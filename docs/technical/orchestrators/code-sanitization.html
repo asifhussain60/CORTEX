@@ -1,1012 +1,188 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta content="width=device-width, initial-scale=1.0" name="viewport">
-<title>Code Sanitization Orchestrator | CORTEX Technical Documentation</title>
-<!-- D3.js -->
-<script src="https://d3js.org/d3.v7.min.js" type="text/javascript">
-</script><!-- Mermaid -->
-<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js" type="text/javascript">
-</script>
-<style type="text/css">
-      :root {
-            --sanitization-primary: #9C27B0;
-            --sanitization-secondary: #7B1FA2;
-            --sanitization-dark: #4A148C;
-            --phase-1: #2196F3;
-            --phase-2: #4CAF50;
-            --phase-3: #FF9800;
-            --phase-4: #F44336;
-            --phase-5: #00BCD4;
-            --success: #10B981;
-            --warning: #F59E0B;
-            --error: #DC2626;
-            --critical: #B91C1C;
-            --high: #F59E0B;
-            --medium: #3B82F6;
-            --low: #10B981;
-        }
-        
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: #0f172a;
-            color: #e2e8f0;
-        }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-        
-        header {
-            text-align: center;
-            padding: 3rem 0;
-            border-bottom: 2px solid var(--sanitization-primary);
-        }
-        
-        header h1 {
-            font-size: 3rem;
-            font-weight: 700;
-            color: var(--sanitization-primary);
-            margin: 0;
-        }
-        
-        header .subtitle {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            margin-top: 0.5rem;
-        }
-        
-        .metadata {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-top: 1.5rem;
-            font-size: 0.9rem;
-            color: #cbd5e1;
-        }
-        
-        .metadata span {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .section {
-            margin: 4rem 0;
-        }
-        
-        .section h2 {
-            font-size: 2rem;
-            color: var(--sanitization-primary);
-            margin-bottom: 1.5rem;
-            border-left: 4px solid var(--sanitization-primary);
-            padding-left: 1rem;
-        }
-        
-        .section p {
-            line-height: 1.8;
-            color: #cbd5e1;
-            margin-bottom: 1rem;
-        }
-        
-        .diagram-container {
-            background: #1e293b;
-            border-radius: 12px;
-            padding: 2rem;
-            margin: 2rem 0;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-        }
-        
-        .diagram-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: var(--sanitization-secondary);
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .mermaid {
-            background: #0f172a;
-            border-radius: 8px;
-            padding: 1.5rem;
-            min-height: 400px;
-        }
-        
-        #transformation-heatmap,
-        #validation-flow {
-            width: 100%;
-            min-height: 500px;
-            background: #0f172a;
-            border-radius: 8px;
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin: 2rem 0;
-        }
-        
-        .stat-card {
-            background: linear-gradient(135deg, var(--sanitization-primary), var(--sanitization-dark));
-            border-radius: 8px;
-            padding: 1.5rem;
-            text-align: center;
-        }
-        
-        .stat-value {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: white;
-        }
-        
-        .stat-label {
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.8);
-            margin-top: 0.5rem;
-        }
-        
-        .phases-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin: 2rem 0;
-        }
-        
-        .phase-card {
-            background: #1e293b;
-            border-radius: 8px;
-            padding: 1.5rem;
-            border-left: 4px solid;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        
-        .phase-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 16px rgba(156, 39, 176, 0.3);
-        }
-        
-        .phase-card.phase-1 { border-left-color: var(--phase-1); }
-        .phase-card.phase-2 { border-left-color: var(--phase-2); }
-        .phase-card.phase-3 { border-left-color: var(--phase-3); }
-        .phase-card.phase-4 { border-left-color: var(--phase-4); }
-        .phase-card.phase-5 { border-left-color: var(--phase-5); }
-        
-        .phase-card h3 {
-            margin-top: 0;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .phase-card .phase-number {
-            display: inline-block;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: var(--sanitization-primary);
-            color: white;
-            text-align: center;
-            line-height: 32px;
-            font-weight: 700;
-        }
-        
-        .phase-card p {
-            margin: 0.5rem 0;
-            font-size: 0.9rem;
-            color: #94a3b8;
-        }
-        
-        .phase-card ul {
-            list-style: none;
-            padding: 0;
-            margin: 1rem 0 0 0;
-        }
-        
-        .phase-card li {
-            padding: 0.3rem 0;
-            font-size: 0.85rem;
-            color: #cbd5e1;
-        }
-        
-        .phase-card li::before {
-            content: "• ";
-            color: var(--sanitization-primary);
-            font-weight: bold;
-            margin-right: 0.5rem;
-        }
-        
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin: 2rem 0;
-        }
-        
-        .feature-card {
-            background: #1e293b;
-            border-radius: 8px;
-            padding: 1.5rem;
-            border-left: 4px solid var(--sanitization-primary);
-        }
-        
-        .feature-card h3 {
-            color: var(--sanitization-secondary);
-            margin-top: 0;
-        }
-        
-        .feature-card ul {
-            list-style: none;
-            padding: 0;
-        }
-        
-        .feature-card li {
-            padding: 0.5rem 0;
-            color: #cbd5e1;
-        }
-        
-        .feature-card li::before {
-            content: "✓ ";
-            color: var(--success);
-            font-weight: bold;
-            margin-right: 0.5rem;
-        }
-        
-        .tooltip {
-            position: absolute;
-            background: #1e293b;
-            border: 1px solid var(--sanitization-primary);
-            border-radius: 4px;
-            padding: 0.5rem 1rem;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.2s;
-            font-size: 0.9rem;
-            color: #e2e8f0;
-            z-index: 1000;
-            max-width: 300px;
-        }
-        
-        .security-badge {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin: 0.25rem;
-        }
-        
-        .security-badge.critical {
-            background: var(--critical);
-            color: white;
-        }
-        
-        .security-badge.high {
-            background: var(--high);
-            color: white;
-        }
-        
-        .security-badge.medium {
-            background: var(--medium);
-            color: white;
-        }
-        
-        .security-badge.low {
-            background: var(--low);
-            color: white;
-        }
-        
-        footer {
-            text-align: center;
-            padding: 3rem 0;
-            border-top: 2px solid var(--sanitization-primary);
-            color: #94a3b8;
-            margin-top: 4rem;
-        }
-        
-        @media (max-width: 768px) {
-            header h1 {
-                font-size: 2rem;
-            }
-            
-            .metadata {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-        }
-            
-        /* Breadcrumb Navigation */
-        .breadcrumb {
-            background: rgba(30, 41, 59, 0.8);
-            padding: 1rem 2rem;
-            border-bottom: 1px solid rgba(124, 58, 237, 0.3);
-            margin-bottom: 2rem;
-        }
-        
-        .breadcrumb a {
-            color: var(--primary, #2196F3);
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-        
-        .breadcrumb a:hover {
-            color: var(--secondary, #1976D2);
-            text-decoration: underline;
-        }
-        
-        .breadcrumb-separator {
-            color: #64748b;
-            margin: 0 0.5rem;
-        }
-        
-        .breadcrumb-current {
-            color: #e2e8f0;
-        }
-
-  <body>
-    <!-- Breadcrumb -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Sanitization Orchestrator | CORTEX Technical Documentation</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root { --primary: #4CAF50; --success: #10B981; --warning: #F59E0B; --error: #DC2626; }
+        body { font-family: 'Inter', -apple-system, sans-serif; margin: 0; padding: 0; background: #0f172a; color: #e2e8f0; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+        header { text-align: center; padding: 3rem 0; border-bottom: 2px solid var(--primary); }
+        header h1 { font-size: 3rem; font-weight: 700; color: var(--primary); margin: 0; }
+        header .subtitle { font-size: 1.2rem; color: #94a3b8; margin-top: 0.5rem; }
+        .metadata { display: flex; justify-content: center; gap: 2rem; margin-top: 1rem; flex-wrap: wrap; }
+        .metadata-item { background: rgba(76, 175, 80, 0.1); padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.9rem; }
+        .section { margin: 3rem 0; }
+        .section-title { font-size: 2rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; border-left: 4px solid var(--primary); padding-left: 1rem; }
+        .intro-text { font-size: 1.1rem; line-height: 1.8; color: #cbd5e1; margin-bottom: 2rem; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+        .feature-card { background: #1e293b; border-radius: 12px; padding: 1.5rem; border-left: 4px solid var(--primary); transition: transform 0.2s; }
+        .feature-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(76, 175, 80, 0.3); }
+        .viz-container { background: #1e293b; border-radius: 12px; padding: 2rem; margin: 2rem 0; }
+        .mermaid { background: #0f172a; border-radius: 8px; padding: 2rem; }
+        .breadcrumb { background: rgba(30, 41, 59, 0.8); padding: 1rem 2rem; border-bottom: 1px solid rgba(76, 175, 80, 0.3); }
+        .breadcrumb a { color: var(--primary); text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .breadcrumb-separator { color: #64748b; margin: 0 0.5rem; }
+        .breadcrumb-current { color: #e2e8f0; }
+        footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid #334155; margin-top: 4rem; color: #64748b; }
+    </style>
+</head>
+<body>
     <nav class="breadcrumb">
-        <a href="../../index.html">Home<\/a>
-        <span class="breadcrumb-separator">›<\/span>
-        <a href="../../features/orchestrators.html">Orchestrators<\/a>
-        <span class="breadcrumb-separator">›<\/span>
-        <a href="index.html">Technical Documentation<\/a>
-        <span class="breadcrumb-separator">›<\/span>
-        <span class="breadcrumb-current">Code Sanitization<\/span>
-    <\/nav>
+        <a href="../../index.html">Home</a>
+        <span class="breadcrumb-separator">›</span>
+        <a href="index.html">Orchestrators</a>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-current">Code Sanitization</span>
+    </nav>
     
     <div class="container">
         <header>
-            <h1>🔒 Code Sanitization Orchestrator<\/h1>
-            <p class="subtitle">5-Phase Workflow for Removing Company-Specific Data<\/p>
+            <h1>🧼 Code Sanitization Orchestrator</h1>
+            <p class="subtitle">5-Phase Domain Transformation for Safe Code Sharing</p>
             <div class="metadata">
-                <span>📄 <strong>Version:<\/strong> 4.0<\/span>
-                <span>📦 <strong>Category:<\/strong> Execution<\/span>
-                <span>⚡ <strong>Phases:<\/strong> 5<\/span>
-                <span>📊 <strong>Status:<\/strong> PRODUCTION<\/span>
-            <\/div>
-
-        <!-- Overview Section -->
-        <section class="section">
-            <h2>📋 Overview<\/h2>
-            <p>
-                The Code Sanitization Orchestrator provides automated removal of company-specific data while
-                preserving code functionality. Features AST-powered transformation, validation with build+test,
-                rollback safety, and comprehensive audit trail generation.
-            
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-value">5<\/div>
-                    <div class="stat-label">Sanitization Phases<\/div>
-                <\/div>
-                <div class="stat-card">
-                    <div class="stat-value">100%<\/div>
-                    <div class="stat-label">Rollback Safety<\/div>
-                <\/div>
-                <div class="stat-card">
-                    <div class="stat-value">AST<\/div>
-                    <div class="stat-label">Transformation Engine<\/div>
-                <\/div>
-                <div class="stat-card">
-                    <div class="stat-value">11+<\/div>
-                    <div class="stat-label">Languages Supported<\/div>
-                <\/div>
-
-        <!-- Security Levels -->
-        <section class="section">
-            <h2>🛡️ Security Classification Levels<\/h2>
-            <p>
-                The analyzer categorizes domain-specific terms into four sensitivity levels to guide transformation priority:
-            <div style="margin: 1rem 0;">
-                <span class="security-badge critical">CRITICAL<\/span>
-                <span style="color: #cbd5e1;">Company names, product names, legal entities<\/span>
-            <\/div>
-            <div style="margin: 1rem 0;">
-                <span class="security-badge high">HIGH<\/span>
-                <span style="color: #cbd5e1;">Department names, proprietary technologies, internal systems<\/span>
-            <\/div>
-            <div style="margin: 1rem 0;">
-                <span class="security-badge medium">MEDIUM<\/span>
-                <span style="color: #cbd5e1;">Project codes, team names, internal terminology<\/span>
-            <\/div>
-            <div style="margin: 1rem 0;">
-                <span class="security-badge low">LOW<\/span>
-                <span style="color: #cbd5e1;">Generic business terms, low-risk references<\/span>
-            <\/div>
-
-        <!-- 5-Phase Workflow -->
-        <section class="section">
-            <h2>🔄 5-Phase Workflow<\/h2>
-            <p>
-                Each phase builds on the previous, with validation gates and rollback safety to ensure code integrity.
-            
-            <div class="phases-grid">
-                <div class="phase-card phase-1">
-                    <h3>
-                        <span class="phase-number">1<\/span>
-                        Analyze
-                    <\/h3>
-                    <p>File scanning and sensitivity analysis<\/p>
-                    <ul>
-                        <li>11+ language support (Python, JS, Java, etc.)<\/li>
-                        <li>Domain term extraction<\/li>
-                        <li>Namespace analysis<\/li>
-                        <li>Sensitivity classification (CRITICAL→LOW)<\/li>
-                    <\/ul>
-                
-                <div class="phase-card phase-2">
-                    <h3>
-                        <span class="phase-number">2<\/span>
-                        Mapping
-                    <\/h3>
-                    <p>Generate domain→generic transformations<\/p>
-                    <ul>
-                        <li>Conflict detection (multiple→same)<\/li>
-                        <li>User approval workflow<\/li>
-                        <li>Custom mapping support (JSON)<\/li>
-                        <li>Reversible transformations<\/li>
-                    <\/ul>
-                
-                <div class="phase-card phase-3">
-                    <h3>
-                        <span class="phase-number">3<\/span>
-                        Transform
-                    <\/h3>
-                    <p>AST-powered code transformation<\/p>
-                    <ul>
-                        <li>Backup creation (timestamp)<\/li>
-                        <li>AST transformation (preserves syntax)<\/li>
-                        <li>File renaming (paths + imports)<\/li>
-                        <li>Special file handling (configs, README)<\/li>
-                    <\/ul>
-                
-                <div class="phase-card phase-4">
-                    <h3>
-                        <span class="phase-number">4<\/span>
-                        Validate
-                    <\/h3>
-                    <p>Build and test validation<\/p>
-                    <ul>
-                        <li>Build system detection (pytest, npm, mvn)<\/li>
-                        <li>Build execution + test suite<\/li>
-                        <li>Import validation<\/li>
-                        <li>Auto-rollback on failure<\/li>
-                    <\/ul>
-                
-                <div class="phase-card phase-5">
-                    <h3>
-                        <span class="phase-number">5<\/span>
-                        Report
-                    <\/h3>
-                    <p>Audit trail and metrics<\/p>
-                    <ul>
-                        <li>Markdown audit report<\/li>
-                        <li>Mapping reference (JSON)<\/li>
-                        <li>Transformation metrics<\/li>
-                        <li>Packaged output artifacts<\/li>
-                    <\/ul>
-
-        <!-- Complete Workflow Diagram -->
-        <section class="section">
-            <h2>📊 Complete Workflow Sequence<\/h2>
-            <p>
-                The 5-phase workflow with validation gates, rollback safety, and audit trail generation.
-            
-            <div class="diagram-container">
-                <div class="diagram-title">🔄 5-Phase Sanitization Flow<\/div>
-                <div class="mermaid">
-  sequenceDiagram
-    participant User
-    participant Orch as Sanitization Orchestrator
-    participant Analyzer as CodeAnalyzer
-    participant Mapper as MappingEngine
-    participant Transform as CodeTransformer
-    participant Validator as BuildValidator
-    participant Reporter as ReportGenerator
-    participant Backup
-    
-    User->>Orch: sanitize /path/to/project
-    Orch->>Orch: 🎭 Orchestrator engaged
-    
-    Note over Orch,Analyzer: Phase 1: ANALYZE
-    Orch->>Analyzer: scan_file_structure()
-    Analyzer->>Analyzer: Detect 11+ languages
-    Analyzer->>Analyzer: Extract domain terms
-    Analyzer->>Analyzer: Extract namespaces
-    Analyzer->>Analyzer: Classify sensitivity:<br/>CRITICAL/HIGH/MEDIUM/LOW
-    Analyzer-->>Orch: Analysis: 50 files<br/>15 domain terms<br/>8 CRITICAL, 5 HIGH, 2 MEDIUM
-    
-    Note over Orch,Mapper: Phase 2: MAPPING
-    Orch->>Mapper: generate_mappings(analysis)
-    Mapper->>Mapper: Create domain→generic map
-    Mapper->>Mapper: Detect conflicts
-    Mapper->>User: Review mappings<br/>(MyCompany → GenericCorp)
-    User-->>Mapper: Approve
-    Mapper-->>Orch: Mappings: 15 transformations<br/>0 conflicts
-    
-    Note over Orch,Transform: Phase 3: TRANSFORM
-    Orch->>Backup: Create backup (timestamp)
-    Backup-->>Orch: Backup created
-    Orch->>Transform: apply_transformations(mappings)
-    Transform->>Transform: AST transformation
-    Transform->>Transform: Rename files/directories
-    Transform->>Transform: Update imports
-    Transform->>Transform: Handle special files<br/>(configs, README, setup.py)
-    Transform-->>Orch: 45 files transformed<br/>8 files renamed
-    
-    Note over Orch,Validator: Phase 4: VALIDATE
-    Orch->>Validator: validate_build()
-    Validator->>Validator: Detect build system<br/>(pytest/npm/mvn)
-    Validator->>Validator: Execute build
-    Validator->>Validator: Run test suite
-    Validator->>Validator: Validate imports
-    Validator->>Validator: Re-scan sensitivity
-    
-    alt Validation Passed
-        Validator-->>Orch: ✅ Build: SUCCESS<br/>Tests: 45/45 passed<br/>No proprietary data found
+                <div class="metadata-item"><span style="color:#94a3b8">Complexity:</span> <span style="color:var(--primary);font-weight:600">HIGH</span></div>
+                <div class="metadata-item"><span style="color:#94a3b8">Phases:</span> <span style="color:var(--primary);font-weight:600">5</span></div>
+                <div class="metadata-item"><span style="color:#94a3b8">File:</span> <span style="color:var(--primary);font-weight:600">sanitization_orchestrator.py</span></div>
+            </div>
+        </header>
         
-        Note over Orch,Reporter: Phase 5: REPORT
-        Orch->>Reporter: generate_audit_report(results)
-        Reporter->>Reporter: Create Markdown report
-        Reporter->>Reporter: Generate mapping reference (JSON)
-        Reporter->>Reporter: Package artifacts
-        Reporter-->>Orch: Report: sanitization-audit.md<br/>Mapping: transformations.json
+        <section class="section">
+            <div class="intro-text">
+                The Code Sanitization Orchestrator removes company-specific data and transforms domain terminology to make codebases 
+                safe for public sharing, portfolio demonstrations, or open-source publication. Executes a 5-phase workflow: 
+                Analyze → Mapping → Transform → Validate → Report. Features automated backup creation, build/test validation, 
+                reference tracking, and comprehensive audit trails.
+            </div>
+        </section>
         
-        Orch->>Orch: 🎭 Orchestrator completing:<br/>✅ ALL WORK COMPLETE
-        Orch-->>User: # 🎉 CONGRATULATIONS<br/>Sanitization complete!<br/>Output: project-sanitized/
-    else Validation Failed
-        Validator-->>Orch: ❌ Build failed or tests failing
-        Orch->>Backup: Restore from backup
-        Backup-->>Orch: Original code restored
-        Orch-->>User: ❌ Validation failed - rolled back<br/>Review errors and retry
-    end
-
-        <!-- Transformation Heatmap -->
         <section class="section">
-            <h2>🗺️ Transformation Mapping Heatmap<\/h2>
-            <p>
-                Interactive heatmap showing company-specific terms mapped to generic equivalents.
-                Color intensity indicates transformation frequency across the codebase.
-            
-            <div class="diagram-container">
-                <div class="diagram-title">🔀 Domain → Generic Transformation Matrix<\/div>
-                <div id="transformation-heatmap"><\/div>
-            <\/div>
-
-        <!-- Validation Flow -->
+            <h2 class="section-title">✨ Key Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div style="font-size:2rem;margin-bottom:1rem">🔍</div>
+                    <div style="font-size:1.25rem;font-weight:600;color:#f1f5f9;margin-bottom:0.75rem">Intelligent Detection</div>
+                    <div style="color:#94a3b8">AST-powered detection of company names, internal URLs, API keys, proprietary terms</div>
+                </div>
+                <div class="feature-card">
+                    <div style="font-size:2rem;margin-bottom:1rem">🗺️</div>
+                    <div style="font-size:1.25rem;font-weight:600;color:#f1f5f9;margin-bottom:0.75rem">Domain Mapping</div>
+                    <div style="color:#94a3b8">Company-specific → Generic mappings with semantic preservation</div>
+                </div>
+                <div class="feature-card">
+                    <div style="font-size:2rem;margin-bottom:1rem">🔄</div>
+                    <div style="font-size:1.25rem;font-weight:600;color:#f1f5f9;margin-bottom:0.75rem">Safe Transformation</div>
+                    <div style="color:#94a3b8">Automated replacement with reference tracking and validation</div>
+                </div>
+                <div class="feature-card">
+                    <div style="font-size:2rem;margin-bottom:1rem">✅</div>
+                    <div style="font-size:1.25rem;font-weight:600;color:#f1f5f9;margin-bottom:0.75rem">Build/Test Validation</div>
+                    <div style="color:#94a3b8">Ensures sanitized code still builds and passes all tests</div>
+                </div>
+                <div class="feature-card">
+                    <div style="font-size:2rem;margin-bottom:1rem">📋</div>
+                    <div style="font-size:1.25rem;font-weight:600;color:#f1f5f9;margin-bottom:0.75rem">Audit Trail</div>
+                    <div style="color:#94a3b8">Complete mapping reference + backup for rollback</div>
+                </div>
+                <div class="feature-card">
+                    <div style="font-size:2rem;margin-bottom:1rem">🔒</div>
+                    <div style="font-size:1.25rem;font-weight:600;color:#f1f5f9;margin-bottom:0.75rem">Safety Guarantees</div>
+                    <div style="color:#94a3b8">Automatic backups before transformation, rollback on failure</div>
+                </div>
+            </div>
+        </section>
+        
         <section class="section">
-            <h2>✅ Validation & Rollback Flow<\/h2>
-            <p>
-                Multi-gate validation ensures code integrity with automatic rollback on failure.
-                Shows build system detection, test execution, and rollback decision tree.
-            
-            <div class="diagram-container">
-                <div class="diagram-title">🔍 Validation Gates & Rollback Strategy<\/div>
-                <div id="validation-flow"><\/div>
-            <\/div>
-
-        <!-- Integration Diagram -->
-        <section class="section">
-            <h2>🔗 Component Architecture<\/h2>
-            <p>
-                The orchestrator coordinates 5 utility modules in sequence, with backup and rollback
-                integration for safety.
-            
-            <div class="diagram-container">
-                <div class="diagram-title">🏗️ System Component Relationships<\/div>
+            <h2 class="section-title">🔄 5-Phase Sanitization Workflow</h2>
+            <div class="viz-container">
                 <div class="mermaid">
-  graph TB
-    ORCH[Sanitization Orchestrator<br/>5-Phase Controller]
+graph TD
+    A[Start Sanitization] --> B[📦 Phase 1: Backup]
+    B --> C[🔍 Phase 2: Analyze]
+    C --> D{Company Data<br/>Found?}
+    D -->|No| END1[✅ Already Clean]
+    D -->|Yes| E[🗺️ Phase 3: Generate Mapping]
     
-    subgraph "Phase Executors"
-        ANALYZER[CodeAnalyzer<br/>File Scanning]
-        MAPPER[MappingEngine<br/>Mapping Generation]
-        TRANSFORMER[CodeTransformer<br/>AST Transformation]
-        VALIDATOR[BuildValidator<br/>Build/Test]
-        REPORTER[ReportGenerator<br/>Audit Reports]
-    end
+    E --> F[Company Terms]
+    E --> G[Internal URLs]
+    E --> H[API Keys/Secrets]
+    E --> I[Proprietary Names]
     
-    subgraph "Supporting Systems"
-        BACKUP[Backup System<br/>Timestamped Snapshots]
-        ROLLBACK[Rollback Manager<br/>State Restoration]
-        MANIFEST[Manifest<br/>Configuration]
-    end
+    F & G & H & I --> J[🔄 Phase 4: Transform]
+    J --> K[Replace in Code]
+    J --> L[Update Comments]
+    J --> M[Transform Docs]
+    J --> N[Sanitize Config]
     
-    ORCH --> ANALYZER
-    ANALYZER --> MAPPER
-    MAPPER --> TRANSFORMER
-    TRANSFORMER --> VALIDATOR
-    VALIDATOR --> REPORTER
+    K & L & M & N --> O[✅ Phase 5: Validate]
+    O --> P{Build Success?}
+    P -->|No| ROLLBACK[⚠️ Rollback from Backup]
+    P -->|Yes| Q{Tests Pass?}
+    Q -->|No| ROLLBACK
+    Q -->|Yes| R{References<br/>Intact?}
+    R -->|No| ROLLBACK
+    R -->|Yes| S[📋 Generate Report]
     
-    TRANSFORMER --> BACKUP
-    VALIDATOR --> ROLLBACK
-    ROLLBACK --> BACKUP
+    S --> T[Mapping Reference]
+    S --> U[Audit Trail]
+    S --> V[Statistics]
     
-    ORCH --> MANIFEST
+    T & U & V --> W[✅ Sanitization Complete]
     
-    style ORCH fill:#9C27B0,stroke:#7B1FA2,stroke-width:3px,color:#fff
-    style BACKUP fill:#4CAF50,stroke:#388E3C,stroke-width:2px,color:#fff
-    style ROLLBACK fill:#F44336,stroke:#D32F2F,stroke-width:2px,color:#fff
-    style MANIFEST fill:#2196F3,stroke:#1976D2,stroke-width:2px,color:#fff
-
-        <!-- Key Features Section -->
+    style A fill:#4CAF50,stroke:#388E3C,color:#fff
+    style W fill:#10B981,stroke:#059669,color:#fff
+    style ROLLBACK fill:#DC2626,stroke:#B91C1C,color:#fff
+                </div>
+            </div>
+        </section>
+        
         <section class="section">
-            <h2>✨ Key Features<\/h2>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h3>🔒 Security-First Design<\/h3>
-                    <ul>
-                        <li>4-level sensitivity classification<\/li>
-                        <li>CRITICAL→HIGH→MEDIUM→LOW<\/li>
-                        <li>Post-validation re-scan<\/li>
-                        <li>No proprietary data leakage<\/li>
-                    <\/ul>
-                
-                <div class="feature-card">
-                    <h3>🎯 AST-Powered Transformation<\/h3>
-                    <ul>
-                        <li>Syntax-preserving changes<\/li>
-                        <li>11+ language support<\/li>
-                        <li>Import/reference updates<\/li>
-                        <li>File/directory renaming<\/li>
-                    <\/ul>
-                
-                <div class="feature-card">
-                    <h3>✅ Multi-Gate Validation<\/h3>
-                    <ul>
-                        <li>Build system detection<\/li>
-                        <li>Test suite execution<\/li>
-                        <li>Import validation<\/li>
-                        <li>Pass rate >= original<\/li>
-                    <\/ul>
-                
-                <div class="feature-card">
-                    <h3>🔄 Rollback Safety<\/h3>
-                    <ul>
-                        <li>Timestamped backups<\/li>
-                        <li>Auto-rollback on failure<\/li>
-                        <li>State restoration<\/li>
-                        <li>30-day retention<\/li>
-                    <\/ul>
-                
-                <div class="feature-card">
-                    <h3>📋 Comprehensive Audit Trail<\/h3>
-                    <ul>
-                        <li>Markdown audit reports<\/li>
-                        <li>JSON mapping reference<\/li>
-                        <li>Transformation metrics<\/li>
-                        <li>Reversible mappings<\/li>
-                    <\/ul>
-                
-                <div class="feature-card">
-                    <h3>⚡ Dry-Run Mode<\/h3>
-                    <ul>
-                        <li>Preview without changes<\/li>
-                        <li>Impact assessment<\/li>
-                        <li>Mapping review<\/li>
-                        <li>Risk analysis<\/li>
-                    <\/ul>
-
-        <!-- Usage Examples -->
-        <section class="section">
-            <h2>💡 Usage Examples<\/h2>
-            
-            <div class="feature-card" style="margin: 1rem 0;">
-                <h3>CLI Usage<\/h3>
-                <pre style="background: #0f172a; padding: 1rem; border-radius: 4px; overflow-x: auto; color: #10B981;">
-  # Standard sanitization
-  python scripts/cli_wrappers/sanitize_wrapper.py /path/to/project
-
-  # Dry-run mode (preview only)
-  python scripts/cli_wrappers/sanitize_wrapper.py MyProject --dry-run
-
-  # Custom output directory
-  python scripts/cli_wrappers/sanitize_wrapper.py MyProject --output ~/sanitized
-
-  # Custom mappings
-  python scripts/cli_wrappers/sanitize_wrapper.py MyProject --mapping-file mappings.json
-            
-            <div class="feature-card" style="margin: 1rem 0;">
-                <h3>Python API<\/h3>
-                <pre style="background: #0f172a; padding: 1rem; border-radius: 4px; overflow-x: auto; color: #10B981;">
-  from src.orchestrators.sanitization import SanitizationOrchestrator
-
-  # Initialize orchestrator
-  orchestrator = SanitizationOrchestrator(
-    target_directory="/path/to/project",
-    dry_run=False  # Set True for preview
-  )
-
-  # Execute sanitization
-  result = orchestrator.execute()
-
-  # Check results
-  if result.success:
-    print(f"✅ Files analyzed: {result.files_analyzed}")
-    print(f"✅ Files transformed: {result.files_transformed}")
-    print(f"✅ Report: {result.report_path}")
-  else:
-    print(f"❌ Failed at {result.phase}")
-
+            <h2 class="section-title">🎯 Use Cases</h2>
+            <div class="viz-container">
+                <div class="mermaid">
+mindmap
+  root((Code<br/>Sanitization))
+    Portfolio Projects
+      Demo apps
+      Case studies
+      Technical samples
+    Open Source
+      Public repositories
+      Community contributions
+      Library releases
+    Job Applications
+      Code samples
+      Technical interviews
+      Portfolio showcase
+    Documentation
+      Technical blogs
+      Tutorials
+      Knowledge sharing
+                </div>
+            </div>
+        </section>
+        
         <footer>
-            <p><strong>Author:<\/strong> Asif Hussain | <strong>GitHub:<\/strong> github.com/asifhussain60/CORTEX<\/p>
-            <p>Copyright © 2025 Asif Hussain. All rights reserved.<\/p>
-        <\/footer>
-
-    <!-- D3.js Visualizations -->
+            <p>&copy; 2025 Asif Hussain | CORTEX 4.0</p>
+            <p>Code Sanitization Orchestrator - Safe Domain Transformation</p>
+        </footer>
+    </div>
+    
     <script>
-        // Initialize Mermaid
         mermaid.initialize({ 
             startOnLoad: true,
             theme: 'dark',
             themeVariables: {
-                primaryColor: '#9C27B0',
+                primaryColor: '#4CAF50',
                 primaryTextColor: '#fff',
-                primaryBorderColor: '#7B1FA2',
-                lineColor: '#BA68C8',
-                secondaryColor: '#4CAF50',
-                tertiaryColor: '#2196F3'
+                lineColor: '#64748b',
+                secondaryColor: '#1e293b'
             }
         });
-
-        // Transformation Heatmap Data
-        const transformations = [
-            { original: "AcmeCompany", generic: "GenericCorp", count: 45, sensitivity: "CRITICAL" },
-            { original: "ProprietaryAPI", generic: "ThirdPartyAPI", count: 32, sensitivity: "HIGH" },
-            { original: "InternalSystem", generic: "ExternalSystem", count: 28, sensitivity: "HIGH" },
-            { original: "ProjectAlpha", generic: "ProjectA", count: 22, sensitivity: "MEDIUM" },
-            { original: "EngineeringTeam", generic: "DevelopmentTeam", count: 18, sensitivity: "MEDIUM" },
-            { original: "LegacyDatabase", generic: "DataStore", count: 15, sensitivity: "HIGH" },
-            { original: "ClientPortal", generic: "UserPortal", count: 12, sensitivity: "MEDIUM" },
-            { original: "BillingModule", generic: "PaymentModule", count: 10, sensitivity: "LOW" },
-            { original: "ReportingTool", generic: "AnalyticsTool", count: 8, sensitivity: "LOW" },
-            { original: "AdminConsole", generic: "ManagementConsole", count: 6, sensitivity: "LOW" }
-        ];
-
-        const heatmapWidth = 1200;
-        const heatmapHeight = 500;
-        const heatmapMargin = { top: 20, right: 120, bottom: 100, left: 200 };
-
-        const heatmapSvg = d3.select("#transformation-heatmap")
-            .append("svg")
-            .attr("width", heatmapWidth)
-            .attr("height", heatmapHeight)
-            .attr("viewBox", [0, 0, heatmapWidth, heatmapHeight])
-            .attr("style", "max-width: 100%; height: auto;");
-
-        // Color scale based on count
-        const colorScale = d3.scaleSequential(d3.interpolatePurples)
-            .domain([0, d3.max(transformations, d => d.count)]);
-
-        // Sensitivity colors
-        const sensitivityColors = {
-            "CRITICAL": "#B91C1C",
-            "HIGH": "#F59E0B",
-            "MEDIUM": "#3B82F6",
-            "LOW": "#10B981"
-        };
-
-        const xScale = d3.scaleBand()
-            .domain(["Original → Generic"])
-            .range([heatmapMargin.left, heatmapWidth - heatmapMargin.right])
-            .padding(0.1);
-
-        const yScale = d3.scaleBand()
-            .domain(transformations.map(d => d.original))
-            .range([heatmapMargin.top, heatmapHeight - heatmapMargin.bottom])
-            .padding(0.1);
-
-        // Create cells
-        const cells = heatmapSvg.selectAll(".cell")
-            .data(transformations)
-            .join("g")
-            .attr("class", "cell");
-
-        cells.append("rect")
-            .attr("x", xScale("Original → Generic"))
-            .attr("y", d => yScale(d.original))
-            .attr("width", xScale.bandwidth())
-            .attr("height", yScale.bandwidth())
-            .attr("fill", d => colorScale(d.count))
-            .attr("stroke", "#1e293b")
-            .attr("stroke-width", 2)
-            .attr("rx", 4)
-            .style("cursor", "pointer")
-            .on("mouseover", function(event, d) {
-                d3.select(this)
-                    .attr("stroke", "#9C27B0")
-                    .attr("stroke-width", 3);
-                
-                const tooltip = d3.select("body").append("div")
-                    .attr("class", "tooltip")
-                    .style("left", (event.pageX + 10) + "px")
-                    .style("top", (event.pageY - 10) + "px")
-                    .style("opacity", 1)
-                    .html(`
-                        <strong>${d.original} → ${d.generic}<\/strong><br/>
-                        Occurrences: ${d.count}<br/>
-                        Sensitivity: <span style="color: ${sensitivityColors[d.sensitivity]}">${d.sensitivity}<\/span>
-                    `);
-            })
-            .on("mouseout", function() {
-                d3.select(this)
-                    .attr("stroke", "#1e293b")
-                    .attr("stroke-width", 2);
-                
-                d3.selectAll(".tooltip").remove();
-            });
-
-        // Add count labels
-        cells.append("text")
-            .attr("x", xScale("Original → Generic") + xScale.bandwidth() / 2)
-            .attr("y", d => yScale(d.original) + yScale.bandwidth() / 2)
-            .attr("text-anchor", "middle")
-            .attr("dominant-baseline", "middle")
-            .attr("fill", "#fff")
-            .attr("font-size", "14px")
-            .attr("font-weight", "700")
-            .text(d => d.count);
-
-        // Y-axis labels (original terms)
-        heatmapSvg.selectAll(".y-label")
-            .data(transformations)
-            .join("text")
-            .attr("class", "y-label")
-            .attr("x", heatmapMargin.left - 10)
-            .attr("y", d => yScale(d.original) + yScale.bandwidth() / 2)
-            .attr("text-anchor", "end")
-            .attr("dominant-baseline", "middle")
-            .attr("fill", "#e2e8f0")
-            .attr("font-size", "12px")
-            .text(d => d.original);
-
-        // Generic term labels on right
-        heatmapSvg.selectAll(".generic-label")
-            .data(transformations)
-            .join("text")
-            .attr("class", "generic-label")
-            .attr("x", heatmapWidth - heatmapMargin.right + 10)
-            .attr("y", d => yScale(d.original) + yScale.bandwidth() / 2)
-            .attr("text-anchor", "start")
-            .attr("dominant-baseline", "middle")
-            .attr("fill", "#10B981")
-            .attr("font-size", "12px")
-            .text(d => d.generic);
-
-        // Sensitivity badges
-        heatmapSvg.selectAll(".sensitivity-badge")
-            .data(transformations)
-            .join("rect")
-            .attr("class", "sensitivity-badge")
-            .attr("x", heatmapMargin.left - 90)
-            .attr("y", d => yScale(d.original) + yScale.bandwidth() / 2 - 8)
-            .attr("width", 70)
-            .attr("height", 16)
-            .attr("fill", d => sensitivityColors[d.sensitivity])
-            .attr("rx", 3);
-
-        heatmapSvg.selectAll(".sensitivity-text")
-            .data(transformations)
-            .join("text")
-            .attr("class", "sensitivity-text")
-            .attr("x", heatmapMargin.left - 55)
-            .attr("y", d => yScale(d.original) + yScale.bandwidth() / 2)
-            .attr("text-anchor", "middle")
-            .attr("dominant-baseline", "middle")
-            .attr("fill", "#fff")
-            .attr("font-size", "9px")
-            .attr("font-weight", "600")
-            .text(d => d.sensitivity);
-
-        // Legend
-        const legend = heatmapSvg.append("g")
-            .attr("transform", `translate(${heatmapMargin.left}, ${heatmapHeight - heatmapMargin.bottom + 20})`);
-
-        legend.append("text")
-            .attr("x", 0)
-            .attr("y", 0)
-            .attr("fill", "#e2e8f0")
-            .attr("font-size", "12px")
-            .text("Color intensity = Occurrence frequency");
-
-        // Validation Flow Diagram (Sankey-style)
-        const validationWidth = 1200;
-        const validationHeight = 500;
-
-        const validationSvg = d3.select("#validation-flow")
-            .append("svg")
-            .attr("width", validationWidth)
-            .attr("height", validationHeight)
-            .attr("viewBox", [0, 0, validationWidth, validationHeight])
-            .attr("style", "max-width: 100%; height: auto;");
-
-        const validationSteps = [
-            { id: "start", label: "Transformed Code", x: 100, y: 250, color: "#9C27B0" },
-            { id: "detect", label: "Detect Build System", x: 300, y: 250, color: "#2196F3" },
-            { id: "build", label: "Execute Build", x: 500, y: 150, color: "#4CAF50" },
-            { id: "test", label: "Run Test Suite", x: 500, y: 250, color: "#4CAF50" },
-            { id: "import", label: "Validate Imports", x: 500, y: 350, color: "#4CAF50" },
-            { id: "rescan", label: "Re-Scan Sensitivity", x: 700, y: 250, color: "#2196F3" },
-            { id: "success", label: "✅ Validation Passed", x: 900, y: 150, color: "#10B981" },
-            { id: "fail", label: "❌ Validation Failed", x: 900, y: 350, color: "#DC2626" },
-            { id: "rollback", label: "Restore from Backup", x: 1100, y: 350, color: "#F44336" }
-        ];
-
-        const validationLinks = [
-            { source: "start", target: "detect" },
-            { source: "detect", target: "build" },
-            { source: "detect", target: "test" },
-            { source: "detect", target: "import" },
-            { source: "build", target: "rescan" },
-            { source: "test", target: "rescan" },
-            { source: "import", target: "rescan" },
-            { source: "rescan", target: "success" },
-            { source: "rescan", target: "fail" },
-            { source: "fail", target: "rollback" }
-        ];
-
-        // Draw links
-        validationLinks.forEach(link => {
-            const sourceNode = validationSteps.find(n => n.id === link.source);
-            const targetNode = validationSteps.find(n => n.id === link.target);
-            
-            validationSvg.append("line")
-                .attr("x1", sourceNode.x + 80)
-                .attr("y1", sourceNode.y)
-                .attr("x2", targetNode.x - 10)
-                .attr("y2", targetNode.y)
-                .attr("stroke", "#BA68C8")
-                .attr("stroke-width", 2)
-                .attr("marker-end", "url(#validation-arrow)");
-        });
-
-        // Arrow marker
-        validationSvg.append("defs").append("marker")
-            .attr("id", "validation-arrow")
-            .attr("viewBox", "0 0 10 10")
-            .attr("refX", 5)
-            .attr("refY", 5)
-            .attr("markerWidth", 6)
-            .attr("markerHeight", 6)
-            .attr("orient", "auto-start-reverse")
-            .append("path")
-            .attr("d", "M 0 0 L 10 5 L 0 10 z")
-            .attr("fill", "#BA68C8");
-
-        // Draw nodes
-        const validationNodes = validationSvg.selectAll(".validation-node")
-            .data(validationSteps)
-            .join("g")
-            .attr("class", "validation-node")
-            .attr("transform", d => `translate(${d.x}, ${d.y})`);
-
-        validationNodes.append("rect")
-            .attr("width", 150)
-            .attr("height", 50)
-            .attr("y", -25)
-            .attr("fill", d => d.color)
-            .attr("stroke", "#1e293b")
-            .attr("stroke-width", 2)
-            .attr("rx", 8);
-
-        validationNodes.append("text")
-            .attr("x", 75)
-            .attr("y", 5)
-            .attr("text-anchor", "middle")
-            .attr("dominant-baseline", "middle")
-            .attr("fill", "#fff")
-            .attr("font-size", "12px")
-            .attr("font-weight", "600")
-            .text(d => d.label);
-  </style>
-</head>
-<body>
+    </script>
 </body>
 </html>
