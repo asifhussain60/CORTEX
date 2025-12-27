@@ -18,11 +18,13 @@ Autonomous documentation generation orchestrator that discovers, analyzes, and d
 
 ## ⚠️ CRITICAL RULES
 
-### 1. Fresh Generation (NO 3.0 References)
-- **DELETE** all existing documentation under `docs/` (EXCEPT `docs/story/` - NEVER TOUCH)
-- **DISCOVER** current CORTEX 4.0 features BEFORE generating docs
+### 1. Incremental Refresh (NO 3.0 References)
+- **PRESERVE** existing documentation structure under `docs/` (especially `docs/story/` and `docs/technical/`)
+- **UPDATE** outdated content only - remove 3.0 references, deprecated features
+- **DISCOVER** current CORTEX 4.0 features BEFORE updating docs
 - **NO REFERENCES** to CORTEX 3.0 features, deprecated orchestrators, or legacy systems
 - **VALIDATE** all content against current codebase (`src/`, `cortex-brain/`, `tests/`)
+- **DELETE ONLY:** Pages with no corresponding current functionality
 
 ### 2. Story Preservation (CRITICAL)
 ```
@@ -56,29 +58,31 @@ docs/index.html      ← "The Awakening of CORTEX" story button MUST remain
 
 ### 4. User vs Admin Distinction (CRITICAL)
 
-**Document ONLY User-Facing Features:**
-- ✅ **USER:** Features developers use to build applications
-- ❌ **ADMIN:** CORTEX internal enhancements, optimizations, maintenance
+**Filtering Principle:** Document features developers use to build applications, NOT CORTEX's internal maintenance.
 
-**User-Facing Operations (Document These):**
-- `plan` - Planning System 2.0 (feature planning)
-- `plan ado` - Azure DevOps integration (story/feature generation)
+**USER-Facing Operations (Document in main features/):**
+- `plan [feature]` - Planning System 2.0 (feature planning with DoR/DoD)
+- `plan ado` - Azure DevOps integration (story/feature/task generation)
 - `start tdd` - TDD Mastery workflow (RED-GREEN-REFACTOR)
-- `sanitize` - Code sanitization (remove company data)
+- `sanitize [directory]` - Code sanitization (remove company-specific data)
 - `execute all phases autonomously` - Autonomous plan execution
-- `upgrade cortex` - Upgrade to CORTEX 4.0
+- `upgrade cortex` - Upgrade orchestrator (3.0→4.0 migration)
 - `help` - Command reference
 
-**Admin-Only Operations (EXCLUDE from docs):**
-- `align` - CORTEX system alignment (internal maintenance)
-- `refine` - CORTEX system refinement (internal optimization)
-- `system maintenance` - CORTEX internal maintenance (7-phase workflow)
-- `healthcheck` - CORTEX health monitoring (internal diagnostics)
-- `cleanup` - CORTEX workspace cleanup (internal housekeeping)
-- `optimize` - CORTEX optimization (internal performance)
-- `review` - CORTEX architectural review (internal quality gates)
-- `deploy` - CORTEX deployment (admin-only publish)
-- `regenerate_prompts` - CORTEX prompt regeneration (internal tooling)
+**ADMIN-Only Operations (Document in technical/orchestrators/ only):**
+- `align` - System alignment (CORTEX internal)
+- `refine` - System refinement (CORTEX internal)
+- `system maintenance` - 7-phase maintenance (CORTEX internal)
+- `healthcheck` - Health monitoring (CORTEX internal)
+- `cleanup` - Workspace cleanup (CORTEX internal)
+- `optimize` - CORTEX optimization (CORTEX internal)
+- `review` - Architectural review (CORTEX internal)
+- `deploy` - Deployment to publish (CORTEX admin)
+- `regenerate_prompts` - Prompt regeneration (CORTEX internal)
+
+**Key Distinction:** 
+- USER docs → `docs/features/` (what developers use to build apps)
+- ADMIN docs → `docs/technical/orchestrators/` (how CORTEX maintains itself)
 
 **Filtering Rule:**
 ```python
@@ -407,13 +411,8 @@ docs/
 
 ## 🔍 Global Search System (Lunr.js)
 
-### Why Lunr.js
-- ✅ **Lightweight:** 3.5KB gzipped (12KB uncompressed)
-- ✅ **Client-side:** No server required, works offline
-- ✅ **GitHub Pages compatible:** Pure JavaScript, no backend
-- ✅ **Full-text search:** Stemming, relevance scoring
-- ✅ **Performance:** <200ms search response for 100+ pages
-- ✅ **No API keys:** Zero dependencies, no rate limits
+**Status:** ✅ Lunr.js selected (lightweight, client-side, GitHub Pages compatible)
+**Performance Target:** <200ms search response for 100+ pages
 
 ### Required Assets
 ```
@@ -883,29 +882,57 @@ Every orchestrator page MUST include:
 
 ## 🚀 Execution Workflow
 
-### Phase 1: Preparation (DELETE & DISCOVER)
-1. **DELETE** all files in `docs/` EXCEPT:
+### Phase 1: Preparation (DISCOVER & AUDIT)
+
+**1. DISCOVER current CORTEX 4.0 features:**
+   - Parse `cortex-brain/documents/archive/CORTEX4-STATUS.md` (Phase completion)
+   - Scan `src/orchestrators/` (8 orchestrators: Planning, TDD, Execution, ADO, Sanitization, Refinement, System Maintenance, Upgrade)
+   - Extract USER operations from `cortex-operations.yaml` (filter by `is_user_facing()`)
+   - Aggregate `tests/` coverage (pytest reports)
+   - Review `cortex-brain/manifests/orchestrators/` (DoR/DoD, TDD integration)
+
+**2. AUDIT existing documentation:**
+   - List all pages in `docs/` (excluding `story/`)
+   - Identify outdated pages (CORTEX 3.0 references, deprecated features)
+   - Check for missing pages (new Phase 13B capabilities, knowledge library)
+   - Verify link integrity (broken cross-references)
+
+**3. VALIDATE discoveries:**
+   - Cross-reference features with codebase (`src/`, `tests/`)
+   - Confirm orchestrator implementations exist and have tests
+   - Verify metrics from CORTEX4-STATUS.md match current test results
+
+**4. PRESERVE critical assets:**
    - `docs/story/` (entire directory - NEVER TOUCH)
-   - `docs/assets/images/CORTEX-logo.png` (preserve logo)
-   - `docs/assets/images/Awakening.png` (preserve story button image)
-   - `docs/assets/css/main.css` (preserve theme)
+   - `docs/technical/` (17 orchestrator pages - UPDATE content only)
+   - `docs/assets/` (logo, Awakening.png, main.css theme)
+   - `docs/index.html` story button HTML (exact preservation)
 
-2. **DISCOVER** current features:
-   - Run discovery scripts (Step 1 above)
-   - Parse architecture documents
-   - Extract orchestrator details
-   - Aggregate test coverage
-   - Identify capabilities (Phase 13B)
+### Phase 2: Structure Validation
 
-3. **VALIDATE** discoveries:
-   - Cross-reference with codebase
-   - Verify test results
-   - Confirm orchestrator implementations
+**Goal:** Ensure all required directories and index pages exist
 
-### Phase 2: Structure Generation
-1. Create directory structure (see "Documentation Structure" above)
-2. Generate category index pages (architecture/index.html, orchestrators/index.html, etc.)
-3. Set up asset directories for each category
+**Execution:**
+```python
+# Pseudo-code for validation
+required_dirs = [
+    'docs/architecture/diagrams/',
+    'docs/features/',
+    'docs/governance/',
+    'docs/knowledge-library/diagrams/',
+    'docs/validation/diagrams/',
+    'docs/technical/orchestrators/',  # Already exists with 17 pages
+    'docs/api/orchestrators/',
+    'docs/api/brain-tiers/'
+]
+
+for dir in required_dirs:
+    if not exists(dir):
+        create_directory(dir)
+        create_index_page(dir)  # Generate category landing page
+```
+
+**Tools:** Use `file_search` to check existing structure, `create_directory` for missing dirs, `create_file` for index pages
 ### Phase 3: Content Generation
 **Priority Order:**
 1. **Home Dashboard** (`docs/index.html`)
@@ -1047,45 +1074,42 @@ Every orchestrator page MUST include:
 - [ ] **6 USER-facing orchestrator pages created** (Planning, TDD, Execution, ADO, Sanitization, Upgrade)
 - [ ] **NO ADMIN orchestrator pages** (System Maintenance, Refinement, Alignment excluded)
 - [ ] 5 architecture pages created with visualizations (USER-relevant architecture only)
-### Post-Generation
-- [ ] Home dashboard updated (preserves story button)
-- [ ] **Story button HTML matches exactly** (including all CSS classes, image paths, text)
-- [ ] **Story button link verified:** `story/index.html` resolves correctly
-- [ ] **Awakening image preserved:** `assets/images/Awakening.png` accessible
-- [ ] **Technical Documentation button added** to hero CTA section
-- [ ] **Technical Documentation card added** to Core Capabilities grid
-- [ ] 6 USER-facing orchestrator pages created (Planning, TDD, Execution, ADO, Sanitization, Upgrade)
-- [ ] 24 docs/technical/ subdirectories populated (80+ pages total)
-- [ ] 5 architecture pages created with visualizations
-- [ ] 5 feature pages created
-- [ ] 3 governance pages created
-- [ ] 3 validation pages created (Phase 13B)
-- [ ] **Global search assets installed:**
-  - [ ] `docs/assets/js/lunr.min.js` (downloaded from CDN)
-  - [ ] `docs/assets/js/search.js` (created)
-  - [ ] `docs/search-index.json` (auto-generated with 100+ pages indexed)
-- [ ] **Search functionality validated:**
-  - [ ] Search bar appears on all pages
-  - [ ] Ctrl+K focuses search input
-  - [ ] Search returns results <200ms
-  - [ ] Arrow keys navigate results
-  - [ ] Enter opens selected result
-  - [ ] Escape closes dropdown
-  - [ ] Mobile responsive (search icon, no shortcuts shown)
-- [ ] All pages have CORTEX logo with glow
-- [ ] All pages have breadcrumb navigation
-- [ ] All pages have global search bar
-- [ ] All D3.js diagrams render correctly
+### Post-Generation Validation
+
+**CRITICAL (Must Pass):**
+- [ ] `docs/story/` directory UNTOUCHED (verify no modifications)
+- [ ] Story button HTML matches exactly (CSS classes, image path, link target)
+- [ ] Story button functional test (click → navigates to `story/index.html`)
+- [ ] No CORTEX 3.0 references in any documentation page
+- [ ] All internal links resolve (no 404s)
+
+**Content Completeness:**
+- [ ] 6 USER orchestrator features in `docs/features/` (Planning, TDD, Execution, ADO, Sanitization, Upgrade)
+- [ ] 17 orchestrator pages in `docs/technical/orchestrators/` (updated content, not recreated)
+- [ ] 5 architecture pages with D3.js/Mermaid visualizations
+- [ ] 3 governance pages (SKULL rules, DoR/DoD, compliance)
+- [ ] 3 validation pages (Phase 13B: capabilities, metrics, STS workflow)
+- [ ] Knowledge library pages (Phase 10: patterns, usage)
+
+**Search Functionality:**
+- [ ] `docs/assets/js/lunr.min.js` installed
+- [ ] `docs/assets/js/search.js` created
+- [ ] `docs/search-index.json` generated (<500KB)
+- [ ] Search bar on all pages (global header)
+- [ ] Keyboard shortcuts work (Ctrl+K focus, Escape close, Arrow navigation)
+- [ ] Search performance <200ms
+
+**Visual Consistency:**
+- [ ] CORTEX logo with glow on all pages (except home)
+- [ ] Breadcrumb navigation on all pages (except home)
+- [ ] Glassmorphism theme consistent (colors, glass-bg, shadows)
+- [ ] Mobile responsive (tested on 375px, 768px, 1024px)
+
+**Performance:**
+- [ ] All D3.js diagrams render without errors
 - [ ] All Mermaid diagrams render correctly
-- [ ] `docs/story/` directory UNTOUCHED
-- [ ] Story button on home page WORKS (click test)
-- [ ] No CORTEX 3.0 references in documentation
-- [ ] All links resolve correctly
-- [ ] Glassmorphism theme consistent across all pages
-- [ ] Mobile responsive design validated
-- [ ] Search index size <500KB
-- [ ] Glassmorphism theme consistent across all pages
-- [ ] Mobile responsive design validated
+- [ ] Page load <3s (desktop), <5s (mobile)
+- [ ] Images optimized (<500KB each)
 
 ---
 
@@ -1109,6 +1133,72 @@ Every orchestrator page MUST include:
 - **Visual Progress:** `cortex-brain/documents/archive/visual-progress-integration.md`
 - **Architecture:** `cortex-brain/documents/archive/*-ARCHITECTURE.md` (10 files)
 - **Operations:** `cortex-operations.yaml`
+
+---
+
+## 🎯 Concrete Execution Workflow
+
+When user says `docgen` or `regenerate documentation`:
+
+**Step 1: Discovery (Use grep_search, file_search, read_file)**
+```
+1. grep_search("src/orchestrators/**/*.py", "class.*Orchestrator") → Extract orchestrator names
+2. read_file("cortex-brain/documents/archive/CORTEX4-STATUS.md") → Parse Phase completions
+3. read_file("cortex-operations.yaml") → Filter USER operations with is_user_facing()
+4. file_search("tests/**/*.py") → Count test files for coverage metrics
+```
+
+**Step 2: Audit Existing Docs (Use file_search, read_file)**
+```
+1. file_search("docs/**/*.html") → List all pages (exclude story/)
+2. For each page: read_file() → Check for "CORTEX 3.0", deprecated features
+3. Identify gaps: Missing Phase 13B validation pages, knowledge library docs
+```
+
+**Step 3: Update Content (Use replace_string_in_file, create_file)**
+```
+1. docs/index.html → Update metrics (preserve story button HTML exactly)
+2. docs/features/*.html → Update USER orchestrators (Planning, TDD, ADO, Sanitization, Upgrade)
+3. docs/technical/orchestrators/*.html → Update ADMIN orchestrators (content only, preserve structure)
+4. docs/architecture/*.html → Add Phase 11 multi-repo, Phase 13B validation
+5. docs/knowledge-library/*.html → Create Phase 10 pattern library pages
+```
+
+**Step 4: Generate Missing Pages (Use create_file)**
+```
+1. docs/validation/capabilities.html → Phase 13B: 9 capabilities
+2. docs/validation/metrics.html → Phase 13B: Performance metrics
+3. docs/validation/diagrams/capability-matrix.html → D3.js heatmap
+4. docs/knowledge-library/planning-patterns.html → Phase 10 patterns
+```
+
+**Step 5: Search Index (Use grep_search to extract content, create_file for index)**
+```
+1. For each .html in docs/ (exclude story/):
+   - Extract title, description, h2/h3 headings
+   - Build searchDocs array
+2. Create docs/search-index.json with Lunr index
+3. Verify size <500KB
+```
+
+**Step 6: Validation (Use read_file to verify)**
+```
+1. read_file("docs/index.html", lines with "story") → Verify button preservation
+2. file_search("docs/**/*.html") → Count pages (expect 80+ total)
+3. grep_search("docs/**/*.html", "CORTEX 3.0") → Should return 0 matches
+4. Manual: Click story button test → Navigate to story/index.html
+```
+
+**Tools Priority:**
+- **Discovery:** `grep_search` (fast pattern matching), `semantic_search` (feature finding)
+- **Audit:** `file_search` (directory scanning), `read_file` (content validation)
+- **Update:** `multi_replace_string_in_file` (batch edits), `replace_string_in_file` (single edits)
+- **Create:** `create_file` (new pages), `create_directory` (missing folders)
+
+---
+
+## ❌ Anti-Patterns to Avoid
+
 1. ❌ **NO CORTEX 3.0 references** - Only document CORTEX 4.0 features
 2. ❌ **NO placeholder content** - All pages must have real, validated content
 3. ❌ **NO generic descriptions** - Every page needs specific functionality details
@@ -1119,15 +1209,17 @@ Every orchestrator page MUST include:
 8. ❌ **NO logo variations** - Use exact logo styling from index.html
 9. ❌ **NO ADMIN-only features documented** - System Maintenance, Refinement, Alignment, Healthcheck are internal CORTEX operations
 10. ❌ **NO internal optimization workflows** - Document USER workflows only (planning, TDD, execution, sanitization)
-1. ❌ **NO CORTEX 3.0 references** - Only document CORTEX 4.0 features
-2. ❌ **NO placeholder content** - All pages must have real, validated content
-3. ❌ **NO generic descriptions** - Every page needs specific functionality details
-4. ❌ **NO missing diagrams** - All orchestrators need visual workflows
-5. ❌ **NO broken links** - All navigation must work
-6. ❌ **NO story directory modifications** - `docs/story/` is off-limits
-7. ❌ **NO theme inconsistencies** - All pages use glassmorphism design system
-8. ❌ **NO logo variations** - Use exact logo styling from index.html
 
 ---
 
-**Execution:** Run `docgen` command in Copilot Chat to regenerate all documentation from scratch.
+## 🚀 Execution Command
+
+**Command:** `docgen` or `regenerate documentation`
+
+**Approach:** Incremental refresh (preserve existing structure, update content only)
+
+**Preservation Rules:**
+- ✅ `docs/story/` - NEVER TOUCH
+- ✅ `docs/technical/` - PRESERVE and UPDATE (already has 17 orchestrator pages)
+- ✅ `docs/assets/` - PRESERVE theme, logo, images
+- ✅ `docs/index.html` - UPDATE metrics/features, PRESERVE story button exactly
