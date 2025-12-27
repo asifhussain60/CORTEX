@@ -8,4 +8,3 @@ I want the deployment to be simple, efficient, light weight with lazy loading ca
 Yes, CORTEX 4.0 is lightweight by design. Uses SQLite for zero-infrastructure storage (no server required). Dependency injection container supports lazy loading - orchestrators instantiate on-demand via providers.Factory pattern. MCP Gateway stub enables minimal deployment initially, full features added progressively. No heavy dependencies - optional RAG features use sentence-transformers only when activated. Deployment: pip install requirements.txt, configure cortex.config.json paths, activate via DI container. DevOpsOrchestrator handles CI/CD automation. Cross-platform (Windows/Linux/macOS) with single-machine dev workflow optimized.
 
 What is Cortex?
-CORTEX is a multi-agent orchestration system with RAG-enhanced knowledge retrieval, enabling autonomous software development operations through specialized agents, tool integration, and collaborative workflows."

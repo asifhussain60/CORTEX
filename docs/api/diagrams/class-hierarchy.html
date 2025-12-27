@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Class Hierarchy</title>
-    <script src="https://d3js.org/d3.v7.8.5.min.js"></script>
-    <style>
-        body {
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Class Hierarchy</title>
+<script src="https://d3js.org/d3.v7.8.5.min.js" type="text/javascript">
+</script>
+<style type="text/css">
+      body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
@@ -53,12 +54,10 @@
             opacity: 0;
             transition: opacity 0.3s;
         }
-    </style>
-</head>
-<body>
-    <h1>Class Hierarchy</h1>
-    <div id="diagram"></div>
-    <div class="tooltip" id="tooltip"></div>
+  <body>
+    <h1>Class Hierarchy<\/h1>
+    <div id="diagram"><\/div>
+    <div class="tooltip" id="tooltip"><\/div>
     
     <script>
         const nodes = [
@@ -7582,7 +7581,7 @@
     "is_abstract": false,
     "docstring": "Log and link TDD cycle patterns for learning"
   }
-];
+  ];
         const links = [
   {
     "source": "ABC",
@@ -8594,7 +8593,7 @@
     "target": "conversation_lifecycle_manager.WorkflowState",
     "type": "inherits"
   }
-];
+  ];
         
         const width = document.getElementById('diagram').offsetWidth;
         const height = 800;
@@ -8689,7 +8688,7 @@
             const tooltip = d3.select("#tooltip");
             tooltip.style("opacity", 1)
                 .html(`
-                    <strong>${d.name}</strong><br/>
+                    <strong>${d.name}<\/strong><br/>
                     Module: ${d.module}<br/>
                     Methods: ${d.method_count}<br/>
                     ${d.is_abstract ? "Abstract Class<br/>" : ""}
@@ -8702,6 +8701,8 @@
         function hideTooltip() {
             d3.select("#tooltip").style("opacity", 0);
         }
-    </script>
+  </style>
+</head>
+<body>
 </body>
 </html>

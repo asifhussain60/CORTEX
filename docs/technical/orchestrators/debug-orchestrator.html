@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Orchestrator | CORTEX Technical Documentation</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root { --primary: #F44336; --success: #10B981; --warning: #F59E0B; --error: #DC2626; }
+        body { font-family: 'Inter', -apple-system, sans-serif; margin: 0; padding: 0; background: #0f172a; color: #e2e8f0; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+        header { text-align: center; padding: 3rem 0; border-bottom: 2px solid var(--primary); }
+        header h1 { font-size: 3rem; font-weight: 700; color: var(--primary); margin: 0; }
+        header .subtitle { font-size: 1.2rem; color: #94a3b8; margin-top: 0.5rem; }
+        .metadata { display: flex; justify-content: center; gap: 2rem; margin-top: 1rem; flex-wrap: wrap; }
+        .metadata-item { background: rgba(255, 255, 255, 0.05); padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.9rem; }
+        .section { margin: 3rem 0; }
+        .section-title { font-size: 2rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; border-left: 4px solid var(--primary); padding-left: 1rem; }
+        .intro-text { font-size: 1.1rem; line-height: 1.8; color: #cbd5e1; margin-bottom: 2rem; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+        .feature-card { background: #1e293b; border-radius: 12px; padding: 1.5rem; border-left: 4px solid var(--primary); transition: transform 0.2s; }
+        .feature-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(255, 255, 255, 0.1); }
+        .viz-container { background: #1e293b; border-radius: 12px; padding: 2rem; margin: 2rem 0; }
+        .mermaid { background: #0f172a; border-radius: 8px; padding: 2rem; }
+        .breadcrumb { background: rgba(30, 41, 59, 0.8); padding: 1rem 2rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .breadcrumb a { color: var(--primary); text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .breadcrumb-separator { color: #64748b; margin: 0 0.5rem; }
+        .breadcrumb-current { color: #e2e8f0; }
+        footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid #334155; margin-top: 4rem; color: #64748b; }
+    </style>
+</head>
+<body>
+    <nav class="breadcrumb">
+        <a href="../../index.html">Home</a>
+        <span class="breadcrumb-separator">›</span>
+        <a href="index.html">Orchestrators</a>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-current">Debug</span>
+    </nav>
+    
+    <div class="container">
+        <header>
+            <h1>🐛 Debug Orchestrator</h1>
+            <p class="subtitle">Symptom → Root Cause → Fix Strategy</p>
+            <div class="metadata">
+                <div class="metadata-item"><span style="color:#94a3b8">Complexity:</span> <span style="color:var(--primary);font-weight:600">MEDIUM</span></div>
+                <div class="metadata-item"><span style="color:#94a3b8">File:</span> <span style="color:var(--primary);font-weight:600">debug_orchestrator.py</span></div>
+            </div>
+        </header>
+        
+        <section class="section">
+            <div class="intro-text">Systematic debugging workflow: symptom analysis → root cause identification → fix strategy → validation. Features context capture, error trace visualization with stack analysis, rollback decision tree, and learning integration for pattern recognition across debugging sessions.</div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title">✨ Key Features</h2>
+            <div class="features-grid"><div class="feature-card"><div style="font-size:2rem;margin-bottom:1rem">🔍</div><div style="font-size:1.25rem;font-weight:600;color:#f1f5f9;margin-bottom:0.75rem">Symptom Analysis</div><div style="color:#94a3b8">Comprehensive error context capture</div></div><div class="feature-card"><div style="font-size:2rem;margin-bottom:1rem">🎯</div><div style="font-size:1.25rem;font-weight:600;color:#f1f5f9;margin-bottom:0.75rem">Root Cause Detection</div><div style="color:#94a3b8">Stack trace analysis and pattern matching</div></div><div class="feature-card"><div style="font-size:2rem;margin-bottom:1rem">🔧</div><div style="font-size:1.25rem;font-weight:600;color:#f1f5f9;margin-bottom:0.75rem">Fix Strategy</div><div style="color:#94a3b8">Automated fix suggestions with validation</div></div></div>
+        </section>
+        
+        <section class="section"><h2 class="section-title">🔄 Debugging Workflow</h2><div class="viz-container"><div class="mermaid">
+graph LR
+    A[Symptom<br/>Reported] --> B[Capture<br/>Context]
+    B --> C[Analyze<br/>Stack Trace]
+    C --> D[Identify<br/>Root Cause]
+    D --> E[Generate<br/>Fix Strategy]
+    E --> F{Apply<br/>Fix?}
+    F -->|Yes| G[Validate]
+    F -->|No| H[Manual Review]
+    G --> I{Tests<br/>Pass?}
+    I -->|Yes| J[✅ Resolved]
+    I -->|No| K[🔄 Rollback]
+    
+    style A fill:#F44336,stroke:#D32F2F,color:#fff
+    style J fill:#10B981,stroke:#059669,color:#fff
+                </div></div></section>
+        
+        <footer>
+            <p>&copy; 2025 Asif Hussain | CORTEX 4.0</p>
+            <p>Debug Orchestrator - Intelligent Error Resolution</p>
+        </footer>
+    </div>
+    
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#F44336',
+                primaryTextColor: '#fff',
+                lineColor: '#64748b',
+                secondaryColor: '#1e293b'
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,235 +1,227 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Onboarding Acknowledgment Orchestrator - CORTEX Orchestrators</title>
-    <link rel="icon" type="image/png" href="../../assets/images/CORTEX-logo.png">
-    <link rel="stylesheet" href="../../assets/css/main.css">
-    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Onboarding Acknowledgment Orchestrator - CORTEX Orchestrators</title>
+<link href="../../assets/images/CORTEX-logo.png" rel="icon" type="image/png">
+<link href="../../assets/css/main.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
 </head>
 <body>
-    <!-- Breadcrumb -->
-    <nav class="breadcrumb">
-        <a href="../../index.html">Home</a>
-        <span class="breadcrumb-separator">›</span>
-        <a href="../index.html">Orchestrators</a>
-        <span class="breadcrumb-separator">›</span>
-        <span class="breadcrumb-current">Onboarding Acknowledgment Orchestrator</span>
-    </nav>
-
-    <!-- Hero -->
-    <section class="section">
-        <div class="container">
-            <div class="glass-card">
-                <div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 1rem;">
-                    <div class="icon" style="font-size: 3rem;">🔧</div>
-                    <div>
-                        <h1 style="margin-bottom: 0.5rem;">Onboarding Acknowledgment Orchestrator</h1>
-                        <p style="color: var(--text-secondary); font-size: 1.125rem; margin: 0;">
+<!-- Breadcrumb -->
+<nav class="breadcrumb">
+<a href="../../index.html">Home</a>
+<span class="breadcrumb-separator">›</span>
+<a href="../index.html">Orchestrators</a>
+<span class="breadcrumb-separator">›</span>
+<span class="breadcrumb-current">Onboarding Acknowledgment Orchestrator</span>
+</nav>
+<!-- Hero -->
+<section class="section">
+<div class="container">
+<div class="glass-card">
+<div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 1rem;">
+<div class="icon" style="font-size: 3rem;">🔧</div>
+<div>
+<h1 style="margin-bottom: 0.5rem;">Onboarding Acknowledgment Orchestrator</h1>
+<p style="color: var(--text-secondary); font-size: 1.125rem; margin: 0;">
                             CORTEX Orchestration System
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- Overview -->
-    <section class="section" style="padding-top: 0;">
-        <div class="container">
-            <h2>Overview</h2>
-            <div class="glass-card">
-                <p style="font-size: 1.125rem; line-height: 1.8; color: var(--text-secondary);">
-                    Onboarding Acknowledgment Orchestrator - Sprint 1 Day 3</p><p>Manages 3-step governance acknowledgment flow for first-time users.</p><p>FLOW STEPS:<br>1. Welcome & Introduction<br>   - Greet user<br>   - Explain CORTEX governance approach<br>   - Set expectations</p><p>2. Rulebook Display<br>   - Show key governance rules<br>   - Highlight protection layers<br>   - Provide examples</p><p>3. Explicit Acknowledgment<br>   - Request confirmation<br>   - Record acknowledgment<br>   - Complete onboarding</p><p>USAGE:<br>    from src.orchestrators.onboarding_acknowledgment_orchestrator import OnboardingAcknowledgmentOrchestrator<br>    <br>    orchestrator = OnboardingAcknowledgmentOrchestrator()<br>    <br>    if orchestrator.needs_onboarding():<br>        # Start onboarding flow<br>        step1 = orchestrator.execute_step_1()<br>        # ... user proceeds through steps<br>        orchestrator.record_acknowledgment()</p><p>INTEGRATION:<br>- Called by UnifiedEntryPointOrchestrator for first-time users<br>- Skipped for returning users (acknowledged_rulebook=1)<br>- Works alongside WelcomeBannerAgent (banner is per-session, this is one-time)</p><p>SPRINT 1 DAY 3-4: First-Time Acknowledgment<br>Author: Asif Hussain (CORTEX Enhancement System)<br>Date: November 28, 2025
-                </p>
-            </div>
-        </div>
-    </section>
+<section class="section" style="padding-top: 0;">
+<div class="container">
+<h2>Overview</h2>
+<div class="glass-card">
+<p style="font-size: 1.125rem; line-height: 1.8; color: var(--text-secondary);">
+                    Onboarding Acknowledgment Orchestrator - Sprint 1 Day 3</p>
+<p>Manages 3-step governance acknowledgment flow for first-time users.</p>
+<p>FLOW STEPS:<br>1. Welcome &amp; Introduction<br>   - Greet user<br>   - Explain CORTEX governance approach<br>   - Set expectations</p>
+<p>2. Rulebook Display<br>   - Show key governance rules<br>   - Highlight protection layers<br>   - Provide examples</p>
+<p>3. Explicit Acknowledgment<br>   - Request confirmation<br>   - Record acknowledgment<br>   - Complete onboarding</p>
+<p>USAGE:<br>    from src.orchestrators.onboarding_acknowledgment_orchestrator import OnboardingAcknowledgmentOrchestrator<br> <br>    orchestrator = OnboardingAcknowledgmentOrchestrator()<br> <br>    if orchestrator.needs_onboarding():<br>        # Start onboarding flow<br>        step1 = orchestrator.execute_step_1()<br>        # ... user proceeds through steps<br>        orchestrator.record_acknowledgment()</p>
+<p>INTEGRATION:<br>- Called by UnifiedEntryPointOrchestrator for first-time users<br>- Skipped for returning users (acknowledged_rulebook=1)<br>- Works alongside WelcomeBannerAgent (banner is per-session, this is one-time)</p>
+<p>SPRINT 1 DAY 3-4: First-Time Acknowledgment<br>Author: Asif Hussain (CORTEX Enhancement System)<br>Date: November 28, 2025
 
     <!-- Workflow Diagram -->
-    <section class="section" style="padding-top: 0;">
-        <div class="container">
-            <h2>Workflow Diagram</h2>
-            <div class="glass-card">
-                <div class="mermaid">
+<section class="section" style="padding-top: 0;">
+<div class="container">
+<h2>Workflow Diagram</h2>
+<div class="glass-card">
+<div class="mermaid">
 flowchart TD
     Start([onboarding_acknowledgment_orchestrator])
 
     Init[Initialize OnboardingAcknowledgmentOrchestrator]
-    Start --> Init
+    Start --&gt; Init
 
     M0[  Init  ]
-    Init --> M0
+    Init --&gt; M0
     M1[Needs Onboarding]
-    M0 --> M1
+    M0 --&gt; M1
     M2[Get Onboarding Status]
-    M1 --> M2
+    M1 --&gt; M2
     M3[Execute Step 1 Welcome]
-    M2 --> M3
+    M2 --&gt; M3
     M4[Execute Step 2 Rulebook]
-    M3 --> M4
+    M3 --&gt; M4
     M5[Execute Step 3 Acknowledgment]
-    M4 --> M5
+    M4 --&gt; M5
     M6[Record Acknowledgment]
-    M5 --> M6
+    M5 --&gt; M6
     M7[Get Current Step]
-    M6 --> M7
+    M6 --&gt; M7
     M8[Reset Onboarding]
-    M7 --> M8
+    M7 --&gt; M8
 
-    M8 --> End([Complete])
-                </div>
-            </div>
-        </div>
-    </section>
+    M8 --&gt; End([Complete])
 
     <!-- Classes and Methods -->
-    <section class="section" style="padding-top: 0;">
-        <div class="container">
-            <h2>Implementation Details</h2>
-
-            <div class="glass-card" style="margin-bottom: 2rem;">
-                <h3>Class: OnboardingStep</h3>
-
-                <p style="color: var(--text-secondary); line-height: 1.8;">
+<section class="section" style="padding-top: 0;">
+<div class="container">
+<h2>Implementation Details</h2>
+<div class="glass-card" style="margin-bottom: 2rem;">
+<h3>Class: OnboardingStep</h3>
+<p style="color: var(--text-secondary); line-height: 1.8;">
                     Onboarding flow steps.
+
                 </p>
+<p><strong>Inherits from:</strong> <code>Enum</code>
+</p>
+<div class="glass-card" style="margin-bottom: 2rem;">
+<h3>Class: OnboardingAcknowledgmentOrchestrator</h3>
+<p style="color: var(--text-secondary); line-height: 1.8;">
+                    Orchestrates 3-step governance acknowledgment for first-time users.</p>
+<p>Features:<br>- Progressive disclosure (3 steps)<br>- User-paced progression<br>- Persistent state tracking<br>- Skip for returning users
 
-                <p><strong>Inherits from:</strong> <code>Enum</code></p>
-
-            </div>
-
-            <div class="glass-card" style="margin-bottom: 2rem;">
-                <h3>Class: OnboardingAcknowledgmentOrchestrator</h3>
-
-                <p style="color: var(--text-secondary); line-height: 1.8;">
-                    Orchestrates 3-step governance acknowledgment for first-time users.</p><p>Features:<br>- Progressive disclosure (3 steps)<br>- User-paced progression<br>- Persistent state tracking<br>- Skip for returning users
                 </p>
-
-                <h4 style="margin-top: 1.5rem;">Methods</h4>
-                <div style="margin-left: 1rem;">
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+<h4 style="margin-top: 1.5rem;">Methods</h4>
+<div style="margin-left: 1rem;">
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             __init__(self, db_path)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Initialize onboarding orchestrator.</p>
+<p>Args:<br>    db_path: Optional custom database path
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Initialize onboarding orchestrator.</p><p>Args:<br>    db_path: Optional custom database path
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             needs_onboarding(self)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Check if user needs to go through onboarding.</p>
+<p>Returns:<br>    True if user hasn't acknowledged rulebook, False otherwise
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Check if user needs to go through onboarding.</p><p>Returns:<br>    True if user hasn't acknowledged rulebook, False otherwise
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             get_onboarding_status(self)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Get detailed onboarding status for user.</p>
+<p>Returns:<br>    Dict with acknowledgment status and onboarding needs
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Get detailed onboarding status for user.</p><p>Returns:<br>    Dict with acknowledgment status and onboarding needs
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             execute_step_1_welcome(self)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Execute Step 1: Welcome &amp; Introduction.</p>
+<p>Returns:<br>    Dict with welcome content and next step info
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Execute Step 1: Welcome & Introduction.</p><p>Returns:<br>    Dict with welcome content and next step info
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             execute_step_2_rulebook(self)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Execute Step 2: Rulebook Display.</p>
+<p>Returns:<br>    Dict with rulebook content and next step info
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Execute Step 2: Rulebook Display.</p><p>Returns:<br>    Dict with rulebook content and next step info
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             execute_step_3_acknowledgment(self)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Execute Step 3: Acknowledgment.</p>
+<p>This step requests explicit acknowledgment from the user.</p>
+<p>Returns:<br>    Dict with acknowledgment prompt and instructions
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Execute Step 3: Acknowledgment.</p><p>This step requests explicit acknowledgment from the user.</p><p>Returns:<br>    Dict with acknowledgment prompt and instructions
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             record_acknowledgment(self)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Record user's acknowledgment and complete onboarding.</p>
+<p>Returns:<br>    Dict with success status and completion message
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Record user's acknowledgment and complete onboarding.</p><p>Returns:<br>    Dict with success status and completion message
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             get_current_step(self)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Get the current onboarding step.</p>
+<p>Returns:<br>    OnboardingStep enum value
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Get the current onboarding step.</p><p>Returns:<br>    OnboardingStep enum value
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             reset_onboarding(self)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Reset onboarding status (for testing or re-onboarding).</p>
+<p>Returns:<br>    True if successful, False otherwise
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Reset onboarding status (for testing or re-onboarding).</p><p>Returns:<br>    True if successful, False otherwise
-                        </p>
 
-                    </div>
 
-                </div>
 
-            </div>
-
-        </div>
-    </section>
 
     <!-- Source File Info -->
-    <section class="section" style="padding-top: 0;">
-        <div class="container">
-            <div class="glass-card" style="text-align: center; color: var(--text-secondary);">
-                <p><strong>Source:</strong> <code>src/orchestrators/onboarding_acknowledgment_orchestrator.py</code></p>
-                <p style="margin-top: 0.5rem; font-size: 0.875rem;">
+<section class="section" style="padding-top: 0;">
+<div class="container">
+<div class="glass-card" style="text-align: center; color: var(--text-secondary);">
+<p><strong>Source:</strong> <code>src/orchestrators/onboarding_acknowledgment_orchestrator.py</code></p>
+<p style="margin-top: 0.5rem; font-size: 0.875rem;">
                     Author: Asif Hussain | Copyright © 2024-2025 Asif Hussain. All rights reserved.
-                </p>
-            </div>
-        </div>
-    </section>
 
-    <script>
-        mermaid.initialize({ startOnLoad: true, theme: 'dark' });
-    </script>
+    <script></script></p>
+</div>
+</div></section></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div></section>
+</div>
+</div>
+</div></section></p>
+</div>
+</div></section></p>
+</div>
+</div>
+</div>
+</div></section>
 </body>
 </html>

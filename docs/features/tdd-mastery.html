@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TDD Mastery - CORTEX 4.0</title>
+    <title>TDD Mastery - CORTEX 4.0 Features</title>
     <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="icon" href="../assets/images/CORTEX-logo.png" type="image/png">
 </head>
 <body>
     <!-- Breadcrumb -->
@@ -16,216 +17,318 @@
         <span class="breadcrumb-current">TDD Mastery</span>
     </nav>
 
-    <!-- Logo Header -->
-    <section class="section" style="padding-top: 2rem; padding-bottom: 0; text-align: center;">
-        <div class="container">
-            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" style="width: 100px; height: 100px; margin: 0 auto 1rem; display: block; border-radius: 15px; box-shadow: 0 8px 32px rgba(0, 212, 255, 0.3);" />
-        </div>
-    </section>
-
     <!-- Hero -->
     <section class="section">
         <div class="container">
             <div class="glass-card">
-                <div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 2rem;">
-                    <div class="icon" style="font-size: 4rem;">🎯</div>
-                    <div>
+                <div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 2rem; flex-wrap: wrap;">
+                    <div class="icon" style="font-size: 4rem;">✅</div>
+                    <div style="flex: 1;">
                         <h1 style="margin-bottom: 0.5rem;">TDD Mastery</h1>
                         <p style="color: var(--text-secondary); font-size: 1.25rem; margin: 0;">
-                            Automated Test-Driven Development with RED-GREEN-REFACTOR enforcement
+                            Test-Driven Development with RED→GREEN→REFACTOR Enforcement
                         </p>
                     </div>
                 </div>
-                
-                <div class="metrics-grid" style="margin-top: 2rem;">
-                    <div style="text-align: center;">
-                        <div class="metric-value" style="font-size: 2rem;">94%</div>
-                        <div class="metric-label">Test-First Success Rate</div>
+
+                <div class="metrics-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin-top: 2rem;">
+                    <div class="metric-card">
+                        <div class="metric-value">94%</div>
+                        <div class="metric-label">Success Rate</div>
+                        <div class="metric-sublabel">TDD Workflows</div>
                     </div>
-                    <div style="text-align: center;">
-                        <div class="metric-value" style="font-size: 2rem;">4</div>
+                    <div class="metric-card">
+                        <div class="metric-value">4</div>
                         <div class="metric-label">Coverage Layers</div>
+                        <div class="metric-sublabel">Unit to E2E</div>
                     </div>
-                    <div style="text-align: center;">
-                        <div class="metric-value" style="font-size: 2rem;">100%</div>
-                        <div class="metric-label">RED Phase Validation</div>
+                    <div class="metric-card">
+                        <div class="metric-value">100%</div>
+                        <div class="metric-label">RED Phase</div>
+                        <div class="metric-sublabel">Enforcement</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">&lt;5min</div>
+                        <div class="metric-label">Cycle Time</div>
+                        <div class="metric-sublabel">RED→REFACTOR</div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Executive Summary -->
+    <!-- Overview -->
     <section class="section" style="padding-top: 0;">
         <div class="container">
-            <h2>Executive Summary</h2>
+            <h2>What is TDD Mastery?</h2>
             <div class="glass-card">
                 <p style="font-size: 1.125rem; line-height: 1.8; color: var(--text-secondary);">
-                    TDD Mastery transforms test-driven development from a manual discipline into an automated workflow. 
-                    CORTEX enforces the RED-GREEN-REFACTOR cycle through SKULL Protection rules, ensuring tests are 
-                    written first and fail before implementation. The system validates coverage across 4 layers 
-                    (unit, integration, system, acceptance) and maintains a 94% success rate for test-first development.
+                    <strong style="color: var(--accent-primary);">TDD Mastery</strong> is CORTEX's enforced Test-Driven Development workflow that ensures 
+                    every code change follows the <strong>RED→GREEN→REFACTOR</strong> cycle. Unlike traditional TDD that relies on developer discipline, 
+                    CORTEX automates verification at each phase—tests <em>must</em> fail before implementation, pass after implementation, 
+                    and maintain coverage during refactoring.
+                </p>
+                <p style="font-size: 1.125rem; line-height: 1.8; color: var(--text-secondary); margin-top: 1rem;">
+                    This systematic approach prevents bugs, reduces technical debt, and creates living documentation through comprehensive test coverage.
                 </p>
             </div>
         </div>
     </section>
 
-    <!-- How It Works -->
+    <!-- The TDD Cycle -->
     <section class="section" style="padding-top: 0;">
         <div class="container">
-            <h2>How It Works</h2>
-            
+            <h2>The RED→GREEN→REFACTOR Cycle</h2>
+
             <!-- RED Phase -->
-            <div class="collapsible">
-                <div class="collapsible-header glass-card">
-                    <h3>🔴 RED Phase: Write Failing Tests</h3>
-                    <span class="collapsible-icon">▼</span>
+            <div class="glass-card" style="margin-bottom: 2rem; border-left: 4px solid var(--danger);">
+                <div style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1rem;">
+                    <div style="font-size: 3rem;">🔴</div>
+                    <div>
+                        <h3 style="margin: 0; color: var(--danger);">RED: Write Failing Test</h3>
+                        <p style="margin: 0.25rem 0 0 0; color: var(--text-muted);">Test must fail before implementation</p>
+                    </div>
                 </div>
-                <div class="collapsible-content glass-card-flat">
-                    <p><strong>What happens:</strong></p>
-                    <ul style="color: var(--text-secondary); line-height: 1.8;">
-                        <li>CORTEX generates comprehensive test cases before any implementation</li>
-                        <li>Tests MUST fail initially (verified by RED_PHASE_VALIDATION rule)</li>
-                        <li>Covers all 4 layers: unit, integration, system, acceptance</li>
-                        <li>Tests are executable immediately with clear failure messages</li>
-                    </ul>
-                    
-                    <p style="margin-top: 1.5rem;"><strong>Enforcement:</strong></p>
-                    <ul style="color: var(--text-secondary); line-height: 1.8;">
-                        <li><code>TDD_ENFORCEMENT</code>: Blocks implementation without failing tests</li>
-                        <li><code>RED_PHASE_VALIDATION</code>: Validates tests fail before GREEN phase</li>
-                        <li>Brain Protector alerts if implementation starts too early</li>
-                    </ul>
+                <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;">
+                    <strong>Purpose:</strong> Define expected behavior and prove the test can detect failures.
+                </p>
+                <div style="background: rgba(244, 67, 54, 0.1); border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+                    <strong style="color: var(--danger);">SKULL Rule:</strong> Tests MUST fail first. If test passes without implementation, 
+                    the test is invalid and must be fixed.
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <div>
+                        <strong style="color: var(--accent-primary);">Enforcement:</strong>
+                        <ul style="margin: 0.5rem 0 0 1.5rem; color: var(--text-secondary);">
+                            <li>Run test with <code>pytest</code></li>
+                            <li>Verify failure message</li>
+                            <li>Confirm failure reason</li>
+                            <li>Block GREEN phase if passes</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong style="color: var(--accent-primary);">Example:</strong>
+                        <code style="display: block; background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 4px; margin-top: 0.5rem; white-space: pre-wrap;">def test_parse_feature():
+    # Test fails: parse_feature() 
+    # doesn't exist yet
+    assert parse_feature("x") == {...}</code>
+                    </div>
                 </div>
             </div>
 
             <!-- GREEN Phase -->
-            <div class="collapsible">
-                <div class="collapsible-header glass-card">
-                    <h3>🟢 GREEN Phase: Implement Solution</h3>
-                    <span class="collapsible-icon">▼</span>
+            <div class="glass-card" style="margin-bottom: 2rem; border-left: 4px solid var(--success);">
+                <div style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1rem;">
+                    <div style="font-size: 3rem;">🟢</div>
+                    <div>
+                        <h3 style="margin: 0; color: var(--success);">GREEN: Make Test Pass</h3>
+                        <p style="margin: 0.25rem 0 0 0; color: var(--text-muted);">Implement minimal code to pass test</p>
+                    </div>
                 </div>
-                <div class="collapsible-content glass-card-flat">
-                    <p><strong>What happens:</strong></p>
-                    <ul style="color: var(--text-secondary); line-height: 1.8;">
-                        <li>Write minimal code to make tests pass</li>
-                        <li>Focus on functionality, not perfection</li>
-                        <li>Run tests continuously to verify progress</li>
-                        <li>All tests must pass before moving to REFACTOR</li>
-                    </ul>
-                    
-                    <p style="margin-top: 1.5rem;"><strong>Success criteria:</strong></p>
-                    <ul style="color: var(--text-secondary); line-height: 1.8;">
-                        <li>All RED phase tests now pass</li>
-                        <li>No new test failures introduced</li>
-                        <li>Code coverage targets met (per-layer validation)</li>
-                    </ul>
+                <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;">
+                    <strong>Purpose:</strong> Write simplest implementation to satisfy the test—no gold-plating.
+                </p>
+                <div style="background: rgba(76, 175, 80, 0.1); border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+                    <strong style="color: var(--success);">Best Practice:</strong> Focus on making the test pass. Optimization comes in REFACTOR phase.
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <div>
+                        <strong style="color: var(--accent-primary);">Enforcement:</strong>
+                        <ul style="margin: 0.5rem 0 0 1.5rem; color: var(--text-secondary);">
+                            <li>Implement feature code</li>
+                            <li>Run test with <code>pytest</code></li>
+                            <li>Verify test passes</li>
+                            <li>Confirm no other tests break</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong style="color: var(--accent-primary);">Example:</strong>
+                        <code style="display: block; background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 4px; margin-top: 0.5rem; white-space: pre-wrap;">def parse_feature(yaml_str):
+    # Minimal implementation
+    data = yaml.safe_load(yaml_str)
+    return data["feature"]</code>
+                    </div>
                 </div>
             </div>
 
             <!-- REFACTOR Phase -->
-            <div class="collapsible">
-                <div class="collapsible-header glass-card">
-                    <h3>♻️ REFACTOR Phase: Optimize & Clean</h3>
-                    <span class="collapsible-icon">▼</span>
+            <div class="glass-card" style="margin-bottom: 2rem; border-left: 4px solid var(--info);">
+                <div style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1rem;">
+                    <div style="font-size: 3rem;">🔵</div>
+                    <div>
+                        <h3 style="margin: 0; color: var(--info);">REFACTOR: Improve Code Quality</h3>
+                        <p style="margin: 0.25rem 0 0 0; color: var(--text-muted);">Optimize without changing behavior</p>
+                    </div>
                 </div>
-                <div class="collapsible-content glass-card-flat">
-                    <p><strong>What happens:</strong></p>
-                    <ul style="color: var(--text-secondary); line-height: 1.8;">
-                        <li>Improve code quality without changing behavior</li>
-                        <li>Remove duplication (enforced by HOLISTIC_CODE_DISCOVERY_ENFORCEMENT)</li>
-                        <li>Optimize performance and readability</li>
-                        <li>Clean up orphaned code (enforced by REFACTOR_CODE_CLEANUP_ENFORCEMENT)</li>
-                    </ul>
-                    
-                    <p style="margin-top: 1.5rem;"><strong>Enforcement:</strong></p>
-                    <ul style="color: var(--text-secondary); line-height: 1.8;">
-                        <li><code>REFACTOR_CODE_CLEANUP_ENFORCEMENT</code>: Mandates removal of dead code</li>
-                        <li>Tests must continue passing throughout refactoring</li>
-                        <li>Brain Protector prevents refactoring that breaks tests</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- SKULL Protection Rules -->
-    <section class="section" style="padding-top: 0;">
-        <div class="container">
-            <h2>SKULL Protection Rules</h2>
-            <div class="glass-card">
-                <p style="color: var(--text-secondary); margin-bottom: 2rem;">
-                    TDD Mastery is enforced by 3 core SKULL rules that protect the TDD workflow:
+                <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;">
+                    <strong>Purpose:</strong> Clean up implementation—extract methods, remove duplication, improve readability.
                 </p>
-                
-                <div style="display: grid; gap: 1.5rem;">
-                    <div style="border-left: 3px solid var(--success); padding-left: 1.5rem;">
-                        <h4>TDD_ENFORCEMENT</h4>
-                        <p style="color: var(--text-secondary);">
-                            Mandates RED→GREEN→REFACTOR cycle. Implementation blocked until failing tests exist.
-                        </p>
+                <div style="background: rgba(33, 150, 243, 0.1); border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+                    <strong style="color: var(--info);">Safety Net:</strong> Tests must continue passing during refactoring. Any failure indicates behavioral change.
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <div>
+                        <strong style="color: var(--accent-primary);">Enforcement:</strong>
+                        <ul style="margin: 0.5rem 0 0 1.5rem; color: var(--text-secondary);">
+                            <li>Improve code structure</li>
+                            <li>Run full test suite</li>
+                            <li>Verify 100% pass rate</li>
+                            <li>Check coverage maintained</li>
+                        </ul>
                     </div>
-                    
-                    <div style="border-left: 3px solid var(--success); padding-left: 1.5rem;">
-                        <h4>RED_PHASE_VALIDATION</h4>
-                        <p style="color: var(--text-secondary);">
-                            Validates tests fail before implementation begins. Prevents false-positive passing tests.
-                        </p>
-                    </div>
-                    
-                    <div style="border-left: 3px solid var(--success); padding-left: 1.5rem;">
-                        <h4>REFACTOR_CODE_CLEANUP_ENFORCEMENT</h4>
-                        <p style="color: var(--text-secondary);">
-                            Requires removal of orphaned and duplicate code during refactoring phase.
-                        </p>
+                    <div>
+                        <strong style="color: var(--accent-primary);">Example:</strong>
+                        <code style="display: block; background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 4px; margin-top: 0.5rem; white-space: pre-wrap;">def parse_feature(yaml_str):
+    data = _load_yaml(yaml_str)
+    return _extract_feature(data)
+    
+# Tests still pass ✅</code>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Real-World Results -->
+    <!-- Coverage Layers -->
     <section class="section" style="padding-top: 0;">
         <div class="container">
-            <h2>Real-World Results</h2>
-            <div class="glass-card">
-                <div class="metrics-grid">
-                    <div style="text-align: center;">
-                        <div class="metric-value" style="font-size: 2.5rem; color: var(--success);">94%</div>
-                        <div class="metric-label">Test-first success rate across all CORTEX features</div>
+            <h2>4-Layer Test Coverage</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                <div class="glass-card">
+                    <h3 style="color: var(--accent-primary);">🧪 Unit Tests</h3>
+                    <p style="color: var(--text-secondary); line-height: 1.8;">
+                        Test individual functions/methods in isolation. Fast execution (&lt;100ms), high coverage (80%+ target).
+                    </p>
+                    <div style="margin-top: 1rem; padding: 0.5rem; background: rgba(33, 150, 243, 0.1); border-radius: 4px;">
+                        <strong>Location:</strong> <code>tests/unit/</code>
                     </div>
-                    <div style="text-align: center;">
-                        <div class="metric-value" style="font-size: 2.5rem; color: var(--success);">100%</div>
-                        <div class="metric-label">RED phase validation compliance</div>
+                </div>
+
+                <div class="glass-card">
+                    <h3 style="color: var(--accent-primary);">🔗 Integration Tests</h3>
+                    <p style="color: var(--text-secondary); line-height: 1.8;">
+                        Test component interactions. Validates orchestrators, agents, and brain tiers working together.
+                    </p>
+                    <div style="margin-top: 1rem; padding: 0.5rem; background: rgba(33, 150, 243, 0.1); border-radius: 4px;">
+                        <strong>Location:</strong> <code>tests/integration/</code>
                     </div>
-                    <div style="text-align: center;">
-                        <div class="metric-value" style="font-size: 2.5rem; color: var(--success);">4-Layer</div>
-                        <div class="metric-label">Coverage validation (unit, integration, system, acceptance)</div>
+                </div>
+
+                <div class="glass-card">
+                    <h3 style="color: var(--accent-primary);">🎯 Functional Tests</h3>
+                    <p style="color: var(--text-secondary); line-height: 1.8;">
+                        Test complete workflows end-to-end. Validates planning, execution, and maintenance operations.
+                    </p>
+                    <div style="margin-top: 1rem; padding: 0.5rem; background: rgba(33, 150, 243, 0.1); border-radius: 4px;">
+                        <strong>Location:</strong> <code>tests/functional/</code>
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <h3 style="color: var(--accent-primary);">🚀 E2E Tests</h3>
+                    <p style="color: var(--text-secondary); line-height: 1.8;">
+                        Test real-world scenarios with actual repositories. Validates CORTEX behavior in production conditions.
+                    </p>
+                    <div style="margin-top: 1rem; padding: 0.5rem; background: rgba(33, 150, 243, 0.1); border-radius: 4px;">
+                        <strong>Location:</strong> <code>tests/e2e/</code>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Navigation -->
-    <section class="section">
+    <!-- TDD Commands -->
+    <section class="section" style="padding-top: 0;">
         <div class="container">
-            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                <a href="index.html" class="btn btn-secondary">← Back to Features</a>
-                <a href="planning-system.html" class="btn btn-secondary">Next: Planning System 2.0 →</a>
+            <h2>TDD Workflow Commands</h2>
+            <div class="glass-card">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                    <div>
+                        <h3 style="color: var(--accent-primary);">Starting TDD Cycle</h3>
+                        <code style="display: block; background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 4px; margin: 0.5rem 0;">
+# In Copilot Chat<br>
+start tdd for [feature]
+                        </code>
+                        <p style="color: var(--text-secondary); margin-top: 0.5rem;">
+                            Initiates RED→GREEN→REFACTOR workflow with automated phase verification.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h3 style="color: var(--accent-primary);">Running Tests</h3>
+                        <code style="display: block; background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 4px; margin: 0.5rem 0;">
+# Run all tests<br>
+pytest tests/<br><br>
+# With coverage<br>
+pytest --cov=src tests/
+                        </code>
+                        <p style="color: var(--text-secondary); margin-top: 0.5rem;">
+                            Executes test suite with coverage reporting and failure details.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h3 style="color: var(--accent-primary);">Verifying Phases</h3>
+                        <code style="display: block; background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 4px; margin: 0.5rem 0;">
+# In Copilot Chat<br>
+verify red phase<br>
+verify green phase<br>
+verify refactor phase
+                        </code>
+                        <p style="color: var(--text-secondary); margin-top: 0.5rem;">
+                            CORTEX validates each phase completion before advancing to next.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Why TDD Mastery?</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                <div class="glass-card">
+                    <h3 style="color: var(--accent-primary);">🛡️ Bug Prevention</h3>
+                    <p style="color: var(--text-secondary); line-height: 1.8;">
+                        Catch bugs before they reach production. Tests define correct behavior, implementation follows.
+                    </p>
+                </div>
+
+                <div class="glass-card">
+                    <h3 style="color: var(--accent-primary);">📚 Living Documentation</h3>
+                    <p style="color: var(--text-secondary); line-height: 1.8;">
+                        Tests document expected behavior better than comments—they're always up-to-date and executable.
+                    </p>
+                </div>
+
+                <div class="glass-card">
+                    <h3 style="color: var(--accent-primary);">🔄 Fearless Refactoring</h3>
+                    <p style="color: var(--text-secondary); line-height: 1.8;">
+                        Comprehensive tests provide safety net for code improvements. Refactor confidently.
+                    </p>
+                </div>
+
+                <div class="glass-card">
+                    <h3 style="color: var(--accent-primary);">⚡ Faster Development</h3>
+                    <p style="color: var(--text-secondary); line-height: 1.8;">
+                        Catch issues immediately rather than hours debugging later. TDD saves time long-term.
+                    </p>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer>
+    <footer class="section" style="text-align: center; padding: 3rem 0; border-top: 1px solid var(--glass-border);">
         <div class="container">
-            <div class="footer-bottom">
-                <p>&copy; 2024-2025 Asif Hussain. All rights reserved. | <strong>CORTEX 4.0</strong></p>
-            </div>
+            <a href="../index.html" class="btn btn-secondary">← Back to Home</a>
+            <p style="margin-top: 2rem; color: var(--text-muted);">
+                Part of the CORTEX 4.0 Documentation Suite<br>
+                Author: Asif Hussain | <a href="https://github.com/asifhussain60/CORTEX" style="color: var(--accent-primary);">github.com/asifhussain60/CORTEX</a>
+            </p>
         </div>
     </footer>
-
-    <script src="../assets/js/main.js"></script>
 </body>
 </html>

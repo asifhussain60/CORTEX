@@ -1,213 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gantt Chart - CORTEX Future</title>
-    <meta name="description" content="Interactive Gantt chart showing CORTEX 4.0 development timeline and progress">
-    <link rel="stylesheet" href="../assets/css/future.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/frappe-gantt@0.6.1/dist/frappe-gantt.css">
-    <script src="https://cdn.jsdelivr.net/npm/frappe-gantt@0.6.1/dist/frappe-gantt.min.js"></script>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Gantt Chart - CORTEX Future</title>
+<meta content="Interactive Gantt chart showing CORTEX 4.0 development timeline and progress" name="description">
+<link href="../assets/css/future.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/frappe-gantt@0.6.1/dist/frappe-gantt.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/frappe-gantt@0.6.1/dist/frappe-gantt.min.js"></script>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="main-nav">
-        <div class="nav-container">
-            <a href="../index.html" class="nav-logo">CORTEX</a>
-            <div class="nav-links">
-                <a href="executive-summary.html">Vision</a>
-                <a href="interactive-roadmap.html">Roadmap</a>
-                <a href="dependency-graph.html">Dependencies</a>
-                <a href="gantt-chart.html" class="active">Gantt</a>
-                <a href="../index.html">Home</a>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <div class="future-hero">
-        <div class="hero-content">
-            <h1 class="hero-title">
-                <span class="gradient-text">Development Timeline</span>
-            </h1>
-            <p class="hero-subtitle">
+<!-- Navigation -->
+<nav class="main-nav">
+<div class="nav-container">
+<a class="nav-logo" href="../index.html">CORTEX</a>
+<div class="nav-links">
+<a href="executive-summary.html">Vision</a>
+<a href="interactive-roadmap.html">Roadmap</a>
+<a href="dependency-graph.html">Dependencies</a>
+<a class="active" href="gantt-chart.html">Gantt</a>
+<a href="../index.html">Home</a>
+</div>
+<!-- Hero Section -->
+<div class="future-hero">
+<div class="hero-content">
+<h1 class="hero-title">
+<span class="gradient-text">Development Timeline</span>
+</h1>
+<p class="hero-subtitle">
                 Interactive Gantt chart tracking CORTEX 4.0 features, milestones, and progress across development cycles
-            </p>
-        </div>
-    </div>
 
     <!-- Statistics Grid -->
-    <div class="stats-container">
-        <div class="stats-grid" id="statsGrid">
-            <div class="stat-card" data-stat="total">
-                <div class="stat-icon">📋</div>
-                <div class="stat-value" id="totalTasks">0</div>
-                <div class="stat-label">Total Tasks</div>
-            </div>
-            <div class="stat-card" data-stat="completed">
-                <div class="stat-icon">✅</div>
-                <div class="stat-value" id="completedTasks">0</div>
-                <div class="stat-label">Completed</div>
-            </div>
-            <div class="stat-card" data-stat="progress">
-                <div class="stat-icon">🔄</div>
-                <div class="stat-value" id="inProgressTasks">0</div>
-                <div class="stat-label">In Progress</div>
-            </div>
-            <div class="stat-card" data-stat="avg">
-                <div class="stat-icon">📊</div>
-                <div class="stat-value" id="avgProgress">0%</div>
-                <div class="stat-label">Avg Progress</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Gantt Container -->
-    <div class="gantt-container">
-        <!-- Control Panel -->
-        <div class="gantt-control-panel">
-            <div class="control-group">
-                <label for="viewMode">View Mode:</label>
-                <select id="viewMode" class="control-select">
-                    <option value="Week">Week</option>
-                    <option value="Month" selected>Month</option>
-                    <option value="Quarter">Quarter</option>
-                    <option value="Year">Year</option>
-                </select>
-            </div>
-            <div class="control-group">
-                <label for="filterStatus">Filter Status:</label>
-                <select id="filterStatus" class="control-select">
-                    <option value="all">All Status</option>
-                    <option value="in-progress">In Progress</option>
-                    <option value="planned">Planned</option>
-                    <option value="future">Future</option>
-                    <option value="completed">Completed</option>
-                </select>
-            </div>
-            <div class="control-group">
-                <label for="filterMilestone">Milestone:</label>
-                <select id="filterMilestone" class="control-select">
-                    <option value="all">All Milestones</option>
-                </select>
-            </div>
-            <div class="control-buttons">
-                <button id="resetFilters" class="btn btn-secondary">Reset Filters</button>
-                <button id="exportCSV" class="btn btn-secondary">Export CSV</button>
-                <button id="printView" class="btn btn-secondary">Print View</button>
-            </div>
-        </div>
-
-        <!-- Gantt Chart SVG Container -->
-        <div class="gantt-wrapper">
-            <svg id="ganttChart"></svg>
-        </div>
-
-        <!-- Progress Summary -->
-        <div class="progress-summary" id="progressSummary">
-            <h3 class="summary-title">Progress by Milestone</h3>
-            <div id="milestoneProgress" class="milestone-progress-container"></div>
-        </div>
-
-        <!-- Legend -->
-        <div class="gantt-legend">
-            <h3 class="legend-title">Legend</h3>
-            <div class="legend-section">
-                <h4>Task Status</h4>
-                <div class="legend-item">
-                    <div class="status-bar status-completed"></div>
-                    <span>Completed (100%)</span>
-                </div>
-                <div class="legend-item">
-                    <div class="status-bar status-in-progress"></div>
-                    <span>In Progress (20-99%)</span>
-                </div>
-                <div class="legend-item">
-                    <div class="status-bar status-planned"></div>
-                    <span>Planned (1-19%)</span>
-                </div>
-                <div class="legend-item">
-                    <div class="status-bar status-future"></div>
-                    <span>Future (0%)</span>
-                </div>
-            </div>
-            <div class="legend-section">
-                <h4>Task Types</h4>
-                <div class="legend-item">
-                    <div class="task-icon milestone-icon">◆</div>
-                    <span>Milestone</span>
-                </div>
-                <div class="legend-item">
-                    <div class="task-icon feature-icon">▬</div>
-                    <span>Feature</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Task Detail Panel (hidden by default) -->
-    <div id="taskDetail" class="task-detail-panel" style="display: none;">
-        <div class="task-detail-header">
-            <h3 id="taskDetailName">Task Name</h3>
-            <button id="closeTaskDetail" class="btn-close">&times;</button>
-        </div>
-        <div class="task-detail-content">
-            <div class="detail-row">
-                <span class="detail-label">Type:</span>
-                <span id="taskDetailType" class="detail-value">-</span>
-            </div>
-            <div class="detail-row">
-                <span class="detail-label">Milestone:</span>
-                <span id="taskDetailMilestone" class="detail-value">-</span>
-            </div>
-            <div class="detail-row">
-                <span class="detail-label">Timeline:</span>
-                <span id="taskDetailTimeline" class="detail-value">-</span>
-            </div>
-            <div class="detail-row">
-                <span class="detail-label">Status:</span>
-                <span id="taskDetailStatus" class="detail-value">-</span>
-            </div>
-            <div class="detail-row">
-                <span class="detail-label">Progress:</span>
-                <div id="taskDetailProgress" class="progress-bar-container">
-                    <div class="progress-bar-fill" style="width: 0%">0%</div>
-                </div>
-            </div>
-            <div class="detail-row">
-                <span class="detail-label">Dependencies:</span>
-                <span id="taskDetailDeps" class="detail-value">-</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- Load Gantt JavaScript -->
-    <script src="../assets/js/gantt-chart.js"></script>
-    <script>
-        // Initialize Gantt chart visualization
-        const ganttChart = new GanttChartVisualization();
-        ganttChart.init();
-    </script>
-    
-    <!-- Print-specific styles -->
-    <style media="print">
-        .main-nav, .gantt-control-panel, .btn, .task-detail-panel {
-            display: none !important;
-        }
-        
-        .gantt-wrapper {
-            page-break-inside: avoid;
-        }
-        
-        body {
-            background: white;
-        }
-        
-        .stats-container, .progress-summary, .gantt-legend {
-            page-break-inside: avoid;
-            background: white;
-            border: 1px solid #ccc;
-        }
-    </style>
+</p>
+<div class="stats-container">
+<div class="stats-grid" id="statsGrid">
+<div class="stat-card" data-stat="total">
+<div class="stat-icon">📋</div>
+<div class="stat-value" id="totalTasks">0</div>
+<div class="stat-label">Total Tasks</div>
+</div>
+<div class="stat-card" data-stat="completed">
+<div class="stat-icon">✅</div>
+<div class="stat-value" id="completedTasks">0</div>
+<div class="stat-label">Completed</div>
+</div>
+<div class="stat-card" data-stat="progress">
+<div class="stat-icon">🔄</div>
+<div class="stat-value" id="inProgressTasks">0</div>
+<div class="stat-label">In Progress</div>
+</div>
+<div class="stat-card" data-stat="avg">
+<div class="stat-icon">📊</div>
+<div class="stat-value" id="avgProgress">0%</div>
+<div class="stat-label">Avg Progress</div>
+</div>
+<!-- Gantt Container -->
+<div class="gantt-container">
+<!-- Control Panel -->
+<div class="gantt-control-panel">
+<div class="control-group">
+<label for="viewMode">View Mode:</label>
+<select class="control-select" id="viewMode">
+<option value="Week">Week</option>
+<option selected value="Month">Month</option>
+<option value="Quarter">Quarter</option>
+<option value="Year">Year</option>
+</select>
+<div class="control-group">
+<label for="filterStatus">Filter Status:</label>
+<select class="control-select" id="filterStatus">
+<option value="all">All Status</option>
+<option value="in-progress">In Progress</option>
+<option value="planned">Planned</option>
+<option value="future">Future</option>
+<option value="completed">Completed</option>
+</select>
+<div class="control-group">
+<label for="filterMilestone">Milestone:</label>
+<select class="control-select" id="filterMilestone">
+<option value="all">All Milestones</option>
+</select>
+<div class="control-buttons">
+<button class="btn btn-secondary" id="resetFilters">Reset Filters</button>
+<button class="btn btn-secondary" id="exportCSV">Export CSV</button>
+<button class="btn btn-secondary" id="printView">Print View</button>
+</div>
+<!-- Gantt Chart SVG Container -->
+<div class="gantt-wrapper">
+<svg id="ganttChart"></svg>
+</div>
+<!-- Progress Summary -->
+<div class="progress-summary" id="progressSummary">
+<h3 class="summary-title">Progress by Milestone</h3>
+<div class="milestone-progress-container" id="milestoneProgress"></div>
+</div>
+<!-- Legend -->
+<div class="gantt-legend">
+<h3 class="legend-title">Legend</h3>
+<div class="legend-section">
+<h4>Task Status</h4>
+<div class="legend-item">
+<div class="status-bar status-completed"></div>
+<span>Completed (100%)</span>
+</div>
+<div class="legend-item">
+<div class="status-bar status-in-progress"></div>
+<span>In Progress (20-99%)</span>
+</div>
+<div class="legend-item">
+<div class="status-bar status-planned"></div>
+<span>Planned (1-19%)</span>
+</div>
+<div class="legend-item">
+<div class="status-bar status-future"></div>
+<span>Future (0%)</span>
+</div>
+<div class="legend-section">
+<h4>Task Types</h4>
+<div class="legend-item">
+<div class="task-icon milestone-icon">◆</div>
+<span>Milestone</span>
+</div>
+<div class="legend-item">
+<div class="task-icon feature-icon">▬</div>
+<span>Feature</span>
+</div>
+<!-- Task Detail Panel (hidden by default) -->
+<div class="task-detail-panel" id="taskDetail" style="display: none;">
+<div class="task-detail-header">
+<h3 id="taskDetailName">Task Name</h3>
+<button class="btn-close" id="closeTaskDetail">×</button>
+</div>
+<div class="task-detail-content">
+<div class="detail-row">
+<span class="detail-label">Type:</span>
+<span class="detail-value" id="taskDetailType">-</span>
+</div>
+<div class="detail-row">
+<span class="detail-label">Milestone:</span>
+<span class="detail-value" id="taskDetailMilestone">-</span>
+</div>
+<div class="detail-row">
+<span class="detail-label">Timeline:</span>
+<span class="detail-value" id="taskDetailTimeline">-</span>
+</div>
+<div class="detail-row">
+<span class="detail-label">Status:</span>
+<span class="detail-value" id="taskDetailStatus">-</span>
+</div>
+<div class="detail-row">
+<span class="detail-label">Progress:</span>
+<div class="progress-bar-container" id="taskDetailProgress">
+<div class="progress-bar-fill" style="width: 0%">0%</div>
+</div>
+<div class="detail-row">
+<span class="detail-label">Dependencies:</span>
+<span class="detail-value" id="taskDetailDeps">-</span>
+</div>
+<!-- Load Gantt JavaScript -->
+<script src="../assets/js/gantt-chart.js"></script>
+<script></script>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div></nav>
 </body>
 </html>

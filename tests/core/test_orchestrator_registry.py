@@ -74,7 +74,8 @@ class TestManualRegistration:
         
         # Create mock orchestrator class
         class MockOrchestrator(BaseOrchestrator):
-            pass
+            def execute(self, context=None):
+                return {"success": True}
         
         registry.register("mock", MockOrchestrator)
         
@@ -208,7 +209,8 @@ from src.core.orchestrator_registry import orchestrator_plugin
 
 @orchestrator_plugin("custom_name", version="2.0.0")
 class DecoratedOrchestrator(BaseOrchestrator):
-    pass
+    def execute(self, context=None):
+        return {"success": True}
 """)
             
             registry.discover([Path(tmpdir)])
@@ -251,10 +253,14 @@ class TestLazyLoading:
         instantiation_count = 0
         
         class LazyOrchestrator(BaseOrchestrator):
-            def __init__(self, *args, **kwargs):
+            def __init__(self, config=None, *args, **kwargs):
                 nonlocal instantiation_count
                 instantiation_count += 1
-                super().__init__(*args, **kwargs)
+                super().__init__(config or {}, *args, **kwargs)
+            
+            def execute(self, **kwargs):
+                """Implement abstract execute method."""
+                return {"status": "success"}
         
         registry.register("lazy", LazyOrchestrator)
         
@@ -294,6 +300,10 @@ class TestLazyLoading:
                 nonlocal received_args
                 received_args = (workspace_root, kwargs)
                 super().__init__(workspace_root, **kwargs)
+            
+            def execute(self, **kwargs):
+                """Implement abstract execute method."""
+                return {"status": "success"}
         
         registry.register("configurable", ConfigurableOrchestrator)
         
@@ -320,6 +330,10 @@ class TestErrorHandling:
         class BrokenOrchestrator(BaseOrchestrator):
             def __init__(self, *args, **kwargs):
                 raise RuntimeError("Initialization failed")
+            
+            def execute(self, **kwargs):
+                """Implement abstract execute method."""
+                return {"status": "success"}
         
         registry.register("broken", BrokenOrchestrator)
         
@@ -335,8 +349,12 @@ class TestErrorHandling:
         registry = OrchestratorRegistry()
         
         class BrokenOrchestrator(BaseOrchestrator):
-            def __init__(self, *args, **kwargs):
+            def __init__(self, config=None, *args, **kwargs):
                 raise ImportError("Missing dependency")
+            
+            def execute(self, **kwargs):
+                """Implement abstract execute method."""
+                return {"status": "success"}
         
         registry.register("broken", BrokenOrchestrator)
         
@@ -361,10 +379,14 @@ class TestThreadSafety:
         instantiation_count = 0
         
         class ThreadSafeOrchestrator(BaseOrchestrator):
-            def __init__(self, *args, **kwargs):
+            def __init__(self, config=None, *args, **kwargs):
                 nonlocal instantiation_count
                 instantiation_count += 1
-                super().__init__(*args, **kwargs)
+                super().__init__(config or {}, *args, **kwargs)
+            
+            def execute(self, **kwargs):
+                """Implement abstract execute method."""
+                return {"status": "success"}
         
         registry.register("threadsafe", ThreadSafeOrchestrator)
         

@@ -3,28 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Planning System 2.0 - CORTEX 4.0</title>
+    <title>Planning System - CORTEX 4.0 Features</title>
     <link rel="stylesheet" href="../assets/css/main.css">
     <link rel="icon" href="../assets/images/CORTEX-logo.png" type="image/png">
 </head>
 <body>
+    <!-- Breadcrumb -->
     <nav class="breadcrumb">
         <a href="../index.html">Home</a>
         <span class="breadcrumb-separator">›</span>
         <a href="index.html">Features</a>
         <span class="breadcrumb-separator">›</span>
-        <span class="breadcrumb-current">Planning System 2.0</span>
+        <span class="breadcrumb-current">Planning System</span>
     </nav>
 
+    <!-- Hero -->
     <section class="section">
         <div class="container">
             <div class="glass-card">
-                <div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 2rem;">
-                    <div class="icon" style="font-size: 4rem;">🗺️</div>
-                    <div>
-                        <h1 style="margin-bottom: 0.5rem;">Planning System 2.0</h1>
+                <div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 2rem; flex-wrap: wrap;">
+                    <div class="icon" style="font-size: 4rem;">📋</div>
+                    <div style="flex: 1;">
+                        <h1 style="margin-bottom: 0.5rem;">Planning System</h1>
                         <p style="color: var(--text-secondary); font-size: 1.25rem; margin: 0;">
-                            Autonomous Multi-Phase Feature Planning with DoR/DoD Compliance
+                            Strategic Feature Planning with DoR/DoD Compliance
                         </p>
                     </div>
                 </div>
@@ -32,8 +34,8 @@
                 <div class="metrics-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin-top: 2rem;">
                     <div class="metric-card">
                         <div class="metric-value">8</div>
-                        <div class="metric-label">Requirements</div>
-                        <div class="metric-sublabel">100% Compliant</div>
+                        <div class="metric-label">DoR Requirements</div>
+                        <div class="metric-sublabel">Quality Gates</div>
                     </div>
                     <div class="metric-card">
                         <div class="metric-value">3</div>
@@ -42,297 +44,335 @@
                     </div>
                     <div class="metric-card">
                         <div class="metric-value">6</div>
-                        <div class="metric-label">Quality Gates</div>
-                        <div class="metric-sublabel">DoR/DoD/TDD</div>
+                        <div class="metric-label">DoD Checks</div>
+                        <div class="metric-sublabel">Validation</div>
                     </div>
                     <div class="metric-card">
-                        <div class="metric-value">100%</div>
-                        <div class="metric-label">Autonomous</div>
-                        <div class="metric-sublabel">End-to-End</div>
+                        <div class="metric-value">10</div>
+                        <div class="metric-label">Planning Phases</div>
+                        <div class="metric-sublabel">Incremental</div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- Overview -->
     <section class="section" style="padding-top: 0;">
         <div class="container">
-            <h2>Overview</h2>
+            <h2>What is the Planning System?</h2>
             <div class="glass-card">
                 <p style="font-size: 1.125rem; line-height: 1.8; color: var(--text-secondary);">
-                    Planning System 2.0 transforms feature requests into executable, phase-by-phase plans with built-in quality gates.
-                    The system automatically detects complexity (LOW/MEDIUM/HIGH), validates Definition of Ready (DoR), generates 
-                    Definition of Done (DoD) criteria, integrates TDD at every layer, and can execute autonomously through all phases
-                    with continuous user feedback loops.
+                    The <strong style="color: var(--accent-primary);">Planning System</strong> is CORTEX's strategic feature planning orchestrator 
+                    that transforms user requests into comprehensive, executable implementation plans. It enforces 
+                    <strong>Definition of Ready (DoR)</strong> requirements before planning begins and validates 
+                    <strong>Definition of Done (DoD)</strong> criteria during execution.
                 </p>
-            </div>
-
-            <h2 style="margin-top: 3rem;">🎯 Auto-Complexity Detection</h2>
-            <div class="glass-card">
-                <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 1.5rem;">
-                    The system analyzes your feature request and automatically routes to the appropriate planning strategy:
+                <p style="font-size: 1.125rem; line-height: 1.8; color: var(--text-secondary); margin-top: 1rem;">
+                    Unlike manual planning that's inconsistent and error-prone, the Planning System uses structured workflows with 
+                    automated complexity detection, incremental phase execution, and built-in TDD integration.
                 </p>
-                
-                <div class="collapsible">
-                    <button class="collapsible-header">
-                        <span>🔴 <strong>HIGH Complexity</strong> - Security, Auth, Migrations, Multi-Tier APIs</span>
-                        <span class="collapsible-icon">▼</span>
-                    </button>
-                    <div class="collapsible-content">
-                        <p><strong>Triggers:</strong> Authentication, authorization, database migrations, payment integration, complex APIs, data pipelines</p>
-                        <p><strong>Strategy:</strong> Incremental delivery with phased rollout</p>
-                        <p><strong>Phases:</strong> 4-6 phases with checkpoints</p>
-                        <p><strong>Example:</strong> "Implement OAuth2 authentication with social login"</p>
-                        <ul style="color: var(--text-secondary); margin-top: 1rem;">
-                            <li>Phase 0: Contextual architectural review (auto-fix blockers)</li>
-                            <li>Phase 1: Core authentication infrastructure</li>
-                            <li>Phase 2: Social provider integration (Google, GitHub)</li>
-                            <li>Phase 3: Token management & refresh</li>
-                            <li>Phase 4: Security hardening & audit logging</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="collapsible">
-                    <button class="collapsible-header">
-                        <span>🟡 <strong>MEDIUM Complexity</strong> - Multi-File Features, Business Logic</span>
-                        <span class="collapsible-icon">▼</span>
-                    </button>
-                    <div class="collapsible-content">
-                        <p><strong>Triggers:</strong> Multi-file changes, new endpoints, business logic, state management</p>
-                        <p><strong>Strategy:</strong> Conditional phases based on validation</p>
-                        <p><strong>Phases:</strong> 2-3 phases with decision points</p>
-                        <p><strong>Example:</strong> "Add user profile editing with validation"</p>
-                        <ul style="color: var(--text-secondary); margin-top: 1rem;">
-                            <li>Phase 1: Profile data model & validation rules</li>
-                            <li>Phase 2: Edit UI component with form handling</li>
-                            <li>Phase 3 (conditional): Avatar upload if file storage ready</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="collapsible">
-                    <button class="collapsible-header">
-                        <span>🟢 <strong>LOW Complexity</strong> - Simple Changes, Bug Fixes</span>
-                        <span class="collapsible-icon">▼</span>
-                    </button>
-                    <div class="collapsible-content">
-                        <p><strong>Triggers:</strong> Single-file changes, UI tweaks, simple bug fixes, documentation</p>
-                        <p><strong>Strategy:</strong> Skeleton plan with direct implementation</p>
-                        <p><strong>Phases:</strong> 1 phase with clear acceptance criteria</p>
-                        <p><strong>Example:</strong> "Fix button alignment on mobile"</p>
-                        <ul style="color: var(--text-secondary); margin-top: 1rem;">
-                            <li>Phase 1: Update CSS media query for button container</li>
-                            <li>Tests: Visual regression test for mobile viewport</li>
-                            <li>DoD: Button centered on all mobile devices (320px-768px)</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <h2 style="margin-top: 3rem;">✅ DoR/DoD Compliance Framework</h2>
-            <div class="glass-card">
-                <div class="collapsible">
-                    <button class="collapsible-header">
-                        <span><strong>Definition of Ready (DoR)</strong> - Interactive Validation</span>
-                        <span class="collapsible-icon">▼</span>
-                    </button>
-                    <div class="collapsible-content">
-                        <p style="margin-bottom: 1rem;">Before planning begins, the system validates that all prerequisites are met through an interactive question-based workflow:</p>
-                        <ul style="color: var(--text-secondary);">
-                            <li><strong>Feature clearly defined:</strong> "What problem does this solve for users?"</li>
-                            <li><strong>Acceptance criteria exist:</strong> "How will we know it's done?"</li>
-                            <li><strong>Dependencies identified:</strong> "What systems/APIs does this rely on?"</li>
-                            <li><strong>Technical feasibility confirmed:</strong> "Are there any blockers?"</li>
-                            <li><strong>Scope bounded:</strong> "What's explicitly out of scope?"</li>
-                        </ul>
-                        <p style="margin-top: 1rem; padding: 1rem; background: rgba(0, 212, 255, 0.1); border-left: 3px solid var(--accent-primary); border-radius: 4px;">
-                            <strong>Iterative Refinement:</strong> You approve each DoR item individually. The system asks clarifying questions until requirements are unambiguous.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="collapsible">
-                    <button class="collapsible-header">
-                        <span><strong>Definition of Done (DoD)</strong> - Quality Gates</span>
-                        <span class="collapsible-icon">▼</span>
-                    </button>
-                    <div class="collapsible-content">
-                        <p style="margin-bottom: 1rem;">Each phase generates specific DoD criteria that must be met before proceeding:</p>
-                        <ul style="color: var(--text-secondary);">
-                            <li><strong>Code complete:</strong> All planned files implemented</li>
-                            <li><strong>Tests passing:</strong> RED→GREEN→REFACTOR cycle completed</li>
-                            <li><strong>Coverage requirements met:</strong> 94% minimum per layer</li>
-                            <li><strong>Documentation updated:</strong> README, API docs, inline comments</li>
-                            <li><strong>Code review complete:</strong> Peer review or architectural review</li>
-                            <li><strong>Acceptance criteria validated:</strong> Feature works as specified</li>
-                        </ul>
-                        <p style="margin-top: 1rem; padding: 1rem; background: rgba(123, 97, 255, 0.1); border-left: 3px solid var(--accent-secondary); border-radius: 4px;">
-                            <strong>Approval Gate:</strong> After Phase 3, you explicitly approve acceptance criteria before autonomous execution proceeds. Visual checklist ensures nothing is missed.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="collapsible">
-                    <button class="collapsible-header">
-                        <span><strong>TDD Integration</strong> - Every Phase, Every Layer</span>
-                        <span class="collapsible-icon">▼</span>
-                    </button>
-                    <div class="collapsible-content">
-                        <p style="margin-bottom: 1rem;">TDD is not optional—it's baked into every phase of the plan:</p>
-                        <ul style="color: var(--text-secondary);">
-                            <li><strong>RED:</strong> Write failing test first (validates requirement understanding)</li>
-                            <li><strong>GREEN:</strong> Implement minimum code to pass</li>
-                            <li><strong>REFACTOR:</strong> Clean up while maintaining green tests</li>
-                            <li><strong>4-Layer Coverage:</strong> Unit → Integration → System → Acceptance</li>
-                            <li><strong>Empty Test Detection:</strong> No placeholder tests allowed</li>
-                            <li><strong>Test-First Enforcement:</strong> SKULL rules block implementation-first commits</li>
-                        </ul>
-                        <p style="margin-top: 1rem;">
-                            <a href="tdd-mastery.html" style="color: var(--accent-primary); text-decoration: none; font-weight: 600;">
-                                Learn more about TDD Mastery →
-                            </a>
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <h2 style="margin-top: 3rem;">🤖 Autonomous Execution</h2>
-            <div class="glass-card">
-                <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 1.5rem;">
-                    Say <strong>"execute all phases autonomously"</strong> and CORTEX will implement your entire plan from start to finish with continuous feedback loops:
-                </p>
-
-                <div class="feature-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
-                    <div class="glass-card-flat" style="padding: 1.5rem;">
-                        <h4 style="color: var(--accent-primary); margin-bottom: 0.5rem;">Phase-by-Phase Execution</h4>
-                        <p style="color: var(--text-secondary); font-size: 0.95rem;">
-                            Complete Phase 1, validate DoD, get approval, move to Phase 2. Continuous checkpoints ensure quality.
-                        </p>
-                    </div>
-                    <div class="glass-card-flat" style="padding: 1.5rem;">
-                        <h4 style="color: var(--accent-primary); margin-bottom: 0.5rem;">Test-First Every Step</h4>
-                        <p style="color: var(--text-secondary); font-size: 0.95rem;">
-                            RED phase validates understanding, GREEN implements solution, REFACTOR optimizes code.
-                        </p>
-                    </div>
-                    <div class="glass-card-flat" style="padding: 1.5rem;">
-                        <h4 style="color: var(--accent-primary); margin-bottom: 0.5rem;">Git Isolation Protection</h4>
-                        <p style="color: var(--text-secondary); font-size: 0.95rem;">
-                            CORTEX code never pollutes user repos. Clean commit history maintained automatically.
-                        </p>
-                    </div>
-                    <div class="glass-card-flat" style="padding: 1.5rem;">
-                        <h4 style="color: var(--accent-primary); margin-bottom: 0.5rem;">Blocker Detection</h4>
-                        <p style="color: var(--text-secondary); font-size: 0.95rem;">
-                            Contextual architectural review auto-fixes blockers or injects Phase 0: Remediation.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <h2 style="margin-top: 3rem;">🛡️ SKULL Protection</h2>
-            <div class="glass-card">
-                <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;">
-                    Planning System 2.0 is protected by 4 SKULL rules that enforce quality at every step:
-                </p>
-                <ul style="color: var(--text-secondary); line-height: 1.8;">
-                    <li><strong>DOR_DOD_COMPLIANCE:</strong> Plans must pass DoR validation before execution</li>
-                    <li><strong>TDD_IN_PLANS:</strong> Every phase includes TDD workflow (RED→GREEN→REFACTOR)</li>
-                    <li><strong>COMPLEXITY_ROUTING:</strong> Auto-detect complexity and route to correct strategy</li>
-                    <li><strong>PHASE_GATE_VALIDATION:</strong> Block execution until DoD criteria met</li>
-                </ul>
-                <p style="margin-top: 1.5rem;">
-                    <a href="../governance/skull-rulebook.html" class="btn btn-secondary">
-                        View All 22 SKULL Rules
-                    </a>
-                </p>
-            </div>
-
-            <h2 style="margin-top: 3rem;">📝 Example Workflow</h2>
-            <div class="glass-card">
-                <h4 style="margin-bottom: 1rem;">User Request: "Add real-time notifications with WebSocket"</h4>
-                
-                <div style="background: rgba(10, 14, 39, 0.6); padding: 1.5rem; border-radius: 8px; border-left: 3px solid var(--accent-primary); margin-top: 1rem;">
-                    <p style="margin: 0; color: var(--text-secondary);"><strong>Phase 0:</strong> Contextual Review → Detects missing Redis dependency → Offers auto-fix</p>
-                    <p style="margin: 0.5rem 0 0 0; color: var(--text-secondary);"><strong>DoR Validation:</strong> Interactive questions confirm requirements are clear</p>
-                    <p style="margin: 0.5rem 0 0 0; color: var(--text-secondary);"><strong>Complexity:</strong> HIGH (real-time, stateful, multiple services)</p>
-                    <p style="margin: 0.5rem 0 0 0; color: var(--text-secondary);"><strong>Strategy:</strong> Incremental (5 phases)</p>
-                </div>
-
-                <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(0, 212, 255, 0.05); border-radius: 8px;">
-                    <p style="margin: 0; font-weight: 600;">Generated Plan:</p>
-                    <ul style="margin: 0.5rem 0 0 0; color: var(--text-secondary);">
-                        <li>Phase 1: WebSocket server setup with connection management</li>
-                        <li>Phase 2: Redis pub/sub integration for scalability</li>
-                        <li>Phase 3: Client SDK with auto-reconnect logic</li>
-                        <li>Phase 4: Notification service integration</li>
-                        <li>Phase 5: Load testing & monitoring</li>
-                    </ul>
-                </div>
-
-                <div style="margin-top: 1rem; padding: 1rem; background: rgba(123, 97, 255, 0.05); border-radius: 8px;">
-                    <p style="margin: 0; font-weight: 600;">After Phase 3: Approval Gate</p>
-                    <p style="margin: 0.5rem 0 0 0; color: var(--text-secondary);">✅ Visual checklist shows: WebSocket connects, Redis pub/sub works, Client reconnects on disconnect</p>
-                    <p style="margin: 0.5rem 0 0 0; color: var(--text-secondary);">User approves → Autonomous execution continues</p>
-                </div>
-            </div>
-
-            <div class="glass-card" style="margin-top: 2rem; background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(123, 97, 255, 0.1));">
-                <h3 style="margin-bottom: 1rem;">Ready to Plan?</h3>
-                <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
-                    Use these commands in GitHub Copilot Chat:
-                </p>
-                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                    <code style="padding: 0.5rem 1rem; background: rgba(0, 0, 0, 0.3); border-radius: 4px; color: var(--accent-primary);">plan [your feature]</code>
-                    <code style="padding: 0.5rem 1rem; background: rgba(0, 0, 0, 0.3); border-radius: 4px; color: var(--accent-primary);">execute all phases autonomously</code>
-                </div>
-            </div>
-
-            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 3rem;">
-                <a href="tdd-mastery.html" class="btn btn-secondary">← Previous: TDD Mastery</a>
-                <a href="index.html" class="btn btn-secondary">Back to Features</a>
-                <a href="dashboard-system.html" class="btn btn-secondary">Next: Dashboard System →</a>
             </div>
         </div>
     </section>
 
-    <footer class="footer">
+    <!-- The 10 Planning Phases -->
+    <section class="section" style="padding-top: 0;">
         <div class="container">
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
-                <div>
-                    <h4>Features</h4>
-                    <ul style="list-style: none; padding: 0;">
-                        <li><a href="tdd-mastery.html">TDD Mastery</a></li>
-                        <li><a href="planning-system.html">Planning System</a></li>
-                        <li><a href="dashboard-system.html">Dashboard</a></li>
+            <h2>10 Planning Phases</h2>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                <!-- Phase 1-2 -->
+                <div class="glass-card">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <div style="background: var(--accent-primary); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">1</div>
+                        <h3 style="margin: 0; color: var(--accent-primary);">Requirements</h3>
+                    </div>
+                    <p style="color: var(--text-secondary); line-height: 1.8;">
+                        Extract and validate DoR requirements. Ensure user story is complete with acceptance criteria, 
+                        constraints, and success metrics.
+                    </p>
+                </div>
+
+                <div class="glass-card">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <div style="background: var(--accent-primary); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">2</div>
+                        <h3 style="margin: 0; color: var(--accent-primary);">Architecture</h3>
+                    </div>
+                    <p style="color: var(--text-secondary); line-height: 1.8;">
+                        Design system architecture. Identify components, dependencies, and integration points. 
+                        Document technical approach and design decisions.
+                    </p>
+                </div>
+
+                <!-- Phase 3-4 -->
+                <div class="glass-card">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <div style="background: var(--success); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">3</div>
+                        <h3 style="margin: 0; color: var(--success);">TDD Blueprint</h3>
+                    </div>
+                    <p style="color: var(--text-secondary); line-height: 1.8;">
+                        Design test strategy for RED→GREEN→REFACTOR. Define test cases, coverage targets, 
+                        and validation criteria before implementation.
+                    </p>
+                </div>
+
+                <div class="glass-card">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <div style="background: var(--success); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">4</div>
+                        <h3 style="margin: 0; color: var(--success);">Implementation</h3>
+                    </div>
+                    <p style="color: var(--text-secondary); line-height: 1.8;">
+                        Execute TDD workflow: write failing tests (RED), implement features (GREEN), 
+                        refactor for quality (REFACTOR). Track progress per component.
+                    </p>
+                </div>
+
+                <!-- Phase 5-6 -->
+                <div class="glass-card">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <div style="background: var(--warning); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">5</div>
+                        <h3 style="margin: 0; color: var(--warning);">Integration</h3>
+                    </div>
+                    <p style="color: var(--text-secondary); line-height: 1.8;">
+                        Integrate components with existing system. Validate interfaces, test interactions, 
+                        and ensure backward compatibility.
+                    </p>
+                </div>
+
+                <div class="glass-card">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <div style="background: var(--warning); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">6</div>
+                        <h3 style="margin: 0; color: var(--warning);">DoD Validation</h3>
+                    </div>
+                    <p style="color: var(--text-secondary); line-height: 1.8;">
+                        Verify all DoD criteria met: tests passing, coverage targets achieved, 
+                        documentation complete, no regressions.
+                    </p>
+                </div>
+
+                <!-- Phase 7-8 -->
+                <div class="glass-card">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <div style="background: var(--info); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">7</div>
+                        <h3 style="margin: 0; color: var(--info);">Documentation</h3>
+                    </div>
+                    <p style="color: var(--text-secondary); line-height: 1.8;">
+                        Generate comprehensive documentation: API references, usage guides, 
+                        architecture diagrams, and troubleshooting tips.
+                    </p>
+                </div>
+
+                <div class="glass-card">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <div style="background: var(--info); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">8</div>
+                        <h3 style="margin: 0; color: var(--info);">Deployment</h3>
+                    </div>
+                    <p style="color: var(--text-secondary); line-height: 1.8;">
+                        Prepare deployment artifacts, create deployment guide, configure CI/CD, 
+                        and establish monitoring/rollback procedures.
+                    </p>
+                </div>
+
+                <!-- Phase 9-10 -->
+                <div class="glass-card">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <div style="background: var(--danger); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">9</div>
+                        <h3 style="margin: 0; color: var(--danger);">Review</h3>
+                    </div>
+                    <p style="color: var(--text-secondary); line-height: 1.8;">
+                        Conduct comprehensive review: code quality, test coverage, performance, 
+                        security, and adherence to standards.
+                    </p>
+                </div>
+
+                <div class="glass-card">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <div style="background: var(--danger); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">10</div>
+                        <h3 style="margin: 0; color: var(--danger);">Finalization</h3>
+                    </div>
+                    <p style="color: var(--text-secondary); line-height: 1.8;">
+                        Complete final tasks: update YAML manifests, create git checkpoint, 
+                        archive planning artifacts, and update knowledge base.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Complexity Detection -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Automatic Complexity Detection</h2>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                <div class="glass-card" style="border-left: 4px solid var(--success);">
+                    <h3 style="color: var(--success);">LOW Complexity</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                        Simple changes with minimal risk. Single file, no dependencies.
+                    </p>
+                    <div style="background: rgba(76, 175, 80, 0.1); padding: 0.75rem; border-radius: 4px;">
+                        <strong>Planning Strategy:</strong> Skeleton (minimal phases)<br>
+                        <strong>Example:</strong> Add utility function, fix typo
+                    </div>
+                </div>
+
+                <div class="glass-card" style="border-left: 4px solid var(--warning);">
+                    <h3 style="color: var(--warning);">MEDIUM Complexity</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                        Moderate changes with some dependencies. Multiple files affected.
+                    </p>
+                    <div style="background: rgba(255, 152, 0, 0.1); padding: 0.75rem; border-radius: 4px;">
+                        <strong>Planning Strategy:</strong> Conditional (skip optional phases)<br>
+                        <strong>Example:</strong> Add API endpoint, refactor module
+                    </div>
+                </div>
+
+                <div class="glass-card" style="border-left: 4px solid var(--danger);">
+                    <h3 style="color: var(--danger);">HIGH Complexity</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                        Complex changes with significant risk. System-wide impact.
+                    </p>
+                    <div style="background: rgba(244, 67, 54, 0.1); padding: 0.75rem; border-radius: 4px;">
+                        <strong>Planning Strategy:</strong> Incremental (all 10 phases)<br>
+                        <strong>Example:</strong> New feature, architecture change
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DoR/DoD -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Definition of Ready & Definition of Done</h2>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem;">
+                <!-- DoR -->
+                <div class="glass-card">
+                    <h3 style="color: var(--accent-primary);">📋 Definition of Ready (DoR)</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                        Requirements must meet all 8 criteria before planning begins:
+                    </p>
+                    <ul style="color: var(--text-secondary); line-height: 2;">
+                        <li>✅ Clear user story with acceptance criteria</li>
+                        <li>✅ Dependencies identified</li>
+                        <li>✅ Testability defined</li>
+                        <li>✅ Technical constraints documented</li>
+                        <li>✅ Success metrics established</li>
+                        <li>✅ Complexity estimated</li>
+                        <li>✅ Priority assigned</li>
+                        <li>✅ Stakeholder approval obtained</li>
                     </ul>
                 </div>
-                <div>
-                    <h4>Architecture</h4>
-                    <ul style="list-style: none; padding: 0;">
-                        <li><a href="../architecture/index.html">4-Tier Brain</a></li>
-                        <li><a href="../governance/skull-rulebook.html">SKULL Rulebook</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4>Resources</h4>
-                    <ul style="list-style: none; padding: 0;">
-                        <li><a href="https://github.com/asifhussain60/CORTEX">GitHub</a></li>
-                        <li><a href="../future/index.html">CORTEX 4.0</a></li>
+
+                <!-- DoD -->
+                <div class="glass-card">
+                    <h3 style="color: var(--success);">✅ Definition of Done (DoD)</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                        Implementation must meet all 6 criteria before completion:
+                    </p>
+                    <ul style="color: var(--text-secondary); line-height: 2;">
+                        <li>✅ All tests passing (unit, integration, E2E)</li>
+                        <li>✅ Code coverage ≥80%</li>
+                        <li>✅ Documentation complete</li>
+                        <li>✅ Code reviewed and approved</li>
+                        <li>✅ No regressions introduced</li>
+                        <li>✅ Acceptance criteria validated</li>
                     </ul>
                 </div>
             </div>
-            <p>&copy; 2025 Asif Hussain. All rights reserved.</p>
+        </div>
+    </section>
+
+    <!-- Planning Commands -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Planning System Commands</h2>
+            <div class="glass-card">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                    <div>
+                        <h3 style="color: var(--accent-primary);">Create Plan</h3>
+                        <code style="display: block; background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 4px; margin: 0.5rem 0;">
+# In Copilot Chat<br>
+plan [feature description]
+                        </code>
+                        <p style="color: var(--text-secondary); margin-top: 0.5rem;">
+                            Initiates planning with DoR validation and complexity detection.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h3 style="color: var(--accent-primary);">Execute All Phases</h3>
+                        <code style="display: block; background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 4px; margin: 0.5rem 0;">
+# In Copilot Chat<br>
+execute all phases autonomously
+                        </code>
+                        <p style="color: var(--text-secondary); margin-top: 0.5rem;">
+                            Runs all 10 phases automatically with checkpoints and validation.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h3 style="color: var(--accent-primary);">Check Status</h3>
+                        <code style="display: block; background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 4px; margin: 0.5rem 0;">
+# In Copilot Chat<br>
+show planning status
+                        </code>
+                        <p style="color: var(--text-secondary); margin-top: 0.5rem;">
+                            Displays current phase, progress, and pending tasks.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <h2>Why Use Planning System?</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                <div class="glass-card">
+                    <h3 style="color: var(--accent-primary);">🎯 Consistency</h3>
+                    <p style="color: var(--text-secondary); line-height: 1.8;">
+                        Every feature follows same structured process. No missed steps, no shortcuts.
+                    </p>
+                </div>
+
+                <div class="glass-card">
+                    <h3 style="color: var(--accent-primary);">⚡ Speed</h3>
+                    <p style="color: var(--text-secondary); line-height: 1.8;">
+                        Automated planning reduces time from requirements to implementation start.
+                    </p>
+                </div>
+
+                <div class="glass-card">
+                    <h3 style="color: var(--accent-primary);">🔒 Quality</h3>
+                    <p style="color: var(--text-secondary); line-height: 1.8;">
+                        DoR/DoD gates ensure quality at every phase. Built-in TDD integration.
+                    </p>
+                </div>
+
+                <div class="glass-card">
+                    <h3 style="color: var(--accent-primary);">📊 Visibility</h3>
+                    <p style="color: var(--text-secondary); line-height: 1.8;">
+                        Track progress across all 10 phases with real-time status updates.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="section" style="text-align: center; padding: 3rem 0; border-top: 1px solid var(--glass-border);">
+        <div class="container">
+            <a href="../index.html" class="btn btn-secondary">← Back to Home</a>
+            <p style="margin-top: 2rem; color: var(--text-muted);">
+                Part of the CORTEX 4.0 Documentation Suite<br>
+                Author: Asif Hussain | <a href="https://github.com/asifhussain60/CORTEX" style="color: var(--accent-primary);">github.com/asifhussain60/CORTEX</a>
+            </p>
         </div>
     </footer>
-
-    <button id="scroll-to-top" class="scroll-to-top" aria-label="Scroll to top">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 19V5M5 12l7-7 7 7"/>
-        </svg>
-    </button>
-
-    <script src="../assets/js/main.js"></script>
 </body>
 </html>

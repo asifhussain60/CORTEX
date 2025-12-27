@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autonomous Execution Orchestrator | CORTEX Technical Documentation</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root { --primary: #4CAF50; --success: #10B981; --warning: #F59E0B; --error: #DC2626; }
+        body { font-family: 'Inter', -apple-system, sans-serif; margin: 0; padding: 0; background: #0f172a; color: #e2e8f0; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+        header { text-align: center; padding: 3rem 0; border-bottom: 2px solid var(--primary); }
+        header h1 { font-size: 3rem; font-weight: 700; color: var(--primary); margin: 0; }
+        header .subtitle { font-size: 1.2rem; color: #94a3b8; margin-top: 0.5rem; }
+        .metadata { display: flex; justify-content: center; gap: 2rem; margin-top: 1rem; flex-wrap: wrap; }
+        .metadata-item { background: rgba(255, 255, 255, 0.05); padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.9rem; }
+        .section { margin: 3rem 0; }
+        .section-title { font-size: 2rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; border-left: 4px solid var(--primary); padding-left: 1rem; }
+        .intro-text { font-size: 1.1rem; line-height: 1.8; color: #cbd5e1; margin-bottom: 2rem; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+        .feature-card { background: #1e293b; border-radius: 12px; padding: 1.5rem; border-left: 4px solid var(--primary); transition: transform 0.2s; }
+        .feature-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(255, 255, 255, 0.1); }
+        .viz-container { background: #1e293b; border-radius: 12px; padding: 2rem; margin: 2rem 0; }
+        .mermaid { background: #0f172a; border-radius: 8px; padding: 2rem; }
+        .breadcrumb { background: rgba(30, 41, 59, 0.8); padding: 1rem 2rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .breadcrumb a { color: var(--primary); text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .breadcrumb-separator { color: #64748b; margin: 0 0.5rem; }
+        .breadcrumb-current { color: #e2e8f0; }
+        footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid #334155; margin-top: 4rem; color: #64748b; }
+    </style>
+</head>
+<body>
+    <nav class="breadcrumb">
+        <a href="../../index.html">Home</a>
+        <span class="breadcrumb-separator">›</span>
+        <a href="index.html">Orchestrators</a>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-current">Autonomous Execution</span>
+    </nav>
+    
+    <div class="container">
+        <header>
+            <h1>🤖 Autonomous Execution Orchestrator</h1>
+            <p class="subtitle">Multi-Phase Plan Execution with Decision Trees</p>
+            <div class="metadata">
+                <div class="metadata-item"><span style="color:#94a3b8">Complexity:</span> <span style="color:var(--primary);font-weight:600">HIGH</span></div>
+                <div class="metadata-item"><span style="color:#94a3b8">File:</span> <span style="color:var(--primary);font-weight:600">autonomous_execution_orchestrator.py</span></div>
+            </div>
+        </header>
+        
+        <section class="section">
+            <div class="intro-text">Executes multi-phase plans autonomously with decision-making at phase boundaries. Features complexity-based routing (HIGH: incremental, MEDIUM: conditional, LOW: skeleton), checkpoint management, failure recovery with rollback options, and progress tracking with real-time dashboard updates.</div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title">✨ Key Features</h2>
+            <div class="features-grid"><div class="feature-card"><div style="font-size:2rem;margin-bottom:1rem">🎯</div><div style="font-size:1.25rem;font-weight:600;color:#f1f5f9;margin-bottom:0.75rem">Decision Trees</div><div style="color:#94a3b8">Complexity-based routing at boundaries</div></div><div class="feature-card"><div style="font-size:2rem;margin-bottom:1rem">💾</div><div style="font-size:1.25rem;font-weight:600;color:#f1f5f9;margin-bottom:0.75rem">Checkpoint Management</div><div style="color:#94a3b8">Automatic phase milestone tracking</div></div><div class="feature-card"><div style="font-size:2rem;margin-bottom:1rem">��</div><div style="font-size:1.25rem;font-weight:600;color:#f1f5f9;margin-bottom:0.75rem">Failure Recovery</div><div style="color:#94a3b8">Rollback and retry with state preservation</div></div></div>
+        </section>
+        
+        <section class="section"><h2 class="section-title">🔄 Autonomous Execution Workflow</h2><div class="viz-container"><div class="mermaid">
+graph TD
+    A[Load Plan] --> B[Analyze<br/>Complexity]
+    B --> C{Route<br/>Strategy}
+    C -->|HIGH| D[Incremental]
+    C -->|MEDIUM| E[Conditional]
+    C -->|LOW| F[Skeleton]
+    D --> G[Execute Phase]
+    E --> G
+    F --> G
+    G --> H[Create<br/>Checkpoint]
+    H --> I{Tests<br/>Pass?}
+    I -->|Yes| J{More<br/>Phases?}
+    I -->|No| K[Rollback<br/>Option]
+    J -->|Yes| L[Next Phase]
+    J -->|No| M[✅ Complete]
+    L --> B
+    
+    style A fill:#4CAF50,stroke:#388E3C,color:#fff
+    style M fill:#10B981,stroke:#059669,color:#fff
+                </div></div></section>
+        
+        <footer>
+            <p>&copy; 2025 Asif Hussain | CORTEX 4.0</p>
+            <p>Autonomous Execution Orchestrator - Intelligent Plan Execution</p>
+        </footer>
+    </div>
+    
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#4CAF50',
+                primaryTextColor: '#fff',
+                lineColor: '#64748b',
+                secondaryColor: '#1e293b'
+            }
+        });
+    </script>
+</body>
+</html>

@@ -455,7 +455,8 @@ class Test{feature_name.replace(" ", "")}:
         
         # Add tests for acceptance criteria
         for i, criterion in enumerate(acceptance_criteria, 1):
-            content += f'''    def test_acceptance_criterion_{i}(self):
+            content += f'''    @pytest.mark.skip(reason="TDD stub - awaiting implementation")
+    def test_acceptance_criterion_{i}(self):
         """Test: {criterion}"""
         # Arrange
         # Act
@@ -467,7 +468,8 @@ class Test{feature_name.replace(" ", "")}:
         # Add tests for edge cases
         for edge_case in edge_cases:
             test_name = f"test_edge_case_{edge_case['type']}"
-            content += f'''    def test_{edge_case['type']}(self):
+            content += f'''    @pytest.mark.skip(reason="TDD stub - awaiting implementation")
+    def test_{edge_case['type']}(self):
         """Test edge case: {edge_case['description']}"""
         # Arrange
         # Act

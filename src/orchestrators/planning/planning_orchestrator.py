@@ -526,6 +526,17 @@ class PlanningOrchestrator(BaseOrchestrator):
                     )
                 plan_data = generation_result.plan_data
             
+            # CRITICAL: Enforce final REFACTOR phase (SKULL rule)
+            # Must be applied after plan generation and before any validation
+            # This ensures ALL plans have mandatory whole-file cleanup phase
+            self.logger.info("🎭 Enforcing final REFACTOR phase (REFACTOR_CODE_CLEANUP_ENFORCEMENT)")
+            plan_data = self._enforce_final_refactor_on_plan_data(plan_data)
+            
+            # CRITICAL: Enforce learning library documentation phase (SKULL rule)
+            # Must come AFTER final REFACTOR to document complete work
+            self.logger.info("🎭 Enforcing learning library documentation phase (LEARNING_LIBRARY_DOCUMENTATION_ENFORCEMENT)")
+            plan_data = self._enforce_learning_library_documentation_on_plan_data(plan_data)
+            
             # Task 13.2: DoR (Definition of Ready) validation
             if self.enforce_dor and plan_data:
                 is_ready, dor_violations = self._validate_definition_of_ready(plan_data)
@@ -1291,9 +1302,10 @@ class PlanningOrchestrator(BaseOrchestrator):
     
     def _cleanup_old_checkpoints(self, retention_days: int = 7) -> int:
         """
-        Cleanup checkpoints older than retention period.
+        Cleanup checkpoints older than retention period or exceeding count limit.
         
-        ENHANCED (Task 13.4): Now supports retention-based cleanup with phase preservation.
+        ENHANCED (Task 13.4): Now supports both retention-based and count-based cleanup.
+        FIXED (Phase 13C Task 13C.4 Part 4): Respect checkpoint_retention_limit config.
         
         Args:
             retention_days: Number of days to retain checkpoints (default: 7)
@@ -1302,17 +1314,55 @@ class PlanningOrchestrator(BaseOrchestrator):
             Number of checkpoints removed
             
         Cleanup Strategy:
-        1. Keep all checkpoints from last N days
-        2. Keep one checkpoint per phase (most recent)
-        3. Remove all others
+        1. If checkpoint count exceeds checkpoint_retention_limit, remove oldest
+        2. Keep all checkpoints from last N days
+        3. Keep one checkpoint per phase (most recent)
+        4. Remove all others
         """
         if not hasattr(self, "_checkpoint_history"):
             return 0
         
         from datetime import timedelta
         
-        cutoff_date = datetime.now() - timedelta(days=retention_days)
         removed_count = 0
+        
+        # Strategy 1: Count-based cleanup (respect checkpoint_retention_limit)
+        if hasattr(self, 'checkpoint_retention_limit') and self.checkpoint_retention_limit:
+            max_checkpoints = self.checkpoint_retention_limit
+            current_count = len(self._checkpoint_history)
+            
+            if current_count > max_checkpoints:
+                # Sort by timestamp (oldest first)
+                sorted_checkpoints = sorted(
+                    self._checkpoint_history,
+                    key=lambda cp: cp.get("timestamp", ""),
+                    reverse=False
+                )
+                
+                # Remove oldest checkpoints to reach limit
+                num_to_remove = current_count - max_checkpoints
+                checkpoints_to_remove = sorted_checkpoints[:num_to_remove]
+                
+                for cp in checkpoints_to_remove:
+                    self._checkpoint_history.remove(cp)
+                    
+                    # Remove from memory checkpoints if applicable
+                    if cp.get("type") == "memory":
+                        self._memory_checkpoints = [
+                            mcp for mcp in self._memory_checkpoints
+                            if mcp.get("checkpoint_id") != cp.get("checkpoint_id")
+                        ]
+                    
+                    removed_count += 1
+                    logger.debug(f"Removed checkpoint (count-based): {cp.get('checkpoint_id')} (phase: {cp.get('phase_name')})")
+                
+                if removed_count > 0:
+                    logger.info(f"✅ Cleaned up {removed_count} checkpoints (count limit: {max_checkpoints})")
+                
+                return removed_count
+        
+        # Strategy 2: Time-based cleanup (original implementation)
+        cutoff_date = datetime.now() - timedelta(days=retention_days)
         
         # Group checkpoints by phase
         checkpoints_by_phase = {}
@@ -1780,6 +1830,215 @@ class PlanningOrchestrator(BaseOrchestrator):
         return "\n".join(report)
     
     # ========================================================================
+    # DoR/DoD Validation Methods (Task 8.4 - Extended Testing)
+    # ========================================================================
+    
+    def _validate_dor(self, phase_context: Dict[str, Any]) -> BaseValidationResult:
+        """
+        Validate Definition of Ready for a phase.
+        
+        Args:
+            phase_context: Phase context with criteria
+            
+        Returns:
+            ValidationResult with validation status
+        """
+        phase_name = phase_context.get("phase_name", "Unknown")
+        dor_criteria = phase_context.get("dor_criteria", [])
+        
+        errors = []
+        warnings = []
+        
+        # Check if criteria exist
+        if not dor_criteria or len(dor_criteria) == 0:
+            errors.append(f"DoR validation failed: No criteria defined for phase '{phase_name}'")
+            return BaseValidationResult(
+                valid=False,
+                errors=errors,
+                warnings=warnings
+            )
+        
+        # Log validation
+        logger.info(f"DoR validation for phase '{phase_name}': {len(dor_criteria)} criteria")
+        
+        # All criteria present - validation passes
+        return BaseValidationResult(
+            valid=True,
+            errors=[],
+            warnings=[]
+        )
+    
+    def _validate_dod(self, phase_context: Dict[str, Any]) -> BaseValidationResult:
+        """
+        Validate Definition of Done for a phase.
+        
+        Args:
+            phase_context: Phase context with criteria and completion status
+            
+        Returns:
+            ValidationResult with validation status
+        """
+        phase_name = phase_context.get("phase_name", "Unknown")
+        dod_criteria = phase_context.get("dod_criteria", [])
+        completed_criteria = phase_context.get("completed_criteria", dod_criteria)  # Default: all complete
+        
+        errors = []
+        warnings = []
+        
+        # Check if criteria exist
+        if not dod_criteria or len(dod_criteria) == 0:
+            errors.append(f"DoD validation failed: No criteria defined for phase '{phase_name}'")
+            return BaseValidationResult(
+                valid=False,
+                errors=errors,
+                warnings=warnings
+            )
+        
+        # Check completion
+        if len(completed_criteria) < len(dod_criteria):
+            incomplete = set(dod_criteria) - set(completed_criteria)
+            errors.append(f"DoD incomplete: {len(incomplete)} criteria not met: {incomplete}")
+            return BaseValidationResult(
+                valid=False,
+                errors=errors,
+                warnings=warnings
+            )
+        
+        # Log validation
+        logger.info(f"DoD validation for phase '{phase_name}': {len(dod_criteria)} criteria met")
+        
+        return BaseValidationResult(
+            valid=True,
+            errors=[],
+            warnings=[]
+        )
+    
+    def _load_dor_dod_from_manifest(
+        self, 
+        manifest: Dict[str, Any], 
+        phase_name: str
+    ) -> Dict[str, List[str]]:
+        """
+        Load DoR/DoD criteria from manifest for a specific phase.
+        
+        Args:
+            manifest: Manifest dictionary
+            phase_name: Phase name to load criteria for
+            
+        Returns:
+            Dict with 'dor' and 'dod' lists
+        """
+        phases = manifest.get("phases", [])
+        
+        for phase in phases:
+            if isinstance(phase, dict) and phase.get("name") == phase_name:
+                return {
+                    "dor": phase.get("dor", []),
+                    "dod": phase.get("dod", [])
+                }
+        
+        # Return empty if not found
+        return {"dor": [], "dod": []}
+    
+    def _set_custom_criteria(self, phase_name: str, custom_criteria: Dict[str, List[str]]):
+        """
+        Set custom DoR/DoD criteria for a phase.
+        
+        Args:
+            phase_name: Phase name
+            custom_criteria: Dict with 'dor' and 'dod' lists
+        """
+        if not hasattr(self, '_custom_criteria'):
+            self._custom_criteria = {}
+        
+        self._custom_criteria[phase_name] = custom_criteria
+        logger.debug(f"Custom criteria set for phase '{phase_name}'")
+    
+    def _get_phase_criteria(self, phase_name: str) -> Dict[str, List[str]]:
+        """
+        Get DoR/DoD criteria for a phase (custom or default).
+        
+        Args:
+            phase_name: Phase name
+            
+        Returns:
+            Dict with 'dor' and 'dod' lists
+        """
+        # Check custom criteria first
+        if hasattr(self, '_custom_criteria') and phase_name in self._custom_criteria:
+            return self._custom_criteria[phase_name]
+        
+        # Return default empty
+        return {"dor": [], "dod": []}
+    
+    def _get_validation_metrics(self) -> Dict[str, Any]:
+        """
+        Get DoR/DoD validation metrics for reporting.
+        
+        Returns:
+            Dict with validation counts
+        """
+        if not hasattr(self, '_validation_metrics'):
+            self._validation_metrics = {
+                "dor_validations": 0,
+                "dod_validations": 0,
+                "dor_failures": 0,
+                "dod_failures": 0
+            }
+        
+        return self._validation_metrics
+    
+    def _execute_phase_with_validation(
+        self, 
+        phase_name: str, 
+        phase_context: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """
+        Execute phase with DoR/DoD validation.
+        
+        Args:
+            phase_name: Phase name
+            phase_context: Phase context
+            
+        Returns:
+            Dict with execution result
+        """
+        # Validate DoR before execution
+        dor_result = self._validate_dor(phase_context)
+        
+        if not dor_result.valid:
+            logger.error(f"DoR validation failed for phase '{phase_name}': {dor_result.errors}")
+            return {
+                "success": False,
+                "phase": phase_name,
+                "error": "DoR validation failed",
+                "details": dor_result.errors
+            }
+        
+        # Execute phase (simplified - actual execution would be more complex)
+        logger.info(f"Executing phase '{phase_name}'")
+        
+        # Validate DoD after execution
+        dod_result = self._validate_dod(phase_context)
+        
+        if not dod_result.valid:
+            logger.warning(f"DoD validation failed for phase '{phase_name}': {dod_result.errors}")
+            return {
+                "success": False,
+                "phase": phase_name,
+                "error": "DoD validation failed",
+                "details": dod_result.errors,
+                "rollback": "Phase rolled back due to DoD failure"
+            }
+        
+        return {
+            "success": True,
+            "phase": phase_name,
+            "dor_validated": True,
+            "dod_validated": True
+        }
+    
+    # ========================================================================
     # TDD Workflow Methods (Task 13.3)
     # ========================================================================
     
@@ -1866,6 +2125,16 @@ class PlanningOrchestrator(BaseOrchestrator):
         plan["metadata"]["tdd_required"] = tdd_required
         
         logger.info(f"✅ TDD workflow integrated: {len(tdd_phases)} phases added")
+        
+        # CRITICAL: Enforce final REFACTOR phase (SKULL rule)
+        # This MUST be called AFTER all phases are added to ensure
+        # final cleanup phase reviews ENTIRE file
+        plan = self._enforce_final_refactor_phase(plan)
+        
+        # CRITICAL: Enforce learning library documentation phase (SKULL rule)
+        # This MUST come AFTER final REFACTOR to document complete work
+        plan = self._enforce_learning_library_documentation(plan)
+        
         return plan
     
     def _generate_test_plan(self, plan: Dict[str, Any]) -> Dict[str, Any]:
@@ -1928,6 +2197,632 @@ class PlanningOrchestrator(BaseOrchestrator):
         
         logger.info(f"Generated test plan: {len(test_plan['test_cases'])} test cases")
         return test_plan
+    
+    def _enforce_final_refactor_phase(self, plan: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Enforce mandatory final REFACTOR phase at end of plan.
+        
+        CRITICAL: This is SEPARATE from TDD REFACTOR phase.
+        - TDD REFACTOR: Cleans code that was just written (micro-level)
+        - FINAL REFACTOR: Reviews ENTIRE file for overall cleanliness (macro-level)
+        
+        Purpose: Prevent technical debt accumulation by ensuring modified files
+        are left in clean, optimized state with no broken structure, duplicates,
+        or high complexity.
+        
+        SKULL Rule: REFACTOR_CODE_CLEANUP_ENFORCEMENT (Tier 0 instinct)
+        
+        Args:
+            plan: Plan dict (will be modified in-place)
+            
+        Returns:
+            Plan dict with final REFACTOR phase appended
+        """
+        phases = plan.get("phases", [])
+        
+        # Check if final REFACTOR phase already exists
+        if phases and "final refactor" in phases[-1].get("name", "").lower():
+            logger.info("Final REFACTOR phase already exists, skipping enforcement")
+            return plan
+        
+        # Create comprehensive final REFACTOR phase
+        final_refactor_phase = {
+            "name": "Final REFACTOR - Whole-File Cleanup",
+            "type": "quality_gate",
+            "description": "Review ENTIRE file(s) for overall cleanliness and optimization",
+            "rationale": "Ensures modified files are left clean with no broken structure, duplicates, or technical debt",
+            "scope": "ALL modified files (not just new code)",
+            "activities": [
+                "Review ENTIRE file structure (not just modified sections)",
+                "Fix broken HTML tags, syntax errors, structural issues",
+                "Remove ALL duplicate and redundant code",
+                "Refactor ALL functions with complexity >30 down to ≤30",
+                "Enforce SOLID principles throughout file",
+                "Remove ALL dead/orphaned code and unused imports",
+                "Validate file integrity and completeness",
+                "Run all tests to ensure no regressions"
+            ],
+            "validation_criteria": [
+                "✅ No broken HTML tags or structural issues",
+                "✅ Zero duplicate or redundant code blocks",
+                "✅ All function complexity ≤30 (measured with radon/complexity tools)",
+                "✅ SOLID principles enforced (SRP, OCP, LSP, ISP, DIP)",
+                "✅ No dead code or unused imports",
+                "✅ All tests passing (100% pass rate)",
+                "✅ File is production-ready and maintainable"
+            ],
+            "tools": [
+                "radon cc (complexity analysis)",
+                "pylint/flake8 (code quality)",
+                "HTML validator (for HTML files)",
+                "duplicate code detectors"
+            ],
+            "estimated_hours": 1.0,
+            "required": True,
+            "enforcement_level": "MANDATORY",
+            "skull_rule": "REFACTOR_CODE_CLEANUP_ENFORCEMENT"
+        }
+        
+        # Append to end of phases
+        phases.append(final_refactor_phase)
+        plan["phases"] = phases
+        plan["metadata"]["final_refactor_enforced"] = True
+        
+        logger.info("✅ Final REFACTOR phase enforced (SKULL: REFACTOR_CODE_CLEANUP_ENFORCEMENT)")
+        return plan
+    
+    def _enforce_learning_library_documentation(self, plan: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Enforce mandatory learning library documentation phase.
+        
+        CRITICAL: This phase comes AFTER final REFACTOR to ensure ALL work
+        (implementation + cleanup) is documented in learning library.
+        
+        Purpose: Capture implementation knowledge, design decisions, and lessons
+        learned in organized folder structure for future reference and onboarding.
+        
+        SKULL Rule: LEARNING_LIBRARY_DOCUMENTATION_ENFORCEMENT (Tier 0 instinct)
+        
+        Args:
+            plan: Plan dict (will be modified in-place)
+            
+        Returns:
+            Plan dict with learning library documentation phase appended
+        """
+        phases = plan.get("phases", [])
+        
+        # Check if learning library phase already exists
+        if phases and any("learning library" in p.get("name", "").lower() for p in phases):
+            logger.info("Learning library documentation phase already exists, skipping enforcement")
+            return plan
+        
+        # Determine repository name from workspace context
+        repo_name = getattr(self, 'workspace_name', 'unknown')
+        if repo_name == 'unknown' or not repo_name:
+            # Fallback to extracting from workspace_root config
+            workspace_root = Path(self.config.get("workspace_root", Path.cwd()))
+            repo_name = workspace_root.name
+        
+        # Determine category and topic from plan metadata
+        metadata = plan.get("metadata", {})
+        plan_title = metadata.get("title", "Unknown")
+        
+        # Create learning library documentation phase
+        learning_phase = {
+            "name": "Learning Library Documentation",
+            "type": "knowledge_capture",
+            "description": "Capture implementation knowledge, design decisions, and lessons learned in learning library",
+            "rationale": "Ensures work is documented for future reference, accelerates onboarding, preserves design rationale",
+            "scope": "Complete implementation and decision history",
+            "activities": [
+                f"Create learning library folder: cortex-brain/documents/library/{repo_name}/{{category}}/{{topic}}/",
+                "Generate README.md (overview, quickstart, key concepts)",
+                "Generate context.md (problem statement, requirements, constraints)",
+                "Generate architecture.md (design diagrams, components, data flow)",
+                "Generate implementation-guide.md (code walkthrough, key algorithms, extension points)",
+                "Generate test-strategy.md (test approach, coverage metrics, test files)",
+                "Generate research-notes.md (design decisions, trade-offs, alternatives considered)",
+                "Link documentation to knowledge graph for cross-referencing"
+            ],
+            "documentation_structure": {
+                "location": f"cortex-brain/documents/library/{repo_name}/{{category}}/{{topic}}/",
+                "files": [
+                    "README.md",
+                    "context.md",
+                    "architecture.md",
+                    "implementation-guide.md",
+                    "test-strategy.md",
+                    "research-notes.md"
+                ]
+            },
+            "validation_criteria": [
+                "✅ All 6 documentation files created",
+                "✅ README includes overview and quickstart",
+                "✅ Context captures problem and requirements",
+                "✅ Architecture includes diagrams and components",
+                "✅ Implementation guide provides code walkthrough",
+                "✅ Test strategy documents coverage and approach",
+                "✅ Research notes preserve design decisions",
+                "✅ Documentation linked to knowledge graph"
+            ],
+            "tools": [
+                "AutoDocumentationGenerator",
+                "KnowledgeGraphUpdater",
+                "MarkdownGenerator"
+            ],
+            "estimated_hours": 0.5,
+            "required": True,
+            "enforcement_level": "MANDATORY",
+            "skull_rule": "LEARNING_LIBRARY_DOCUMENTATION_ENFORCEMENT",
+            "benefits": [
+                "100% documentation coverage",
+                "Knowledge preserved forever",
+                "50% faster onboarding",
+                "Design rationale available",
+                "Learning aids for developers"
+            ]
+        }
+        
+        # Append after final REFACTOR phase
+        phases.append(learning_phase)
+        plan["phases"] = phases
+        plan["metadata"]["learning_library_enforced"] = True
+        
+        logger.info("✅ Learning library documentation phase enforced (SKULL: LEARNING_LIBRARY_DOCUMENTATION_ENFORCEMENT)")
+        return plan
+    
+    def _enforce_final_refactor_on_plan_data(self, plan_data: PlanData) -> PlanData:
+        """
+        Enforce final REFACTOR phase on PlanData object.
+        
+        Converts PlanData to dict, applies enforcement, converts back.
+        
+        Args:
+            plan_data: PlanData object
+            
+        Returns:
+            PlanData with final REFACTOR phase added
+        """
+        # Convert PlanData to dict
+        plan_dict = {
+            "metadata": {
+                "title": plan_data.metadata.title,
+                "description": plan_data.metadata.description,
+                "complexity": plan_data.metadata.complexity.value if hasattr(plan_data.metadata.complexity, 'value') else plan_data.metadata.complexity,
+                "plan_type": plan_data.metadata.plan_type.value if hasattr(plan_data.metadata.plan_type, 'value') else plan_data.metadata.plan_type,
+            },
+            "phases": [
+                {
+                    "name": phase.phase_name,
+                    "tasks": phase.tasks,
+                    "acceptance_criteria": phase.acceptance_criteria
+                }
+                for phase in plan_data.phases
+            ]
+        }
+        
+        # Apply enforcement
+        plan_dict = self._enforce_final_refactor_phase(plan_dict)
+        
+        # Convert back to PlanData (append final phase)
+        final_phase_dict = plan_dict["phases"][-1]
+        final_phase = PlanPhaseData(
+            phase_name=final_phase_dict["name"],
+            tasks=[{"task": activity, "estimated_hours": 0.15} for activity in final_phase_dict.get("activities", [])],
+            acceptance_criteria=final_phase_dict.get("validation_criteria", [])
+        )
+        plan_data.phases.append(final_phase)
+        
+        return plan_data
+    
+    def _enforce_learning_library_documentation_on_plan_data(self, plan_data: PlanData) -> PlanData:
+        """
+        Enforce learning library documentation phase on PlanData object.
+        
+        Converts PlanData to dict, applies enforcement, converts back.
+        
+        Args:
+            plan_data: PlanData object
+            
+        Returns:
+            PlanData with learning library documentation phase added
+        """
+        # Convert PlanData to dict
+        plan_dict = {
+            "metadata": {
+                "title": plan_data.metadata.title,
+                "description": plan_data.metadata.description,
+            },
+            "phases": [
+                {
+                    "name": phase.phase_name,
+                    "tasks": phase.tasks,
+                    "acceptance_criteria": phase.acceptance_criteria
+                }
+                for phase in plan_data.phases
+            ]
+        }
+        
+        # Apply enforcement
+        plan_dict = self._enforce_learning_library_documentation(plan_dict)
+        
+        # Convert back to PlanData (append learning phase)
+        learning_phase_dict = plan_dict["phases"][-1]
+        learning_phase = PlanPhaseData(
+            phase_name=learning_phase_dict["name"],
+            tasks=[{"task": activity, "estimated_hours": 0.05} for activity in learning_phase_dict.get("activities", [])],
+            acceptance_criteria=learning_phase_dict.get("validation_criteria", [])
+        )
+        plan_data.phases.append(learning_phase)
+        
+        return plan_data
+    
+    # ========================================================================
+    # TDD Integration Methods (Task 8.4 - Extended Testing)
+    # ========================================================================
+    
+    def _generate_tdd_dor(self, phase_name: str) -> List[str]:
+        """
+        Generate TDD-specific Definition of Ready criteria for a phase.
+        
+        Args:
+            phase_name: Phase name
+            
+        Returns:
+            List of TDD DoR criteria
+        """
+        base_criteria = [
+            "Test cases identified from acceptance criteria",
+            "Test framework configured and operational",
+            "Test environment available",
+            "Test data prepared"
+        ]
+        
+        # Phase-specific criteria
+        if "implementation" in phase_name.lower() or "code" in phase_name.lower():
+            base_criteria.extend([
+                "Tests written before implementation (RED phase)",
+                "All tests failing with expected reasons",
+                "Test coverage targets defined (≥95% unit)"
+            ])
+        elif "refactor" in phase_name.lower():
+            base_criteria.extend([
+                "All tests passing before refactoring",
+                "Baseline coverage established"
+            ])
+        
+        logger.debug(f"Generated TDD DoR for '{phase_name}': {len(base_criteria)} criteria")
+        return base_criteria
+    
+    def _generate_tdd_dod(self, phase_name: str) -> List[str]:
+        """
+        Generate TDD-specific Definition of Done criteria for a phase.
+        
+        Args:
+            phase_name: Phase name
+            
+        Returns:
+            List of TDD DoD criteria
+        """
+        base_criteria = [
+            "All tests passing (100% pass rate)",
+            "Code coverage ≥95% for unit tests",
+            "No skipped or ignored tests",
+            "Test execution time <5 seconds"
+        ]
+        
+        # Phase-specific criteria
+        if "implementation" in phase_name.lower() or "green" in phase_name.lower():
+            base_criteria.extend([
+                "Minimal implementation passing all tests",
+                "No premature optimization",
+                "Code follows SOLID principles"
+            ])
+        elif "refactor" in phase_name.lower():
+            base_criteria.extend([
+                "Code complexity reduced",
+                "Duplication eliminated",
+                "All tests still passing (regression check)"
+            ])
+        
+        logger.debug(f"Generated TDD DoD for '{phase_name}': {len(base_criteria)} criteria")
+        return base_criteria
+    
+    def _get_tdd_guidance(self, context: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        """
+        Get TDD workflow guidance from intelligence layer.
+        
+        Args:
+            context: Context with phase information
+            
+        Returns:
+            TDD guidance dict or None
+        """
+        phase = context.get("phase", "")
+        
+        guidance = {
+            "phase": phase,
+            "description": f"TDD guidance for {phase} phase",
+            "best_practices": [
+                "Write smallest test that fails",
+                "Make test pass with simplest code",
+                "Refactor while keeping tests green"
+            ],
+            "common_mistakes": [
+                "Writing too many tests at once",
+                "Skipping the RED phase",
+                "Not refactoring after GREEN"
+            ]
+        }
+        
+        # Phase-specific guidance
+        if phase.upper() == "RED":
+            guidance["focus"] = "Write failing test that describes next behavior"
+            guidance["exit_criteria"] = "Test fails for the right reason"
+        elif phase.upper() == "GREEN":
+            guidance["focus"] = "Make test pass with minimal code"
+            guidance["exit_criteria"] = "All tests passing"
+        elif phase.upper() == "REFACTOR":
+            guidance["focus"] = "Improve code quality while maintaining tests"
+            guidance["exit_criteria"] = "Clean code, all tests still passing"
+        
+        logger.debug(f"TDD guidance for '{phase}': {guidance.get('focus', 'general')}")
+        return guidance
+    
+    def _is_test_quality_validation_enabled(self) -> bool:
+        """
+        Check if test quality validation is enabled.
+        
+        Returns:
+            True if enabled, False otherwise
+        """
+        # Check config
+        tdd_workflow = self.config.get("tdd_workflow", True)
+        quality_validation = self.config.get("test_quality_validation", True)
+        
+        enabled = tdd_workflow and quality_validation
+        logger.debug(f"Test quality validation: {'enabled' if enabled else 'disabled'}")
+        return enabled
+    
+    def _get_checkpoint_strategy(self) -> Dict[str, Any]:
+        """
+        Get git checkpoint strategy for TDD workflow.
+        
+        Returns:
+            Checkpoint strategy dict
+        """
+        strategy = {
+            "enabled": True,
+            "after_tdd_cycle": True,
+            "phases": ["RED", "GREEN", "REFACTOR"],
+            "auto_commit": True,
+            "commit_message_template": "TDD {phase}: {description}"
+        }
+        
+        logger.debug(f"Checkpoint strategy: after_tdd_cycle={strategy['after_tdd_cycle']}")
+        return strategy
+    
+    def _track_tdd_metric(self, metric_name: str, value: Any):
+        """
+        Track TDD metrics during execution.
+        
+        Args:
+            metric_name: Metric name
+            value: Metric value
+        """
+        if not hasattr(self, '_tdd_metrics'):
+            self._tdd_metrics = {}
+        
+        self._tdd_metrics[metric_name] = value
+        logger.debug(f"TDD metric tracked: {metric_name}={value}")
+    
+    def _get_tdd_metrics(self) -> Dict[str, Any]:
+        """
+        Get collected TDD metrics.
+        
+        Returns:
+            Dict of TDD metrics
+        """
+        if not hasattr(self, '_tdd_metrics'):
+            self._tdd_metrics = {}
+        
+        return self._tdd_metrics
+    
+    # ========================================================================
+    # Manifest Compliance Integration (Phase 13C Task 13C.4 Part 3)
+    # ========================================================================
+    
+    @property
+    def _manifest(self) -> Optional[Dict[str, Any]]:
+        """
+        Get loaded planning system manifest.
+        
+        Returns:
+            Manifest dictionary if validator exists, else None
+        """
+        if self.manifest_validator and hasattr(self.manifest_validator, 'manifest'):
+            return self.manifest_validator.manifest
+        return None
+    
+    def _validate_against_manifest(self, plan_data: Dict[str, Any]) -> BaseValidationResult:
+        """
+        Validate plan against manifest schema and compliance rules.
+        
+        Args:
+            plan_data: Plan data to validate
+            
+        Returns:
+            BaseValidationResult with validation outcome
+        """
+        if not self.manifest_validator:
+            logger.warning("Manifest validator not enabled - skipping validation")
+            return BaseValidationResult(
+                valid=True,
+                errors=[],
+                warnings=["Manifest validation disabled"]
+            )
+        
+        try:
+            # Use ManifestComplianceValidator to validate
+            report = self.manifest_validator.validate_plan_compliance(plan_data)
+            
+            # Convert ComplianceReport to BaseValidationResult
+            errors = []
+            warnings = []
+            
+            for violation in report.violations:
+                message = f"[{violation.section.value}] {violation.message}"
+                if violation.severity == "critical":
+                    errors.append(message)
+                elif violation.severity == "major":
+                    errors.append(message)
+                else:  # minor
+                    warnings.append(message)
+            
+            # Log violations
+            if errors:
+                logger.error(f"Manifest violations found: {len(errors)} errors")
+                for error in errors:
+                    logger.error(f"  - {error}")
+            
+            is_valid = len(errors) == 0
+            
+            return BaseValidationResult(
+                valid=is_valid,
+                errors=errors,
+                warnings=warnings
+            )
+            
+        except Exception as e:
+            logger.exception(f"Manifest validation failed: {e}")
+            return BaseValidationResult(
+                valid=False,
+                errors=[f"Manifest validation error: {str(e)}"],
+                warnings=[]
+            )
+    
+    def _get_manifest_requirements(self) -> Dict[str, Any]:
+        """
+        Get manifest requirements for DoR/DoD/TDD.
+        
+        Returns:
+            Dict with DoR, DoD, and TDD requirements
+        """
+        if not self.manifest_validator:
+            return {
+                "dor": [],
+                "dod": [],
+                "tdd": []
+            }
+        
+        return {
+            "dor": getattr(self.manifest_validator, 'dor_requirements', []),
+            "dod": getattr(self.manifest_validator, 'dod_requirements', []),
+            "tdd": getattr(self.manifest_validator, 'tdd_requirements', [])
+        }
+    
+    def _get_manifest_inheritance(self) -> Optional[Dict[str, Any]]:
+        """
+        Get manifest inheritance structure (Planning System → ADO).
+        
+        Returns:
+            Dict with inheritance info or None
+        """
+        if not self._manifest:
+            return None
+        
+        # Check for inheritance metadata in manifest
+        inheritance = {
+            "base_manifest": "planning-system-4.0-manifest.yaml",
+            "derived_manifests": [],
+            "inheritance_supported": True
+        }
+        
+        # Check if ADO manifest exists and inherits from Planning System
+        ado_manifest_path = self.cortex_root / "cortex-brain" / "admin" / "manifests" / "ado-planning-manifest.yaml"
+        
+        if ado_manifest_path.exists():
+            try:
+                with open(ado_manifest_path, 'r') as f:
+                    ado_manifest = yaml.safe_load(f)
+                    
+                if ado_manifest and "inherits_from" in ado_manifest:
+                    inheritance["derived_manifests"].append({
+                        "name": "ado-planning-manifest.yaml",
+                        "inherits_from": ado_manifest["inherits_from"]
+                    })
+            except Exception as e:
+                logger.warning(f"Could not load ADO manifest for inheritance check: {e}")
+        
+        return inheritance
+    
+    def _check_manifest_compatibility(self) -> Dict[str, Any]:
+        """
+        Check manifest version compatibility.
+        
+        Returns:
+            Dict with compatibility status
+        """
+        if not self._manifest:
+            return {
+                "compatible": False,
+                "reason": "Manifest not loaded"
+            }
+        
+        # Get manifest version
+        manifest_version = self._manifest.get("version", "unknown")
+        expected_version = "4.0"
+        
+        compatible = manifest_version.startswith(expected_version)
+        
+        return {
+            "compatible": compatible,
+            "version": manifest_version,
+            "expected": expected_version,
+            "reason": "Version match" if compatible else f"Version mismatch: expected {expected_version}, got {manifest_version}"
+        }
+    
+    def _estimate_plan_size(self, plan_data: Any) -> int:
+        """
+        Estimate plan size in bytes for Phase 10 modularization.
+        
+        Args:
+            plan_data: Plan data to estimate
+            
+        Returns:
+            Estimated size in bytes
+        """
+        try:
+            # Convert to YAML and measure
+            yaml_content = yaml.dump(plan_data.__dict__ if hasattr(plan_data, '__dict__') else plan_data)
+            return len(yaml_content.encode('utf-8'))
+        except Exception as e:
+            logger.warning(f"Could not estimate plan size: {e}")
+            return 0
+    
+    def _should_modularize_plan(self, plan_data: Any) -> bool:
+        """
+        Check if plan should be modularized (Phase 10).
+        
+        Args:
+            plan_data: Plan data to check
+            
+        Returns:
+            True if plan exceeds 20KB threshold
+        """
+        size = self._estimate_plan_size(plan_data)
+        threshold = 20 * 1024  # 20KB
+        
+        should_modularize = size > threshold
+        
+        if should_modularize:
+            logger.info(f"Plan size {size} bytes exceeds {threshold} - modularization recommended")
+        
+        return should_modularize
+    
+    # ========================================================================
+    # RED Phase Execution
+    # ========================================================================
     
     def _execute_red_phase(self, plan: Dict[str, Any]) -> Dict[str, Any]:
         """

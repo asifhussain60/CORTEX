@@ -1,555 +1,551 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tdd Implementation Orchestrator - CORTEX Orchestrators</title>
-    <link rel="icon" type="image/png" href="../../assets/images/CORTEX-logo.png">
-    <link rel="stylesheet" href="../../assets/css/main.css">
-    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Tdd Implementation Orchestrator - CORTEX Orchestrators</title>
+<link href="../../assets/images/CORTEX-logo.png" rel="icon" type="image/png">
+<link href="../../assets/css/main.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
 </head>
 <body>
-    <!-- Breadcrumb -->
-    <nav class="breadcrumb">
-        <a href="../../index.html">Home</a>
-        <span class="breadcrumb-separator">›</span>
-        <a href="../index.html">Orchestrators</a>
-        <span class="breadcrumb-separator">›</span>
-        <span class="breadcrumb-current">Tdd Implementation Orchestrator</span>
-    </nav>
-
-    <!-- Hero -->
-    <section class="section">
-        <div class="container">
-            <div class="glass-card">
-                <div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 1rem;">
-                    <div class="icon" style="font-size: 3rem;">🔧</div>
-                    <div>
-                        <h1 style="margin-bottom: 0.5rem;">Tdd Implementation Orchestrator</h1>
-                        <p style="color: var(--text-secondary); font-size: 1.125rem; margin: 0;">
+<!-- Breadcrumb -->
+<nav class="breadcrumb">
+<a href="../../index.html">Home</a>
+<span class="breadcrumb-separator">›</span>
+<a href="../index.html">Orchestrators</a>
+<span class="breadcrumb-separator">›</span>
+<span class="breadcrumb-current">Tdd Implementation Orchestrator</span>
+</nav>
+<!-- Hero -->
+<section class="section">
+<div class="container">
+<div class="glass-card">
+<div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 1rem;">
+<div class="icon" style="font-size: 3rem;">🔧</div>
+<div>
+<h1 style="margin-bottom: 0.5rem;">Tdd Implementation Orchestrator</h1>
+<p style="color: var(--text-secondary); font-size: 1.125rem; margin: 0;">
                             CORTEX Orchestration System
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- Overview -->
-    <section class="section" style="padding-top: 0;">
-        <div class="container">
-            <h2>Overview</h2>
-            <div class="glass-card">
-                <p style="font-size: 1.125rem; line-height: 1.8; color: var(--text-secondary);">
-                    TDD Implementation Orchestrator</p><p>Orchestrates Test-Driven Development workflow with RED→GREEN→REFACTOR phases<br>and clean code enforcement. Enforces quality during REFACTOR phase with<br>duplicate detection, SOLID validation, and holistic code review.</p><p>Key Features:<br>- Phase-based TDD workflow (RED → GREEN → REFACTOR)<br>- Test-first validation (tests must fail before implementation)<br>- Minimal implementation guidance (tests pass with simplest code)<br>- Holistic REFACTOR phase (duplicates, redundancies, SOLID principles)<br>- Scope-aware quality checks (implementation files only)<br>- Out-of-scope blocker detection (log, don't fix)<br>- Git checkpoints at phase boundaries (rollback capability)<br>- Pattern learning (stores refactoring preferences in Tier 2)<br>- Real-time metrics (dashboard integration)</p><p>Usage:<br>    from src.orchestrators.tdd_implementation_orchestrator import TDDImplementationOrchestrator<br>    <br>    orchestrator = TDDImplementationOrchestrator(project_root="path/to/project")<br>    <br>    # Start TDD session<br>    session = orchestrator.start_session(<br>        feature_name="User Authentication",<br>        task_id="FEATURE-001"<br>    )<br>    <br>    # Execute RED phase<br>    red_result = orchestrator.execute_red_phase(session_id=session["session_id"])<br>    <br>    # Execute GREEN phase<br>    green_result = orchestrator.execute_green_phase(session_id=session["session_id"])<br>    <br>    # Execute REFACTOR phase (the innovation)<br>    refactor_result = orchestrator.execute_refactor_phase(session_id=session["session_id"])</p><p>Author: Asif Hussain<br>Copyright: © 2024-2025 Asif Hussain. All rights reserved.<br>License: Source-Available (Use Allowed, No Contributions)<br>Version: 1.0.0 (CORTEX 3.8.2)
-                </p>
-            </div>
-        </div>
-    </section>
+<section class="section" style="padding-top: 0;">
+<div class="container">
+<h2>Overview</h2>
+<div class="glass-card">
+<p style="font-size: 1.125rem; line-height: 1.8; color: var(--text-secondary);">
+                    TDD Implementation Orchestrator</p>
+<p>Orchestrates Test-Driven Development workflow with RED→GREEN→REFACTOR phases<br>and clean code enforcement. Enforces quality during REFACTOR phase with<br>duplicate detection, SOLID validation, and holistic code review.</p>
+<p>Key Features:<br>- Phase-based TDD workflow (RED → GREEN → REFACTOR)<br>- Test-first validation (tests must fail before implementation)<br>- Minimal implementation guidance (tests pass with simplest code)<br>- Holistic REFACTOR phase (duplicates, redundancies, SOLID principles)<br>- Scope-aware quality checks (implementation files only)<br>- Out-of-scope blocker detection (log, don't fix)<br>- Git checkpoints at phase boundaries (rollback capability)<br>- Pattern learning (stores refactoring preferences in Tier 2)<br>- Real-time metrics (dashboard integration)</p>
+<p>Usage:<br>    from src.orchestrators.tdd_implementation_orchestrator import TDDImplementationOrchestrator<br> <br>    orchestrator = TDDImplementationOrchestrator(project_root="path/to/project")<br> <br>    # Start TDD session<br>    session = orchestrator.start_session(<br>        feature_name="User Authentication",<br>        task_id="FEATURE-001"<br>    )<br> <br>    # Execute RED phase<br>    red_result = orchestrator.execute_red_phase(session_id=session["session_id"])<br> <br>    # Execute GREEN phase<br>    green_result = orchestrator.execute_green_phase(session_id=session["session_id"])<br> <br>    # Execute REFACTOR phase (the innovation)<br>    refactor_result = orchestrator.execute_refactor_phase(session_id=session["session_id"])</p>
+<p>Author: Asif Hussain<br>Copyright: © 2024-2025 Asif Hussain. All rights reserved.<br>License: Source-Available (Use Allowed, No Contributions)<br>Version: 1.0.0 (CORTEX 3.8.2)
 
     <!-- Workflow Diagram -->
-    <section class="section" style="padding-top: 0;">
-        <div class="container">
-            <h2>Workflow Diagram</h2>
-            <div class="glass-card">
-                <div class="mermaid">
+<section class="section" style="padding-top: 0;">
+<div class="container">
+<h2>Workflow Diagram</h2>
+<div class="glass-card">
+<div class="mermaid">
 flowchart TD
     Start([tdd_implementation_orchestrator])
 
     Init[Initialize TDDImplementationOrchestrator]
-    Start --> Init
+    Start --&gt; Init
 
     M0[  Init  ]
-    Init --> M0
+    Init --&gt; M0
     M2[Start Session]
-    M1 --> M2
+    M1 --&gt; M2
     M3[Get Session]
-    M2 --> M3
+    M2 --&gt; M3
     M6[Execute Red Phase]
-    M5 --> M6
+    M5 --&gt; M6
     M7[Execute Green Phase]
-    M6 --> M7
+    M6 --&gt; M7
     M8[Execute Refactor Phase]
-    M7 --> M8
+    M7 --&gt; M8
     M9[Complete Session]
-    M8 --> M9
+    M8 --&gt; M9
     M10[Rollback To Checkpoint]
-    M9 --> M10
+    M9 --&gt; M10
     M32[Get Learned Refactoring Patterns]
-    M31 --> M32
+    M31 --&gt; M32
 
-    M32 --> End([Complete])
-                </div>
-            </div>
-        </div>
-    </section>
+    M32 --&gt; End([Complete])
 
     <!-- Classes and Methods -->
-    <section class="section" style="padding-top: 0;">
-        <div class="container">
-            <h2>Implementation Details</h2>
-
-            <div class="glass-card" style="margin-bottom: 2rem;">
-                <h3>Class: TDDPhase</h3>
-
-                <p style="color: var(--text-secondary); line-height: 1.8;">
+<section class="section" style="padding-top: 0;">
+<div class="container">
+<h2>Implementation Details</h2>
+<div class="glass-card" style="margin-bottom: 2rem;">
+<h3>Class: TDDPhase</h3>
+<p style="color: var(--text-secondary); line-height: 1.8;">
                     TDD workflow phases (DEPRECATED - use session_model.TDDPhase).
+
                 </p>
+<p><strong>Inherits from:</strong> <code>Enum</code>
+</p>
+<div class="glass-card" style="margin-bottom: 2rem;">
+<h3>Class: TDDSessionState</h3>
+<p style="color: var(--text-secondary); line-height: 1.8;">
+                    State tracker for TDD session (MIGRATED to session_model.TDDSession).</p>
+<p>This class now inherits from TDDSession for type safety and consistency.<br>Maintains backward compatibility with existing code.
 
-                <p><strong>Inherits from:</strong> <code>Enum</code></p>
-
-            </div>
-
-            <div class="glass-card" style="margin-bottom: 2rem;">
-                <h3>Class: TDDSessionState</h3>
-
-                <p style="color: var(--text-secondary); line-height: 1.8;">
-                    State tracker for TDD session (MIGRATED to session_model.TDDSession).</p><p>This class now inherits from TDDSession for type safety and consistency.<br>Maintains backward compatibility with existing code.
                 </p>
-
-                <p><strong>Inherits from:</strong> <code>TDDSession</code></p>
-
-                <h4 style="margin-top: 1.5rem;">Methods</h4>
-                <div style="margin-left: 1rem;">
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+<p><strong>Inherits from:</strong> <code>TDDSession</code></p>
+<h4 style="margin-top: 1.5rem;">Methods</h4>
+<div style="margin-left: 1rem;">
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             __init__(self, session_id, feature_name, task_id, work_item_id)
                         </h5>
-
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             transition_to(self, new_phase, checkpoint_id)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Transition to new phase with history tracking.</p>
+<p>Uses validation framework to ensure valid transitions.</p>
+<p>Args:<br>    new_phase: Phase to transition to (old enum)<br>    checkpoint_id: Optional checkpoint ID for rollback
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Transition to new phase with history tracking.</p><p>Uses validation framework to ensure valid transitions.</p><p>Args:<br>    new_phase: Phase to transition to (old enum)<br>    checkpoint_id: Optional checkpoint ID for rollback
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             can_transition_to(self, target_phase)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Validate if transition to target phase is allowed.</p>
+<p>Now uses validation framework for consistent rules.</p>
+<p>Args:<br>    target_phase: Phase to validate transition to<br> <br>Returns:<br>    Tuple of (allowed, reason)
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Validate if transition to target phase is allowed.</p><p>Now uses validation framework for consistent rules.</p><p>Args:<br>    target_phase: Phase to validate transition to<br>    <br>Returns:<br>    Tuple of (allowed, reason)
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             to_dict(self)
                         </h5>
-
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
                             Convert state to dictionary for persistence (uses parent serialization).
-                        </p>
 
-                    </div>
 
-                </div>
 
-            </div>
 
-            <div class="glass-card" style="margin-bottom: 2rem;">
-                <h3>Class: TDDImplementationOrchestrator</h3>
+            </p>
+<div class="glass-card" style="margin-bottom: 2rem;">
+<h3>Class: TDDImplementationOrchestrator</h3>
+<p style="color: var(--text-secondary); line-height: 1.8;">
+                    Orchestrates TDD workflow with clean code enforcement.</p>
+<p>Manages RED→GREEN→REFACTOR cycle with:<br>- Test-first validation (RED phase)<br>- Minimal implementation (GREEN phase)<br>- Holistic refactoring (REFACTOR phase - THE INNOVATION)<br>- Git checkpoints at boundaries<br>- Pattern learning (Tier 2 integration)<br>- Real-time metrics (dashboard integration)
 
-                <p style="color: var(--text-secondary); line-height: 1.8;">
-                    Orchestrates TDD workflow with clean code enforcement.</p><p>Manages RED→GREEN→REFACTOR cycle with:<br>- Test-first validation (RED phase)<br>- Minimal implementation (GREEN phase)<br>- Holistic refactoring (REFACTOR phase - THE INNOVATION)<br>- Git checkpoints at boundaries<br>- Pattern learning (Tier 2 integration)<br>- Real-time metrics (dashboard integration)
                 </p>
-
-                <h4 style="margin-top: 1.5rem;">Methods</h4>
-                <div style="margin-left: 1rem;">
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+<h4 style="margin-top: 1.5rem;">Methods</h4>
+<div style="margin-left: 1rem;">
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             __init__(self, project_root, cortex_root, enable_pattern_library)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Initialize TDD Implementation Orchestrator.</p>
+<p>Args:<br>    project_root: Root directory of project being developed<br>    cortex_root: Root directory of CORTEX (defaults to auto-detect)<br>    enable_pattern_library: Enable Tier 2 pattern learning (default: True)
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Initialize TDD Implementation Orchestrator.</p><p>Args:<br>    project_root: Root directory of project being developed<br>    cortex_root: Root directory of CORTEX (defaults to auto-detect)<br>    enable_pattern_library: Enable Tier 2 pattern learning (default: True)
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             _detect_cortex_root(self)
                         </h5>
-
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
                             Auto-detect CORTEX root from current file location.
-                        </p>
 
-                    </div>
 
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             start_session(self, feature_name, task_id, work_item_id, test_files, require_tests_upfront)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Start a new TDD session.</p>
+<p>TIER 0 ENFORCEMENT: By default, requires test file paths to enforce test-first.</p>
+<p>Args:<br>    feature_name: Name of feature being implemented<br>    task_id: Optional task identifier<br>    work_item_id: Optional ADO work item ID<br>    test_files: Test files that MUST exist before RED phase (test-first enforcement)<br>    require_tests_upfront: If True, blocks session start until test files specified<br> <br>Returns:<br>    Dict with session_id and initial state
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Start a new TDD session.</p><p>TIER 0 ENFORCEMENT: By default, requires test file paths to enforce test-first.</p><p>Args:<br>    feature_name: Name of feature being implemented<br>    task_id: Optional task identifier<br>    work_item_id: Optional ADO work item ID<br>    test_files: Test files that MUST exist before RED phase (test-first enforcement)<br>    require_tests_upfront: If True, blocks session start until test files specified<br>    <br>Returns:<br>    Dict with session_id and initial state
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             get_session(self, session_id)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Get active session state.</p>
+<p>Args:<br>    session_id: Session identifier<br> <br>Returns:<br>    TDDSessionState or None if not found
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Get active session state.</p><p>Args:<br>    session_id: Session identifier<br>    <br>Returns:<br>    TDDSessionState or None if not found
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             _save_session_state(self, state)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Persist session state to disk.</p>
+<p>Args:<br>    state: Session state to save
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Persist session state to disk.</p><p>Args:<br>    state: Session state to save
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             _validate_phase_transition(self, session_id, target_phase)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Validate phase transition is allowed.</p>
+<p>Args:<br>    session_id: Session identifier<br>    target_phase: Target phase to transition to<br> <br>Returns:<br>    Tuple of (allowed, reason, state)
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Validate phase transition is allowed.</p><p>Args:<br>    session_id: Session identifier<br>    target_phase: Target phase to transition to<br>    <br>Returns:<br>    Tuple of (allowed, reason, state)
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             execute_red_phase(self, session_id, test_command, test_files)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Execute RED phase: Verify tests fail before implementation.</p>
+<p>TIER 0 ENFORCEMENT: Tests MUST be written and failing before implementation.</p>
+<p>Args:<br>    session_id: TDD session identifier<br>    test_command: Optional test command (auto-detected if not provided)<br>    test_files: Optional list of test files to validate (enforces test-first)<br> <br>Returns:<br>    Dict with success, message, test results
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Execute RED phase: Verify tests fail before implementation.</p><p>TIER 0 ENFORCEMENT: Tests MUST be written and failing before implementation.</p><p>Args:<br>    session_id: TDD session identifier<br>    test_command: Optional test command (auto-detected if not provided)<br>    test_files: Optional list of test files to validate (enforces test-first)<br>    <br>Returns:<br>    Dict with success, message, test results
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             execute_green_phase(self, session_id, test_command)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Execute GREEN phase: Verify tests pass after minimal implementation.</p>
+<p>Args:<br>    session_id: TDD session identifier<br>    test_command: Optional test command (auto-detected if not provided)<br> <br>Returns:<br>    Dict with success, message, test results, coverage delta
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Execute GREEN phase: Verify tests pass after minimal implementation.</p><p>Args:<br>    session_id: TDD session identifier<br>    test_command: Optional test command (auto-detected if not provided)<br>    <br>Returns:<br>    Dict with success, message, test results, coverage delta
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             execute_refactor_phase(self, session_id, auto_apply)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Execute REFACTOR phase: Holistic code quality analysis and cleanup.</p>
+<p>THIS IS THE INNOVATION - Enforces clean code/architecture.</p>
+<p>Args:<br>    session_id: TDD session identifier<br>    auto_apply: If True, apply safe refactorings automatically<br> <br>Returns:<br>    Dict with success, message, refactorings, metrics
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Execute REFACTOR phase: Holistic code quality analysis and cleanup.</p><p>THIS IS THE INNOVATION - Enforces clean code/architecture.</p><p>Args:<br>    session_id: TDD session identifier<br>    auto_apply: If True, apply safe refactorings automatically<br>    <br>Returns:<br>    Dict with success, message, refactorings, metrics
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             complete_session(self, session_id)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Complete TDD session and generate summary.</p>
+<p>Args:<br>    session_id: Session identifier<br> <br>Returns:<br>    Dict with success, summary, metrics
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Complete TDD session and generate summary.</p><p>Args:<br>    session_id: Session identifier<br>    <br>Returns:<br>    Dict with success, summary, metrics
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             rollback_to_checkpoint(self, session_id, checkpoint_id)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Rollback to previous checkpoint.</p>
+<p>Args:<br>    session_id: Session identifier<br>    checkpoint_id: Checkpoint to rollback to<br> <br>Returns:<br>    Dict with success, message
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Rollback to previous checkpoint.</p><p>Args:<br>    session_id: Session identifier<br>    checkpoint_id: Checkpoint to rollback to<br>    <br>Returns:<br>    Dict with success, message
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             _run_tests(self, test_command)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Run tests without coverage.</p>
+<p>Args:<br>    test_command: Optional test command (auto-detected if not provided)<br> <br>Returns:<br>    Dict with test results
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Run tests without coverage.</p><p>Args:<br>    test_command: Optional test command (auto-detected if not provided)<br>    <br>Returns:<br>    Dict with test results
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             _run_tests_with_coverage(self, test_command)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Run tests with coverage tracking.</p>
+<p>Args:<br>    test_command: Optional test command (auto-detected if not provided)<br> <br>Returns:<br>    Dict with test results and coverage
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Run tests with coverage tracking.</p><p>Args:<br>    test_command: Optional test command (auto-detected if not provided)<br>    <br>Returns:<br>    Dict with test results and coverage
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             _detect_test_command(self, with_coverage)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Auto-detect test command based on project structure.</p>
+<p>Args:<br>    with_coverage: Whether to include coverage flags<br> <br>Returns:<br>    Test command string
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Auto-detect test command based on project structure.</p><p>Args:<br>    with_coverage: Whether to include coverage flags<br>    <br>Returns:<br>    Test command string
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             _parse_test_output(self, output)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Parse test output to extract pass/fail counts.</p>
+<p>Args:<br>    output: Test command output<br> <br>Returns:<br>    Tuple of (passed, failed, total)
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Parse test output to extract pass/fail counts.</p><p>Args:<br>    output: Test command output<br>    <br>Returns:<br>    Tuple of (passed, failed, total)
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             _extract_failing_tests(self, output)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Extract failing test names from output.</p>
+<p>Args:<br>    output: Test command output<br> <br>Returns:<br>    List of failing test names
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Extract failing test names from output.</p><p>Args:<br>    output: Test command output<br>    <br>Returns:<br>    List of failing test names
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             _extract_coverage(self, output)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Extract coverage percentage from output.</p>
+<p>Args:<br>    output: Test command output<br> <br>Returns:<br>    Coverage percentage (0.0-100.0)
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Extract coverage percentage from output.</p><p>Args:<br>    output: Test command output<br>    <br>Returns:<br>    Coverage percentage (0.0-100.0)
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             _get_changed_files(self)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Get list of changed files since last checkpoint.</p>
+<p>Returns:<br>    List of changed file paths
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Get list of changed files since last checkpoint.</p><p>Returns:<br>    List of changed file paths
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             _analyze_scope(self, state)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Analyze implementation scope: categorize changed files.</p>
+<p>Args:<br>    state: TDD session state<br> <br>Returns:<br>    Dict with implementation_files, test_files, config_files, out_of_scope
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Analyze implementation scope: categorize changed files.</p><p>Args:<br>    state: TDD session state<br>    <br>Returns:<br>    Dict with implementation_files, test_files, config_files, out_of_scope
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             _detect_security_issues(self, files)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Detect security vulnerabilities in implementation files.</p>
+<p>Detection rules from BadMonolith analysis + CRITICAL-ARCHITECTURE-REVIEW.md:<br>- SQL injection (string concatenation with SQL keywords)<br>- Hard-coded credentials (passwords, API keys)<br>- Missing error handling in async methods<br>- Unvalidated user input<br>- Missing authorization checks (NEW)<br>- No rate limiting (NEW)<br>- HTTP instead of HTTPS (NEW)<br>- Missing CSRF protection (NEW)<br>- No audit logging for state changes (NEW)</p>
+<p>Args:<br>    files: List of implementation files<br> <br>Returns:<br>    Dict with security_issues list, enhanced with architectural gaps
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Detect security vulnerabilities in implementation files.</p><p>Detection rules from BadMonolith analysis + CRITICAL-ARCHITECTURE-REVIEW.md:<br>- SQL injection (string concatenation with SQL keywords)<br>- Hard-coded credentials (passwords, API keys)<br>- Missing error handling in async methods<br>- Unvalidated user input<br>- Missing authorization checks (NEW)<br>- No rate limiting (NEW)<br>- HTTP instead of HTTPS (NEW)<br>- Missing CSRF protection (NEW)<br>- No audit logging for state changes (NEW)</p><p>Args:<br>    files: List of implementation files<br>    <br>Returns:<br>    Dict with security_issues list, enhanced with architectural gaps
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             _detect_magic_values(self, files)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Detect magic strings/numbers in implementation files.</p>
+<p>Detection rules from BadMonolith analysis:<br>- String literals used &gt;5 times (should be constants)<br>- Numeric literals in business logic (except 0, 1, -1)<br>- Hard-coded URLs/endpoints</p>
+<p>Args:<br>    files: List of implementation files<br> <br>Returns:<br>    Dict with magic_values list
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Detect magic strings/numbers in implementation files.</p><p>Detection rules from BadMonolith analysis:<br>- String literals used >5 times (should be constants)<br>- Numeric literals in business logic (except 0, 1, -1)<br>- Hard-coded URLs/endpoints</p><p>Args:<br>    files: List of implementation files<br>    <br>Returns:<br>    Dict with magic_values list
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             _detect_duplicates(self, files)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Detect duplicate code blocks in implementation files.</p>
+<p>Args:<br>    files: List of implementation files<br> <br>Returns:<br>    Dict with duplicates list
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Detect duplicate code blocks in implementation files.</p><p>Args:<br>    files: List of implementation files<br>    <br>Returns:<br>    Dict with duplicates list
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             _detect_redundancies(self, files)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Detect redundant code (unused variables, dead code, etc.).</p>
+<p>Args:<br>    files: List of implementation files<br> <br>Returns:<br>    Dict with redundancies list
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Detect redundant code (unused variables, dead code, etc.).</p><p>Args:<br>    files: List of implementation files<br>    <br>Returns:<br>    Dict with redundancies list
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             _detect_anemic_domain_models(self, files)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Detect anemic domain models (entities with no behavior).</p>
+<p>Based on CRITICAL-ARCHITECTURE-REVIEW.md finding:<br>- Entities with only properties/fields (no methods)<br>- Missing domain logic (Complete(), Reopen(), Validate())<br>- No value objects or domain services</p>
+<p>Args:<br>    files: List of implementation files<br> <br>Returns:<br>    Dict with anemic_models list
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Detect anemic domain models (entities with no behavior).</p><p>Based on CRITICAL-ARCHITECTURE-REVIEW.md finding:<br>- Entities with only properties/fields (no methods)<br>- Missing domain logic (Complete(), Reopen(), Validate())<br>- No value objects or domain services</p><p>Args:<br>    files: List of implementation files<br>    <br>Returns:<br>    Dict with anemic_models list
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             _detect_configuration_issues(self, files)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Detect configuration management issues.</p>
+<p>Based on CRITICAL-ARCHITECTURE-REVIEW.md findings:<br>- Hard-coded URLs in source code<br>- Configuration not externalized to environment files<br>- Connection strings in code</p>
+<p>Args:<br>    files: List of implementation files<br> <br>Returns:<br>    Dict with config_issues list
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Detect configuration management issues.</p><p>Based on CRITICAL-ARCHITECTURE-REVIEW.md findings:<br>- Hard-coded URLs in source code<br>- Configuration not externalized to environment files<br>- Connection strings in code</p><p>Args:<br>    files: List of implementation files<br>    <br>Returns:<br>    Dict with config_issues list
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             _detect_transaction_issues(self, files)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Detect missing transaction management.</p>
+<p>Based on CRITICAL-ARCHITECTURE-REVIEW.md findings:<br>- Multiple database operations not atomic<br>- Race conditions in update operations<br>- No Unit of Work pattern</p>
+<p>Args:<br>    files: List of implementation files<br> <br>Returns:<br>    Dict with transaction_issues list
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Detect missing transaction management.</p><p>Based on CRITICAL-ARCHITECTURE-REVIEW.md findings:<br>- Multiple database operations not atomic<br>- Race conditions in update operations<br>- No Unit of Work pattern</p><p>Args:<br>    files: List of implementation files<br>    <br>Returns:<br>    Dict with transaction_issues list
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             _validate_solid(self, files)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Validate SOLID principles with enhanced detection.</p>
+<p>Enhanced with BadMonolith learnings:<br>- God class/method detection (&gt;300 lines, &gt;10 methods)<br>- Deep nesting (&gt;3 levels indicates complexity)<br>- Long parameter lists (&gt;4 parameters)<br>- Tight coupling (concrete type dependencies)<br>- Interface bloat (&gt;7 methods in interface)</p>
+<p>Args:<br>    files: List of implementation files<br> <br>Returns:<br>    Dict with violations list
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Validate SOLID principles with enhanced detection.</p><p>Enhanced with BadMonolith learnings:<br>- God class/method detection (>300 lines, >10 methods)<br>- Deep nesting (>3 levels indicates complexity)<br>- Long parameter lists (>4 parameters)<br>- Tight coupling (concrete type dependencies)<br>- Interface bloat (>7 methods in interface)</p><p>Args:<br>    files: List of implementation files<br>    <br>Returns:<br>    Dict with violations list
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             _calculate_nesting_depth(self, node, current_depth)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Calculate maximum nesting depth in AST node.</p>
+<p>Args:<br>    node: AST node to analyze<br>    current_depth: Current depth level<br> <br>Returns:<br>    Maximum nesting depth
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Calculate maximum nesting depth in AST node.</p><p>Args:<br>    node: AST node to analyze<br>    current_depth: Current depth level<br>    <br>Returns:<br>    Maximum nesting depth
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             _detect_blockers(self, out_of_scope_files)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Detect out-of-scope blockers (errors in files outside implementation scope).</p>
+<p>Args:<br>    out_of_scope_files: Files outside implementation scope<br> <br>Returns:<br>    Dict with blockers list
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Detect out-of-scope blockers (errors in files outside implementation scope).</p><p>Args:<br>    out_of_scope_files: Files outside implementation scope<br>    <br>Returns:<br>    Dict with blockers list
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             _generate_refactorings(self, security_result, magic_result, duplicates_result, redundancies_result, solid_result, anemic_result, config_result, transaction_result)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Generate refactoring recommendations from analysis results.</p>
+<p>Enhanced with CRITICAL-ARCHITECTURE-REVIEW.md findings:<br>- Anemic domain model fixes<br>- Configuration externalization<br>- Transaction management</p>
+<p>Args:<br>    security_result: Security scan results<br>    magic_result: Magic value detection results<br>    duplicates_result: Duplicate detection results<br>    redundancies_result: Redundancy detection results<br>    solid_result: SOLID validation results<br>    anemic_result: Anemic domain model detection results (NEW)<br>    config_result: Configuration issues results (NEW)<br>    transaction_result: Transaction management issues (NEW)<br> <br>Returns:<br>    List of refactoring recommendations with enhanced architecture guidance
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Generate refactoring recommendations from analysis results.</p><p>Enhanced with CRITICAL-ARCHITECTURE-REVIEW.md findings:<br>- Anemic domain model fixes<br>- Configuration externalization<br>- Transaction management</p><p>Args:<br>    security_result: Security scan results<br>    magic_result: Magic value detection results<br>    duplicates_result: Duplicate detection results<br>    redundancies_result: Redundancy detection results<br>    solid_result: SOLID validation results<br>    anemic_result: Anemic domain model detection results (NEW)<br>    config_result: Configuration issues results (NEW)<br>    transaction_result: Transaction management issues (NEW)<br>    <br>Returns:<br>    List of refactoring recommendations with enhanced architecture guidance
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             _apply_refactorings_auto(self, refactorings, state)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Auto-apply safe refactorings.</p>
+<p>Args:<br>    refactorings: List of refactoring recommendations<br>    state: Session state<br> <br>Returns:<br>    List of applied refactorings
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Auto-apply safe refactorings.</p><p>Args:<br>    refactorings: List of refactoring recommendations<br>    state: Session state<br>    <br>Returns:<br>    List of applied refactorings
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             _store_refactoring_patterns(self, refactorings, applied_refactorings, state)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Store refactoring patterns in Tier 2 for learning.</p>
+<p>Learns project preferences:<br>- Accepted vs rejected refactorings<br>- Extract method naming conventions<br>- Class splitting strategies<br>- Duplicate consolidation approaches</p>
+<p>Args:<br>    refactorings: All refactoring recommendations<br>    applied_refactorings: Refactorings that were applied<br>    state: Session state
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Store refactoring patterns in Tier 2 for learning.</p><p>Learns project preferences:<br>- Accepted vs rejected refactorings<br>- Extract method naming conventions<br>- Class splitting strategies<br>- Duplicate consolidation approaches</p><p>Args:<br>    refactorings: All refactoring recommendations<br>    applied_refactorings: Refactorings that were applied<br>    state: Session state
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             get_learned_refactoring_patterns(self, feature_name, refactoring_type)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Retrieve learned refactoring patterns from Tier 2.</p>
+<p>Used to suggest refactorings based on project history.</p>
+<p>Args:<br>    feature_name: Filter by feature (optional)<br>    refactoring_type: Filter by type (extract_method, split_class, etc.)<br> <br>Returns:<br>    List of learned patterns with confidence scores
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Retrieve learned refactoring patterns from Tier 2.</p><p>Used to suggest refactorings based on project history.</p><p>Args:<br>    feature_name: Filter by feature (optional)<br>    refactoring_type: Filter by type (extract_method, split_class, etc.)<br>    <br>Returns:<br>    List of learned patterns with confidence scores
-                        </p>
 
-                    </div>
 
-                </div>
 
-            </div>
-
-        </div>
-    </section>
 
     <!-- Source File Info -->
-    <section class="section" style="padding-top: 0;">
-        <div class="container">
-            <div class="glass-card" style="text-align: center; color: var(--text-secondary);">
-                <p><strong>Source:</strong> <code>src/orchestrators/tdd_implementation_orchestrator.py</code></p>
-                <p style="margin-top: 0.5rem; font-size: 0.875rem;">
+<section class="section" style="padding-top: 0;">
+<div class="container">
+<div class="glass-card" style="text-align: center; color: var(--text-secondary);">
+<p><strong>Source:</strong> <code>src/orchestrators/tdd_implementation_orchestrator.py</code></p>
+<p style="margin-top: 0.5rem; font-size: 0.875rem;">
                     Author: Asif Hussain | Copyright © 2024-2025 Asif Hussain. All rights reserved.
-                </p>
-            </div>
-        </div>
-    </section>
 
-    <script>
-        mermaid.initialize({ startOnLoad: true, theme: 'dark' });
-    </script>
+    <script></script></p>
+</div>
+</div></section></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div></section>
+</div>
+</div>
+</div></section></p>
+</div>
+</div></section></p>
+</div>
+</div>
+</div>
+</div></section>
 </body>
 </html>

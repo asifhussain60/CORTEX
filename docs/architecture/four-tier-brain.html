@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>4-Tier Brain - CORTEX 4.0 Architecture</title>
-    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="icon" href="../assets/images/CORTEX-logo.png" type="image/png">
 </head>
 <body>
     <!-- Breadcrumb -->
@@ -17,243 +17,199 @@
         <span class="breadcrumb-current">4-Tier Brain</span>
     </nav>
 
-    <!-- Evolution Banner -->
-    <section class="section" style="padding-top: 2rem; padding-bottom: 0;">
+    <!-- Hero -->
+    <section class="section">
         <div class="container">
-            <div class="evolution-banner">
-                <div>
-                    <strong>Architecture Evolution in Progress</strong>
-                    <p>CORTEX is consolidating from 15+ orchestrators to a unified 10-orchestrator system. 
-                       This page reflects current (3.0) architecture. See 
-                       <a href="../future/technical-evolution.html">Technical Evolution</a> for CORTEX 4.0 plans.</p>
+            <div class="glass-card">
+                <div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 2rem; flex-wrap: wrap;">
+                    <div class="icon" style="font-size: 4rem;">🧠</div>
+                    <div style="flex: 1;">
+                        <h1 style="margin-bottom: 0.5rem;">4-Tier Brain Architecture</h1>
+                        <p style="color: var(--text-secondary); font-size: 1.25rem; margin: 0;">
+                            Hierarchical Memory System Powering CORTEX Intelligence
+                        </p>
+                    </div>
+                </div>
+
+                <div class="metrics-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin-top: 2rem;">
+                    <div class="metric-card">
+                        <div class="metric-value">4</div>
+                        <div class="metric-label">Memory Tiers</div>
+                        <div class="metric-sublabel">Specialized Layers</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">8,429</div>
+                        <div class="metric-label">Knowledge Nodes</div>
+                        <div class="metric-sublabel">Tier 2 Graph</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">&lt;100ms</div>
+                        <div class="metric-label">Query Speed</div>
+                        <div class="metric-sublabel">Tier 1 FIFO</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">70</div>
+                        <div class="metric-label">Working Memory</div>
+                        <div class="metric-sublabel">Conversations</div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Header -->
-    <section class="section">
-        <div class="container">
-            <h1 class="section-title">4-Tier Brain Architecture</h1>
-            <p class="text-center" style="max-width: 900px; margin: 0 auto 3rem; color: var(--text-secondary); font-size: 1.125rem;">
-                A distributed intelligence system designed like a skyscraper—each floor has a specific purpose, and information travels between layers in under 100 milliseconds
-            </p>
-        </div>
-    </section>
-
-    <!-- Executive Summary -->
+    <!-- Overview -->
     <section class="section" style="padding-top: 0;">
         <div class="container">
+            <h2>What is the 4-Tier Brain?</h2>
             <div class="glass-card">
-                <h2 class="mb-3">Executive Summary</h2>
-                <p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8;">
-                    CORTEX's 4-tier architecture is not just an AI assistant—it's a governed, learning, context-aware development partner. 
-                    Governance at the top ensures quality through 22 immutable SKULL rules. Working memory in Tier 1 provides rich context 
-                    from the last 70 conversations. Knowledge in Tier 2 learns patterns through 8,429 nodes and 24,817 connections. Context 
-                    in Tier 3 tracks reality with real-time git activity, code metrics, and hotspot detection. Together: intelligent, fast, governed.
+                <p style="font-size: 1.125rem; line-height: 1.8; color: var(--text-secondary);">
+                    The <strong style="color: var(--accent-primary);">4-Tier Brain</strong> is CORTEX's hierarchical memory architecture that provides 
+                    strategic planning, long-term learning, and context awareness. Unlike traditional AI assistants with no memory, 
+                    CORTEX remembers patterns, learns from mistakes, and builds institutional knowledge across development sessions.
                 </p>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-top: 2rem;">
-                    <div style="text-align: center; padding: 1.5rem; background: rgba(255, 193, 7, 0.1); border-radius: 8px;">
-                        <div style="font-size: 2.5rem; font-weight: 700; color: #ffc107;">87ms</div>
-                        <div style="font-size: 0.875rem; color: var(--text-secondary);">Average Round-Trip</div>
-                        <div style="font-size: 0.75rem; color: var(--text-tertiary); margin-top: 0.5rem;">Faster than eye blink (100-150ms)</div>
-                    </div>
-                    <div style="text-align: center; padding: 1.5rem; background: rgba(0, 212, 255, 0.1); border-radius: 8px;">
-                        <div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-primary);">70</div>
-                        <div style="font-size: 0.875rem; color: var(--text-secondary);">Conversations</div>
-                        <div style="font-size: 0.75rem; color: var(--text-tertiary); margin-top: 0.5rem;">FIFO queue, &lt;100ms query</div>
-                    </div>
-                    <div style="text-align: center; padding: 1.5rem; background: rgba(123, 97, 255, 0.1); border-radius: 8px;">
-                        <div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-secondary);">8,429</div>
-                        <div style="font-size: 0.875rem; color: var(--text-secondary);">Knowledge Nodes</div>
-                        <div style="font-size: 0.75rem; color: var(--text-tertiary); margin-top: 0.5rem;">24,817 connections active</div>
-                    </div>
-                    <div style="text-align: center; padding: 1.5rem; background: rgba(76, 175, 80, 0.1); border-radius: 8px;">
-                        <div style="font-size: 2.5rem; font-weight: 700; color: #4caf50;">0</div>
-                        <div style="font-size: 0.875rem; color: var(--text-secondary);">Single Points of Failure</div>
-                        <div style="font-size: 0.75rem; color: var(--text-tertiary); margin-top: 0.5rem;">Distributed SQLite databases</div>
-                    </div>
-                </div>
+                <p style="font-size: 1.125rem; line-height: 1.8; color: var(--text-secondary); margin-top: 1rem;">
+                    Each tier serves a specialized purpose—from immutable governance rules (Tier 0) to real-time development context (Tier 3)—creating 
+                    a complete cognitive framework that evolves with your team.
+                </p>
             </div>
         </div>
     </section>
 
-    <!-- Tier 0: Governance -->
-    <section class="section" id="tier0">
+    <!-- The 4 Tiers -->
+    <section class="section" style="padding-top: 0;">
         <div class="container">
-            <div class="glass-card" style="border-left: 4px solid #ffc107;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; cursor: pointer;" onclick="toggleSection('tier0-content')">
-                    <h2 style="margin: 0; color: #ffc107;">🏛️ Tier 0: Governance Layer</h2>
-                    <span id="tier0-content-icon" style="font-size: 1.5rem; transition: transform 0.3s;">▼</span>
-                </div>
-                <div id="tier0-content" style="display: block;">
-                    <p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1.5rem;">
-                        At the top, we have Tier 0—CORTEX's constitution. This layer contains 22 immutable rules we call <strong>SKULL</strong> 
-                        (System Knowledge Unified for Long-term Learning). These rules enforce TDD, git isolation, and red-phase validation. 
-                        They cannot be bypassed, ensuring code quality and system integrity at all times. Notice the golden color—this represents 
-                        the highest authority in the system.
-                    </p>
-                    
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
-                        <div style="padding: 1rem; background: rgba(255, 193, 7, 0.1); border-radius: 8px; border: 1px solid rgba(255, 193, 7, 0.3);">
-                            <div style="font-size: 1.5rem; font-weight: 700; color: #ffc107;">22 Rules</div>
-                            <div style="font-size: 0.875rem; color: var(--text-secondary);">SKULL Protection Rules</div>
-                        </div>
-                        <div style="padding: 1rem; background: rgba(76, 175, 80, 0.1); border-radius: 8px; border: 1px solid rgba(76, 175, 80, 0.3);">
-                            <div style="font-size: 1.5rem; font-weight: 700; color: #4caf50;">100%</div>
-                            <div style="font-size: 0.875rem; color: var(--text-secondary);">Enforcement Rate</div>
-                        </div>
-                        <div style="padding: 1rem; background: rgba(255, 193, 7, 0.1); border-radius: 8px; border: 1px solid rgba(255, 193, 7, 0.3);">
-                            <div style="font-size: 1.5rem; font-weight: 700; color: #ffc107;">&lt;10ms</div>
-                            <div style="font-size: 0.875rem; color: var(--text-secondary);">Access Latency</div>
-                        </div>
+            <h2>The 4 Memory Tiers</h2>
+
+            <!-- Tier 0 -->
+            <div class="glass-card" style="margin-bottom: 2rem; border-left: 4px solid var(--danger);">
+                <div style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1rem;">
+                    <div style="font-size: 3rem;">🛡️</div>
+                    <div>
+                        <h3 style="margin: 0; color: var(--danger);">Tier 0: Governance (SKULL Rules)</h3>
+                        <p style="margin: 0.25rem 0 0 0; color: var(--text-muted);">Immutable protection rules</p>
                     </div>
-                    
-                    <div style="background: rgba(10, 14, 39, 0.5); padding: 1.5rem; border-radius: 8px; margin-top: 1.5rem;">
-                        <h3 style="color: #ffc107; margin-bottom: 1rem;">Key SKULL Rules</h3>
-                        <ul style="color: var(--text-secondary); line-height: 2;">
-                            <li><strong>TDD_ENFORCEMENT:</strong> RED→GREEN→REFACTOR mandatory workflow</li>
-                            <li><strong>RED_PHASE_VALIDATION:</strong> Tests must fail before implementation</li>
-                            <li><strong>HOLISTIC_CODE_DISCOVERY_ENFORCEMENT:</strong> Search before create (prevent duplication)</li>
-                            <li><strong>GIT_ISOLATION_ENFORCEMENT:</strong> CORTEX code never in user repos</li>
-                            <li><strong>REFACTOR_CODE_CLEANUP_ENFORCEMENT:</strong> Remove orphaned/duplicate code</li>
+                </div>
+                <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;">
+                    <strong>Purpose:</strong> Core governance layer with 22 immutable SKULL rules enforced by the Brain Protector.
+                </p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                    <div>
+                        <strong style="color: var(--accent-primary);">Key Features:</strong>
+                        <ul style="margin: 0.5rem 0 0 1.5rem; color: var(--text-secondary);">
+                            <li>TDD enforcement</li>
+                            <li>Duplication prevention</li>
+                            <li>Git isolation</li>
+                            <li>Knowledge integrity</li>
                         </ul>
-                        <a href="../governance/skull-rulebook.html" class="btn btn-primary" style="margin-top: 1rem;">View All 22 Rules →</a>
+                    </div>
+                    <div>
+                        <strong style="color: var(--accent-primary);">Storage:</strong>
+                        <ul style="margin: 0.5rem 0 0 1.5rem; color: var(--text-secondary);">
+                            <li><code>brain-protection-rules.yaml</code></li>
+                            <li>Never modified</li>
+                            <li>100% enforcement</li>
+                        </ul>
+                    </div>
+                </div>
+                <a href="../governance/skull-rulebook.html" class="btn btn-primary" style="margin-top: 1rem; display: inline-block;">
+                    View SKULL Rules →
+                </a>
+            </div>
+
+            <!-- Tier 1 -->
+            <div class="glass-card" style="margin-bottom: 2rem; border-left: 4px solid var(--warning);">
+                <div style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1rem;">
+                    <div style="font-size: 3rem;">⚡</div>
+                    <div>
+                        <h3 style="margin: 0; color: var(--warning);">Tier 1: Working Memory (FIFO Queue)</h3>
+                        <p style="margin: 0.25rem 0 0 0; color: var(--text-muted);">Fast, short-term context</p>
+                    </div>
+                </div>
+                <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;">
+                    <strong>Purpose:</strong> High-speed working memory storing recent 70 conversations with &lt;100ms query time.
+                </p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                    <div>
+                        <strong style="color: var(--accent-primary);">Key Features:</strong>
+                        <ul style="margin: 0.5rem 0 0 1.5rem; color: var(--text-secondary);">
+                            <li>FIFO eviction policy</li>
+                            <li>70-conversation window</li>
+                            <li>Session context</li>
+                            <li>Real-time queries</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong style="color: var(--accent-primary);">Storage:</strong>
+                        <ul style="margin: 0.5rem 0 0 1.5rem; color: var(--text-secondary);">
+                            <li><code>conversation-history.db</code></li>
+                            <li>SQLite with FTS5</li>
+                            <li>Auto-pruning</li>
+                        </ul>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- Tier 1: Working Memory -->
-    <section class="section" id="tier1">
-        <div class="container">
-            <div class="glass-card" style="border-left: 4px solid var(--accent-primary);">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; cursor: pointer;" onclick="toggleSection('tier1-content')">
-                    <h2 style="margin: 0; color: var(--accent-primary);">💾 Tier 1: Working Memory</h2>
-                    <span id="tier1-content-icon" style="font-size: 1.5rem; transition: transform 0.3s;">▼</span>
-                </div>
-                <div id="tier1-content" style="display: block;">
-                    <p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1.5rem;">
-                        Tier 1 is CORTEX's short-term memory—the last 70 conversations stored in a FIFO (First-In, First-Out) queue. When conversation 
-                        71 arrives, conversation 1 is automatically deleted. This design gives CORTEX rich context without memory bloat. Query speed? 
-                        Under 100 milliseconds. That's the time it takes light to travel 30 kilometers.
-                    </p>
-                    
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
-                        <div style="padding: 1rem; background: rgba(0, 212, 255, 0.1); border-radius: 8px; border: 1px solid rgba(0, 212, 255, 0.3);">
-                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent-primary);">70</div>
-                            <div style="font-size: 0.875rem; color: var(--text-secondary);">Conversations Stored</div>
-                        </div>
-                        <div style="padding: 1rem; background: rgba(0, 212, 255, 0.1); border-radius: 8px; border: 1px solid rgba(0, 212, 255, 0.3);">
-                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent-primary);">&lt;100ms</div>
-                            <div style="font-size: 0.875rem; color: var(--text-secondary);">Query Latency</div>
-                        </div>
-                        <div style="padding: 1rem; background: rgba(0, 212, 255, 0.1); border-radius: 8px; border: 1px solid rgba(0, 212, 255, 0.3);">
-                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent-primary);">FIFO</div>
-                            <div style="font-size: 0.875rem; color: var(--text-secondary);">Queue Mechanism</div>
-                        </div>
+            <!-- Tier 2 -->
+            <div class="glass-card" style="margin-bottom: 2rem; border-left: 4px solid var(--success);">
+                <div style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1rem;">
+                    <div style="font-size: 3rem;">🕸️</div>
+                    <div>
+                        <h3 style="margin: 0; color: var(--success);">Tier 2: Knowledge Graph (Long-Term Learning)</h3>
+                        <p style="margin: 0.25rem 0 0 0; color: var(--text-muted);">Pattern storage & retrieval</p>
                     </div>
-                    
-                    <div style="background: rgba(10, 14, 39, 0.5); padding: 1.5rem; border-radius: 8px; margin-top: 1.5rem;">
-                        <h3 style="color: var(--accent-primary); margin-bottom: 1rem;">Why 70 Conversations?</h3>
-                        <p style="color: var(--text-secondary); line-height: 1.8;">
-                            It's a sweet spot discovered through testing. More than 70 and queries slow down. Fewer than 70 and context 
-                            becomes shallow. We tested 50, 100, and 150 conversations—70 gave the best balance between richness and speed 
-                            while staying under the critical 100ms threshold.
-                        </p>
+                </div>
+                <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;">
+                    <strong>Purpose:</strong> Persistent knowledge graph with 8,429 nodes storing patterns, solutions, and learnings.
+                </p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                    <div>
+                        <strong style="color: var(--accent-primary);">Key Features:</strong>
+                        <ul style="margin: 0.5rem 0 0 1.5rem; color: var(--text-secondary);">
+                            <li>Pattern recognition</li>
+                            <li>Solution templates</li>
+                            <li>Best practices</li>
+                            <li>Anti-pattern detection</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong style="color: var(--accent-primary);">Storage:</strong>
+                        <ul style="margin: 0.5rem 0 0 1.5rem; color: var(--text-secondary);">
+                            <li><code>knowledge-graph.yaml</code></li>
+                            <li>Semantic relationships</li>
+                            <li>Confidence scoring</li>
+                        </ul>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- Tier 2: Knowledge Graph -->
-    <section class="section" id="tier2">
-        <div class="container">
-            <div class="glass-card" style="border-left: 4px solid var(--accent-secondary);">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; cursor: pointer;" onclick="toggleSection('tier2-content')">
-                    <h2 style="margin: 0; color: var(--accent-secondary);">🕸️ Tier 2: Knowledge Graph</h2>
-                    <span id="tier2-content-icon" style="font-size: 1.5rem; transition: transform 0.3s;">▼</span>
-                </div>
-                <div id="tier2-content" style="display: block;">
-                    <p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1.5rem;">
-                        Tier 2 is CORTEX's long-term memory—a knowledge graph where patterns emerge and semantic understanding lives. With over 
-                        8,400 nodes and 24,000 connections, this layer uses <strong>Hebbian learning</strong>: concepts that fire together, wire 
-                        together. When you ask about TDD and git checkpoints together multiple times, CORTEX strengthens that connection, learning 
-                        your workflow patterns.
-                    </p>
-                    
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
-                        <div style="padding: 1rem; background: rgba(123, 97, 255, 0.1); border-radius: 8px; border: 1px solid rgba(123, 97, 255, 0.3);">
-                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent-secondary);">8,429</div>
-                            <div style="font-size: 0.875rem; color: var(--text-secondary);">Knowledge Nodes</div>
-                        </div>
-                        <div style="padding: 1rem; background: rgba(123, 97, 255, 0.1); border-radius: 8px; border: 1px solid rgba(123, 97, 255, 0.3);">
-                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent-secondary);">24,817</div>
-                            <div style="font-size: 0.875rem; color: var(--text-secondary);">Connections</div>
-                        </div>
-                        <div style="padding: 1rem; background: rgba(123, 97, 255, 0.1); border-radius: 8px; border: 1px solid rgba(123, 97, 255, 0.3);">
-                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent-secondary);">Active</div>
-                            <div style="font-size: 0.875rem; color: var(--text-secondary);">Pattern Learning</div>
-                        </div>
-                    </div>
-                    
-                    <div style="background: rgba(10, 14, 39, 0.5); padding: 1.5rem; border-radius: 8px; margin-top: 1.5rem;">
-                        <h3 style="color: var(--accent-secondary); margin-bottom: 1rem;">Hebbian Learning in Action</h3>
-                        <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;">
-                            Named after neuroscientist Donald Hebb, this learning principle states: "Neurons that fire together, wire together." 
-                            In CORTEX, when you use two concepts together frequently, their connection strengthens. Over time, CORTEX learns your 
-                            patterns and can anticipate related concepts.
-                        </p>
-                        <p style="color: var(--text-secondary); line-height: 1.8;">
-                            <strong>Example:</strong> If you frequently ask about "TDD" and "git checkpoints" together, CORTEX will strengthen 
-                            the connection between these concepts. Next time you mention TDD, CORTEX automatically considers git checkpoint patterns.
-                        </p>
+            <!-- Tier 3 -->
+            <div class="glass-card" style="margin-bottom: 2rem; border-left: 4px solid var(--info);">
+                <div style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1rem;">
+                    <div style="font-size: 3rem;">📊</div>
+                    <div>
+                        <h3 style="margin: 0; color: var(--info);">Tier 3: Development Context (Metrics & Hotspots)</h3>
+                        <p style="margin: 0.25rem 0 0 0; color: var(--text-muted);">Real-time codebase intelligence</p>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Tier 3: Development Context -->
-    <section class="section" id="tier3">
-        <div class="container">
-            <div class="glass-card" style="border-left: 4px solid #2196f3;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; cursor: pointer;" onclick="toggleSection('tier3-content')">
-                    <h2 style="margin: 0; color: #2196f3;">📊 Tier 3: Development Context</h2>
-                    <span id="tier3-content-icon" style="font-size: 1.5rem; transition: transform 0.3s;">▼</span>
-                </div>
-                <div id="tier3-content" style="display: block;">
-                    <p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1.5rem;">
-                        At the foundation is Tier 3—CORTEX's awareness of your project's health. This layer tracks your codebase in real-time: 
-                        which files are hot (frequently changed), git activity patterns, code metrics, and test coverage. Those red glowing zones 
-                        in the visualization? Those are your development hotspots—areas of high change velocity that deserve attention.
-                    </p>
-                    
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
-                        <div style="padding: 1rem; background: rgba(33, 150, 243, 0.1); border-radius: 8px; border: 1px solid rgba(33, 150, 243, 0.3);">
-                            <div style="font-size: 1.5rem; font-weight: 700; color: #2196f3;">Real-Time</div>
-                            <div style="font-size: 0.875rem; color: var(--text-secondary);">Project Tracking</div>
-                        </div>
-                        <div style="padding: 1rem; background: rgba(33, 150, 243, 0.1); border-radius: 8px; border: 1px solid rgba(33, 150, 243, 0.3);">
-                            <div style="font-size: 1.5rem; font-weight: 700; color: #2196f3;">Git</div>
-                            <div style="font-size: 0.875rem; color: var(--text-secondary);">Activity Patterns</div>
-                        </div>
-                        <div style="padding: 1rem; background: rgba(33, 150, 243, 0.1); border-radius: 8px; border: 1px solid rgba(33, 150, 243, 0.3);">
-                            <div style="font-size: 1.5rem; font-weight: 700; color: #2196f3;">Hotspot</div>
-                            <div style="font-size: 0.875rem; color: var(--text-secondary);">Detection Active</div>
-                        </div>
+                <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;">
+                    <strong>Purpose:</strong> Real-time development context tracking metrics, complexity, and code hotspots.
+                </p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                    <div>
+                        <strong style="color: var(--accent-primary);">Key Features:</strong>
+                        <ul style="margin: 0.5rem 0 0 1.5rem; color: var(--text-secondary);">
+                            <li>Complexity analysis</li>
+                            <li>Hotspot detection</li>
+                            <li>Test coverage tracking</li>
+                            <li>Refactoring priorities</li>
+                        </ul>
                     </div>
-                    
-                    <div style="background: rgba(10, 14, 39, 0.5); padding: 1.5rem; border-radius: 8px; margin-top: 1.5rem;">
-                        <h3 style="color: #2196f3; margin-bottom: 1rem;">What CORTEX Tracks</h3>
-                        <ul style="color: var(--text-secondary); line-height: 2;">
-                            <li><strong>File Hotspots:</strong> Which files change most frequently (high velocity = potential risk)</li>
-                            <li><strong>Git Activity:</strong> Commit patterns, branch activity, merge frequency</li>
-                            <li><strong>Code Metrics:</strong> Complexity scores, test coverage percentages, dependency graphs</li>
-                            <li><strong>Test Coverage:</strong> Per-file and per-layer coverage tracking with RED-GREEN-REFACTOR alignment</li>
-                            <li><strong>Project Health:</strong> Aggregated metrics that indicate overall codebase quality</li>
+                    <div>
+                        <strong style="color: var(--accent-primary);">Storage:</strong>
+                        <ul style="margin: 0.5rem 0 0 1.5rem; color: var(--text-secondary);">
+                            <li><code>development-context.yaml</code></li>
+                            <li>AST-powered analysis</li>
+                            <li>Git integration</li>
                         </ul>
                     </div>
                 </div>
@@ -261,298 +217,89 @@
         </div>
     </section>
 
-    <!-- Distributed Databases -->
-    <section class="section">
+    <!-- How It Works -->
+    <section class="section" style="padding-top: 0;">
         <div class="container">
+            <h2>How the Tiers Work Together</h2>
             <div class="glass-card">
-                <h2 class="mb-3">Distributed Database Architecture</h2>
-                <p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1.5rem;">
-                    Each tier has its own SQLite database—distributed by design. No single point of failure, optimized for specific query patterns. 
-                    Working memory needs speed, knowledge graph needs graph traversal, development context needs aggregation. Each database is purpose-built.
-                </p>
-                
-                <div style="background: rgba(10, 14, 39, 0.5); padding: 1.5rem; border-radius: 8px;">
-                    <h3 style="color: var(--accent-primary); margin-bottom: 1rem;">Why SQLite Instead of PostgreSQL or MongoDB?</h3>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
-                        <div>
-                            <h4 style="color: #ffc107; margin-bottom: 0.5rem;">⚡ Zero Configuration</h4>
-                            <p style="color: var(--text-secondary); line-height: 1.8;">
-                                No server to manage, no complex setup. File-based storage means CORTEX is portable and easy to deploy.
-                            </p>
-                        </div>
-                        <div>
-                            <h4 style="color: #ffc107; margin-bottom: 0.5rem;">📁 File-Based Portability</h4>
-                            <p style="color: var(--text-secondary); line-height: 1.8;">
-                                Backup with a simple file copy. Move databases between machines effortlessly. No export/import required.
-                            </p>
-                        </div>
-                        <div>
-                            <h4 style="color: #ffc107; margin-bottom: 0.5rem;">🚀 Sub-Millisecond Queries</h4>
-                            <p style="color: var(--text-secondary); line-height: 1.8;">
-                                For CORTEX's access patterns and scale, SQLite delivers sub-millisecond query times—perfect for the 87ms target.
-                            </p>
-                        </div>
+                <div class="metrics-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+                    <div class="metric-card">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">1️⃣</div>
+                        <h3 style="color: var(--accent-primary); margin-bottom: 0.5rem;">Query Arrives</h3>
+                        <p style="color: var(--text-secondary); margin: 0;">User request enters CORTEX through Copilot Chat interface.</p>
+                    </div>
+                    <div class="metric-card">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">2️⃣</div>
+                        <h3 style="color: var(--accent-primary); margin-bottom: 0.5rem;">Tier 0 Validation</h3>
+                        <p style="color: var(--text-secondary); margin: 0;">Brain Protector checks request against SKULL rules.</p>
+                    </div>
+                    <div class="metric-card">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">3️⃣</div>
+                        <h3 style="color: var(--accent-primary); margin-bottom: 0.5rem;">Context Retrieval</h3>
+                        <p style="color: var(--text-secondary); margin: 0;">Tier 1 provides recent conversations, Tier 2 supplies learned patterns.</p>
+                    </div>
+                    <div class="metric-card">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">4️⃣</div>
+                        <h3 style="color: var(--accent-primary); margin-bottom: 0.5rem;">Real-Time Analysis</h3>
+                        <p style="color: var(--text-secondary); margin: 0;">Tier 3 analyzes current codebase state and complexity.</p>
+                    </div>
+                    <div class="metric-card">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">5️⃣</div>
+                        <h3 style="color: var(--accent-primary); margin-bottom: 0.5rem;">Response Generation</h3>
+                        <p style="color: var(--text-secondary); margin: 0;">CORTEX synthesizes all tiers to generate informed response.</p>
+                    </div>
+                    <div class="metric-card">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">6️⃣</div>
+                        <h3 style="color: var(--accent-primary); margin-bottom: 0.5rem;">Knowledge Update</h3>
+                        <p style="color: var(--text-secondary); margin: 0;">Learnings stored in Tier 2 for future operations.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Graceful Degradation -->
-    <section class="section">
+    <!-- Benefits -->
+    <section class="section" style="padding-top: 0;">
         <div class="container">
-            <div class="glass-card">
-                <h2 class="mb-3">Graceful Degradation</h2>
-                <p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1.5rem;">
-                    CORTEX's 4-tier architecture degrades gracefully under failure. Only Tier 0 failure would stop the system—and Tier 0 is 
-                    read-only immutable code, the most reliable component.
-                </p>
-                
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
-                    <div style="padding: 1.5rem; background: rgba(244, 67, 54, 0.1); border-radius: 8px; border: 1px solid rgba(244, 67, 54, 0.3);">
-                        <h3 style="color: #f44336; margin-bottom: 0.5rem;">Tier 3 Fails</h3>
-                        <p style="color: var(--text-secondary); line-height: 1.8; font-size: 0.9rem;">
-                            CORTEX loses development context but still has memory and knowledge. Can still provide intelligent responses using Tier 1 & 2.
-                        </p>
-                    </div>
-                    <div style="padding: 1.5rem; background: rgba(255, 152, 0, 0.1); border-radius: 8px; border: 1px solid rgba(255, 152, 0, 0.3);">
-                        <h3 style="color: #ff9800; margin-bottom: 0.5rem;">Tier 2 Fails</h3>
-                        <p style="color: var(--text-secondary); line-height: 1.8; font-size: 0.9rem;">
-                            CORTEX loses long-term patterns but still has recent conversations and governance. Operates with reduced learning capability.
-                        </p>
-                    </div>
-                    <div style="padding: 1.5rem; background: rgba(255, 193, 7, 0.1); border-radius: 8px; border: 1px solid rgba(255, 193, 7, 0.3);">
-                        <h3 style="color: #ffc107; margin-bottom: 0.5rem;">Tier 1 Fails</h3>
-                        <p style="color: var(--text-secondary); line-height: 1.8; font-size: 0.9rem;">
-                            CORTEX loses recent context but still has knowledge and governance. Operates with no short-term memory but long-term patterns intact.
-                        </p>
-                    </div>
-                    <div style="padding: 1.5rem; background: rgba(76, 175, 80, 0.1); border-radius: 8px; border: 1px solid rgba(76, 175, 80, 0.3);">
-                        <h3 style="color: #4caf50; margin-bottom: 0.5rem;">Tier 0 Fails</h3>
-                        <p style="color: var(--text-secondary); line-height: 1.8; font-size: 0.9rem;">
-                            System stops—but Tier 0 is read-only immutable code, the most reliable component. Only code corruption could cause failure.
-                        </p>
-                    </div>
+            <h2>Why 4-Tier Architecture?</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                <div class="glass-card">
+                    <h3 style="color: var(--accent-primary);">🚀 Performance</h3>
+                    <p style="color: var(--text-secondary); line-height: 1.8;">
+                        Tier separation ensures fast queries (&lt;100ms) while maintaining deep knowledge storage. Hot data in Tier 1, patterns in Tier 2.
+                    </p>
+                </div>
+                <div class="glass-card">
+                    <h3 style="color: var(--accent-primary);">🧠 Intelligence</h3>
+                    <p style="color: var(--text-secondary); line-height: 1.8;">
+                        Long-term learning through Tier 2 knowledge graph builds institutional memory that improves over time.
+                    </p>
+                </div>
+                <div class="glass-card">
+                    <h3 style="color: var(--accent-primary);">🛡️ Safety</h3>
+                    <p style="color: var(--text-secondary); line-height: 1.8;">
+                        Tier 0 SKULL rules provide immutable guardrails preventing common development anti-patterns.
+                    </p>
+                </div>
+                <div class="glass-card">
+                    <h3 style="color: var(--accent-primary);">📊 Context</h3>
+                    <p style="color: var(--text-secondary); line-height: 1.8;">
+                        Tier 3 provides real-time codebase awareness—complexity, hotspots, and refactoring priorities.
+                    </p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Data Flow -->
-    <section class="section">
+    <!-- Footer -->
+    <footer class="section" style="text-align: center; padding: 3rem 0; border-top: 1px solid var(--glass-border);">
         <div class="container">
-            <div class="glass-card">
-                <h2 class="mb-3">💫 Bidirectional Data Flow</h2>
-                <p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1.5rem;">
-                    Information flows both ways in CORTEX—commands cascade down from governance to context, while feedback bubbles up from 
-                    metrics to memory. Each data packet travels through the system in an average of <strong>87 milliseconds</strong>—faster 
-                    than a human eye blink (100-150ms).
-                </p>
-                
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
-                    <div style="background: rgba(0, 212, 255, 0.1); padding: 1.5rem; border-radius: 8px; border: 1px solid rgba(0, 212, 255, 0.3);">
-                        <h3 style="color: var(--accent-primary); margin-bottom: 1rem;">⬇️ Downward Flow (Commands)</h3>
-                        <ul style="color: var(--text-secondary); line-height: 2;">
-                            <li><strong>Tier 0 → Tier 1:</strong> Governance rules validate conversation context</li>
-                            <li><strong>Tier 1 → Tier 2:</strong> Recent conversations seed knowledge graph queries</li>
-                            <li><strong>Tier 2 → Tier 3:</strong> Learned patterns guide context tracking priorities</li>
-                            <li><strong>Result:</strong> Governed decisions flow to execution layer</li>
-                        </ul>
-                    </div>
-                    
-                    <div style="background: rgba(123, 97, 255, 0.1); padding: 1.5rem; border-radius: 8px; border: 1px solid rgba(123, 97, 255, 0.3);">
-                        <h3 style="color: var(--accent-secondary); margin-bottom: 1rem;">⬆️ Upward Flow (Feedback)</h3>
-                        <ul style="color: var(--text-secondary); line-height: 2;">
-                            <li><strong>Tier 3 → Tier 2:</strong> Code metrics update knowledge patterns</li>
-                            <li><strong>Tier 2 → Tier 1:</strong> Patterns inform conversation context enrichment</li>
-                            <li><strong>Tier 1 → Tier 0:</strong> Memory trends surface governance improvement needs</li>
-                            <li><strong>Result:</strong> Real-world outcomes shape future governance</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(255, 193, 7, 0.1); border-radius: 8px; border: 1px solid rgba(255, 193, 7, 0.3);">
-                    <div style="display: flex; align-items: center; justify-content: space-between;">
-                        <div>
-                            <h3 style="color: #ffc107; margin-bottom: 0.5rem;">Average Round-Trip Time</h3>
-                            <p style="color: var(--text-secondary); margin: 0;">From user query through all 4 tiers back to response</p>
-                        </div>
-                        <div style="text-align: right;">
-                            <div style="font-size: 3rem; font-weight: 700; color: #ffc107;">87ms</div>
-                            <div style="font-size: 0.875rem; color: var(--text-tertiary);">Faster than eye blink (100-150ms)</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Q&A Section -->
-    <section class="section">
-        <div class="container">
-            <div class="glass-card">
-                <h2 class="mb-3">💡 Frequently Asked Questions</h2>
-                <p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 2rem;">
-                    Common questions about CORTEX's 4-tier architecture design decisions and capabilities.
-                </p>
-                
-                <div style="display: grid; gap: 1.5rem;">
-                    <!-- Q1 -->
-                    <div style="background: rgba(10, 14, 39, 0.5); padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--accent-primary);">
-                        <h3 style="color: var(--accent-primary); margin-bottom: 0.75rem;">❓ Why exactly 70 conversations in Tier 1?</h3>
-                        <p style="color: var(--text-secondary); line-height: 1.8;">
-                            It's a carefully tested sweet spot. More than 70 and query speed degrades beyond our 100ms target. Fewer than 70 
-                            and context becomes too shallow for intelligent responses. We tested 50, 100, and 150—<strong>70 gave the best balance 
-                            between richness and speed</strong> while maintaining sub-100ms query performance.
-                        </p>
-                    </div>
-                    
-                    <!-- Q2 -->
-                    <div style="background: rgba(10, 14, 39, 0.5); padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--accent-primary);">
-                        <h3 style="color: var(--accent-primary); margin-bottom: 0.75rem;">❓ Can I see Tier 2 actually learn?</h3>
-                        <p style="color: var(--text-secondary); line-height: 1.8;">
-                            Yes! The knowledge graph visualization shows real-time learning. When you use CORTEX, you'll see connections strengthen 
-                            between concepts you use together frequently. That's <strong>Hebbian learning</strong> in action—neurons that fire together, 
-                            wire together. Use "TDD" and "git checkpoints" together multiple times, and CORTEX strengthens that semantic connection.
-                        </p>
-                    </div>
-                    
-                    <!-- Q3 -->
-                    <div style="background: rgba(10, 14, 39, 0.5); padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--accent-primary);">
-                        <h3 style="color: var(--accent-primary); margin-bottom: 0.75rem;">❓ How does this compare to ChatGPT's architecture?</h3>
-                        <p style="color: var(--text-secondary); line-height: 1.8;">
-                            ChatGPT is <strong>stateless</strong>—no memory between sessions. CORTEX has <strong>4 tiers of state</strong>: 
-                            governance rules (Tier 0), 70 conversations of memory (Tier 1), 8,429+ learned patterns (Tier 2), and live project 
-                            metrics (Tier 3). ChatGPT is a language model. <strong>CORTEX is an AI development partner with memory, learning, 
-                            and context</strong>.
-                        </p>
-                    </div>
-                    
-                    <!-- Q4 -->
-                    <div style="background: rgba(10, 14, 39, 0.5); padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--accent-primary);">
-                        <h3 style="color: var(--accent-primary); margin-bottom: 0.75rem;">❓ What if I need more than 70 conversations of context?</h3>
-                        <p style="color: var(--text-secondary); line-height: 1.8;">
-                            That's where Tier 2 comes in! While Tier 1 only keeps 70 recent conversations, <strong>Tier 2 preserves patterns 
-                            from ALL conversations</strong>. The knowledge graph extracts and retains semantic patterns indefinitely. So you don't 
-                            lose information—you gain compressed, semantic understanding that survives beyond the 70-conversation window.
-                        </p>
-                    </div>
-                    
-                    <!-- Q5 -->
-                    <div style="background: rgba(10, 14, 39, 0.5); padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--accent-primary);">
-                        <h3 style="color: var(--accent-primary); margin-bottom: 0.75rem;">❓ Can I customize the governance rules in Tier 0?</h3>
-                        <p style="color: var(--text-secondary); line-height: 1.8;">
-                            No—by design. Tier 0's 22 SKULL rules are <strong>immutable</strong> to ensure code quality and system integrity. 
-                            However, you can <strong>extend</strong> the system with project-specific rules in your repository's configuration. 
-                            Think of Tier 0 as the constitution (unchangeable) and your config as local ordinances (customizable). This prevents 
-                            users from accidentally disabling critical protections like TDD enforcement or git isolation.
-                        </p>
-                    </div>
-                    
-                    <!-- Q6 -->
-                    <div style="background: rgba(10, 14, 39, 0.5); padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--accent-primary);">
-                        <h3 style="color: var(--accent-primary); margin-bottom: 0.75rem;">❓ How does Tier 3 detect "hotspots"?</h3>
-                        <p style="color: var(--text-secondary); line-height: 1.8;">
-                            Hotspot detection uses <strong>change velocity analysis</strong>. Tier 3 tracks how frequently each file changes over 
-                            rolling time windows (daily, weekly, monthly). Files with high change frequency + high complexity scores = hotspots. 
-                            These indicate areas of active development or potential technical debt. CORTEX surfaces these in dashboard visualizations 
-                            with red heat indicators.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Key Takeaways -->
-    <section class="section">
-        <div class="container">
-            <div class="glass-card" style="background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(0, 212, 255, 0.1) 100%); border: 1px solid rgba(255, 193, 7, 0.3);">
-                <h2 class="mb-3 text-center">🎯 Key Takeaways</h2>
-                <p style="font-size: 1rem; color: var(--text-secondary); text-align: center; margin-bottom: 2rem;">
-                    What you should remember about CORTEX's 4-tier architecture
-                </p>
-                
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
-                    <div style="text-align: center; padding: 1.5rem;">
-                        <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🏛️</div>
-                        <h3 style="color: #ffc107; margin-bottom: 0.5rem;">4 Tiers</h3>
-                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Governance, Memory, Knowledge, Context</p>
-                    </div>
-                    
-                    <div style="text-align: center; padding: 1.5rem;">
-                        <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">⚡</div>
-                        <h3 style="color: #ffc107; margin-bottom: 0.5rem;">87ms Response</h3>
-                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Faster than eye blink (100-150ms)</p>
-                    </div>
-                    
-                    <div style="text-align: center; padding: 1.5rem;">
-                        <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🗄️</div>
-                        <h3 style="color: #ffc107; margin-bottom: 0.5rem;">Distributed DBs</h3>
-                        <p style="color: var(--text-secondary); font-size: 0.9rem;">No single point of failure</p>
-                    </div>
-                    
-                    <div style="text-align: center; padding: 1.5rem;">
-                        <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🔄</div>
-                        <h3 style="color: #ffc107; margin-bottom: 0.5rem;">Bidirectional Flow</h3>
-                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Commands down, feedback up</p>
-                    </div>
-                    
-                    <div style="text-align: center; padding: 1.5rem;">
-                        <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🛡️</div>
-                        <h3 style="color: #ffc107; margin-bottom: 0.5rem;">Governed Intelligence</h3>
-                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Not just smart, but trustworthy</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Lateral Navigation -->
-    <section class="section">
-        <div class="container">
-            <div class="glass-card">
-                <h3 class="text-center mb-3">Explore Other Architecture Components</h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
-                    <a href="../governance/skull-rulebook.html" class="btn btn-secondary" style="display: block; text-align: center;">🛡️ SKULL Rulebook</a>
-                    <a href="orchestrator-ecosystem.html" class="btn btn-secondary" style="display: block; text-align: center;">🎭 Orchestrator Ecosystem</a>
-                    <a href="agent-system.html" class="btn btn-secondary" style="display: block; text-align: center;">🤖 Agent System</a>
-                    <a href="index.html" class="btn btn-secondary" style="display: block; text-align: center;">← Architecture Overview</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="section">
-        <div class="container text-center">
-            <a href="index.html" class="btn btn-primary">← Back to Architecture</a>
-        </div>
-    </section>
-
-    <footer>
-        <div class="container">
-            <div class="footer-bottom">
-                <p>&copy; 2024-2025 Asif Hussain. All rights reserved. | <strong>CORTEX 4.0</strong></p>
-            </div>
+            <a href="../index.html" class="btn btn-secondary">← Back to Home</a>
+            <p style="margin-top: 2rem; color: var(--text-muted);">
+                Part of the CORTEX 4.0 Documentation Suite<br>
+                Author: Asif Hussain | <a href="https://github.com/asifhussain60/CORTEX" style="color: var(--accent-primary);">github.com/asifhussain60/CORTEX</a>
+            </p>
         </div>
     </footer>
-
-    <script src="../assets/js/main.js"></script>
-    <script>
-        function toggleSection(sectionId) {
-            const section = document.getElementById(sectionId);
-            const icon = document.getElementById(sectionId + '-icon');
-            
-            if (section.style.display === 'none') {
-                section.style.display = 'block';
-                icon.style.transform = 'rotate(0deg)';
-                icon.textContent = '▼';
-            } else {
-                section.style.display = 'none';
-                icon.style.transform = 'rotate(-90deg)';
-                icon.textContent = '▶';
-            }
-        }
-    </script>
 </body>
 </html>

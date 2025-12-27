@@ -1,207 +1,208 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phase Checkpoint Manager - CORTEX Orchestrators</title>
-    <link rel="icon" type="image/png" href="../../assets/images/CORTEX-logo.png">
-    <link rel="stylesheet" href="../../assets/css/main.css">
-    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Phase Checkpoint Manager - CORTEX Orchestrators</title>
+<link href="../../assets/images/CORTEX-logo.png" rel="icon" type="image/png">
+<link href="../../assets/css/main.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
 </head>
 <body>
-    <!-- Breadcrumb -->
-    <nav class="breadcrumb">
-        <a href="../../index.html">Home</a>
-        <span class="breadcrumb-separator">›</span>
-        <a href="../index.html">Orchestrators</a>
-        <span class="breadcrumb-separator">›</span>
-        <span class="breadcrumb-current">Phase Checkpoint Manager</span>
-    </nav>
-
-    <!-- Hero -->
-    <section class="section">
-        <div class="container">
-            <div class="glass-card">
-                <div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 1rem;">
-                    <div class="icon" style="font-size: 3rem;">🔧</div>
-                    <div>
-                        <h1 style="margin-bottom: 0.5rem;">Phase Checkpoint Manager</h1>
-                        <p style="color: var(--text-secondary); font-size: 1.125rem; margin: 0;">
+<!-- Breadcrumb -->
+<nav class="breadcrumb">
+<a href="../../index.html">Home</a>
+<span class="breadcrumb-separator">›</span>
+<a href="../index.html">Orchestrators</a>
+<span class="breadcrumb-separator">›</span>
+<span class="breadcrumb-current">Phase Checkpoint Manager</span>
+</nav>
+<!-- Hero -->
+<section class="section">
+<div class="container">
+<div class="glass-card">
+<div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 1rem;">
+<div class="icon" style="font-size: 3rem;">🔧</div>
+<div>
+<h1 style="margin-bottom: 0.5rem;">Phase Checkpoint Manager</h1>
+<p style="color: var(--text-secondary); font-size: 1.125rem; margin: 0;">
                             CORTEX Orchestration System
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- Overview -->
-    <section class="section" style="padding-top: 0;">
-        <div class="container">
-            <h2>Overview</h2>
-            <div class="glass-card">
-                <p style="font-size: 1.125rem; line-height: 1.8; color: var(--text-secondary);">
-                    Phase Checkpoint Manager for workflow phase tracking.</p><p>This module manages metadata for workflow phase checkpoints, enabling<br>rollback to specific phases and progress tracking.</p><p>Example:<br>    >>> manager = PhaseCheckpointManager()<br>    >>> checkpoint_id = manager.create_pre_work_checkpoint(<br>    ...     operation="Authentication feature",<br>    ...     session_id="feature-auth-001"<br>    ... )<br>    >>> print(f"Pre-work checkpoint created: {checkpoint_id}")<br>    >>> <br>    >>> checkpoint_id = manager.create_phase_checkpoint(<br>    ...     phase="phase-1-foundation",<br>    ...     session_id="feature-auth-001",<br>    ...     metrics={"tests_passing": 25, "coverage": 92.5}<br>    ... )<br>    >>> print(f"Phase checkpoint created: {checkpoint_id}")
-                </p>
-            </div>
-        </div>
-    </section>
+<section class="section" style="padding-top: 0;">
+<div class="container">
+<h2>Overview</h2>
+<div class="glass-card">
+<p style="font-size: 1.125rem; line-height: 1.8; color: var(--text-secondary);">
+                    Phase Checkpoint Manager for workflow phase tracking.</p>
+<p>This module manages metadata for workflow phase checkpoints, enabling<br>rollback to specific phases and progress tracking.</p>
+<p>Example:<br>    &gt;&gt;&gt; manager = PhaseCheckpointManager()<br>    &gt;&gt;&gt; checkpoint_id = manager.create_pre_work_checkpoint(<br>    ...     operation="Authentication feature",<br>    ...     session_id="feature-auth-001"<br>    ... )<br>    &gt;&gt;&gt; print(f"Pre-work checkpoint created: {checkpoint_id}")<br>    &gt;&gt;&gt; <br>    &gt;&gt;&gt; checkpoint_id = manager.create_phase_checkpoint(<br>    ...     phase="phase-1-foundation",<br>    ...     session_id="feature-auth-001",<br>    ...     metrics={"tests_passing": 25, "coverage": 92.5}<br>    ... )<br>    &gt;&gt;&gt; print(f"Phase checkpoint created: {checkpoint_id}")
 
     <!-- Workflow Diagram -->
-    <section class="section" style="padding-top: 0;">
-        <div class="container">
-            <h2>Workflow Diagram</h2>
-            <div class="glass-card">
-                <div class="mermaid">
+<section class="section" style="padding-top: 0;">
+<div class="container">
+<h2>Workflow Diagram</h2>
+<div class="glass-card">
+<div class="mermaid">
 flowchart TD
     Start([phase_checkpoint_manager])
 
     Init[Initialize PhaseCheckpointManager]
-    Start --> Init
+    Start --&gt; Init
 
     M0[  Init  ]
-    Init --> M0
+    Init --&gt; M0
     M2[Store Checkpoint Metadata]
-    M1 --> M2
+    M1 --&gt; M2
     M3[Get Checkpoint Metadata]
-    M2 --> M3
+    M2 --&gt; M3
     M4[List Checkpoints]
-    M3 --> M4
+    M3 --&gt; M4
     M6[Create Pre Work Checkpoint]
-    M5 --> M6
+    M5 --&gt; M6
     M7[Create Phase Checkpoint]
-    M6 --> M7
+    M6 --&gt; M7
 
-    M7 --> End([Complete])
-                </div>
-            </div>
-        </div>
-    </section>
+    M7 --&gt; End([Complete])
 
     <!-- Classes and Methods -->
-    <section class="section" style="padding-top: 0;">
-        <div class="container">
-            <h2>Implementation Details</h2>
+<section class="section" style="padding-top: 0;">
+<div class="container">
+<h2>Implementation Details</h2>
+<div class="glass-card" style="margin-bottom: 2rem;">
+<h3>Class: PhaseCheckpointManager</h3>
+<p style="color: var(--text-secondary); line-height: 1.8;">
+                    Manages phase checkpoint metadata for workflows.</p>
+<p>Stores checkpoint metadata in .cortex/phase-checkpoints-{session_id}.json<br>files for resumable workflows and rollback support.</p>
+<p>Integrates with GitCheckpointOrchestrator for automated checkpoint creation<br>during workflow phases.</p>
+<p>Attributes:<br>    cortex_root: Path to repository root<br>    checkpoint_dir: Path to .cortex metadata directory<br>    git_checkpoint: GitCheckpointOrchestrator instance for checkpoint creation
 
-            <div class="glass-card" style="margin-bottom: 2rem;">
-                <h3>Class: PhaseCheckpointManager</h3>
-
-                <p style="color: var(--text-secondary); line-height: 1.8;">
-                    Manages phase checkpoint metadata for workflows.</p><p>Stores checkpoint metadata in .cortex/phase-checkpoints-{session_id}.json<br>files for resumable workflows and rollback support.</p><p>Integrates with GitCheckpointOrchestrator for automated checkpoint creation<br>during workflow phases.</p><p>Attributes:<br>    cortex_root: Path to repository root<br>    checkpoint_dir: Path to .cortex metadata directory<br>    git_checkpoint: GitCheckpointOrchestrator instance for checkpoint creation
                 </p>
-
-                <h4 style="margin-top: 1.5rem;">Methods</h4>
-                <div style="margin-left: 1rem;">
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+<h4 style="margin-top: 1.5rem;">Methods</h4>
+<div style="margin-left: 1rem;">
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             __init__(self, cortex_root)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Initialize manager with cortex root directory.</p>
+<p>Args:<br>    cortex_root: Path to repository root (default: current directory)
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Initialize manager with cortex root directory.</p><p>Args:<br>    cortex_root: Path to repository root (default: current directory)
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             _get_metadata_file(self, session_id)
                         </h5>
-
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
                             Get metadata file path for session.
-                        </p>
 
-                    </div>
 
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             store_checkpoint_metadata(self, session_id, phase, checkpoint_id, commit_sha, metrics)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Store checkpoint metadata for workflow phase.</p>
+<p>Args:<br>    session_id: Unique session identifier (e.g., "feature-xyz")<br>    phase: Phase name (e.g., "phase-1-foundation")<br>    checkpoint_id: Checkpoint identifier (e.g., "ckpt-001")<br>    commit_sha: Git commit SHA for checkpoint<br>    metrics: Optional performance/progress metrics</p>
+<p>Example:<br>    &gt;&gt;&gt; manager = PhaseCheckpointManager()<br>    &gt;&gt;&gt; manager.store_checkpoint_metadata(<br>    ...     session_id="auth-feature",<br>    ...     phase="phase-2-implementation",<br>    ...     checkpoint_id="ckpt-002",<br>    ...     commit_sha="def456abc789",<br>    ...     metrics={"tests_passing": 45, "coverage": 92.5}<br>    ... )
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Store checkpoint metadata for workflow phase.</p><p>Args:<br>    session_id: Unique session identifier (e.g., "feature-xyz")<br>    phase: Phase name (e.g., "phase-1-foundation")<br>    checkpoint_id: Checkpoint identifier (e.g., "ckpt-001")<br>    commit_sha: Git commit SHA for checkpoint<br>    metrics: Optional performance/progress metrics</p><p>Example:<br>    >>> manager = PhaseCheckpointManager()<br>    >>> manager.store_checkpoint_metadata(<br>    ...     session_id="auth-feature",<br>    ...     phase="phase-2-implementation",<br>    ...     checkpoint_id="ckpt-002",<br>    ...     commit_sha="def456abc789",<br>    ...     metrics={"tests_passing": 45, "coverage": 92.5}<br>    ... )
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             get_checkpoint_metadata(self, session_id, phase)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Get checkpoint metadata for specific phase.</p>
+<p>Args:<br>    session_id: Session identifier<br>    phase: Phase name to retrieve</p>
+<p>Returns:<br>    Checkpoint metadata dictionary or None if not found</p>
+<p>Example:<br>    &gt;&gt;&gt; manager = PhaseCheckpointManager()<br>    &gt;&gt;&gt; metadata = manager.get_checkpoint_metadata("auth-feature", "phase-1")<br>    &gt;&gt;&gt; if metadata:<br>    ...     print(f"Checkpoint: {metadata['checkpoint_id']}")
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Get checkpoint metadata for specific phase.</p><p>Args:<br>    session_id: Session identifier<br>    phase: Phase name to retrieve</p><p>Returns:<br>    Checkpoint metadata dictionary or None if not found</p><p>Example:<br>    >>> manager = PhaseCheckpointManager()<br>    >>> metadata = manager.get_checkpoint_metadata("auth-feature", "phase-1")<br>    >>> if metadata:<br>    ...     print(f"Checkpoint: {metadata['checkpoint_id']}")
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             list_checkpoints(self, session_id)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            List all checkpoints for session.</p>
+<p>Args:<br>    session_id: Session identifier</p>
+<p>Returns:<br>    List of checkpoint dictionaries (empty if session doesn't exist)</p>
+<p>Example:<br>    &gt;&gt;&gt; manager = PhaseCheckpointManager()<br>    &gt;&gt;&gt; checkpoints = manager.list_checkpoints("auth-feature")<br>    &gt;&gt;&gt; for cp in checkpoints:<br>    ...     print(f"{cp['phase']}: {cp['commit_sha'][:7]}")
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            List all checkpoints for session.</p><p>Args:<br>    session_id: Session identifier</p><p>Returns:<br>    List of checkpoint dictionaries (empty if session doesn't exist)</p><p>Example:<br>    >>> manager = PhaseCheckpointManager()<br>    >>> checkpoints = manager.list_checkpoints("auth-feature")<br>    >>> for cp in checkpoints:<br>    ...     print(f"{cp['phase']}: {cp['commit_sha'][:7]}")
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             _create_checkpoint_with_metadata(self, checkpoint_type, message, session_id, phase, metrics)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Internal helper to create checkpoint and store metadata.</p>
+<p>Args:<br>    checkpoint_type: Type for git checkpoint (e.g., "pre-work", "phase-X")<br>    message: Commit message<br>    session_id: Session identifier<br>    phase: Phase name for metadata storage<br>    metrics: Optional metrics to store</p>
+<p>Returns:<br>    Checkpoint ID if successful, None if failed
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Internal helper to create checkpoint and store metadata.</p><p>Args:<br>    checkpoint_type: Type for git checkpoint (e.g., "pre-work", "phase-X")<br>    message: Commit message<br>    session_id: Session identifier<br>    phase: Phase name for metadata storage<br>    metrics: Optional metrics to store</p><p>Returns:<br>    Checkpoint ID if successful, None if failed
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             create_pre_work_checkpoint(self, operation, session_id)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Create pre-work checkpoint before operation starts.</p>
+<p>This checkpoint captures the repository state before any work begins,<br>enabling complete rollback if needed.</p>
+<p>Args:<br>    operation: Description of operation about to begin<br>    session_id: Unique session identifier</p>
+<p>Returns:<br>    Checkpoint ID if successful, None if failed</p>
+<p>Example:<br>    &gt;&gt;&gt; manager = PhaseCheckpointManager()<br>    &gt;&gt;&gt; checkpoint_id = manager.create_pre_work_checkpoint(<br>    ...     operation="Authentication feature implementation",<br>    ...     session_id="feature-auth-001"<br>    ... )<br>    &gt;&gt;&gt; if checkpoint_id:<br>    ...     print(f"✅ Pre-work checkpoint created: {checkpoint_id}")<br>    ... else:<br>    ...     print("⚠️ Checkpoint creation failed")
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Create pre-work checkpoint before operation starts.</p><p>This checkpoint captures the repository state before any work begins,<br>enabling complete rollback if needed.</p><p>Args:<br>    operation: Description of operation about to begin<br>    session_id: Unique session identifier</p><p>Returns:<br>    Checkpoint ID if successful, None if failed</p><p>Example:<br>    >>> manager = PhaseCheckpointManager()<br>    >>> checkpoint_id = manager.create_pre_work_checkpoint(<br>    ...     operation="Authentication feature implementation",<br>    ...     session_id="feature-auth-001"<br>    ... )<br>    >>> if checkpoint_id:<br>    ...     print(f"✅ Pre-work checkpoint created: {checkpoint_id}")<br>    ... else:<br>    ...     print("⚠️ Checkpoint creation failed")
-                        </p>
 
-                    </div>
-
-                    <div style="margin-bottom: 1.5rem;">
-                        <h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
+                    </p>
+<div style="margin-bottom: 1.5rem;">
+<h5 style="font-family: 'Courier New', monospace; color: var(--accent-primary);">
                             create_phase_checkpoint(self, phase, session_id, metrics)
                         </h5>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
+                            Create phase checkpoint after phase completion.</p>
+<p>This checkpoint captures progress after completing a workflow phase,<br>enabling rollback to specific phases if issues arise.</p>
+<p>Args:<br>    phase: Phase name (e.g., "phase-1-foundation", "phase-2-implementation")<br>    session_id: Unique session identifier<br>    metrics: Optional performance/progress metrics (e.g., tests_passing, coverage)</p>
+<p>Returns:<br>    Checkpoint ID if successful, None if failed</p>
+<p>Example:<br>    &gt;&gt;&gt; manager = PhaseCheckpointManager()<br>    &gt;&gt;&gt; checkpoint_id = manager.create_phase_checkpoint(<br>    ...     phase="phase-2-implementation",<br>    ...     session_id="feature-auth-001",<br>    ...     metrics={"tests_passing": 45, "coverage": 92.5, "duration": 300}<br>    ... )<br>    &gt;&gt;&gt; if checkpoint_id:<br>    ...     print(f"✅ Phase checkpoint created: {checkpoint_id}")<br>    ... else:<br>    ...     print("⚠️ Checkpoint creation failed")
 
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-left: 1rem;">
-                            Create phase checkpoint after phase completion.</p><p>This checkpoint captures progress after completing a workflow phase,<br>enabling rollback to specific phases if issues arise.</p><p>Args:<br>    phase: Phase name (e.g., "phase-1-foundation", "phase-2-implementation")<br>    session_id: Unique session identifier<br>    metrics: Optional performance/progress metrics (e.g., tests_passing, coverage)</p><p>Returns:<br>    Checkpoint ID if successful, None if failed</p><p>Example:<br>    >>> manager = PhaseCheckpointManager()<br>    >>> checkpoint_id = manager.create_phase_checkpoint(<br>    ...     phase="phase-2-implementation",<br>    ...     session_id="feature-auth-001",<br>    ...     metrics={"tests_passing": 45, "coverage": 92.5, "duration": 300}<br>    ... )<br>    >>> if checkpoint_id:<br>    ...     print(f"✅ Phase checkpoint created: {checkpoint_id}")<br>    ... else:<br>    ...     print("⚠️ Checkpoint creation failed")
-                        </p>
 
-                    </div>
 
-                </div>
 
-            </div>
-
-        </div>
-    </section>
 
     <!-- Source File Info -->
-    <section class="section" style="padding-top: 0;">
-        <div class="container">
-            <div class="glass-card" style="text-align: center; color: var(--text-secondary);">
-                <p><strong>Source:</strong> <code>src/orchestrators/phase_checkpoint_manager.py</code></p>
-                <p style="margin-top: 0.5rem; font-size: 0.875rem;">
+<section class="section" style="padding-top: 0;">
+<div class="container">
+<div class="glass-card" style="text-align: center; color: var(--text-secondary);">
+<p><strong>Source:</strong> <code>src/orchestrators/phase_checkpoint_manager.py</code></p>
+<p style="margin-top: 0.5rem; font-size: 0.875rem;">
                     Author: Asif Hussain | Copyright © 2024-2025 Asif Hussain. All rights reserved.
-                </p>
-            </div>
-        </div>
-    </section>
 
-    <script>
-        mermaid.initialize({ startOnLoad: true, theme: 'dark' });
-    </script>
+    <script></script></p>
+</div>
+</div></section></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div></section>
+</div>
+</div>
+</div></section></p>
+</div>
+</div></section></p>
+</div>
+</div>
+</div>
+</div></section>
 </body>
 </html>

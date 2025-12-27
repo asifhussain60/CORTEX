@@ -69,7 +69,7 @@ function initializeScrollToTop() {
  * Initialize collapsible sections for progressive disclosure
  */
 function initializeCollapsibles() {
-    const collapsibles = document.querySelectorAll('.collapsible-header');
+    const collapsibles = document.querySelectorAll('.collapsible-header, .collapsible-tile-header');
     
     collapsibles.forEach(header => {
         header.addEventListener('click', () => {

@@ -3,29 +3,36 @@ CORTEX Story Illustration Prompt
 
 FILENAME: cortex-awakening-ch11-02.png
 CHAPTER: ch11
-TITLE: Planning System 2.0 Vision
+TITLE: Registry Eureka
 PLACEMENT: technical_diagram
-MOOD: Vision, roadmap, next evolution, scale
+MOOD: Eureka moment, pattern recognition, elegant consolidation
 
 NARRATIVE ANCHOR:
-'Phase 2 is about making CORTEX real.'
+'It saw the pattern we missed!'
 
 SCENE DESCRIPTION:
-Whiteboard showing Planning System 2.0 architecture: incremental planning with DoR/DoD gates, TDD integration, ADO compatibility. Mr. Codenstein explaining next evolution to Miss G. Visual: roadmap from basement project to production system.
+Whiteboard showing three-tier architecture diagram. Top: Three side-by-side boxes labeled CommandRegistry, ToolkitRegistry, WorkspaceRegistry with similar code snippets, red circles highlighting duplicate register() and execute() methods. Middle: Funnel arrows converging with "85% duplication!" and lightbulb. Bottom: Single UnifiedRegistry box with three thin adapter boxes branching out. Miss G staring with amazement. Mr. Codenstein pointing proudly at CORTEX's discovery.
 
 VISUAL ELEMENTS:
-  - Whiteboard: Planning System 2.0 flowchart
-  - DoR/DoD gates as checkpoints in workflow
-  - TDD integration (RED-GREEN-REFACTOR) embedded in planning
-  - ADO Operations branch showing enterprise integration
-  - Miss G's apparition listening, engaged expression
-  - Metrics visible: 87ms latency, 81.4% coverage, 12.3% churn
-  - Evolution visual: basement → production system
+  - Three-tier whiteboard architecture diagram
+  - TOP: Three registry boxes side-by-side
+    - Code snippets showing register() and execute()
+    - Red circles/arrows highlighting duplication
+  - MIDDLE: Convergence funnel
+    - "🔍 85% code duplication"
+    - "💡 Eureka! Abstract the common logic"
+  - BOTTOM: UnifiedRegistry box (center)
+    - Three adapter boxes branching: Command, Toolkit, Workspace
+    - "✅ Single source of truth"
+    - "✅ Backward compatible"
+  - Miss G amazed expression
+  - Mr. Codenstein pointing proudly
+  - Lightbulb sketch for eureka moment
 
 ---
 
 DALL-E 3 PROMPT:
-Black and white cartoon illustration in newspaper comic strip style. Whiteboard showing Planning System 2.0 architecture: incremental planning with DoR/DoD gates, TDD integration, ADO compatibility. Mr. Codenstein explaining next evolution to Miss G. Visual: roadmap from basement project to production system.
+Black and white cartoon illustration in newspaper comic strip style. Whiteboard showing three-tier architecture diagram. Top: Three registry boxes with similar code, red circles highlighting duplication. Middle: Funnel arrows with "85% duplication!" and lightbulb. Bottom: UnifiedRegistry box with three adapter boxes. Miss G amazed. Mr. Codenstein pointing proudly.
 
 CANONICAL CHARACTERS (maintain consistency across ALL images):
 - Mr. Codenstein: Wild unkempt WHITE hair sticking out in all directions (Einstein-inspired, consistent spiky pattern). Thick round black-framed glasses, slightly crooked on nose. White lab coat with visible coffee stains on front, pen marks on sleeves, frayed cuffs. Stubble (3-day growth), slightly gaunt cheeks from exhaustion. Hunched posture from too much screen time. Pocket protector with 5+ pens. Mid-40s appearance. ALWAYS has these features in every image.
@@ -33,21 +40,35 @@ CANONICAL CHARACTERS (maintain consistency across ALL images):
 - Miss G: Elegant, graceful female figure with gentle curves. Shoulder-length flowing hair, slightly wavy, moves as if in gentle breeze. Slightly translucent (70% opacity), subtle shimmer effect around edges. Business casual attire (blouse and pencil skirt). Kind eyes with knowing smile. ALWAYS has these features in every image.
 
 MAIN SCENE ELEMENTS:
-- Whiteboard: Planning System 2.0 flowchart
-- DoR/DoD gates as checkpoints in workflow
-- TDD integration (RED-GREEN-REFACTOR) embedded in planning
-- ADO Operations branch showing enterprise integration
-- Miss G's apparition listening, engaged expression
-- Metrics visible: 87ms latency, 81.4% coverage, 12.3% churn
-- Evolution visual: basement → production system
+- Three-tier architecture diagram on whiteboard
+- Top: Three duplicate registry boxes with code snippets
+- Red circles showing duplication pattern
+- Middle: Convergence funnel with "85% duplication" and lightbulb
+- Bottom: Unified solution with adapter pattern
+- Miss G amazed at pattern recognition
+- Mr. Codenstein proudly explaining
+- Eureka moment visual (lightbulb)
 
-MOOD: Vision, roadmap, next evolution, scale
+MOOD: Eureka moment, pattern recognition, elegant consolidation
 
 STYLE REQUIREMENTS:
 - Clean line art, high contrast black and white
 - Newspaper comic strip aesthetic (think Calvin and Hobbes or Dilbert)
 - Simple but expressive character design
 - NO color, NO shading - pure black line art on white background
+- Slightly exaggerated proportions for comedic effect
+- Architecture diagram clarity with code snippet readability
+
+---
+
+CONTEXT:
+Illustrates registry consolidation work from Phase 13. Three separate registries (CommandRegistry, ToolkitRegistry, WorkspaceRegistry) found to have 85% duplicate code - identical register() and execute() methods with only minor differences. Solution: UnifiedRegistry handles all registration logic, with thin adapters providing backward compatibility.
+
+STORY INTEGRATION:
+Appears in Chapter 11 when CORTEX (via Refinement Orchestrator) analyzes codebase and discovers registry duplication pattern. Moment represents CORTEX applying pattern recognition to its own architecture - seeing similarities humans might miss. Miss G watches as CORTEX consolidates three registries into elegant solution while maintaining compatibility. "Robot learning to refactor itself" moment.
+
+---
+Generated by CORTEX Story Enhancement Orchestrator
 - Slightly exaggerated proportions for comedic effect
 - Cluttered but organized chaos visible: coffee mugs, cables, whiteboards with diagrams
 

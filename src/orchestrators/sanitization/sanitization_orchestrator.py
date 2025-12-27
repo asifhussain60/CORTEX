@@ -195,22 +195,38 @@ class SanitizationOrchestrator(BaseOrchestrator):
             self.logger.warning(f"ManifestLoader failed, using fallback: {e}")
             self.manifest = self._load_manifest_fallback()
         
-        # Initialize utility modules
+        # Initialize utility modules (CRITICAL - fail-fast if unavailable)
         try:
             self.analyzer = CodeAnalyzer(str(self.target), self.manifest)
             self.mapper = MappingEngine(self.manifest)
             self.transformer = CodeTransformer(self.manifest)
             self.validator = BuildValidator(self.manifest)
             self.reporter = ReportGenerator(self.manifest)
+            self.logger.info("✅ All sanitization utilities initialized successfully")
+        except ImportError as e:
+            error_msg = (
+                f"Failed to import required sanitization utilities: {e}\n"
+                f"Ensure all dependencies are installed and modules are available in:\n"
+                f"  - src/operations/utilities/sanitization/code_analyzer.py\n"
+                f"  - src/operations/utilities/sanitization/mapping_engine.py\n"
+                f"  - src/operations/utilities/sanitization/transformer.py\n"
+                f"  - src/operations/utilities/sanitization/validator.py\n"
+                f"  - src/operations/utilities/sanitization/report_generator.py"
+            )
+            self.logger.error(error_msg)
+            raise RuntimeError(error_msg) from e
         except Exception as e:
-            # Fall back to mocks if utilities aren't ready
-            self.logger.warning(f"Using mock utilities: {e}")
-            from unittest.mock import Mock
-            self.analyzer = Mock()
-            self.mapper = Mock()
-            self.transformer = Mock()
-            self.validator = Mock()
-            self.reporter = Mock()
+            error_msg = (
+                f"Failed to initialize sanitization utilities: {e}\n"
+                f"Target directory: {self.target}\n"
+                f"Manifest loaded: {bool(self.manifest)}\n"
+                f"Check that:\n"
+                f"  1. Target directory exists and is accessible\n"
+                f"  2. Manifest contains required configuration sections\n"
+                f"  3. All utility class constructors receive valid parameters"
+            )
+            self.logger.error(error_msg)
+            raise RuntimeError(error_msg) from e
         
         # Log initialization with engagement hint
         self.logger.info(f"🎭 Orchestrator engaged: SanitizationOrchestrator")

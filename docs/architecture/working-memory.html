@@ -1,466 +1,422 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Working Memory (Tier 1) - CORTEX 4.0 Architecture</title>
-    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
-    <link rel="stylesheet" href="../assets/css/main.css">
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Working Memory (Tier 1) - CORTEX 4.0 Architecture</title>
+<link href="../assets/images/CORTEX-logo.png" rel="icon" type="image/png">
+<link href="../assets/css/main.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Breadcrumb -->
-    <nav class="breadcrumb">
-        <a href="../index.html">Home</a>
-        <span class="breadcrumb-separator">›</span>
-        <a href="index.html">Architecture</a>
-        <span class="breadcrumb-separator">›</span>
-        <span class="breadcrumb-current">Working Memory (Tier 1)</span>
-    </nav>
-
-    <!-- Evolution Banner -->
-    <section class="section" style="padding-top: 2rem; padding-bottom: 0;">
-        <div class="container">
-            <div class="evolution-banner">
-                <div>
-                    <strong>Architecture Evolution in Progress</strong>
-                    <p>CORTEX is consolidating from 15+ orchestrators to a unified 10-orchestrator system. 
+<!-- Breadcrumb -->
+<nav class="breadcrumb">
+<a href="../index.html">Home</a>
+<span class="breadcrumb-separator">›</span>
+<a href="index.html">Architecture</a>
+<span class="breadcrumb-separator">›</span>
+<span class="breadcrumb-current">Working Memory (Tier 1)</span>
+</nav>
+<!-- Evolution Banner -->
+<section class="section" style="padding-top: 2rem; padding-bottom: 0;">
+<div class="container">
+<div class="evolution-banner">
+<div>
+<strong>Architecture Evolution in Progress</strong>
+<p>CORTEX is consolidating from 15+ orchestrators to a unified 10-orchestrator system. 
                        This page reflects current (3.0) architecture. See 
                        <a href="../future/technical-evolution.html">Technical Evolution</a> for CORTEX 4.0 plans.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Header -->
-    <section class="section">
-        <div class="container">
-            <h1 class="section-title">💾 Working Memory (Tier 1)</h1>
-            <p class="text-center" style="max-width: 900px; margin: 0 auto 3rem; color: var(--text-secondary); font-size: 1.125rem;">
-                70-conversation FIFO queue delivering <100ms query performance with automatic pruning for recent context
-            </p>
-        </div>
-    </section>
+</div>
+<!-- Header -->
+<section class="section">
+<div class="container">
+<h1 class="section-title">💾 Working Memory (Tier 1)</h1>
+<p class="text-center" style="max-width: 900px; margin: 0 auto 3rem; color: var(--text-secondary); font-size: 1.125rem;">
+                70-conversation FIFO queue delivering &lt;100ms query performance with automatic pruning for recent context
 
     <!-- Executive Summary -->
-    <section class="section" style="padding-top: 0;">
-        <div class="container">
-            <div class="glass-card">
-                <h2 class="mb-3">Executive Summary</h2>
-                <p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8;">
+<section class="section" style="padding-top: 0;">
+<div class="container">
+<div class="glass-card">
+<h2 class="mb-3">Executive Summary</h2>
+<p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8;">
                     CORTEX's Tier 1 working memory is a classic FIFO (First In, First Out) queue holding the most recent 70 conversations. 
                     This is short-term memory optimized for immediate context: recent user interactions, active discussions, and current 
                     work threads. When conversation 71 arrives, conversation 1 gets automatically purged—no manual cleanup, no bloat. 
-                    With <100ms query times and SQLite persistence, this tier balances speed with continuity.
+                    With &lt;100ms query times and SQLite persistence, this tier balances speed with continuity.
                 </p>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-top: 2rem;">
-                    <div style="text-align: center; padding: 1.5rem; background: rgba(0, 212, 255, 0.1); border-radius: 8px;">
-                        <div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-primary);">70</div>
-                        <div style="font-size: 0.875rem; color: var(--text-secondary);">Conversations</div>
-                        <div style="font-size: 0.75rem; color: var(--text-tertiary); margin-top: 0.5rem;">FIFO capacity</div>
-                    </div>
-                    <div style="text-align: center; padding: 1.5rem; background: rgba(76, 175, 80, 0.1); border-radius: 8px;">
-                        <div style="font-size: 2.5rem; font-weight: 700; color: #4caf50;">&lt;100ms</div>
-                        <div style="font-size: 0.875rem; color: var(--text-secondary);">Query Time</div>
-                        <div style="font-size: 0.75rem; color: var(--text-tertiary); margin-top: 0.5rem;">Avg 87ms</div>
-                    </div>
-                    <div style="text-align: center; padding: 1.5rem; background: rgba(255, 193, 7, 0.1); border-radius: 8px;">
-                        <div style="font-size: 2.5rem; font-weight: 700; color: #ffc107;">4.2MB</div>
-                        <div style="font-size: 0.875rem; color: var(--text-secondary);">Storage Size</div>
-                        <div style="font-size: 0.75rem; color: var(--text-tertiary); margin-top: 0.5rem;">Lean & fast</div>
-                    </div>
-                    <div style="text-align: center; padding: 1.5rem; background: rgba(123, 97, 255, 0.1); border-radius: 8px;">
-                        <div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-secondary);">Auto</div>
-                        <div style="font-size: 0.875rem; color: var(--text-secondary);">Pruning</div>
-                        <div style="font-size: 0.75rem; color: var(--text-tertiary); margin-top: 0.5rem;">FIFO oldest-first</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- FIFO Mechanics -->
-    <section class="section">
-        <div class="container">
-            <div class="glass-card" style="background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(33, 150, 243, 0.1) 100%); border: 2px solid var(--accent-primary);">
-                <h2 class="mb-3" style="color: var(--accent-primary);">🔄 FIFO Queue Mechanics</h2>
-                <p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1.5rem;">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-top: 2rem;">
+<div style="text-align: center; padding: 1.5rem; background: rgba(0, 212, 255, 0.1); border-radius: 8px;">
+<div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-primary);">70</div>
+<div style="font-size: 0.875rem; color: var(--text-secondary);">Conversations</div>
+<div style="font-size: 0.75rem; color: var(--text-tertiary); margin-top: 0.5rem;">FIFO capacity</div>
+</div>
+<div style="text-align: center; padding: 1.5rem; background: rgba(76, 175, 80, 0.1); border-radius: 8px;">
+<div style="font-size: 2.5rem; font-weight: 700; color: #4caf50;">&lt;100ms</div>
+<div style="font-size: 0.875rem; color: var(--text-secondary);">Query Time</div>
+<div style="font-size: 0.75rem; color: var(--text-tertiary); margin-top: 0.5rem;">Avg 87ms</div>
+</div>
+<div style="text-align: center; padding: 1.5rem; background: rgba(255, 193, 7, 0.1); border-radius: 8px;">
+<div style="font-size: 2.5rem; font-weight: 700; color: #ffc107;">4.2MB</div>
+<div style="font-size: 0.875rem; color: var(--text-secondary);">Storage Size</div>
+<div style="font-size: 0.75rem; color: var(--text-tertiary); margin-top: 0.5rem;">Lean &amp; fast</div>
+</div>
+<div style="text-align: center; padding: 1.5rem; background: rgba(123, 97, 255, 0.1); border-radius: 8px;">
+<div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-secondary);">Auto</div>
+<div style="font-size: 0.875rem; color: var(--text-secondary);">Pruning</div>
+<div style="font-size: 0.75rem; color: var(--text-tertiary); margin-top: 0.5rem;">FIFO oldest-first</div>
+</div>
+<!-- FIFO Mechanics -->
+<section class="section">
+<div class="container">
+<div class="glass-card" style="background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(33, 150, 243, 0.1) 100%); border: 2px solid var(--accent-primary);">
+<h2 class="mb-3" style="color: var(--accent-primary);">🔄 FIFO Queue Mechanics</h2>
+<p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1.5rem;">
                     The FIFO queue operates like a vertical stack with 70 slots. New conversations PUSH from the top, old conversations POP 
                     from the bottom. This automatic management keeps memory focused on recent, relevant context without manual intervention.
-                </p>
                 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
-                    <div style="background: rgba(10, 14, 39, 0.5); padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--accent-primary);">
-                        <h3 style="color: var(--accent-primary); margin-bottom: 1rem;">📥 PUSH Operation</h3>
-                        <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;">
+                </p>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+<div style="background: rgba(10, 14, 39, 0.5); padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--accent-primary);">
+<h3 style="color: var(--accent-primary); margin-bottom: 1rem;">📥 PUSH Operation</h3>
+<p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;">
                             When a new conversation enters:
                         </p>
-                        <ul style="color: var(--text-secondary); line-height: 2;">
-                            <li>New entry added at top position (slot 70)</li>
-                            <li>All existing slots shift down one position</li>
-                            <li>Entry glows bright cyan indicating fresh data</li>
-                            <li>Timestamp recorded for age tracking</li>
-                            <li>If queue full (70 entries), triggers POP operation</li>
-                        </ul>
-                        <div style="margin-top: 1rem; padding: 0.75rem; background: rgba(0, 212, 255, 0.1); border-radius: 6px; text-align: center;">
-                            <strong style="color: var(--accent-primary);">Last PUSH:</strong> 3 seconds ago (Conv #70)
-                        </div>
-                    </div>
+<ul style="color: var(--text-secondary); line-height: 2;">
+<li>New entry added at top position (slot 70)</li>
+<li>All existing slots shift down one position</li>
+<li>Entry glows bright cyan indicating fresh data</li>
+<li>Timestamp recorded for age tracking</li>
+<li>If queue full (70 entries), triggers POP operation</li>
+</ul>
+<div style="margin-top: 1rem; padding: 0.75rem; background: rgba(0, 212, 255, 0.1); border-radius: 6px; text-align: center;">
+<strong style="color: var(--accent-primary);">Last PUSH:</strong> 3 seconds ago (Conv #70)
                     
                     <div style="background: rgba(10, 14, 39, 0.5); padding: 1.5rem; border-radius: 8px; border-left: 4px solid #f44336;">
-                        <h3 style="color: #f44336; margin-bottom: 1rem;">📤 POP Operation</h3>
-                        <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;">
+<h3 style="color: #f44336; margin-bottom: 1rem;">📤 POP Operation</h3>
+<p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;">
                             When oldest conversation purges:
                         </p>
-                        <ul style="color: var(--text-secondary); line-height: 2;">
-                            <li>Bottom entry (slot 1) removed from queue</li>
-                            <li>All connections dissolved automatically</li>
-                            <li>Record archived to conversation history</li>
-                            <li>Space freed for new PUSH operation</li>
-                            <li>No manual cleanup—fully automatic</li>
-                        </ul>
-                        <div style="margin-top: 1rem; padding: 0.75rem; background: rgba(244, 67, 54, 0.1); border-radius: 6px; text-align: center;">
-                            <strong style="color: #f44336;">Last POP:</strong> 4 hours ago (Conv #1)
-                        </div>
-                    </div>
-                </div>
+<ul style="color: var(--text-secondary); line-height: 2;">
+<li>Bottom entry (slot 1) removed from queue</li>
+<li>All connections dissolved automatically</li>
+<li>Record archived to conversation history</li>
+<li>Space freed for new PUSH operation</li>
+<li>No manual cleanup—fully automatic</li>
+</ul>
+<div style="margin-top: 1rem; padding: 0.75rem; background: rgba(244, 67, 54, 0.1); border-radius: 6px; text-align: center;">
+<strong style="color: #f44336;">Last POP:</strong> 4 hours ago (Conv #1)
                 
                 <div style="background: rgba(10, 14, 39, 0.5); padding: 1.5rem; border-radius: 8px;">
-                    <h3 style="color: var(--accent-primary); margin-bottom: 1rem;">🎨 Color-Coded Freshness</h3>
-                    <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;">
+<h3 style="color: var(--accent-primary); margin-bottom: 1rem;">🎨 Color-Coded Freshness</h3>
+<p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;">
                         Visual gradient indicates memory age without checking timestamps:
                     </p>
-                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
-                        <div style="text-align: center; padding: 1rem; background: rgba(0, 212, 255, 0.2); border-radius: 6px;">
-                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent-primary);">Bright Cyan</div>
-                            <div style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.5rem;">Top 10 slots</div>
-                            <div style="font-size: 0.75rem; color: var(--text-tertiary);">Fresh, frequently accessed</div>
-                        </div>
-                        <div style="text-align: center; padding: 1rem; background: rgba(33, 150, 243, 0.2); border-radius: 6px;">
-                            <div style="font-size: 1.5rem; font-weight: 700; color: #2196f3;">Medium Blue</div>
-                            <div style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.5rem;">Middle 50 slots</div>
-                            <div style="font-size: 0.75rem; color: var(--text-tertiary);">Active consolidation</div>
-                        </div>
-                        <div style="text-align: center; padding: 1rem; background: rgba(63, 81, 181, 0.2); border-radius: 6px;">
-                            <div style="font-size: 1.5rem; font-weight: 700; color: #3f51b5;">Faint Blue</div>
-                            <div style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.5rem;">Bottom 10 slots</div>
-                            <div style="font-size: 0.75rem; color: var(--text-tertiary);">Aging, preparing for deletion</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Retrieval Performance -->
-    <section class="section">
-        <div class="container">
-            <h2 class="mb-3" style="color: #4caf50;">🔍 Retrieval Performance</h2>
-            
-            <div class="glass-card" style="border-left: 4px solid #4caf50; margin-bottom: 1.5rem;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; cursor: pointer;" onclick="toggleSection('search-content')">
-                    <h3 style="margin: 0; color: #4caf50;">⚡ Recency-Biased Search</h3>
-                    <span id="search-content-icon" style="font-size: 1.5rem; transition: transform 0.3s;">▼</span>
-                </div>
-                <div id="search-content" style="display: block;">
-                    <p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;">
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+<div style="text-align: center; padding: 1rem; background: rgba(0, 212, 255, 0.2); border-radius: 6px;">
+<div style="font-size: 1.5rem; font-weight: 700; color: var(--accent-primary);">Bright Cyan</div>
+<div style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.5rem;">Top 10 slots</div>
+<div style="font-size: 0.75rem; color: var(--text-tertiary);">Fresh, frequently accessed</div>
+</div>
+<div style="text-align: center; padding: 1rem; background: rgba(33, 150, 243, 0.2); border-radius: 6px;">
+<div style="font-size: 1.5rem; font-weight: 700; color: #2196f3;">Medium Blue</div>
+<div style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.5rem;">Middle 50 slots</div>
+<div style="font-size: 0.75rem; color: var(--text-tertiary);">Active consolidation</div>
+</div>
+<div style="text-align: center; padding: 1rem; background: rgba(63, 81, 181, 0.2); border-radius: 6px;">
+<div style="font-size: 1.5rem; font-weight: 700; color: #3f51b5;">Faint Blue</div>
+<div style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.5rem;">Bottom 10 slots</div>
+<div style="font-size: 0.75rem; color: var(--text-tertiary);">Aging, preparing for deletion</div>
+</div>
+<!-- Retrieval Performance -->
+<section class="section">
+<div class="container">
+<h2 class="mb-3" style="color: #4caf50;">🔍 Retrieval Performance</h2>
+<div class="glass-card" style="border-left: 4px solid #4caf50; margin-bottom: 1.5rem;">
+<div onclick="toggleSection('search-content')" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; cursor: pointer;">
+<h3 style="margin: 0; color: #4caf50;">⚡ Recency-Biased Search</h3>
+<span id="search-content-icon" style="font-size: 1.5rem; transition: transform 0.3s;">▼</span>
+</div>
+<div id="search-content" style="display: block;">
+<p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;">
                         Search algorithm scans slots from top to bottom (newest first), prioritizing recent conversations. This recency 
                         bias matches human conversation patterns: "What did we just discuss?" queries answer fastest.
                     </p>
-                    <div style="background: rgba(76, 175, 80, 0.1); padding: 1.5rem; border-radius: 8px;">
-                        <div style="margin-bottom: 1.5rem;">
-                            <div style="font-weight: 700; color: #4caf50; margin-bottom: 0.5rem;">Example Query:</div>
-                            <div style="background: rgba(10, 14, 39, 0.5); padding: 1rem; border-radius: 6px; font-family: 'Courier New', monospace; color: var(--accent-primary);">
+<div style="background: rgba(76, 175, 80, 0.1); padding: 1.5rem; border-radius: 8px;">
+<div style="margin-bottom: 1.5rem;">
+<div style="font-weight: 700; color: #4caf50; margin-bottom: 0.5rem;">Example Query:</div>
+<div style="background: rgba(10, 14, 39, 0.5); padding: 1rem; border-radius: 6px; font-family: 'Courier New', monospace; color: var(--accent-primary);">
                                 "previous conversation about TDD"
-                            </div>
-                        </div>
                         <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
-                            <div style="text-align: center;">
-                                <div style="font-size: 2rem; font-weight: 700; color: #4caf50;">12</div>
-                                <div style="font-size: 0.875rem; color: var(--text-secondary);">Matches Found</div>
-                            </div>
-                            <div style="text-align: center;">
-                                <div style="font-size: 2rem; font-weight: 700; color: #4caf50;">87ms</div>
-                                <div style="font-size: 0.875rem; color: var(--text-secondary);">Query Time</div>
-                            </div>
-                            <div style="text-align: center;">
-                                <div style="font-size: 2rem; font-weight: 700; color: #4caf50;">Conv #70</div>
-                                <div style="font-size: 0.875rem; color: var(--text-secondary);">First Checked</div>
-                            </div>
-                        </div>
-                        <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid rgba(76, 175, 80, 0.3);">
-                            <strong style="color: #4caf50;">Search Path:</strong> Top → Bottom (slots 70, 69, 68... 1) until matches found or queue exhausted
-                        </div>
-                    </div>
-                </div>
-            </div>
+<div style="text-align: center;">
+<div style="font-size: 2rem; font-weight: 700; color: #4caf50;">12</div>
+<div style="font-size: 0.875rem; color: var(--text-secondary);">Matches Found</div>
+</div>
+<div style="text-align: center;">
+<div style="font-size: 2rem; font-weight: 700; color: #4caf50;">87ms</div>
+<div style="font-size: 0.875rem; color: var(--text-secondary);">Query Time</div>
+</div>
+<div style="text-align: center;">
+<div style="font-size: 2rem; font-weight: 700; color: #4caf50;">Conv #70</div>
+<div style="font-size: 0.875rem; color: var(--text-secondary);">First Checked</div>
+</div>
+<div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid rgba(76, 175, 80, 0.3);">
+<strong style="color: #4caf50;">Search Path:</strong> Top → Bottom (slots 70, 69, 68... 1) until matches found or queue exhausted
             
             <div class="glass-card" style="border-left: 4px solid #4caf50; margin-bottom: 1.5rem;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; cursor: pointer;" onclick="toggleSection('indexing-content')">
-                    <h3 style="margin: 0; color: #4caf50;">🗂️ Optimized Indexing</h3>
-                    <span id="indexing-content-icon" style="font-size: 1.5rem; transition: transform 0.3s;">▼</span>
-                </div>
-                <div id="indexing-content" style="display: block;">
-                    <p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;">
+<div onclick="toggleSection('indexing-content')" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; cursor: pointer;">
+<h3 style="margin: 0; color: #4caf50;">🗂️ Optimized Indexing</h3>
+<span id="indexing-content-icon" style="font-size: 1.5rem; transition: transform 0.3s;">▼</span>
+</div>
+<div id="indexing-content" style="display: block;">
+<p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;">
                         B-tree indices on conversation ID, timestamp, and user ID enable sub-100ms queries even when scanning 70 records. 
                         SQLite's query planner optimizes access patterns automatically.
                     </p>
-                    <div style="background: rgba(76, 175, 80, 0.1); padding: 1.5rem; border-radius: 8px;">
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
-                            <div>
-                                <div style="font-weight: 700; color: #4caf50; margin-bottom: 0.75rem;">Indexed Fields:</div>
-                                <ul style="color: var(--text-secondary); line-height: 2; margin: 0; padding-left: 1.5rem;">
-                                    <li>conversation_id (PRIMARY KEY)</li>
-                                    <li>timestamp (DESC for recency)</li>
-                                    <li>user_id (multi-user filtering)</li>
-                                    <li>message_count (query by length)</li>
-                                </ul>
-                            </div>
-                            <div>
-                                <div style="font-weight: 700; color: #4caf50; margin-bottom: 0.75rem;">Performance Impact:</div>
-                                <ul style="color: var(--text-secondary); line-height: 2; margin: 0; padding-left: 1.5rem;">
-                                    <li>ID lookup: O(log n) vs O(n)</li>
-                                    <li>Timestamp range: Indexed scan</li>
-                                    <li>User filtering: Composite index</li>
-                                    <li>Full-text: FTS5 virtual table</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Database Integration -->
-    <section class="section">
-        <div class="container">
-            <div class="glass-card" style="background: linear-gradient(135deg, rgba(255, 152, 0, 0.1) 0%, rgba(255, 193, 7, 0.1) 100%); border: 2px solid #ff9800;">
-                <h2 class="mb-3" style="color: #ff9800;">💽 Database Architecture</h2>
-                <p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 2rem;">
+<div style="background: rgba(76, 175, 80, 0.1); padding: 1.5rem; border-radius: 8px;">
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+<div>
+<div style="font-weight: 700; color: #4caf50; margin-bottom: 0.75rem;">Indexed Fields:</div>
+<ul style="color: var(--text-secondary); line-height: 2; margin: 0; padding-left: 1.5rem;">
+<li>conversation_id (PRIMARY KEY)</li>
+<li>timestamp (DESC for recency)</li>
+<li>user_id (multi-user filtering)</li>
+<li>message_count (query by length)</li>
+</ul>
+<div>
+<div style="font-weight: 700; color: #4caf50; margin-bottom: 0.75rem;">Performance Impact:</div>
+<ul style="color: var(--text-secondary); line-height: 2; margin: 0; padding-left: 1.5rem;">
+<li>ID lookup: O(log n) vs O(n)</li>
+<li>Timestamp range: Indexed scan</li>
+<li>User filtering: Composite index</li>
+<li>Full-text: FTS5 virtual table</li>
+</ul>
+<!-- Database Integration -->
+<section class="section">
+<div class="container">
+<div class="glass-card" style="background: linear-gradient(135deg, rgba(255, 152, 0, 0.1) 0%, rgba(255, 193, 7, 0.1) 100%); border: 2px solid #ff9800;">
+<h2 class="mb-3" style="color: #ff9800;">💽 Database Architecture</h2>
+<p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 2rem;">
                     SQLite database `working_memory.db` provides persistence across restarts while maintaining in-memory speed. 
                     Queue mechanics live in RAM for instant PUSH/POP, database syncs asynchronously for durability.
-                </p>
                 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
-                    <div style="background: rgba(10, 14, 39, 0.5); padding: 1.5rem; border-radius: 8px;">
-                        <h3 style="color: #ff9800; margin-bottom: 1rem;">📊 Database Stats</h3>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                            <div style="text-align: center; padding: 0.75rem; background: rgba(255, 152, 0, 0.1); border-radius: 6px;">
-                                <div style="font-size: 1.5rem; font-weight: 700; color: #ff9800;">70</div>
-                                <div style="font-size: 0.875rem; color: var(--text-secondary);">Rows</div>
-                            </div>
-                            <div style="text-align: center; padding: 0.75rem; background: rgba(255, 152, 0, 0.1); border-radius: 6px;">
-                                <div style="font-size: 1.5rem; font-weight: 700; color: #ff9800;">3</div>
-                                <div style="font-size: 0.875rem; color: var(--text-secondary);">Tables</div>
-                            </div>
-                            <div style="text-align: center; padding: 0.75rem; background: rgba(255, 152, 0, 0.1); border-radius: 6px;">
-                                <div style="font-size: 1.5rem; font-weight: 700; color: #ff9800;">4.2MB</div>
-                                <div style="font-size: 0.875rem; color: var(--text-secondary);">Size</div>
-                            </div>
-                            <div style="text-align: center; padding: 0.75rem; background: rgba(255, 152, 0, 0.1); border-radius: 6px;">
-                                <div style="font-size: 1.5rem; font-weight: 700; color: #ff9800;">4</div>
-                                <div style="font-size: 0.875rem; color: var(--text-secondary);">Indices</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div style="background: rgba(10, 14, 39, 0.5); padding: 1.5rem; border-radius: 8px;">
-                        <h3 style="color: #ff9800; margin-bottom: 1rem;">🗃️ Table Schema</h3>
-                        <div style="font-family: 'Courier New', monospace; font-size: 0.875rem; color: var(--text-secondary);">
-                            <div style="margin-bottom: 0.5rem;"><strong style="color: #ff9800;">conversations</strong></div>
-                            <div style="padding-left: 1rem; line-height: 1.8;">
+                </p>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+<div style="background: rgba(10, 14, 39, 0.5); padding: 1.5rem; border-radius: 8px;">
+<h3 style="color: #ff9800; margin-bottom: 1rem;">📊 Database Stats</h3>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+<div style="text-align: center; padding: 0.75rem; background: rgba(255, 152, 0, 0.1); border-radius: 6px;">
+<div style="font-size: 1.5rem; font-weight: 700; color: #ff9800;">70</div>
+<div style="font-size: 0.875rem; color: var(--text-secondary);">Rows</div>
+</div>
+<div style="text-align: center; padding: 0.75rem; background: rgba(255, 152, 0, 0.1); border-radius: 6px;">
+<div style="font-size: 1.5rem; font-weight: 700; color: #ff9800;">3</div>
+<div style="font-size: 0.875rem; color: var(--text-secondary);">Tables</div>
+</div>
+<div style="text-align: center; padding: 0.75rem; background: rgba(255, 152, 0, 0.1); border-radius: 6px;">
+<div style="font-size: 1.5rem; font-weight: 700; color: #ff9800;">4.2MB</div>
+<div style="font-size: 0.875rem; color: var(--text-secondary);">Size</div>
+</div>
+<div style="text-align: center; padding: 0.75rem; background: rgba(255, 152, 0, 0.1); border-radius: 6px;">
+<div style="font-size: 1.5rem; font-weight: 700; color: #ff9800;">4</div>
+<div style="font-size: 0.875rem; color: var(--text-secondary);">Indices</div>
+</div>
+<div style="background: rgba(10, 14, 39, 0.5); padding: 1.5rem; border-radius: 8px;">
+<h3 style="color: #ff9800; margin-bottom: 1rem;">🗃️ Table Schema</h3>
+<div style="font-family: 'Courier New', monospace; font-size: 0.875rem; color: var(--text-secondary);">
+<div style="margin-bottom: 0.5rem;"><strong style="color: #ff9800;">conversations</strong></div>
+<div style="padding-left: 1rem; line-height: 1.8;">
                                 - id (INTEGER PRIMARY KEY)<br>
                                 - timestamp (DATETIME)<br>
                                 - user_id (TEXT)<br>
                                 - message_count (INTEGER)<br>
                                 - content_hash (TEXT)
-                            </div>
                             <div style="margin: 0.75rem 0 0.5rem;"><strong style="color: #ff9800;">messages</strong></div>
-                            <div style="padding-left: 1rem; line-height: 1.8;">
+<div style="padding-left: 1rem; line-height: 1.8;">
                                 - conversation_id (FK)<br>
                                 - role (TEXT)<br>
                                 - content (TEXT)
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 
                 <div style="background: rgba(10, 14, 39, 0.5); padding: 1.5rem; border-radius: 8px;">
-                    <h3 style="color: #ff9800; margin-bottom: 1rem;">⚙️ Persistence Strategy</h3>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
-                        <div>
-                            <div style="font-weight: 700; color: #ff9800; margin-bottom: 0.75rem;">In-Memory Operations:</div>
-                            <ul style="color: var(--text-secondary); line-height: 2; margin: 0; padding-left: 1.5rem;">
-                                <li>PUSH/POP operations (instant)</li>
-                                <li>Queue position tracking</li>
-                                <li>Color-coded freshness state</li>
-                                <li>Active search operations</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <div style="font-weight: 700; color: #ff9800; margin-bottom: 0.75rem;">Database Syncs:</div>
-                            <ul style="color: var(--text-secondary); line-height: 2; margin: 0; padding-left: 1.5rem;">
-                                <li>Asynchronous writes (non-blocking)</li>
-                                <li>Batch commits every 5 seconds</li>
-                                <li>WAL mode for concurrency</li>
-                                <li>Auto-recovery on restart</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Why 70 Conversations? -->
-    <section class="section">
-        <div class="container">
-            <div class="glass-card">
-                <h2 class="mb-3 text-center">🤔 Why 70 Conversations?</h2>
-                <p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; text-align: center; margin-bottom: 2rem;">
+<h3 style="color: #ff9800; margin-bottom: 1rem;">⚙️ Persistence Strategy</h3>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+<div>
+<div style="font-weight: 700; color: #ff9800; margin-bottom: 0.75rem;">In-Memory Operations:</div>
+<ul style="color: var(--text-secondary); line-height: 2; margin: 0; padding-left: 1.5rem;">
+<li>PUSH/POP operations (instant)</li>
+<li>Queue position tracking</li>
+<li>Color-coded freshness state</li>
+<li>Active search operations</li>
+</ul>
+<div>
+<div style="font-weight: 700; color: #ff9800; margin-bottom: 0.75rem;">Database Syncs:</div>
+<ul style="color: var(--text-secondary); line-height: 2; margin: 0; padding-left: 1.5rem;">
+<li>Asynchronous writes (non-blocking)</li>
+<li>Batch commits every 5 seconds</li>
+<li>WAL mode for concurrency</li>
+<li>Auto-recovery on restart</li>
+</ul>
+<!-- Why 70 Conversations? -->
+<section class="section">
+<div class="container">
+<div class="glass-card">
+<h2 class="mb-3 text-center">🤔 Why 70 Conversations?</h2>
+<p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; text-align: center; margin-bottom: 2rem;">
                     The magic number wasn't arbitrary—it's the sweet spot between context and performance
-                </p>
                 
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
-                    <div style="padding: 1.5rem; background: rgba(33, 150, 243, 0.1); border-radius: 8px; border-left: 4px solid #2196f3;">
-                        <h3 style="color: #2196f3; margin-bottom: 0.75rem;">📚 Sufficient Context</h3>
-                        <p style="color: var(--text-secondary); line-height: 1.8; margin: 0;">
+                </p>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+<div style="padding: 1.5rem; background: rgba(33, 150, 243, 0.1); border-radius: 8px; border-left: 4px solid #2196f3;">
+<h3 style="color: #2196f3; margin-bottom: 0.75rem;">📚 Sufficient Context</h3>
+<p style="color: var(--text-secondary); line-height: 1.8; margin: 0;">
                             70 conversations covers ~1-2 weeks of active development for typical users. Enough history for continuity 
                             ("Remember when we discussed X?") without drowning in ancient context.
-                        </p>
-                    </div>
                     
-                    <div style="padding: 1.5rem; background: rgba(76, 175, 80, 0.1); border-radius: 8px; border-left: 4px solid #4caf50;">
-                        <h3 style="color: #4caf50; margin-bottom: 0.75rem;">⚡ Performance Boundary</h3>
-                        <p style="color: var(--text-secondary); line-height: 1.8; margin: 0;">
-                            Linear scans of 70 records complete in <100ms. Beyond ~100-150 conversations, queries slow noticeably. 
+                    </p>
+<div style="padding: 1.5rem; background: rgba(76, 175, 80, 0.1); border-radius: 8px; border-left: 4px solid #4caf50;">
+<h3 style="color: #4caf50; margin-bottom: 0.75rem;">⚡ Performance Boundary</h3>
+<p style="color: var(--text-secondary); line-height: 1.8; margin: 0;">
+                            Linear scans of 70 records complete in &lt;100ms. Beyond ~100-150 conversations, queries slow noticeably. 
                             The 70-conversation limit keeps searches instant.
-                        </p>
-                    </div>
                     
-                    <div style="padding: 1.5rem; background: rgba(255, 152, 0, 0.1); border-radius: 8px; border-left: 4px solid #ff9800;">
-                        <h3 style="color: #ff9800; margin-bottom: 0.75rem;">💾 Memory Footprint</h3>
-                        <p style="color: var(--text-secondary); line-height: 1.8; margin: 0;">
+                    </p>
+<div style="padding: 1.5rem; background: rgba(255, 152, 0, 0.1); border-radius: 8px; border-left: 4px solid #ff9800;">
+<h3 style="color: #ff9800; margin-bottom: 0.75rem;">💾 Memory Footprint</h3>
+<p style="color: var(--text-secondary); line-height: 1.8; margin: 0;">
                             At 4.2MB for 70 conversations (~60KB each), memory usage stays lean. Storage isn't the constraint—speed is. 
                             70 conversations fit comfortably in L3 cache for ultra-fast access.
-                        </p>
-                    </div>
                     
-                    <div style="padding: 1.5rem; background: rgba(156, 39, 176, 0.1); border-radius: 8px; border-left: 4px solid #9c27b0;">
-                        <h3 style="color: #9c27b0; margin-bottom: 0.75rem;">🎯 Recency Principle</h3>
-                        <p style="color: var(--text-secondary); line-height: 1.8; margin: 0;">
+                    </p>
+<div style="padding: 1.5rem; background: rgba(156, 39, 176, 0.1); border-radius: 8px; border-left: 4px solid #9c27b0;">
+<h3 style="color: #9c27b0; margin-bottom: 0.75rem;">🎯 Recency Principle</h3>
+<p style="color: var(--text-secondary); line-height: 1.8; margin: 0;">
                             Most queries target recent conversations. 90% of searches find answers in the top 30 conversations. 
                             The bottom 40 provide depth without being accessed frequently.
-                        </p>
-                    </div>
-                </div>
                 
-                <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(0, 212, 255, 0.1); border-radius: 8px; text-align: center;">
-                    <p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin: 0;">
-                        <strong style="color: var(--accent-primary);">Empirical Testing:</strong> Tested configurations from 30 to 200 conversations. 
+                </p>
+<div style="margin-top: 2rem; padding: 1.5rem; background: rgba(0, 212, 255, 0.1); border-radius: 8px; text-align: center;">
+<p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin: 0;">
+<strong style="color: var(--accent-primary);">Empirical Testing:</strong> Tested configurations from 30 to 200 conversations. 
                         70 emerged as optimal: fast queries, adequate context, controlled memory. More isn't always better.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- Key Takeaways -->
-    <section class="section">
-        <div class="container">
-            <div class="glass-card" style="background: linear-gradient(135deg, rgba(123, 97, 255, 0.1) 0%, rgba(0, 212, 255, 0.1) 100%); border: 1px solid rgba(123, 97, 255, 0.3);">
-                <h2 class="mb-3 text-center">🎓 Key Takeaways</h2>
-                <div style="display: grid; grid-template-columns: 1fr; gap: 1rem; margin-top: 2rem;">
-                    <div style="display: flex; align-items: center; padding: 1rem; background: rgba(10, 14, 39, 0.5); border-radius: 8px;">
-                        <div style="font-size: 2rem; margin-right: 1rem;">🔄</div>
-                        <div>
-                            <strong style="color: var(--accent-secondary);">FIFO Queue Mechanics:</strong>
-                            <span style="color: var(--text-secondary);"> Automatic PUSH/POP maintains 70-conversation capacity with oldest-first purging—no manual cleanup needed</span>
-                        </div>
-                    </div>
-                    
-                    <div style="display: flex; align-items: center; padding: 1rem; background: rgba(10, 14, 39, 0.5); border-radius: 8px;">
-                        <div style="font-size: 2rem; margin-right: 1rem;">⚡</div>
-                        <div>
-                            <strong style="color: #4caf50;">Sub-100ms Queries:</strong>
-                            <span style="color: var(--text-secondary);"> Achieved through B-tree indices, in-memory operations, and optimized linear scans (avg 87ms)</span>
-                        </div>
-                    </div>
-                    
-                    <div style="display: flex; align-items: center; padding: 1rem; background: rgba(10, 14, 39, 0.5); border-radius: 8px;">
-                        <div style="font-size: 2rem; margin-right: 1rem;">🎨</div>
-                        <div>
-                            <strong style="color: var(--accent-primary);">Color-Coded Freshness:</strong>
-                            <span style="color: var(--text-secondary);"> Visual gradient (cyan→blue) indicates age without timestamp checks—instant visual awareness</span>
-                        </div>
-                    </div>
-                    
-                    <div style="display: flex; align-items: center; padding: 1rem; background: rgba(10, 14, 39, 0.5); border-radius: 8px;">
-                        <div style="font-size: 2rem; margin-right: 1rem;">🔍</div>
-                        <div>
-                            <strong style="color: #2196f3;">Recency-Biased Search:</strong>
-                            <span style="color: var(--text-secondary);"> Top-to-bottom scanning prioritizes recent conversations, matching human interaction patterns naturally</span>
-                        </div>
-                    </div>
-                    
-                    <div style="display: flex; align-items: center; padding: 1rem; background: rgba(10, 14, 39, 0.5); border-radius: 8px;">
-                        <div style="font-size: 2rem; margin-right: 1rem;">💾</div>
-                        <div>
-                            <strong style="color: #ff9800;">SQLite Persistence:</strong>
-                            <span style="color: var(--text-secondary);"> In-memory queue backed by async database writes—speed of RAM with durability of disk (4.2MB footprint)</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Lateral Navigation -->
-    <section class="section">
-        <div class="container">
-            <div class="glass-card">
-                <h3 class="text-center mb-3">Explore Other Architecture Components</h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
-                    <a href="four-tier-brain.html" class="btn btn-secondary" style="display: block; text-align: center;">🧠 4-Tier Brain</a>
-                    <a href="skull-protection.html" class="btn btn-secondary" style="display: block; text-align: center;">🛡️ SKULL Protection</a>
-                    <a href="orchestrator-ecosystem.html" class="btn btn-secondary" style="display: block; text-align: center;">🎭 Orchestrator Ecosystem</a>
-                    <a href="agent-system.html" class="btn btn-secondary" style="display: block; text-align: center;">🤖 Agent System</a>
-                    <a href="index.html" class="btn btn-secondary" style="display: block; text-align: center;">← Architecture Overview</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="section">
-        <div class="container text-center">
-            <a href="index.html" class="btn btn-primary">← Back to Architecture</a>
-        </div>
-    </section>
-
-    <footer>
-        <div class="container">
-            <div class="footer-bottom">
-                <p>&copy; 2024-2025 Asif Hussain. All rights reserved. | <strong>CORTEX 4.0</strong></p>
-            </div>
-        </div>
-    </footer>
-
-    <script src="../assets/js/main.js"></script>
-    <script>
-        function toggleSection(sectionId) {
-            const section = document.getElementById(sectionId);
-            const icon = document.getElementById(sectionId + '-icon');
-            
-            if (section.style.display === 'none') {
-                section.style.display = 'block';
-                icon.style.transform = 'rotate(0deg)';
-                icon.textContent = '▼';
-            } else {
-                section.style.display = 'none';
-                icon.style.transform = 'rotate(-90deg)';
-                icon.textContent = '▶';
-            }
-        }
-    </script>
+<section class="section">
+<div class="container">
+<div class="glass-card" style="background: linear-gradient(135deg, rgba(123, 97, 255, 0.1) 0%, rgba(0, 212, 255, 0.1) 100%); border: 1px solid rgba(123, 97, 255, 0.3);">
+<h2 class="mb-3 text-center">🎓 Key Takeaways</h2>
+<div style="display: grid; grid-template-columns: 1fr; gap: 1rem; margin-top: 2rem;">
+<div style="display: flex; align-items: center; padding: 1rem; background: rgba(10, 14, 39, 0.5); border-radius: 8px;">
+<div style="font-size: 2rem; margin-right: 1rem;">🔄</div>
+<div>
+<strong style="color: var(--accent-secondary);">FIFO Queue Mechanics:</strong>
+<span style="color: var(--text-secondary);"> Automatic PUSH/POP maintains 70-conversation capacity with oldest-first purging—no manual cleanup needed</span>
+</div>
+<div style="display: flex; align-items: center; padding: 1rem; background: rgba(10, 14, 39, 0.5); border-radius: 8px;">
+<div style="font-size: 2rem; margin-right: 1rem;">⚡</div>
+<div>
+<strong style="color: #4caf50;">Sub-100ms Queries:</strong>
+<span style="color: var(--text-secondary);"> Achieved through B-tree indices, in-memory operations, and optimized linear scans (avg 87ms)</span>
+</div>
+<div style="display: flex; align-items: center; padding: 1rem; background: rgba(10, 14, 39, 0.5); border-radius: 8px;">
+<div style="font-size: 2rem; margin-right: 1rem;">🎨</div>
+<div>
+<strong style="color: var(--accent-primary);">Color-Coded Freshness:</strong>
+<span style="color: var(--text-secondary);"> Visual gradient (cyan→blue) indicates age without timestamp checks—instant visual awareness</span>
+</div>
+<div style="display: flex; align-items: center; padding: 1rem; background: rgba(10, 14, 39, 0.5); border-radius: 8px;">
+<div style="font-size: 2rem; margin-right: 1rem;">🔍</div>
+<div>
+<strong style="color: #2196f3;">Recency-Biased Search:</strong>
+<span style="color: var(--text-secondary);"> Top-to-bottom scanning prioritizes recent conversations, matching human interaction patterns naturally</span>
+</div>
+<div style="display: flex; align-items: center; padding: 1rem; background: rgba(10, 14, 39, 0.5); border-radius: 8px;">
+<div style="font-size: 2rem; margin-right: 1rem;">💾</div>
+<div>
+<strong style="color: #ff9800;">SQLite Persistence:</strong>
+<span style="color: var(--text-secondary);"> In-memory queue backed by async database writes—speed of RAM with durability of disk (4.2MB footprint)</span>
+</div>
+<!-- Lateral Navigation -->
+<section class="section">
+<div class="container">
+<div class="glass-card">
+<h3 class="text-center mb-3">Explore Other Architecture Components</h3>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+<a class="btn btn-secondary" href="four-tier-brain.html" style="display: block; text-align: center;">🧠 4-Tier Brain</a>
+<a class="btn btn-secondary" href="skull-protection.html" style="display: block; text-align: center;">🛡️ SKULL Protection</a>
+<a class="btn btn-secondary" href="orchestrator-ecosystem.html" style="display: block; text-align: center;">🎭 Orchestrator Ecosystem</a>
+<a class="btn btn-secondary" href="agent-system.html" style="display: block; text-align: center;">🤖 Agent System</a>
+<a class="btn btn-secondary" href="index.html" style="display: block; text-align: center;">← Architecture Overview</a>
+</div>
+<section class="section">
+<div class="container text-center">
+<a class="btn btn-primary" href="index.html">← Back to Architecture</a>
+</div>
+<footer>
+<div class="container">
+<div class="footer-bottom">
+<p>© 2024-2025 Asif Hussain. All rights reserved. | <strong>CORTEX 4.0</strong></p>
+</div>
+<script src="../assets/js/main.js"></script>
+<script></script>
+</div></footer></section>
+</div>
+</div></section>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div></section></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div></section>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div></section>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div></section>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div></section>
+</div>
+</div>
+</div></section></p>
+</div></section>
+</div>
+</div></section>
 </body>
 </html>

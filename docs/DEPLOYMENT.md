@@ -1,14 +1,16 @@
 # GitHub Pages Deployment Instructions
 
-**Status:** ✅ Code pushed to GitHub  
-**Branch:** CORTEX-3.0  
-**Commit:** 520f9acd
+**Status:** ✅ Ready for Git Pages Publishing  
+**Branch:** CORTEX-4.0  
+**Last Updated:** December 26, 2025
 
 ---
 
-## 🚀 Final Step: Configure GitHub Pages
+## 🚀 Publishing to GitHub Pages
 
-To make the site live at `https://asifhussain60.github.io/CORTEX/`, you need to configure GitHub Pages in the repository settings:
+**⚠️ DO NOT PUBLISH YET** - Complete documentation views first
+
+When ready to publish:
 
 ### Steps:
 
@@ -16,8 +18,8 @@ To make the site live at `https://asifhussain60.github.io/CORTEX/`, you need to 
    - Navigate to: https://github.com/asifhussain60/CORTEX/settings/pages
 
 2. **Configure Source:**
-   - **Branch:** Select `CORTEX-3.0`
-   - **Folder:** Select `/docs` (GitHub will detect the gh-pages subfolder)
+   - **Branch:** Select `CORTEX-4.0`
+   - **Folder:** Select `/docs`
    - Click **Save**
 
 3. **Wait for Deployment:**
@@ -27,27 +29,59 @@ To make the site live at `https://asifhussain60.github.io/CORTEX/`, you need to 
 
 4. **Verify Live Site:**
    - Once deployed, visit: https://asifhussain60.github.io/CORTEX/
-   - Check that:
-     - ✅ CORTEX logo displays
-     - ✅ SKULL Rulebook button works
-     - ✅ All navigation links function
-     - ✅ Glassmorphism design renders correctly
-     - ✅ Mobile responsiveness works
+   - Check critical pages:
+     - ✅ Landing page (`index.html`)
+     - ✅ Story viewer (`story/viewer.html`)
+     - ✅ SKULL Rulebook (`governance/skull-rulebook.html`)
+     - ✅ All feature pages
+     - ✅ Mobile responsiveness
 
 ---
 
-## 📁 Site Structure
+## 📁 Site Structure (CORTEX 4.0)
 
 ```
-docs/gh-pages/
-├── index.html                          # Landing page (with logo + SKULL)
-├── governance/skull-rulebook.html      # 22 SKULL rules
+docs/
+├── .nojekyll                           # Disable Jekyll processing
+├── index.html                          # Landing page (updated Dec 26)
+├── README.md                           # Site documentation
+├── DEPLOYMENT.md                       # This file
+│
+├── assets/
+│   ├── css/main.css                    # Glassmorphism design system
+│   ├── images/
+│   │   ├── CORTEX-logo.png            # 200x200 logo
+│   │   └── Awakening.png              # Story hero image
+│   └── js/                            # JavaScript modules
+│
+├── story/
+│   ├── viewer.html                     # Interactive story viewer (NEW)
+│   ├── story-viewer.js                # Chapter navigation logic (NEW)
+│   ├── README.md                      # Story viewer docs (NEW)
+│   ├── Prologue/PROLOGUE.txt
+│   ├── Chapter-01/ through Chapter-12/ # 12 chapter files
+│   └── illustrations/images/
+│       ├── essentials/                # Core chapter images (12 files)
+│       └── valuable/                  # Additional images (7 files)
+│
+├── governance/
+│   └── skull-rulebook.html            # 22 SKULL protection rules
+│
 ├── features/
-│   ├── index.html                      # Feature catalog
-│   ├── tdd-mastery.html               # Full detail page
-│   ├── planning-system.html           # STUB_PAGE
-│   ├── dashboard-system.html          # STUB_PAGE
-│   └── ado-operations.html            # STUB_PAGE
+│   ├── tdd-mastery.html
+│   ├── planning-system.html
+│   ├── dashboard-system.html
+│   └── ado-operations.html
+│
+├── future/
+│   └── index.html                     # CORTEX 4.0 vision
+│
+├── architecture/                       # Technical architecture docs
+├── api/                               # API documentation
+├── orchestration/                     # Orchestrator guides
+├── planning/                          # Planning system docs
+└── technical/                         # Technical deep dives
+```
 ├── architecture/index.html             # STUB_PAGE
 ├── future/index.html                   # STUB_PAGE
 └── assets/
@@ -91,11 +125,27 @@ Stub pages have this comment:
 
 ## 📊 What's Complete
 
-### ✅ Fully Implemented Pages:
-1. **index.html** - Landing page with logo, SKULL, metrics
-2. **governance/skull-rulebook.html** - Complete 22-rule showcase
-3. **features/tdd-mastery.html** - Full RED-GREEN-REFACTOR workflow
-4. **features/index.html** - Feature catalog grid
+### ✅ Fully Implemented Pages (Updated Dec 26, 2025):
+1. **index.html** - Landing page with "What is CORTEX", story link, metrics
+2. **story/viewer.html** - Interactive story viewer (12 chapters + prologue)
+3. **governance/skull-rulebook.html** - Complete 22-rule showcase
+4. **features/tdd-mastery.html** - Full RED-GREEN-REFACTOR workflow
+5. **features/index.html** - Feature catalog grid
+
+### 🆕 Story Viewer Features:
+- **Left Sidebar Navigation**: All 13 chapters with descriptive titles
+- **Contextual Images**: 19 illustrations embedded within narrative
+- **Chapter Navigation**: Previous/Next buttons, URL hash support
+- **Glassmorphism Theme**: Consistent design system
+- **Responsive Design**: Mobile-optimized image handling
+- **CORTEX Logo**: 200x200px logo in sidebar
+
+### 📝 Recent Updates (Dec 26, 2025):
+- ✅ Created interactive story viewer (`story/viewer.html`)
+- ✅ Moved "What is CORTEX" above "The Awakening" button
+- ✅ Enhanced CORTEX description (multi-agent orchestration, RAG)
+- ✅ Simplified positioning statements
+- ✅ Updated main site link to `story/viewer.html`
 
 ### 🚧 Stub Pages (Need Full Content):
 1. **features/planning-system.html** - Planning System 2.0 details

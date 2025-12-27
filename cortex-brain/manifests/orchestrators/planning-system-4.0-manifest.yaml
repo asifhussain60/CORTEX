@@ -562,8 +562,46 @@ workflow:
         - "min_test_coverage: 80%"
         - "min_quality_score: 7.0/10.0"
         - "all_tests_passing: true"
+        - "final_refactor_phase_enforced: true" # SKULL Rule: REFACTOR_CODE_CLEANUP_ENFORCEMENT
       rollback_on_failure: true
-      notes: "TDD v4.0 provides adaptive learning (11+ languages), AI code generation, and clean code enforcement"
+      notes: "TDD v4.0 provides adaptive learning (11+ languages), AI code generation, and clean code enforcement. SKULL Rule enforces mandatory final REFACTOR phase that reviews ENTIRE file for cleanliness."
+      skull_enforcement:
+        rule_id: "REFACTOR_CODE_CLEANUP_ENFORCEMENT"
+        enforcement_level: "MANDATORY"
+        description: "All plans MUST include final REFACTOR phase that reviews ENTIRE file (not just new code) for duplicates, broken structure, complexity >30, SOLID violations, and dead code"
+        purpose: "Prevent technical debt accumulation by ensuring modified files are left in clean, optimized state"
+        phase_requirements:
+          name: "Final REFACTOR - Whole-File Cleanup"
+          type: "quality_gate"
+          scope: "ALL modified files (not just new code)"
+          activities:
+            - "Review ENTIRE file structure (not just modified sections)"
+            - "Fix broken HTML tags, syntax errors, structural issues"
+            - "Remove ALL duplicate and redundant code"
+            - "Refactor ALL functions with complexity >30 down to ≤30"
+            - "Enforce SOLID principles throughout file"
+            - "Remove ALL dead/orphaned code and unused imports"
+            - "Validate file integrity and completeness"
+            - "Run all tests to ensure no regressions"
+          validation_criteria:
+            - "✅ No broken HTML tags or structural issues"
+            - "✅ Zero duplicate or redundant code blocks"
+            - "✅ All function complexity ≤30"
+            - "✅ SOLID principles enforced"
+            - "✅ No dead code or unused imports"
+            - "✅ All tests passing (100% pass rate)"
+            - "✅ File is production-ready and maintainable"
+        distinction_from_tdd_refactor:
+          tdd_refactor: "Cleans code that was just written (micro-level, per-feature)"
+          final_refactor: "Reviews ENTIRE file for overall cleanliness (macro-level, whole-file)"
+        implementation:
+          method: "_enforce_final_refactor_phase()"
+          location: "src/orchestrators/planning/planning_orchestrator.py"
+          integration_points:
+            - "_integrate_tdd_workflow() - Called after TDD phases added"
+            - "execute() - Applied after plan generation"
+          test_coverage: "tests/orchestrators/planning/test_final_refactor_enforcement.py"
+
 
     - id: 4
       name: "Refactor"
