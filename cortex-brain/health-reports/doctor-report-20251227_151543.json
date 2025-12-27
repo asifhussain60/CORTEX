@@ -1,0 +1,34 @@
+{
+  "timestamp": "2025-12-27T15:15:43.449894",
+  "mode": "dry-run",
+  "phases_run": [
+    "report"
+  ],
+  "phase_results": {
+    "report": {
+      "success": true,
+      "duration": 0.000203,
+      "findings": {
+        "metrics": {
+          "phases_completed": 0,
+          "phases_failed": 0,
+          "total_errors": 0,
+          "total_warnings": 0,
+          "total_actions": 0,
+          "total_duration": 0
+        },
+        "report_path": "/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/health-reports/doctor-report-20251227_151543.md"
+      },
+      "errors": [],
+      "warnings": [],
+      "actions_taken": [
+        "Generated report: /Users/asifhussain/PROJECTS/CORTEX/cortex-brain/health-reports/doctor-report-20251227_151543.md"
+      ]
+    }
+  },
+  "overall_health_score": 100.0,
+  "critical_issues": [],
+  "recommendations": [
+    "System is healthy - no immediate actions required"
+  ]
+}

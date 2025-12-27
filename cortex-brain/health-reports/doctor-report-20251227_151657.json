@@ -1,0 +1,232 @@
+{
+  "timestamp": "2025-12-27T15:16:56.660324",
+  "mode": "dry-run",
+  "phases_run": [
+    "scan"
+  ],
+  "phase_results": {
+    "scan": {
+      "success": true,
+      "duration": 1.20337,
+      "findings": {
+        "duplicates": {
+          "duplicates": [
+            {
+              "file1_line": 22,
+              "file2_line": 39,
+              "similarity": 0.8399592252803262,
+              "lines": 20,
+              "preview": "## \u26a0\ufe0f CRITICAL: Parse User Request FIRST\n\n**Problem:** Meta-directives incorrectly treated as user's..."
+            },
+            {
+              "file1_line": 52,
+              "file2_line": 57,
+              "similarity": 0.9873417721518988,
+              "lines": 4,
+              "preview": "## \ud83d\udccb ADAPTIVE RESPONSE FORMAT (v4.1)\n\n**Header (ALWAYS required):**\n```markdown..."
+            },
+            {
+              "file1_line": 110,
+              "file2_line": 93,
+              "similarity": 0.975609756097561,
+              "lines": 5,
+              "preview": "## \ud83e\udde0 CORTEX {Operation}\n**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX\n\n---\n..."
+            },
+            {
+              "file1_line": 115,
+              "file2_line": 98,
+              "similarity": 0.8080808080808081,
+              "lines": 3,
+              "preview": "### \ud83c\udfaf Understanding & Scope\n{what you understood}\n..."
+            },
+            {
+              "file1_line": 118,
+              "file2_line": 101,
+              "similarity": 1.0,
+              "lines": 3,
+              "preview": "### \u26a1 Approach & Considerations\nNo Challenge - All work completed successfully\n..."
+            },
+            {
+              "file1_line": 121,
+              "file2_line": 104,
+              "similarity": 0.8828828828828829,
+              "lines": 3,
+              "preview": "### \ud83d\udcac Response\n{completion summary with metrics}\n..."
+            },
+            {
+              "file1_line": 273,
+              "file2_line": 367,
+              "similarity": 0.9029003783102144,
+              "lines": 10,
+              "preview": "## \ud83d\udea8 Common Pitfalls\n\n1. **Don't bypass Tier 0 instincts** - Brain Protector enforces with evidence\n..."
+            }
+          ],
+          "total_duplication": 6.442953020134229,
+          "file1_lines": 304,
+          "file2_lines": 441
+        },
+        "unnecessary_files": {
+          "files": {
+            "temp": [
+              "cortex-brain/templates/planning/TEMP-PLAN-TEMPLATE.md",
+              "cortex-brain/documents/archive/TEMPLATE-REFACTORING-COMPLETE.md",
+              "cortex-brain/documents/archive/TEMPLATE-SYSTEM-IMPLEMENTATION-COMPLETE.md",
+              "cortex-brain/documents/archive/TEMPLATE-SYSTEM-GUIDE.md",
+              "cortex-brain/documents/archive/TEMPLATE-ENHANCEMENT-COMPLETE.md",
+              "cortex-brain/documents/archive/TEMPLATE-ENFORCEMENT-COMPLETE.md",
+              "cortex-brain/documents/archive/TEMP-FILE-CLEANUP-SYSTEM.md",
+              "cortex-brain/backups/html-invalid-20251227/TEMPLATE-PATTERNS.md"
+            ],
+            "summary": [
+              "docs/story/CORTEX-STORY-ENHANCEMENT-SUMMARY.md",
+              "cortex-sample-apps/_Real/RA-Domain/discovery/00-EXECUTIVE-SUMMARY.md",
+              "cortex-sample-apps/_Real/RA-Domain/toolkit/ONEDRIVE-DEPLOYMENT-SUMMARY.md",
+              "cortex-sample-apps/_Real/ra-modernized/.review/05-13-SUMMARY.md",
+              "cortex-sample-apps/_Real/payment-processor-modernized/.review/05-13-SUMMARY.md",
+              "cortex-brain/documents/archive/UPDATE-SUMMARY.md",
+              "cortex-brain/documents/archive/RA-PHASE-5-EXECUTIVE-SUMMARY.md",
+              "cortex-brain/documents/archive/TASK-8.1-COVERAGE-AUDIT-SUMMARY.md",
+              "cortex-brain/documents/archive/ENHANCEMENTS-SUMMARY.md",
+              "cortex-brain/documents/archive/PHASE-3-AWAKENING-SUMMARY.md",
+              "cortex-brain/documents/archive/PHASE-6.5-COMPLETION-SUMMARY.md",
+              "cortex-brain/documents/archive/V3-NARRATIVE-SUMMARY.md",
+              "cortex-brain/documents/archive/SESSION-EPM-FINAL-SUMMARY.md",
+              "cortex-brain/documents/archive/SETUP-CORTEX-EXECUTIVE-SUMMARY.md",
+              "cortex-brain/documents/archive/PHASE-1-ANALYSIS-SUMMARY.md",
+              "cortex-brain/documents/archive/CORTEX-SETUP-001-SUMMARY.md",
+              "cortex-brain/documents/archive/ADO-PLANNING-ENHANCEMENTS-SUMMARY.md",
+              "cortex-brain/documents/archive/TDD-ENFORCEMENT-EXECUTIVE-SUMMARY.md",
+              "cortex-brain/documents/archive/STUB-MOCK-REMEDIATION-COMPLETE-SUMMARY.md",
+              "cortex-brain/documents/archive/EXECUTIVE-SUMMARY.md",
+              "cortex-brain/documents/archive/PLAN-SUMMARY.md",
+              "cortex-brain/documents/archive/PHASE-2-DEPLOYMENT-SUMMARY.md",
+              "cortex-brain/documents/archive/CODE-LANGUAGE-ENFORCEMENT-SUMMARY.md",
+              "cortex-brain/documents/archive/FIRST-INTERACTION-FIX-SUMMARY.md",
+              "cortex-brain/documents/archive/SETUP-SUMMARY.md",
+              "cortex-brain/documents/archive/PHASE-7-PROGRESS-SUMMARY.md",
+              "cortex-brain/documents/archive/MULTILINGUAL-SUPPORT-SUMMARY.md",
+              "cortex-brain/documents/archive/CORTEX-4.0-RAG-ENHANCEMENT-SUMMARY.md",
+              "cortex-brain/documents/archive/VALIDATION-SUMMARY.md",
+              "cortex-brain/documents/archive/CONSOLIDATED-PLAN-SUMMARY.md",
+              "cortex-brain/documents/archive/CONSOLIDATION-SUMMARY.md",
+              "cortex-brain/documents/archive/INTEGRATION-SUMMARY.md",
+              "cortex-brain/documents/archive/EPM-ORCHESTRATOR-ENHANCEMENT-USER-SUMMARY.md",
+              "src/tier1/IMPLEMENTATION-SUMMARY.md",
+              "src/tier3/IMPLEMENTATION-SUMMARY.md"
+            ],
+            "old": [
+              "docs/index.html.bak",
+              "cortex-brain/documents/planning/active/CORTEX-3.0-4.0/CORTEX4-STATUS.md.bak",
+              "cortex-brain/documents/planning/archive/2025-12-18/_backup",
+              "htmlcov/z_705ef2790afe791d_backup_manager_py.html",
+              "htmlcov/z_35a4a0a489b3500b_backup_archiver_py.html",
+              "backups/doctor_backup_20251227_151620"
+            ],
+            "logs": [
+              "logs/test_validation.log",
+              "logs/src.templates.template_manager.log",
+              "logs/coverage/task-8.5-coverage-20251223-171025.log",
+              "logs/coverage/task-8.5-coverage-20251224-103120.log",
+              "logs/coverage/coverage-audit-20251223-153936.log",
+              "cortex-brain/tier1/requests.log",
+              "cortex-brain/documents/reports/PHASE-B2-PROGRESS.log",
+              "scripts/temp/publish.log",
+              "scripts/temp/deployment-dry-run.log",
+              "scripts/temp/test_timing.log"
+            ]
+          },
+          "total": 59
+        },
+        "redundant_folders": {
+          "redundant": [],
+          "empty": [
+            ".cortex/sessions",
+            "docs/planning",
+            "docs/technical/toolkit",
+            "docs/technical/validation",
+            "docs/STS/assets",
+            "docs/STS/certification",
+            "cortex-sample-apps/sts-validation-app/ui/mockups",
+            "cortex-brain/corpus-callosum",
+            "cortex-brain/audit-archive",
+            "cortex-brain/knowledge/api",
+            "cortex-brain/documents/narratives",
+            "cortex-brain/documents/investigations",
+            "cortex-brain/documents/policies",
+            "cortex-brain/documents/conversation-captures",
+            "cortex-brain/documents/diagrams/advanced-features",
+            "cortex-brain/documents/diagrams/infrastructure",
+            "cortex-brain/documents/planning/cortex-4.0",
+            "cortex-brain/documents/planning/orchestrators",
+            "cortex-brain/documents/planning/temp-plans/TEMP-PLAN-20251216_165710-comprehensive-analysis-of-syst",
+            "cortex-brain/documents/planning/temp-plans/TEMP-PLAN-20251216_165525-comprehensive-analysis-of-syst",
+            "cortex-brain/documents/planning/archive/2025-12-18/unified-planning-system-implementation",
+            "cortex-brain/documents/planning/archive/2025-12-18/toolkit-architecture-20251216",
+            "cortex-brain/documents/planning/archive/2025-12-18/workspace-architecture-40-20251216",
+            "cortex-brain/documents/planning/archive/2025-12-18/implants-migration-20251216",
+            "cortex-brain/documents/planning/archive/2025-12-18/_backup/template-naming-enhancement",
+            "cortex-brain/documents/planning/archive/2025-12-18/_backup/cortex-rearchitecture-v1/context",
+            "cortex-brain/documents/planning/archive/2025-12-18/_backup/cortex-rearchitecture-v1/reports",
+            "cortex-brain/documents/planning/features/.archive/.archive/.archive/.archive/.archive",
+            "cortex-brain/documents/planning/active/phase-6-completion",
+            "cortex-brain/documents/planning/active/CORTEX-3.0-4.0/progress",
+            "cortex-brain/documents/planning/active/CORTEX-3.0-4.0/worker-plans",
+            "cortex-brain/documents/planning/active/html-regeneration-v1/artifacts",
+            "cortex-brain/documents/planning/active/html-regeneration-v1/execution",
+            "cortex-brain/documents/planning/active/html-regeneration-v1/reports",
+            "cortex-brain/documents/planning/archived/legacy-navigation",
+            "cortex-brain/documents/library/planning_strategies",
+            "cortex-brain/documents/library/workflows",
+            "cortex-brain/documents/library/troubleshooting",
+            "cortex-brain/documents/library/testing",
+            "cortex-brain/documents/library/architecture",
+            "cortex-brain/documents/library/ado_workflows",
+            "cortex-brain/documents/library/implementation",
+            "cortex-brain/documents/library/milestones",
+            "cortex-brain/documents/library/refactoring",
+            "cortex-brain/documents/library/performance",
+            "cortex-brain/documents/evidence-templates/misc",
+            "cortex-brain/documents/evidence-templates/planning",
+            "cortex-brain/documents/evidence-templates/git",
+            "cortex-brain/documents/architecture/orchestrators",
+            "cortex-brain/documents/guides/quick-reference",
+            "cortex-brain/documents/guidelines/architecture/diagrams",
+            "backups/cleanup_20251226_131759",
+            "backups/cleanup_20251226_131837",
+            "backups/cleanup_20251226_131800",
+            "MagicMock/mock.config.root_path.__truediv__().__truediv__().__truediv__()/5315279120",
+            "MagicMock/mock.config.root_path.__truediv__().__truediv__().__truediv__()/5427773648",
+            "MagicMock/mock.config.root_path.__truediv__().__truediv__().__truediv__()/5423307216",
+            "MagicMock/mock.config.root_path.__truediv__().__truediv__().__truediv__()/5457127216",
+            "MagicMock/mock.config.root_path.__truediv__().__truediv__().__truediv__()/5293315648",
+            "MagicMock/mock.config.root_path.__truediv__().__truediv__().__truediv__()/4845447200",
+            "MagicMock/mock.config.root_path.__truediv__().__truediv__().__truediv__()/5456867536",
+            "MagicMock/mock.config.root_path.__truediv__().__truediv__().__truediv__()/6058158736",
+            "MagicMock/mock.config.root_path.__truediv__().__truediv__().__truediv__()/5458146352",
+            "MagicMock/mock.config.root_path.__truediv__().__truediv__().__truediv__()/5095444544",
+            "MagicMock/mock.config.root_path.__truediv__().__truediv__().__truediv__()/5417842336",
+            "MagicMock/mock.config.root_path.__truediv__().__truediv__().__truediv__()/5475139840",
+            "MagicMock/mock.config.root_path.__truediv__().__truediv__().__truediv__()/4810226512",
+            "MagicMock/mock.config.root_path.__truediv__().__truediv__().__truediv__()/6110983696",
+            "MagicMock/mock.config.root_path.__truediv__().__truediv__().__truediv__()/4986059072",
+            "src/cortex-brain/config",
+            "src/cortex-brain/tier3/workspace-ws2",
+            "src/cortex-brain/tier3/workspace-ws1",
+            "src/cortex-brain/tier3/workspace-test-workspace"
+          ]
+        }
+      },
+      "errors": [],
+      "warnings": [
+        "Found 7 duplicate sections",
+        "Found 59 unnecessary files"
+      ],
+      "actions_taken": []
+    }
+  },
+  "overall_health_score": 96.0,
+  "critical_issues": [],
+  "recommendations": [
+    "Run cleanup with --execute to remove unnecessary files"
+  ]
+}

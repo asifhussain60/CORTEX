@@ -1,0 +1,31 @@
+{
+  "timestamp": "2025-12-27T15:16:20.992538",
+  "mode": "execute",
+  "phases_run": [
+    "cleanup"
+  ],
+  "phase_results": {
+    "cleanup": {
+      "success": true,
+      "duration": 0.102674,
+      "findings": {
+        "backup_dir": "/Users/asifhussain/PROJECTS/CORTEX/backups/doctor_backup_20251227_151620",
+        "cleanup": {
+          "files_deleted": [],
+          "folders_deleted": [],
+          "errors": []
+        }
+      },
+      "errors": [],
+      "warnings": [],
+      "actions_taken": [
+        "Created backup at /Users/asifhussain/PROJECTS/CORTEX/backups/doctor_backup_20251227_151620"
+      ]
+    }
+  },
+  "overall_health_score": 100.0,
+  "critical_issues": [],
+  "recommendations": [
+    "System is healthy - no immediate actions required"
+  ]
+}
