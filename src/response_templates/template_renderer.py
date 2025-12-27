@@ -249,8 +249,8 @@ class TemplateRenderer:
         
         # Apply mode-specific transformations
         if mode == 'autonomous' and component_id == 'next_steps_section':
-            # Compact next steps format
-            return component_format.replace('### 🔍 Next Steps', '**Next:**')
+            # Compact next steps format (CORTEX 4.0 adaptive format)
+            return component_format.replace('**Next Steps:**', '**Next:**')
         
         if mode == 'pair' and component_id == 'next_steps_section':
             # Collaborative options format
@@ -262,9 +262,9 @@ class TemplateRenderer:
         """Get pair mode collaborative next steps format.
         
         Returns:
-            Next steps section with option/track language
+            Next steps section with option/track language (CORTEX 4.0)
         """
-        return """### 🔍 Next Steps
+        return """**Next Steps:**
 
 **I see a few options we could explore:**
 

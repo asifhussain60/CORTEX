@@ -223,19 +223,16 @@ class ContextRenderer:
         styled_content = f"{emoji} **CORTEX {context.get('template_name', 'Response')}**\n"
         styled_content += f"Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX\n\n"
         
-        # Add namespace-specific sections based on mandatory format
-        styled_content += f"### 🎯 Understanding & Scope\n"
-        styled_content += f"   [Based on {namespace.lower()} namespace detection]\n\n"
+        # Add namespace-specific sections (v4.0 adaptive format)
+        styled_content += f"**Context:** [Based on {namespace.lower()} namespace detection]\n\n"
         
-        styled_content += f"### ⚡ Approach & Considerations\n"
-        styled_content += f"   ✓ **Accept** - Template selected with {context.get('confidence', 0):.1f} confidence.\n\n"
+        styled_content += f"✓ **Accept** - Template selected with {context.get('confidence', 0):.1f} confidence.\n\n"
         
-        styled_content += f"### 💬 Response\n"
-        styled_content += f"{content}\n\n"
+        styled_content += f"**Response:**\n{content}\n\n"
         
-        styled_content += f"📝 **Your Request:** {context.get('question', '[Request]')}\n\n"
+        styled_content += f"**Your Request:** {context.get('question', '[Request]')}\n\n"
         
-        styled_content += f"🔍 **Next Steps:**\n"
+        styled_content += f"**Next:**\n"
         styled_content += f"   1. [Context-specific recommendations]\n"
         styled_content += f"   2. [Additional options]\n"
         styled_content += f"   3. [Further assistance]"

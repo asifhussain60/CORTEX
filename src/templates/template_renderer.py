@@ -76,7 +76,7 @@ class TemplateRenderer:
     
     def render_success(self, content: Dict[str, str], context: TemplateContext) -> str:
         """
-        Render a success/completion response.
+        Render a success/completion response (v4.0 format).
         
         Args:
             content: Section content
@@ -97,20 +97,19 @@ class TemplateRenderer:
         # Separator
         parts.append("\n---\n")
         
-        # Success sections (fixed order)
+        # v4.0 Success sections (simplified)
         success_sections = [
-            "understanding_scope",
-            "approach_considerations",
-            "response",
-            "impact_changes",
-            "next_steps"
+            ("context", "🎯", "Understanding & Scope"),
+            ("approach", "⚡", "Approach & Considerations"),
+            ("response", "💬", "Response"),
+            ("changes", "📊", "Impact & Changes"),
+            ("next_steps", "🔍", "Next Steps")
         ]
         
-        for section_id in success_sections:
+        for section_id, emoji, title in success_sections:
             section_content = content.get(section_id, "")
             if section_content:
-                section_text = self._render_section(section_id, section_content)
-                parts.append(section_text)
+                parts.append(f"### {emoji} {title}\n{section_content}")
         
         return "\n\n".join(parts)
     
@@ -133,13 +132,13 @@ class TemplateRenderer:
         return f"### {emoji} {section_name}\n{content}"
     
     def _get_section_name(self, section_id: str) -> str:
-        """Convert section ID to display name"""
+        """Convert section ID to display name (v4.0 adaptive format)"""
         # Map common section IDs to display names
         name_map = {
-            "understanding_scope": "Understanding & Scope",
-            "approach_considerations": "Approach & Considerations",
+            "context": "Context",
+            "analysis": "Analysis",
             "response": "Response",
-            "impact_changes": "Impact & Changes",
+            "changes": "Changes",
             "next_steps": "Next Steps",
             "architecture": "Architecture",
             "technical_details": "Technical Details",

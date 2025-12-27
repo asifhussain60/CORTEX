@@ -225,29 +225,21 @@ class ConfidenceResponseGenerator:
             template = self.template_loader.load_template(base_template_name)
             response_text = self.template_renderer.render(template, context=full_context)
         except Exception as e:
-            # Fallback response if template fails
-            response_text = f"""# CORTEX {operation_type}
+            # Fallback response if template fails (v4.0 adaptive format)
+            response_text = f"""## 🧠 CORTEX {operation_type}
 **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
-
----
 
 {confidence_indicator}
 
-### 🎯 Understanding & Scope
-{user_request}
+**Context:** {user_request}
 
-### ⚡ Approach & Considerations
-✓ **Accept**
-Processing your request using learned patterns.
+✓ **Accept** - Processing your request using learned patterns.
 
-### 💬 Response
-[Response content]
+**Response:** [Response content]
 
-### 📊 Impact & Changes
-{user_request}
+**Changes:** {user_request}
 
-## Next Steps
-[Next steps]
+**Next:** [Next steps]
 """
         
         return {
@@ -301,28 +293,20 @@ Processing your request using learned patterns.
             template = self.template_loader.load_template(base_template_name)
             response_text = self.template_renderer.render(template, context=full_context)
         except Exception:
-            response_text = f"""# CORTEX {operation_type}
+            response_text = f"""## 🧠 CORTEX {operation_type}
 **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
-
----
 
 {confidence_indicator}
 
-### 🎯 Understanding & Scope
-{user_request}
+**Context:** {user_request}
 
-### ⚡ Approach & Considerations
-⚡ **Challenge**
-This is new territory for CORTEX. No previous patterns exist.
+⚡ **Challenge:** This is new territory for CORTEX. No previous patterns exist.
 
-### 💬 Response
-[Fresh response content]
+**Response:** [Fresh response content]
 
-### 📊 Impact & Changes
-{user_request}
+**Changes:** {user_request}
 
-## Next Steps
-[Next steps]
+**Next:** [Next steps]
 """
         
         return {

@@ -130,28 +130,20 @@ class WiringGenerator:
         for trigger in triggers:
             yaml += f'    - "{trigger}"\n'
         
-        yaml += f"""  response_type: "detailed"
+        yaml += f"""  response_type: "adaptive"
   orchestrator: "{feature_name}"
   content: |
-    # 🧠 CORTEX {feature_name}
+    ## 🧠 CORTEX {feature_name}
     **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
     
-    ---
+    **Context:** {{{{understanding}}}}
     
-    ### 🎯 Understanding & Scope
-    {{{{understanding}}}}
-    
-    ### ⚡ Approach & Considerations
-    {{{{challenge}}}}
-    
-    ### 💬 Response
     {purpose}
     
-    ### 📊 Impact & Changes
+    **Changes:**
     {{{{user_request}}}}
     
-    ## Next Steps
-    {{{{next_steps}}}}
+    **Next:** {{{{next_steps}}}}
 """
         return yaml
     
