@@ -10,7 +10,7 @@ const CHAPTERS = {
         id: 'prologue',
         number: 'PROLOGUE',
         title: 'The Basement Laboratory',
-        file: 'Prologue/PROLOGUE.txt',
+        file: 'Prologue/index.md',
         images: [
             { src: 'illustrations/images/essentials/cortex-awakening-prologue-01.jpeg', position: 'right' },
             { src: 'illustrations/images/essentials/cortex-awakening-prologue-02.jpeg', position: 'left' }
@@ -22,7 +22,7 @@ const CHAPTERS = {
         id: 'chapter-01',
         number: 'CHAPTER 1',
         title: 'The Amnesia Crisis',
-        file: 'Chapter-01/CHAPTER-01.txt',
+        file: 'Chapter-01/index.md',
         images: [
             { src: 'illustrations/images/essentials/cortex-awakening-ch01-01.jpeg', position: 'left' },
             { src: 'illustrations/images/valuable/cortex-awakening-ch01-02.jpeg', position: 'right' },
@@ -35,7 +35,7 @@ const CHAPTERS = {
         id: 'chapter-02',
         number: 'CHAPTER 2',
         title: 'Tier 0 - The Gatekeeper',
-        file: 'Chapter-02/CHAPTER-02.txt',
+        file: 'Chapter-02/index.md',
         images: [
             { src: 'illustrations/images/essentials/cortex-awakening-ch02-01.jpeg', position: 'right' },
             { src: 'illustrations/images/essentials/cortex-awakening-ch02-02.jpeg', position: 'left' }
@@ -47,7 +47,7 @@ const CHAPTERS = {
         id: 'chapter-03',
         number: 'CHAPTER 3',
         title: 'Tier 1 - Memory Awakens',
-        file: 'Chapter-03/CHAPTER-03.txt',
+        file: 'Chapter-03/index.md',
         images: [
             { src: 'illustrations/images/essentials/cortex-awakening-ch03-01.jpeg', position: 'left' },
             { src: 'illustrations/images/valuable/cortex-awakening-ch03-02.jpeg', position: 'right' }
@@ -59,7 +59,7 @@ const CHAPTERS = {
         id: 'chapter-04',
         number: 'CHAPTER 4',
         title: 'Tier 2 - The Learning Machine',
-        file: 'Chapter-04/CHAPTER-04.txt',
+        file: 'Chapter-04/index.md',
         images: [
             { src: 'illustrations/images/essentials/cortex-awakening-ch04-01.jpeg', position: 'left' },
             { src: 'illustrations/images/valuable/cortex-awakening-ch04-02.jpeg', position: 'right' }
@@ -71,7 +71,7 @@ const CHAPTERS = {
         id: 'chapter-05',
         number: 'CHAPTER 5',
         title: 'The Test-Driven Rebellion',
-        file: 'Chapter-05/CHAPTER-05.txt',
+        file: 'Chapter-05/index.md',
         images: [
             { src: 'illustrations/images/valuable/cortex-awakening-ch05-01.jpeg', position: 'left' },
             { src: 'illustrations/images/valuable/cortex-awakening-ch05-02.jpeg', position: 'right' }
@@ -83,7 +83,7 @@ const CHAPTERS = {
         id: 'chapter-06',
         number: 'CHAPTER 6',
         title: 'The Great Orchestration',
-        file: 'Chapter-06/CHAPTER-06.txt',
+        file: 'Chapter-06/index.md',
         images: [
             { src: 'illustrations/images/essentials/cortex-awakening-ch06-01.jpeg', position: 'left' },
             { src: 'illustrations/images/valuable/cortex-awakening-ch06-01.jpeg', position: 'right' },
@@ -96,7 +96,7 @@ const CHAPTERS = {
         id: 'chapter-07',
         number: 'CHAPTER 7',
         title: 'The Planning Revolution',
-        file: 'Chapter-07/CHAPTER-07.txt',
+        file: 'Chapter-07/index.md',
         images: [
             { src: 'illustrations/images/essentials/cortex-awakening-ch07-01.jpeg', position: 'right' },
             { src: 'illustrations/images/valuable/cortex-awakening-ch07-02.jpeg', position: 'left' }
@@ -108,7 +108,7 @@ const CHAPTERS = {
         id: 'chapter-08',
         number: 'CHAPTER 8',
         title: 'The Enterprise Awakening',
-        file: 'Chapter-08/CHAPTER-08.txt',
+        file: 'Chapter-08/index.md',
         images: [
             { src: 'illustrations/images/essentials/cortex-awakening-ch08-01.jpeg', position: 'left' },
             { src: 'illustrations/images/valuable/cortex-awakening-ch08-02.jpeg', position: 'right' }
@@ -120,7 +120,7 @@ const CHAPTERS = {
         id: 'chapter-09',
         number: 'CHAPTER 9',
         title: 'The Sanitizer\'s Dilemma',
-        file: 'Chapter-09/CHAPTER-09.txt',
+        file: 'Chapter-09/index.md',
         images: [
             { src: 'illustrations/images/essentials/cortex-awakening-ch09-01.jpeg', position: 'right' },
             { src: 'illustrations/images/valuable/cortex-awakening-ch09-02.jpeg', position: 'left' }
@@ -132,7 +132,7 @@ const CHAPTERS = {
         id: 'chapter-10',
         number: 'CHAPTER 10',
         title: 'The Self-Healing System',
-        file: 'Chapter-10/CHAPTER-10.txt',
+        file: 'Chapter-10/index.md',
         images: [
             { src: 'illustrations/images/essentials/cortex-awakening-ch10-01.jpeg', position: 'left' },
             { src: 'illustrations/images/valuable/cortex-awakening-ch10-02.jpeg', position: 'right' }
@@ -144,7 +144,7 @@ const CHAPTERS = {
         id: 'chapter-11',
         number: 'CHAPTER 11',
         title: 'The Knowledge Keeper',
-        file: 'Chapter-11/CHAPTER-11.txt',
+        file: 'Chapter-11/index.md',
         images: [
             { src: 'illustrations/images/essentials/cortex-awakening-ch11-01.jpeg', position: 'left' },
             { src: 'illustrations/images/valuable/cortex-awakening-ch11-01.jpeg', position: 'right' },
@@ -157,7 +157,7 @@ const CHAPTERS = {
         id: 'chapter-12',
         number: 'CHAPTER 12',
         title: 'The Convergence',
-        file: 'Chapter-12/CHAPTER-12.txt',
+        file: 'Chapter-12/index.md',
         images: [
             { src: 'illustrations/images/essentials/cortex-awakening-epilogue-01.jpeg', position: 'right' }
         ],
@@ -168,7 +168,7 @@ const CHAPTERS = {
         id: 'chapter-13',
         number: 'CHAPTER 13',
         title: 'The Refiner',
-        file: 'Chapter-13/CHAPTER-13.txt',
+        file: 'Chapter-13/index.md',
         images: [
             { src: 'illustrations/images/essentials/cortex-awakening-ch13-01.jpeg', position: 'left' },
             { src: 'illustrations/images/valuable/cortex-awakening-ch13-02.jpeg', position: 'right' }
@@ -350,8 +350,35 @@ function renderChapter(chapter, content) {
  * Uses section-aware distribution to ensure contextual placement
  */
 function parseChapterContent(text, images) {
-    // Remove first line (chapter title - already in header)
-    const lines = text.split('\n').slice(1);
+    // Strip frontmatter (YAML between ---) and HTML wrapper tags
+    let lines = text.split('\n');
+    
+    // Remove YAML frontmatter
+    if (lines[0] === '---') {
+        const endIndex = lines.findIndex((line, i) => i > 0 && line === '---');
+        if (endIndex > 0) {
+            lines = lines.slice(endIndex + 1);
+        }
+    }
+    
+    // Remove HTML wrapper tags and link tags (but keep empty lines for paragraph separation)
+    lines = lines.filter(line => {
+        const trimmed = line.trim();
+        // Keep empty lines
+        if (trimmed === '') return true;
+        // Filter out HTML wrapper elements and navigation
+        return !trimmed.startsWith('<link ') && 
+               !trimmed.startsWith('<div class="story-') &&
+               !trimmed.startsWith('<div class="chapter-navigation') &&
+               !trimmed.startsWith('<a href=') &&
+               trimmed !== '</div>' &&
+               trimmed !== '</a>';
+    });
+    
+    // Remove first line if it's the chapter title (starts with #)
+    if (lines[0] && lines[0].trim().startsWith('# ')) {
+        lines = lines.slice(1);
+    }
     
     // First pass: Count sections to calculate optimal image placement
     const sections = [];
@@ -430,6 +457,17 @@ function parseChapterContent(text, images) {
                 inParagraph = false;
             }
             html += '<hr style="border: none; border-top: 1px solid var(--glass-border); margin: 2rem 0;">';
+            continue;
+        }
+        
+        // Embedded image tag (HTML img tag in markdown)
+        if (line.startsWith('<img ')) {
+            if (inParagraph) {
+                html += processCharacterDialog(paragraphBuffer) + '</p>';
+                paragraphBuffer = '';
+                inParagraph = false;
+            }
+            html += line; // Pass through HTML img tags
             continue;
         }
         
