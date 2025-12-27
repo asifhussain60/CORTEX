@@ -1,524 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta content="width=device-width, initial-scale=1.0" name="viewport">
-<title>Cleanup Orchestrator | CORTEX Technical Documentation</title>
-<!-- D3.js -->
-<script src="https://d3js.org/d3.v7.min.js" type="text/javascript">
-</script><!-- Mermaid -->
-<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js" type="text/javascript">
-</script>
-<style type="text/css">
-      :root {
-            --cleanup-primary: #FF9800;
-            --cleanup-secondary: #F57C00;
-            --cleanup-dark: #E65100;
-            --success: #10B981;
-            --warning: #F59E0B;
-            --error: #DC2626;
-        }
-        
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: #0f172a;
-            color: #e2e8f0;
-        }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-        
-        header {
-            text-align: center;
-            padding: 3rem 0;
-            border-bottom: 2px solid var(--cleanup-primary);
-            margin-bottom: 3rem;
-        }
-        
-        h1 {
-            font-size: 3rem;
-            margin: 0;
-            color: var(--cleanup-primary);
-            font-weight: 600;
-        }
-        
-        .subtitle {
-            font-size: 1.25rem;
-            color: #94a3b8;
-            margin-top: 0.5rem;
-        }
-        
-        .orchestrator-meta {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin: 2rem 0;
-            padding: 1.5rem;
-            background: #1e293b;
-            border-radius: 8px;
-            border-left: 4px solid var(--cleanup-primary);
-        }
-        
-        .meta-item {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .meta-label {
-            font-size: 0.875rem;
-            color: #94a3b8;
-            margin-bottom: 0.25rem;
-        }
-        
-        .meta-value {
-            font-size: 1.125rem;
-            font-weight: 600;
-            color: var(--cleanup-primary);
-        }
-        
-        .section {
-            margin: 3rem 0;
-            padding: 2rem;
-            background: #1e293b;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-        }
-        
-        h2 {
-            font-size: 2rem;
-            margin-top: 0;
-            color: #f1f5f9;
-            border-bottom: 2px solid var(--cleanup-secondary);
-            padding-bottom: 0.5rem;
-        }
-        
-        .diagram-container {
-            background: #0f172a;
-            padding: 2rem;
-            border-radius: 8px;
-            margin: 1.5rem 0;
-            border: 1px solid #334155;
-        }
-        
-        .mermaid {
-            text-align: center;
-        }
-        
-        #protectedDirs, #cleanupImpact {
-            min-height: 500px;
-            width: 100%;
-        }
-        
-        .feature-list {
-            display: grid;
-            gap: 1rem;
-            margin: 1.5rem 0;
-        }
-        
-        .feature-card {
-            padding: 1rem;
-            background: #0f172a;
-            border-radius: 8px;
-            border-left: 4px solid var(--cleanup-primary);
-        }
-        
-        .feature-title {
-            font-weight: 600;
-            color: var(--cleanup-primary);
-            margin-bottom: 0.5rem;
-        }
-        
-        .feature-desc {
-            color: #cbd5e1;
-            font-size: 0.938rem;
-            line-height: 1.6;
-        }
-        
-        .category-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin: 2rem 0;
-        }
-        
-        .category-card {
-            padding: 1rem;
-            background: #0f172a;
-            border-radius: 8px;
-            border: 2px solid var(--cleanup-primary);
-            text-align: center;
-        }
-        
-        .category-name {
-            font-weight: 600;
-            color: var(--cleanup-primary);
-            font-size: 1.125rem;
-        }
-        
-        .category-desc {
-            font-size: 0.875rem;
-            color: #94a3b8;
-            margin-top: 0.5rem;
-        }
-        
-        .tooltip {
-            position: absolute;
-            padding: 0.75rem;
-            background: #1e293b;
-            border: 1px solid var(--cleanup-primary);
-            border-radius: 6px;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.2s;
-            font-size: 0.875rem;
-            color: #e2e8f0;
-            max-width: 300px;
-            z-index: 1000;
-        }
-        
-        .back-link {
-            display: inline-block;
-            margin: 2rem 0;
-            padding: 0.75rem 1.5rem;
-            background: var(--cleanup-primary);
-            color: #0f172a;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: 600;
-            transition: background 0.2s;
-        }
-        
-        .back-link:hover {
-            background: var(--cleanup-secondary);
-        }
-        
-        @media (max-width: 768px) {
-            .container { padding: 1rem; }
-            h1 { font-size: 2rem; }
-            .orchestrator-meta { grid-template-columns: 1fr; }
-        }
-            
-        /* Breadcrumb Navigation */
-        .breadcrumb {
-            background: rgba(30, 41, 59, 0.8);
-            padding: 1rem 2rem;
-            border-bottom: 1px solid rgba(124, 58, 237, 0.3);
-            margin-bottom: 2rem;
-        }
-        
-        .breadcrumb a {
-            color: var(--primary, #2196F3);
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-        
-        .breadcrumb a:hover {
-            color: var(--secondary, #1976D2);
-            text-decoration: underline;
-        }
-        
-        .breadcrumb-separator {
-            color: #64748b;
-            margin: 0 0.5rem;
-        }
-        
-        .breadcrumb-current {
-            color: #e2e8f0;
-        }
-
-  <body>
-    <!-- Breadcrumb -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cleanup Orchestrator | CORTEX Technical Documentation</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root { --primary: #FF9800; --success: #10B981; --warning: #F59E0B; --error: #DC2626; }
+        body { font-family: 'Inter', -apple-system, sans-serif; margin: 0; padding: 0; background: #0f172a; color: #e2e8f0; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+        header { text-align: center; padding: 3rem 0; border-bottom: 2px solid var(--primary); }
+        header h1 { font-size: 3rem; font-weight: 700; color: var(--primary); margin: 0; }
+        header .subtitle { font-size: 1.2rem; color: #94a3b8; margin-top: 0.5rem; }
+        .metadata { display: flex; justify-content: center; gap: 2rem; margin-top: 1rem; flex-wrap: wrap; }
+        .metadata-item { background: rgba(255, 255, 255, 0.05); padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.9rem; }
+        .section { margin: 3rem 0; }
+        .section-title { font-size: 2rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; border-left: 4px solid var(--primary); padding-left: 1rem; }
+        .intro-text { font-size: 1.1rem; line-height: 1.8; color: #cbd5e1; margin-bottom: 2rem; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+        .feature-card { background: #1e293b; border-radius: 12px; padding: 1.5rem; border-left: 4px solid var(--primary); transition: transform 0.2s; }
+        .feature-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(255, 255, 255, 0.1); }
+        .viz-container { background: #1e293b; border-radius: 12px; padding: 2rem; margin: 2rem 0; }
+        .mermaid { background: #0f172a; border-radius: 8px; padding: 2rem; }
+        .breadcrumb { background: rgba(30, 41, 59, 0.8); padding: 1rem 2rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .breadcrumb a { color: var(--primary); text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .breadcrumb-separator { color: #64748b; margin: 0 0.5rem; }
+        .breadcrumb-current { color: #e2e8f0; }
+        footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid #334155; margin-top: 4rem; color: #64748b; }
+    </style>
+</head>
+<body>
     <nav class="breadcrumb">
-        <a href="../../index.html">Home<\/a>
-        <span class="breadcrumb-separator">›<\/span>
-        <a href="../../features/orchestrators.html">Orchestrators<\/a>
-        <span class="breadcrumb-separator">›<\/span>
-        <a href="index.html">Technical Documentation<\/a>
-        <span class="breadcrumb-separator">›<\/span>
-        <span class="breadcrumb-current">Cleanup<\/span>
-    <\/nav>
+        <a href="../../index.html">Home</a>
+        <span class="breadcrumb-separator">›</span>
+        <a href="index.html">Orchestrators</a>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-current">Cleanup</span>
+    </nav>
     
     <div class="container">
         <header>
-            <h1>🧹 Cleanup Orchestrator<\/h1>
-            <p class="subtitle">File Organization & Reference Tracking with AST-Powered Cleanup<\/p>
-        <\/header>
-
-        <div class="orchestrator-meta">
-            <div class="meta-item">
-                <span class="meta-label">File Location<\/span>
-                <span class="meta-value">src/operations/modules/orchestration/<\/span>
-            <\/div>
-            <div class="meta-item">
-                <span class="meta-label">Complexity<\/span>
-                <span class="meta-value">MEDIUM<\/span>
-            <\/div>
-            <div class="meta-item">
-                <span class="meta-label">Manifest<\/span>
-                <span class="meta-value">cleanup-rules.yaml<\/span>
-            <\/div>
-            <div class="meta-item">
-                <span class="meta-label">Integration<\/span>
-                <span class="meta-value">Maintenance Phase 3<\/span>
-            <\/div>
-
+            <h1>🧹 Cleanup Orchestrator</h1>
+            <p class="subtitle">Obsolete Code Detection & Safe Removal</p>
+            <div class="metadata">
+                <div class="metadata-item"><span style="color:#94a3b8">Complexity:</span> <span style="color:var(--primary);font-weight:600">MEDIUM</span></div>
+                <div class="metadata-item"><span style="color:#94a3b8">File:</span> <span style="color:var(--primary);font-weight:600">cleanup_orchestrator.py</span></div>
+            </div>
+        </header>
+        
         <section class="section">
-            <h2>Overview<\/h2>
-            <p>
-                The Cleanup Orchestrator organizes files into proper <code>cortex-brain/documents/{category}/<\/code> 
-                structure and updates references across the codebase. It prevents root-level document sprawl by 
-                enforcing CORTEX file organization standards with AST-powered reference tracking.
-            
-            <div class="feature-list">
-                <div class="feature-card">
-                    <div class="feature-title">📁 Smart File Organization<\/div>
-                    <div class="feature-desc">
-                        Scans for misplaced files, categorizes by content analysis, and moves to appropriate 
-                        subdirectories within <code>cortex-brain/documents/<\/code>.
-                <div class="feature-card">
-                    <div class="feature-title">🔒 Protected Directories<\/div>
-                    <div class="feature-desc">
-                        Enforces protection rules for critical files: README, LICENSE, requirements.txt never 
-                        moved. Root-level configs stay in place.
-                <div class="feature-card">
-                    <div class="feature-title">🔍 AST Reference Tracking<\/div>
-                    <div class="feature-desc">
-                        Uses Abstract Syntax Tree analysis to find all file references in Python code, markdown 
-                        links, and imports. Updates paths automatically after moves.
-                <div class="feature-card">
-                    <div class="feature-title">📊 Impact Assessment<\/div>
-                    <div class="feature-desc">
-                        Before cleanup, shows: files to be moved, references to be updated, potential conflicts, 
-                        estimated space freed.
-
+            <div class="intro-text">Automated cleanup workflow for detecting and removing obsolete code. Features orphan detection (unused files), duplicate finding, import trace analysis, and safe deletion with rollback points. Creates cleanup manifests for audit trails.</div>
+        </section>
+        
         <section class="section">
-            <h2>5-Phase File Organization Workflow<\/h2>
-            <div class="diagram-container">
-                <div class="mermaid">
-  graph TD
-    START([Cleanup Request]) --> SCAN[Phase 1: Scan<br/>Identify misplaced files]
+            <h2 class="section-title">✨ Key Features</h2>
+            <div class="features-grid"><div class="feature-card"><div style="font-size:2rem;margin-bottom:1rem">🔍</div><div style="font-size:1.25rem;font-weight:600;color:#f1f5f9;margin-bottom:0.75rem">Orphan Detection</div><div style="color:#94a3b8">Identifies unused files and imports</div></div><div class="feature-card"><div style="font-size:2rem;margin-bottom:1rem">📋</div><div style="font-size:1.25rem;font-weight:600;color:#f1f5f9;margin-bottom:0.75rem">Duplicate Analysis</div><div style="color:#94a3b8">Finds and merges duplicate code</div></div><div class="feature-card"><div style="font-size:2rem;margin-bottom:1rem">💾</div><div style="font-size:1.25rem;font-weight:600;color:#f1f5f9;margin-bottom:0.75rem">Safe Deletion</div><div style="color:#94a3b8">Rollback-enabled removal process</div></div></div>
+        </section>
+        
+        <section class="section"><h2 class="section-title">🔄 Cleanup Workflow</h2><div class="viz-container"><div class="mermaid">
+graph TD
+    A[Scan Codebase] --> B[Detect Orphans]
+    B --> C[Find Duplicates]
+    C --> D[Trace Imports]
+    D --> E{Generate<br/>Manifest}
+    E --> F[Review Items]
+    F --> G{Approve?}
+    G -->|Yes| H[Create Backup]
+    H --> I[Delete Files]
+    I --> J[Run Tests]
+    J --> K{Tests Pass?}
+    K -->|Yes| L[✅ Complete]
+    K -->|No| M[🔄 Rollback]
+    G -->|No| N[Cancel]
     
-    SCAN --> CHECK_ROOT{Files in<br/>Root?}
+    style A fill:#FF9800,stroke:#F57C00,color:#fff
+    style L fill:#10B981,stroke:#059669,color:#fff
+                </div></div></section>
+        
+        <footer>
+            <p>&copy; 2025 Asif Hussain | CORTEX 4.0</p>
+            <p>Cleanup Orchestrator - Code Health Optimization</p>
+        </footer>
+    </div>
     
-    CHECK_ROOT --> |No| SKIP[No cleanup needed]
-    CHECK_ROOT --> |Yes| FILTER[Filter out protected files:<br/>README, LICENSE, configs]
-    
-    FILTER --> CATEGORIZE[Phase 2: Categorize<br/>Analyze content]
-    
-    CATEGORIZE --> ANALYZE{File<br/>Type?}
-    
-    ANALYZE --> |Report| CAT_REPORT[Category: reports/]
-    ANALYZE --> |Analysis| CAT_ANALYSIS[Category: analysis/]
-    ANALYZE --> |Summary| CAT_SUMMARY[Category: summaries/]
-    ANALYZE --> |Investigation| CAT_INVEST[Category: investigations/]
-    ANALYZE --> |Plan| CAT_PLAN[Category: planning/]
-    ANALYZE --> |Guide| CAT_GUIDE[Category: implementation-guides/]
-    ANALYZE --> |Unknown| CAT_ARCHIVE[Category: archive/]
-    
-    CAT_REPORT --> ORGANIZE
-    CAT_ANALYSIS --> ORGANIZE
-    CAT_SUMMARY --> ORGANIZE
-    CAT_INVEST --> ORGANIZE
-    CAT_PLAN --> ORGANIZE
-    CAT_GUIDE --> ORGANIZE
-    CAT_ARCHIVE --> ORGANIZE
-    
-    ORGANIZE[Phase 3: Organize<br/>Move files] --> BACKUP[Create backup:<br/>cortex-brain/backups/cleanup_timestamp/]
-    
-    BACKUP --> MOVE{Dry Run?}
-    
-    MOVE --> |Yes| SIMULATE[Simulate moves<br/>Log would-be changes]
-    MOVE --> |No| EXECUTE[Execute moves:<br/>shutil.move(src, dest)]
-    
-    SIMULATE --> UPDATE_REFS
-    EXECUTE --> UPDATE_REFS
-    
-    UPDATE_REFS[Phase 4: Update References<br/>AST analysis] --> SCAN_REFS[Scan codebase for references:<br/>- Python imports<br/>- Markdown links<br/>- File paths in code]
-    
-    SCAN_REFS --> FIND_REFS{References<br/>Found?}
-    
-    FIND_REFS --> |No| FINALIZE
-    FIND_REFS --> |Yes| UPDATE[Update references:<br/>- Rewrite imports<br/>- Fix markdown links<br/>- Update path strings]
-    
-    UPDATE --> VALIDATE[Validate:<br/>- Imports resolve<br/>- Links valid<br/>- Tests pass]
-    
-    VALIDATE --> CHECK_VALID{Validation<br/>Pass?}
-    
-    CHECK_VALID --> |No| ROLLBACK[Rollback:<br/>Restore from backup]
-    CHECK_VALID --> |Yes| FINALIZE
-    
-    ROLLBACK --> FAIL[❌ Cleanup failed<br/>Files restored]
-    
-    FINALIZE[Phase 5: Finalization<br/>Generate report] --> REPORT[Report metrics:<br/>- Files moved<br/>- References updated<br/>- Space freed<br/>- Errors]
-    
-    REPORT --> SUCCESS[✅ Cleanup complete]
-    
-    SKIP --> END([Complete])
-    FAIL --> END
-    SUCCESS --> END
-    
-    style START fill:#FF9800,stroke:#F57C00,color:#fff
-    style SCAN fill:#2196F3,stroke:#1976D2,color:#fff
-    style CATEGORIZE fill:#4CAF50,stroke:#388E3C,color:#fff
-    style ORGANIZE fill:#9C27B0,stroke:#7B1FA2,color:#fff
-    style UPDATE_REFS fill:#00BCD4,stroke:#0097A7,color:#fff
-    style FINALIZE fill:#607D8B,stroke:#455A64,color:#fff
-    style SUCCESS fill:#10B981,stroke:#059669,color:#fff
-    style ROLLBACK fill:#DC2626,stroke:#B91C1C,color:#fff
-    style END fill:#10B981,stroke:#059669,color:#fff
-
-        <section class="section">
-            <h2>Document Categories<\/h2>
-            <p>Valid categories for file organization under <code>cortex-brain/documents/<\/code>:<\/p>
-            <div class="category-grid">
-                <div class="category-card">
-                    <div class="category-name">📊 reports/<\/div>
-                    <div class="category-desc">Status reports, test results, validation summaries<\/div>
-                <\/div>
-                <div class="category-card">
-                    <div class="category-name">🔍 analysis/<\/div>
-                    <div class="category-desc">Code analysis, architecture reviews, technical debt<\/div>
-                <\/div>
-                <div class="category-card">
-                    <div class="category-name">📝 summaries/<\/div>
-                    <div class="category-desc">Project summaries, progress reports, overviews<\/div>
-                <\/div>
-                <div class="category-card">
-                    <div class="category-name">🐛 investigations/<\/div>
-                    <div class="category-desc">Bug investigations, root cause analysis, debugging<\/div>
-                <\/div>
-                <div class="category-card">
-                    <div class="category-name">📋 planning/<\/div>
-                    <div class="category-desc">Feature plans, ADO items, master plans, roadmaps<\/div>
-                <\/div>
-                <div class="category-card">
-                    <div class="category-name">📚 implementation-guides/<\/div>
-                    <div class="category-desc">How-to guides, setup instructions, best practices<\/div>
-                <\/div>
-                <div class="category-card">
-                    <div class="category-name">📐 diagrams/<\/div>
-                    <div class="category-desc">Architecture diagrams, flowcharts, visualizations<\/div>
-                <\/div>
-                <div class="category-card">
-                    <div class="category-name">💬 conversation-captures/<\/div>
-                    <div class="category-desc">Conversation logs, session captures, chat exports<\/div>
-                <\/div>
-                <div class="category-card">
-                    <div class="category-name">📦 archive/<\/div>
-                    <div class="category-desc">Deprecated docs, old versions, historical content<\/div>
-                <\/div>
-
-        <section class="section">
-            <h2>Protected Directories Tree Visualization<\/h2>
-            <p>Hierarchical view of protected files and directories that are never moved.<\/p>
-            <div class="diagram-container">
-                <div id="protectedDirs"><\/div>
-            <\/div>
-
-        <section class="section">
-            <h2>Reference Update Flowchart<\/h2>
-            <div class="diagram-container">
-                <div class="mermaid">
-  graph LR
-    FILE[File Moved] --> SCAN[Scan Codebase<br/>AST Analysis]
-    
-    SCAN --> PYTHON{Python<br/>Files?}
-    SCAN --> MARKDOWN{Markdown<br/>Files?}
-    SCAN --> CONFIG{Config<br/>Files?}
-    
-    PYTHON --> |Yes| IMPORTS[Find imports:<br/>from old_path import X]
-    MARKDOWN --> |Yes| LINKS[Find links:<br/>[text](old_path.md)]
-    CONFIG --> |Yes| PATHS[Find paths:<br/>file: old_path.yaml]
-    
-    IMPORTS --> UPDATE_IMPORTS[Rewrite import:<br/>from new_path import X]
-    LINKS --> UPDATE_LINKS[Fix link:<br/>[text](new_path.md)]
-    PATHS --> UPDATE_PATHS[Update path:<br/>file: new_path.yaml]
-    
-    UPDATE_IMPORTS --> VALIDATE
-    UPDATE_LINKS --> VALIDATE
-    UPDATE_PATHS --> VALIDATE
-    
-    VALIDATE[Validate Changes:<br/>- Import resolution<br/>- Link validity<br/>- Path existence]
-    
-    VALIDATE --> CHECK{Valid?}
-    
-    CHECK --> |Yes| COMMIT[Commit changes]
-    CHECK --> |No| REVERT[Revert updates<br/>Log errors]
-    
-    COMMIT --> SUCCESS[✅ References updated]
-    REVERT --> FAIL[❌ Update failed]
-    
-    style FILE fill:#FF9800,stroke:#F57C00,color:#fff
-    style SCAN fill:#2196F3,stroke:#1976D2,color:#fff
-    style VALIDATE fill:#4CAF50,stroke:#388E3C,color:#fff
-    style SUCCESS fill:#10B981,stroke:#059669,color:#fff
-    style FAIL fill:#DC2626,stroke:#B91C1C,color:#fff
-
-        <section class="section">
-            <h2>Cleanup Impact Assessment<\/h2>
-            <p>Before/after comparison showing cleanup results and impact metrics.<\/p>
-            <div class="diagram-container">
-                <div id="cleanupImpact"><\/div>
-            <\/div>
-
-        <section class="section">
-            <h2>Key Features<\/h2>
-            <div class="feature-list">
-                <div class="feature-card">
-                    <div class="feature-title">🎯 Content-Based Categorization<\/div>
-                    <div class="feature-desc">
-                        Analyzes file content (keywords, structure, metadata) to automatically determine 
-                        the correct category. No manual classification needed.
-                <div class="feature-card">
-                    <div class="feature-title">🔄 Dry Run Mode<\/div>
-                    <div class="feature-desc">
-                        Simulates cleanup without making changes. Shows what would be moved, where, and 
-                        which references would be updated.
-                <div class="feature-card">
-                    <div class="feature-title">💾 Automatic Backup<\/div>
-                    <div class="feature-desc">
-                        Creates timestamped backup in <code>cortex-brain/backups/cleanup_YYYYMMDD_HHMMSS/<\/code> 
-                        before any file moves. Easy rollback if needed.
-                <div class="feature-card">
-                    <div class="feature-title">🔍 Duplicate Detection<\/div>
-                    <div class="feature-desc">
-                        Identifies duplicate files by content hash. Prompts to keep one version and archive 
-                        duplicates to prevent clutter.
-                <div class="feature-card">
-                    <div class="feature-title">📊 Comprehensive Reporting<\/div>
-                    <div class="feature-desc">
-                        Generates cleanup report with: files moved count, categories affected, references 
-                        updated, space freed, errors encountered.
-
-        <section class="section">
-            <h2>Related Documentation<\/h2>
-            <div class="feature-list">
-                <div class="feature-card">
-                    <div class="feature-title">Implementation<\/div>
-                    <div class="feature-desc">
-                        <code>src/operations/modules/orchestration/cleanup_orchestrator.py<\/code>
-                    <\/div>
-                <div class="feature-card">
-                    <div class="feature-title">Manifest<\/div>
-                    <div class="feature-desc">
-                        <code>cortex-brain/manifests/orchestrators/cleanup-rules.yaml<\/code>
-                    <\/div>
-                <div class="feature-card">
-                    <div class="feature-title">Maintenance Integration<\/div>
-                    <div class="feature-desc">
-                        <code>src/operations/modules/orchestration/maintenance_orchestrator.py<\/code>
-                    <\/div>
-
-        <a href="index.html" class="back-link">← Back to Orchestrator Index<\/a>
-    <\/div>
-
-    <div class="tooltip" id="tooltip"><\/div>
-
     <script>
         mermaid.initialize({ 
             startOnLoad: true,
@@ -526,215 +92,10 @@
             themeVariables: {
                 primaryColor: '#FF9800',
                 primaryTextColor: '#fff',
-                primaryBorderColor: '#F57C00',
-                lineColor: '#94a3b8',
-                secondaryColor: '#1e293b',
-                tertiaryColor: '#0f172a'
+                lineColor: '#64748b',
+                secondaryColor: '#1e293b'
             }
         });
-
-        function createProtectedDirsTree() {
-            const data = {
-                name: "CORTEX/",
-                children: [
-                    {
-                        name: "Protected Root Files",
-                        children: [
-                            { name: "README.md", protected: true },
-                            { name: "LICENSE", protected: true },
-                            { name: "requirements.txt", protected: true },
-                            { name: ".gitignore", protected: true },
-                            { name: "setup.py", protected: true }
-                        ]
-                    },
-                    {
-                        name: "src/",
-                        children: [
-                            { name: "All Python files (never moved)", protected: true }
-                        ]
-                    },
-                    {
-                        name: "tests/",
-                        children: [
-                            { name: "All test files (never moved)", protected: true }
-                        ]
-                    },
-                    {
-                        name: "cortex-brain/",
-                        children: [
-                            { name: "*.yaml manifests (never moved)", protected: true },
-                            { name: "*.db databases (never moved)", protected: true },
-                            {
-                                name: "documents/ (cleanup target)",
-                                protected: false,
-                                children: [
-                                    { name: "reports/", protected: false },
-                                    { name: "analysis/", protected: false },
-                                    { name: "summaries/", protected: false }
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            };
-
-            const width = document.getElementById('protectedDirs').clientWidth;
-            const height = 500;
-
-            const svg = d3.select('#protectedDirs')
-                .append('svg')
-                .attr('width', width)
-                .attr('height', height);
-
-            const g = svg.append('g')
-                .attr('transform', `translate(50, 50)`);
-
-            const tree = d3.tree()
-                .size([height - 100, width - 150]);
-
-            const root = d3.hierarchy(data);
-            tree(root);
-
-            g.selectAll('.link')
-                .data(root.links())
-                .enter()
-                .append('path')
-                .attr('d', d3.linkHorizontal()
-                    .x(d => d.y)
-                    .y(d => d.x))
-                .attr('fill', 'none')
-                .attr('stroke', '#64748b')
-                .attr('stroke-width', 2);
-
-            const node = g.selectAll('.node')
-                .data(root.descendants())
-                .enter()
-                .append('g')
-                .attr('transform', d => `translate(${d.y},${d.x})`);
-
-            node.append('circle')
-                .attr('r', 6)
-                .attr('fill', d => d.data.protected ? '#DC2626' : (d.data.protected === false ? '#10B981' : '#FF9800'))
-                .attr('stroke', '#0f172a')
-                .attr('stroke-width', 2);
-
-            node.append('text')
-                .attr('dy', '0.31em')
-                .attr('x', d => d.children ? -10 : 10)
-                .attr('text-anchor', d => d.children ? 'end' : 'start')
-                .text(d => d.data.name)
-                .attr('fill', '#e2e8f0')
-                .attr('font-size', '12px')
-                .clone(true).lower()
-                .attr('stroke', '#0f172a')
-                .attr('stroke-width', 3);
-        }
-
-        function createCleanupImpact() {
-            const categories = [
-                { name: 'Files Moved', before: 0, after: 42 },
-                { name: 'Root Files', before: 58, after: 16 },
-                { name: 'References Updated', before: 0, after: 156 },
-                { name: 'Space Freed (KB)', before: 0, after: 2400 },
-                { name: 'Duplicates Removed', before: 0, after: 8 }
-            ];
-
-            const width = document.getElementById('cleanupImpact').clientWidth;
-            const height = 400;
-            const margin = { top: 40, right: 40, bottom: 60, left: 150 };
-
-            const svg = d3.select('#cleanupImpact')
-                .append('svg')
-                .attr('width', width)
-                .attr('height', height);
-
-            const yScale = d3.scaleBand()
-                .domain(categories.map(d => d.name))
-                .range([margin.top, height - margin.bottom])
-                .padding(0.2);
-
-            const xScale = d3.scaleLinear()
-                .domain([0, d3.max(categories, d => Math.max(d.before, d.after))])
-                .range([margin.left, width - margin.right]);
-
-            // Before bars
-            svg.selectAll('.bar-before')
-                .data(categories)
-                .enter()
-                .append('rect')
-                .attr('class', 'bar-before')
-                .attr('x', margin.left)
-                .attr('y', d => yScale(d.name))
-                .attr('width', d => xScale(d.before) - margin.left)
-                .attr('height', yScale.bandwidth() / 2)
-                .attr('fill', '#64748b')
-                .attr('opacity', 0.5);
-
-            // After bars
-            svg.selectAll('.bar-after')
-                .data(categories)
-                .enter()
-                .append('rect')
-                .attr('class', 'bar-after')
-                .attr('x', margin.left)
-                .attr('y', d => yScale(d.name) + yScale.bandwidth() / 2)
-                .attr('width', d => xScale(d.after) - margin.left)
-                .attr('height', yScale.bandwidth() / 2)
-                .attr('fill', '#FF9800')
-                .attr('opacity', 0.8);
-
-            // Y-axis
-            svg.append('g')
-                .attr('transform', `translate(${margin.left},0)`)
-                .call(d3.axisLeft(yScale))
-                .selectAll('text')
-                .attr('fill', '#e2e8f0');
-
-            // X-axis
-            svg.append('g')
-                .attr('transform', `translate(0,${height - margin.bottom})`)
-                .call(d3.axisBottom(xScale))
-                .selectAll('text')
-                .attr('fill', '#e2e8f0');
-
-            // Legend
-            const legend = svg.append('g')
-                .attr('transform', `translate(${width - 120}, ${margin.top})`);
-
-            legend.append('rect')
-                .attr('width', 20)
-                .attr('height', 10)
-                .attr('fill', '#64748b')
-                .attr('opacity', 0.5);
-
-            legend.append('text')
-                .attr('x', 25)
-                .attr('y', 10)
-                .attr('fill', '#e2e8f0')
-                .attr('font-size', '12px')
-                .text('Before');
-
-            legend.append('rect')
-                .attr('y', 20)
-                .attr('width', 20)
-                .attr('height', 10)
-                .attr('fill', '#FF9800')
-                .attr('opacity', 0.8);
-
-            legend.append('text')
-                .attr('x', 25)
-                .attr('y', 30)
-                .attr('fill', '#e2e8f0')
-                .attr('font-size', '12px')
-                .text('After');
-        }
-
-        window.addEventListener('load', () => {
-            createProtectedDirsTree();
-            createCleanupImpact();
-        });
-  </style>
-</head>
-<body>
+    </script>
 </body>
 </html>
