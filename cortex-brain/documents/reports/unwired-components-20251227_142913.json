@@ -1,0 +1,1154 @@
+{
+  "orchestrators": [
+    {
+      "name": "UpgradeOrchestrator",
+      "file": "src/orchestrators/upgrade_orchestrator_v1.py",
+      "in_operations_yaml": true,
+      "has_response_template": false,
+      "has_triggers": true,
+      "wired": true,
+      "operation_id": "upgrade",
+      "triggers": [
+        "upgrade cortex",
+        "upgrade system",
+        "check for updates",
+        "update cortex",
+        "pull latest changes",
+        "upgrade to latest version"
+      ]
+    },
+    {
+      "name": "MasterSetupOrchestrator",
+      "file": "src/orchestrators/master_setup_orchestrator.py",
+      "in_operations_yaml": false,
+      "has_response_template": false,
+      "has_triggers": false,
+      "wired": false,
+      "operation_id": null,
+      "triggers": []
+    },
+    {
+      "name": "SetupEPMOrchestrator",
+      "file": "src/orchestrators/setup_epm_orchestrator.py",
+      "in_operations_yaml": false,
+      "has_response_template": false,
+      "has_triggers": false,
+      "wired": false,
+      "operation_id": null,
+      "triggers": []
+    },
+    {
+      "name": "RollbackOrchestrator",
+      "file": "src/orchestrators/rollback_orchestrator.py",
+      "in_operations_yaml": true,
+      "has_response_template": false,
+      "has_triggers": true,
+      "wired": true,
+      "operation_id": "rollback_utility",
+      "triggers": [
+        "internal git utility"
+      ]
+    },
+    {
+      "name": "GitCheckpointOrchestrator",
+      "file": "src/orchestrators/git_checkpoint_orchestrator.py",
+      "in_operations_yaml": false,
+      "has_response_template": false,
+      "has_triggers": false,
+      "wired": false,
+      "operation_id": null,
+      "triggers": []
+    },
+    {
+      "name": "ApplicationHealthOrchestrator",
+      "file": "src/orchestrators/application_health_orchestrator.py",
+      "in_operations_yaml": false,
+      "has_response_template": false,
+      "has_triggers": false,
+      "wired": false,
+      "operation_id": null,
+      "triggers": []
+    },
+    {
+      "name": "AlignmentOrchestrator",
+      "file": "src/orchestrators/alignment_orchestrator.py",
+      "in_operations_yaml": true,
+      "has_response_template": false,
+      "has_triggers": true,
+      "wired": true,
+      "operation_id": "realign_plans",
+      "triggers": [
+        "realign plans",
+        "migrate plans to canonical structure",
+        "reorganize plans",
+        "update plan structure"
+      ]
+    },
+    {
+      "name": "OnboardingAcknowledgmentOrchestrator",
+      "file": "src/orchestrators/onboarding_acknowledgment_orchestrator.py",
+      "in_operations_yaml": false,
+      "has_response_template": false,
+      "has_triggers": false,
+      "wired": false,
+      "operation_id": null,
+      "triggers": []
+    },
+    {
+      "name": "UpgradeOrchestratorV2",
+      "file": "src/orchestrators/upgrade_orchestrator_v2.py",
+      "in_operations_yaml": false,
+      "has_response_template": false,
+      "has_triggers": false,
+      "wired": false,
+      "operation_id": null,
+      "triggers": []
+    },
+    {
+      "name": "PlanningOrchestrator",
+      "file": "src/orchestrators/planning_orchestrator.py",
+      "in_operations_yaml": true,
+      "has_response_template": false,
+      "has_triggers": true,
+      "wired": true,
+      "operation_id": "migration_utility",
+      "triggers": [
+        "internal planning utility"
+      ]
+    },
+    {
+      "name": "ADOOrchestrator",
+      "file": "src/orchestrators/ado/ado_orchestrator.py",
+      "in_operations_yaml": true,
+      "has_response_template": false,
+      "has_triggers": true,
+      "wired": true,
+      "operation_id": "ado",
+      "triggers": [
+        "plan ado",
+        "plan ado story",
+        "plan ado feature",
+        "create ado work item",
+        "create new work item",
+        "update ado work item",
+        "update work item",
+        "generate ado completion summary",
+        "generate ado summary",
+        "ado code review",
+        "create plan ado"
+      ]
+    },
+    {
+      "name": "PreFlightOrchestrator",
+      "file": "src/orchestrators/planning/pre_flight_orchestrator.py",
+      "in_operations_yaml": false,
+      "has_response_template": false,
+      "has_triggers": false,
+      "wired": false,
+      "operation_id": null,
+      "triggers": []
+    },
+    {
+      "name": "PlanningOrchestrator",
+      "file": "src/orchestrators/planning/planning_orchestrator.py",
+      "in_operations_yaml": true,
+      "has_response_template": false,
+      "has_triggers": true,
+      "wired": true,
+      "operation_id": "migration_utility",
+      "triggers": [
+        "internal planning utility"
+      ]
+    },
+    {
+      "name": "IntelligenceOrchestrator",
+      "file": "src/orchestrators/planning/intelligence/intelligence_orchestrator.py",
+      "in_operations_yaml": false,
+      "has_response_template": false,
+      "has_triggers": false,
+      "wired": false,
+      "operation_id": null,
+      "triggers": []
+    },
+    {
+      "name": "SystemIntegrityOrchestrator",
+      "file": "src/orchestrators/system/system_integrity_orchestrator.py",
+      "in_operations_yaml": false,
+      "has_response_template": false,
+      "has_triggers": false,
+      "wired": false,
+      "operation_id": null,
+      "triggers": []
+    },
+    {
+      "name": "OrchestratorConfig",
+      "file": "src/orchestrators/story_enhancement/story_enhancement_orchestrator.py",
+      "in_operations_yaml": true,
+      "has_response_template": false,
+      "has_triggers": true,
+      "wired": true,
+      "operation_id": "maintain_cortex",
+      "triggers": [
+        "maintain",
+        "maintenance",
+        "cleanup",
+        "clean workspace",
+        "clean up",
+        "tidy up",
+        "organize workspace",
+        "optimize",
+        "optimize cortex",
+        "run optimization",
+        "improve cortex",
+        "holistic review",
+        "architecture review",
+        "health check",
+        "system scan",
+        "check cortex health",
+        "system health",
+        "brain health check",
+        "how is cortex doing",
+        "run system diagnostics",
+        "validate everything",
+        "comprehensive diagnostics"
+      ]
+    },
+    {
+      "name": "StoryEnhancementOrchestrator",
+      "file": "src/orchestrators/story_enhancement/story_enhancement_orchestrator.py",
+      "in_operations_yaml": false,
+      "has_response_template": false,
+      "has_triggers": false,
+      "wired": false,
+      "operation_id": null,
+      "triggers": []
+    },
+    {
+      "name": "SanitizationOrchestrator",
+      "file": "src/orchestrators/sanitization/sanitization_orchestrator.py",
+      "in_operations_yaml": true,
+      "has_response_template": false,
+      "has_triggers": true,
+      "wired": true,
+      "operation_id": "sanitize",
+      "triggers": [
+        "sanitize",
+        "sanitize codebase",
+        "anonymize project",
+        "make generic",
+        "remove company data",
+        "sanitize code",
+        "clean proprietary data"
+      ]
+    },
+    {
+      "name": "SanitizationOrchestratorV2",
+      "file": "src/orchestrators/sanitization/sanitization_orchestrator_v2_migrated_archived.py",
+      "in_operations_yaml": false,
+      "has_response_template": false,
+      "has_triggers": false,
+      "wired": false,
+      "operation_id": null,
+      "triggers": []
+    },
+    {
+      "name": "TDDOrchestrator",
+      "file": "src/orchestrators/tdd/tdd_orchestrator.py",
+      "in_operations_yaml": true,
+      "has_response_template": false,
+      "has_triggers": true,
+      "wired": true,
+      "operation_id": "tdd_utility",
+      "triggers": [
+        "internal tdd utility"
+      ]
+    },
+    {
+      "name": "TDDOrchestrator",
+      "file": "src/orchestrators/tdd/tdd_orchestrator_v4_migrated.py",
+      "in_operations_yaml": true,
+      "has_response_template": false,
+      "has_triggers": true,
+      "wired": true,
+      "operation_id": "tdd_utility",
+      "triggers": [
+        "internal tdd utility"
+      ]
+    },
+    {
+      "name": "OrchestratorStatus",
+      "file": "src/orchestrators/base/base_orchestrator.py",
+      "in_operations_yaml": true,
+      "has_response_template": false,
+      "has_triggers": true,
+      "wired": true,
+      "operation_id": "maintain_cortex",
+      "triggers": [
+        "maintain",
+        "maintenance",
+        "cleanup",
+        "clean workspace",
+        "clean up",
+        "tidy up",
+        "organize workspace",
+        "optimize",
+        "optimize cortex",
+        "run optimization",
+        "improve cortex",
+        "holistic review",
+        "architecture review",
+        "health check",
+        "system scan",
+        "check cortex health",
+        "system health",
+        "brain health check",
+        "how is cortex doing",
+        "run system diagnostics",
+        "validate everything",
+        "comprehensive diagnostics"
+      ]
+    },
+    {
+      "name": "OrchestratorResult",
+      "file": "src/orchestrators/base/base_orchestrator.py",
+      "in_operations_yaml": false,
+      "has_response_template": false,
+      "has_triggers": false,
+      "wired": false,
+      "operation_id": null,
+      "triggers": []
+    },
+    {
+      "name": "BaseOrchestrator",
+      "file": "src/orchestrators/base/base_orchestrator.py",
+      "in_operations_yaml": true,
+      "has_response_template": false,
+      "has_triggers": true,
+      "wired": true,
+      "operation_id": "maintain_cortex",
+      "triggers": [
+        "maintain",
+        "maintenance",
+        "cleanup",
+        "clean workspace",
+        "clean up",
+        "tidy up",
+        "organize workspace",
+        "optimize",
+        "optimize cortex",
+        "run optimization",
+        "improve cortex",
+        "holistic review",
+        "architecture review",
+        "health check",
+        "system scan",
+        "check cortex health",
+        "system health",
+        "brain health check",
+        "how is cortex doing",
+        "run system diagnostics",
+        "validate everything",
+        "comprehensive diagnostics"
+      ]
+    },
+    {
+      "name": "HandsOnTutorialOrchestrator",
+      "file": "src/operations/modules/hands_on_tutorial_orchestrator.py",
+      "in_operations_yaml": false,
+      "has_response_template": false,
+      "has_triggers": false,
+      "wired": false,
+      "operation_id": null,
+      "triggers": []
+    },
+    {
+      "name": "DemoOrchestrator",
+      "file": "src/operations/modules/demo/demo_orchestrator.py",
+      "in_operations_yaml": true,
+      "has_response_template": false,
+      "has_triggers": true,
+      "wired": true,
+      "operation_id": "workspace_context_manager",
+      "triggers": [
+        "operation name"
+      ]
+    },
+    {
+      "name": "EnterpriseDocumentationOrchestratorModule",
+      "file": "src/operations/modules/documentation/enterprise_documentation_orchestrator_module.py",
+      "in_operations_yaml": false,
+      "has_response_template": false,
+      "has_triggers": false,
+      "wired": false,
+      "operation_id": null,
+      "triggers": []
+    },
+    {
+      "name": "AutoRegistrationOrchestrator",
+      "file": "src/operations/modules/epm/auto_registration_orchestrator.py",
+      "in_operations_yaml": false,
+      "has_response_template": false,
+      "has_triggers": false,
+      "wired": false,
+      "operation_id": null,
+      "triggers": []
+    },
+    {
+      "name": "VacuumOrchestrator",
+      "file": "src/operations/modules/vacuum/vacuum_orchestrator.py",
+      "in_operations_yaml": false,
+      "has_response_template": false,
+      "has_triggers": false,
+      "wired": false,
+      "operation_id": null,
+      "triggers": []
+    },
+    {
+      "name": "OptimizeCortexOrchestrator",
+      "file": "src/operations/modules/optimization/optimize_cortex_orchestrator.py",
+      "in_operations_yaml": false,
+      "has_response_template": false,
+      "has_triggers": false,
+      "wired": false,
+      "operation_id": null,
+      "triggers": []
+    },
+    {
+      "name": "DiagramRegenerationOrchestrator",
+      "file": "src/operations/modules/diagrams/diagram_regeneration_orchestrator.py",
+      "in_operations_yaml": false,
+      "has_response_template": false,
+      "has_triggers": false,
+      "wired": false,
+      "operation_id": null,
+      "triggers": []
+    },
+    {
+      "name": "OptimizeSystemOrchestrator",
+      "file": "src/operations/modules/system/optimize_system_orchestrator.py",
+      "in_operations_yaml": false,
+      "has_response_template": false,
+      "has_triggers": false,
+      "wired": false,
+      "operation_id": null,
+      "triggers": []
+    },
+    {
+      "name": "PublishBranchOrchestrator",
+      "file": "src/operations/modules/publish/publish_branch_orchestrator.py",
+      "in_operations_yaml": false,
+      "has_response_template": false,
+      "has_triggers": false,
+      "wired": false,
+      "operation_id": null,
+      "triggers": []
+    },
+    {
+      "name": "UserCleanupOrchestrator",
+      "file": "src/operations/modules/cleanup/user_cleanup_orchestrator.py",
+      "in_operations_yaml": false,
+      "has_response_template": false,
+      "has_triggers": false,
+      "wired": false,
+      "operation_id": null,
+      "triggers": []
+    },
+    {
+      "name": "CleanupOrchestrator",
+      "file": "src/operations/modules/cleanup/cleanup_orchestrator.py",
+      "in_operations_yaml": true,
+      "has_response_template": false,
+      "has_triggers": true,
+      "wired": true,
+      "operation_id": "cleanup_plans",
+      "triggers": [
+        "cleanup plans",
+        "clean up old plans",
+        "archive completed plans",
+        "manage plan lifecycle"
+      ]
+    },
+    {
+      "name": "HolisticCleanupOrchestrator",
+      "file": "src/operations/modules/cleanup/holistic_cleanup_orchestrator.py",
+      "in_operations_yaml": false,
+      "has_response_template": false,
+      "has_triggers": false,
+      "wired": false,
+      "operation_id": null,
+      "triggers": []
+    },
+    {
+      "name": "ReviewOrchestrator",
+      "file": "src/operations/modules/architectural/review_orchestrator.py",
+      "in_operations_yaml": true,
+      "has_response_template": false,
+      "has_triggers": true,
+      "wired": true,
+      "operation_id": "workspace_context_manager",
+      "triggers": [
+        "operation name"
+      ]
+    },
+    {
+      "name": "ADOValidationOrchestrator",
+      "file": "src/operations/modules/orchestration/ado_validation_orchestrator.py",
+      "in_operations_yaml": false,
+      "has_response_template": false,
+      "has_triggers": false,
+      "wired": false,
+      "operation_id": null,
+      "triggers": []
+    },
+    {
+      "name": "RefinementOrchestrator",
+      "file": "src/operations/modules/orchestration/refinement_orchestrator.py",
+      "in_operations_yaml": true,
+      "has_response_template": false,
+      "has_triggers": true,
+      "wired": true,
+      "operation_id": "refine",
+      "triggers": [
+        "refine",
+        "refine the system",
+        "improve cortex",
+        "optimize cortex holistically",
+        "system refine",
+        "refinement",
+        "improve cortex quality",
+        "enhance system"
+      ]
+    },
+    {
+      "name": "HolisticDiscoveryOrchestrator",
+      "file": "src/operations/modules/orchestration/holistic_discovery_orchestrator.py",
+      "in_operations_yaml": false,
+      "has_response_template": false,
+      "has_triggers": false,
+      "wired": false,
+      "operation_id": null,
+      "triggers": []
+    },
+    {
+      "name": "MaintenanceOrchestrator",
+      "file": "src/operations/modules/orchestration/maintenance_orchestrator.py",
+      "in_operations_yaml": true,
+      "has_response_template": false,
+      "has_triggers": true,
+      "wired": true,
+      "operation_id": "planning_vacuum",
+      "triggers": [
+        "operation name"
+      ]
+    },
+    {
+      "name": "VisionAPIValidationOrchestrator",
+      "file": "src/operations/modules/orchestration/vision_api_validation_orchestrator.py",
+      "in_operations_yaml": false,
+      "has_response_template": false,
+      "has_triggers": false,
+      "wired": false,
+      "operation_id": null,
+      "triggers": []
+    },
+    {
+      "name": "CleanupOrchestrator",
+      "file": "src/operations/modules/orchestration/cleanup_orchestrator.py",
+      "in_operations_yaml": true,
+      "has_response_template": false,
+      "has_triggers": true,
+      "wired": true,
+      "operation_id": "cleanup_plans",
+      "triggers": [
+        "cleanup plans",
+        "clean up old plans",
+        "archive completed plans",
+        "manage plan lifecycle"
+      ]
+    },
+    {
+      "name": "ArchitecturalReviewOrchestrator",
+      "file": "src/operations/modules/orchestration/architectural_review_orchestrator.py",
+      "in_operations_yaml": false,
+      "has_response_template": false,
+      "has_triggers": false,
+      "wired": false,
+      "operation_id": null,
+      "triggers": []
+    },
+    {
+      "name": "BrainTuningOrchestrator",
+      "file": "src/operations/modules/brain/brain_tuning_orchestrator.py",
+      "in_operations_yaml": false,
+      "has_response_template": false,
+      "has_triggers": false,
+      "wired": false,
+      "operation_id": null,
+      "triggers": []
+    },
+    {
+      "name": "DesignSyncOrchestrator",
+      "file": "src/operations/modules/design_sync/design_sync_orchestrator.py",
+      "in_operations_yaml": false,
+      "has_response_template": false,
+      "has_triggers": false,
+      "wired": false,
+      "operation_id": null,
+      "triggers": []
+    }
+  ],
+  "agents": [
+    {
+      "name": "ApplicationHealthAgent",
+      "file": "src/cortex_agents/application_health_agent.py",
+      "wired_in_executor": true,
+      "has_agent_type_enum": false,
+      "wired": false
+    },
+    {
+      "name": "RCAAgent",
+      "file": "src/cortex_agents/rca_agent.py",
+      "wired_in_executor": false,
+      "has_agent_type_enum": true,
+      "wired": false
+    },
+    {
+      "name": "LearningCaptureAgent",
+      "file": "src/cortex_agents/learning_capture_agent.py",
+      "wired_in_executor": false,
+      "has_agent_type_enum": false,
+      "wired": false
+    },
+    {
+      "name": "ComplianceDashboardAgent",
+      "file": "src/cortex_agents/compliance_dashboard_agent.py",
+      "wired_in_executor": false,
+      "has_agent_type_enum": false,
+      "wired": false
+    },
+    {
+      "name": "WelcomeBannerAgent",
+      "file": "src/cortex_agents/welcome_banner_agent.py",
+      "wired_in_executor": false,
+      "has_agent_type_enum": false,
+      "wired": false
+    },
+    {
+      "name": "ProfileAgent",
+      "file": "src/cortex_agents/profile_agent.py",
+      "wired_in_executor": false,
+      "has_agent_type_enum": true,
+      "wired": false
+    },
+    {
+      "name": "LearningLibrarianAgent",
+      "file": "src/cortex_agents/learning_librarian_agent.py",
+      "wired_in_executor": false,
+      "has_agent_type_enum": false,
+      "wired": false
+    },
+    {
+      "name": "ADOAgent",
+      "file": "src/cortex_agents/ado_agent.py",
+      "wired_in_executor": true,
+      "has_agent_type_enum": true,
+      "wired": true
+    },
+    {
+      "name": "ArchitectureIntelligenceAgent",
+      "file": "src/cortex_agents/strategic/architecture_intelligence_agent.py",
+      "wired_in_executor": false,
+      "has_agent_type_enum": false,
+      "wired": false
+    },
+    {
+      "name": "RouterAgent",
+      "file": "src/cortex_agents/operational/router_agent.py",
+      "wired_in_executor": true,
+      "has_agent_type_enum": true,
+      "wired": true
+    }
+  ],
+  "operation_modules": [
+    {
+      "name": "GenerateStoryChaptersModule",
+      "file": "src/operations/modules/generate_story_chapters_module.py",
+      "linked_to_operation": false,
+      "operation_id": null,
+      "wired": false
+    },
+    {
+      "name": "ConversationCaptureModule",
+      "file": "src/operations/modules/conversation_capture_module.py",
+      "linked_to_operation": false,
+      "operation_id": null,
+      "wired": false
+    },
+    {
+      "name": "RefreshDesignDocsModule",
+      "file": "src/operations/modules/refresh_design_docs_module.py",
+      "linked_to_operation": false,
+      "operation_id": null,
+      "wired": false
+    },
+    {
+      "name": "VacuumSQLiteDatabasesModule",
+      "file": "src/operations/modules/vacuum_sqlite_databases_module.py",
+      "linked_to_operation": false,
+      "operation_id": null,
+      "wired": false
+    },
+    {
+      "name": "DashboardLauncherModule",
+      "file": "src/operations/modules/dashboard_launcher_module.py",
+      "linked_to_operation": true,
+      "operation_id": "load_dashboard",
+      "wired": true
+    },
+    {
+      "name": "ContextDisplayModule",
+      "file": "src/operations/modules/context_display_module.py",
+      "linked_to_operation": false,
+      "operation_id": null,
+      "wired": false
+    },
+    {
+      "name": "SaveStoryMarkdownModule",
+      "file": "src/operations/modules/save_story_markdown_module.py",
+      "linked_to_operation": true,
+      "operation_id": "document_cortex",
+      "wired": true
+    },
+    {
+      "name": "ToolingVerificationModule",
+      "file": "src/operations/modules/tooling_verification_module.py",
+      "linked_to_operation": true,
+      "operation_id": "environment_setup",
+      "wired": true
+    },
+    {
+      "name": "PlatformDetectionModule",
+      "file": "src/operations/modules/platform_detection_module.py",
+      "linked_to_operation": true,
+      "operation_id": "environment_setup",
+      "wired": true
+    },
+    {
+      "name": "GenerateCleanupReportModule",
+      "file": "src/operations/modules/generate_cleanup_report_module.py",
+      "linked_to_operation": false,
+      "operation_id": null,
+      "wired": false
+    },
+    {
+      "name": "ContextControlModule",
+      "file": "src/operations/modules/context_control_module.py",
+      "linked_to_operation": false,
+      "operation_id": null,
+      "wired": false
+    },
+    {
+      "name": "AdminDashboardLauncherModule",
+      "file": "src/operations/modules/admin_dashboard_launcher_module.py",
+      "linked_to_operation": false,
+      "operation_id": null,
+      "wired": false
+    },
+    {
+      "name": "ScanDocstringsModule",
+      "file": "src/operations/modules/scan_docstrings_module.py",
+      "linked_to_operation": false,
+      "operation_id": null,
+      "wired": false
+    },
+    {
+      "name": "ConversationTrackingModule",
+      "file": "src/operations/modules/conversation_tracking_module.py",
+      "linked_to_operation": true,
+      "operation_id": "environment_setup",
+      "wired": true
+    },
+    {
+      "name": "GenerateImagePromptsModule",
+      "file": "src/operations/modules/generate_image_prompts_module.py",
+      "linked_to_operation": false,
+      "operation_id": null,
+      "wired": false
+    },
+    {
+      "name": "PythonDependenciesModule",
+      "file": "src/operations/modules/python_dependencies_module.py",
+      "linked_to_operation": true,
+      "operation_id": "environment_setup",
+      "wired": true
+    },
+    {
+      "name": "RelocateStoryFilesModule",
+      "file": "src/operations/modules/relocate_story_files_module.py",
+      "linked_to_operation": false,
+      "operation_id": null,
+      "wired": false
+    },
+    {
+      "name": "VirtualEnvironmentModule",
+      "file": "src/operations/modules/virtual_environment_module.py",
+      "linked_to_operation": true,
+      "operation_id": "environment_setup",
+      "wired": true
+    },
+    {
+      "name": "BrainTestsModule",
+      "file": "src/operations/modules/brain_tests_module.py",
+      "linked_to_operation": true,
+      "operation_id": "environment_setup",
+      "wired": true
+    },
+    {
+      "name": "RemoveOrphanedFilesModule",
+      "file": "src/operations/modules/remove_orphaned_files_module.py",
+      "linked_to_operation": false,
+      "operation_id": null,
+      "wired": false
+    },
+    {
+      "name": "ClearPythonCacheModule",
+      "file": "src/operations/modules/clear_python_cache_module.py",
+      "linked_to_operation": false,
+      "operation_id": null,
+      "wired": false
+    },
+    {
+      "name": "ValidateStoryStructureModule",
+      "file": "src/operations/modules/validate_story_structure_module.py",
+      "linked_to_operation": true,
+      "operation_id": "document_cortex",
+      "wired": true
+    },
+    {
+      "name": "EvaluateCortexArchitectureModule",
+      "file": "src/operations/modules/evaluate_cortex_architecture_module.py",
+      "linked_to_operation": false,
+      "operation_id": null,
+      "wired": false
+    },
+    {
+      "name": "DeployDocsPreviewModule",
+      "file": "src/operations/modules/deploy_docs_preview_module.py",
+      "linked_to_operation": false,
+      "operation_id": null,
+      "wired": false
+    },
+    {
+      "name": "BuildStoryPreviewModule",
+      "file": "src/operations/modules/build_story_preview_module.py",
+      "linked_to_operation": true,
+      "operation_id": "document_cortex",
+      "wired": true
+    },
+    {
+      "name": "RemoveOldLogsModule",
+      "file": "src/operations/modules/remove_old_logs_module.py",
+      "linked_to_operation": false,
+      "operation_id": null,
+      "wired": false
+    },
+    {
+      "name": "ProjectValidationModule",
+      "file": "src/operations/modules/project_validation_module.py",
+      "linked_to_operation": true,
+      "operation_id": "environment_setup",
+      "wired": true
+    },
+    {
+      "name": "LoadProtectionRulesModule",
+      "file": "src/operations/modules/load_protection_rules_module.py",
+      "linked_to_operation": false,
+      "operation_id": null,
+      "wired": false
+    },
+    {
+      "name": "GitSyncModule",
+      "file": "src/operations/modules/git_sync_module.py",
+      "linked_to_operation": true,
+      "operation_id": "environment_setup",
+      "wired": true
+    },
+    {
+      "name": "SetupCompletionModule",
+      "file": "src/operations/modules/setup_completion_module.py",
+      "linked_to_operation": true,
+      "operation_id": "environment_setup",
+      "wired": true
+    },
+    {
+      "name": "LoadStoryTemplateModule",
+      "file": "src/operations/modules/load_story_template_module.py",
+      "linked_to_operation": true,
+      "operation_id": "document_cortex",
+      "wired": true
+    },
+    {
+      "name": "BrainInitializationModule",
+      "file": "src/operations/modules/brain_initialization_module.py",
+      "linked_to_operation": true,
+      "operation_id": "environment_setup",
+      "wired": true
+    },
+    {
+      "name": "VisionAPIModule",
+      "file": "src/operations/modules/vision_api_module.py",
+      "linked_to_operation": true,
+      "operation_id": "environment_setup",
+      "wired": true
+    },
+    {
+      "name": "ApplyNarratorVoiceModule",
+      "file": "src/operations/modules/apply_narrator_voice_module.py",
+      "linked_to_operation": true,
+      "operation_id": "document_cortex",
+      "wired": true
+    },
+    {
+      "name": "GitCheckpointModule",
+      "file": "src/operations/modules/git_checkpoint_module.py",
+      "linked_to_operation": false,
+      "operation_id": null,
+      "wired": false
+    },
+    {
+      "name": "ScanTemporaryFilesModule",
+      "file": "src/operations/modules/scan_temporary_files_module.py",
+      "linked_to_operation": false,
+      "operation_id": null,
+      "wired": false
+    },
+    {
+      "name": "EnterpriseDocumentationOrchestratorModule",
+      "file": "src/operations/modules/documentation/enterprise_documentation_orchestrator_module.py",
+      "linked_to_operation": false,
+      "operation_id": null,
+      "wired": false
+    },
+    {
+      "name": "HardcodedDataCleanerModule",
+      "file": "src/operations/modules/optimization/hardcoded_data_cleaner_module.py",
+      "linked_to_operation": false,
+      "operation_id": null,
+      "wired": false
+    },
+    {
+      "name": "EnhancedFeedbackModule",
+      "file": "src/operations/modules/feedback/enhanced_feedback_module.py",
+      "linked_to_operation": false,
+      "operation_id": null,
+      "wired": false
+    },
+    {
+      "name": "RemoveObsoleteTestsModule",
+      "file": "src/operations/modules/cleanup/remove_obsolete_tests_module.py",
+      "linked_to_operation": false,
+      "operation_id": null,
+      "wired": false
+    }
+  ],
+  "setup_modules": [
+    {
+      "name": "UserProfileModule",
+      "file": "src/setup/modules/user_profile_module.py",
+      "module_id": "user_profile",
+      "in_setup_yaml": false,
+      "in_factory": true,
+      "wired": false
+    },
+    {
+      "name": "PathConfigurationModule",
+      "file": "src/setup/modules/path_configuration_module.py",
+      "module_id": "path_configuration",
+      "in_setup_yaml": false,
+      "in_factory": true,
+      "wired": false
+    },
+    {
+      "name": "PlatformDetectionModule",
+      "file": "src/setup/modules/platform_detection_module.py",
+      "module_id": "platform_detection",
+      "in_setup_yaml": true,
+      "in_factory": true,
+      "wired": true
+    },
+    {
+      "name": "GitIgnoreSetupModule",
+      "file": "src/setup/modules/gitignore_setup_module.py",
+      "module_id": "gitignore_setup",
+      "in_setup_yaml": true,
+      "in_factory": true,
+      "wired": true
+    },
+    {
+      "name": "PythonEnvironmentModule",
+      "file": "src/setup/modules/python_environment_module.py",
+      "module_id": "python_environment",
+      "in_setup_yaml": false,
+      "in_factory": true,
+      "wired": false
+    },
+    {
+      "name": "PythonDependenciesModule",
+      "file": "src/setup/modules/python_dependencies_module.py",
+      "module_id": "python_dependencies",
+      "in_setup_yaml": true,
+      "in_factory": true,
+      "wired": true
+    },
+    {
+      "name": "RefactoringToolsModule",
+      "file": "src/setup/modules/refactoring_tools_module.py",
+      "module_id": "refactoring_tools",
+      "in_setup_yaml": true,
+      "in_factory": true,
+      "wired": true
+    },
+    {
+      "name": "OnboardingModule",
+      "file": "src/setup/modules/onboarding_module.py",
+      "module_id": "onboarding",
+      "in_setup_yaml": true,
+      "in_factory": true,
+      "wired": true
+    },
+    {
+      "name": "BrainInitializationModule",
+      "file": "src/setup/modules/brain_initialization_module.py",
+      "module_id": "brain_initialization",
+      "in_setup_yaml": true,
+      "in_factory": true,
+      "wired": true
+    },
+    {
+      "name": "VisionAPIModule",
+      "file": "src/setup/modules/vision_api_module.py",
+      "module_id": "vision_api",
+      "in_setup_yaml": true,
+      "in_factory": true,
+      "wired": true
+    }
+  ],
+  "plugins": [
+    {
+      "name": "Plugin",
+      "file": "src/plugins/extension_scaffold_plugin.py",
+      "registered": false,
+      "wired": false
+    },
+    {
+      "name": "ConversationImportPlugin",
+      "file": "src/plugins/conversation_import_plugin.py",
+      "registered": false,
+      "wired": false
+    },
+    {
+      "name": "InvestigationSecurityPlugin",
+      "file": "src/plugins/investigation_security_plugin.py",
+      "registered": false,
+      "wired": false
+    },
+    {
+      "name": "ConfigurationWizardPlugin",
+      "file": "src/plugins/configuration_wizard_plugin.py",
+      "registered": false,
+      "wired": false
+    },
+    {
+      "name": "SweeperPlugin",
+      "file": "src/plugins/sweeper_plugin.py",
+      "registered": false,
+      "wired": false
+    },
+    {
+      "name": "Plugin",
+      "file": "src/plugins/cleanup_plugin.py",
+      "registered": false,
+      "wired": false
+    },
+    {
+      "name": "InvestigationRefactoringPlugin",
+      "file": "src/plugins/investigation_refactoring_plugin.py",
+      "registered": false,
+      "wired": false
+    },
+    {
+      "name": "DocRefreshPlugin",
+      "file": "src/plugins/doc_refresh_plugin.py",
+      "registered": false,
+      "wired": false
+    },
+    {
+      "name": "PhaseTrackerPlugin",
+      "file": "src/plugins/phase_tracker_plugin.py",
+      "registered": false,
+      "wired": false
+    },
+    {
+      "name": "InvestigationHtmlIdMappingPlugin",
+      "file": "src/plugins/investigation_html_id_mapping_plugin.py",
+      "registered": false,
+      "wired": false
+    },
+    {
+      "name": "SystemRefactorPlugin",
+      "file": "src/plugins/system_refactor_plugin.py",
+      "registered": false,
+      "wired": false
+    },
+    {
+      "name": "PlatformSwitchPlugin",
+      "file": "src/plugins/platform_switch_plugin.py",
+      "registered": false,
+      "wired": false
+    },
+    {
+      "name": "CodeReviewPlugin",
+      "file": "src/plugins/code_review_plugin.py",
+      "registered": false,
+      "wired": false
+    }
+  ],
+  "summary": {
+    "orchestrators": {
+      "total": 46,
+      "wired": 18,
+      "unwired": 28,
+      "wiring_percentage": 39.1
+    },
+    "agents": {
+      "total": 10,
+      "wired": 2,
+      "unwired": 8,
+      "wiring_percentage": 20.0
+    },
+    "operation_modules": {
+      "total": 40,
+      "wired": 17,
+      "unwired": 23,
+      "wiring_percentage": 42.5
+    },
+    "setup_modules": {
+      "total": 10,
+      "wired": 7,
+      "unwired": 3,
+      "wiring_percentage": 70.0
+    },
+    "plugins": {
+      "total": 13,
+      "wired": 0,
+      "unwired": 13,
+      "wiring_percentage": 0.0
+    },
+    "overall": {
+      "total_components": 119,
+      "wired_components": 44,
+      "unwired_components": 75,
+      "overall_wiring_percentage": 37.0
+    }
+  }
+}

@@ -106,6 +106,45 @@ modules:
       python_version_min: "3.10"
       create_if_missing: true
   
+  - module_id: user_profile
+    name: User Profile Configuration
+    description: Configure user profile settings and preferences
+    phase: ENVIRONMENT
+    priority: 35
+    dependencies: [platform_detection]
+    optional: true
+    enabled_by_default: false
+    config:
+      default_editor: vscode
+      default_shell: auto-detect
+      save_preferences: true
+  
+  - module_id: path_configuration
+    name: Path Configuration
+    description: Configure system and project paths for CORTEX operations
+    phase: ENVIRONMENT
+    priority: 40
+    dependencies: [platform_detection]
+    optional: false
+    enabled_by_default: true
+    config:
+      auto_detect: true
+      validate_paths: true
+      create_missing: false
+  
+  - module_id: python_environment
+    name: Python Environment Setup
+    description: Configure Python environment and verify Python version requirements
+    phase: ENVIRONMENT
+    priority: 45
+    dependencies: [virtual_environment]
+    optional: false
+    enabled_by_default: true
+    config:
+      min_version: "3.10"
+      verify_pip: true
+      verify_venv: true
+  
   # ============================================
   # Phase 3: DEPENDENCIES
   # ============================================
@@ -321,6 +360,8 @@ profiles:
       - platform_detection
       - git_sync
       - virtual_environment
+      - path_configuration
+      - python_environment
       - python_dependencies
       - brain_initialization
       - smart_refactoring_recommender
@@ -337,6 +378,9 @@ profiles:
       - platform_detection
       - git_sync
       - virtual_environment
+      - user_profile
+      - path_configuration
+      - python_environment
       - python_dependencies
       - optional_dependencies
       - vision_api

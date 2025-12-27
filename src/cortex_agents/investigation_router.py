@@ -343,6 +343,12 @@ class InvestigationRouter:
             from src.plugins.plugin_registry import get_registry
             
             registry = get_registry()
+            
+            # Ensure plugins are discovered
+            if not registry.is_initialized:
+                plugin_count = registry.discover_plugins()
+                self.logger.info(f"Plugin discovery: {plugin_count} plugins loaded")
+            
             available_plugins = registry.get_all_plugins()
             
             # Filter plugins that handle investigation analysis

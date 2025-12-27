@@ -21,6 +21,20 @@ from src.cortex_agents.tactical.code_executor import CodeExecutor
 from src.agents.feedback_agent import FeedbackAgent
 from src.cortex_agents.ado_agent import ADOAgent
 from src.cortex_agents.application_health_agent import ApplicationHealthAgent
+from src.cortex_agents.profile_agent import ProfileAgent
+from src.cortex_agents.rca_agent import RCAAgent
+from src.cortex_agents.learning_capture_agent import LearningCaptureAgent
+from src.cortex_agents.compliance_dashboard_agent import ComplianceDashboardAgent
+from src.cortex_agents.welcome_banner_agent import WelcomeBannerAgent
+from src.cortex_agents.learning_librarian_agent import LearningLibrarianAgent
+
+# ArchitectureIntelligenceAgent has broken dependency chain - import with fallback
+try:
+    from src.cortex_agents.strategic.architecture_intelligence_agent import ArchitectureIntelligenceAgent
+    _architecture_intelligence_available = True
+except ImportError as e:
+    _architecture_intelligence_available = False
+    logging.getLogger(__name__).warning(f"ArchitectureIntelligenceAgent not available: {e}")
 
 
 class AgentExecutor:
@@ -181,6 +195,50 @@ class AgentExecutor:
                 tier1_api=self.tier1,
                 tier2_kg=self.tier2,
                 tier3_context=self.tier3
+            )
+        elif agent_type == AgentType.PROFILE:
+            # ProfileAgent for user profile management
+            agent = ProfileAgent(
+                name="ProfileAgent",
+                tier1_api=self.tier1,
+                tier2_kg=self.tier2,
+                tier3_context=self.tier3
+            )
+        elif agent_type == AgentType.RCA:
+            # RCAAgent for root cause analysis
+            agent = RCAAgent(
+                name="RCAAgent"
+            )
+        elif agent_type == AgentType.ARCHITECTURE_INTELLIGENCE:
+            # ArchitectureIntelligenceAgent for architecture health analysis
+            if _architecture_intelligence_available:
+                agent = ArchitectureIntelligenceAgent(
+                    name="ArchitectureIntelligenceAgent",
+                    tier1_api=self.tier1,
+                    tier2_kg=self.tier2,
+                    tier3_context=self.tier3
+                )
+            else:
+                self.logger.warning("ArchitectureIntelligenceAgent not available due to missing dependencies")
+        elif agent_type == AgentType.LEARNING_CAPTURE:
+            # LearningCaptureAgent for capturing learning from conversations
+            agent = LearningCaptureAgent(
+                name="LearningCaptureAgent"
+            )
+        elif agent_type == AgentType.COMPLIANCE_DASHBOARD:
+            # ComplianceDashboardAgent for compliance tracking
+            agent = ComplianceDashboardAgent(
+                name="ComplianceDashboardAgent"
+            )
+        elif agent_type == AgentType.WELCOME_BANNER:
+            # WelcomeBannerAgent for welcome messages
+            agent = WelcomeBannerAgent(
+                name="WelcomeBannerAgent"
+            )
+        elif agent_type == AgentType.LEARNING_LIBRARIAN:
+            # LearningLibrarianAgent for learning library management
+            agent = LearningLibrarianAgent(
+                name="LearningLibrarianAgent"
             )
         # Add other agents as needed
         else:

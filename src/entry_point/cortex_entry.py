@@ -117,6 +117,9 @@ class CortexEntry:
         self._debug_orchestrator = None
         self._observers_wired = False
         
+        # Plugin registry (lazy-loaded)
+        self._plugin_registry = None
+        
         # Always initialize lightweight components
         self.parser = RequestParser()
         self.formatter = ResponseFormatter()
@@ -240,6 +243,27 @@ class CortexEntry:
             )
             self.logger.debug("Brain Protector loaded")
         return self._brain_protector
+    
+    @property
+    def plugin_registry(self):
+        """Lazy-load Plugin Registry with auto-discovery."""
+        if self._plugin_registry is None:
+            try:
+                from src.plugins.plugin_registry import get_registry
+                registry = get_registry()
+                
+                # Auto-discover plugins if not already initialized
+                if not registry.is_initialized:
+                    plugin_count = registry.discover_plugins()
+                    self.logger.info(f"Plugin registry loaded: {plugin_count} plugins discovered")
+                else:
+                    self.logger.debug(f"Plugin registry already initialized: {registry.plugin_count} plugins")
+                
+                self._plugin_registry = registry
+            except ImportError as e:
+                self.logger.warning(f"Plugin registry not available: {e}")
+                self._plugin_registry = None
+        return self._plugin_registry
     
     @property
     def learning_observer(self):

@@ -25,10 +25,15 @@ class AgentType(Enum):
     COMMITTER = auto()       # CommitHandler
     FEEDBACK = auto()        # FeedbackAgent (NEW - Feedback collection)
     PROFILE = auto()         # ProfileAgent (NEW - User Profile System)
+    ADO = auto()             # ADOAgent (Azure DevOps) - simple alias
     ADO_ORCHESTRATOR = auto() # ADO/Unified Entry Point (NEW - ADO Integration)
     ESTIMATOR = auto()       # TimeframeEstimator (NEW - SWAGGER Timeframe Estimation)
     RCA = auto()             # RCAAgent (NEW - Root Cause Analysis)
     APPLICATION_HEALTH = auto()  # ApplicationHealthOrchestrator (NEW - Application Health Dashboard)
+    LEARNING_CAPTURE = auto()    # LearningCaptureAgent (NEW - Capture learning from conversations)
+    COMPLIANCE_DASHBOARD = auto() # ComplianceDashboardAgent (NEW - Compliance tracking)
+    WELCOME_BANNER = auto()      # WelcomeBannerAgent (NEW - Welcome messages)
+    LEARNING_LIBRARIAN = auto()  # LearningLibrarianAgent (NEW - Learning library management)
 
 
 class IntentType(Enum):

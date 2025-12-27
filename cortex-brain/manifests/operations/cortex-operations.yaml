@@ -19,6 +19,8 @@ operations:
     category: system
     modules:
     - system_integrity_orchestrator
+    - load_protection_rules
+    - evaluate_cortex_architecture
     profiles:
       full:
         description: "Full 8-phase integrity check (analyze \u2192 tests \u2192 docs\
@@ -279,6 +281,7 @@ operations:
     category: planning
     modules:
     - maintenance_orchestrator
+    - vacuum_sqlite_databases
     profiles:
       standard:
         description: "Full maintenance workflow v3.0 (healthcheck \u2192 align \u2192\
@@ -314,6 +317,9 @@ operations:
     category: conversation
     modules:
     - resume_conversation_orchestrator
+    - conversation_capture
+    - context_display
+    - context_control
     profiles:
       standard:
         description: Resume conversation with full context
@@ -347,6 +353,7 @@ operations:
     category: analysis
     modules:
     - ast_narrative_orchestrator
+    - generate_story_chapters
     profiles:
       executive:
         description: Generate executive-level narrative (non-technical, 1500-2000
@@ -521,6 +528,7 @@ operations:
     category: general
     modules:
     - regenerate_cortex_prompts
+    - enhanced_feedback
     profiles:
       standard:
         description: Backup, delete, scan codebase, regenerate prompt files
@@ -718,6 +726,12 @@ operations:
     natural_language:
     - operation name
     category: documentation
+    modules:
+    - refresh_design_docs
+    - enterprise_documentation
+    - scan_docstrings
+    - generate_image_prompts
+    - deploy_docs_preview
   enhanced_collectors:
     name: Enhanced Collectors
     description: Enhanced Dashboard Data Collectors
@@ -824,6 +838,8 @@ operations:
     - admin dashboard
     - dashboard admin
     category: visualization
+    modules:
+    - admin_dashboard_launcher
     status: planned
     notes: Deferred - Dashboard system requires redesign. Admin-only feature. Launches
       dashboard with dropdown of all available repositories. Blocked from production
@@ -902,6 +918,7 @@ operations:
     category: developer_tools
     modules:
     - sanitization_orchestrator
+    - hardcoded_data_cleaner
     profiles:
       standard:
         description: "5-phase sanitization workflow: analyze \u2192 mapping \u2192\
@@ -980,6 +997,14 @@ operations:
     natural_language:
     - dry run complete
     category: maintenance
+    modules:
+    - remove_orphaned_files
+    - clear_python_cache
+    - remove_old_logs
+    - scan_temporary_files
+    - generate_cleanup_report
+    - relocate_story_files
+    - remove_obsolete_tests
   commit:
     name: Commit
     description: Commit Entry Point
@@ -1044,6 +1069,8 @@ operations:
     - cortex git checkpoint utility
     - create
     category: git
+    modules:
+    - git_checkpoint
   header_formatter:
     name: Header Formatter
     description: CORTEX Orchestrator Header Formatter
@@ -3157,6 +3184,695 @@ operations:
     author: Asif Hussain
     modules:
     - src.operations.modules.validation/session_utility
+
+  # ============================================================================
+  # NEWLY WIRED ORCHESTRATORS (Wiring Remediation - December 2025)
+  # ============================================================================
+
+  git_checkpoint:
+    name: Git Checkpoint
+    description: Automated git commits during TDD workflow (RED→GREEN→REFACTOR) with
+      session tracking and meaningful commit messages
+    deployment_tier: dual_context
+    execution_method: copilot_chat
+    natural_language:
+    - git checkpoint
+    - commit progress
+    - save checkpoint
+    - checkpoint commit
+    - tdd checkpoint
+    - create checkpoint
+    - save tdd progress
+    category: development
+    modules:
+    - git_checkpoint_orchestrator
+    - git_checkpoint
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Integrates with TDD workflow for automated checkpoint commits during
+        RED→GREEN→REFACTOR cycle. Session-based tracking with UUID.
+    examples:
+    - git checkpoint
+    - save checkpoint for RED phase
+    - checkpoint commit with message
+
+  design_sync:
+    name: Design Sync
+    description: Sync design documents with implementation reality. Detects gaps between
+      documented design and actual code, generates sync reports.
+    deployment_tier: admin
+    execution_method: copilot_chat
+    natural_language:
+    - design sync
+    - sync design
+    - align design docs
+    - sync design documents
+    - design implementation sync
+    - check design alignment
+    - verify design matches code
+    category: documentation
+    modules:
+    - design_sync_orchestrator
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Analyzes design documents vs implementation, generates gap analysis
+        reports, suggests updates.
+    examples:
+    - design sync
+    - sync design documents
+    - check design alignment
+
+  regenerate_diagrams:
+    name: Regenerate Diagrams
+    description: Regenerate architecture diagrams from code. Updates Mermaid diagrams,
+      component relationships, and system architecture visuals.
+    deployment_tier: admin
+    execution_method: copilot_chat
+    natural_language:
+    - regenerate diagrams
+    - update diagrams
+    - refresh architecture diagrams
+    - regenerate architecture
+    - update mermaid diagrams
+    - refresh diagrams
+    - rebuild diagrams
+    category: documentation
+    modules:
+    - diagram_regeneration_orchestrator
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Scans codebase structure, generates Mermaid diagrams, updates
+        architecture documentation.
+    examples:
+    - regenerate diagrams
+    - update architecture diagrams
+    - refresh mermaid diagrams
+
+  app_health:
+    name: Application Health
+    description: Comprehensive application health monitoring and diagnostics. Checks
+      system components, dependencies, and performance metrics.
+    deployment_tier: dual_context
+    execution_method: copilot_chat
+    natural_language:
+    - app health
+    - check application
+    - health status
+    - application health
+    - check system health
+    - health check
+    - system diagnostics
+    - check app status
+    category: monitoring
+    modules:
+    - application_health_orchestrator
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Returns health metrics, identifies issues, checks component status.
+    examples:
+    - app health
+    - check application health
+    - system health status
+
+  vacuum:
+    name: Vacuum Databases
+    description: SQLite database optimization - VACUUM command to reclaim space and
+      defragment databases for improved performance.
+    deployment_tier: admin
+    execution_method: copilot_chat
+    natural_language:
+    - vacuum databases
+    - optimize db
+    - clean databases
+    - vacuum sqlite
+    - database cleanup
+    - optimize databases
+    - reclaim database space
+    category: maintenance
+    modules:
+    - vacuum_orchestrator
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Vacuums all CORTEX SQLite databases, reports space reclaimed.
+    examples:
+    - vacuum databases
+    - optimize cortex databases
+    - clean sqlite databases
+
+  holistic_cleanup:
+    name: Holistic Cleanup
+    description: Comprehensive cleanup across entire CORTEX system - removes orphaned
+      files, clears caches, archives old logs, cleans temporary files.
+    deployment_tier: admin
+    execution_method: copilot_chat
+    natural_language:
+    - holistic cleanup
+    - full cleanup
+    - comprehensive cleanup
+    - deep cleanup
+    - system cleanup
+    - cleanup everything
+    category: maintenance
+    modules:
+    - holistic_cleanup_orchestrator
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Multi-phase cleanup covering all system areas.
+    examples:
+    - holistic cleanup
+    - run full cleanup
+    - comprehensive system cleanup
+
+  architectural_review:
+    name: Architectural Review
+    description: Automated architecture analysis - checks for anti-patterns, suggests
+      improvements, validates SOLID principles.
+    deployment_tier: admin
+    execution_method: copilot_chat
+    natural_language:
+    - architectural review
+    - review architecture
+    - analyze architecture
+    - check architecture
+    - architecture analysis
+    - validate architecture
+    category: quality
+    modules:
+    - architectural_review_orchestrator
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Static analysis for architectural patterns and anti-patterns.
+    examples:
+    - architectural review
+    - analyze system architecture
+    - check for anti-patterns
+
+  brain_tuning:
+    name: Brain Tuning
+    description: Optimize CORTEX brain databases and knowledge structures for improved
+      performance and recall accuracy.
+    deployment_tier: admin
+    execution_method: copilot_chat
+    natural_language:
+    - brain tuning
+    - tune brain
+    - optimize brain
+    - brain optimization
+    - tune knowledge graph
+    - optimize memory
+    category: maintenance
+    modules:
+    - brain_tuning_orchestrator
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Optimizes tier databases, prunes stale knowledge, improves retrieval.
+    examples:
+    - brain tuning
+    - optimize cortex brain
+    - tune knowledge structures
+
+  # ============================================================================
+  # PHASE 4: REMAINING ORCHESTRATORS (Wiring Remediation - December 2025)
+  # ============================================================================
+
+  master_setup:
+    name: Master Setup
+    description: Master setup orchestrator for coordinating all setup modules in correct
+      sequence with dependency resolution.
+    deployment_tier: admin
+    execution_method: copilot_chat
+    natural_language:
+    - master setup
+    - setup cortex
+    - run setup
+    - cortex setup
+    - full setup
+    - initialize cortex
+    category: setup
+    modules:
+    - master_setup_orchestrator
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Coordinates all setup modules with dependency resolution
+    examples:
+    - master setup
+    - run full cortex setup
+
+  setup_epm:
+    name: Setup EPM
+    description: Enterprise Portfolio Management setup - configures EPM integration
+      and portfolio tracking features.
+    deployment_tier: admin
+    execution_method: copilot_chat
+    natural_language:
+    - setup epm
+    - configure epm
+    - epm setup
+    - portfolio setup
+    - enterprise portfolio management
+    category: setup
+    modules:
+    - setup_epm_orchestrator
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: EPM integration setup for portfolio management
+    examples:
+    - setup epm
+    - configure enterprise portfolio
+
+  onboarding_acknowledgment:
+    name: Onboarding Acknowledgment
+    description: Handles user acknowledgment during onboarding process. Tracks user
+      acceptance of terms and initial configuration choices.
+    deployment_tier: dual_context
+    execution_method: copilot_chat
+    natural_language:
+    - onboarding acknowledge
+    - acknowledge onboarding
+    - confirm onboarding
+    - accept terms
+    - complete onboarding
+    category: onboarding
+    modules:
+    - onboarding_acknowledgment_orchestrator
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Tracks user acknowledgment during onboarding flow
+    examples:
+    - acknowledge onboarding
+    - confirm onboarding completion
+
+  upgrade_v2:
+    name: Upgrade V2
+    description: Enhanced upgrade orchestrator v2 with improved safety checks, rollback
+      support, and incremental upgrade paths.
+    deployment_tier: admin
+    execution_method: copilot_chat
+    natural_language:
+    - upgrade v2
+    - enhanced upgrade
+    - safe upgrade
+    - incremental upgrade
+    - upgrade cortex v2
+    category: maintenance
+    modules:
+    - upgrade_orchestrator_v2
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: V2 upgrade with rollback support and safety checks
+    examples:
+    - upgrade v2
+    - run enhanced upgrade
+
+  pre_flight:
+    name: Pre-flight Check
+    description: Pre-flight validation before major operations. Checks system readiness,
+      validates configurations, ensures prerequisites are met.
+    deployment_tier: dual_context
+    execution_method: copilot_chat
+    natural_language:
+    - pre-flight
+    - preflight check
+    - pre flight
+    - check readiness
+    - validate prerequisites
+    - system readiness check
+    category: validation
+    modules:
+    - pre_flight_orchestrator
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Validates system state before major operations
+    examples:
+    - run pre-flight
+    - check system readiness
+
+  intelligence:
+    name: Intelligence Gathering
+    description: Gather intelligence about codebase, patterns, and system state for
+      informed decision making during planning.
+    deployment_tier: admin
+    execution_method: copilot_chat
+    natural_language:
+    - gather intelligence
+    - intelligence report
+    - analyze codebase
+    - system intelligence
+    - code intelligence
+    category: analysis
+    modules:
+    - intelligence_orchestrator
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Collects and analyzes codebase intelligence for planning
+    examples:
+    - gather intelligence
+    - generate intelligence report
+
+  system_integrity_check:
+    name: System Integrity Check
+    description: Deep system integrity validation - verifies file integrity, configuration
+      consistency, and system health markers.
+    deployment_tier: admin
+    execution_method: copilot_chat
+    natural_language:
+    - integrity check
+    - check integrity
+    - verify integrity
+    - system integrity check
+    - validate system integrity
+    category: validation
+    modules:
+    - system_integrity_orchestrator
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Deep integrity validation across system
+    examples:
+    - run integrity check
+    - verify system integrity
+
+  story_enhancement:
+    name: Story Enhancement
+    description: Enhance user stories with technical details, acceptance criteria,
+      and implementation guidance.
+    deployment_tier: dual_context
+    execution_method: copilot_chat
+    natural_language:
+    - enhance story
+    - story enhancement
+    - improve story
+    - add story details
+    - enrich story
+    category: planning
+    modules:
+    - story_enhancement_orchestrator
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Enriches user stories with technical details
+    examples:
+    - enhance story
+    - add technical details to story
+
+  hands_on_tutorial:
+    name: Hands-on Tutorial
+    description: Interactive tutorial system for learning CORTEX features through
+      guided hands-on exercises.
+    deployment_tier: dual_context
+    execution_method: copilot_chat
+    natural_language:
+    - hands on tutorial
+    - interactive tutorial
+    - learn cortex
+    - tutorial mode
+    - guided learning
+    - start tutorial
+    category: learning
+    modules:
+    - hands_on_tutorial_orchestrator
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Guided interactive learning for CORTEX features
+    examples:
+    - start hands-on tutorial
+    - learn cortex interactively
+
+  enterprise_documentation:
+    name: Enterprise Documentation
+    description: Generate enterprise-grade documentation with compliance headers,
+      audit trails, and versioning.
+    deployment_tier: admin
+    execution_method: copilot_chat
+    natural_language:
+    - enterprise docs
+    - enterprise documentation
+    - generate enterprise docs
+    - compliance documentation
+    - audit documentation
+    category: documentation
+    modules:
+    - enterprise_documentation_orchestrator
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Enterprise documentation with compliance and audit support
+    examples:
+    - generate enterprise docs
+    - create compliance documentation
+
+  auto_registration:
+    name: Auto Registration
+    description: Automatic component registration for dynamic discovery and wiring
+      of new modules, orchestrators, and agents.
+    deployment_tier: admin
+    execution_method: copilot_chat
+    natural_language:
+    - auto register
+    - auto registration
+    - register components
+    - dynamic registration
+    - auto wire components
+    category: system
+    modules:
+    - auto_registration_orchestrator
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Dynamic component discovery and registration
+    examples:
+    - run auto registration
+    - register new components
+
+  optimize_cortex:
+    name: Optimize CORTEX
+    description: Comprehensive CORTEX optimization - performance tuning, cache optimization,
+      and resource management.
+    deployment_tier: admin
+    execution_method: copilot_chat
+    natural_language:
+    - optimize cortex
+    - cortex optimization
+    - performance tuning
+    - tune cortex
+    - optimize performance
+    category: maintenance
+    modules:
+    - optimize_cortex_orchestrator
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Performance optimization for CORTEX system
+    examples:
+    - optimize cortex
+    - run performance tuning
+
+  optimize_system:
+    name: Optimize System
+    description: System-level optimization for host machine - memory management, process
+      optimization, and resource cleanup.
+    deployment_tier: admin
+    execution_method: copilot_chat
+    natural_language:
+    - optimize system
+    - system optimization
+    - optimize host
+    - system tune
+    - optimize resources
+    category: maintenance
+    modules:
+    - optimize_system_orchestrator
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Host system optimization and resource management
+    examples:
+    - optimize system
+    - tune host system
+
+  publish_branch:
+    name: Publish Branch
+    description: Publish feature branch for deployment - validates, packages, and
+      prepares branch for production release.
+    deployment_tier: admin
+    execution_method: copilot_chat
+    natural_language:
+    - publish branch
+    - prepare release
+    - release branch
+    - deploy branch
+    - publish for deployment
+    category: deployment
+    modules:
+    - publish_branch_orchestrator
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Branch packaging and release preparation
+    examples:
+    - publish branch
+    - prepare branch for release
+
+  user_cleanup:
+    name: User Cleanup
+    description: Clean up user-specific artifacts - temporary files, cache, and session
+      data in user workspace.
+    deployment_tier: dual_context
+    execution_method: copilot_chat
+    natural_language:
+    - user cleanup
+    - clean user files
+    - cleanup workspace
+    - clear user cache
+    - clean my workspace
+    category: maintenance
+    modules:
+    - user_cleanup_orchestrator
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: User workspace cleanup operations
+    examples:
+    - run user cleanup
+    - clean my workspace
+
+  ado_validation:
+    name: ADO Validation
+    description: Validate Azure DevOps work items - checks format, required fields,
+      and compliance with templates.
+    deployment_tier: dual_context
+    execution_method: copilot_chat
+    natural_language:
+    - validate ado
+    - ado validation
+    - check work item
+    - validate work items
+    - ado compliance check
+    category: validation
+    modules:
+    - ado_validation_orchestrator
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Work item validation and compliance checking
+    examples:
+    - validate ado work items
+    - check ado compliance
+
+  holistic_discovery:
+    name: Holistic Discovery
+    description: Comprehensive codebase discovery - scans all components, maps relationships,
+      and generates system overview.
+    deployment_tier: admin
+    execution_method: copilot_chat
+    natural_language:
+    - holistic discovery
+    - full discovery
+    - discover all
+    - system discovery
+    - comprehensive scan
+    - map codebase
+    category: analysis
+    modules:
+    - holistic_discovery_orchestrator
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Full codebase scanning and relationship mapping
+    examples:
+    - run holistic discovery
+    - discover all components
+
+  vision_api_validation:
+    name: Vision API Validation
+    description: Validate Vision API configuration and connectivity. Tests image analysis
+      capabilities and API health.
+    deployment_tier: admin
+    execution_method: copilot_chat
+    natural_language:
+    - validate vision api
+    - vision api check
+    - check vision api
+    - test vision api
+    - vision validation
+    category: validation
+    modules:
+    - vision_api_validation_orchestrator
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Vision API health and configuration validation
+    examples:
+    - validate vision api
+    - test vision api connectivity
+
 modules:
   project_validation:
     name: Project Validation
