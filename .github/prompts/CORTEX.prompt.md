@@ -377,6 +377,12 @@ python -m src.main
 
 ## 📚 Additional Resources
 
+**Learning Paths (NEW):**
+- `cortex-brain/documents/learning-paths/README.md` - Learning path index (3 paths)
+- `cortex-brain/documents/learning-paths/CORTEX-4.0-QUICK-START.md` - 10-minute quick start
+- `cortex-brain/documents/learning-paths/CORTEX-4.0-INTERACTIVE-TUTORIAL.md` - 45-60 min comprehensive tutorial
+- `cortex-brain/documents/learning-paths/CORTEX-4.0-PRACTICE-EXERCISES.md` - 30 hands-on exercises
+
 **Module Guides:**
 - `modules/planning-orchestrator-guide.md` - Planning System
 - `modules/tdd-mastery-guide.md` - TDD workflow

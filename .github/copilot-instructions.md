@@ -266,6 +266,7 @@ python -m src.main
 | `cortex-brain/brain-protection-rules.yaml` | SKULL rules |
 | `cortex-brain/response-templates-v4.yaml` | 62 templates |
 | `cortex.config.json` | Machine settings |
+| `cortex-brain/documents/learning-paths/` | Interactive tutorials (NEW) |
 
 ---
 
@@ -296,5 +297,7 @@ python -m src.main
 ---
 
 **Quick Start:** Say "help" to see available operations.
+
+**New Users:** Check `cortex-brain/documents/learning-paths/` for tutorials.
 
 **Anti-Bloat:** This file MUST stay under 300 lines.
