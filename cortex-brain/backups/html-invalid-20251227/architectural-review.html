@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Architectural Review Orchestrator | CORTEX Technical Documentation</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root { --primary: #9C27B0; --success: #10B981; --warning: #F59E0B; --error: #DC2626; }
+        body { font-family: 'Inter', -apple-system, sans-serif; margin: 0; padding: 0; background: #0f172a; color: #e2e8f0; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+        header { text-align: center; padding: 3rem 0; border-bottom: 2px solid var(--primary); }
+        header h1 { font-size: 3rem; font-weight: 700; color: var(--primary); margin: 0; }
+        header .subtitle { font-size: 1.2rem; color: #94a3b8; margin-top: 0.5rem; }
+        .metadata { display: flex; justify-content: center; gap: 2rem; margin-top: 1rem; flex-wrap: wrap; }
+        .metadata-item { background: rgba(255, 255, 255, 0.05); padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.9rem; }
+        .section { margin: 3rem 0; }
+        .section-title { font-size: 2rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; border-left: 4px solid var(--primary); padding-left: 1rem; }
+        .intro-text { font-size: 1.1rem; line-height: 1.8; color: #cbd5e1; margin-bottom: 2rem; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+        .feature-card { background: #1e293b; border-radius: 12px; padding: 1.5rem; border-left: 4px solid var(--primary); transition: transform 0.2s; }
+        .feature-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(255, 255, 255, 0.1); }
+        .viz-container { background: #1e293b; border-radius: 12px; padding: 2rem; margin: 2rem 0; }
+        .mermaid { background: #0f172a; border-radius: 8px; padding: 2rem; }
+        .breadcrumb { background: rgba(30, 41, 59, 0.8); padding: 1rem 2rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .breadcrumb a { color: var(--primary); text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .breadcrumb-separator { color: #64748b; margin: 0 0.5rem; }
+        .breadcrumb-current { color: #e2e8f0; }
+        footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid #334155; margin-top: 4rem; color: #64748b; }
+    </style>
+</head>
+<body>
+    <nav class="breadcrumb">
+        <a href="../../index.html">Home</a>
+        <span class="breadcrumb-separator">›</span>
+        <a href="index.html">Orchestrators</a>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-current">Architectural Review</span>
+    </nav>
+    
+    <div class="container">
+        <header>
+            <h1>🏛️ Architectural Review Orchestrator</h1>
+            <p class="subtitle">6-Phase Analysis with 0-100 Scoring</p>
+            <div class="metadata">
+                <div class="metadata-item"><span>Complexity:</span> <span>MEDIUM</span></div>
+                <div class="metadata-item"><span>File:</span> <span>review_orchestrator.py</span></div>
+            </div>
+        </header>
+        
+        <section class="section">
+            <div class="intro-text">Comprehensive 6-phase architectural analysis with 0-100 scoring system. Evaluates code structure, design patterns, SOLID principles, scalability, and maintainability. Provides git protection, compliance analysis, and actionable recommendations with severity categorization (critical/warning/info).</div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title">✨ Key Features</h2>
+            <div class="features-grid"><div class="feature-card"><div>📊</div><div>0-100 Scoring System</div><div>Quantitative architecture quality assessment</div></div><div class="feature-card"><div>🔍</div><div>6-Phase Analysis</div><div>Structure, patterns, SOLID, scalability, security, maintainability</div></div><div class="feature-card"><div>🛡️</div><div>Git Protection</div><div>Prevents breaking changes, enforces standards</div></div></div>
+        </section>
+        
+        <section class="section"><h2 class="section-title">🔄 6-Phase Review Process</h2><div class="viz-container"><div class="mermaid">
+graph LR
+    A[Structure<br />Analysis] --> B[Design<br />Patterns]
+    B --> C[SOLID<br />Principles]
+    C --> D[Scalability<br />Review]
+    D --> E[Security<br />Audit]
+    E --> F[Maintainability<br />Score]
+    F --> G[Final Score<br />0-100]
+    
+    style A fill:#9C27B0,stroke:#7B1FA2,color:#fff
+    style G fill:#10B981,stroke:#059669,color:#fff
+                </div></div></section>
+        
+        <footer>
+            <p>© 2025 Asif Hussain | CORTEX 4.0</p>
+            <p>Architectural Review Orchestrator - Comprehensive Architecture Analysis</p>
+        </footer>
+    </div>
+    
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#9C27B0',
+                primaryTextColor: '#fff',
+                lineColor: '#64748b',
+                secondaryColor: '#1e293b'
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,1328 +1,765 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta content="width=device-width, initial-scale=1.0" name="viewport">
-<title>FAQ - CORTEX AI Assistant</title>
-<link href="assets/css/main.css" rel="stylesheet">
-<link href="assets/css/faq.css" rel="stylesheet">
-<link href="assets/images/CORTEX-logo.png" rel="icon" type="image/png">
-<!-- Open Graph / Social Media -->
-<meta content="CORTEX FAQ - Frequently Asked Questions" property="og:title">
-<meta content="Common questions about CORTEX architecture, features, and usage" property="og:description">
-<meta content="https://asifhussain60.github.io/CORTEX/assets/images/CORTEX-logo.png" property="og:image">
-<meta content="https://asifhussain60.github.io/CORTEX/faq.html" property="og:url">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - CORTEX 4.0</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="icon" type="image/png" href="assets/images/CORTEX-logo.png">
 </head>
 <body>
-<nav class="main-nav">
-<div class="nav-content">
-<a class="logo-link" href="index.html">
-<img alt="CORTEX Logo" class="nav-logo" src="assets/images/CORTEX-logo.png">
-<span class="logo-text">CORTEX</span>
-</a>
-<div class="nav-links">
-<a href="features/">Features</a>
-<a href="architecture/">Architecture</a>
-<a href="story/">Story</a>
-<a href="future/">Future Vision</a>
-<a class="active" href="faq.html">FAQ</a>
-<a class="github-link" href="https://github.com/asifhussain60/CORTEX" target="_blank">GitHub</a>
-</div>
-<main class="faq-container">
-<header class="faq-header">
-<h1>🔍 Frequently Asked Questions</h1>
-<p class="faq-subtitle">Quick answers to common questions about CORTEX</p>
-<div class="faq-search">
-<input aria-label="Search FAQ" id="faqSearch" placeholder="🔎 Search questions..." type="text">
-<span class="search-count" id="searchCount"></span>
-</div>
-</header>
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb">
+        <a href="index.html">Home</a>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-current">FAQ</span>
+    </nav>
 
-<!-- Quick Jump Categories -->
-<nav class="faq-category-nav">
-<a href="#getting-started" class="category-link">🚀 Getting Started</a>
-<a href="#architecture" class="category-link">🏗️ Architecture</a>
-<a href="#features" class="category-link">✨ Features</a>
-<a href="#governance" class="category-link">🛡️ Governance</a>
-<a href="#troubleshooting" class="category-link">🔧 Troubleshooting</a>
-<a href="#performance" class="category-link">⚡ Performance</a>
-<a href="#testing" class="category-link">🧪 Testing</a>
-<a href="#resources" class="category-link">📚 Resources</a>
-</nav>
+    <!-- Hero Section -->
+    <section class="section">
+        <div class="container">
+            <div class="glass-card">
+                <div>
+                    <div class="icon">❓</div>
+                    <div>
+                        <h1>Frequently Asked Questions</h1>
+                        <p>Quick answers to common questions about CORTEX architecture, features, and usage</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<!-- Getting Started Section -->
-<section class="faq-category" id="getting-started">
-<h2 class="category-title">
-<span class="category-icon">🚀</span>
-                Getting Started
-            </h2>
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">What is CORTEX and who is it for?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p>CORTEX is an AI-powered development assistant that enhances GitHub Copilot with long-term memory, strategic planning, and architectural intelligence. It's designed for:</p>
-<ul>
-<li>
-<strong>Software Engineers</strong> - TDD workflows, code quality, automated testing</li>
-<li>
-<strong>Tech Leads</strong> - Architecture reviews, planning systems, team coordination</li>
-<li>
-<strong>Product Managers</strong> - ADO integration, progress tracking, feature planning</li>
-</ul>
-<p><a href="index.html">Learn more about CORTEX →</a></p>
-</div>
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">How do I install CORTEX?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p>CORTEX works within GitHub Copilot Chat. Setup is simple:</p>
-<ol>
-<li>Clone the repository: <code>git clone https://github.com/asifhussain60/CORTEX.git</code>
-</li>
-<li>Install dependencies: <code>pip install -r requirements.txt</code>
-</li>
-<li>Configure paths: Edit <code>cortex.config.json</code> with your machine-specific paths</li>
-<li>Say "help" in Copilot Chat to see available operations</li>
-</ol>
-<p><strong>Requirements:</strong> Python 3.8+, GitHub Copilot subscription</p>
-</div>
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">What's the difference between CORTEX and plain Copilot?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<table class="comparison-table">
-<thead>
-<tr>
-<th>Feature</th>
-<th>GitHub Copilot</th>
-<th>CORTEX</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Memory</td>
-<td>❌ No persistence</td>
-<td>✅ 70-conversation FIFO</td>
-</tr>
-<tr>
-<td>Planning</td>
-<td>❌ Single-turn suggestions</td>
-<td>✅ Multi-phase strategic plans</td>
-</tr>
-<tr>
-<td>TDD</td>
-<td>⚠️ Manual RED-GREEN-REFACTOR</td>
-<td>✅ Enforced TDD workflow</td>
-</tr>
-<tr>
-<td>Architecture</td>
-<td>❌ No context preservation</td>
-<td>✅ Knowledge graph + dev context</td>
-</tr>
-<tr>
-<td>Safety</td>
-<td>⚠️ Can suggest unsafe code</td>
-<td>✅ SKULL brain protection</td>
-</tr>
-<p><a href="story/">Read the origin story →</a></p>
-</tbody>
-</table>
-</div>
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">Do I need to run Python commands?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p><strong>No!</strong> CORTEX uses a template-based response system. Just say commands in Copilot Chat:</p>
-<ul>
-<li>
-<code>plan user authentication</code> - Start planning workflow</li>
-<li>
-<code>start tdd</code> - Begin TDD cycle</li>
-<li>
-<code>load dashboard</code> - Launch metrics dashboard</li>
-<li>
-<code>help</code> - See all commands</li>
-</ul>
-<p>Python execution is only needed for advanced admin operations.</p>
-<div class="faq-links">
-<a href="technical/setup-guides/environment-config.html" class="doc-link">Environment Config →</a>
-</div>
-</div>
-</div>
+    <!-- Quick Jump Navigation -->
+    <section class="section">
+        <div class="container">
+            <div class="glass-card">
+                <h2>Quick Jump</h2>
+                <div class="metrics-grid">
+                    <a href="#getting-started" class="btn btn-primary">🚀 Getting Started</a>
+                    <a href="#architecture" class="btn btn-primary">🏗️ Architecture</a>
+                    <a href="#features" class="btn btn-primary">✨ Features</a>
+                    <a href="#governance" class="btn btn-primary">🛡️ Governance</a>
+                    <a href="#troubleshooting" class="btn btn-primary">🔧 Troubleshooting</a>
+                    <a href="#performance" class="btn btn-primary">⚡ Performance</a>
+                    <a href="#testing" class="btn btn-primary">🧪 Testing</a>
+                    <a href="#resources" class="btn btn-primary">📚 Resources</a>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">What are the system requirements?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p><strong>Minimum requirements:</strong></p>
-<ul>
-<li><strong>Python:</strong> 3.8 or higher</li>
-<li><strong>GitHub Copilot:</strong> Active subscription</li>
-<li><strong>VS Code:</strong> Latest stable version</li>
-<li><strong>Disk Space:</strong> 500MB for CORTEX + brain storage</li>
-<li><strong>RAM:</strong> 4GB minimum, 8GB recommended</li>
-</ul>
-<div class="faq-links">
-<a href="technical/setup-guides/index.html" class="doc-link">Setup Guide →</a>
-</div>
-</div>
-</div>
+    <!-- Getting Started Section -->
+    <section class="section" id="getting-started">
+        <div class="container">
+            <h2>🚀 Getting Started</h2>
+            
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>What is CORTEX and who is it for?</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p>CORTEX is an AI-powered development assistant that enhances GitHub Copilot with long-term memory, strategic planning, and architectural intelligence. It's designed for:</p>
+                    <ul>
+                        <li><strong>Software Engineers</strong> - TDD workflows, code quality, automated testing</li>
+                        <li><strong>Tech Leads</strong> - Architecture reviews, planning systems, team coordination</li>
+                        <li><strong>Product Managers</strong> - ADO integration, progress tracking, feature planning</li>
+                    </ul>
+                    <p><a href="index.html">Learn more about CORTEX →</a></p>
+                </div>
+            </div>
 
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">How do I configure cortex.config.json?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p>Edit <code>cortex.config.json</code> with machine-specific paths:</p>
-<pre><code>{
-  "workspace_root": "d:/PROJECTS/CORTEX",
-  "brain_root": "d:/PROJECTS/CORTEX/cortex-brain",
-  "user_repo_root": "d:/PROJECTS/MyApp"
-}</code></pre>
-<p><strong>Required paths:</strong></p>
-<ul>
-<li><code>workspace_root</code> - CORTEX installation directory</li>
-<li><code>brain_root</code> - Brain storage (usually workspace_root/cortex-brain)</li>
-<li><code>user_repo_root</code> - Your application repository</li>
-</ul>
-<div class="faq-links">
-<a href="technical/setup-guides/environment-config.html" class="doc-link">Configuration Guide →</a>
-</div>
-</div>
-</div>
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>How do I install CORTEX?</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p>CORTEX works within GitHub Copilot Chat. Setup is simple:</p>
+                    <ol>
+                        <li>Clone the repository: <code>git clone https://github.com/asifhussain60/CORTEX.git</code></li>
+                        <li>Install dependencies: <code>pip install -r requirements.txt</code></li>
+                        <li>Configure paths: Edit <code>cortex.config.json</code> with your machine-specific paths</li>
+                        <li>Say "help" in Copilot Chat to see available operations</li>
+                    </ol>
+                    <p><strong>Requirements:</strong> Python 3.8+, GitHub Copilot subscription</p>
+                    <p><a href="getting-started/index.html">Full setup guide →</a></p>
+                </div>
+            </div>
 
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">What commands are available?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p><strong>Core commands:</strong></p>
-<ul>
-<li><code>help</code> - Show all available commands</li>
-<li><code>plan [feature]</code> - Create feature plan</li>
-<li><code>start tdd</code> - Begin TDD workflow</li>
-<li><code>execute all phases autonomously</code> - Auto-execute plan</li>
-<li><code>plan ado</code> - Generate ADO work items</li>
-<li><code>sanitize [directory]</code> - Clean sensitive data</li>
-</ul>
-<div class="faq-links">
-<a href="features/index.html" class="doc-link">All Features →</a>
-<a href="orchestrators/index.html" class="doc-link">Orchestrators →</a>
-</div>
-</div>
-</div>
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>What's the difference between CORTEX and plain Copilot?</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Key differences:</strong></p>
+                    <ul>
+                        <li><strong>Memory:</strong> GitHub Copilot has no persistence; CORTEX has 70-conversation FIFO working memory</li>
+                        <li><strong>Planning:</strong> Copilot provides single-turn suggestions; CORTEX creates multi-phase strategic plans</li>
+                        <li><strong>TDD:</strong> Copilot requires manual RED-GREEN-REFACTOR; CORTEX enforces TDD workflow</li>
+                        <li><strong>Architecture:</strong> Copilot has no context preservation; CORTEX uses knowledge graph + dev context</li>
+                        <li><strong>Safety:</strong> Copilot can suggest unsafe code; CORTEX has SKULL brain protection</li>
+                    </ul>
+                    <p><a href="story/index.html">Read the origin story →</a></p>
+                </div>
+            </div>
 
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">How do I get help in Copilot Chat?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p>Say <code>help</code> to see the command reference with available operations.</p>
-<p><strong>Context-aware help:</strong></p>
-<ul>
-<li><code>help planning</code> - Planning System commands</li>
-<li><code>help tdd</code> - TDD workflow commands</li>
-<li><code>help ado</code> - Azure DevOps commands</li>
-</ul>
-<div class="faq-links">
-<a href="features/index.html" class="doc-link">Features Overview →</a>
-</div>
-</div>
-</div>
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>Do I need to run Python commands?</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>No!</strong> CORTEX uses a template-based response system. Just say commands in Copilot Chat:</p>
+                    <ul>
+                        <li><code>plan user authentication</code> - Start planning workflow</li>
+                        <li><code>start tdd</code> - Begin TDD cycle</li>
+                        <li><code>system maintenance</code> - Run system maintenance</li>
+                        <li><code>help</code> - See all commands</li>
+                    </ul>
+                    <p>Python execution is only needed for advanced admin operations.</p>
+                </div>
+            </div>
 
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">Can I use CORTEX with multiple repositories?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p><strong>Yes!</strong> Phase 11 Multi-Repo Architecture supports 1:∞ scaling:</p>
-<ul>
-<li><strong>Workspace Detection:</strong> Auto-detects repository context</li>
-<li><strong>Tier 3 Segmentation:</strong> Separate dev context per repo</li>
-<li><strong>Git Isolation:</strong> CORTEX code never mixed with user repos</li>
-</ul>
-<div class="faq-links">
-<a href="features/workspace-detection.html" class="doc-link">Multi-Workspace →</a>
-<a href="architecture/multi-repo.html" class="doc-link">Architecture →</a>
-</div>
-</div>
-</div>
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>What commands are available?</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Core commands:</strong></p>
+                    <ul>
+                        <li><code>help</code> - Show all available commands</li>
+                        <li><code>plan [feature]</code> - Create feature plan with auto-TDD</li>
+                        <li><code>start tdd</code> - Begin TDD workflow</li>
+                        <li><code>execute all phases autonomously</code> - Auto-execute plan</li>
+                        <li><code>plan ado</code> - Generate ADO work items</li>
+                        <li><code>sanitize [directory]</code> - Clean sensitive data</li>
+                        <li><code>system maintenance</code> - Run 7-phase maintenance</li>
+                        <li><code>refine</code> - Holistic system refinement</li>
+                    </ul>
+                    <p><a href="features/index.html">All features →</a></p>
+                </div>
+            </div>
 
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">Where is my data stored?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p><strong>Data locations:</strong></p>
-<ul>
-<li><strong>Working Memory:</strong> <code>cortex-brain/conversation-context.jsonl</code></li>
-<li><strong>Knowledge Graph:</strong> <code>cortex-brain/knowledge-graph.yaml</code></li>
-<li><strong>Development Context:</strong> <code>cortex-brain/development-context.yaml</code></li>
-<li><strong>Metrics:</strong> <code>logs/</code> and <code>metrics/</code></li>
-</ul>
-<p><strong>Privacy:</strong> All data stays local on your machine.</p>
-<div class="faq-links">
-<a href="architecture/four-tier-brain.html" class="doc-link">Four-Tier Brain →</a>
-</div>
-</div>
-</div>
-</section>
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>Can I use CORTEX with multiple repositories?</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Yes!</strong> Phase 11 Multi-Repo Architecture supports 1:∞ scaling:</p>
+                    <ul>
+                        <li><strong>Workspace Detection:</strong> Auto-detects repository context</li>
+                        <li><strong>Tier 3 Segmentation:</strong> Separate dev context per repo</li>
+                        <li><strong>Git Isolation:</strong> CORTEX code never mixed with user repos</li>
+                    </ul>
+                    <p><a href="getting-started/multi-repo-setup.html">Multi-repo guide →</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<!-- Architecture & Design Section -->
-<section class="faq-category" id="architecture">
-<h2 class="category-title">
-<span class="category-icon">🏗️</span>
-                Architecture &amp; Design
-            </h2>
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">What is the Four-Tier Brain architecture?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p>CORTEX organizes intelligence into 4 hierarchical tiers:</p>
-<ul>
-<li>
-<strong>Tier 0: Governance</strong> - SKULL rules, brain protection, safety enforcement</li>
-<li>
-<strong>Tier 1: Working Memory</strong> - 70-conversation FIFO queue, SQLite persistence</li>
-<li>
-<strong>Tier 2: Knowledge Graph</strong> - Pattern learning, relationship modeling</li>
-<li>
-<strong>Tier 3: Development Context</strong> - Metrics, hotspots, codebase intelligence</li>
-</ul>
-<p><a href="architecture/four-tier-brain.html">Explore Four-Tier Brain →</a></p>
-</div>
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">What is SKULL and why do I need it?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p><strong>SKULL = Safety, Knowledge, Usability, Logic, Learning</strong></p>
-<p>Brain Protection rules that prevent common AI failures:</p>
-<ul>
-<li>
-<strong>TDD_ENFORCEMENT:</strong> RED→GREEN→REFACTOR mandatory</li>
-<li>
-<strong>RED_PHASE_VALIDATION:</strong> Tests must fail before implementation</li>
-<li>
-<strong>HOLISTIC_CODE_DISCOVERY:</strong> Search before create (prevent duplication)</li>
-<li>
-<strong>REFACTOR_CODE_CLEANUP:</strong> Remove orphaned code</li>
-<li>
-<strong>GIT_ISOLATION:</strong> CORTEX code never in user repos</li>
-</ul>
-<p><a href="architecture/skull-protection.html">Learn about SKULL →</a></p>
-</div>
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">How does Working Memory work?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p>Tier 1 solves Copilot's "goldfish memory" with a 70-conversation FIFO queue:</p>
-<ul>
-<li>
-<strong>SQLite persistence:</strong> Conversations survive restarts</li>
-<li>
-<strong>FIFO eviction:</strong> Oldest conversations pruned automatically</li>
-<li>
-<strong>Sub-100ms retrieval:</strong> Fast context loading</li>
-<li>
-<strong>JSON-based capture:</strong> Full conversation history</li>
-</ul>
-<p><strong>Why 70?</strong> Balances context richness with performance (&lt;100ms retrieval).</p>
-<p><a href="architecture/working-memory.html">Dive deeper →</a></p>
-</div>
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">What are Orchestrators vs Agents?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p><strong>Orchestrators:</strong> High-level workflows coordinating multiple operations</p>
-<ul>
-<li>Planning System 2.0 (incremental planning)</li>
-<li>TDD Mastery (RED-GREEN-REFACTOR)</li>
-<li>System Maintenance (6-phase healthcheck)</li>
-<li>ADO Operations (work item management)</li>
-</ul>
-<p><strong>Agents:</strong> Specialized AI assistants for specific domains</p>
-<ul>
-<li>Strategic Planning Agent</li>
-<li>Brain Protector (SKULL enforcement)</li>
-</ul>
-<p><a href="architecture/orchestrators.html">Orchestrators →</a> | <a href="architecture/agents.html">Agents →</a></p>
-</div>
-</div>
+    <!-- Architecture Section -->
+    <section class="section" id="architecture">
+        <div class="container">
+            <h2>🏗️ Architecture & Design</h2>
+            
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>What is the Four-Tier Brain architecture?</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p>CORTEX uses a 4-tier brain system for intelligent memory management:</p>
+                    <ul>
+                        <li><strong>Tier 0:</strong> Governance (SKULL rules, brain protection)</li>
+                        <li><strong>Tier 1:</strong> Working memory (70-conversation FIFO, &lt;100ms access)</li>
+                        <li><strong>Tier 2:</strong> Knowledge graph (pattern learning, relationships)</li>
+                        <li><strong>Tier 3:</strong> Development context (metrics, hotspots, per-repo)</li>
+                    </ul>
+                    <p><a href="architecture/four-tier-brain.html">Architecture details →</a></p>
+                </div>
+            </div>
 
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">How does the Knowledge Graph store patterns?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p>Tier 2 Knowledge Graph learns from your development patterns:</p>
-<ul>
-<li><strong>8,429 nodes:</strong> Orchestrators, operations, dependencies</li>
-<li><strong>Pattern detection:</strong> Reusable architectural patterns</li>
-<li><strong>Relationship modeling:</strong> Component interactions</li>
-<li><strong>YAML storage:</strong> Human-readable format</li>
-</ul>
-<div class="faq-links">
-<a href="architecture/knowledge-graph.html" class="doc-link">Knowledge Graph →</a>
-<a href="knowledge-library/index.html" class="doc-link">Pattern Library →</a>
-</div>
-</div>
-</div>
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>What are orchestrators?</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p>Orchestrators are multi-phase workflows that coordinate complex operations:</p>
+                    <ul>
+                        <li><strong>Planning System:</strong> Multi-phase feature planning with auto-TDD</li>
+                        <li><strong>TDD Orchestrator:</strong> RED-GREEN-REFACTOR enforcement</li>
+                        <li><strong>System Maintenance:</strong> 7-phase health and optimization</li>
+                        <li><strong>Code Sanitization:</strong> 5-phase sensitive data removal</li>
+                        <li><strong>System Refinement:</strong> 7-phase holistic improvement</li>
+                    </ul>
+                    <p><a href="architecture/orchestrator-ecosystem.html">Orchestrator ecosystem →</a></p>
+                </div>
+            </div>
 
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">What is Phase 11 Multi-Repo Architecture?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p>Phase 11 enables 1:∞ repository scaling:</p>
-<ul>
-<li><strong>Workspace Detection:</strong> Auto-identifies current repo context</li>
-<li><strong>Tier 3 Segmentation:</strong> Separate dev context per repository</li>
-<li><strong>Cross-repo Intelligence:</strong> Learn from all projects</li>
-<li><strong>98/98 tests passing:</strong> Production-ready</li>
-</ul>
-<div class="faq-links">
-<a href="architecture/multi-repo.html" class="doc-link">Multi-Repo Architecture →</a>
-<a href="features/workspace-detection.html" class="doc-link">Workspace Detection →</a>
-</div>
-</div>
-</div>
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>What are agents and how do they work?</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p>CORTEX has 2 specialist agents:</p>
+                    <ul>
+                        <li><strong>Planning Agent:</strong> Creates structured feature plans with DoR/DoD compliance</li>
+                        <li><strong>Strategic Reasoning Agent:</strong> Analyzes architecture, identifies patterns</li>
+                    </ul>
+                    <p>Agents work within orchestrators to provide specialized intelligence.</p>
+                    <p><a href="architecture/agent-system.html">Agent architecture →</a></p>
+                </div>
+            </div>
 
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">How does Tier 3 Development Context work?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p>Tier 3 provides codebase intelligence:</p>
-<ul>
-<li><strong>Code Hotspots:</strong> Frequently changed files</li>
-<li><strong>Complexity Metrics:</strong> Cyclomatic complexity, maintainability</li>
-<li><strong>Test Coverage:</strong> Per-layer breakdown</li>
-<li><strong>Git Analytics:</strong> Commit patterns, branch health</li>
-</ul>
-<div class="faq-links">
-<a href="architecture/development-context.html" class="doc-link">Development Context →</a>
-</div>
-</div>
-</div>
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>What is SKULL brain protection?</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p>SKULL (Systematic Knowledge-driven Universal Logic Library) enforces safety rules:</p>
+                    <ul>
+                        <li><strong>TDD_ENFORCEMENT:</strong> RED→GREEN→REFACTOR mandatory</li>
+                        <li><strong>HOLISTIC_CODE_DISCOVERY:</strong> Search before create (prevent duplication)</li>
+                        <li><strong>REFACTOR_CODE_CLEANUP:</strong> Remove orphaned/duplicate code</li>
+                        <li><strong>GIT_ISOLATION:</strong> CORTEX code never in user repos</li>
+                    </ul>
+                    <p><a href="architecture/skull-protection.html">SKULL rules →</a></p>
+                </div>
+            </div>
 
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">What are brain protection rules?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p>22 SKULL rules that prevent common AI failures:</p>
-<ul>
-<li><strong>TDD_ENFORCEMENT:</strong> RED→GREEN→REFACTOR mandatory</li>
-<li><strong>HOLISTIC_CODE_DISCOVERY:</strong> Search before create</li>
-<li><strong>REFACTOR_CODE_CLEANUP:</strong> Remove orphaned code</li>
-<li><strong>GIT_ISOLATION:</strong> CORTEX code never in user repos</li>
-<li><strong>RED_PHASE_VALIDATION:</strong> Tests must fail first</li>
-</ul>
-<div class="faq-links">
-<a href="governance/skull-rulebook.html" class="doc-link">All 22 Rules →</a>
-</div>
-</div>
-</div>
-</section>
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>How does working memory work?</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p>Tier 1 working memory uses a 70-conversation FIFO queue:</p>
+                    <ul>
+                        <li><strong>Storage:</strong> JSON Lines format in <code>conversation-context.jsonl</code></li>
+                        <li><strong>Retention:</strong> Last 70 conversations preserved</li>
+                        <li><strong>Performance:</strong> Sub-100ms retrieval with smart indexing</li>
+                        <li><strong>Cleanup:</strong> Automatic FIFO eviction when limit reached</li>
+                    </ul>
+                    <p><a href="architecture/working-memory.html">Working memory details →</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<!-- Features & Usage Section -->
-<section class="faq-category" id="features">
-<h2 class="category-title">
-<span class="category-icon">✨</span>
-                Features &amp; Usage
-            </h2>
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">How do I use Planning System 2.0?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p>Say <code>plan [feature name]</code> in Copilot Chat. CORTEX auto-detects complexity:</p>
-<ul>
-<li>
-<strong>HIGH complexity:</strong> Incremental phases (auth, security, migrations, APIs)</li>
-<li>
-<strong>MEDIUM complexity:</strong> Conditional incremental (data modeling, integrations)</li>
-<li>
-<strong>LOW complexity:</strong> Skeleton plan (CRUD, utilities)</li>
-</ul>
-<p><strong>Example:</strong> <code>plan user authentication with OAuth</code> → Auto-routes to incremental</p>
-<p><a href="features/planning-system.html">Complete planning guide →</a></p>
-</div>
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">How does TDD Mastery work?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p>Say <code>start tdd</code> to begin enforced RED-GREEN-REFACTOR cycle:</p>
-<ol>
-<li>
-<strong>RED:</strong> Write failing test (CORTEX validates it fails)</li>
-<li>
-<strong>GREEN:</strong> Implement minimum code to pass</li>
-<li>
-<strong>REFACTOR:</strong> Clean up with tests passing</li>
-</ol>
-<p><strong>Safety features:</strong></p>
-<ul>
-<li>Empty test detection (rejects placeholder tests)</li>
-<li>Per-layer coverage validation</li>
-<li>Debugging orchestrator integration</li>
-</ul>
-<p><a href="features/tdd-mastery.html">Master TDD workflow →</a></p>
-</div>
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">What is the Dashboard and how do I use it?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p>Real-time metrics visualization with glassmorphism UI. Launch with <code>load dashboard</code>:</p>
-<ul>
-<li>
-<strong>Test Coverage:</strong> Per-layer breakdown (view/service/repository)</li>
-<li>
-<strong>Code Quality:</strong> Cyclomatic complexity, maintainability</li>
-<li>
-<strong>Memory Usage:</strong> Working memory queue health</li>
-<li>
-<strong>Git Activity:</strong> Commit frequency, branch health</li>
-</ul>
-<p><strong>Auto-opens browser</strong> at http://localhost:8080-8089</p>
-<p><a href="features/dashboard.html">Dashboard features →</a></p>
-</div>
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">How do I integrate with Azure DevOps?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p>Say <code>plan ado</code> or <code>plan ado story</code> for ADO-formatted work items:</p>
-<ul>
-<li>
-<strong>Stories:</strong> User-facing features with acceptance criteria</li>
-<li>
-<strong>Features:</strong> Epic-level initiatives with multiple stories</li>
-<li>
-<strong>Tasks:</strong> Technical work items with estimates</li>
-<li>
-<strong>Summaries:</strong> Completion reports with test evidence</li>
-</ul>
-<p><strong>Inherits Planning System 2.0:</strong> DoR/DoD compliance, TDD integration, complexity detection</p>
-<p><a href="features/ado-operations.html">ADO integration guide →</a></p>
-<div class="faq-links">
-<a href="orchestrators/ado-operations.html" class="doc-link">ADO Operations →</a>
-</div>
-</div>
-</div>
+    <!-- Features Section -->
+    <section class="section" id="features">
+        <div class="container">
+            <h2>✨ Features</h2>
+            
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>How does the Planning System work?</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p>The Planning System creates multi-phase feature plans with automatic TDD integration:</p>
+                    <ul>
+                        <li><strong>Auto-Complexity Detection:</strong> Routes HIGH→incremental, LOW→skeleton</li>
+                        <li><strong>DoR/DoD Compliance:</strong> Definition of Ready/Done enforcement</li>
+                        <li><strong>TDD Integration:</strong> Automatic test-first workflow</li>
+                        <li><strong>Manifest-Driven:</strong> YAML-based plan structure</li>
+                    </ul>
+                    <p><a href="features/planning-system.html">Planning System guide →</a></p>
+                </div>
+            </div>
 
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">How do I sanitize code for sharing?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p>Say <code>sanitize [directory]</code> for 5-phase code sanitization:</p>
-<ol>
-<li><strong>Analyze:</strong> Discover sensitive data (company names, API keys)</li>
-<li><strong>Mapping:</strong> Create consistent replacements</li>
-<li><strong>Transform:</strong> Apply sanitization</li>
-<li><strong>Validate:</strong> Ensure code still works</li>
-<li><strong>Report:</strong> Document changes</li>
-</ol>
-<div class="faq-links">
-<a href="orchestrators/sanitization.html" class="doc-link">Code Sanitization →</a>
-</div>
-</div>
-</div>
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>What is TDD Mastery?</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p>TDD Mastery enforces test-driven development workflow:</p>
+                    <ul>
+                        <li><strong>RED Phase:</strong> Write failing tests first (validated)</li>
+                        <li><strong>GREEN Phase:</strong> Implement minimum code to pass</li>
+                        <li><strong>REFACTOR Phase:</strong> Clean up with tests passing</li>
+                        <li><strong>Tech Discovery:</strong> Supports 11+ languages/frameworks</li>
+                    </ul>
+                    <p><a href="features/tdd-mastery.html">TDD workflow →</a></p>
+                </div>
+            </div>
 
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">What is autonomous execution mode?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p>Say <code>execute all phases autonomously</code> to auto-execute plans:</p>
-<ul>
-<li><strong>Adaptive modes:</strong> AUTONOMOUS, CHECKPOINT, INTERACTIVE</li>
-<li><strong>Sub-orchestrator routing:</strong> Delegates to Planning, TDD, Documentation</li>
-<li><strong>Validation gates:</strong> Pre/post-phase DoR/DoD checks</li>
-<li><strong>Rollback support:</strong> Auto-rollback on failures</li>
-</ul>
-<div class="faq-links">
-<a href="orchestrators/execution-orchestrator.html" class="doc-link">Execution Orchestrator →</a>
-</div>
-</div>
-</div>
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>How does ADO integration work?</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p>ADO Operations creates Azure DevOps work items:</p>
+                    <ul>
+                        <li><strong>Story/Feature/Task:</strong> Formatted output ready for ADO</li>
+                        <li><strong>Planning Integration:</strong> Uses Planning System manifest structure</li>
+                        <li><strong>Completion Summaries:</strong> Generate work completion reports</li>
+                        <li><strong>Code Reviews:</strong> AI-assisted review comments</li>
+                    </ul>
+                    <p><a href="features/ado-operations.html">ADO Operations guide →</a></p>
+                </div>
+            </div>
 
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">How do I upgrade from CORTEX 3.0 to 4.0?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p>Say <code>upgrade cortex</code> for 5-phase upgrade workflow:</p>
-<ol>
-<li><strong>Backup:</strong> Create checkpoint</li>
-<li><strong>Migrate:</strong> Port 3.0 implementations</li>
-<li><strong>Test:</strong> Validate all tests pass</li>
-<li><strong>Archive:</strong> Remove 3.0 artifacts</li>
-<li><strong>Verify:</strong> Confirm 4.0 compliance</li>
-</ol>
-<div class="faq-links">
-<a href="orchestrators/upgrade.html" class="doc-link">Upgrade Guide →</a>
-</div>
-</div>
-</div>
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>What is Code Sanitization?</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p>Code Sanitization removes company-specific data for safe sharing:</p>
+                    <ul>
+                        <li><strong>5 Phases:</strong> Analyze → Mapping → Transform → Validate → Report</li>
+                        <li><strong>Smart Detection:</strong> Identifies company names, domains, secrets</li>
+                        <li><strong>Build Validation:</strong> Ensures code still compiles/tests after sanitization</li>
+                        <li><strong>Reversible:</strong> Mapping file allows reconstruction</li>
+                    </ul>
+                    <p><a href="technical/orchestrators/code-sanitization.html">Sanitization guide →</a></p>
+                </div>
+            </div>
 
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">What is holistic discovery?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p>HOLISTIC_CODE_DISCOVERY_ENFORCEMENT prevents code duplication:</p>
-<ul>
-<li><strong>Search before create:</strong> Find existing implementations</li>
-<li><strong>Semantic search:</strong> Find similar functionality</li>
-<li><strong>Grep search:</strong> Find exact matches</li>
-<li><strong>Prevents duplication:</strong> Reuse existing code</li>
-</ul>
-<div class="faq-links">
-<a href="features/holistic-discovery.html" class="doc-link">Holistic Discovery →</a>
-</div>
-</div>
-</div>
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>How does System Maintenance work?</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p>System Maintenance runs 7 automated phases:</p>
+                    <ol>
+                        <li><strong>Pre-Healthcheck:</strong> Baseline system health</li>
+                        <li><strong>Alignment:</strong> Auto-fix common issues</li>
+                        <li><strong>Cleanup:</strong> Remove obsolete files</li>
+                        <li><strong>Optimization:</strong> Performance tuning</li>
+                        <li><strong>Vacuum:</strong> Compact databases</li>
+                        <li><strong>Prompt Refresh:</strong> Regenerate documentation</li>
+                        <li><strong>Post-Healthcheck:</strong> Validate improvements</li>
+                    </ol>
+                    <p><a href="features/system-maintenance.html">Maintenance workflow →</a></p>
+                </div>
+            </div>
 
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">How do response templates work?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p>62 response templates provide consistent formatting:</p>
-<ul>
-<li><strong>Adaptive tiers:</strong> INSTANT, FOCUSED, STRUCTURED, COMPREHENSIVE</li>
-<li><strong>Context-aware:</strong> Scale response to question complexity</li>
-<li><strong>Profile variants:</strong> Technical, Executive, Tutorial modes</li>
-<li><strong>Success templates:</strong> Completion celebrations</li>
-</ul>
-<div class="faq-links">
-<a href="features/response-templates.html" class="doc-link">Response Templates →</a>
-</div>
-</div>
-</div>
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>What is System Refinement?</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p>System Refinement performs holistic system improvement:</p>
+                    <ol>
+                        <li><strong>Discovery:</strong> Find improvement opportunities</li>
+                        <li><strong>SKULL Review:</strong> Validate brain protection rules</li>
+                        <li><strong>Documentation:</strong> Update outdated docs</li>
+                        <li><strong>Code Quality:</strong> Refactor high-complexity code</li>
+                        <li><strong>Architecture:</strong> Review system design</li>
+                        <li><strong>Performance:</strong> Optimize slow operations</li>
+                        <li><strong>Validation:</strong> Ensure all improvements work</li>
+                    </ol>
+                    <p><a href="technical/orchestrators/refinement-orchestrator.html">Refinement workflow →</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">What are DoR and DoD compliance checks?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p><strong>Definition of Ready (DoR):</strong> Pre-implementation validation</p>
-<ul>
-<li>Requirements complete</li>
-<li>Acceptance criteria defined</li>
-<li>Technical approach clear</li>
-</ul>
-<p><strong>Definition of Done (DoD):</strong> Post-implementation validation</p>
-<ul>
-<li>Tests passing</li>
-<li>Documentation updated</li>
-<li>Code reviewed</li>
-</ul>
-<div class="faq-links">
-<a href="governance/dor-dod.html" class="doc-link">DoR/DoD Guide →</a>
-</div>
-</div>
-</div>
+    <!-- Governance Section -->
+    <section class="section" id="governance">
+        <div class="container">
+            <h2>🛡️ Governance & Safety</h2>
+            
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>How does CORTEX prevent bad code suggestions?</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p>SKULL brain protection enforces safety rules at Tier 0:</p>
+                    <ul>
+                        <li><strong>TDD Enforcement:</strong> Tests must fail before implementation</li>
+                        <li><strong>Code Discovery:</strong> Search before creating (prevent duplication)</li>
+                        <li><strong>Cleanup Enforcement:</strong> Remove orphaned code during refactor</li>
+                        <li><strong>Git Isolation:</strong> CORTEX code never commits to user repos</li>
+                    </ul>
+                </div>
+            </div>
 
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">How do I execute plans autonomously?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p>After creating a plan with <code>plan [feature]</code>, execute autonomously:</p>
-<ul>
-<li><code>execute all phases autonomously</code> - Full auto-execution</li>
-<li><strong>Progress tracking:</strong> Visual phase status</li>
-<li><strong>Git checkpoints:</strong> Auto-save at phase boundaries</li>
-<li><strong>Error handling:</strong> Auto-rollback on failures</li>
-</ul>
-<div class="faq-links">
-<a href="orchestrators/execution-orchestrator.html" class="doc-link">Execution Guide →</a>
-</div>
-</div>
-</div>
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>Is my data secure?</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Yes!</strong> All CORTEX data stays local:</p>
+                    <ul>
+                        <li><strong>No cloud uploads:</strong> Brain data stored on your machine</li>
+                        <li><strong>Git isolation:</strong> CORTEX never commits to user repos</li>
+                        <li><strong>Sanitization:</strong> Clean sensitive data before sharing</li>
+                        <li><strong>Local execution:</strong> Python commands run locally</li>
+                    </ul>
+                </div>
+            </div>
 
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">What metrics does the dashboard show?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p>Real-time metrics with glassmorphism UI:</p>
-<ul>
-<li><strong>Test Coverage:</strong> Per-layer breakdown (view/service/repository)</li>
-<li><strong>Code Quality:</strong> Complexity, maintainability, hotspots</li>
-<li><strong>Memory Health:</strong> Working memory queue status</li>
-<li><strong>Git Activity:</strong> Commit frequency, branch health</li>
-<li><strong>Orchestrator Usage:</strong> Execution metrics</li>
-</ul>
-<div class="faq-links">
-<a href="features/dashboard-system.html" class="doc-link">Dashboard →</a>
-<a href="validation/metrics.html" class="doc-link">Validation Metrics →</a>
-</div>
-</div>
-</div>
-</section>
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>How does Git isolation work?</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p>SKULL GIT_ISOLATION_ENFORCEMENT prevents mixing codebases:</p>
+                    <ul>
+                        <li><strong>CORTEX tests:</strong> Always in <code>CORTEX/tests/</code></li>
+                        <li><strong>User app tests:</strong> Always in <code>UserApp/tests/</code></li>
+                        <li><strong>Pre-commit validation:</strong> Blocks cross-contamination</li>
+                        <li><strong>Workspace detection:</strong> Auto-detects correct context</li>
+                    </ul>
+                </div>
+            </div>
 
-<!-- Governance & Safety Section -->
-<section class="faq-category" id="governance">
-<h2 class="category-title">
-<span class="category-icon">🛡️</span>
-Governance & Safety
-</h2>
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>Can CORTEX delete my code?</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>No!</strong> CORTEX has multiple safety mechanisms:</p>
+                    <ul>
+                        <li><strong>Git Checkpoints:</strong> Auto-commits before major operations</li>
+                        <li><strong>Rollback Support:</strong> Undo changes with <code>rollback</code> command</li>
+                        <li><strong>Dry-Run Mode:</strong> Preview changes before applying</li>
+                        <li><strong>User Confirmation:</strong> Destructive operations require approval</li>
+                    </ul>
+                </div>
+            </div>
 
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">What are the 22 SKULL rules?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p><strong>SKULL = Safety, Knowledge, Usability, Logic, Learning</strong></p>
-<p>22 brain protection rules across 5 categories:</p>
-<ul>
-<li><strong>Safety (5 rules):</strong> TDD enforcement, RED phase validation, safe defaults</li>
-<li><strong>Knowledge (4 rules):</strong> Holistic discovery, knowledge graph, pattern learning</li>
-<li><strong>Usability (5 rules):</strong> Progressive disclosure, response templates, user context</li>
-<li><strong>Logic (4 rules):</strong> Refactor cleanup, Git isolation, test location</li>
-<li><strong>Learning (4 rules):</strong> Feedback loops, conversation capture, metric collection</li>
-</ul>
-<div class="faq-links">
-<a href="governance/skull-rulebook.html" class="doc-link">All 22 Rules →</a>
-</div>
-</div>
-</div>
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>What are DoR and DoD requirements?</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p>Definition of Ready (DoR) and Definition of Done (DoD) ensure quality:</p>
+                    <ul>
+                        <li><strong>DoR:</strong> Requirements clear, acceptance criteria defined, testable</li>
+                        <li><strong>DoD:</strong> Code complete, tests passing, documented, reviewed</li>
+                        <li><strong>Enforcement:</strong> Planning System validates at each phase gate</li>
+                        <li><strong>Compliance:</strong> Tracked in plan manifests</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">How does TDD enforcement prevent bugs?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p>TDD_ENFORCEMENT + RED_PHASE_VALIDATION ensure quality:</p>
-<ul>
-<li><strong>Tests first:</strong> Define behavior before implementation</li>
-<li><strong>Fail validation:</strong> Tests MUST fail initially (proves they work)</li>
-<li><strong>Pass validation:</strong> Implementation makes tests pass</li>
-<li><strong>Refactor safety:</strong> Tests catch regressions</li>
-<li><strong>94% success rate:</strong> Proven reliability</li>
-</ul>
-<div class="faq-links">
-<a href="governance/skull-rulebook.html" class="doc-link">TDD Rules →</a>
-<a href="features/tdd-mastery.html" class="doc-link">TDD Workflow →</a>
-</div>
-</div>
-</div>
+    <!-- Troubleshooting Section -->
+    <section class="section" id="troubleshooting">
+        <div class="container">
+            <h2>🔧 Troubleshooting</h2>
+            
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>CORTEX doesn't recognize my commands</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Solution:</strong></p>
+                    <ol>
+                        <li>Verify CORTEX is in your workspace (check <code>.github/prompts/CORTEX.prompt.md</code>)</li>
+                        <li>Say <code>help</code> to see available commands</li>
+                        <li>Check <code>cortex.config.json</code> paths are correct</li>
+                        <li>Run <code>system maintenance</code> to align system</li>
+                    </ol>
+                </div>
+            </div>
 
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">What is Git isolation and why does it matter?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p>GIT_ISOLATION_ENFORCEMENT keeps CORTEX and user code separate:</p>
-<ul>
-<li><strong>CORTEX code:</strong> Only in CORTEX repository</li>
-<li><strong>User code:</strong> Only in user repositories</li>
-<li><strong>Test location:</strong> CORTEX tests in <code>tests/</code>, user tests in user repo</li>
-<li><strong>Prevents contamination:</strong> No accidental commits to wrong repo</li>
-</ul>
-<div class="faq-links">
-<a href="governance/skull-rulebook.html" class="doc-link">Git Isolation Rule →</a>
-</div>
-</div>
-</div>
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>Tests are failing after CORTEX changes</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>TDD workflow ensures this shouldn't happen, but if it does:</strong></p>
+                    <ol>
+                        <li>Run <code>rollback</code> to undo recent changes</li>
+                        <li>Check git history for last checkpoint</li>
+                        <li>Review test failures with <code>start tdd</code></li>
+                        <li>Ensure RED phase was completed before GREEN phase</li>
+                    </ol>
+                </div>
+            </div>
 
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">How does CORTEX prevent code duplication?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p>HOLISTIC_CODE_DISCOVERY_ENFORCEMENT searches before creating:</p>
-<ul>
-<li><strong>Semantic search:</strong> Find similar functionality</li>
-<li><strong>Grep search:</strong> Find exact matches</li>
-<li><strong>File search:</strong> Find by name pattern</li>
-<li><strong>Evidence required:</strong> Must show search results before creating</li>
-</ul>
-<div class="faq-links">
-<a href="features/holistic-discovery.html" class="doc-link">Holistic Discovery →</a>
-</div>
-</div>
-</div>
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>Working memory seems slow or corrupted</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Solution:</strong></p>
+                    <ol>
+                        <li>Run <code>system maintenance</code> to optimize brain</li>
+                        <li>Check <code>cortex-brain/conversation-context.jsonl</code> size (should be &lt; 10MB)</li>
+                        <li>Manual cleanup: Remove old conversations from JSONL file</li>
+                        <li>Rebuild indexes with <code>optimize</code></li>
+                    </ol>
+                </div>
+            </div>
 
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">What safety checks happen before code generation?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p>Multi-layer safety validation:</p>
-<ul>
-<li><strong>Tier 0 Governance:</strong> SKULL rule enforcement</li>
-<li><strong>DoR validation:</strong> Requirements complete before implementation</li>
-<li><strong>Holistic discovery:</strong> Check for existing code</li>
-<li><strong>Test-first:</strong> TDD enforcement (tests before implementation)</li>
-<li><strong>Brain Protector:</strong> Reviews all operations for SKULL compliance</li>
-</ul>
-<div class="faq-links">
-<a href="governance/skull-rulebook.html" class="doc-link">Safety Rules →</a>
-</div>
-</div>
-</div>
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>Python import errors</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Solution:</strong></p>
+                    <pre><code># Reinstall dependencies
+pip install -r requirements.txt
 
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">How does Definition of Ready (DoR) validation work?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p>DoR ensures requirements are complete before implementation:</p>
-<ul>
-<li><strong>Feature description:</strong> Clear and unambiguous</li>
-<li><strong>Acceptance criteria:</strong> Testable conditions</li>
-<li><strong>Technical approach:</strong> Architecture decisions made</li>
-<li><strong>Dependencies:</strong> External requirements identified</li>
-<li><strong>Estimates:</strong> Complexity and effort assessed</li>
-</ul>
-<p><strong>Automatic validation:</strong> Planning System checks DoR before proceeding</p>
-<div class="faq-links">
-<a href="governance/dor-dod.html" class="doc-link">DoR/DoD Guide →</a>
-</div>
-</div>
-</div>
-</section>
+# Check Python version (3.8+ required)
+python --version
 
-<!-- Troubleshooting Section -->
-<section class="faq-category" id="troubleshooting">
-<h2 class="category-title">
-<span class="category-icon">🔧</span>
-Troubleshooting
-</h2>
+# Run healthcheck
+system maintenance</code></pre>
+                </div>
+            </div>
 
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">CORTEX isn't responding to commands. What's wrong?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p><strong>Common causes and fixes:</strong></p>
-<ul>
-<li>❌ <strong>Not in CORTEX repo:</strong> Commands only work within CORTEX project folder</li>
-<li>❌ <strong>Wrong syntax:</strong> Use exact command names (case-sensitive)</li>
-<li>❌ <strong>Missing config:</strong> Ensure <code>cortex.config.json</code> exists</li>
-<li>❌ <strong>GitHub Copilot disabled:</strong> Check VS Code extension status</li>
-</ul>
-<p><strong>Quick fix:</strong> Say <code>help</code> to see available commands</p>
-<div class="faq-links">
-<a href="technical/troubleshooting/common-issues.html" class="doc-link">Troubleshooting →</a>
-</div>
-</div>
-</div>
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>How do I reset CORTEX to default state?</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Full reset:</strong></p>
+                    <ol>
+                        <li>Backup important data from <code>cortex-brain/</code></li>
+                        <li>Delete <code>cortex-brain/conversation-context.jsonl</code></li>
+                        <li>Delete <code>cortex-brain/knowledge-graph.yaml</code></li>
+                        <li>Delete <code>cortex-brain/development-context.yaml</code></li>
+                        <li>Run <code>system maintenance</code> to reinitialize</li>
+                    </ol>
+                    <p><strong>Warning:</strong> This loses all working memory and learned patterns.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">Tests are failing during TDD RED phase. Is this normal?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p><strong>Yes!</strong> RED phase requires tests to fail. This proves:</p>
-<ul>
-<li>✅ Test is actually running</li>
-<li>✅ Test is checking the right behavior</li>
-<li>✅ Implementation doesn't exist yet</li>
-</ul>
-<p><strong>RED_PHASE_VALIDATION rule:</strong> If tests pass immediately, CORTEX rejects the TDD cycle.</p>
-<div class="faq-links">
-<a href="governance/skull-rulebook.html" class="doc-link">TDD Rules →</a>
-</div>
-</div>
-</div>
+    <!-- Performance Section -->
+    <section class="section" id="performance">
+        <div class="container">
+            <h2>⚡ Performance</h2>
+            
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>How fast is CORTEX?</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Performance metrics:</strong></p>
+                    <ul>
+                        <li><strong>Working Memory:</strong> &lt; 100ms retrieval (70 conversations)</li>
+                        <li><strong>Template Responses:</strong> Instant (no Python execution)</li>
+                        <li><strong>Planning System:</strong> &lt; 5 seconds for 8-phase plan</li>
+                        <li><strong>System Maintenance:</strong> &lt; 5 minutes for full 7-phase cycle</li>
+                    </ul>
+                </div>
+            </div>
 
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">How do I reset Working Memory if it's corrupted?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p><strong>Safe reset options:</strong></p>
-<ol>
-<li><strong>Backup first:</strong> Copy <code>cortex-brain/conversation-context.jsonl</code></li>
-<li><strong>Delete file:</strong> Remove <code>conversation-context.jsonl</code></li>
-<li><strong>Restart CORTEX:</strong> New FIFO queue will be created</li>
-<li><strong>Verify:</strong> Say <code>help</code> to test</li>
-</ol>
-<p><strong>Alternative:</strong> Run <code>system maintenance</code> for auto-cleanup</p>
-<div class="faq-links">
-<a href="technical/troubleshooting/common-issues.html" class="doc-link">Common Issues →</a>
-</div>
-</div>
-</div>
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>How much disk space does CORTEX use?</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Typical usage:</strong></p>
+                    <ul>
+                        <li><strong>CORTEX codebase:</strong> ~50MB</li>
+                        <li><strong>Brain storage:</strong> 100-500MB (depends on usage)</li>
+                        <li><strong>Logs/metrics:</strong> 50-100MB</li>
+                        <li><strong>Total:</strong> ~500MB average</li>
+                    </ul>
+                    <p>Run <code>cleanup</code> regularly to remove obsolete files.</p>
+                </div>
+            </div>
 
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">Dashboard won't launch. How do I fix it?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p><strong>Dashboard troubleshooting:</strong></p>
-<ol>
-<li>Check ports 8080-8089 available: <code>netstat -ano | findstr 8080</code></li>
-<li>Verify dependencies: <code>pip install -r requirements.txt</code></li>
-<li>Try manual launch: <code>python scripts/launch_dashboard.py</code></li>
-<li>Check logs: <code>logs/dashboard.log</code></li>
-</ol>
-<p><strong>Alternative:</strong> Open <code>docs/index.html</code> in browser</p>
-<div class="faq-links">
-<a href="technical/troubleshooting/common-issues.html" class="doc-link">Common Issues →</a>
-</div>
-</div>
-</div>
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>Can I optimize CORTEX performance?</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Optimization tips:</strong></p>
+                    <ul>
+                        <li>Run <code>system maintenance</code> weekly</li>
+                        <li>Keep working memory under 70 conversations</li>
+                        <li>Use <code>cleanup</code> to remove obsolete files</li>
+                        <li>Vacuum databases periodically</li>
+                        <li>Archive old plans to <code>cortex-brain/archive/</code></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">How do I debug orchestrator issues?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p><strong>Debugging workflow:</strong></p>
-<ul>
-<li><strong>Check logs:</strong> <code>logs/orchestration-metrics/</code></li>
-<li><strong>Review checkpoints:</strong> <code>cortex-brain/checkpoints/</code></li>
-<li><strong>Enable verbose:</strong> Set <code>DEBUG=True</code> in config</li>
-<li><strong>Test isolation:</strong> Run orchestrator tests in <code>tests/</code></li>
-</ul>
-<div class="faq-links">
-<a href="technical/troubleshooting/debug-guide.html" class="doc-link">Debug Guide →</a>
-</div>
-</div>
-</div>
-
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">Planning system is stuck. How do I resume?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p><strong>Resume planning:</strong></p>
-<ul>
-<li><strong>Check checkpoint:</strong> <code>cortex-brain/checkpoints/planning_orchestrator/</code></li>
-<li><strong>Resume from last phase:</strong> Automatically detected</li>
-<li><strong>Manual reset:</strong> Delete checkpoint to start fresh</li>
-<li><strong>30-day retention:</strong> Old checkpoints auto-cleaned</li>
-</ul>
-<div class="faq-links">
-<a href="technical/troubleshooting/common-issues.html" class="doc-link">Common Issues →</a>
-</div>
-</div>
-</div>
-
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">SQLite database is locked. How do I fix this?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p><strong>Database lock resolution:</strong></p>
-<ol>
-<li><strong>Close all CORTEX instances:</strong> Kill orphaned processes</li>
-<li><strong>Check file locks:</strong> Windows: <code>handle64 cortex.db</code></li>
-<li><strong>Restart VS Code:</strong> Release all connections</li>
-<li><strong>Run vacuum:</strong> <code>system maintenance</code> (includes DB optimization)</li>
-</ol>
-<div class="faq-links">
-<a href="technical/troubleshooting/common-issues.html" class="doc-link">Common Issues →</a>
-</div>
-</div>
-</div>
-
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">How do I report a bug or request a feature?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p><strong>GitHub Issues workflow:</strong></p>
-<ol>
-<li><strong>Search existing:</strong> Check if already reported</li>
-<li><strong>Use templates:</strong> Bug report or feature request template</li>
-<li><strong>Include evidence:</strong> Logs, screenshots, test results</li>
-<li><strong>SKULL compliance:</strong> Follow TDD for bug fixes</li>
-</ol>
-<div class="faq-links">
-<a href="https://github.com/asifhussain60/CORTEX/issues" class="doc-link" target="_blank">Report Issue →</a>
-</div>
-</div>
-</div>
-</section>
-
-<!-- Performance & Optimization Section -->
-<section class="faq-category" id="performance">
-<h2 class="category-title">
-<span class="category-icon">⚡</span>
-Performance & Optimization
-</h2>
-
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">How do I optimize CORTEX for large codebases?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p><strong>Optimization strategies:</strong></p>
-<ul>
-<li><strong>Tier 1 pruning:</strong> 70-conversation limit (auto-managed)</li>
-<li><strong>Tier 2 indexing:</strong> Knowledge graph performance tuning</li>
-<li><strong>Tier 3 caching:</strong> Dev context caching for frequent queries</li>
-<li><strong>Run maintenance:</strong> Weekly <code>system maintenance</code></li>
-</ul>
-<div class="faq-links">
-<a href="technical/performance/optimization-guide.html" class="doc-link">Optimization Guide →</a>
-</div>
-</div>
-</div>
-
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">What are the performance benchmarks?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p><strong>Phase 13B STS validation results:</strong></p>
-<ul>
-<li><strong>Test pass rate:</strong> 97.6%</li>
-<li><strong>Working Memory retrieval:</strong> <100ms</li>
-<li><strong>Orchestrator execution:</strong> <10ms mode selection</li>
-<li><strong>Brain query:</strong> <5ms risk calculation</li>
-<li><strong>9/9 capabilities:</strong> Fully validated</li>
-</ul>
-<div class="faq-links">
-<a href="technical/performance/benchmarks.html" class="doc-link">Benchmarks →</a>
-<a href="validation/metrics.html" class="doc-link">Validation Metrics →</a>
-</div>
-</div>
-</div>
-
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">How do I reduce context window usage?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p><strong>Context optimization:</strong></p>
-<ul>
-<li><strong>Response templates:</strong> Adaptive tiers (INSTANT→COMPREHENSIVE)</li>
-<li><strong>Token optimization:</strong> Compression rules in <code>token-optimization-rules.yaml</code></li>
-<li><strong>Selective loading:</strong> Load only required Tier 1 conversations</li>
-<li><strong>Run maintenance:</strong> Cleanup reduces context bloat</li>
-</ul>
-<div class="faq-links">
-<a href="technical/performance/optimization-guide.html" class="doc-link">Optimization →</a>
-</div>
-</div>
-</div>
-
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">Why is Working Memory limited to 70 conversations?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p><strong>Performance-optimized limit:</strong></p>
-<ul>
-<li><strong>Sub-100ms retrieval:</strong> Maintains fast lookups</li>
-<li><strong>Context richness:</strong> Balances history vs performance</li>
-<li><strong>FIFO eviction:</strong> Oldest automatically removed</li>
-<li><strong>Tested optimal:</strong> Validated in Phase 13B</li>
-</ul>
-<div class="faq-links">
-<a href="architecture/working-memory.html" class="doc-link">Working Memory →</a>
-</div>
-</div>
-</div>
-
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">How often should I run system maintenance?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p><strong>Recommended schedule:</strong></p>
-<ul>
-<li><strong>Weekly:</strong> Friday afternoon cleanup</li>
-<li><strong>After major changes:</strong> Post-refactor, post-migration</li>
-<li><strong>Before releases:</strong> Validate system health</li>
-<li><strong>When prompted:</strong> CORTEX suggests maintenance when needed</li>
-</ul>
-<p><strong>Duration:</strong> 2-5 minutes (automated). Say <code>system maintenance</code> to start 7-phase workflow</p>
-<div class="faq-links">
-<a href="technical/orchestrators/maintenance-orchestrator.html" class="doc-link">Maintenance →</a>
-</div>
-</div>
-</div>
-</section>
-
-<!-- Testing & Validation Section -->
-<section class="faq-category" id="testing">
-<h2 class="category-title">
-<span class="category-icon">🧪</span>
-Testing & Validation
-</h2>
-
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">What is the test coverage for CORTEX?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p><strong>Phase 13B STS Validation results:</strong></p>
-<ul>
-<li><strong>Overall pass rate:</strong> 97.6%</li>
-<li><strong>Brain + Agentic AI:</strong> 164+ tests, 98%+ coverage</li>
-<li><strong>Orchestrator Consolidation:</strong> 142/142 tests, 95% agentic</li>
-<li><strong>Universal Adapters:</strong> 82/82 tests passing</li>
-<li><strong>Multi-Repo:</strong> 98/98 tests passing</li>
-</ul>
-<div class="faq-links">
-<a href="validation/metrics.html" class="doc-link">Test Metrics →</a>
-<a href="validation/test-coverage.html" class="doc-link">Coverage Report →</a>
-</div>
-</div>
-</div>
-
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">How do I run CORTEX's internal tests?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p><strong>Test execution:</strong></p>
-<pre><code># All tests
+    <!-- Testing Section -->
+    <section class="section" id="testing">
+        <div class="container">
+            <h2>🧪 Testing</h2>
+            
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>How do I run CORTEX tests?</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Run tests:</strong></p>
+                    <pre><code># All tests
 pytest tests/
 
 # With coverage
 pytest --cov=src tests/
 
-# Specific orchestrator
-pytest tests/orchestrators/test_planning_orchestrator.py</code></pre>
-<div class="faq-links">
-<a href="technical/testing/index.html" class="doc-link">Testing Guide →</a>
-</div>
-</div>
-</div>
+# Specific test file
+pytest tests/test_orchestrator.py</code></pre>
+                    <p><strong>Note:</strong> CORTEX tests are in <code>CORTEX/tests/</code>, user app tests in <code>UserApp/tests/</code></p>
+                </div>
+            </div>
 
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">What is STS validation (Phase 13B)?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p><strong>Systematic Testing & Stabilization:</strong> Comprehensive validation of CORTEX 4.0</p>
-<ul>
-<li><strong>9 capabilities validated:</strong> All core features tested</li>
-<li><strong>72% efficiency gain:</strong> Compared to manual testing</li>
-<li><strong>Automated validation:</strong> Continuous testing</li>
-<li><strong>Production-ready:</strong> All acceptance criteria met</li>
-</ul>
-<div class="faq-links">
-<a href="validation/index.html" class="doc-link">STS Validation →</a>
-<a href="validation/capabilities.html" class="doc-link">9 Capabilities →</a>
-</div>
-</div>
-</div>
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>What is TDD enforcement?</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p>SKULL TDD_ENFORCEMENT ensures test-driven development:</p>
+                    <ul>
+                        <li><strong>RED Phase:</strong> Write failing tests first (validated by CORTEX)</li>
+                        <li><strong>GREEN Phase:</strong> Implement minimum code to pass</li>
+                        <li><strong>REFACTOR Phase:</strong> Clean up with all tests passing</li>
+                        <li><strong>Validation:</strong> Each phase must complete before next</li>
+                    </ul>
+                    <p><a href="features/tdd-mastery.html">TDD workflow →</a></p>
+                </div>
+            </div>
 
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">What are the 9 validated capabilities?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p><strong>Phase 13B validated capabilities:</strong></p>
-<ol>
-<li>Four-Tier Brain Architecture</li>
-<li>Planning System 2.0 (incremental + TDD)</li>
-<li>TDD Mastery Orchestrator</li>
-<li>Execution Orchestrator (autonomous)</li>
-<li>ADO Operations Integration</li>
-<li>Code Sanitization Workflow</li>
-<li>SKULL Brain Protection (22 rules)</li>
-<li>Multi-Repo Architecture (1:∞ scaling)</li>
-<li>Response Template System (62 templates)</li>
-</ol>
-<div class="faq-links">
-<a href="validation/capabilities.html" class="doc-link">Capabilities Detail →</a>
-</div>
-</div>
-</div>
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>How does CORTEX validate tests fail before implementation?</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>RED_PHASE_VALIDATION:</strong></p>
+                    <ul>
+                        <li>Runs tests after RED phase generation</li>
+                        <li>Verifies tests fail with expected errors</li>
+                        <li>Blocks GREEN phase if tests pass (indicates test issues)</li>
+                        <li>Provides feedback on test quality</li>
+                    </ul>
+                </div>
+            </div>
 
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">How do I validate my CORTEX installation?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p><strong>Installation validation:</strong></p>
-<ol>
-<li><strong>Check version:</strong> <code>python --version</code> (3.8+)</li>
-<li><strong>Verify config:</strong> <code>cortex.config.json</code> exists</li>
-<li><strong>Test command:</strong> Say <code>help</code> in Copilot Chat</li>
-<li><strong>Run tests:</strong> <code>pytest tests/smoke/</code> (quick validation)</li>
-</ol>
-<div class="faq-links">
-<a href="technical/testing/index.html" class="doc-link">Testing Guide →</a>
-</div>
-</div>
-</div>
-</section>
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>What test coverage does CORTEX have?</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Current coverage:</strong></p>
+                    <ul>
+                        <li><strong>Orchestrators:</strong> 85%+ coverage</li>
+                        <li><strong>Brain tiers:</strong> 90%+ coverage</li>
+                        <li><strong>Agents:</strong> 80%+ coverage</li>
+                        <li><strong>Overall:</strong> Target 80%+ coverage</li>
+                    </ul>
+                    <p>Run <code>pytest --cov=src tests/</code> to see current metrics.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<!-- Learning & Resources Section -->
-<section class="faq-category" id="resources">
-<h2 class="category-title">
-<span class="category-icon">📚</span>
-Learning & Resources
-</h2>
+    <!-- Resources Section -->
+    <section class="section" id="resources">
+        <div class="container">
+            <h2>📚 Resources</h2>
+            
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>Where can I find documentation?</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Documentation locations:</strong></p>
+                    <ul>
+                        <li><strong>Website:</strong> <a href="https://asifhussain60.github.io/CORTEX/">asifhussain60.github.io/CORTEX</a></li>
+                        <li><strong>GitHub:</strong> <a href="https://github.com/asifhussain60/CORTEX">github.com/asifhussain60/CORTEX</a></li>
+                        <li><strong>Brain docs:</strong> <code>cortex-brain/documents/</code></li>
+                        <li><strong>Learning paths:</strong> <code>cortex-brain/documents/learning-paths/</code></li>
+                    </ul>
+                </div>
+            </div>
 
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">Where can I read the CORTEX origin story?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p><strong>"The Awakening of CORTEX"</strong> - A tech comedy in 13 chapters</p>
-<p>From 23 coffee mugs and goldfish memory to production-ready Four-Tier Brain. The 2-month journey building CORTEX from crisis to solution.</p>
-<div class="faq-links">
-<a href="story/index.html" class="doc-link">Read the Story →</a>
-</div>
-</div>
-</div>
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>Are there tutorials or examples?</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Learning resources:</strong></p>
+                    <ul>
+                        <li><a href="getting-started/tutorial.html">Interactive Tutorial</a> - 45-60 minute walkthrough</li>
+                        <li><a href="getting-started/first-commands.html">First Commands</a> - Essential operations</li>
+                        <li><a href="story/index.html">Origin Story</a> - How CORTEX was created</li>
+                        <li><code>cortex-brain/documents/learning-paths/</code> - Practice exercises</li>
+                    </ul>
+                </div>
+            </div>
 
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">What planning patterns are available?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p><strong>Phase 10 Knowledge Library:</strong> Reusable planning patterns</p>
-<ul>
-<li><strong>Incremental patterns:</strong> HIGH complexity features</li>
-<li><strong>Conditional patterns:</strong> MEDIUM complexity features</li>
-<li><strong>Skeleton patterns:</strong> LOW complexity features</li>
-<li><strong>TDD patterns:</strong> RED-GREEN-REFACTOR workflows</li>
-</ul>
-<div class="faq-links">
-<a href="knowledge-library/planning-patterns.html" class="doc-link">Planning Patterns →</a>
-<a href="knowledge-library/tdd-patterns.html" class="doc-link">TDD Patterns →</a>
-</div>
-</div>
-</div>
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>How do I contribute to CORTEX?</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p>CORTEX is open source on GitHub:</p>
+                    <ol>
+                        <li>Fork the repository</li>
+                        <li>Create a feature branch</li>
+                        <li>Follow TDD workflow (tests first!)</li>
+                        <li>Run <code>system maintenance</code> before committing</li>
+                        <li>Submit pull request</li>
+                    </ol>
+                    <p><strong>License:</strong> Copyright © 2025 Asif Hussain. All rights reserved.</p>
+                </div>
+            </div>
 
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">Where is the API documentation?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p><strong>API documentation locations:</strong></p>
-<ul>
-<li><strong>User-facing APIs:</strong> <a href="api/index.html">Main API docs</a></li>
-<li><strong>Orchestrator APIs:</strong> <a href="technical/api/orchestrators/">Detailed orchestrator APIs</a></li>
-<li><strong>Brain Tier APIs:</strong> <a href="technical/api/brain-tiers/">Tier 0-3 APIs</a></li>
-<li><strong>Agent APIs:</strong> <a href="technical/api/agents/">Agent system APIs</a></li>
-</ul>
-<div class="faq-links">
-<a href="api/index.html" class="doc-link">API Documentation →</a>
-</div>
-</div>
-</div>
+            <div class="collapsible">
+                <div class="collapsible-header glass-card">
+                    <h3>Where can I get help?</h3>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content glass-card-flat">
+                    <p><strong>Support options:</strong></p>
+                    <ul>
+                        <li><strong>In-app:</strong> Say <code>help</code> in Copilot Chat</li>
+                        <li><strong>GitHub Issues:</strong> Report bugs or request features</li>
+                        <li><strong>Documentation:</strong> Comprehensive guides at <a href="https://asifhussain60.github.io/CORTEX/">asifhussain60.github.io/CORTEX</a></li>
+                        <li><strong>FAQ:</strong> This page!</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<div class="faq-item">
-<button aria-expanded="false" class="faq-question">
-<span class="question-text">How do I contribute to CORTEX?</span>
-<span class="toggle-icon">+</span>
-</button>
-<div class="faq-answer">
-<p><strong>Contribution requirements:</strong></p>
-<ol>
-<li><strong>TDD mandatory:</strong> All code must have tests (RED-GREEN-REFACTOR)</li>
-<li><strong>SKULL compliance:</strong> Pass brain protection validation</li>
-<li><strong>Documentation:</strong> Update relevant docs in <code>cortex-brain/documents/</code></li>
-<li><strong>PR template:</strong> Use provided template with test evidence</li>
-</ol>
-<div class="faq-links">
-<a href="https://github.com/asifhussain60/CORTEX" class="doc-link" target="_blank">GitHub Repository →</a>
-</div>
-</div>
-</div>
-</section>
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 CORTEX 4.0 | <a href="index.html">Home</a> | <a href="https://github.com/asifhussain60/CORTEX">GitHub</a></p>
+        </div>
+    </footer>
 
-<!-- Still Have Questions CTA -->
-<section class="faq-cta glass-card">
-<h2>Still Have Questions?</h2>
-<p>Can't find what you're looking for? We're here to help!</p>
-<div class="cta-buttons">
-<a href="https://github.com/asifhussain60/CORTEX/issues" class="btn-primary" target="_blank">
-🐛 Report an Issue
-</a>
-<a href="https://github.com/asifhussain60/CORTEX/discussions" class="btn-secondary" target="_blank">
-💬 Join Discussions
-</a>
-</div>
-</section>
-</main>
-
-<!-- Footer -->
-<footer class="footer">
-<div class="container">
-<div class="footer-copyright">
-<p>© 2025 Asif Hussain. All rights reserved.</p>
-<p>CORTEX 4.0 - Enterprise Development Intelligence</p>
-</div>
-</div>
-</footer>
-
-<!-- FAQ JavaScript -->
-<script src="assets/js/faq.js" defer></script>
+    <script src="assets/js/main.js" defer></script>
 </body>
 </html>
