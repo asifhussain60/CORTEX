@@ -45,8 +45,8 @@
             <h1>💾 Git Checkpoint Orchestrator</h1>
             <p class="subtitle">Phase Milestone Tracking & Rollback Management</p>
             <div class="metadata">
-                <div class="metadata-item"><span style="color:#94a3b8">Complexity:</span> <span style="color:var(--primary);font-weight:600">MEDIUM</span></div>
-                <div class="metadata-item"><span style="color:#94a3b8">File:</span> <span style="color:var(--primary);font-weight:600">git_checkpoint_orchestrator.py</span></div>
+                <div class="metadata-item"><span>Complexity:</span> <span>MEDIUM</span></div>
+                <div class="metadata-item"><span>File:</span> <span>git_checkpoint_orchestrator.py</span></div>
             </div>
         </header>
         
@@ -56,17 +56,17 @@
         
         <section class="section">
             <h2 class="section-title">✨ Key Features</h2>
-            <div class="features-grid"><div class="feature-card"><div style="font-size:2rem;margin-bottom:1rem">🎯</div><div style="font-size:1.25rem;font-weight:600;color:#f1f5f9;margin-bottom:0.75rem">Milestone Tracking</div><div style="color:#94a3b8">Automatic checkpoints at phase boundaries</div></div><div class="feature-card"><div style="font-size:2rem;margin-bottom:1rem">🔄</div><div style="font-size:1.25rem;font-weight:600;color:#f1f5f9;margin-bottom:0.75rem">Safe Rollback</div><div style="color:#94a3b8">Quick recovery to any checkpoint</div></div><div class="feature-card"><div style="font-size:2rem;margin-bottom:1rem">🛡️</div><div style="font-size:1.25rem;font-weight:600;color:#f1f5f9;margin-bottom:0.75rem">Branch Protection</div><div style="color:#94a3b8">Prevents destructive operations</div></div></div>
+            <div class="features-grid"><div class="feature-card"><div>🎯</div><div>Milestone Tracking</div><div>Automatic checkpoints at phase boundaries</div></div><div class="feature-card"><div>🔄</div><div>Safe Rollback</div><div>Quick recovery to any checkpoint</div></div><div class="feature-card"><div>🛡️</div><div>Branch Protection</div><div>Prevents destructive operations</div></div></div>
         </section>
         
         <section class="section"><h2 class="section-title">🔄 Checkpoint Workflow</h2><div class="viz-container"><div class="mermaid">
 graph TD
-    A[Phase Start] --> B{Create<br/>Checkpoint?}
+    A[Phase Start] --> B{Create<br />Checkpoint?}
     B -->|Yes| C[Git Commit]
     B -->|No| D[Continue]
     C --> E[Tag Milestone]
     E --> F[Phase Work]
-    F --> G{Phase<br/>Success?}
+    F --> G{Phase<br />Success?}
     G -->|Yes| H[Next Phase]
     G -->|No| I[Rollback Option]
     I --> J[Restore Checkpoint]
@@ -77,7 +77,7 @@ graph TD
                 </div></div></section>
         
         <footer>
-            <p>&copy; 2025 Asif Hussain | CORTEX 4.0</p>
+            <p>© 2025 Asif Hussain | CORTEX 4.0</p>
             <p>Git Checkpoint Orchestrator - Phase Milestone Management</p>
         </footer>
     </div>

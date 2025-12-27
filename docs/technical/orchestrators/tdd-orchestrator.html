@@ -92,11 +92,11 @@
 
             <div class="metadata">            font-weight: 700;
 
-                <div class="metadata-item"><span style="color:#94a3b8">Complexity:</span> <span style="color:var(--primary);font-weight:600">HIGH</span></div>            color: var(--tdd-primary);
+                <div class="metadata-item"><span>Complexity:</span> <span>HIGH</span></div>            color: var(--tdd-primary);
 
-                <div class="metadata-item"><span style="color:#94a3b8">File:</span> <span style="color:var(--primary);font-weight:600">tdd_orchestrator.py</span></div>            margin: 0;
+                <div class="metadata-item"><span>File:</span> <span>tdd_orchestrator.py</span></div>            margin: 0;
 
-                <div class="metadata-item"><span style="color:#94a3b8">Languages:</span> <span style="color:var(--primary);font-weight:600">11+</span></div>        }
+                <div class="metadata-item"><span>Languages:</span> <span>11+</span></div>        }
 
             </div>        
 
@@ -130,41 +130,41 @@
 
                 <div class="feature-card">        
 
-                    <div style="font-size:2rem;margin-bottom:1rem">🔴</div>        .metadata span {
+                    <div>🔴</div>        .metadata span {
 
-                    <div style="font-size:1.25rem;font-weight:600;color:#f1f5f9;margin-bottom:0.75rem">RED Phase Validation</div>            display: flex;
+                    <div>RED Phase Validation</div>            display: flex;
 
-                    <div style="color:#94a3b8">Tests must fail first - enforces proper TDD workflow</div>            align-items: center;
+                    <div>Tests must fail first - enforces proper TDD workflow</div>            align-items: center;
 
                 </div>            gap: 0.5rem;
 
                 <div class="feature-card">        }
 
-                    <div style="font-size:2rem;margin-bottom:1rem">🟢</div>        
+                    <div>🟢</div>        
 
-                    <div style="font-size:1.25rem;font-weight:600;color:#f1f5f9;margin-bottom:0.75rem">GREEN Implementation</div>        .section {
+                    <div>GREEN Implementation</div>        .section {
 
-                    <div style="color:#94a3b8">Minimal code to pass tests, no premature optimization</div>            margin: 4rem 0;
+                    <div>Minimal code to pass tests, no premature optimization</div>            margin: 4rem 0;
 
                 </div>        }
 
                 <div class="feature-card">        
 
-                    <div style="font-size:2rem;margin-bottom:1rem">🔵</div>        .section h2 {
+                    <div>🔵</div>        .section h2 {
 
-                    <div style="font-size:1.25rem;font-weight:600;color:#f1f5f9;margin-bottom:0.75rem">REFACTOR Clean Code</div>            font-size: 2rem;
+                    <div>REFACTOR Clean Code</div>            font-size: 2rem;
 
-                    <div style="color:#94a3b8">SOLID/DRY/KISS/YAGNI enforcement with quality scoring</div>            color: var(--tdd-primary);
+                    <div>SOLID/DRY/KISS/YAGNI enforcement with quality scoring</div>            color: var(--tdd-primary);
 
                 </div>            margin-bottom: 1.5rem;
 
                 <div class="feature-card">            border-left: 4px solid var(--tdd-primary);
 
-                    <div style="font-size:2rem;margin-bottom:1rem">🌍</div>            padding-left: 1rem;
+                    <div>🌍</div>            padding-left: 1rem;
 
-                    <div style="font-size:1.25rem;font-weight:600;color:#f1f5f9;margin-bottom:0.75rem">11+ Languages</div>        }
+                    <div>11+ Languages</div>        }
 
-                    <div style="color:#94a3b8">Python, JavaScript, TypeScript, Java, C#, Go, Rust, Ruby, PHP, Kotlin, Swift</div>        
+                    <div>Python, JavaScript, TypeScript, Java, C#, Go, Rust, Ruby, PHP, Kotlin, Swift</div>        
 
                 </div>        .section p {
 
@@ -224,7 +224,7 @@ graph LR            border-radius: 12px;
 
         <footer>            min-height: 400px;
 
-            <p>&copy; 2025 Asif Hussain | CORTEX 4.0</p>        }
+            <p>© 2025 Asif Hussain | CORTEX 4.0</p>        }
 
             <p>TDD Orchestrator - Test-Driven Development Mastery</p>        
 
@@ -496,15 +496,15 @@ graph LR            border-radius: 12px;
             <h2>🔄 The TDD Cycle<\/h2>
             <div class="phase-badges">
                 <div class="phase-badge red">
-                    🔴 RED<br/>
+                    🔴 RED<br />
                     <small>Write Failing Tests<\/small>
                 <\/div>
                 <div class="phase-badge green">
-                    🟢 GREEN<br/>
+                    🟢 GREEN<br />
                     <small>Minimal Implementation<\/small>
                 <\/div>
                 <div class="phase-badge refactor">
-                    ♻️ REFACTOR<br/>
+                    ♻️ REFACTOR<br />
                     <small>Clean Code<\/small>
                 <\/div>
 
@@ -529,13 +529,13 @@ graph LR            border-radius: 12px;
     
     User->>TDD: start tdd User Authentication
     TDD->>Tech: Discover technology stack
-    Tech->>Tech: Detect language, frameworks<br/>test tools, versions
+    Tech->>Tech: Detect language, frameworks<br />test tools, versions
     Tech-->>TDD: Python, pytest, FastAPI
     
     Note over TDD,RED: 🔴 RED PHASE: Write Failing Tests
     TDD->>RED: Execute RED phase
-    RED->>RED: Generate test cases<br/>(happy path, edge cases)
-    RED->>RED: Validate DoR:<br/>✓ Feature defined<br/>✓ No existing tests<br/>✓ Git clean
+    RED->>RED: Generate test cases<br />(happy path, edge cases)
+    RED->>RED: Validate DoR:<br />✓ Feature defined<br />✓ No existing tests<br />✓ Git clean
     RED->>RED: Create test file
     RED->>RED: Run tests
     RED->>RED: Validate ALL FAIL ❌
@@ -544,8 +544,8 @@ graph LR            border-radius: 12px;
     
     Note over TDD,GREEN: 🟢 GREEN PHASE: Minimal Implementation
     TDD->>GREEN: Execute GREEN phase
-    GREEN->>GREEN: Validate DoR:<br/>✓ Tests failing<br/>✓ No passing tests
-    GREEN->>GREEN: Implement minimal code<br/>(no over-engineering)
+    GREEN->>GREEN: Validate DoR:<br />✓ Tests failing<br />✓ No passing tests
+    GREEN->>GREEN: Implement minimal code<br />(no over-engineering)
     GREEN->>GREEN: Run tests continuously
     GREEN->>GREEN: Validate ≥90% passing ✅
     GREEN->>GREEN: Check coverage ≥80%
@@ -561,7 +561,7 @@ graph LR            border-radius: 12px;
     Quality-->>REFACTOR: Quality score: 6.5/10
     
     alt Quality < 7.0
-        REFACTOR->>REFACTOR: Apply refactorings:<br/>• Extract functions<br/>• Remove duplicates<br/>• Simplify logic
+        REFACTOR->>REFACTOR: Apply refactorings:<br />• Extract functions<br />• Remove duplicates<br />• Simplify logic
         REFACTOR->>REFACTOR: Run tests (ensure still passing)
         REFACTOR->>Quality: Re-score quality
         Quality-->>REFACTOR: Quality score: 8.2/10 ✅
@@ -570,8 +570,8 @@ graph LR            border-radius: 12px;
     REFACTOR->>Git: Create REFACTOR checkpoint
     REFACTOR-->>TDD: REFACTOR complete
     
-    TDD->>TDD: Store patterns in Tier 2<br/>(knowledge graph)
-    TDD-->>User: TDD workflow complete!<br/>Quality: 8.2/10 ✅
+    TDD->>TDD: Store patterns in Tier 2<br />(knowledge graph)
+    TDD-->>User: TDD workflow complete!<br />Quality: 8.2/10 ✅
 
         <!-- Key Features Section -->
         <section class="section">

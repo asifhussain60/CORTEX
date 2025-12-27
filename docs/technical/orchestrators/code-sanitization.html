@@ -60,34 +60,34 @@
             <h2 class="section-title">✨ Key Features</h2>
             <div class="features-grid">
                 <div class="feature-card">
-                    <div style="font-size:2rem;margin-bottom:1rem">🔍</div>
-                    <div style="font-size:1.25rem;font-weight:600;color:#f1f5f9;margin-bottom:0.75rem">Intelligent Detection</div>
-                    <div style="color:#94a3b8">AST-powered detection of company names, internal URLs, API keys, proprietary terms</div>
+                    <div>🔍</div>
+                    <div>Intelligent Detection</div>
+                    <div>AST-powered detection of company names, internal URLs, API keys, proprietary terms</div>
                 </div>
                 <div class="feature-card">
-                    <div style="font-size:2rem;margin-bottom:1rem">🗺️</div>
-                    <div style="font-size:1.25rem;font-weight:600;color:#f1f5f9;margin-bottom:0.75rem">Domain Mapping</div>
-                    <div style="color:#94a3b8">Company-specific → Generic mappings with semantic preservation</div>
+                    <div>🗺️</div>
+                    <div>Domain Mapping</div>
+                    <div>Company-specific → Generic mappings with semantic preservation</div>
                 </div>
                 <div class="feature-card">
-                    <div style="font-size:2rem;margin-bottom:1rem">🔄</div>
-                    <div style="font-size:1.25rem;font-weight:600;color:#f1f5f9;margin-bottom:0.75rem">Safe Transformation</div>
-                    <div style="color:#94a3b8">Automated replacement with reference tracking and validation</div>
+                    <div>🔄</div>
+                    <div>Safe Transformation</div>
+                    <div>Automated replacement with reference tracking and validation</div>
                 </div>
                 <div class="feature-card">
-                    <div style="font-size:2rem;margin-bottom:1rem">✅</div>
-                    <div style="font-size:1.25rem;font-weight:600;color:#f1f5f9;margin-bottom:0.75rem">Build/Test Validation</div>
-                    <div style="color:#94a3b8">Ensures sanitized code still builds and passes all tests</div>
+                    <div>✅</div>
+                    <div>Build/Test Validation</div>
+                    <div>Ensures sanitized code still builds and passes all tests</div>
                 </div>
                 <div class="feature-card">
-                    <div style="font-size:2rem;margin-bottom:1rem">📋</div>
-                    <div style="font-size:1.25rem;font-weight:600;color:#f1f5f9;margin-bottom:0.75rem">Audit Trail</div>
-                    <div style="color:#94a3b8">Complete mapping reference + backup for rollback</div>
+                    <div>📋</div>
+                    <div>Audit Trail</div>
+                    <div>Complete mapping reference + backup for rollback</div>
                 </div>
                 <div class="feature-card">
-                    <div style="font-size:2rem;margin-bottom:1rem">🔒</div>
-                    <div style="font-size:1.25rem;font-weight:600;color:#f1f5f9;margin-bottom:0.75rem">Safety Guarantees</div>
-                    <div style="color:#94a3b8">Automatic backups before transformation, rollback on failure</div>
+                    <div>🔒</div>
+                    <div>Safety Guarantees</div>
+                    <div>Automatic backups before transformation, rollback on failure</div>
                 </div>
             </div>
         </section>
@@ -99,7 +99,7 @@
 graph TD
     A[Start Sanitization] --> B[📦 Phase 1: Backup]
     B --> C[🔍 Phase 2: Analyze]
-    C --> D{Company Data<br/>Found?}
+    C --> D{Company Data<br />Found?}
     D -->|No| END1[✅ Already Clean]
     D -->|Yes| E[🗺️ Phase 3: Generate Mapping]
     
@@ -119,7 +119,7 @@ graph TD
     P -->|No| ROLLBACK[⚠️ Rollback from Backup]
     P -->|Yes| Q{Tests Pass?}
     Q -->|No| ROLLBACK
-    Q -->|Yes| R{References<br/>Intact?}
+    Q -->|Yes| R{References<br />Intact?}
     R -->|No| ROLLBACK
     R -->|Yes| S[📋 Generate Report]
     
@@ -141,7 +141,7 @@ graph TD
             <div class="viz-container">
                 <div class="mermaid">
 mindmap
-  root((Code<br/>Sanitization))
+  root((Code<br />Sanitization))
     Portfolio Projects
       Demo apps
       Case studies
@@ -163,7 +163,7 @@ mindmap
         </section>
         
         <footer>
-            <p>&copy; 2025 Asif Hussain | CORTEX 4.0</p>
+            <p>© 2025 Asif Hussain | CORTEX 4.0</p>
             <p>Code Sanitization Orchestrator - Safe Domain Transformation</p>
         </footer>
     </div>
