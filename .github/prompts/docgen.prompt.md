@@ -46,6 +46,8 @@ Autonomous documentation generation orchestrator that discovers, analyzes, and d
 9. Generate search system (Lunr.js index + UI)
    ↓
 10. Validate all pages (links, styling, accessibility)
+   ↓
+11. Run HTML Quality Tools (MANDATORY - style centralizer + validator)
 ```
 
 ---
@@ -141,8 +143,39 @@ docs/search-index.json + assets/js/search.js (Lunr.js integration)
 - Orchestrators/features before technical details (progressive disclosure)
 - Search system last (needs all pages indexed)
 
+### 1.5. File Regeneration Strategy (DELETE → RECREATE)
+**⚠️ CRITICAL: Always DELETE existing files BEFORE recreating**
+
+**Problem Solved:** Using `replace_string_in_file` or partial updates on HTML files causes:
+- Duplicate/merged content (e.g., `<!DOCTYPE html><!DOCTYPE html>`)
+- Corrupted tag structures
+- Unpredictable merge artifacts
+
+**Enforcement Rules:**
+```bash
+# ✅ CORRECT: Delete first, then create fresh
+rm docs/index.html
+create_file docs/index.html [complete content]
+
+# ❌ WRONG: Partial update or replace_string_in_file on HTML
+replace_string_in_file docs/index.html [old] [new]  # FORBIDDEN for HTML
+```
+
+**Mandatory Workflow for ALL HTML files:**
+1. **DELETE** existing file: `rm /path/to/file.html`
+2. **CREATE** new file with complete content: `create_file`
+3. **VALIDATE** with html_validator.py
+
+**Exception:** `docs/assets/css/main.css` may use `replace_string_in_file` for targeted CSS additions.
+
 ### 2. Glassmorphism Styling Enforcement
 **100% centralized in `main.css` - ZERO exceptions except story button image**
+
+**⚠️ CRITICAL: SINGLE CSS FILE ONLY**
+- ALL pages MUST use `docs/assets/css/main.css` - NO alternate CSS files
+- ❌ **FORBIDDEN:** `technical/assets/styles/glassmorphism.css` or ANY subdirectory CSS
+- ❌ **FORBIDDEN:** Creating new CSS files in `docs/technical/`, `docs/orchestrators/`, etc.
+- ✅ **REQUIRED:** Relative path to main.css from any depth: `../assets/css/main.css`, `../../assets/css/main.css`
 
 **Forbidden:**
 ```html
@@ -153,16 +186,56 @@ docs/search-index.json + assets/js/search.js (Lunr.js integration)
 <style>
 .my-custom-card { background: var(--glass-bg); }
 </style>
+
+<!-- ❌ NO ALTERNATE CSS FILES -->
+<link rel="stylesheet" href="assets/styles/glassmorphism.css">
+<link rel="stylesheet" href="technical/assets/styles/theme.css">
 ```
 
 **Required:**
 ```html
-<!-- ✅ CENTRALIZED CSS CLASSES -->
+<!-- ✅ SINGLE CENTRALIZED CSS FILE -->
 <link rel="stylesheet" href="../assets/css/main.css">
+<!-- OR from deeper paths -->
+<link rel="stylesheet" href="../../assets/css/main.css">
 <div class="glass-card">
 <div class="metric-card">
 <span class="badge badge-success">
 ```
+
+### 2.5. HTML Quality Tools Enforcement (MANDATORY Step 11)
+**ZERO inline styles, ZERO syntax errors - run tools after every documentation generation**
+
+**Tools Location:** `cortex-toolkit/documentation/html-tools/`
+
+**Mandatory Execution:**
+```bash
+# Step 11a: Remove ALL inline styles (centralizes to main.css)
+python3 cortex-toolkit/documentation/html-tools/html_style_centralizer.py
+
+# Step 11b: Validate ALL HTML syntax (no broken tags)
+python3 cortex-toolkit/documentation/html-tools/html_validator.py
+```
+
+**Expected Results:**
+```
+# html_style_centralizer.py output:
+✅ Processed 50 files
+✅ Removed 0 inline styles (if compliant)
+# OR if issues found:
+🔧 Removed X inline styles from Y files
+
+# html_validator.py output:
+✅ All 50 files are syntactically correct
+# OR if issues found:
+❌ Syntax errors in X files (fix before proceeding)
+```
+
+**Allowed Exceptions (only these 6):**
+1. `docs/story/viewer.html` - Legacy viewer (3 styles, preserved)
+2. D3.js dynamic styling - `style="background: ${d.color}"` patterns (runtime-generated)
+
+**Failure Mode:** If html_validator.py reports errors, STOP and fix before proceeding. Do not publish documentation with syntax errors.
 
 ### 3. Story Preservation (CRITICAL - NEVER MODIFY)
 ```
@@ -176,7 +249,7 @@ docs/index.html      ← Story button HTML MUST remain exactly as specified
     <span class="btn-hero-icon">
         <img src="assets/images/Awakening.png" 
              alt="Awakening" 
-             style="width: 150px; height: 150px; border-radius: 15px;" />
+             style="width: 200px; height: 200px; border-radius: 15px;" />
     </span>
     <span class="btn-hero-text">The Awakening Of CORTEX</span>
     <span class="btn-hero-caption">Read the How It All Happened</span>
@@ -797,7 +870,7 @@ without compromising confidential information.
                 <span class="btn-hero-icon">
                     <img src="assets/images/Awakening.png" 
                          alt="Awakening" 
-                         style="width: 150px; height: 150px; border-radius: 15px;" />
+                         style="width: 200px; height: 200px; border-radius: 15px;" />
                 </span>
                 <span class="btn-hero-text">The Awakening Of CORTEX</span>
                 <span class="btn-hero-caption">Read the How It All Happened</span>
@@ -3182,6 +3255,8 @@ for dir in required_dirs:
 3. ❌ Duplicate CSS class definitions across files
 4. ❌ `!important` overrides (except resets)
 5. ❌ Hardcoded colors (must use CSS variables)
+6. ❌ **Alternate CSS files** - ALL pages use `docs/assets/css/main.css` ONLY
+7. ❌ **Subdirectory CSS** - No `technical/assets/styles/` or similar directories
 
 ### Content Violations
 6. ❌ References to CORTEX 3.0 features
@@ -3260,7 +3335,7 @@ for dir in required_dirs:
        <span class="btn-hero-icon">
            <img src="assets/images/Awakening.png" 
                 alt="Awakening" 
-                style="width: 150px; height: 150px; border-radius: 15px;" />
+                style="width: 200px; height: 200px; border-radius: 15px;" />
        </span>
        <span class="btn-hero-text">The Awakening Of CORTEX</span>
        <span class="btn-hero-caption">Read the How It All Happened</span>
@@ -3380,6 +3455,21 @@ for dir in required_dirs:
 3. grep_search("docs/**/*.html", "CORTEX 3.0") → Should return 0 matches
 4. Manual: Click story button test → Navigate to story/index.html
 ```
+
+**Step 11: HTML Quality Tools (MANDATORY)**
+```bash
+# 11a: Remove inline styles - expect 0 removals if compliant
+python3 cortex-toolkit/documentation/html-tools/html_style_centralizer.py
+
+# 11b: Validate HTML syntax - expect "All files syntactically correct"
+python3 cortex-toolkit/documentation/html-tools/html_validator.py
+```
+
+**HTML Quality Checklist:**
+- [ ] `html_style_centralizer.py` executed - ZERO inline styles (except 6 allowed exceptions)
+- [ ] `html_validator.py` executed - ZERO syntax errors in all HTML files
+- [ ] If styles removed → Run validator again to confirm no structural damage
+- [ ] Story/viewer.html exceptions preserved (3 legacy styles allowed)
 
 **Tools Priority:**
 - **Discovery:** `grep_search` (fast pattern matching), `semantic_search` (feature finding)
