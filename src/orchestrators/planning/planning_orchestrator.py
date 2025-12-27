@@ -296,6 +296,11 @@ class PlanningOrchestrator(BaseOrchestrator):
             modularization_threshold=modularization_threshold
         )
         
+        # Task 13A: Initialize PlanFolderManager for hierarchical structure
+        from src.utils.plan_folder_manager import PlanFolderManager
+        self.folder_manager = PlanFolderManager(project_root=self.cortex_root)
+        self.folder_structure_enabled = config.get("enable_folder_structure", True)
+        
         # Execution engine (Week 8 Day 3)
         self.plan_executor = PlanExecutor(
             workspace_root=config.get("workspace_root", Path.cwd()),
@@ -804,7 +809,8 @@ class PlanningOrchestrator(BaseOrchestrator):
         output_dir: Path
     ) -> PlanningResult:
         """
-        Render plan as markdown with Phase 10 YAML modularization.
+        Render plan as markdown with Phase 10 YAML modularization and
+        Task 13A folder structure creation.
         
         Args:
             plan_data: Plan data to render
@@ -814,6 +820,46 @@ class PlanningOrchestrator(BaseOrchestrator):
             PlanningResult with markdown file path and optional modular YAML structure
         """
         self.logger.info(f"📄 Rendering markdown to: {output_dir}")
+        
+        # Task 13A: Create hierarchical folder structure if enabled
+        plan_folder = None
+        if self.folder_structure_enabled:
+            try:
+                # Generate plan ID from title
+                safe_title = plan_data.metadata.title.lower().replace(" ", "-").replace("_", "-")
+                
+                # Detect next version
+                base_name = safe_title.removesuffix("-v1").removesuffix("-v2").removesuffix("-v3")
+                next_version = self.folder_manager.detect_next_version(base_name, status="active")
+                plan_id = f"{base_name}-v{next_version}"
+                
+                # Create folder structure
+                plan_folder = self.folder_manager.create_plan_folder(
+                    plan_id=plan_id,
+                    title=plan_data.metadata.title,
+                    complexity_tier=plan_data.metadata.complexity.value if hasattr(plan_data.metadata.complexity, 'value') else 3,
+                    status="active",
+                    metadata={
+                        "plan_type": plan_data.metadata.plan_type.value if hasattr(plan_data.metadata.plan_type, 'value') else str(plan_data.metadata.plan_type),
+                        "author": plan_data.metadata.author,
+                        "created": plan_data.metadata.created.isoformat() if hasattr(plan_data.metadata.created, 'isoformat') else str(plan_data.metadata.created),
+                    }
+                )
+                
+                self.logger.info(f"✅ Created plan folder structure: {plan_folder}")
+                
+                # Override output_dir to use plan_folder root
+                output_dir = plan_folder
+                
+            except ValueError as e:
+                self.logger.warning(f"⚠️  Plan folder already exists, using existing: {e}")
+                # Fall back to existing folder if plan already exists
+                plan_folder = self.folder_manager.get_plan_folder(plan_id, status="active")
+                if plan_folder:
+                    output_dir = plan_folder
+            except Exception as e:
+                self.logger.error(f"❌ Failed to create plan folder: {e}")
+                # Continue with flat structure if folder creation fails
         
         # Create output paths
         output_dir = Path(output_dir)
@@ -850,12 +896,36 @@ class PlanningOrchestrator(BaseOrchestrator):
         if plan_data.tdd_requirements:
             plan_dict["tdd_requirements"] = plan_data.tdd_requirements
         
-        # Render with automatic modularization
-        rendering_result = self.markdown_renderer.render(
-            plan_data=plan_dict,
-            output_filename=safe_title,
-            save_yaml=True
-        )
+        # Task 13A: Use 00-master-plan.md for hierarchical structure
+        if plan_folder:
+            output_filename = "00-master-plan"
+        else:
+            output_filename = safe_title
+        
+        # Task 13A: Temporarily override renderer output_dir if using hierarchical structure
+        original_output_dir = self.markdown_renderer.output_dir
+        if plan_folder:
+            self.markdown_renderer.output_dir = output_dir
+        
+        try:
+            # Render with automatic modularization
+            rendering_result = self.markdown_renderer.render(
+                plan_data=plan_dict,
+                output_filename=output_filename,
+                save_yaml=True
+            )
+            
+            # Task 13A: Move YAML to execution/ subfolder if hierarchical structure
+            if plan_folder and rendering_result.yaml_path:
+                execution_folder = plan_folder / "execution"
+                execution_folder.mkdir(exist_ok=True)
+                yaml_target = execution_folder / rendering_result.yaml_path.name
+                rendering_result.yaml_path.rename(yaml_target)
+                rendering_result.yaml_path = yaml_target
+                self.logger.info(f"✅ YAML moved to: {yaml_target}")
+        finally:
+            # Restore original output_dir
+            self.markdown_renderer.output_dir = original_output_dir
         
         if not rendering_result.success:
             self.logger.error(f"❌ Markdown rendering failed: {rendering_result.errors}")
