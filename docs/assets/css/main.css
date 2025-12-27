@@ -591,6 +591,11 @@ body {
     padding: 4rem 0;
 }
 
+.section-alt {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 4rem 0;
+}
+
 .section-title {
     font-size: 2.5rem;
     text-align: center;
@@ -624,6 +629,47 @@ body {
     border: 1px solid var(--glass-border);
     border-radius: var(--radius-md);
     padding: var(--spacing-lg);
+}
+
+/* Card link variant for clickable cards */
+.glass-card.card-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    text-decoration: none;
+    color: inherit;
+    padding: 2rem;
+    gap: 1rem;
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.glass-card.card-link:hover {
+    transform: translateY(-8px);
+    border-color: var(--accent-primary);
+    box-shadow: 0 8px 32px rgba(0, 212, 255, 0.3);
+}
+
+.card-icon {
+    font-size: 3rem;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.glass-card.card-link h4 {
+    margin: 0 0 0.5rem 0;
+    color: var(--text-primary);
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.glass-card.card-link p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    line-height: 1.5;
 }
 
 /* ============================================
@@ -1785,15 +1831,26 @@ footer,
     gap: 2rem;
 }
 
+.feature-grid-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+}
+
 @media (max-width: 1024px) {
     .feature-grid-3 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .feature-grid-4 {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
 @media (max-width: 768px) {
     .feature-grid-3,
-    .feature-grid-2 {
+    .feature-grid-2,
+    .feature-grid-4 {
         grid-template-columns: 1fr;
     }
 }
