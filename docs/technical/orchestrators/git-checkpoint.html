@@ -1,612 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta content="width=device-width, initial-scale=1.0" name="viewport">
-<title>Git Checkpoint Orchestrator | CORTEX Technical Documentation</title>
-<!-- D3.js -->
-<script src="https://d3js.org/d3.v7.min.js" type="text/javascript">
-</script><!-- Mermaid -->
-<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js" type="text/javascript">
-</script>
-<style type="text/css">
-      :root {
-            --git-primary: #00BCD4;
-            --git-secondary: #0097A7;
-            --git-dark: #006064;
-            --success: #10B981;
-            --warning: #F59E0B;
-            --error: #DC2626;
-        }
-        
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: #0f172a;
-            color: #e2e8f0;
-        }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-        
-        header {
-            text-align: center;
-            padding: 3rem 0;
-            border-bottom: 2px solid var(--git-primary);
-            margin-bottom: 3rem;
-        }
-        
-        h1 {
-            font-size: 3rem;
-            margin: 0;
-            color: var(--git-primary);
-            font-weight: 600;
-        }
-        
-        .subtitle {
-            font-size: 1.25rem;
-            color: #94a3b8;
-            margin-top: 0.5rem;
-        }
-        
-        .orchestrator-meta {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin: 2rem 0;
-            padding: 1.5rem;
-            background: #1e293b;
-            border-radius: 8px;
-            border-left: 4px solid var(--git-primary);
-        }
-        
-        .meta-item {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .meta-label {
-            font-size: 0.875rem;
-            color: #94a3b8;
-            margin-bottom: 0.25rem;
-        }
-        
-        .meta-value {
-            font-size: 1.125rem;
-            font-weight: 600;
-            color: var(--git-primary);
-        }
-        
-        .section {
-            margin: 3rem 0;
-            padding: 2rem;
-            background: #1e293b;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-        }
-        
-        h2 {
-            font-size: 2rem;
-            margin-top: 0;
-            color: #f1f5f9;
-            border-bottom: 2px solid var(--git-secondary);
-            padding-bottom: 0.5rem;
-        }
-        
-        .diagram-container {
-            background: #0f172a;
-            padding: 2rem;
-            border-radius: 8px;
-            margin: 1.5rem 0;
-            border: 1px solid #334155;
-        }
-        
-        .mermaid {
-            text-align: center;
-        }
-        
-        #commitTimeline, #rollbackImpact {
-            min-height: 600px;
-            width: 100%;
-        }
-        
-        .feature-list {
-            display: grid;
-            gap: 1rem;
-            margin: 1.5rem 0;
-        }
-        
-        .feature-card {
-            padding: 1rem;
-            background: #0f172a;
-            border-radius: 8px;
-            border-left: 4px solid var(--git-primary);
-        }
-        
-        .feature-title {
-            font-weight: 600;
-            color: var(--git-primary);
-            margin-bottom: 0.5rem;
-        }
-        
-        .feature-desc {
-            color: #cbd5e1;
-            font-size: 0.938rem;
-            line-height: 1.6;
-        }
-        
-        .tooltip {
-            position: absolute;
-            padding: 0.75rem;
-            background: #1e293b;
-            border: 1px solid var(--git-primary);
-            border-radius: 6px;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.2s;
-            font-size: 0.875rem;
-            color: #e2e8f0;
-            max-width: 300px;
-            z-index: 1000;
-        }
-        
-        .back-link {
-            display: inline-block;
-            margin: 2rem 0;
-            padding: 0.75rem 1.5rem;
-            background: var(--git-primary);
-            color: #0f172a;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: 600;
-            transition: background 0.2s;
-        }
-        
-        .back-link:hover {
-            background: var(--git-secondary);
-        }
-        
-        @media (max-width: 768px) {
-            .container { padding: 1rem; }
-            h1 { font-size: 2rem; }
-            .orchestrator-meta { grid-template-columns: 1fr; }
-        }
-            
-        /* Breadcrumb Navigation */
-        .breadcrumb {
-            background: rgba(30, 41, 59, 0.8);
-            padding: 1rem 2rem;
-            border-bottom: 1px solid rgba(124, 58, 237, 0.3);
-            margin-bottom: 2rem;
-        }
-        
-        .breadcrumb a {
-            color: var(--primary, #2196F3);
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-        
-        .breadcrumb a:hover {
-            color: var(--secondary, #1976D2);
-            text-decoration: underline;
-        }
-        
-        .breadcrumb-separator {
-            color: #64748b;
-            margin: 0 0.5rem;
-        }
-        
-        .breadcrumb-current {
-            color: #e2e8f0;
-        }
-
-  <body>
-    <!-- Breadcrumb -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Git Checkpoint Orchestrator | CORTEX Technical Documentation</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root { --primary: #FF9800; --success: #10B981; --warning: #F59E0B; --error: #DC2626; }
+        body { font-family: 'Inter', -apple-system, sans-serif; margin: 0; padding: 0; background: #0f172a; color: #e2e8f0; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+        header { text-align: center; padding: 3rem 0; border-bottom: 2px solid var(--primary); }
+        header h1 { font-size: 3rem; font-weight: 700; color: var(--primary); margin: 0; }
+        header .subtitle { font-size: 1.2rem; color: #94a3b8; margin-top: 0.5rem; }
+        .metadata { display: flex; justify-content: center; gap: 2rem; margin-top: 1rem; flex-wrap: wrap; }
+        .metadata-item { background: rgba(255, 255, 255, 0.05); padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.9rem; }
+        .section { margin: 3rem 0; }
+        .section-title { font-size: 2rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; border-left: 4px solid var(--primary); padding-left: 1rem; }
+        .intro-text { font-size: 1.1rem; line-height: 1.8; color: #cbd5e1; margin-bottom: 2rem; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+        .feature-card { background: #1e293b; border-radius: 12px; padding: 1.5rem; border-left: 4px solid var(--primary); transition: transform 0.2s; }
+        .feature-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(255, 255, 255, 0.1); }
+        .viz-container { background: #1e293b; border-radius: 12px; padding: 2rem; margin: 2rem 0; }
+        .mermaid { background: #0f172a; border-radius: 8px; padding: 2rem; }
+        .breadcrumb { background: rgba(30, 41, 59, 0.8); padding: 1rem 2rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .breadcrumb a { color: var(--primary); text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .breadcrumb-separator { color: #64748b; margin: 0 0.5rem; }
+        .breadcrumb-current { color: #e2e8f0; }
+        footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid #334155; margin-top: 4rem; color: #64748b; }
+    </style>
+</head>
+<body>
     <nav class="breadcrumb">
-        <a href="../../index.html">Home<\/a>
-        <span class="breadcrumb-separator">›<\/span>
-        <a href="../../features/orchestrators.html">Orchestrators<\/a>
-        <span class="breadcrumb-separator">›<\/span>
-        <a href="index.html">Technical Documentation<\/a>
-        <span class="breadcrumb-separator">›<\/span>
-        <span class="breadcrumb-current">Git Checkpoint<\/span>
-    <\/nav>
+        <a href="../../index.html">Home</a>
+        <span class="breadcrumb-separator">›</span>
+        <a href="index.html">Orchestrators</a>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-current">Git Checkpoint</span>
+    </nav>
     
     <div class="container">
         <header>
-            <h1>🔄 Git Checkpoint Orchestrator<\/h1>
-            <p class="subtitle">Phase Milestone Tracking & Rollback Management<\/p>
-        <\/header>
-
-        <div class="orchestrator-meta">
-            <div class="meta-item">
-                <span class="meta-label">File Location<\/span>
-                <span class="meta-value">src/orchestrators/<\/span>
-            <\/div>
-            <div class="meta-item">
-                <span class="meta-label">Complexity<\/span>
-                <span class="meta-value">MEDIUM<\/span>
-            <\/div>
-            <div class="meta-item">
-                <span class="meta-label">Manifest<\/span>
-                <span class="meta-value">git-checkpoint-rules.yaml<\/span>
-            <\/div>
-            <div class="meta-item">
-                <span class="meta-label">Integration<\/span>
-                <span class="meta-value">All Orchestrators<\/span>
-            <\/div>
-
+            <h1>💾 Git Checkpoint Orchestrator</h1>
+            <p class="subtitle">Phase Milestone Tracking & Rollback Management</p>
+            <div class="metadata">
+                <div class="metadata-item"><span style="color:#94a3b8">Complexity:</span> <span style="color:var(--primary);font-weight:600">MEDIUM</span></div>
+                <div class="metadata-item"><span style="color:#94a3b8">File:</span> <span style="color:var(--primary);font-weight:600">git_checkpoint_orchestrator.py</span></div>
+            </div>
+        </header>
+        
         <section class="section">
-            <h2>Overview<\/h2>
-            <p>
-                The Git Checkpoint Orchestrator provides automated phase milestone tracking and rollback 
-                management for all CORTEX orchestrators. It creates safety checkpoints at key phase boundaries, 
-                enabling quick recovery if issues are detected downstream.
-            
-            <div class="feature-list">
-                <div class="feature-card">
-                    <div class="feature-title">📍 Phase Milestone Tracking<\/div>
-                    <div class="feature-desc">
-                        Automatically creates git commits at phase boundaries with standardized messages 
-                        (e.g., "CHECKPOINT: Phase 3 Complete - Transform"). Enables granular rollback.
-                <div class="feature-card">
-                    <div class="feature-title">🔒 Branch Protection<\/div>
-                    <div class="feature-desc">
-                        Enforces branch protection rules: prevent force-push to main, require checkpoint 
-                        commits before merges, validate test pass before commit.
-                <div class="feature-card">
-                    <div class="feature-title">⏮️ Intelligent Rollback<\/div>
-                    <div class="feature-desc">
-                        Smart rollback selection based on impact analysis. Shows files changed since checkpoint, 
-                        affected modules, and potential downstream impact.
-                <div class="feature-card">
-                    <div class="feature-title">📊 Commit Timeline Visualization<\/div>
-                    <div class="feature-desc">
-                        Interactive D3.js timeline showing checkpoints, phase transitions, and rollback points 
-                        with drill-down to commit details.
-
+            <div class="intro-text">Manages git checkpoints at phase boundaries for safe rollback. Features phase milestone tracking, rollback point creation, branch protection, and impact analysis. Provides commit timeline visualization with milestone markers and rollback decision trees.</div>
+        </section>
+        
         <section class="section">
-            <h2>Checkpoint Creation Workflow<\/h2>
-            <div class="diagram-container">
-                <div class="mermaid">
-  graph TD
-    START([Phase Complete]) --> VALIDATE{Validation<br/>Pass?}
+            <h2 class="section-title">✨ Key Features</h2>
+            <div class="features-grid"><div class="feature-card"><div style="font-size:2rem;margin-bottom:1rem">🎯</div><div style="font-size:1.25rem;font-weight:600;color:#f1f5f9;margin-bottom:0.75rem">Milestone Tracking</div><div style="color:#94a3b8">Automatic checkpoints at phase boundaries</div></div><div class="feature-card"><div style="font-size:2rem;margin-bottom:1rem">🔄</div><div style="font-size:1.25rem;font-weight:600;color:#f1f5f9;margin-bottom:0.75rem">Safe Rollback</div><div style="color:#94a3b8">Quick recovery to any checkpoint</div></div><div class="feature-card"><div style="font-size:2rem;margin-bottom:1rem">🛡️</div><div style="font-size:1.25rem;font-weight:600;color:#f1f5f9;margin-bottom:0.75rem">Branch Protection</div><div style="color:#94a3b8">Prevents destructive operations</div></div></div>
+        </section>
+        
+        <section class="section"><h2 class="section-title">🔄 Checkpoint Workflow</h2><div class="viz-container"><div class="mermaid">
+graph TD
+    A[Phase Start] --> B{Create<br/>Checkpoint?}
+    B -->|Yes| C[Git Commit]
+    B -->|No| D[Continue]
+    C --> E[Tag Milestone]
+    E --> F[Phase Work]
+    F --> G{Phase<br/>Success?}
+    G -->|Yes| H[Next Phase]
+    G -->|No| I[Rollback Option]
+    I --> J[Restore Checkpoint]
     
-    VALIDATE --> |No| FAIL[Skip checkpoint<br/>Report failure]
-    VALIDATE --> |Yes| CHECK_CHANGES{Changes<br/>Exist?}
+    style A fill:#FF9800,stroke:#F57C00,color:#fff
+    style H fill:#10B981,stroke:#059669,color:#fff
+    style J fill:#F44336,stroke:#D32F2F,color:#fff
+                </div></div></section>
+        
+        <footer>
+            <p>&copy; 2025 Asif Hussain | CORTEX 4.0</p>
+            <p>Git Checkpoint Orchestrator - Phase Milestone Management</p>
+        </footer>
+    </div>
     
-    CHECK_CHANGES --> |No| SKIP[Skip checkpoint<br/>No changes to commit]
-    CHECK_CHANGES --> |Yes| STAGE[Stage files:<br/>git add relevant files]
-    
-    STAGE --> GEN_MSG[Generate checkpoint message:<br/>CHECKPOINT: Phase X - Description]
-    
-    GEN_MSG --> CHECK_BRANCH{Branch<br/>Protected?}
-    
-    CHECK_BRANCH --> |Yes| ENFORCE[Enforce protection rules:<br/>- No force-push<br/>- Tests must pass<br/>- Review required]
-    CHECK_BRANCH --> |No| COMMIT
-    
-    ENFORCE --> VALIDATE_RULES{Rules<br/>Pass?}
-    VALIDATE_RULES --> |No| BLOCK[Block commit<br/>Report violations]
-    VALIDATE_RULES --> |Yes| COMMIT
-    
-    COMMIT[Create checkpoint commit:<br/>git commit -m message]
-    
-    COMMIT --> TAG[Create git tag:<br/>checkpoint-phase-X-timestamp]
-    
-    TAG --> METADATA[Store metadata:<br/>- Phase number<br/>- Files changed<br/>- Test results<br/>- Timestamp]
-    
-    METADATA --> PUSH{Auto-push<br/>Enabled?}
-    
-    PUSH --> |Yes| REMOTE[Push to remote:<br/>git push origin branch]
-    PUSH --> |No| LOCAL[Local checkpoint only]
-    
-    REMOTE --> SUCCESS[✅ Checkpoint created]
-    LOCAL --> SUCCESS
-    
-    FAIL --> END([Complete])
-    SKIP --> END
-    BLOCK --> END
-    SUCCESS --> END
-    
-    style START fill:#00BCD4,stroke:#0097A7,color:#fff
-    style VALIDATE fill:#4CAF50,stroke:#388E3C,color:#fff
-    style COMMIT fill:#2196F3,stroke:#1976D2,color:#fff
-    style TAG fill:#FF9800,stroke:#F57C00,color:#fff
-    style SUCCESS fill:#10B981,stroke:#059669,color:#fff
-    style FAIL fill:#DC2626,stroke:#B91C1C,color:#fff
-    style BLOCK fill:#DC2626,stroke:#B91C1C,color:#fff
-    style END fill:#10B981,stroke:#059669,color:#fff
-
-        <section class="section">
-            <h2>Commit Timeline with Phase Milestones<\/h2>
-            <p>Interactive timeline showing checkpoint history with rollback points.<\/p>
-            <div class="diagram-container">
-                <div id="commitTimeline"><\/div>
-            <\/div>
-
-        <section class="section">
-            <h2>Branch Protection Rules<\/h2>
-            <div class="diagram-container">
-                <div class="mermaid">
-  graph LR
-    COMMIT[Commit Attempt] --> CHECK_BRANCH{Target<br/>Branch?}
-    
-    CHECK_BRANCH --> |main| MAIN_RULES[Main Branch Rules:<br/>- No direct commits<br/>- PR required<br/>- 2 approvals]
-    CHECK_BRANCH --> |develop| DEV_RULES[Develop Branch Rules:<br/>- Tests must pass<br/>- No force-push]
-    CHECK_BRANCH --> |feature| FEATURE_RULES[Feature Branch Rules:<br/>- No restrictions]
-    
-    MAIN_RULES --> VALIDATE_MAIN{Rules<br/>Pass?}
-    DEV_RULES --> VALIDATE_DEV{Tests<br/>Pass?}
-    FEATURE_RULES --> ALLOW
-    
-    VALIDATE_MAIN --> |No| REJECT[❌ Reject commit]
-    VALIDATE_MAIN --> |Yes| ALLOW[✅ Allow commit]
-    
-    VALIDATE_DEV --> |No| REJECT
-    VALIDATE_DEV --> |Yes| ALLOW
-    
-    REJECT --> LOG[Log violation<br/>Notify user]
-    ALLOW --> CREATE[Create checkpoint]
-    
-    LOG --> END([Complete])
-    CREATE --> END
-    
-    style COMMIT fill:#00BCD4,stroke:#0097A7,color:#fff
-    style ALLOW fill:#10B981,stroke:#059669,color:#fff
-    style REJECT fill:#DC2626,stroke:#B91C1C,color:#fff
-
-        <section class="section">
-            <h2>Rollback Decision Tree with Impact Analysis<\/h2>
-            <p>Visualizes impact of rolling back to a specific checkpoint.<\/p>
-            <div class="diagram-container">
-                <div id="rollbackImpact"><\/div>
-            <\/div>
-
-        <section class="section">
-            <h2>Key Features<\/h2>
-            <div class="feature-list">
-                <div class="feature-card">
-                    <div class="feature-title">🎯 Granular Checkpoints<\/div>
-                    <div class="feature-desc">
-                        Creates checkpoints at every phase boundary, not just end of workflow. Enables 
-                        rollback to any intermediate state.
-                <div class="feature-card">
-                    <div class="feature-title">📋 Standardized Messages<\/div>
-                    <div class="feature-desc">
-                        Checkpoint format: <code>CHECKPOINT: Phase [N] - [Description]<\/code>. Makes it 
-                        easy to identify rollback points in git history.
-                <div class="feature-card">
-                    <div class="feature-title">🔍 Impact Analysis<\/div>
-                    <div class="feature-desc">
-                        Before rollback, shows: files changed since checkpoint, modules affected, tests 
-                        that may need re-running, downstream dependencies.
-                <div class="feature-card">
-                    <div class="feature-title">🏷️ Git Tags<\/div>
-                    <div class="feature-desc">
-                        Creates git tags at checkpoints for easy reference: 
-                        <code>checkpoint-phase-3-20251226-143022<\/code>
-                    <\/div>
-                <div class="feature-card">
-                    <div class="feature-title">🔐 Security<\/div>
-                    <div class="feature-desc">
-                        Prevents accidental data loss: confirms rollback action, creates backup branch 
-                        before rollback, validates branch protection rules.
-
-        <section class="section">
-            <h2>Related Documentation<\/h2>
-            <div class="feature-list">
-                <div class="feature-card">
-                    <div class="feature-title">Manifest<\/div>
-                    <div class="feature-desc">
-                        <code>cortex-brain/manifests/orchestrators/git-checkpoint-rules.yaml<\/code>
-                    <\/div>
-                <div class="feature-card">
-                    <div class="feature-title">Implementation<\/div>
-                    <div class="feature-desc">
-                        <code>src/orchestrators/git_checkpoint_orchestrator.py<\/code>
-                    <\/div>
-
-        <a href="index.html" class="back-link">← Back to Orchestrator Index<\/a>
-    <\/div>
-
-    <div class="tooltip" id="tooltip"><\/div>
-
     <script>
         mermaid.initialize({ 
             startOnLoad: true,
             theme: 'dark',
             themeVariables: {
-                primaryColor: '#00BCD4',
+                primaryColor: '#FF9800',
                 primaryTextColor: '#fff',
-                primaryBorderColor: '#0097A7',
-                lineColor: '#94a3b8',
-                secondaryColor: '#1e293b',
-                tertiaryColor: '#0f172a'
+                lineColor: '#64748b',
+                secondaryColor: '#1e293b'
             }
         });
-
-        function createCommitTimeline() {
-            const data = [
-                { date: new Date('2025-12-26T10:00:00'), phase: 0, label: 'Start', type: 'start' },
-                { date: new Date('2025-12-26T10:15:00'), phase: 1, label: 'Phase 1 Complete', type: 'checkpoint' },
-                { date: new Date('2025-12-26T10:30:00'), phase: 2, label: 'Phase 2 Complete', type: 'checkpoint' },
-                { date: new Date('2025-12-26T10:45:00'), phase: 3, label: 'Phase 3 Complete', type: 'checkpoint' },
-                { date: new Date('2025-12-26T10:50:00'), phase: 3, label: 'Issue Detected', type: 'error' },
-                { date: new Date('2025-12-26T10:52:00'), phase: 3, label: 'Rollback to Phase 2', type: 'rollback' },
-                { date: new Date('2025-12-26T11:00:00'), phase: 3, label: 'Phase 3 Fixed', type: 'checkpoint' },
-                { date: new Date('2025-12-26T11:15:00'), phase: 4, label: 'Complete', type: 'complete' }
-            ];
-
-            const width = document.getElementById('commitTimeline').clientWidth;
-            const height = 400;
-            const margin = { top: 40, right: 40, bottom: 60, left: 60 };
-
-            const svg = d3.select('#commitTimeline')
-                .append('svg')
-                .attr('width', width)
-                .attr('height', height);
-
-            const xScale = d3.scaleTime()
-                .domain(d3.extent(data, d => d.date))
-                .range([margin.left, width - margin.right]);
-
-            const colorMap = {
-                start: '#00BCD4',
-                checkpoint: '#10B981',
-                error: '#DC2626',
-                rollback: '#F59E0B',
-                complete: '#9C27B0'
-            };
-
-            // Timeline line
-            svg.append('line')
-                .attr('x1', margin.left)
-                .attr('x2', width - margin.right)
-                .attr('y1', height / 2)
-                .attr('y2', height / 2)
-                .attr('stroke', '#64748b')
-                .attr('stroke-width', 3);
-
-            // Commits
-            const commits = svg.selectAll('.commit')
-                .data(data)
-                .enter()
-                .append('g')
-                .attr('class', 'commit')
-                .attr('transform', d => `translate(${xScale(d.date)}, ${height / 2})`);
-
-            commits.append('circle')
-                .attr('r', d => d.type === 'rollback' ? 12 : 8)
-                .attr('fill', d => colorMap[d.type])
-                .attr('stroke', '#0f172a')
-                .attr('stroke-width', 2)
-                .on('mouseover', function(event, d) {
-                    const tooltip = d3.select('#tooltip');
-                    tooltip.style('opacity', 1)
-                        .html(`
-                            <strong>${d.label}<\/strong><br/>
-                            Phase: ${d.phase}<br/>
-                            Time: ${d.date.toLocaleTimeString()}
-                        `)
-                        .style('left', (event.pageX + 10) + 'px')
-                        .style('top', (event.pageY - 28) + 'px');
-                })
-                .on('mouseout', () => d3.select('#tooltip').style('opacity', 0));
-
-            commits.append('text')
-                .attr('y', (d, i) => i % 2 === 0 ? -20 : 35)
-                .attr('text-anchor', 'middle')
-                .attr('fill', '#e2e8f0')
-                .attr('font-size', '11px')
-                .attr('font-weight', '600')
-                .text(d => d.label);
-
-            // X-axis
-            svg.append('g')
-                .attr('transform', `translate(0,${height - margin.bottom})`)
-                .call(d3.axisBottom(xScale).ticks(6).tickFormat(d3.timeFormat('%H:%M')))
-                .selectAll('text')
-                .attr('fill', '#e2e8f0');
-        }
-
-        function createRollbackImpact() {
-            const data = {
-                name: "Rollback to Phase 2",
-                children: [
-                    {
-                        name: "Files Changed (12)",
-                        children: [
-                            { name: "src/module_a.py", impact: "high" },
-                            { name: "src/module_b.py", impact: "medium" },
-                            { name: "tests/test_a.py", impact: "high" }
-                        ]
-                    },
-                    {
-                        name: "Tests Affected (8)",
-                        children: [
-                            { name: "test_phase_3_*", impact: "high" },
-                            { name: "test_integration_*", impact: "medium" }
-                        ]
-                    },
-                    {
-                        name: "Downstream Impact",
-                        children: [
-                            { name: "Phase 4 blocked", impact: "high" },
-                            { name: "Deploy delayed", impact: "medium" }
-                        ]
-                    }
-                ]
-            };
-
-            const width = document.getElementById('rollbackImpact').clientWidth;
-            const height = 500;
-
-            const svg = d3.select('#rollbackImpact')
-                .append('svg')
-                .attr('width', width)
-                .attr('height', height);
-
-            const g = svg.append('g')
-                .attr('transform', `translate(${width / 2},${height / 2})`);
-
-            const tree = d3.tree()
-                .size([2 * Math.PI, Math.min(width, height) / 2 - 80]);
-
-            const root = d3.hierarchy(data);
-            tree(root);
-
-            const impactColors = {
-                high: '#DC2626',
-                medium: '#F59E0B',
-                low: '#10B981'
-            };
-
-            g.selectAll('.link')
-                .data(root.links())
-                .enter()
-                .append('path')
-                .attr('d', d3.linkRadial()
-                    .angle(d => d.x)
-                    .radius(d => d.y))
-                .attr('fill', 'none')
-                .attr('stroke', '#64748b')
-                .attr('stroke-width', 2);
-
-            const node = g.selectAll('.node')
-                .data(root.descendants())
-                .enter()
-                .append('g')
-                .attr('transform', d => `rotate(${d.x * 180 / Math.PI - 90}) translate(${d.y},0)`);
-
-            node.append('circle')
-                .attr('r', d => d.depth === 0 ? 10 : 6)
-                .attr('fill', d => d.data.impact ? impactColors[d.data.impact] : '#00BCD4')
-                .attr('stroke', '#0f172a')
-                .attr('stroke-width', 2);
-
-            node.append('text')
-                .attr('dy', '0.31em')
-                .attr('x', d => d.x < Math.PI === !d.children ? 6 : -6)
-                .attr('text-anchor', d => d.x < Math.PI === !d.children ? 'start' : 'end')
-                .attr('transform', d => d.x >= Math.PI ? 'rotate(180)' : null)
-                .text(d => d.data.name)
-                .attr('fill', '#e2e8f0')
-                .attr('font-size', '11px')
-                .clone(true).lower()
-                .attr('stroke', '#0f172a')
-                .attr('stroke-width', 3);
-        }
-
-        window.addEventListener('load', () => {
-            createCommitTimeline();
-            createRollbackImpact();
-        });
-  </style>
-</head>
-<body>
+    </script>
 </body>
 </html>

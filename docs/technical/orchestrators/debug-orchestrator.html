@@ -1,795 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta content="width=device-width, initial-scale=1.0" name="viewport">
-<title>Debug Orchestrator | CORTEX Technical Documentation</title>
-<!-- D3.js -->
-<script src="https://d3js.org/d3.v7.min.js" type="text/javascript">
-</script><!-- Mermaid -->
-<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js" type="text/javascript">
-</script>
-<style type="text/css">
-      :root {
-            --debug-primary: #F44336;
-            --debug-secondary: #D32F2F;
-            --debug-dark: #B71C1C;
-            --phase-1: #2196F3;
-            --phase-2: #4CAF50;
-            --phase-3: #FF9800;
-            --phase-4: #9C27B0;
-            --success: #10B981;
-            --warning: #F59E0B;
-            --error: #DC2626;
-            --critical: #B91C1C;
-        }
-        
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: #0f172a;
-            color: #e2e8f0;
-        }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-        
-        header {
-            text-align: center;
-            padding: 3rem 0;
-            border-bottom: 2px solid var(--debug-primary);
-            margin-bottom: 3rem;
-        }
-        
-        h1 {
-            font-size: 3rem;
-            margin: 0;
-            color: var(--debug-primary);
-            font-weight: 600;
-        }
-        
-        .subtitle {
-            font-size: 1.25rem;
-            color: #94a3b8;
-            margin-top: 0.5rem;
-        }
-        
-        .orchestrator-meta {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin: 2rem 0;
-            padding: 1.5rem;
-            background: #1e293b;
-            border-radius: 8px;
-            border-left: 4px solid var(--debug-primary);
-        }
-        
-        .meta-item {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .meta-label {
-            font-size: 0.875rem;
-            color: #94a3b8;
-            margin-bottom: 0.25rem;
-        }
-        
-        .meta-value {
-            font-size: 1.125rem;
-            font-weight: 600;
-            color: var(--debug-primary);
-        }
-        
-        .section {
-            margin: 3rem 0;
-            padding: 2rem;
-            background: #1e293b;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-        }
-        
-        h2 {
-            font-size: 2rem;
-            margin-top: 0;
-            color: #f1f5f9;
-            border-bottom: 2px solid var(--debug-secondary);
-            padding-bottom: 0.5rem;
-        }
-        
-        h3 {
-            font-size: 1.5rem;
-            color: var(--debug-primary);
-            margin-top: 2rem;
-        }
-        
-        .diagram-container {
-            background: #0f172a;
-            padding: 2rem;
-            border-radius: 8px;
-            margin: 1.5rem 0;
-            border: 1px solid #334155;
-        }
-        
-        .mermaid {
-            text-align: center;
-        }
-        
-        #debugWorkflow, #errorTrace, #contextCapture, #rollbackTree {
-            min-height: 600px;
-            width: 100%;
-        }
-        
-        .phase-legend {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1rem;
-            margin: 2rem 0;
-        }
-        
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem;
-            background: #0f172a;
-            border-radius: 6px;
-        }
-        
-        .legend-color {
-            width: 20px;
-            height: 20px;
-            border-radius: 4px;
-        }
-        
-        .legend-label {
-            font-size: 0.875rem;
-            color: #e2e8f0;
-        }
-        
-        .feature-list {
-            display: grid;
-            gap: 1rem;
-            margin: 1.5rem 0;
-        }
-        
-        .feature-card {
-            padding: 1rem;
-            background: #0f172a;
-            border-radius: 8px;
-            border-left: 4px solid var(--debug-primary);
-        }
-        
-        .feature-title {
-            font-weight: 600;
-            color: var(--debug-primary);
-            margin-bottom: 0.5rem;
-        }
-        
-        .feature-desc {
-            color: #cbd5e1;
-            font-size: 0.938rem;
-            line-height: 1.6;
-        }
-        
-        .tooltip {
-            position: absolute;
-            padding: 0.75rem;
-            background: #1e293b;
-            border: 1px solid var(--debug-primary);
-            border-radius: 6px;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.2s;
-            font-size: 0.875rem;
-            color: #e2e8f0;
-            max-width: 300px;
-            z-index: 1000;
-        }
-        
-        .back-link {
-            display: inline-block;
-            margin: 2rem 0;
-            padding: 0.75rem 1.5rem;
-            background: var(--debug-primary);
-            color: #fff;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: 600;
-            transition: background 0.2s;
-        }
-        
-        .back-link:hover {
-            background: var(--debug-secondary);
-        }
-        
-        /* Responsive */
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-            
-            h1 {
-                font-size: 2rem;
-            }
-            
-            .orchestrator-meta {
-                grid-template-columns: 1fr;
-            }
-        }
-            
-        /* Breadcrumb Navigation */
-        .breadcrumb {
-            background: rgba(30, 41, 59, 0.8);
-            padding: 1rem 2rem;
-            border-bottom: 1px solid rgba(124, 58, 237, 0.3);
-            margin-bottom: 2rem;
-        }
-        
-        .breadcrumb a {
-            color: var(--primary, #2196F3);
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-        
-        .breadcrumb a:hover {
-            color: var(--secondary, #1976D2);
-            text-decoration: underline;
-        }
-        
-        .breadcrumb-separator {
-            color: #64748b;
-            margin: 0 0.5rem;
-        }
-        
-        .breadcrumb-current {
-            color: #e2e8f0;
-        }
-
-  <body>
-    <!-- Breadcrumb -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Orchestrator | CORTEX Technical Documentation</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root { --primary: #F44336; --success: #10B981; --warning: #F59E0B; --error: #DC2626; }
+        body { font-family: 'Inter', -apple-system, sans-serif; margin: 0; padding: 0; background: #0f172a; color: #e2e8f0; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+        header { text-align: center; padding: 3rem 0; border-bottom: 2px solid var(--primary); }
+        header h1 { font-size: 3rem; font-weight: 700; color: var(--primary); margin: 0; }
+        header .subtitle { font-size: 1.2rem; color: #94a3b8; margin-top: 0.5rem; }
+        .metadata { display: flex; justify-content: center; gap: 2rem; margin-top: 1rem; flex-wrap: wrap; }
+        .metadata-item { background: rgba(255, 255, 255, 0.05); padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.9rem; }
+        .section { margin: 3rem 0; }
+        .section-title { font-size: 2rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; border-left: 4px solid var(--primary); padding-left: 1rem; }
+        .intro-text { font-size: 1.1rem; line-height: 1.8; color: #cbd5e1; margin-bottom: 2rem; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+        .feature-card { background: #1e293b; border-radius: 12px; padding: 1.5rem; border-left: 4px solid var(--primary); transition: transform 0.2s; }
+        .feature-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(255, 255, 255, 0.1); }
+        .viz-container { background: #1e293b; border-radius: 12px; padding: 2rem; margin: 2rem 0; }
+        .mermaid { background: #0f172a; border-radius: 8px; padding: 2rem; }
+        .breadcrumb { background: rgba(30, 41, 59, 0.8); padding: 1rem 2rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .breadcrumb a { color: var(--primary); text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .breadcrumb-separator { color: #64748b; margin: 0 0.5rem; }
+        .breadcrumb-current { color: #e2e8f0; }
+        footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid #334155; margin-top: 4rem; color: #64748b; }
+    </style>
+</head>
+<body>
     <nav class="breadcrumb">
-        <a href="../../index.html">Home<\/a>
-        <span class="breadcrumb-separator">›<\/span>
-        <a href="../../features/orchestrators.html">Orchestrators<\/a>
-        <span class="breadcrumb-separator">›<\/span>
-        <a href="index.html">Technical Documentation<\/a>
-        <span class="breadcrumb-separator">›<\/span>
-        <span class="breadcrumb-current">Debug<\/span>
-    <\/nav>
+        <a href="../../index.html">Home</a>
+        <span class="breadcrumb-separator">›</span>
+        <a href="index.html">Orchestrators</a>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-current">Debug</span>
+    </nav>
     
     <div class="container">
         <header>
-            <h1>🐛 Debug Orchestrator<\/h1>
-            <p class="subtitle">Orchestrated Bug Resolution with Context Capture & Learning Integration<\/p>
-        <\/header>
-
-        <!-- Orchestrator Metadata -->
-        <div class="orchestrator-meta">
-            <div class="meta-item">
-                <span class="meta-label">Manifest Location<\/span>
-                <span class="meta-value">cortex-brain/manifests/orchestrators/<\/span>
-            <\/div>
-            <div class="meta-item">
-                <span class="meta-label">Complexity<\/span>
-                <span class="meta-value">MEDIUM<\/span>
-            <\/div>
-            <div class="meta-item">
-                <span class="meta-label">Workflow<\/span>
-                <span class="meta-value">Symptom → Root Cause → Fix<\/span>
-            <\/div>
-            <div class="meta-item">
-                <span class="meta-label">Rollback Support<\/span>
-                <span class="meta-value">Yes<\/span>
-            <\/div>
-            <div class="meta-item">
-                <span class="meta-label">Version<\/span>
-                <span class="meta-value">2.0.0<\/span>
-            <\/div>
-
-        <!-- Overview Section -->
+            <h1>🐛 Debug Orchestrator</h1>
+            <p class="subtitle">Symptom → Root Cause → Fix Strategy</p>
+            <div class="metadata">
+                <div class="metadata-item"><span style="color:#94a3b8">Complexity:</span> <span style="color:var(--primary);font-weight:600">MEDIUM</span></div>
+                <div class="metadata-item"><span style="color:#94a3b8">File:</span> <span style="color:var(--primary);font-weight:600">debug_orchestrator.py</span></div>
+            </div>
+        </header>
+        
         <section class="section">
-            <h2>Overview<\/h2>
-            <p>
-                The Debug Orchestrator provides orchestrated bug resolution with full Planning/TDD parity. 
-                It accepts bug reports in natural language or structured format, performs contextual architectural 
-                review, injects debug code strategically, captures execution context, and learns from successful 
-                resolutions to improve future debugging.
-            
-            <h3>Key Capabilities<\/h3>
-            <div class="feature-list">
-                <div class="feature-card">
-                    <div class="feature-title">📋 Bug Report Intake<\/div>
-                    <div class="feature-desc">
-                        Accepts natural language descriptions or structured test failure output. Parses to extract 
-                        affected components, error messages, and stack traces.
-                <div class="feature-card">
-                    <div class="feature-title">🔍 Contextual Review Integration<\/div>
-                    <div class="feature-desc">
-                        Triggers scoped architectural review focused on bug context. Classifies findings as 
-                        BLOCKER/CRITICAL/INFO for prioritization.
-                <div class="feature-card">
-                    <div class="feature-title">💉 Template-Based Debug Injection<\/div>
-                    <div class="feature-desc">
-                        Injects debug code at strategic locations using pre-defined templates. All injected code 
-                        has CORTEX_DEBUG_ markers for one-shot cleanup.
-                <div class="feature-card">
-                    <div class="feature-title">📊 Context Capture<\/div>
-                    <div class="feature-desc">
-                        Captures full execution context: variable states, function call stacks, timing data, 
-                        and environment conditions during bug occurrence.
-                <div class="feature-card">
-                    <div class="feature-title">🧠 Learning Integration<\/div>
-                    <div class="feature-desc">
-                        Stores successful debug patterns in Tier 2 brain for future reference. Improves root 
-                        cause analysis and fix strategy recommendations over time.
-                <div class="feature-card">
-                    <div class="feature-title">✅ Validation & Rollback<\/div>
-                    <div class="feature-desc">
-                        Validates fixes with test suite execution. Automatic rollback if tests fail or new 
-                        issues are introduced.
-
-        <!-- Debug Workflow -->
+            <div class="intro-text">Systematic debugging workflow: symptom analysis → root cause identification → fix strategy → validation. Features context capture, error trace visualization with stack analysis, rollback decision tree, and learning integration for pattern recognition across debugging sessions.</div>
+        </section>
+        
         <section class="section">
-            <h2>Debugging Workflow<\/h2>
-            <div class="phase-legend">
-                <div class="legend-item">
-                    <div class="legend-color" style="background: var(--phase-1);"><\/div>
-                    <div class="legend-label">Symptom Analysis<\/div>
-                <\/div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background: var(--phase-2);"><\/div>
-                    <div class="legend-label">Root Cause<\/div>
-                <\/div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background: var(--phase-3);"><\/div>
-                    <div class="legend-label">Fix Strategy<\/div>
-                <\/div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background: var(--phase-4);"><\/div>
-                    <div class="legend-label">Validation<\/div>
-                <\/div>
-            
-            <div class="diagram-container">
-                <div class="mermaid">
-  graph TD
-    START([Bug Report]) --> PARSE[Parse Bug Report<br/>Extract components & errors]
+            <h2 class="section-title">✨ Key Features</h2>
+            <div class="features-grid"><div class="feature-card"><div style="font-size:2rem;margin-bottom:1rem">🔍</div><div style="font-size:1.25rem;font-weight:600;color:#f1f5f9;margin-bottom:0.75rem">Symptom Analysis</div><div style="color:#94a3b8">Comprehensive error context capture</div></div><div class="feature-card"><div style="font-size:2rem;margin-bottom:1rem">🎯</div><div style="font-size:1.25rem;font-weight:600;color:#f1f5f9;margin-bottom:0.75rem">Root Cause Detection</div><div style="color:#94a3b8">Stack trace analysis and pattern matching</div></div><div class="feature-card"><div style="font-size:2rem;margin-bottom:1rem">🔧</div><div style="font-size:1.25rem;font-weight:600;color:#f1f5f9;margin-bottom:0.75rem">Fix Strategy</div><div style="color:#94a3b8">Automated fix suggestions with validation</div></div></div>
+        </section>
+        
+        <section class="section"><h2 class="section-title">🔄 Debugging Workflow</h2><div class="viz-container"><div class="mermaid">
+graph LR
+    A[Symptom<br/>Reported] --> B[Capture<br/>Context]
+    B --> C[Analyze<br/>Stack Trace]
+    C --> D[Identify<br/>Root Cause]
+    D --> E[Generate<br/>Fix Strategy]
+    E --> F{Apply<br/>Fix?}
+    F -->|Yes| G[Validate]
+    F -->|No| H[Manual Review]
+    G --> I{Tests<br/>Pass?}
+    I -->|Yes| J[✅ Resolved]
+    I -->|No| K[🔄 Rollback]
     
-    PARSE --> CLASSIFY{Bug<br/>Type?}
+    style A fill:#F44336,stroke:#D32F2F,color:#fff
+    style J fill:#10B981,stroke:#059669,color:#fff
+                </div></div></section>
+        
+        <footer>
+            <p>&copy; 2025 Asif Hussain | CORTEX 4.0</p>
+            <p>Debug Orchestrator - Intelligent Error Resolution</p>
+        </footer>
+    </div>
     
-    CLASSIFY --> |Test Failure| TEST_ANALYSIS[Test Failure Analysis:<br/>- Failed test name<br/>- Assertion errors<br/>- Stack trace]
-    CLASSIFY --> |Runtime Error| RUNTIME_ANALYSIS[Runtime Error Analysis:<br/>- Exception type<br/>- Error location<br/>- Call stack]
-    CLASSIFY --> |UI Bug| UI_ANALYSIS[UI Bug Analysis:<br/>- Component affected<br/>- User interaction<br/>- Console errors]
-    CLASSIFY --> |Performance| PERF_ANALYSIS[Performance Analysis:<br/>- Slow operations<br/>- Resource usage<br/>- Bottlenecks]
-    
-    TEST_ANALYSIS --> SCOPE
-    RUNTIME_ANALYSIS --> SCOPE
-    UI_ANALYSIS --> SCOPE
-    PERF_ANALYSIS --> SCOPE
-    
-    SCOPE[Extract Scope Keywords<br/>Component/module names] --> REVIEW[Trigger Contextual Review<br/>ReviewOrchestrator integration]
-    
-    REVIEW --> FINDINGS[Review Findings:<br/>- BLOCKER issues<br/>- CRITICAL issues<br/>- INFO insights]
-    
-    FINDINGS --> PRIORITIZE{Critical<br/>Issues?}
-    
-    PRIORITIZE --> |Yes| ADDRESS_CRITICAL[Address critical issues first<br/>Before debug injection]
-    PRIORITIZE --> |No| INJECT
-    
-    ADDRESS_CRITICAL --> INJECT[Inject Debug Code<br/>Template-based insertion]
-    
-    INJECT --> TEMPLATES{Select<br/>Templates}
-    
-    TEMPLATES --> |Function| FUNC_LOG[Function entry/exit logging<br/>Parameter capture]
-    TEMPLATES --> |Variable| VAR_CAPTURE[Variable state snapshots<br/>At key locations]
-    TEMPLATES --> |Exception| EXCEPTION_WRAP[Exception boundary wrapping<br/>Enhanced error details]
-    TEMPLATES --> |UI| CONSOLE_LOG[Browser console.log<br/>Component lifecycle]
-    
-    FUNC_LOG --> MARK
-    VAR_CAPTURE --> MARK
-    EXCEPTION_WRAP --> MARK
-    CONSOLE_LOG --> MARK
-    
-    MARK[Mark all injections:<br/>CORTEX_DEBUG_ prefix] --> EXECUTE[Execute with Debug Code<br/>Capture context]
-    
-    EXECUTE --> CAPTURE[Context Capture:<br/>- Variable states<br/>- Call stacks<br/>- Timing data<br/>- Environment]
-    
-    CAPTURE --> ANALYZE_ROOT[Root Cause Analysis<br/>Pattern matching]
-    
-    ANALYZE_ROOT --> QUERY_TIER2[Query Tier 2 Brain<br/>Similar bugs & fixes]
-    
-    QUERY_TIER2 --> RECOMMEND[Generate Fix Strategy:<br/>- Based on patterns<br/>- Confidence score<br/>- Alternative approaches]
-    
-    RECOMMEND --> APPLY_FIX[Apply Fix<br/>Code changes]
-    
-    APPLY_FIX --> CLEANUP[One-Shot Marker Cleanup<br/>Remove ALL CORTEX_DEBUG_]
-    
-    CLEANUP --> VALIDATE[Validation:<br/>Run test suite]
-    
-    VALIDATE --> CHECK_TESTS{Tests<br/>Pass?}
-    
-    CHECK_TESTS --> |Yes| LEARN[Store Pattern in Tier 2:<br/>- Bug signature<br/>- Root cause<br/>- Fix strategy<br/>- Success rate]
-    CHECK_TESTS --> |No| ROLLBACK[Rollback Changes<br/>Restore checkpoint]
-    
-    ROLLBACK --> ALTERNATIVE{Try Alternative<br/>Fix?}
-    
-    ALTERNATIVE --> |Yes| RECOMMEND
-    ALTERNATIVE --> |No| MANUAL[Manual Intervention Required<br/>Report to user]
-    
-    LEARN --> SUCCESS[Success Report:<br/>- Bug resolved<br/>- Test results<br/>- Learning stored]
-    
-    SUCCESS --> END([Complete])
-    MANUAL --> END
-    
-    style START fill:#F44336,stroke:#D32F2F,color:#fff
-    style PARSE fill:#2196F3,stroke:#1976D2,color:#fff
-    style REVIEW fill:#4CAF50,stroke:#388E3C,color:#fff
-    style INJECT fill:#FF9800,stroke:#F57C00,color:#fff
-    style ANALYZE_ROOT fill:#9C27B0,stroke:#7B1FA2,color:#fff
-    style LEARN fill:#10B981,stroke:#059669,color:#fff
-    style SUCCESS fill:#10B981,stroke:#059669,color:#fff
-    style ROLLBACK fill:#DC2626,stroke:#B91C1C,color:#fff
-    style END fill:#10B981,stroke:#059669,color:#fff
-
-        <!-- Error Trace Visualization -->
-        <section class="section">
-            <h2>Error Trace Visualization with Stack Analysis<\/h2>
-            <p>Interactive stack trace visualization showing error propagation through call hierarchy.<\/p>
-            <div class="diagram-container">
-                <div id="errorTrace"><\/div>
-            <\/div>
-
-        <!-- Context Capture -->
-        <section class="section">
-            <h2>Context Capture & Learning Integration<\/h2>
-            <div class="diagram-container">
-                <div class="mermaid">
-  graph LR
-    BUG[Bug Occurrence] --> CAPTURE[Context Capture:<br/>Variables, Stack, Timing]
-    
-    CAPTURE --> STORE_SESSION[Store Debug Session:<br/>- Symptoms<br/>- Context data<br/>- Applied fixes]
-    
-    STORE_SESSION --> ANALYZE[Pattern Analysis:<br/>- Compare with history<br/>- Identify similarities]
-    
-    ANALYZE --> TIER2[(Tier 2 Brain<br/>Debug Patterns)]
-    
-    TIER2 --> QUERY[Future Debugging:<br/>Query similar bugs]
-    
-    QUERY --> RECOMMEND[Improved Recommendations:<br/>- Higher confidence<br/>- Faster resolution<br/>- Proven strategies]
-    
-    RECOMMEND --> FEEDBACK[User Feedback:<br/>Fix success rate]
-    
-    FEEDBACK --> REFINE[Refine Patterns<br/>Update confidence scores]
-    
-    REFINE --> TIER2
-    
-    style BUG fill:#F44336,stroke:#D32F2F,color:#fff
-    style TIER2 fill:#2196F3,stroke:#1976D2,color:#fff
-    style RECOMMEND fill:#10B981,stroke:#059669,color:#fff
-
-        <!-- Rollback Decision Tree -->
-        <section class="section">
-            <h2>Rollback Decision Tree<\/h2>
-            <p>Automated decision-making for when to rollback vs. iterate on fix strategy.<\/p>
-            <div class="diagram-container">
-                <div id="rollbackTree"><\/div>
-            <\/div>
-
-        <!-- Debug Templates -->
-        <section class="section">
-            <h2>Debug Injection Templates<\/h2>
-            <div class="feature-list">
-                <div class="feature-card">
-                    <div class="feature-title">🔧 Function Entry/Exit Logging<\/div>
-                    <div class="feature-desc">
-                        <code>CORTEX_DEBUG_FUNC_ENTRY<\/code> and <code>CORTEX_DEBUG_FUNC_EXIT<\/code> markers 
-                        with parameter capture and return value logging.
-                <div class="feature-card">
-                    <div class="feature-title">📊 Variable State Capture<\/div>
-                    <div class="feature-desc">
-                        <code>CORTEX_DEBUG_VAR_STATE<\/code> markers for snapshot capture at critical locations 
-                        with full object serialization.
-                <div class="feature-card">
-                    <div class="feature-title">⚠️ Exception Boundary Wrapping<\/div>
-                    <div class="feature-desc">
-                        <code>CORTEX_DEBUG_EXCEPTION<\/code> try-catch wrappers with enhanced error details, 
-                        stack preservation, and context data.
-                <div class="feature-card">
-                    <div class="feature-title">🖥️ Browser Console Logging<\/div>
-                    <div class="feature-desc">
-                        <code>CORTEX_DEBUG_UI<\/code> console.log statements for UI bugs with component lifecycle 
-                        tracking and state inspection.
-                <div class="feature-card">
-                    <div class="feature-title">⏱️ Timing & Performance<\/div>
-                    <div class="feature-desc">
-                        <code>CORTEX_DEBUG_PERF<\/code> timing markers for performance analysis with high-resolution 
-                        timestamps and operation duration tracking.
-
-        <!-- Related Documentation -->
-        <section class="section">
-            <h2>Related Documentation<\/h2>
-            <div class="feature-list">
-                <div class="feature-card">
-                    <div class="feature-title">Manifest<\/div>
-                    <div class="feature-desc">
-                        <code>cortex-brain/manifests/orchestrators/debug-orchestrator-manifest.yaml<\/code>
-                    <\/div>
-                <div class="feature-card">
-                    <div class="feature-title">Implementation Guide<\/div>
-                    <div class="feature-desc">
-                        <code>cortex-brain/documents/implementation-guides/debug-orchestrator-guide.md<\/code>
-                    <\/div>
-                <div class="feature-card">
-                    <div class="feature-title">Review Integration<\/div>
-                    <div class="feature-desc">
-                        <code>src/operations/modules/architectural/review_orchestrator.py<\/code>
-                    <\/div>
-                <div class="feature-card">
-                    <div class="feature-title">TDD Integration<\/div>
-                    <div class="feature-desc">
-                        <code>src/orchestrators/tdd/tdd_orchestrator.py<\/code>
-                    <\/div>
-
-        <a href="index.html" class="back-link">← Back to Orchestrator Index<\/a>
-    <\/div>
-
-    <div class="tooltip" id="tooltip"><\/div>
-
     <script>
-        // Initialize Mermaid
         mermaid.initialize({ 
             startOnLoad: true,
             theme: 'dark',
             themeVariables: {
                 primaryColor: '#F44336',
                 primaryTextColor: '#fff',
-                primaryBorderColor: '#D32F2F',
-                lineColor: '#94a3b8',
-                secondaryColor: '#1e293b',
-                tertiaryColor: '#0f172a'
+                lineColor: '#64748b',
+                secondaryColor: '#1e293b'
             }
         });
-
-        // Error Trace Visualization (D3.js Sankey Diagram)
-        function createErrorTrace() {
-            const data = {
-                nodes: [
-                    { name: 'main()', level: 0 },
-                    { name: 'process_request()', level: 1 },
-                    { name: 'validate_input()', level: 2 },
-                    { name: 'check_auth()', level: 2 },
-                    { name: 'execute_query()', level: 3 },
-                    { name: 'db_connection()', level: 4 },
-                    { name: '❌ ConnectionError', level: 5, error: true }
-                ],
-                links: [
-                    { source: 0, target: 1, value: 10 },
-                    { source: 1, target: 2, value: 5 },
-                    { source: 1, target: 3, value: 5 },
-                    { source: 2, target: 4, value: 5 },
-                    { source: 4, target: 5, value: 5 },
-                    { source: 5, target: 6, value: 5 }
-                ]
-            };
-
-            const width = document.getElementById('errorTrace').clientWidth;
-            const height = 600;
-            const margin = { top: 40, right: 40, bottom: 40, left: 40 };
-
-            const svg = d3.select('#errorTrace')
-                .append('svg')
-                .attr('width', width)
-                .attr('height', height);
-
-            const levelHeight = (height - margin.top - margin.bottom) / 6;
-
-            // Create links
-            const link = svg.append('g')
-                .selectAll('path')
-                .data(data.links)
-                .enter()
-                .append('path')
-                .attr('d', d => {
-                    const sourceY = margin.top + data.nodes[d.source].level * levelHeight;
-                    const targetY = margin.top + data.nodes[d.target].level * levelHeight;
-                    const midY = (sourceY + targetY) / 2;
-                    return `M ${width / 2} ${sourceY} 
-                            C ${width / 2} ${midY}, 
-                              ${width / 2} ${midY}, 
-                              ${width / 2} ${targetY}`;
-                })
-                .attr('fill', 'none')
-                .attr('stroke', d => data.nodes[d.target].error ? '#DC2626' : '#64748b')
-                .attr('stroke-width', d => d.value)
-                .attr('opacity', 0.5);
-
-            // Create nodes
-            const node = svg.append('g')
-                .selectAll('g')
-                .data(data.nodes)
-                .enter()
-                .append('g')
-                .attr('transform', (d, i) => `translate(${width / 2}, ${margin.top + d.level * levelHeight})`);
-
-            node.append('rect')
-                .attr('x', -100)
-                .attr('y', -20)
-                .attr('width', 200)
-                .attr('height', 40)
-                .attr('rx', 6)
-                .attr('fill', d => d.error ? '#DC2626' : '#1e293b')
-                .attr('stroke', d => d.error ? '#B91C1C' : '#F44336')
-                .attr('stroke-width', 2);
-
-            node.append('text')
-                .attr('text-anchor', 'middle')
-                .attr('dy', '0.35em')
-                .attr('fill', '#e2e8f0')
-                .attr('font-size', '14px')
-                .attr('font-weight', '600')
-                .text(d => d.name);
-
-            // Add level labels
-            svg.append('g')
-                .selectAll('text')
-                .data(data.nodes)
-                .enter()
-                .append('text')
-                .attr('x', 20)
-                .attr('y', d => margin.top + d.level * levelHeight)
-                .attr('fill', '#94a3b8')
-                .attr('font-size', '12px')
-                .text((d, i) => `Level ${d.level}`);
-
-            // Title
-            svg.append('text')
-                .attr('x', width / 2)
-                .attr('y', 25)
-                .attr('text-anchor', 'middle')
-                .attr('fill', '#F44336')
-                .attr('font-size', '18px')
-                .attr('font-weight', '600')
-                .text('Error Propagation Stack Trace');
-        }
-
-        // Rollback Decision Tree (D3.js Tree)
-        function createRollbackTree() {
-            const data = {
-                name: "Fix Applied",
-                children: [
-                    {
-                        name: "Run Tests",
-                        children: [
-                            {
-                                name: "All Pass",
-                                children: [
-                                    { name: "✅ Success - Store Pattern" }
-                                ]
-                            },
-                            {
-                                name: "Some Fail",
-                                children: [
-                                    {
-                                        name: "New Failures?",
-                                        children: [
-                                            {
-                                                name: "Yes - Introduced Bugs",
-                                                children: [
-                                                    { name: "🔄 Rollback" }
-                                                ]
-                                            },
-                                            {
-                                                name: "No - Existing Failures",
-                                                children: [
-                                                    { name: "✅ Success - Fix Unrelated" }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                ]
-                            },
-                            {
-                                name: "All Fail",
-                                children: [
-                                    {
-                                        name: "Severity?",
-                                        children: [
-                                            {
-                                                name: "Critical",
-                                                children: [{ name: "🔄 Immediate Rollback" }]
-                                            },
-                                            {
-                                                name: "Non-Critical",
-                                                children: [{ name: "⚠️ Flag for Review" }]
-                                            }
-                                        ]
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            };
-
-            const width = document.getElementById('rollbackTree').clientWidth;
-            const height = 600;
-
-            const svg = d3.select('#rollbackTree')
-                .append('svg')
-                .attr('width', width)
-                .attr('height', height);
-
-            const g = svg.append('g')
-                .attr('transform', `translate(${width / 2},${50})`);
-
-            const tree = d3.tree()
-                .size([width - 200, height - 100])
-                .separation((a, b) => (a.parent == b.parent ? 1 : 1.5));
-
-            const root = d3.hierarchy(data);
-            tree(root);
-
-            // Center the tree
-            const minX = d3.min(root.descendants(), d => d.x);
-            const maxX = d3.max(root.descendants(), d => d.x);
-            g.attr('transform', `translate(${(width - (maxX - minX)) / 2 - minX},${50})`);
-
-            // Links
-            g.selectAll('.link')
-                .data(root.links())
-                .enter()
-                .append('path')
-                .attr('class', 'link')
-                .attr('d', d3.linkVertical()
-                    .x(d => d.x)
-                    .y(d => d.y))
-                .attr('fill', 'none')
-                .attr('stroke', '#64748b')
-                .attr('stroke-width', 2);
-
-            // Nodes
-            const node = g.selectAll('.node')
-                .data(root.descendants())
-                .enter()
-                .append('g')
-                .attr('class', 'node')
-                .attr('transform', d => `translate(${d.x},${d.y})`);
-
-            node.append('circle')
-                .attr('r', 8)
-                .attr('fill', d => {
-                    if (d.data.name.includes('✅')) return '#10B981';
-                    if (d.data.name.includes('🔄')) return '#DC2626';
-                    if (d.data.name.includes('⚠️')) return '#F59E0B';
-                    return '#F44336';
-                })
-                .attr('stroke', '#0f172a')
-                .attr('stroke-width', 2);
-
-            node.append('text')
-                .attr('dy', '0.31em')
-                .attr('x', d => d.children ? -10 : 10)
-                .attr('text-anchor', d => d.children ? 'end' : 'start')
-                .text(d => d.data.name)
-                .attr('fill', '#e2e8f0')
-                .attr('font-size', '12px')
-                .clone(true).lower()
-                .attr('stroke', '#0f172a')
-                .attr('stroke-width', 3);
-        }
-
-        // Initialize visualizations
-        window.addEventListener('load', () => {
-            createErrorTrace();
-            createRollbackTree();
-        });
-  </style>
-</head>
-<body>
+    </script>
 </body>
 </html>
