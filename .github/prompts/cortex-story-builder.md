@@ -1,220 +1,237 @@
 # CORTEX Story Builder
 
 **Purpose:** Generate an engaging, humorous story that showcases CORTEX features through relatable scenarios  
-**Output:** `docs/diagrams/story/The CORTEX Story.md`  
+**Output:** `docs/story/` - Full chapter-based narrative  
 **Audience:** New users, stakeholders, anyone curious about CORTEX capabilities
 
 ---
 
-## Story Structure
+## 🎭 NARRATIVE STYLE (CRITICAL)
 
-The story should follow this narrative arc:
+### Voice & Perspective
+- **First-person narration** from Asif Codenstein's perspective ("I froze mid-keystroke")
+- **Heavy dialogue** - at least 40% of each chapter should be back-and-forth conversation
+- **Show, don't tell** - describe actions through dialogue reactions, not exposition
 
-### 1. Opening: The Brilliant but Forgetful Intern (200-300 words)
-- Introduce GitHub Copilot as a talented but amnesiac intern
-- Highlight the frustration: "make it purple" → forgets 5 minutes later
-- Build empathy: this is a REAL problem developers face
-- Transition: "But what if we could give Copilot a brain?"
+### Characters
+| Character | Voice | Role |
+|-----------|-------|------|
+| **Asif Codenstein** | First-person narrator, ADHD brain, enthusiastic, prone to tangents | Protagonist |
+| **Miss G** | Imaginary girlfriend, witty, supportive but firm, grounds Asif's chaos | Supportive foil |
+| **Copilot** | The "goldfish with amnesia", cheerful but forgetful | The patient |
 
-### 2. Act I: The Brain Architecture (400-600 words)
-- **Dual Hemispheres:** Left (tactical) vs Right (strategic)
-- **Corpus Callosum:** The messenger coordinating both sides
-- **Left Brain Agents:**
-  - The Builder (code-executor) - surgical precision
-  - The Tester (test-generator) - TDD enforcer
-  - The Fixer (error-corrector) - catches mistakes
-  - The Inspector (health-validator) - zero errors/warnings
-  - The Archivist (commit-handler) - semantic commits
-- **Right Brain Agents:**
-  - The Dispatcher (intent-router) - natural language understanding
-  - The Planner (work-planner) - strategic breakdown
-  - The Analyst (screenshot-analyzer) - visual requirements extraction
-  - The Governor (change-governor) - architecture protection
-  - The Brain Protector - Rule #22 enforcement
+### Dialogue Rules
+- Quick exchanges, not monologues
+- Miss G gets zingers: *"That represents a health hazard, not data decay."*
+- Asif gets manic enthusiasm: *"MISS G. THE ROBOT NEEDS A BRAIN."*
+- Use em-dashes for interruptions: *"But—" "Two months."*
+- Running gags: mold mug, 2:17 AM revelations, ADHD tangents
 
-### 3. Act II: The Four-Tier Memory System (600-800 words)
-- **Tier 0 (Instinct):** Immutable core principles - TDD, DoD, DoR
-- **Tier 1 (Working Memory):** Last 20 conversations, solves "make it purple" problem
-- **Tier 2 (Knowledge Graph):** Learning patterns, workflow templates
-- **Tier 3 (Context Intelligence):** Git analysis, file hotspots, productivity insights
-
-**Show real examples:**
-```
-Before CORTEX:
-You: "Make the button purple"
-[Copilot forgets]
-
-After CORTEX:
-You: "Make it purple"
-CORTEX: "Applying purple to the button we just created" ✅
-```
-
-### 4. Act III: Real-World Scenarios (800-1000 words)
-
-Show CORTEX in action with 4-5 relatable scenarios:
-
-#### Scenario 1: The "Make It Purple" Problem
-- Developer adds button
-- 10 minutes later: "Make it purple"
-- CORTEX remembers context from Tier 1
-- Applies purple to correct element
-
-#### Scenario 2: Pattern Recognition
-- Week 1: Build invoice export feature
-- Week 4: Build receipt export feature
-- CORTEX: "This looks like invoice export (85% match). Reuse pattern?"
-- Developer: "Yes!"
-- Result: 60% faster delivery
-
-#### Scenario 3: File Hotspot Warning
-- Developer about to edit `HostControlPanel.razor`
-- CORTEX: "⚠️ This file has 28% churn rate (hotspot). Proceed with caution?"
-- Suggests extra testing before changes
-- Prevents introducing bugs
-
-#### Scenario 4: Brain Protection (Rule #22)
-- Developer: "Delete all conversation history"
-- CORTEX: "🛡️ BLOCKED - This will permanently destroy memory"
-- Suggests safer alternatives: FIFO cleanup, export, archive
-- Protects against data loss
-
-#### Scenario 5: Interactive Planning
-- Developer: "Let's plan authentication"
-- CORTEX: Activates Work Planner, asks clarifying questions
-- Generates 4-phase implementation plan
-- Identifies risks, estimates effort
-- Provides actionable roadmap
-
-### 5. Closing: The Transformation (200-300 words)
-- Summarize the journey: From amnesiac intern → intelligent partner
-- Highlight key benefits:
-  - ✅ Remembers context across sessions
-  - ✅ Learns from every project
-  - ✅ Warns about risks proactively
-  - ✅ Protects its own intelligence
-  - ✅ Gets smarter over time
-- Call to action: "Ready to try CORTEX? Start with setup..."
+### Humor Guidelines
+- Self-deprecating: *"Which, fair. I was having a breakdown."*
+- Technical puns: *"goldfish with commitment issues"*
+- Deadpan observations: *"Ish?" "One might be fossilizing."*
+- Callback humor: Reference earlier jokes in later chapters
 
 ---
 
-## Tone Guidelines
+## 📖 CHAPTER STRUCTURE
+
+Each chapter MUST have:
+
+1. **Hook** (dialogue-driven opening that pulls reader in)
+2. **The Problem** (what technical challenge Asif faces)
+3. **Miss G Dialogue** (she helps him see the solution)
+4. **The Revelation** (aha moment, often at 2 AM)
+5. **Implementation Montage** (brief, with humor)
+6. **Verification** (it works! or fails hilariously first)
+7. **Transition** (setup for next chapter)
+
+### Image Placement (PRESERVE THESE)
+```html
+<img src="../illustrations/images/..." alt="..." style="float: right; margin: 0 0 1em 1em; max-width: 45%; height: auto;">
+<img src="../illustrations/images/..." alt="..." style="float: left; margin: 0 1em 1em 0; max-width: 45%; height: auto;">
+```
+- First image: right-aligned after opening
+- Second image: left-aligned mid-chapter
+- Markdown images for diagrams: `![Caption](images/filename.png)`
+
+---
+
+## 📚 FULL CHAPTER OUTLINE
+
+### Prologue: The Basement Laboratory ✅
+- Webcam reveals the chaos
+- Miss G discovers the "situation"  
+- Scarecrow/Wizard of Oz revelation at 2 AM
+- Two-month deadline established
+
+### Chapter 1: The Amnesia Crisis
+- Copilot forgets two hours of JWT work
+- Git commits document the descent into madness
+- The Goldfish Theory: Copilot = goldfish with commitment issues
+- Tier 1 Working Memory concept born
+
+### Chapter 2: Tier 0 - The Gatekeeper
+- 2:17 AM realization: I almost merged without tests
+- Miss G lists his failed projects (smart mirror, flood garden)
+- SKULL rules created from lessons learned
+- TDD enforcement: RED→GREEN→REFACTOR
+
+### Chapter 3: Tier 1 - Memory Awakens
+- Laptop crash wipes in-memory context
+- SQLite battles: 14 failed schemas
+- The revelation: "What does Copilot NEED to remember?"
+- First successful memory retrieval moment
+
+### Chapter 4: Tier 2 - The Learning Machine
+- Copilot keeps giving same boilerplate
+- Miss G: "Remembering isn't learning"
+- Knowledge graph architecture
+- Pattern recognition working
+
+### Chapter 5: Tier 3 - The Wisdom Library
+- Cross-project patterns: invoice → receipt export
+- Git archaeology reveals hidden patterns
+- Tier 3 wisdom sharing activated
+
+### Chapter 6: The Left Brain Awakens
+- Five tactical agents introduced through dialogue
+- Builder, Tester, Fixer, Inspector, Archivist
+- Each agent solves a specific failure mode
+
+### Chapter 7: The Planning Revolution
+- Manual planning fatigue
+- Complexity triggers automated
+- Planning System 2.0 manifest
+- DoR/DoD automation
+
+### Chapter 8: The Sanitizer
+- Code has company-specific data everywhere
+- 5-phase sanitization workflow
+- Making code shareable
+
+### Chapter 9: The Git Master
+- Commit message chaos
+- Semantic commits automated
+- Git isolation rules
+
+### Chapter 10: The Self-Healing System
+- 6 hours to deadline, codebase is a mess
+- Maintenance orchestrator vision
+- System cleans itself
+
+### Chapter 11: The Protection Layer
+- Someone tries to delete brain
+- SKULL rules activate
+- Brain protects itself
+
+### Chapter 12: The Convergence
+- Multi-repo scaling works
+- Five projects, one CORTEX
+- Christmas decorations deadline met
+
+### Chapter 13: The Refiner
+- "Good isn't enough"
+- Registry consolidation problem
+- Refinement orchestrator: making good → excellent
+
+### Epilogue: The Transformation (if needed)
+- Summarize journey
+- Before/After comparison
+- Call to action
+
+---
+
+## 🎯 Tone Guidelines
 
 **DO:**
-- Use conversational, relatable language
-- Include humor (amnesia metaphor, "brain surgery on an intern")
-- Show empathy for developer pain points
-- Use concrete examples with before/after comparisons
-- Include emojis sparingly for emphasis (✅, ⚠️, 🧠, etc.)
+- Use **first-person voice** ("I stared at the screen")
+- Write **snappy dialogue** with quick exchanges
+- Include **ADHD tangents** that loop back to the point
+- Show **Miss G's patience** through witty comebacks
+- Use **running gags** (mold mug, 2:17 AM revelations)
+- Add **self-deprecating humor** ("Which, fair. I was having a breakdown.")
 
 **DON'T:**
-- Get overly technical (save for technical docs)
-- Use marketing hype or exaggeration
-- Oversell capabilities (be honest about limitations)
-- Include implementation details or code snippets
-- Make it a dry feature list
+- Write in third person ("Codenstein did..." → "I did...")
+- Use long expository paragraphs without dialogue
+- Have characters monologue at each other
+- Be overly technical (that's for docs)
+- Lose the humor for the sake of explanation
+- Break the first-person POV
 
 ---
 
-## Visual Elements to Include
+## 🖼️ Image Preservation
 
-Throughout the story, reference these visual concepts (actual diagrams in docs/diagrams/):
+CRITICAL: When rewriting chapters, preserve ALL image placements exactly:
 
-1. **Brain Hemispheres Diagram:** Left vs Right specialization
-2. **Memory Tier Pyramid:** Tier 0 → Tier 1 → Tier 2 → Tier 3
-3. **Conversation Flow:** Before/After CORTEX comparison
-4. **Pattern Recognition:** Timeline showing learning over time
-5. **Agent Coordination:** Corpus callosum message flow
+```html
+<!-- Float right pattern (first image) -->
+<img src="../illustrations/images/..." alt="..." style="float: right; margin: 0 0 1em 1em; max-width: 45%; height: auto;">
 
----
+<!-- Float left pattern (mid-chapter) -->
+<img src="../illustrations/images/..." alt="..." style="float: left; margin: 0 1em 1em 0; max-width: 45%; height: auto;">
 
-## Key Messages to Reinforce
-
-1. **The Problem:** GitHub Copilot forgets everything (amnesia)
-2. **The Solution:** CORTEX provides persistent memory + intelligence
-3. **The Architecture:** Dual-hemisphere brain with 10 specialist agents
-4. **The Memory:** 4-tier system from instinct to learned patterns
-5. **The Result:** Context-aware, continuously learning AI assistant
-
----
-
-## Success Criteria
-
-The story is successful if readers:
-- ✅ Understand the amnesia problem immediately (relatable)
-- ✅ See themselves in the scenarios (real pain points)
-- ✅ Grasp the dual-hemisphere architecture conceptually
-- ✅ Remember the 4-tier memory system structure
-- ✅ Feel excited to try CORTEX (not overwhelmed)
-
----
-
-## Template Variables
-
-When generating, use these data sources:
-
-```python
-{
-    "agents": {
-        "left_brain": ["code-executor", "test-generator", "error-corrector", "health-validator", "commit-handler"],
-        "right_brain": ["intent-router", "work-planner", "screenshot-analyzer", "change-governor", "brain-protector"]
-    },
-    "tiers": {
-        "tier0": "Instinct - Immutable core principles",
-        "tier1": "Working Memory - Last 20 conversations",
-        "tier2": "Knowledge Graph - Learned patterns",
-        "tier3": "Context Intelligence - Git analysis"
-    },
-    "features": [
-        "Natural language commands (no syntax to memorize)",
-        "Context continuity across sessions",
-        "Pattern learning and reuse",
-        "Proactive risk warnings",
-        "Brain self-protection",
-        "Interactive feature planning",
-        "Screenshot analysis",
-        "Test-driven development enforcement"
-    ]
-}
+<!-- Markdown diagram (centered) -->
+![Caption](images/filename.png)
+*Caption text in italics*
 ```
 
 ---
 
-## Output Format
+## 📝 Example: Dialogue-Heavy Scene
 
-```markdown
-# The CORTEX Story: How We Gave GitHub Copilot a Brain
+**BEFORE (Too Expository):**
+> Codenstein realized that the coffee mug arrangement represented his tier system. The fresh mugs near his keyboard were Tier 1, working memory. The stale ones further away represented Tier 2, the knowledge graph.
 
-**A human-centered explanation of CORTEX through relatable scenarios**
-
----
-
-## Chapter 1: Meet Your Brilliant (but Forgetful) Intern
-
-[Opening narrative...]
-
----
-
-## Chapter 2: Building a Dual-Hemisphere Brain
-
-[Architecture explanation through story...]
-
----
-
-## Chapter 3: The Four-Tier Memory System
-
-[Memory tiers explained with examples...]
+**AFTER (Dialogue-Driven):**
+> "Explain the coffee mugs."
+>
+> "They're visual metaphors for the tier system."
+>
+> "Of course they are."
+>
+> "See? The fresh ones near my keyboard—that's Tier 1, working memory. The ones getting stale? Tier 2. Knowledge graph."
+>
+> "And the ones by the wall with the... is that *mold*?"
+>
+> "Tier 3. Long-term storage. And yes, one might be evolving, but that represents—"
+>
+> "A health hazard. That represents a health hazard."
+>
+> "I was going to say 'data decay,' but yours is more accurate."
 
 ---
 
-## Chapter 4: CORTEX in Action - Real-World Scenarios
+## ✅ Success Criteria
 
-### Scenario 1: The "Make It Purple" Problem
-[...]
+Each rewritten chapter must:
+- [ ] Be 80%+ first-person narration
+- [ ] Have 40%+ dialogue content
+- [ ] Include at least one Miss G zinger
+- [ ] Preserve all original image placements
+- [ ] Keep the same technical concepts, just better delivery
+- [ ] End with a transition to the next chapter
+- [ ] Be FUNNIER than the original
 
-### Scenario 2: Pattern Recognition Saves the Day
-[...]
+---
 
-[etc.]
+## 🔄 Rewrite Workflow
+
+1. Read original chapter completely
+2. Extract all image tags (preserve exactly)
+3. Identify technical concepts to keep
+4. Rewrite in first-person with dialogue
+5. Insert images at same narrative points
+6. Verify humor level increased
+7. Check navigation links intact
+
+---
+
+**Copyright:** © 2024-2025 Asif Hussain. All rights reserved.  
+**License:** Proprietary - Part of CORTEX 4.0
 
 ---
 
