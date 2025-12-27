@@ -1,135 +1,267 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta content="width=device-width, initial-scale=1.0" name="viewport">
-<title>TDD Orchestrator v4.0 | CORTEX Technical Documentation</title>
-<!-- D3.js -->
-<script src="https://d3js.org/d3.v7.min.js" type="text/javascript">
-</script><!-- Mermaid -->
-<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js" type="text/javascript">
-</script>
-<style type="text/css">
-      :root {
-            --tdd-primary: #9C27B0;
-            --tdd-secondary: #7B1FA2;
-            --tdd-dark: #4A148C;
-            --red-phase: #F44336;
-            --green-phase: #4CAF50;
-            --refactor-phase: #2196F3;
-            --success: #10B981;
-            --warning: #F59E0B;
-            --error: #DC2626;
-        }
-        
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: #0f172a;
-            color: #e2e8f0;
-        }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-        
-        header {
-            text-align: center;
-            padding: 3rem 0;
-            border-bottom: 2px solid var(--tdd-primary);
-        }
-        
-        header h1 {
-            font-size: 3rem;
-            font-weight: 700;
-            color: var(--tdd-primary);
-            margin: 0;
-        }
-        
-        header .subtitle {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            margin-top: 0.5rem;
-        }
-        
-        .metadata {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-top: 1.5rem;
-            font-size: 0.9rem;
-            color: #cbd5e1;
-        }
-        
-        .metadata span {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .section {
-            margin: 4rem 0;
-        }
-        
-        .section h2 {
-            font-size: 2rem;
-            color: var(--tdd-primary);
-            margin-bottom: 1.5rem;
-            border-left: 4px solid var(--tdd-primary);
-            padding-left: 1rem;
-        }
-        
-        .section p {
-            line-height: 1.8;
-            color: #cbd5e1;
-            margin-bottom: 1rem;
-        }
-        
-        .diagram-container {
-            background: #1e293b;
-            border-radius: 12px;
-            padding: 2rem;
-            margin: 2rem 0;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-        }
-        
-        .diagram-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: var(--tdd-secondary);
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .mermaid {
-            background: #0f172a;
-            border-radius: 8px;
-            padding: 1.5rem;
-            min-height: 400px;
-        }
-        
-        #test-coverage-viz,
-        #quality-scoring-viz,
-        #tech-detection-viz {
-            width: 100%;
-            min-height: 500px;
-            background: #0f172a;
-            border-radius: 8px;
-        }
-        
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin: 2rem 0;
-        }
-        
-        .feature-card {
+<!DOCTYPE html><!DOCTYPE html>
+
+<html lang="en"><html lang="en">
+
+<head><head>
+
+    <meta charset="UTF-8"><meta charset="utf-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>TDD Orchestrator v4.0 | CORTEX Technical Documentation</title><title>TDD Orchestrator v4.0 | CORTEX Technical Documentation</title>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script><!-- D3.js -->
+
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script><script src="https://d3js.org/d3.v7.min.js" type="text/javascript">
+
+    <style></script><!-- Mermaid -->
+
+        :root { --primary: #9C27B0; --success: #10B981; --warning: #F59E0B; --error: #DC2626; }<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js" type="text/javascript">
+
+        body { font-family: 'Inter', -apple-system, sans-serif; margin: 0; padding: 0; background: #0f172a; color: #e2e8f0; }</script>
+
+        .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }<style type="text/css">
+
+        header { text-align: center; padding: 3rem 0; border-bottom: 2px solid var(--primary); }      :root {
+
+        header h1 { font-size: 3rem; font-weight: 700; color: var(--primary); margin: 0; }            --tdd-primary: #9C27B0;
+
+        header .subtitle { font-size: 1.2rem; color: #94a3b8; margin-top: 0.5rem; }            --tdd-secondary: #7B1FA2;
+
+        .metadata { display: flex; justify-content: center; gap: 2rem; margin-top: 1rem; flex-wrap: wrap; }            --tdd-dark: #4A148C;
+
+        .metadata-item { background: rgba(156, 39, 176, 0.1); padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.9rem; }            --red-phase: #F44336;
+
+        .section { margin: 3rem 0; }            --green-phase: #4CAF50;
+
+        .section-title { font-size: 2rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; border-left: 4px solid var(--primary); padding-left: 1rem; }            --refactor-phase: #2196F3;
+
+        .intro-text { font-size: 1.1rem; line-height: 1.8; color: #cbd5e1; margin-bottom: 2rem; }            --success: #10B981;
+
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 2rem 0; }            --warning: #F59E0B;
+
+        .feature-card { background: #1e293b; border-radius: 12px; padding: 1.5rem; border-left: 4px solid var(--primary); transition: transform 0.2s; }            --error: #DC2626;
+
+        .feature-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(156, 39, 176, 0.3); }        }
+
+        .viz-container { background: #1e293b; border-radius: 12px; padding: 2rem; margin: 2rem 0; }        
+
+        .mermaid { background: #0f172a; border-radius: 8px; padding: 2rem; }        body {
+
+        .breadcrumb { background: rgba(30, 41, 59, 0.8); padding: 1rem 2rem; border-bottom: 1px solid rgba(156, 39, 176, 0.3); }            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+        .breadcrumb a { color: var(--primary); text-decoration: none; }            margin: 0;
+
+        .breadcrumb a:hover { text-decoration: underline; }            padding: 0;
+
+        .breadcrumb-separator { color: #64748b; margin: 0 0.5rem; }            background: #0f172a;
+
+        .breadcrumb-current { color: #e2e8f0; }            color: #e2e8f0;
+
+        footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid #334155; margin-top: 4rem; color: #64748b; }        }
+
+    </style>        
+
+</head>        .container {
+
+<body>            max-width: 1400px;
+
+    <nav class="breadcrumb">            margin: 0 auto;
+
+        <a href="../../index.html">Home</a>            padding: 2rem;
+
+        <span class="breadcrumb-separator">›</span>        }
+
+        <a href="index.html">Orchestrators</a>        
+
+        <span class="breadcrumb-separator">›</span>        header {
+
+        <span class="breadcrumb-current">TDD Orchestrator</span>            text-align: center;
+
+    </nav>            padding: 3rem 0;
+
+                border-bottom: 2px solid var(--tdd-primary);
+
+    <div class="container">        }
+
+        <header>        
+
+            <h1>🧪 TDD Orchestrator v4.0</h1>        header h1 {
+
+            <p class="subtitle">RED→GREEN→REFACTOR with 11+ Languages & Quality Scoring</p>            font-size: 3rem;
+
+            <div class="metadata">            font-weight: 700;
+
+                <div class="metadata-item"><span style="color:#94a3b8">Complexity:</span> <span style="color:var(--primary);font-weight:600">HIGH</span></div>            color: var(--tdd-primary);
+
+                <div class="metadata-item"><span style="color:#94a3b8">File:</span> <span style="color:var(--primary);font-weight:600">tdd_orchestrator.py</span></div>            margin: 0;
+
+                <div class="metadata-item"><span style="color:#94a3b8">Languages:</span> <span style="color:var(--primary);font-weight:600">11+</span></div>        }
+
+            </div>        
+
+        </header>        header .subtitle {
+
+                    font-size: 1.2rem;
+
+        <section class="section">            color: #94a3b8;
+
+            <div class="intro-text">            margin-top: 0.5rem;
+
+                The TDD Orchestrator enforces test-driven development with mandatory RED→GREEN→REFACTOR cycles.         }
+
+                Features adaptive technology discovery for 11+ languages, AI-driven test generation, clean code enforcement         
+
+                (SOLID/DRY/KISS/YAGNI), and per-phase rollback capabilities. Quality scoring (0-10) with violation detection         .metadata {
+
+                ensures high standards across unit, integration, and e2e tests.            display: flex;
+
+            </div>            justify-content: center;
+
+        </section>            gap: 2rem;
+
+                    margin-top: 1.5rem;
+
+        <section class="section">            font-size: 0.9rem;
+
+            <h2 class="section-title">✨ Key Features</h2>            color: #cbd5e1;
+
+            <div class="features-grid">        }
+
+                <div class="feature-card">        
+
+                    <div style="font-size:2rem;margin-bottom:1rem">🔴</div>        .metadata span {
+
+                    <div style="font-size:1.25rem;font-weight:600;color:#f1f5f9;margin-bottom:0.75rem">RED Phase Validation</div>            display: flex;
+
+                    <div style="color:#94a3b8">Tests must fail first - enforces proper TDD workflow</div>            align-items: center;
+
+                </div>            gap: 0.5rem;
+
+                <div class="feature-card">        }
+
+                    <div style="font-size:2rem;margin-bottom:1rem">🟢</div>        
+
+                    <div style="font-size:1.25rem;font-weight:600;color:#f1f5f9;margin-bottom:0.75rem">GREEN Implementation</div>        .section {
+
+                    <div style="color:#94a3b8">Minimal code to pass tests, no premature optimization</div>            margin: 4rem 0;
+
+                </div>        }
+
+                <div class="feature-card">        
+
+                    <div style="font-size:2rem;margin-bottom:1rem">🔵</div>        .section h2 {
+
+                    <div style="font-size:1.25rem;font-weight:600;color:#f1f5f9;margin-bottom:0.75rem">REFACTOR Clean Code</div>            font-size: 2rem;
+
+                    <div style="color:#94a3b8">SOLID/DRY/KISS/YAGNI enforcement with quality scoring</div>            color: var(--tdd-primary);
+
+                </div>            margin-bottom: 1.5rem;
+
+                <div class="feature-card">            border-left: 4px solid var(--tdd-primary);
+
+                    <div style="font-size:2rem;margin-bottom:1rem">🌍</div>            padding-left: 1rem;
+
+                    <div style="font-size:1.25rem;font-weight:600;color:#f1f5f9;margin-bottom:0.75rem">11+ Languages</div>        }
+
+                    <div style="color:#94a3b8">Python, JavaScript, TypeScript, Java, C#, Go, Rust, Ruby, PHP, Kotlin, Swift</div>        
+
+                </div>        .section p {
+
+            </div>            line-height: 1.8;
+
+        </section>            color: #cbd5e1;
+
+                    margin-bottom: 1rem;
+
+        <section class="section">        }
+
+            <h2 class="section-title">🔄 RED→GREEN→REFACTOR Cycle</h2>        
+
+            <div class="viz-container">        .diagram-container {
+
+                <div class="mermaid">            background: #1e293b;
+
+graph LR            border-radius: 12px;
+
+    A[🔴 RED: Write Failing Test] --> B{Test Fails?}            padding: 2rem;
+
+    B -->|No| ERROR[❌ Invalid TDD]            margin: 2rem 0;
+
+    B -->|Yes| C[🟢 GREEN: Minimal Implementation]            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+
+    C --> D{Tests Pass?}        }
+
+    D -->|No| C        
+
+    D -->|Yes| E[🔵 REFACTOR: Clean Code]        .diagram-title {
+
+    E --> F{Quality > 7/10?}            font-size: 1.3rem;
+
+    F -->|No| E            font-weight: 600;
+
+    F -->|Yes| G[✅ Complete]            color: var(--tdd-secondary);
+
+                margin-bottom: 1.5rem;
+
+    style A fill:#F44336,stroke:#D32F2F,color:#fff            display: flex;
+
+    style C fill:#4CAF50,stroke:#388E3C,color:#fff            align-items: center;
+
+    style E fill:#2196F3,stroke:#1976D2,color:#fff            gap: 0.5rem;
+
+    style G fill:#10B981,stroke:#059669,color:#fff        }
+
+    style ERROR fill:#DC2626,stroke:#B91C1C,color:#fff        
+
+                </div>        .mermaid {
+
+            </div>            background: #0f172a;
+
+        </section>            border-radius: 8px;
+
+                    padding: 1.5rem;
+
+        <footer>            min-height: 400px;
+
+            <p>&copy; 2025 Asif Hussain | CORTEX 4.0</p>        }
+
+            <p>TDD Orchestrator - Test-Driven Development Mastery</p>        
+
+        </footer>        #test-coverage-viz,
+
+    </div>        #quality-scoring-viz,
+
+            #tech-detection-viz {
+
+    <script>            width: 100%;
+
+        mermaid.initialize({             min-height: 500px;
+
+            startOnLoad: true,            background: #0f172a;
+
+            theme: 'dark',            border-radius: 8px;
+
+            themeVariables: {        }
+
+                primaryColor: '#9C27B0',        
+
+                primaryTextColor: '#fff',        .feature-grid {
+
+                lineColor: '#64748b',            display: grid;
+
+                secondaryColor: '#1e293b'            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+
+            }            gap: 1.5rem;
+
+        });            margin: 2rem 0;
+
+    </script>        }
+
+</body>        
+
+</html>        .feature-card {
+
             background: #1e293b;
             border-radius: 8px;
             padding: 1.5rem;
@@ -940,8 +1072,6 @@
             .attr("fill", "#9C27B0")
             .style("font-size", "36px")
             .style("font-weight", "700");
-  </style>
-</head>
-<body>
+    </script>
 </body>
 </html>
