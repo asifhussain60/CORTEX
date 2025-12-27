@@ -200,6 +200,7 @@ docs/index.html      ← Story button HTML MUST remain exactly as specified
 4. **cortex-brain/manifests/** → Planning System, ADO, TDD manifests (DoR/DoD gates)
 5. **tests/** → Coverage reports, validation suites, integration tests
 6. **cortex-brain/documents/archive/** → Architecture deep-dives, design decisions
+7. **cortex-brain/documents/learning-paths/** → Interactive tutorials (Quick Start, Tutorial, Exercises)
 
 **Discovery Workflow:**
 ```
@@ -245,10 +246,16 @@ docs/
 │   ├── deployment.html                 ← Deployment instructions
 │   ├── multi-repo-setup.html           ← Multi-repo configuration
 │   ├── first-commands.html             ← Essential commands guide
-│   ├── tutorial.html                   ← Interactive tutorial
+│   ├── tutorial.html                   ← Interactive tutorial (references learning-paths/)
 │   ├── diagrams/
 │   │   ├── setup-flow.mmd              ← Mermaid flowchart (setup steps)
 │   │   └── multi-repo-diagram.html     ← D3.js visualization (1:∞ architecture)
+│   └── assets/
+├── learning-paths/                     ← 🆕 Interactive learning modules
+│   ├── index.html                      ← Learning paths overview
+│   ├── quick-start.html                ← CORTEX-4.0-QUICK-START.md (web version)
+│   ├── interactive-tutorial.html       ← CORTEX-4.0-INTERACTIVE-TUTORIAL.md (web)
+│   ├── practice-exercises.html         ← CORTEX-4.0-PRACTICE-EXERCISES.md (web)
 │   └── assets/
 ├── assets/
 │   ├── css/
