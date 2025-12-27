@@ -142,9 +142,6 @@ Twenty minutes of JWT, OAuth, session management. I closed the chat. Opened a te
 
 The response appeared: "Based on our conversation about JWT and OAuth, here's how to implement token refresh with the security considerations we discussed..."
 
-![First successful memory retrieval](images/first-memory.png)
-*The moment it remembered*
-
 I sat very still.
 
 "It remembered," I whispered.
@@ -206,9 +203,6 @@ I gestured at the screen. All the tests. All the green. "Because it's working. T
 "The learning tier?"
 
 "Memory is good. But learning is better." I pulled up my whiteboard. "Tier 1 remembers WHAT we discussed. Tier 2 needs to learn WHY it matters. Patterns. Relationships. Knowledge graphs."
-
-![Tier 1 complete, Tier 2 sketched](images/tier1-complete-tier2-begin.png)
-*Working memory glowing green. Knowledge graph spec haunting.*
 
 "How long?"
 

@@ -108,9 +108,6 @@ Miss G's voice manifested with the particular patience she reserves for my 3 AM 
 
 "Goldfish!" I gestured at the whiteboard, which had evolved into something that would concern a psychiatrist. "**THE GOLDFISH THEORY**" was scrawled across the top, surrounded by arrows pointing in directions that made sense to me at the time.
 
-![The Goldfish Theory whiteboard](images/goldfish-theory.png)
-*Scientific breakthrough or sleep-deprived rambling? The line was getting blurry.*
-
 "Goldfish actually have decent memory," I explained, pacing. "They can remember things for months. But they have terrible context switching. Show them something new, they forget they were in the middle of something else."
 
 "Like you with browser tabs."

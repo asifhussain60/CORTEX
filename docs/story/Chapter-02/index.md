@@ -38,9 +38,6 @@ I spun around. Miss G's voice materialized in my consciousness with the precisio
 
 "Building the fun parts first?" She settled into the folding chair I'd designated "the thinking chair." "Skipping ahead to the cool features?"
 
-![Miss G's coffee delivery](images/mrs-g-coffee-delivery.png)
-*The folding chair had been there since the 2019 dinner party. It had found its true purpose.*
-
 I opened my mouth to deny it. Closed it. Opened it again.
 
 "I was," I admitted. "But then I stopped."

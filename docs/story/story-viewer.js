@@ -467,7 +467,30 @@ function parseChapterContent(text, images) {
                 paragraphBuffer = '';
                 inParagraph = false;
             }
+            // Fix relative paths: ../illustrations/ → illustrations/
+            line = line.replace(/src=["']\.\.\/illustrations\//g, 'src="illustrations/');
             html += line; // Pass through HTML img tags
+            continue;
+        }
+        
+        // Markdown-style image: ![alt](path)
+        if (line.match(/^!\[.*\]\(.+\)$/)) {
+            if (inParagraph) {
+                html += processCharacterDialog(paragraphBuffer) + '</p>';
+                paragraphBuffer = '';
+                inParagraph = false;
+            }
+            // Convert markdown image to HTML and skip (these are often placeholders)
+            // Match: ![alt text](path)
+            const match = line.match(/^!\[(.*?)\]\((.+?)\)$/);
+            if (match) {
+                const alt = match[1];
+                let src = match[2];
+                // Fix relative paths
+                src = src.replace(/^\.\.\/illustrations\//, 'illustrations/');
+                src = src.replace(/^images\//, 'illustrations/images/');
+                html += `<div class="chapter-image"><img src="${src}" alt="${alt}" style="max-width: 100%; border-radius: var(--radius-md); border: 1px solid var(--glass-border); box-shadow: var(--shadow);" /></div>`;
+            }
             continue;
         }
         

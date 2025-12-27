@@ -10,6 +10,8 @@ title: "Chapter 4: Tier 2 - The Learning Machine"
 
 # Chapter 4: Tier 2 - The Learning Machine
 
+<img src="../illustrations/images/essentials/cortex-awakening-ch04-01.jpeg" alt="The Learning Machine" style="float: right; margin: 0 0 1em 1em; max-width: 45%; height: auto;">
+
 The frustration hit on a Tuesday afternoon.
 
 I was building my fourth API endpoint that week when I noticed something depressing. Copilot kept giving me the exact same boilerplate response for error handling. Not wrong. Not bad. Just... identical. Every. Single. Time.
@@ -67,9 +69,6 @@ I stared at her. The neurons were firing. "You just solved Tier 2."
 "I did?"
 
 "Entity extraction is tagging! Relationships are connections! Patterns are 'things that go together'!" I was already heading for the basement. "It's not a graph database—it's a really smart indexing system ON TOP of SQLite!"
-
-![The jewelry organization epiphany](images/jewelry-epiphany.png)
-*When a cataloging system solves your knowledge graph problem*
 
 ## The Implementation
 
@@ -130,9 +129,6 @@ I froze.
 **Test 2:** Mentioned a bug. Copilot recognized it as similar to three previous bugs, identified the common pattern (missing null checks), suggested the fix that had worked before.
 
 **Test 3:** Started discussing a new feature. Copilot proactively noted similarities to two previous features, referenced their architecture, suggested consistent implementation.
-
-![Pattern recognition in action](images/pattern-recognition.png)
-*Copilot connecting dots without being told*
 
 "It's building a knowledge graph," I explained, gesturing at the whiteboard. "Every entity, every pattern, every relationship. When I mention something new, it searches the graph, scores by confidence, uses that context to respond."
 

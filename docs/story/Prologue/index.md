@@ -192,9 +192,6 @@ I paused. "When you say it like that, it sounds insane."
 
 "*Your* hair is perfect. It insulted *my* hair. And honestly, it had some valid points."
 
-![The 4-tier architecture sketch](images/tier-architecture-whiteboard.png)
-*The whiteboard that started it all - Tier 0 through Tier 3 sketched in frantic marker*
-
 ## The Deadline
 
 Miss G was quiet for a long moment. I'd learned to read her silences over our years of imaginary couplehood. This one meant she was actually considering it.

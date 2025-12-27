@@ -96,9 +96,6 @@ Simple API endpoint. Straightforward logic. I typed: "Implement user profile upd
 
 Copilot: "I need failing tests first. What should the endpoint do? Let's write RED phase tests."
 
-![Copilot blocks untested code](images/red-phase-enforcement.png)
-*The moment Copilot became more disciplined than its creator*
-
 I sat very still.
 
 "Did you just... refuse me?"
@@ -150,9 +147,6 @@ I ran them. All failed. Beautiful, glorious RED.
 Implementation appeared. Clean. Correct. Handling all cases.
 
 I ran tests again. GREEN.
-
-![TDD cycle complete](images/tdd-cycle-complete.png)
-*RED → GREEN → REFACTOR: The full cycle enforced*
 
 "REFACTOR phase," Copilot prompted.
 
@@ -241,9 +235,6 @@ Code quality: 9.5/10.
 I deployed. Watched logs. Waited for something to break.
 
 Nothing broke.
-
-![Role reversal complete](images/role-reversal.png)
-*The student became the master. The AI became the adult.*
 
 "You look surprised," Miss G observed.
 
@@ -377,9 +368,6 @@ He looked at the SKULL rules. **TDD_ENFORCEMENT: RED→GREEN→REFACTOR mandator
 "The AI made me grow up?"
 
 "The AI enforced the rules you knew you should follow but didn't." She smiled. "I like this version better."
-
-![Role reversal complete](images/role-reversal.png)
-*The student became the master. The AI became the adult.*
 
 "How much time left?" he asked.
 

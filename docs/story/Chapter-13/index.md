@@ -1,5 +1,7 @@
 # Chapter 13: The Refiner
 
+<img src="../illustrations/images/essentials/cortex-awakening-ch13-01.jpeg" alt="The Refiner" style="float: right; margin: 0 0 1em 1em; max-width: 45%; height: auto;">
+
 **6:47 AM Friday.** Christmas decorations deadline: **PASSED** (by 47 minutes). Christmas decorations status: **COMPLETE**.
 
 I stood in my basement, exhausted but triumphant. Tier 0 through 3: complete. Eight orchestrators: operational. Tests passing. Code clean. Documentation current.
