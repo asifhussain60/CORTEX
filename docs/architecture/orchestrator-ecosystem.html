@@ -17,7 +17,7 @@
 <span class="breadcrumb-current">Orchestrator Ecosystem</span>
 </nav>
 <!-- Evolution Banner -->
-<section class="section" style="padding-top: 2rem; padding-bottom: 0;">
+<section class="section">
 <div class="container">
 <div class="evolution-banner">
 <div>
@@ -30,493 +30,493 @@
 <section class="section">
 <div class="container">
 <h1 class="section-title">🎭 Orchestrator Ecosystem</h1>
-<p class="text-center" style="max-width: 900px; margin: 0 auto 3rem; color: var(--text-secondary); font-size: 1.125rem;">
+<p class="text-center">
                 High-level workflow coordinators organized into tactical execution and strategic planning subsystems
 
     <!-- Executive Summary -->
-<section class="section" style="padding-top: 0;">
+<section class="section">
 <div class="container">
 <div class="glass-card">
 <h2 class="mb-3">Executive Summary</h2>
-<p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8;">
+<p>
                     CORTEX's orchestrator ecosystem consists of 15+ specialized workflow coordinators split into two subsystems: 
                     <strong>tactical execution</strong> (immediate operations) and <strong>strategic planning</strong> (long-term goals). 
                     Orchestrators communicate through a message bus using pub/sub patterns, enabling loose coupling and independent evolution. 
                     This microservices architecture separates concerns while maintaining integration through enterprise service bus patterns.
                 </p>
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-top: 2rem;">
-<div style="text-align: center; padding: 1.5rem; background: rgba(33, 150, 243, 0.1); border-radius: 8px;">
-<div style="font-size: 2.5rem; font-weight: 700; color: #2196f3;">15+</div>
-<div style="font-size: 0.875rem; color: var(--text-secondary);">Orchestrators</div>
-<div style="font-size: 0.75rem; color: var(--text-tertiary); margin-top: 0.5rem;">Specialized workflows</div>
+<div>
+<div>
+<div>15+</div>
+<div>Orchestrators</div>
+<div>Specialized workflows</div>
 </div>
-<div style="text-align: center; padding: 1.5rem; background: rgba(255, 193, 7, 0.1); border-radius: 8px;">
-<div style="font-size: 2.5rem; font-weight: 700; color: #ffc107;">2</div>
-<div style="font-size: 0.875rem; color: var(--text-secondary);">Subsystems</div>
-<div style="font-size: 0.75rem; color: var(--text-tertiary); margin-top: 0.5rem;">Tactical + Strategic</div>
+<div>
+<div>2</div>
+<div>Subsystems</div>
+<div>Tactical + Strategic</div>
 </div>
-<div style="text-align: center; padding: 1.5rem; background: rgba(76, 175, 80, 0.1); border-radius: 8px;">
-<div style="font-size: 2.5rem; font-weight: 700; color: #4caf50;">5,000+</div>
-<div style="font-size: 0.875rem; color: var(--text-secondary);">Messages/sec</div>
-<div style="font-size: 0.75rem; color: var(--text-tertiary); margin-top: 0.5rem;">Message bus throughput</div>
+<div>
+<div>5,000+</div>
+<div>Messages/sec</div>
+<div>Message bus throughput</div>
 </div>
-<div style="text-align: center; padding: 1.5rem; background: rgba(0, 212, 255, 0.1); border-radius: 8px;">
-<div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-primary);">&lt;5ms</div>
-<div style="font-size: 0.875rem; color: var(--text-secondary);">Latency</div>
-<div style="font-size: 0.75rem; color: var(--text-tertiary); margin-top: 0.5rem;">Message routing time</div>
+<div>
+<div><5ms</div>
+<div>Latency</div>
+<div>Message routing time</div>
 </div>
 <!-- Tactical Execution Subsystem -->
 <section class="section">
 <div class="container">
-<h2 class="mb-3" style="color: #2196f3;">⚡ Tactical Execution Subsystem</h2>
-<p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 2rem; text-align: center;">
+<h2 class="mb-3">⚡ Tactical Execution Subsystem</h2>
+<p>
                 "Do it now" operations—immediate execution, implementation, testing, and version control
 
             <!-- Plan Execution Orchestrator -->
 </p>
-<div class="glass-card" style="border-left: 4px solid #2196f3; margin-bottom: 1.5rem;">
-<div onclick="toggleSection('plan-exec-content')" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; cursor: pointer;">
-<h3 style="margin: 0; color: #2196f3;">🚀 Plan Execution Orchestrator</h3>
-<span id="plan-exec-content-icon" style="font-size: 1.5rem; transition: transform 0.3s;">▼</span>
+<div class="glass-card">
+<div onclick="toggleSection('plan-exec-content')">
+<h3>🚀 Plan Execution Orchestrator</h3>
+<span id="plan-exec-content-icon">▼</span>
 </div>
-<div id="plan-exec-content" style="display: block;">
-<p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;">
+<div id="plan-exec-content">
+<p>
                         Executes multi-phase implementation plans created by Planning Orchestrator. Coordinates file creation, code generation, 
                         testing, and git commits in sequential phases with checkpoint validation.
                     </p>
-<div style="background: rgba(33, 150, 243, 0.1); padding: 1rem; border-radius: 8px;">
-<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
 <div>
-<div style="font-weight: 700; color: #2196f3; margin-bottom: 0.5rem;">Current Tasks</div>
-<div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">147</div>
+<div>
+<div>
+<div>Current Tasks</div>
+<div>147</div>
 </div>
 <div>
-<div style="font-weight: 700; color: #2196f3; margin-bottom: 0.5rem;">Success Rate</div>
-<div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">98.7%</div>
+<div>Success Rate</div>
+<div>98.7%</div>
 </div>
 <div>
-<div style="font-weight: 700; color: #2196f3; margin-bottom: 0.5rem;">Versions</div>
-<div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">v1 + v2</div>
+<div>Versions</div>
+<div>v1 + v2</div>
 </div>
-<div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(33, 150, 243, 0.3);">
-<strong style="color: #2196f3;">Key Features:</strong> Phase checkpoints, rollback on failure, git integration, TDD enforcement, file creation tracking
+<div>
+<strong>Key Features:</strong> Phase checkpoints, rollback on failure, git integration, TDD enforcement, file creation tracking
 
             <!-- TDD Implementation Orchestrator -->
-<div class="glass-card" style="border-left: 4px solid #2196f3; margin-bottom: 1.5rem;">
-<div onclick="toggleSection('tdd-content')" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; cursor: pointer;">
-<h3 style="margin: 0; color: #2196f3;">🧪 TDD Implementation Orchestrator</h3>
-<span id="tdd-content-icon" style="font-size: 1.5rem; transition: transform 0.3s;">▼</span>
+<div class="glass-card">
+<div onclick="toggleSection('tdd-content')">
+<h3>🧪 TDD Implementation Orchestrator</h3>
+<span id="tdd-content-icon">▼</span>
 </div>
-<div id="tdd-content" style="display: block;">
-<p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;">
+<div id="tdd-content">
+<p>
                         Controls RED→GREEN→REFACTOR test-driven development cycles. Enforces test-first discipline, validates RED phase failures, 
                         manages GREEN phase implementation, and orchestrates REFACTOR phase improvements.
                     </p>
-<div style="background: rgba(33, 150, 243, 0.1); padding: 1rem; border-radius: 8px;">
-<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
 <div>
-<div style="font-weight: 700; color: #2196f3; margin-bottom: 0.5rem;">TDD Cycles</div>
-<div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">1,200+</div>
+<div>
+<div>
+<div>TDD Cycles</div>
+<div>1,200+</div>
 </div>
 <div>
-<div style="font-weight: 700; color: #2196f3; margin-bottom: 0.5rem;">Test-First Rate</div>
-<div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">94%</div>
+<div>Test-First Rate</div>
+<div>94%</div>
 </div>
 <div>
-<div style="font-weight: 700; color: #2196f3; margin-bottom: 0.5rem;">Coverage</div>
-<div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">4-layer</div>
+<div>Coverage</div>
+<div>4-layer</div>
 </div>
-<div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(33, 150, 243, 0.3);">
-<strong style="color: #2196f3;">Enforces:</strong> RED phase validation (tests must fail first), GREEN phase implementation (minimal code), REFACTOR phase cleanup (no functionality changes)
+<div>
+<strong>Enforces:</strong> RED phase validation (tests must fail first), GREEN phase implementation (minimal code), REFACTOR phase cleanup (no functionality changes)
 
             <!-- Git Checkpoint Orchestrator -->
-<div class="glass-card" style="border-left: 4px solid #2196f3; margin-bottom: 1.5rem;">
-<div onclick="toggleSection('git-content')" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; cursor: pointer;">
-<h3 style="margin: 0; color: #2196f3;">📦 Git Checkpoint Orchestrator</h3>
-<span id="git-content-icon" style="font-size: 1.5rem; transition: transform 0.3s;">▼</span>
+<div class="glass-card">
+<div onclick="toggleSection('git-content')">
+<h3>📦 Git Checkpoint Orchestrator</h3>
+<span id="git-content-icon">▼</span>
 </div>
-<div id="git-content" style="display: block;">
-<p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;">
+<div id="git-content">
+<p>
                         Manages version control with CORTEX/user isolation enforcement. Creates automatic checkpoints, generates intelligent 
                         commit messages using Conventional Commits format, and prevents dirty state work.
                     </p>
-<div style="background: rgba(33, 150, 243, 0.1); padding: 1rem; border-radius: 8px;">
-<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
 <div>
-<div style="font-weight: 700; color: #2196f3; margin-bottom: 0.5rem;">Checkpoints</div>
-<div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">520+</div>
+<div>
+<div>
+<div>Checkpoints</div>
+<div>520+</div>
 </div>
 <div>
-<div style="font-weight: 700; color: #2196f3; margin-bottom: 0.5rem;">Isolation Rate</div>
-<div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">100%</div>
+<div>Isolation Rate</div>
+<div>100%</div>
 </div>
 <div>
-<div style="font-weight: 700; color: #2196f3; margin-bottom: 0.5rem;">Rollbacks</div>
-<div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">Ready</div>
+<div>Rollbacks</div>
+<div>Ready</div>
 </div>
-<div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(33, 150, 243, 0.3);">
-<strong style="color: #2196f3;">Features:</strong> Auto-checkpointing, Conventional Commits (feat/fix/docs/refactor), CORTEX/user repo isolation, dirty state prevention
+<div>
+<strong>Features:</strong> Auto-checkpointing, Conventional Commits (feat/fix/docs/refactor), CORTEX/user repo isolation, dirty state prevention
 
             <!-- Dashboard Launcher -->
-<div class="glass-card" style="border-left: 4px solid #2196f3; margin-bottom: 1.5rem;">
-<div onclick="toggleSection('dashboard-launcher-content')" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; cursor: pointer;">
-<h3 style="margin: 0; color: #2196f3;">📊 Dashboard Launcher Orchestrator</h3>
-<span id="dashboard-launcher-content-icon" style="font-size: 1.5rem; transition: transform 0.3s;">▼</span>
+<div class="glass-card">
+<div onclick="toggleSection('dashboard-launcher-content')">
+<h3>📊 Dashboard Launcher Orchestrator</h3>
+<span id="dashboard-launcher-content-icon">▼</span>
 </div>
-<div id="dashboard-launcher-content" style="display: block;">
-<p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;">
+<div id="dashboard-launcher-content">
+<p>
                         Launches glassmorphism dashboard with D3.js visualizations. Manages HTTP server (ports 8080-8089), auto-opens browser, 
-                        and serves interactive analytics with FCP &lt; 1.5s, LCP &lt; 2.5s performance budget.
+                        and serves interactive analytics with FCP < 1.5s, LCP < 2.5s performance budget.
                     </p>
-<div style="background: rgba(33, 150, 243, 0.1); padding: 1rem; border-radius: 8px;">
-<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
 <div>
-<div style="font-weight: 700; color: #2196f3; margin-bottom: 0.5rem;">Launches</div>
-<div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">200+</div>
+<div>
+<div>
+<div>Launches</div>
+<div>200+</div>
 </div>
 <div>
-<div style="font-weight: 700; color: #2196f3; margin-bottom: 0.5rem;">Port Range</div>
-<div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">8080-8089</div>
+<div>Port Range</div>
+<div>8080-8089</div>
 </div>
 <div>
-<div style="font-weight: 700; color: #2196f3; margin-bottom: 0.5rem;">FCP Target</div>
-<div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">&lt;1.5s</div>
+<div>FCP Target</div>
+<div><1.5s</div>
 </div>
-<div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(33, 150, 243, 0.3);">
-<strong style="color: #2196f3;">Capabilities:</strong> HTTP server management, browser auto-launch, glassmorphism design, D3.js charts, performance optimization
+<div>
+<strong>Capabilities:</strong> HTTP server management, browser auto-launch, glassmorphism design, D3.js charts, performance optimization
 
             <!-- Dashboard Collector & Generator -->
-<div class="glass-card" style="border-left: 4px solid #2196f3; margin-bottom: 1.5rem;">
-<div onclick="toggleSection('dashboard-collector-content')" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; cursor: pointer;">
-<h3 style="margin: 0; color: #2196f3;">📈 Dashboard Collector &amp; Generator</h3>
-<span id="dashboard-collector-content-icon" style="font-size: 1.5rem; transition: transform 0.3s;">▼</span>
+<div class="glass-card">
+<div onclick="toggleSection('dashboard-collector-content')">
+<h3>📈 Dashboard Collector & Generator</h3>
+<span id="dashboard-collector-content-icon">▼</span>
 </div>
-<div id="dashboard-collector-content" style="display: block;">
-<p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;">
+<div id="dashboard-collector-content">
+<p>
                         Collects metrics from git history, test results, SKULL enforcement logs, and codebase analysis. Generates JSON data 
                         for dashboard visualization with zero mock data policy enforcement.
                     </p>
-<div style="background: rgba(33, 150, 243, 0.1); padding: 1rem; border-radius: 8px;">
-<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
 <div>
-<div style="font-weight: 700; color: #2196f3; margin-bottom: 0.5rem;">Data Sources</div>
-<div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">8+</div>
+<div>
+<div>
+<div>Data Sources</div>
+<div>8+</div>
 </div>
 <div>
-<div style="font-weight: 700; color: #2196f3; margin-bottom: 0.5rem;">Collections</div>
-<div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">500+</div>
+<div>Collections</div>
+<div>500+</div>
 </div>
 <div>
-<div style="font-weight: 700; color: #2196f3; margin-bottom: 0.5rem;">Mock Data</div>
-<div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">0%</div>
+<div>Mock Data</div>
+<div>0%</div>
 </div>
-<div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(33, 150, 243, 0.3);">
-<strong style="color: #2196f3;">Sources:</strong> Git logs, test coverage, SKULL violations, code metrics, Tier 2 knowledge graph, conversation history, orchestrator logs
+<div>
+<strong>Sources:</strong> Git logs, test coverage, SKULL violations, code metrics, Tier 2 knowledge graph, conversation history, orchestrator logs
 
     <!-- Strategic Planning Subsystem -->
 <section class="section">
 <div class="container">
-<h2 class="mb-3" style="color: #ff9800;">🎯 Strategic Planning Subsystem</h2>
-<p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 2rem; text-align: center;">
+<h2 class="mb-3">🎯 Strategic Planning Subsystem</h2>
+<p>
                 "Figure it out" operations—long-term planning, architecture evaluation, system health, and evolution
 
             <!-- Planning Orchestrator -->
 </p>
-<div class="glass-card" style="border-left: 4px solid #ff9800; margin-bottom: 1.5rem;">
-<div onclick="toggleSection('planning-content')" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; cursor: pointer;">
-<h3 style="margin: 0; color: #ff9800;">📋 Planning Orchestrator</h3>
-<span id="planning-content-icon" style="font-size: 1.5rem; transition: transform 0.3s;">▼</span>
+<div class="glass-card">
+<div onclick="toggleSection('planning-content')">
+<h3>📋 Planning Orchestrator</h3>
+<span id="planning-content-icon">▼</span>
 </div>
-<div id="planning-content" style="display: block;">
-<p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;">
+<div id="planning-content">
+<p>
                         Creates multi-phase feature implementation plans with DoR/DoD compliance. Auto-detects complexity (HIGH/MEDIUM/LOW), 
                         includes TDD in all plans, and generates phase-by-phase execution roadmaps with quality gates.
                     </p>
-<div style="background: rgba(255, 152, 0, 0.1); padding: 1rem; border-radius: 8px;">
-<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
 <div>
-<div style="font-weight: 700; color: #ff9800; margin-bottom: 0.5rem;">Active Plans</div>
-<div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">47</div>
+<div>
+<div>
+<div>Active Plans</div>
+<div>47</div>
 </div>
 <div>
-<div style="font-weight: 700; color: #ff9800; margin-bottom: 0.5rem;">DoR/DoD Compliance</div>
-<div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">100%</div>
+<div>DoR/DoD Compliance</div>
+<div>100%</div>
 </div>
 <div>
-<div style="font-weight: 700; color: #ff9800; margin-bottom: 0.5rem;">Quality Gates</div>
-<div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">6</div>
+<div>Quality Gates</div>
+<div>6</div>
 </div>
-<div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255, 152, 0, 0.3);">
-<strong style="color: #ff9800;">Features:</strong> Auto-complexity detection, TDD enforcement, DoR (8 requirements), DoD (6 gates), incremental/conditional/skeleton plans
+<div>
+<strong>Features:</strong> Auto-complexity detection, TDD enforcement, DoR (8 requirements), DoD (6 gates), incremental/conditional/skeleton plans
 
             <!-- Documentation Orchestrator -->
-<div class="glass-card" style="border-left: 4px solid #ff9800; margin-bottom: 1.5rem;">
-<div onclick="toggleSection('docs-content')" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; cursor: pointer;">
-<h3 style="margin: 0; color: #ff9800;">📚 Documentation Orchestrator</h3>
-<span id="docs-content-icon" style="font-size: 1.5rem; transition: transform 0.3s;">▼</span>
+<div class="glass-card">
+<div onclick="toggleSection('docs-content')">
+<h3>📚 Documentation Orchestrator</h3>
+<span id="docs-content-icon">▼</span>
 </div>
-<div id="docs-content" style="display: block;">
-<p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;">
+<div id="docs-content">
+<p>
                         Manages documentation lifecycle with structured organization enforcement. Prevents root-level docs, enforces 
                         <code>cortex-brain/documents/{category}/</code> paths, and maintains documentation hygiene across all categories.
                     </p>
-<div style="background: rgba(255, 152, 0, 0.1); padding: 1rem; border-radius: 8px;">
-<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
 <div>
-<div style="font-weight: 700; color: #ff9800; margin-bottom: 0.5rem;">Documents</div>
-<div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">500+</div>
+<div>
+<div>
+<div>Documents</div>
+<div>500+</div>
 </div>
 <div>
-<div style="font-weight: 700; color: #ff9800; margin-bottom: 0.5rem;">Categories</div>
-<div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">12</div>
+<div>Categories</div>
+<div>12</div>
 </div>
 <div>
-<div style="font-weight: 700; color: #ff9800; margin-bottom: 0.5rem;">Root Blocks</div>
-<div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">847</div>
+<div>Root Blocks</div>
+<div>847</div>
 </div>
-<div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255, 152, 0, 0.3);">
-<strong style="color: #ff9800;">Categories:</strong> reports, analysis, summaries, investigations, planning, implementation-guides, enhancements, cleanup-reports, health-reports, discovery-reports
+<div>
+<strong>Categories:</strong> reports, analysis, summaries, investigations, planning, implementation-guides, enhancements, cleanup-reports, health-reports, discovery-reports
 
             <!-- Application Health Orchestrator -->
-<div class="glass-card" style="border-left: 4px solid #ff9800; margin-bottom: 1.5rem;">
-<div onclick="toggleSection('health-content')" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; cursor: pointer;">
-<h3 style="margin: 0; color: #ff9800;">🏥 Application Health Orchestrator</h3>
-<span id="health-content-icon" style="font-size: 1.5rem; transition: transform 0.3s;">▼</span>
+<div class="glass-card">
+<div onclick="toggleSection('health-content')">
+<h3>🏥 Application Health Orchestrator</h3>
+<span id="health-content-icon">▼</span>
 </div>
-<div id="health-content" style="display: block;">
-<p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;">
+<div id="health-content">
+<p>
                         Monitors system health across all tiers. Checks database integrity, file system health, git repository status, 
                         test coverage metrics, and orchestrator operational status. Generates health reports and triggers maintenance when needed.
                     </p>
-<div style="background: rgba(255, 152, 0, 0.1); padding: 1rem; border-radius: 8px;">
-<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
 <div>
-<div style="font-weight: 700; color: #ff9800; margin-bottom: 0.5rem;">Health Checks</div>
-<div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">1,000+</div>
+<div>
+<div>
+<div>Health Checks</div>
+<div>1,000+</div>
 </div>
 <div>
-<div style="font-weight: 700; color: #ff9800; margin-bottom: 0.5rem;">System Health</div>
-<div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">98%</div>
+<div>System Health</div>
+<div>98%</div>
 </div>
 <div>
-<div style="font-weight: 700; color: #ff9800; margin-bottom: 0.5rem;">Auto-Repairs</div>
-<div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">Active</div>
+<div>Auto-Repairs</div>
+<div>Active</div>
 </div>
-<div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255, 152, 0, 0.3);">
-<strong style="color: #ff9800;">Monitors:</strong> 4-tier database health, file system integrity, git status, test coverage, orchestrator availability, SKULL enforcement logs
+<div>
+<strong>Monitors:</strong> 4-tier database health, file system integrity, git status, test coverage, orchestrator availability, SKULL enforcement logs
 
             <!-- Manager Report Orchestrator -->
-<div class="glass-card" style="border-left: 4px solid #ff9800; margin-bottom: 1.5rem;">
-<div onclick="toggleSection('manager-content')" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; cursor: pointer;">
-<h3 style="margin: 0; color: #ff9800;">📊 Manager Report Orchestrator</h3>
-<span id="manager-content-icon" style="font-size: 1.5rem; transition: transform 0.3s;">▼</span>
+<div class="glass-card">
+<div onclick="toggleSection('manager-content')">
+<h3>📊 Manager Report Orchestrator</h3>
+<span id="manager-content-icon">▼</span>
 </div>
-<div id="manager-content" style="display: block;">
-<p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;">
+<div id="manager-content">
+<p>
                         Generates executive summaries and technical manager reports. Aggregates metrics across all orchestrators, 
                         formats data for stakeholder consumption, and produces actionable insights with trend analysis.
                     </p>
-<div style="background: rgba(255, 152, 0, 0.1); padding: 1rem; border-radius: 8px;">
-<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
 <div>
-<div style="font-weight: 700; color: #ff9800; margin-bottom: 0.5rem;">Reports Generated</div>
-<div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">300+</div>
+<div>
+<div>
+<div>Reports Generated</div>
+<div>300+</div>
 </div>
 <div>
-<div style="font-weight: 700; color: #ff9800; margin-bottom: 0.5rem;">Formats</div>
-<div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">3</div>
+<div>Formats</div>
+<div>3</div>
 </div>
 <div>
-<div style="font-weight: 700; color: #ff9800; margin-bottom: 0.5rem;">Update Frequency</div>
-<div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">Daily</div>
+<div>Update Frequency</div>
+<div>Daily</div>
 </div>
-<div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255, 152, 0, 0.3);">
-<strong style="color: #ff9800;">Report Types:</strong> Executive summary (KPIs), technical deep-dive (metrics), trend analysis (weekly/monthly), stakeholder dashboards
+<div>
+<strong>Report Types:</strong> Executive summary (KPIs), technical deep-dive (metrics), trend analysis (weekly/monthly), stakeholder dashboards
 
             <!-- Debug Workflow Orchestrator -->
-<div class="glass-card" style="border-left: 4px solid #ff9800; margin-bottom: 1.5rem;">
-<div onclick="toggleSection('debug-content')" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; cursor: pointer;">
-<h3 style="margin: 0; color: #ff9800;">🐛 Debug Workflow Orchestrator</h3>
-<span id="debug-content-icon" style="font-size: 1.5rem; transition: transform 0.3s;">▼</span>
+<div class="glass-card">
+<div onclick="toggleSection('debug-content')">
+<h3>🐛 Debug Workflow Orchestrator</h3>
+<span id="debug-content-icon">▼</span>
 </div>
-<div id="debug-content" style="display: block;">
-<p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;">
+<div id="debug-content">
+<p>
                         Coordinates debugging workflows with step-through execution, breakpoint management, variable inspection, and 
                         stack trace analysis. Integrates with TDD cycles for test-driven debugging.
                     </p>
-<div style="background: rgba(255, 152, 0, 0.1); padding: 1rem; border-radius: 8px;">
-<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
 <div>
-<div style="font-weight: 700; color: #ff9800; margin-bottom: 0.5rem;">Debug Sessions</div>
-<div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">450+</div>
+<div>
+<div>
+<div>Debug Sessions</div>
+<div>450+</div>
 </div>
 <div>
-<div style="font-weight: 700; color: #ff9800; margin-bottom: 0.5rem;">Resolution Rate</div>
-<div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">92%</div>
+<div>Resolution Rate</div>
+<div>92%</div>
 </div>
 <div>
-<div style="font-weight: 700; color: #ff9800; margin-bottom: 0.5rem;">Avg Time</div>
-<div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">12min</div>
+<div>Avg Time</div>
+<div>12min</div>
 </div>
-<div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255, 152, 0, 0.3);">
-<strong style="color: #ff9800;">Capabilities:</strong> Step-through execution, breakpoint management, variable inspection, stack trace analysis, TDD integration
+<div>
+<strong>Capabilities:</strong> Step-through execution, breakpoint management, variable inspection, stack trace analysis, TDD integration
 
     <!-- System Integration Orchestrators -->
 <section class="section">
 <div class="container">
-<h2 class="mb-3" style="color: #9c27b0;">🔗 System Integration Orchestrators</h2>
-<p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 2rem; text-align: center;">
+<h2 class="mb-3">🔗 System Integration Orchestrators</h2>
+<p>
                 Cross-cutting concerns—configuration, validation, onboarding, and system-wide coordination
 
             </p>
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+<div>
 <!-- Config Manager -->
-<div class="glass-card" style="border-top: 3px solid #9c27b0;">
-<h3 style="color: #9c27b0; margin-bottom: 1rem;">⚙️ Config Manager</h3>
-<p style="color: var(--text-secondary); line-height: 1.8; font-size: 0.95rem; margin-bottom: 1rem;">
+<div class="glass-card">
+<h3>⚙️ Config Manager</h3>
+<p>
                         Manages machine-specific configuration with <code>cortex.config.json</code>. Validates paths, enforces 
                         schema compliance, and provides configuration migration support.
                     </p>
-<div style="background: rgba(156, 39, 176, 0.1); padding: 0.75rem; border-radius: 6px; font-size: 0.85rem;">
+<div>
 <strong>Configs Managed:</strong> 200+ | <strong>Validation:</strong> 100% | <strong>Migrations:</strong> 15
 
                 <!-- Validation Framework -->
-<div class="glass-card" style="border-top: 3px solid #9c27b0;">
-<h3 style="color: #9c27b0; margin-bottom: 1rem;">✅ Validation Framework</h3>
-<p style="color: var(--text-secondary); line-height: 1.8; font-size: 0.95rem; margin-bottom: 1rem;">
+<div class="glass-card">
+<h3>✅ Validation Framework</h3>
+<p>
                         Cross-orchestrator validation ensuring consistency across all operations. Validates file paths, git state, 
                         test results, and SKULL compliance.
                     </p>
-<div style="background: rgba(156, 39, 176, 0.1); padding: 0.75rem; border-radius: 6px; font-size: 0.85rem;">
+<div>
 <strong>Validations:</strong> 5,000+ | <strong>Pass Rate:</strong> 99.2% | <strong>Validators:</strong> 12
 
                 <!-- Onboarding Acknowledgment -->
-<div class="glass-card" style="border-top: 3px solid #9c27b0;">
-<h3 style="color: #9c27b0; margin-bottom: 1rem;">👋 Onboarding Acknowledgment</h3>
-<p style="color: var(--text-secondary); line-height: 1.8; font-size: 0.95rem; margin-bottom: 1rem;">
+<div class="glass-card">
+<h3>👋 Onboarding Acknowledgment</h3>
+<p>
                         Guides new users through CORTEX setup with interactive acknowledgment of governance rules, TDD requirements, 
                         and system capabilities.
                     </p>
-<div style="background: rgba(156, 39, 176, 0.1); padding: 0.75rem; border-radius: 6px; font-size: 0.85rem;">
+<div>
 <strong>Users Onboarded:</strong> 50+ | <strong>Completion:</strong> 96% | <strong>Time:</strong> 8min avg
 
                 <!-- Git Sync & Optimize -->
-<div class="glass-card" style="border-top: 3px solid #9c27b0;">
-<h3 style="color: #9c27b0; margin-bottom: 1rem;">🔄 Git Sync &amp; Optimize</h3>
-<p style="color: var(--text-secondary); line-height: 1.8; font-size: 0.95rem; margin-bottom: 1rem;">
+<div class="glass-card">
+<h3>🔄 Git Sync & Optimize</h3>
+<p>
                         Synchronizes git repositories and optimizes storage with garbage collection, pack file optimization, 
                         and reflog cleanup.
                     </p>
-<div style="background: rgba(156, 39, 176, 0.1); padding: 0.75rem; border-radius: 6px; font-size: 0.85rem;">
+<div>
 <strong>Syncs:</strong> 1,200+ | <strong>Space Saved:</strong> 2.4GB | <strong>Optimization:</strong> Weekly
 
                 <!-- Learning Observer -->
-<div class="glass-card" style="border-top: 3px solid #9c27b0;">
-<h3 style="color: #9c27b0; margin-bottom: 1rem;">👁️ Learning Observer</h3>
-<p style="color: var(--text-secondary); line-height: 1.8; font-size: 0.95rem; margin-bottom: 1rem;">
+<div class="glass-card">
+<h3>👁️ Learning Observer</h3>
+<p>
                         Observes user interactions to feed Tier 2 knowledge graph. Identifies patterns, strengthens semantic connections, 
                         and enables Hebbian learning.
                     </p>
-<div style="background: rgba(156, 39, 176, 0.1); padding: 0.75rem; border-radius: 6px; font-size: 0.85rem;">
+<div>
 <strong>Observations:</strong> 10,000+ | <strong>Patterns:</strong> 500+ | <strong>Connections:</strong> 24,817
 
                 <!-- Phase Checkpoint Manager -->
-<div class="glass-card" style="border-top: 3px solid #9c27b0;">
-<h3 style="color: #9c27b0; margin-bottom: 1rem;">🚦 Phase Checkpoint Manager</h3>
-<p style="color: var(--text-secondary); line-height: 1.8; font-size: 0.95rem; margin-bottom: 1rem;">
+<div class="glass-card">
+<h3>🚦 Phase Checkpoint Manager</h3>
+<p>
                         Manages phase boundaries in multi-phase execution. Validates checkpoint conditions, enables rollback to previous 
                         phases, and tracks phase progression.
                     </p>
-<div style="background: rgba(156, 39, 176, 0.1); padding: 0.75rem; border-radius: 6px; font-size: 0.85rem;">
+<div>
 <strong>Checkpoints:</strong> 800+ | <strong>Rollbacks:</strong> 12 | <strong>Success:</strong> 98.5%
 
     <!-- Message Bus Architecture -->
 <section class="section">
 <div class="container">
-<div class="glass-card" style="background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(33, 150, 243, 0.1) 100%); border: 1px solid rgba(255, 193, 7, 0.3);">
+<div class="glass-card">
 <h2 class="mb-3 text-center">📨 Message Bus Integration</h2>
-<p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; text-align: center; margin-bottom: 2rem;">
+<p>
                     Pub/sub messaging enables loose coupling and independent service evolution
                 
                 </p>
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
-<div style="background: rgba(33, 150, 243, 0.1); padding: 1.5rem; border-radius: 8px;">
-<h3 style="color: #2196f3; margin-bottom: 1rem;">📤 Message Publishing</h3>
-<ul style="color: var(--text-secondary); line-height: 2; padding-left: 1.5rem;">
+<div>
+<div>
+<h3>📤 Message Publishing</h3>
+<ul>
 <li>Planning → "Plan Complete" → Bus → Executor subscribes</li>
 <li>Test Runner → "Tests Passed" → Bus → Git Checkpoint subscribes</li>
 <li>Upgrade → "Prepare Upgrade" → Bus → All services subscribe</li>
 <li>Dashboard → "Metrics Updated" → Bus → Health Monitor subscribes</li>
 </ul>
-<div style="background: rgba(255, 152, 0, 0.1); padding: 1.5rem; border-radius: 8px;">
-<h3 style="color: #ff9800; margin-bottom: 1rem;">📥 Message Subscription</h3>
-<ul style="color: var(--text-secondary); line-height: 2; padding-left: 1.5rem;">
+<div>
+<h3>📥 Message Subscription</h3>
+<ul>
 <li>Orchestrators subscribe to message types they care about</li>
 <li>No direct coupling between services (loose coupling)</li>
 <li>Adding new orchestrators doesn't break existing ones</li>
 <li>Services can evolve independently without coordination</li>
 </ul>
-<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 2rem;">
-<div style="text-align: center; padding: 1rem; background: rgba(76, 175, 80, 0.1); border-radius: 8px;">
-<div style="font-size: 2rem; font-weight: 700; color: #4caf50;">5,000+</div>
-<div style="font-size: 0.875rem; color: var(--text-secondary);">Messages/sec</div>
+<div>
+<div>
+<div>5,000+</div>
+<div>Messages/sec</div>
 </div>
-<div style="text-align: center; padding: 1rem; background: rgba(0, 212, 255, 0.1); border-radius: 8px;">
-<div style="font-size: 2rem; font-weight: 700; color: var(--accent-primary);">&lt;5ms</div>
-<div style="font-size: 0.875rem; color: var(--text-secondary);">Routing Latency</div>
+<div>
+<div><5ms</div>
+<div>Routing Latency</div>
 </div>
-<div style="text-align: center; padding: 1rem; background: rgba(255, 193, 7, 0.1); border-radius: 8px;">
-<div style="font-size: 2rem; font-weight: 700; color: #ffc107;">20+</div>
-<div style="font-size: 0.875rem; color: var(--text-secondary);">Message Types</div>
+<div>
+<div>20+</div>
+<div>Message Types</div>
 </div>
-<div style="text-align: center; padding: 1rem; background: rgba(156, 39, 176, 0.1); border-radius: 8px;">
-<div style="font-size: 2rem; font-weight: 700; color: #9c27b0;">100%</div>
-<div style="font-size: 0.875rem; color: var(--text-secondary);">Delivery Rate</div>
+<div>
+<div>100%</div>
+<div>Delivery Rate</div>
 </div>
 <!-- Key Benefits -->
 <section class="section">
 <div class="container">
 <div class="glass-card">
 <h2 class="mb-3 text-center">✨ Key Benefits of Orchestrator Ecosystem</h2>
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
-<div style="padding: 1.5rem; background: rgba(33, 150, 243, 0.1); border-radius: 8px; border-left: 4px solid #2196f3;">
-<h3 style="color: #2196f3; margin-bottom: 0.75rem;">🎯 Separation of Concerns</h3>
-<p style="color: var(--text-secondary); line-height: 1.8; margin: 0;">
+<div>
+<div>
+<h3>🎯 Separation of Concerns</h3>
+<p>
                             Tactical execution separate from strategic planning. Each orchestrator has single responsibility, making the 
                             system easier to understand, maintain, and extend.
                     
                     </p>
-<div style="padding: 1.5rem; background: rgba(76, 175, 80, 0.1); border-radius: 8px; border-left: 4px solid #4caf50;">
-<h3 style="color: #4caf50; margin-bottom: 0.75rem;">🔗 Loose Coupling</h3>
-<p style="color: var(--text-secondary); line-height: 1.8; margin: 0;">
+<div>
+<h3>🔗 Loose Coupling</h3>
+<p>
                             Message bus integration means orchestrators don't call each other directly. Adding, removing, or modifying 
                             one orchestrator doesn't break others.
                     
                     </p>
-<div style="padding: 1.5rem; background: rgba(255, 152, 0, 0.1); border-radius: 8px; border-left: 4px solid #ff9800;">
-<h3 style="color: #ff9800; margin-bottom: 0.75rem;">⚡ Independent Evolution</h3>
-<p style="color: var(--text-secondary); line-height: 1.8; margin: 0;">
+<div>
+<h3>⚡ Independent Evolution</h3>
+<p>
                             Each orchestrator can be upgraded, tested, and deployed independently. Version mismatches don't cause failures 
                             thanks to message-based contracts.
                     
                     </p>
-<div style="padding: 1.5rem; background: rgba(156, 39, 176, 0.1); border-radius: 8px; border-left: 4px solid #9c27b0;">
-<h3 style="color: #9c27b0; margin-bottom: 0.75rem;">📊 Observable &amp; Debuggable</h3>
-<p style="color: var(--text-secondary); line-height: 1.8; margin: 0;">
+<div>
+<h3>📊 Observable & Debuggable</h3>
+<p>
                             All messages flow through central bus with full logging. Debugging becomes tracing message flows rather than 
                             stepping through complex call stacks.
                     
                     </p>
-<div style="padding: 1.5rem; background: rgba(0, 212, 255, 0.1); border-radius: 8px; border-left: 4px solid var(--accent-primary);">
-<h3 style="color: var(--accent-primary); margin-bottom: 0.75rem;">🚀 Scalable Architecture</h3>
-<p style="color: var(--text-secondary); line-height: 1.8; margin: 0;">
+<div>
+<h3>🚀 Scalable Architecture</h3>
+<p>
                             Message bus handles 5,000+ msg/sec today. If throughput needs increase, we can scale horizontally by adding 
                             more instances or sharding by message type.
                     
                     </p>
-<div style="padding: 1.5rem; background: rgba(255, 193, 7, 0.1); border-radius: 8px; border-left: 4px solid #ffc107;">
-<h3 style="color: #ffc107; margin-bottom: 0.75rem;">🔄 Resilient to Failures</h3>
-<p style="color: var(--text-secondary); line-height: 1.8; margin: 0;">
+<div>
+<h3>🔄 Resilient to Failures</h3>
+<p>
                             If one orchestrator fails, others continue operating. Message queues buffer work during outages, and services 
                             can catch up when restored.
 
@@ -525,11 +525,11 @@
 <div class="container">
 <div class="glass-card">
 <h3 class="text-center mb-3">Explore Other Architecture Components</h3>
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
-<a class="btn btn-secondary" href="four-tier-brain.html" style="display: block; text-align: center;">🧠 4-Tier Brain</a>
-<a class="btn btn-secondary" href="skull-protection.html" style="display: block; text-align: center;">🛡️ SKULL Protection</a>
-<a class="btn btn-secondary" href="agent-system.html" style="display: block; text-align: center;">🤖 Agent System</a>
-<a class="btn btn-secondary" href="index.html" style="display: block; text-align: center;">← Architecture Overview</a>
+<div>
+<a class="btn btn-secondary" href="four-tier-brain.html">🧠 4-Tier Brain</a>
+<a class="btn btn-secondary" href="skull-protection.html">🛡️ SKULL Protection</a>
+<a class="btn btn-secondary" href="agent-system.html">🤖 Agent System</a>
+<a class="btn btn-secondary" href="index.html">← Architecture Overview</a>
 </div>
 <section class="section">
 <div class="container text-center">
