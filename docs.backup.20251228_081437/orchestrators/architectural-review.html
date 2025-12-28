@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX Architectural Review Orchestrator - 6-phase analysis with 0-100 scoring for layer separation, SOLID compliance, and testability">
+    <title>Architectural Review - CORTEX</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        .mermaid { background: transparent; margin: 1.5rem 0; }
+        .diagram-card { margin-bottom: 2rem; }
+        .diagram-title { font-size: 1.1rem; color: var(--accent-primary); margin-bottom: 1rem; font-weight: 600; }
+        .score-dashboard { width: 100%; min-height: 300px; display: flex; justify-content: center; }
+        .scoring-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1rem 0; }
+        .scoring-card { padding: 1rem; background: rgba(26, 26, 46, 0.6); border-radius: 8px; text-align: center; }
+        .score-value { font-size: 2rem; font-weight: 700; }
+        .score-max { font-size: 1rem; color: #a0aec0; }
+        @media (max-width: 768px) { .scoring-grid { grid-template-columns: repeat(2, 1fr); } }
+    </style>
+</head>
+<body>
+    <!-- Skip Link -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">→</span>
+        <a href="index.html">Orchestrators</a>
+        <span class="breadcrumb-separator">→</span>
+        <span class="breadcrumb-current">Architectural Review</span>
+    </nav>
+    
+    <!-- Logo Header -->
+    <div class="logo-header">
+        <a href="../index.html">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
+        </a>
+    </div>
+    
+    <!-- Main Content -->
+    <main class="container" id="main-content">
+        <!-- Main Content Card -->
+        <div class="glass-card">
+            <h1>Architectural Review Orchestrator</h1>
+            <span class="badge badge-success">Production Ready</span>
+            
+            <p>
+                The Architectural Review Orchestrator performs comprehensive architecture assessment across 6 phases.
+                It generates a 0-100 architecture score with letter grades (A-F) based on layer separation, 
+                design patterns, dependency management, SOLID compliance, and testability. Each phase produces
+                detailed findings, violations, and actionable recommendations.
+            </p>
+            
+            <!-- Key Metrics -->
+            <div class="metrics-grid metrics-grid-4">
+                <div class="metric-card glass-card">
+                    <div class="metric-value">6</div>
+                    <div class="metric-label">Analysis Phases</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">5</div>
+                    <div class="metric-label">Scoring Categories</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">100</div>
+                    <div class="metric-label">Max Score</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">A-F</div>
+                    <div class="metric-label">Grade Scale</div>
+                </div>
+            </div>
+            
+            <!-- Command -->
+            <div class="command-card">
+                <code class="command-syntax">review architecture [--target path] [--dry-run]</code>
+                <p class="command-description">
+                    Perform comprehensive architecture assessment with scoring.
+                </p>
+                <div class="command-example">
+                    review architecture --target src/
+                </div>
+            </div>
+        </div>
+        
+        <!-- Score Dashboard -->
+        <section class="section-dashboard">
+            <div class="glass-card diagram-card">
+                <h2><span>📊</span> Architecture Score Dashboard (D3.js)</h2>
+                <p class="diagram-title">Real-time scoring breakdown by category</p>
+                
+                <div id="score-dashboard" class="score-dashboard"></div>
+            </div>
+        </section>
+        
+        <!-- Scoring Breakdown -->
+        <section class="section-scoring">
+            <div class="glass-card">
+                <h2><span>🎯</span> Scoring Breakdown</h2>
+                
+                <div class="scoring-grid">
+                    <div class="scoring-card">
+                        <div class="score-value">25</div>
+                        <div class="score-max">/25 max</div>
+                        <strong>Layer Separation</strong>
+                        <p>-3 points per violation</p>
+                    </div>
+                    <div class="scoring-card">
+                        <div class="score-value">15</div>
+                        <div class="score-max">/15 max</div>
+                        <strong>Design Patterns</strong>
+                        <p>Pattern usage & opportunities</p>
+                    </div>
+                    <div class="scoring-card">
+                        <div class="score-value">20</div>
+                        <div class="score-max">/20 max</div>
+                        <strong>Dependency Management</strong>
+                        <p>Circular deps & coupling</p>
+                    </div>
+                    <div class="scoring-card">
+                        <div class="score-value">15</div>
+                        <div class="score-max">/15 max</div>
+                        <strong>SOLID Compliance</strong>
+                        <p>5 principles check</p>
+                    </div>
+                    <div class="scoring-card">
+                        <div class="score-value">25</div>
+                        <div class="score-max">/25 max</div>
+                        <strong>Testability</strong>
+                        <p>Coverage & test quality</p>
+                    </div>
+                    <div class="scoring-card">
+                        <div class="score-value">100</div>
+                        <div class="score-max">TOTAL</div>
+                        <strong>Overall Score</strong>
+                        <p>A ≥90, B ≥80, C ≥70, D ≥60</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 6-Phase Pipeline -->
+        <section class="section-pipeline">
+            <div class="glass-card diagram-card">
+                <h2><span>🔄</span> 6-Phase Analysis Pipeline</h2>
+                <p class="diagram-title">Comprehensive architecture assessment workflow</p>
+                
+                <div class="mermaid">
+flowchart TB
+    START[Architecture Review Start] --> P1[Phase 1: Layer Separation]
+    
+    subgraph LAYER["🏗️ Phase 1: Layer Separation (25 pts)"]
+        P1 --> L1[Map files to layers]
+        L1 --> L2[Analyze imports]
+        L2 --> L3{Violations found?}
+        L3 -->|Yes| L4[Record violations<br />-3 pts each]
+        L3 -->|No| L5[Full 25 points]
+    end
+    
+    L4 --> P2[Phase 2: Pattern Detection]
+    L5 --> P2
+    
+    subgraph PATTERN["🎨 Phase 2: Design Patterns (15 pts)"]
+        P2 --> PA1[Scan for patterns]
+        PA1 --> PA2[Factory, Strategy, Observer...]
+        PA2 --> PA3[Identify opportunities]
+        PA3 --> PA4[Score pattern usage]
+    end
+    
+    PA4 --> P3[Phase 3: Dependency Analysis]
+    
+    subgraph DEPS["📦 Phase 3: Dependencies (20 pts)"]
+        P3 --> D1[Build dependency graph]
+        D1 --> D2[Detect circular deps]
+        D2 --> D3[Measure coupling]
+        D3 --> D4[Calculate fan-out]
+    end
+    
+    D4 --> P4[Phase 4: SOLID Assessment]
+    
+    subgraph SOLID["⚡ Phase 4: SOLID (15 pts)"]
+        P4 --> S1[Single Responsibility]
+        P4 --> S2[Open/Closed]
+        P4 --> S3[Liskov Substitution]
+        P4 --> S4[Interface Segregation]
+        P4 --> S5[Dependency Inversion]
+    end
+    
+    S1 --> P5[Phase 5: Testability]
+    S2 --> P5
+    S3 --> P5
+    S4 --> P5
+    S5 --> P5
+    
+    subgraph TEST["🧪 Phase 5: Testability (25 pts)"]
+        P5 --> T1[Check test coverage]
+        T1 --> T2[Analyze test quality]
+        T2 --> T3[Identify untestable code]
+    end
+    
+    T3 --> P6[Phase 6: Scoring]
+    
+    subgraph SCORE["📊 Phase 6: Scoring"]
+        P6 --> SC1[Calculate total score]
+        SC1 --> SC2[Assign letter grade]
+        SC2 --> SC3[Generate recommendations]
+    end
+    
+    SC3 --> REPORT[Architecture Report]
+    
+    style START fill:#00d4ff,color:#1a1a2e
+    style REPORT fill:#10b981,color:#fff
+                </div>
+            </div>
+        </section>
+        
+        <!-- Layer Hierarchy -->
+        <section class="section-layers">
+            <div class="glass-card diagram-card">
+                <h2><span>🏛️</span> Layer Hierarchy & Dependencies</h2>
+                <p class="diagram-title">Valid layer dependencies (lower can depend on higher)</p>
+                
+                <div class="mermaid">
+flowchart TB
+    subgraph HIERARCHY["Layer Hierarchy"]
+        API["🌐 API Layer<br />(Level 0)"]
+        BUSINESS["💼 Business Layer<br />(Level 1)"]
+        DATA["📀 Data Layer<br />(Level 2)"]
+        UTILS["🔧 Utils Layer<br />(Level 3)"]
+    end
+    
+    API -->|"✅ allowed"| BUSINESS
+    API -->|"✅ allowed"| UTILS
+    BUSINESS -->|"✅ allowed"| DATA
+    BUSINESS -->|"✅ allowed"| UTILS
+    DATA -->|"✅ allowed"| UTILS
+    
+    BUSINESS -.->|"❌ VIOLATION"| API
+    DATA -.->|"❌ VIOLATION"| API
+    DATA -.->|"❌ VIOLATION"| BUSINESS
+    UTILS -.->|"❌ VIOLATION"| API
+    UTILS -.->|"❌ VIOLATION"| BUSINESS
+    UTILS -.->|"❌ VIOLATION"| DATA
+    
+    style API fill:#00d4ff,color:#1a1a2e
+    style BUSINESS fill:#8b5cf6,color:#fff
+    style DATA fill:#f59e0b,color:#1a1a2e
+    style UTILS fill:#10b981,color:#fff
+                </div>
+            </div>
+        </section>
+        
+        <!-- Data Model -->
+        <section class="section-datamodel">
+            <div class="glass-card diagram-card">
+                <h2><span>🗃️</span> Analysis Data Model</h2>
+                <p class="diagram-title">Key data structures for architectural analysis</p>
+                
+                <div class="mermaid">
+classDiagram
+    class ArchitectureMetrics {
+        +float layer_separation_score
+        +int layer_violations_count
+        +float pattern_score
+        +int patterns_detected
+        +float dependency_score
+        +int circular_dependencies
+        +float solid_score
+        +float testability_score
+        +float test_coverage
+        +float total_score
+        +str grade
+        +calculate_total_score() float
+        +to_dict() Dict
+    }
+    
+    class LayerViolation {
+        +str violation_type
+        +str severity
+        +str source_file
+        +str target_module
+        +str source_layer
+        +str target_layer
+        +str recommendation
+    }
+    
+    class PatternOpportunity {
+        +str pattern_name
+        +str location
+        +str reason
+        +str benefit
+        +str priority
+        +str implementation_guide
+    }
+    
+    class DependencyIssue {
+        +str issue_type
+        +str severity
+        +List~str~ modules
+        +str recommendation
+    }
+    
+    class ArchitecturalReviewOrchestrator {
+        +Path target_path
+        +bool dry_run
+        +ArchitectureMetrics metrics
+        +List~LayerViolation~ layer_violations
+        +List~PatternOpportunity~ pattern_opportunities
+        +execute() Dict
+    }
+    
+    ArchitecturalReviewOrchestrator *-- ArchitectureMetrics
+    ArchitecturalReviewOrchestrator *-- LayerViolation
+    ArchitecturalReviewOrchestrator *-- PatternOpportunity
+    ArchitecturalReviewOrchestrator *-- DependencyIssue
+                </div>
+            </div>
+        </section>
+        
+        <!-- Grade Scale -->
+        <section class="section-grades">
+            <div class="glass-card">
+                <h2><span>🎓</span> Grade Scale & Interpretation</h2>
+                
+                <table class="glass-table">
+                    <thead>
+                        <tr>
+                            <th>Grade</th>
+                            <th>Score Range</th>
+                            <th>Interpretation</th>
+                            <th>Recommended Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span>A</span></td>
+                            <td>90-100</td>
+                            <td>Excellent architecture</td>
+                            <td>Maintain and document as reference</td>
+                        </tr>
+                        <tr>
+                            <td><span>B</span></td>
+                            <td>80-89</td>
+                            <td>Good with minor issues</td>
+                            <td>Address low-priority recommendations</td>
+                        </tr>
+                        <tr>
+                            <td><span>C</span></td>
+                            <td>70-79</td>
+                            <td>Needs improvement</td>
+                            <td>Schedule refactoring sprint</td>
+                        </tr>
+                        <tr>
+                            <td><span>D</span></td>
+                            <td>60-69</td>
+                            <td>Significant issues</td>
+                            <td>Prioritize architectural debt</td>
+                        </tr>
+                        <tr>
+                            <td><span>F</span></td>
+                            <td><60</td>
+                            <td>Critical problems</td>
+                            <td>Immediate intervention required</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        
+        <!-- SOLID Principles -->
+        <section class="section-solid">
+            <div class="glass-card diagram-card">
+                <h2><span>⚡</span> SOLID Compliance Checks</h2>
+                <p class="diagram-title">Each principle contributes to the 15-point SOLID score</p>
+                
+                <div class="mermaid">
+mindmap
+  root((SOLID<br />15 pts))
+    S["**S**ingle Responsibility<br />3 pts"]
+      Classes with one job
+      Max methods check
+      Cohesion analysis
+    O["**O**pen/Closed<br />3 pts"]
+      Extension points
+      Abstract classes
+      Interface usage
+    L["**L**iskov Substitution<br />3 pts"]
+      Proper inheritance
+      Contract compliance
+      No type checks
+    I["**I**nterface Segregation<br />3 pts"]
+      Small interfaces
+      No fat interfaces
+      Cohesive methods
+    D["**D**ependency Inversion<br />3 pts"]
+      Abstractions over concrete
+      DI containers
+      No hardcoded deps
+                </div>
+            </div>
+        </section>
+        
+        <!-- Example Output -->
+        <section class="section-output">
+            <div class="glass-card">
+                <h2><span>📋</span> Example Review Output</h2>
+                
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-language">JSON</span>
+                        <button class="copy-btn">Copy</button>
+                    </div>
+                    <pre><code>{
+  "status": "success",
+  "metrics": {
+    "layer_separation": {
+      "score": 22.0,
+      "max": 25,
+      "violations": 1
+    },
+    "design_patterns": {
+      "score": 12.0,
+      "max": 15,
+      "detected": 4,
+      "recommended": 2
+    },
+    "dependency_management": {
+      "score": 18.0,
+      "max": 20,
+      "circular_deps": 0,
+      "tight_coupling": 2
+    },
+    "solid_compliance": {
+      "score": 13.0,
+      "max": 15,
+      "violations": 2
+    },
+    "testability": {
+      "score": 20.0,
+      "max": 25,
+      "coverage": "82.5%"
+    },
+    "overall": {
+      "score": 85.0,
+      "max": 100,
+      "grade": "B"
+    }
+  },
+  "violations": [
+    {
+      "type": "layer_violation",
+      "severity": "MEDIUM",
+      "source_file": "src/data/database.py",
+      "target_module": "src.api.routes",
+      "source_layer": "data",
+      "target_layer": "api",
+      "recommendation": "Data layer should not import from API layer"
+    }
+  ],
+  "recommendations": [
+    {
+      "priority": "HIGH",
+      "category": "testability",
+      "title": "Increase test coverage",
+      "description": "Coverage is 82.5%, target is 90%",
+      "files": ["src/auth/oauth.py", "src/data/cache.py"]
+    }
+  ]
+}</code></pre>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Related Features -->
+        <section class="section-related">
+            <div class="glass-card">
+                <h2><span>🔗</span> Related Orchestrators</h2>
+                <div class="feature-grid feature-grid-3">
+                    <a href="cortex-lens.html" class="glass-card">
+                        <span class="feature-icon">🔍</span>
+                        <h3 class="feature-title">CORTEX Lens</h3>
+                        <p class="text-secondary">Codebase analysis & mapping</p>
+                    </a>
+                    <a href="system-integrity.html" class="glass-card">
+                        <span class="feature-icon">🛡️</span>
+                        <h3 class="feature-title">System Integrity</h3>
+                        <p class="text-secondary">Validation & auto-fix</p>
+                    </a>
+                    <a href="refinement-orchestrator.html" class="glass-card">
+                        <span class="feature-icon">✨</span>
+                        <h3 class="feature-title">Refinement</h3>
+                        <p class="text-secondary">Quality enhancement</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+<button class="scroll-to-top" aria-label="Scroll to top">↑</button>
+    <script src="../assets/js/main.js"></script>
+    <script>
+        // Mermaid Configuration
+        mermaid.initialize({ 
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#1a1a2e',
+                primaryTextColor: '#e2e8f0',
+                primaryBorderColor: '#00d4ff',
+                lineColor: '#00d4ff',
+                secondaryColor: '#16213e',
+                tertiaryColor: '#0f3460'
+            }
+        });
+        
+        // D3.js Score Dashboard - Radial Bar Chart
+        (function() {
+            const container = document.getElementById('score-dashboard');
+            const width = Math.min(container.clientWidth, 600);
+            const height = 300;
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const radius = Math.min(width, height) / 2 - 40;
+            
+            const categories = [
+                { name: 'Layer Separation', score: 22, max: 25, color: '#00d4ff' },
+                { name: 'Design Patterns', score: 12, max: 15, color: '#8b5cf6' },
+                { name: 'Dependencies', score: 18, max: 20, color: '#f59e0b' },
+                { name: 'SOLID', score: 13, max: 15, color: '#10b981' },
+                { name: 'Testability', score: 20, max: 25, color: '#ef4444' }
+            ];
+            
+            const totalScore = categories.reduce((sum, c) => sum + c.score, 0);
+            const maxTotal = categories.reduce((sum, c) => sum + c.max, 0);
+            const grade = totalScore >= 90 ? 'A' : totalScore >= 80 ? 'B' : totalScore >= 70 ? 'C' : totalScore >= 60 ? 'D' : 'F';
+            const gradeColor = grade === 'A' ? '#10b981' : grade === 'B' ? '#00d4ff' : grade === 'C' ? '#f59e0b' : '#ef4444';
+            
+            const svg = d3.select('#score-dashboard')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+            
+            const g = svg.append('g')
+                .attr('transform', `translate(${centerX}, ${centerY})`);
+            
+            // Background circles
+            const barWidth = 18;
+            const gap = 6;
+            
+            categories.forEach((cat, i) => {
+                const innerRadius = radius - (i * (barWidth + gap)) - barWidth;
+                const outerRadius = radius - (i * (barWidth + gap));
+                
+                // Background arc
+                const bgArc = d3.arc()
+                    .innerRadius(innerRadius)
+                    .outerRadius(outerRadius)
+                    .startAngle(0)
+                    .endAngle(2 * Math.PI);
+                
+                g.append('path')
+                    .attr('d', bgArc)
+                    .attr('fill', '#1a1a2e')
+                    .attr('stroke', '#2d2d4a');
+                
+                // Score arc
+                const scoreAngle = (cat.score / cat.max) * 2 * Math.PI;
+                const scoreArc = d3.arc()
+                    .innerRadius(innerRadius)
+                    .outerRadius(outerRadius)
+                    .startAngle(0)
+                    .endAngle(scoreAngle)
+                    .cornerRadius(3);
+                
+                g.append('path')
+                    .attr('d', scoreArc)
+                    .attr('fill', cat.color);
+                
+                // Label
+                g.append('text')
+                    .attr('x', outerRadius + 10)
+                    .attr('y', 0)
+                    .attr('text-anchor', 'start')
+                    .attr('dominant-baseline', 'central')
+                    .attr('fill', '#e2e8f0')
+                    .attr('font-size', 10)
+                    .attr('transform', `rotate(${-90 + (i * (barWidth + gap) * 0.8)})`)
+                    .text(`${cat.name}: ${cat.score}/${cat.max}`);
+            });
+            
+            // Center grade
+            g.append('circle')
+                .attr('r', radius - categories.length * (barWidth + gap) - 10)
+                .attr('fill', '#1a1a2e')
+                .attr('stroke', gradeColor)
+                .attr('stroke-width', 3);
+            
+            g.append('text')
+                .attr('text-anchor', 'middle')
+                .attr('dominant-baseline', 'central')
+                .attr('fill', gradeColor)
+                .attr('font-size', 48)
+                .attr('font-weight', 700)
+                .text(grade);
+            
+            g.append('text')
+                .attr('y', 30)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#a0aec0')
+                .attr('font-size', 14)
+                .text(`${totalScore}/${maxTotal}`);
+        })();
+    </script>
+</body>
+</html>

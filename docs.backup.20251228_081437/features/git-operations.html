@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Git Operations - CORTEX</title>
+<link href="../assets/css/main.css" rel="stylesheet">
+<link href="../assets/images/CORTEX-logo.png" rel="icon" type="image/png">
+</head>
+<body>
+<!-- Breadcrumb -->
+<nav class="breadcrumb">
+<a href="../index.html">Home</a>
+<span class="breadcrumb-separator">›</span>
+<a href="index.html">Features</a>
+<span class="breadcrumb-separator">›</span>
+<span class="breadcrumb-current">Git Operations</span>
+</nav>
+<!-- Hero -->
+<section class="section">
+<div class="container">
+<div class="glass-card">
+<div>
+<div class="icon">🔀</div>
+<div>
+<h1>Git Operations & Checkpointing</h1>
+<p>
+                            Automated Git Management with CORTEX/User Isolation Enforcement
+                
+                </p>
+<div class="metrics-grid">
+<div>
+<div class="metric-value">100%</div>
+<div class="metric-label">Isolation Enforcement</div>
+</div>
+<div>
+<div class="metric-value">Auto</div>
+<div class="metric-label">Checkpoint Creation</div>
+</div>
+<div>
+<div class="metric-value">Zero</div>
+<div class="metric-label">Dirty State Work</div>
+</div>
+<!-- Executive Summary -->
+<section class="section">
+<div class="container">
+<h2>Executive Summary</h2>
+<div class="glass-card">
+<p>
+                    CORTEX's Git Operations system provides automated version control with strict isolation between 
+                    CORTEX internal code and user application code. Three SKULL rules enforce git integrity: 
+                    <strong>GIT_ISOLATION_ENFORCEMENT</strong> prevents CORTEX code from touching user repos, 
+                    <strong>GIT_CHECKPOINT_ENFORCEMENT</strong> creates safety checkpoints before risky operations, 
+                    and <strong>PREVENT_DIRTY_STATE_WORK</strong> blocks development on uncommitted changes.
+
+    <!-- Core Features -->
+<section class="section">
+<div class="container">
+<h2>Core Git Operations</h2>
+<!-- Git Isolation -->
+<div class="collapsible">
+<div class="collapsible-header glass-card">
+<h3>🛡️ Git Isolation Enforcement</h3>
+<span class="collapsible-icon">▼</span>
+</div>
+<div class="collapsible-content glass-card-flat">
+<p><strong>Purpose:</strong> Absolute separation between CORTEX internal code and user application code</p>
+<p><strong>How it works:</strong></p>
+<ul>
+<li>
+<strong>CORTEX Repository:</strong> All CORTEX code lives in <code>/PROJECTS/CORTEX/</code>
+</li>
+<li>
+<strong>User Repositories:</strong> Application code lives in separate repos (e.g., <code>/PROJECTS/MyApp/</code>)</li>
+<li>
+<strong>Zero Cross-Contamination:</strong> CORTEX never commits to user repos, users never commit to CORTEX</li>
+<li>
+<strong>Brain Protector Validation:</strong> All git operations validated against isolation rules</li>
+</ul>
+<p><strong>Protected paths:</strong></p>
+<pre>CORTEX Critical Paths (never touch user code):
+├── src/tier0/ (governance)
+├── cortex-brain/ (memory, knowledge, context)
+├── .github/prompts/ (prompt files)
+└── cortex-operations.yaml (operation registry)
+
+User Application Paths (CORTEX never commits here):
+├── SPA/ (Single Page Applications)
+├── blazor/ (Blazor apps)
+├── signalr/ (SignalR hubs)
+└── Any user-created project folders</pre>
+</div>
+<!-- Checkpointing -->
+<div class="collapsible">
+<div class="collapsible-header glass-card">
+<h3>🔖 Automatic Checkpointing</h3>
+<span class="collapsible-icon">▼</span>
+</div>
+<div class="collapsible-content glass-card-flat">
+<p><strong>Purpose:</strong> Safety net for rollback before high-risk operations</p>
+<p><strong>When checkpoints are created:</strong></p>
+<ul>
+<li>
+<strong>Before System Maintenance:</strong> Checkpoint before cleanup phase</li>
+<li>
+<strong>Before Refactoring:</strong> Checkpoint before code restructuring</li>
+<li>
+<strong>Before Major Changes:</strong> Architecture updates, migrations</li>
+<li>
+<strong>Before Pull Operations:</strong> Safety net before merging remote changes</li>
+</ul>
+<p><strong>Checkpoint format:</strong></p>
+<pre>git commit -m "checkpoint: Pre-cleanup safety checkpoint"
+git tag checkpoint-20251210-143000</pre>
+<p><strong>Rollback capability:</strong></p>
+<pre># If something goes wrong, rollback to checkpoint
+git reset --hard checkpoint-20251210-143000
+
+# Or just view the checkpoint
+git show checkpoint-20251210-143000</pre>
+</div>
+<!-- Intelligent Commits -->
+<div class="collapsible">
+<div class="collapsible-header glass-card">
+<h3>💬 Intelligent Commit Messages</h3>
+<span class="collapsible-icon">▼</span>
+</div>
+<div class="collapsible-content glass-card-flat">
+<p><strong>Purpose:</strong> Auto-generate descriptive commit messages from changes</p>
+<p><strong>What CORTEX analyzes:</strong></p>
+<ul>
+<li>
+<strong>Changed Files:</strong> Identifies modules, components, features affected</li>
+<li>
+<strong>Change Type:</strong> feat (new), fix (bug), refactor, docs, test, chore</li>
+<li>
+<strong>Scope:</strong> Component or module name (e.g., <code>dashboard</code>, <code>tdd</code>)</li>
+<li>
+<strong>Impact:</strong> Breaking changes, deprecations, migrations</li>
+</ul>
+<p><strong>Conventional Commits format:</strong></p>
+<pre>feat(dashboard): Add Use Cases tab with role capabilities matrix
+
+- Created Use Cases tab partial (templates/partials/use_cases_tab.html.j2)
+- Wired tabs in interactive-dashboard-template.html
+- Created Dashboard Orchestrator (src/dashboard/orchestrator.py)
+- TDD test suite (tests/dashboard/test_orchestrator.py)
+
+Progress: Dashboard v3 integration layer complete
+Tests: 13/13 passing (100%)</pre>
+<p><strong>Benefits:</strong></p>
+<ul>
+<li>Consistent commit history</li>
+<li>Easy to generate changelogs</li>
+<li>Clear what changed and why</li>
+<li>Searchable by scope/type</li>
+</ul>
+<!-- Dirty State Prevention -->
+<div class="collapsible">
+<div class="collapsible-header glass-card">
+<h3>🚫 Dirty State Prevention</h3>
+<span class="collapsible-icon">▼</span>
+</div>
+<div class="collapsible-content glass-card-flat">
+<p><strong>Purpose:</strong> Block development work when uncommitted changes exist</p>
+<p><strong>What's blocked:</strong></p>
+<ul>
+<li>
+<strong>New Feature Development:</strong> Can't start planning with dirty state</li>
+<li>
+<strong>System Maintenance:</strong> Maintenance requires clean working tree</li>
+<li>
+<strong>Refactoring:</strong> Can't refactor with uncommitted changes</li>
+<li>
+<strong>Major Operations:</strong> Migrations, deployments require clean state</li>
+</ul>
+<p><strong>Brain Protector response:</strong></p>
+<pre>🚨 BLOCKED: PREVENT_DIRTY_STATE_WORK
+
+Cannot start development work with uncommitted changes.
+
+Current State:
+  Modified: 3 files
+  Untracked: 2 files
+
+Required Action:
+  1. Review changes: git status
+  2. Commit changes: git add . && git commit -m "..."
+  3. Or stash: git stash save "WIP: description"
+  
+Then retry your request.</pre>
+<p><strong>Why this matters:</strong></p>
+<p>
+                        Prevents work-in-progress from being lost or accidentally mixed with new changes. 
+                        Ensures clean rollback capability and clear change history.
+
+            <!-- Branch Management -->
+</p>
+<div class="collapsible">
+<div class="collapsible-header glass-card">
+<h3>🌿 Branch Management</h3>
+<span class="collapsible-icon">▼</span>
+</div>
+<div class="collapsible-content glass-card-flat">
+<p><strong>Purpose:</strong> Organize feature development with semantic branch names</p>
+<p><strong>Branch naming conventions:</strong></p>
+<pre>feature/authentication-system
+fix/dashboard-rendering-bug
+refactor/orchestrator-cleanup
+docs/api-reference-update
+test/tdd-coverage-improvement</pre>
+<p><strong>Branch operations:</strong></p>
+<ul>
+<li>
+<strong>Auto-create:</strong> CORTEX creates feature branches for planning sessions</li>
+<li>
+<strong>Safe Switching:</strong> Validates clean state before checkout</li>
+<li>
+<strong>Merge Protection:</strong> Prevents merging with failing tests</li>
+<li>
+<strong>Branch Cleanup:</strong> Prunes merged/stale branches</li>
+</ul>
+<!-- SKULL Protection -->
+<section class="section">
+<div class="container">
+<h2>SKULL Protection Rules</h2>
+<div class="glass-card">
+<p>
+                    Git Operations are governed by 3 core SKULL rules:
+                
+                </p>
+<div>
+<div>
+<h4>GIT_ISOLATION_ENFORCEMENT</h4>
+<p>
+<strong>Zero-tolerance policy:</strong> CORTEX code never touches user repos. User code never 
+                            touches CORTEX repo. Brain Protector validates every git operation against isolation rules.
+                    
+                    </p>
+<div>
+<h4>GIT_CHECKPOINT_ENFORCEMENT</h4>
+<p>
+<strong>Mandatory checkpoints:</strong> Before high-risk operations (cleanup, refactoring, 
+                            migrations), CORTEX creates git checkpoint (commit + tag) for rollback capability.
+                    
+                    </p>
+<div>
+<h4>PREVENT_DIRTY_STATE_WORK</h4>
+<p>
+<strong>Clean state required:</strong> Development work blocked when uncommitted changes exist. 
+                            Prevents WIP loss and ensures clean rollback.
+
+    <!-- Real-World Results -->
+<section class="section">
+<div class="container">
+<h2>Real-World Results</h2>
+<div class="glass-card">
+<div class="metrics-grid">
+<div>
+<div class="metric-value">100%</div>
+<div class="metric-label">Isolation compliance (zero breaches)</div>
+</div>
+<div>
+<div class="metric-value">Auto</div>
+<div class="metric-label">Checkpoint creation (no manual steps)</div>
+</div>
+<div>
+<div class="metric-value">Zero</div>
+<div class="metric-label">Dirty state incidents</div>
+</div>
+<div>
+<div class="metric-value">520+</div>
+<div class="metric-label">Conventional commits (CORTEX-3.0 branch)</div>
+</div>
+<!-- Usage Examples -->
+<section class="section">
+<div class="container">
+<h2>How It Works</h2>
+<div class="glass-card">
+<p>
+<strong>Git operations are automatic:</strong> CORTEX handles checkpointing, isolation validation, 
+                    and commit message generation without user intervention.
+                
+                </p>
+<p>
+<strong>User actions that trigger git operations:</strong>
+</p>
+<ul>
+<li>
+<code>system maintenance</code> - Creates checkpoint before cleanup</li>
+<li>
+<code>plan [feature]</code> - Validates clean state, creates feature branch</li>
+<li>
+<code>execute all phases autonomously</code> - Commits after each phase</li>
+<li>
+<code>deploy</code> - Creates deployment tag</li>
+</ul>
+<p>
+                    All git operations are logged and validated by Brain Protector for compliance.
+
+    <!-- Navigation -->
+<section class="section">
+<div class="container">
+<div>
+<a class="btn btn-secondary" href="index.html">← Back to Features</a>
+<a class="btn btn-secondary" href="response-templates.html">Next: Response Templates →</a>
+</div>
+</div></section></p>
+</div>
+</div></section>
+</div>
+</div>
+</div></section></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div></section>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div></section></p>
+</div>
+</div></section>
+</div>
+</div>
+</div>
+</div>
+</div></section>
+</body>
+</html>

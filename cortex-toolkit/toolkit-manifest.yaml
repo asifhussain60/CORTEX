@@ -327,3 +327,23 @@ categories:
         platforms: [windows, linux, macos]
         requires_admin: false
         execution_method: cli
+        
+      - name: plan-scaffold
+        command: cortex-plan-scaffold
+        script: core/utilities/plan_scaffold_generator.py
+        description: Generate standard 4-folder planning structure
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli
+        user_friendly_name: "Plan Scaffold Generator"
+        functionality: "Automatically creates Planning System 4.0 folder structure (context/, reports/, artifacts/, tracking/) with progress tracker JSON"
+        
+      - name: orchestrator-scaffold
+        command: cortex-orch-scaffold
+        script: core/utilities/orchestrator_scaffold_generator.py
+        description: Generate orchestrator-specific folder structures
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli
+        user_friendly_name: "Orchestrator Scaffold Generator"
+        functionality: "Creates standard folder structures for multiple orchestrator types (planning, sanitization, tdd, ado, maintenance)"

@@ -43,32 +43,31 @@
                     <div class="icon">📋</div>
                     <div>
                         <h1>Planning System</h1>
-                        <p>
-                            Strategic Feature Planning with DoR/DoD Compliance
-                        </p>
+                        <p class="subtitle">Intelligent Feature Planning with TDD Integration</p>
                     </div>
                 </div>
-
-                <div class="metrics-grid">
+                
+                <!-- Key Metrics -->
+                <div class="metrics-grid metrics-grid-4">
                     <div class="metric-card">
-                        <div class="metric-value">8</div>
-                        <div class="metric-label">DoR Requirements</div>
-                        <div class="metric-sublabel">Quality Gates</div>
+                        <div class="metric-value">4</div>
+                        <div class="metric-label">Core Phases</div>
+                        <div class="metric-sublabel">Structured Workflow</div>
                     </div>
                     <div class="metric-card">
-                        <div class="metric-value">3</div>
-                        <div class="metric-label">Complexity Levels</div>
+                        <div class="metric-value">4</div>
+                        <div class="metric-label">Complexity Tiers</div>
                         <div class="metric-sublabel">Auto-Detected</div>
                     </div>
                     <div class="metric-card">
-                        <div class="metric-value">6</div>
-                        <div class="metric-label">DoD Checks</div>
-                        <div class="metric-sublabel">Validation</div>
+                        <div class="metric-value">100%</div>
+                        <div class="metric-label">TDD Coverage</div>
+                        <div class="metric-sublabel">Tier 2+</div>
                     </div>
                     <div class="metric-card">
-                        <div class="metric-value">10</div>
-                        <div class="metric-label">Planning Phases</div>
-                        <div class="metric-sublabel">Incremental</div>
+                        <div class="metric-value">40%</div>
+                        <div class="metric-label">Time Saved</div>
+                        <div class="metric-sublabel">vs Manual Planning</div>
                     </div>
                 </div>
             </div>
@@ -81,303 +80,163 @@
             <h2>What is the Planning System?</h2>
             <div class="glass-card">
                 <p>
-                    The <strong>Planning System</strong> is CORTEX's strategic feature planning orchestrator 
-                    that transforms user requests into comprehensive, executable implementation plans. It enforces 
-                    <strong>Definition of Ready (DoR)</strong> requirements before planning begins and validates 
-                    <strong>Definition of Done (DoD)</strong> criteria during execution.
+                    The <strong>Planning System</strong> is CORTEX's intelligent feature planning orchestrator 
+                    that transforms user requests into structured, test-driven implementation plans. It automatically 
+                    classifies complexity, discovers existing plans to avoid duplication, and generates tier-appropriate 
+                    documentation—all while enforcing TDD principles from the start.
                 </p>
+                
+                <div class="highlight-box">
+                    <p><strong>🎯 Core Capability:</strong> Converts feature requests into structured plans with 
+                    automatic complexity detection (4 tiers: INSTANT→LIGHTWEIGHT→DOCUMENTED→COMPLEX), TDD integration, 
+                    and zero overhead for simple tasks.</p>
+                </div>
+                
                 <p>
-                    Unlike manual planning that's inconsistent and error-prone, the Planning System uses structured workflows with 
-                    automated complexity detection, incremental phase execution, and built-in TDD integration.
+                    The system operates through <strong>4 core phases</strong>:
+                </p>
+                <ol class="feature-list">
+                    <li><strong>Phase 1 - Classification & Analysis:</strong> Automatically classifies operations into 
+                    one of 4 tiers based on complexity dimensions (component count, dependencies, external integrations)</li>
+                    <li><strong>Phase 2 - Pre-Planning Discovery:</strong> Searches for existing/recent plans to prevent 
+                    duplication and unnecessary work</li>
+                    <li><strong>Phase 3 - Tiered Execution:</strong> Executes tier-appropriate planning workflow 
+                    (INSTANT=no artifacts, LIGHTWEIGHT=inline notes, DOCUMENTED=full folder, COMPLEX=multi-phase with gates)</li>
+                    <li><strong>Phase 3.5 - TDD Integration:</strong> Automatically integrates RED→GREEN→REFACTOR workflow 
+                    for Tier 2+ operations</li>
+                    <li><strong>Phase 4 - Validation & Storage:</strong> Validates plan completeness and stores in 
+                    cortex-brain/documents/planning/ with structured folder hierarchy</li>
+                </ol>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Benefits -->
+    <section class="section">
+        <div class="container">
+            <h2>Key Benefits</h2>
+            
+            <div class="card-grid-2">
+                <div class="glass-card">
+                    <h3>⚡ Zero Overhead for Simple Tasks</h3>
+                    <p>
+                        Tier 1 operations (simple queries, file reads) execute immediately with no planning artifacts. 
+                        The system knows when planning overhead isn't justified.
+                    </p>
+                </div>
+
+                <div class="glass-card">
+                    <h3>🎯 Automatic Complexity Detection</h3>
+                    <p>
+                        No need to manually decide planning depth. The system analyzes component count, dependencies, 
+                        external integrations, and security concerns to classify operations automatically.
+                    </p>
+                </div>
+
+                <div class="glass-card">
+                    <h3>🧪 TDD-First Workflow</h3>
+                    <p>
+                        Test cases are generated and validated (RED state) before implementation begins for Tier 2+ operations. 
+                        No more retrofitting tests after code is written.
+                    </p>
+                </div>
+
+                <div class="glass-card">
+                    <h3>🔍 Smart Duplication Prevention</h3>
+                    <p>
+                        Pre-planning discovery checks cortex-brain for existing or recent plans before creating new ones, 
+                        preventing redundant work and promoting plan reuse.
+                    </p>
+                </div>
+
+                <div class="glass-card">
+                    <h3>📁 Structured Storage</h3>
+                    <p>
+                        Plans stored in cortex-brain with consistent 4-subfolder structure (context/, reports/, tracking/, 
+                        artifacts/) for easy retrieval and knowledge management.
+                    </p>
+                </div>
+
+                <div class="glass-card">
+                    <h3>📊 Scalable Planning</h3>
+                    <p>
+                        From 30-second instant operations to multi-hour complex features with phase gates—the same system 
+                        handles all complexity levels with appropriate planning depth.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Example -->
+    <section class="section">
+        <div class="container">
+            <h2>Example: OAuth2 Authentication Feature</h2>
+            <div class="glass-card">
+                <p><strong>User Request:</strong> "Create a user authentication system with OAuth2"</p>
+                <p><strong>System Response:</strong></p>
+                <ol class="feature-list">
+                    <li><strong>Phase 1 (Classification):</strong> Detects <span class="badge badge-danger">Tier 4: COMPLEX</span> 
+                    — multiple components, external OAuth2 provider integration, security concerns, 20+ implementation steps</li>
+                    <li><strong>Phase 2 (Discovery):</strong> Searches cortex-brain/documents/planning/ for existing OAuth2 plans, 
+                    finds none, proceeds with new plan creation</li>
+                    <li><strong>Phase 3 (Execution):</strong> Creates full planning folder at 
+                    <code>cortex-brain/documents/planning/active/oauth-authentication/</code> with 4 subfolders, generates 
+                    master plan with implementation phases, architecture documentation, and risk assessment</li>
+                    <li><strong>Phase 3.5 (TDD):</strong> Generates comprehensive test suite (<code>test_oauth_config</code>, 
+                    <code>test_token_exchange</code>, <code>test_refresh_flow</code>, <code>test_user_session</code>) 
+                    and validates RED state before implementation</li>
+                    <li><strong>Phase 4 (Validation):</strong> Validates all required plan components present, stores validated 
+                    plan in cortex-brain, updates knowledge graph with new OAuth2 planning pattern</li>
+                </ol>
+                <p class="text-secondary">
+                    <strong>Result:</strong> Complete implementation plan with architecture diagrams, phased delivery schedule, 
+                    test coverage targets, and security considerations—ready for Execution Orchestrator to implement autonomously.
                 </p>
             </div>
         </div>
     </section>
 
-    <!-- The 10 Planning Phases -->
+    <!-- Learn More CTA -->
     <section class="section">
         <div class="container">
-            <h2>10 Planning Phases</h2>
-
-            <div>
-                <!-- Phase 1-2 -->
-                <div class="glass-card">
-                    <div>
-                        <div>1</div>
-                        <h3>Requirements</h3>
-                    </div>
-                    <p>
-                        Extract and validate DoR requirements. Ensure user story is complete with acceptance criteria, 
-                        constraints, and success metrics.
-                    </p>
-                </div>
-
-                <div class="glass-card">
-                    <div>
-                        <div>2</div>
-                        <h3>Architecture</h3>
-                    </div>
-                    <p>
-                        Design system architecture. Identify components, dependencies, and integration points. 
-                        Document technical approach and design decisions.
-                    </p>
-                </div>
-
-                <!-- Phase 3-4 -->
-                <div class="glass-card">
-                    <div>
-                        <div>3</div>
-                        <h3>TDD Blueprint</h3>
-                    </div>
-                    <p>
-                        Design test strategy for RED→GREEN→REFACTOR. Define test cases, coverage targets, 
-                        and validation criteria before implementation.
-                    </p>
-                </div>
-
-                <div class="glass-card">
-                    <div>
-                        <div>4</div>
-                        <h3>Implementation</h3>
-                    </div>
-                    <p>
-                        Execute TDD workflow: write failing tests (RED), implement features (GREEN), 
-                        refactor for quality (REFACTOR). Track progress per component.
-                    </p>
-                </div>
-
-                <!-- Phase 5-6 -->
-                <div class="glass-card">
-                    <div>
-                        <div>5</div>
-                        <h3>Integration</h3>
-                    </div>
-                    <p>
-                        Integrate components with existing system. Validate interfaces, test interactions, 
-                        and ensure backward compatibility.
-                    </p>
-                </div>
-
-                <div class="glass-card">
-                    <div>
-                        <div>6</div>
-                        <h3>DoD Validation</h3>
-                    </div>
-                    <p>
-                        Verify all DoD criteria met: tests passing, coverage targets achieved, 
-                        documentation complete, no regressions.
-                    </p>
-                </div>
-
-                <!-- Phase 7-8 -->
-                <div class="glass-card">
-                    <div>
-                        <div>7</div>
-                        <h3>Documentation</h3>
-                    </div>
-                    <p>
-                        Generate comprehensive documentation: API references, usage guides, 
-                        architecture diagrams, and troubleshooting tips.
-                    </p>
-                </div>
-
-                <div class="glass-card">
-                    <div>
-                        <div>8</div>
-                        <h3>Deployment</h3>
-                    </div>
-                    <p>
-                        Prepare deployment artifacts, create deployment guide, configure CI/CD, 
-                        and establish monitoring/rollback procedures.
-                    </p>
-                </div>
-
-                <!-- Phase 9-10 -->
-                <div class="glass-card">
-                    <div>
-                        <div>9</div>
-                        <h3>Review</h3>
-                    </div>
-                    <p>
-                        Conduct comprehensive review: code quality, test coverage, performance, 
-                        security, and adherence to standards.
-                    </p>
-                </div>
-
-                <div class="glass-card">
-                    <div>
-                        <div>10</div>
-                        <h3>Finalization</h3>
-                    </div>
-                    <p>
-                        Complete final tasks: update YAML manifests, create git checkpoint, 
-                        archive planning artifacts, and update knowledge base.
-                    </p>
-                </div>
+            <div class="glass-card" style="text-align: center; padding: 3rem;">
+                <h2 style="margin-bottom: 1.5rem;">📚 Complete User Guide</h2>
+                <p style="max-width: 600px; margin: 0 auto 2rem;">
+                    Dive deep into the 4-phase workflow, tier classification rules, TDD integration patterns, 
+                    folder structure specifications, and real-world examples from simple to complex features.
+                </p>
+                <a href="../orchestrators/planning-system.html" class="btn-primary" style="display: inline-block; padding: 1rem 2rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-decoration: none; border-radius: 12px; font-weight: 600; font-size: 1.125rem; transition: transform 0.2s;">
+                    View Full Documentation →
+                </a>
+                <p class="text-secondary" style="margin-top: 1.5rem; font-size: 0.875rem;">
+                    <strong>Includes:</strong> Phase-by-phase breakdowns • Tier classification decision tree • 
+                    TDD integration patterns • Planning folder templates • Example outputs for all 4 tiers
+                </p>
             </div>
         </div>
     </section>
 
-    <!-- Complexity Detection -->
+    <!-- Related Features -->
     <section class="section">
         <div class="container">
-            <h2>Automatic Complexity Detection</h2>
-
-            <div>
-                <div class="glass-card">
-                    <h3>LOW Complexity</h3>
-                    <p>
-                        Simple changes with minimal risk. Single file, no dependencies.
-                    </p>
-                    <div>
-                        <strong>Planning Strategy:</strong> Skeleton (minimal phases)<br>
-                        <strong>Example:</strong> Add utility function, fix typo
-                    </div>
-                </div>
-
-                <div class="glass-card">
-                    <h3>MEDIUM Complexity</h3>
-                    <p>
-                        Moderate changes with some dependencies. Multiple files affected.
-                    </p>
-                    <div>
-                        <strong>Planning Strategy:</strong> Conditional (skip optional phases)<br>
-                        <strong>Example:</strong> Add API endpoint, refactor module
-                    </div>
-                </div>
-
-                <div class="glass-card">
-                    <h3>HIGH Complexity</h3>
-                    <p>
-                        Complex changes with significant risk. System-wide impact.
-                    </p>
-                    <div>
-                        <strong>Planning Strategy:</strong> Incremental (all 10 phases)<br>
-                        <strong>Example:</strong> New feature, architecture change
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- DoR/DoD -->
-    <section class="section">
-        <div class="container">
-            <h2>Definition of Ready & Definition of Done</h2>
-
-            <div>
-                <!-- DoR -->
-                <div class="glass-card">
-                    <h3>📋 Definition of Ready (DoR)</h3>
-                    <p>
-                        Requirements must meet all 8 criteria before planning begins:
-                    </p>
-                    <ul>
-                        <li>✅ Clear user story with acceptance criteria</li>
-                        <li>✅ Dependencies identified</li>
-                        <li>✅ Testability defined</li>
-                        <li>✅ Technical constraints documented</li>
-                        <li>✅ Success metrics established</li>
-                        <li>✅ Complexity estimated</li>
-                        <li>✅ Priority assigned</li>
-                        <li>✅ Stakeholder approval obtained</li>
-                    </ul>
-                </div>
-
-                <!-- DoD -->
-                <div class="glass-card">
-                    <h3>✅ Definition of Done (DoD)</h3>
-                    <p>
-                        Implementation must meet all 6 criteria before completion:
-                    </p>
-                    <ul>
-                        <li>✅ All tests passing (unit, integration, E2E)</li>
-                        <li>✅ Code coverage ≥80%</li>
-                        <li>✅ Documentation complete</li>
-                        <li>✅ Code reviewed and approved</li>
-                        <li>✅ No regressions introduced</li>
-                        <li>✅ Acceptance criteria validated</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Planning Commands -->
-    <section class="section">
-        <div class="container">
-            <h2>Planning System Commands</h2>
-            <div class="glass-card">
-                <div>
-                    <div>
-                        <h3>Create Plan</h3>
-                        <code>
-# In Copilot Chat<br>
-plan [feature description]
-                        </code>
-                        <p>
-                            Initiates planning with DoR validation and complexity detection.
-                        </p>
-                    </div>
-
-                    <div>
-                        <h3>Execute All Phases</h3>
-                        <code>
-# In Copilot Chat<br>
-execute all phases autonomously
-                        </code>
-                        <p>
-                            Runs all 10 phases automatically with checkpoints and validation.
-                        </p>
-                    </div>
-
-                    <div>
-                        <h3>Check Status</h3>
-                        <code>
-# In Copilot Chat<br>
-show planning status
-                        </code>
-                        <p>
-                            Displays current phase, progress, and pending tasks.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Benefits -->
-    <section class="section">
-        <div class="container">
-            <h2>Why Use Planning System?</h2>
-            <div>
-                <div class="glass-card">
-                    <h3>🎯 Consistency</h3>
-                    <p>
-                        Every feature follows same structured process. No missed steps, no shortcuts.
-                    </p>
-                </div>
-
-                <div class="glass-card">
-                    <h3>⚡ Speed</h3>
-                    <p>
-                        Automated planning reduces time from requirements to implementation start.
-                    </p>
-                </div>
-
-                <div class="glass-card">
-                    <h3>🔒 Quality</h3>
-                    <p>
-                        DoR/DoD gates ensure quality at every phase. Built-in TDD integration.
-                    </p>
-                </div>
-
-                <div class="glass-card">
-                    <h3>📊 Visibility</h3>
-                    <p>
-                        Track progress across all 10 phases with real-time status updates.
-                    </p>
-                </div>
+            <h2>Related Features</h2>
+            <div class="feature-grid feature-grid-3">
+                <a href="tdd-mastery.html" class="glass-card">
+                    <span class="feature-icon">🧪</span>
+                    <h3 class="feature-title">TDD Mastery</h3>
+                    <p class="text-secondary">RED→GREEN→REFACTOR orchestrator</p>
+                </a>
+                <a href="execution-orchestrator.html" class="glass-card">
+                    <span class="feature-icon">⚡</span>
+                    <h3 class="feature-title">Execution Orchestrator</h3>
+                    <p class="text-secondary">Autonomous plan execution</p>
+                </a>
+                <a href="ado-operations.html" class="glass-card">
+                    <span class="feature-icon">📋</span>
+                    <h3 class="feature-title">ADO Operations</h3>
+                    <p class="text-secondary">Azure DevOps work item generation</p>
+                </a>
             </div>
         </div>
     </section>

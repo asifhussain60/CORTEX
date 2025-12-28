@@ -11,39 +11,234 @@ description: "CORTEX System Maintenance - Health checks, intent router validatio
 
 ---
 
-## 🎯 6-Phase Maintenance Pipeline
+## 🎯 8-Phase Maintenance Pipeline
 
 | Phase | Action | Success Criteria |
 |-------|--------|------------------|
-| **1** | Quick Health Check | Health score ≥90 |
-| **2** | Full Diagnostic | All components wired |
-| **3** | Wiring Integrity | 100% wiring coverage |
-| **4** | Review Reports | Reports generated |
-| **5** | Intent Router Validation | All manifests synced |
-| **6** | Regenerate Lean Prompts | <200 lines each |
+| **1** | Toolkit Automation Validation | Scaffold generators working |
+| **2** | Quick Health Check | Health score ≥90 |
+| **3** | Full Diagnostic | All components wired |
+| **4** | Wiring Integrity | 100% wiring coverage |
+| **5** | Knowledge Library Validation | All guidelines accessible |
+| **6** | Review Reports | Reports generated |
+| **7** | Intent Router Validation | All manifests synced |
+| **8** | Regenerate Lean Prompts | <200 lines each |
 
 ---
 
-## Phase 1-4: Health & Diagnostics
+## Phase 1: Toolkit Automation Validation 🛠️ NEW
+
+### 1a. Verify Scaffold Generators Exist
+
+**Critical:** Ensure automation utilities are present and functional.
 
 ```bash
-# Phase 1: Quick check
+# Check plan scaffold generator
+test -f cortex-toolkit/core/utilities/plan_scaffold_generator.py || echo "ERROR: Plan scaffold generator missing!"
+
+# Check orchestrator scaffold generator
+test -f cortex-toolkit/core/utilities/orchestrator_scaffold_generator.py || echo "ERROR: Orchestrator scaffold generator missing!"
+
+# Verify both are registered in toolkit manifest
+grep -q "plan-scaffold" cortex-toolkit/toolkit-manifest.yaml || echo "ERROR: Plan scaffold not registered!"
+grep -q "orchestrator-scaffold" cortex-toolkit/toolkit-manifest.yaml || echo "ERROR: Orchestrator scaffold not registered!"
+```
+
+### 1b. Test Scaffold Generators
+
+```bash
+# Test plan scaffold generator (dry run)
+python cortex-toolkit/core/utilities/plan_scaffold_generator.py "test-plan" --dry-run
+
+# Test orchestrator scaffold generator (dry run)
+python cortex-toolkit/core/utilities/orchestrator_scaffold_generator.py --type planning "test-plan" --dry-run
+
+# List available templates
+python cortex-toolkit/core/utilities/orchestrator_scaffold_generator.py --list-templates
+```
+
+**Expected Output:**
+- ✅ Dry run shows 4 folders for planning (context, reports, artifacts, tracking)
+- ✅ progress-tracker.json would be created
+- ✅ All orchestrator templates listed (planning, sanitization, tdd, ado, maintenance)
+
+### 1c. Verify Manifest Integration
+
+Check that planning system manifest references automation:
+
+```bash
+# Verify automation section exists in planning manifest
+grep -A 5 "automation:" cortex-brain/manifests/orchestrators/planning-system-4.0-manifest.yaml
+```
+
+**Expected Fields:**
+- `tool:` points to `plan_scaffold_generator.py`
+- `usage:` shows command syntax
+- `benefits:` lists automation advantages
+- `enforcement:` references maintenance requirement
+
+### 1d. Enforcement Rule
+
+**⚠️ MANDATORY:** All new plans MUST use scaffold generator.
+
+**Manual folder creation is DEPRECATED** as of CORTEX 4.0.1.
+
+**Validation:** During Phase 7 (Regenerate Prompts), verify CORTEX.prompt.md and planning-system-4.0-manifest.yaml both enforce scaffold usage.
+
+---
+
+## Phase 2-4: Health & Diagnostics
+
+```bash
+# Phase 2: Quick check
 python3 scripts/cortex_system_doctor.py --quick
 
-# Phase 2: Full diagnostic
+# Phase 3: Full diagnostic
 python3 scripts/cortex_system_doctor.py --phase diagnose --phase scan
 
-# Phase 3: Wiring integrity
+# Phase 4: Wiring integrity
 python3 scripts/check_wiring_integrity.py
-
-# Phase 4: Reports in cortex-brain/health-reports/
 ```
 
 ---
 
-## Phase 5: Intent Router Validation ⚠️ CRITICAL
+## Phase 5: Knowledge Library Validation 📚 CRITICAL
 
-### 5a. Manifest Path Verification
+### 5a. Knowledge Library Structure Check
+
+**Source of Truth:** `cortex-brain/knowledge/`
+
+Verify knowledge library structure and accessibility:
+
+```bash
+# Verify knowledge library structure
+test -d cortex-brain/knowledge || echo "ERROR: Knowledge library missing!"
+
+# Count knowledge files by category
+for dir in cortex-brain/knowledge/*/; do
+  echo "$(basename "$dir"): $(find "$dir" -name "*.yaml" | wc -l) files"
+done
+
+# Verify README exists and is current
+test -f cortex-brain/knowledge/README.md || echo "ERROR: Knowledge README missing!"
+
+# Check for orphaned YAML files (not in a category)
+find cortex-brain/knowledge/ -maxdepth 1 -name "*.yaml" -type f
+```
+
+**Expected Categories:**
+- `database/` - Database best practices (Oracle, SQL Server, etc.)
+- `ddd/` - Domain-Driven Design patterns
+- `devops/` - DevOps and infrastructure
+- `domains/` - Domain-specific knowledge (RAG, embeddings)
+- `engineering/` - Software engineering principles
+- `performance/` - Performance optimization
+- `security/` - Security best practices
+- `testing/` - Testing strategies and patterns
+- `ui-ux/` - UI/UX design guidelines
+
+### 5b. Knowledge Library Reference Validation
+
+**Critical:** Ensure orchestrators and modules can reference knowledge library.
+
+Verify these systems wire to knowledge library:
+
+| System | Knowledge Usage | Verification |
+|--------|----------------|--------------|
+| **Code Review Orchestrator** | Validates code against guidelines | Check manifest references `cortex-brain/knowledge/` |
+| **Sanitization Orchestrator** | Applies best practices during cleanup | Check for knowledge library imports |
+| **Refactoring Orchestrator** | Identifies anti-patterns | Check pattern detection references |
+| **TDD Orchestrator** | Guides test design | Check test pattern references |
+| **Documentation Generator** | Auto-generates docs from guidelines | Check template references |
+
+### 5c. Knowledge File Schema Validation
+
+Each knowledge YAML must have:
+
+```yaml
+metadata:
+  title: "Guideline Name"
+  category: "Category"
+  version: "X.Y"
+  created: "YYYY-MM-DD"
+  updated: "YYYY-MM-DD"
+  tags: [tag1, tag2, ...]
+  generated_docs:
+    - path: "docs/guidelines/{category}/{filename}.md"
+
+{category}_section:
+  principle: "Core principle statement"
+  importance: "Why it matters"
+  rules:
+    - id: "unique_id_###"
+      name: "Rule Name"
+      severity: "CRITICAL|HIGH|MEDIUM|LOW"
+      examples:
+        good: [...]
+        bad: [...]
+```
+
+### 5d. Validation Commands
+
+```bash
+# Check all YAML files for metadata section
+for f in cortex-brain/knowledge/**/*.yaml; do
+  grep -q "metadata:" "$f" || echo "MISSING metadata: $f"
+done
+
+# Verify severity levels are valid
+for f in cortex-brain/knowledge/**/*.yaml; do
+  grep -E "severity: \"(CRITICAL|HIGH|MEDIUM|LOW)\"" "$f" > /dev/null || \
+    echo "Invalid severity in: $f"
+done
+
+# Check for duplicate rule IDs
+grep -rh "id: \"" cortex-brain/knowledge/ | sort | uniq -d
+
+# Verify README is up to date (check statistics)
+grep "Total:" cortex-brain/knowledge/README.md
+```
+
+### 5e. Integration Verification
+
+Verify orchestrators can load knowledge library:
+
+```bash
+# Check for knowledge library imports in orchestrators
+grep -r "knowledge" src/orchestrators/*.py | grep -E "(import|load|read)"
+
+# Check for knowledge references in manifests
+grep -r "knowledge" cortex-brain/manifests/orchestrators/*.yaml
+
+# Verify brain protection rules reference knowledge library
+grep -A 5 "knowledge" cortex-brain/brain-protection-rules.yaml
+```
+
+### 5f. Knowledge Library Health Metrics
+
+| Metric | Current | Target | Status |
+|--------|---------|--------|--------|
+| Total Guidelines | 30 | 30+ | ✅ |
+| Categories | 9 | 8+ | ✅ |
+| Total Rules | 525+ | 500+ | ✅ |
+| Critical Rules | 77+ | 75+ | ✅ |
+| Files with Metadata | 30/30 | 100% | ✅ |
+| Files with Examples | 30/30 | 100% | ✅ |
+
+---
+
+## Phase 6: Review Reports
+
+```bash
+# Phase 5: Reports in cortex-brain/health-reports/
+ls -lah cortex-brain/health-reports/
+```
+
+---
+
+## Phase 7: Intent Router Validation ⚠️ CRITICAL
+
+### 7a. Manifest Path Verification
 
 **Source of Truth:** `cortex-brain/manifests/orchestrators/`
 
@@ -57,7 +252,7 @@ Scan all orchestrator manifests and verify CORTEX.prompt.md references them corr
 | `code-sanitization-manifest.yaml` | Sanitization | `sanitize`, `make generic`, `anonymize` |
 | `refinement-orchestrator-manifest.yaml` | Refinement | `refine`, `improve cortex` |
 
-### 5b. Output Structure Validation
+### 7b. Output Structure Validation
 
 Planning System MUST specify folder structure from manifest:
 ```yaml
@@ -66,7 +261,7 @@ required_subfolders: [context/, reports/, artifacts/, tracking/]
 required_files: [00-master-plan.md]
 ```
 
-### 5c. Validation Commands
+### 6c. Validation Commands
 
 ```bash
 # Check for broken/old paths
@@ -80,11 +275,11 @@ done
 
 ---
 
-## Phase 6: Regenerate Lean Prompts
+## Phase 8: Regenerate Lean Prompts
 
 **Goal:** Create minimal, clean prompt files with proper intent routing.
 
-### 6a. CORTEX.prompt.md Structure (Target: <200 lines)
+### 7a. CORTEX.prompt.md Structure (Target: <200 lines)
 
 ```markdown
 # 🎯 CORTEX Universal Entry Point
@@ -103,7 +298,7 @@ Version | Author | Status
 [Command table with descriptions]
 ```
 
-### 6b. copilot-instructions.md Structure (Target: <150 lines)
+### 7b. copilot-instructions.md Structure (Target: <150 lines)
 
 ```markdown
 # GitHub Copilot Instructions for CORTEX
@@ -120,12 +315,13 @@ Version | Author | Status
 [Category list]
 ```
 
-### 6c. Wiring Rules
+### 7c. Wiring Rules
 
 1. **Single Source of Truth:** `CORTEX.prompt.md` is the intent router
 2. **copilot-instructions.md:** Points TO CORTEX.prompt.md, doesn't duplicate
 3. **Manifests:** All orchestrators reference their manifest file
 4. **Output Specs:** Planning operations include folder structure requirement
+5. **Knowledge Library:** All orchestrators must reference `cortex-brain/knowledge/` for guidelines
 
 ---
 
@@ -135,6 +331,9 @@ Version | Author | Status
 |-------|----------------|
 | Health Score | ≥ 90/100 |
 | Wiring Coverage | 100% |
+| Knowledge Library | All 9 categories present, README current |
+| Knowledge Guidelines | 30+ files with valid metadata |
+| Knowledge Integration | Orchestrators reference knowledge library |
 | Manifest Paths | All resolve to existing files |
 | Intent Triggers | Each orchestrator has ≥3 triggers |
 | CORTEX.prompt.md | <200 lines, all manifests wired |
@@ -152,18 +351,25 @@ Run during every maintenance cycle:
 - [ ] No references to deprecated `orchestrator-manifests/` path
 - [ ] Each orchestrator has ≥3 trigger phrases
 - [ ] Planning System has output folder structure specified
+- [ ] Knowledge library has all 9 categories present
+- [ ] Knowledge library README.md is current (stats match actual files)
+- [ ] All knowledge YAML files have valid metadata section
+- [ ] All knowledge rules have valid severity levels (CRITICAL/HIGH/MEDIUM/LOW)
+- [ ] No duplicate rule IDs across knowledge library
+- [ ] Orchestrators reference knowledge library in code/manifests
+- [ ] Brain protection rules reference knowledge library
 - [ ] CORTEX.prompt.md is <200 lines
 - [ ] copilot-instructions.md is <150 lines
 - [ ] copilot-instructions.md defers to CORTEX.prompt.md (no duplication)
-- [ ] Reports folder cleaned (see Phase 7)
+- [ ] Reports folder cleaned (see Phase 8)
 
 ---
 
-## Phase 7: Report Management 🗑️
+## Phase 9: Report Management 🗑️
 
 **Goal:** Prevent report bloat - user won't read them, CORTEX doesn't need most of them.
 
-### 7a. Report Policy
+### 9a. Report Policy
 
 | Report Type | Policy | Reason |
 |-------------|--------|--------|
@@ -174,7 +380,7 @@ Run during every maintenance cycle:
 | **Major architecture decisions** (SYSTEM-INTEGRITY-*, MOCK-STUB-AUDIT) | KEEP | Reference for future decisions |
 | **Migration/refactor summaries** (ORCHESTRATOR-*, CORTEX-CLEANUP-*) | KEEP | Historical context |
 
-### 7b. Cleanup Commands
+### 8b. Cleanup Commands
 
 ```bash
 cd cortex-brain/documents/reports/
@@ -199,7 +405,7 @@ echo "Remaining reports: $(ls -1 | wc -l)"
 du -sh .
 ```
 
-### 7c. Prevention Rules
+### 8c. Prevention Rules
 
 **STOP creating reports for:**
 - ❌ Task completion summaries
@@ -213,7 +419,7 @@ du -sh .
 - ✅ Compliance audits (when required)
 - ✅ Reference documentation (non-temporal)
 
-### 7d. Alternative: Use Metrics Database
+### 8d. Alternative: Use Metrics Database
 
 For tracking operational data, use `cortex-brain/analytics/metrics.db` instead of JSON reports.
 

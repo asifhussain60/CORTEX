@@ -1,0 +1,44 @@
+# Jekyll Configuration for CORTEX Story
+
+title: "The Awakening of CORTEX"
+description: "A Tech Comedy in Twelve Chapters - How an AI Got a Brain"
+author: "Asif Hussain"
+url: "https://asifhussain60.github.io"
+baseurl: "/CORTEX"
+
+# Build settings
+markdown: kramdown
+theme: minima
+
+# Exclude from processing
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+
+# Includes
+include:
+  - _config.yml
+
+# Permalinks
+permalink: pretty
+
+# Collections (if needed for chapters)
+collections:
+  chapters:
+    output: true
+    permalink: /story/:name/
+
+# Defaults
+defaults:
+  - scope:
+      path: "docs/story"
+    values:
+      layout: "default"
+
+# Plugins
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
