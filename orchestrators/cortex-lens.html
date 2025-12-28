@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX Lens v3.0 - Admin dashboard parity with glassmorphism design, D3.js visualizations, and narrative story generation">
+    <title>CORTEX Lens - CORTEX 4.0</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        .mermaid { background: transparent; margin: 1.5rem 0; }
+        .diagram-card { margin-bottom: 2rem; }
+        .diagram-title { font-size: 1.1rem; color: var(--accent-primary); margin-bottom: 1rem; font-weight: 600; }
+        .tab-structure { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; margin: 1.5rem 0; }
+        .tab-item { padding: 1rem; background: rgba(26, 26, 46, 0.6); border-radius: 8px; text-align: center; border: 1px solid rgba(0, 212, 255, 0.3); }
+        .tab-item:hover { border-color: #00d4ff; }
+        .force-graph { width: 100%; height: 450px; }
+        .radar-chart { width: 100%; height: 400px; }
+        @media (max-width: 768px) { .tab-structure { grid-template-columns: repeat(2, 1fr); } }
+    </style>
+</head>
+<body>
+    <!-- Skip Link -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">→</span>
+        <a href="index.html">Orchestrators</a>
+        <span class="breadcrumb-separator">→</span>
+        <span class="breadcrumb-current">CORTEX Lens</span>
+    </nav>
+    
+    <!-- Logo Header -->
+    <div class="logo-header">
+        <a href="../index.html">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
+        </a>
+    </div>
+    
+    <!-- Main Content -->
+    <main class="container" id="main-content">
+        <!-- Main Content Card -->
+        <div class="glass-card">
+            <h1>CORTEX Lens v3.0</h1>
+            <span class="badge badge-success">Production Ready</span>
+            
+            <p>
+                CORTEX Lens is your repository's storyteller—it transforms raw code analysis into compelling 
+                narratives with glassmorphism-styled dashboards and D3.js interactive visualizations. With 
+                8-tab navigation covering health, architecture, tech stack, security, and more, it generates 
+                beautiful HTML reports that make complex repositories understandable at a glance. Built with 
+                zero external dependencies, it adapts to 6 different repository types (API, Console, Full Stack, etc.) 
+                with adaptive visibility panels.
+            </p>
+            
+            <!-- Key Metrics -->
+            <div class="metrics-grid metrics-grid-4">
+                <div class="metric-card glass-card">
+                    <div class="metric-value">8</div>
+                    <div class="metric-label">Dashboard Tabs</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">6</div>
+                    <div class="metric-label">Repo Templates</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">26+</div>
+                    <div class="metric-label">Components</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">0</div>
+                    <div class="metric-label">Dependencies</div>
+                </div>
+            </div>
+            
+            <!-- Command -->
+            <div class="command-card">
+                <code class="command-syntax">lens [repository path] [--output dir]</code>
+                <p class="command-description">
+                    Analyzes a repository and generates an interactive HTML dashboard with narrative insights.
+                </p>
+                <div class="command-example">
+                    lens ./my-project --output ./reports
+                </div>
+            </div>
+        </div>
+        
+        <!-- 8-Tab Navigation Structure -->
+        <section class="section-tabs">
+            <div class="glass-card">
+                <h2><span>📊</span> 8-Tab Dashboard Structure</h2>
+                
+                <div class="tab-structure">
+                    <div class="tab-item">
+                        <span>🏠</span>
+                        <div>Overview</div>
+                        <div>Health scores, key metrics</div>
+                    </div>
+                    <div class="tab-item">
+                        <span>🏗️</span>
+                        <div>Architecture</div>
+                        <div>Structure, patterns</div>
+                    </div>
+                    <div class="tab-item">
+                        <span>💻</span>
+                        <div>Tech Stack</div>
+                        <div>Languages, frameworks</div>
+                    </div>
+                    <div class="tab-item">
+                        <span>🔒</span>
+                        <div>Security</div>
+                        <div>Vulnerabilities, compliance</div>
+                    </div>
+                    <div class="tab-item">
+                        <span>📁</span>
+                        <div>Code Org</div>
+                        <div>Modules, coupling</div>
+                    </div>
+                    <div class="tab-item">
+                        <span>📦</span>
+                        <div>Vendors</div>
+                        <div>Dependencies, licenses</div>
+                    </div>
+                    <div class="tab-item">
+                        <span>🔄</span>
+                        <div>Reconciliation</div>
+                        <div>Drift, alignment</div>
+                    </div>
+                    <div class="tab-item">
+                        <span>📖</span>
+                        <div>Story</div>
+                        <div>Narrative insights</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Narrative Generation Pipeline -->
+        <section class="section-narrative">
+            <div class="glass-card diagram-card">
+                <h2><span>📝</span> Narrative Story Generation Pipeline</h2>
+                <p class="diagram-title">How raw analysis becomes compelling narrative</p>
+                
+                <div class="mermaid">
+flowchart LR
+    subgraph COLLECT["📥 Data Collection"]
+        A1[AST Analysis]
+        A2[File Metrics]
+        A3[Dependency Graph]
+        A4[Test Coverage]
+        A5[Security Scan]
+    end
+    
+    subgraph ANALYZE["🔍 Pattern Detection"]
+        B1[Architecture Patterns]
+        B2[Code Smells]
+        B3[Hotspots]
+        B4[Strengths]
+        B5[Risks]
+    end
+    
+    subgraph WEAVE["🧵 Story Weaving"]
+        C1[Introduction]
+        C2[Key Findings]
+        C3[Recommendations]
+        C4[Business Impact]
+        C5[Action Items]
+    end
+    
+    subgraph OUTPUT["📊 Dashboard"]
+        D1[Interactive Charts]
+        D2[Narrative Panels]
+        D3[Drill-down Links]
+    end
+    
+    A1 --> B1
+    A2 --> B2
+    A3 --> B3
+    A4 --> B4
+    A5 --> B5
+    
+    B1 --> C1
+    B2 --> C2
+    B3 --> C2
+    B4 --> C3
+    B5 --> C4
+    
+    C1 --> D2
+    C2 --> D1
+    C3 --> D3
+    C4 --> D2
+    C5 --> D3
+    
+    style COLLECT fill:#1a1a2e,stroke:#00d4ff
+    style ANALYZE fill:#1a1a2e,stroke:#f59e0b
+    style WEAVE fill:#1a1a2e,stroke:#10b981
+    style OUTPUT fill:#1a1a2e,stroke:#8b5cf6
+                </div>
+            </div>
+        </section>
+        
+        <!-- Repository Type Detection -->
+        <section class="section-templates">
+            <div class="glass-card">
+                <h2><span>🎯</span> Adaptive Repository Templates</h2>
+                <p>CORTEX Lens automatically detects repository type and applies appropriate analysis:</p>
+                
+                <table class="glass-table">
+                    <thead>
+                        <tr>
+                            <th>Template</th>
+                            <th>Detection Signals</th>
+                            <th>Focus Areas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="badge badge-primary">API Service</span></td>
+                            <td>FastAPI, Express, ASP.NET controllers</td>
+                            <td>Endpoints, auth, rate limiting</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-success">Console App</span></td>
+                            <td>CLI entry points, argparse, commander</td>
+                            <td>Commands, arguments, I/O</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-warning">Full Stack</span></td>
+                            <td>Frontend + backend folders, package.json</td>
+                            <td>Component tree, API integration</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-danger">Library</span></td>
+                            <td>setup.py, pyproject.toml, public exports</td>
+                            <td>API surface, compatibility</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge">Microservices</span></td>
+                            <td>Multiple services, docker-compose</td>
+                            <td>Service mesh, communication</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge">Monorepo</span></td>
+                            <td>Workspaces, lerna, nx config</td>
+                            <td>Package graph, shared deps</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        
+        <!-- Force-Directed Dependency Graph -->
+        <section class="section-force">
+            <div class="glass-card diagram-card">
+                <h2><span>🕸️</span> Module Dependency Graph (D3.js)</h2>
+                <p class="diagram-title">Interactive force-directed visualization of code dependencies</p>
+                
+                <div id="dependency-graph" class="force-graph"></div>
+            </div>
+        </section>
+        
+        <!-- Analysis Phase Sequence -->
+        <section class="section-sequence">
+            <div class="glass-card diagram-card">
+                <h2><span>🔄</span> Analysis Phase Sequence</h2>
+                <p class="diagram-title">Component interactions during lens analysis</p>
+                
+                <div class="mermaid">
+sequenceDiagram
+    participant User
+    participant Lens as CORTEX Lens
+    participant AST as AST Analyzer
+    participant Pattern as Pattern Detector
+    participant Story as Story Weaver
+    participant Render as Template Renderer
+    
+    User->>Lens: lens ./repository
+    
+    rect rgb(26, 46, 66)
+        Note over Lens,AST: Phase 1: Collection
+        Lens->>AST: analyze_all_files()
+        AST-->>Lens: FileMetrics[]
+        Lens->>AST: build_dependency_graph()
+        AST-->>Lens: DependencyGraph
+    end
+    
+    rect rgb(46, 26, 26)
+        Note over Lens,Pattern: Phase 2: Detection
+        Lens->>Pattern: detect_repository_type()
+        Pattern-->>Lens: RepositoryTemplate
+        Lens->>Pattern: find_patterns()
+        Pattern-->>Lens: Patterns[]
+        Lens->>Pattern: identify_hotspots()
+        Pattern-->>Lens: Hotspots[]
+    end
+    
+    rect rgb(26, 66, 46)
+        Note over Lens,Story: Phase 3: Narrative
+        Lens->>Story: generate_introduction()
+        Story-->>Lens: IntroSection
+        Lens->>Story: weave_findings()
+        Story-->>Lens: FindingsNarrative
+        Lens->>Story: create_recommendations()
+        Story-->>Lens: Recommendations[]
+    end
+    
+    rect rgb(66, 46, 26)
+        Note over Lens,Render: Phase 4: Output
+        Lens->>Render: apply_template(data)
+        Render-->>Lens: HTMLDashboard
+        Lens-->>User: Open ./reports/index.html
+    end
+                </div>
+            </div>
+        </section>
+        
+        <!-- Health Radar Chart -->
+        <section class="section-radar">
+            <div class="glass-card diagram-card">
+                <h2><span>📈</span> Repository Health Radar (D3.js)</h2>
+                <p class="diagram-title">Multi-dimensional health assessment visualization</p>
+                
+                <div id="health-radar" class="radar-chart"></div>
+            </div>
+        </section>
+        
+        <!-- Glassmorphism Design System -->
+        <section class="section-design">
+            <div class="glass-card">
+                <h2><span>🎨</span> Glassmorphism Design System</h2>
+                
+                <div class="mermaid">
+mindmap
+    root((CORTEX Lens Design))
+        Typography
+            125% Scale Factor
+            Inter Font Family
+            Hierarchical Headings
+            Readable Line Heights
+        Colors
+            Primary Blue #00d4ff
+            Success Green #10b981
+            Warning Amber #f59e0b
+            Danger Red #ef4444
+            Background Dark #1a1a2e
+        Components
+            Glass Cards
+                backdrop-filter blur
+                Semi-transparent bg
+                Subtle borders
+            Metrics Grid
+                Responsive columns
+                Animated counters
+            Interactive Charts
+                D3.js powered
+                Hover tooltips
+                Click drill-down
+        Accessibility
+            WCAG 2.1 AAA
+            Keyboard navigation
+            Screen reader support
+            Focus indicators
+                </div>
+            </div>
+        </section>
+        
+        <!-- Example Output -->
+        <section class="section-output">
+            <div class="glass-card">
+                <h2><span>📋</span> Example Narrative Output</h2>
+                
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-language">Markdown</span>
+                        <button class="copy-btn">Copy</button>
+                    </div>
+                    <pre><code># 📖 Repository Story: my-api-service
+
+## Executive Summary
+This is a **well-structured FastAPI service** with clear separation of concerns.
+The codebase demonstrates mature practices with 87% test coverage and 
+minimal technical debt.
+
+## 🌟 Strengths
+- **Clean Architecture**: Controllers, services, and repositories are properly layered
+- **Strong Test Coverage**: 342 tests covering 87% of code paths
+- **Modern Stack**: Python 3.11, FastAPI 0.104, Pydantic v2
+
+## ⚠️ Areas for Improvement
+1. **Cyclomatic Complexity**: `payment_processor.py` exceeds threshold (CC=18)
+2. **Duplicate Code**: 3 instances of similar validation logic detected
+3. **Missing Docstrings**: 12 public functions lack documentation
+
+## 💡 Recommendations
+1. Extract payment validation into a dedicated validator class
+2. Create a shared validation mixin for duplicate logic
+3. Add docstrings using the NumPy format
+
+## 📊 Business Impact
+Addressing the identified issues could:
+- Reduce bug probability by ~15%
+- Improve onboarding time for new developers
+- Enable easier refactoring for upcoming OAuth2 feature</code></pre>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Related Features -->
+        <section class="section-related">
+            <div class="glass-card">
+                <h2><span>🔗</span> Related Orchestrators</h2>
+                <div class="feature-grid feature-grid-3">
+                    <a href="intelligent-dashboard.html" class="glass-card">
+                        <span class="feature-icon">📊</span>
+                        <h3 class="feature-title">Intelligent Dashboard</h3>
+                        <p class="text-secondary">Auto-populate dashboard data</p>
+                    </a>
+                    <a href="refinement-orchestrator.html" class="glass-card">
+                        <span class="feature-icon">🔧</span>
+                        <h3 class="feature-title">Refinement</h3>
+                        <p class="text-secondary">Act on Lens findings</p>
+                    </a>
+                    <a href="debug-orchestrator.html" class="glass-card">
+                        <span class="feature-icon">🐛</span>
+                        <h3 class="feature-title">Debug</h3>
+                        <p class="text-secondary">Deep-dive into issues</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+<button class="scroll-to-top" aria-label="Scroll to top">↑</button>
+    <script src="../assets/js/main.js"></script>
+    <script>
+        // Mermaid Configuration
+        mermaid.initialize({ 
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#1a1a2e',
+                primaryTextColor: '#e2e8f0',
+                primaryBorderColor: '#00d4ff',
+                lineColor: '#00d4ff',
+                secondaryColor: '#16213e',
+                tertiaryColor: '#0f3460'
+            }
+        });
+        
+        // D3.js Force-Directed Dependency Graph
+        (function() {
+            const container = document.getElementById('dependency-graph');
+            const width = container.clientWidth || 800;
+            const height = 420;
+            
+            const nodes = [
+                { id: 'main', label: 'main.py', type: 'entry', size: 30 },
+                { id: 'api', label: 'api/', type: 'module', size: 25 },
+                { id: 'services', label: 'services/', type: 'module', size: 25 },
+                { id: 'models', label: 'models/', type: 'module', size: 22 },
+                { id: 'utils', label: 'utils/', type: 'utility', size: 18 },
+                { id: 'config', label: 'config.py', type: 'config', size: 16 },
+                { id: 'auth', label: 'auth/', type: 'module', size: 22 },
+                { id: 'db', label: 'database/', type: 'module', size: 20 },
+                { id: 'tests', label: 'tests/', type: 'test', size: 20 }
+            ];
+            
+            const links = [
+                { source: 'main', target: 'api' },
+                { source: 'main', target: 'config' },
+                { source: 'api', target: 'services' },
+                { source: 'api', target: 'auth' },
+                { source: 'services', target: 'models' },
+                { source: 'services', target: 'db' },
+                { source: 'services', target: 'utils' },
+                { source: 'auth', target: 'models' },
+                { source: 'auth', target: 'utils' },
+                { source: 'db', target: 'models' },
+                { source: 'tests', target: 'api' },
+                { source: 'tests', target: 'services' }
+            ];
+            
+            const svg = d3.select('#dependency-graph')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+            
+            const colorMap = {
+                entry: '#ef4444',
+                module: '#00d4ff',
+                utility: '#10b981',
+                config: '#f59e0b',
+                test: '#8b5cf6'
+            };
+            
+            const simulation = d3.forceSimulation(nodes)
+                .force('link', d3.forceLink(links).id(d => d.id).distance(80))
+                .force('charge', d3.forceManyBody().strength(-300))
+                .force('center', d3.forceCenter(width / 2, height / 2))
+                .force('collision', d3.forceCollide().radius(40));
+            
+            const link = svg.selectAll('.link')
+                .data(links)
+                .join('line')
+                .attr('stroke', '#00d4ff')
+                .attr('stroke-opacity', 0.4)
+                .attr('stroke-width', 2);
+            
+            const node = svg.selectAll('.node')
+                .data(nodes)
+                .join('g')
+                .call(d3.drag()
+                    .on('start', dragstarted)
+                    .on('drag', dragged)
+                    .on('end', dragended));
+            
+            node.append('circle')
+                .attr('r', d => d.size)
+                .attr('fill', d => colorMap[d.type])
+                .attr('stroke', '#1a1a2e')
+                .attr('stroke-width', 2);
+            
+            node.append('text')
+                .attr('dy', d => d.size + 14)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#e2e8f0')
+                .attr('font-size', 10)
+                .text(d => d.label);
+            
+            simulation.on('tick', () => {
+                link
+                    .attr('x1', d => d.source.x)
+                    .attr('y1', d => d.source.y)
+                    .attr('x2', d => d.target.x)
+                    .attr('y2', d => d.target.y);
+                
+                node.attr('transform', d => `translate(${d.x}, ${d.y})`);
+            });
+            
+            function dragstarted(event) {
+                if (!event.active) simulation.alphaTarget(0.3).restart();
+                event.subject.fx = event.subject.x;
+                event.subject.fy = event.subject.y;
+            }
+            
+            function dragged(event) {
+                event.subject.fx = event.x;
+                event.subject.fy = event.y;
+            }
+            
+            function dragended(event) {
+                if (!event.active) simulation.alphaTarget(0);
+                event.subject.fx = null;
+                event.subject.fy = null;
+            }
+        })();
+        
+        // D3.js Radar Chart
+        (function() {
+            const container = document.getElementById('health-radar');
+            const width = container.clientWidth || 400;
+            const height = 380;
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const maxRadius = 140;
+            
+            const dimensions = [
+                { axis: 'Test Coverage', value: 0.87 },
+                { axis: 'Code Quality', value: 0.78 },
+                { axis: 'Security', value: 0.92 },
+                { axis: 'Documentation', value: 0.65 },
+                { axis: 'Performance', value: 0.81 },
+                { axis: 'Maintainability', value: 0.73 }
+            ];
+            
+            const svg = d3.select('#health-radar')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+            
+            const g = svg.append('g')
+                .attr('transform', `translate(${centerX}, ${centerY})`);
+            
+            // Draw concentric circles
+            const levels = 5;
+            for (let i = 1; i <= levels; i++) {
+                g.append('circle')
+                    .attr('r', (maxRadius / levels) * i)
+                    .attr('fill', 'none')
+                    .attr('stroke', '#00d4ff')
+                    .attr('stroke-opacity', 0.2);
+            }
+            
+            // Draw axes
+            const angleSlice = (Math.PI * 2) / dimensions.length;
+            
+            dimensions.forEach((d, i) => {
+                const angle = angleSlice * i - Math.PI / 2;
+                const x = Math.cos(angle) * maxRadius;
+                const y = Math.sin(angle) * maxRadius;
+                
+                g.append('line')
+                    .attr('x1', 0)
+                    .attr('y1', 0)
+                    .attr('x2', x)
+                    .attr('y2', y)
+                    .attr('stroke', '#00d4ff')
+                    .attr('stroke-opacity', 0.3);
+                
+                g.append('text')
+                    .attr('x', Math.cos(angle) * (maxRadius + 20))
+                    .attr('y', Math.sin(angle) * (maxRadius + 20))
+                    .attr('text-anchor', 'middle')
+                    .attr('dy', 4)
+                    .attr('fill', '#e2e8f0')
+                    .attr('font-size', 11)
+                    .text(d.axis);
+            });
+            
+            // Draw data polygon
+            const radarLine = d3.lineRadial()
+                .radius(d => d.value * maxRadius)
+                .angle((d, i) => i * angleSlice)
+                .curve(d3.curveLinearClosed);
+            
+            g.append('path')
+                .datum(dimensions)
+                .attr('d', radarLine)
+                .attr('fill', '#00d4ff')
+                .attr('fill-opacity', 0.3)
+                .attr('stroke', '#00d4ff')
+                .attr('stroke-width', 2);
+            
+            // Draw data points
+            dimensions.forEach((d, i) => {
+                const angle = angleSlice * i - Math.PI / 2;
+                const x = Math.cos(angle) * (d.value * maxRadius);
+                const y = Math.sin(angle) * (d.value * maxRadius);
+                
+                g.append('circle')
+                    .attr('cx', x)
+                    .attr('cy', y)
+                    .attr('r', 5)
+                    .attr('fill', '#00d4ff')
+                    .attr('stroke', '#1a1a2e')
+                    .attr('stroke-width', 2);
+                
+                g.append('text')
+                    .attr('x', x)
+                    .attr('y', y - 12)
+                    .attr('text-anchor', 'middle')
+                    .attr('fill', '#10b981')
+                    .attr('font-size', 10)
+                    .attr('font-weight', 600)
+                    .text(Math.round(d.value * 100) + '%');
+            });
+        })();
+    </script>
+</body>
+</html>

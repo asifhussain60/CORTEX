@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX ADO Operations - Azure DevOps integration with automated story/feature generation">
+    <title>ADO Operations - CORTEX 4.0</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- Breadcrumb Navigation (Top) -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">→</span>
+        <a href="index.html">Orchestrators</a>
+        <span class="breadcrumb-separator">→</span>
+        <span class="breadcrumb-current">ADO Operations</span>
+    </nav>
+    
+    <!-- Logo Header (Below Breadcrumb) -->
+    <div class="logo-header">
+        <a href="../index.html">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
+        </a>
+    </div>
+    
+    <main class="container" id="main-content">
+        <div class="glass-card">
+            <h1>ADO Operations</h1>
+            <span class="badge badge-info">Azure DevOps</span>
+            
+            <!-- Intro Description -->
+            <p>
+                Writing Azure DevOps work items is tedious—formatting acceptance criteria, linking 
+                stories to features, ensuring DoR/DoD compliance. ADO Operations generates perfectly 
+                formatted ADO work items from your natural language descriptions, complete with 
+                acceptance criteria, story points, and proper linking. Copy-paste directly into ADO 
+                or use the API integration for automatic creation.
+            </p>
+            
+            <div class="metrics-grid metrics-grid-3">
+                <div class="metric-card glass-card">
+                    <div class="metric-value">Stories</div>
+                    <div class="metric-label">Auto-Generated</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">Features</div>
+                    <div class="metric-label">Breakdown</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">ADO</div>
+                    <div class="metric-label">Format</div>
+                </div>
+            </div>
+            
+            <div class="command-card">
+                <code class="command-syntax">plan ado [feature]</code>
+                <p class="command-description">
+                    Generates ADO-formatted work items with stories, acceptance criteria, and DoR/DoD.
+                </p>
+                <div class="command-example">
+                    plan ado user registration flow
+                </div>
+            </div>
+        </div>
+        
+        <section class="section-workflow">
+            <div class="glass-card">
+                <h2><span>📋</span> Generated Work Items</h2>
+                
+                <div class="card-grid-2">
+                    <div class="tier-card tier-2">
+                        <div class="tier-header">
+                            <span class="tier-icon">📁</span>
+                            <div>
+                                <div class="tier-title">Feature</div>
+                                <div class="tier-subtitle">Epic-level item</div>
+                            </div>
+                        </div>
+                        <ul class="feature-list">
+                            <li>• Title and description</li>
+                            <li>• Business value statement</li>
+                            <li>• Child story links</li>
+                            <li>• Acceptance criteria</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tier-card tier-1">
+                        <div class="tier-header">
+                            <span class="tier-icon">📝</span>
+                            <div>
+                                <div class="tier-title">User Stories</div>
+                                <div class="tier-subtitle">Implementation items</div>
+                            </div>
+                        </div>
+                        <ul class="feature-list">
+                            <li>• As a [user], I want...</li>
+                            <li>• Acceptance criteria (Given/When/Then)</li>
+                            <li>• Story points estimate</li>
+                            <li>• DoR/DoD compliance</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section-usage">
+            <div class="glass-card">
+                <h2><span>📊</span> Example Output</h2>
+                
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-language">Markdown</span>
+                        <button class="copy-btn">Copy</button>
+                    </div>
+                    <pre><code>## Feature: User Registration Flow
+
+**Business Value:** Enable new users to create accounts, 
+increasing user base and engagement metrics.
+
+### Story 1: Email Registration
+**As a** new user
+**I want to** register with my email
+**So that** I can access the platform
+
+**Acceptance Criteria:**
+- [ ] Given valid email, when submitted, then account created
+- [ ] Given existing email, when submitted, then error shown
+- [ ] Given weak password, when submitted, then requirements shown
+
+**Story Points:** 5
+**DoR:** ✅ Requirements clear, design approved
+**DoD:** ✅ Tests pass, code reviewed, deployed to staging</code></pre>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section-integration">
+            <div class="glass-card">
+                <h2><span>🔗</span> Related Features</h2>
+                <div class="feature-grid feature-grid-3">
+                    <a href="planning-system.html" class="glass-card">
+                        <span class="feature-icon">🎯</span>
+                        <h3 class="feature-title">Planning System</h3>
+                        <p class="text-secondary">Base planning engine</p>
+                    </a>
+                    <a href="../features/token-optimization.html" class="glass-card">
+                        <span class="feature-icon">⚡</span>
+                        <h3 class="feature-title">Token Optimization</h3>
+                        <p class="text-secondary">Efficient output format</p>
+                    </a>
+                    <a href="execution-orchestrator.html" class="glass-card">
+                        <span class="feature-icon">⚡</span>
+                        <h3 class="feature-title">Execution</h3>
+                        <p class="text-secondary">Execute generated plans</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+<button class="scroll-to-top" aria-label="Scroll to top">↑</button>
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>

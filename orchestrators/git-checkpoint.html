@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX Git Checkpoint Orchestrator - Automatic rollback points with retention policies and milestone tracking">
+    <title>Git Checkpoint - CORTEX 4.0</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        .mermaid { background: transparent; margin: 1.5rem 0; }
+        .diagram-card { margin-bottom: 2rem; }
+        .diagram-title { font-size: 1.1rem; color: var(--accent-primary); margin-bottom: 1rem; font-weight: 600; }
+        .timeline-container { width: 100%; height: 300px; overflow-x: auto; }
+        .trigger-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin: 1rem 0; }
+        .trigger-card { padding: 1rem; background: rgba(26, 26, 46, 0.6); border-radius: 8px; }
+        .checkpoint-timeline { width: 100%; min-height: 250px; }
+        @media (max-width: 768px) { .trigger-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <!-- Skip Link -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">→</span>
+        <a href="index.html">Orchestrators</a>
+        <span class="breadcrumb-separator">→</span>
+        <span class="breadcrumb-current">Git Checkpoint</span>
+    </nav>
+    
+    <!-- Logo Header -->
+    <div class="logo-header">
+        <a href="../index.html">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
+        </a>
+    </div>
+    
+    <!-- Main Content -->
+    <main class="container" id="main-content">
+        <!-- Main Content Card -->
+        <div class="glass-card">
+            <h1>Git Checkpoint Orchestrator</h1>
+            <span class="badge badge-success">Production Ready</span>
+            
+            <p>
+                The Git Checkpoint Orchestrator is your safety net—it automatically creates git checkpoints 
+                at key workflow milestones, enabling instant rollback if something goes wrong. With smart 
+                retention policies (30 days max, 50 checkpoints), trigger-based automation (before/after 
+                implementation, TDD phases, plan completion), and safety checks for uncommitted changes, 
+                you'll never lose work or get stuck in an unrecoverable state.
+            </p>
+            
+            <!-- Key Metrics -->
+            <div class="metrics-grid metrics-grid-4">
+                <div class="metric-card glass-card">
+                    <div class="metric-value">11</div>
+                    <div class="metric-label">Auto Triggers</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">30</div>
+                    <div class="metric-label">Max Days</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">50</div>
+                    <div class="metric-label">Max Count</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">AUTO</div>
+                    <div class="metric-label">Cleanup</div>
+                </div>
+            </div>
+            
+            <!-- Command -->
+            <div class="command-card">
+                <code class="command-syntax">checkpoint [name] | rollback [checkpoint-id]</code>
+                <p class="command-description">
+                    Create named checkpoints or rollback to a previous state.
+                </p>
+                <div class="command-example">
+                    checkpoint before-oauth-refactor
+                </div>
+            </div>
+        </div>
+        
+        <!-- Auto Triggers -->
+        <section class="section-triggers">
+            <div class="glass-card">
+                <h2><span>⚡</span> Automatic Checkpoint Triggers</h2>
+                
+                <div class="trigger-grid">
+                    <div class="trigger-card">
+                        <h3>📝 Implementation</h3>
+                        <ul>
+                            <li>✅ Before implementation</li>
+                            <li>✅ After implementation</li>
+                            <li>✅ Before refactoring</li>
+                            <li>✅ After refactoring</li>
+                        </ul>
+                    </div>
+                    <div class="trigger-card">
+                        <h3>🧪 TDD Workflow</h3>
+                        <ul>
+                            <li>✅ Before TDD RED phase</li>
+                            <li>✅ After TDD GREEN phase</li>
+                            <li>✅ After TDD REFACTOR phase</li>
+                        </ul>
+                    </div>
+                    <div class="trigger-card">
+                        <h3>📋 Planning</h3>
+                        <ul>
+                            <li>✅ Before plan generation</li>
+                            <li>✅ After plan approval</li>
+                            <li>✅ After plan completion</li>
+                        </ul>
+                    </div>
+                    <div class="trigger-card">
+                        <h3>🐛 Debug & Test</h3>
+                        <ul>
+                            <li>✅ On test failure</li>
+                            <li>✅ Before debug injection</li>
+                            <li>✅ After fix verification</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Checkpoint Timeline -->
+        <section class="section-timeline">
+            <div class="glass-card diagram-card">
+                <h2><span>📅</span> Checkpoint Timeline (D3.js)</h2>
+                <p class="diagram-title">Visual history of checkpoints with rollback points</p>
+                
+                <div id="checkpoint-timeline" class="checkpoint-timeline"></div>
+            </div>
+        </section>
+        
+        <!-- Checkpoint Lifecycle -->
+        <section class="section-lifecycle">
+            <div class="glass-card diagram-card">
+                <h2><span>🔄</span> Checkpoint Lifecycle</h2>
+                <p class="diagram-title">From creation to cleanup or rollback</p>
+                
+                <div class="mermaid">
+stateDiagram-v2
+    [*] --> Triggered: Auto/Manual trigger
+    
+    state Triggered {
+        [*] --> CheckSafety
+        CheckSafety --> CreateTag: Safe
+        CheckSafety --> WarnUser: Uncommitted changes
+        WarnUser --> CreateTag: User confirms
+        WarnUser --> Abort: User cancels
+    }
+    
+    Triggered --> Active: Tag created
+    
+    state Active {
+        [*] --> Available
+        Available --> Used: Rollback requested
+        Used --> Restored: git reset --hard
+    }
+    
+    Active --> Stale: age > 30 days
+    Active --> Preserved: Has custom name
+    
+    state Cleanup {
+        [*] --> CheckRetention
+        CheckRetention --> Delete: Exceeds limits
+        CheckRetention --> Keep: Within limits
+    }
+    
+    Stale --> Cleanup: Auto cleanup runs
+    
+    Cleanup --> [*]
+    Preserved --> [*]
+    
+    note right of Active
+        Checkpoints available
+        for instant rollback
+    end note
+    
+    note right of Stale
+        Candidates for
+        auto-cleanup
+    end note
+                </div>
+            </div>
+        </section>
+        
+        <!-- Rollback Flow -->
+        <section class="section-rollback">
+            <div class="glass-card diagram-card">
+                <h2><span>🔙</span> Rollback Decision Flow</h2>
+                <p class="diagram-title">Safety checks before restoring previous state</p>
+                
+                <div class="mermaid">
+flowchart TD
+    A[User: rollback to checkpoint-X] --> B{Checkpoint exists?}
+    B -->|No| C[❌ Error: Checkpoint not found]
+    B -->|Yes| D{Uncommitted changes?}
+    
+    D -->|Yes| E[⚠️ Warning: Changes will be lost]
+    E --> F{User confirms?}
+    F -->|No| G[Abort rollback]
+    F -->|Yes| H[Create safety checkpoint]
+    
+    D -->|No| H
+    
+    H --> I[Show changes to lose]
+    I --> J{Final confirmation?}
+    J -->|No| G
+    J -->|Yes| K[git reset --hard checkpoint-X]
+    
+    K --> L{Reset successful?}
+    L -->|Yes| M[✅ Rollback complete]
+    L -->|No| N[Restore from safety checkpoint]
+    
+    M --> O[Log rollback event]
+    N --> P[❌ Rollback failed - state restored]
+    
+    style C fill:#ef4444,color:#fff
+    style M fill:#10b981,color:#fff
+    style P fill:#f59e0b,color:#fff
+    style E fill:#f59e0b,color:#1a1a2e
+                </div>
+            </div>
+        </section>
+        
+        <!-- Retention Policy -->
+        <section class="section-retention">
+            <div class="glass-card">
+                <h2><span>🗄️</span> Retention Policy</h2>
+                
+                <table class="glass-table">
+                    <thead>
+                        <tr>
+                            <th>Rule</th>
+                            <th>Value</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Max Age</td>
+                            <td><span class="badge badge-warning">30 days</span></td>
+                            <td>Auto-delete checkpoints older than 30 days</td>
+                        </tr>
+                        <tr>
+                            <td>Max Count</td>
+                            <td><span class="badge badge-warning">50</span></td>
+                            <td>Keep maximum 50 checkpoints per repository</td>
+                        </tr>
+                        <tr>
+                            <td>Grace Period</td>
+                            <td><span class="badge badge-success">3 days</span></td>
+                            <td>Minimum retention before any cleanup</td>
+                        </tr>
+                        <tr>
+                            <td>Named Checkpoints</td>
+                            <td><span class="badge badge-success">Preserved</span></td>
+                            <td>User-named checkpoints never auto-deleted</td>
+                        </tr>
+                        <tr>
+                            <td>Tagged Checkpoints</td>
+                            <td><span class="badge badge-success">Preserved</span></td>
+                            <td>Checkpoints with custom tags never deleted</td>
+                        </tr>
+                        <tr>
+                            <td>Cleanup Interval</td>
+                            <td><span class="badge badge-primary">24 hours</span></td>
+                            <td>Automatic cleanup runs daily</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        
+        <!-- Naming Conventions -->
+        <section class="section-naming">
+            <div class="glass-card diagram-card">
+                <h2><span>🏷️</span> Checkpoint Naming Conventions</h2>
+                <p class="diagram-title">Automatic naming patterns by checkpoint type</p>
+                
+                <div class="mermaid">
+flowchart LR
+    subgraph AUTO["Auto-Generated Names"]
+        A1["pre-work-20251227-143022"]
+        A2["post-work-20251227-145612"]
+        A3["tdd-red-20251227-150000"]
+        A4["tdd-green-20251227-151234"]
+        A5["tdd-refactor-20251227-152000"]
+        A6["implementation-20251227-153456"]
+    end
+    
+    subgraph USER["User-Named"]
+        U1["user-before-oauth-20251227"]
+        U2["user-pre-release-v2.0"]
+        U3["user-experiment-1"]
+    end
+    
+    subgraph FORMAT["Name Format"]
+        F1["{type}-{timestamp}"]
+        F2["YYYYMMDD-HHMMSS"]
+    end
+    
+    A1 --> F1
+    A2 --> F1
+    A3 --> F1
+    U1 --> F2
+    
+    style AUTO fill:#1a1a2e,stroke:#00d4ff
+    style USER fill:#1a1a2e,stroke:#10b981
+    style FORMAT fill:#1a1a2e,stroke:#f59e0b
+                </div>
+            </div>
+        </section>
+        
+        <!-- Integration Points -->
+        <section class="section-integration">
+            <div class="glass-card diagram-card">
+                <h2><span>🔗</span> Orchestrator Integration Points</h2>
+                <p class="diagram-title">How Git Checkpoint integrates with other workflows</p>
+                
+                <div class="mermaid">
+flowchart TD
+    subgraph TDD["TDD Workflow"]
+        T1[RED Phase] --> CP1((checkpoint))
+        T2[GREEN Phase] --> CP2((checkpoint))
+        T3[REFACTOR Phase] --> CP3((checkpoint))
+    end
+    
+    subgraph PLANNING["Planning Workflow"]
+        P1[Plan Start] --> CP4((checkpoint))
+        P2[Plan Approval] --> CP5((checkpoint))
+        P3[Plan Complete] --> CP6((checkpoint))
+    end
+    
+    subgraph DEBUG["Debug Workflow"]
+        D1[Debug Start] --> CP7((checkpoint))
+        D2[Fix Applied] --> CP8((checkpoint))
+        D3[Debug End] --> CP9((checkpoint))
+    end
+    
+    subgraph MAINTENANCE["Maintenance"]
+        M1[Pre-Healthcheck] --> CP10((checkpoint))
+        M2[Post-Healthcheck] --> CP11((checkpoint))
+    end
+    
+    CP1 --> GIT[(Git Tags)]
+    CP2 --> GIT
+    CP3 --> GIT
+    CP4 --> GIT
+    CP5 --> GIT
+    CP6 --> GIT
+    CP7 --> GIT
+    CP8 --> GIT
+    CP9 --> GIT
+    CP10 --> GIT
+    CP11 --> GIT
+    
+    style TDD fill:#1a1a2e,stroke:#10b981
+    style PLANNING fill:#1a1a2e,stroke:#00d4ff
+    style DEBUG fill:#1a1a2e,stroke:#ef4444
+    style MAINTENANCE fill:#1a1a2e,stroke:#f59e0b
+                </div>
+            </div>
+        </section>
+        
+        <!-- Example Output -->
+        <section class="section-output">
+            <div class="glass-card">
+                <h2><span>📋</span> Example Checkpoint Metadata</h2>
+                
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-language">YAML</span>
+                        <button class="copy-btn">Copy</button>
+                    </div>
+                    <pre><code>checkpoint:
+  name: "tdd-green-20251227-151234"
+  type: "tdd_green"
+  timestamp: "2025-12-27T15:12:34Z"
+  
+  metadata:
+    commit_hash: "a1b2c3d4e5f6"
+    branch_name: "feature/oauth-integration"
+    user_message: "Implementing OAuth token refresh"
+    cortex_operation: "tdd"
+    
+  files_modified:
+    - "src/auth/oauth_handler.py"
+    - "tests/test_oauth.py"
+    
+  diff_stats:
+    insertions: 45
+    deletions: 12
+    files_changed: 2
+    
+  storage:
+    location: "git-tags"
+    annotation: true
+    pushed_to_remote: false
+    
+  rollback_command: "git reset --hard tdd-green-20251227-151234"
+  
+  retention:
+    age_days: 3
+    preserve: false
+    cleanup_eligible: false</code></pre>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Related Features -->
+        <section class="section-related">
+            <div class="glass-card">
+                <h2><span>🔗</span> Related Orchestrators</h2>
+                <div class="feature-grid feature-grid-3">
+                    <a href="tdd-orchestrator.html" class="glass-card">
+                        <span class="feature-icon">✅</span>
+                        <h3 class="feature-title">TDD Mastery</h3>
+                        <p class="text-secondary">Checkpoints per TDD phase</p>
+                    </a>
+                    <a href="debug-orchestrator.html" class="glass-card">
+                        <span class="feature-icon">🐛</span>
+                        <h3 class="feature-title">Debug</h3>
+                        <p class="text-secondary">Rollback on debug failure</p>
+                    </a>
+                    <a href="planning-system.html" class="glass-card">
+                        <span class="feature-icon">📋</span>
+                        <h3 class="feature-title">Planning System</h3>
+                        <p class="text-secondary">Plan milestone checkpoints</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+<button class="scroll-to-top" aria-label="Scroll to top">↑</button>
+    <script src="../assets/js/main.js"></script>
+    <script>
+        // Mermaid Configuration
+        mermaid.initialize({ 
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#1a1a2e',
+                primaryTextColor: '#e2e8f0',
+                primaryBorderColor: '#00d4ff',
+                lineColor: '#00d4ff',
+                secondaryColor: '#16213e',
+                tertiaryColor: '#0f3460'
+            }
+        });
+        
+        // D3.js Checkpoint Timeline
+        (function() {
+            const container = document.getElementById('checkpoint-timeline');
+            const width = container.clientWidth || 800;
+            const height = 220;
+            
+            const checkpoints = [
+                { id: 1, name: 'pre-work', time: '14:30', type: 'implementation', current: false },
+                { id: 2, name: 'tdd-red', time: '14:45', type: 'tdd', current: false },
+                { id: 3, name: 'tdd-green', time: '15:12', type: 'tdd', current: false },
+                { id: 4, name: 'tdd-refactor', time: '15:28', type: 'tdd', current: false },
+                { id: 5, name: 'post-work', time: '15:45', type: 'implementation', current: false },
+                { id: 6, name: 'debug-start', time: '16:00', type: 'debug', current: false },
+                { id: 7, name: 'debug-fix', time: '16:15', type: 'debug', current: true }
+            ];
+            
+            const colorMap = {
+                implementation: '#00d4ff',
+                tdd: '#10b981',
+                debug: '#ef4444',
+                planning: '#f59e0b'
+            };
+            
+            const svg = d3.select('#checkpoint-timeline')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+            
+            // Timeline line
+            const lineY = height / 2;
+            const startX = 60;
+            const endX = width - 60;
+            const spacing = (endX - startX) / (checkpoints.length - 1);
+            
+            svg.append('line')
+                .attr('x1', startX)
+                .attr('y1', lineY)
+                .attr('x2', endX)
+                .attr('y2', lineY)
+                .attr('stroke', '#00d4ff')
+                .attr('stroke-width', 3)
+                .attr('stroke-opacity', 0.5);
+            
+            // Draw checkpoints
+            checkpoints.forEach((cp, i) => {
+                const x = startX + i * spacing;
+                const g = svg.append('g')
+                    .attr('transform', `translate(${x}, ${lineY})`);
+                
+                // Checkpoint circle
+                g.append('circle')
+                    .attr('r', cp.current ? 16 : 12)
+                    .attr('fill', colorMap[cp.type])
+                    .attr('stroke', cp.current ? '#fff' : '#1a1a2e')
+                    .attr('stroke-width', cp.current ? 3 : 2);
+                
+                // Current indicator
+                if (cp.current) {
+                    g.append('text')
+                        .attr('y', 5)
+                        .attr('text-anchor', 'middle')
+                        .attr('fill', '#fff')
+                        .attr('font-size', 10)
+                        .attr('font-weight', 700)
+                        .text('●');
+                }
+                
+                // Name label (above)
+                g.append('text')
+                    .attr('y', -25)
+                    .attr('text-anchor', 'middle')
+                    .attr('fill', '#e2e8f0')
+                    .attr('font-size', 10)
+                    .attr('font-weight', cp.current ? 600 : 400)
+                    .text(cp.name);
+                
+                // Time label (below)
+                g.append('text')
+                    .attr('y', 35)
+                    .attr('text-anchor', 'middle')
+                    .attr('fill', '#a0aec0')
+                    .attr('font-size', 9)
+                    .text(cp.time);
+            });
+            
+            // Legend
+            const legend = svg.append('g')
+                .attr('transform', `translate(${width - 200}, 20)`);
+            
+            const legendItems = [
+                { type: 'implementation', label: 'Implementation' },
+                { type: 'tdd', label: 'TDD Phase' },
+                { type: 'debug', label: 'Debug' }
+            ];
+            
+            legendItems.forEach((item, i) => {
+                legend.append('circle')
+                    .attr('cx', 0)
+                    .attr('cy', i * 20)
+                    .attr('r', 6)
+                    .attr('fill', colorMap[item.type]);
+                
+                legend.append('text')
+                    .attr('x', 14)
+                    .attr('y', i * 20 + 4)
+                    .attr('fill', '#e2e8f0')
+                    .attr('font-size', 10)
+                    .text(item.label);
+            });
+            
+            // Current label
+            svg.append('text')
+                .attr('x', 20)
+                .attr('y', height - 15)
+                .attr('fill', '#10b981')
+                .attr('font-size', 11)
+                .text('● = Current position | Click any checkpoint to rollback');
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>The Awakening of CORTEX - Story Viewer</title>
+<link href="../assets/css/main.css" rel="stylesheet" type="text/css">
+<link href="story-viewer.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+    <!-- Burger Menu (Mobile Only) -->
+    <div class="burger-menu" id="burgerMenu">
+        <div class="burger-icon">
+            <div class="burger-line"></div>
+            <div class="burger-line"></div>
+            <div class="burger-line"></div>
+        </div>
+    </div>
+
+    <!-- Sidebar Overlay (Mobile Only) -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <nav class="breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-current">The Awakening of CORTEX</span>
+    </nav>
+    
+    <div class="story-layout">
+        <!-- Left Sidebar - Chapter Navigation -->
+        <aside class="chapter-sidebar" id="chapterSidebar">
+            <div class="story-header">
+                <a href="#" class="story-header-link" onclick="window.location.hash=''; return false;">
+                    <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="story-logo" />
+                    <h1>🧠 The Awakening</h1>
+                    <p class="story-subtitle">A Tech Comedy in 12 Chapters</p>
+                </a>
+            </div>
+
+            <nav>
+                <ul class="chapter-list" id="chapterList">
+                    <li class="chapter-item">
+                        <a href="#prologue" class="chapter-link active" data-chapter="prologue">
+                            <span class="chapter-number">PROLOGUE</span>
+                            <span class="chapter-title">The Basement Laboratory</span>
+                        </a>
+                    </li>
+                    <li class="chapter-item">
+                        <a href="#chapter-01" class="chapter-link" data-chapter="chapter-01">
+                            <span class="chapter-number">CHAPTER 1</span>
+                            <span class="chapter-title">The Amnesia Crisis</span>
+                        </a>
+                    </li>
+                    <li class="chapter-item">
+                        <a href="#chapter-02" class="chapter-link" data-chapter="chapter-02">
+                            <span class="chapter-number">CHAPTER 2</span>
+                            <span class="chapter-title">Tier 0 - The Gatekeeper</span>
+                        </a>
+                    </li>
+                    <li class="chapter-item">
+                        <a href="#chapter-03" class="chapter-link" data-chapter="chapter-03">
+                            <span class="chapter-number">CHAPTER 3</span>
+                            <span class="chapter-title">Tier 1 - Memory Awakens</span>
+                        </a>
+                    </li>
+                    <li class="chapter-item">
+                        <a href="#chapter-04" class="chapter-link" data-chapter="chapter-04">
+                            <span class="chapter-number">CHAPTER 4</span>
+                            <span class="chapter-title">Tier 2 - The Learning Machine</span>
+                        </a>
+                    </li>
+                    <li class="chapter-item">
+                        <a href="#chapter-05" class="chapter-link" data-chapter="chapter-05">
+                            <span class="chapter-number">CHAPTER 5</span>
+                            <span class="chapter-title">The Test-Driven Rebellion</span>
+                        </a>
+                    </li>
+                    <li class="chapter-item">
+                        <a href="#chapter-06" class="chapter-link" data-chapter="chapter-06">
+                            <span class="chapter-number">CHAPTER 6</span>
+                            <span class="chapter-title">The Great Orchestration</span>
+                        </a>
+                    </li>
+                    <li class="chapter-item">
+                        <a href="#chapter-07" class="chapter-link" data-chapter="chapter-07">
+                            <span class="chapter-number">CHAPTER 7</span>
+                            <span class="chapter-title">The Planning Revolution</span>
+                        </a>
+                    </li>
+                    <li class="chapter-item">
+                        <a href="#chapter-08" class="chapter-link" data-chapter="chapter-08">
+                            <span class="chapter-number">CHAPTER 8</span>
+                            <span class="chapter-title">The Enterprise Awakening</span>
+                        </a>
+                    </li>
+                    <li class="chapter-item">
+                        <a href="#chapter-09" class="chapter-link" data-chapter="chapter-09">
+                            <span class="chapter-number">CHAPTER 9</span>
+                            <span class="chapter-title">The Sanitizer's Dilemma</span>
+                        </a>
+                    </li>
+                    <li class="chapter-item">
+                        <a href="#chapter-10" class="chapter-link" data-chapter="chapter-10">
+                            <span class="chapter-number">CHAPTER 10</span>
+                            <span class="chapter-title">The Self-Healing System</span>
+                        </a>
+                    </li>
+                    <li class="chapter-item">
+                        <a href="#chapter-11" class="chapter-link" data-chapter="chapter-11">
+                            <span class="chapter-number">CHAPTER 11</span>
+                            <span class="chapter-title">The Knowledge Keeper</span>
+                        </a>
+                    </li>
+                    <li class="chapter-item">
+                        <a href="#chapter-12" class="chapter-link" data-chapter="chapter-12">
+                            <span class="chapter-number">CHAPTER 12</span>
+                            <span class="chapter-title">The Convergence</span>
+                        </a>
+                    </li>
+                    <li class="chapter-item">
+                        <a href="#chapter-13" class="chapter-link" data-chapter="chapter-13">
+                            <span class="chapter-number">CHAPTER 13</span>
+                            <span class="chapter-title">The Refiner</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="story-content">
+            <div id="chapterContent">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading chapter...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="story-viewer.js?v=4.0.5"></script>
+</body>
+</html>

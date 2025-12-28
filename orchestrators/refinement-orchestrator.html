@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX Refinement Orchestrator - 7-phase holistic system improvement with SKULL test optimization and code quality enhancement">
+    <title>Refinement Orchestrator - CORTEX 4.0</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        .mermaid { background: transparent; margin: 1.5rem 0; }
+        .diagram-card { margin-bottom: 2rem; }
+        .diagram-title { font-size: 1.1rem; color: var(--accent-primary); margin-bottom: 1rem; font-weight: 600; }
+        .d3-container { width: 100%; min-height: 400px; background: rgba(26, 26, 46, 0.5); border-radius: 12px; overflow: hidden; }
+        .risk-matrix { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1rem; }
+        .risk-card { padding: 1rem; border-radius: 8px; text-align: center; }
+        .risk-safe { background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; }
+        .risk-moderate { background: rgba(245, 158, 11, 0.2); border: 1px solid #f59e0b; }
+        .risk-dangerous { background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; }
+        .quality-gauge { width: 100%; height: 200px; }
+        .treemap-container { width: 100%; height: 450px; }
+        .sankey-container { width: 100%; height: 400px; }
+    </style>
+</head>
+<body>
+    <!-- Skip Link -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">→</span>
+        <a href="index.html">Orchestrators</a>
+        <span class="breadcrumb-separator">→</span>
+        <span class="breadcrumb-current">Refinement</span>
+    </nav>
+    
+    <!-- Logo Header -->
+    <div class="logo-header">
+        <a href="../index.html">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
+        </a>
+    </div>
+    
+    <!-- Main Content -->
+    <main class="container" id="main-content">
+        <!-- Main Content Card -->
+        <div class="glass-card">
+            <h1>Refinement Orchestrator</h1>
+            <span class="badge badge-success">Production Ready</span>
+            
+            <p>
+                The Refinement Orchestrator is your automated code quality guardian—it performs a comprehensive 
+                7-phase analysis that discovers dead code, optimizes SKULL governance tests, refines documentation, 
+                improves code quality, reviews architecture, optimizes performance, and validates everything before 
+                applying changes. With risk-categorized changes (safe/moderate/dangerous) and automatic rollback 
+                scripts, you can confidently improve your codebase without fear.
+            </p>
+            
+            <!-- Key Metrics -->
+            <div class="metrics-grid metrics-grid-4">
+                <div class="metric-card glass-card">
+                    <div class="metric-value">7</div>
+                    <div class="metric-label">Phases</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">3</div>
+                    <div class="metric-label">Risk Categories</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">15</div>
+                    <div class="metric-label">Max Complexity</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">80%</div>
+                    <div class="metric-label">Min Coverage</div>
+                </div>
+            </div>
+            
+            <!-- Command -->
+            <div class="command-card">
+                <code class="command-syntax">refine [--dry-run] [--phase 1-7]</code>
+                <p class="command-description">
+                    Runs holistic system refinement with optional dry-run mode and phase selection.
+                </p>
+                <div class="command-example">
+                    refine --dry-run    # Preview changes without applying
+                </div>
+            </div>
+        </div>
+        
+        <!-- 7-Phase Workflow -->
+        <section class="section-workflow">
+            <div class="glass-card">
+                <h2><span>📋</span> The 7-Phase Refinement Pipeline</h2>
+                
+                <div class="workflow-phases">
+                    <div class="phase-card">
+                        <span class="phase-number">1</span>
+                        <span class="phase-icon">🔍</span>
+                        <div class="phase-title">Discovery & Analysis</div>
+                        <p class="phase-description">Complexity analysis, dead code detection, coverage gaps</p>
+                    </div>
+                    <div class="phase-card">
+                        <span class="phase-number">2</span>
+                        <span class="phase-icon">🛡️</span>
+                        <div class="phase-title">SKULL Test Review</div>
+                        <p class="phase-description">Optimize governance tests, merge redundant tests</p>
+                    </div>
+                    <div class="phase-card">
+                        <span class="phase-number">3</span>
+                        <span class="phase-icon">📄</span>
+                        <div class="phase-title">Documentation</div>
+                        <p class="phase-description">Fix broken refs, reduce token bloat, sync docs</p>
+                    </div>
+                    <div class="phase-card">
+                        <span class="phase-number">4</span>
+                        <span class="phase-icon">✨</span>
+                        <div class="phase-title">Code Quality</div>
+                        <p class="phase-description">Simplify functions, remove duplicates, standardize</p>
+                    </div>
+                    <div class="phase-card">
+                        <span class="phase-number">5</span>
+                        <span class="phase-icon">🏗️</span>
+                        <div class="phase-title">Architecture</div>
+                        <p class="phase-description">Check circular deps, tier violations, consolidation</p>
+                    </div>
+                    <div class="phase-card">
+                        <span class="phase-number">6</span>
+                        <span class="phase-icon">⚡</span>
+                        <div class="phase-title">Performance</div>
+                        <p class="phase-description">Find bottlenecks, memory leaks, caching opportunities</p>
+                    </div>
+                    <div class="phase-card">
+                        <span class="phase-number">7</span>
+                        <span class="phase-icon">✅</span>
+                        <div class="phase-title">Validation</div>
+                        <p class="phase-description">Run tests, verify SKULL, generate rollback script</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- State Machine Diagram -->
+        <section class="section-state">
+            <div class="glass-card diagram-card">
+                <h2><span>🔄</span> Phase State Machine</h2>
+                <p class="diagram-title">State transitions with blocking gates and checkpoints</p>
+                
+                <div class="mermaid">
+stateDiagram-v2
+    [*] --> Discovery: refine command
+    
+    state Discovery {
+        [*] --> AnalyzeComplexity
+        AnalyzeComplexity --> DetectDeadCode
+        DetectDeadCode --> FindCoverageGaps
+        FindCoverageGaps --> [*]
+    }
+    
+    Discovery --> SKULL: blocking=true ✓
+    
+    state SKULL {
+        [*] --> ScanTests
+        ScanTests --> IdentifyRedundant
+        IdentifyRedundant --> ProposeMerges
+        ProposeMerges --> AwaitApproval
+        AwaitApproval --> [*]: approved
+    }
+    
+    SKULL --> GitCheckpoint1: git checkpoint
+    GitCheckpoint1 --> Documentation
+    
+    state Documentation {
+        [*] --> ScanRefs
+        ScanRefs --> FixBroken
+        FixBroken --> OptimizeTokens
+        OptimizeTokens --> [*]
+    }
+    
+    Documentation --> GitCheckpoint2: git checkpoint
+    GitCheckpoint2 --> CodeQuality
+    
+    state CodeQuality {
+        [*] --> SimplifyFunctions
+        SimplifyFunctions --> RemoveDuplicates
+        RemoveDuplicates --> ApplyFormatting
+        ApplyFormatting --> [*]
+    }
+    
+    CodeQuality --> GitCheckpoint3: git checkpoint
+    GitCheckpoint3 --> Architecture: blocking=false
+    Architecture --> Performance: blocking=false
+    Performance --> Validation: blocking=true
+    
+    Validation --> [*]: all tests pass
+    Validation --> Rollback: tests fail
+    Rollback --> [*]
+                </div>
+            </div>
+        </section>
+        
+        <!-- Risk Categorization -->
+        <section class="section-risk">
+            <div class="glass-card">
+                <h2><span>⚠️</span> Change Risk Categories</h2>
+                <p>All changes are categorized by risk level with appropriate safeguards:</p>
+                
+                <div class="risk-matrix">
+                    <div class="risk-card risk-safe">
+                        <h3>🟢 SAFE</h3>
+                        <p>Auto-approved</p>
+                        <ul>
+                            <li>Import optimization</li>
+                            <li>Formatting fixes</li>
+                            <li>Comment updates</li>
+                        </ul>
+                    </div>
+                    <div class="risk-card risk-moderate">
+                        <h3>🟡 MODERATE</h3>
+                        <p>Review recommended</p>
+                        <ul>
+                            <li>Function simplification</li>
+                            <li>Duplicate removal</li>
+                            <li>Documentation updates</li>
+                        </ul>
+                    </div>
+                    <div class="risk-card risk-dangerous">
+                        <h3>🔴 DANGEROUS</h3>
+                        <p>Explicit approval required</p>
+                        <ul>
+                            <li>SKULL test removal</li>
+                            <li>Governance rule changes</li>
+                            <li>Architecture refactoring</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Complexity Analysis Treemap -->
+        <section class="section-complexity">
+            <div class="glass-card diagram-card">
+                <h2><span>📊</span> Code Complexity Analysis (D3.js)</h2>
+                <p class="diagram-title">Interactive treemap showing module complexity distribution</p>
+                
+                <div id="complexity-treemap" class="treemap-container"></div>
+            </div>
+        </section>
+        
+        <!-- Quality Gates Flow -->
+        <section class="section-gates">
+            <div class="glass-card diagram-card">
+                <h2><span>🚦</span> Quality Gates & Rollback Triggers</h2>
+                <p class="diagram-title">Decision flow for quality validation</p>
+                
+                <div class="mermaid">
+flowchart TD
+    subgraph GATES["Quality Gates"]
+        G1[Tests Pass?]
+        G2[SKULL Violations?]
+        G3[Import Errors?]
+        G4[Docs Valid?]
+    end
+    
+    subgraph TRIGGERS["Rollback Triggers"]
+        T1[Test failure rate >5%]
+        T2[SKULL violations detected]
+        T3[Import errors found]
+        T4[User abort requested]
+    end
+    
+    Start[Phase Complete] --> G1
+    G1 -->|Yes| G2
+    G1 -->|No| T1
+    
+    G2 -->|Zero| G3
+    G2 -->|Found| T2
+    
+    G3 -->|None| G4
+    G3 -->|Errors| T3
+    
+    G4 -->|Valid| Success[✅ Proceed to Next Phase]
+    G4 -->|Invalid| Warning[⚠️ Fix & Retry]
+    
+    T1 --> Rollback[🔙 Execute Rollback Script]
+    T2 --> Rollback
+    T3 --> Rollback
+    T4 --> Rollback
+    
+    Rollback --> Restore[Restore from Git Checkpoint]
+    
+    style Success fill:#10b981,color:#fff
+    style Rollback fill:#ef4444,color:#fff
+    style Warning fill:#f59e0b,color:#fff
+                </div>
+            </div>
+        </section>
+        
+        <!-- Metrics Sankey Diagram -->
+        <section class="section-sankey">
+            <div class="glass-card diagram-card">
+                <h2><span>📈</span> Refinement Metrics Flow (D3.js)</h2>
+                <p class="diagram-title">How improvements flow through the pipeline</p>
+                
+                <div id="metrics-sankey" class="sankey-container"></div>
+            </div>
+        </section>
+        
+        <!-- Phase Dependencies -->
+        <section class="section-deps">
+            <div class="glass-card diagram-card">
+                <h2><span>🔗</span> Phase Dependencies & Blocking Rules</h2>
+                <p class="diagram-title">Which phases block others and require checkpoints</p>
+                
+                <div class="mermaid">
+graph LR
+    subgraph Blocking["Blocking Phases"]
+        P1[1. Discovery]
+        P2[2. SKULL Review]
+        P3[3. Documentation]
+        P4[4. Code Quality]
+        P7[7. Validation]
+    end
+    
+    subgraph NonBlocking["Non-Blocking Phases"]
+        P5[5. Architecture]
+        P6[6. Performance]
+    end
+    
+    subgraph Checkpoints["Git Checkpoints"]
+        CP1((CP1))
+        CP2((CP2))
+        CP3((CP3))
+    end
+    
+    P1 ==>|must complete| P2
+    P2 --> CP1
+    CP1 ==>|must complete| P3
+    P3 --> CP2
+    CP2 ==>|must complete| P4
+    P4 --> CP3
+    CP3 --> P5
+    P5 -.->|optional| P6
+    P5 ==>|must complete| P7
+    P6 -.->|optional| P7
+    
+    style P1 fill:#00d4ff,color:#1a1a2e
+    style P2 fill:#00d4ff,color:#1a1a2e
+    style P3 fill:#00d4ff,color:#1a1a2e
+    style P4 fill:#00d4ff,color:#1a1a2e
+    style P7 fill:#00d4ff,color:#1a1a2e
+    style P5 fill:#8b5cf6,color:#fff
+    style P6 fill:#8b5cf6,color:#fff
+    style CP1 fill:#10b981,color:#fff
+    style CP2 fill:#10b981,color:#fff
+    style CP3 fill:#10b981,color:#fff
+                </div>
+            </div>
+        </section>
+        
+        <!-- SKULL Test Optimization -->
+        <section class="section-skull">
+            <div class="glass-card diagram-card">
+                <h2><span>🛡️</span> SKULL Test Optimization Process</h2>
+                <p class="diagram-title">How governance tests are analyzed and optimized</p>
+                
+                <div class="mermaid">
+flowchart TB
+    subgraph Input["SKULL Test Suite"]
+        T1[test_tdd_enforcement]
+        T2[test_tdd_mandatory]
+        T3[test_holistic_discovery]
+        T4[test_search_before_create]
+        T5[test_git_isolation]
+    end
+    
+    subgraph Analysis["Analysis Engine"]
+        A1{Redundant?}
+        A2{Mergeable?}
+        A3{Clear Purpose?}
+        A4{Strong Assertions?}
+    end
+    
+    subgraph Actions["Optimization Actions"]
+        ACT1[Mark for Removal]
+        ACT2[Merge Tests]
+        ACT3[Add Documentation]
+        ACT4[Strengthen Assertions]
+        ACT5[Keep As-Is]
+    end
+    
+    T1 --> A1
+    T2 --> A1
+    T1 -->|similar to T2| ACT2
+    
+    T3 --> A2
+    T4 --> A2
+    T3 -->|covers same rule| ACT2
+    
+    T5 --> A3
+    T5 -->|purpose unclear| ACT3
+    
+    A4 -->|weak| ACT4
+    A4 -->|strong| ACT5
+    
+    subgraph Safeguards["⚠️ Safeguards"]
+        S1[Never remove core tests]
+        S2[Preserve coverage %]
+        S3[Require explicit approval]
+    end
+    
+    ACT1 -.-> S1
+    ACT1 -.-> S2
+    ACT1 -.-> S3
+    
+    style Safeguards fill:#ef4444,color:#fff
+                </div>
+            </div>
+        </section>
+        
+        <!-- Example Output -->
+        <section class="section-output">
+            <div class="glass-card">
+                <h2><span>📊</span> Example Refinement Report</h2>
+                
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-language">YAML</span>
+                        <button class="copy-btn">Copy</button>
+                    </div>
+                    <pre><code>refinement_report:
+  session_id: "refine-20251227-153045"
+  dry_run: false
+  duration: "18m 42s"
+  
+  phase_results:
+    discovery:
+      dead_code_found: 147 lines
+      complexity_violations: 3 functions
+      coverage_gaps: 2 modules
+      
+    skull_review:
+      redundant_tests: 2
+      merged_tests: 1
+      assertions_improved: 4
+      
+    documentation:
+      broken_refs_fixed: 5
+      tokens_reduced: 1,240
+      files_updated: 3
+      
+    code_quality:
+      functions_simplified: 3
+      duplicates_removed: 89 lines
+      imports_optimized: 12 files
+      
+    architecture:
+      circular_deps_found: 0
+      tier_violations: 1
+      consolidation_opportunities: 2
+      
+    performance:
+      bottlenecks_identified: 1
+      caching_suggestions: 3
+      
+    validation:
+      tests_passed: 342/342
+      skull_violations: 0
+      import_errors: 0
+      
+  metrics_delta:
+    lines_removed: 236
+    complexity_reduced: "18%"
+    coverage_improved: "+2.3%"
+    token_reduction: "12%"
+    
+  rollback_script: "scripts/rollback_refine_20251227.py"
+  git_checkpoints: ["cp1-skull", "cp2-docs", "cp3-quality"]
+  status: "SUCCESS"</code></pre>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Related Features -->
+        <section class="section-related">
+            <div class="glass-card">
+                <h2><span>🔗</span> Related Orchestrators</h2>
+                <div class="feature-grid feature-grid-3">
+                    <a href="system-maintenance.html" class="glass-card">
+                        <span class="feature-icon">🔧</span>
+                        <h3 class="feature-title">System Maintenance</h3>
+                        <p class="text-secondary">7-phase health pipeline</p>
+                    </a>
+                    <a href="system-integrity.html" class="glass-card">
+                        <span class="feature-icon">🛡️</span>
+                        <h3 class="feature-title">System Integrity</h3>
+                        <p class="text-secondary">Validation and auto-fix</p>
+                    </a>
+                    <a href="tdd-orchestrator.html" class="glass-card">
+                        <span class="feature-icon">✅</span>
+                        <h3 class="feature-title">TDD Mastery</h3>
+                        <p class="text-secondary">Test-first workflow</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+<button class="scroll-to-top" aria-label="Scroll to top">↑</button>
+    <script src="../assets/js/main.js"></script>
+    <script>
+        // Mermaid Configuration
+        mermaid.initialize({ 
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#1a1a2e',
+                primaryTextColor: '#e2e8f0',
+                primaryBorderColor: '#00d4ff',
+                lineColor: '#00d4ff',
+                secondaryColor: '#16213e',
+                tertiaryColor: '#0f3460'
+            }
+        });
+        
+        // D3.js Complexity Treemap
+        (function() {
+            const data = {
+                name: "CORTEX",
+                children: [
+                    {
+                        name: "orchestrators",
+                        children: [
+                            { name: "planning_orchestrator.py", value: 12, complexity: "medium" },
+                            { name: "tdd_orchestrator.py", value: 18, complexity: "high" },
+                            { name: "maintenance_orchestrator.py", value: 14, complexity: "medium" },
+                            { name: "refinement_orchestrator.py", value: 11, complexity: "medium" },
+                            { name: "debug_orchestrator.py", value: 16, complexity: "high" }
+                        ]
+                    },
+                    {
+                        name: "cortex_agents",
+                        children: [
+                            { name: "brain_agent.py", value: 8, complexity: "low" },
+                            { name: "memory_agent.py", value: 9, complexity: "low" }
+                        ]
+                    },
+                    {
+                        name: "operations",
+                        children: [
+                            { name: "health_checker.py", value: 7, complexity: "low" },
+                            { name: "cleanup_module.py", value: 13, complexity: "medium" },
+                            { name: "reference_tracker.py", value: 15, complexity: "high" }
+                        ]
+                    },
+                    {
+                        name: "tier1",
+                        children: [
+                            { name: "working_memory.py", value: 10, complexity: "medium" },
+                            { name: "session_manager.py", value: 6, complexity: "low" }
+                        ]
+                    }
+                ]
+            };
+            
+            const container = document.getElementById('complexity-treemap');
+            const width = container.clientWidth || 800;
+            const height = 400;
+            
+            const color = d3.scaleOrdinal()
+                .domain(["low", "medium", "high"])
+                .range(["#10b981", "#f59e0b", "#ef4444"]);
+            
+            const root = d3.hierarchy(data)
+                .sum(d => d.value)
+                .sort((a, b) => b.value - a.value);
+            
+            d3.treemap()
+                .size([width, height])
+                .padding(2)
+                .round(true)(root);
+            
+            const svg = d3.select('#complexity-treemap')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height)
+                .style('font', '12px Inter, sans-serif');
+            
+            const leaf = svg.selectAll('g')
+                .data(root.leaves())
+                .join('g')
+                .attr('transform', d => `translate(${d.x0},${d.y0})`);
+            
+            leaf.append('rect')
+                .attr('fill', d => color(d.data.complexity))
+                .attr('fill-opacity', 0.7)
+                .attr('width', d => d.x1 - d.x0)
+                .attr('height', d => d.y1 - d.y0)
+                .attr('rx', 4)
+                .attr('ry', 4)
+                .style('stroke', '#1a1a2e')
+                .style('stroke-width', 1);
+            
+            leaf.append('text')
+                .attr('x', 4)
+                .attr('y', 16)
+                .attr('fill', '#fff')
+                .text(d => d.data.name.replace('.py', ''))
+                .attr('font-size', d => Math.min(12, (d.x1 - d.x0) / 8));
+            
+            leaf.append('text')
+                .attr('x', 4)
+                .attr('y', 32)
+                .attr('fill', '#e2e8f0')
+                .attr('opacity', 0.8)
+                .text(d => `CC: ${d.data.value}`)
+                .attr('font-size', 10);
+            
+            // Legend
+            const legend = svg.append('g')
+                .attr('transform', `translate(${width - 120}, 10)`);
+            
+            const legendData = [
+                { label: 'Low (<10)', color: '#10b981' },
+                { label: 'Medium (10-15)', color: '#f59e0b' },
+                { label: 'High (>15)', color: '#ef4444' }
+            ];
+            
+            legendData.forEach((d, i) => {
+                legend.append('rect')
+                    .attr('x', 0)
+                    .attr('y', i * 20)
+                    .attr('width', 12)
+                    .attr('height', 12)
+                    .attr('fill', d.color)
+                    .attr('rx', 2);
+                
+                legend.append('text')
+                    .attr('x', 18)
+                    .attr('y', i * 20 + 10)
+                    .attr('fill', '#e2e8f0')
+                    .attr('font-size', 10)
+                    .text(d.label);
+            });
+        })();
+        
+        // D3.js Metrics Flow (Simplified Sankey-like visualization)
+        (function() {
+            const container = document.getElementById('metrics-sankey');
+            const width = container.clientWidth || 800;
+            const height = 350;
+            
+            const svg = d3.select('#metrics-sankey')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+            
+            // Define stages
+            const stages = [
+                { name: "Discovery", x: 50, metrics: ["147 dead lines", "3 complex funcs", "2 gaps"] },
+                { name: "SKULL", x: 200, metrics: ["2 redundant", "4 improved"] },
+                { name: "Docs", x: 350, metrics: ["5 refs fixed", "1.2K tokens"] },
+                { name: "Quality", x: 500, metrics: ["89 lines removed", "12 files"] },
+                { name: "Output", x: 650, metrics: ["18% complexity ↓", "2.3% coverage ↑"] }
+            ];
+            
+            // Draw connections
+            const connections = [
+                { from: 0, to: 1, value: 30, color: "#00d4ff" },
+                { from: 1, to: 2, value: 25, color: "#10b981" },
+                { from: 2, to: 3, value: 20, color: "#f59e0b" },
+                { from: 3, to: 4, value: 35, color: "#8b5cf6" }
+            ];
+            
+            // Draw flow paths
+            connections.forEach(conn => {
+                const from = stages[conn.from];
+                const to = stages[conn.to];
+                
+                const path = d3.path();
+                path.moveTo(from.x + 60, height / 2);
+                path.bezierCurveTo(
+                    from.x + 100, height / 2,
+                    to.x - 40, height / 2,
+                    to.x, height / 2
+                );
+                
+                svg.append('path')
+                    .attr('d', path.toString())
+                    .attr('fill', 'none')
+                    .attr('stroke', conn.color)
+                    .attr('stroke-width', conn.value)
+                    .attr('opacity', 0.4);
+            });
+            
+            // Draw stage nodes
+            stages.forEach((stage, i) => {
+                const g = svg.append('g')
+                    .attr('transform', `translate(${stage.x}, ${height / 2})`);
+                
+                // Node circle
+                g.append('circle')
+                    .attr('r', 35)
+                    .attr('fill', '#1a1a2e')
+                    .attr('stroke', '#00d4ff')
+                    .attr('stroke-width', 2);
+                
+                // Stage name
+                g.append('text')
+                    .attr('text-anchor', 'middle')
+                    .attr('dy', 5)
+                    .attr('fill', '#00d4ff')
+                    .attr('font-weight', 600)
+                    .attr('font-size', 11)
+                    .text(stage.name);
+                
+                // Metrics below
+                stage.metrics.forEach((metric, j) => {
+                    g.append('text')
+                        .attr('text-anchor', 'middle')
+                        .attr('y', 55 + j * 16)
+                        .attr('fill', '#e2e8f0')
+                        .attr('font-size', 10)
+                        .text(metric);
+                });
+            });
+            
+            // Title
+            svg.append('text')
+                .attr('x', width / 2)
+                .attr('y', 25)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#e2e8f0')
+                .attr('font-size', 12)
+                .text('Improvement Metrics Flow Through Pipeline');
+        })();
+    </script>
+</body>
+</html>
