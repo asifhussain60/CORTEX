@@ -1,7 +1,8 @@
 # CORTEX Documentation Styling Standards
 
-**Version:** 1.0.0  
+**Version:** 1.1.0  
 **Created:** December 28, 2025  
+**Last Updated:** December 28, 2025  
 **Author:** Asif Hussain  
 **Purpose:** Standardized styling guide for all CORTEX feature documentation
 
@@ -9,7 +10,7 @@
 
 ## 🎨 Overview
 
-This document defines the visual styling standards for CORTEX feature documentation to ensure consistency across all orchestrators, agents, and system features. These standards were established based on the Planning System documentation redesign.
+This document defines the visual styling standards for CORTEX feature documentation to ensure consistency across all orchestrators, agents, and system features. These standards were established based on the Planning System documentation redesign and refined through iterative improvements across multiple documentation pages including orchestrator indexes, technical documentation, and the interactive story viewer.
 
 ---
 
@@ -312,42 +313,243 @@ border: 1px solid rgba(255, 255, 255, 0.1);
 
 Use this checklist when creating new feature documentation:
 
+**Layout & Structure:**
 - [ ] Logo is 300px (desktop) / 200px (mobile)
-- [ ] NO version numbers in title
-- [ ] NO "Production Ready" badges
+- [ ] NO version numbers in title or H1
+- [ ] NO "Production Ready" or status badges
+- [ ] All panels aligned to 1400px max-width
+- [ ] 48px spacing between panels (`var(--spacing-2xl)`)
+- [ ] Remove redundant "View Full Technical Details" links
+- [ ] Remove duplicate reference panels
+
+**Colors & Theme:**
 - [ ] Background gradient: `#0a0e27` to `#1a1f3a`
 - [ ] All accent gradients use: `#00d4ff` to `#7b61ff`
 - [ ] Text color: `#ffffff` (white) on dark backgrounds
-- [ ] 48px spacing between panels (`var(--spacing-2xl)`)
+- [ ] Diagram text labels: `#ffffff` (white)
+- [ ] Theme consistent across main docs, technical docs, and story pages
+
+**Typography:**
 - [ ] Icons are 2.4rem (phase-icon, tier-icon)
 - [ ] Phase titles: 1.125rem
 - [ ] Phase descriptions: 1rem
 - [ ] Tier titles: 1.375rem
 - [ ] Feature list items: 1.0625rem
-- [ ] Bullets use CSS `::before`, NOT HTML text
-- [ ] Bullet size: 1.5rem with brand color
-- [ ] List item spacing: No margin, minimal padding
+- [ ] Story viewer: 1.2em across all breakpoints
 - [ ] Line-height: 1.5 for compact lists, 1.7 for body text
-- [ ] Mobile-responsive (test at 768px and 480px)
-- [ ] Touch targets ≥44px for mobile
+
+**Lists & Bullets:**
+- [ ] Bullets use CSS `::before` with `position: absolute`, NOT HTML text
+- [ ] Bullet size: 1.5rem with brand color (`--accent-primary`)
+- [ ] List item spacing: No margin, minimal padding (2rem left for bullets)
+- [ ] Multi-line text wraps properly without overlapping bullets
+- [ ] No bullet characters in HTML markup
+
+**Mobile Responsiveness:**
+- [ ] Mobile-responsive tested at 768px and 480px
+- [ ] Touch targets ≥44px (minimum 60px for buttons)
+- [ ] Navigation buttons: full text (desktop), arrows only (mobile)
+- [ ] Remove `<hr>` separators on mobile
+- [ ] Mobile navigation in glassmorphic panel
+- [ ] Cards stack vertically on mobile
+- [ ] Font sizes remain readable (≥14px minimum)
+
+**Interactive Elements:**
+- [ ] D3.js diagrams match panel width (1400px)
+- [ ] Category filters use brand gradient
+- [ ] Hover tooltips use glassmorphism
 - [ ] All colors use CSS variables
 - [ ] Glassmorphism effects applied consistently
 
+**Version Control:**
+- [ ] Version numbers removed from UI elements
+- [ ] Technical library versions preserved
+- [ ] Migration documentation versions kept
+- [ ] Viewport meta tags unchanged
+
 ---
 
-## 📦 Template Files
+## 📦 Template Files & Examples
 
-**HTML Template:** `docs/orchestrators/planning-system.html` (reference implementation)  
+**Reference Implementations:**
+- **HTML Template:** `docs/orchestrators/planning-system.html` (comprehensive feature page)
+- **Index Template:** `docs/orchestrators/index.html` (interactive diagram + organized sections)
+- **Technical Template:** `docs/technical/orchestrators/index.html` (D3.js visualizations)
+- **Story Viewer:** `docs/story/viewer.html` (responsive mobile navigation)
+
+---
+
+## 🖼️ Interactive Elements
+
+### D3.js Orchestrator Visualization
+
+**Container Width:**
+```css
+#orchestrator-map {
+    max-width: 1400px;
+    margin: 0 auto var(--spacing-2xl);
+}
+```
+
+**Text Color on Diagrams:**
+```css
+.node text {
+    fill: #ffffff;  /* Always white on dark backgrounds */
+}
+```
+
+**Guidelines:**
+- Interactive diagrams match panel width (1400px)
+- All text labels must be white (`#ffffff`) on dark backgrounds
+- Category filters should use brand gradient colors
+- Hover tooltips use glassmorphism styling
+
+### Page Structure (Index Pages)
+
+**Recommended Layout:**
+1. **Logo** (centered, 300px)
+2. **Interactive Diagram** (if applicable, 1400px max-width)
+3. **Introduction Panel** (includes "How It Works" explanations)
+4. **Primary Items** (grid of main features/orchestrators)
+5. **Secondary Sections** (supporting items, metadata)
+
+**Guidelines:**
+- All panels align to 1400px max-width with auto margins
+- Remove "View Full Technical Details" links if embedding diagrams
+- Remove redundant reference panels
+- Maintain consistent glassmorphism across all cards
+
+---
+
+## 📱 Mobile Navigation (Story Viewer)
+
+### Navigation Button Styling
+
+**Desktop (unchanged):**
+```css
+.chapter-navigation {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+}
+
+.nav-button {
+    /* Full text labels visible */
+}
+```
+
+**Mobile (max-width: 480px):**
+```css
+.chapter-navigation {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    background: rgba(26, 31, 58, 0.6);
+    backdrop-filter: blur(15px);
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nav-button {
+    min-width: 60px;
+    padding: var(--spacing-sm);
+}
+
+.nav-button .text {
+    display: none;  /* Hide text labels */
+}
+
+.nav-button .arrow {
+    display: block;  /* Show only arrows: ← → */
+}
+
+.chapter-navigation hr {
+    display: none;  /* Remove horizontal rules */
+}
+```
+
+**Guidelines:**
+- Desktop: Full navigation with text labels
+- Mobile: Arrow-only (← →) in glassmorphic panel
+- Remove horizontal rule separators on mobile
+- Single row of buttons, centered
+- Minimum 60px width per button (touch target)
+
+---
+
+## 📝 Font Size Standards by Section
+
+### Story Viewer Typography
+
+**Chapter Body Paragraphs (all breakpoints):**
+```css
+.chapter-body p {
+    font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif;
+    font-size: 1.2em;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+/* Consistent across desktop, tablet, and mobile */
+@media (max-width: 768px) {
+    .chapter-body p { font-size: 1.2em; }
+}
+
+@media (max-width: 480px) {
+    .chapter-body p { font-size: 1.2em; }
+}
+```
+
+**Guidelines:**
+- Standardize font sizes across all devices for consistency
+- Comic fonts for storytelling remain at 1.2em
+- Technical documentation uses standard system fonts
+
+---
+
+## 🚫 Version Number Removal Policy
+
+### Where to Remove Versions
+
+**❌ Remove from:**
+- Page titles (`<title>`)
+- H1 headers
+- Breadcrumbs
+- Meta descriptions
+- Feature names in UI
+
+**✅ Keep in:**
+- Migration documentation (e.g., "Upgrading from 3.0 to 4.0")
+- Technical library versions (e.g., "D3.js 7.4.0")
+- Viewport meta tags (e.g., `initial-scale=1.0`)
+- Version control references in commit messages
+- Code examples demonstrating version-specific features
+
+**Examples:**
+
+| Context | Before | After |
+|---------|--------|-------|
+| Page title | `CORTEX 4.0 - Planning System` | `CORTEX - Planning System` |
+| Feature name | `Planning System 2.0` | `Planning System` |
+| Migration doc | `Upgrade to 4.0` | `Upgrade to 4.0` (keep) |
+| Library | `D3.js 6.4.0` | `D3.js 7.4.0` (keep) |
+
+**Rationale:**
+- Version numbers in UI create maintenance burden
+- Features should have timeless names
+- Technical references need versions for compatibility
+- Migration paths require version context
+
+---
+
 ## 🔄 Version History
 
 | Version | Date | Changes |
 |---------|------|---------|
-| 1.0.0 | 2025-12-28 | Initial standards based on Planning System redesign |
-| 1.0.1 | 2025-12-28 | Added background theme standards, color consistency rules |
-
-| Version | Date | Changes |
-|---------|------|---------|
-| 1.0.0 | 2025-12-28 | Initial standards based on Planning System redesign |
+| 1.0.0 | 2025-12-28 | Initial standards from Planning System redesign |
+| 1.0.1 | 2025-12-28 | Added background theme, color consistency |
+| 1.1.0 | 2025-12-28 | Added interactive elements, mobile navigation, version removal policy, template references, font standardization across breakpoints |
 
 ---
 
