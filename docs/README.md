@@ -6,12 +6,38 @@ This is the GitHub Pages source for CORTEX 3.0 enterprise documentation.
 
 ## Structure
 
+### Three-Tier Documentation Model (v4.0)
+
+**Tier 1: Features (`features/`)** - Overview & Benefits (500-800 words)
+- High-level benefits and use cases
+- Target audience: Decision makers, new users
+- Links to complete documentation in Tier 2
+
+**Tier 2: Orchestrators (`orchestrators/`)** - Complete User Documentation (1500-3000 words)
+- **SOURCE OF TRUTH** for all user-facing documentation
+- Full workflow descriptions, command examples, troubleshooting
+- Target audience: All users (technical and non-technical)
+
+**Tier 3: Technical (`technical/orchestrators/`)** - Implementation Details (2000-5000 words)
+- Architecture diagrams, code structure, API references
+- Target audience: Contributors, developers extending CORTEX
+
+### Directory Layout
+
 - `index.html` - Executive landing page with CORTEX logo and SKULL prominence
+- `features/` - 8 feature overview pages (Tier 1)
+- `orchestrators/` - 17 complete orchestrator docs (Tier 2 - SOURCE OF TRUTH)
+- `technical/orchestrators/` - Implementation details (Tier 3)
 - `governance/skull-rulebook.html` - Complete 22-rule SKULL showcase
-- `features/` - Feature catalog and detail pages
 - `architecture/` - System architecture pages
-- `future/` - CORTEX 4.0 vision
-- `assets/` - CSS, JS, images
+- `story/` - CORTEX Awakening narrative
+- `assets/` - CSS, JS, images, data sources
+
+### Data Sources
+
+- `assets/data/orchestrator-metrics.json` - Single source of truth for phase counts, success rates, metrics
+  - All documentation pages should reference this file
+  - Update metrics here to propagate changes across all pages
 
 ## Design System
 
