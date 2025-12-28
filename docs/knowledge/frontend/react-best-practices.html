@@ -13,20 +13,25 @@
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <nav class="breadcrumb-container sticky-nav" aria-label="Breadcrumb">
-        <button class="back-button" onclick="history.back()" aria-label="Go back">← Back</button>
-        <ol class="breadcrumb">
-            <li><a href="../../index.html">Home</a></li>
-            <li><a href="../index.html">Knowledge Library</a></li>
-            <li><a href="../frontend.html">Frontend</a></li>
-            <li aria-current="page">React Best Practices</li>
-        </ol>
+    <!-- Breadcrumb Navigation (Top) -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../../index.html">Home</a>
+        <span class="breadcrumb-separator">→</span>
+        <a href="../index.html">Knowledge Library</a>
+        <span class="breadcrumb-separator">→</span>
+        <a href="../frontend.html">Frontend</a>
+        <span class="breadcrumb-separator">→</span>
+        <span class="breadcrumb-current">React Best Practices</span>
     </nav>
+    
+    <!-- Logo Header (Below Breadcrumb) -->
+    <div class="logo-header">
+        <a href="../../index.html">
+            <img src="../../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
+        </a>
+    </div>
 
     <section class="hero" id="main-content">
-        <div class="logo-header">
-            <img src="../../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
-        </div>
         <h1 class="hero-title">⚛️ React Best Practices</h1>
         <p class="hero-subtitle">Modern React patterns for components, hooks, and performance</p>
         <div class="file-metadata">

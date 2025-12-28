@@ -9,30 +9,56 @@
     <title>CORTEX Knowledge Library</title>
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/knowledge.css">
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <!-- Sticky Navigation -->
-    <nav class="breadcrumb-container sticky-nav" aria-label="Breadcrumb">
-        <button class="back-button" onclick="history.back()" aria-label="Go back">
-            ← Back
-        </button>
-        <ol class="breadcrumb">
-            <li><a href="../index.html">Home</a></li>
-            <li aria-current="page">Knowledge Library</li>
-        </ol>
+    <!-- Breadcrumb Navigation (Top) -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">→</span>
+        <span class="breadcrumb-current">Knowledge Library</span>
     </nav>
+    
+    <!-- Logo Header (Below Breadcrumb) -->
+    <div class="logo-header">
+        <a href="../index.html">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
+        </a>
+    </div>
 
     <!-- Hero Section -->
     <section class="hero" id="main-content">
-        <div class="logo-header">
-            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
-        </div>
         <h1 class="hero-title">📚 Knowledge Library</h1>
         <p class="hero-subtitle">
             65+ knowledge files across 17 categories covering frontend, backend, cloud, and software craft
         </p>
+    </section>
+
+    <!-- Quick Stats Section -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title text-center">Knowledge Library Statistics</h2>
+            <div class="metrics-grid-4">
+                <div class="glass-card metric-card">
+                    <div class="metric-value">65+</div>
+                    <div class="metric-label">Knowledge Files</div>
+                </div>
+                <div class="glass-card metric-card">
+                    <div class="metric-value">17</div>
+                    <div class="metric-label">Categories</div>
+                </div>
+                <div class="glass-card metric-card">
+                    <div class="metric-value">5</div>
+                    <div class="metric-label">Domain Groups</div>
+                </div>
+                <div class="glass-card metric-card">
+                    <div class="metric-value">500+</div>
+                    <div class="metric-label">Best Practice Rules</div>
+                </div>
+            </div>
+        </div>
     </section>
 
     <!-- Search Section -->
@@ -229,31 +255,6 @@
                 <!-- D3 Diagram Container (hidden initially) -->
                 <div class="lazy-content" hidden>
                     <div id="d3-diagram" class="d3-diagram-container"></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Quick Stats Section -->
-    <section class="section">
-        <div class="container">
-            <h2 class="section-title text-center">Knowledge Library Statistics</h2>
-            <div class="metrics-grid-4">
-                <div class="glass-card metric-card">
-                    <div class="metric-value">65+</div>
-                    <div class="metric-label">Knowledge Files</div>
-                </div>
-                <div class="glass-card metric-card">
-                    <div class="metric-value">17</div>
-                    <div class="metric-label">Categories</div>
-                </div>
-                <div class="glass-card metric-card">
-                    <div class="metric-value">5</div>
-                    <div class="metric-label">Domain Groups</div>
-                </div>
-                <div class="glass-card metric-card">
-                    <div class="metric-value">500+</div>
-                    <div class="metric-label">Best Practice Rules</div>
                 </div>
             </div>
         </div>
