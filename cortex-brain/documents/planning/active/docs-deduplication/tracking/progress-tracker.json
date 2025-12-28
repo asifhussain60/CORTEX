@@ -1,0 +1,416 @@
+{
+  "plan_id": "docs-deduplication",
+  "plan_name": "Documentation Deduplication & Consolidation",
+  "created": "2025-12-28",
+  "author": "Asif Hussain",
+  "status": "in-planning",
+  "priority": "HIGH",
+  
+  "phases": [
+    {
+      "phase": 1,
+      "name": "Critical Fixes & Admin Feature Removal",
+      "status": "completed",
+      "priority": "CRITICAL",
+      "estimated_hours": 3,
+      "actual_hours": 3,
+      "completion_date": "2025-12-28",
+      "tasks": [
+        {
+          "id": "1.1",
+          "task": "Remove System Maintenance from public docs (admin feature only)",
+          "status": "completed",
+          "files": [
+            "docs/features/system-maintenance.html",
+            "docs/orchestrators/system-maintenance.html"
+          ]
+        },
+        {
+          "id": "1.2",
+          "task": "Remove all System Maintenance links from other pages",
+          "status": "completed",
+          "files": [
+            "docs/orchestrators/index.html",
+            "docs/features/index.html",
+            "docs/getting-started/tutorial.html",
+            "docs/faq.html",
+            "docs/orchestrators/refinement-orchestrator.html",
+            "docs/orchestrators/system-integrity.html"
+          ]
+        },
+        {
+          "id": "1.3",
+          "task": "Populate empty architectural-review.html with technical content",
+          "status": "completed",
+          "files": [
+            "docs/technical/orchestrators/architectural-review.html"
+          ]
+        }
+      ]
+    },
+    {
+      "phase": 2,
+      "name": "Planning System Consolidation",
+      "status": "completed",
+      "priority": "HIGH",
+      "estimated_hours": 3,
+      "actual_hours": 2.5,
+      "completion_date": "2025-12-28",
+      "tasks": [
+        {
+          "id": "2.1",
+          "task": "Verify canonical phase count from manifest",
+          "status": "completed",
+          "result": "Manifest shows 4 phases: Classification & Analysis, Pre-Planning Discovery, Execution, TDD Integration (3.5)"
+        },
+        {
+          "id": "2.2",
+          "task": "Update orchestrators/planning-system.html to match manifest (4 phases)",
+          "status": "completed",
+          "files": ["docs/orchestrators/planning-system.html"],
+          "changes": "Changed from '5-Phase Workflow' to '4-Phase Workflow', replaced DoR/DoD section with 4 Complexity Tiers"
+        },
+        {
+          "id": "2.3",
+          "task": "Reduce features/planning-system.html to overview-only",
+          "status": "completed",
+          "files": ["docs/features/planning-system.html"],
+          "changes": "Reduced from 386 lines to 246 lines, removed detailed phases, kept overview + benefits + CTA"
+        },
+        {
+          "id": "2.4",
+          "task": "Update cross-references",
+          "status": "completed",
+          "result": "Verified all cross-references already point to orchestrators/planning-system.html"
+        }
+      ]
+    },
+          "status": "not-started",
+          "files": [
+            "cortex-brain/manifests/orchestrators/planning-system-4.0-manifest.yaml"
+          ]
+        },
+        {
+          "id": "2.2",
+          "task": "Consolidate orchestrators/planning-system.html as source of truth",
+          "status": "not-started",
+          "files": [
+            "docs/orchestrators/planning-system.html"
+          ]
+        },
+        {
+          "id": "2.3",
+          "task": "Reduce features/planning-system.html to overview (500-800 words)",
+          "status": "not-started",
+          "files": [
+            "docs/features/planning-system.html"
+          ]
+        },
+        {
+          "id": "2.4",
+          "task": "Update all cross-references to point to orchestrators version",
+          "status": "not-started",
+          "files": [
+            "docs/features/index.html",
+            "docs/features/orchestrators.html"
+          ]
+        }
+      ]
+    },
+    {
+      "phase": 3,
+      "name": "TDD Orchestrator Consolidation",
+      "status": "completed",
+      "priority": "HIGH",
+      "estimated_hours": 3,
+      "actual_hours": 2,
+      "completion_date": "2025-12-28",
+      "tasks": [
+        {
+          "id": "3.1",
+          "task": "Merge user and technical TDD Orchestrator pages into single comprehensive page",
+          "status": "completed",
+          "files": [
+            "docs/orchestrators/tdd-orchestrator.html",
+            "docs/technical/orchestrators/tdd-orchestrator.html"
+          ],
+          "changes": "Added 6 technical sections (Technology Discovery, Quality Scoring, Usage Examples, Ecosystem Integration, Enhanced SKULL, Performance)"
+        },
+        {
+          "id": "3.2",
+          "task": "Create unified structure (Overview → Workflow → Technical → Examples → Architecture)",
+          "status": "completed",
+          "files": [
+            "docs/orchestrators/tdd-orchestrator.html"
+          ],
+          "result": "228 lines → 520 lines, serves both technical and non-technical audiences"
+        },
+        {
+          "id": "3.3",
+          "task": "Delete technical duplicate and update all cross-references",
+          "status": "completed",
+          "files": [
+            "docs/technical/orchestrators/tdd-orchestrator.html",
+            "docs/features/orchestrators.html"
+          ],
+          "result": "Deleted 487-line duplicate, updated 1 cross-reference link"
+        }
+      ]
+    },
+        }
+      ]
+    },
+    {
+      "phase": 4,
+      "name": "CORTEX Lens Consolidation",
+      "status": "completed",
+      "priority": "MEDIUM",
+      "estimated_hours": 2,
+      "actual_hours": 0.5,
+      "completion_date": "2025-12-28",
+      "tasks": [
+        {
+          "id": "4.1",
+          "task": "Audit content and verify no conflicts",
+          "status": "completed",
+          "result": "Orchestrators version (663 lines) is comprehensive, technical version (100 lines) has minimal content only"
+        },
+        {
+          "id": "4.2",
+          "task": "Delete minimal technical duplicate",
+          "status": "completed",
+          "files": ["docs/technical/orchestrators/cortex-lens.html"],
+          "result": "Deleted 100-line minimal file (header + 3 features + simple diagram)"
+        },
+        {
+          "id": "4.3",
+          "task": "Update cross-references",
+          "status": "completed",
+          "files": ["docs/features/orchestrators.html"],
+          "changes": "Updated 1 link from technical/ to orchestrators/"
+        }
+      ]
+    },
+          "status": "not-started",
+          "files": [
+            "docs/orchestrators/cortex-lens.html",
+            "docs/technical/orchestrators/cortex-lens.html"
+          ]
+        },
+        {
+          "id": "4.2",
+          "task": "Deduplicate intro 'repository storyteller' description",
+          "status": "not-started",
+          "files": [
+            "docs/orchestrators/cortex-lens.html",
+            "docs/technical/orchestrators/cortex-lens.html"
+          ]
+        }
+      ]
+    },
+    {
+      "phase": 5,
+      "name": "ADO Operations Cleanup",
+      "status": "completed",
+      "priority": "MEDIUM",
+      "estimated_hours": 1.5,
+      "actual_hours": 0.25,
+      "completion_date": "2025-12-28",
+      "tasks": [
+        {
+          "id": "5.1",
+          "task": "Verify split is acceptable (user vs technical docs)",
+          "status": "completed",
+          "result": "VERIFIED: orchestrators/ado-operations.html (168 lines, user docs) and technical/orchestrators/ado-planning.html (95 lines, technical) serve different audiences"
+        },
+        {
+          "id": "5.2",
+          "task": "Check for duplicate intro text",
+          "status": "completed",
+          "result": "NO DUPLICATION FOUND: Intro text is different between files - user version has 'Writing Azure DevOps...', technical version has 'Inherits Planning System...'"
+        },
+        {
+          "id": "5.3",
+          "task": "Verify cross-references are correct",
+          "status": "completed",
+          "result": "All links verified correct - features/orchestrators.html links to technical/ado-planning, other pages link to ado-operations"
+        }
+      ]
+    },
+          "status": "not-started",
+          "files": [
+            "docs/orchestrators/ado-operations.html",
+            "docs/technical/orchestrators/ado-planning.html"
+          ]
+        },
+        {
+          "id": "5.2",
+          "task": "Deduplicate 'Writing Azure DevOps work items is tedious' hook",
+          "status": "not-started",
+          "files": [
+            "docs/orchestrators/ado-operations.html",
+            "docs/technical/orchestrators/ado-planning.html"
+          ]
+        }
+      ]
+    },
+    {
+      "phase": 6,
+      "name": "Overview Pages Consolidation",
+      "status": "completed",
+      "priority": "MEDIUM",
+      "estimated_hours": 2,
+      "actual_hours": 1,
+      "completion_date": "2025-12-28",
+      "tasks": [
+        {
+          "id": "6.1",
+          "task": "Establish clear hierarchy (features vs orchestrators)",
+          "status": "completed",
+          "result": "features/index.html = 6 core features, orchestrators/index.html = 16 orchestrators complete catalog"
+        },
+        {
+          "id": "6.2",
+          "task": "Replace features/orchestrators.html with redirect",
+          "status": "completed",
+          "files": ["docs/features/orchestrators.html"],
+          "changes": "Replaced 462-line duplicate with styled redirect page (auto-redirect + fallback link)"
+        },
+        {
+          "id": "6.3",
+          "task": "Update navigation",
+          "status": "completed",
+          "result": "Navigation already correct - features/index.html has 'View Orchestrators' CTA to orchestrators/index.html"
+        }
+      ]
+    },
+          "status": "not-started",
+          "files": [
+            "docs/features/index.html",
+            "docs/features/orchestrators.html",
+            "docs/orchestrators/index.html"
+          ]
+        },
+        {
+          "id": "6.2",
+          "task": "Update navigation to clarify '6 core' vs '16 total'",
+          "status": "not-started",
+          "files": [
+            "docs/features/index.html",
+            "docs/orchestrators/index.html"
+          ]
+        }
+      ]
+    },
+    {
+      "phase": 7,
+      "name": "Shared Content System",
+      "status": "not-started",
+      "priority": "LOW",
+      "estimated_hours": 3,
+      "tasks": [
+        {
+          "id": "7.1",
+          "task": "Create orchestrator-metrics.json data source",
+          "status": "not-started",
+          "files": [
+            "docs/assets/data/orchestrator-metrics.json"
+          ]
+        },
+        {
+          "id": "7.2",
+          "task": "Create intro-hooks.json template system",
+          "status": "not-started",
+          "files": [
+            "docs/assets/data/intro-hooks.json"
+          ]
+        },
+        {
+          "id": "7.3",
+          "task": "Standardize breadcrumb separators to '→'",
+          "status": "not-started",
+          "files": [
+            "docs/assets/css/main.css"
+          ]
+        }
+      ]
+    },
+    {
+      "phase": 8,
+      "name": "Documentation Style Guide",
+      "status": "not-started",
+      "priority": "LOW",
+      "estimated_hours": 2,
+      "tasks": [
+        {
+          "id": "8.1",
+          "task": "Create documentation-hierarchy-guide.md",
+          "status": "not-started",
+          "files": [
+            "cortex-brain/documents/templates/documentation-hierarchy-guide.md"
+          ]
+        },
+        {
+          "id": "8.2",
+          "task": "Update docs/README.md with new structure",
+          "status": "not-started",
+          "files": [
+            "docs/README.md"
+          ]
+        }
+      ]
+    }
+  ],
+  
+  "totals": {
+    "total_phases": 8,
+  "totals": {
+    "total_phases": 8,
+    "total_tasks": 23,
+    "total_estimated_hours": 19.5,
+    "files_to_modify": 24,
+    "files_to_remove": 3,
+    "files_to_create": 3
+  },uccess_metrics": {
+    "content_reduction_percentage": "40-50%",
+    "duplicate_words_removed": 15000,
+    "phase_count_conflicts_resolved": 2,
+    "empty_files_removed": 1,
+    "navigation_clicks_max": 3
+  },
+  
+  "risks": [
+    {
+      "risk": "Removing needed content",
+      "likelihood": "MEDIUM",
+      "impact": "HIGH",
+      "mitigation": "Audit before deletion, keep backups"
+    },
+    {
+      "risk": "Introducing new inconsistencies",
+      "likelihood": "MEDIUM",
+      "impact": "MEDIUM",
+      "mitigation": "Use metrics data source, single source of truth"
+    },
+    {
+      "risk": "Missing System Maintenance links",
+      "likelihood": "HIGH",
+      "impact": "LOW",
+      "mitigation": "Comprehensive grep search for all references"
+    }
+  ],
+  
+  "next_steps": [
+    "Review updated master plan (00-master-plan.md) with user decisions",
+    "Approve Phase 1 (Critical Fixes & Admin Removal) to begin",
+    "Create backup: Copy-Item -Recurse docs/ docs.backup/",
+    "Execute Phase 1 tasks"
+  ],
+  "user_decisions": {
+    "tdd_orchestrator": "Merge user and technical versions into single comprehensive page",
+    "system_maintenance": "Remove from public docs - admin feature only",
+    "architectural_review": "Populate empty file with technical content",
+    "redirects": "No redirects needed - remove links for deleted pages",
+    "renovation_banner": "No banner during work"
+  }
+}

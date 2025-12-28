@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Architectural Review Orchestrator - Technical Implementation, Architecture, and API Reference">
+    <title>Architectural Review - Technical Documentation | CORTEX</title>
+    <link rel="icon" type="image/png" href="../../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        .mermaid { background: transparent; margin: 1.5rem 0; }
+        .code-block { background: rgba(10, 14, 39, 0.8); padding: 1rem; border-radius: 8px; overflow-x: auto; margin: 1rem 0; }
+        .code-block code { color: #10b981; font-family: 'Consolas', monospace; }
+        .api-method { font-weight: 700; color: var(--accent-primary); }
+        .api-param { background: rgba(123, 97, 255, 0.2); padding: 0.2rem 0.5rem; border-radius: 4px; font-family: monospace; }
+        .implementation-note { background: rgba(255, 152, 0, 0.1); border-left: 4px solid var(--accent-secondary); padding: 1rem; margin: 1rem 0; }
+    </style>
+</head>
+<body>
+    <!-- Skip Link -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../../index.html">Home</a>
+        <span class="breadcrumb-separator">→</span>
+        <a href="../index.html">Technical</a>
+        <span class="breadcrumb-separator">→</span>
+        <a href="index.html">Orchestrators</a>
+        <span class="breadcrumb-separator">→</span>
+        <span class="breadcrumb-current">Architectural Review</span>
+    </nav>
+    
+    <!-- Logo Header -->
+    <div class="logo-header">
+        <a href="../../index.html">
+            <img src="../../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
+        </a>
+    </div>
+    
+    <!-- Main Content -->
+    <main class="container" id="main-content">
+        <!-- Technical Overview -->
+        <div class="glass-card">
+            <h1>🏗️ Architectural Review - Technical Documentation</h1>
+            <span class="badge badge-info">Technical Reference</span>
+            
+            <p>
+                This document provides technical implementation details, architecture patterns, API references, 
+                and contribution guidelines for the Architectural Review Orchestrator. For user-facing documentation, 
+                see <a href="../../orchestrators/architectural-review.html">Architectural Review User Guide</a>.
+            </p>
+            
+            <!-- Quick Links -->
+            <div class="metrics-grid metrics-grid-4">
+                <a href="#architecture" class="metric-card glass-card">
+                    <div class="metric-label">Architecture</div>
+                </a>
+                <a href="#implementation" class="metric-card glass-card">
+                    <div class="metric-label">Implementation</div>
+                </a>
+                <a href="#api-reference" class="metric-card glass-card">
+                    <div class="metric-label">API Reference</div>
+                </a>
+                <a href="#contributing" class="metric-card glass-card">
+                    <div class="metric-label">Contributing</div>
+                </a>
+            </div>
+        </div>
+        
+        <!-- System Architecture -->
+        <section class="section" id="architecture">
+            <div class="glass-card">
+                <h2>🏛️ System Architecture</h2>
+                
+                <h3>Component Structure</h3>
+                <div class="mermaid">
+graph TB
+    subgraph ORCHESTRATOR["Architectural Review Orchestrator"]
+        MAIN[ArchitecturalReviewOrchestrator]
+        MAIN --> LAYER[LayerAnalyzer]
+        MAIN --> PATTERN[PatternDetector]
+        MAIN --> DEP[DependencyAnalyzer]
+        MAIN --> SOLID[SOLIDAnalyzer]
+        MAIN --> TEST[TestabilityAnalyzer]
+        MAIN --> SCORE[ScoringEngine]
+    end
+    
+    subgraph ANALYZERS["Analysis Modules"]
+        LAYER --> LAYERUTIL[LayerValidator]
+        PATTERN --> PATTERNLIB[PatternLibrary]
+        DEP --> DEPGRAPH[DependencyGraph]
+        SOLID --> SOLIDUTIL[SOLIDValidator]
+        TEST --> TESTUTIL[TestCoverageAnalyzer]
+    end
+    
+    subgraph OUTPUT["Output Generation"]
+        SCORE --> REPORT[ReportGenerator]
+        SCORE --> VIZ[VisualizationEngine]
+        REPORT --> JSON[JSON Report]
+        REPORT --> HTML[HTML Dashboard]
+        VIZ --> CHARTS[D3.js Charts]
+    end
+    
+    style MAIN fill:#00d4ff,color:#1a1a2e
+    style SCORE fill:#10b981,color:#fff
+                </div>
+                
+                <h3>Data Flow Pipeline</h3>
+                <div class="mermaid">
+sequenceDiagram
+    participant User
+    participant Orchestrator
+    participant Analyzers
+    participant ScoringEngine
+    participant ReportGen
+    
+    User->>Orchestrator: review architecture --target src/
+    Orchestrator->>Orchestrator: Load configuration
+    Orchestrator->>Orchestrator: Discover source files
+    
+    loop For Each Analyzer
+        Orchestrator->>Analyzers: Execute analysis phase
+        Analyzers->>Analyzers: Parse code
+        Analyzers->>Analyzers: Detect violations
+        Analyzers-->>Orchestrator: Return findings
+    end
+    
+    Orchestrator->>ScoringEngine: Calculate scores
+    ScoringEngine->>ScoringEngine: Compute category scores
+    ScoringEngine->>ScoringEngine: Calculate total score
+    ScoringEngine->>ScoringEngine: Assign letter grade
+    ScoringEngine-->>Orchestrator: Return metrics
+    
+    Orchestrator->>ReportGen: Generate report
+    ReportGen->>ReportGen: Build JSON structure
+    ReportGen->>ReportGen: Create HTML dashboard
+    ReportGen-->>User: Display results
+                </div>
+                
+                <h3>File Structure</h3>
+                <div class="code-block">
+                    <code>
+src/orchestrators/
+├── architectural_review_orchestrator.py  # Main orchestrator
+├── analyzers/
+│   ├── layer_analyzer.py                # Layer separation analysis
+│   ├── pattern_detector.py              # Design pattern detection
+│   ├── dependency_analyzer.py           # Dependency graph analysis
+│   ├── solid_analyzer.py                # SOLID principles validation
+│   └── testability_analyzer.py          # Test coverage & quality
+├── scoring/
+│   ├── scoring_engine.py                # Score calculation
+│   └── grading_system.py                # Letter grade assignment
+├── reporters/
+│   ├── report_generator.py              # Report generation
+│   └── visualization_engine.py          # D3.js chart generation
+└── utils/
+    ├── code_parser.py                   # AST parsing
+    ├── dependency_graph.py              # Dependency graph builder
+    └── pattern_library.py               # Pattern definitions
+                    </code>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Implementation Details -->
+        <section class="section" id="implementation">
+            <div class="glass-card">
+                <h2>⚙️ Implementation Details</h2>
+                
+                <h3>Core Classes</h3>
+                
+                <h4>ArchitecturalReviewOrchestrator</h4>
+                <div class="code-block">
+                    <code>
+class ArchitecturalReviewOrchestrator:
+    """
+    Main orchestrator for architectural review.
+    Coordinates 6 analysis phases and scoring.
+    """
+    
+    def __init__(self, config: Dict[str, Any]):
+        self.config = config
+        self.analyzers = self._initialize_analyzers()
+        self.scoring_engine = ScoringEngine(config)
+        
+    def execute(self, target_path: str, dry_run: bool = False) -> ArchitectureReport:
+        """
+        Execute complete architectural review.
+        
+        Args:
+            target_path: Path to analyze
+            dry_run: If True, skip file modifications
+            
+        Returns:
+            ArchitectureReport with scores and findings
+        """
+        findings = {}
+        
+        # Phase 1: Layer Analysis
+        findings['layer'] = self.analyzers['layer'].analyze(target_path)
+        
+        # Phase 2: Pattern Detection
+        findings['pattern'] = self.analyzers['pattern'].detect(target_path)
+        
+        # Phase 3: Dependency Analysis
+        findings['dependency'] = self.analyzers['dependency'].analyze(target_path)
+        
+        # Phase 4: SOLID Analysis
+        findings['solid'] = self.analyzers['solid'].validate(target_path)
+        
+        # Phase 5: Testability Analysis
+        findings['testability'] = self.analyzers['testability'].analyze(target_path)
+        
+        # Phase 6: Scoring
+        metrics = self.scoring_engine.calculate(findings)
+        
+        return ArchitectureReport(findings, metrics)
+                    </code>
+                </div>
+                
+                <h4>LayerAnalyzer</h4>
+                <div class="code-block">
+                    <code>
+class LayerAnalyzer:
+    """
+    Analyzes layer separation and detects violations.
+    """
+    
+    LAYER_HIERARCHY = {
+        'api': 0,
+        'business': 1,
+        'data': 2,
+        'utils': 3
+    }
+    
+    def analyze(self, target_path: str) -> LayerAnalysisResult:
+        """
+        Detect layer violations based on import analysis.
+        
+        Returns:
+            LayerAnalysisResult with violations and score
+        """
+        violations = []
+        
+        for file_path in self._discover_files(target_path):
+            layer = self._detect_layer(file_path)
+            imports = self._parse_imports(file_path)
+            
+            for imp in imports:
+                target_layer = self._detect_layer(imp)
+                
+                # Check if dependency violates hierarchy
+                if self._is_violation(layer, target_layer):
+                    violations.append(LayerViolation(
+                        source=file_path,
+                        target=imp,
+                        source_layer=layer,
+                        target_layer=target_layer,
+                        severity=self._calculate_severity(layer, target_layer)
+                    ))
+        
+        score = self._calculate_score(violations)
+        return LayerAnalysisResult(violations, score)
+                    </code>
+                </div>
+                
+                <h4>ScoringEngine</h4>
+                <div class="code-block">
+                    <code>
+class ScoringEngine:
+    """
+    Calculates architecture scores and assigns grades.
+    """
+    
+    WEIGHTS = {
+        'layer_separation': 0.25,
+        'patterns': 0.20,
+        'dependencies': 0.20,
+        'solid': 0.20,
+        'testability': 0.15
+    }
+    
+    def calculate(self, findings: Dict[str, Any]) -> ArchitectureMetrics:
+        """
+        Calculate weighted total score from all findings.
+        
+        Returns:
+            ArchitectureMetrics with scores and grade
+        """
+        scores = {
+            'layer_separation': self._score_layers(findings['layer']),
+            'patterns': self._score_patterns(findings['pattern']),
+            'dependencies': self._score_dependencies(findings['dependency']),
+            'solid': self._score_solid(findings['solid']),
+            'testability': self._score_testability(findings['testability'])
+        }
+        
+        # Calculate weighted total
+        total_score = sum(
+            scores[category] * self.WEIGHTS[category]
+            for category in scores
+        )
+        
+        # Assign letter grade
+        grade = self._assign_grade(total_score)
+        
+        return ArchitectureMetrics(
+            scores=scores,
+            total_score=total_score,
+            grade=grade,
+            findings=findings
+        )
+    
+    def _assign_grade(self, score: float) -> str:
+        """Assign A-F grade based on score."""
+        if score >= 90: return 'A'
+        if score >= 80: return 'B'
+        if score >= 70: return 'C'
+        if score >= 60: return 'D'
+        return 'F'
+                    </code>
+                </div>
+                
+                <div class="implementation-note">
+                    <strong>⚠️ Implementation Note:</strong> All analyzers use Python's <code>ast</code> module 
+                    for static code analysis. This ensures accurate parsing without executing code.
+                </div>
+            </div>
+        </section>
+        
+        <!-- API Reference -->
+        <section class="section" id="api-reference">
+            <div class="glass-card">
+                <h2>📚 API Reference</h2>
+                
+                <h3>Main Orchestrator API</h3>
+                
+                <h4 class="api-method">execute(target_path: str, dry_run: bool = False) → ArchitectureReport</h4>
+                <p>Execute complete architectural review on specified path.</p>
+                <ul>
+                    <li><span class="api-param">target_path</span>: Path to analyze (absolute or relative)</li>
+                    <li><span class="api-param">dry_run</span>: If True, skip file modifications (default: False)</li>
+                </ul>
+                <p><strong>Returns:</strong> <code>ArchitectureReport</code> object containing findings and metrics</p>
+                
+                <h4 class="api-method">analyze_layer_separation(target_path: str) → LayerAnalysisResult</h4>
+                <p>Perform only layer separation analysis.</p>
+                
+                <h4 class="api-method">detect_patterns(target_path: str) → PatternDetectionResult</h4>
+                <p>Detect design patterns and anti-patterns.</p>
+                
+                <h4 class="api-method">analyze_dependencies(target_path: str) → DependencyAnalysisResult</h4>
+                <p>Build dependency graph and detect circular dependencies.</p>
+                
+                <h3>Data Models</h3>
+                
+                <h4>ArchitectureMetrics</h4>
+                <div class="code-block">
+                    <code>
+@dataclass
+class ArchitectureMetrics:
+    layer_separation_score: float      # 0-100
+    pattern_score: float                # 0-100
+    dependency_score: float             # 0-100
+    solid_score: float                  # 0-100
+    testability_score: float            # 0-100
+    total_score: float                  # 0-100 weighted average
+    grade: str                          # A, B, C, D, or F
+    findings: Dict[str, Any]            # Detailed findings per phase
+                    </code>
+                </div>
+                
+                <h4>LayerViolation</h4>
+                <div class="code-block">
+                    <code>
+@dataclass
+class LayerViolation:
+    source_file: str                    # File with violation
+    target_module: str                  # Imported module
+    source_layer: str                   # Source layer name
+    target_layer: str                   # Target layer name
+    severity: str                       # 'high', 'medium', 'low'
+    recommendation: str                 # How to fix
+                    </code>
+                </div>
+                
+                <h4>PatternOpportunity</h4>
+                <div class="code-block">
+                    <code>
+@dataclass
+class PatternOpportunity:
+    pattern_name: str                   # e.g., 'Strategy', 'Factory'
+    location: str                       # File path
+    reason: str                         # Why pattern is recommended
+    benefit: str                        # Expected benefit
+    priority: str                       # 'high', 'medium', 'low'
+    implementation_guide: str           # Step-by-step guide
+                    </code>
+                </div>
+                
+                <h3>Configuration</h3>
+                <div class="code-block">
+                    <code>
+# cortex-brain/manifests/orchestrators/architectural-review-manifest.yaml
+
+orchestrator:
+  name: "Architectural Review"
+  version: "1.0.0"
+  
+analyzers:
+  layer_analyzer:
+    enabled: true
+    layer_hierarchy:
+      - api: 0
+      - business: 1
+      - data: 2
+      - utils: 3
+    
+  pattern_detector:
+    enabled: true
+    patterns:
+      - Strategy
+      - Factory
+      - Singleton
+      - Observer
+      - Repository
+      
+  dependency_analyzer:
+    enabled: true
+    max_depth: 5
+    detect_circular: true
+    
+scoring:
+  weights:
+    layer_separation: 0.25
+    patterns: 0.20
+    dependencies: 0.20
+    solid: 0.20
+    testability: 0.15
+  
+  grading_scale:
+    A: [90, 100]
+    B: [80, 89]
+    C: [70, 79]
+    D: [60, 69]
+    F: [0, 59]
+                    </code>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Performance Considerations -->
+        <section class="section">
+            <div class="glass-card">
+                <h2>⚡ Performance Considerations</h2>
+                
+                <h3>Optimization Strategies</h3>
+                <ul>
+                    <li><strong>Caching:</strong> AST parsing results cached per file to avoid re-parsing</li>
+                    <li><strong>Parallel Analysis:</strong> Analyzers run concurrently using <code>asyncio</code></li>
+                    <li><strong>Incremental Analysis:</strong> Only analyze changed files in incremental mode</li>
+                    <li><strong>Memory Management:</strong> Process large codebases in batches to avoid memory issues</li>
+                </ul>
+                
+                <h3>Performance Benchmarks</h3>
+                <table class="metrics-table">
+                    <thead>
+                        <tr>
+                            <th>Codebase Size</th>
+                            <th>Files</th>
+                            <th>Analysis Time</th>
+                            <th>Memory Usage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Small (&lt;10K LOC)</td>
+                            <td>50-100</td>
+                            <td>&lt; 5s</td>
+                            <td>~50MB</td>
+                        </tr>
+                        <tr>
+                            <td>Medium (10-50K LOC)</td>
+                            <td>100-500</td>
+                            <td>10-30s</td>
+                            <td>~200MB</td>
+                        </tr>
+                        <tr>
+                            <td>Large (50-200K LOC)</td>
+                            <td>500-2000</td>
+                            <td>1-3 min</td>
+                            <td>~500MB</td>
+                        </tr>
+                        <tr>
+                            <td>Enterprise (&gt;200K LOC)</td>
+                            <td>2000+</td>
+                            <td>3-10 min</td>
+                            <td>~1GB</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        
+        <!-- Contributing -->
+        <section class="section" id="contributing">
+            <div class="glass-card">
+                <h2>🤝 Contributing</h2>
+                
+                <h3>Adding New Analyzers</h3>
+                <p>To add a new analysis phase:</p>
+                
+                <ol>
+                    <li><strong>Create Analyzer Class</strong>
+                        <div class="code-block">
+                            <code>
+# src/orchestrators/analyzers/my_analyzer.py
+
+class MyAnalyzer:
+    def __init__(self, config: Dict[str, Any]):
+        self.config = config
+    
+    def analyze(self, target_path: str) -> MyAnalysisResult:
+        """Perform custom analysis."""
+        # Implementation here
+        pass
+                            </code>
+                        </div>
+                    </li>
+                    
+                    <li><strong>Register Analyzer</strong>
+                        <div class="code-block">
+                            <code>
+# In ArchitecturalReviewOrchestrator.__init__
+
+self.analyzers = {
+    'layer': LayerAnalyzer(config),
+    'pattern': PatternDetector(config),
+    'my_analyzer': MyAnalyzer(config),  # Add here
+}
+                            </code>
+                        </div>
+                    </li>
+                    
+                    <li><strong>Update Scoring</strong>
+                        <div class="code-block">
+                            <code>
+# In ScoringEngine
+
+WEIGHTS = {
+    'layer_separation': 0.25,
+    'patterns': 0.20,
+    'dependencies': 0.20,
+    'solid': 0.15,
+    'testability': 0.15,
+    'my_analyzer': 0.05  # Add weight
+}
+                            </code>
+                        </div>
+                    </li>
+                    
+                    <li><strong>Add Tests</strong>
+                        <div class="code-block">
+                            <code>
+# tests/orchestrators/test_my_analyzer.py
+
+def test_my_analyzer():
+    analyzer = MyAnalyzer({})
+    result = analyzer.analyze('tests/fixtures/sample_code')
+    assert result.score >= 0
+    assert result.score <= 100
+                            </code>
+                        </div>
+                    </li>
+                </ol>
+                
+                <h3>Testing Guidelines</h3>
+                <ul>
+                    <li>All analyzers must have unit tests with &gt;90% coverage</li>
+                    <li>Integration tests required for orchestrator-level functionality</li>
+                    <li>Use fixtures in <code>tests/fixtures/</code> for sample codebases</li>
+                    <li>Performance tests for large codebase scenarios</li>
+                </ul>
+                
+                <h3>Code Style</h3>
+                <ul>
+                    <li>Follow PEP 8 for Python code</li>
+                    <li>Use type hints for all public methods</li>
+                    <li>Document all classes and methods with docstrings</li>
+                    <li>Run <code>black</code>, <code>isort</code>, and <code>mypy</code> before committing</li>
+                </ul>
+                
+                <h3>Pull Request Checklist</h3>
+                <ul>
+                    <li>✅ Tests pass (<code>pytest</code>)</li>
+                    <li>✅ Coverage &gt;90% (<code>pytest --cov</code>)</li>
+                    <li>✅ Type checking passes (<code>mypy</code>)</li>
+                    <li>✅ Code formatted (<code>black .</code>)</li>
+                    <li>✅ Imports sorted (<code>isort .</code>)</li>
+                    <li>✅ Documentation updated</li>
+                    <li>✅ Changelog entry added</li>
+                </ul>
+            </div>
+        </section>
+        
+        <!-- Related Resources -->
+        <section class="section-related">
+            <div class="glass-card">
+                <h2>🔗 Related Resources</h2>
+                <div class="feature-grid feature-grid-3">
+                    <a href="../../orchestrators/architectural-review.html" class="glass-card">
+                        <span class="feature-icon">📖</span>
+                        <h3 class="feature-title">User Guide</h3>
+                        <p class="text-secondary">User-facing documentation</p>
+                    </a>
+                    <a href="index.html" class="glass-card">
+                        <span class="feature-icon">⚙️</span>
+                        <h3 class="feature-title">All Orchestrators</h3>
+                        <p class="text-secondary">Technical documentation hub</p>
+                    </a>
+                    <a href="https://github.com/asifhussain60/CORTEX" class="glass-card">
+                        <span class="feature-icon">💻</span>
+                        <h3 class="feature-title">Source Code</h3>
+                        <p class="text-secondary">GitHub repository</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024-2025 Asif Hussain. All rights reserved.</p>
+        <p><a href="https://github.com/asifhussain60/CORTEX">GitHub</a></p>
+    </footer>
+    
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#00d4ff',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#7b61ff',
+                lineColor: '#7b61ff',
+                secondaryColor: '#7b61ff',
+                tertiaryColor: '#1a1f3a'
+            }
+        });
+        
+        // Collapsible sections
+        document.querySelectorAll('.collapsible-header').forEach(header => {
+            header.addEventListener('click', function() {
+                this.classList.toggle('active');
+                const content = this.nextElementSibling;
+                const icon = this.querySelector('.collapsible-icon');
+                
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                    icon.textContent = '▼';
+                } else {
+                    content.style.maxHeight = content.scrollHeight + 'px';
+                    icon.textContent = '▲';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
