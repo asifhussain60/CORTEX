@@ -178,7 +178,7 @@ sections:
 
 components:
   branding:
-    author_line: "**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX"
+    author_line: "**Author:** Asif Hussain | **Website:** https://asifhussain60.github.io/CORTEX/"
     separator: "---"
   
   formatting:
@@ -223,7 +223,7 @@ special:
       # 🎉 CONGRATULATIONS
       
       ## 🧠 CORTEX {operation}
-      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      **Author:** Asif Hussain | **Website:** https://asifhussain60.github.io/CORTEX/
       
       ---
       
@@ -248,7 +248,7 @@ special:
     description: "Use when operation fails"
     format: |
       ## 🧠 CORTEX Error
-      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      **Author:** Asif Hussain | **Website:** https://asifhussain60.github.io/CORTEX/
       
       ---
       
@@ -469,9 +469,10 @@ metadata:
   version: "4.0.1"
   author: "Asif Hussain"
   copyright: "© 2025 Asif Hussain. All rights reserved."
+  website: "https://asifhussain60.github.io/CORTEX/"
   github: "github.com/asifhussain60/CORTEX"
   created: "2025-12-18"
-  updated: "2025-12-19"
+  updated: "2025-12-28"
   lines_of_code: 642
   reduction_from_v3: "97%"
   estimated_token_savings: "~12,000 tokens per response cycle"

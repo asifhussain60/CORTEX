@@ -8,7 +8,7 @@ optimization:
 shared:
   standard_header: '## 🧠 CORTEX {title}
 
-    **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+    **Author:** Asif Hussain | **GitHub:** https://asifhussain60.github.io/CORTEX/
 
 
     ---
@@ -18,7 +18,7 @@ base_templates:
   standard_5_part: &standard_5_part_base
     base_structure: |
       ## 🧠 CORTEX {operation}
-      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      **Author:** Asif Hussain | **GitHub:** https://asifhussain60.github.io/CORTEX/
       
       ---
       
@@ -40,7 +40,7 @@ base_templates:
   tech_aware_response: &tech_aware_base
     base_structure: |
       ## 🧠 CORTEX {operation}
-      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      **Author:** Asif Hussain | **GitHub:** https://asifhussain60.github.io/CORTEX/
       
       ---
       
@@ -78,7 +78,7 @@ base_templates:
       ## 🧠 CORTEX {operation}
       **{understanding_brief}** | *No Challenge*
       
-      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      **Author:** Asif Hussain | **GitHub:** https://asifhussain60.github.io/CORTEX/
       
       ---
       
@@ -415,7 +415,7 @@ templates:
     response_type: banner
     content: |
       # 🧠 CORTEX Governance Rules
-      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      **Author:** Asif Hussain | **GitHub:** https://asifhussain60.github.io/CORTEX/
       
       ---
       
@@ -464,7 +464,7 @@ templates:
     response_type: narrative
     content: |
       # 🧠 CORTEX Governance Onboarding - Welcome
-      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      **Author:** Asif Hussain | **GitHub:** https://asifhussain60.github.io/CORTEX/
       
       ---
       
@@ -529,7 +529,7 @@ templates:
     response_type: narrative
     content: |
       # 🧠 CORTEX Governance Onboarding - Rulebook
-      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      **Author:** Asif Hussain | **GitHub:** https://asifhussain60.github.io/CORTEX/
       
       ---
       
@@ -633,7 +633,7 @@ templates:
     response_type: narrative
     content: |
       # 🧠 CORTEX Governance Onboarding - Acknowledgment
-      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      **Author:** Asif Hussain | **GitHub:** https://asifhussain60.github.io/CORTEX/
       
       ---
       
@@ -695,7 +695,7 @@ templates:
     response_type: success
     content: |
       # 🧠 CORTEX Governance Onboarding - Complete
-      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      **Author:** Asif Hussain | **GitHub:** https://asifhussain60.github.io/CORTEX/
       
       ---
       
@@ -754,7 +754,7 @@ templates:
     response_type: interactive
     content: '# 🧠 CORTEX Discovery & Introduction
 
-      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      **Author:** Asif Hussain | **GitHub:** https://asifhussain60.github.io/CORTEX/
 
 
       ---
@@ -1110,7 +1110,7 @@ templates:
     response_type: interactive
     content: '# 🧠 CORTEX Setup & Onboarding
 
-      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      **Author:** Asif Hussain | **GitHub:** https://asifhussain60.github.io/CORTEX/
 
 
       ---
@@ -1347,7 +1347,7 @@ templates:
     response_type: interactive
     content: '# 🧠 CORTEX Initialization
 
-      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      **Author:** Asif Hussain | **GitHub:** https://asifhussain60.github.io/CORTEX/
 
 
       ---
@@ -1924,7 +1924,7 @@ templates:
     response_type: confidence_indicator
     content: '# 🧠 CORTEX Confidence High
 
-      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      **Author:** Asif Hussain | **GitHub:** https://asifhussain60.github.io/CORTEX/
 
 
       ---
@@ -1972,7 +1972,7 @@ templates:
     response_type: confidence_indicator
     content: '# 🧠 CORTEX Confidence Medium
 
-      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      **Author:** Asif Hussain | **GitHub:** https://asifhussain60.github.io/CORTEX/
 
 
       ---
@@ -2020,7 +2020,7 @@ templates:
     response_type: confidence_indicator
     content: '# 🧠 CORTEX Confidence Low
 
-      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      **Author:** Asif Hussain | **GitHub:** https://asifhussain60.github.io/CORTEX/
 
 
       ---
@@ -2068,7 +2068,7 @@ templates:
     response_type: confidence_indicator
     content: '# 🧠 CORTEX Confidence None
 
-      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      **Author:** Asif Hussain | **GitHub:** https://asifhussain60.github.io/CORTEX/
 
 
       ---
