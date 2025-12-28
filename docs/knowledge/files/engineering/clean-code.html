@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clean Code Principles | CORTEX Knowledge</title>
+    <link rel="stylesheet" href="../../../assets/css/main.css">
+</head>
+<body>
+    <header class="header-glass">
+        <div class="container">
+            <nav class="breadcrumb">
+                <a href="../../../index.html" class="breadcrumb-link">Home</a>
+                <span class="breadcrumb-separator">/</span>
+                <a href="../../index.html" class="breadcrumb-link">Knowledge Library</a>
+                <span class="breadcrumb-separator">/</span>
+                <a href="../../engineering.html" class="breadcrumb-link">Engineering</a>
+                <span class="breadcrumb-separator">/</span>
+                <span class="breadcrumb-current">Clean Code</span>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <section class="knowledge-file-hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1 class="hero-title">Clean Code Principles</h1>
+                    <p class="hero-subtitle">A Handbook of Agile Software Craftsmanship</p>
+                    <div class="hero-meta">
+                        <span class="meta-item"><i class="icon-author"></i> Robert C. Martin (Uncle Bob)</span>
+                        <span class="meta-item"><i class="icon-category"></i> Software Craftsmanship</span>
+                        <span class="meta-item"><i class="icon-version"></i> v1.0.0</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="tab-container">
+            <div class="container">
+                <div class="tab-nav">
+                    <button class="tab-button active" data-tab="overview">Overview</button>
+                    <button class="tab-button" data-tab="content">Content</button>
+                    <button class="tab-button" data-tab="examples">Examples</button>
+                    <button class="tab-button" data-tab="cortex">CORTEX Usage</button>
+                </div>
+
+                <div class="tab-content active" id="overview">
+                    <div class="content-section">
+                        <h2 class="section-header">What is Clean Code?</h2>
+                        <p class="section-text">
+                            Clean Code is code that is easy to understand and easy to change. Written by Robert C. Martin (Uncle Bob), this seminal work defines the principles and practices that distinguish professional software craftsmanship from mere programming. Clean code reads like well-written prose, where every variable, function, and class clearly communicates its intent.
+                        </p>
+                        <p class="section-text">
+                            The cost of maintaining messy code increases exponentially over time. Teams slow down, bugs multiply, and eventually the codebase becomes unmaintainable. Clean code prevents this degradation by establishing clear standards for naming, function design, error handling, and code organization.
+                        </p>
+                    </div>
+
+                    <div class="content-section">
+                        <h2 class="section-header">Core Principles</h2>
+                        <div class="principle-grid">
+                            <div class="principle-card">
+                                <h3 class="principle-name">Meaningful Names</h3>
+                                <p class="principle-desc">Names should reveal intent without requiring comments</p>
+                            </div>
+                            <div class="principle-card">
+                                <h3 class="principle-name">Small Functions</h3>
+                                <p class="principle-desc">Functions should do one thing and do it well</p>
+                            </div>
+                            <div class="principle-card">
+                                <h3 class="principle-name">Clear Comments</h3>
+                                <p class="principle-desc">Code should be self-documenting; comments explain why, not what</p>
+                            </div>
+                            <div class="principle-card">
+                                <h3 class="principle-name">Error Handling</h3>
+                                <p class="principle-desc">Errors should be explicit and handled consistently</p>
+                            </div>
+                            <div class="principle-card">
+                                <h3 class="principle-name">Formatting</h3>
+                                <p class="principle-desc">Consistent formatting makes code easier to read</p>
+                            </div>
+                            <div class="principle-card">
+                                <h3 class="principle-name">Testing</h3>
+                                <p class="principle-desc">Clean tests enable clean code through confidence</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <h2 class="section-header">When to Apply Clean Code</h2>
+                        <div class="usage-grid">
+                            <div class="usage-card usage-when">
+                                <h3 class="usage-title">✅ Always Apply</h3>
+                                <ul class="usage-list">
+                                    <li>Production code that will be maintained</li>
+                                    <li>Team projects with multiple developers</li>
+                                    <li>Libraries and shared code</li>
+                                    <li>Code that will live for years</li>
+                                    <li>Any code that will be reviewed or modified</li>
+                                </ul>
+                            </div>
+                            <div class="usage-card usage-avoid">
+                                <h3 class="usage-title">⚖️ Balance With</h3>
+                                <ul class="usage-list">
+                                    <li>Delivery deadlines (but plan to refactor)</li>
+                                    <li>Prototypes (mark clearly as throwaway)</li>
+                                    <li>Performance-critical code (document trade-offs)</li>
+                                    <li>Learning exercises (still practice good habits)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="content">
+                    <div class="content-section">
+                        <h2 class="section-header">Meaningful Names</h2>
+                        <div class="principle-detail">
+                            <h3 class="subsection-header">Use Intention-Revealing Names</h3>
+                            <p class="section-text">
+                                The name of a variable, function, or class should answer all the big questions: why it exists, what it does, and how it's used. If a name requires a comment, then the name does not reveal its intent.
+                            </p>
+                            <ul class="guideline-list">
+                                <li><strong>Reveal Intent:</strong> <code>elapsed_time_in_days</code> instead of <code>d</code></li>
+                                <li><strong>Avoid Disinformation:</strong> Don't call something a <code>list</code> if it's not actually a list</li>
+                                <li><strong>Make Distinctions:</strong> <code>source</code> and <code>destination</code> instead of <code>a1</code> and <code>a2</code></li>
+                                <li><strong>Use Pronounceable Names:</strong> <code>generation_timestamp</code> instead of <code>genymdhms</code></li>
+                                <li><strong>Use Searchable Names:</strong> <code>MAX_CLASSES_PER_STUDENT</code> instead of <code>7</code></li>
+                                <li><strong>Avoid Encodings:</strong> No Hungarian notation or type prefixes</li>
+                            </ul>
+
+                            <h3 class="subsection-header">Class and Method Names</h3>
+                            <ul class="guideline-list">
+                                <li><strong>Classes:</strong> Should be nouns or noun phrases (<code>Customer</code>, <code>WikiPage</code>, <code>Account</code>)</li>
+                                <li><strong>Methods:</strong> Should be verbs or verb phrases (<code>delete_page</code>, <code>save</code>, <code>calculate_total</code>)</li>
+                                <li><strong>Accessors/Mutators:</strong> Use <code>get_name</code>, <code>set_name</code>, <code>is_active</code></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <h2 class="section-header">Functions</h2>
+                        <div class="principle-detail">
+                            <h3 class="subsection-header">Small!</h3>
+                            <p class="section-text">
+                                Functions should be small. Then they should be smaller than that. Functions should hardly ever be 20 lines long, and should ideally fit on one screen without scrolling.
+                            </p>
+
+                            <h3 class="subsection-header">Do One Thing</h3>
+                            <p class="section-text">
+                                Functions should do one thing. They should do it well. They should do it only. If a function does multiple things, it should be split into multiple functions.
+                            </p>
+
+                            <h3 class="subsection-header">One Level of Abstraction</h3>
+                            <p class="section-text">
+                                Statements within a function should all be at the same level of abstraction. Mixing levels makes code hard to understand.
+                            </p>
+
+                            <h3 class="subsection-header">Function Arguments</h3>
+                            <ul class="guideline-list">
+                                <li><strong>Ideal:</strong> Zero arguments (niladic)</li>
+                                <li><strong>Good:</strong> One argument (monadic)</li>
+                                <li><strong>Acceptable:</strong> Two arguments (dyadic)</li>
+                                <li><strong>Avoid:</strong> Three or more arguments (triadic+)</li>
+                            </ul>
+                            <p class="section-text">
+                                Arguments make functions harder to test and understand. Consider wrapping multiple arguments in an object.
+                            </p>
+
+                            <h3 class="subsection-header">Have No Side Effects</h3>
+                            <p class="section-text">
+                                Functions should not have hidden side effects. If a function is named <code>check_password</code>, it shouldn't also initialize a session. Side effects create temporal couplings and order dependencies.
+                            </p>
+
+                            <h3 class="subsection-header">Command Query Separation</h3>
+                            <p class="section-text">
+                                Functions should either do something (command) or answer something (query), but not both. Doing both leads to confusion.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <h2 class="section-header">Comments</h2>
+                        <div class="principle-detail">
+                            <h3 class="subsection-header">The Proper Use of Comments</h3>
+                            <p class="section-text">
+                                The proper use of comments is to compensate for our failure to express ourselves in code. Comments are, at best, a necessary evil. Every time you write a comment, you should grimace and feel the failure of your ability to express yourself.
+                            </p>
+
+                            <h3 class="subsection-header">Good Comments</h3>
+                            <ul class="guideline-list">
+                                <li><strong>Legal Comments:</strong> Copyright and licensing information</li>
+                                <li><strong>Informative Comments:</strong> Explain regex patterns or return values</li>
+                                <li><strong>Explanation of Intent:</strong> Why a particular solution was chosen</li>
+                                <li><strong>Clarification:</strong> Translate obscure arguments or return values</li>
+                                <li><strong>Warning of Consequences:</strong> Explain why something is done a certain way</li>
+                                <li><strong>TODO Comments:</strong> Jobs that should be done but aren't yet</li>
+                            </ul>
+
+                            <h3 class="subsection-header">Bad Comments</h3>
+                            <ul class="violation-list">
+                                <li><strong>Mumbling:</strong> Unclear or cryptic comments</li>
+                                <li><strong>Redundant:</strong> Comments that say the same thing as the code</li>
+                                <li><strong>Misleading:</strong> Comments that are incorrect or outdated</li>
+                                <li><strong>Mandated:</strong> Required comments that add no value</li>
+                                <li><strong>Journal:</strong> Change history (use version control)</li>
+                                <li><strong>Noise:</strong> Comments stating the obvious</li>
+                                <li><strong>Commented-Out Code:</strong> Delete it; version control remembers</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <h2 class="section-header">Formatting</h2>
+                        <div class="principle-detail">
+                            <h3 class="subsection-header">Vertical Formatting</h3>
+                            <ul class="guideline-list">
+                                <li><strong>Small Files:</strong> 200-500 lines is reasonable, smaller is better</li>
+                                <li><strong>Newspaper Metaphor:</strong> High-level concepts at top, details at bottom</li>
+                                <li><strong>Vertical Openness:</strong> Blank lines separate concepts</li>
+                                <li><strong>Vertical Density:</strong> Related code should appear dense</li>
+                                <li><strong>Vertical Distance:</strong> Related concepts should be close together</li>
+                            </ul>
+
+                            <h3 class="subsection-header">Horizontal Formatting</h3>
+                            <ul class="guideline-list">
+                                <li><strong>Line Length:</strong> Keep lines under 120 characters</li>
+                                <li><strong>Horizontal Openness:</strong> Use whitespace to associate related things</li>
+                                <li><strong>Indentation:</strong> Shows hierarchy and scope</li>
+                                <li><strong>Team Rules:</strong> Entire team should follow same formatting</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <h2 class="section-header">Error Handling</h2>
+                        <div class="principle-detail">
+                            <h3 class="subsection-header">Use Exceptions Rather Than Return Codes</h3>
+                            <p class="section-text">
+                                Exceptions separate error handling from happy path logic, making code cleaner and easier to read.
+                            </p>
+
+                            <h3 class="subsection-header">Write Try-Catch-Finally First</h3>
+                            <p class="section-text">
+                                Try blocks define a scope. Start with try-catch-finally when writing code that could throw exceptions.
+                            </p>
+
+                            <h3 class="subsection-header">Provide Context with Exceptions</h3>
+                            <p class="section-text">
+                                Each exception should provide enough context to determine the source and location of an error. Include operation name and failure type in exception messages.
+                            </p>
+
+                            <h3 class="subsection-header">Don't Return Null</h3>
+                            <p class="section-text">
+                                Returning null invites null pointer exceptions. Return empty objects, raise exceptions, or use Optional/Maybe types instead.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="examples">
+                    <div class="content-section">
+                        <h2 class="section-header">Meaningful Names - Python</h2>
+                        <h3 class="example-header">❌ Bad: Unclear Names</h3>
+                        <pre class="code-block"><code class="language-python"># ❌ Poor naming
+d = 365  # What is d?
+def get(u):  # Get what? From where?
+    return db.q(u)  # What is q?
+
+list1 = get_data()  # What data?
+list2 = get_data()  # What's the difference?</code></pre>
+
+                        <h3 class="example-header">✅ Good: Intention-Revealing Names</h3>
+                        <pre class="code-block"><code class="language-python"># ✅ Clear naming
+DAYS_IN_YEAR = 365
+
+def get_active_customers(user_filter: UserFilter) -> List[Customer]:
+    return database.query_customers(user_filter)
+
+active_customers = get_active_customers(filter)
+pending_customers = get_pending_customers()</code></pre>
+                    </div>
+
+                    <div class="content-section">
+                        <h2 class="section-header">Small Functions - Python</h2>
+                        <h3 class="example-header">❌ Bad: Large Function Doing Multiple Things</h3>
+                        <pre class="code-block"><code class="language-python"># ❌ Function doing too many things
+def process_order(order_data):
+    # Validate
+    if not order_data.get('customer_id'):
+        raise ValueError("Missing customer")
+    if not order_data.get('items'):
+        raise ValueError("No items")
+    
+    # Calculate total
+    total = 0
+    for item in order_data['items']:
+        total += item['price'] * item['quantity']
+    
+    # Apply discount
+    if order_data.get('coupon'):
+        discount = get_discount(order_data['coupon'])
+        total = total * (1 - discount)
+    
+    # Save to database
+    db.execute("INSERT INTO orders VALUES (...)")
+    
+    # Send email
+    send_email(order_data['customer_id'], "Order confirmed")
+    
+    return total</code></pre>
+
+                        <h3 class="example-header">✅ Good: Small, Focused Functions</h3>
+                        <pre class="code-block"><code class="language-python"># ✅ Each function does one thing
+def process_order(order_data: OrderData) -> OrderResult:
+    validate_order(order_data)
+    order = create_order(order_data)
+    total = calculate_total(order)
+    save_order(order)
+    notify_customer(order)
+    return OrderResult(order_id=order.id, total=total)
+
+def validate_order(order_data: OrderData) -> None:
+    if not order_data.customer_id:
+        raise ValueError("Missing customer")
+    if not order_data.items:
+        raise ValueError("No items")
+
+def calculate_total(order: Order) -> Decimal:
+    subtotal = calculate_subtotal(order.items)
+    return apply_discount(subtotal, order.coupon)
+
+def calculate_subtotal(items: List[OrderItem]) -> Decimal:
+    return sum(item.price * item.quantity for item in items)</code></pre>
+                    </div>
+
+                    <div class="content-section">
+                        <h2 class="section-header">Comments - Python</h2>
+                        <h3 class="example-header">❌ Bad: Redundant and Noise Comments</h3>
+                        <pre class="code-block"><code class="language-python"># ❌ Bad comments
+# Get the user
+def get_user(user_id):  # Comments that repeat the function name
+    # Query the database
+    user = db.query("SELECT * FROM users WHERE id = ?", user_id)
+    # Return the user
+    return user
+
+# Set the name
+def set_name(name):
+    self.name = name  # Set name to name</code></pre>
+
+                        <h3 class="example-header">✅ Good: Explain Why, Not What</h3>
+                        <pre class="code-block"><code class="language-python"># ✅ Good comments explain intent
+def get_user(user_id: int) -> Optional[User]:
+    # Use read replica for user lookups to reduce load on primary DB
+    user = read_replica.query(
+        "SELECT * FROM users WHERE id = ?", 
+        user_id
+    )
+    return user
+
+def calculate_price(base_price: Decimal, quantity: int) -> Decimal:
+    # Discount starts at 10 units to encourage bulk orders
+    # Business requirement from Q4 2024 pricing strategy
+    if quantity >= 10:
+        return base_price * quantity * Decimal('0.9')
+    return base_price * quantity</code></pre>
+                    </div>
+
+                    <div class="content-section">
+                        <h2 class="section-header">Error Handling - C#</h2>
+                        <h3 class="example-header">❌ Bad: Return Codes and Nulls</h3>
+                        <pre class="code-block"><code class="language-csharp">// ❌ Bad error handling
+public int ProcessPayment(Payment payment)
+{
+    if (payment == null)
+        return -1;  // Error code?
+    
+    var result = chargeCard(payment.Card);
+    if (result == null)  // Null checking everywhere
+        return -2;
+    
+    if (result.Status == 0)  // What does 0 mean?
+        return -3;
+    
+    return 1;  // Success? Maybe?
+}</code></pre>
+
+                        <h3 class="example-header">✅ Good: Exceptions with Context</h3>
+                        <pre class="code-block"><code class="language-csharp">// ✅ Good error handling
+public PaymentResult ProcessPayment(Payment payment)
+{
+    if (payment == null)
+        throw new ArgumentNullException(nameof(payment));
+    
+    try
+    {
+        var chargeResult = ChargeCard(payment.Card);
+        
+        if (!chargeResult.IsSuccessful)
+        {
+            throw new PaymentFailedException(
+                $"Card charge failed: {chargeResult.ErrorMessage}",
+                chargeResult.ErrorCode
+            );
+        }
+        
+        return new PaymentResult 
+        { 
+            TransactionId = chargeResult.TransactionId,
+            Amount = payment.Amount 
+        };
+    }
+    catch (NetworkException ex)
+    {
+        throw new PaymentFailedException(
+            "Payment gateway unreachable",
+            ex
+        );
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="cortex">
+                    <div class="content-section">
+                        <h2 class="section-header">Clean Code in CORTEX</h2>
+                        <p class="section-text">
+                            CORTEX enforces clean code principles throughout its codebase and provides automated tools to help developers write cleaner code.
+                        </p>
+                    </div>
+
+                    <div class="content-section">
+                        <h2 class="section-header">Automated Clean Code Checks</h2>
+                        <div class="cortex-example">
+                            <p class="section-text">
+                                CORTEX code review agents automatically check for clean code violations:
+                            </p>
+                            <pre class="code-block"><code class="language-python"># CORTEX Clean Code Analyzer
+class CleanCodeAnalyzer:
+    def analyze_function(self, func: FunctionNode) -> List[Violation]:
+        violations = []
+        
+        # Check function length (should be < 20 lines)
+        if func.line_count > 20:
+            violations.append(Violation(
+                code="CC001",
+                message=f"Function too long: {func.line_count} lines",
+                severity="MEDIUM"
+            ))
+        
+        # Check parameter count (should be <= 3)
+        if len(func.parameters) > 3:
+            violations.append(Violation(
+                code="CC002",
+                message=f"Too many parameters: {len(func.parameters)}",
+                severity="MEDIUM"
+            ))
+        
+        # Check for single-letter variables (except i, j, k in loops)
+        for var in func.variables:
+            if len(var.name) == 1 and var.name not in ['i', 'j', 'k']:
+                violations.append(Violation(
+                    code="CC003",
+                    message=f"Single-letter variable: {var.name}",
+                    severity="LOW"
+                ))
+        
+        return violations</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <h2 class="section-header">Clean Code Refactoring Suggestions</h2>
+                        <div class="cortex-example">
+                            <p class="section-text">
+                                CORTEX suggests specific refactorings to improve code quality:
+                            </p>
+                            <pre class="code-block"><code class="language-python"># Before: Long function
+def process_user_registration(data):
+    # 50 lines of validation, creation, email sending...
+    pass
+
+# CORTEX Suggestion:
+# "Function 'process_user_registration' is 50 lines long.
+#  Suggested refactoring: Extract Method
+#  Split into:
+#  - validate_registration_data()
+#  - create_user_account()
+#  - send_welcome_email()
+#  - log_registration_event()"
+
+# After: Clean, focused functions
+def process_user_registration(data: RegistrationData) -> User:
+    validate_registration_data(data)
+    user = create_user_account(data)
+    send_welcome_email(user)
+    log_registration_event(user)
+    return user</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <h2 class="section-header">Query Clean Code Knowledge</h2>
+                        <div class="query-examples">
+                            <div class="query-card">
+                                <div class="query-prompt">"Review this function for clean code violations"</div>
+                                <div class="query-desc">Analyzes function against all clean code principles</div>
+                            </div>
+                            <div class="query-card">
+                                <div class="query-prompt">"Suggest better names for these variables"</div>
+                                <div class="query-desc">Provides intention-revealing name alternatives</div>
+                            </div>
+                            <div class="query-card">
+                                <div class="query-prompt">"Refactor this to reduce function size"</div>
+                                <div class="query-desc">Breaks large functions into smaller, focused ones</div>
+                            </div>
+                            <div class="query-card">
+                                <div class="query-prompt">"Are these comments necessary?"</div>
+                                <div class="query-desc">Evaluates comment quality and suggests self-documenting code</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <h2 class="section-header">Related Knowledge Files</h2>
+                        <div class="related-files">
+                            <a href="solid-principles.html" class="related-file-card">
+                                <h3 class="related-file-title">SOLID Principles</h3>
+                                <p class="related-file-desc">Object-oriented design principles for clean code</p>
+                            </a>
+                            <a href="refactoring.html" class="related-file-card">
+                                <h3 class="related-file-title">Refactoring</h3>
+                                <p class="related-file-desc">Techniques for cleaning up existing code</p>
+                            </a>
+                            <a href="code-review.html" class="related-file-card">
+                                <h3 class="related-file-title">Code Review</h3>
+                                <p class="related-file-desc">Best practices for reviewing code quality</p>
+                            </a>
+                            <a href="../testing/tdd-best-practices.html" class="related-file-card">
+                                <h3 class="related-file-title">TDD Best Practices</h3>
+                                <p class="related-file-desc">Test-driven development supports clean code</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer-glass">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3 class="footer-title">CORTEX Knowledge</h3>
+                    <p class="footer-text">Part of the CORTEX AI Assistant ecosystem</p>
+                </div>
+                <div class="footer-section">
+                    <h3 class="footer-title">Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="../../index.html" class="footer-link">Knowledge Library</a></li>
+                        <li><a href="../../engineering.html" class="footer-link">Engineering Category</a></li>
+                        <li><a href="../../../index.html" class="footer-link">CORTEX Home</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3 class="footer-title">Source</h3>
+                    <p class="footer-text">Robert C. Martin (Uncle Bob)</p>
+                    <p class="footer-text">Clean Code: A Handbook of Agile Software Craftsmanship (2008)</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copyright">&copy; 2025 CORTEX Project. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetTab = this.getAttribute('data-tab');
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    this.classList.add('active');
+                    document.getElementById(targetTab).classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
