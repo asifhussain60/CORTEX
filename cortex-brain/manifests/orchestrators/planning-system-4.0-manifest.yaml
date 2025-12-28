@@ -677,6 +677,15 @@ configuration:
       - "reports/" # Progress reports
       - "artifacts/" # Supporting files
       - "tracking/" # Progress tracking JSON
+    automation:
+      tool: "cortex-toolkit/core/utilities/plan_scaffold_generator.py"
+      usage: "python plan_scaffold_generator.py '<plan-name>'"
+      benefits:
+        - "Eliminates manual folder creation (4 folders + tracker JSON)"
+        - "Ensures consistent structure across all plans"
+        - "Reduces orchestrator overhead by ~30 seconds per plan"
+        - "Prevents missing folders or incorrect naming"
+      enforcement: "Required for all new plans (see cortex-maintenance.prompt.md Phase 1)"
 
   plan_file_naming:
     master_plan: "00-master-plan.md"
