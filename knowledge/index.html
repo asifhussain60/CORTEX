@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX Knowledge Library - 65+ knowledge files across 17 categories covering frontend, backend, cloud, and software craft">
+    <meta name="keywords" content="CORTEX, knowledge library, best practices, frontend, backend, cloud, microservices">
+    <meta name="author" content="Asif Hussain">
+    <title>CORTEX Knowledge Library</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Sticky Navigation -->
+    <nav class="breadcrumb-container sticky-nav" aria-label="Breadcrumb">
+        <button class="back-button" onclick="history.back()" aria-label="Go back">
+            ← Back
+        </button>
+        <ol class="breadcrumb">
+            <li><a href="../index.html">Home</a></li>
+            <li aria-current="page">Knowledge Library</li>
+        </ol>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="main-content">
+        <div class="logo-header">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
+        </div>
+        <h1 class="hero-title">📚 Knowledge Library</h1>
+        <p class="hero-subtitle">
+            65+ knowledge files across 17 categories covering frontend, backend, cloud, and software craft
+        </p>
+    </section>
+
+    <!-- Search Section -->
+    <section class="section">
+        <div class="container">
+            <div class="search-container">
+                <input 
+                    type="search" 
+                    id="knowledge-search" 
+                    class="search-input" 
+                    placeholder="🔍 Search domains, categories, or knowledge files..."
+                    aria-label="Search knowledge library"
+                >
+            </div>
+        </div>
+    </section>
+
+    <!-- Domain Overview Section -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title text-center">Knowledge Domains</h2>
+            
+            <div class="domain-grid" id="domain-grid">
+                <!-- Domain 1: Frontend & UI -->
+                <article class="domain-card glass-card" data-domain="frontend-ui">
+                    <div class="domain-header">
+                        <span class="domain-icon">🎨</span>
+                        <div class="domain-title-group">
+                            <h3 class="domain-title">Frontend & UI</h3>
+                            <span class="domain-file-count">14 files</span>
+                        </div>
+                    </div>
+                    <p class="domain-description">
+                        User interface development, frontend frameworks, and user experience design
+                    </p>
+                    <div class="category-preview">
+                        <a href="frontend.html" class="category-chip" data-category="frontend">
+                            💻 Frontend
+                        </a>
+                        <a href="ui-ux.html" class="category-chip" data-category="ui-ux">
+                            🎨 UI/UX
+                        </a>
+                        <a href="mobile.html" class="category-chip" data-category="mobile">
+                            📱 Mobile
+                        </a>
+                    </div>
+                    <div class="domain-footer">
+                        <span class="domain-topics">React • Angular • Vue • TypeScript • Mobile</span>
+                    </div>
+                </article>
+
+                <!-- Domain 2: Backend & APIs -->
+                <article class="domain-card glass-card" data-domain="backend-apis">
+                    <div class="domain-header">
+                        <span class="domain-icon">🔌</span>
+                        <div class="domain-title-group">
+                            <h3 class="domain-title">Backend & APIs</h3>
+                            <span class="domain-file-count">12 files</span>
+                        </div>
+                    </div>
+                    <p class="domain-description">
+                        API design, microservices architecture, and messaging patterns
+                    </p>
+                    <div class="category-preview">
+                        <a href="api-design.html" class="category-chip" data-category="api-design">
+                            🔌 API Design
+                        </a>
+                        <a href="microservices.html" class="category-chip" data-category="microservices">
+                            ⚙️ Microservices
+                        </a>
+                        <a href="messaging.html" class="category-chip" data-category="messaging">
+                            📬 Messaging
+                        </a>
+                    </div>
+                    <div class="domain-footer">
+                        <span class="domain-topics">REST • GraphQL • gRPC • Event-Driven • Resilience</span>
+                    </div>
+                </article>
+
+                <!-- Domain 3: Data & Storage -->
+                <article class="domain-card glass-card" data-domain="data-storage">
+                    <div class="domain-header">
+                        <span class="domain-icon">🗄️</span>
+                        <div class="domain-title-group">
+                            <h3 class="domain-title">Data & Storage</h3>
+                            <span class="domain-file-count">9 files</span>
+                        </div>
+                    </div>
+                    <p class="domain-description">
+                        Database patterns, performance optimization, and caching strategies
+                    </p>
+                    <div class="category-preview">
+                        <a href="database.html" class="category-chip" data-category="database">
+                            🗄️ Databases
+                        </a>
+                        <a href="performance.html" class="category-chip" data-category="performance">
+                            ⚡ Performance
+                        </a>
+                    </div>
+                    <div class="domain-footer">
+                        <span class="domain-topics">SQL • NoSQL • Redis • Caching • Optimization</span>
+                    </div>
+                </article>
+
+                <!-- Domain 4: Infrastructure & Cloud -->
+                <article class="domain-card glass-card" data-domain="infrastructure-cloud">
+                    <div class="domain-header">
+                        <span class="domain-icon">☁️</span>
+                        <div class="domain-title-group">
+                            <h3 class="domain-title">Infrastructure & Cloud</h3>
+                            <span class="domain-file-count">10 files</span>
+                        </div>
+                    </div>
+                    <p class="domain-description">
+                        Cloud platforms, containers, orchestration, and DevOps practices
+                    </p>
+                    <div class="category-preview">
+                        <a href="cloud.html" class="category-chip" data-category="cloud">
+                            ☁️ Cloud
+                        </a>
+                        <a href="containers.html" class="category-chip" data-category="containers">
+                            📦 Containers
+                        </a>
+                        <a href="devops.html" class="category-chip" data-category="devops">
+                            🚀 DevOps
+                        </a>
+                    </div>
+                    <div class="domain-footer">
+                        <span class="domain-topics">AWS • Azure • Docker • Kubernetes • CI/CD</span>
+                    </div>
+                </article>
+
+                <!-- Domain 5: Software Craft -->
+                <article class="domain-card glass-card" data-domain="software-craft">
+                    <div class="domain-header">
+                        <span class="domain-icon">🏗️</span>
+                        <div class="domain-title-group">
+                            <h3 class="domain-title">Software Craft</h3>
+                            <span class="domain-file-count">20 files</span>
+                        </div>
+                    </div>
+                    <p class="domain-description">
+                        Engineering practices, design patterns, testing, security, and DDD
+                    </p>
+                    <div class="category-preview">
+                        <a href="engineering.html" class="category-chip" data-category="engineering">
+                            🛠️ Engineering
+                        </a>
+                        <a href="ddd.html" class="category-chip" data-category="ddd">
+                            📐 DDD
+                        </a>
+                        <a href="security.html" class="category-chip" data-category="security">
+                            🔒 Security
+                        </a>
+                        <a href="testing.html" class="category-chip" data-category="testing">
+                            ✅ Testing
+                        </a>
+                        <a href="rag-domains.html" class="category-chip" data-category="rag-domains">
+                            🧠 RAG
+                        </a>
+                    </div>
+                    <div class="domain-footer">
+                        <span class="domain-topics">Clean Code • SOLID • TDD • Security • Patterns</span>
+                    </div>
+                </article>
+            </div>
+
+            <!-- Empty State (hidden by default) -->
+            <div id="empty-state" class="empty-state" hidden>
+                <div class="empty-state-icon">🔍</div>
+                <h3>No results found</h3>
+                <p>Try adjusting your search terms</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Category Relationships Section (Lazy Loaded) -->
+    <section class="section section-alt">
+        <div class="container">
+            <h2 class="section-title text-center">Category Relationships</h2>
+            <p class="text-center" style="margin-bottom: 2rem; color: var(--text-secondary);">
+                Explore how different knowledge categories interconnect
+            </p>
+            
+            <div class="lazy-container" data-lazy-load="d3-diagram">
+                <!-- Skeleton Loader -->
+                <div class="skeleton-loader">
+                    <div class="skeleton-pulse"></div>
+                    <p style="text-align: center; color: var(--text-secondary); margin-top: 1rem;">
+                        Loading diagram...
+                    </p>
+                </div>
+                
+                <!-- D3 Diagram Container (hidden initially) -->
+                <div class="lazy-content" hidden>
+                    <div id="d3-diagram" class="d3-diagram-container"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Stats Section -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title text-center">Knowledge Library Statistics</h2>
+            <div class="metrics-grid-4">
+                <div class="glass-card metric-card">
+                    <div class="metric-value">65+</div>
+                    <div class="metric-label">Knowledge Files</div>
+                </div>
+                <div class="glass-card metric-card">
+                    <div class="metric-value">17</div>
+                    <div class="metric-label">Categories</div>
+                </div>
+                <div class="glass-card metric-card">
+                    <div class="metric-value">5</div>
+                    <div class="metric-label">Domain Groups</div>
+                </div>
+                <div class="glass-card metric-card">
+                    <div class="metric-value">500+</div>
+                    <div class="metric-label">Best Practice Rules</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Search Functionality
+        const searchInput = document.getElementById('knowledge-search');
+        const domainGrid = document.getElementById('domain-grid');
+        const emptyState = document.getElementById('empty-state');
+        const domainCards = document.querySelectorAll('.domain-card');
+
+        searchInput.addEventListener('input', debounce(handleSearch, 300));
+
+        function handleSearch(e) {
+            const searchTerm = e.target.value.toLowerCase().trim();
+            
+            if (!searchTerm) {
+                // Show all domains
+                domainCards.forEach(card => card.hidden = false);
+                emptyState.hidden = true;
+                return;
+            }
+
+            let visibleCount = 0;
+
+            domainCards.forEach(card => {
+                const domainTitle = card.querySelector('.domain-title').textContent.toLowerCase();
+                const domainDescription = card.querySelector('.domain-description').textContent.toLowerCase();
+                const domainTopics = card.querySelector('.domain-topics').textContent.toLowerCase();
+                const categoryChips = Array.from(card.querySelectorAll('.category-chip'))
+                    .map(chip => chip.textContent.toLowerCase())
+                    .join(' ');
+
+                const matches = domainTitle.includes(searchTerm) ||
+                               domainDescription.includes(searchTerm) ||
+                               domainTopics.includes(searchTerm) ||
+                               categoryChips.includes(searchTerm);
+
+                if (matches) {
+                    card.hidden = false;
+                    visibleCount++;
+                    
+                    // Highlight matching text (simple implementation)
+                    highlightSearchTerm(card, searchTerm);
+                } else {
+                    card.hidden = true;
+                }
+            });
+
+            // Show/hide empty state
+            emptyState.hidden = visibleCount > 0;
+        }
+
+        function highlightSearchTerm(card, term) {
+            // Remove previous highlights
+            card.querySelectorAll('.highlight').forEach(el => {
+                el.classList.remove('highlight');
+            });
+
+            // Add highlight class (CSS handles styling)
+            if (term.length > 2) {
+                const textElements = card.querySelectorAll('.domain-title, .domain-description, .category-chip, .domain-topics');
+                textElements.forEach(el => {
+                    if (el.textContent.toLowerCase().includes(term)) {
+                        el.classList.add('highlight');
+                    }
+                });
+            }
+        }
+
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func.apply(this, args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Lazy Load D3 Diagram
+        const lazyObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const container = entry.target;
+                    loadD3Diagram(container);
+                    lazyObserver.unobserve(container);
+                }
+            });
+        }, {
+            rootMargin: '100px'
+        });
+
+        const lazyContainer = document.querySelector('[data-lazy-load="d3-diagram"]');
+        if (lazyContainer) {
+            lazyObserver.observe(lazyContainer);
+        }
+
+        function loadD3Diagram(container) {
+            // Hide skeleton
+            const skeleton = container.querySelector('.skeleton-loader');
+            const content = container.querySelector('.lazy-content');
+            
+            skeleton.hidden = true;
+            content.hidden = false;
+
+            // Create simple network diagram showing category relationships
+            const diagramContainer = document.getElementById('d3-diagram');
+            
+            // Simple HTML-based diagram (D3.js can be added later)
+            diagramContainer.innerHTML = `
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; padding: 2rem;">
+                    <div class="relationship-node">
+                        <div class="relationship-icon">💻</div>
+                        <div>Frontend</div>
+                        <div class="relationship-connections">→ Testing, Performance</div>
+                    </div>
+                    <div class="relationship-node">
+                        <div class="relationship-icon">🔌</div>
+                        <div>API Design</div>
+                        <div class="relationship-connections">→ Security, Testing</div>
+                    </div>
+                    <div class="relationship-node">
+                        <div class="relationship-icon">⚙️</div>
+                        <div>Microservices</div>
+                        <div class="relationship-connections">→ Cloud, Containers</div>
+                    </div>
+                    <div class="relationship-node">
+                        <div class="relationship-icon">🗄️</div>
+                        <div>Databases</div>
+                        <div class="relationship-connections">→ Performance, Security</div>
+                    </div>
+                    <div class="relationship-node">
+                        <div class="relationship-icon">☁️</div>
+                        <div>Cloud</div>
+                        <div class="relationship-connections">→ DevOps, Containers</div>
+                    </div>
+                    <div class="relationship-node">
+                        <div class="relationship-icon">🛠️</div>
+                        <div>Engineering</div>
+                        <div class="relationship-connections">→ All Categories</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+
+    <style>
+        /* Domain Grid */
+        .domain-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        /* Domain Card */
+        .domain-card {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            transition: transform var(--transition-base), border-color var(--transition-base);
+            cursor: pointer;
+        }
+
+        .domain-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent-primary);
+        }
+
+        /* Domain Header */
+        .domain-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .domain-icon {
+            font-size: 2.4rem;
+            flex-shrink: 0;
+        }
+
+        .domain-title-group {
+            flex: 1;
+        }
+
+        .domain-title {
+            margin: 0;
+            font-size: 1.375rem;
+            color: var(--accent-primary);
+        }
+
+        .domain-file-count {
+            display: inline-block;
+            margin-top: 0.25rem;
+            padding: 0.25rem 0.5rem;
+            background: rgba(0, 212, 255, 0.2);
+            color: var(--accent-primary);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Domain Description */
+        .domain-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* Category Preview */
+        .category-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .category-chip {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            background: rgba(26, 31, 58, 0.7);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            text-decoration: none;
+            transition: all var(--transition-base);
+        }
+
+        .category-chip:hover {
+            background: rgba(0, 212, 255, 0.2);
+            border-color: var(--accent-primary);
+            transform: translateY(-2px);
+        }
+
+        /* Domain Footer */
+        .domain-footer {
+            padding-top: 1rem;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .domain-topics {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        /* Search Container */
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: var(--glass-bg);
+            border: 2px solid var(--glass-border);
+            border-radius: 50px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all var(--transition-base);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .search-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        /* Highlight Search Results */
+        .highlight {
+            background: rgba(0, 212, 255, 0.2);
+            padding: 0.125rem 0.25rem;
+            border-radius: 4px;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            color: var(--text-secondary);
+        }
+
+        /* Skeleton Loader */
+        .skeleton-loader {
+            padding: 3rem;
+            text-align: center;
+        }
+
+        .skeleton-pulse {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0.05) 0%,
+                rgba(255, 255, 255, 0.1) 50%,
+                rgba(255, 255, 255, 0.05) 100%
+            );
+            background-size: 200% 100%;
+            animation: pulse 1.5s infinite;
+            border-radius: 16px;
+        }
+
+        @keyframes pulse {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* D3 Diagram */
+        .d3-diagram-container {
+            min-height: 400px;
+            background: rgba(26, 31, 58, 0.5);
+            border-radius: 16px;
+            padding: 2rem;
+        }
+
+        .relationship-node {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all var(--transition-base);
+        }
+
+        .relationship-node:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-primary);
+        }
+
+        .relationship-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .relationship-connections {
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        /* Metric Card */
+        .metric-card {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .metric-value {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        /* Mobile Optimizations */
+        @media (max-width: 767px) {
+            .domain-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .domain-icon {
+                font-size: 2rem;
+            }
+
+            .domain-title {
+                font-size: 1.25rem;
+            }
+
+            .category-preview {
+                gap: 0.375rem;
+            }
+
+            .category-chip {
+                padding: 0.375rem 0.75rem;
+                font-size: 0.8125rem;
+            }
+
+            .metric-value {
+                font-size: 2.5rem;
+            }
+
+            .metrics-grid-4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Tablet */
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .domain-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Desktop */
+        @media (min-width: 1024px) {
+            .domain-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .back-button {
+                display: none;
+            }
+        }
+    </style>
+</body>
+</html>

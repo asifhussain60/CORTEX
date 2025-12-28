@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="DevOps & CI/CD - Automation, pipelines, infrastructure as code">
+    <meta name="author" content="Asif Hussain">
+    <title>DevOps - CORTEX Knowledge</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <nav class="breadcrumb-container sticky-nav" aria-label="Breadcrumb">
+        <button class="back-button" onclick="history.back()" aria-label="Go back">← Back</button>
+        <ol class="breadcrumb">
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="index.html">Knowledge Library</a></li>
+            <li><a href="index.html#infrastructure-cloud">Infrastructure & Cloud</a></li>
+            <li aria-current="page">DevOps</li>
+        </ol>
+    </nav>
+    <section class="hero" id="main-content">
+        <div class="logo-header">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
+        </div>
+        <h1 class="hero-title">🔧 DevOps & CI/CD</h1>
+        <p class="hero-subtitle">Automation, pipelines, infrastructure as code, monitoring</p>
+    </section>
+    <aside class="category-sidebar" aria-label="Category navigation">
+        <h3>Infrastructure & Cloud</h3>
+        <nav class="category-nav">
+            <a href="cloud.html" class="category-nav-link">☁️ Cloud</a>
+            <a href="containers.html" class="category-nav-link">🐳 Containers</a>
+            <a href="devops.html" class="category-nav-link active">🔧 DevOps</a>
+        </nav>
+    </aside>
+    <section class="section category-content">
+        <div class="container">
+            <div class="tabs-container">
+                <div class="tabs-nav" role="tablist" aria-label="Category sections">
+                    <button class="tab-button active" role="tab" aria-selected="true" aria-controls="overview-tab" id="overview-btn" data-tab="overview">Overview</button>
+                    <button class="tab-button" role="tab" aria-selected="false" aria-controls="files-tab" id="files-btn" data-tab="files">Knowledge Files</button>
+                    <button class="tab-button" role="tab" aria-selected="false" aria-controls="resources-tab" id="resources-btn" data-tab="resources">Learning Resources</button>
+                    <button class="tab-button" role="tab" aria-selected="false" aria-controls="usage-tab" id="usage-btn" data-tab="usage">CORTEX Usage</button>
+                </div>
+                <div class="tab-content active" id="overview-tab" role="tabpanel" aria-labelledby="overview-btn">
+                    <div class="glass-card">
+                        <h2>Overview</h2>
+                        <p>DevOps practices for continuous integration, delivery, infrastructure automation, and observability.</p>
+                        <h3>Category Statistics</h3>
+                        <div class="stats-grid">
+                            <div class="stat-item"><div class="stat-value">3</div><div class="stat-label">Knowledge Files</div></div>
+                            <div class="stat-item"><div class="stat-value">70+</div><div class="stat-label">Practices</div></div>
+                            <div class="stat-item"><div class="stat-value">4</div><div class="stat-label">Core Pillars</div></div>
+                        </div>
+                    </div>
+                    <div class="glass-card">
+                        <h2>Concept Map</h2>
+                        <div class="mermaid">
+graph LR
+    A[Code] --> B[Build]
+    B --> C[Test]
+    C --> D[Deploy]
+    D --> E[Monitor]
+    E --> A
+    F[Infrastructure as Code] --> D
+    G[Automated Testing] --> C
+    H[Observability] --> E
+    style A fill:#00d4ff,stroke:#7b61ff,stroke-width:2px
+    style E fill:#4ecdc4,stroke:#fff,stroke-width:2px
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-content" id="files-tab" role="tabpanel" aria-labelledby="files-btn" hidden>
+                    <div class="glass-card">
+                        <h2>Knowledge Files</h2>
+                        <p>Explore DevOps automation and practices:</p>
+                    </div>
+                    <div class="knowledge-files-accordion">
+                        <div class="accordion-item">
+                            <button class="accordion-header" aria-expanded="false" aria-controls="cicd-content">
+                                <span class="accordion-icon">🔄</span>
+                                <div class="accordion-title-group">
+                                    <h3 class="accordion-title">CI/CD Pipelines</h3>
+                                    <p class="accordion-subtitle">GitHub Actions, GitLab CI, Jenkins</p>
+                                </div>
+                                <span class="badge">25 rules</span>
+                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </button>
+                            <div id="cicd-content" class="accordion-content" hidden>
+                                <p>CI/CD pipeline design and automation patterns.</p>
+                                <p><em>📝 Knowledge file coming soon</em></p>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <button class="accordion-header" aria-expanded="false" aria-controls="iac-content">
+                                <span class="accordion-icon">🏗️</span>
+                                <div class="accordion-title-group">
+                                    <h3 class="accordion-title">Infrastructure as Code</h3>
+                                    <p class="accordion-subtitle">Terraform, Pulumi, CloudFormation</p>
+                                </div>
+                                <span class="badge">22 rules</span>
+                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </button>
+                            <div id="iac-content" class="accordion-content" hidden>
+                                <p>Infrastructure as Code best practices.</p>
+                                <p><em>📝 Knowledge file coming soon</em></p>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <button class="accordion-header" aria-expanded="false" aria-controls="monitoring-content">
+                                <span class="accordion-icon">📊</span>
+                                <div class="accordion-title-group">
+                                    <h3 class="accordion-title">Monitoring & Observability</h3>
+                                    <p class="accordion-subtitle">Prometheus, Grafana, logs, traces</p>
+                                </div>
+                                <span class="badge">20 rules</span>
+                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </button>
+                            <div id="monitoring-content" class="accordion-content" hidden>
+                                <p>Monitoring, logging, and observability practices.</p>
+                                <p><em>📝 Knowledge file coming soon</em></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-content" id="resources-tab" role="tabpanel" aria-labelledby="resources-btn" hidden>
+                    <div class="glass-card">
+                        <h2>Learning Resources</h2>
+                        <ul class="resource-list">
+                            <li><div class="resource-link">
+                                <span class="resource-icon">📚</span>
+                                <div><strong>The DevOps Handbook</strong><p>By Gene Kim - DevOps principles</p></div>
+                            </div></li>
+                            <li><div class="resource-link">
+                                <span class="resource-icon">📚</span>
+                                <div><strong>Accelerate</strong><p>By Nicole Forsgren - High-performing teams</p></div>
+                            </div></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="tab-content" id="usage-tab" role="tabpanel" aria-labelledby="usage-btn" hidden>
+                    <div class="glass-card">
+                        <h2>How CORTEX Uses DevOps Knowledge</h2>
+                        <h3>🔄 Pipeline Generation</h3>
+                        <ul class="feature-list">
+                            <li><strong>GitHub Actions:</strong> Workflow YAML generation</li>
+                            <li><strong>Build Steps:</strong> Multi-stage build optimization</li>
+                            <li><strong>Testing:</strong> Automated test execution</li>
+                        </ul>
+                        <h3>🏗️ IaC Templates</h3>
+                        <ul class="feature-list">
+                            <li><strong>Terraform:</strong> Module generation</li>
+                            <li><strong>State Management:</strong> Remote backend configuration</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <nav class="bottom-nav" aria-label="Category navigation">
+        <a href="cloud.html" class="bottom-nav-link"><span class="bottom-nav-icon">☁️</span><span class="bottom-nav-label">Cloud</span></a>
+        <a href="containers.html" class="bottom-nav-link"><span class="bottom-nav-icon">🐳</span><span class="bottom-nav-label">Containers</span></a>
+        <a href="devops.html" class="bottom-nav-link active"><span class="bottom-nav-icon">🔧</span><span class="bottom-nav-label">DevOps</span></a>
+    </nav>
+    <script src="../assets/js/category-page.js"></script>
+    <script>mermaid.initialize({startOnLoad:true,theme:'dark',themeVariables:{primaryColor:'#00d4ff',primaryTextColor:'#fff',primaryBorderColor:'#7b61ff',lineColor:'#00d4ff',secondaryColor:'#7b61ff',tertiaryColor:'#1a1f3a'}});</script>
+</body>
+</html>

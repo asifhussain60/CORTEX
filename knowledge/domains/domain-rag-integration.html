@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Domain RAG Integration - Integrate retrieval with domain knowledge and multi-tenant patterns">
+    <meta name="author" content="Asif Hussain">
+    <title>Domain RAG Integration - CORTEX Knowledge</title>
+    <link rel="icon" type="image/png" href="../../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <nav class="breadcrumb-container sticky-nav" aria-label="Breadcrumb">
+        <button class="back-button" onclick="history.back()" aria-label="Go back">← Back</button>
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge Library</a></li>
+            <li><a href="../rag-domains.html">RAG & AI Domains</a></li>
+            <li aria-current="page">Domain RAG Integration</li>
+        </ol>
+    </nav>
+
+    <section class="hero" id="main-content">
+        <div class="logo-header">
+            <img src="../../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
+        </div>
+        <h1 class="hero-title">🧩 Domain RAG Integration</h1>
+        <p class="hero-subtitle">Integrate retrieval with domain knowledge and business logic</p>
+        <div class="file-metadata">
+            <span class="metadata-item">📦 20+ Patterns</span>
+            <span class="metadata-item">🏷️ RAG & AI Domains</span>
+            <span class="metadata-item">📅 Updated: Dec 2025</span>
+        </div>
+    </section>
+
+    <aside class="toc-sidebar" aria-label="Table of contents">
+        <h3>On This Page</h3>
+        <nav class="toc-nav">
+            <a href="#overview" class="toc-link">Overview</a>
+            <a href="#cortex" class="toc-link">CORTEX Integration</a>
+            <a href="#patterns" class="toc-link">Domain Patterns</a>
+            <a href="#multi-tenant" class="toc-link">Multi-Tenant RAG</a>
+            <a href="#evaluation" class="toc-link">Evaluation</a>
+            <a href="#related" class="toc-link">Related Files</a>
+        </nav>
+    </aside>
+
+    <main class="file-content">
+        <section class="glass-card" id="overview">
+            <h2>Domain RAG Integration</h2>
+            <p>
+                Domain RAG Integration connects retrieval systems with domain-specific knowledge, 
+                business rules, and organizational context. This enables AI systems to provide 
+                contextually relevant responses aligned with domain expertise.
+            </p>
+
+            <h3>Key Concepts</h3>
+            <ul class="feature-list">
+                <li><strong>Domain Knowledge Sources:</strong> Engineering practices, coding standards, design patterns</li>
+                <li><strong>Context-Aware Retrieval:</strong> Retrieve based on domain context (code review, generation, architecture)</li>
+                <li><strong>Multi-Tenant Isolation:</strong> Separate knowledge bases per tenant/organization</li>
+                <li><strong>Hierarchical Knowledge:</strong> General patterns → Domain-specific → Organization-specific</li>
+            </ul>
+        </section>
+
+        <section class="glass-card" id="cortex">
+            <h2>CORTEX Brain Integration</h2>
+            <p>CORTEX uses a 4-tier brain architecture. RAG integrates with each tier for different purposes.</p>
+
+            <div class="rule-card">
+                <h3>Tier 0: Governance & Rules</h3>
+                <span class="badge badge-critical">CRITICAL</span>
+                <p>Retrieve SKULL rules, brain protection rules, and governance policies.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Governance Retrieval</h4>
+                    <pre><code class="language-python">def retrieve_governance_rules(operation: str, vector_db):
+    """
+    Retrieve SKULL rules relevant to the operation.
+    """
+    query = f"What rules apply when {operation}?"
+    
+    rules = vector_db.search(
+        query=query,
+        filter={"tier": "tier0", "type": "governance"},
+        top_k=5
+    )
+    
+    return rules
+
+# Example: Check TDD enforcement rules
+rules = retrieve_governance_rules(
+    operation="implementing a new feature",
+    vector_db=cortex_brain_db
+)
+
+# Rules might include:
+# - TDD_ENFORCEMENT: Write tests before implementation
+# - HOLISTIC_DISCOVERY: Search before creating files
+# - GIT_ISOLATION: Don't commit CORTEX code to user repos
+</code></pre>
+                </div>
+            </div>
+
+            <div class="rule-card">
+                <h3>Tier 1: Working Memory</h3>
+                <span class="badge badge-high">HIGH PRIORITY</span>
+                <p>Retrieve recent conversation context and active tasks.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Conversation Context Retrieval</h4>
+                    <pre><code class="language-python">def retrieve_conversation_context(user_query: str, session_id: str, vector_db):
+    """
+    Retrieve relevant conversation history.
+    """
+    # Search recent conversation turns
+    context = vector_db.search(
+        query=user_query,
+        filter={
+            "tier": "tier1",
+            "session_id": session_id,
+            "timestamp": {"$gte": datetime.now() - timedelta(hours=24)}
+        },
+        top_k=10
+    )
+    
+    return context
+
+# Example
+context = retrieve_conversation_context(
+    user_query="Continue the TDD implementation",
+    session_id="session_123",
+    vector_db=cortex_brain_db
+)
+# Returns: Recent discussion about TDD, test failures, implementation progress
+</code></pre>
+                </div>
+            </div>
+
+            <div class="rule-card">
+                <h3>Tier 2: Knowledge Graph</h3>
+                <span class="badge badge-high">HIGH PRIORITY</span>
+                <p>Retrieve design patterns, best practices, and learned lessons.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Pattern Retrieval</h4>
+                    <pre><code class="language-python">def retrieve_engineering_patterns(task: str, vector_db):
+    """
+    Retrieve relevant engineering patterns and best practices.
+    """
+    patterns = vector_db.search(
+        query=task,
+        filter={"tier": "tier2", "type": "pattern"},
+        top_k=5
+    )
+    
+    return patterns
+
+# Example: Code review patterns
+patterns = retrieve_engineering_patterns(
+    task="reviewing Python code for security issues",
+    vector_db=cortex_brain_db
+)
+# Returns: OWASP patterns, secure coding practices, code review checklists
+</code></pre>
+                </div>
+            </div>
+
+            <div class="rule-card">
+                <h3>Tier 3: Development Context</h3>
+                <span class="badge badge-medium">MEDIUM PRIORITY</span>
+                <p>Retrieve code metrics, hotspots, and project-specific context.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Development Context Retrieval</h4>
+                    <pre><code class="language-python">def retrieve_code_context(file_path: str, vector_db):
+    """
+    Retrieve relevant code metrics and hotspot analysis.
+    """
+    context = vector_db.search(
+        query=f"Code analysis for {file_path}",
+        filter={"tier": "tier3", "type": "metrics"},
+        top_k=3
+    )
+    
+    return context
+
+# Example
+context = retrieve_code_context(
+    file_path="src/services/user_service.py",
+    vector_db=cortex_brain_db
+)
+# Returns: Complexity metrics, change frequency, test coverage
+</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" id="patterns">
+            <h2>Domain-Specific RAG Patterns</h2>
+
+            <div class="rule-card">
+                <h3>Code Generation Pattern</h3>
+                <span class="badge badge-high">COMMON USE CASE</span>
+                <p>Retrieve engineering patterns, coding standards, and similar code before generation.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Code Generation with RAG</h4>
+                    <pre><code class="language-python">def generate_code_with_rag(user_request: str, vector_db, llm):
+    """
+    Generate code using retrieved patterns and standards.
+    """
+    # Step 1: Retrieve relevant patterns
+    patterns = vector_db.search(
+        query=user_request,
+        filter={"category": "engineering", "type": "pattern"},
+        top_k=3
+    )
+    
+    # Step 2: Retrieve coding standards
+    standards = vector_db.search(
+        query=f"{user_request} coding standards",
+        filter={"type": "standards"},
+        top_k=2
+    )
+    
+    # Step 3: Retrieve similar code examples
+    examples = vector_db.search(
+        query=user_request,
+        filter={"type": "code_example"},
+        top_k=2
+    )
+    
+    # Step 4: Assemble context
+    context = f"""
+Engineering Patterns:
+{format_patterns(patterns)}
+
+Coding Standards:
+{format_standards(standards)}
+
+Similar Examples:
+{format_examples(examples)}
+"""
+    
+    # Step 5: Generate code
+    prompt = f"""Based on these patterns and standards:
+{context}
+
+Generate code for: {user_request}
+
+Requirements:
+- Follow coding standards
+- Apply relevant patterns
+- Include error handling
+- Add docstrings
+"""
+    
+    code = llm.generate(prompt)
+    return code
+
+# Example
+code = generate_code_with_rag(
+    user_request="Create a REST API endpoint for user registration",
+    vector_db=knowledge_db,
+    llm=openai_llm
+)
+# Returns: Code following patterns (Repository, DTO), standards (PEP 8), 
+#          with examples (FastAPI endpoint structure)
+</code></pre>
+                </div>
+            </div>
+
+            <div class="rule-card">
+                <h3>Code Review Pattern</h3>
+                <span class="badge badge-high">QUALITY ASSURANCE</span>
+                <p>Retrieve review checklists, security patterns, and best practices.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Code Review with RAG</h4>
+                    <pre><code class="language-python">def review_code_with_rag(code: str, language: str, vector_db, llm):
+    """
+    Review code using retrieved checklists and patterns.
+    """
+    # Step 1: Retrieve review checklist
+    checklist = vector_db.search(
+        query=f"{language} code review checklist",
+        filter={"type": "checklist"},
+        top_k=1
+    )[0]
+    
+    # Step 2: Retrieve security patterns (OWASP)
+    security = vector_db.search(
+        query=f"{language} security vulnerabilities",
+        filter={"category": "security"},
+        top_k=5
+    )
+    
+    # Step 3: Retrieve SOLID principles
+    principles = vector_db.search(
+        query="SOLID principles",
+        filter={"category": "engineering"},
+        top_k=1
+    )[0]
+    
+    # Step 4: Perform review
+    prompt = f"""Review this {language} code:
+
+{code}
+
+Check against:
+1. Code Review Checklist: {checklist.content}
+2. Security Patterns: {format_patterns(security)}
+3. SOLID Principles: {principles.content}
+
+Provide:
+- Issues found (with severity)
+- Suggestions for improvement
+- Security vulnerabilities
+"""
+    
+    review = llm.generate(prompt)
+    return review
+
+# Example
+review = review_code_with_rag(
+    code=user_submitted_code,
+    language="Python",
+    vector_db=knowledge_db,
+    llm=openai_llm
+)
+# Returns: Detailed review against checklist, security patterns, SOLID principles
+</code></pre>
+                </div>
+            </div>
+
+            <div class="rule-card">
+                <h3>Architecture Advice Pattern</h3>
+                <span class="badge badge-medium">STRATEGIC</span>
+                <p>Retrieve design patterns, architecture patterns, and anti-patterns.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Architecture Advice with RAG</h4>
+                    <pre><code class="language-python">def architecture_advice_with_rag(scenario: str, vector_db, llm):
+    """
+    Provide architecture advice using retrieved patterns.
+    """
+    # Step 1: Retrieve relevant patterns
+    patterns = vector_db.search(
+        query=scenario,
+        filter={"category": "architecture"},
+        top_k=5
+    )
+    
+    # Step 2: Retrieve anti-patterns to avoid
+    anti_patterns = vector_db.search(
+        query=f"{scenario} anti-patterns",
+        filter={"type": "anti-pattern"},
+        top_k=3
+    )
+    
+    # Step 3: Generate advice
+    prompt = f"""Given this scenario: {scenario}
+
+Relevant Patterns:
+{format_patterns(patterns)}
+
+Anti-Patterns to Avoid:
+{format_patterns(anti_patterns)}
+
+Provide architectural advice including:
+- Recommended patterns and why
+- Trade-offs to consider
+- Anti-patterns to avoid
+- Implementation guidance
+"""
+    
+    advice = llm.generate(prompt)
+    return advice
+
+# Example
+advice = architecture_advice_with_rag(
+    scenario="Building a microservices system with event-driven communication",
+    vector_db=knowledge_db,
+    llm=openai_llm
+)
+# Returns: Event sourcing, CQRS, Saga patterns; avoids distributed monolith
+</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" id="multi-tenant">
+            <h2>Multi-Tenant RAG</h2>
+
+            <div class="rule-card">
+                <h3>Namespace-Based Isolation</h3>
+                <span class="badge badge-high">SECURITY</span>
+                <p>Isolate tenant data using metadata filters.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Multi-Tenant Retrieval</h4>
+                    <pre><code class="language-python">def multi_tenant_retrieval(query: str, tenant_id: str, vector_db, top_k=5):
+    """
+    Retrieve knowledge scoped to specific tenant.
+    """
+    # Combine shared + tenant-specific knowledge
+    
+    # 1. Shared knowledge (all tenants)
+    shared_results = vector_db.search(
+        query=query,
+        filter={"tenant_id": "shared", "type": "general_knowledge"},
+        top_k=top_k // 2
+    )
+    
+    # 2. Tenant-specific knowledge
+    tenant_results = vector_db.search(
+        query=query,
+        filter={"tenant_id": tenant_id},
+        top_k=top_k // 2
+    )
+    
+    # 3. Merge and rank
+    all_results = shared_results + tenant_results
+    all_results.sort(key=lambda x: x.score, reverse=True)
+    
+    return all_results[:top_k]
+
+# Example
+results = multi_tenant_retrieval(
+    query="Python best practices",
+    tenant_id="company_abc",
+    vector_db=knowledge_db,
+    top_k=5
+)
+# Returns: 
+# - Shared: General Python best practices (PEP 8, type hints)
+# - Tenant: Company ABC's specific coding standards and internal libraries
+</code></pre>
+                </div>
+
+                <h4>Knowledge Hierarchy</h4>
+                <ul class="feature-list">
+                    <li><strong>Shared:</strong> General best practices, language patterns</li>
+                    <li><strong>Tenant-Specific:</strong> Company standards, internal APIs, project context</li>
+                    <li><strong>Isolation:</strong> Tenant A cannot access Tenant B's knowledge</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="glass-card" id="evaluation">
+            <h2>Evaluation Framework</h2>
+
+            <div class="rule-card">
+                <h3>Quality Metrics</h3>
+                <span class="badge badge-high">CONTINUOUS IMPROVEMENT</span>
+                <p>Track metrics to improve RAG system quality over time.</p>
+                
+                <h4>Key Metrics</h4>
+                <ul class="feature-list">
+                    <li><strong>Retrieval Precision:</strong> % of retrieved docs that are relevant (target: > 80%)</li>
+                    <li><strong>Retrieval Recall:</strong> % of relevant docs that are retrieved (target: > 70%)</li>
+                    <li><strong>Response Accuracy:</strong> Correctness of generated answers (human eval)</li>
+                    <li><strong>Citation Correctness:</strong> Citations match retrieved sources (target: > 95%)</li>
+                    <li><strong>Latency:</strong> End-to-end response time (target: < 3s)</li>
+                </ul>
+
+                <div class="example-section">
+                    <h4>✅ Metrics Collection</h4>
+                    <pre><code class="language-python">class RAGMetrics:
+    """Collect and track RAG system metrics."""
+    
+    def __init__(self, metrics_db):
+        self.metrics_db = metrics_db
+    
+    def log_retrieval(self, query: str, results: list, relevance_scores: list):
+        """Log retrieval metrics."""
+        self.metrics_db.insert({
+            "timestamp": datetime.now(),
+            "type": "retrieval",
+            "query": query,
+            "num_results": len(results),
+            "avg_relevance": np.mean(relevance_scores),
+            "latency_ms": results.metadata["latency_ms"]
+        })
+    
+    def log_response(self, query: str, response: str, user_feedback: int):
+        """Log response quality (1-5 stars)."""
+        self.metrics_db.insert({
+            "timestamp": datetime.now(),
+            "type": "response",
+            "query": query,
+            "response_length": len(response),
+            "user_rating": user_feedback
+        })
+    
+    def compute_metrics(self, time_window="7d"):
+        """Compute aggregated metrics."""
+        metrics = self.metrics_db.aggregate(time_window)
+        return {
+            "avg_retrieval_latency": metrics["avg_latency_ms"],
+            "avg_relevance_score": metrics["avg_relevance"],
+            "avg_user_rating": metrics["avg_user_rating"],
+            "total_queries": metrics["count"]
+        }
+
+# Usage
+metrics = RAGMetrics(metrics_db)
+
+# Log each interaction
+results = vector_db.search(query, top_k=5)
+metrics.log_retrieval(query, results, [r.score for r in results])
+
+response = llm.generate(query, context)
+user_feedback = collect_feedback()  # 1-5 stars
+metrics.log_response(query, response, user_feedback)
+
+# Weekly review
+weekly_metrics = metrics.compute_metrics(time_window="7d")
+print(f"Avg user rating: {weekly_metrics['avg_user_rating']}/5")
+</code></pre>
+                </div>
+            </div>
+
+            <div class="rule-card">
+                <h3>A/B Testing</h3>
+                <span class="badge badge-medium">OPTIMIZATION</span>
+                <p>Test different retrieval strategies to find what works best.</p>
+                
+                <div class="example-section">
+                    <h4>✅ A/B Test Framework</h4>
+                    <pre><code class="language-python">import random
+
+def ab_test_retrieval(query: str, vector_db, variant="A"):
+    """
+    A/B test different retrieval strategies.
+    """
+    if variant == "A":
+        # Variant A: Pure vector search
+        results = vector_db.search(query, top_k=5)
+    elif variant == "B":
+        # Variant B: Hybrid search (vector + keyword)
+        results = hybrid_search(query, vector_db, top_k=5, alpha=0.5)
+    
+    return results, variant
+
+# Usage
+variant = random.choice(["A", "B"])  # 50/50 split
+results, variant = ab_test_retrieval(query, vector_db, variant)
+
+# Log variant and user feedback
+metrics.log_experiment(query, variant, user_rating)
+
+# Analyze after 1000 queries
+analyze_ab_test(metrics_db, variants=["A", "B"])
+# Output: Variant B (hybrid) has 4.2/5 rating vs Variant A 3.8/5
+</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" id="related">
+            <h2>Related Knowledge Files</h2>
+            <div class="related-grid">
+                <a href="embeddings-strategy.html" class="related-card">
+                    <span class="related-icon">🧠</span>
+                    <h3>Embeddings Strategy</h3>
+                    <p>Generate domain-specific embeddings</p>
+                </a>
+                <a href="vector-database-guide.html" class="related-card">
+                    <span class="related-icon">🗄️</span>
+                    <h3>Vector Database Guide</h3>
+                    <p>Store domain knowledge efficiently</p>
+                </a>
+                <a href="retrieval-pipeline.html" class="related-card">
+                    <span class="related-icon">🔍</span>
+                    <h3>Retrieval Pipeline</h3>
+                    <p>Build complete RAG retrieval systems</p>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="../../assets/js/main.js"></script>
+</body>
+</html>

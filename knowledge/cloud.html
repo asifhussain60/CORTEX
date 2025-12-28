@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Cloud Architecture - AWS, Azure, GCP best practices and patterns">
+    <meta name="author" content="Asif Hussain">
+    <title>Cloud Architecture - CORTEX Knowledge</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <nav class="breadcrumb-container sticky-nav" aria-label="Breadcrumb">
+        <button class="back-button" onclick="history.back()" aria-label="Go back">← Back</button>
+        <ol class="breadcrumb">
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="index.html">Knowledge Library</a></li>
+            <li><a href="index.html#infrastructure-cloud">Infrastructure & Cloud</a></li>
+            <li aria-current="page">☁️ C A</li>
+        </ol>
+    </nav>
+
+    <section class="hero" id="main-content">
+        <div class="logo-header">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
+        </div>
+        <h1 class="hero-title">☁️ Cloud Architecture</h1>
+        <p class="hero-subtitle">AWS, Azure, GCP best practices and patterns</p>
+    </section>
+
+    <aside class="category-sidebar" aria-label="Category navigation">
+        <h3>Infrastructure & Cloud</h3>
+        <nav class="category-nav">
+            <a href="cloud.html" class="category-nav-link active">☁️ Cloud</a>
+            <a href="containers.html" class="category-nav-link">🐳 Containers</a>
+            <a href="devops.html" class="category-nav-link">🔧 DevOps</a>
+        </nav>
+    </aside>
+
+    <section class="section category-content">
+        <div class="container">
+            <div class="tabs-container">
+                <div class="tabs-nav" role="tablist" aria-label="Category sections">
+                    <button class="tab-button active" role="tab" aria-selected="true" aria-controls="overview-tab" id="overview-btn" data-tab="overview">Overview</button>
+                    <button class="tab-button" role="tab" aria-selected="false" aria-controls="files-tab" id="files-btn" data-tab="files">Knowledge Files</button>
+                    <button class="tab-button" role="tab" aria-selected="false" aria-controls="resources-tab" id="resources-btn" data-tab="resources">Learning Resources</button>
+                    <button class="tab-button" role="tab" aria-selected="false" aria-controls="usage-tab" id="usage-btn" data-tab="usage">CORTEX Usage</button>
+                </div>
+
+                <div class="tab-content active" id="overview-tab" role="tabpanel" aria-labelledby="overview-btn">
+                    <div class="glass-card">
+                        <h2>Overview</h2>
+                        <p>AWS, Azure, GCP best practices and patterns</p>
+
+                        <h3>Category Statistics</h3>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <div class="stat-value">3</div>
+                                <div class="stat-label">Knowledge Files</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">90+</div>
+                                <div class="stat-label">Patterns</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">3</div>
+                                <div class="stat-label">Major Providers</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card">
+                        <h2>Concept Map</h2>
+                        <div class="mermaid">
+graph TD
+    A[Cloud Platform] --> B[Compute]
+    A --> C[Storage]
+    A --> D[Database]
+    A --> E[Networking]
+    A --> F[Security]
+    B --> G[VMs/Containers/Serverless]
+    C --> H[Object/Block/File]
+    D --> I[SQL/NoSQL]
+    style A fill:#00d4ff,stroke:#7b61ff,stroke-width:2px
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="files-tab" role="tabpanel" aria-labelledby="files-btn" hidden>
+                    <div class="glass-card">
+                        <h2>Knowledge Files</h2>
+                        <p>Explore cloud architecture patterns:</p>
+                    </div>
+
+                    <div class="knowledge-files-accordion">
+                        <div class="accordion-item">
+                            <button class="accordion-header" aria-expanded="false" aria-controls="aws-best-practices-content">
+                                <span class="accordion-icon">🟠</span>
+                                <div class="accordion-title-group">
+                                    <h3 class="accordion-title">AWS Best Practices</h3>
+                                    <p class="accordion-subtitle">EC2, S3, Lambda, VPC</p>
+                                </div>
+                                <span class="badge">30 rules</span>
+                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </button>
+                            <div id="aws-best-practices-content" class="accordion-content" hidden>
+                <p>Comprehensive AWS cloud best practices covering EC2, S3, Lambda, VPC, and more.</p>
+                <a href="cloud/aws-best-practices.html" class="btn-link">View Full Documentation →</a>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <button class="accordion-header" aria-expanded="false" aria-controls="azure-patterns-content">
+                                <span class="accordion-icon">🔵</span>
+                                <div class="accordion-title-group">
+                                    <h3 class="accordion-title">Azure Patterns</h3>
+                                    <p class="accordion-subtitle">App Service, Cosmos DB, Functions</p>
+                                </div>
+                                <span class="badge">28 rules</span>
+                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </button>
+                            <div id="azure-patterns-content" class="accordion-content" hidden>
+                <p>App Service, Cosmos DB, Functions patterns and best practices.</p>
+                <p><em>📝 Knowledge file coming soon</em></p>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <button class="accordion-header" aria-expanded="false" aria-controls="gcp-architecture-content">
+                                <span class="accordion-icon">🟡</span>
+                                <div class="accordion-title-group">
+                                    <h3 class="accordion-title">GCP Architecture</h3>
+                                    <p class="accordion-subtitle">Compute Engine, Cloud Storage</p>
+                                </div>
+                                <span class="badge">25 rules</span>
+                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </button>
+                            <div id="gcp-architecture-content" class="accordion-content" hidden>
+                <p>Compute Engine, Cloud Storage patterns and best practices.</p>
+                <p><em>📝 Knowledge file coming soon</em></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="resources-tab" role="tabpanel" aria-labelledby="resources-btn" hidden>
+                    <div class="glass-card">
+                        <h2>Learning Resources</h2>
+                        <p><em>Curated resources coming soon</em></p>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="usage-tab" role="tabpanel" aria-labelledby="usage-btn" hidden>
+                    <div class="glass-card">
+                        <h2>How CORTEX Uses Cloud Architecture Knowledge</h2>
+                        <p><em>Usage patterns coming soon</em></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <nav class="bottom-nav" aria-label="Category navigation">
+        <a href="cloud.html" class="bottom-nav-link active">
+            <span class="bottom-nav-icon">☁️</span>
+            <span class="bottom-nav-label">Cloud</span>
+        </a>
+        <a href="containers.html" class="bottom-nav-link">
+            <span class="bottom-nav-icon">🐳</span>
+            <span class="bottom-nav-label">Containers</span>
+        </a>
+        <a href="devops.html" class="bottom-nav-link">
+            <span class="bottom-nav-icon">🔧</span>
+            <span class="bottom-nav-label">DevOps</span>
+        </a>
+    </nav>
+
+    <script src="../assets/js/category-page.js"></script>
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#00d4ff',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#7b61ff',
+                lineColor: '#00d4ff',
+                secondaryColor: '#7b61ff',
+                tertiaryColor: '#1a1f3a'
+            }
+        });
+    </script>
+</body>
+</html>

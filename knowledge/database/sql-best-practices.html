@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SQL Best Practices - Query Optimization, Indexing, Transactions, Security">
+    <meta name="author" content="Asif Hussain">
+    <title>SQL Best Practices - CORTEX Knowledge</title>
+    <link rel="icon" type="image/png" href="../../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <nav class="breadcrumb-container sticky-nav" aria-label="Breadcrumb">
+        <button class="back-button" onclick="history.back()" aria-label="Go back">← Back</button>
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge Library</a></li>
+            <li><a href="../database.html">Database</a></li>
+            <li aria-current="page">SQL Best Practices</li>
+        </ol>
+    </nav>
+
+    <section class="hero" id="main-content">
+        <div class="logo-header">
+            <img src="../../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
+        </div>
+        <h1 class="hero-title">🗄️ SQL Best Practices</h1>
+        <p class="hero-subtitle">Query optimization, indexing, transactions, and SQL security</p>
+        <div class="file-metadata">
+            <span class="metadata-item">📦 18 Rules</span>
+            <span class="metadata-item">🏷️ Database</span>
+            <span class="metadata-item">📅 Updated: Dec 2025</span>
+        </div>
+    </section>
+
+    <aside class="toc-sidebar" aria-label="Table of contents">
+        <h3>On This Page</h3>
+        <nav class="toc-nav">
+            <a href="#overview" class="toc-link">Overview</a>
+            <a href="#querying" class="toc-link">Query Optimization</a>
+            <a href="#indexing" class="toc-link">Indexing Strategies</a>
+            <a href="#transactions" class="toc-link">Transactions</a>
+            <a href="#security" class="toc-link">SQL Security</a>
+            <a href="#related" class="toc-link">Related Files</a>
+        </nav>
+    </aside>
+
+    <section class="section file-content">
+        <div class="container">
+            <div id="overview" class="content-section">
+                <div class="glass-card">
+                    <h2>Overview</h2>
+                    <p>SQL best practices covering query optimization, proper indexing, transaction management, and security to build performant and secure database applications.</p>
+                    
+                    <div class="info-box info-box-primary">
+                        <strong>Key SQL Principles:</strong>
+                        <ul>
+                            <li><strong>Query Efficiency:</strong> Write queries that minimize database load</li>
+                            <li><strong>Index Optimization:</strong> Strategic indexing for read/write balance</li>
+                            <li><strong>Data Integrity:</strong> Use transactions and constraints</li>
+                            <li><strong>Security:</strong> Prevent SQL injection and unauthorized access</li>
+                            <li><strong>Normalization:</strong> Reduce data redundancy appropriately</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="querying" class="content-section">
+                <div class="glass-card">
+                    <h2>Query Optimization</h2>
+
+                    <div class="rule-detail">
+                        <div class="rule-header-detail">
+                            <h3>Select Only Required Columns</h3>
+                            <span class="severity-badge severity-high">HIGH</span>
+                        </div>
+                        <p class="rule-description">
+                            Avoid SELECT * - explicitly list only the columns you need to reduce network transfer and memory usage.
+                        </p>
+
+                        <div class="code-comparison-grid">
+                            <div class="code-example code-good">
+                                <h4>✅ Good - Explicit Column Selection</h4>
+                                <pre><code class="language-sql">-- Only select required columns
+SELECT 
+    u.user_id,
+    u.username,
+    u.email,
+    u.created_at
+FROM users u
+WHERE u.is_active = 1
+ORDER BY u.created_at DESC
+LIMIT 100;
+
+-- Join with specific columns
+SELECT 
+    o.order_id,
+    o.order_date,
+    c.customer_name,
+    c.email
+FROM orders o
+INNER JOIN customers c ON o.customer_id = c.customer_id
+WHERE o.order_date >= '2024-01-01';</code></pre>
+                            </div>
+
+                            <div class="code-example code-bad">
+                                <h4>❌ Bad - SELECT *</h4>
+                                <pre><code class="language-sql">-- Retrieves all columns, even unused ones
+SELECT *
+FROM users
+WHERE is_active = 1;
+
+-- Ambiguous in joins - which table's columns?
+SELECT *
+FROM orders o
+INNER JOIN customers c ON o.customer_id = c.customer_id;
+-- Gets all columns from both tables
+-- Wastes bandwidth, memory, unclear columns</code></pre>
+                            </div>
+                        </div>
+
+                        <div class="info-box info-box-warning">
+                            <strong>Performance Impact:</strong> SELECT * can retrieve BLOB/TEXT columns you don't need, significantly increasing query time and memory usage. It also breaks code when table schema changes.
+                        </div>
+                    </div>
+
+                    <div class="rule-detail">
+                        <div class="rule-header-detail">
+                            <h3>Use EXISTS Instead of COUNT for Existence Checks</h3>
+                            <span class="severity-badge severity-high">HIGH</span>
+                        </div>
+                        <p class="rule-description">
+                            When checking if records exist, use EXISTS instead of COUNT(*) - it stops scanning once a match is found.
+                        </p>
+
+                        <div class="code-comparison-grid">
+                            <div class="code-example code-good">
+                                <h4>✅ Good - EXISTS for Checks</h4>
+                                <pre><code class="language-sql">-- Stops at first match
+SELECT 
+    p.product_id,
+    p.product_name,
+    CASE 
+        WHEN EXISTS (
+            SELECT 1 
+            FROM orders o 
+            WHERE o.product_id = p.product_id
+        )
+        THEN 'Has Orders'
+        ELSE 'No Orders'
+    END AS order_status
+FROM products p;</code></pre>
+                            </div>
+
+                            <div class="code-example code-bad">
+                                <h4>❌ Bad - COUNT for Existence</h4>
+                                <pre><code class="language-sql">-- Counts all matches unnecessarily
+SELECT 
+    p.product_id,
+    p.product_name,
+    CASE 
+        WHEN (
+            SELECT COUNT(*) 
+            FROM orders o 
+            WHERE o.product_id = p.product_id
+        ) > 0
+        THEN 'Has Orders'
+        ELSE 'No Orders'
+    END AS order_status
+FROM products p;
+-- Scans entire table even if 1000 orders exist</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="rule-detail">
+                        <div class="rule-header-detail">
+                            <h3>Use UNION ALL Instead of UNION When Possible</h3>
+                            <span class="severity-badge severity-medium">MEDIUM</span>
+                        </div>
+                        <p class="rule-description">
+                            UNION removes duplicates (expensive sort operation). Use UNION ALL if duplicates are acceptable or impossible.
+                        </p>
+
+                        <div class="code-example code-good">
+                            <h4>✅ Good - UNION ALL</h4>
+                            <pre><code class="language-sql">-- No duplicate removal needed
+SELECT order_id, customer_id, order_date
+FROM orders_2024
+UNION ALL
+SELECT order_id, customer_id, order_date
+FROM orders_2023
+ORDER BY order_date DESC;
+
+-- Duplicates already impossible (distinct sources)
+SELECT 'premium' AS tier, user_id FROM premium_users
+UNION ALL
+SELECT 'basic' AS tier, user_id FROM basic_users;</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="indexing" class="content-section">
+                <div class="glass-card">
+                    <h2>Indexing Strategies</h2>
+
+                    <div class="rule-detail">
+                        <div class="rule-header-detail">
+                            <h3>Index Foreign Keys and WHERE Clauses</h3>
+                            <span class="severity-badge severity-high">HIGH</span>
+                        </div>
+                        <p class="rule-description">
+                            Create indexes on columns frequently used in WHERE, JOIN, and ORDER BY clauses. Always index foreign keys.
+                        </p>
+
+                        <div class="code-example code-good">
+                            <h4>✅ Good - Strategic Indexes</h4>
+                            <pre><code class="language-sql">-- Index foreign keys for joins
+CREATE INDEX idx_orders_customer_id 
+ON orders(customer_id);
+
+-- Index WHERE clause columns
+CREATE INDEX idx_users_email 
+ON users(email);
+
+-- Composite index for common query patterns
+CREATE INDEX idx_orders_customer_date 
+ON orders(customer_id, order_date DESC);
+
+-- Covering index includes SELECT columns
+CREATE INDEX idx_products_category_covering 
+ON products(category_id, product_name, price);</code></pre>
+                        </div>
+
+                        <div class="info-box info-box-info">
+                            <strong>Index Order Matters:</strong> In composite indexes like (customer_id, order_date), queries can use the index for customer_id alone, but NOT for order_date alone. Put most selective columns first.
+                        </div>
+                    </div>
+
+                    <div class="rule-detail">
+                        <div class="rule-header-detail">
+                            <h3>Avoid Over-Indexing</h3>
+                            <span class="severity-badge severity-medium">MEDIUM</span>
+                        </div>
+                        <p class="rule-description">
+                            Too many indexes slow down INSERT/UPDATE/DELETE operations. Balance read vs write performance.
+                        </p>
+
+                        <div class="code-example code-good">
+                            <h4>✅ Good - Selective Indexing</h4>
+                            <pre><code class="language-sql">-- Analyze query patterns first
+-- Index only frequently used query patterns
+
+-- High-read table: More indexes OK
+CREATE INDEX idx_users_email ON users(email);
+CREATE INDEX idx_users_username ON users(username);
+CREATE INDEX idx_users_created ON users(created_at);
+
+-- High-write table: Minimal indexes
+-- Only index critical queries
+CREATE INDEX idx_audit_log_timestamp 
+ON audit_log(log_timestamp);
+-- Avoid indexing columns rarely queried</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="transactions" class="content-section">
+                <div class="glass-card">
+                    <h2>Transaction Management</h2>
+
+                    <div class="rule-detail">
+                        <div class="rule-header-detail">
+                            <h3>Use Transactions for Multi-Step Operations</h3>
+                            <span class="severity-badge severity-high">HIGH</span>
+                        </div>
+                        <p class="rule-description">
+                            Wrap related operations in transactions to ensure atomicity. Either all operations succeed or all are rolled back.
+                        </p>
+
+                        <div class="code-comparison-grid">
+                            <div class="code-example code-good">
+                                <h4>✅ Good - Transaction for Money Transfer</h4>
+                                <pre><code class="language-sql">BEGIN TRANSACTION;
+
+-- Deduct from source account
+UPDATE accounts
+SET balance = balance - 100.00
+WHERE account_id = 12345
+  AND balance >= 100.00;
+
+-- Check if deduction succeeded
+IF @@ROWCOUNT = 0
+BEGIN
+    ROLLBACK TRANSACTION;
+    RAISERROR('Insufficient funds', 16, 1);
+    RETURN;
+END
+
+-- Add to destination account
+UPDATE accounts
+SET balance = balance + 100.00
+WHERE account_id = 67890;
+
+-- Record transaction
+INSERT INTO transactions (from_account, to_account, amount, timestamp)
+VALUES (12345, 67890, 100.00, GETDATE());
+
+COMMIT TRANSACTION;</code></pre>
+                            </div>
+
+                            <div class="code-example code-bad">
+                                <h4>❌ Bad - No Transaction</h4>
+                                <pre><code class="language-sql">-- Without transaction - partial failure possible
+UPDATE accounts
+SET balance = balance - 100.00
+WHERE account_id = 12345;
+
+-- If this fails, money disappears!
+UPDATE accounts
+SET balance = balance + 100.00
+WHERE account_id = 67890;</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="rule-detail">
+                        <div class="rule-header-detail">
+                            <h3>Set Appropriate Isolation Levels</h3>
+                            <span class="severity-badge severity-medium">MEDIUM</span>
+                        </div>
+                        <p class="rule-description">
+                            Choose transaction isolation level based on concurrency requirements vs performance tradeoff.
+                        </p>
+
+                        <div class="code-example code-good">
+                            <h4>✅ Good - Isolation Level Selection</h4>
+                            <pre><code class="language-sql">-- READ COMMITTED (default) - prevents dirty reads
+SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+BEGIN TRANSACTION;
+SELECT * FROM products WHERE product_id = 123;
+COMMIT;
+
+-- REPEATABLE READ - prevents non-repeatable reads
+SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+BEGIN TRANSACTION;
+SELECT balance FROM accounts WHERE account_id = 456;
+-- Same SELECT will return same value even if others update
+SELECT balance FROM accounts WHERE account_id = 456;
+COMMIT;
+
+-- SNAPSHOT - readers don't block writers
+SET TRANSACTION ISOLATION LEVEL SNAPSHOT;
+BEGIN TRANSACTION;
+-- Reads consistent snapshot, no locks on read
+SELECT * FROM orders WHERE order_date >= '2024-01-01';
+COMMIT;</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="security" class="content-section">
+                <div class="glass-card">
+                    <h2>SQL Security</h2>
+
+                    <div class="rule-detail">
+                        <div class="rule-header-detail">
+                            <h3>Always Use Parameterized Queries</h3>
+                            <span class="severity-badge severity-high">HIGH</span>
+                        </div>
+                        <p class="rule-description">
+                            Never concatenate user input into SQL strings. Use parameterized queries or prepared statements to prevent SQL injection.
+                        </p>
+
+                        <div class="code-comparison-grid">
+                            <div class="code-example code-good">
+                                <h4>✅ Good - Parameterized Query</h4>
+                                <pre><code class="language-python"># Python with parameterized query
+import psycopg2
+
+def get_user(username):
+    conn = psycopg2.connect(database="mydb")
+    cursor = conn.cursor()
+    
+    # Parameter placeholder prevents injection
+    cursor.execute(
+        "SELECT * FROM users WHERE username = %s",
+        (username,)
+    )
+    
+    result = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    return result
+
+# C# with Entity Framework
+var user = await context.Users
+    .Where(u => u.Username == username)
+    .FirstOrDefaultAsync();</code></pre>
+                            </div>
+
+                            <div class="code-example code-bad">
+                                <h4>❌ Bad - String Concatenation (SQL INJECTION!)</h4>
+                                <pre><code class="language-python"># VULNERABLE TO SQL INJECTION
+def get_user_unsafe(username):
+    conn = psycopg2.connect(database="mydb")
+    cursor = conn.cursor()
+    
+    # NEVER DO THIS!
+    query = f"SELECT * FROM users WHERE username = '{username}'"
+    cursor.execute(query)
+    
+    # Attacker input: "' OR '1'='1"
+    # Query becomes: SELECT * FROM users WHERE username = '' OR '1'='1'
+    # Returns all users!</code></pre>
+                            </div>
+                        </div>
+
+                        <div class="info-box info-box-danger">
+                            <strong>⚠️ Critical Security Issue:</strong> String concatenation allows attackers to inject malicious SQL. They can read, modify, or delete any data, create admin accounts, or even execute system commands.
+                        </div>
+                    </div>
+
+                    <div class="rule-detail">
+                        <div class="rule-header-detail">
+                            <h3>Apply Principle of Least Privilege</h3>
+                            <span class="severity-badge severity-high">HIGH</span>
+                        </div>
+                        <p class="rule-description">
+                            Database users should have only the minimum permissions necessary. Never use admin accounts for application connections.
+                        </p>
+
+                        <div class="code-example code-good">
+                            <h4>✅ Good - Limited Permissions</h4>
+                            <pre><code class="language-sql">-- Create application user with limited permissions
+CREATE USER app_reader WITH PASSWORD 'secure_password';
+
+-- Read-only access to specific tables
+GRANT SELECT ON users TO app_reader;
+GRANT SELECT ON products TO app_reader;
+GRANT SELECT ON orders TO app_reader;
+
+-- Create user for API with write access
+CREATE USER app_writer WITH PASSWORD 'secure_password';
+GRANT SELECT, INSERT, UPDATE ON orders TO app_writer;
+GRANT SELECT ON products TO app_writer;
+-- NO DELETE permission
+-- NO access to sensitive tables like audit_logs
+
+-- Revoke dangerous permissions
+REVOKE ALL ON admin_settings FROM app_writer;</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="related" class="content-section">
+                <div class="glass-card">
+                    <h2>Related Knowledge Files</h2>
+                    <div class="related-files-grid">
+                        <a href="nosql-patterns.html" class="related-file-card">
+                            <span class="file-icon">📊</span>
+                            <div>
+                                <h4>NoSQL Patterns</h4>
+                                <p>Document and key-value databases</p>
+                            </div>
+                        </a>
+                        <a href="orm-best-practices.html" class="related-file-card">
+                            <span class="file-icon">🔗</span>
+                            <div>
+                                <h4>ORM Best Practices</h4>
+                                <p>Entity Framework, SQLAlchemy</p>
+                            </div>
+                        </a>
+                        <a href="../performance/query-optimization.html" class="related-file-card">
+                            <span class="file-icon">⚡</span>
+                            <div>
+                                <h4>Query Performance</h4>
+                                <p>Advanced optimization techniques</p>
+                            </div>
+                        </a>
+                        <a href="../security/data-protection.html" class="related-file-card">
+                            <span class="file-icon">🔒</span>
+                            <div>
+                                <h4>Data Protection</h4>
+                                <p>Encryption and data security</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="../../assets/js/file-detail.js"></script>
+</body>
+</html>

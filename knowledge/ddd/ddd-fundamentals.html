@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Domain-Driven Design - Bounded Contexts, Aggregates, Entities, Value Objects">
+    <meta name="author" content="Asif Hussain">
+    <title>DDD Fundamentals - CORTEX Knowledge</title>
+    <link rel="icon" type="image/png" href="../../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <nav class="breadcrumb-container sticky-nav" aria-label="Breadcrumb">
+        <button class="back-button" onclick="history.back()" aria-label="Go back">← Back</button>
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge Library</a></li>
+            <li><a href="../ddd.html">Domain-Driven Design</a></li>
+            <li aria-current="page">DDD Fundamentals</li>
+        </ol>
+    </nav>
+
+    <section class="hero" id="main-content">
+        <div class="logo-header">
+            <img src="../../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
+        </div>
+        <h1 class="hero-title">🏛️ Domain-Driven Design Fundamentals</h1>
+        <p class="hero-subtitle">Bounded contexts, entities, value objects, aggregates, and ubiquitous language</p>
+        <div class="file-metadata">
+            <span class="metadata-item">📦 16 Rules</span>
+            <span class="metadata-item">🏷️ Software Craft</span>
+            <span class="metadata-item">📅 Updated: Dec 2025</span>
+        </div>
+    </section>
+
+    <aside class="toc-sidebar" aria-label="Table of contents">
+        <h3>On This Page</h3>
+        <nav class="toc-nav">
+            <a href="#overview" class="toc-link">Overview</a>
+            <a href="#strategic" class="toc-link">Strategic Design</a>
+            <a href="#tactical" class="toc-link">Tactical Patterns</a>
+            <a href="#entities" class="toc-link">Entities vs Value Objects</a>
+            <a href="#aggregates" class="toc-link">Aggregates</a>
+            <a href="#related" class="toc-link">Related Files</a>
+        </nav>
+    </aside>
+
+    <section class="section file-content">
+        <div class="container">
+            <div id="overview" class="content-section">
+                <div class="glass-card">
+                    <h2>Overview</h2>
+                    <p>Domain-Driven Design (DDD) is an approach to software development that focuses on understanding and modeling the business domain, using ubiquitous language shared between developers and domain experts.</p>
+                    
+                    <div class="info-box info-box-primary">
+                        <strong>DDD Core Principles:</strong>
+                        <ul>
+                            <li><strong>Ubiquitous Language:</strong> Shared vocabulary between developers and domain experts</li>
+                            <li><strong>Bounded Contexts:</strong> Clear boundaries for models and teams</li>
+                            <li><strong>Focus on Core Domain:</strong> Invest in what differentiates your business</li>
+                            <li><strong>Continuous Learning:</strong> Evolve understanding through collaboration</li>
+                            <li><strong>Model-Driven Design:</strong> Code reflects domain concepts directly</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="strategic" class="content-section">
+                <div class="glass-card">
+                    <h2>Strategic Design - Bounded Contexts</h2>
+
+                    <div class="rule-detail">
+                        <div class="rule-header-detail">
+                            <h3>Define Explicit Bounded Contexts</h3>
+                            <span class="severity-badge severity-high">HIGH</span>
+                        </div>
+                        <p class="rule-description">
+                            A bounded context is an explicit boundary where a domain model is defined and applicable. Same term can have different meanings in different contexts.
+                        </p>
+
+                        <div class="code-example code-good">
+                            <h4>✅ Good - Separate Bounded Contexts</h4>
+                            <pre><code class="language-csharp">// Sales Context - Customer means "buyer"
+namespace ECommerce.Sales
+{
+    public class Customer
+    {
+        public CustomerId Id { get; private set; }
+        public string Name { get; private set; }
+        public ShoppingCart Cart { get; private set; }
+        public List<Order> OrderHistory { get; private set; }
+        public decimal CreditLimit { get; private set; }
+        
+        public void PlaceOrder(Order order)
+        {
+            if (order.Total > CreditLimit)
+                throw new InsufficientCreditException();
+            
+            OrderHistory.Add(order);
+        }
+    }
+}
+
+// Support Context - Customer means "support case subject"
+namespace ECommerce.Support
+{
+    public class Customer
+    {
+        public CustomerId Id { get; private set; }
+        public string Name { get; private set; }
+        public string Email { get; private set; }
+        public List<Ticket> Tickets { get; private set; }
+        public SupportTier Tier { get; private set; }
+        
+        public void CreateTicket(string issue)
+        {
+            var ticket = new Ticket(this, issue, Tier);
+            Tickets.Add(ticket);
+        }
+    }
+}
+
+// Different models, same concept, different contexts</code></pre>
+                        </div>
+
+                        <div class="info-box info-box-info">
+                            <strong>Context Mapping:</strong> Define relationships between bounded contexts using patterns: Shared Kernel, Customer-Supplier, Conformist, Anticorruption Layer, Published Language.
+                        </div>
+                    </div>
+
+                    <div class="rule-detail">
+                        <div class="rule-header-detail">
+                            <h3>Use Ubiquitous Language Consistently</h3>
+                            <span class="severity-badge severity-high">HIGH</span>
+                        </div>
+                        <p class="rule-description">
+                            Use domain expert terminology in code, tests, and conversations. No translation layer between business and code.
+                        </p>
+
+                        <div class="code-comparison-grid">
+                            <div class="code-example code-good">
+                                <h4>✅ Good - Domain Language</h4>
+                                <pre><code class="language-typescript">// Insurance domain terms used directly
+class Policy {
+  private premium: Money;
+  private deductible: Money;
+  private coverageLimit: Money;
+  
+  underwrite(applicant: Applicant): UnderwritingDecision {
+    const riskAssessment = this.assessRisk(applicant);
+    
+    if (riskAssessment.isHighRisk()) {
+      return UnderwritingDecision.decline(
+        "Applicant exceeds risk tolerance"
+      );
+    }
+    
+    return UnderwritingDecision.approve(
+      this.calculatePremium(riskAssessment)
+    );
+  }
+  
+  // Domain expert would understand this code
+}</code></pre>
+                            </div>
+
+                            <div class="code-example code-bad">
+                                <h4>❌ Bad - Technical Language</h4>
+                                <pre><code class="language-typescript">// Generic terms, lost domain meaning
+class Item {
+  private price: number;
+  private minPayment: number;
+  private maxValue: number;
+  
+  process(person: Person): Result {
+    const score = this.calculate(person);
+    
+    if (score > 0.7) {
+      return Result.reject("Score too high");
+    }
+    
+    return Result.accept(this.computePrice(score));
+  }
+  
+  // Domain expert wouldn't recognize their domain
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="rule-detail">
+                        <div class="rule-header-detail">
+                            <h3>Identify Core, Supporting, and Generic Subdomains</h3>
+                            <span class="severity-badge severity-medium">MEDIUM</span>
+                        </div>
+                        <p class="rule-description">
+                            Core domain provides competitive advantage (invest heavily). Supporting domains are necessary but not differentiating. Generic domains can use off-the-shelf solutions.
+                        </p>
+
+                        <div class="info-box info-box-success">
+                            <strong>Subdomain Strategy:</strong>
+                            <ul>
+                                <li><strong>Core Domain:</strong> Unique business logic, competitive advantage - Build custom, invest in best team</li>
+                                <li><strong>Supporting:</strong> Necessary but not special - Build simple, adequate solution</li>
+                                <li><strong>Generic:</strong> Solved problem (auth, payment) - Buy or use OSS, minimal customization</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tactical" class="content-section">
+                <div class="glass-card">
+                    <h2>Tactical Patterns Overview</h2>
+
+                    <div class="rule-detail">
+                        <div class="rule-header-detail">
+                            <h3>Apply Tactical Patterns Within Bounded Contexts</h3>
+                            <span class="severity-badge severity-high">HIGH</span>
+                        </div>
+                        <p class="rule-description">
+                            Tactical patterns (Entities, Value Objects, Aggregates, Repositories, Domain Events) are used within a bounded context to model the domain.
+                        </p>
+
+                        <div class="info-box info-box-primary">
+                            <strong>Tactical Pattern Hierarchy:</strong>
+                            <ul>
+                                <li><strong>Entity:</strong> Object with identity that persists over time</li>
+                                <li><strong>Value Object:</strong> Immutable object defined by attributes, no identity</li>
+                                <li><strong>Aggregate:</strong> Cluster of entities/VOs with consistency boundary</li>
+                                <li><strong>Aggregate Root:</strong> Single entity entry point to aggregate</li>
+                                <li><strong>Repository:</strong> Abstracts persistence for aggregates</li>
+                                <li><strong>Domain Service:</strong> Stateless operations not belonging to entities</li>
+                                <li><strong>Domain Event:</strong> Something significant that happened in domain</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="entities" class="content-section">
+                <div class="glass-card">
+                    <h2>Entities vs Value Objects</h2>
+
+                    <div class="rule-detail">
+                        <div class="rule-header-detail">
+                            <h3>Use Entities for Objects with Identity</h3>
+                            <span class="severity-badge severity-high">HIGH</span>
+                        </div>
+                        <p class="rule-description">
+                            Entities have unique identity that persists through lifecycle. Equality based on ID, not attributes.
+                        </p>
+
+                        <div class="code-example code-good">
+                            <h4>✅ Good - Entity with Identity</h4>
+                            <pre><code class="language-csharp">public class Order
+{
+    public OrderId Id { get; private set; }
+    public CustomerId CustomerId { get; private set; }
+    public DateTime OrderDate { get; private set; }
+    private List<OrderLine> _orderLines;
+    public OrderStatus Status { get; private set; }
+    
+    // Entity equality based on ID
+    public override bool Equals(object obj)
+    {
+        if (obj is Order other)
+            return Id.Equals(other.Id);
+        return false;
+    }
+    
+    // Business logic methods
+    public void AddLine(Product product, int quantity)
+    {
+        if (Status != OrderStatus.Draft)
+            throw new InvalidOperationException(
+                "Cannot modify confirmed order"
+            );
+        
+        _orderLines.Add(new OrderLine(product, quantity));
+    }
+    
+    public void Confirm()
+    {
+        if (!_orderLines.Any())
+            throw new InvalidOperationException(
+                "Cannot confirm empty order"
+            );
+        
+        Status = OrderStatus.Confirmed;
+        // Raise domain event
+        DomainEvents.Raise(new OrderConfirmedEvent(Id));
+    }
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="rule-detail">
+                        <div class="rule-header-detail">
+                            <h3>Use Value Objects for Descriptive Concepts</h3>
+                            <span class="severity-badge severity-high">HIGH</span>
+                        </div>
+                        <p class="rule-description">
+                            Value Objects are immutable, defined by attributes, no identity. Two VOs with same attributes are equal.
+                        </p>
+
+                        <div class="code-comparison-grid">
+                            <div class="code-example code-good">
+                                <h4>✅ Good - Value Object</h4>
+                                <pre><code class="language-csharp">public class Money : IEquatable<Money>
+{
+    public decimal Amount { get; }
+    public Currency Currency { get; }
+    
+    public Money(decimal amount, Currency currency)
+    {
+        if (amount < 0)
+            throw new ArgumentException("Amount cannot be negative");
+        
+        Amount = amount;
+        Currency = currency ?? throw new ArgumentNullException();
+    }
+    
+    // Immutable - operations return new instance
+    public Money Add(Money other)
+    {
+        if (Currency != other.Currency)
+            throw new InvalidOperationException(
+                "Cannot add different currencies"
+            );
+        
+        return new Money(Amount + other.Amount, Currency);
+    }
+    
+    public Money Multiply(decimal factor)
+    {
+        return new Money(Amount * factor, Currency);
+    }
+    
+    // Equality based on values
+    public bool Equals(Money other)
+    {
+        if (other is null) return false;
+        return Amount == other.Amount && Currency == other.Currency;
+    }
+    
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Amount, Currency);
+    }
+}</code></pre>
+                            </div>
+
+                            <div class="code-example code-bad">
+                                <h4>❌ Bad - Primitive Obsession</h4>
+                                <pre><code class="language-csharp">// Using primitives instead of value objects
+public class Order
+{
+    public decimal TotalAmount { get; set; }
+    public string Currency { get; set; }
+    
+    public void AddAmount(decimal amount, string currency)
+    {
+        // No validation, no invariants
+        // Can mix currencies accidentally
+        TotalAmount += amount;
+        // Lost domain concepts
+    }
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="aggregates" class="content-section">
+                <div class="glass-card">
+                    <h2>Aggregate Design</h2>
+
+                    <div class="rule-detail">
+                        <div class="rule-header-detail">
+                            <h3>Design Small Aggregates</h3>
+                            <span class="severity-badge severity-high">HIGH</span>
+                        </div>
+                        <p class="rule-description">
+                            Keep aggregates small - just enough to enforce invariants. Large aggregates cause performance and concurrency issues.
+                        </p>
+
+                        <div class="code-comparison-grid">
+                            <div class="code-example code-good">
+                                <h4>✅ Good - Small Aggregate</h4>
+                                <pre><code class="language-typescript">// Aggregate: Order (root) + OrderLines
+class Order {
+  private id: OrderId;
+  private customerId: CustomerId; // Reference by ID
+  private lines: OrderLine[] = [];
+  private status: OrderStatus;
+  
+  // Invariant: Total must be positive
+  addLine(productId: ProductId, quantity: number): void {
+    if (this.status !== OrderStatus.Draft) {
+      throw new Error("Cannot modify confirmed order");
+    }
+    
+    this.lines.push(new OrderLine(productId, quantity));
+  }
+  
+  confirm(): void {
+    if (this.lines.length === 0) {
+      throw new Error("Cannot confirm empty order");
+    }
+    
+    // Invariants checked before status change
+    this.status = OrderStatus.Confirmed;
+  }
+  
+  // Customer is separate aggregate
+  // Reference by ID, not object
+}</code></pre>
+                            </div>
+
+                            <div class="code-example code-bad">
+                                <h4>❌ Bad - Large Aggregate</h4>
+                                <pre><code class="language-typescript">// Overly large aggregate
+class Order {
+  private id: OrderId;
+  private customer: Customer;      // Full object!
+  private lines: OrderLine[];
+  private shipment: Shipment;      // Full object!
+  private invoices: Invoice[];     // Collection!
+  private payments: Payment[];     // Collection!
+  
+  // Loading order loads entire object graph
+  // Concurrent updates cause conflicts
+  // Performance issues
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="rule-detail">
+                        <div class="rule-header-detail">
+                            <h3>Reference Other Aggregates by ID</h3>
+                            <span class="severity-badge severity-high">HIGH</span>
+                        </div>
+                        <p class="rule-description">
+                            Aggregates reference other aggregates by ID only, not by object reference. Enforces boundaries and prevents large object graphs.
+                        </p>
+
+                        <div class="code-example code-good">
+                            <h4>✅ Good - Reference by ID</h4>
+                            <pre><code class="language-python"># Aggregate Root: Product
+class Product:
+    def __init__(self, product_id: ProductId, name: str, category_id: CategoryId):
+        self._id = product_id
+        self._name = name
+        self._category_id = category_id  # Reference by ID
+        
+    def change_category(self, new_category_id: CategoryId):
+        # Domain logic
+        self._category_id = new_category_id
+        
+    # Category is separate aggregate
+    # Loaded separately when needed
+
+# Repository fetches related data
+class ProductService:
+    def get_product_with_category(self, product_id: ProductId):
+        product = self.product_repo.find_by_id(product_id)
+        category = self.category_repo.find_by_id(product.category_id)
+        
+        return ProductDto(product, category)</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="rule-detail">
+                        <div class="rule-header-detail">
+                            <h3>Enforce Invariants Within Aggregate Boundaries</h3>
+                            <span class="severity-badge severity-high">HIGH</span>
+                        </div>
+                        <p class="rule-description">
+                            Aggregate root is responsible for maintaining invariants for entire aggregate. All modifications go through root.
+                        </p>
+
+                        <div class="code-example code-good">
+                            <h4>✅ Good - Invariant Enforcement</h4>
+                            <pre><code class="language-csharp">public class ShoppingCart
+{
+    private List<CartItem> _items = new();
+    private Money _total;
+    private const int MaxItems = 50;
+    
+    // All modifications through root
+    public void AddItem(Product product, int quantity)
+    {
+        // Enforce invariants
+        if (_items.Count >= MaxItems)
+            throw new DomainException("Cart is full");
+        
+        if (quantity <= 0 || quantity > 100)
+            throw new DomainException("Invalid quantity");
+        
+        var existingItem = _items.FirstOrDefault(i => i.ProductId == product.Id);
+        
+        if (existingItem != null)
+            existingItem.IncreaseQuantity(quantity); // Through item method
+        else
+            _items.Add(new CartItem(product.Id, quantity, product.Price));
+        
+        // Recalculate total to maintain invariant
+        RecalculateTotal();
+    }
+    
+    private void RecalculateTotal()
+    {
+        _total = _items
+            .Select(i => i.LineTotal)
+            .Aggregate(Money.Zero, (sum, line) => sum.Add(line));
+    }
+    
+    // No public setter for _items
+    // Invariants always maintained
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="related" class="content-section">
+                <div class="glass-card">
+                    <h2>Related Knowledge Files</h2>
+                    <div class="related-files-grid">
+                        <a href="bounded-contexts.html" class="related-file-card">
+                            <span class="file-icon">📦</span>
+                            <div>
+                                <h4>Bounded Contexts</h4>
+                                <p>Context mapping patterns</p>
+                            </div>
+                        </a>
+                        <a href="aggregates.html" class="related-file-card">
+                            <span class="file-icon">🎯</span>
+                            <div>
+                                <h4>Aggregate Patterns</h4>
+                                <p>Advanced aggregate design</p>
+                            </div>
+                        </a>
+                        <a href="domain-events.html" class="related-file-card">
+                            <span class="file-icon">📡</span>
+                            <div>
+                                <h4>Domain Events</h4>
+                                <p>Event-driven domain models</p>
+                            </div>
+                        </a>
+                        <a href="../microservices/service-design.html" class="related-file-card">
+                            <span class="file-icon">🔷</span>
+                            <div>
+                                <h4>Microservices Design</h4>
+                                <p>DDD with microservices</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="../../assets/js/file-detail.js"></script>
+</body>
+</html>

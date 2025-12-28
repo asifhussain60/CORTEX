@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Domain Events - Event-driven architecture, event sourcing, CQRS, and saga patterns">
+    <meta name="author" content="Asif Hussain">
+    <title>Domain Events - CORTEX Knowledge</title>
+    <link rel="icon" type="image/png" href="../../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <nav class="breadcrumb-container sticky-nav" aria-label="Breadcrumb">
+        <button class="back-button" onclick="history.back()" aria-label="Go back">← Back</button>
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge Library</a></li>
+            <li><a href="../ddd.html">Domain-Driven Design</a></li>
+            <li aria-current="page">Domain Events</li>
+        </ol>
+    </nav>
+
+    <section class="hero" id="main-content">
+        <div class="logo-header">
+            <img src="../../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
+        </div>
+        <h1 class="hero-title">📡 Domain Events</h1>
+        <p class="hero-subtitle">Event-driven architecture patterns for decoupled systems</p>
+        <div class="file-metadata">
+            <span class="metadata-item">📦 45+ Rules</span>
+            <span class="metadata-item">🏷️ Domain-Driven Design</span>
+            <span class="metadata-item">📅 Updated: Dec 2025</span>
+        </div>
+    </section>
+
+    <aside class="toc-sidebar" aria-label="Table of contents">
+        <h3>On This Page</h3>
+        <nav class="toc-nav">
+            <a href="#overview" class="toc-link">Overview</a>
+            <a href="#design" class="toc-link">Event Design</a>
+            <a href="#publishing" class="toc-link">Publishing Events</a>
+            <a href="#handling" class="toc-link">Event Handlers</a>
+            <a href="#event-sourcing" class="toc-link">Event Sourcing</a>
+            <a href="#cqrs" class="toc-link">CQRS</a>
+            <a href="#related" class="toc-link">Related Files</a>
+        </nav>
+    </aside>
+
+    <main class="file-content">
+        <section class="glass-card" id="overview">
+            <h2>What are Domain Events?</h2>
+            <blockquote class="info-banner">
+                "Use a domain event to capture an occurrence of something that happened in the domain." 
+                — Eric Evans
+            </blockquote>
+            
+            <p>
+                Domain Events are records of significant occurrences in your domain. They enable decoupled 
+                communication between aggregates and bounded contexts, support eventual consistency, and 
+                provide an audit trail of system behavior.
+            </p>
+
+            <h3>Characteristics</h3>
+            <ul class="feature-list">
+                <li><strong>Past Tense Naming:</strong> OrderPlaced (not PlaceOrder) - describes what happened</li>
+                <li><strong>Immutable:</strong> What happened cannot change after the fact</li>
+                <li><strong>Contains Relevant Data:</strong> Information needed by event consumers</li>
+                <li><strong>Published After Persistence:</strong> Only after aggregate state is saved</li>
+                <li><strong>Triggers Side Effects:</strong> Can cause actions in other parts of system</li>
+            </ul>
+
+            <h3>Types of Events</h3>
+            <ul class="feature-list">
+                <li><strong>Internal Domain Events:</strong> Within same bounded context (OrderConfirmed → EmailSent)</li>
+                <li><strong>Integration Events:</strong> Across bounded contexts (OrderPlaced → Fulfillment notified)</li>
+                <li><strong>Event Sourcing Events:</strong> Complete state representation for rebuilding aggregates</li>
+            </ul>
+
+            <div class="info-banner">
+                <strong>💡 Benefits:</strong> Decouples components, enables eventual consistency, provides audit trail, 
+                supports temporal queries, makes implicit processes explicit.
+            </div>
+        </section>
+
+        <section class="glass-card" id="design">
+            <h2>Event Design</h2>
+            <p>How to structure domain events for maximum clarity and maintainability.</p>
+
+            <div class="rule-card">
+                <h3>Event Structure Components</h3>
+                <span class="badge badge-high">HIGH PRIORITY</span>
+                <p>Every domain event should contain these key components.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Recommended - Well-Designed Event</h4>
+                    <pre><code class="language-csharp">// Base domain event class
+public abstract class DomainEvent
+{
+    public Guid EventId { get; }          // Unique event identifier
+    public DateTime OccurredOn { get; }    // When it happened
+    
+    protected DomainEvent()
+    {
+        EventId = Guid.NewGuid();
+        OccurredOn = DateTime.UtcNow;
+    }
+}
+
+// Specific domain event
+public class OrderPlacedEvent : DomainEvent
+{
+    // Aggregate information
+    public Guid OrderId { get; }           // What aggregate
+    public Guid CustomerId { get; }        // Who caused it
+    
+    // Event-specific data
+    public Money TotalAmount { get; }      // Relevant information
+    public DateTime OrderDate { get; }
+    public List&lt;OrderItemDto&gt; Items { get; }
+    
+    // Metadata
+    public string CorrelationId { get; }   // For distributed tracing
+    
+    public OrderPlacedEvent(
+        Guid orderId,
+        Guid customerId,
+        Money totalAmount,
+        DateTime orderDate,
+        List&lt;OrderItemDto&gt; items,
+        string correlationId)
+    {
+        OrderId = orderId;
+        CustomerId = customerId;
+        TotalAmount = totalAmount;
+        OrderDate = orderDate;
+        Items = items ?? new List&lt;OrderItemDto&gt;();
+        CorrelationId = correlationId;
+    }
+}
+
+// DTO for event data (avoid exposing domain entities)
+public class OrderItemDto
+{
+    public Guid ProductId { get; set; }
+    public int Quantity { get; set; }
+    public Money UnitPrice { get; set; }
+}
+</code></pre>
+                </div>
+            </div>
+
+            <div class="rule-card">
+                <h3>Event Naming Convention</h3>
+                <span class="badge badge-high">HIGH PRIORITY</span>
+                <p>Use past tense to describe what happened. Be specific and business-focused.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Good Event Names</h4>
+                    <pre><code class="language-csharp">// E-commerce
+OrderPlacedEvent
+OrderShippedEvent
+PaymentProcessedEvent
+InventoryReservedEvent
+
+// Banking
+AccountOpenedEvent
+FundsTransferredEvent
+LoanApprovedEvent
+InterestAccruedEvent
+
+// Healthcare
+AppointmentScheduledEvent
+PrescriptionIssuedEvent
+TestResultsPublishedEvent
+</code></pre>
+                </div>
+
+                <div class="example-section bad-example">
+                    <h4>❌ Poor Event Names</h4>
+                    <pre><code class="language-csharp">// Avoid command-style names (not past tense)
+PlaceOrderEvent          // Use: OrderPlacedEvent
+ProcessPaymentEvent      // Use: PaymentProcessedEvent
+
+// Avoid generic names (not specific)
+DataChangedEvent         // What data? What changed?
+UpdatedEvent             // What was updated?
+
+// Avoid technical names (not business-focused)
+DatabaseWrittenEvent     // Use business concept instead
+CacheInvalidatedEvent    // Implementation detail, not domain event
+</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" id="publishing">
+            <h2>Publishing Events</h2>
+            <p>How and when to publish domain events from aggregates.</p>
+
+            <div class="rule-card">
+                <h3>In-Memory Event Publishing Pattern</h3>
+                <span class="badge badge-high">HIGH PRIORITY</span>
+                <p>Collect events in aggregate, publish after successful persistence.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Recommended</h4>
+                    <pre><code class="language-csharp">// Aggregate collects events
+public class Order : Entity, IAggregateRoot
+{
+    private readonly List&lt;DomainEvent&gt; _domainEvents = new();
+    public IReadOnlyList&lt;DomainEvent&gt; DomainEvents => _domainEvents;
+    
+    public void Submit()
+    {
+        if (Items.Count == 0)
+            throw new InvalidOperationException("Cannot submit empty order");
+        
+        // Change state
+        Status = OrderStatus.Submitted;
+        
+        // Raise event (not published yet)
+        _domainEvents.Add(new OrderSubmittedEvent(
+            Id, 
+            CustomerId, 
+            TotalAmount,
+            DateTime.UtcNow
+        ));
+    }
+    
+    public void ClearDomainEvents() => _domainEvents.Clear();
+}
+
+// Repository publishes events after save
+public class OrderRepository : IOrderRepository
+{
+    private readonly DbContext _context;
+    private readonly IEventBus _eventBus;
+    
+    public async Task UpdateAsync(Order order)
+    {
+        _context.Orders.Update(order);
+        
+        // Save changes first
+        await _context.SaveChangesAsync();
+        
+        // Then publish events (only if save succeeds)
+        foreach (var @event in order.DomainEvents)
+        {
+            await _eventBus.PublishAsync(@event);
+        }
+        
+        order.ClearDomainEvents();
+    }
+}
+
+// Application service coordinates
+public class OrderService
+{
+    private readonly IOrderRepository _repository;
+    
+    public async Task SubmitOrder(Guid orderId)
+    {
+        var order = await _repository.GetByIdAsync(orderId);
+        
+        order.Submit();  // Raises event
+        
+        await _repository.UpdateAsync(order);  // Saves + publishes
+    }
+}
+</code></pre>
+                    <p class="example-note">✅ Events only published after successful database save.</p>
+                </div>
+            </div>
+
+            <div class="rule-card">
+                <h3>Outbox Pattern for Reliability</h3>
+                <span class="badge badge-medium">MEDIUM PRIORITY</span>
+                <p>Store events in database table, publish asynchronously for guaranteed delivery.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Recommended for Distributed Systems</h4>
+                    <pre><code class="language-csharp">// Outbox table stores unpublished events
+public class OutboxMessage
+{
+    public Guid Id { get; set; }
+    public string EventType { get; set; }
+    public string EventData { get; set; }  // JSON serialized
+    public DateTime OccurredOn { get; set; }
+    public bool Published { get; set; }
+    public DateTime? PublishedOn { get; set; }
+}
+
+// Save event to outbox in same transaction as aggregate
+public async Task UpdateAsync(Order order)
+{
+    using var transaction = await _context.Database.BeginTransactionAsync();
+    
+    try
+    {
+        // Save aggregate
+        _context.Orders.Update(order);
+        
+        // Save events to outbox (same transaction)
+        foreach (var @event in order.DomainEvents)
+        {
+            var outboxMessage = new OutboxMessage
+            {
+                Id = Guid.NewGuid(),
+                EventType = @event.GetType().Name,
+                EventData = JsonSerializer.Serialize(@event),
+                OccurredOn = @event.OccurredOn,
+                Published = false
+            };
+            
+            _context.OutboxMessages.Add(outboxMessage);
+        }
+        
+        await _context.SaveChangesAsync();
+        await transaction.CommitAsync();
+        
+        order.ClearDomainEvents();
+    }
+    catch
+    {
+        await transaction.RollbackAsync();
+        throw;
+    }
+}
+
+// Background worker publishes events from outbox
+public class OutboxProcessor : BackgroundService
+{
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        while (!stoppingToken.IsCancellationRequested)
+        {
+            var unpublishedEvents = await _context.OutboxMessages
+                .Where(m => !m.Published)
+                .OrderBy(m => m.OccurredOn)
+                .Take(100)
+                .ToListAsync();
+            
+            foreach (var message in unpublishedEvents)
+            {
+                try
+                {
+                    // Publish to message bus
+                    await _eventBus.PublishAsync(
+                        DeserializeEvent(message.EventType, message.EventData)
+                    );
+                    
+                    // Mark as published
+                    message.Published = true;
+                    message.PublishedOn = DateTime.UtcNow;
+                }
+                catch (Exception ex)
+                {
+                    // Log error, retry later
+                    _logger.LogError(ex, "Failed to publish event {EventId}", message.Id);
+                }
+            }
+            
+            await _context.SaveChangesAsync();
+            await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
+        }
+    }
+}
+</code></pre>
+                    <p class="example-note">✅ Guarantees event delivery even if message bus is temporarily unavailable.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" id="handling">
+            <h2>Event Handlers</h2>
+            <p>How to subscribe to and handle domain events.</p>
+
+            <div class="rule-card">
+                <h3>Event Handler Pattern</h3>
+                <span class="badge badge-high">HIGH PRIORITY</span>
+                <p>Implement handlers for specific event types. Handlers should be idempotent.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Recommended</h4>
+                    <pre><code class="language-csharp">// Event handler interface
+public interface IEventHandler&lt;TEvent&gt; where TEvent : DomainEvent
+{
+    Task HandleAsync(TEvent @event);
+}
+
+// Specific event handler
+public class OrderSubmittedEventHandler : IEventHandler&lt;OrderSubmittedEvent&gt;
+{
+    private readonly IInventoryService _inventoryService;
+    private readonly IEmailService _emailService;
+    private readonly ILogger _logger;
+    
+    public async Task HandleAsync(OrderSubmittedEvent @event)
+    {
+        _logger.LogInformation(
+            "Handling OrderSubmitted event for order {OrderId}", 
+            @event.OrderId
+        );
+        
+        try
+        {
+            // Reserve inventory
+            await _inventoryService.ReserveInventoryAsync(
+                @event.OrderId, 
+                @event.Items
+            );
+            
+            // Send confirmation email
+            await _emailService.SendOrderConfirmationAsync(
+                @event.CustomerId,
+                @event.OrderId,
+                @event.TotalAmount
+            );
+            
+            _logger.LogInformation(
+                "Successfully handled OrderSubmitted event for order {OrderId}", 
+                @event.OrderId
+            );
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(
+                ex, 
+                "Error handling OrderSubmitted event for order {OrderId}", 
+                @event.OrderId
+            );
+            throw;  // Let infrastructure retry
+        }
+    }
+}
+
+// Event bus dispatches to handlers
+public class EventBus : IEventBus
+{
+    private readonly IServiceProvider _serviceProvider;
+    
+    public async Task PublishAsync&lt;TEvent&gt;(TEvent @event) where TEvent : DomainEvent
+    {
+        var handlers = _serviceProvider
+            .GetServices&lt;IEventHandler&lt;TEvent&gt;&gt;();
+        
+        foreach (var handler in handlers)
+        {
+            await handler.HandleAsync(@event);
+        }
+    }
+}
+</code></pre>
+                </div>
+            </div>
+
+            <div class="rule-card">
+                <h3>Idempotent Event Handling</h3>
+                <span class="badge badge-high">HIGH PRIORITY</span>
+                <p>Handlers must be idempotent - processing same event multiple times has same result.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Recommended - Idempotency Check</h4>
+                    <pre><code class="language-csharp">// Track processed events
+public class ProcessedEventTracker
+{
+    private readonly DbContext _context;
+    
+    public async Task&lt;bool&gt; HasBeenProcessedAsync(Guid eventId)
+    {
+        return await _context.ProcessedEvents
+            .AnyAsync(e => e.EventId == eventId);
+    }
+    
+    public async Task MarkAsProcessedAsync(Guid eventId)
+    {
+        _context.ProcessedEvents.Add(new ProcessedEvent
+        {
+            EventId = eventId,
+            ProcessedOn = DateTime.UtcNow
+        });
+        await _context.SaveChangesAsync();
+    }
+}
+
+// Handler checks idempotency
+public class PaymentProcessedEventHandler : IEventHandler&lt;PaymentProcessedEvent&gt;
+{
+    private readonly ProcessedEventTracker _tracker;
+    private readonly IInvoiceService _invoiceService;
+    
+    public async Task HandleAsync(PaymentProcessedEvent @event)
+    {
+        // Check if already processed
+        if (await _tracker.HasBeenProcessedAsync(@event.EventId))
+        {
+            _logger.LogInformation(
+                "Event {EventId} already processed, skipping", 
+                @event.EventId
+            );
+            return;
+        }
+        
+        // Process event
+        await _invoiceService.MarkAsPaidAsync(@event.InvoiceId);
+        
+        // Mark as processed
+        await _tracker.MarkAsProcessedAsync(@event.EventId);
+    }
+}
+</code></pre>
+                    <p class="example-note">✅ Prevents duplicate processing if event is delivered multiple times.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" id="event-sourcing">
+            <h2>Event Sourcing</h2>
+            <p>
+                Store all changes as sequence of events. Aggregate state is derived by replaying events. 
+                Provides complete audit trail and enables temporal queries.
+            </p>
+
+            <div class="rule-card">
+                <h3>Event Sourcing Pattern</h3>
+                <span class="badge badge-medium">MEDIUM PRIORITY</span>
+                <p>Store events as primary source of truth, rebuild state by replaying events.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Recommended</h4>
+                    <pre><code class="language-csharp">// Event-sourced aggregate
+public class BankAccount
+{
+    public Guid Id { get; private set; }
+    public decimal Balance { get; private set; }
+    
+    private List&lt;DomainEvent&gt; _changes = new();
+    
+    // Replay events to rebuild state
+    public static BankAccount LoadFromHistory(Guid id, IEnumerable&lt;DomainEvent&gt; history)
+    {
+        var account = new BankAccount { Id = id };
+        
+        foreach (var @event in history)
+        {
+            account.Apply(@event);
+        }
+        
+        return account;
+    }
+    
+    // Apply event to state
+    private void Apply(DomainEvent @event)
+    {
+        switch (@event)
+        {
+            case AccountOpenedEvent e:
+                Id = e.AccountId;
+                Balance = e.InitialDeposit;
+                break;
+            
+            case FundsDepositedEvent e:
+                Balance += e.Amount;
+                break;
+            
+            case FundsWithdrawnEvent e:
+                Balance -= e.Amount;
+                break;
+        }
+    }
+    
+    // Public methods raise events
+    public void Deposit(decimal amount)
+    {
+        if (amount <= 0)
+            throw new ArgumentException("Amount must be positive");
+        
+        var @event = new FundsDepositedEvent(Id, amount, DateTime.UtcNow);
+        Apply(@event);
+        _changes.Add(@event);
+    }
+}
+
+// Event store repository
+public class EventStore
+{
+    public async Task&lt;BankAccount&gt; GetByIdAsync(Guid accountId)
+    {
+        var events = await _context.Events
+            .Where(e => e.AggregateId == accountId)
+            .OrderBy(e => e.Version)
+            .ToListAsync();
+        
+        return BankAccount.LoadFromHistory(accountId, events);
+    }
+    
+    public async Task SaveAsync(BankAccount account)
+    {
+        foreach (var @event in account.GetChanges())
+        {
+            await _context.Events.AddAsync(new StoredEvent
+            {
+                EventId = @event.EventId,
+                AggregateId = account.Id,
+                EventType = @event.GetType().Name,
+                EventData = JsonSerializer.Serialize(@event),
+                OccurredOn = @event.OccurredOn
+            });
+        }
+        
+        await _context.SaveChangesAsync();
+    }
+}
+</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" id="cqrs">
+            <h2>CQRS (Command Query Responsibility Segregation)</h2>
+            <p>
+                Separate read and write models. Commands change state, queries return data. 
+                Often combined with event sourcing.
+            </p>
+
+            <div class="rule-card">
+                <h3>CQRS Pattern</h3>
+                <span class="badge badge-medium">MEDIUM PRIORITY</span>
+                <p>Split command (write) operations from query (read) operations.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Recommended</h4>
+                    <pre><code class="language-csharp">// COMMAND SIDE (Write Model)
+public class PlaceOrderCommand
+{
+    public Guid CustomerId { get; set; }
+    public List&lt;OrderItemDto&gt; Items { get; set; }
+}
+
+public class PlaceOrderCommandHandler
+{
+    private readonly IOrderRepository _repository;
+    
+    public async Task&lt;Guid&gt; Handle(PlaceOrderCommand command)
+    {
+        var order = Order.Create(command.CustomerId);
+        
+        foreach (var item in command.Items)
+        {
+            order.AddItem(item.ProductId, item.Quantity, item.UnitPrice);
+        }
+        
+        await _repository.AddAsync(order);
+        
+        return order.Id;
+    }
+}
+
+// QUERY SIDE (Read Model)
+public class OrderSummaryQuery
+{
+    public Guid OrderId { get; set; }
+}
+
+public class OrderSummaryQueryHandler
+{
+    private readonly IReadOnlyDbContext _queryDb;
+    
+    public async Task&lt;OrderSummaryDto&gt; Handle(OrderSummaryQuery query)
+    {
+        // Query optimized read model
+        return await _queryDb.OrderSummaries
+            .Where(o => o.OrderId == query.OrderId)
+            .Select(o => new OrderSummaryDto
+            {
+                OrderId = o.OrderId,
+                CustomerName = o.CustomerName,
+                TotalAmount = o.TotalAmount,
+                Status = o.Status
+            })
+            .FirstOrDefaultAsync();
+    }
+}
+</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" id="related">
+            <h2>Related Knowledge Files</h2>
+            <div class="related-grid">
+                <a href="aggregates-entities.html" class="related-card">
+                    <span class="related-icon">📐</span>
+                    <h3>Aggregates & Entities</h3>
+                    <p>Tactical DDD patterns for raising events</p>
+                </a>
+                <a href="bounded-contexts.html" class="related-card">
+                    <span class="related-icon">🏗️</span>
+                    <h3>Bounded Contexts</h3>
+                    <p>Integration events between contexts</p>
+                </a>
+                <a href="../messaging/event-driven-patterns.html" class="related-card">
+                    <span class="related-icon">📨</span>
+                    <h3>Event-Driven Patterns</h3>
+                    <p>Messaging infrastructure for events</p>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
+    <script src="../../assets/js/main.js"></script>
+</body>
+</html>
