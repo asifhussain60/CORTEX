@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="UI/UX Design - Design systems, accessibility, usability patterns">
+    <meta name="keywords" content="ui, ux, design systems, accessibility, usability">
+    <meta name="author" content="Asif Hussain">
+    <title>UI/UX Design - CORTEX Knowledge</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <nav class="breadcrumb-container sticky-nav" aria-label="Breadcrumb">
+        <button class="back-button" onclick="history.back()" aria-label="Go back">← Back</button>
+        <ol class="breadcrumb">
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="index.html">Knowledge Library</a></li>
+            <li><a href="index.html#frontend-ui">Frontend & UI</a></li>
+            <li aria-current="page">UI/UX</li>
+        </ol>
+    </nav>
+
+    <section class="hero" id="main-content">
+        <div class="logo-header">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
+        </div>
+        <h1 class="hero-title">🎨 UI/UX Design</h1>
+        <p class="hero-subtitle">Design systems, accessibility standards, and user experience patterns</p>
+    </section>
+
+    <aside class="category-sidebar" aria-label="Category navigation">
+        <h3>Frontend & UI</h3>
+        <nav class="category-nav">
+            <a href="frontend.html" class="category-nav-link">💻 Frontend</a>
+            <a href="ui-ux.html" class="category-nav-link active">🎨 UI/UX</a>
+            <a href="mobile.html" class="category-nav-link">📱 Mobile</a>
+        </nav>
+    </aside>
+
+    <section class="section category-content">
+        <div class="container">
+            <div class="tabs-container">
+                <div class="tabs-nav" role="tablist" aria-label="Category sections">
+                    <button class="tab-button active" role="tab" aria-selected="true" aria-controls="overview-tab" id="overview-btn" data-tab="overview">Overview</button>
+                    <button class="tab-button" role="tab" aria-selected="false" aria-controls="files-tab" id="files-btn" data-tab="files">Knowledge Files</button>
+                    <button class="tab-button" role="tab" aria-selected="false" aria-controls="resources-tab" id="resources-btn" data-tab="resources">Learning Resources</button>
+                    <button class="tab-button" role="tab" aria-selected="false" aria-controls="usage-tab" id="usage-btn" data-tab="usage">CORTEX Usage</button>
+                </div>
+
+                <div class="tab-content active" id="overview-tab" role="tabpanel" aria-labelledby="overview-btn">
+                    <div class="glass-card">
+                        <h2>Overview</h2>
+                        <p>UI/UX design focuses on creating intuitive, accessible, and delightful user experiences through design systems, accessibility standards, and proven usability patterns.</p>
+
+                        <h3>Category Statistics</h3>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <div class="stat-value">4</div>
+                                <div class="stat-label">Knowledge Files</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">80+</div>
+                                <div class="stat-label">Design Patterns</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">WCAG 2.1</div>
+                                <div class="stat-label">Standards</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card">
+                        <h2>Concept Map</h2>
+                        <div class="mermaid">
+graph TD
+    A[UI/UX Design] --> B[Design Systems]
+    A --> C[Accessibility]
+    A --> D[Usability]
+    
+    B --> E[Typography]
+    B --> F[Color]
+    B --> G[Spacing]
+    B --> H[Components]
+    
+    C --> I[WCAG]
+    C --> J[ARIA]
+    C --> K[Keyboard Nav]
+    
+    D --> L[User Research]
+    D --> M[Interaction Design]
+    D --> N[Information Architecture]
+    
+    style A fill:#00d4ff,stroke:#7b61ff,stroke-width:2px
+    style B fill:#7b61ff,stroke:#fff,stroke-width:2px
+    style C fill:#ff6b6b,stroke:#fff,stroke-width:2px
+    style D fill:#4ecdc4,stroke:#fff,stroke-width:2px
+                        </div>
+                    </div>
+
+                    <div class="glass-card">
+                        <h2>High-Priority Patterns</h2>
+                        <div class="rules-showcase">
+                            <div class="rule-card" data-expandable>
+                                <div class="rule-header" onclick="toggleRule(this)">
+                                    <span class="rule-icon">♿</span>
+                                    <div class="rule-title-group">
+                                        <h3>WCAG AAA Compliance</h3>
+                                        <span class="severity-badge severity-high">HIGH</span>
+                                    </div>
+                                    <button class="expand-btn" aria-label="Expand rule">+</button>
+                                </div>
+                                <div class="rule-body" hidden>
+                                    <p><strong>Description:</strong> All UI elements must meet WCAG 2.1 Level AAA standards for contrast ratios (7:1 for normal text, 4.5:1 for large text).</p>
+                                </div>
+                            </div>
+
+                            <div class="rule-card" data-expandable>
+                                <div class="rule-header" onclick="toggleRule(this)">
+                                    <span class="rule-icon">📏</span>
+                                    <div class="rule-title-group">
+                                        <h3>8px Grid System</h3>
+                                        <span class="severity-badge severity-medium">MEDIUM</span>
+                                    </div>
+                                    <button class="expand-btn" aria-label="Expand rule">+</button>
+                                </div>
+                                <div class="rule-body" hidden>
+                                    <p><strong>Description:</strong> Use 8px base unit for spacing, sizing, and layout to ensure visual consistency across all platforms.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="files-tab" role="tabpanel" aria-labelledby="files-btn" hidden>
+                    <div class="glass-card">
+                        <h2>Knowledge Files</h2>
+                        <p>Explore UI/UX design principles and patterns:</p>
+                    </div>
+
+                    <div class="knowledge-files-accordion">
+                        <div class="accordion-item">
+                            <button class="accordion-header" aria-expanded="false" aria-controls="design-systems-content">
+                                <span class="accordion-icon">🎨</span>
+                                <div class="accordion-title-group">
+                                    <h3 class="accordion-title">Design Systems</h3>
+                                    <p class="accordion-subtitle">Typography, color, spacing, components</p>
+                                </div>
+                                <span class="badge">22 rules</span>
+                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </button>
+                            <div id="design-systems-content" class="accordion-content" hidden>
+                                <p>Comprehensive design system patterns for consistent UI.</p>
+                                <p><em>📝 Knowledge file coming soon</em></p>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <button class="accordion-header" aria-expanded="false" aria-controls="accessibility-content">
+                                <span class="accordion-icon">♿</span>
+                                <div class="accordion-title-group">
+                                    <h3 class="accordion-title">Accessibility Standards</h3>
+                                    <p class="accordion-subtitle">WCAG, ARIA, keyboard navigation</p>
+                                </div>
+                                <span class="badge">28 rules</span>
+                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </button>
+                            <div id="accessibility-content" class="accordion-content" hidden>
+                                <p>WCAG 2.1 compliance and accessibility best practices.</p>
+                                <p><em>📝 Knowledge file coming soon</em></p>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <button class="accordion-header" aria-expanded="false" aria-controls="usability-content">
+                                <span class="accordion-icon">👥</span>
+                                <div class="accordion-title-group">
+                                    <h3 class="accordion-title">Usability Patterns</h3>
+                                    <p class="accordion-subtitle">User flows, interaction design</p>
+                                </div>
+                                <span class="badge">18 rules</span>
+                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </button>
+                            <div id="usability-content" class="accordion-content" hidden>
+                                <p>Proven usability patterns for intuitive interfaces.</p>
+                                <p><em>📝 Knowledge file coming soon</em></p>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <button class="accordion-header" aria-expanded="false" aria-controls="responsive-content">
+                                <span class="accordion-icon">📐</span>
+                                <div class="accordion-title-group">
+                                    <h3 class="accordion-title">Responsive Design</h3>
+                                    <p class="accordion-subtitle">Mobile-first, breakpoints, fluid layouts</p>
+                                </div>
+                                <span class="badge">16 rules</span>
+                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </button>
+                            <div id="responsive-content" class="accordion-content" hidden>
+                                <p>Mobile-first responsive design patterns.</p>
+                                <p><em>📝 Knowledge file coming soon</em></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="resources-tab" role="tabpanel" aria-labelledby="resources-btn" hidden>
+                    <div class="glass-card">
+                        <h2>Learning Resources</h2>
+                        
+                        <h3>Official Standards</h3>
+                        <ul class="resource-list">
+                            <li>
+                                <a href="https://www.w3.org/WAI/WCAG21/quickref/" target="_blank" rel="noopener noreferrer" class="resource-link">
+                                    <span class="resource-icon">📖</span>
+                                    <div>
+                                        <strong>WCAG 2.1 Guidelines</strong>
+                                        <p>Web Content Accessibility Guidelines</p>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://material.io/design" target="_blank" rel="noopener noreferrer" class="resource-link">
+                                    <span class="resource-icon">📖</span>
+                                    <div>
+                                        <strong>Material Design</strong>
+                                        <p>Google's design system documentation</p>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+
+                        <h3>Books</h3>
+                        <ul class="resource-list">
+                            <li>
+                                <div class="resource-link">
+                                    <span class="resource-icon">📚</span>
+                                    <div>
+                                        <strong>Don't Make Me Think</strong>
+                                        <p>By Steve Krug - Usability essentials</p>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="resource-link">
+                                    <span class="resource-icon">📚</span>
+                                    <div>
+                                        <strong>The Design of Everyday Things</strong>
+                                        <p>By Don Norman - Design principles</p>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="usage-tab" role="tabpanel" aria-labelledby="usage-btn" hidden>
+                    <div class="glass-card">
+                        <h2>How CORTEX Uses UI/UX Knowledge</h2>
+                        
+                        <h3>🎯 Design Review</h3>
+                        <ul class="feature-list">
+                            <li><strong>Contrast Validation:</strong> Checks color contrast ratios against WCAG standards</li>
+                            <li><strong>Touch Target Sizing:</strong> Validates interactive elements are ≥48px</li>
+                            <li><strong>Spacing Consistency:</strong> Ensures 8px grid system compliance</li>
+                        </ul>
+
+                        <h3>♿ Accessibility Auditing</h3>
+                        <ul class="feature-list">
+                            <li><strong>ARIA Attributes:</strong> Validates proper semantic HTML and ARIA</li>
+                            <li><strong>Keyboard Navigation:</strong> Tests focus management and tab order</li>
+                            <li><strong>Screen Reader:</strong> Ensures proper alt text and labels</li>
+                        </ul>
+
+                        <h3>📐 Component Generation</h3>
+                        <ul class="feature-list">
+                            <li><strong>Design System Tokens:</strong> Generates CSS variables from design tokens</li>
+                            <li><strong>Responsive Breakpoints:</strong> Implements mobile-first patterns</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <nav class="bottom-nav" aria-label="Category navigation">
+        <a href="frontend.html" class="bottom-nav-link">
+            <span class="bottom-nav-icon">💻</span>
+            <span class="bottom-nav-label">Frontend</span>
+        </a>
+        <a href="ui-ux.html" class="bottom-nav-link active">
+            <span class="bottom-nav-icon">🎨</span>
+            <span class="bottom-nav-label">UI/UX</span>
+        </a>
+        <a href="mobile.html" class="bottom-nav-link">
+            <span class="bottom-nav-icon">📱</span>
+            <span class="bottom-nav-label">Mobile</span>
+        </a>
+    </nav>
+
+    <script src="../assets/js/category-page.js"></script>
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#00d4ff',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#7b61ff',
+                lineColor: '#00d4ff',
+                secondaryColor: '#7b61ff',
+                tertiaryColor: '#1a1f3a'
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="DDD Aggregates & Entities - Tactical Domain-Driven Design patterns for consistency boundaries">
+    <meta name="author" content="Asif Hussain">
+    <title>Aggregates & Entities - CORTEX Knowledge</title>
+    <link rel="icon" type="image/png" href="../../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <nav class="breadcrumb-container sticky-nav" aria-label="Breadcrumb">
+        <button class="back-button" onclick="history.back()" aria-label="Go back">← Back</button>
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge Library</a></li>
+            <li><a href="../ddd.html">Domain-Driven Design</a></li>
+            <li aria-current="page">Aggregates & Entities</li>
+        </ol>
+    </nav>
+
+    <section class="hero" id="main-content">
+        <div class="logo-header">
+            <img src="../../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
+        </div>
+        <h1 class="hero-title">📐 Aggregates & Entities</h1>
+        <p class="hero-subtitle">Tactical DDD patterns for consistency boundaries and domain models</p>
+        <div class="file-metadata">
+            <span class="metadata-item">📦 40+ Rules</span>
+            <span class="metadata-item">🏷️ Domain-Driven Design</span>
+            <span class="metadata-item">📅 Updated: Dec 2025</span>
+        </div>
+    </section>
+
+    <aside class="toc-sidebar" aria-label="Table of contents">
+        <h3>On This Page</h3>
+        <nav class="toc-nav">
+            <a href="#overview" class="toc-link">Overview</a>
+            <a href="#entities" class="toc-link">Entities</a>
+            <a href="#value-objects" class="toc-link">Value Objects</a>
+            <a href="#aggregates" class="toc-link">Aggregates</a>
+            <a href="#repositories" class="toc-link">Repositories</a>
+            <a href="#domain-events" class="toc-link">Domain Events</a>
+            <a href="#related" class="toc-link">Related Files</a>
+        </nav>
+    </aside>
+
+    <main class="file-content">
+        <section class="glass-card" id="overview">
+            <h2>Tactical DDD Building Blocks</h2>
+            <p>
+                Tactical Domain-Driven Design provides building blocks for implementing domain models within bounded contexts. 
+                These patterns ensure data consistency, enforce business invariants, and create maintainable domain logic.
+            </p>
+            <div class="info-banner">
+                <strong>💡 Key Benefit:</strong> Aggregates define consistency boundaries, ensuring all business rules 
+                are enforced atomically within transaction boundaries.
+            </div>
+            
+            <h3>Core Building Blocks</h3>
+            <ul class="feature-list">
+                <li><strong>Entities:</strong> Objects with unique identity that persists over time</li>
+                <li><strong>Value Objects:</strong> Immutable objects defined by attributes, not identity</li>
+                <li><strong>Aggregates:</strong> Cluster of entities/value objects with consistency boundary</li>
+                <li><strong>Domain Events:</strong> Record of something significant that happened</li>
+                <li><strong>Repositories:</strong> Abstraction for accessing aggregates</li>
+                <li><strong>Domain Services:</strong> Stateless operations not belonging to entities</li>
+                <li><strong>Factories:</strong> Complex object creation logic</li>
+            </ul>
+        </section>
+
+        <section class="glass-card" id="entities">
+            <h2>Entities</h2>
+            <p>
+                Entities are objects with unique identity and lifecycle. Equality is based on ID, not attributes. 
+                Identity remains constant throughout the entity's lifecycle.
+            </p>
+
+            <div class="rule-card">
+                <h3>Entity Identity Patterns</h3>
+                <span class="badge badge-high">HIGH PRIORITY</span>
+                <p>Choose appropriate identity strategy based on your domain and infrastructure needs.</p>
+                
+                <h4>Strategy 1: GUID/UUID (Recommended for Distributed Systems)</h4>
+                <div class="example-section">
+                    <h4>✅ Recommended</h4>
+                    <pre><code class="language-csharp">public class Order : Entity
+{
+    public Guid Id { get; private set; }
+    public DateTime OrderDate { get; private set; }
+    
+    public Order()
+    {
+        Id = Guid.NewGuid();  // Generated in code
+        OrderDate = DateTime.UtcNow;
+    }
+}
+
+// Benefits:
+// 1. No database round-trip needed
+// 2. Portable across systems
+// 3. No collision risk in distributed scenarios
+</code></pre>
+                </div>
+
+                <h4>Strategy 2: Database-Generated ID</h4>
+                <div class="example-section">
+                    <pre><code class="language-sql">-- SQL Server IDENTITY
+CREATE TABLE Orders (
+    OrderId INT IDENTITY(1,1) PRIMARY KEY,
+    CustomerId INT,
+    OrderDate DATETIME
+);
+
+-- Pros: Simple, guaranteed unique, sequential
+-- Cons: Requires DB round-trip, not portable
+</code></pre>
+                </div>
+
+                <h4>Strategy 3: Natural Key</h4>
+                <div class="example-section">
+                    <pre><code class="language-csharp">public class Product : Entity
+{
+    public string SKU { get; private set; }  // Stock Keeping Unit
+    
+    public Product(string sku)
+    {
+        if (string.IsNullOrEmpty(sku))
+            throw new ArgumentException("SKU required");
+        SKU = sku;
+    }
+}
+
+// Pros: Human-readable, business meaningful
+// Cons: May change over time, uniqueness not guaranteed
+</code></pre>
+                </div>
+            </div>
+
+            <div class="rule-card">
+                <h3>Entity Base Class Pattern</h3>
+                <span class="badge badge-high">HIGH PRIORITY</span>
+                <p>Implement a base Entity class with identity-based equality comparison.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Recommended</h4>
+                    <pre><code class="language-csharp">public abstract class Entity
+{
+    public Guid Id { get; protected set; }
+    
+    // Equality based on ID
+    public override bool Equals(object obj)
+    {
+        if (obj is not Entity other)
+            return false;
+        
+        if (ReferenceEquals(this, other))
+            return true;
+        
+        if (GetType() != other.GetType())
+            return false;
+        
+        // Entities with default ID (not persisted) are not equal
+        if (Id == default || other.Id == default)
+            return false;
+        
+        return Id == other.Id;
+    }
+    
+    public override int GetHashCode()
+    {
+        return Id.GetHashCode();
+    }
+    
+    public static bool operator ==(Entity left, Entity right)
+    {
+        if (left is null && right is null)
+            return true;
+        if (left is null || right is null)
+            return false;
+        return left.Equals(right);
+    }
+    
+    public static bool operator !=(Entity left, Entity right)
+    {
+        return !(left == right);
+    }
+}
+</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" id="value-objects">
+            <h2>Value Objects</h2>
+            <p>
+                Value Objects are immutable objects defined by their attributes, not identity. 
+                Two value objects with the same attributes are considered equal.
+            </p>
+
+            <div class="rule-card">
+                <h3>Value Object Characteristics</h3>
+                <span class="badge badge-high">HIGH PRIORITY</span>
+                <p>Value Objects must be immutable, have no identity, and implement value-based equality.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Recommended - Money Value Object</h4>
+                    <pre><code class="language-csharp">public sealed class Money : IEquatable&lt;Money&gt;
+{
+    public decimal Amount { get; }
+    public string Currency { get; }
+    
+    private Money(decimal amount, string currency)
+    {
+        if (string.IsNullOrEmpty(currency))
+            throw new ArgumentException("Currency required");
+        
+        Amount = amount;
+        Currency = currency.ToUpperInvariant();
+    }
+    
+    public static Money Create(decimal amount, string currency)
+    {
+        return new Money(amount, currency);
+    }
+    
+    // Value-based equality
+    public bool Equals(Money other)
+    {
+        if (other is null) return false;
+        return Amount == other.Amount && Currency == other.Currency;
+    }
+    
+    public override bool Equals(object obj)
+    {
+        return obj is Money other && Equals(other);
+    }
+    
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Amount, Currency);
+    }
+    
+    // Immutable operations return new instances
+    public Money Add(Money other)
+    {
+        if (Currency != other.Currency)
+            throw new InvalidOperationException("Cannot add different currencies");
+        
+        return new Money(Amount + other.Amount, Currency);
+    }
+}
+
+// Usage
+var price = Money.Create(99.99m, "USD");
+var discount = Money.Create(10.00m, "USD");
+var finalPrice = price.Add(discount.Negate());
+</code></pre>
+                </div>
+            </div>
+
+            <div class="rule-card">
+                <h3>When to Use Value Objects vs Entities</h3>
+                <span class="badge badge-medium">MEDIUM PRIORITY</span>
+                <p>Use value objects for concepts that have no meaningful identity.</p>
+                
+                <div class="example-section">
+                    <h4>Examples</h4>
+                    <pre><code class="language-csharp">// VALUE OBJECTS (no identity needed)
+public class Address
+{
+    public string Street { get; }
+    public string City { get; }
+    public string PostalCode { get; }
+    // Immutable, value-based equality
+}
+
+public class DateRange
+{
+    public DateTime Start { get; }
+    public DateTime End { get; }
+    // Immutable, value-based equality
+}
+
+// ENTITIES (need identity)
+public class Customer : Entity
+{
+    public Guid Id { get; private set; }
+    public string Name { get; private set; }
+    public Address ShippingAddress { get; private set; }  // Value object
+}
+</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" id="aggregates">
+            <h2>Aggregates</h2>
+            <p>
+                An Aggregate is a cluster of entities and value objects with a consistency boundary. 
+                The Aggregate Root is the only entry point for external access.
+            </p>
+
+            <div class="rule-card">
+                <h3>Aggregate Rules</h3>
+                <span class="badge badge-high">HIGH PRIORITY</span>
+                <p>Follow these rules to design effective aggregates that maintain consistency.</p>
+                
+                <ul class="feature-list">
+                    <li><strong>Rule 1:</strong> Protect business invariants inside aggregate boundaries</li>
+                    <li><strong>Rule 2:</strong> Design small aggregates for better performance</li>
+                    <li><strong>Rule 3:</strong> Reference other aggregates by ID only</li>
+                    <li><strong>Rule 4:</strong> Update one aggregate per transaction</li>
+                    <li><strong>Rule 5:</strong> Use eventual consistency between aggregates</li>
+                </ul>
+                
+                <div class="example-section">
+                    <h4>✅ Recommended - Order Aggregate</h4>
+                    <pre><code class="language-csharp">public class Order : Entity, IAggregateRoot
+{
+    // Aggregate root properties
+    public Guid Id { get; private set; }
+    public Guid CustomerId { get; private set; }  // Reference by ID
+    public DateTime OrderDate { get; private set; }
+    
+    // Aggregate contains children
+    private readonly List&lt;OrderItem&gt; _items = new();
+    public IReadOnlyCollection&lt;OrderItem&gt; Items => _items.AsReadOnly();
+    
+    public Money TotalAmount { get; private set; }
+    public OrderStatus Status { get; private set; }
+    
+    // Private constructor - use factory method
+    private Order() { }
+    
+    // Factory method enforces invariants
+    public static Order Create(Guid customerId)
+    {
+        var order = new Order
+        {
+            Id = Guid.NewGuid(),
+            CustomerId = customerId,
+            OrderDate = DateTime.UtcNow,
+            Status = OrderStatus.Draft,
+            TotalAmount = Money.Create(0, "USD")
+        };
+        
+        return order;
+    }
+    
+    // Aggregate root controls all changes
+    public void AddItem(Guid productId, int quantity, Money unitPrice)
+    {
+        if (Status != OrderStatus.Draft)
+            throw new InvalidOperationException("Cannot modify submitted order");
+        
+        if (quantity <= 0)
+            throw new ArgumentException("Quantity must be positive");
+        
+        var item = new OrderItem(productId, quantity, unitPrice);
+        _items.Add(item);
+        
+        RecalculateTotal();  // Maintain invariant
+    }
+    
+    public void RemoveItem(Guid itemId)
+    {
+        if (Status != OrderStatus.Draft)
+            throw new InvalidOperationException("Cannot modify submitted order");
+        
+        var item = _items.FirstOrDefault(i => i.Id == itemId);
+        if (item != null)
+        {
+            _items.Remove(item);
+            RecalculateTotal();
+        }
+    }
+    
+    public void Submit()
+    {
+        if (_items.Count == 0)
+            throw new InvalidOperationException("Cannot submit empty order");
+        
+        Status = OrderStatus.Submitted;
+        
+        // Raise domain event
+        AddDomainEvent(new OrderSubmittedEvent(Id, CustomerId, TotalAmount));
+    }
+    
+    // Private method ensures invariant
+    private void RecalculateTotal()
+    {
+        var total = _items.Sum(i => i.LineTotal.Amount);
+        TotalAmount = Money.Create(total, "USD");
+    }
+}
+
+// OrderItem is NOT an aggregate root - only accessible through Order
+public class OrderItem : Entity
+{
+    public Guid Id { get; private set; }
+    public Guid ProductId { get; private set; }
+    public int Quantity { get; private set; }
+    public Money UnitPrice { get; private set; }
+    public Money LineTotal { get; private set; }
+    
+    internal OrderItem(Guid productId, int quantity, Money unitPrice)
+    {
+        Id = Guid.NewGuid();
+        ProductId = productId;
+        Quantity = quantity;
+        UnitPrice = unitPrice;
+        LineTotal = Money.Create(quantity * unitPrice.Amount, unitPrice.Currency);
+    }
+}
+</code></pre>
+                </div>
+            </div>
+
+            <div class="rule-card">
+                <h3>Aggregate Size Guidelines</h3>
+                <span class="badge badge-medium">MEDIUM PRIORITY</span>
+                <p>Keep aggregates small to avoid performance and concurrency issues.</p>
+                
+                <div class="example-section bad-example">
+                    <h4>❌ Avoid - Aggregate Too Large</h4>
+                    <pre><code class="language-csharp">// BAD: Customer aggregate contains too much
+public class Customer : IAggregateRoot
+{
+    public List&lt;Order&gt; Orders { get; set; }          // 1000s of orders
+    public List&lt;Payment&gt; Payments { get; set; }      // 1000s of payments
+    public List&lt;Address&gt; Addresses { get; set; }     // Many addresses
+    public List&lt;Review&gt; Reviews { get; set; }        // 1000s of reviews
+    
+    // Loading this aggregate is expensive!
+    // Concurrency conflicts are common!
+}
+</code></pre>
+                </div>
+                
+                <div class="example-section">
+                    <h4>✅ Recommended - Right-Sized Aggregates</h4>
+                    <pre><code class="language-csharp">// GOOD: Separate aggregates with references by ID
+public class Customer : IAggregateRoot
+{
+    public Guid Id { get; private set; }
+    public string Name { get; private set; }
+    // Small, focused aggregate
+}
+
+public class Order : IAggregateRoot
+{
+    public Guid Id { get; private set; }
+    public Guid CustomerId { get; private set; }  // Reference by ID
+    public List&lt;OrderItem&gt; Items { get; private set; }
+}
+
+// Each aggregate can be loaded/updated independently
+</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" id="repositories">
+            <h2>Repositories</h2>
+            <p>
+                Repositories provide abstraction for accessing aggregates, hiding data access complexity 
+                and providing collection-like interface.
+            </p>
+
+            <div class="rule-card">
+                <h3>Repository Pattern</h3>
+                <span class="badge badge-high">HIGH PRIORITY</span>
+                <p>Create one repository per aggregate root. Repositories work with complete aggregates, not fragments.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Recommended</h4>
+                    <pre><code class="language-csharp">// Repository interface (in domain layer)
+public interface IOrderRepository
+{
+    Task&lt;Order&gt; GetByIdAsync(Guid orderId);
+    Task&lt;List&lt;Order&gt;&gt; GetByCustomerIdAsync(Guid customerId);
+    Task AddAsync(Order order);
+    Task UpdateAsync(Order order);
+    Task DeleteAsync(Guid orderId);
+}
+
+// Repository implementation (in infrastructure layer)
+public class OrderRepository : IOrderRepository
+{
+    private readonly AppDbContext _context;
+    
+    public OrderRepository(AppDbContext context)
+    {
+        _context = context;
+    }
+    
+    public async Task&lt;Order&gt; GetByIdAsync(Guid orderId)
+    {
+        // Load complete aggregate (root + children)
+        return await _context.Orders
+            .Include(o => o.Items)  // Load order items
+            .FirstOrDefaultAsync(o => o.Id == orderId);
+    }
+    
+    public async Task AddAsync(Order order)
+    {
+        await _context.Orders.AddAsync(order);
+        await _context.SaveChangesAsync();
+    }
+}
+
+// Usage in application service
+public class OrderService
+{
+    private readonly IOrderRepository _orderRepository;
+    
+    public async Task SubmitOrder(Guid orderId)
+    {
+        var order = await _orderRepository.GetByIdAsync(orderId);
+        order.Submit();  // Business logic in domain
+        await _orderRepository.UpdateAsync(order);
+    }
+}
+</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" id="domain-events">
+            <h2>Domain Events</h2>
+            <p>
+                Domain Events capture significant business occurrences and enable decoupled communication 
+                between aggregates using eventual consistency.
+            </p>
+
+            <div class="rule-card">
+                <h3>Domain Event Pattern</h3>
+                <span class="badge badge-medium">MEDIUM PRIORITY</span>
+                <p>Use domain events to maintain consistency across aggregate boundaries.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Recommended</h4>
+                    <pre><code class="language-csharp">// Domain event
+public class OrderSubmittedEvent : IDomainEvent
+{
+    public Guid OrderId { get; }
+    public Guid CustomerId { get; }
+    public Money TotalAmount { get; }
+    public DateTime OccurredOn { get; }
+    
+    public OrderSubmittedEvent(Guid orderId, Guid customerId, Money totalAmount)
+    {
+        OrderId = orderId;
+        CustomerId = customerId;
+        TotalAmount = totalAmount;
+        OccurredOn = DateTime.UtcNow;
+    }
+}
+
+// Aggregate raises event
+public class Order : IAggregateRoot
+{
+    private readonly List&lt;IDomainEvent&gt; _domainEvents = new();
+    public IReadOnlyList&lt;IDomainEvent&gt; DomainEvents => _domainEvents;
+    
+    public void Submit()
+    {
+        Status = OrderStatus.Submitted;
+        _domainEvents.Add(new OrderSubmittedEvent(Id, CustomerId, TotalAmount));
+    }
+    
+    public void ClearDomainEvents() => _domainEvents.Clear();
+}
+
+// Event handler (separate aggregate)
+public class InventoryService : IDomainEventHandler&lt;OrderSubmittedEvent&gt;
+{
+    public async Task Handle(OrderSubmittedEvent @event)
+    {
+        // Reserve inventory for submitted order
+        // This happens in separate transaction (eventual consistency)
+    }
+}
+</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" id="related">
+            <h2>Related Knowledge Files</h2>
+            <div class="related-grid">
+                <a href="bounded-contexts.html" class="related-card">
+                    <span class="related-icon">🏗️</span>
+                    <h3>Bounded Contexts</h3>
+                    <p>Strategic DDD patterns for context boundaries</p>
+                </a>
+                <a href="domain-events.html" class="related-card">
+                    <span class="related-icon">📡</span>
+                    <h3>Domain Events</h3>
+                    <p>Event-driven architecture patterns</p>
+                </a>
+                <a href="../engineering/design-patterns.html" class="related-card">
+                    <span class="related-icon">🎨</span>
+                    <h3>Design Patterns</h3>
+                    <p>Gang of Four and enterprise patterns</p>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+    <script src="../../assets/js/main.js"></script>
+</body>
+</html>

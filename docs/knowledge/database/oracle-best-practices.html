@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Oracle Database Best Practices - Connection pooling, performance tuning, security, PL/SQL">
+    <meta name="author" content="Asif Hussain">
+    <title>Oracle Best Practices - CORTEX Knowledge</title>
+    <link rel="icon" type="image/png" href="../../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <nav class="breadcrumb-container sticky-nav" aria-label="Breadcrumb">
+        <button class="back-button" onclick="history.back()" aria-label="Go back">← Back</button>
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge Library</a></li>
+            <li><a href="../database.html">Database</a></li>
+            <li aria-current="page">Oracle Best Practices</li>
+        </ol>
+    </nav>
+
+    <section class="hero" id="main-content">
+        <div class="logo-header">
+            <img src="../../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
+        </div>
+        <h1 class="hero-title">🔷 Oracle Database Best Practices</h1>
+        <p class="hero-subtitle">Enterprise-grade Oracle database guidelines for performance and security</p>
+        <div class="file-metadata">
+            <span class="metadata-item">📦 35+ Rules</span>
+            <span class="metadata-item">🏷️ Database</span>
+            <span class="metadata-item">📅 Updated: Dec 2025</span>
+        </div>
+    </section>
+
+    <aside class="toc-sidebar" aria-label="Table of contents">
+        <h3>On This Page</h3>
+        <nav class="toc-nav">
+            <a href="#overview" class="toc-link">Overview</a>
+            <a href="#connection" class="toc-link">Connection Management</a>
+            <a href="#query" class="toc-link">Query Optimization</a>
+            <a href="#indexing" class="toc-link">Indexing Strategies</a>
+            <a href="#plsql" class="toc-link">PL/SQL Best Practices</a>
+            <a href="#security" class="toc-link">Security</a>
+            <a href="#performance" class="toc-link">Performance Tuning</a>
+            <a href="#related" class="toc-link">Related Files</a>
+        </nav>
+    </aside>
+
+    <main class="file-content">
+        <section class="glass-card" id="overview">
+            <h2>Overview</h2>
+            <p>
+                Oracle Database is an industry-leading RDBMS that powers mission-critical enterprise applications. 
+                These best practices cover connection pooling, query optimization, indexing strategies, PL/SQL patterns, 
+                and security configurations for Oracle 12c through 23c.
+            </p>
+            <div class="info-banner">
+                <strong>💡 Key Benefit:</strong> Following these practices ensures your Oracle database delivers 
+                optimal performance, maintains data integrity, and adheres to enterprise security standards.
+            </div>
+        </section>
+
+        <section class="glass-card" id="connection">
+            <h2>Connection Management</h2>
+            <p>
+                Efficient connection handling prevents resource exhaustion and improves scalability. 
+                Connection pooling is critical for multi-user applications.
+            </p>
+
+            <div class="rule-card">
+                <h3>Use Connection Pooling</h3>
+                <span class="badge badge-high">HIGH PRIORITY</span>
+                <p>Always use connection pools to reuse connections efficiently. Avoid creating new connections per operation.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Recommended</h4>
+                    <pre><code class="language-python">import oracledb
+
+# Create connection pool (recommended)
+pool = oracledb.create_pool(
+    user="app_user",
+    password="secure_password",
+    dsn="mydb.example.com:1521/ORCLPDB1",
+    min=2,
+    max=10,
+    increment=1,
+    threaded=True
+)
+
+# Acquire connection from pool
+with pool.acquire() as connection:
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM employees WHERE dept_id = :dept", dept=10)
+        results = cursor.fetchall()
+</code></pre>
+                    <p class="example-note">Connection pool reuses connections, dramatically improving performance.</p>
+                </div>
+
+                <div class="example-section bad-example">
+                    <h4>❌ Avoid</h4>
+                    <pre><code class="language-python"># Creating new connection for each operation (inefficient)
+connection = oracledb.connect(
+    user="app_user",
+    password="secure_password",
+    dsn="mydb.example.com:1521/ORCLPDB1"
+)
+cursor = connection.cursor()
+cursor.execute("SELECT * FROM employees")
+connection.close()
+</code></pre>
+                    <p class="example-note">Creating new connections is expensive; reuse via pooling.</p>
+                </div>
+            </div>
+
+            <div class="rule-card">
+                <h3>Close Resources Properly</h3>
+                <span class="badge badge-high">HIGH PRIORITY</span>
+                <p>Always close cursors and connections to prevent resource leaks. Use context managers in Python.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Recommended</h4>
+                    <pre><code class="language-python"># Use context managers (recommended)
+with oracledb.connect(user=user, password=pwd, dsn=dsn) as connection:
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM departments")
+        rows = cursor.fetchall()
+# Connection and cursor automatically closed
+</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" id="query">
+            <h2>Query Optimization</h2>
+            <p>Well-optimized queries reduce database load and improve application responsiveness.</p>
+
+            <div class="rule-card">
+                <h3>Use Bind Variables</h3>
+                <span class="badge badge-high">HIGH PRIORITY</span>
+                <p>Always use bind variables to prevent SQL injection and enable query plan caching.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Recommended</h4>
+                    <pre><code class="language-python"># Named bind variables (recommended)
+cursor.execute(
+    "SELECT * FROM employees WHERE dept_id = :dept AND salary > :min_sal",
+    dept=10,
+    min_sal=50000
+)
+
+# Positional bind variables
+cursor.execute(
+    "SELECT * FROM employees WHERE dept_id = :1 AND salary > :2",
+    [10, 50000]
+)
+</code></pre>
+                </div>
+
+                <div class="example-section bad-example">
+                    <h4>❌ Avoid</h4>
+                    <pre><code class="language-python"># String concatenation (SQL injection risk!)
+dept_id = 10
+query = f"SELECT * FROM employees WHERE dept_id = {dept_id}"
+cursor.execute(query)
+</code></pre>
+                </div>
+            </div>
+
+            <div class="rule-card">
+                <h3>Fetch Only Required Columns</h3>
+                <span class="badge badge-medium">MEDIUM PRIORITY</span>
+                <p>Avoid SELECT * in production code. Specify only the columns you need.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Recommended</h4>
+                    <pre><code class="language-sql">-- Fetch specific columns
+SELECT emp_id, first_name, last_name, salary
+FROM employees
+WHERE dept_id = 10;
+</code></pre>
+                </div>
+
+                <div class="example-section bad-example">
+                    <h4>❌ Avoid</h4>
+                    <pre><code class="language-sql">-- Fetches unnecessary data
+SELECT * FROM employees WHERE dept_id = 10;
+</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" id="indexing">
+            <h2>Indexing Strategies</h2>
+            <p>Proper indexing is critical for query performance, especially on large tables.</p>
+
+            <div class="rule-card">
+                <h3>Index Foreign Keys</h3>
+                <span class="badge badge-high">HIGH PRIORITY</span>
+                <p>Always create indexes on foreign key columns to optimize joins and prevent locking issues.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Recommended</h4>
+                    <pre><code class="language-sql">-- Create index on foreign key
+CREATE INDEX idx_emp_dept_id ON employees(dept_id);
+
+-- Benefits:
+-- 1. Faster joins between employees and departments
+-- 2. Prevents row-level locking on parent table deletes
+-- 3. Improves referential integrity checks
+</code></pre>
+                </div>
+            </div>
+
+            <div class="rule-card">
+                <h3>Use Composite Indexes Wisely</h3>
+                <span class="badge badge-medium">MEDIUM PRIORITY</span>
+                <p>For queries filtering on multiple columns, create composite indexes with most selective column first.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Recommended</h4>
+                    <pre><code class="language-sql">-- Composite index (column order matters!)
+CREATE INDEX idx_emp_dept_status 
+ON employees(dept_id, employment_status);
+
+-- Optimized query
+SELECT * FROM employees
+WHERE dept_id = 10 AND employment_status = 'ACTIVE';
+</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" id="plsql">
+            <h2>PL/SQL Best Practices</h2>
+            <p>Oracle's procedural language enables complex business logic within the database.</p>
+
+            <div class="rule-card">
+                <h3>Use Bulk Operations</h3>
+                <span class="badge badge-high">HIGH PRIORITY</span>
+                <p>Use BULK COLLECT and FORALL for processing large datasets efficiently.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Recommended</h4>
+                    <pre><code class="language-sql">-- Bulk collect (fast)
+DECLARE
+    TYPE emp_id_tab IS TABLE OF employees.emp_id%TYPE;
+    emp_ids emp_id_tab;
+BEGIN
+    SELECT emp_id BULK COLLECT INTO emp_ids
+    FROM employees
+    WHERE dept_id = 10;
+    
+    -- Process in bulk
+    FORALL i IN 1..emp_ids.COUNT
+        UPDATE employee_audit
+        SET last_checked = SYSDATE
+        WHERE emp_id = emp_ids(i);
+END;
+</code></pre>
+                </div>
+
+                <div class="example-section bad-example">
+                    <h4>❌ Avoid</h4>
+                    <pre><code class="language-sql">-- Row-by-row processing (slow)
+FOR emp IN (SELECT emp_id FROM employees WHERE dept_id = 10) LOOP
+    UPDATE employee_audit
+    SET last_checked = SYSDATE
+    WHERE emp_id = emp.emp_id;
+END LOOP;
+</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" id="security">
+            <h2>Security Best Practices</h2>
+            <p>Protect sensitive data and prevent unauthorized access with proper security configurations.</p>
+
+            <div class="rule-card">
+                <h3>Use Least Privilege Access</h3>
+                <span class="badge badge-high">HIGH PRIORITY</span>
+                <p>Grant minimum necessary privileges to application accounts. Avoid using SYS or SYSTEM accounts.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Recommended</h4>
+                    <pre><code class="language-sql">-- Create application-specific user with limited privileges
+CREATE USER app_user IDENTIFIED BY secure_password;
+
+-- Grant only necessary privileges
+GRANT CONNECT TO app_user;
+GRANT SELECT, INSERT, UPDATE, DELETE ON employees TO app_user;
+GRANT EXECUTE ON employee_pkg TO app_user;
+
+-- Do NOT grant DBA or unlimited privileges
+</code></pre>
+                </div>
+            </div>
+
+            <div class="rule-card">
+                <h3>Enable Transparent Data Encryption</h3>
+                <span class="badge badge-high">HIGH PRIORITY</span>
+                <p>Encrypt sensitive columns and tablespaces to protect data at rest.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Recommended</h4>
+                    <pre><code class="language-sql">-- Enable TDE for sensitive column
+ALTER TABLE employees 
+MODIFY (ssn ENCRYPT USING 'AES256');
+
+-- Encrypt entire tablespace
+CREATE TABLESPACE secure_data
+DATAFILE '/u01/app/oracle/oradata/secure01.dbf' SIZE 100M
+ENCRYPTION USING 'AES256' DEFAULT STORAGE(ENCRYPT);
+</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" id="performance">
+            <h2>Performance Tuning</h2>
+            <p>Monitor and optimize database performance using Oracle's built-in tools.</p>
+
+            <div class="rule-card">
+                <h3>Analyze Execution Plans</h3>
+                <span class="badge badge-medium">MEDIUM PRIORITY</span>
+                <p>Use EXPLAIN PLAN and AWR reports to identify slow queries and optimization opportunities.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Recommended</h4>
+                    <pre><code class="language-sql">-- Generate execution plan
+EXPLAIN PLAN FOR
+SELECT e.emp_id, e.first_name, d.dept_name
+FROM employees e
+JOIN departments d ON e.dept_id = d.dept_id
+WHERE e.salary > 50000;
+
+-- View the plan
+SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY);
+
+-- Look for:
+-- 1. Full table scans on large tables
+-- 2. Missing indexes
+-- 3. Cartesian joins
+-- 4. High cost operations
+</code></pre>
+                </div>
+            </div>
+
+            <div class="rule-card">
+                <h3>Monitor Wait Events</h3>
+                <span class="badge badge-medium">MEDIUM PRIORITY</span>
+                <p>Query v$session_wait to identify performance bottlenecks in real-time.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Recommended</h4>
+                    <pre><code class="language-sql">-- Identify top wait events
+SELECT event, 
+       SUM(wait_time + time_waited) AS total_wait_time,
+       COUNT(*) AS wait_count
+FROM v$session_wait
+WHERE wait_class <> 'Idle'
+GROUP BY event
+ORDER BY total_wait_time DESC
+FETCH FIRST 10 ROWS ONLY;
+</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" id="related">
+            <h2>Related Knowledge Files</h2>
+            <div class="related-grid">
+                <a href="sql-best-practices.html" class="related-card">
+                    <span class="related-icon">📊</span>
+                    <h3>SQL Best Practices</h3>
+                    <p>General SQL optimization and query patterns</p>
+                </a>
+                <a href="../performance/profiling-analysis.html" class="related-card">
+                    <span class="related-icon">⚡</span>
+                    <h3>Performance Profiling</h3>
+                    <p>Database profiling and analysis techniques</p>
+                </a>
+                <a href="../security/secure-coding-practices.html" class="related-card">
+                    <span class="related-icon">🔒</span>
+                    <h3>Secure Coding</h3>
+                    <p>Security practices for database applications</p>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+    <script src="../../assets/js/main.js"></script>
+</body>
+</html>

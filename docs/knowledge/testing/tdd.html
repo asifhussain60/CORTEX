@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Test-Driven Development - Red-Green-Refactor, Unit Testing, Mocking">
+    <meta name="author" content="Asif Hussain">
+    <title>Test-Driven Development - CORTEX Knowledge</title>
+    <link rel="icon" type="image/png" href="../../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <nav class="breadcrumb-container sticky-nav" aria-label="Breadcrumb">
+        <button class="back-button" onclick="history.back()" aria-label="Go back">← Back</button>
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge Library</a></li>
+            <li><a href="../testing.html">Testing</a></li>
+            <li aria-current="page">Test-Driven Development</li>
+        </ol>
+    </nav>
+
+    <section class="hero" id="main-content">
+        <div class="logo-header">
+            <img src="../../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
+        </div>
+        <h1 class="hero-title">🔴🟢 Test-Driven Development</h1>
+        <p class="hero-subtitle">Red-Green-Refactor cycle, unit testing, and TDD best practices</p>
+        <div class="file-metadata">
+            <span class="metadata-item">📦 20 Rules</span>
+            <span class="metadata-item">🏷️ Testing</span>
+            <span class="metadata-item">📅 Updated: Dec 2025</span>
+        </div>
+    </section>
+
+    <aside class="toc-sidebar" aria-label="Table of contents">
+        <h3>On This Page</h3>
+        <nav class="toc-nav">
+            <a href="#overview" class="toc-link">Overview</a>
+            <a href="#cycle" class="toc-link">Red-Green-Refactor</a>
+            <a href="#writing" class="toc-link">Writing Tests</a>
+            <a href="#mocking" class="toc-link">Mocking & Stubs</a>
+            <a href="#patterns" class="toc-link">TDD Patterns</a>
+            <a href="#related" class="toc-link">Related Files</a>
+        </nav>
+    </aside>
+
+    <section class="section file-content">
+        <div class="container">
+            <div id="overview" class="content-section">
+                <div class="glass-card">
+                    <h2>Overview</h2>
+                    <p>Test-Driven Development (TDD) is a software development approach where tests are written before the implementation code, following the Red-Green-Refactor cycle.</p>
+                    
+                    <div class="info-box info-box-primary">
+                        <strong>TDD Benefits:</strong>
+                        <ul>
+                            <li><strong>Better Design:</strong> Writing tests first forces modular, testable code</li>
+                            <li><strong>Documentation:</strong> Tests serve as living documentation</li>
+                            <li><strong>Confidence:</strong> Safe refactoring with comprehensive test suite</li>
+                            <li><strong>Fewer Bugs:</strong> Catch issues early in development</li>
+                            <li><strong>Focus:</strong> Clear goal for each implementation step</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="cycle" class="content-section">
+                <div class="glass-card">
+                    <h2>Red-Green-Refactor Cycle</h2>
+
+                    <div class="rule-detail">
+                        <div class="rule-header-detail">
+                            <h3>Follow the Three-Step Cycle</h3>
+                            <span class="severity-badge severity-high">HIGH</span>
+                        </div>
+                        <p class="rule-description">
+                            TDD follows a strict cycle: Red (write failing test), Green (make it pass), Refactor (improve code quality). Never skip steps.
+                        </p>
+
+                        <div class="code-example code-good">
+                            <h4>✅ Example - TDD Cycle</h4>
+                            <pre><code class="language-python"># STEP 1: RED - Write failing test
+import pytest
+from calculator import Calculator
+
+def test_add_two_numbers():
+    calc = Calculator()
+    result = calc.add(2, 3)
+    assert result == 5
+    # Run: test fails (Calculator doesn't exist yet)
+
+# STEP 2: GREEN - Minimal code to pass
+class Calculator:
+    def add(self, a, b):
+        return 5  # Hardcoded to pass test
+    # Run: test passes
+
+# STEP 3: REFACTOR - Proper implementation
+class Calculator:
+    def add(self, a, b):
+        return a + b
+    # Run: test still passes
+
+# Continue cycle: Add more tests, implement, refactor</code></pre>
+                        </div>
+
+                        <div class="info-box info-box-warning">
+                            <strong>Common Mistake:</strong> Writing implementation before tests, or skipping the Red phase. Always see the test fail first to ensure it's actually testing something.
+                        </div>
+                    </div>
+
+                    <div class="rule-detail">
+                        <div class="rule-header-detail">
+                            <h3>Write the Simplest Test First</h3>
+                            <span class="severity-badge severity-high">HIGH</span>
+                        </div>
+                        <p class="rule-description">
+                            Start with the simplest possible test case. Build complexity incrementally through additional tests.
+                        </p>
+
+                        <div class="code-example code-good">
+                            <h4>✅ Good - Incremental Test Progression</h4>
+                            <pre><code class="language-typescript">// Test 1: Simplest case - empty list
+describe('ShoppingCart', () => {
+  it('should start with zero total', () => {
+    const cart = new ShoppingCart();
+    expect(cart.getTotal()).toBe(0);
+  });
+
+  // Test 2: Single item
+  it('should calculate total for one item', () => {
+    const cart = new ShoppingCart();
+    cart.addItem({ name: 'Book', price: 10 });
+    expect(cart.getTotal()).toBe(10);
+  });
+
+  // Test 3: Multiple items
+  it('should calculate total for multiple items', () => {
+    const cart = new ShoppingCart();
+    cart.addItem({ name: 'Book', price: 10 });
+    cart.addItem({ name: 'Pen', price: 2 });
+    expect(cart.getTotal()).toBe(12);
+  });
+
+  // Test 4: Edge case - discount
+  it('should apply discount correctly', () => {
+    const cart = new ShoppingCart();
+    cart.addItem({ name: 'Book', price: 100 });
+    cart.applyDiscount(0.1); // 10% discount
+    expect(cart.getTotal()).toBe(90);
+  });
+});</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="rule-detail">
+                        <div class="rule-header-detail">
+                            <h3>Take Baby Steps</h3>
+                            <span class="severity-badge severity-medium">MEDIUM</span>
+                        </div>
+                        <p class="rule-description">
+                            Make small, incremental changes. Each test should require minimal code to pass. Don't write multiple tests before implementing.
+                        </p>
+
+                        <div class="code-example code-good">
+                            <h4>✅ Good - Small Iterations</h4>
+                            <pre><code class="language-csharp">// Iteration 1: Test empty string
+[Test]
+public void ReverseString_EmptyString_ReturnsEmpty()
+{
+    var reverser = new StringReverser();
+    Assert.AreEqual("", reverser.Reverse(""));
+}
+
+// Implementation 1
+public string Reverse(string input)
+{
+    return ""; // Simplest passing code
+}
+
+// Iteration 2: Test single character
+[Test]
+public void ReverseString_SingleChar_ReturnsSameChar()
+{
+    var reverser = new StringReverser();
+    Assert.AreEqual("a", reverser.Reverse("a"));
+}
+
+// Implementation 2
+public string Reverse(string input)
+{
+    if (input.Length <= 1) return input;
+    return ""; // Still hardcoded for multi-char
+}
+
+// Iteration 3: Test two characters
+[Test]
+public void ReverseString_TwoChars_ReversesOrder()
+{
+    var reverser = new StringReverser();
+    Assert.AreEqual("ba", reverser.Reverse("ab"));
+}
+
+// Implementation 3 (final)
+public string Reverse(string input)
+{
+    return new string(input.Reverse().ToArray());
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="writing" class="content-section">
+                <div class="glass-card">
+                    <h2>Writing Effective Tests</h2>
+
+                    <div class="rule-detail">
+                        <div class="rule-header-detail">
+                            <h3>Follow AAA Pattern: Arrange-Act-Assert</h3>
+                            <span class="severity-badge severity-high">HIGH</span>
+                        </div>
+                        <p class="rule-description">
+                            Structure tests with three clear sections: Arrange (setup), Act (execute), Assert (verify). Improves readability and maintainability.
+                        </p>
+
+                        <div class="code-comparison-grid">
+                            <div class="code-example code-good">
+                                <h4>✅ Good - AAA Pattern</h4>
+                                <pre><code class="language-typescript">describe('UserService', () => {
+  it('should create user with hashed password', async () => {
+    // Arrange
+    const userService = new UserService();
+    const userData = {
+      email: 'test@example.com',
+      password: 'SecurePass123'
+    };
+    
+    // Act
+    const user = await userService.createUser(userData);
+    
+    // Assert
+    expect(user.email).toBe('test@example.com');
+    expect(user.password).not.toBe('SecurePass123');
+    expect(user.password.length).toBeGreaterThan(20);
+  });
+});</code></pre>
+                            </div>
+
+                            <div class="code-example code-bad">
+                                <h4>❌ Bad - Mixed Sections</h4>
+                                <pre><code class="language-typescript">it('should create user', async () => {
+  const userService = new UserService();
+  const user = await userService.createUser({
+    email: 'test@example.com',
+    password: 'SecurePass123'
+  });
+  expect(user.email).toBe('test@example.com');
+  const anotherUser = await userService.createUser({
+    email: 'test2@example.com',
+    password: 'Pass456'
+  });
+  expect(user.password).not.toBe('SecurePass123');
+  // Confusing, hard to follow</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="rule-detail">
+                        <div class="rule-header-detail">
+                            <h3>One Assert Per Test (Guideline)</h3>
+                            <span class="severity-badge severity-medium">MEDIUM</span>
+                        </div>
+                        <p class="rule-description">
+                            Prefer single assertions per test for clear failure messages. Multiple related assertions are acceptable for same behavior.
+                        </p>
+
+                        <div class="code-comparison-grid">
+                            <div class="code-example code-good">
+                                <h4>✅ Good - Focused Tests</h4>
+                                <pre><code class="language-python">def test_user_registration_creates_user():
+    user = register_user("alice@example.com", "password123")
+    assert user is not None
+
+def test_user_registration_sets_email():
+    user = register_user("alice@example.com", "password123")
+    assert user.email == "alice@example.com"
+
+def test_user_registration_hashes_password():
+    user = register_user("alice@example.com", "password123")
+    assert user.password != "password123"
+    assert len(user.password) > 20
+
+# Clear failure messages: knows exactly what failed</code></pre>
+                            </div>
+
+                            <div class="code-example code-bad">
+                                <h4>❌ Bad - Testing Multiple Behaviors</h4>
+                                <pre><code class="language-python">def test_user_registration():
+    user = register_user("alice@example.com", "password123")
+    assert user is not None
+    assert user.email == "alice@example.com"
+    assert user.password != "password123"
+    assert user.is_active == True
+    assert user.role == "user"
+    assert user.created_at is not None
+    # If second assert fails, others don't run
+    # Unclear which behavior failed</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="rule-detail">
+                        <div class="rule-header-detail">
+                            <h3>Test Behavior, Not Implementation</h3>
+                            <span class="severity-badge severity-high">HIGH</span>
+                        </div>
+                        <p class="rule-description">
+                            Focus on what the code does (public API), not how it does it (private methods). Tests should survive refactoring.
+                        </p>
+
+                        <div class="code-comparison-grid">
+                            <div class="code-example code-good">
+                                <h4>✅ Good - Testing Behavior</h4>
+                                <pre><code class="language-typescript">// Test public behavior
+describe('EmailService', () => {
+  it('should send welcome email after user signup', async () => {
+    const emailService = new EmailService();
+    const mockMailer = createMockMailer();
+    emailService.setMailer(mockMailer);
+    
+    await emailService.sendWelcomeEmail('user@example.com');
+    
+    expect(mockMailer.sentEmails).toHaveLength(1);
+    expect(mockMailer.sentEmails[0].to).toBe('user@example.com');
+    expect(mockMailer.sentEmails[0].subject).toContain('Welcome');
+  });
+});</code></pre>
+                            </div>
+
+                            <div class="code-example code-bad">
+                                <h4>❌ Bad - Testing Implementation</h4>
+                                <pre><code class="language-typescript">// Testing private methods
+describe('EmailService', () => {
+  it('should call _formatEmailBody', () => {
+    const emailService = new EmailService();
+    const spy = jest.spyOn(emailService, '_formatEmailBody');
+    
+    emailService.sendWelcomeEmail('user@example.com');
+    
+    expect(spy).toHaveBeenCalled();
+    // Breaks if refactor changes method name
+    // Doesn't test actual behavior</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="mocking" class="content-section">
+                <div class="glass-card">
+                    <h2>Mocking & Test Doubles</h2>
+
+                    <div class="rule-detail">
+                        <div class="rule-header-detail">
+                            <h3>Use Dependency Injection for Testability</h3>
+                            <span class="severity-badge severity-high">HIGH</span>
+                        </div>
+                        <p class="rule-description">
+                            Inject dependencies through constructor or method parameters to enable easy mocking in tests.
+                        </p>
+
+                        <div class="code-comparison-grid">
+                            <div class="code-example code-good">
+                                <h4>✅ Good - Dependency Injection</h4>
+                                <pre><code class="language-python"># Production code with DI
+class OrderService:
+    def __init__(self, payment_gateway, email_service):
+        self.payment_gateway = payment_gateway
+        self.email_service = email_service
+    
+    def process_order(self, order):
+        payment_result = self.payment_gateway.charge(order.total)
+        if payment_result.success:
+            self.email_service.send_confirmation(order)
+            return True
+        return False
+
+# Test with mocks
+def test_order_processing_sends_confirmation():
+    # Arrange
+    mock_gateway = Mock()
+    mock_gateway.charge.return_value = PaymentResult(success=True)
+    mock_email = Mock()
+    
+    service = OrderService(mock_gateway, mock_email)
+    order = Order(total=100)
+    
+    # Act
+    result = service.process_order(order)
+    
+    # Assert
+    assert result is True
+    mock_email.send_confirmation.assert_called_once_with(order)</code></pre>
+                            </div>
+
+                            <div class="code-example code-bad">
+                                <h4>❌ Bad - Hard Dependencies</h4>
+                                <pre><code class="language-python"># Hard to test
+class OrderService:
+    def process_order(self, order):
+        # Creates dependencies internally
+        gateway = StripePaymentGateway()  # Hard-coded
+        email = SendGridEmailService()    # Hard-coded
+        
+        payment_result = gateway.charge(order.total)
+        if payment_result.success:
+            email.send_confirmation(order)
+            return True
+        return False
+
+# Test requires actual Stripe/SendGrid connections
+# Slow, brittle, requires credentials</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="rule-detail">
+                        <div class="rule-header-detail">
+                            <h3>Prefer Fakes Over Mocks for Complex Dependencies</h3>
+                            <span class="severity-badge severity-medium">MEDIUM</span>
+                        </div>
+                        <p class="rule-description">
+                            For complex external systems (databases, APIs), use fake implementations instead of mocking every interaction.
+                        </p>
+
+                        <div class="code-example code-good">
+                            <h4>✅ Good - Fake Implementation</h4>
+                            <pre><code class="language-typescript">// Fake repository for testing
+class FakeUserRepository implements IUserRepository {
+  private users: Map<string, User> = new Map();
+  
+  async findById(id: string): Promise<User | null> {
+    return this.users.get(id) || null;
+  }
+  
+  async save(user: User): Promise<void> {
+    this.users.set(user.id, user);
+  }
+  
+  async delete(id: string): Promise<void> {
+    this.users.delete(id);
+  }
+}
+
+// Test using fake
+describe('UserService', () => {
+  it('should update user profile', async () => {
+    const fakeRepo = new FakeUserRepository();
+    const service = new UserService(fakeRepo);
+    
+    // Create test user
+    await fakeRepo.save({ id: '1', name: 'Alice' });
+    
+    // Test update
+    await service.updateProfile('1', { name: 'Alice Smith' });
+    
+    const updated = await fakeRepo.findById('1');
+    expect(updated.name).toBe('Alice Smith');
+  });
+});</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="patterns" class="content-section">
+                <div class="glass-card">
+                    <h2>TDD Patterns & Tips</h2>
+
+                    <div class="rule-detail">
+                        <div class="rule-header-detail">
+                            <h3>Test Edge Cases and Error Conditions</h3>
+                            <span class="severity-badge severity-high">HIGH</span>
+                        </div>
+                        <p class="rule-description">
+                            Don't just test happy path. Cover edge cases, boundaries, and error conditions.
+                        </p>
+
+                        <div class="code-example code-good">
+                            <h4>✅ Good - Comprehensive Test Coverage</h4>
+                            <pre><code class="language-csharp">// Happy path
+[Test]
+public void Divide_ValidNumbers_ReturnsQuotient()
+{
+    Assert.AreEqual(4, Calculator.Divide(8, 2));
+}
+
+// Edge case: Zero dividend
+[Test]
+public void Divide_ZeroDividend_ReturnsZero()
+{
+    Assert.AreEqual(0, Calculator.Divide(0, 5));
+}
+
+// Error condition: Division by zero
+[Test]
+public void Divide_ZeroDivisor_ThrowsException()
+{
+    Assert.Throws<DivideByZeroException>(() => 
+        Calculator.Divide(10, 0)
+    );
+}
+
+// Edge case: Negative numbers
+[Test]
+public void Divide_NegativeNumbers_ReturnsNegativeQuotient()
+{
+    Assert.AreEqual(-2, Calculator.Divide(-8, 4));
+    Assert.AreEqual(-2, Calculator.Divide(8, -4));
+}
+
+// Boundary: Very large numbers
+[Test]
+public void Divide_LargeNumbers_HandlesCorrectly()
+{
+    Assert.AreEqual(1000000, Calculator.Divide(1000000000, 1000));
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="rule-detail">
+                        <div class="rule-header-detail">
+                            <h3>Keep Tests Fast</h3>
+                            <span class="severity-badge severity-high">HIGH</span>
+                        </div>
+                        <p class="rule-description">
+                            Unit tests should run in milliseconds. Fast tests enable frequent execution during development.
+                        </p>
+
+                        <div class="info-box info-box-success">
+                            <strong>Speed Guidelines:</strong>
+                            <ul>
+                                <li><strong>Unit Tests:</strong> < 100ms per test, full suite < 10s</li>
+                                <li><strong>Integration Tests:</strong> < 1s per test</li>
+                                <li><strong>E2E Tests:</strong> < 10s per test</li>
+                                <li><strong>Avoid:</strong> Database calls, file I/O, network requests, Thread.Sleep</li>
+                                <li><strong>Use:</strong> In-memory fakes, mocks, test-specific lightweight implementations</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="related" class="content-section">
+                <div class="glass-card">
+                    <h2>Related Knowledge Files</h2>
+                    <div class="related-files-grid">
+                        <a href="unit-testing.html" class="related-file-card">
+                            <span class="file-icon">🧪</span>
+                            <div>
+                                <h4>Unit Testing</h4>
+                                <p>Unit test best practices</p>
+                            </div>
+                        </a>
+                        <a href="integration-testing.html" class="related-file-card">
+                            <span class="file-icon">🔗</span>
+                            <div>
+                                <h4>Integration Testing</h4>
+                                <p>Testing component interactions</p>
+                            </div>
+                        </a>
+                        <a href="../engineering/clean-code.html" class="related-file-card">
+                            <span class="file-icon">✨</span>
+                            <div>
+                                <h4>Clean Code</h4>
+                                <p>Testable code design</p>
+                            </div>
+                        </a>
+                        <a href="../engineering/refactoring.html" class="related-file-card">
+                            <span class="file-icon">🔧</span>
+                            <div>
+                                <h4>Refactoring</h4>
+                                <p>Safe refactoring with tests</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
+    <script src="../../assets/js/file-detail.js"></script>
+</body>
+</html>

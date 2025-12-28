@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CI/CD Pipelines - Continuous integration and deployment best practices">
+    <meta name="author" content="Asif Hussain">
+    <title>CI/CD Pipelines - CORTEX Knowledge</title>
+    <link rel="icon" type="image/png" href="../../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <nav class="breadcrumb-container sticky-nav" aria-label="Breadcrumb">
+        <button class="back-button" onclick="history.back()" aria-label="Go back">← Back</button>
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge Library</a></li>
+            <li><a href="../devops.html">DevOps</a></li>
+            <li aria-current="page">CI/CD Pipelines</li>
+        </ol>
+    </nav>
+
+    <section class="hero" id="main-content">
+        <div class="logo-header">
+            <img src="../../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
+        </div>
+        <h1 class="hero-title">⚙️ CI/CD Pipelines</h1>
+        <p class="hero-subtitle">Continuous integration and deployment automation patterns</p>
+        <div class="file-metadata">
+            <span class="metadata-item">📦 50+ Rules</span>
+            <span class="metadata-item">🏷️ DevOps</span>
+            <span class="metadata-item">📅 Updated: Dec 2025</span>
+        </div>
+    </section>
+
+    <aside class="toc-sidebar" aria-label="Table of contents">
+        <h3>On This Page</h3>
+        <nav class="toc-nav">
+            <a href="#overview" class="toc-link">Overview</a>
+            <a href="#stages" class="toc-link">Pipeline Stages</a>
+            <a href="#testing" class="toc-link">Automated Testing</a>
+            <a href="#deployment" class="toc-link">Deployment Strategies</a>
+            <a href="#security" class="toc-link">Security</a>
+            <a href="#optimization" class="toc-link">Optimization</a>
+            <a href="#related" class="toc-link">Related Files</a>
+        </nav>
+    </aside>
+
+    <main class="file-content">
+        <section class="glass-card" id="overview">
+            <h2>What is CI/CD?</h2>
+            <p>
+                Continuous Integration/Continuous Deployment (CI/CD) automates software delivery from code commit 
+                to production. CI ensures code changes are automatically built and tested. CD ensures deployments 
+                are automated, reliable, and repeatable.
+            </p>
+
+            <h3>Key Benefits</h3>
+            <ul class="feature-list">
+                <li><strong>Faster Time to Market:</strong> 60-90% reduction in release cycle time</li>
+                <li><strong>Reduced Risk:</strong> Small, frequent releases easier to troubleshoot</li>
+                <li><strong>Improved Quality:</strong> Automated testing catches bugs before production</li>
+                <li><strong>Consistent Deployments:</strong> Eliminates human error (95% success rate)</li>
+                <li><strong>Rapid Feedback:</strong> 10x faster feedback loop for developers</li>
+            </ul>
+
+            <div class="info-banner">
+                <strong>💡 CI vs CD vs Continuous Deployment:</strong>
+                <ul class="feature-list">
+                    <li><strong>CI:</strong> Automatically build and test on every commit</li>
+                    <li><strong>CD (Delivery):</strong> Always deployable, manual approval for production</li>
+                    <li><strong>CD (Deployment):</strong> Every passing build automatically deploys to production</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="glass-card" id="stages">
+            <h2>Pipeline Stages</h2>
+            <p>A typical CI/CD pipeline consists of these sequential stages.</p>
+
+            <div class="rule-card">
+                <h3>Stage 1: Source</h3>
+                <span class="badge badge-high">HIGH PRIORITY</span>
+                <p>Trigger pipeline on code changes and clone repository.</p>
+                
+                <div class="example-section">
+                    <h4>✅ GitHub Actions Example</h4>
+                    <pre><code class="language-yaml">name: CI Pipeline
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for analysis
+</code></pre>
+                </div>
+
+                <h4>Best Practices</h4>
+                <ul class="feature-list">
+                    <li>Use webhooks for instant triggering (not polling)</li>
+                    <li>Shallow clone to reduce clone time</li>
+                    <li>Cache dependencies between runs</li>
+                </ul>
+            </div>
+
+            <div class="rule-card">
+                <h3>Stage 2: Build</h3>
+                <span class="badge badge-high">HIGH PRIORITY</span>
+                <p>Compile code, resolve dependencies, create artifacts.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Multi-Language Build</h4>
+                    <pre><code class="language-yaml"># .NET Build
+- name: Setup .NET
+  uses: actions/setup-dotnet@v3
+  with:
+    dotnet-version: '8.0.x'
+
+- name: Restore dependencies
+  run: dotnet restore
+
+- name: Build
+  run: dotnet build --configuration Release --no-restore
+
+- name: Publish
+  run: dotnet publish -c Release -o ./publish
+</code></pre>
+                </div>
+
+                <div class="example-section">
+                    <h4>✅ Node.js Build</h4>
+                    <pre><code class="language-yaml"># Node.js Build
+- name: Setup Node.js
+  uses: actions/setup-node@v4
+  with:
+    node-version: '20'
+    cache: 'npm'
+
+- name: Install dependencies
+  run: npm ci
+
+- name: Build
+  run: npm run build
+</code></pre>
+                </div>
+
+                <h4>Best Practices</h4>
+                <ul class="feature-list">
+                    <li>Keep build time under 10 minutes</li>
+                    <li>Fail fast on build errors</li>
+                    <li>Cache dependencies (npm, NuGet, Maven)</li>
+                    <li>Use specific tool versions (not "latest")</li>
+                </ul>
+            </div>
+
+            <div class="rule-card">
+                <h3>Stage 3: Test</h3>
+                <span class="badge badge-high">HIGH PRIORITY</span>
+                <p>Run automated tests to validate code quality.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Multi-Level Testing</h4>
+                    <pre><code class="language-yaml">- name: Unit Tests
+  run: dotnet test --configuration Release --no-build --verbosity normal --logger trx
+
+- name: Integration Tests
+  run: dotnet test tests/IntegrationTests --no-build
+  env:
+    ConnectionString: ${{ secrets.TEST_DB_CONNECTION }}
+
+- name: Code Coverage
+  run: |
+    dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=lcov
+    bash &lt;(curl -s https://codecov.io/bash)
+
+- name: Publish Test Results
+  uses: dorny/test-reporter@v1
+  if: always()
+  with:
+    name: Test Results
+    path: '**/*.trx'
+    reporter: dotnet-trx
+</code></pre>
+                </div>
+
+                <h4>Test Categories</h4>
+                <ul class="feature-list">
+                    <li><strong>Unit Tests:</strong> Fast, isolated tests (seconds)</li>
+                    <li><strong>Integration Tests:</strong> Test component interactions (minutes)</li>
+                    <li><strong>E2E Tests:</strong> Full user workflows (minutes to hours)</li>
+                    <li><strong>Performance Tests:</strong> Load/stress testing</li>
+                </ul>
+            </div>
+
+            <div class="rule-card">
+                <h3>Stage 4: Security Scanning</h3>
+                <span class="badge badge-high">HIGH PRIORITY</span>
+                <p>Scan for vulnerabilities, secrets, and code quality issues.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Security Checks</h4>
+                    <pre><code class="language-yaml">- name: Dependency Vulnerability Scan
+  run: dotnet list package --vulnerable --include-transitive
+
+- name: Secret Scanning
+  uses: trufflesecurity/trufflehog@main
+  with:
+    path: ./
+    base: main
+
+- name: SAST (Static Analysis)
+  uses: github/codeql-action/analyze@v2
+
+- name: SonarQube Analysis
+  uses: sonarsource/sonarqube-scan-action@master
+  env:
+    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+</code></pre>
+                </div>
+            </div>
+
+            <div class="rule-card">
+                <h3>Stage 5: Artifact Storage</h3>
+                <span class="badge badge-medium">MEDIUM PRIORITY</span>
+                <p>Package and store build artifacts for deployment.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Docker Image</h4>
+                    <pre><code class="language-yaml">- name: Build Docker Image
+  run: |
+    docker build -t myapp:${{ github.sha }} .
+    docker tag myapp:${{ github.sha }} myapp:latest
+
+- name: Push to Container Registry
+  run: |
+    echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+    docker push myapp:${{ github.sha }}
+    docker push myapp:latest
+</code></pre>
+                </div>
+
+                <div class="example-section">
+                    <h4>✅ NuGet Package</h4>
+                    <pre><code class="language-yaml">- name: Pack NuGet Package
+  run: dotnet pack --configuration Release --output ./nupkgs
+
+- name: Push to NuGet.org
+  run: dotnet nuget push ./nupkgs/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" id="testing">
+            <h2>Automated Testing Strategy</h2>
+            <p>Comprehensive testing ensures code quality and prevents regressions.</p>
+
+            <div class="rule-card">
+                <h3>Test Pyramid</h3>
+                <span class="badge badge-high">HIGH PRIORITY</span>
+                <p>Balance fast unit tests with slower integration and E2E tests.</p>
+                
+                <div class="example-section">
+                    <h4>Recommended Distribution</h4>
+                    <pre><code class="language-markdown">         /\
+        /E2E\       10% - Slow, brittle, expensive
+       /------\
+      /  Intg  \    20% - Medium speed, test interactions
+     /----------\
+    /   Unit     \  70% - Fast, cheap, reliable
+   /--------------\
+
+UNIT TESTS (70%):
+- Test single function/class
+- Fast execution (< 1 second each)
+- No external dependencies (mocked)
+- High coverage (80%+)
+
+INTEGRATION TESTS (20%):
+- Test component interactions
+- Database, API, file system
+- Medium speed (seconds to minutes)
+- Focus on critical paths
+
+E2E TESTS (10%):
+- Test complete user workflows
+- Browser automation (Selenium, Playwright)
+- Slow (minutes)
+- Cover happy paths only
+</code></pre>
+                </div>
+            </div>
+
+            <div class="rule-card">
+                <h3>Test Quality Gates</h3>
+                <span class="badge badge-high">HIGH PRIORITY</span>
+                <p>Define thresholds that must pass before deployment.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Quality Gate Configuration</h4>
+                    <pre><code class="language-yaml"># Fail pipeline if quality gates not met
+- name: Check Code Coverage
+  run: |
+    COVERAGE=$(grep -Po 'Line coverage: \K[0-9.]+' coverage.txt)
+    if (( $(echo "$COVERAGE &lt; 80" | bc -l) )); then
+      echo "Code coverage $COVERAGE% is below 80% threshold"
+      exit 1
+    fi
+
+- name: Check Test Pass Rate
+  run: |
+    PASS_RATE=$(grep -Po 'Test pass rate: \K[0-9.]+' test-results.txt)
+    if (( $(echo "$PASS_RATE &lt; 95" | bc -l) )); then
+      echo "Test pass rate $PASS_RATE% is below 95% threshold"
+      exit 1
+    fi
+</code></pre>
+                </div>
+
+                <h4>Common Quality Gates</h4>
+                <ul class="feature-list">
+                    <li><strong>Code Coverage:</strong> ≥ 80% line coverage</li>
+                    <li><strong>Test Pass Rate:</strong> 100% tests passing</li>
+                    <li><strong>Security Vulnerabilities:</strong> Zero critical/high vulnerabilities</li>
+                    <li><strong>Code Smells:</strong> SonarQube rating ≥ A</li>
+                    <li><strong>Build Time:</strong> &lt; 10 minutes</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="glass-card" id="deployment">
+            <h2>Deployment Strategies</h2>
+            <p>Choose the right deployment strategy based on risk tolerance and downtime requirements.</p>
+
+            <div class="rule-card">
+                <h3>Blue-Green Deployment</h3>
+                <span class="badge badge-high">HIGH PRIORITY</span>
+                <p>Maintain two identical environments. Switch traffic instantly, instant rollback.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Blue-Green Strategy</h4>
+                    <pre><code class="language-yaml"># Deploy to Green (inactive) environment
+- name: Deploy to Green
+  run: |
+    kubectl apply -f k8s/green-deployment.yaml
+    kubectl rollout status deployment/myapp-green
+
+# Run smoke tests on Green
+- name: Smoke Test Green
+  run: |
+    curl https://green.myapp.com/health
+    ./run-smoke-tests.sh green.myapp.com
+
+# Switch traffic from Blue to Green
+- name: Switch Traffic
+  run: |
+    kubectl patch service myapp -p '{"spec":{"selector":{"version":"green"}}}'
+    
+# Monitor for 5 minutes
+- name: Monitor
+  run: sleep 300
+
+# Rollback if issues detected
+- name: Rollback if Needed
+  if: failure()
+  run: |
+    kubectl patch service myapp -p '{"spec":{"selector":{"version":"blue"}}}'
+</code></pre>
+                </div>
+
+                <h4>Pros & Cons</h4>
+                <ul class="feature-list">
+                    <li>✅ Instant rollback (just switch traffic back)</li>
+                    <li>✅ Zero downtime</li>
+                    <li>✅ Full production testing before cutover</li>
+                    <li>❌ Requires double infrastructure (expensive)</li>
+                    <li>❌ Database migration challenges</li>
+                </ul>
+            </div>
+
+            <div class="rule-card">
+                <h3>Canary Deployment</h3>
+                <span class="badge badge-high">HIGH PRIORITY</span>
+                <p>Gradually roll out to small percentage of users, monitor, then expand.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Canary Strategy</h4>
+                    <pre><code class="language-yaml"># Deploy canary (5% traffic)
+- name: Deploy Canary
+  run: |
+    kubectl apply -f k8s/canary-deployment.yaml
+    kubectl set image deployment/myapp-canary myapp=myapp:${{ github.sha }}
+    
+# Route 5% traffic to canary
+- name: Configure Traffic Split
+  run: |
+    kubectl apply -f - &lt;&lt;EOF
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: myapp
+    spec:
+      trafficPolicy:
+        canary:
+          weight: 5  # 5% to canary, 95% to stable
+    EOF
+
+# Monitor canary metrics for 30 minutes
+- name: Monitor Canary
+  run: |
+    ./monitor-canary.sh --duration 30m --error-rate-threshold 1%
+    
+# If successful, increase to 50%
+- name: Increase Canary
+  run: kubectl patch service myapp -p '{"spec":{"trafficPolicy":{"canary":{"weight":50}}}}'
+
+# Monitor again
+- name: Monitor 50%
+  run: ./monitor-canary.sh --duration 30m
+
+# Promote canary to 100%
+- name: Promote Canary
+  run: |
+    kubectl patch service myapp -p '{"spec":{"trafficPolicy":{"canary":{"weight":100}}}}'
+    kubectl delete deployment myapp-stable
+    kubectl rename deployment myapp-canary myapp-stable
+</code></pre>
+                </div>
+
+                <h4>Pros & Cons</h4>
+                <ul class="feature-list">
+                    <li>✅ Limits blast radius (only affects small % of users)</li>
+                    <li>✅ Real production testing with real users</li>
+                    <li>✅ Gradual rollout reduces risk</li>
+                    <li>❌ Complex traffic routing</li>
+                    <li>❌ Requires monitoring/alerting</li>
+                </ul>
+            </div>
+
+            <div class="rule-card">
+                <h3>Rolling Deployment</h3>
+                <span class="badge badge-medium">MEDIUM PRIORITY</span>
+                <p>Update instances one by one. Simple but limited rollback.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Kubernetes Rolling Update</h4>
+                    <pre><code class="language-yaml">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+spec:
+  replicas: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1  # Max 1 pod down at a time
+      maxSurge: 2        # Max 2 extra pods during update
+  template:
+    spec:
+      containers:
+      - name: myapp
+        image: myapp:${{ github.sha }}
+        readinessProbe:  # Critical for rolling updates
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 5
+</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" id="security">
+            <h2>Pipeline Security</h2>
+            <p>Secure your CI/CD pipeline to prevent supply chain attacks.</p>
+
+            <div class="rule-card">
+                <h3>Secrets Management</h3>
+                <span class="badge badge-high">HIGH PRIORITY</span>
+                <p>Never hardcode secrets. Use secret managers.</p>
+                
+                <div class="example-section">
+                    <h4>✅ GitHub Secrets</h4>
+                    <pre><code class="language-yaml">- name: Deploy to Production
+  run: |
+    az login --service-principal \
+      --username ${{ secrets.AZURE_CLIENT_ID }} \
+      --password ${{ secrets.AZURE_CLIENT_SECRET }} \
+      --tenant ${{ secrets.AZURE_TENANT_ID }}
+    
+    az webapp deploy --name myapp --resource-group prod
+</code></pre>
+                </div>
+
+                <div class="example-section bad-example">
+                    <h4>❌ Avoid - Hardcoded Secrets</h4>
+                    <pre><code class="language-yaml"># NEVER DO THIS!
+- name: Deploy
+  run: |
+    export API_KEY="sk-1234567890abcdef"  # Exposed in logs!
+    ./deploy.sh
+</code></pre>
+                </div>
+            </div>
+
+            <div class="rule-card">
+                <h3>Least Privilege Access</h3>
+                <span class="badge badge-high">HIGH PRIORITY</span>
+                <p>Grant minimum permissions needed for each pipeline stage.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Scoped Permissions</h4>
+                    <pre><code class="language-yaml">permissions:
+  contents: read        # Read repository
+  packages: write       # Publish packages
+  deployments: write    # Create deployments
+  # Do NOT grant:
+  # - admin (too broad)
+  # - write to main branch
+</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" id="optimization">
+            <h2>Pipeline Optimization</h2>
+            <p>Improve build speed and resource efficiency.</p>
+
+            <div class="rule-card">
+                <h3>Caching Dependencies</h3>
+                <span class="badge badge-medium">MEDIUM PRIORITY</span>
+                <p>Cache dependencies to avoid re-downloading on every build.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Multi-Language Caching</h4>
+                    <pre><code class="language-yaml"># Node.js
+- uses: actions/setup-node@v4
+  with:
+    node-version: '20'
+    cache: 'npm'  # Automatic caching
+
+# .NET
+- uses: actions/setup-dotnet@v3
+  with:
+    dotnet-version: '8.0.x'
+- uses: actions/cache@v3
+  with:
+    path: ~/.nuget/packages
+    key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+
+# Python
+- uses: actions/setup-python@v4
+  with:
+    python-version: '3.11'
+    cache: 'pip'
+</code></pre>
+                    <p class="example-note">✅ Reduces build time by 50-80%</p>
+                </div>
+            </div>
+
+            <div class="rule-card">
+                <h3>Parallel Jobs</h3>
+                <span class="badge badge-medium">MEDIUM PRIORITY</span>
+                <p>Run independent jobs in parallel to reduce total pipeline time.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Matrix Strategy</h4>
+                    <pre><code class="language-yaml">jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18, 20, 22]
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm test
+
+# Runs 9 jobs in parallel (3 versions × 3 OSes)
+</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" id="related">
+            <h2>Related Knowledge Files</h2>
+            <div class="related-grid">
+                <a href="infrastructure-as-code.html" class="related-card">
+                    <span class="related-icon">🏗️</span>
+                    <h3>Infrastructure as Code</h3>
+                    <p>Automated infrastructure provisioning</p>
+                </a>
+                <a href="monitoring-observability.html" class="related-card">
+                    <span class="related-icon">📊</span>
+                    <h3>Monitoring & Observability</h3>
+                    <p>Pipeline and application monitoring</p>
+                </a>
+                <a href="../containers/kubernetes-patterns.html" class="related-card">
+                    <span class="related-icon">🐳</span>
+                    <h3>Kubernetes Patterns</h3>
+                    <p>Container orchestration for deployments</p>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="../../assets/js/main.js"></script>
+</body>
+</html>

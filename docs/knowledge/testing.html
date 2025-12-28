@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Testing Strategies - Unit, integration, E2E, TDD practices">
+    <meta name="author" content="Asif Hussain">
+    <title>Testing - CORTEX Knowledge</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <nav class="breadcrumb-container sticky-nav" aria-label="Breadcrumb">
+        <button class="back-button" onclick="history.back()" aria-label="Go back">← Back</button>
+        <ol class="breadcrumb">
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="index.html">Knowledge Library</a></li>
+            <li><a href="index.html#software-craft">Software Craft</a></li>
+            <li aria-current="page">Testing</li>
+        </ol>
+    </nav>
+    <section class="hero" id="main-content">
+        <div class="logo-header">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
+        </div>
+        <h1 class="hero-title">🧪 Testing Strategies</h1>
+        <p class="hero-subtitle">Unit, integration, E2E testing, TDD, test automation</p>
+    </section>
+    <aside class="category-sidebar" aria-label="Category navigation">
+        <h3>Software Craft</h3>
+        <nav class="category-nav">
+            <a href="engineering.html" class="category-nav-link">🏗️ Engineering</a>
+            <a href="ddd.html" class="category-nav-link">🎯 DDD</a>
+            <a href="security.html" class="category-nav-link">🔒 Security</a>
+            <a href="testing.html" class="category-nav-link active">🧪 Testing</a>
+            <a href="rag-domains.html" class="category-nav-link">🤖 RAG</a>
+        </nav>
+    </aside>
+    <section class="section category-content">
+        <div class="container">
+            <div class="tabs-container">
+                <div class="tabs-nav" role="tablist" aria-label="Category sections">
+                    <button class="tab-button active" role="tab" aria-selected="true" aria-controls="overview-tab" id="overview-btn" data-tab="overview">Overview</button>
+                    <button class="tab-button" role="tab" aria-selected="false" aria-controls="files-tab" id="files-btn" data-tab="files">Knowledge Files</button>
+                    <button class="tab-button" role="tab" aria-selected="false" aria-controls="resources-tab" id="resources-btn" data-tab="resources">Learning Resources</button>
+                    <button class="tab-button" role="tab" aria-selected="false" aria-controls="usage-tab" id="usage-btn" data-tab="usage">CORTEX Usage</button>
+                </div>
+                <div class="tab-content active" id="overview-tab" role="tabpanel" aria-labelledby="overview-btn">
+                    <div class="glass-card">
+                        <h2>Overview</h2>
+                        <p>Testing strategies covering unit tests, integration tests, E2E tests, TDD workflows, and test automation frameworks.</p>
+                        <h3>Category Statistics</h3>
+                        <div class="stats-grid">
+                            <div class="stat-item"><div class="stat-value">5</div><div class="stat-label">Knowledge Files</div></div>
+                            <div class="stat-item"><div class="stat-value">90+</div><div class="stat-label">Test Patterns</div></div>
+                            <div class="stat-item"><div class="stat-value">4</div><div class="stat-label">Test Types</div></div>
+                        </div>
+                    </div>
+                    <div class="glass-card">
+                        <h2>Concept Map</h2>
+                        <div class="mermaid">
+graph TD
+    A[Testing Pyramid] --> B[E2E Tests]
+    A --> C[Integration Tests]
+    A --> D[Unit Tests]
+    B --> E[Few, Slow, High-Level]
+    C --> F[Some, Medium Speed]
+    D --> G[Many, Fast, Isolated]
+    H[TDD Cycle] --> I[Red: Write Failing Test]
+    I --> J[Green: Make It Pass]
+    J --> K[Refactor: Improve Code]
+    K --> I
+    style A fill:#00d4ff,stroke:#7b61ff,stroke-width:2px
+    style D fill:#4ecdc4,stroke:#fff,stroke-width:2px
+    style H fill:#ff6b6b,stroke:#fff,stroke-width:2px
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-content" id="files-tab" role="tabpanel" aria-labelledby="files-btn" hidden>
+                    <div class="glass-card">
+                        <h2>Knowledge Files</h2>
+                        <p>Explore testing best practices:</p>
+                    </div>
+                    <div class="knowledge-files-accordion">
+                        <div class="accordion-item">
+                            <button class="accordion-header" aria-expanded="false" aria-controls="unit-testing-content">
+                                <span class="accordion-icon">🔬</span>
+                                <div class="accordion-title-group">
+                                    <h3 class="accordion-title">Unit Testing</h3>
+                                    <p class="accordion-subtitle">Arrange-Act-Assert, mocking, isolation</p>
+                                </div>
+                                <span class="badge">22 rules</span>
+                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </button>
+                            <div id="unit-testing-content" class="accordion-content" hidden>
+                                <p>Unit test best practices and patterns.</p>
+                                <p><em>📝 Knowledge file coming soon</em></p>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <button class="accordion-header" aria-expanded="false" aria-controls="integration-testing-content">
+                                <span class="accordion-icon">🔗</span>
+                                <div class="accordion-title-group">
+                                    <h3 class="accordion-title">Integration Testing</h3>
+                                    <p class="accordion-subtitle">Component interaction, databases, APIs</p>
+                                </div>
+                                <span class="badge">18 rules</span>
+                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </button>
+                            <div id="integration-testing-content" class="accordion-content" hidden>
+                                <p>Integration testing patterns for component interactions.</p>
+                                <p><em>📝 Knowledge file coming soon</em></p>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <button class="accordion-header" aria-expanded="false" aria-controls="e2e-testing-content">
+                                <span class="accordion-icon">🎭</span>
+                                <div class="accordion-title-group">
+                                    <h3 class="accordion-title">E2E Testing</h3>
+                                    <p class="accordion-subtitle">Selenium, Playwright, Cypress</p>
+                                </div>
+                                <span class="badge">16 rules</span>
+                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </button>
+                            <div id="e2e-testing-content" class="accordion-content" hidden>
+                                <p>End-to-end testing with browser automation.</p>
+                                <p><em>📝 Knowledge file coming soon</em></p>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <button class="accordion-header" aria-expanded="false" aria-controls="tdd-content">
+                                <span class="accordion-icon">🔴🟢</span>
+                                <div class="accordion-title-group">
+                                    <h3 class="accordion-title">Test-Driven Development</h3>
+                                    <p class="accordion-subtitle">Red-Green-Refactor cycle</p>
+                                </div>
+                                <span class="badge">20 rules</span>
+                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </button>
+                            <div id="tdd-content" class="accordion-content" hidden>
+                                <p>TDD workflow and best practices.</p>
+                                <p><em>📝 Knowledge file coming soon</em></p>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <button class="accordion-header" aria-expanded="false" aria-controls="test-automation-content">
+                                <span class="accordion-icon">🤖</span>
+                                <div class="accordion-title-group">
+                                    <h3 class="accordion-title">Test Automation</h3>
+                                    <p class="accordion-subtitle">CI/CD integration, test runners</p>
+                                </div>
+                                <span class="badge">15 rules</span>
+                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </button>
+                            <div id="test-automation-content" class="accordion-content" hidden>
+                                <p>Automated testing in CI/CD pipelines.</p>
+                                <p><em>📝 Knowledge file coming soon</em></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-content" id="resources-tab" role="tabpanel" aria-labelledby="resources-btn" hidden>
+                    <div class="glass-card">
+                        <h2>Learning Resources</h2>
+                        <ul class="resource-list">
+                            <li><div class="resource-link">
+                                <span class="resource-icon">📚</span>
+                                <div><strong>Test-Driven Development</strong><p>By Kent Beck - TDD fundamentals</p></div>
+                            </div></li>
+                            <li><div class="resource-link">
+                                <span class="resource-icon">📚</span>
+                                <div><strong>Growing Object-Oriented Software</strong><p>By Steve Freeman - Guided by tests</p></div>
+                            </div></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="tab-content" id="usage-tab" role="tabpanel" aria-labelledby="usage-btn" hidden>
+                    <div class="glass-card">
+                        <h2>How CORTEX Uses Testing Knowledge</h2>
+                        <h3>🧪 Test Generation</h3>
+                        <ul class="feature-list">
+                            <li><strong>Unit Tests:</strong> Generates unit tests with mocks</li>
+                            <li><strong>Integration:</strong> Creates integration test scaffolding</li>
+                            <li><strong>E2E:</strong> Generates Playwright/Cypress tests</li>
+                        </ul>
+                        <h3>🔴🟢 TDD Support</h3>
+                        <ul class="feature-list">
+                            <li><strong>Red Phase:</strong> Creates failing test first</li>
+                            <li><strong>Green Phase:</strong> Generates minimal implementation</li>
+                            <li><strong>Refactor:</strong> Suggests improvements</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <nav class="bottom-nav" aria-label="Category navigation">
+        <a href="engineering.html" class="bottom-nav-link"><span class="bottom-nav-icon">🏗️</span><span class="bottom-nav-label">Engineering</span></a>
+        <a href="ddd.html" class="bottom-nav-link"><span class="bottom-nav-icon">🎯</span><span class="bottom-nav-label">DDD</span></a>
+        <a href="security.html" class="bottom-nav-link"><span class="bottom-nav-icon">🔒</span><span class="bottom-nav-label">Security</span></a>
+        <a href="testing.html" class="bottom-nav-link active"><span class="bottom-nav-icon">🧪</span><span class="bottom-nav-label">Testing</span></a>
+        <a href="rag-domains.html" class="bottom-nav-link"><span class="bottom-nav-icon">🤖</span><span class="bottom-nav-label">RAG</span></a>
+    </nav>
+    <script src="../assets/js/category-page.js"></script>
+    <script>mermaid.initialize({startOnLoad:true,theme:'dark',themeVariables:{primaryColor:'#00d4ff',primaryTextColor:'#fff',primaryBorderColor:'#7b61ff',lineColor:'#00d4ff',secondaryColor:'#7b61ff',tertiaryColor:'#1a1f3a'}});</script>
+</body>
+</html>

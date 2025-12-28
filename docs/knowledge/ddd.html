@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Domain-Driven Design - Bounded contexts, aggregates, domain modeling">
+    <meta name="author" content="Asif Hussain">
+    <title>Domain-Driven Design - CORTEX Knowledge</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <nav class="breadcrumb-container sticky-nav" aria-label="Breadcrumb">
+        <button class="back-button" onclick="history.back()" aria-label="Go back">← Back</button>
+        <ol class="breadcrumb">
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="index.html">Knowledge Library</a></li>
+            <li><a href="index.html#software-craft">Software Craft</a></li>
+            <li aria-current="page">DDD</li>
+        </ol>
+    </nav>
+    <section class="hero" id="main-content">
+        <div class="logo-header">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
+        </div>
+        <h1 class="hero-title">🎯 Domain-Driven Design</h1>
+        <p class="hero-subtitle">Bounded contexts, aggregates, domain modeling, ubiquitous language</p>
+    </section>
+    <aside class="category-sidebar" aria-label="Category navigation">
+        <h3>Software Craft</h3>
+        <nav class="category-nav">
+            <a href="engineering.html" class="category-nav-link">🏗️ Engineering</a>
+            <a href="ddd.html" class="category-nav-link active">🎯 DDD</a>
+            <a href="security.html" class="category-nav-link">🔒 Security</a>
+            <a href="testing.html" class="category-nav-link">🧪 Testing</a>
+            <a href="rag-domains.html" class="category-nav-link">🤖 RAG</a>
+        </nav>
+    </aside>
+    <section class="section category-content">
+        <div class="container">
+            <div class="tabs-container">
+                <div class="tabs-nav" role="tablist" aria-label="Category sections">
+                    <button class="tab-button active" role="tab" aria-selected="true" aria-controls="overview-tab" id="overview-btn" data-tab="overview">Overview</button>
+                    <button class="tab-button" role="tab" aria-selected="false" aria-controls="files-tab" id="files-btn" data-tab="files">Knowledge Files</button>
+                    <button class="tab-button" role="tab" aria-selected="false" aria-controls="resources-tab" id="resources-btn" data-tab="resources">Learning Resources</button>
+                    <button class="tab-button" role="tab" aria-selected="false" aria-controls="usage-tab" id="usage-btn" data-tab="usage">CORTEX Usage</button>
+                </div>
+                <div class="tab-content active" id="overview-tab" role="tabpanel" aria-labelledby="overview-btn">
+                    <div class="glass-card">
+                        <h2>Overview</h2>
+                        <p>Domain-Driven Design patterns for modeling complex business domains with bounded contexts, aggregates, and ubiquitous language.</p>
+                        <h3>Category Statistics</h3>
+                        <div class="stats-grid">
+                            <div class="stat-item"><div class="stat-value">4</div><div class="stat-label">Knowledge Files</div></div>
+                            <div class="stat-item"><div class="stat-value">65+</div><div class="stat-label">Patterns</div></div>
+                            <div class="stat-item"><div class="stat-value">3</div><div class="stat-label">Core Layers</div></div>
+                        </div>
+                    </div>
+                    <div class="glass-card">
+                        <h2>Concept Map</h2>
+                        <div class="mermaid">
+graph TD
+    A[Domain-Driven Design] --> B[Strategic Design]
+    A --> C[Tactical Design]
+    B --> D[Bounded Contexts]
+    B --> E[Context Mapping]
+    B --> F[Ubiquitous Language]
+    C --> G[Entities]
+    C --> H[Value Objects]
+    C --> I[Aggregates]
+    C --> J[Domain Events]
+    C --> K[Repositories]
+    style A fill:#00d4ff,stroke:#7b61ff,stroke-width:2px
+    style B fill:#4ecdc4,stroke:#fff,stroke-width:2px
+    style C fill:#ff6b6b,stroke:#fff,stroke-width:2px
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-content" id="files-tab" role="tabpanel" aria-labelledby="files-btn" hidden>
+                    <div class="glass-card">
+                        <h2>Knowledge Files</h2>
+                        <p>Explore domain-driven design patterns:</p>
+                    </div>
+                    <div class="knowledge-files-accordion">
+                        <div class="accordion-item">
+                            <button class="accordion-header" aria-expanded="false" aria-controls="bounded-contexts-content">
+                                <span class="accordion-icon">🗺️</span>
+                                <div class="accordion-title-group">
+                                    <h3 class="accordion-title">Bounded Contexts</h3>
+                                    <p class="accordion-subtitle">Context boundaries, strategic design</p>
+                                </div>
+                                <span class="badge">18 rules</span>
+                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </button>
+                            <div id="bounded-contexts-content" class="accordion-content" hidden>
+                                <p>Bounded context identification and mapping.</p>
+                                <p><em>📝 Knowledge file coming soon</em></p>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <button class="accordion-header" aria-expanded="false" aria-controls="aggregates-content">
+                                <span class="accordion-icon">🔗</span>
+                                <div class="accordion-title-group">
+                                    <h3 class="accordion-title">Aggregates</h3>
+                                    <p class="accordion-subtitle">Aggregate roots, consistency boundaries</p>
+                                </div>
+                                <span class="badge">16 rules</span>
+                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </button>
+                            <div id="aggregates-content" class="accordion-content" hidden>
+                                <p>Aggregate design and transactional consistency.</p>
+                                <p><em>📝 Knowledge file coming soon</em></p>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <button class="accordion-header" aria-expanded="false" aria-controls="domain-events-content">
+                                <span class="accordion-icon">📢</span>
+                                <div class="accordion-title-group">
+                                    <h3 class="accordion-title">Domain Events</h3>
+                                    <p class="accordion-subtitle">Event modeling, event sourcing</p>
+                                </div>
+                                <span class="badge">15 rules</span>
+                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </button>
+                            <div id="domain-events-content" class="accordion-content" hidden>
+                                <p>Domain events and event-driven architecture.</p>
+                                <p><em>📝 Knowledge file coming soon</em></p>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <button class="accordion-header" aria-expanded="false" aria-controls="repositories-content">
+                                <span class="accordion-icon">💾</span>
+                                <div class="accordion-title-group">
+                                    <h3 class="accordion-title">Repositories</h3>
+                                    <p class="accordion-subtitle">Data access abstraction</p>
+                                </div>
+                                <span class="badge">14 rules</span>
+                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </button>
+                            <div id="repositories-content" class="accordion-content" hidden>
+                                <p>Repository pattern for aggregate persistence.</p>
+                                <p><em>📝 Knowledge file coming soon</em></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-content" id="resources-tab" role="tabpanel" aria-labelledby="resources-btn" hidden>
+                    <div class="glass-card">
+                        <h2>Learning Resources</h2>
+                        <ul class="resource-list">
+                            <li><div class="resource-link">
+                                <span class="resource-icon">📚</span>
+                                <div><strong>Domain-Driven Design</strong><p>By Eric Evans - The blue book</p></div>
+                            </div></li>
+                            <li><div class="resource-link">
+                                <span class="resource-icon">📚</span>
+                                <div><strong>Implementing DDD</strong><p>By Vaughn Vernon - Practical guide</p></div>
+                            </div></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="tab-content" id="usage-tab" role="tabpanel" aria-labelledby="usage-btn" hidden>
+                    <div class="glass-card">
+                        <h2>How CORTEX Uses DDD Knowledge</h2>
+                        <h3>🗺️ Strategic Design</h3>
+                        <ul class="feature-list">
+                            <li><strong>Context Discovery:</strong> Identifies bounded contexts</li>
+                            <li><strong>Language:</strong> Extracts ubiquitous language</li>
+                            <li><strong>Mapping:</strong> Creates context maps</li>
+                        </ul>
+                        <h3>🎯 Tactical Design</h3>
+                        <ul class="feature-list">
+                            <li><strong>Entities:</strong> Generates entity classes</li>
+                            <li><strong>Aggregates:</strong> Implements aggregate roots</li>
+                            <li><strong>Events:</strong> Creates domain event classes</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <nav class="bottom-nav" aria-label="Category navigation">
+        <a href="engineering.html" class="bottom-nav-link"><span class="bottom-nav-icon">🏗️</span><span class="bottom-nav-label">Engineering</span></a>
+        <a href="ddd.html" class="bottom-nav-link active"><span class="bottom-nav-icon">🎯</span><span class="bottom-nav-label">DDD</span></a>
+        <a href="security.html" class="bottom-nav-link"><span class="bottom-nav-icon">🔒</span><span class="bottom-nav-label">Security</span></a>
+        <a href="testing.html" class="bottom-nav-link"><span class="bottom-nav-icon">🧪</span><span class="bottom-nav-label">Testing</span></a>
+        <a href="rag-domains.html" class="bottom-nav-link"><span class="bottom-nav-icon">🤖</span><span class="bottom-nav-label">RAG</span></a>
+    </nav>
+    <script src="../assets/js/category-page.js"></script>
+    <script>mermaid.initialize({startOnLoad:true,theme:'dark',themeVariables:{primaryColor:'#00d4ff',primaryTextColor:'#fff',primaryBorderColor:'#7b61ff',lineColor:'#00d4ff',secondaryColor:'#7b61ff',tertiaryColor:'#1a1f3a'}});</script>
+</body>
+</html>

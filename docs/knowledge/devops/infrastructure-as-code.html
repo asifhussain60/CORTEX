@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Infrastructure as Code - Terraform, CloudFormation, and IaC best practices">
+    <meta name="author" content="Asif Hussain">
+    <title>Infrastructure as Code - CORTEX Knowledge</title>
+    <link rel="icon" type="image/png" href="../../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <nav class="breadcrumb-container sticky-nav" aria-label="Breadcrumb">
+        <button class="back-button" onclick="history.back()" aria-label="Go back">← Back</button>
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge Library</a></li>
+            <li><a href="../devops.html">DevOps</a></li>
+            <li aria-current="page">Infrastructure as Code</li>
+        </ol>
+    </nav>
+
+    <section class="hero" id="main-content">
+        <div class="logo-header">
+            <img src="../../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
+        </div>
+        <h1 class="hero-title">🏗️ Infrastructure as Code</h1>
+        <p class="hero-subtitle">Automated infrastructure provisioning with Terraform and IaC tools</p>
+        <div class="file-metadata">
+            <span class="metadata-item">📦 45+ Rules</span>
+            <span class="metadata-item">🏷️ DevOps</span>
+            <span class="metadata-item">📅 Updated: Dec 2025</span>
+        </div>
+    </section>
+
+    <aside class="toc-sidebar" aria-label="Table of contents">
+        <h3>On This Page</h3>
+        <nav class="toc-nav">
+            <a href="#overview" class="toc-link">Overview</a>
+            <a href="#tools" class="toc-link">IaC Tools</a>
+            <a href="#terraform" class="toc-link">Terraform</a>
+            <a href="#best-practices" class="toc-link">Best Practices</a>
+            <a href="#state" class="toc-link">State Management</a>
+            <a href="#related" class="toc-link">Related Files</a>
+        </nav>
+    </aside>
+
+    <main class="file-content">
+        <section class="glass-card" id="overview">
+            <h2>What is Infrastructure as Code?</h2>
+            <p>
+                Infrastructure as Code (IaC) manages and provisions infrastructure through machine-readable 
+                definition files rather than manual processes. It brings software development practices 
+                (version control, testing, code review) to infrastructure management.
+            </p>
+
+            <h3>Core Principles</h3>
+            <ul class="feature-list">
+                <li><strong>Declarative:</strong> Define desired end state, tool figures out how to achieve it</li>
+                <li><strong>Idempotent:</strong> Running same code multiple times produces same result</li>
+                <li><strong>Version Controlled:</strong> Infrastructure definitions stored in Git</li>
+                <li><strong>Reproducible:</strong> Same code creates identical infrastructure every time</li>
+            </ul>
+
+            <h3>Key Benefits</h3>
+            <ul class="feature-list">
+                <li><strong>Speed:</strong> 10x faster environment creation (minutes vs hours/days)</li>
+                <li><strong>Consistency:</strong> Zero configuration drift across environments</li>
+                <li><strong>Reduced Risk:</strong> 60% reduction in infrastructure incidents</li>
+                <li><strong>Cost Optimization:</strong> 30-50% infrastructure cost savings</li>
+                <li><strong>Disaster Recovery:</strong> Recovery time reduced from days to hours</li>
+            </ul>
+        </section>
+
+        <section class="glass-card" id="tools">
+            <h2>IaC Tools Comparison</h2>
+
+            <div class="rule-card">
+                <h3>Terraform (Recommended)</h3>
+                <span class="badge badge-high">MOST POPULAR</span>
+                <p>Cloud-agnostic, declarative IaC tool with strong state management.</p>
+                
+                <h4>Strengths</h4>
+                <ul class="feature-list">
+                    <li>Cloud-agnostic (AWS, Azure, GCP, 3,000+ providers)</li>
+                    <li>Strong state management and plan/preview capabilities</li>
+                    <li>Large community and module registry</li>
+                    <li>HCL language is readable and maintainable</li>
+                </ul>
+
+                <h4>Best For</h4>
+                <p>Multi-cloud environments, complex infrastructure, large teams</p>
+            </div>
+
+            <div class="rule-card">
+                <h3>AWS CloudFormation</h3>
+                <span class="badge badge-medium">AWS-SPECIFIC</span>
+                <p>Native AWS IaC service with deep AWS integration.</p>
+                
+                <h4>Strengths</h4>
+                <ul class="feature-list">
+                    <li>Deep AWS integration, no additional tools needed</li>
+                    <li>Free (only pay for resources created)</li>
+                    <li>Automatic rollback on failures</li>
+                </ul>
+
+                <h4>Limitations</h4>
+                <ul class="feature-list">
+                    <li>AWS-only (vendor lock-in)</li>
+                    <li>YAML/JSON can be verbose</li>
+                    <li>No plan/preview (until recently with Change Sets)</li>
+                </ul>
+            </div>
+
+            <div class="rule-card">
+                <h3>Pulumi</h3>
+                <span class="badge badge-medium">MODERN</span>
+                <p>Use real programming languages (TypeScript, Python, C#, Go) for IaC.</p>
+                
+                <h4>Strengths</h4>
+                <ul class="feature-list">
+                    <li>Use familiar programming languages</li>
+                    <li>Strong typing, IDE support, unit testing</li>
+                    <li>Cloud-agnostic</li>
+                </ul>
+
+                <h4>Best For</h4>
+                <p>Teams preferring code over config, complex logic in infrastructure</p>
+            </div>
+        </section>
+
+        <section class="glass-card" id="terraform">
+            <h2>Terraform Best Practices</h2>
+
+            <div class="rule-card">
+                <h3>Basic Terraform Structure</h3>
+                <span class="badge badge-high">HIGH PRIORITY</span>
+                <p>Organize Terraform code into logical modules with clear separation of concerns.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Recommended Structure</h4>
+                    <pre><code class="language-hcl"># main.tf - Main resources
+resource "aws_vpc" "main" {
+  cidr_block           = var.vpc_cidr
+  enable_dns_hostnames = true
+  enable_dns_support   = true
+
+  tags = {
+    Name        = "${var.environment}-vpc"
+    Environment = var.environment
+    ManagedBy   = "Terraform"
+  }
+}
+
+resource "aws_subnet" "public" {
+  count                   = length(var.availability_zones)
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = cidrsubnet(var.vpc_cidr, 8, count.index)
+  availability_zone       = var.availability_zones[count.index]
+  map_public_ip_on_launch = true
+
+  tags = {
+    Name        = "${var.environment}-public-${count.index + 1}"
+    Environment = var.environment
+  }
+}
+
+# variables.tf - Input variables
+variable "environment" {
+  description = "Environment name (dev, staging, prod)"
+  type        = string
+  validation {
+    condition     = contains(["dev", "staging", "prod"], var.environment)
+    error_message = "Environment must be dev, staging, or prod."
+  }
+}
+
+variable "vpc_cidr" {
+  description = "CIDR block for VPC"
+  type        = string
+  default     = "10.0.0.0/16"
+}
+
+variable "availability_zones" {
+  description = "List of availability zones"
+  type        = list(string)
+}
+
+# outputs.tf - Output values
+output "vpc_id" {
+  description = "ID of the VPC"
+  value       = aws_vpc.main.id
+}
+
+output "public_subnet_ids" {
+  description = "IDs of public subnets"
+  value       = aws_subnet.public[*].id
+}
+
+# terraform.tfvars - Variable values
+environment        = "dev"
+vpc_cidr          = "10.0.0.0/16"
+availability_zones = ["us-east-1a", "us-east-1b", "us-east-1c"]
+</code></pre>
+                </div>
+            </div>
+
+            <div class="rule-card">
+                <h3>Module Organization</h3>
+                <span class="badge badge-high">HIGH PRIORITY</span>
+                <p>Create reusable modules for common infrastructure patterns.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Module Structure</h4>
+                    <pre><code class="language-plaintext">terraform/
+├── environments/
+│   ├── dev/
+│   │   ├── main.tf
+│   │   ├── terraform.tfvars
+│   │   └── backend.tf
+│   ├── staging/
+│   │   ├── main.tf
+│   │   ├── terraform.tfvars
+│   │   └── backend.tf
+│   └── prod/
+│       ├── main.tf
+│       ├── terraform.tfvars
+│       └── backend.tf
+└── modules/
+    ├── vpc/
+    │   ├── main.tf
+    │   ├── variables.tf
+    │   └── outputs.tf
+    ├── eks-cluster/
+    │   ├── main.tf
+    │   ├── variables.tf
+    │   └── outputs.tf
+    └── rds/
+        ├── main.tf
+        ├── variables.tf
+        └── outputs.tf
+</code></pre>
+                </div>
+
+                <div class="example-section">
+                    <h4>✅ Using Modules</h4>
+                    <pre><code class="language-hcl"># environments/prod/main.tf
+module "vpc" {
+  source = "../../modules/vpc"
+
+  environment        = "prod"
+  vpc_cidr          = "10.0.0.0/16"
+  availability_zones = ["us-east-1a", "us-east-1b", "us-east-1c"]
+}
+
+module "eks_cluster" {
+  source = "../../modules/eks-cluster"
+
+  cluster_name = "prod-cluster"
+  vpc_id       = module.vpc.vpc_id
+  subnet_ids   = module.vpc.private_subnet_ids
+  
+  node_groups = {
+    general = {
+      instance_types = ["t3.medium"]
+      min_size       = 2
+      max_size       = 10
+      desired_size   = 3
+    }
+  }
+}
+
+module "rds" {
+  source = "../../modules/rds"
+
+  identifier     = "prod-database"
+  engine         = "postgres"
+  engine_version = "15.3"
+  instance_class = "db.t3.medium"
+  vpc_id         = module.vpc.vpc_id
+  subnet_ids     = module.vpc.private_subnet_ids
+}
+</code></pre>
+                </div>
+            </div>
+
+            <div class="rule-card">
+                <h3>Terraform Workflow</h3>
+                <span class="badge badge-high">HIGH PRIORITY</span>
+                <p>Follow standard Terraform workflow for safe infrastructure changes.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Standard Workflow</h4>
+                    <pre><code class="language-bash"># 1. Initialize (download providers, modules)
+terraform init
+
+# 2. Validate syntax
+terraform validate
+
+# 3. Format code
+terraform fmt -recursive
+
+# 4. Plan changes (preview what will happen)
+terraform plan -out=tfplan
+
+# Review the plan output carefully!
+# Look for:
+# - Resources to be created (+)
+# - Resources to be modified (~)
+# - Resources to be destroyed (-)
+
+# 5. Apply changes
+terraform apply tfplan
+
+# 6. Verify outputs
+terraform output
+
+# Optional: Destroy resources
+terraform destroy
+</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" id="best-practices">
+            <h2>IaC Best Practices</h2>
+
+            <div class="rule-card">
+                <h3>Never Hardcode Secrets</h3>
+                <span class="badge badge-high">CRITICAL</span>
+                <p>Use secret managers, never commit secrets to version control.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Recommended - AWS Secrets Manager</h4>
+                    <pre><code class="language-hcl"># Retrieve secret from AWS Secrets Manager
+data "aws_secretsmanager_secret_version" "db_password" {
+  secret_id = "prod/database/password"
+}
+
+resource "aws_db_instance" "main" {
+  identifier        = "mydb"
+  engine            = "postgres"
+  instance_class    = "db.t3.medium"
+  username          = "admin"
+  password          = data.aws_secretsmanager_secret_version.db_password.secret_string
+  # Password never stored in Terraform code
+}
+</code></pre>
+                </div>
+
+                <div class="example-section bad-example">
+                    <h4>❌ Avoid - Hardcoded Secrets</h4>
+                    <pre><code class="language-hcl"># NEVER DO THIS!
+resource "aws_db_instance" "main" {
+  username = "admin"
+  password = "MySuper$ecretP@ssw0rd"  # Exposed in Git!
+}
+</code></pre>
+                </div>
+            </div>
+
+            <div class="rule-card">
+                <h3>Use Remote State</h3>
+                <span class="badge badge-high">HIGH PRIORITY</span>
+                <p>Store Terraform state in remote backend for team collaboration and safety.</p>
+                
+                <div class="example-section">
+                    <h4>✅ S3 + DynamoDB Backend</h4>
+                    <pre><code class="language-hcl"># backend.tf
+terraform {
+  backend "s3" {
+    bucket         = "mycompany-terraform-state"
+    key            = "prod/terraform.tfstate"
+    region         = "us-east-1"
+    encrypt        = true
+    dynamodb_table = "terraform-state-lock"  # State locking
+  }
+}
+
+# Create S3 bucket for state (one-time setup)
+resource "aws_s3_bucket" "terraform_state" {
+  bucket = "mycompany-terraform-state"
+  
+  lifecycle {
+    prevent_destroy = true  # Critical: Don't accidentally delete state!
+  }
+}
+
+resource "aws_s3_bucket_versioning" "terraform_state" {
+  bucket = aws_s3_bucket.terraform_state.id
+  
+  versioning_configuration {
+    status = "Enabled"  # Keep history of state changes
+  }
+}
+
+# DynamoDB table for state locking
+resource "aws_dynamodb_table" "terraform_lock" {
+  name         = "terraform-state-lock"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "LockID"
+  
+  attribute {
+    name = "LockID"
+    type = "S"
+  }
+}
+</code></pre>
+                    <p class="example-note">✅ Benefits: Team collaboration, state locking, versioning, encryption.</p>
+                </div>
+            </div>
+
+            <div class="rule-card">
+                <h3>Tag Everything</h3>
+                <span class="badge badge-medium">MEDIUM PRIORITY</span>
+                <p>Consistent tagging enables cost allocation, automation, and resource management.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Standard Tags</h4>
+                    <pre><code class="language-hcl">locals {
+  common_tags = {
+    Environment  = var.environment
+    Project      = "MyProject"
+    ManagedBy    = "Terraform"
+    CostCenter   = "Engineering"
+    Owner        = "platform-team@company.com"
+    Terraform    = "true"
+    Repository   = "github.com/company/infrastructure"
+  }
+}
+
+resource "aws_instance" "web" {
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = "t3.micro"
+
+  tags = merge(
+    local.common_tags,
+    {
+      Name = "${var.environment}-web-server"
+      Role = "WebServer"
+    }
+  )
+}
+</code></pre>
+                </div>
+            </div>
+
+            <div class="rule-card">
+                <h3>Use Workspaces for Environments</h3>
+                <span class="badge badge-medium">MEDIUM PRIORITY</span>
+                <p>Separate dev/staging/prod using Terraform workspaces or separate state files.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Workspaces</h4>
+                    <pre><code class="language-bash"># Create workspaces
+terraform workspace new dev
+terraform workspace new staging
+terraform workspace new prod
+
+# Switch between workspaces
+terraform workspace select prod
+
+# List workspaces
+terraform workspace list
+
+# Use workspace name in code
+resource "aws_instance" "web" {
+  instance_type = terraform.workspace == "prod" ? "t3.large" : "t3.micro"
+  
+  tags = {
+    Name        = "${terraform.workspace}-web"
+    Environment = terraform.workspace
+  }
+}
+</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" id="state">
+            <h2>State Management</h2>
+            <p>Terraform state is critical - it maps real resources to your configuration.</p>
+
+            <div class="rule-card">
+                <h3>State File Security</h3>
+                <span class="badge badge-high">CRITICAL</span>
+                <p>State files may contain sensitive data. Protect them carefully.</p>
+                
+                <h4>State File Protection</h4>
+                <ul class="feature-list">
+                    <li><strong>Never commit to Git:</strong> Add terraform.tfstate to .gitignore</li>
+                    <li><strong>Encrypt at rest:</strong> Use S3 encryption, Azure Storage encryption</li>
+                    <li><strong>Encrypt in transit:</strong> Use HTTPS/TLS for remote backends</li>
+                    <li><strong>Enable versioning:</strong> S3 versioning for state history</li>
+                    <li><strong>Restrict access:</strong> IAM policies, least privilege</li>
+                    <li><strong>Enable state locking:</strong> DynamoDB (AWS), Azure Blob lease</li>
+                </ul>
+            </div>
+
+            <div class="rule-card">
+                <h3>State Commands</h3>
+                <span class="badge badge-medium">MEDIUM PRIORITY</span>
+                <p>Useful Terraform state commands for debugging and migration.</p>
+                
+                <div class="example-section">
+                    <h4>Common State Operations</h4>
+                    <pre><code class="language-bash"># List resources in state
+terraform state list
+
+# Show details of specific resource
+terraform state show aws_instance.web
+
+# Move resource in state (rename)
+terraform state mv aws_instance.old aws_instance.new
+
+# Remove resource from state (without destroying)
+terraform state rm aws_instance.web
+
+# Import existing resource into state
+terraform import aws_instance.web i-1234567890abcdef0
+
+# Pull remote state to local
+terraform state pull > terraform.tfstate
+
+# Push local state to remote
+terraform state push terraform.tfstate
+</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" id="related">
+            <h2>Related Knowledge Files</h2>
+            <div class="related-grid">
+                <a href="cicd-pipelines.html" class="related-card">
+                    <span class="related-icon">⚙️</span>
+                    <h3>CI/CD Pipelines</h3>
+                    <p>Automate infrastructure deployments</p>
+                </a>
+                <a href="monitoring-observability.html" class="related-card">
+                    <span class="related-icon">📊</span>
+                    <h3>Monitoring & Observability</h3>
+                    <p>Monitor infrastructure health</p>
+                </a>
+                <a href="../cloud/aws-best-practices.html" class="related-card">
+                    <span class="related-icon">☁️</span>
+                    <h3>AWS Best Practices</h3>
+                    <p>Cloud infrastructure patterns</p>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-hcl.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="../../assets/js/main.js"></script>
+</body>
+</html>
