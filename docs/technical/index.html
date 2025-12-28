@@ -1,366 +1,1036 @@
-<!DOCTYPE html><!DOCTYPE html>
+<!DOCTYPE html><!DOCTYPE html><!DOCTYPE html><!DOCTYPE html>
 
-<html lang="en"><html lang="en">
+<html lang="en">
 
-<head><head>
+<head><html lang="en">
 
-    <meta charset="UTF-8">    <meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><head><html lang="en"><html lang="en">
 
-    <meta name="description" content="CORTEX Technical Documentation - Comprehensive developer guide for the CORTEX AI Assistant framework">    <meta name="description" content="CORTEX Technical Documentation - Comprehensive developer guide for the CORTEX AI Assistant framework">
+    <meta name="description" content="CORTEX Technical Documentation - Comprehensive developer guide for the CORTEX AI Assistant framework">
 
-    <meta name="author" content="Asif Hussain">    <meta name="author" content="Asif Hussain">
+    <meta name="author" content="Asif Hussain">    <meta charset="UTF-8">
 
-    <meta name="copyright" content="© 2025 Asif Hussain. All rights reserved.">    <meta name="copyright" content="© 2025 Asif Hussain. All rights reserved.">
+    <meta name="copyright" content="© 2025 Asif Hussain. All rights reserved.">
 
-    <title>📚 CORTEX Technical Documentation</title>    <title>CORTEX Technical Documentation</title>
+    <title>📚 CORTEX Technical Documentation</title>    <meta name="viewport" content="width=device-width, initial-scale=1.0"><head><head>
 
-        
+    <link rel="stylesheet" href="../assets/css/main.css">
 
-    <!-- Styles -->    <!-- Styles - SINGLE centralized CSS file -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">    <meta name="description" content="CORTEX Technical Documentation - Comprehensive developer guide for the CORTEX AI Assistant framework">
 
-    <link rel="stylesheet" href="../assets/css/main.css">    <link rel="stylesheet" href="../assets/css/main.css">
+</head>
 
-        
+<body>    <meta name="author" content="Asif Hussain">    <meta charset="UTF-8">    <meta charset="UTF-8">
 
-    <!-- Font Awesome -->    <!-- D3.js -->
+    <nav class="breadcrumb">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">    <script src="https://d3js.org/d3.v7.min.js"></script>
+        <a href="../index.html">Home</a>    <meta name="copyright" content="© 2025 Asif Hussain. All rights reserved.">
 
-</head>    
+        <span class="separator">›</span>
 
-<body>    <!-- Font Awesome -->
+        <span class="current">Technical Documentation</span>    <title>📚 CORTEX Technical Documentation</title>    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Header -->    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    </nav>
 
-    <header class="header"></head>
+    
 
-        <div class="container"><body>
+    <header class="header">
 
-            <div style="text-align: center; margin-bottom: 2rem;">    <!-- Header -->
+        <div class="container">    <!-- Styles - SINGLE centralized CSS file -->    <meta name="description" content="CORTEX Technical Documentation - Comprehensive developer guide for the CORTEX AI Assistant framework">    <meta name="description" content="CORTEX Technical Documentation - Comprehensive developer guide for the CORTEX AI Assistant framework">
 
-                <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" style="width: 300px; height: 300px; border: none; background: transparent; display: inline-block; box-shadow: 0 0 40px rgba(0, 212, 255, 0.6), 0 0 80px rgba(0, 212, 255, 0.3); border-radius: 0; padding: 0;">    <header class="header">
+            <div class="logo-header">
 
-            </div>        <div class="header-content">
-
-            <h1 style="font-size: 3.5rem; margin-bottom: 0.5rem; background: linear-gradient(135deg, #00d4ff 0%, #7c3aed 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">CORTEX</h1>            <div class="logo-container">
-
-            <p style="font-size: 1.5rem; color: #94a3b8; margin-bottom: 3rem;">Technical Documentation</p>                <img src="../CORTEX-logo.png" alt="CORTEX Logo" class="logo" style="width: 300px; height: 300px; border: none; background: transparent; border-radius: 0; padding: 0">
-
-                            <div>
-
-            <div class="search-container" style="max-width: 600px; margin: 0 auto;">                    <div class="logo-text">CORTEX</div>
-
-                <i class="fas fa-search search-icon"></i>                    <div>Technical Documentation</div>
-
-                <input type="text" class="search-input" placeholder="Search documentation..." id="searchInput">                </div>
-
-            </div>            </div>
-
-        </div>            
-
-    </header>            <div class="search-container">
-
-                <i class="fas fa-search search-icon"></i>
-
-    <!-- Main Content -->                <input type="text" class="search-input" placeholder="Search documentation..." id="searchInput">
-
-    <main class="container" style="max-width: 1400px; margin: 3rem auto; padding: 0 2rem;">            </div>
-
-                    
-
-        <!-- Version Badge -->            <nav class="nav-container">
-
-        <div style="text-align: center; margin-bottom: 3rem;">                <a href="#architecture" class="nav-link active">Architecture</a>
-
-            <span style="display: inline-block; padding: 0.5rem 1.5rem; background: rgba(16, 185, 129, 0.1); border: 1px solid #10b981; border-radius: 2rem; color: #10b981; font-weight: 600;">                <a href="#api" class="nav-link">API</a>
-
-                V3 9.0 • PRODUCTION                <a href="#workflows" class="nav-link">Workflows</a>
-
-            </span>                <a href="#guides" class="nav-link">Guides</a>
-
-        </div>            </nav>
-
-        </div>
-
-        <!-- Introduction -->    </header>
-
-        <div class="glass-card" style="margin-bottom: 3rem; padding: 2rem;">
-
-            <p style="font-size: 1.2rem; line-height: 1.8; color: #cbd5e1; margin: 0;">    <!-- Main Layout -->
-
-                CORTEX is an AI-powered development assistant with long-term memory, context awareness, and strategic planning capabilities. This documentation provides complete technical details for developers to understand, integrate, and extend the CORTEX framework.    <div class="layout">
-
-            </p>        <!-- Sidebar Navigation -->
-
-        </div>        <aside class="sidebar">
-
-            <div class="sidebar-section">
-
-        <!-- Navigation Cards -->                <div class="sidebar-title">Architecture</div>
-
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 4rem;">                <a href="architecture/overview.html" class="sidebar-item">
-
-                                <i class="fas fa-sitemap"></i>
-
-            <!-- Architecture -->                    Overview
-
-            <a href="#architecture" class="glass-card" style="padding: 2rem; text-decoration: none; display: block; transition: all 0.3s ease;">                </a>
-
-                <div style="font-size: 3rem; margin-bottom: 1rem; text-align: center;">🏗️</div>                <a href="architecture/4-tier-brain.html" class="sidebar-item">
-
-                <h3 style="font-size: 1.5rem; margin-bottom: 1rem; color: #00d4ff;">Architecture</h3>                    <i class="fas fa-brain"></i>
-
-                <p style="color: #94a3b8; line-height: 1.6;">4-Tier Brain • Agents • Orchestrators • Diagrams</p>                    4-Tier Brain
-
-            </a>                </a>
-
-                <a href="architecture/orchestrator-framework.html" class="sidebar-item">
-
-            <!-- API Reference -->                    <i class="fas fa-cogs"></i>
-
-            <a href="#api" class="glass-card" style="padding: 2rem; text-decoration: none; display: block; transition: all 0.3s ease;">                    Orchestrators
-
-                <div style="font-size: 3rem; margin-bottom: 1rem; text-align: center;">🔌</div>                </a>
-
-                <h3 style="font-size: 1.5rem; margin-bottom: 1rem; color: #7c3aed;">API Reference</h3>                <a href="architecture/agent-framework.html" class="sidebar-item">
-
-                <p style="color: #94a3b8; line-height: 1.6;">Planning System • TDD Mastery • Maintenance • Strategic Agent • Execution Agent</p>                    <i class="fas fa-robot"></i>
-
-            </a>                    Agents
-
-                </a>
-
-            <!-- Workflows -->                <a href="architecture/diagrams/system-architecture.html" class="sidebar-item">
-
-            <a href="#workflows" class="glass-card" style="padding: 2rem; text-decoration: none; display: block; transition: all 0.3s ease;">                    <i class="fas fa-project-diagram"></i>
-
-                <div style="font-size: 3rem; margin-bottom: 1rem; text-align: center;">⚙️</div>                    Diagrams
-
-                <h3 style="font-size: 1.5rem; margin-bottom: 1rem; color: #10b981;">Workflows</h3>                </a>
-
-                <p style="color: #94a3b8; line-height: 1.6;">Planning Workflow • TDD Cycle • Maintenance</p>            </div>
-
-            </a>            
-
-            <div class="sidebar-section">
-
-            <!-- Guides -->                <div class="sidebar-title">API Reference</div>
-
-            <a href="#guides" class="glass-card" style="padding: 2rem; text-decoration: none; display: block; transition: all 0.3s ease;">                <a href="api/orchestrators/planning-system.html" class="sidebar-item">
-
-                <div style="font-size: 3rem; margin-bottom: 1rem; text-align: center;">📖</div>                    <i class="fas fa-tasks"></i>
-
-                <h3 style="font-size: 1.5rem; margin-bottom: 1rem; color: #f59e0b;">Guides</h3>                    Planning System
-
-                <p style="color: #94a3b8; line-height: 1.6;">Quick Start • Copilot Integration • Deployment • Troubleshooting</p>                </a>
-
-            </a>                <a href="api/orchestrators/tdd-mastery.html" class="sidebar-item">
-
-        </div>                    <i class="fas fa-vial"></i>
-
-                    TDD Mastery
-
-        <!-- Architecture Section -->                </a>
-
-        <section id="architecture" style="margin-bottom: 4rem;">                <a href="api/orchestrators/maintenance.html" class="sidebar-item">
-
-            <div class="glass-card" style="padding: 2rem; margin-bottom: 2rem;">                    <i class="fas fa-wrench"></i>
-
-                <h2 style="font-size: 2.5rem; margin-bottom: 2rem; color: #00d4ff; display: flex; align-items: center; gap: 1rem;">                    Maintenance
-
-                    <span style="font-size: 3rem;">🏗️</span>                </a>
-
-                    Architecture                <a href="api/agents/strategic-planning-agent.html" class="sidebar-item">
-
-                </h2>                    <i class="fas fa-chess"></i>
-
-                                    Strategic Agent
-
-                <div style="margin-bottom: 2rem;">                </a>
-
-                    <h3 style="font-size: 1.8rem; color: #00d4ff; margin-bottom: 1rem;">📋 Overview</h3>                <a href="api/agents/code-execution-agent.html" class="sidebar-item">
-
-                    <p style="color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem;">                    <i class="fas fa-code"></i>
-
-                        CORTEX uses a hierarchical 4-tier brain architecture for memory management and knowledge organization:                    Execution Agent
-
-                    </p>                </a>
-
-                    <ul style="color: #cbd5e1; line-height: 2; margin-left: 2rem;">            </div>
-
-                        <li><strong style="color: #00d4ff;">Tier 0 (Governance):</strong> Core rules, templates, and system-wide policies</li>            
-
-                        <li><strong style="color: #7c3aed;">Tier 1 (Working Memory):</strong> Active conversations, current context, session state</li>            <div class="sidebar-section">
-
-                        <li><strong style="color: #10b981;">Tier 2 (Knowledge Graph):</strong> Relationships, patterns, learned insights</li>                <div class="sidebar-title">Workflows</div>
-
-                        <li><strong style="color: #f59e0b;">Tier 3 (Development Context):</strong> Project-specific knowledge, codebase understanding</li>                <a href="workflows/planning-workflow.html" class="sidebar-item">
-
-                    </ul>                    <i class="fas fa-stream"></i>
-
-                </div>                    Planning Workflow
-
-                </a>
-
-                <div style="margin-bottom: 2rem;">                <a href="workflows/tdd-workflow.html" class="sidebar-item">
-
-                    <h3 style="font-size: 1.8rem; color: #7c3aed; margin-bottom: 1rem;">🧠 4-Tier Brain</h3>                    <i class="fas fa-circle-notch"></i>
-
-                    <div style="background: rgba(124, 58, 237, 0.1); border-left: 4px solid #7c3aed; padding: 1.5rem; border-radius: 0.5rem;">                    TDD Cycle
-
-                        <p style="color: #cbd5e1; line-height: 1.8; margin: 0;">                </a>
-
-                            The brain structure provides persistent memory across conversations, enabling CORTEX to remember project context, user preferences, and development patterns over time.                <a href="workflows/maintenance-workflow.html" class="sidebar-item">
-
-                        </p>                    <i class="fas fa-tools"></i>
-
-                    </div>                    Maintenance
-
-                </div>                </a>
+                <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">    <link rel="stylesheet" href="../assets/css/main.css">
 
             </div>
 
-                <div style="margin-bottom: 2rem;">            
+            <h1>CORTEX Technical Documentation</h1>        <meta name="author" content="Asif Hussain">    <meta name="author" content="Asif Hussain">
 
-                    <h3 style="font-size: 1.8rem; color: #10b981; margin-bottom: 1rem;">🤖 Orchestrators</h3>            <div class="sidebar-section">
+            <p class="subtitle">Comprehensive developer guide for the CORTEX AI Assistant framework</p>
 
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">                <div class="sidebar-title">Guides</div>
+        </div>    <!-- Font Awesome -->
 
-                        <div style="background: rgba(16, 185, 129, 0.05); padding: 1rem; border-radius: 0.5rem; border: 1px solid rgba(16, 185, 129, 0.2);">                <a href="setup-guides/quick-start.html" class="sidebar-item">
+    </header>
 
-                            <strong style="color: #10b981;">Planning System</strong>                    <i class="fas fa-rocket"></i>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">    <meta name="copyright" content="© 2025 Asif Hussain. All rights reserved.">    <meta name="copyright" content="© 2025 Asif Hussain. All rights reserved.">
 
-                            <p style="color: #94a3b8; font-size: 0.9rem; margin-top: 0.5rem;">Strategic task decomposition</p>                    Quick Start
+    <main class="container">
 
-                        </div>                </a>
+        <div class="text-center"></head>
 
-                        <div style="background: rgba(16, 185, 129, 0.05); padding: 1rem; border-radius: 0.5rem; border: 1px solid rgba(16, 185, 129, 0.2);">                <a href="integration/copilot-integration.html" class="sidebar-item">
+            <span class="badge badge-success">V3 9.0 • PRODUCTION</span>
 
-                            <strong style="color: #10b981;">TDD Orchestrator</strong>                    <i class="fas fa-plug"></i>
+        </div><body>    <title>📚 CORTEX Technical Documentation</title>    <title>CORTEX Technical Documentation</title>
 
-                            <p style="color: #94a3b8; font-size: 0.9rem; margin-top: 0.5rem;">RED→GREEN→REFACTOR cycle</p>                    Copilot Integration
 
-                        </div>                </a>
 
-                        <div style="background: rgba(16, 185, 129, 0.05); padding: 1rem; border-radius: 0.5rem; border: 1px solid rgba(16, 185, 129, 0.2);">                <a href="deployment/overview.html" class="sidebar-item">
+        <section class="section-overview">    <!-- Breadcrumb Navigation -->
 
-                            <strong style="color: #10b981;">Maintenance</strong>                    <i class="fas fa-server"></i>
+            <div class="glass-card">
 
-                            <p style="color: #94a3b8; font-size: 0.9rem; margin-top: 0.5rem;">6-phase health pipeline</p>                    Deployment
+                <p class="lead">    <nav class="breadcrumb">        
 
-                        </div>                </a>
+                    CORTEX is an AI-powered development assistant with long-term memory, context awareness, and strategic planning capabilities. This documentation provides complete technical details for developers to understand, integrate, and extend the CORTEX framework.
 
-                        <div style="background: rgba(16, 185, 129, 0.05); padding: 1rem; border-radius: 0.5rem; border: 1px solid rgba(16, 185, 129, 0.2);">                <a href="troubleshooting/index.html" class="sidebar-item">
+                </p>        <a href="../index.html">Home</a>
 
-                            <strong style="color: #10b981;">Refinement</strong>                    <i class="fas fa-ambulance"></i>
+            </div>
 
-                            <p style="color: #94a3b8; font-size: 0.9rem; margin-top: 0.5rem;">7-phase code improvement</p>                    Troubleshooting
+        </section>        <span class="separator">›</span>    <!-- Styles -->    <!-- Styles - SINGLE centralized CSS file -->
 
-                        </div>                </a>
 
-                        <div style="background: rgba(16, 185, 129, 0.05); padding: 1rem; border-radius: 0.5rem; border: 1px solid rgba(16, 185, 129, 0.2);">            </div>
 
-                            <strong style="color: #10b981;">Sanitization</strong>        </aside>
+        <section class="feature-grid-4">        <span class="current">Technical Documentation</span>
 
-                            <p style="color: #94a3b8; font-size: 0.9rem; margin-top: 0.5rem;">5-phase sensitive data removal</p>
+            <a href="#architecture" class="glass-card card-link">
 
-                        </div>        <!-- Main Content -->
+                <div class="card-icon">🏗️</div>    </nav>    <link rel="stylesheet" href="../assets/css/main.css">    <link rel="stylesheet" href="../assets/css/main.css">
 
-                        <div style="background: rgba(16, 185, 129, 0.05); padding: 1rem; border-radius: 0.5rem; border: 1px solid rgba(16, 185, 129, 0.2);">        <main class="main-content">
+                <h3>Architecture</h3>
 
-                            <strong style="color: #10b981;">ADO Operations</strong>            <!-- Hero Section -->
+                <p>4-Tier Brain, Agents, Orchestrators, Diagrams</p>
 
-                            <p style="color: #94a3b8; font-size: 0.9rem; margin-top: 0.5rem;">Azure DevOps integration</p>            <div class="card fade-in">
+            </a>
 
-                        </div>                <div class="card-header">
+    <!-- Header with Logo -->        
 
-                    </div>                    <div>
+            <a href="#api" class="glass-card card-link">
 
-                </div>                        <h1 class="card-title">CORTEX Technical Documentation</h1>
+                <div class="card-icon">🔌</div>    <header class="header">
 
-                        <p class="card-subtitle">Comprehensive developer guide for the CORTEX AI Assistant framework</p>
+                <h3>API Reference</h3>
 
-                <div>                    </div>
+                <p>Planning System, TDD Mastery, Maintenance, Agents</p>        <div class="container">    <!-- Font Awesome -->    <!-- D3.js -->
 
-                    <h3 style="font-size: 1.8rem; color: #f59e0b; margin-bottom: 1rem;">🎯 Agents</h3>                    <div>
+            </a>
 
-                    <p style="color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem;">                        <span class="badge badge-primary">v3.9.0</span>
+            <div class="logo-header">
 
-                        Two specialized agents handle different aspects of development:                        <span class="badge badge-success">Production</span>
+            <a href="#workflows" class="glass-card card-link">
 
-                    </p>                    </div>
+                <div class="card-icon">⚙️</div>                <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">    <script src="https://d3js.org/d3.v7.min.js"></script>
 
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">                </div>
+                <h3>Workflows</h3>
 
-                        <div style="background: rgba(245, 158, 11, 0.05); padding: 1.5rem; border-radius: 0.5rem; border-left: 4px solid #f59e0b;">                
+                <p>Planning Workflow, TDD Cycle, Maintenance</p>            </div>
 
-                            <h4 style="color: #f59e0b; margin-bottom: 0.5rem;">Strategic Agent</h4>                <p>
+            </a>
 
-                            <p style="color: #94a3b8; font-size: 0.95rem;">High-level planning, architecture decisions, and requirement analysis</p>                    CORTEX is an AI-powered development assistant with long-term memory, context awareness, and strategic planning capabilities. This documentation provides complete technical details for developers to understand, integrate, and extend the CORTEX framework.
+            <h1>CORTEX Technical Documentation</h1></head>    
 
-                        </div>                </p>
+            <a href="#guides" class="glass-card card-link">
 
-                        <div style="background: rgba(245, 158, 11, 0.05); padding: 1.5rem; border-radius: 0.5rem; border-left: 4px solid #f59e0b;">                
+                <div class="card-icon">📖</div>            <p class="subtitle">Comprehensive developer guide for the CORTEX AI Assistant framework</p>
 
-                            <h4 style="color: #f59e0b; margin-bottom: 0.5rem;">Execution Agent</h4>                <div class="grid grid-3">
+                <h3>Guides</h3>
 
-                            <p style="color: #94a3b8; font-size: 0.95rem;">Code implementation, testing, and tactical operations</p>                    <div class="glass">
+                <p>Quick Start, Copilot Integration, Deployment</p>            <body>    <!-- Font Awesome -->
 
-                        </div>                        <i class="fas fa-book"></i>
+            </a>
 
-                    </div>                        <h3>Comprehensive</h3>
+        </section>            <!-- Search Bar -->
 
-                </div>                        <p>Complete API docs, workflows, and integration guides</p>
 
-            </div>                    </div>
 
-        </section>                    <div class="glass">
+        <section id="architecture" class="section-architecture">            <div class="search-container">    <!-- Header -->    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-                        <i class="fas fa-project-diagram"></i>
+            <div class="glass-card">
 
-        <!-- API Reference Section -->                        <h3>Interactive</h3>
+                <h2>                <i class="fas fa-search search-icon"></i>
 
-        <section id="api" style="margin-bottom: 4rem;">                        <p>D3.js diagrams with zoom, pan, and drill-down</p>
+                    <span class="section-icon">🏗️</span>
 
-            <div class="glass-card" style="padding: 2rem; margin-bottom: 2rem;">                    </div>
+                    Architecture                <input type="text" class="search-input" placeholder="Search documentation..." id="searchInput">    <header class="header"></head>
 
-                <h2 style="font-size: 2.5rem; margin-bottom: 2rem; color: #7c3aed; display: flex; align-items: center; gap: 1rem;">                    <div class="glass">
+                </h2>
 
-                    <span style="font-size: 3rem;">🔌</span>                        <i class="fas fa-mobile-alt"></i>
+                            </div>
 
-                    API Reference                        <h3>Responsive</h3>
+                <div class="content-block">
 
-                </h2>                        <p>Mobile-friendly, accessible, WCAG AA compliant</p>
+                    <h3>📋 Overview</h3>        </div>        <div class="container"><body>
+
+                    <p>CORTEX uses a hierarchical 4-tier brain architecture for memory management and knowledge organization:</p>
+
+                    <ul class="feature-list">    </header>
+
+                        <li><strong>Tier 0 (Governance):</strong> Core rules, templates, and system-wide policies</li>
+
+                        <li><strong>Tier 1 (Working Memory):</strong> Active conversations, current context, session state</li>            <div style="text-align: center; margin-bottom: 2rem;">    <!-- Header -->
+
+                        <li><strong>Tier 2 (Knowledge Graph):</strong> Relationships, patterns, learned insights</li>
+
+                        <li><strong>Tier 3 (Development Context):</strong> Project-specific knowledge, codebase understanding</li>    <!-- Main Content -->
+
+                    </ul>
+
+                </div>    <main class="container">                <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" style="width: 300px; height: 300px; border: none; background: transparent; display: inline-block; box-shadow: 0 0 40px rgba(0, 212, 255, 0.6), 0 0 80px rgba(0, 212, 255, 0.3); border-radius: 0; padding: 0;">    <header class="header">
+
+
+
+                <div class="content-block">        
+
+                    <h3>🧠 4-Tier Brain</h3>
+
+                    <div class="info-panel">        <!-- Version Badge -->            </div>        <div class="header-content">
+
+                        <p>The brain structure provides persistent memory across conversations, enabling CORTEX to remember project context, user preferences, and development patterns over time.</p>
+
+                    </div>        <div class="text-center">
+
+                </div>
+
+            <span class="badge badge-success">V3 9.0 • PRODUCTION</span>            <h1 style="font-size: 3.5rem; margin-bottom: 0.5rem; background: linear-gradient(135deg, #00d4ff 0%, #7c3aed 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">CORTEX</h1>            <div class="logo-container">
+
+                <div class="content-block">
+
+                    <h3>🤖 Orchestrators</h3>        </div>
+
+                    <div class="feature-grid-3">
+
+                        <div class="metric-card">            <p style="font-size: 1.5rem; color: #94a3b8; margin-bottom: 3rem;">Technical Documentation</p>                <img src="../CORTEX-logo.png" alt="CORTEX Logo" class="logo" style="width: 300px; height: 300px; border: none; background: transparent; border-radius: 0; padding: 0">
+
+                            <div class="metric-label">Planning System</div>
+
+                            <p>Strategic task decomposition</p>        <!-- Introduction -->
+
+                        </div>
+
+                        <div class="metric-card">        <section class="section-overview">                            <div>
+
+                            <div class="metric-label">TDD Orchestrator</div>
+
+                            <p>RED→GREEN→REFACTOR cycle</p>            <div class="glass-card">
+
+                        </div>
+
+                        <div class="metric-card">                <p class="lead">            <div class="search-container" style="max-width: 600px; margin: 0 auto;">                    <div class="logo-text">CORTEX</div>
+
+                            <div class="metric-label">Maintenance</div>
+
+                            <p>6-phase health pipeline</p>                    CORTEX is an AI-powered development assistant with long-term memory, context awareness, and strategic planning capabilities. This documentation provides complete technical details for developers to understand, integrate, and extend the CORTEX framework.
+
+                        </div>
+
+                        <div class="metric-card">                </p>                <i class="fas fa-search search-icon"></i>                    <div>Technical Documentation</div>
+
+                            <div class="metric-label">Refinement</div>
+
+                            <p>7-phase code improvement</p>            </div>
+
+                        </div>
+
+                        <div class="metric-card">        </section>                <input type="text" class="search-input" placeholder="Search documentation..." id="searchInput">                </div>
+
+                            <div class="metric-label">Sanitization</div>
+
+                            <p>5-phase sensitive data removal</p>
+
+                        </div>
+
+                        <div class="metric-card">        <!-- Navigation Cards -->            </div>            </div>
+
+                            <div class="metric-label">ADO Operations</div>
+
+                            <p>Azure DevOps integration</p>        <section class="feature-grid-4">
+
+                        </div>
+
+                    </div>                    </div>            
+
+                </div>
+
+            <!-- Architecture -->
+
+                <div class="content-block">
+
+                    <h3>🎯 Agents</h3>            <a href="#architecture" class="glass-card card-link">    </header>            <div class="search-container">
+
+                    <p>Two specialized agents handle different aspects of development:</p>
+
+                    <div class="feature-grid-2">                <div class="card-icon">🏗️</div>
+
+                        <div class="info-panel">
+
+                            <h4>Strategic Agent</h4>                <h3>Architecture</h3>                <i class="fas fa-search search-icon"></i>
+
+                            <p>High-level planning, architecture decisions, and requirement analysis</p>
+
+                        </div>                <p>4-Tier Brain • Agents • Orchestrators • Diagrams</p>
+
+                        <div class="info-panel">
+
+                            <h4>Execution Agent</h4>            </a>    <!-- Main Content -->                <input type="text" class="search-input" placeholder="Search documentation..." id="searchInput">
+
+                            <p>Code implementation, testing, and tactical operations</p>
+
+                        </div>
+
+                    </div>
+
+                </div>            <!-- API Reference -->    <main class="container" style="max-width: 1400px; margin: 3rem auto; padding: 0 2rem;">            </div>
+
+            </div>
+
+        </section>            <a href="#api" class="glass-card card-link">
+
+
+
+        <section id="api" class="section-api">                <div class="card-icon">🔌</div>                    
+
+            <div class="glass-card">
+
+                <h2>                <h3>API Reference</h3>
+
+                    <span class="section-icon">🔌</span>
+
+                    API Reference                <p>Planning System • TDD Mastery • Maintenance • Strategic Agent • Execution Agent</p>        <!-- Version Badge -->            <nav class="nav-container">
+
+                </h2>
+
+                            </a>
+
+                <div class="content-block">
+
+                    <h3>📋 Planning System</h3>        <div style="text-align: center; margin-bottom: 3rem;">                <a href="#architecture" class="nav-link active">Architecture</a>
+
+                    <div class="code-panel">
+
+                        <code>plan [task description]</code>            <!-- Workflows -->
+
+                        <p>Creates a strategic plan with 4 subfolders: Design, Implementation, Testing, Documentation</p>
+
+                    </div>            <a href="#workflows" class="glass-card card-link">            <span style="display: inline-block; padding: 0.5rem 1.5rem; background: rgba(16, 185, 129, 0.1); border: 1px solid #10b981; border-radius: 2rem; color: #10b981; font-weight: 600;">                <a href="#api" class="nav-link">API</a>
+
+                </div>
+
+                <div class="card-icon">⚙️</div>
+
+                <div class="content-block">
+
+                    <h3>🔴 TDD Mastery</h3>                <h3>Workflows</h3>                V3 9.0 • PRODUCTION                <a href="#workflows" class="nav-link">Workflows</a>
+
+                    <div class="code-panel">
+
+                        <code>tdd [feature description]</code>                <p>Planning Workflow • TDD Cycle • Maintenance</p>
+
+                        <p>Starts TDD workflow: RED (failing test) → GREEN (minimal implementation) → REFACTOR (clean code)</p>
+
+                    </div>            </a>            </span>                <a href="#guides" class="nav-link">Guides</a>
+
+                </div>
+
+
+
+                <div class="content-block">
+
+                    <h3>🔧 Maintenance</h3>            <!-- Guides -->        </div>            </nav>
+
+                    <div class="code-panel">
+
+                        <code>system maintenance</code>            <a href="#guides" class="glass-card card-link">
+
+                        <p>Runs 6-phase health check: Diagnostics, Cleanup, Optimization, Validation, Documentation, Reporting</p>
+
+                    </div>                <div class="card-icon">📖</div>        </div>
+
+                </div>
+
+                <h3>Guides</h3>
+
+                <div class="content-block">
+
+                    <h3>🎯 Strategic Agent</h3>                <p>Quick Start • Copilot Integration • Deployment • Troubleshooting</p>        <!-- Introduction -->    </header>
+
+                    <div class="info-panel">
+
+                        <p>Handles architecture design, requirement analysis, and high-level planning decisions</p>            </a>
+
+                    </div>
+
+                </div>        </section>        <div class="glass-card" style="margin-bottom: 3rem; padding: 2rem;">
+
+
+
+                <div class="content-block">
+
+                    <h3>⚡ Execution Agent</h3>
+
+                    <div class="info-panel">        <!-- Architecture Section -->            <p style="font-size: 1.2rem; line-height: 1.8; color: #cbd5e1; margin: 0;">    <!-- Main Layout -->
+
+                        <p>Executes code implementation, runs tests, and performs tactical development operations</p>
+
+                    </div>        <section id="architecture" class="section-architecture">
+
+                </div>
+
+            </div>            <div class="glass-card">                CORTEX is an AI-powered development assistant with long-term memory, context awareness, and strategic planning capabilities. This documentation provides complete technical details for developers to understand, integrate, and extend the CORTEX framework.    <div class="layout">
+
+        </section>
+
+                <h2>
+
+        <section id="workflows" class="section-workflow">
+
+            <div class="glass-card">                    <span class="section-icon">🏗️</span>            </p>        <!-- Sidebar Navigation -->
+
+                <h2>
+
+                    <span class="section-icon">⚙️</span>                    Architecture
+
+                    Workflows
+
+                </h2>                </h2>        </div>        <aside class="sidebar">
+
+                
+
+                <div class="content-block">                
+
+                    <h3>📋 Planning Workflow</h3>
+
+                    <ol class="feature-list">                <div class="content-block">            <div class="sidebar-section">
+
+                        <li>Analyze user request and break down into components</li>
+
+                        <li>Create planning structure with 4 subfolders</li>                    <h3>📋 Overview</h3>
+
+                        <li>Generate Design, Implementation, Testing, Documentation plans</li>
+
+                        <li>Present structured plan for user approval</li>                    <p>        <!-- Navigation Cards -->                <div class="sidebar-title">Architecture</div>
+
+                        <li>Execute plan phase by phase with checkpoints</li>
+
+                    </ol>                        CORTEX uses a hierarchical 4-tier brain architecture for memory management and knowledge organization:
+
+                </div>
+
+                    </p>        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 4rem;">                <a href="architecture/overview.html" class="sidebar-item">
+
+                <div class="content-block">
+
+                    <h3>🔴 TDD Cycle</h3>                    <ul class="feature-list">
+
+                    <div class="info-panel">
+
+                        <p><strong class="text-danger">RED:</strong> Write failing test that defines desired behavior</p>                        <li><strong>Tier 0 (Governance):</strong> Core rules, templates, and system-wide policies</li>                                <i class="fas fa-sitemap"></i>
+
+                        <p><strong class="text-success">GREEN:</strong> Write minimal code to make test pass</p>
+
+                        <p><strong class="text-info">REFACTOR:</strong> Clean up code while keeping tests green</p>                        <li><strong>Tier 1 (Working Memory):</strong> Active conversations, current context, session state</li>
+
+                    </div>
+
+                </div>                        <li><strong>Tier 2 (Knowledge Graph):</strong> Relationships, patterns, learned insights</li>            <!-- Architecture -->                    Overview
+
+
+
+                <div class="content-block">                        <li><strong>Tier 3 (Development Context):</strong> Project-specific knowledge, codebase understanding</li>
+
+                    <h3>🔧 Maintenance</h3>
+
+                    <ol class="feature-list">                    </ul>            <a href="#architecture" class="glass-card" style="padding: 2rem; text-decoration: none; display: block; transition: all 0.3s ease;">                </a>
+
+                        <li><strong>Phase 1 - Diagnostics:</strong> Analyze system health metrics</li>
+
+                        <li><strong>Phase 2 - Cleanup:</strong> Remove obsolete files and artifacts</li>                </div>
+
+                        <li><strong>Phase 3 - Optimization:</strong> Improve performance and efficiency</li>
+
+                        <li><strong>Phase 4 - Validation:</strong> Run tests and verify integrity</li>                <div style="font-size: 3rem; margin-bottom: 1rem; text-align: center;">🏗️</div>                <a href="architecture/4-tier-brain.html" class="sidebar-item">
+
+                        <li><strong>Phase 5 - Documentation:</strong> Update docs and comments</li>
+
+                        <li><strong>Phase 6 - Reporting:</strong> Generate health report</li>                <div class="content-block">
+
+                    </ol>
+
+                </div>                    <h3>🧠 4-Tier Brain</h3>                <h3 style="font-size: 1.5rem; margin-bottom: 1rem; color: #00d4ff;">Architecture</h3>                    <i class="fas fa-brain"></i>
+
+            </div>
+
+        </section>                    <div class="info-panel">
+
+
+
+        <section id="guides" class="section-guides">                        <p>                <p style="color: #94a3b8; line-height: 1.6;">4-Tier Brain • Agents • Orchestrators • Diagrams</p>                    4-Tier Brain
+
+            <div class="glass-card">
+
+                <h2>                            The brain structure provides persistent memory across conversations, enabling CORTEX to remember project context, user preferences, and development patterns over time.
+
+                    <span class="section-icon">📖</span>
+
+                    Guides                        </p>            </a>                </a>
+
+                </h2>
 
                                     </div>
 
+                <div class="content-block">
+
+                    <h3>🚀 Quick Start</h3>                </div>                <a href="architecture/orchestrator-framework.html" class="sidebar-item">
+
+                    <ol class="feature-list">
+
+                        <li>Say "help" in Copilot Chat to see all operations</li>
+
+                        <li>Use "plan [task]" for complex multi-step work</li>
+
+                        <li>Use "tdd [feature]" for test-driven development</li>                <div class="content-block">            <!-- API Reference -->                    <i class="fas fa-cogs"></i>
+
+                        <li>Use "system maintenance" for health checks</li>
+
+                    </ol>                    <h3>🤖 Orchestrators</h3>
+
+                </div>
+
+                    <div class="feature-grid-3">            <a href="#api" class="glass-card" style="padding: 2rem; text-decoration: none; display: block; transition: all 0.3s ease;">                    Orchestrators
+
+                <div class="content-block">
+
+                    <h3>🤝 Copilot Integration</h3>                        <div class="metric-card">
+
+                    <div class="info-panel">
+
+                        <p>CORTEX integrates with GitHub Copilot through .github/copilot-instructions.md and .github/prompts/ directory. All intent routing is defined in CORTEX.prompt.md.</p>                            <div class="metric-label">Planning System</div>                <div style="font-size: 3rem; margin-bottom: 1rem; text-align: center;">🔌</div>                </a>
+
+                    </div>
+
+                </div>                            <p>Strategic task decomposition</p>
+
+
+
+                <div class="content-block">                        </div>                <h3 style="font-size: 1.5rem; margin-bottom: 1rem; color: #7c3aed;">API Reference</h3>                <a href="architecture/agent-framework.html" class="sidebar-item">
+
+                    <h3>🌐 Deployment</h3>
+
+                    <ol class="feature-list">                        <div class="metric-card">
+
+                        <li>Documentation server: <code>./scripts/launch_docs.sh</code></li>
+
+                        <li>Access at: <code>http://localhost:8000</code></li>                            <div class="metric-label">TDD Orchestrator</div>                <p style="color: #94a3b8; line-height: 1.6;">Planning System • TDD Mastery • Maintenance • Strategic Agent • Execution Agent</p>                    <i class="fas fa-robot"></i>
+
+                        <li>Publish docs: See cortex-brain/publish-config.yaml</li>
+
+                    </ol>                            <p>RED→GREEN→REFACTOR cycle</p>
+
+                </div>
+
+                        </div>            </a>                    Agents
+
+                <div class="content-block">
+
+                    <h3>🔍 Troubleshooting</h3>                        <div class="metric-card">
+
+                    <div class="info-panel">
+
+                        <ul class="feature-list">                            <div class="metric-label">Maintenance</div>                </a>
+
+                            <li>Check <code>cortex-brain/brain-protection-rules.yaml</code> for SKULL rules</li>
+
+                            <li>Review <code>cortex-brain/lessons-learned.yaml</code> for common issues</li>                            <p>6-phase health pipeline</p>
+
+                            <li>Run <code>system maintenance</code> for automated diagnostics</li>
+
+                            <li>Check logs in <code>logs/</code> directory</li>                        </div>            <!-- Workflows -->                <a href="architecture/diagrams/system-architecture.html" class="sidebar-item">
+
+                        </ul>
+
+                    </div>                        <div class="metric-card">
+
+                </div>
+
+            </div>                            <div class="metric-label">Refinement</div>            <a href="#workflows" class="glass-card" style="padding: 2rem; text-decoration: none; display: block; transition: all 0.3s ease;">                    <i class="fas fa-project-diagram"></i>
+
+        </section>
+
+                            <p>7-phase code improvement</p>
+
+        <div class="text-center">
+
+            <a href="#" class="glass-card card-link">                        </div>                <div style="font-size: 3rem; margin-bottom: 1rem; text-align: center;">⚙️</div>                    Diagrams
+
+                <i class="fas fa-arrow-up"></i> Back to Top
+
+            </a>                        <div class="metric-card">
+
+        </div>
+
+    </main>                            <div class="metric-label">Sanitization</div>                <h3 style="font-size: 1.5rem; margin-bottom: 1rem; color: #10b981;">Workflows</h3>                </a>
+
+
+
+    <footer class="footer">                            <p>5-phase sensitive data removal</p>
+
+        <div class="container">
+
+            <p>&copy; 2025 Asif Hussain. All rights reserved.</p>                        </div>                <p style="color: #94a3b8; line-height: 1.6;">Planning Workflow • TDD Cycle • Maintenance</p>            </div>
+
+            <nav class="footer-links">
+
+                <a href="../index.html">Home</a>                        <div class="metric-card">
+
+                <a href="../architecture/index.html">Architecture</a>
+
+                <a href="../orchestrators/index.html">Orchestrators</a>                            <div class="metric-label">ADO Operations</div>            </a>            
+
+                <a href="../features/index.html">Features</a>
+
+            </nav>                            <p>Azure DevOps integration</p>
+
+        </div>
+
+    </footer>                        </div>            <div class="sidebar-section">
+
+
+
+    <script>                    </div>
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+
+            anchor.addEventListener('click', function (e) {                </div>            <!-- Guides -->                <div class="sidebar-title">API Reference</div>
+
+                e.preventDefault();
+
+                const target = document.querySelector(this.getAttribute('href'));
+
+                if (target) {
+
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });                <div class="content-block">            <a href="#guides" class="glass-card" style="padding: 2rem; text-decoration: none; display: block; transition: all 0.3s ease;">                <a href="api/orchestrators/planning-system.html" class="sidebar-item">
+
+                }
+
+            });                    <h3>🎯 Agents</h3>
+
+        });
+
+    </script>                    <p>Two specialized agents handle different aspects of development:</p>                <div style="font-size: 3rem; margin-bottom: 1rem; text-align: center;">📖</div>                    <i class="fas fa-tasks"></i>
+
+</body>
+
+</html>                    <div class="feature-grid-2">
+
+
+                        <div class="info-panel">                <h3 style="font-size: 1.5rem; margin-bottom: 1rem; color: #f59e0b;">Guides</h3>                    Planning System
+
+                            <h4>Strategic Agent</h4>
+
+                            <p>High-level planning, architecture decisions, and requirement analysis</p>                <p style="color: #94a3b8; line-height: 1.6;">Quick Start • Copilot Integration • Deployment • Troubleshooting</p>                </a>
+
+                        </div>
+
+                        <div class="info-panel">            </a>                <a href="api/orchestrators/tdd-mastery.html" class="sidebar-item">
+
+                            <h4>Execution Agent</h4>
+
+                            <p>Code implementation, testing, and tactical operations</p>        </div>                    <i class="fas fa-vial"></i>
+
+                        </div>
+
+                    </div>                    TDD Mastery
+
+                </div>
+
+            </div>        <!-- Architecture Section -->                </a>
+
+        </section>
+
+        <section id="architecture" style="margin-bottom: 4rem;">                <a href="api/orchestrators/maintenance.html" class="sidebar-item">
+
+        <!-- API Reference Section -->
+
+        <section id="api" class="section-api">            <div class="glass-card" style="padding: 2rem; margin-bottom: 2rem;">                    <i class="fas fa-wrench"></i>
+
+            <div class="glass-card">
+
+                <h2>                <h2 style="font-size: 2.5rem; margin-bottom: 2rem; color: #00d4ff; display: flex; align-items: center; gap: 1rem;">                    Maintenance
+
+                    <span class="section-icon">🔌</span>
+
+                    API Reference                    <span style="font-size: 3rem;">🏗️</span>                </a>
+
+                </h2>
+
+                                    Architecture                <a href="api/agents/strategic-planning-agent.html" class="sidebar-item">
+
+                <div class="content-block">
+
+                    <h3>📋 Planning System</h3>                </h2>                    <i class="fas fa-chess"></i>
+
+                    <div class="code-panel">
+
+                        <code>plan [task description]</code>                                    Strategic Agent
+
+                        <p>
+
+                            Creates a strategic plan with 4 subfolders: Design, Implementation, Testing, Documentation                <div style="margin-bottom: 2rem;">                </a>
+
+                        </p>
+
+                    </div>                    <h3 style="font-size: 1.8rem; color: #00d4ff; margin-bottom: 1rem;">📋 Overview</h3>                <a href="api/agents/code-execution-agent.html" class="sidebar-item">
+
+                </div>
+
+                    <p style="color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem;">                    <i class="fas fa-code"></i>
+
+                <div class="content-block">
+
+                    <h3>🔴 TDD Mastery</h3>                        CORTEX uses a hierarchical 4-tier brain architecture for memory management and knowledge organization:                    Execution Agent
+
+                    <div class="code-panel">
+
+                        <code>tdd [feature description]</code>                    </p>                </a>
+
+                        <p>
+
+                            Starts TDD workflow: RED (failing test) → GREEN (minimal implementation) → REFACTOR (clean code)                    <ul style="color: #cbd5e1; line-height: 2; margin-left: 2rem;">            </div>
+
+                        </p>
+
+                    </div>                        <li><strong style="color: #00d4ff;">Tier 0 (Governance):</strong> Core rules, templates, and system-wide policies</li>            
+
+                </div>
+
+                        <li><strong style="color: #7c3aed;">Tier 1 (Working Memory):</strong> Active conversations, current context, session state</li>            <div class="sidebar-section">
+
+                <div class="content-block">
+
+                    <h3>🔧 Maintenance</h3>                        <li><strong style="color: #10b981;">Tier 2 (Knowledge Graph):</strong> Relationships, patterns, learned insights</li>                <div class="sidebar-title">Workflows</div>
+
+                    <div class="code-panel">
+
+                        <code>system maintenance</code>                        <li><strong style="color: #f59e0b;">Tier 3 (Development Context):</strong> Project-specific knowledge, codebase understanding</li>                <a href="workflows/planning-workflow.html" class="sidebar-item">
+
+                        <p>
+
+                            Runs 6-phase health check: Diagnostics, Cleanup, Optimization, Validation, Documentation, Reporting                    </ul>                    <i class="fas fa-stream"></i>
+
+                        </p>
+
+                    </div>                </div>                    Planning Workflow
+
+                </div>
+
+                </a>
+
+                <div class="content-block">
+
+                    <h3>🎯 Strategic Agent</h3>                <div style="margin-bottom: 2rem;">                <a href="workflows/tdd-workflow.html" class="sidebar-item">
+
+                    <div class="info-panel">
+
+                        <p>                    <h3 style="font-size: 1.8rem; color: #7c3aed; margin-bottom: 1rem;">🧠 4-Tier Brain</h3>                    <i class="fas fa-circle-notch"></i>
+
+                            Handles architecture design, requirement analysis, and high-level planning decisions
+
+                        </p>                    <div style="background: rgba(124, 58, 237, 0.1); border-left: 4px solid #7c3aed; padding: 1.5rem; border-radius: 0.5rem;">                    TDD Cycle
+
+                    </div>
+
+                </div>                        <p style="color: #cbd5e1; line-height: 1.8; margin: 0;">                </a>
+
+
+
+                <div class="content-block">                            The brain structure provides persistent memory across conversations, enabling CORTEX to remember project context, user preferences, and development patterns over time.                <a href="workflows/maintenance-workflow.html" class="sidebar-item">
+
+                    <h3>⚡ Execution Agent</h3>
+
+                    <div class="info-panel">                        </p>                    <i class="fas fa-tools"></i>
+
+                        <p>
+
+                            Executes code implementation, runs tests, and performs tactical development operations                    </div>                    Maintenance
+
+                        </p>
+
+                    </div>                </div>                </a>
+
+                </div>
+
+            </div>            </div>
+
+        </section>
+
+                <div style="margin-bottom: 2rem;">            
+
+        <!-- Workflows Section -->
+
+        <section id="workflows" class="section-workflow">                    <h3 style="font-size: 1.8rem; color: #10b981; margin-bottom: 1rem;">🤖 Orchestrators</h3>            <div class="sidebar-section">
+
+            <div class="glass-card">
+
+                <h2>                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">                <div class="sidebar-title">Guides</div>
+
+                    <span class="section-icon">⚙️</span>
+
+                    Workflows                        <div style="background: rgba(16, 185, 129, 0.05); padding: 1rem; border-radius: 0.5rem; border: 1px solid rgba(16, 185, 129, 0.2);">                <a href="setup-guides/quick-start.html" class="sidebar-item">
+
+                </h2>
+
+                                            <strong style="color: #10b981;">Planning System</strong>                    <i class="fas fa-rocket"></i>
+
+                <div class="content-block">
+
+                    <h3>📋 Planning Workflow</h3>                            <p style="color: #94a3b8; font-size: 0.9rem; margin-top: 0.5rem;">Strategic task decomposition</p>                    Quick Start
+
+                    <ol class="feature-list">
+
+                        <li>Analyze user request and break down into components</li>                        </div>                </a>
+
+                        <li>Create planning structure with 4 subfolders</li>
+
+                        <li>Generate Design, Implementation, Testing, Documentation plans</li>                        <div style="background: rgba(16, 185, 129, 0.05); padding: 1rem; border-radius: 0.5rem; border: 1px solid rgba(16, 185, 129, 0.2);">                <a href="integration/copilot-integration.html" class="sidebar-item">
+
+                        <li>Present structured plan for user approval</li>
+
+                        <li>Execute plan phase by phase with checkpoints</li>                            <strong style="color: #10b981;">TDD Orchestrator</strong>                    <i class="fas fa-plug"></i>
+
+                    </ol>
+
+                </div>                            <p style="color: #94a3b8; font-size: 0.9rem; margin-top: 0.5rem;">RED→GREEN→REFACTOR cycle</p>                    Copilot Integration
+
+
+
+                <div class="content-block">                        </div>                </a>
+
+                    <h3>🔴 TDD Cycle</h3>
+
+                    <div class="info-panel">                        <div style="background: rgba(16, 185, 129, 0.05); padding: 1rem; border-radius: 0.5rem; border: 1px solid rgba(16, 185, 129, 0.2);">                <a href="deployment/overview.html" class="sidebar-item">
+
+                        <p><strong class="text-danger">RED:</strong> Write failing test that defines desired behavior</p>
+
+                        <p><strong class="text-success">GREEN:</strong> Write minimal code to make test pass</p>                            <strong style="color: #10b981;">Maintenance</strong>                    <i class="fas fa-server"></i>
+
+                        <p><strong class="text-info">REFACTOR:</strong> Clean up code while keeping tests green</p>
+
+                    </div>                            <p style="color: #94a3b8; font-size: 0.9rem; margin-top: 0.5rem;">6-phase health pipeline</p>                    Deployment
+
+                </div>
+
+                        </div>                </a>
+
+                <div class="content-block">
+
+                    <h3>🔧 Maintenance</h3>                        <div style="background: rgba(16, 185, 129, 0.05); padding: 1rem; border-radius: 0.5rem; border: 1px solid rgba(16, 185, 129, 0.2);">                <a href="troubleshooting/index.html" class="sidebar-item">
+
+                    <ol class="feature-list">
+
+                        <li><strong>Phase 1 - Diagnostics:</strong> Analyze system health metrics</li>                            <strong style="color: #10b981;">Refinement</strong>                    <i class="fas fa-ambulance"></i>
+
+                        <li><strong>Phase 2 - Cleanup:</strong> Remove obsolete files and artifacts</li>
+
+                        <li><strong>Phase 3 - Optimization:</strong> Improve performance and efficiency</li>                            <p style="color: #94a3b8; font-size: 0.9rem; margin-top: 0.5rem;">7-phase code improvement</p>                    Troubleshooting
+
+                        <li><strong>Phase 4 - Validation:</strong> Run tests and verify integrity</li>
+
+                        <li><strong>Phase 5 - Documentation:</strong> Update docs and comments</li>                        </div>                </a>
+
+                        <li><strong>Phase 6 - Reporting:</strong> Generate health report</li>
+
+                    </ol>                        <div style="background: rgba(16, 185, 129, 0.05); padding: 1rem; border-radius: 0.5rem; border: 1px solid rgba(16, 185, 129, 0.2);">            </div>
+
+                </div>
+
+            </div>                            <strong style="color: #10b981;">Sanitization</strong>        </aside>
+
+        </section>
+
+                            <p style="color: #94a3b8; font-size: 0.9rem; margin-top: 0.5rem;">5-phase sensitive data removal</p>
+
+        <!-- Guides Section -->
+
+        <section id="guides" class="section-guides">                        </div>        <!-- Main Content -->
+
+            <div class="glass-card">
+
+                <h2>                        <div style="background: rgba(16, 185, 129, 0.05); padding: 1rem; border-radius: 0.5rem; border: 1px solid rgba(16, 185, 129, 0.2);">        <main class="main-content">
+
+                    <span class="section-icon">📖</span>
+
+                    Guides                            <strong style="color: #10b981;">ADO Operations</strong>            <!-- Hero Section -->
+
+                </h2>
+
+                                            <p style="color: #94a3b8; font-size: 0.9rem; margin-top: 0.5rem;">Azure DevOps integration</p>            <div class="card fade-in">
+
+                <div class="content-block">
+
+                    <h3>🚀 Quick Start</h3>                        </div>                <div class="card-header">
+
+                    <ol class="feature-list">
+
+                        <li>Say "help" in Copilot Chat to see all operations</li>                    </div>                    <div>
+
+                        <li>Use "plan [task]" for complex multi-step work</li>
+
+                        <li>Use "tdd [feature]" for test-driven development</li>                </div>                        <h1 class="card-title">CORTEX Technical Documentation</h1>
+
+                        <li>Use "system maintenance" for health checks</li>
+
+                    </ol>                        <p class="card-subtitle">Comprehensive developer guide for the CORTEX AI Assistant framework</p>
+
+                </div>
+
+                <div>                    </div>
+
+                <div class="content-block">
+
+                    <h3>🤝 Copilot Integration</h3>                    <h3 style="font-size: 1.8rem; color: #f59e0b; margin-bottom: 1rem;">🎯 Agents</h3>                    <div>
+
+                    <div class="info-panel">
+
+                        <p>                    <p style="color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem;">                        <span class="badge badge-primary">v3.9.0</span>
+
+                            CORTEX integrates with GitHub Copilot through .github/copilot-instructions.md and .github/prompts/ directory. All intent routing is defined in CORTEX.prompt.md.
+
+                        </p>                        Two specialized agents handle different aspects of development:                        <span class="badge badge-success">Production</span>
+
+                    </div>
+
+                </div>                    </p>                    </div>
+
+
+
+                <div class="content-block">                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">                </div>
+
+                    <h3>🌐 Deployment</h3>
+
+                    <ol class="feature-list">                        <div style="background: rgba(245, 158, 11, 0.05); padding: 1.5rem; border-radius: 0.5rem; border-left: 4px solid #f59e0b;">                
+
+                        <li>Documentation server: <code>./scripts/launch_docs.sh</code></li>
+
+                        <li>Access at: <code>http://localhost:8000</code></li>                            <h4 style="color: #f59e0b; margin-bottom: 0.5rem;">Strategic Agent</h4>                <p>
+
+                        <li>Publish docs: See cortex-brain/publish-config.yaml</li>
+
+                    </ol>                            <p style="color: #94a3b8; font-size: 0.95rem;">High-level planning, architecture decisions, and requirement analysis</p>                    CORTEX is an AI-powered development assistant with long-term memory, context awareness, and strategic planning capabilities. This documentation provides complete technical details for developers to understand, integrate, and extend the CORTEX framework.
+
+                </div>
+
+                        </div>                </p>
+
+                <div class="content-block">
+
+                    <h3>🔍 Troubleshooting</h3>                        <div style="background: rgba(245, 158, 11, 0.05); padding: 1.5rem; border-radius: 0.5rem; border-left: 4px solid #f59e0b;">                
+
+                    <div class="info-panel">
+
+                        <ul class="feature-list">                            <h4 style="color: #f59e0b; margin-bottom: 0.5rem;">Execution Agent</h4>                <div class="grid grid-3">
+
+                            <li>Check <code>cortex-brain/brain-protection-rules.yaml</code> for SKULL rules</li>
+
+                            <li>Review <code>cortex-brain/lessons-learned.yaml</code> for common issues</li>                            <p style="color: #94a3b8; font-size: 0.95rem;">Code implementation, testing, and tactical operations</p>                    <div class="glass">
+
+                            <li>Run <code>system maintenance</code> for automated diagnostics</li>
+
+                            <li>Check logs in <code>logs/</code> directory</li>                        </div>                        <i class="fas fa-book"></i>
+
+                        </ul>
+
+                    </div>                    </div>                        <h3>Comprehensive</h3>
+
+                </div>
+
+            </div>                </div>                        <p>Complete API docs, workflows, and integration guides</p>
+
+        </section>
+
+            </div>                    </div>
+
+        <!-- Back to Top -->
+
+        <div class="text-center">        </section>                    <div class="glass">
+
+            <a href="#" class="glass-card card-link">
+
+                <i class="fas fa-arrow-up"></i> Back to Top                        <i class="fas fa-project-diagram"></i>
+
+            </a>
+
+        </div>        <!-- API Reference Section -->                        <h3>Interactive</h3>
+
+
+
+    </main>        <section id="api" style="margin-bottom: 4rem;">                        <p>D3.js diagrams with zoom, pan, and drill-down</p>
+
+
+
+    <!-- Footer -->            <div class="glass-card" style="padding: 2rem; margin-bottom: 2rem;">                    </div>
+
+    <footer class="footer">
+
+        <div class="container">                <h2 style="font-size: 2.5rem; margin-bottom: 2rem; color: #7c3aed; display: flex; align-items: center; gap: 1rem;">                    <div class="glass">
+
+            <p>&copy; 2025 Asif Hussain. All rights reserved.</p>
+
+            <nav class="footer-links">                    <span style="font-size: 3rem;">🔌</span>                        <i class="fas fa-mobile-alt"></i>
+
+                <a href="../index.html">Home</a>
+
+                <a href="../architecture/index.html">Architecture</a>                    API Reference                        <h3>Responsive</h3>
+
+                <a href="../orchestrators/index.html">Orchestrators</a>
+
+                <a href="../features/index.html">Features</a>                </h2>                        <p>Mobile-friendly, accessible, WCAG AA compliant</p>
+
+            </nav>
+
+        </div>                                    </div>
+
+    </footer>
+
                 <div style="margin-bottom: 2rem;">                </div>
 
-                    <h3 style="font-size: 1.8rem; color: #00d4ff; margin-bottom: 1rem;">📋 Planning System</h3>            </div>
+    <!-- Scripts -->
 
-                    <div style="background: rgba(0, 212, 255, 0.05); padding: 1.5rem; border-radius: 0.5rem; border: 1px solid rgba(0, 212, 255, 0.2);">
+    <script>                    <h3 style="font-size: 1.8rem; color: #00d4ff; margin-bottom: 1rem;">📋 Planning System</h3>            </div>
 
-                        <code style="color: #00d4ff; font-size: 1.1rem;">plan [task description]</code>            <!-- Quick Links -->
+        // Search functionality
+
+        document.getElementById('searchInput')?.addEventListener('input', function(e) {                    <div style="background: rgba(0, 212, 255, 0.05); padding: 1.5rem; border-radius: 0.5rem; border: 1px solid rgba(0, 212, 255, 0.2);">
+
+            const searchTerm = e.target.value.toLowerCase();
+
+            console.log('Searching for:', searchTerm);                        <code style="color: #00d4ff; font-size: 1.1rem;">plan [task description]</code>            <!-- Quick Links -->
+
+        });
 
                         <p style="color: #cbd5e1; margin-top: 1rem; line-height: 1.8;">            <div class="card fade-in">
 
-                            Creates a strategic plan with 4 subfolders: Design, Implementation, Testing, Documentation                <h2>Quick Access</h2>
+        // Smooth scroll for anchor links
 
-                        </p>                <div class="grid grid-2">
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {                            Creates a strategic plan with 4 subfolders: Design, Implementation, Testing, Documentation                <h2>Quick Access</h2>
 
-                    </div>                    <a href="architecture/overview.html" class="btn btn-primary">
+            anchor.addEventListener('click', function (e) {
 
-                </div>                        <i class="fas fa-sitemap"></i>
+                e.preventDefault();                        </p>                <div class="grid grid-2">
 
-                        System Architecture
+                const target = document.querySelector(this.getAttribute('href'));
 
-                <div style="margin-bottom: 2rem;">                    </a>
+                if (target) {                    </div>                    <a href="architecture/overview.html" class="btn btn-primary">
 
-                    <h3 style="font-size: 1.8rem; color: #7c3aed; margin-bottom: 1rem;">🔴 TDD Mastery</h3>                    <a href="api/index.html" class="btn btn-secondary">
+                    target.scrollIntoView({
 
-                    <div style="background: rgba(124, 58, 237, 0.05); padding: 1.5rem; border-radius: 0.5rem; border: 1px solid rgba(124, 58, 237, 0.2);">                        <i class="fas fa-code"></i>
+                        behavior: 'smooth',                </div>                        <i class="fas fa-sitemap"></i>
+
+                        block: 'start'
+
+                    });                        System Architecture
+
+                }
+
+            });                <div style="margin-bottom: 2rem;">                    </a>
+
+        });
+
+    </script>                    <h3 style="font-size: 1.8rem; color: #7c3aed; margin-bottom: 1rem;">🔴 TDD Mastery</h3>                    <a href="api/index.html" class="btn btn-secondary">
+
+</body>
+
+</html>                    <div style="background: rgba(124, 58, 237, 0.05); padding: 1.5rem; border-radius: 0.5rem; border: 1px solid rgba(124, 58, 237, 0.2);">                        <i class="fas fa-code"></i>
+
 
                         <code style="color: #7c3aed; font-size: 1.1rem;">tdd [feature description]</code>                        API Reference
 
