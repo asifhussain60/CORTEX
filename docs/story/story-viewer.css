@@ -235,8 +235,9 @@
 
 .chapter-body p {
     font-family: 'Comic Neue', 'Comic Sans MS', 'Comic Sans', 'Chalkboard SE', 'Marker Felt', 'Tekton Pro', cursive, sans-serif;
-    font-size: 1.3em;
+    font-size: 1.5em;
     margin-bottom: 1.5rem;
+    line-height: 1.6;
 }
 
 .chapter-body em {
@@ -253,7 +254,8 @@
 .chapter-body span,
 .chapter-body div:not(.chapter-image) {
     font-family: 'Comic Neue', 'Comic Sans MS', 'Comic Sans', 'Chalkboard SE', 'Marker Felt', 'Tekton Pro', cursive, sans-serif;
-    font-size: 1.3em;
+    font-size: 1.5em;
+    line-height: 1.6;
 }
 
 /* Inline Image Styling */
@@ -535,8 +537,16 @@
     }
 
     .chapter-body p {
-        font-size: 1.1em;
+        font-size: 1.4em;
         margin-bottom: 1.25rem;
+        line-height: 1.7;
+    }
+
+    .chapter-body li,
+    .chapter-body span,
+    .chapter-body div:not(.chapter-image) {
+        font-size: 1.4em;
+        line-height: 1.7;
     }
 
     /* Make images full width on mobile */
