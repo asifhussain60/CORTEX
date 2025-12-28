@@ -3,319 +3,540 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="UI/UX Design - Design systems, accessibility, usability patterns">
-    <meta name="keywords" content="ui, ux, design systems, accessibility, usability">
+    <meta name="description" content="UI/UX Design - Design Systems, Accessibility, Usability Patterns, WCAG Standards">
+    <meta name="keywords" content="ui, ux, design systems, accessibility, usability, wcag, aria, user experience">
     <meta name="author" content="Asif Hussain">
-    <title>UI/UX Design - CORTEX Knowledge</title>
-    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <title>UI/UX Design | CORTEX Knowledge</title>
     <link rel="stylesheet" href="../assets/css/main.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <nav class="breadcrumb-container sticky-nav" aria-label="Breadcrumb">
-        <button class="back-button" onclick="history.back()" aria-label="Go back">← Back</button>
-        <ol class="breadcrumb">
-            <li><a href="../index.html">Home</a></li>
-            <li><a href="index.html">Knowledge Library</a></li>
-            <li><a href="index.html#frontend-ui">Frontend & UI</a></li>
-            <li aria-current="page">UI/UX</li>
-        </ol>
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">→</span>
+        <a href="index.html">Knowledge Library</a>
+        <span class="breadcrumb-separator">→</span>
+        <span class="breadcrumb-current">UI/UX Design</span>
     </nav>
 
     <section class="hero" id="main-content">
-        <div class="logo-header">
-            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
-        </div>
         <h1 class="hero-title">🎨 UI/UX Design</h1>
-        <p class="hero-subtitle">Design systems, accessibility standards, and user experience patterns</p>
+        <p class="hero-subtitle">Design Systems, Accessibility, Usability Patterns, and WCAG Standards</p>
+        <div class="file-metadata">
+            <span class="metadata-item">📦 Design & Accessibility</span>
+            <span class="metadata-item">🏷️ UI/UX</span>
+            <span class="metadata-item">📅 Updated: Dec 2025</span>
+        </div>
     </section>
 
-    <aside class="category-sidebar" aria-label="Category navigation">
-        <h3>Frontend & UI</h3>
-        <nav class="category-nav">
-            <a href="frontend.html" class="category-nav-link">💻 Frontend</a>
-            <a href="ui-ux.html" class="category-nav-link active">🎨 UI/UX</a>
-            <a href="mobile.html" class="category-nav-link">📱 Mobile</a>
-        </nav>
-    </aside>
-
-    <section class="section category-content">
+    <section class="section file-content">
         <div class="container">
-            <div class="tabs-container">
-                <div class="tabs-nav" role="tablist" aria-label="Category sections">
-                    <button class="tab-button active" role="tab" aria-selected="true" aria-controls="overview-tab" id="overview-btn" data-tab="overview">Overview</button>
-                    <button class="tab-button" role="tab" aria-selected="false" aria-controls="files-tab" id="files-btn" data-tab="files">Knowledge Files</button>
-                    <button class="tab-button" role="tab" aria-selected="false" aria-controls="resources-tab" id="resources-btn" data-tab="resources">Learning Resources</button>
-                    <button class="tab-button" role="tab" aria-selected="false" aria-controls="usage-tab" id="usage-btn" data-tab="usage">CORTEX Usage</button>
-                </div>
-
-                <div class="tab-content active" id="overview-tab" role="tabpanel" aria-labelledby="overview-btn">
-                    <div class="glass-card">
-                        <h2>Overview</h2>
-                        <p>UI/UX design focuses on creating intuitive, accessible, and delightful user experiences through design systems, accessibility standards, and proven usability patterns.</p>
-
-                        <h3>Category Statistics</h3>
-                        <div class="stats-grid">
-                            <div class="stat-item">
-                                <div class="stat-value">4</div>
-                                <div class="stat-label">Knowledge Files</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-value">80+</div>
-                                <div class="stat-label">Design Patterns</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-value">WCAG 2.1</div>
-                                <div class="stat-label">Standards</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="glass-card">
-                        <h2>Concept Map</h2>
-                        <div class="mermaid">
-graph TD
-    A[UI/UX Design] --> B[Design Systems]
-    A --> C[Accessibility]
-    A --> D[Usability]
-    
-    B --> E[Typography]
-    B --> F[Color]
-    B --> G[Spacing]
-    B --> H[Components]
-    
-    C --> I[WCAG]
-    C --> J[ARIA]
-    C --> K[Keyboard Nav]
-    
-    D --> L[User Research]
-    D --> M[Interaction Design]
-    D --> N[Information Architecture]
-    
-    style A fill:#00d4ff,stroke:#7b61ff,stroke-width:2px
-    style B fill:#7b61ff,stroke:#fff,stroke-width:2px
-    style C fill:#ff6b6b,stroke:#fff,stroke-width:2px
-    style D fill:#4ecdc4,stroke:#fff,stroke-width:2px
-                        </div>
-                    </div>
-
-                    <div class="glass-card">
-                        <h2>High-Priority Patterns</h2>
-                        <div class="rules-showcase">
-                            <div class="rule-card" data-expandable>
-                                <div class="rule-header" onclick="toggleRule(this)">
-                                    <span class="rule-icon">♿</span>
-                                    <div class="rule-title-group">
-                                        <h3>WCAG AAA Compliance</h3>
-                                        <span class="severity-badge severity-high">HIGH</span>
-                                    </div>
-                                    <button class="expand-btn" aria-label="Expand rule">+</button>
-                                </div>
-                                <div class="rule-body" hidden>
-                                    <p><strong>Description:</strong> All UI elements must meet WCAG 2.1 Level AAA standards for contrast ratios (7:1 for normal text, 4.5:1 for large text).</p>
-                                </div>
-                            </div>
-
-                            <div class="rule-card" data-expandable>
-                                <div class="rule-header" onclick="toggleRule(this)">
-                                    <span class="rule-icon">📏</span>
-                                    <div class="rule-title-group">
-                                        <h3>8px Grid System</h3>
-                                        <span class="severity-badge severity-medium">MEDIUM</span>
-                                    </div>
-                                    <button class="expand-btn" aria-label="Expand rule">+</button>
-                                </div>
-                                <div class="rule-body" hidden>
-                                    <p><strong>Description:</strong> Use 8px base unit for spacing, sizing, and layout to ensure visual consistency across all platforms.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tab-content" id="files-tab" role="tabpanel" aria-labelledby="files-btn" hidden>
-                    <div class="glass-card">
-                        <h2>Knowledge Files</h2>
-                        <p>Explore UI/UX design principles and patterns:</p>
-                    </div>
-
-                    <div class="knowledge-files-accordion">
-                        <div class="accordion-item">
-                            <button class="accordion-header" aria-expanded="false" aria-controls="design-systems-content">
-                                <span class="accordion-icon">🎨</span>
-                                <div class="accordion-title-group">
-                                    <h3 class="accordion-title">Design Systems</h3>
-                                    <p class="accordion-subtitle">Typography, color, spacing, components</p>
-                                </div>
-                                <span class="badge">22 rules</span>
-                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                            </button>
-                            <div id="design-systems-content" class="accordion-content" hidden>
-                                <p>Comprehensive design system patterns for consistent UI.</p>
-                                <p><em>📝 Knowledge file coming soon</em></p>
-                            </div>
-                        </div>
-
-                        <div class="accordion-item">
-                            <button class="accordion-header" aria-expanded="false" aria-controls="accessibility-content">
-                                <span class="accordion-icon">♿</span>
-                                <div class="accordion-title-group">
-                                    <h3 class="accordion-title">Accessibility Standards</h3>
-                                    <p class="accordion-subtitle">WCAG, ARIA, keyboard navigation</p>
-                                </div>
-                                <span class="badge">28 rules</span>
-                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                            </button>
-                            <div id="accessibility-content" class="accordion-content" hidden>
-                                <p>WCAG 2.1 compliance and accessibility best practices.</p>
-                                <p><em>📝 Knowledge file coming soon</em></p>
-                            </div>
-                        </div>
-
-                        <div class="accordion-item">
-                            <button class="accordion-header" aria-expanded="false" aria-controls="usability-content">
-                                <span class="accordion-icon">👥</span>
-                                <div class="accordion-title-group">
-                                    <h3 class="accordion-title">Usability Patterns</h3>
-                                    <p class="accordion-subtitle">User flows, interaction design</p>
-                                </div>
-                                <span class="badge">18 rules</span>
-                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                            </button>
-                            <div id="usability-content" class="accordion-content" hidden>
-                                <p>Proven usability patterns for intuitive interfaces.</p>
-                                <p><em>📝 Knowledge file coming soon</em></p>
-                            </div>
-                        </div>
-
-                        <div class="accordion-item">
-                            <button class="accordion-header" aria-expanded="false" aria-controls="responsive-content">
-                                <span class="accordion-icon">📐</span>
-                                <div class="accordion-title-group">
-                                    <h3 class="accordion-title">Responsive Design</h3>
-                                    <p class="accordion-subtitle">Mobile-first, breakpoints, fluid layouts</p>
-                                </div>
-                                <span class="badge">16 rules</span>
-                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                            </button>
-                            <div id="responsive-content" class="accordion-content" hidden>
-                                <p>Mobile-first responsive design patterns.</p>
-                                <p><em>📝 Knowledge file coming soon</em></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tab-content" id="resources-tab" role="tabpanel" aria-labelledby="resources-btn" hidden>
-                    <div class="glass-card">
-                        <h2>Learning Resources</h2>
-                        
-                        <h3>Official Standards</h3>
-                        <ul class="resource-list">
-                            <li>
-                                <a href="https://www.w3.org/WAI/WCAG21/quickref/" target="_blank" rel="noopener noreferrer" class="resource-link">
-                                    <span class="resource-icon">📖</span>
-                                    <div>
-                                        <strong>WCAG 2.1 Guidelines</strong>
-                                        <p>Web Content Accessibility Guidelines</p>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="https://material.io/design" target="_blank" rel="noopener noreferrer" class="resource-link">
-                                    <span class="resource-icon">📖</span>
-                                    <div>
-                                        <strong>Material Design</strong>
-                                        <p>Google's design system documentation</p>
-                                    </div>
-                                </a>
-                            </li>
-                        </ul>
-
-                        <h3>Books</h3>
-                        <ul class="resource-list">
-                            <li>
-                                <div class="resource-link">
-                                    <span class="resource-icon">📚</span>
-                                    <div>
-                                        <strong>Don't Make Me Think</strong>
-                                        <p>By Steve Krug - Usability essentials</p>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="resource-link">
-                                    <span class="resource-icon">📚</span>
-                                    <div>
-                                        <strong>The Design of Everyday Things</strong>
-                                        <p>By Don Norman - Design principles</p>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="tab-content" id="usage-tab" role="tabpanel" aria-labelledby="usage-btn" hidden>
-                    <div class="glass-card">
-                        <h2>How CORTEX Uses UI/UX Knowledge</h2>
-                        
-                        <h3>🎯 Design Review</h3>
+            <!-- Overview -->
+            <div id="overview" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">📋 Overview</h2>
+                    <p>UI/UX Design encompasses the creation of intuitive, accessible, and aesthetically pleasing user interfaces. This guide covers design systems, accessibility standards, usability patterns, and best practices for creating exceptional user experiences.</p>
+                    
+                    <div class="info-box info-box-primary">
+                        <strong>Core UI/UX Principles:</strong>
                         <ul class="feature-list">
-                            <li><strong>Contrast Validation:</strong> Checks color contrast ratios against WCAG standards</li>
-                            <li><strong>Touch Target Sizing:</strong> Validates interactive elements are ≥48px</li>
-                            <li><strong>Spacing Consistency:</strong> Ensures 8px grid system compliance</li>
+                            <li><strong>User-Centered:</strong> Design with users' needs and goals in mind</li>
+                            <li><strong>Accessible:</strong> Ensure usability for people of all abilities</li>
+                            <li><strong>Consistent:</strong> Maintain design patterns across the interface</li>
+                            <li><strong>Responsive:</strong> Adapt seamlessly across devices and screen sizes</li>
                         </ul>
+                    </div>
 
-                        <h3>♿ Accessibility Auditing</h3>
-                        <ul class="feature-list">
-                            <li><strong>ARIA Attributes:</strong> Validates proper semantic HTML and ARIA</li>
-                            <li><strong>Keyboard Navigation:</strong> Tests focus management and tab order</li>
-                            <li><strong>Screen Reader:</strong> Ensures proper alt text and labels</li>
-                        </ul>
+                    <h3>Design Process Flow</h3>
+                    <div class="mermaid">
+graph LR
+    A[Research] --> B[Define]
+    B --> C[Ideate]
+    C --> D[Prototype]
+    D --> E[Test]
+    E --> F[Iterate]
+    F --> D
+    
+    style A fill:#f59e0b,color:#fff
+    style B fill:#3b82f6,color:#fff
+    style C fill:#10b981,color:#fff
+    style D fill:#8b5cf6,color:#fff
+    style E fill:#00d4ff,color:#fff
+    style F fill:#7b61ff,color:#fff
+                    </div>
+                </div>
+            </div>
 
-                        <h3>📐 Component Generation</h3>
+            <!-- Design Systems -->
+            <div id="design-systems" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🎯 Design Systems</h2>
+                    
+                    <h3>What is a Design System?</h3>
+                    <div class="info-box info-box-info">
+                        <p>A design system is a collection of reusable components, patterns, and guidelines that ensure consistency across digital products.</p>
                         <ul class="feature-list">
-                            <li><strong>Design System Tokens:</strong> Generates CSS variables from design tokens</li>
-                            <li><strong>Responsive Breakpoints:</strong> Implements mobile-first patterns</li>
+                            <li><strong>Components:</strong> Reusable UI elements (buttons, inputs, cards)</li>
+                            <li><strong>Patterns:</strong> Common UI solutions (navigation, forms, modals)</li>
+                            <li><strong>Guidelines:</strong> Rules for spacing, typography, colors</li>
+                            <li><strong>Documentation:</strong> Usage examples and best practices</li>
                         </ul>
+                    </div>
+
+                    <h3>Popular Design Systems</h3>
+                    <div class="grid-2col">
+                        <div class="info-box info-box-secondary">
+                            <h4>Material Design (Google)</h4>
+                            <ul class="feature-list">
+                                <li>Motion-based design language</li>
+                                <li>Elevation and shadows</li>
+                                <li>Bold colors and typography</li>
+                                <li>Comprehensive component library</li>
+                            </ul>
+                        </div>
+
+                        <div class="info-box info-box-secondary">
+                            <h4>Human Interface Guidelines (Apple)</h4>
+                            <ul class="feature-list">
+                                <li>Clarity and depth</li>
+                                <li>Platform-specific patterns</li>
+                                <li>Emphasis on content</li>
+                                <li>iOS, macOS, watchOS guidelines</li>
+                            </ul>
+                        </div>
+
+                        <div class="info-box info-box-secondary">
+                            <h4>Fluent Design (Microsoft)</h4>
+                            <ul class="feature-list">
+                                <li>Light, depth, motion, material</li>
+                                <li>Acrylic materials and reveals</li>
+                                <li>Cross-platform consistency</li>
+                                <li>Windows, web, mobile support</li>
+                            </ul>
+                        </div>
+
+                        <div class="info-box info-box-secondary">
+                            <h4>Carbon Design (IBM)</h4>
+                            <ul class="feature-list">
+                                <li>Enterprise-focused</li>
+                                <li>Accessibility-first approach</li>
+                                <li>Data visualization components</li>
+                                <li>Open-source component library</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>Building a Design System</h3>
+                    <div class="info-box info-box-primary">
+                        <strong>Key Steps:</strong>
+                        <ul class="feature-list">
+                            <li><strong>Audit:</strong> Review existing UI components and patterns</li>
+                            <li><strong>Define Tokens:</strong> Establish colors, typography, spacing scales</li>
+                            <li><strong>Create Components:</strong> Build reusable, flexible components</li>
+                            <li><strong>Document:</strong> Provide clear usage guidelines and examples</li>
+                            <li><strong>Version Control:</strong> Track changes and maintain consistency</li>
+                            <li><strong>Governance:</strong> Establish processes for updates and contributions</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accessibility -->
+            <div id="accessibility" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">♿ Accessibility (A11y)</h2>
+                    
+                    <h3>WCAG 2.1 Principles (POUR)</h3>
+                    <div class="grid-2col">
+                        <div class="info-box info-box-success">
+                            <h4>Perceivable</h4>
+                            <ul class="feature-list">
+                                <li><strong>Text Alternatives:</strong> Alt text for images</li>
+                                <li><strong>Adaptable:</strong> Multiple ways to present content</li>
+                                <li><strong>Distinguishable:</strong> Sufficient color contrast</li>
+                                <li><strong>Captions:</strong> For audio and video content</li>
+                            </ul>
+                        </div>
+
+                        <div class="info-box info-box-success">
+                            <h4>Operable</h4>
+                            <ul class="feature-list">
+                                <li><strong>Keyboard Accessible:</strong> All functions via keyboard</li>
+                                <li><strong>Enough Time:</strong> Users control time limits</li>
+                                <li><strong>Seizures:</strong> No flashing content</li>
+                                <li><strong>Navigable:</strong> Clear navigation and focus</li>
+                            </ul>
+                        </div>
+
+                        <div class="info-box info-box-success">
+                            <h4>Understandable</h4>
+                            <ul class="feature-list">
+                                <li><strong>Readable:</strong> Clear language and structure</li>
+                                <li><strong>Predictable:</strong> Consistent behavior</li>
+                                <li><strong>Input Assistance:</strong> Error prevention and recovery</li>
+                                <li><strong>Instructions:</strong> Clear form labels and guidance</li>
+                            </ul>
+                        </div>
+
+                        <div class="info-box info-box-success">
+                            <h4>Robust</h4>
+                            <ul class="feature-list">
+                                <li><strong>Compatible:</strong> Works with assistive technologies</li>
+                                <li><strong>Valid HTML:</strong> Proper semantic markup</li>
+                                <li><strong>ARIA:</strong> Accessible Rich Internet Applications</li>
+                                <li><strong>Future-Proof:</strong> Support for new technologies</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>WCAG Conformance Levels</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Level</th>
+                                <th>Requirements</th>
+                                <th>Target Audience</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Level A</strong></td>
+                                <td>Essential accessibility features</td>
+                                <td>Minimum legal compliance</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Level AA</strong></td>
+                                <td>Addresses major accessibility barriers</td>
+                                <td>Standard for most organizations</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Level AAA</strong></td>
+                                <td>Highest level of accessibility</td>
+                                <td>Specialized or critical applications</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Accessibility Checklist</h3>
+                    <div class="info-box info-box-warning">
+                        <strong>Essential Accessibility Practices:</strong>
+                        <ul class="feature-list">
+                            <li><strong>Semantic HTML:</strong> Use appropriate HTML elements (header, nav, main, article)</li>
+                            <li><strong>Alt Text:</strong> Descriptive alternative text for all images</li>
+                            <li><strong>Color Contrast:</strong> Minimum 4.5:1 for normal text, 3:1 for large text</li>
+                            <li><strong>Keyboard Navigation:</strong> Tab order and focus indicators</li>
+                            <li><strong>ARIA Labels:</strong> aria-label, aria-labelledby for complex components</li>
+                            <li><strong>Form Labels:</strong> Explicit labels for all form inputs</li>
+                            <li><strong>Headings:</strong> Proper heading hierarchy (h1 → h6)</li>
+                            <li><strong>Skip Links:</strong> Allow users to skip repetitive content</li>
+                            <li><strong>Responsive Text:</strong> Text resizes up to 200% without loss of content</li>
+                            <li><strong>Error Identification:</strong> Clear error messages and recovery paths</li>
+                        </ul>
+                    </div>
+
+                    <h3>Assistive Technologies</h3>
+                    <div class="info-box info-box-info">
+                        <strong>Common Assistive Technologies:</strong>
+                        <ul class="feature-list">
+                            <li><strong>Screen Readers:</strong> JAWS, NVDA, VoiceOver, TalkBack</li>
+                            <li><strong>Screen Magnifiers:</strong> ZoomText, Windows Magnifier</li>
+                            <li><strong>Voice Control:</strong> Dragon NaturallySpeaking, Voice Control</li>
+                            <li><strong>Switch Devices:</strong> Alternative input methods for motor impairments</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Usability Patterns -->
+            <div id="usability" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🧩 Usability Patterns</h2>
+                    
+                    <h3>Jakob Nielsen's 10 Usability Heuristics</h3>
+                    <div class="grid-2col">
+                        <div class="info-box info-box-primary">
+                            <h4>Visibility of System Status</h4>
+                            <p>Keep users informed about what's happening through appropriate feedback within a reasonable time.</p>
+                        </div>
+
+                        <div class="info-box info-box-primary">
+                            <h4>Match Between System and Real World</h4>
+                            <p>Use familiar language, concepts, and conventions that users understand from the real world.</p>
+                        </div>
+
+                        <div class="info-box info-box-primary">
+                            <h4>User Control and Freedom</h4>
+                            <p>Provide undo/redo actions and clear exit options for users who make mistakes.</p>
+                        </div>
+
+                        <div class="info-box info-box-primary">
+                            <h4>Consistency and Standards</h4>
+                            <p>Follow platform and industry conventions so users don't have to learn new patterns.</p>
+                        </div>
+
+                        <div class="info-box info-box-primary">
+                            <h4>Error Prevention</h4>
+                            <p>Eliminate error-prone conditions and provide confirmation for destructive actions.</p>
+                        </div>
+
+                        <div class="info-box info-box-primary">
+                            <h4>Recognition Rather Than Recall</h4>
+                            <p>Minimize memory load by making objects, actions, and options visible.</p>
+                        </div>
+                    </div>
+
+                    <h3>Common UX Patterns</h3>
+                    <div class="info-box info-box-info">
+                        <strong>Navigation Patterns:</strong>
+                        <ul class="feature-list">
+                            <li><strong>Hamburger Menu:</strong> Collapsible menu for mobile navigation</li>
+                            <li><strong>Breadcrumbs:</strong> Show user's location in hierarchy</li>
+                            <li><strong>Tab Navigation:</strong> Organize related content sections</li>
+                            <li><strong>Mega Menu:</strong> Multi-column dropdown for complex sites</li>
+                            <li><strong>Sticky Navigation:</strong> Fixed nav bar during scrolling</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box info-box-info">
+                        <strong>Input Patterns:</strong>
+                        <ul class="feature-list">
+                            <li><strong>Autocomplete:</strong> Suggest completions as user types</li>
+                            <li><strong>Input Masking:</strong> Format input (phone, credit card)</li>
+                            <li><strong>Inline Validation:</strong> Real-time error feedback</li>
+                            <li><strong>Multi-Step Forms:</strong> Break long forms into steps</li>
+                            <li><strong>Search Filters:</strong> Refine results with faceted search</li>
+                        </ul>
+                    </div>
+
+                    <h3>Mobile UX Patterns</h3>
+                    <div class="mermaid">
+graph TB
+    A[Mobile UX Patterns]
+    A --> B[Gestures]
+    A --> C[Navigation]
+    A --> D[Input]
+    
+    B --> B1[Swipe]
+    B --> B2[Pinch/Zoom]
+    B --> B3[Pull-to-Refresh]
+    
+    C --> C1[Bottom Nav]
+    C --> C2[Tab Bar]
+    C --> C3[Drawer]
+    
+    D --> D1[Bottom Sheets]
+    D --> D2[Date Pickers]
+    D --> D3[Autocomplete]
+    
+    style A fill:#7b61ff,color:#fff
+    style B fill:#3b82f6,color:#fff
+    style C fill:#10b981,color:#fff
+    style D fill:#f59e0b,color:#fff
+                    </div>
+                </div>
+            </div>
+
+            <!-- Responsive Design -->
+            <div id="responsive" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">📱 Responsive Design</h2>
+                    
+                    <h3>Breakpoints</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Device</th>
+                                <th>Breakpoint</th>
+                                <th>Layout Considerations</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Mobile</strong></td>
+                                <td>320px - 480px</td>
+                                <td>Single column, touch-friendly targets</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Tablet</strong></td>
+                                <td>481px - 768px</td>
+                                <td>Two columns, optimized spacing</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Desktop</strong></td>
+                                <td>769px - 1024px</td>
+                                <td>Multi-column layouts, hover states</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Large Desktop</strong></td>
+                                <td>1025px+</td>
+                                <td>Wide layouts, max-width containers</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Mobile-First Approach</h3>
+                    <div class="info-box info-box-success">
+                        <strong>Mobile-First Benefits:</strong>
+                        <ul class="feature-list">
+                            <li><strong>Performance:</strong> Start with essential content and features</li>
+                            <li><strong>Progressive Enhancement:</strong> Add complexity for larger screens</li>
+                            <li><strong>Focus:</strong> Prioritize critical user needs</li>
+                            <li><strong>Flexibility:</strong> Easier to scale up than scale down</li>
+                        </ul>
+                    </div>
+
+                    <h3>Responsive Techniques</h3>
+                    <div class="grid-2col">
+                        <div class="info-box info-box-info">
+                            <h4>Fluid Layouts</h4>
+                            <ul class="feature-list">
+                                <li>Percentage-based widths</li>
+                                <li>CSS Grid and Flexbox</li>
+                                <li>Viewport units (vw, vh)</li>
+                                <li>max-width constraints</li>
+                            </ul>
+                        </div>
+
+                        <div class="info-box info-box-info">
+                            <h4>Flexible Media</h4>
+                            <ul class="feature-list">
+                                <li>Responsive images (srcset)</li>
+                                <li>Picture element for art direction</li>
+                                <li>SVG for scalable graphics</li>
+                                <li>Aspect ratio boxes</li>
+                            </ul>
+                        </div>
+
+                        <div class="info-box info-box-info">
+                            <h4>Media Queries</h4>
+                            <ul class="feature-list">
+                                <li>Breakpoint-based styling</li>
+                                <li>Orientation queries</li>
+                                <li>Feature detection</li>
+                                <li>Container queries (new)</li>
+                            </ul>
+                        </div>
+
+                        <div class="info-box info-box-info">
+                            <h4>Touch Optimization</h4>
+                            <ul class="feature-list">
+                                <li>44x44px minimum touch targets</li>
+                                <li>Adequate spacing between elements</li>
+                                <li>Touch gesture support</li>
+                                <li>Prevent accidental taps</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resources -->
+            <div id="resources" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">📚 Resources & Learning</h2>
+                    
+                    <div class="grid-2col">
+                        <div class="info-box info-box-info">
+                            <h3>Design Resources</h3>
+                            <ul class="feature-list">
+                                <li><a href="https://www.w3.org/WAI/WCAG21/quickref/" target="_blank" rel="noopener">WCAG Quick Reference</a> - Accessibility guidelines</li>
+                                <li><a href="https://www.nngroup.com/" target="_blank" rel="noopener">Nielsen Norman Group</a> - UX research and articles</li>
+                                <li><a href="https://material.io/design" target="_blank" rel="noopener">Material Design</a> - Google's design system</li>
+                                <li><a href="https://www.figma.com/resources/" target="_blank" rel="noopener">Figma Resources</a> - Design tool and community</li>
+                            </ul>
+                        </div>
+
+                        <div class="info-box info-box-info">
+                            <h3>Accessibility Tools</h3>
+                            <ul class="feature-list">
+                                <li><a href="https://wave.webaim.org/" target="_blank" rel="noopener">WAVE</a> - Web accessibility evaluation tool</li>
+                                <li><a href="https://www.deque.com/axe/" target="_blank" rel="noopener">axe DevTools</a> - Accessibility testing</li>
+                                <li><a href="https://webaim.org/resources/contrastchecker/" target="_blank" rel="noopener">Contrast Checker</a> - Color contrast analyzer</li>
+                                <li><a href="https://www.nvaccess.org/" target="_blank" rel="noopener">NVDA</a> - Free screen reader</li>
+                            </ul>
+                        </div>
+
+                        <div class="info-box info-box-info">
+                            <h3>Design Communities</h3>
+                            <ul class="feature-list">
+                                <li><a href="https://dribbble.com/" target="_blank" rel="noopener">Dribbble</a> - Design inspiration</li>
+                                <li><a href="https://www.behance.net/" target="_blank" rel="noopener">Behance</a> - Creative portfolios</li>
+                                <li><a href="https://uxdesign.cc/" target="_blank" rel="noopener">UX Collective</a> - UX articles and insights</li>
+                                <li><a href="https://www.smashingmagazine.com/" target="_blank" rel="noopener">Smashing Magazine</a> - Web design resources</li>
+                            </ul>
+                        </div>
+
+                        <div class="info-box info-box-info">
+                            <h3>Learning Platforms</h3>
+                            <ul class="feature-list">
+                                <li><a href="https://www.interaction-design.org/" target="_blank" rel="noopener">Interaction Design Foundation</a> - UX courses</li>
+                                <li><a href="https://www.coursera.org/specializations/ui-ux-design" target="_blank" rel="noopener">Coursera UI/UX</a> - Specialization courses</li>
+                                <li><a href="https://www.udacity.com/course/ux-designer-nanodegree--nd578" target="_blank" rel="noopener">Udacity UX Nanodegree</a> - UX program</li>
+                                <li><a href="https://designlab.com/" target="_blank" rel="noopener">Designlab</a> - Mentored UX courses</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <nav class="bottom-nav" aria-label="Category navigation">
-        <a href="frontend.html" class="bottom-nav-link">
-            <span class="bottom-nav-icon">💻</span>
-            <span class="bottom-nav-label">Frontend</span>
-        </a>
-        <a href="ui-ux.html" class="bottom-nav-link active">
-            <span class="bottom-nav-icon">🎨</span>
-            <span class="bottom-nav-label">UI/UX</span>
-        </a>
-        <a href="mobile.html" class="bottom-nav-link">
-            <span class="bottom-nav-icon">📱</span>
-            <span class="bottom-nav-label">Mobile</span>
-        </a>
-    </nav>
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 CORTEX Knowledge Base. Created by Asif Hussain.</p>
+            <p>
+                <a href="index.html">Knowledge Home</a> • 
+                <a href="../index.html">CORTEX Home</a>
+            </p>
+        </div>
+    </footer>
 
-    <script src="../assets/js/category-page.js"></script>
     <script>
+        // Initialize Mermaid
         mermaid.initialize({ 
             startOnLoad: true,
             theme: 'dark',
             themeVariables: {
-                primaryColor: '#00d4ff',
+                primaryColor: '#7b61ff',
                 primaryTextColor: '#fff',
-                primaryBorderColor: '#7b61ff',
+                primaryBorderColor: '#fff',
                 lineColor: '#00d4ff',
-                secondaryColor: '#7b61ff',
-                tertiaryColor: '#1a1f3a'
+                secondaryColor: '#2196F3',
+                tertiaryColor: '#FF9800'
             }
         });
+
+        // Smooth scroll for TOC links
+        document.querySelectorAll('.toc-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    
+                    // Update active state
+                    document.querySelectorAll('.toc-link').forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        // Update active TOC link on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.getAttribute('id');
+                    document.querySelectorAll('.toc-link').forEach(link => {
+                        link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+                    });
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll('.content-section').forEach(section => observer.observe(section));
     </script>
 </body>
 </html>

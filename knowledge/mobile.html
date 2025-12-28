@@ -3,336 +3,684 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Mobile Development - iOS, Android, React Native, Flutter patterns">
-    <meta name="keywords" content="mobile, ios, android, react native, flutter">
+    <meta name="description" content="Mobile Development - React Native, Flutter, iOS, Android, Cross-Platform Apps">
+    <meta name="keywords" content="mobile, react native, flutter, ios, android, swift, kotlin, cross-platform">
     <meta name="author" content="Asif Hussain">
-    <title>Mobile Development - CORTEX Knowledge</title>
-    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <title>Mobile Development | CORTEX Knowledge</title>
     <link rel="stylesheet" href="../assets/css/main.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <nav class="breadcrumb-container sticky-nav" aria-label="Breadcrumb">
-        <button class="back-button" onclick="history.back()" aria-label="Go back">← Back</button>
-        <ol class="breadcrumb">
-            <li><a href="../index.html">Home</a></li>
-            <li><a href="index.html">Knowledge Library</a></li>
-            <li><a href="index.html#frontend-ui">Frontend & UI</a></li>
-            <li aria-current="page">Mobile</li>
-        </ol>
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">→</span>
+        <a href="index.html">Knowledge Library</a>
+        <span class="breadcrumb-separator">→</span>
+        <span class="breadcrumb-current">Mobile Development</span>
     </nav>
 
     <section class="hero" id="main-content">
-        <div class="logo-header">
-            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
-        </div>
         <h1 class="hero-title">📱 Mobile Development</h1>
-        <p class="hero-subtitle">iOS, Android, cross-platform frameworks, and mobile-specific patterns</p>
+        <p class="hero-subtitle">Native and Cross-Platform Mobile App Development</p>
+        <div class="file-metadata">
+            <span class="metadata-item">📦 Mobile Apps</span>
+            <span class="metadata-item">🏷️ iOS & Android</span>
+            <span class="metadata-item">📅 Updated: Dec 2025</span>
+        </div>
     </section>
 
-    <aside class="category-sidebar" aria-label="Category navigation">
-        <h3>Frontend & UI</h3>
-        <nav class="category-nav">
-            <a href="frontend.html" class="category-nav-link">💻 Frontend</a>
-            <a href="ui-ux.html" class="category-nav-link">🎨 UI/UX</a>
-            <a href="mobile.html" class="category-nav-link active">📱 Mobile</a>
-        </nav>
-    </aside>
-
-    <section class="section category-content">
+    <section class="section file-content">
         <div class="container">
-            <div class="tabs-container">
-                <div class="tabs-nav" role="tablist" aria-label="Category sections">
-                    <button class="tab-button active" role="tab" aria-selected="true" aria-controls="overview-tab" id="overview-btn" data-tab="overview">Overview</button>
-                    <button class="tab-button" role="tab" aria-selected="false" aria-controls="files-tab" id="files-btn" data-tab="files">Knowledge Files</button>
-                    <button class="tab-button" role="tab" aria-selected="false" aria-controls="resources-tab" id="resources-btn" data-tab="resources">Learning Resources</button>
-                    <button class="tab-button" role="tab" aria-selected="false" aria-controls="usage-tab" id="usage-btn" data-tab="usage">CORTEX Usage</button>
-                </div>
-
-                <div class="tab-content active" id="overview-tab" role="tabpanel" aria-labelledby="overview-btn">
-                    <div class="glass-card">
-                        <h2>Overview</h2>
-                        <p>Mobile development covers native iOS and Android as well as cross-platform frameworks like React Native and Flutter. Focus on performance, platform conventions, and mobile-specific UX patterns.</p>
-
-                        <h3>Category Statistics</h3>
-                        <div class="stats-grid">
-                            <div class="stat-item">
-                                <div class="stat-value">6</div>
-                                <div class="stat-label">Knowledge Files</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-value">4</div>
-                                <div class="stat-label">Platforms</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-value">90+</div>
-                                <div class="stat-label">Best Practices</div>
-                            </div>
-                        </div>
+            <!-- Overview -->
+            <div id="overview" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">📋 Overview</h2>
+                    <p>Mobile development encompasses creating applications for iOS and Android platforms. Modern mobile development offers multiple approaches: native development, cross-platform frameworks, and hybrid solutions, each with distinct advantages.</p>
+                    
+                    <div class="info-box info-box-primary">
+                        <strong>Mobile Development Landscape:</strong>
+                        <ul class="feature-list">
+                            <li><strong>Native:</strong> Platform-specific development (Swift/Kotlin)</li>
+                            <li><strong>Cross-Platform:</strong> Single codebase for multiple platforms</li>
+                            <li><strong>Hybrid:</strong> Web technologies wrapped in native container</li>
+                            <li><strong>Progressive Web Apps:</strong> Web apps with mobile capabilities</li>
+                        </ul>
                     </div>
 
-                    <div class="glass-card">
-                        <h2>Concept Map</h2>
-                        <div class="mermaid">
-graph TD
-    A[Mobile Development] --> B[Native]
+                    <h3>Mobile Platform Statistics (2025)</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Platform</th>
+                                <th>Market Share</th>
+                                <th>Languages</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Android</strong></td>
+                                <td>~71%</td>
+                                <td>Kotlin, Java</td>
+                            </tr>
+                            <tr>
+                                <td><strong>iOS</strong></td>
+                                <td>~28%</td>
+                                <td>Swift, Objective-C</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Others</strong></td>
+                                <td>~1%</td>
+                                <td>Various</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Development Approaches -->
+            <div id="approaches" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🎯 Development Approaches</h2>
+                    
+                    <h3>Approach Comparison</h3>
+                    <div class="mermaid">
+graph TB
+    A[Mobile Development]
+    A --> B[Native]
     A --> C[Cross-Platform]
+    A --> D[Hybrid]
+    A --> E[PWA]
     
-    B --> D[iOS/Swift]
-    B --> E[Android/Kotlin]
+    B --> B1[iOS - Swift]
+    B --> B2[Android - Kotlin]
     
-    C --> F[React Native]
-    C --> G[Flutter]
+    C --> C1[React Native]
+    C --> C2[Flutter]
+    C --> C3[.NET MAUI]
     
-    D --> H[UIKit]
-    D --> I[SwiftUI]
+    D --> D1[Ionic]
+    D --> D2[Cordova]
     
-    E --> J[Jetpack Compose]
-    E --> K[XML Layouts]
+    E --> E1[Web Technologies]
     
-    F --> L[Native Modules]
-    F --> M[JS Bridge]
-    
-    G --> N[Dart]
-    G --> O[Widgets]
-    
-    style A fill:#00d4ff,stroke:#7b61ff,stroke-width:2px
-    style B fill:#4ecdc4,stroke:#fff,stroke-width:2px
-    style C fill:#ff6b6b,stroke:#fff,stroke-width:2px
-                        </div>
+    style A fill:#7b61ff,color:#fff
+    style B fill:#10b981,color:#fff
+    style C fill:#3b82f6,color:#fff
+    style D fill:#f59e0b,color:#fff
+    style E fill:#ec4899,color:#fff
                     </div>
 
-                    <div class="glass-card">
-                        <h2>High-Priority Patterns</h2>
-                        <div class="rules-showcase">
-                            <div class="rule-card" data-expandable>
-                                <div class="rule-header" onclick="toggleRule(this)">
-                                    <span class="rule-icon">⚡</span>
-                                    <div class="rule-title-group">
-                                        <h3>60 FPS Performance</h3>
-                                        <span class="severity-badge severity-high">HIGH</span>
-                                    </div>
-                                    <button class="expand-btn" aria-label="Expand rule">+</button>
-                                </div>
-                                <div class="rule-body" hidden>
-                                    <p><strong>Description:</strong> All animations and scrolling must maintain 60 FPS. Avoid heavy computations on the main thread.</p>
-                                </div>
-                            </div>
+                    <h3>Decision Matrix</h3>
+                    <table class="glass-table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Criteria</th>
+                                <th>Native</th>
+                                <th>React Native</th>
+                                <th>Flutter</th>
+                                <th>PWA</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Performance</strong></td>
+                                <td>⭐⭐⭐⭐⭐</td>
+                                <td>⭐⭐⭐⭐</td>
+                                <td>⭐⭐⭐⭐⭐</td>
+                                <td>⭐⭐⭐</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Code Reuse</strong></td>
+                                <td>⭐</td>
+                                <td>⭐⭐⭐⭐⭐</td>
+                                <td>⭐⭐⭐⭐⭐</td>
+                                <td>⭐⭐⭐⭐⭐</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Development Speed</strong></td>
+                                <td>⭐⭐</td>
+                                <td>⭐⭐⭐⭐</td>
+                                <td>⭐⭐⭐⭐</td>
+                                <td>⭐⭐⭐⭐⭐</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Native Features</strong></td>
+                                <td>⭐⭐⭐⭐⭐</td>
+                                <td>⭐⭐⭐⭐</td>
+                                <td>⭐⭐⭐⭐</td>
+                                <td>⭐⭐⭐</td>
+                            </tr>
+                            <tr>
+                                <td><strong>UI Consistency</strong></td>
+                                <td>⭐⭐⭐⭐⭐</td>
+                                <td>⭐⭐⭐</td>
+                                <td>⭐⭐⭐⭐⭐</td>
+                                <td>⭐⭐⭐</td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-                            <div class="rule-card" data-expandable>
-                                <div class="rule-header" onclick="toggleRule(this)">
-                                    <span class="rule-icon">🔋</span>
-                                    <div class="rule-title-group">
-                                        <h3>Battery Optimization</h3>
-                                        <span class="severity-badge severity-high">HIGH</span>
-                                    </div>
-                                    <button class="expand-btn" aria-label="Expand rule">+</button>
-                                </div>
-                                <div class="rule-body" hidden>
-                                    <p><strong>Description:</strong> Minimize background tasks, network requests, and GPS usage to preserve battery life.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tab-content" id="files-tab" role="tabpanel" aria-labelledby="files-btn" hidden>
-                    <div class="glass-card">
-                        <h2>Knowledge Files</h2>
-                        <p>Explore mobile development best practices:</p>
-                    </div>
-
-                    <div class="knowledge-files-accordion">
-                        <div class="accordion-item">
-                            <button class="accordion-header" aria-expanded="false" aria-controls="ios-content">
-                                <span class="accordion-icon">🍎</span>
-                                <div class="accordion-title-group">
-                                    <h3 class="accordion-title">iOS Development</h3>
-                                    <p class="accordion-subtitle">Swift, SwiftUI, UIKit patterns</p>
-                                </div>
-                                <span class="badge">20 rules</span>
-                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                            </button>
-                            <div id="ios-content" class="accordion-content" hidden>
-                                <p>iOS native development with Swift and SwiftUI.</p>
-                                <p><em>📝 Knowledge file coming soon</em></p>
-                            </div>
-                        </div>
-
-                        <div class="accordion-item">
-                            <button class="accordion-header" aria-expanded="false" aria-controls="android-content">
-                                <span class="accordion-icon">🤖</span>
-                                <div class="accordion-title-group">
-                                    <h3 class="accordion-title">Android Development</h3>
-                                    <p class="accordion-subtitle">Kotlin, Jetpack Compose</p>
-                                </div>
-                                <span class="badge">22 rules</span>
-                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                            </button>
-                            <div id="android-content" class="accordion-content" hidden>
-                                <p>Android native development with Kotlin.</p>
-                                <p><em>📝 Knowledge file coming soon</em></p>
-                            </div>
+                    <h3>When to Choose Each Approach</h3>
+                    <div class="grid-2col">
+                        <div class="info-box info-box-success">
+                            <h4>Choose Native When:</h4>
+                            <ul class="feature-list">
+                                <li>Performance is critical (games, AR/VR)</li>
+                                <li>Deep platform integration required</li>
+                                <li>Platform-specific UI is essential</li>
+                                <li>Complex hardware access needed</li>
+                            </ul>
                         </div>
 
-                        <div class="accordion-item">
-                            <button class="accordion-header" aria-expanded="false" aria-controls="react-native-content">
-                                <span class="accordion-icon">⚛️</span>
-                                <div class="accordion-title-group">
-                                    <h3 class="accordion-title">React Native</h3>
-                                    <p class="accordion-subtitle">Cross-platform with React</p>
-                                </div>
-                                <span class="badge">18 rules</span>
-                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                            </button>
-                            <div id="react-native-content" class="accordion-content" hidden>
-                                <p>Cross-platform mobile with React Native.</p>
-                                <p><em>📝 Knowledge file coming soon</em></p>
-                            </div>
-                        </div>
-
-                        <div class="accordion-item">
-                            <button class="accordion-header" aria-expanded="false" aria-controls="flutter-content">
-                                <span class="accordion-icon">🐦</span>
-                                <div class="accordion-title-group">
-                                    <h3 class="accordion-title">Flutter</h3>
-                                    <p class="accordion-subtitle">Dart widgets and state</p>
-                                </div>
-                                <span class="badge">16 rules</span>
-                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                            </button>
-                            <div id="flutter-content" class="accordion-content" hidden>
-                                <p>Cross-platform mobile with Flutter and Dart.</p>
-                                <p><em>📝 Knowledge file coming soon</em></p>
-                            </div>
-                        </div>
-
-                        <div class="accordion-item">
-                            <button class="accordion-header" aria-expanded="false" aria-controls="mobile-ux-content">
-                                <span class="accordion-icon">✨</span>
-                                <div class="accordion-title-group">
-                                    <h3 class="accordion-title">Mobile UX Patterns</h3>
-                                    <p class="accordion-subtitle">Touch gestures, navigation</p>
-                                </div>
-                                <span class="badge">14 rules</span>
-                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                            </button>
-                            <div id="mobile-ux-content" class="accordion-content" hidden>
-                                <p>Mobile-specific UX patterns and conventions.</p>
-                                <p><em>📝 Knowledge file coming soon</em></p>
-                            </div>
+                        <div class="info-box info-box-info">
+                            <h4>Choose Cross-Platform When:</h4>
+                            <ul class="feature-list">
+                                <li>Faster time-to-market required</li>
+                                <li>Limited development resources</li>
+                                <li>Consistent UI across platforms</li>
+                                <li>Existing web developer expertise</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="tab-content" id="resources-tab" role="tabpanel" aria-labelledby="resources-btn" hidden>
-                    <div class="glass-card">
-                        <h2>Learning Resources</h2>
-                        
-                        <h3>Official Documentation</h3>
-                        <ul class="resource-list">
-                            <li>
-                                <a href="https://developer.apple.com/documentation/" target="_blank" rel="noopener noreferrer" class="resource-link">
-                                    <span class="resource-icon">📖</span>
-                                    <div>
-                                        <strong>Apple Developer</strong>
-                                        <p>iOS and SwiftUI documentation</p>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="https://developer.android.com/docs" target="_blank" rel="noopener noreferrer" class="resource-link">
-                                    <span class="resource-icon">📖</span>
-                                    <div>
-                                        <strong>Android Developers</strong>
-                                        <p>Android and Kotlin guides</p>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="https://reactnative.dev/docs/getting-started" target="_blank" rel="noopener noreferrer" class="resource-link">
-                                    <span class="resource-icon">📖</span>
-                                    <div>
-                                        <strong>React Native Docs</strong>
-                                        <p>Official React Native documentation</p>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="https://flutter.dev/docs" target="_blank" rel="noopener noreferrer" class="resource-link">
-                                    <span class="resource-icon">📖</span>
-                                    <div>
-                                        <strong>Flutter Documentation</strong>
-                                        <p>Flutter framework and Dart</p>
-                                    </div>
-                                </a>
-                            </li>
+            <!-- React Native -->
+            <div id="react-native" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">⚛️ React Native</h2>
+                    
+                    <h3>What is React Native?</h3>
+                    <div class="info-box info-box-primary">
+                        <p><strong>React Native</strong> is Meta's cross-platform framework that allows you to build native mobile apps using React and JavaScript. It renders actual native components, not web views.</p>
+                        <ul class="feature-list">
+                            <li><strong>Learn Once, Write Anywhere:</strong> Use React knowledge for mobile</li>
+                            <li><strong>Native Rendering:</strong> Real native UI components</li>
+                            <li><strong>Hot Reload:</strong> See changes instantly</li>
+                            <li><strong>Large Ecosystem:</strong> npm packages and native modules</li>
+                        </ul>
+                    </div>
+
+                    <h3>Architecture</h3>
+                    <div class="mermaid">
+graph LR
+    A[JavaScript Code]
+    B[Bridge]
+    C[Native Modules]
+    D[iOS/Android]
+    
+    A -->|Async| B
+    B -->|Serialize| C
+    C -->|Render| D
+    
+    style A fill:#f59e0b,color:#fff
+    style B fill:#7b61ff,color:#fff
+    style C fill:#3b82f6,color:#fff
+    style D fill:#10b981,color:#fff
+                    </div>
+
+                    <h3>Core Components</h3>
+                    <div class="grid-2col">
+                        <div class="info-box info-box-secondary">
+                            <h4>Built-in Components</h4>
+                            <ul class="feature-list">
+                                <li><strong>View:</strong> Container component (like div)</li>
+                                <li><strong>Text:</strong> Text rendering component</li>
+                                <li><strong>Image:</strong> Display images</li>
+                                <li><strong>ScrollView:</strong> Scrollable container</li>
+                                <li><strong>FlatList:</strong> Performant lists</li>
+                                <li><strong>TextInput:</strong> Text input field</li>
+                            </ul>
+                        </div>
+
+                        <div class="info-box info-box-secondary">
+                            <h4>Platform-Specific APIs</h4>
+                            <ul class="feature-list">
+                                <li><strong>Platform:</strong> Detect OS (iOS/Android)</li>
+                                <li><strong>Dimensions:</strong> Screen dimensions</li>
+                                <li><strong>Keyboard:</strong> Keyboard events</li>
+                                <li><strong>Linking:</strong> Open URLs/deep links</li>
+                                <li><strong>Alert:</strong> Native alert dialogs</li>
+                                <li><strong>StatusBar:</strong> Status bar control</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>Popular Libraries</h3>
+                    <div class="info-box info-box-info">
+                        <strong>React Native Ecosystem:</strong>
+                        <ul class="feature-list">
+                            <li><strong>React Navigation:</strong> Routing and navigation</li>
+                            <li><strong>Redux/Zustand:</strong> State management</li>
+                            <li><strong>React Native Paper:</strong> Material Design components</li>
+                            <li><strong>Expo:</strong> Development toolkit and services</li>
+                            <li><strong>Reanimated:</strong> Advanced animations</li>
+                            <li><strong>React Native Elements:</strong> Cross-platform UI toolkit</li>
+                        </ul>
+                    </div>
+
+                    <h3>Expo vs React Native CLI</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Feature</th>
+                                <th>Expo</th>
+                                <th>React Native CLI</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Setup</strong></td>
+                                <td>Quick and easy</td>
+                                <td>Requires native setup</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Native Modules</strong></td>
+                                <td>Limited to Expo SDK</td>
+                                <td>Full access</td>
+                            </tr>
+                            <tr>
+                                <td><strong>OTA Updates</strong></td>
+                                <td>Built-in</td>
+                                <td>Requires setup</td>
+                            </tr>
+                            <tr>
+                                <td><strong>App Size</strong></td>
+                                <td>Larger</td>
+                                <td>Smaller</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Best For</strong></td>
+                                <td>MVPs, prototypes</td>
+                                <td>Production apps</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Flutter -->
+            <div id="flutter" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🦋 Flutter</h2>
+                    
+                    <h3>What is Flutter?</h3>
+                    <div class="info-box info-box-primary">
+                        <p><strong>Flutter</strong> is Google's UI toolkit for building natively compiled applications from a single codebase. It uses Dart language and renders its own UI components.</p>
+                        <ul class="feature-list">
+                            <li><strong>Fast Rendering:</strong> Custom rendering engine (Skia)</li>
+                            <li><strong>Widget-Based:</strong> Everything is a widget</li>
+                            <li><strong>Hot Reload:</strong> Instant UI updates</li>
+                            <li><strong>Multi-Platform:</strong> Mobile, web, desktop from one codebase</li>
+                        </ul>
+                    </div>
+
+                    <h3>Flutter Architecture</h3>
+                    <div class="mermaid">
+graph TB
+    A[Dart App]
+    B[Flutter Framework]
+    C[Flutter Engine]
+    D[Platform]
+    
+    A --> B
+    B --> C
+    C --> D
+    
+    B --> B1[Widgets]
+    B --> B2[Rendering]
+    B --> B3[Gestures]
+    
+    C --> C1[Skia Graphics]
+    C --> C2[Dart Runtime]
+    
+    style A fill:#f59e0b,color:#fff
+    style B fill:#7b61ff,color:#fff
+    style C fill:#3b82f6,color:#fff
+    style D fill:#10b981,color:#fff
+                    </div>
+
+                    <h3>Core Concepts</h3>
+                    <div class="grid-2col">
+                        <div class="info-box info-box-success">
+                            <h4>Widgets</h4>
+                            <ul class="feature-list">
+                                <li><strong>Stateless:</strong> Immutable widgets</li>
+                                <li><strong>Stateful:</strong> Mutable state widgets</li>
+                                <li><strong>Inherited:</strong> Propagate data down tree</li>
+                                <li><strong>Material:</strong> Material Design widgets</li>
+                                <li><strong>Cupertino:</strong> iOS-style widgets</li>
+                            </ul>
+                        </div>
+
+                        <div class="info-box info-box-success">
+                            <h4>State Management</h4>
+                            <ul class="feature-list">
+                                <li><strong>setState:</strong> Simple local state</li>
+                                <li><strong>Provider:</strong> Recommended by Flutter team</li>
+                                <li><strong>Bloc:</strong> Business logic separation</li>
+                                <li><strong>Riverpod:</strong> Modern provider alternative</li>
+                                <li><strong>GetX:</strong> Lightweight state management</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>Flutter Advantages</h3>
+                    <div class="info-box info-box-info">
+                        <strong>Why Choose Flutter:</strong>
+                        <ul class="feature-list">
+                            <li><strong>Performance:</strong> Near-native performance with custom rendering</li>
+                            <li><strong>Consistency:</strong> Same UI across all platforms</li>
+                            <li><strong>Productivity:</strong> Hot reload and expressive UI</li>
+                            <li><strong>Single Codebase:</strong> iOS, Android, web, desktop</li>
+                            <li><strong>Rich Widgets:</strong> Extensive built-in widget library</li>
+                            <li><strong>Growing Ecosystem:</strong> Active community and packages</li>
                         </ul>
                     </div>
                 </div>
+            </div>
 
-                <div class="tab-content" id="usage-tab" role="tabpanel" aria-labelledby="usage-btn" hidden>
-                    <div class="glass-card">
-                        <h2>How CORTEX Uses Mobile Knowledge</h2>
-                        
-                        <h3>📱 Platform-Specific Generation</h3>
+            <!-- Native Development -->
+            <div id="native" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🍎 📱 Native Development</h2>
+                    
+                    <h3>iOS Development (Swift)</h3>
+                    <div class="info-box info-box-primary">
+                        <strong>Swift Ecosystem:</strong>
                         <ul class="feature-list">
-                            <li><strong>iOS:</strong> Generates SwiftUI views with proper state management</li>
-                            <li><strong>Android:</strong> Creates Jetpack Compose components</li>
-                            <li><strong>React Native:</strong> Implements cross-platform components</li>
-                            <li><strong>Flutter:</strong> Builds stateless/stateful widgets</li>
+                            <li><strong>SwiftUI:</strong> Declarative UI framework (modern)</li>
+                            <li><strong>UIKit:</strong> Imperative UI framework (traditional)</li>
+                            <li><strong>Xcode:</strong> Official IDE with Interface Builder</li>
+                            <li><strong>TestFlight:</strong> Beta testing platform</li>
+                            <li><strong>App Store Connect:</strong> App distribution</li>
                         </ul>
+                    </div>
 
-                        <h3>⚡ Performance Validation</h3>
+                    <h3>Android Development (Kotlin)</h3>
+                    <div class="info-box info-box-success">
+                        <strong>Kotlin Ecosystem:</strong>
                         <ul class="feature-list">
-                            <li><strong>Main Thread:</strong> Detects blocking operations</li>
-                            <li><strong>Memory Leaks:</strong> Identifies retain cycles</li>
-                            <li><strong>Network:</strong> Validates efficient API usage</li>
+                            <li><strong>Jetpack Compose:</strong> Modern declarative UI</li>
+                            <li><strong>XML Layouts:</strong> Traditional view system</li>
+                            <li><strong>Android Studio:</strong> Official IDE</li>
+                            <li><strong>Android Jetpack:</strong> Modern development components</li>
+                            <li><strong>Google Play Console:</strong> App distribution</li>
                         </ul>
+                    </div>
 
-                        <h3>🔋 Resource Optimization</h3>
+                    <h3>Native vs Cross-Platform</h3>
+                    <div class="grid-2col">
+                        <div class="info-box info-box-warning">
+                            <h4>Native Advantages</h4>
+                            <ul class="feature-list">
+                                <li>Maximum performance</li>
+                                <li>Full platform API access</li>
+                                <li>Best user experience</li>
+                                <li>Latest features immediately</li>
+                                <li>Better debugging tools</li>
+                            </ul>
+                        </div>
+
+                        <div class="info-box info-box-danger">
+                            <h4>Native Challenges</h4>
+                            <ul class="feature-list">
+                                <li>Separate codebases (2x work)</li>
+                                <li>Different languages/tools</li>
+                                <li>Higher development cost</li>
+                                <li>Slower time-to-market</li>
+                                <li>Two teams or broader skillset</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Architecture Patterns -->
+            <div id="architecture" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🏗️ Architecture Patterns</h2>
+                    
+                    <h3>Common Mobile Architectures</h3>
+                    <div class="mermaid">
+graph TB
+    A[Mobile Architecture]
+    A --> B[MVC]
+    A --> C[MVP]
+    A --> D[MVVM]
+    A --> E[Clean Architecture]
+    
+    B --> B1[Model-View-Controller]
+    C --> C1[Model-View-Presenter]
+    D --> D1[Model-View-ViewModel]
+    E --> E1[Layered Architecture]
+    
+    style A fill:#7b61ff,color:#fff
+    style B fill:#3b82f6,color:#fff
+    style C fill:#10b981,color:#fff
+    style D fill:#f59e0b,color:#fff
+    style E fill:#ec4899,color:#fff
+                    </mermaid>
+
+                    <h3>MVVM Pattern (Recommended)</h3>
+                    <div class="info-box info-box-success">
+                        <p><strong>Model-View-ViewModel:</strong> Separation of concerns with data binding</p>
                         <ul class="feature-list">
-                            <li><strong>Battery:</strong> Reviews background task usage</li>
-                            <li><strong>Network:</strong> Suggests caching strategies</li>
-                            <li><strong>Storage:</strong> Validates data persistence</li>
+                            <li><strong>Model:</strong> Data and business logic</li>
+                            <li><strong>View:</strong> UI components and layout</li>
+                            <li><strong>ViewModel:</strong> Presentation logic and state</li>
+                            <li><strong>Benefits:</strong> Testable, maintainable, scalable</li>
                         </ul>
+                    </div>
+
+                    <h3>Clean Architecture Layers</h3>
+                    <div class="grid-3col">
+                        <div class="info-box info-box-info">
+                            <h4>Presentation Layer</h4>
+                            <ul class="feature-list">
+                                <li>UI Components</li>
+                                <li>ViewModels</li>
+                                <li>Navigation</li>
+                                <li>User Input</li>
+                            </ul>
+                        </div>
+
+                        <div class="info-box info-box-info">
+                            <h4>Domain Layer</h4>
+                            <ul class="feature-list">
+                                <li>Business Logic</li>
+                                <li>Use Cases</li>
+                                <li>Entities</li>
+                                <li>Repository Interfaces</li>
+                            </ul>
+                        </div>
+
+                        <div class="info-box info-box-info">
+                            <h4>Data Layer</h4>
+                            <ul class="feature-list">
+                                <li>Repository Implementations</li>
+                                <li>Data Sources</li>
+                                <li>API Clients</li>
+                                <li>Local Database</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Testing -->
+            <div id="testing" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🧪 Mobile Testing</h2>
+                    
+                    <h3>Testing Types</h3>
+                    <div class="grid-2col">
+                        <div class="info-box info-box-primary">
+                            <h4>React Native Testing</h4>
+                            <ul class="feature-list">
+                                <li><strong>Jest:</strong> Unit and integration tests</li>
+                                <li><strong>React Native Testing Library:</strong> Component testing</li>
+                                <li><strong>Detox:</strong> E2E testing framework</li>
+                                <li><strong>Maestro:</strong> Mobile UI testing</li>
+                            </ul>
+                        </div>
+
+                        <div class="info-box info-box-primary">
+                            <h4>Flutter Testing</h4>
+                            <ul class="feature-list">
+                                <li><strong>flutter_test:</strong> Unit and widget tests</li>
+                                <li><strong>mockito:</strong> Mocking dependencies</li>
+                                <li><strong>integration_test:</strong> E2E testing</li>
+                                <li><strong>Golden Tests:</strong> Screenshot comparison</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>Native Testing Tools</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Platform</th>
+                                <th>Unit Tests</th>
+                                <th>UI Tests</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>iOS</strong></td>
+                                <td>XCTest</td>
+                                <td>XCUITest</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Android</strong></td>
+                                <td>JUnit, Mockito</td>
+                                <td>Espresso, UI Automator</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Testing Best Practices</h3>
+                    <div class="info-box info-box-warning">
+                        <strong>Mobile Testing Guidelines:</strong>
+                        <ul class="feature-list">
+                            <li><strong>Test on Real Devices:</strong> Simulators don't catch all issues</li>
+                            <li><strong>Test Different Screen Sizes:</strong> Cover various device dimensions</li>
+                            <li><strong>Test Network Conditions:</strong> Slow, offline, intermittent</li>
+                            <li><strong>Test Permissions:</strong> Location, camera, notifications</li>
+                            <li><strong>Test Battery Impact:</strong> Monitor power consumption</li>
+                            <li><strong>Automated CI/CD:</strong> Run tests on every commit</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resources -->
+            <div id="resources" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">📚 Resources & Learning</h2>
+                    
+                    <div class="grid-2col">
+                        <div class="info-box info-box-info">
+                            <h3>React Native</h3>
+                            <ul class="feature-list">
+                                <li><a href="https://reactnative.dev/" target="_blank" rel="noopener">React Native Docs</a> - Official documentation</li>
+                                <li><a href="https://docs.expo.dev/" target="_blank" rel="noopener">Expo Docs</a> - Expo development platform</li>
+                                <li><a href="https://reactnavigation.org/" target="_blank" rel="noopener">React Navigation</a> - Routing library</li>
+                                <li><a href="https://www.reactnative.directory/" target="_blank" rel="noopener">React Native Directory</a> - Library directory</li>
+                            </ul>
+                        </div>
+
+                        <div class="info-box info-box-info">
+                            <h3>Flutter</h3>
+                            <ul class="feature-list">
+                                <li><a href="https://flutter.dev/" target="_blank" rel="noopener">Flutter Docs</a> - Official documentation</li>
+                                <li><a href="https://pub.dev/" target="_blank" rel="noopener">pub.dev</a> - Flutter package repository</li>
+                                <li><a href="https://api.flutter.dev/" target="_blank" rel="noopener">Flutter API Reference</a> - API documentation</li>
+                                <li><a href="https://dartpad.dev/" target="_blank" rel="noopener">DartPad</a> - Online Dart playground</li>
+                            </ul>
+                        </div>
+
+                        <div class="info-box info-box-info">
+                            <h3>iOS Development</h3>
+                            <ul class="feature-list">
+                                <li><a href="https://developer.apple.com/documentation/" target="_blank" rel="noopener">Apple Developer</a> - Official iOS documentation</li>
+                                <li><a href="https://developer.apple.com/swift/" target="_blank" rel="noopener">Swift.org</a> - Swift language guide</li>
+                                <li><a href="https://developer.apple.com/design/human-interface-guidelines/" target="_blank" rel="noopener">HIG</a> - Human Interface Guidelines</li>
+                                <li><a href="https://www.hackingwithswift.com/" target="_blank" rel="noopener">Hacking with Swift</a> - Swift tutorials</li>
+                            </ul>
+                        </div>
+
+                        <div class="info-box info-box-info">
+                            <h3>Android Development</h3>
+                            <ul class="feature-list">
+                                <li><a href="https://developer.android.com/" target="_blank" rel="noopener">Android Developers</a> - Official documentation</li>
+                                <li><a href="https://kotlinlang.org/" target="_blank" rel="noopener">Kotlin Docs</a> - Kotlin language guide</li>
+                                <li><a href="https://developer.android.com/jetpack/compose" target="_blank" rel="noopener">Jetpack Compose</a> - Modern Android UI</li>
+                                <li><a href="https://material.io/develop/android" target="_blank" rel="noopener">Material Design</a> - Android design system</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <nav class="bottom-nav" aria-label="Category navigation">
-        <a href="frontend.html" class="bottom-nav-link">
-            <span class="bottom-nav-icon">💻</span>
-            <span class="bottom-nav-label">Frontend</span>
-        </a>
-        <a href="ui-ux.html" class="bottom-nav-link">
-            <span class="bottom-nav-icon">🎨</span>
-            <span class="bottom-nav-label">UI/UX</span>
-        </a>
-        <a href="mobile.html" class="bottom-nav-link active">
-            <span class="bottom-nav-icon">📱</span>
-            <span class="bottom-nav-label">Mobile</span>
-        </a>
-    </nav>
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 CORTEX Knowledge Base. Created by Asif Hussain.</p>
+            <p>
+                <a href="index.html">Knowledge Home</a> • 
+                <a href="../index.html">CORTEX Home</a>
+            </p>
+        </div>
+    </footer>
 
-    <script src="../assets/js/category-page.js"></script>
     <script>
+        // Initialize Mermaid
         mermaid.initialize({ 
             startOnLoad: true,
             theme: 'dark',
             themeVariables: {
-                primaryColor: '#00d4ff',
+                primaryColor: '#7b61ff',
                 primaryTextColor: '#fff',
-                primaryBorderColor: '#7b61ff',
+                primaryBorderColor: '#fff',
                 lineColor: '#00d4ff',
-                secondaryColor: '#7b61ff',
-                tertiaryColor: '#1a1f3a'
+                secondaryColor: '#2196F3',
+                tertiaryColor: '#FF9800'
             }
         });
+
+        // Smooth scroll for TOC links
+        document.querySelectorAll('.toc-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    
+                    // Update active state
+                    document.querySelectorAll('.toc-link').forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        // Update active TOC link on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.getAttribute('id');
+                    document.querySelectorAll('.toc-link').forEach(link => {
+                        link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+                    });
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll('.content-section').forEach(section => observer.observe(section));
     </script>
 </body>
 </html>
