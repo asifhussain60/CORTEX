@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX Knowledge Library - Cloud & AWS: AWS Well-Architected Framework, EC2, S3, Lambda Best Practices">
+    <title>CORTEX Knowledge - Cloud & AWS</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+    <!-- Sticky Breadcrumb Navigation -->
+    <nav class="breadcrumb-container sticky-nav">
+        <button class="back-button" onclick="history.back()" aria-label="Go back">← Back</button>
+        <ol class="breadcrumb">
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="index.html">Knowledge Library</a></li>
+            <li><a href="index.html#infrastructure">Infrastructure</a></li>
+            <li aria-current="page">Cloud & AWS</li>
+        </ol>
+    </nav>
+
+    <!-- Logo Header -->
+    <div class="logo-header">
+        <img src="../assets/images/CORTEX-logo.png" class="page-logo" alt="CORTEX Logo">
+    </div>
+
+    <!-- Page Title -->
+    <h1>☁️ Cloud & AWS Best Practices</h1>
+
+    <!-- Feature Benefit Panel -->
+    <div class="feature-benefit-panel">
+        <span class="icon">🚀</span>
+        <div class="content">
+            <h2>Build Scalable, Secure, Cost-Optimized Cloud Architectures</h2>
+            <p class="description">
+                Cloud computing with AWS transforms infrastructure management from capital-intensive hardware procurement to on-demand, pay-as-you-go services—scaling from zero to millions of users in minutes, deploying globally across 30+ regions with a click, and paying only for what you use. Whether you're architecting serverless applications with Lambda that scale infinitely without managing servers, designing multi-region disaster recovery with 99.99% uptime SLAs, or optimizing costs by 40% through reserved instances and spot pricing, AWS best practices based on the Well-Architected Framework ensure your systems are operationally excellent, secure, reliable, performant, and cost-effective. Imagine launching a startup MVP that handles 1,000 users today and seamlessly scales to 10 million tomorrow—or migrating legacy infrastructure to reduce server costs from $50k/month to $15k while improving reliability—that's the power of cloud-native architecture on AWS.
+            </p>
+        </div>
+    </div>
+
+    <!-- Tabs Navigation -->
+    <div class="tabs-container">
+        <div class="tabs-nav" role="tablist">
+            <button class="tab-button active" role="tab" aria-selected="true" aria-controls="overview-tab" data-tab="overview">
+                📖 Overview
+            </button>
+            <button class="tab-button" role="tab" aria-selected="false" aria-controls="files-tab" data-tab="files">
+                📄 Knowledge Files
+            </button>
+            <button class="tab-button" role="tab" aria-selected="false" aria-controls="resources-tab" data-tab="resources">
+                🎓 Learning Resources
+            </button>
+            <button class="tab-button" role="tab" aria-selected="false" aria-controls="usage-tab" data-tab="usage">
+                🔧 CORTEX Usage
+            </button>
+        </div>
+
+        <!-- Tab 1: Overview -->
+        <div class="tab-content active" id="overview-tab" role="tabpanel">
+            <section class="glass-card">
+                <h2>What is Cloud Computing with AWS?</h2>
+                <p>
+                    AWS (Amazon Web Services) is a comprehensive cloud platform offering 200+ services—from compute (EC2, Lambda) and storage (S3, EBS) to databases (RDS, DynamoDB), networking (VPC, Route 53), and AI/ML (SageMaker)—enabling you to build and run applications without owning physical infrastructure. Instead of buying servers, you rent virtual machines by the hour; instead of managing data centers, you deploy globally with API calls; instead of capacity planning for peak load, you auto-scale automatically based on demand. AWS best practices, codified in the Well-Architected Framework, guide you to build systems that are operationally excellent (automated deployments, monitoring), secure (encryption, IAM policies), reliable (multi-AZ deployments), performant (caching, CDN), and cost-optimized (right-sizing, reserved capacity).
+                </p>
+
+                <h3>AWS Well-Architected Framework (5 Pillars)</h3>
+                <ul class="feature-list">
+                    <li><strong>Operational Excellence:</strong> Automate operations (Infrastructure as Code), monitor with CloudWatch, learn from failures</li>
+                    <li><strong>Security:</strong> Implement IAM least privilege, encrypt data at rest/in transit, enable CloudTrail audit logging</li>
+                    <li><strong>Reliability:</strong> Design for failure (multi-AZ), auto-scale, test disaster recovery procedures</li>
+                    <li><strong>Performance Efficiency:</strong> Use right services for workload (Lambda for event-driven, RDS for relational data), leverage CDN (CloudFront)</li>
+                    <li><strong>Cost Optimization:</strong> Right-size instances, use reserved/spot instances, monitor with Cost Explorer</li>
+                </ul>
+
+                <h3>Why AWS Matters</h3>
+                <div class="metrics-grid-3">
+                    <div class="metric-card">
+                        <div class="metric-value">60%</div>
+                        <div class="metric-label">Cost Reduction</div>
+                        <div class="metric-description">Typical savings vs. on-premises data centers through right-sizing and reserved instances</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">99.99%</div>
+                        <div class="metric-label">Uptime SLA</div>
+                        <div class="metric-description">Multi-AZ deployments achieve 4-9s availability (52 minutes downtime/year)</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">30+</div>
+                        <div class="metric-label">Global Regions</div>
+                        <div class="metric-description">Deploy worldwide in minutes for low-latency user experiences</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="glass-card">
+                <h2>Core AWS Services</h2>
+                <p>
+                    CORTEX's cloud knowledge focuses on the most critical AWS services for building production applications:
+                </p>
+
+                <div class="knowledge-areas">
+                    <div class="knowledge-area-card">
+                        <div class="area-icon">💻</div>
+                        <h3>Compute Services</h3>
+                        <p class="area-description">
+                            <strong>EC2:</strong> Virtual servers with customizable CPU/memory—use for traditional applications, microservices, batch processing. Right-size instances (t3.medium vs. m5.large) to avoid overprovisioning.<br><br>
+                            <strong>Lambda:</strong> Serverless functions triggered by events—pay per execution, auto-scales infinitely, ideal for APIs, data processing, webhooks. No server management required.
+                        </p>
+                        <ul class="area-features">
+                            <li>EC2 instance types (t3, m5, c5, r5)</li>
+                            <li>Auto Scaling Groups (ASG)</li>
+                            <li>Lambda function optimization</li>
+                            <li>Spot instances (70% cost savings)</li>
+                        </ul>
+                    </div>
+
+                    <div class="knowledge-area-card">
+                        <div class="area-icon">🗄️</div>
+                        <h3>Storage & Databases</h3>
+                        <p class="area-description">
+                            <strong>S3:</strong> Object storage for static assets, backups, data lakes—99.999999999% durability, versioning, lifecycle policies to archive to Glacier for long-term storage.<br><br>
+                            <strong>RDS:</strong> Managed relational databases (MySQL, PostgreSQL)—automated backups, Multi-AZ for high availability, read replicas for scaling reads.<br><br>
+                            <strong>DynamoDB:</strong> NoSQL for high-traffic apps—single-digit millisecond latency, auto-scales, pay per request.
+                        </p>
+                        <ul class="area-features">
+                            <li>S3 storage classes (Standard, IA, Glacier)</li>
+                            <li>RDS Multi-AZ & read replicas</li>
+                            <li>DynamoDB partition key design</li>
+                            <li>Aurora Serverless for variable workloads</li>
+                        </ul>
+                    </div>
+
+                    <div class="knowledge-area-card">
+                        <div class="area-icon">🌐</div>
+                        <h3>Networking & Security</h3>
+                        <p class="area-description">
+                            <strong>VPC:</strong> Virtual Private Cloud for network isolation—public/private subnets, security groups, NACLs. Launch resources in private subnets, expose via ALB.<br><br>
+                            <strong>IAM:</strong> Identity & Access Management—least privilege policies, roles for EC2/Lambda, MFA for sensitive operations. Never use root account for daily tasks.<br><br>
+                            <strong>CloudFront:</strong> Content Delivery Network—cache static assets at edge locations worldwide, reduce latency from 500ms to 50ms.
+                        </p>
+                        <ul class="area-features">
+                            <li>VPC design (public/private subnets)</li>
+                            <li>IAM policies & roles</li>
+                            <li>Security groups vs. NACLs</li>
+                            <li>CloudFront + S3 for static sites</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="glass-card">
+                <h2>AWS Architecture Patterns</h2>
+                <p>
+                    Common architectural patterns for building scalable, resilient applications on AWS:
+                </p>
+
+                <div class="architecture-patterns">
+                    <div class="pattern-card">
+                        <h3>🔹 Serverless Web App</h3>
+                        <p><strong>Stack:</strong> S3 (static site) + CloudFront (CDN) + API Gateway + Lambda + DynamoDB</p>
+                        <p><strong>Use Case:</strong> Modern single-page applications, RESTful APIs, event-driven backends</p>
+                        <p><strong>Benefits:</strong> Zero server management, infinite scale, pay-per-request pricing</p>
+                        <p><strong>Cost:</strong> $50-500/month for small-medium apps (vs. $2k+ for EC2 approach)</p>
+                    </div>
+
+                    <div class="pattern-card">
+                        <h3>🔹 Multi-Tier Web App</h3>
+                        <p><strong>Stack:</strong> Route 53 (DNS) + ALB (load balancer) + EC2 Auto Scaling + RDS Multi-AZ + ElastiCache (Redis)</p>
+                        <p><strong>Use Case:</strong> Traditional web apps, e-commerce, SaaS platforms with relational data</p>
+                        <p><strong>Benefits:</strong> High availability (99.99%), auto-scales with traffic, managed databases</p>
+                        <p><strong>Architecture:</strong> Public subnet (ALB) → Private subnet (EC2) → Private subnet (RDS)</p>
+                    </div>
+
+                    <div class="pattern-card">
+                        <h3>🔹 Event-Driven Architecture</h3>
+                        <p><strong>Stack:</strong> S3 (trigger) + SNS/SQS (messaging) + Lambda (processing) + DynamoDB/RDS (storage)</p>
+                        <p><strong>Use Case:</strong> Data pipelines, image processing, real-time analytics, microservices decoupling</p>
+                        <p><strong>Benefits:</strong> Loosely coupled, fault-tolerant, scales automatically, processes millions of events</p>
+                        <p><strong>Pattern:</strong> Producer → Queue (SQS) → Consumer (Lambda) → Store results</p>
+                    </div>
+
+                    <div class="pattern-card">
+                        <h3>🔹 Multi-Region Disaster Recovery</h3>
+                        <p><strong>Stack:</strong> Route 53 (failover routing) + Primary Region (us-east-1) + Secondary Region (eu-west-1) + S3 Cross-Region Replication</p>
+                        <p><strong>Use Case:</strong> Mission-critical applications requiring 99.999% uptime and compliance</p>
+                        <p><strong>Benefits:</strong> Automatic failover, RTO < 1 hour, RPO < 15 minutes with continuous replication</p>
+                        <p><strong>Trade-off:</strong> Higher cost (2x infrastructure) but ensures business continuity</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="glass-card">
+                <h2>Cost Optimization Strategies</h2>
+                <p>
+                    AWS cost optimization techniques that deliver 40-60% savings without sacrificing performance:
+                </p>
+
+                <div class="quick-wins-grid">
+                    <div class="quick-win-card">
+                        <div class="win-header">
+                            <span class="win-icon">💰</span>
+                            <h3>Reserved Instances</h3>
+                        </div>
+                        <p><strong>Savings:</strong> 40-60% vs. on-demand</p>
+                        <p><strong>Best For:</strong> Steady-state workloads</p>
+                        <p>Commit to 1-3 year term for predictable EC2/RDS workloads. Use Savings Plans for flexibility.</p>
+                    </div>
+
+                    <div class="quick-win-card">
+                        <div class="win-header">
+                            <span class="win-icon">🎯</span>
+                            <h3>Spot Instances</h3>
+                        </div>
+                        <p><strong>Savings:</strong> 70-90% vs. on-demand</p>
+                        <p><strong>Best For:</strong> Fault-tolerant workloads</p>
+                        <p>Use spare AWS capacity for batch jobs, CI/CD runners, data processing. Handle interruptions gracefully.</p>
+                    </div>
+
+                    <div class="quick-win-card">
+                        <div class="win-header">
+                            <span class="win-icon">📏</span>
+                            <h3>Right-Sizing</h3>
+                        </div>
+                        <p><strong>Savings:</strong> 20-40% typical reduction</p>
+                        <p><strong>Best For:</strong> Overprovisioned resources</p>
+                        <p>Monitor CloudWatch metrics—downgrade t3.large to t3.medium if CPU < 20%. Use AWS Compute Optimizer.</p>
+                    </div>
+
+                    <div class="quick-win-card">
+                        <div class="win-header">
+                            <span class="win-icon">📦</span>
+                            <h3>S3 Lifecycle Policies</h3>
+                        </div>
+                        <p><strong>Savings:</strong> 80% storage costs</p>
+                        <p><strong>Best For:</strong> Infrequently accessed data</p>
+                        <p>Auto-transition objects: Standard → IA (30 days) → Glacier (90 days). Delete logs after 1 year.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Tab 2: Knowledge Files -->
+        <div class="tab-content" id="files-tab" role="tabpanel">
+            <section class="glass-card">
+                <h2>📚 Cloud & AWS Knowledge Files</h2>
+                <p>
+                    CORTEX's AWS knowledge is organized into comprehensive files covering the Well-Architected Framework pillars, core services, and production deployment patterns.
+                </p>
+
+                <!-- Accordion 1: AWS Best Practices -->
+                <div class="accordion">
+                    <div class="accordion-item">
+                        <button class="accordion-header">
+                            <span class="accordion-icon">☁️</span>
+                            <span class="accordion-title">AWS Best Practices (aws-best-practices.yaml)</span>
+                            <span class="accordion-toggle">+</span>
+                        </button>
+                        <div class="accordion-body">
+                            <h3>File Overview</h3>
+                            <div class="file-meta">
+                                <span><strong>Path:</strong> cortex-brain/knowledge/cloud/aws-best-practices.yaml</span>
+                                <span><strong>Size:</strong> 367 lines</span>
+                                <span><strong>Version:</strong> 1.0</span>
+                                <span><strong>Source:</strong> AWS Well-Architected Framework</span>
+                            </div>
+
+                            <h3>What's Inside</h3>
+                            <ul class="feature-list">
+                                <li><strong>5 Well-Architected Pillars:</strong> Operational Excellence, Security, Reliability, Performance Efficiency, Cost Optimization</li>
+                                <li><strong>EC2 Best Practices:</strong> Instance sizing, Auto Scaling Groups, reserved/spot instances, EBS optimization</li>
+                                <li><strong>S3 Best Practices:</strong> Storage classes, lifecycle policies, versioning, encryption, cross-region replication</li>
+                                <li><strong>Lambda Best Practices:</strong> Function sizing, cold start optimization, environment variables, VPC integration</li>
+                                <li><strong>RDS Best Practices:</strong> Multi-AZ deployments, read replicas, parameter groups, backup strategies</li>
+                                <li><strong>VPC Design:</strong> Public/private subnet architecture, security groups, NACLs, NAT gateways</li>
+                            </ul>
+
+                            <h3>AWS Well-Architected Pillars</h3>
+                            <div class="concept-grid">
+                                <div class="concept-card">
+                                    <h4>Operational Excellence</h4>
+                                    <p>Automate deployments with CloudFormation/Terraform, monitor with CloudWatch, implement CI/CD pipelines, practice incident response.</p>
+                                </div>
+                                <div class="concept-card">
+                                    <h4>Security</h4>
+                                    <p>IAM least privilege, encrypt data (KMS), enable CloudTrail logging, use security groups and NACLs, implement MFA.</p>
+                                </div>
+                                <div class="concept-card">
+                                    <h4>Reliability</h4>
+                                    <p>Multi-AZ deployments, auto-scaling, automated backups, disaster recovery planning, chaos engineering tests.</p>
+                                </div>
+                                <div class="concept-card">
+                                    <h4>Performance Efficiency</h4>
+                                    <p>Right-size instances, use ElastiCache (Redis), CloudFront CDN, DynamoDB for low latency, leverage AWS global infrastructure.</p>
+                                </div>
+                                <div class="concept-card">
+                                    <h4>Cost Optimization</h4>
+                                    <p>Reserved instances, spot instances, right-sizing, S3 lifecycle policies, Cost Explorer monitoring, tagging strategy.</p>
+                                </div>
+                            </div>
+
+                            <h3>Key AWS Services Covered</h3>
+                            <ul class="feature-list">
+                                <li><strong>Compute:</strong> EC2 (t3, m5, c5 families), Lambda (serverless), ECS/EKS (containers)</li>
+                                <li><strong>Storage:</strong> S3 (object), EBS (block), EFS (file), Glacier (archive)</li>
+                                <li><strong>Database:</strong> RDS (MySQL, PostgreSQL), DynamoDB (NoSQL), Aurora (MySQL-compatible), ElastiCache (Redis/Memcached)</li>
+                                <li><strong>Networking:</strong> VPC, Route 53 (DNS), CloudFront (CDN), Elastic Load Balancer (ALB, NLB)</li>
+                                <li><strong>Security:</strong> IAM, KMS (encryption), Secrets Manager, Security Hub, GuardDuty</li>
+                                <li><strong>Management:</strong> CloudWatch (monitoring), CloudTrail (auditing), CloudFormation (IaC), Systems Manager</li>
+                            </ul>
+
+                            <h3>Code Examples Included</h3>
+                            <ul class="feature-list">
+                                <li>EC2 Auto Scaling Group with CloudFormation</li>
+                                <li>Lambda function with S3 trigger (Python)</li>
+                                <li>VPC with public/private subnets (Terraform)</li>
+                                <li>RDS Multi-AZ deployment configuration</li>
+                                <li>S3 bucket with lifecycle policy and encryption</li>
+                                <li>IAM policy for least privilege access</li>
+                            </ul>
+
+                            <h3>Decision Trees</h3>
+                            <div class="decision-tree">
+                                <h4>Compute Service Selection</h4>
+                                <ul>
+                                    <li><strong>Event-driven, short tasks (&lt;15 min):</strong> Use Lambda (serverless, pay per execution)</li>
+                                    <li><strong>Long-running, stateful apps:</strong> Use EC2 or ECS (container orchestration)</li>
+                                    <li><strong>Batch processing, flexible timing:</strong> Use Spot Instances (70% cost savings)</li>
+                                    <li><strong>Microservices with Kubernetes:</strong> Use EKS (managed Kubernetes)</li>
+                                </ul>
+
+                                <h4>Database Selection</h4>
+                                <ul>
+                                    <li><strong>Relational data, ACID transactions:</strong> Use RDS (MySQL/PostgreSQL)</li>
+                                    <li><strong>NoSQL, high throughput, simple queries:</strong> Use DynamoDB</li>
+                                    <li><strong>Complex queries, joins, analytics:</strong> Use Aurora or Redshift (data warehouse)</li>
+                                    <li><strong>Caching layer:</strong> Use ElastiCache (Redis for data structures, Memcached for simple caching)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Tab 3: Learning Resources -->
+        <div class="tab-content" id="resources-tab" role="tabpanel">
+            <section class="glass-card">
+                <h2>🎓 Learn AWS & Cloud Computing</h2>
+                <p>
+                    Master AWS through these official certifications, courses, and hands-on labs that teach the Well-Architected Framework and production deployment patterns.
+                </p>
+
+                <h3>🎓 AWS Certifications</h3>
+                <div class="resource-grid">
+                    <div class="resource-card">
+                        <h4>AWS Solutions Architect Associate</h4>
+                        <p class="resource-author">Amazon Web Services</p>
+                        <p class="resource-description">Most popular AWS certification—covers EC2, S3, RDS, VPC, IAM, Lambda. Learn to design scalable, secure, cost-optimized architectures.</p>
+                        <span class="resource-badge">Certification</span>
+                    </div>
+
+                    <div class="resource-card">
+                        <h4>AWS Developer Associate</h4>
+                        <p class="resource-author">Amazon Web Services</p>
+                        <p class="resource-description">Focus on building applications—Lambda, API Gateway, DynamoDB, CI/CD with CodePipeline, monitoring with CloudWatch.</p>
+                        <span class="resource-badge">Certification</span>
+                    </div>
+
+                    <div class="resource-card">
+                        <h4>AWS SysOps Administrator</h4>
+                        <p class="resource-author">Amazon Web Services</p>
+                        <p class="resource-description">Operations focus—CloudFormation, Auto Scaling, CloudWatch alarms, backup/disaster recovery, cost optimization.</p>
+                        <span class="resource-badge">Certification</span>
+                    </div>
+                </div>
+
+                <h3>🎥 Video Courses</h3>
+                <div class="resource-grid">
+                    <div class="resource-card">
+                        <h4>AWS Solutions Architect Bootcamp</h4>
+                        <p class="resource-author">A Cloud Guru / Stephane Maarek</p>
+                        <p class="resource-description">Comprehensive AWS course with 30+ hours of video, hands-on labs, and practice exams. Covers all core services and architecture patterns.</p>
+                        <span class="resource-badge">Course</span>
+                    </div>
+
+                    <div class="resource-card">
+                        <h4>Serverless Framework Masterclass</h4>
+                        <p class="resource-author">Udemy</p>
+                        <p class="resource-description">Build production serverless applications with Lambda, API Gateway, DynamoDB, Step Functions. Includes CI/CD and monitoring.</p>
+                        <span class="resource-badge">Serverless</span>
+                    </div>
+
+                    <div class="resource-card">
+                        <h4>AWS Well-Architected Framework</h4>
+                        <p class="resource-author">AWS Training</p>
+                        <p class="resource-description">Official training on the 5 pillars—Operational Excellence, Security, Reliability, Performance Efficiency, Cost Optimization.</p>
+                        <span class="resource-badge">Best Practices</span>
+                    </div>
+                </div>
+
+                <h3>🔧 Tools & Services</h3>
+                <div class="tool-grid">
+                    <div class="tool-card">
+                        <h4>AWS Management Console</h4>
+                        <p>Web-based GUI for managing all AWS services. Good for learning and prototyping, but automate with IaC for production.</p>
+                        <a href="https://console.aws.amazon.com/" class="tool-link">console.aws.amazon.com →</a>
+                    </div>
+
+                    <div class="tool-card">
+                        <h4>AWS CLI</h4>
+                        <p>Command-line interface for scripting and automation. Essential for DevOps workflows and Infrastructure as Code.</p>
+                        <a href="https://aws.amazon.com/cli/" class="tool-link">aws.amazon.com/cli →</a>
+                    </div>
+
+                    <div class="tool-card">
+                        <h4>AWS CloudFormation</h4>
+                        <p>Infrastructure as Code—define AWS resources in YAML/JSON templates. Version control your infrastructure, deploy consistently.</p>
+                        <a href="https://aws.amazon.com/cloudformation/" class="tool-link">CloudFormation →</a>
+                    </div>
+
+                    <div class="tool-card">
+                        <h4>AWS Cost Explorer</h4>
+                        <p>Visualize and analyze AWS spending. Identify cost optimization opportunities, forecast future costs, track reserved instance utilization.</p>
+                        <a href="https://aws.amazon.com/aws-cost-management/aws-cost-explorer/" class="tool-link">Cost Explorer →</a>
+                    </div>
+                </div>
+
+                <h3>📖 Essential Resources</h3>
+                <ul class="resource-list">
+                    <li><a href="https://aws.amazon.com/architecture/well-architected/" target="_blank">AWS Well-Architected Framework</a> - Official best practices documentation</li>
+                    <li><a href="https://aws.amazon.com/whitepapers/" target="_blank">AWS Whitepapers</a> - Deep dives into architecture patterns and security</li>
+                    <li><a href="https://aws.amazon.com/getting-started/" target="_blank">AWS Getting Started</a> - Hands-on tutorials and quick starts</li>
+                    <li><a href="https://aws.amazon.com/blogs/architecture/" target="_blank">AWS Architecture Blog</a> - Real-world architecture case studies</li>
+                    <li><a href="https://awspolicygen.s3.amazonaws.com/policygen.html" target="_blank">IAM Policy Generator</a> - Tool for creating least-privilege IAM policies</li>
+                </ul>
+            </section>
+        </div>
+
+        <!-- Tab 4: CORTEX Usage -->
+        <div class="tab-content" id="usage-tab" role="tabpanel">
+            <section class="glass-card">
+                <h2>🔧 How CORTEX Uses AWS Knowledge</h2>
+                <p>
+                    CORTEX leverages AWS best practices to guide cloud architecture decisions, generate Infrastructure as Code, optimize costs, and ensure Well-Architected Framework compliance across all five pillars.
+                </p>
+
+                <h3>AI-Powered Cloud Architecture</h3>
+                <div class="usage-grid">
+                    <div class="usage-card">
+                        <div class="usage-icon">🏗️</div>
+                        <h4>Architecture Design</h4>
+                        <p>CORTEX analyzes requirements and suggests appropriate AWS services based on the Well-Architected Framework—serverless for event-driven workloads, EC2 Auto Scaling for traditional apps, DynamoDB for high-throughput NoSQL.</p>
+                        <div class="usage-example">
+                            <strong>Example:</strong> "Need RESTful API with 10k requests/sec" → Suggests Lambda + API Gateway + DynamoDB (serverless, auto-scales, pay-per-request)
+                        </div>
+                    </div>
+
+                    <div class="usage-card">
+                        <div class="usage-icon">💰</div>
+                        <h4>Cost Optimization</h4>
+                        <p>Identifies overprovisioned resources, recommends right-sizing (t3.large → t3.medium), suggests reserved instances for steady-state workloads, and spot instances for fault-tolerant batch jobs.</p>
+                        <div class="usage-example">
+                            <strong>Example:</strong> Detects EC2 with 10% CPU utilization → Recommends downgrade + reserved instance purchase (60% savings)
+                        </div>
+                    </div>
+
+                    <div class="usage-card">
+                        <div class="usage-icon">🔒</div>
+                        <h4>Security Hardening</h4>
+                        <p>Reviews IAM policies for least privilege violations, ensures encryption at rest (S3, RDS, EBS), validates security group rules, and recommends CloudTrail for audit logging.</p>
+                        <div class="usage-example">
+                            <strong>Example:</strong> Flags overly permissive IAM policy with "*" actions → Generates least-privilege policy with specific permissions
+                        </div>
+                    </div>
+
+                    <div class="usage-card">
+                        <div class="usage-icon">📊</div>
+                        <h4>IaC Generation</h4>
+                        <p>Generates CloudFormation/Terraform code following AWS best practices—Multi-AZ RDS, Auto Scaling Groups with health checks, VPC with proper subnet isolation.</p>
+                        <div class="usage-example">
+                            <strong>Example:</strong> "Create production VPC" → Generates Terraform with public/private subnets, NAT gateway, security groups
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Well-Architected Review</h3>
+                <p>
+                    CORTEX performs automated Well-Architected Framework reviews across all 5 pillars:
+                </p>
+
+                <div class="integration-flow">
+                    <div class="flow-step">
+                        <div class="flow-icon">⚙️</div>
+                        <h4>Operational Excellence</h4>
+                        <p>Checks: Is infrastructure defined as code? Are deployments automated? Is monitoring/alerting configured?</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step">
+                        <div class="flow-icon">🔐</div>
+                        <h4>Security</h4>
+                        <p>Checks: Least privilege IAM? Encryption enabled? CloudTrail logging? Security groups properly configured?</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step">
+                        <div class="flow-icon">🛡️</div>
+                        <h4>Reliability</h4>
+                        <p>Checks: Multi-AZ deployed? Auto Scaling configured? Backup strategy in place? Disaster recovery tested?</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step">
+                        <div class="flow-icon">⚡</div>
+                        <h4>Performance & Cost</h4>
+                        <p>Checks: Right-sized instances? Caching enabled? Reserved instances purchased? Lifecycle policies set?</p>
+                    </div>
+                </div>
+
+                <h3>Real-World Cloud Transformations</h3>
+                <div class="impact-examples">
+                    <div class="impact-card">
+                        <h4>🚀 Startup MVP to Scale</h4>
+                        <p><strong>Challenge:</strong> Build SaaS platform that scales from 100 to 100k users without infrastructure changes</p>
+                        <p><strong>CORTEX Solution:</strong> Serverless architecture (Lambda + API Gateway + DynamoDB), CloudFront CDN, auto-scales infinitely</p>
+                        <p><strong>Result:</strong> Deployed in 2 weeks, handled 10x traffic spike during Product Hunt launch, $200/month cost at 1k users, $2k at 50k users (linear scaling)</p>
+                    </div>
+
+                    <div class="impact-card">
+                        <h4>💰 On-Prem to Cloud Migration</h4>
+                        <p><strong>Challenge:</strong> Migrate legacy data center ($50k/month) to AWS while maintaining 99.9% uptime</p>
+                        <p><strong>CORTEX Solution:</strong> EC2 Auto Scaling, RDS Multi-AZ, S3 for backups, reserved instances for steady-state, spot for batch jobs</p>
+                        <p><strong>Result:</strong> $50k → $18k monthly cost (64% reduction), improved uptime to 99.95%, eliminated hardware refresh cycles</p>
+                    </div>
+
+                    <div class="impact-card">
+                        <h4>🌍 Global Expansion</h4>
+                        <p><strong>Challenge:</strong> Expand e-commerce platform to Europe and Asia with &lt;100ms latency</p>
+                        <p><strong>CORTEX Solution:</strong> Multi-region deployment (us-east-1, eu-west-1, ap-southeast-1), Route 53 latency-based routing, CloudFront for static assets</p>
+                        <p><strong>Result:</strong> European users: 800ms → 60ms latency, Asian users: 1200ms → 80ms, 25% increase in conversion rate from improved page load times</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- JavaScript for tabs and accordions -->
+    <script src="../assets/js/category-page.js"></script>
+</body>
+</html>
