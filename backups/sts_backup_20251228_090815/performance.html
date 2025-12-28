@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX Performance Showcase - Before & After Code Transformations">
+    <meta name="author" content="Asif Hussain">
+    <title>Performance Showcase - CORTEX STS</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../assets/css/main.css?v=4.0.0">
+</head>
+<body class="sts-showcase">
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb-nav">
+        <div class="container">
+            <a href="../index.html">Home</a>
+            <span class="separator">→</span>
+            <a href="index.html">Sharpen The Saw</a>
+            <span class="separator">→</span>
+            <span class="current">Performance</span>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="logo-container">
+            <a href="../index.html">
+                <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo" width="200" height="200">
+            </a>
+        </div>
+        <h1 class="hero-title">⚡ Performance Showcase</h1>
+        <p class="hero-tagline">8 Performance Anti-Patterns → Optimized Code</p>
+    </section>
+
+    <!-- Educational Section -->
+    <section class="section">
+        <div class="container">
+            <div class="glass-card concept-card">
+                <h2>🎓 Performance Concepts</h2>
+                
+                <div class="principle-explainer">
+                    <div class="principle-letter">N</div>
+                    <div class="principle-content">
+                        <h4>N+1 Query Problem</h4>
+                        <p><em>"One query for the list, then one query per item = disaster."</em></p>
+                        <p class="principle-analogy">🛒 <strong>Analogy:</strong> Going to the store 100 times for 100 items instead of one trip with a list.</p>
+                    </div>
+                </div>
+                
+                <div class="principle-explainer">
+                    <div class="principle-letter">O</div>
+                    <div class="principle-content">
+                        <h4>Big O Notation</h4>
+                        <p><em>"How does performance scale as data grows?"</em></p>
+                        <p class="principle-analogy">📈 <strong>O(n²):</strong> 10 items = 100 operations, 100 items = 10,000 operations. Ouch!</p>
+                    </div>
+                </div>
+                
+                <div class="principle-explainer">
+                    <div class="principle-letter">C</div>
+                    <div class="principle-content">
+                        <h4>Caching</h4>
+                        <p><em>"Don't compute or fetch the same thing twice."</em></p>
+                        <p class="principle-analogy">📝 <strong>Analogy:</strong> Writing down a phone number instead of looking it up every time.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview Stats -->
+    <section class="section section-alt">
+        <div class="container">
+            <div class="metrics-grid-4">
+                <div class="metric-card metric-before">
+                    <span class="metric-value">8</span>
+                    <span class="metric-label">Performance Issues</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-value">12s</span>
+                    <span class="metric-label">Avg Response Time</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-value">500+</span>
+                    <span class="metric-label">DB Queries/Request</span>
+                </div>
+                <div class="metric-card metric-after">
+                    <span class="metric-value">100%</span>
+                    <span class="metric-label">Optimized</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PERF-01: N+1 Query Problem - C# EF Core -->
+    <section class="section" id="perf-01">
+        <div class="container">
+            <div class="flaw-header">
+                <span class="flaw-id">PERF-01</span>
+                <span class="severity-badge severity-critical">CRITICAL</span>
+                <span class="tech-badge tech-csharp">C#</span>
+            </div>
+            <h2>N+1 Query Problem: 101 Queries for 100 Orders</h2>
+            <p class="flaw-description">
+                <strong>N+1 Queries</strong> — Fetching a list of orders, then lazily loading customer for each one. 
+                100 orders = 1 query for orders + 100 queries for customers = 101 total queries!
+            </p>
+            
+            <div class="code-comparison">
+                <div class="code-before">
+                    <div class="code-header">
+                        <span class="code-label">❌ BEFORE</span>
+                        <span class="code-file">OrderService.cs (N+1)</span>
+                    </div>
+<pre><code class="language-csharp">public async Task&lt;List&lt;OrderDto&gt;&gt; GetRecentOrdersAsync()
+{
+    // Query 1: Get all orders
+    var orders = await _context.Orders
+        .Where(o =&gt; o.Date &gt; DateTime.UtcNow.AddDays(-30))
+        .ToListAsync();
+    
+    var result = new List&lt;OrderDto&gt;();
+    foreach (var order in orders)
+    {
+        // Query 2, 3, 4... N+1: Load customer for EACH order!
+        var customer = await _context.Customers
+            .FindAsync(order.CustomerId);
+        
+        // Query N+2, N+3... 2N+1: Load items for EACH order!
+        var items = await _context.OrderItems
+            .Where(i =&gt; i.OrderId == order.Id)
+            .ToListAsync();
+        
+        result.Add(MapToDto(order, customer, items));
+    }
+    return result;
+    // 100 orders = 201 queries! 😱
+}</code></pre>
+                </div>
+                
+                <div class="code-after">
+                    <div class="code-header">
+                        <span class="code-label">✅ AFTER</span>
+                        <span class="code-file">Eager Loading</span>
+                    </div>
+<pre><code class="language-csharp">public async Task&lt;List&lt;OrderDto&gt;&gt; GetRecentOrdersAsync()
+{
+    // Single query with JOINs via Include
+    var orders = await _context.Orders
+        .Include(o =&gt; o.Customer)          // JOIN customers
+        .Include(o =&gt; o.Items)             // JOIN order_items
+            .ThenInclude(i =&gt; i.Product)   // JOIN products
+        .Where(o =&gt; o.Date &gt; DateTime.UtcNow.AddDays(-30))
+        .AsNoTracking()                     // Read-only optimization
+        .ToListAsync();
+    
+    return orders.Select(o =&gt; new OrderDto
+    {
+        Id = o.Id,
+        CustomerName = o.Customer.Name,
+        Items = o.Items.Select(i =&gt; new OrderItemDto
+        {
+            ProductName = i.Product.Name,
+            Quantity = i.Quantity
+        }).ToList()
+    }).ToList();
+    // 100 orders = 1 query! ✓
+}</code></pre>
+                </div>
+            </div>
+            
+            <div class="capability-used">
+                <strong>CORTEX Capability:</strong> System Refinement → Query optimization
+            </div>
+        </div>
+    </section>
+
+    <!-- PERF-02: Memory Leak in Angular -->
+    <section class="section section-alt" id="perf-02">
+        <div class="container">
+            <div class="flaw-header">
+                <span class="flaw-id">PERF-02</span>
+                <span class="severity-badge severity-high">HIGH</span>
+                <span class="tech-badge tech-angular">Angular</span>
+            </div>
+            <h2>Observable Memory Leak: Subscriptions Never Unsubscribed</h2>
+            <p class="flaw-description">
+                <strong>Memory Leak</strong> — Subscribing to Observables without cleanup causes subscriptions to pile up 
+                as components are created/destroyed. Eventually, the browser runs out of memory.
+            </p>
+            
+            <div class="code-comparison">
+                <div class="code-before">
+                    <div class="code-header">
+                        <span class="code-label">❌ BEFORE</span>
+                        <span class="code-file">dashboard.component.ts</span>
+                    </div>
+<pre><code class="language-typescript">@Component({ /* ... */ })
+export class DashboardComponent implements OnInit {
+  data: any[];
+  
+  ngOnInit() {
+    // LEAK: Never unsubscribed!
+    this.dataService.getData().subscribe(data =&gt; {
+      this.data = data;
+    });
+    
+    // LEAK: Another orphaned subscription
+    interval(1000).subscribe(() =&gt; {
+      this.updateTimestamp();
+    });
+    
+    // LEAK: WebSocket subscription
+    this.socketService.messages$.subscribe(msg =&gt; {
+      this.handleMessage(msg);
+    });
+    
+    // Component destroyed? Subscriptions keep running! 💀
+  }
+}</code></pre>
+                </div>
+                
+                <div class="code-after">
+                    <div class="code-header">
+                        <span class="code-label">✅ AFTER</span>
+                        <span class="code-file">Proper Cleanup</span>
+                    </div>
+<pre><code class="language-typescript">@Component({ /* ... */ })
+export class DashboardComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject&lt;void&gt;();
+  
+  ngOnInit() {
+    // Option 1: takeUntil pattern
+    this.dataService.getData()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(data =&gt; this.data = data);
+    
+    // Option 2: async pipe in template (auto-unsubscribes)
+    // &lt;div *ngFor="let item of data$ | async"&gt;
+    
+    interval(1000)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() =&gt; this.updateTimestamp());
+    
+    this.socketService.messages$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(msg =&gt; this.handleMessage(msg));
+  }
+  
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete(); // Clean up all subscriptions!
+  }
+}</code></pre>
+                </div>
+            </div>
+            
+            <div class="capability-used">
+                <strong>CORTEX Capability:</strong> Maintenance → Resource leak detection
+            </div>
+        </div>
+    </section>
+
+    <!-- PERF-03: Synchronous File I/O - C# -->
+    <section class="section" id="perf-03">
+        <div class="container">
+            <div class="flaw-header">
+                <span class="flaw-id">PERF-03</span>
+                <span class="severity-badge severity-high">HIGH</span>
+                <span class="tech-badge tech-csharp">C#</span>
+            </div>
+            <h2>Blocking I/O: Thread Pool Starvation</h2>
+            <p class="flaw-description">
+                <strong>Sync-over-Async</strong> — Using synchronous file/network I/O blocks threads. 
+                Under load, all threads get blocked waiting for I/O, and the app becomes unresponsive.
+            </p>
+            
+            <div class="code-comparison">
+                <div class="code-before">
+                    <div class="code-header">
+                        <span class="code-label">❌ BEFORE</span>
+                        <span class="code-file">FileService.cs</span>
+                    </div>
+<pre><code class="language-csharp">public class FileService
+{
+    public string ReadConfig(string path)
+    {
+        // BLOCKING: Thread waits for disk I/O
+        return File.ReadAllText(path);
+    }
+    
+    public void ProcessFiles(string[] paths)
+    {
+        foreach (var path in paths)
+        {
+            // Each read blocks the thread
+            var content = File.ReadAllText(path);
+            var processed = ProcessContent(content);
+            // Blocking write
+            File.WriteAllText(path + ".out", processed);
+        }
+        // 100 files = thread blocked for entire duration
+    }
+    
+    public byte[] DownloadFile(string url)
+    {
+        using var client = new WebClient();
+        // BLOCKING: Thread waits for network
+        return client.DownloadData(url);
+    }
+}</code></pre>
+                </div>
+                
+                <div class="code-after">
+                    <div class="code-header">
+                        <span class="code-label">✅ AFTER</span>
+                        <span class="code-file">Async I/O</span>
+                    </div>
+<pre><code class="language-csharp">public class FileService
+{
+    public async Task&lt;string&gt; ReadConfigAsync(string path)
+    {
+        // NON-BLOCKING: Thread released during I/O
+        return await File.ReadAllTextAsync(path);
+    }
+    
+    public async Task ProcessFilesAsync(string[] paths)
+    {
+        // Process multiple files concurrently!
+        var tasks = paths.Select(async path =&gt;
+        {
+            var content = await File.ReadAllTextAsync(path);
+            var processed = ProcessContent(content);
+            await File.WriteAllTextAsync(path + ".out", processed);
+        });
+        
+        await Task.WhenAll(tasks);
+        // 100 files processed in parallel, threads not blocked
+    }
+    
+    public async Task&lt;byte[]&gt; DownloadFileAsync(string url)
+    {
+        using var client = new HttpClient();
+        return await client.GetByteArrayAsync(url);
+    }
+}</code></pre>
+                </div>
+            </div>
+            
+            <div class="capability-used">
+                <strong>CORTEX Capability:</strong> System Refinement → Async conversion
+            </div>
+        </div>
+    </section>
+
+    <!-- PERF-04: Inefficient Change Detection - Angular -->
+    <section class="section section-alt" id="perf-04">
+        <div class="container">
+            <div class="flaw-header">
+                <span class="flaw-id">PERF-04</span>
+                <span class="severity-badge severity-medium">MEDIUM</span>
+                <span class="tech-badge tech-angular">Angular</span>
+            </div>
+            <h2>Change Detection Overload: Re-rendering Everything</h2>
+            <p class="flaw-description">
+                <strong>Default Change Detection</strong> — Angular's default strategy checks every component on every event. 
+                With large lists or complex trees, this causes visible lag and jank.
+            </p>
+            
+            <div class="code-comparison">
+                <div class="code-before">
+                    <div class="code-header">
+                        <span class="code-label">❌ BEFORE</span>
+                        <span class="code-file">product-list.component.ts</span>
+                    </div>
+<pre><code class="language-typescript">@Component({
+  selector: 'app-product-list',
+  template: `
+    &lt;div *ngFor="let product of products"&gt;
+      &lt;app-product-card [product]="product"&gt;&lt;/app-product-card&gt;
+    &lt;/div&gt;
+  `
+  // Default change detection - checks ALL 1000 products
+  // on EVERY click, scroll, or timer tick!
+})
+export class ProductListComponent {
+  products: Product[] = [];  // 1000+ items
+  
+  // Expensive computation in template
+  getDiscountedPrice(product: Product): number {
+    // Called 1000+ times per change detection cycle!
+    return this.calculateDiscount(product);
+  }
+}</code></pre>
+                </div>
+                
+                <div class="code-after">
+                    <div class="code-header">
+                        <span class="code-label">✅ AFTER</span>
+                        <span class="code-file">OnPush + TrackBy</span>
+                    </div>
+<pre><code class="language-typescript">@Component({
+  selector: 'app-product-list',
+  template: `
+    &lt;cdk-virtual-scroll-viewport itemSize="50"&gt;
+      &lt;app-product-card 
+        *cdkVirtualFor="let product of products; trackBy: trackById"
+        [product]="product"&gt;
+      &lt;/app-product-card&gt;
+    &lt;/cdk-virtual-scroll-viewport&gt;
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class ProductListComponent {
+  products$: Observable&lt;Product[]&gt;;
+  
+  // trackBy prevents re-creating DOM elements
+  trackById(index: number, product: Product): number {
+    return product.id;
+  }
+}
+
+// Product card also uses OnPush
+@Component({
+  selector: 'app-product-card',
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class ProductCardComponent {
+  @Input() product: Product;
+  // Only re-renders when product reference changes
+}</code></pre>
+                </div>
+            </div>
+            
+            <div class="capability-used">
+                <strong>CORTEX Capability:</strong> Architectural Review → Rendering optimization
+            </div>
+        </div>
+    </section>
+
+    <!-- Summary -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title text-center">Performance Transformation Summary</h2>
+            
+            <div class="glass-card">
+                <h3>Key Optimizations Applied</h3>
+                <div class="tech-summary">
+                    <div class="tech-group">
+                        <h4><span class="tech-badge tech-csharp">C#</span> EF Core</h4>
+                        <ul>
+                            <li>Eager loading with Include()</li>
+                            <li>AsNoTracking for read-only</li>
+                            <li>Async I/O throughout</li>
+                            <li>IMemoryCache for hot data</li>
+                        </ul>
+                    </div>
+                    <div class="tech-group">
+                        <h4><span class="tech-badge tech-angular">Angular</span> Frontend</h4>
+                        <ul>
+                            <li>OnPush change detection</li>
+                            <li>trackBy for *ngFor</li>
+                            <li>takeUntil for subscriptions</li>
+                            <li>Virtual scrolling for lists</li>
+                        </ul>
+                    </div>
+                    <div class="tech-group">
+                        <h4><span class="tech-badge tech-typescript">TypeScript</span> General</h4>
+                        <ul>
+                            <li>Memoization for pure functions</li>
+                            <li>Debouncing user input</li>
+                            <li>Lazy loading modules</li>
+                            <li>Web Workers for CPU tasks</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Navigation -->
+    <section class="section section-alt">
+        <div class="container">
+            <h2 class="section-title text-center">Explore More Categories</h2>
+            <div class="nav-buttons">
+                <a href="code-quality.html" class="btn btn-secondary">← Code Quality</a>
+                <a href="index.html" class="btn btn-secondary">STS Home</a>
+                <a href="testing.html" class="btn btn-primary">Testing →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Back to Home -->
+    <div class="back-link-container">
+        <a href="../index.html" class="back-link">← Back to Home</a>
+    </div>
+</body>
+</html>

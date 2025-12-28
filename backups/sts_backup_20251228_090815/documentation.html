@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation Gaps | STS Showcase | CORTEX 4.0</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+</head>
+<body class="sts-showcase">
+    <header class="site-header">
+        <nav class="nav-container">
+            <a href="../index.html" class="nav-brand">
+                <i class="fas fa-brain"></i> CORTEX 4.0
+            </a>
+            <div class="nav-links">
+                <a href="index.html"><i class="fas fa-bullseye"></i> STS Hub</a>
+                <a href="../documentation.html"><i class="fas fa-book"></i> Documentation</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="sts-main">
+        <!-- Hero Section -->
+        <section class="sts-hero">
+            <div class="hero-badge">
+                <i class="fas fa-file-alt"></i> DOCUMENTATION ISSUES
+            </div>
+            <h1>Documentation<br><span class="accent-text">Transformed</span></h1>
+            <p class="hero-subtitle">Watch CORTEX transform undocumented code into professional, self-documenting systems</p>
+            <div class="sts-metrics">
+                <div class="metric-card">
+                    <div class="metric-value">5</div>
+                    <div class="metric-label">Issues Found</div>
+                </div>
+                <div class="metric-card accent">
+                    <div class="metric-value">5</div>
+                    <div class="metric-label">Auto-Fixed</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">100%</div>
+                    <div class="metric-label">Coverage</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Educational Section -->
+        <section class="sts-education">
+            <div class="education-card">
+                <h3><i class="fas fa-graduation-cap"></i> Why Documentation Matters</h3>
+                <div class="education-grid">
+                    <div class="education-item">
+                        <h4>Onboarding</h4>
+                        <p>New developers spend 75% of their first month reading code. Good documentation cuts onboarding time in half.</p>
+                    </div>
+                    <div class="education-item">
+                        <h4>Maintenance</h4>
+                        <p>Code is read 10x more often than it's written. Future-you (or teammates) will thank present-you for clear docs.</p>
+                    </div>
+                    <div class="education-item">
+                        <h4>IntelliSense</h4>
+                        <p>TSDoc and XML comments power IDE tooltips—making every function self-explanatory at the point of use.</p>
+                    </div>
+                    <div class="education-item">
+                        <h4>API Contracts</h4>
+                        <p>Documentation defines the contract between modules. Clear expectations = fewer integration bugs.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DOC-01: Missing Type Documentation -->
+        <section class="sts-issue-card">
+            <div class="issue-header">
+                <div class="issue-badge critical">DOC-01</div>
+                <div class="issue-title">
+                    <h2>Missing Type Documentation</h2>
+                    <p>Interfaces and types without JSDoc/TSDoc descriptions</p>
+                </div>
+                <span class="tech-badge tech-typescript">TypeScript</span>
+            </div>
+
+            <div class="transform-panels">
+                <div class="panel before-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-times-circle"></i> Before CORTEX
+                    </div>
+                    <pre><code class="language-typescript">// No documentation - what do these fields mean?
+interface User {
+  id: string;
+  fn: string;
+  ln: string;
+  dob: Date;
+  lvl: number;
+  prefs: Record&lt;string, unknown&gt;;
+  meta: object;
+}
+
+interface ApiResponse {
+  d: unknown;
+  s: number;
+  m?: string;
+  ts: number;
+}
+
+type Status = 'a' | 'i' | 'p' | 's';
+
+// What parameters? What does it return?
+function proc(u: User, s: Status): ApiResponse {
+  // 200 lines of complex logic...
+  return { d: null, s: 200, ts: Date.now() };
+}</code></pre>
+                </div>
+
+                <div class="transform-arrow">
+                    <i class="fas fa-magic"></i>
+                    <span>CORTEX</span>
+                </div>
+
+                <div class="panel after-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-check-circle"></i> After CORTEX
+                    </div>
+                    <pre><code class="language-typescript">/**
+ * Represents a user in the system.
+ * @remarks Users are created during registration and updated via profile settings.
+ */
+interface User {
+  /** Unique identifier (UUID v4) */
+  id: string;
+  /** User's first name (1-50 characters) */
+  firstName: string;
+  /** User's last name (1-50 characters) */
+  lastName: string;
+  /** Date of birth (must be 13+ years old) */
+  dateOfBirth: Date;
+  /** Access level: 1=basic, 2=premium, 3=admin */
+  accessLevel: number;
+  /** User preferences keyed by setting name */
+  preferences: Record&lt;string, PreferenceValue&gt;;
+  /** System metadata (read-only) */
+  metadata: UserMetadata;
+}
+
+/**
+ * Standard API response wrapper.
+ * @typeParam T - The type of data payload
+ */
+interface ApiResponse&lt;T&gt; {
+  /** Response payload */
+  data: T;
+  /** HTTP status code */
+  statusCode: number;
+  /** Human-readable message (present on errors) */
+  message?: string;
+  /** Unix timestamp of response generation */
+  timestamp: number;
+}
+
+/**
+ * User account status.
+ * - `active`: Normal operational state
+ * - `inactive`: Manually disabled by admin
+ * - `pending`: Awaiting email verification
+ * - `suspended`: Temporarily blocked (policy violation)
+ */
+type UserStatus = 'active' | 'inactive' | 'pending' | 'suspended';
+
+/**
+ * Process a user status change request.
+ * @param user - The user to update
+ * @param newStatus - Target status
+ * @returns API response with updated user data
+ * @throws {ValidationError} If status transition is invalid
+ * @example
+ * ```typescript
+ * const response = await processStatusChange(user, 'active');
+ * console.log(response.data.status); // 'active'
+ * ```
+ */
+function processStatusChange(
+  user: User,
+  newStatus: UserStatus
+): ApiResponse&lt;User&gt; {
+  // Implementation with clear status transition logic
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="fix-explanation">
+                <h4><i class="fas fa-lightbulb"></i> What CORTEX Fixed</h4>
+                <ul>
+                    <li><strong>Cryptic names expanded:</strong> <code>fn</code> → <code>firstName</code>, <code>lvl</code> → <code>accessLevel</code></li>
+                    <li><strong>TSDoc comments added:</strong> Every interface, property, and function documented</li>
+                    <li><strong>Generics for type safety:</strong> <code>ApiResponse&lt;T&gt;</code> enables typed responses</li>
+                    <li><strong>Examples included:</strong> Usage patterns right in the documentation</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- DOC-02: Undocumented C# Classes -->
+        <section class="sts-issue-card">
+            <div class="issue-header">
+                <div class="issue-badge high">DOC-02</div>
+                <div class="issue-title">
+                    <h2>Undocumented C# Classes</h2>
+                    <p>Missing XML documentation comments for public APIs</p>
+                </div>
+                <span class="tech-badge tech-csharp">C#</span>
+            </div>
+
+            <div class="transform-panels">
+                <div class="panel before-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-times-circle"></i> Before CORTEX
+                    </div>
+                    <pre><code class="language-csharp">public class OrderService
+{
+    private readonly IOrderRepository _repo;
+    private readonly IPaymentGateway _payment;
+    private readonly IEmailService _email;
+
+    public OrderService(IOrderRepository repo, 
+        IPaymentGateway payment, IEmailService email)
+    {
+        _repo = repo;
+        _payment = payment;
+        _email = email;
+    }
+
+    public async Task&lt;Order&gt; CreateOrder(OrderRequest req)
+    {
+        // What validations happen?
+        // What exceptions can be thrown?
+        // What's the expected flow?
+        var order = new Order(req);
+        await _payment.Charge(order.Total);
+        await _repo.Save(order);
+        await _email.SendConfirmation(order);
+        return order;
+    }
+
+    public Order GetOrder(Guid id) => _repo.FindById(id);
+
+    public void Cancel(Guid id, string reason)
+    {
+        var order = _repo.FindById(id);
+        order.Status = OrderStatus.Cancelled;
+        _repo.Save(order);
+    }
+}</code></pre>
+                </div>
+
+                <div class="transform-arrow">
+                    <i class="fas fa-magic"></i>
+                    <span>CORTEX</span>
+                </div>
+
+                <div class="panel after-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-check-circle"></i> After CORTEX
+                    </div>
+                    <pre><code class="language-csharp">/// &lt;summary&gt;
+/// Handles order lifecycle operations including creation, 
+/// retrieval, and cancellation.
+/// &lt;/summary&gt;
+/// &lt;remarks&gt;
+/// &lt;para&gt;
+/// This service coordinates between payment processing, 
+/// persistence, and notification systems.
+/// &lt;/para&gt;
+/// &lt;para&gt;
+/// All operations are transactional and will rollback 
+/// on failure.
+/// &lt;/para&gt;
+/// &lt;/remarks&gt;
+/// &lt;example&gt;
+/// &lt;code&gt;
+/// var orderService = serviceProvider
+///     .GetRequiredService&lt;IOrderService&gt;();
+/// var order = await orderService.CreateOrder(request);
+/// &lt;/code&gt;
+/// &lt;/example&gt;
+public class OrderService : IOrderService
+{
+    private readonly IOrderRepository _repository;
+    private readonly IPaymentGateway _paymentGateway;
+    private readonly IEmailService _emailService;
+    private readonly ILogger&lt;OrderService&gt; _logger;
+
+    /// &lt;summary&gt;
+    /// Initializes a new instance of OrderService.
+    /// &lt;/summary&gt;
+    /// &lt;param name="repository"&gt;Order persistence layer&lt;/param&gt;
+    /// &lt;param name="paymentGateway"&gt;Payment processor&lt;/param&gt;
+    /// &lt;param name="emailService"&gt;Notification service&lt;/param&gt;
+    /// &lt;param name="logger"&gt;Structured logging&lt;/param&gt;
+    public OrderService(
+        IOrderRepository repository,
+        IPaymentGateway paymentGateway,
+        IEmailService emailService,
+        ILogger&lt;OrderService&gt; logger)
+    {
+        _repository = repository ?? 
+            throw new ArgumentNullException(nameof(repository));
+        _paymentGateway = paymentGateway ?? 
+            throw new ArgumentNullException(nameof(paymentGateway));
+        _emailService = emailService ?? 
+            throw new ArgumentNullException(nameof(emailService));
+        _logger = logger ?? 
+            throw new ArgumentNullException(nameof(logger));
+    }
+
+    /// &lt;summary&gt;
+    /// Creates a new order with payment processing.
+    /// &lt;/summary&gt;
+    /// &lt;param name="request"&gt;Order creation details&lt;/param&gt;
+    /// &lt;returns&gt;The created order with assigned ID&lt;/returns&gt;
+    /// &lt;exception cref="ArgumentNullException"&gt;
+    /// Thrown when request is null
+    /// &lt;/exception&gt;
+    /// &lt;exception cref="ValidationException"&gt;
+    /// Thrown when request fails validation
+    /// &lt;/exception&gt;
+    /// &lt;exception cref="PaymentException"&gt;
+    /// Thrown when payment processing fails
+    /// &lt;/exception&gt;
+    public async Task&lt;Order&gt; CreateOrderAsync(
+        OrderRequest request)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        
+        _logger.LogInformation(
+            "Creating order for customer {CustomerId}",
+            request.CustomerId);
+
+        // Validate and create order...
+    }
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="fix-explanation">
+                <h4><i class="fas fa-lightbulb"></i> What CORTEX Fixed</h4>
+                <ul>
+                    <li><strong>XML documentation:</strong> Full &lt;summary&gt;, &lt;param&gt;, &lt;returns&gt;, &lt;exception&gt; tags</li>
+                    <li><strong>Interface extraction:</strong> Added <code>IOrderService</code> for better testability</li>
+                    <li><strong>Null guards documented:</strong> Clear preconditions with <code>ArgumentNullException.ThrowIfNull</code></li>
+                    <li><strong>Code examples:</strong> Usage patterns in &lt;example&gt; blocks</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- DOC-03: Angular Component Documentation -->
+        <section class="sts-issue-card">
+            <div class="issue-header">
+                <div class="issue-badge medium">DOC-03</div>
+                <div class="issue-title">
+                    <h2>Undocumented Angular Components</h2>
+                    <p>Components without proper input/output documentation</p>
+                </div>
+                <span class="tech-badge tech-angular">Angular</span>
+            </div>
+
+            <div class="transform-panels">
+                <div class="panel before-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-times-circle"></i> Before CORTEX
+                    </div>
+                    <pre><code class="language-typescript">@Component({
+  selector: 'app-data-grid',
+  template: `...`
+})
+export class DataGridComponent {
+  @Input() data: any[];
+  @Input() cols: any[];
+  @Input() opts: any;
+  
+  @Output() sel = new EventEmitter();
+  @Output() act = new EventEmitter();
+  @Output() pg = new EventEmitter();
+
+  private ps = 10;
+  private cp = 1;
+
+  onRowClick(r: any) {
+    this.sel.emit(r);
+  }
+
+  doAction(a: string, r: any) {
+    this.act.emit({ a, r });
+  }
+
+  changePage(p: number) {
+    this.cp = p;
+    this.pg.emit(p);
+  }
+}</code></pre>
+                </div>
+
+                <div class="transform-arrow">
+                    <i class="fas fa-magic"></i>
+                    <span>CORTEX</span>
+                </div>
+
+                <div class="panel after-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-check-circle"></i> After CORTEX
+                    </div>
+                    <pre><code class="language-typescript">/**
+ * Reusable data grid component with sorting, 
+ * pagination, and row actions.
+ *
+ * @usageNotes
+ * ### Basic usage
+ * ```html
+ * &lt;app-data-grid
+ *   [data]="users"
+ *   [columns]="columnDefs"
+ *   [options]="{ sortable: true }"
+ *   (rowSelected)="onUserSelected($event)"
+ *   (actionTriggered)="onAction($event)"&gt;
+ * &lt;/app-data-grid&gt;
+ * ```
+ *
+ * ### With custom templates
+ * ```html
+ * &lt;app-data-grid [data]="products"&gt;
+ *   &lt;ng-template #cellTemplate let-item&gt;
+ *     {{ item.name | uppercase }}
+ *   &lt;/ng-template&gt;
+ * &lt;/app-data-grid&gt;
+ * ```
+ */
+@Component({
+  selector: 'app-data-grid',
+  templateUrl: './data-grid.component.html',
+  styleUrls: ['./data-grid.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class DataGridComponent&lt;T extends Record&lt;string, unknown&gt;&gt;
+  implements OnInit, OnChanges {
+  
+  /**
+   * Data source for the grid.
+   * @required
+   */
+  @Input() data: T[] = [];
+
+  /**
+   * Column definitions specifying field, header, and format.
+   * @example
+   * ```typescript
+   * columns = [
+   *   { field: 'name', header: 'Name', sortable: true },
+   *   { field: 'email', header: 'Email', type: 'email' },
+   *   { field: 'createdAt', header: 'Created', pipe: 'date' }
+   * ];
+   * ```
+   */
+  @Input() columns: ColumnDefinition[] = [];
+
+  /**
+   * Grid configuration options.
+   * @default { pageSize: 10, sortable: false }
+   */
+  @Input() options: GridOptions = {
+    pageSize: 10,
+    sortable: false,
+    selectable: true
+  };
+
+  /**
+   * Emits when a row is selected (clicked).
+   * @eventProperty
+   */
+  @Output() rowSelected = new EventEmitter&lt;T&gt;();
+
+  /**
+   * Emits when a row action button is clicked.
+   * Payload includes action name and row data.
+   */
+  @Output() actionTriggered = 
+    new EventEmitter&lt;GridAction&lt;T&gt;&gt;();
+
+  /**
+   * Emits when pagination changes.
+   * Payload is the new page number (1-indexed).
+   */
+  @Output() pageChanged = new EventEmitter&lt;number&gt;();
+
+  /** Current page number (1-indexed) */
+  protected currentPage = 1;
+  
+  /** Number of items per page */
+  protected get pageSize(): number {
+    return this.options.pageSize ?? 10;
+  }
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="fix-explanation">
+                <h4><i class="fas fa-lightbulb"></i> What CORTEX Fixed</h4>
+                <ul>
+                    <li><strong>Component-level docs:</strong> Purpose, usage examples, and template patterns</li>
+                    <li><strong>Input documentation:</strong> @required, @default, and @example tags</li>
+                    <li><strong>Output documentation:</strong> Clear event payload descriptions</li>
+                    <li><strong>Type safety:</strong> Generic <code>T</code> instead of <code>any</code></li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- DOC-04: Missing API Documentation -->
+        <section class="sts-issue-card">
+            <div class="issue-header">
+                <div class="issue-badge high">DOC-04</div>
+                <div class="issue-title">
+                    <h2>Missing API Documentation</h2>
+                    <p>REST endpoints without OpenAPI/Swagger specs</p>
+                </div>
+                <span class="tech-badge tech-csharp">C# / Swagger</span>
+            </div>
+
+            <div class="transform-panels">
+                <div class="panel before-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-times-circle"></i> Before CORTEX
+                    </div>
+                    <pre><code class="language-csharp">[ApiController]
+[Route("api/[controller]")]
+public class ProductsController : ControllerBase
+{
+    private readonly IProductService _svc;
+
+    public ProductsController(IProductService svc)
+    {
+        _svc = svc;
+    }
+
+    [HttpGet]
+    public async Task&lt;IActionResult&gt; GetAll(
+        int? page, int? size, string? cat)
+    {
+        var products = await _svc.GetAll(page, size, cat);
+        return Ok(products);
+    }
+
+    [HttpGet("{id}")]
+    public async Task&lt;IActionResult&gt; GetById(Guid id)
+    {
+        var product = await _svc.GetById(id);
+        return product == null ? NotFound() : Ok(product);
+    }
+
+    [HttpPost]
+    public async Task&lt;IActionResult&gt; Create(ProductDto dto)
+    {
+        var product = await _svc.Create(dto);
+        return CreatedAtAction(nameof(GetById), 
+            new { id = product.Id }, product);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task&lt;IActionResult&gt; Delete(Guid id)
+    {
+        await _svc.Delete(id);
+        return NoContent();
+    }
+}</code></pre>
+                </div>
+
+                <div class="transform-arrow">
+                    <i class="fas fa-magic"></i>
+                    <span>CORTEX</span>
+                </div>
+
+                <div class="panel after-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-check-circle"></i> After CORTEX
+                    </div>
+                    <pre><code class="language-csharp">/// &lt;summary&gt;
+/// Product catalog management endpoints.
+/// &lt;/summary&gt;
+[ApiController]
+[Route("api/v1/[controller]")]
+[Produces("application/json")]
+[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+public class ProductsController : ControllerBase
+{
+    private readonly IProductService _productService;
+    private readonly ILogger&lt;ProductsController&gt; _logger;
+
+    public ProductsController(
+        IProductService productService,
+        ILogger&lt;ProductsController&gt; logger)
+    {
+        _productService = productService;
+        _logger = logger;
+    }
+
+    /// &lt;summary&gt;
+    /// Retrieves a paginated list of products.
+    /// &lt;/summary&gt;
+    /// &lt;param name="page"&gt;Page number (1-indexed)&lt;/param&gt;
+    /// &lt;param name="pageSize"&gt;Items per page (max 100)&lt;/param&gt;
+    /// &lt;param name="category"&gt;Filter by category slug&lt;/param&gt;
+    /// &lt;returns&gt;Paginated product list&lt;/returns&gt;
+    /// &lt;response code="200"&gt;Products retrieved&lt;/response&gt;
+    /// &lt;response code="400"&gt;Invalid pagination&lt;/response&gt;
+    [HttpGet]
+    [ProducesResponseType(typeof(PagedResult&lt;ProductDto&gt;), 
+        StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), 
+        StatusCodes.Status400BadRequest)]
+    public async Task&lt;ActionResult&lt;PagedResult&lt;ProductDto&gt;&gt;&gt;
+        GetAllAsync(
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 20,
+            [FromQuery] string? category = null)
+    {
+        if (page < 1 || pageSize < 1 || pageSize > 100)
+            return BadRequest("Invalid pagination parameters");
+
+        var result = await _productService
+            .GetAllAsync(page, pageSize, category);
+        return Ok(result);
+    }
+
+    /// &lt;summary&gt;
+    /// Retrieves a single product by ID.
+    /// &lt;/summary&gt;
+    /// &lt;param name="id"&gt;Product unique identifier&lt;/param&gt;
+    /// &lt;returns&gt;Product details&lt;/returns&gt;
+    /// &lt;response code="200"&gt;Product found&lt;/response&gt;
+    /// &lt;response code="404"&gt;Product not found&lt;/response&gt;
+    [HttpGet("{id:guid}")]
+    [ProducesResponseType(typeof(ProductDto), 
+        StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task&lt;ActionResult&lt;ProductDto&gt;&gt; GetByIdAsync(
+        [FromRoute] Guid id)
+    {
+        var product = await _productService.GetByIdAsync(id);
+        if (product is null)
+        {
+            _logger.LogWarning("Product {ProductId} not found", id);
+            return NotFound();
+        }
+        return Ok(product);
+    }
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="fix-explanation">
+                <h4><i class="fas fa-lightbulb"></i> What CORTEX Fixed</h4>
+                <ul>
+                    <li><strong>OpenAPI attributes:</strong> <code>[ProducesResponseType]</code> for Swagger docs</li>
+                    <li><strong>XML documentation:</strong> Parameter descriptions and response codes</li>
+                    <li><strong>Route constraints:</strong> <code>{id:guid}</code> validates GUID format</li>
+                    <li><strong>Versioned API:</strong> <code>/api/v1/</code> for future compatibility</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- DOC-05: Missing README Documentation -->
+        <section class="sts-issue-card">
+            <div class="issue-header">
+                <div class="issue-badge medium">DOC-05</div>
+                <div class="issue-title">
+                    <h2>Missing Project Documentation</h2>
+                    <p>No README, setup instructions, or architecture docs</p>
+                </div>
+                <span class="tech-badge tech-typescript">Markdown / TypeScript</span>
+            </div>
+
+            <div class="transform-panels">
+                <div class="panel before-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-times-circle"></i> Before CORTEX
+                    </div>
+                    <pre><code class="language-markdown"># My Project
+
+Run `npm start` to start.
+
+## Notes
+- Uses React
+- Has a database</code></pre>
+                </div>
+
+                <div class="transform-arrow">
+                    <i class="fas fa-magic"></i>
+                    <span>CORTEX</span>
+                </div>
+
+                <div class="panel after-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-check-circle"></i> After CORTEX
+                    </div>
+                    <pre><code class="language-markdown"># 🛒 E-Commerce Platform
+
+> Modern, scalable e-commerce solution built with 
+> React, Node.js, and PostgreSQL.
+
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)]()
+[![Coverage](https://img.shields.io/badge/coverage-87%25-green)]()
+[![License](https://img.shields.io/badge/license-MIT-blue)]()
+
+## 📋 Table of Contents
+- [Features](#features)
+- [Quick Start](#quick-start)
+- [Architecture](#architecture)
+- [API Reference](#api-reference)
+- [Contributing](#contributing)
+
+## ✨ Features
+- 🔐 JWT authentication with refresh tokens
+- 🛍️ Product catalog with categories
+- 🛒 Shopping cart with persistence
+- 💳 Stripe payment integration
+- 📧 Transactional email notifications
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js 18+
+- PostgreSQL 14+
+- Redis 7+
+
+### Installation
+```bash
+# Clone the repository
+git clone https://github.com/org/ecommerce.git
+cd ecommerce
+
+# Install dependencies
+npm install
+
+# Set up environment
+cp .env.example .env
+# Edit .env with your database credentials
+
+# Run migrations
+npm run db:migrate
+
+# Start development server
+npm run dev
+```
+
+## 🏗️ Architecture
+
+```
+src/
+├── api/          # REST endpoints
+├── services/     # Business logic
+├── repositories/ # Data access
+├── models/       # Domain entities
+└── utils/        # Shared utilities
+```
+
+## 📚 API Reference
+
+See [API Documentation](./docs/api.md) for full details.
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| /api/products | GET | List products |
+| /api/cart | POST | Add to cart |
+| /api/orders | POST | Create order |
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Run tests: `npm test`
+4. Submit a pull request</code></pre>
+                </div>
+            </div>
+
+            <div class="fix-explanation">
+                <h4><i class="fas fa-lightbulb"></i> What CORTEX Fixed</h4>
+                <ul>
+                    <li><strong>Complete structure:</strong> TOC, prerequisites, installation, architecture</li>
+                    <li><strong>Visual elements:</strong> Badges, emojis, and diagrams for scanability</li>
+                    <li><strong>Copy-paste ready:</strong> Code blocks with complete commands</li>
+                    <li><strong>Contribution guide:</strong> Clear process for new contributors</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Documentation Best Practices -->
+        <section class="sts-best-practices">
+            <h2><i class="fas fa-book-reader"></i> Documentation Best Practices</h2>
+            <div class="practices-grid">
+                <div class="practice-card">
+                    <div class="practice-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3>TSDoc / JSDoc</h3>
+                    <p>Document every public interface, function, and parameter. IDE integration shows docs at point-of-use.</p>
+                    <code>/** @param name - User's display name */</code>
+                </div>
+                <div class="practice-card">
+                    <div class="practice-icon">
+                        <i class="fas fa-file-code"></i>
+                    </div>
+                    <h3>XML Comments</h3>
+                    <p>C# XML docs power IntelliSense and generate API reference sites automatically.</p>
+                    <code>&lt;summary&gt;Creates a new order&lt;/summary&gt;</code>
+                </div>
+                <div class="practice-card">
+                    <div class="practice-icon">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <h3>Architecture Docs</h3>
+                    <p>Document system boundaries, data flows, and key decisions. ADRs capture the "why".</p>
+                    <code>docs/architecture/decisions/</code>
+                </div>
+                <div class="practice-card">
+                    <div class="practice-icon">
+                        <i class="fas fa-sync"></i>
+                    </div>
+                    <h3>Living Documentation</h3>
+                    <p>Generate docs from code when possible. Swagger, TypeDoc, and Compodoc keep docs in sync.</p>
+                    <code>npm run docs:generate</code>
+                </div>
+            </div>
+        </section>
+
+        <!-- Navigation -->
+        <nav class="sts-nav">
+            <a href="testing.html" class="nav-prev">
+                <i class="fas fa-arrow-left"></i>
+                <span>Testing</span>
+            </a>
+            <a href="index.html" class="nav-hub">
+                <i class="fas fa-th"></i>
+                <span>STS Hub</span>
+            </a>
+            <a href="security.html" class="nav-next">
+                <span>Security</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </nav>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <p>CORTEX 4.0 — AI-Powered Code Intelligence</p>
+            <p class="footer-sub">Transforming codebases through intelligent analysis</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/typescript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/markdown.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</body>
+</html>

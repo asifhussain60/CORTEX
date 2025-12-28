@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX Documentation Showcase - Code Documentation Patterns">
+    <meta name="author" content="Asif Hussain">
+    <title>Documentation | STS | CORTEX 4.0</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/sts.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+</head>
+<body class="sts-showcase">
+    <header class="site-header">
+        <nav class="nav-container">
+            <a href="../index.html" class="nav-brand"><i class="fas fa-brain"></i> CORTEX 4.0</a>
+            <div class="nav-links">
+                <a href="index.html"><i class="fas fa-bullseye"></i> STS Hub</a>
+                <a href="../documentation.html"><i class="fas fa-book"></i> Docs</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="sts-main">
+        <section class="sts-hero">
+            <div class="hero-badge"><i class="fas fa-book-open"></i> DOCUMENTATION</div>
+            <h1>Self-Documenting<br><span class="accent-text">Code</span></h1>
+            <p class="hero-subtitle">Transform cryptic code into readable, well-documented software</p>
+            <div class="sts-metrics">
+                <div class="metric-card"><div class="metric-value">3</div><div class="metric-label">Patterns</div></div>
+                <div class="metric-card accent"><div class="metric-value">100%</div><div class="metric-label">Documented</div></div>
+                <div class="metric-card"><div class="metric-value">IntelliSense</div><div class="metric-label">Enabled</div></div>
+            </div>
+        </section>
+
+        <!-- TSDoc - TypeScript -->
+        <section class="comparison-section">
+            <div class="section-header">
+                <h3><i class="fas fa-tags"></i> TSDoc Comments</h3>
+                <span class="language-badge typescript">TypeScript</span>
+            </div>
+            <div class="refactor-explanation">
+                <h4><i class="fas fa-lightbulb"></i> How This Was Refactored</h4>
+                <ul>
+                    <li><strong>Problem:</strong> Functions with unclear purpose and parameters</li>
+                    <li><strong>Fix:</strong> Add TSDoc comments with @param, @returns, @throws, @example</li>
+                    <li><strong>Result:</strong> IntelliSense shows docs, improves developer experience</li>
+                </ul>
+            </div>
+            <div class="comparison-container">
+                <div class="panel before-panel">
+                    <div class="panel-header"><i class="fas fa-times-circle"></i> Before: Cryptic Function</div>
+                    <pre><code class="language-typescript">function calc(a: number[], t: string, d?: number) {
+  let r = 0;
+  for (const x of a) {
+    if (t === 'sum') r += x;
+    else if (t === 'avg') r = a.reduce((s, n) => s + n, 0) / a.length;
+    else if (t === 'max') r = Math.max(...a);
+  }
+  return d ? Number(r.toFixed(d)) : r;
+}
+
+// What does this do? What's 't'? What's 'd'?
+const result = calc([1, 2, 3], 'avg', 2);</code></pre>
+                </div>
+                <div class="panel after-panel">
+                    <div class="panel-header"><i class="fas fa-check-circle"></i> After: Self-Documenting</div>
+                    <pre><code class="language-typescript">/**
+ * Calculates aggregate statistics for a numeric array.
+ * 
+ * @param values - Array of numbers to calculate
+ * @param operation - Type of calculation: 'sum' | 'avg' | 'max'
+ * @param decimalPlaces - Optional precision for result
+ * @returns The calculated result
+ * @throws {Error} If values array is empty
+ * 
+ * @example
+ * calculateStats([1, 2, 3, 4], 'avg', 2) // returns 2.50
+ */
+function calculateStats(
+  values: number[],
+  operation: 'sum' | 'avg' | 'max',
+  decimalPlaces?: number
+): number {
+  if (values.length === 0) throw new Error('Empty array');
+  // ... implementation
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- XML Documentation - C# -->
+        <section class="comparison-section">
+            <div class="section-header">
+                <h3><i class="fas fa-file-code"></i> XML Documentation</h3>
+                <span class="language-badge csharp">C#</span>
+            </div>
+            <div class="refactor-explanation">
+                <h4><i class="fas fa-lightbulb"></i> How This Was Refactored</h4>
+                <ul>
+                    <li><strong>Problem:</strong> Public APIs without documentation</li>
+                    <li><strong>Fix:</strong> Add XML docs with summary, param, returns, exception tags</li>
+                    <li><strong>Result:</strong> Visual Studio IntelliSense, generated API docs</li>
+                </ul>
+            </div>
+            <div class="comparison-container">
+                <div class="panel before-panel">
+                    <div class="panel-header"><i class="fas fa-times-circle"></i> Before: Undocumented API</div>
+                    <pre><code class="language-csharp">public class UserService
+{
+    public async Task&lt;User&gt; Get(int id, bool inc)
+    {
+        var u = await _repo.Find(id);
+        if (u == null) throw new Exception("Not found");
+        if (inc) u.Profile = await _repo.GetProfile(id);
+        return u;
+    }
+    
+    public async Task&lt;bool&gt; Del(int id)
+    {
+        return await _repo.Remove(id);
+    }
+}</code></pre>
+                </div>
+                <div class="panel after-panel">
+                    <div class="panel-header"><i class="fas fa-check-circle"></i> After: XML Documented</div>
+                    <pre><code class="language-csharp">/// &lt;summary&gt;
+/// Provides operations for user management.
+/// &lt;/summary&gt;
+public class UserService
+{
+    /// &lt;summary&gt;
+    /// Retrieves a user by their unique identifier.
+    /// &lt;/summary&gt;
+    /// &lt;param name="userId"&gt;The user's ID&lt;/param&gt;
+    /// &lt;param name="includeProfile"&gt;Load profile data&lt;/param&gt;
+    /// &lt;returns&gt;The user entity&lt;/returns&gt;
+    /// &lt;exception cref="UserNotFoundException"&gt;
+    /// Thrown when user doesn't exist
+    /// &lt;/exception&gt;
+    public async Task&lt;User&gt; GetUserAsync(
+        int userId, 
+        bool includeProfile = false)
+    {
+        // Implementation...
+    }
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- API Documentation - OpenAPI/Swagger -->
+        <section class="comparison-section">
+            <div class="section-header">
+                <h3><i class="fas fa-server"></i> OpenAPI/Swagger Documentation</h3>
+                <span class="language-badge typescript">TypeScript</span>
+            </div>
+            <div class="refactor-explanation">
+                <h4><i class="fas fa-lightbulb"></i> How This Was Refactored</h4>
+                <ul>
+                    <li><strong>Problem:</strong> API endpoints without documentation</li>
+                    <li><strong>Fix:</strong> Add decorators that generate OpenAPI spec</li>
+                    <li><strong>Result:</strong> Auto-generated Swagger UI, client SDK generation</li>
+                </ul>
+            </div>
+            <div class="comparison-container">
+                <div class="panel before-panel">
+                    <div class="panel-header"><i class="fas fa-times-circle"></i> Before: Undocumented API</div>
+                    <pre><code class="language-typescript">@Controller('users')
+export class UserController {
+  @Get(':id')
+  async getUser(@Param('id') id: string) {
+    return this.userService.findById(id);
+  }
+  
+  @Post()
+  async createUser(@Body() dto: any) {
+    return this.userService.create(dto);
+  }
+}
+
+// Consumers have to guess:
+// - What parameters are required?
+// - What does the response look like?
+// - What errors can occur?</code></pre>
+                </div>
+                <div class="panel after-panel">
+                    <div class="panel-header"><i class="fas fa-check-circle"></i> After: OpenAPI Documented</div>
+                    <pre><code class="language-typescript">@ApiTags('Users')
+@Controller('users')
+export class UserController {
+  @Get(':id')
+  @ApiOperation({ summary: 'Get user by ID' })
+  @ApiParam({ name: 'id', type: String })
+  @ApiResponse({ status: 200, type: UserDto })
+  @ApiResponse({ status: 404, description: 'Not found' })
+  async getUser(@Param('id') id: string): Promise&lt;UserDto&gt; {
+    return this.userService.findById(id);
+  }
+  
+  @Post()
+  @ApiOperation({ summary: 'Create new user' })
+  @ApiBody({ type: CreateUserDto })
+  @ApiResponse({ status: 201, type: UserDto })
+  async createUser(@Body() dto: CreateUserDto) {
+    return this.userService.create(dto);
+  }
+}</code></pre>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-content"><p>&copy; 2024 CORTEX 4.0 - AI-Powered Code Intelligence by Asif Hussain</p></div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/typescript.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</body>
+</html>
