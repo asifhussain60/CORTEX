@@ -37,18 +37,18 @@
     <!-- Logo Header -->
     <div class="logo-header">
         <a href="../index.html">
-            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo" style="width: 300px; height: 300px; border: none; background: transparent; border-radius: 0; padding: 0">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
         </a>
     </div>
     
     <!-- Main Content -->
     <main class="container" id="main-content">
         <!-- Main Content Card -->
-        <div class="glass-card" style="margin-bottom: 2rem;">
+        <div class="glass-card">
             <h1>Architectural Review Orchestrator</h1>
             <span class="badge badge-success">Production Ready</span>
             
-            <p style="margin-top: 1.5rem; font-size: 1.1rem; line-height: 1.7; color: var(--text-secondary);">
+            <p>
                 The Architectural Review Orchestrator performs comprehensive architecture assessment across 6 phases.
                 It generates a 0-100 architecture score with letter grades (A-F) based on layer separation, 
                 design patterns, dependency management, SOLID compliance, and testability. Each phase produces
@@ -88,9 +88,9 @@
         </div>
         
         <!-- Score Dashboard -->
-        <section class="section-dashboard" style="margin-bottom: 2rem;">
+        <section class="section-dashboard">
             <div class="glass-card diagram-card">
-                <h2><span style="font-size: 2rem;">📊</span> Architecture Score Dashboard (D3.js)</h2>
+                <h2><span>📊</span> Architecture Score Dashboard (D3.js)</h2>
                 <p class="diagram-title">Real-time scoring breakdown by category</p>
                 
                 <div id="score-dashboard" class="score-dashboard"></div>
@@ -98,55 +98,55 @@
         </section>
         
         <!-- Scoring Breakdown -->
-        <section class="section-scoring" style="margin-bottom: 2rem;">
+        <section class="section-scoring">
             <div class="glass-card">
-                <h2><span style="font-size: 2rem;">🎯</span> Scoring Breakdown</h2>
+                <h2><span>🎯</span> Scoring Breakdown</h2>
                 
                 <div class="scoring-grid">
-                    <div class="scoring-card" style="border-left: 4px solid #00d4ff;">
-                        <div class="score-value" style="color: #00d4ff;">25</div>
+                    <div class="scoring-card">
+                        <div class="score-value">25</div>
                         <div class="score-max">/25 max</div>
                         <strong>Layer Separation</strong>
-                        <p style="font-size: 0.85rem; margin-top: 0.5rem; color: #a0aec0;">-3 points per violation</p>
+                        <p>-3 points per violation</p>
                     </div>
-                    <div class="scoring-card" style="border-left: 4px solid #8b5cf6;">
-                        <div class="score-value" style="color: #8b5cf6;">15</div>
+                    <div class="scoring-card">
+                        <div class="score-value">15</div>
                         <div class="score-max">/15 max</div>
                         <strong>Design Patterns</strong>
-                        <p style="font-size: 0.85rem; margin-top: 0.5rem; color: #a0aec0;">Pattern usage & opportunities</p>
+                        <p>Pattern usage & opportunities</p>
                     </div>
-                    <div class="scoring-card" style="border-left: 4px solid #f59e0b;">
-                        <div class="score-value" style="color: #f59e0b;">20</div>
+                    <div class="scoring-card">
+                        <div class="score-value">20</div>
                         <div class="score-max">/20 max</div>
                         <strong>Dependency Management</strong>
-                        <p style="font-size: 0.85rem; margin-top: 0.5rem; color: #a0aec0;">Circular deps & coupling</p>
+                        <p>Circular deps & coupling</p>
                     </div>
-                    <div class="scoring-card" style="border-left: 4px solid #10b981;">
-                        <div class="score-value" style="color: #10b981;">15</div>
+                    <div class="scoring-card">
+                        <div class="score-value">15</div>
                         <div class="score-max">/15 max</div>
                         <strong>SOLID Compliance</strong>
-                        <p style="font-size: 0.85rem; margin-top: 0.5rem; color: #a0aec0;">5 principles check</p>
+                        <p>5 principles check</p>
                     </div>
-                    <div class="scoring-card" style="border-left: 4px solid #ef4444;">
-                        <div class="score-value" style="color: #ef4444;">25</div>
+                    <div class="scoring-card">
+                        <div class="score-value">25</div>
                         <div class="score-max">/25 max</div>
                         <strong>Testability</strong>
-                        <p style="font-size: 0.85rem; margin-top: 0.5rem; color: #a0aec0;">Coverage & test quality</p>
+                        <p>Coverage & test quality</p>
                     </div>
-                    <div class="scoring-card" style="border-left: 4px solid #ec4899;">
-                        <div class="score-value" style="color: #ec4899;">100</div>
+                    <div class="scoring-card">
+                        <div class="score-value">100</div>
                         <div class="score-max">TOTAL</div>
                         <strong>Overall Score</strong>
-                        <p style="font-size: 0.85rem; margin-top: 0.5rem; color: #a0aec0;">A ≥90, B ≥80, C ≥70, D ≥60</p>
+                        <p>A ≥90, B ≥80, C ≥70, D ≥60</p>
                     </div>
                 </div>
             </div>
         </section>
         
         <!-- 6-Phase Pipeline -->
-        <section class="section-pipeline" style="margin-bottom: 2rem;">
+        <section class="section-pipeline">
             <div class="glass-card diagram-card">
-                <h2><span style="font-size: 2rem;">🔄</span> 6-Phase Analysis Pipeline</h2>
+                <h2><span>🔄</span> 6-Phase Analysis Pipeline</h2>
                 <p class="diagram-title">Comprehensive architecture assessment workflow</p>
                 
                 <div class="mermaid">
@@ -157,7 +157,7 @@ flowchart TB
         P1 --> L1[Map files to layers]
         L1 --> L2[Analyze imports]
         L2 --> L3{Violations found?}
-        L3 -->|Yes| L4[Record violations<br/>-3 pts each]
+        L3 -->|Yes| L4[Record violations<br />-3 pts each]
         L3 -->|No| L5[Full 25 points]
     end
     
@@ -219,18 +219,18 @@ flowchart TB
         </section>
         
         <!-- Layer Hierarchy -->
-        <section class="section-layers" style="margin-bottom: 2rem;">
+        <section class="section-layers">
             <div class="glass-card diagram-card">
-                <h2><span style="font-size: 2rem;">🏛️</span> Layer Hierarchy & Dependencies</h2>
+                <h2><span>🏛️</span> Layer Hierarchy & Dependencies</h2>
                 <p class="diagram-title">Valid layer dependencies (lower can depend on higher)</p>
                 
                 <div class="mermaid">
 flowchart TB
     subgraph HIERARCHY["Layer Hierarchy"]
-        API["🌐 API Layer<br/>(Level 0)"]
-        BUSINESS["💼 Business Layer<br/>(Level 1)"]
-        DATA["📀 Data Layer<br/>(Level 2)"]
-        UTILS["🔧 Utils Layer<br/>(Level 3)"]
+        API["🌐 API Layer<br />(Level 0)"]
+        BUSINESS["💼 Business Layer<br />(Level 1)"]
+        DATA["📀 Data Layer<br />(Level 2)"]
+        UTILS["🔧 Utils Layer<br />(Level 3)"]
     end
     
     API -->|"✅ allowed"| BUSINESS
@@ -255,9 +255,9 @@ flowchart TB
         </section>
         
         <!-- Data Model -->
-        <section class="section-datamodel" style="margin-bottom: 2rem;">
+        <section class="section-datamodel">
             <div class="glass-card diagram-card">
-                <h2><span style="font-size: 2rem;">🗃️</span> Analysis Data Model</h2>
+                <h2><span>🗃️</span> Analysis Data Model</h2>
                 <p class="diagram-title">Key data structures for architectural analysis</p>
                 
                 <div class="mermaid">
@@ -322,9 +322,9 @@ classDiagram
         </section>
         
         <!-- Grade Scale -->
-        <section class="section-grades" style="margin-bottom: 2rem;">
+        <section class="section-grades">
             <div class="glass-card">
-                <h2><span style="font-size: 2rem;">🎓</span> Grade Scale & Interpretation</h2>
+                <h2><span>🎓</span> Grade Scale & Interpretation</h2>
                 
                 <table class="glass-table">
                     <thead>
@@ -337,32 +337,32 @@ classDiagram
                     </thead>
                     <tbody>
                         <tr>
-                            <td><span style="font-size: 1.5rem; color: #10b981;">A</span></td>
+                            <td><span>A</span></td>
                             <td>90-100</td>
                             <td>Excellent architecture</td>
                             <td>Maintain and document as reference</td>
                         </tr>
                         <tr>
-                            <td><span style="font-size: 1.5rem; color: #00d4ff;">B</span></td>
+                            <td><span>B</span></td>
                             <td>80-89</td>
                             <td>Good with minor issues</td>
                             <td>Address low-priority recommendations</td>
                         </tr>
                         <tr>
-                            <td><span style="font-size: 1.5rem; color: #f59e0b;">C</span></td>
+                            <td><span>C</span></td>
                             <td>70-79</td>
                             <td>Needs improvement</td>
                             <td>Schedule refactoring sprint</td>
                         </tr>
                         <tr>
-                            <td><span style="font-size: 1.5rem; color: #ef4444;">D</span></td>
+                            <td><span>D</span></td>
                             <td>60-69</td>
                             <td>Significant issues</td>
                             <td>Prioritize architectural debt</td>
                         </tr>
                         <tr>
-                            <td><span style="font-size: 1.5rem; color: #dc2626;">F</span></td>
-                            <td>&lt;60</td>
+                            <td><span>F</span></td>
+                            <td><60</td>
                             <td>Critical problems</td>
                             <td>Immediate intervention required</td>
                         </tr>
@@ -372,31 +372,31 @@ classDiagram
         </section>
         
         <!-- SOLID Principles -->
-        <section class="section-solid" style="margin-bottom: 2rem;">
+        <section class="section-solid">
             <div class="glass-card diagram-card">
-                <h2><span style="font-size: 2rem;">⚡</span> SOLID Compliance Checks</h2>
+                <h2><span>⚡</span> SOLID Compliance Checks</h2>
                 <p class="diagram-title">Each principle contributes to the 15-point SOLID score</p>
                 
                 <div class="mermaid">
 mindmap
-  root((SOLID<br/>15 pts))
-    S["**S**ingle Responsibility<br/>3 pts"]
+  root((SOLID<br />15 pts))
+    S["**S**ingle Responsibility<br />3 pts"]
       Classes with one job
       Max methods check
       Cohesion analysis
-    O["**O**pen/Closed<br/>3 pts"]
+    O["**O**pen/Closed<br />3 pts"]
       Extension points
       Abstract classes
       Interface usage
-    L["**L**iskov Substitution<br/>3 pts"]
+    L["**L**iskov Substitution<br />3 pts"]
       Proper inheritance
       Contract compliance
       No type checks
-    I["**I**nterface Segregation<br/>3 pts"]
+    I["**I**nterface Segregation<br />3 pts"]
       Small interfaces
       No fat interfaces
       Cohesive methods
-    D["**D**ependency Inversion<br/>3 pts"]
+    D["**D**ependency Inversion<br />3 pts"]
       Abstractions over concrete
       DI containers
       No hardcoded deps
@@ -405,9 +405,9 @@ mindmap
         </section>
         
         <!-- Example Output -->
-        <section class="section-output" style="margin-bottom: 2rem;">
+        <section class="section-output">
             <div class="glass-card">
-                <h2><span style="font-size: 2rem;">📋</span> Example Review Output</h2>
+                <h2><span>📋</span> Example Review Output</h2>
                 
                 <div class="code-block">
                     <div class="code-block-header">
@@ -476,22 +476,22 @@ mindmap
         </section>
         
         <!-- Related Features -->
-        <section class="section-related" style="margin-bottom: 2rem;">
+        <section class="section-related">
             <div class="glass-card">
-                <h2><span style="font-size: 2rem;">🔗</span> Related Orchestrators</h2>
+                <h2><span>🔗</span> Related Orchestrators</h2>
                 <div class="feature-grid feature-grid-3">
                     <a href="cortex-lens.html" class="glass-card">
-                        <span class="feature-icon" style="font-size: 2.5rem;">🔍</span>
+                        <span class="feature-icon">🔍</span>
                         <h3 class="feature-title">CORTEX Lens</h3>
                         <p class="text-secondary">Codebase analysis & mapping</p>
                     </a>
                     <a href="system-integrity.html" class="glass-card">
-                        <span class="feature-icon" style="font-size: 2.5rem;">🛡️</span>
+                        <span class="feature-icon">🛡️</span>
                         <h3 class="feature-title">System Integrity</h3>
                         <p class="text-secondary">Validation & auto-fix</p>
                     </a>
                     <a href="refinement-orchestrator.html" class="glass-card">
-                        <span class="feature-icon" style="font-size: 2.5rem;">✨</span>
+                        <span class="feature-icon">✨</span>
                         <h3 class="feature-title">Refinement</h3>
                         <p class="text-secondary">Quality enhancement</p>
                     </a>

@@ -41,18 +41,18 @@
     <!-- Logo Header -->
     <div class="logo-header">
         <a href="../index.html">
-            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo" style="width: 300px; height: 300px; border: none; background: transparent; border-radius: 0; padding: 0">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
         </a>
     </div>
     
     <!-- Main Content -->
     <main class="container" id="main-content">
         <!-- Main Content Card -->
-        <div class="glass-card" style="margin-bottom: 2rem;">
+        <div class="glass-card">
             <h1>Pre-Flight Orchestrator</h1>
             <span class="badge badge-success">Production Ready</span>
             
-            <p style="margin-top: 1.5rem; font-size: 1.1rem; line-height: 1.7; color: var(--text-secondary);">
+            <p>
                 The Pre-Flight Orchestrator validates your development environment <strong>BEFORE</strong> executing 
                 a feature plan. It detects project patterns (FastAPI, .NET, Node.js, Docker), generates environment 
                 requirements, validates installed tools, and enforces gates with remediation scripts. Prevent costly 
@@ -70,7 +70,7 @@
                     <div class="metric-label">Requirements</div>
                 </div>
                 <div class="metric-card glass-card">
-                    <div class="metric-value">&lt;15s</div>
+                    <div class="metric-value"><15s</div>
                     <div class="metric-label">Validation Time</div>
                 </div>
                 <div class="metric-card glass-card">
@@ -92,43 +92,43 @@
         </div>
         
         <!-- Gate Status -->
-        <section class="section-gates" style="margin-bottom: 2rem;">
+        <section class="section-gates">
             <div class="glass-card">
-                <h2><span style="font-size: 2rem;">🚦</span> Gate Enforcement</h2>
+                <h2><span>🚦</span> Gate Enforcement</h2>
                 
                 <div class="gate-grid">
-                    <div class="gate-card" style="border-color: #ef4444;">
+                    <div class="gate-card">
                         <div class="gate-status">🛑</div>
-                        <h3 style="color: #ef4444; font-size: 1.2rem;">BLOCK</h3>
-                        <p style="font-size: 0.9rem; color: #a0aec0; margin-top: 0.75rem;">
+                        <h3>BLOCK</h3>
+                        <p>
                             Critical tools missing. Execution <strong>halted</strong>. Run remediation script.
                         </p>
-                        <code style="font-size: 0.8rem; color: #ef4444;">CRITICAL severity</code>
+                        <code>CRITICAL severity</code>
                     </div>
-                    <div class="gate-card" style="border-color: #f59e0b;">
+                    <div class="gate-card">
                         <div class="gate-status">⚠️</div>
-                        <h3 style="color: #f59e0b; font-size: 1.2rem;">WARN</h3>
-                        <p style="font-size: 0.9rem; color: #a0aec0; margin-top: 0.75rem;">
+                        <h3>WARN</h3>
+                        <p>
                             Recommended tools missing. Can proceed with <strong>caution</strong>.
                         </p>
-                        <code style="font-size: 0.8rem; color: #f59e0b;">RECOMMENDED severity</code>
+                        <code>RECOMMENDED severity</code>
                     </div>
-                    <div class="gate-card" style="border-color: #10b981;">
+                    <div class="gate-card">
                         <div class="gate-status">✅</div>
-                        <h3 style="color: #10b981; font-size: 1.2rem;">PASS</h3>
-                        <p style="font-size: 0.9rem; color: #a0aec0; margin-top: 0.75rem;">
+                        <h3>PASS</h3>
+                        <p>
                             All checks passed. Proceed to Phase 1 <strong>normally</strong>.
                         </p>
-                        <code style="font-size: 0.8rem; color: #10b981;">All requirements met</code>
+                        <code>All requirements met</code>
                     </div>
                 </div>
             </div>
         </section>
         
         <!-- Pattern Detection Heatmap -->
-        <section class="section-heatmap" style="margin-bottom: 2rem;">
+        <section class="section-heatmap">
             <div class="glass-card diagram-card">
-                <h2><span style="font-size: 2rem;">🔍</span> Pattern Detection Coverage (D3.js)</h2>
+                <h2><span>🔍</span> Pattern Detection Coverage (D3.js)</h2>
                 <p class="diagram-title">Project patterns detected by file triggers</p>
                 
                 <div id="pattern-heatmap" class="pattern-heatmap"></div>
@@ -136,9 +136,9 @@
         </section>
         
         <!-- 7-Step Workflow -->
-        <section class="section-workflow" style="margin-bottom: 2rem;">
+        <section class="section-workflow">
             <div class="glass-card diagram-card">
-                <h2><span style="font-size: 2rem;">🔄</span> 7-Step Validation Workflow</h2>
+                <h2><span>🔄</span> 7-Step Validation Workflow</h2>
                 <p class="diagram-title">From detection to gate enforcement</p>
                 
                 <div class="mermaid">
@@ -198,59 +198,59 @@ flowchart TB
         </section>
         
         <!-- Supported Patterns -->
-        <section class="section-patterns" style="margin-bottom: 2rem;">
+        <section class="section-patterns">
             <div class="glass-card">
-                <h2><span style="font-size: 2rem;">📂</span> Supported Project Patterns</h2>
+                <h2><span>📂</span> Supported Project Patterns</h2>
                 
                 <div class="pattern-grid">
                     <div class="pattern-item">
-                        <strong style="color: #00d4ff;">🔷 DOTNET_API</strong>
-                        <p style="color: #a0aec0; margin: 0.25rem 0 0 0;">.csproj with Microsoft.NET.Sdk.Web</p>
+                        <strong>🔷 DOTNET_API</strong>
+                        <p>.csproj with Microsoft.NET.Sdk.Web</p>
                     </div>
                     <div class="pattern-item">
-                        <strong style="color: #00d4ff;">🔷 DOTNET_CONSOLE</strong>
-                        <p style="color: #a0aec0; margin: 0.25rem 0 0 0;">.csproj (other SDK)</p>
+                        <strong>🔷 DOTNET_CONSOLE</strong>
+                        <p>.csproj (other SDK)</p>
                     </div>
                     <div class="pattern-item">
-                        <strong style="color: #10b981;">🐍 PYTHON_FASTAPI</strong>
-                        <p style="color: #a0aec0; margin: 0.25rem 0 0 0;">requirements.txt with fastapi</p>
+                        <strong>🐍 PYTHON_FASTAPI</strong>
+                        <p>requirements.txt with fastapi</p>
                     </div>
                     <div class="pattern-item">
-                        <strong style="color: #10b981;">🐍 PYTHON_FLASK</strong>
-                        <p style="color: #a0aec0; margin: 0.25rem 0 0 0;">requirements.txt with flask</p>
+                        <strong>🐍 PYTHON_FLASK</strong>
+                        <p>requirements.txt with flask</p>
                     </div>
                     <div class="pattern-item">
-                        <strong style="color: #f59e0b;">📦 NODEJS_EXPRESS</strong>
-                        <p style="color: #a0aec0; margin: 0.25rem 0 0 0;">package.json with express</p>
+                        <strong>📦 NODEJS_EXPRESS</strong>
+                        <p>package.json with express</p>
                     </div>
                     <div class="pattern-item">
-                        <strong style="color: #f59e0b;">⚛️ REACT_SPA</strong>
-                        <p style="color: #a0aec0; margin: 0.25rem 0 0 0;">package.json with react</p>
+                        <strong>⚛️ REACT_SPA</strong>
+                        <p>package.json with react</p>
                     </div>
                     <div class="pattern-item">
-                        <strong style="color: #8b5cf6;">🔐 JWT_AUTH</strong>
-                        <p style="color: #a0aec0; margin: 0.25rem 0 0 0;">Code contains jwt/JWT</p>
+                        <strong>🔐 JWT_AUTH</strong>
+                        <p>Code contains jwt/JWT</p>
                     </div>
                     <div class="pattern-item">
-                        <strong style="color: #8b5cf6;">🗃️ DATABASE_MIGRATIONS</strong>
-                        <p style="color: #a0aec0; margin: 0.25rem 0 0 0;">migrations/ folder exists</p>
+                        <strong>🗃️ DATABASE_MIGRATIONS</strong>
+                        <p>migrations/ folder exists</p>
                     </div>
                     <div class="pattern-item">
-                        <strong style="color: #ef4444;">🐳 DOCKER_COMPOSE</strong>
-                        <p style="color: #a0aec0; margin: 0.25rem 0 0 0;">docker-compose.yml</p>
+                        <strong>🐳 DOCKER_COMPOSE</strong>
+                        <p>docker-compose.yml</p>
                     </div>
                     <div class="pattern-item">
-                        <strong style="color: #ef4444;">☸️ KUBERNETES</strong>
-                        <p style="color: #a0aec0; margin: 0.25rem 0 0 0;">k8s/*.yaml, kubernetes/*.yaml</p>
+                        <strong>☸️ KUBERNETES</strong>
+                        <p>k8s/*.yaml, kubernetes/*.yaml</p>
                     </div>
                 </div>
             </div>
         </section>
         
         <!-- Integration -->
-        <section class="section-integration" style="margin-bottom: 2rem;">
+        <section class="section-integration">
             <div class="glass-card diagram-card">
-                <h2><span style="font-size: 2rem;">🔗</span> Planning System Integration</h2>
+                <h2><span>🔗</span> Planning System Integration</h2>
                 <p class="diagram-title">Pre-Flight automatically invoked before Phase 1</p>
                 
                 <div class="mermaid">
@@ -282,9 +282,9 @@ flowchart LR
         </section>
         
         <!-- Validation Report -->
-        <section class="section-report" style="margin-bottom: 2rem;">
+        <section class="section-report">
             <div class="glass-card">
-                <h2><span style="font-size: 2rem;">📋</span> Example Validation Report</h2>
+                <h2><span>📋</span> Example Validation Report</h2>
                 
                 <div class="code-block">
                     <div class="code-block-header">
@@ -345,9 +345,9 @@ flowchart LR
         </section>
         
         <!-- Remediation Script -->
-        <section class="section-script" style="margin-bottom: 2rem;">
+        <section class="section-script">
             <div class="glass-card">
-                <h2><span style="font-size: 2rem;">📜</span> Generated Remediation Script</h2>
+                <h2><span>📜</span> Generated Remediation Script</h2>
                 
                 <div class="code-block">
                     <div class="code-block-header">
@@ -383,22 +383,22 @@ Write-Host "`n🎉 Environment setup complete! Re-run pre-flight check." -Foregr
         </section>
         
         <!-- Related Features -->
-        <section class="section-related" style="margin-bottom: 2rem;">
+        <section class="section-related">
             <div class="glass-card">
-                <h2><span style="font-size: 2rem;">🔗</span> Related Orchestrators</h2>
+                <h2><span>🔗</span> Related Orchestrators</h2>
                 <div class="feature-grid feature-grid-3">
                     <a href="planning-system.html" class="glass-card">
-                        <span class="feature-icon" style="font-size: 2.5rem;">📋</span>
+                        <span class="feature-icon">📋</span>
                         <h3 class="feature-title">Planning System</h3>
                         <p class="text-secondary">Invokes pre-flight</p>
                     </a>
                     <a href="cortex-lens.html" class="glass-card">
-                        <span class="feature-icon" style="font-size: 2.5rem;">🔍</span>
+                        <span class="feature-icon">🔍</span>
                         <h3 class="feature-title">CORTEX Lens</h3>
                         <p class="text-secondary">Pattern detection</p>
                     </a>
                     <a href="system-integrity.html" class="glass-card">
-                        <span class="feature-icon" style="font-size: 2.5rem;">🛡️</span>
+                        <span class="feature-icon">🛡️</span>
                         <h3 class="feature-title">System Integrity</h3>
                         <p class="text-secondary">Validation & auto-fix</p>
                     </a>

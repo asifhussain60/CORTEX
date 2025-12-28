@@ -37,18 +37,18 @@
     <!-- Logo Header -->
     <div class="logo-header">
         <a href="../index.html">
-            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo" style="width: 300px; height: 300px; border: none; background: transparent; border-radius: 0; padding: 0">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
         </a>
     </div>
     
     <!-- Main Content -->
     <main class="container" id="main-content">
         <!-- Main Content Card -->
-        <div class="glass-card" style="margin-bottom: 2rem;">
+        <div class="glass-card">
             <h1>Rollback Orchestrator</h1>
             <span class="badge badge-success">Production Ready</span>
             
-            <p style="margin-top: 1.5rem; font-size: 1.1rem; line-height: 1.7; color: var(--text-secondary);">
+            <p>
                 The Rollback Orchestrator provides safe state restoration to previous checkpoints. It integrates 
                 with the PhaseCheckpointManager to list, validate, and restore checkpoints created during TDD 
                 workflows. With built-in safety checks for uncommitted changes and merge conflicts, plus dry-run 
@@ -88,9 +88,9 @@
         </div>
         
         <!-- Checkpoint Timeline -->
-        <section class="section-timeline" style="margin-bottom: 2rem;">
+        <section class="section-timeline">
             <div class="glass-card diagram-card">
-                <h2><span style="font-size: 2rem;">📍</span> Checkpoint Selection (D3.js)</h2>
+                <h2><span>📍</span> Checkpoint Selection (D3.js)</h2>
                 <p class="diagram-title">Available checkpoints with rollback targets</p>
                 
                 <div id="checkpoint-selector" class="checkpoint-selector"></div>
@@ -98,51 +98,51 @@
         </section>
         
         <!-- Safety Checks -->
-        <section class="section-safety" style="margin-bottom: 2rem;">
+        <section class="section-safety">
             <div class="glass-card">
-                <h2><span style="font-size: 2rem;">🛡️</span> Safety Checks</h2>
+                <h2><span>🛡️</span> Safety Checks</h2>
                 
                 <div class="safety-grid">
-                    <div class="safety-card" style="border-color: #ef4444;">
-                        <h3 style="font-size: 1rem;"><span class="check-fail">⚠️</span> Uncommitted Changes</h3>
-                        <p style="font-size: 0.9rem; color: #a0aec0; margin-top: 0.5rem;">
+                    <div class="safety-card">
+                        <h3><span class="check-fail">⚠️</span> Uncommitted Changes</h3>
+                        <p>
                             Detects modified files in working tree. Rollback blocked until changes are 
                             committed or stashed. Lists all affected files.
                         </p>
-                        <code style="font-size: 0.8rem; color: #ef4444;">SAFETY_MSG_UNCOMMITTED</code>
+                        <code>SAFETY_MSG_UNCOMMITTED</code>
                     </div>
-                    <div class="safety-card" style="border-color: #f59e0b;">
-                        <h3 style="font-size: 1rem;"><span class="check-fail">⚠️</span> Merge In Progress</h3>
-                        <p style="font-size: 0.9rem; color: #a0aec0; margin-top: 0.5rem;">
+                    <div class="safety-card">
+                        <h3><span class="check-fail">⚠️</span> Merge In Progress</h3>
+                        <p>
                             Checks for .git/MERGE_HEAD presence. Cannot rollback during active merge. 
                             Complete or abort merge first.
                         </p>
-                        <code style="font-size: 0.8rem; color: #f59e0b;">SAFETY_MSG_MERGE</code>
+                        <code>SAFETY_MSG_MERGE</code>
                     </div>
-                    <div class="safety-card" style="border-color: #10b981;">
-                        <h3 style="font-size: 1rem;"><span class="check-pass">✅</span> Checkpoint Exists</h3>
-                        <p style="font-size: 0.9rem; color: #a0aec0; margin-top: 0.5rem;">
+                    <div class="safety-card">
+                        <h3><span class="check-pass">✅</span> Checkpoint Exists</h3>
+                        <p>
                             Validates checkpoint ID exists in PhaseCheckpointManager registry 
                             before attempting rollback.
                         </p>
-                        <code style="font-size: 0.8rem; color: #10b981;">validate_checkpoint()</code>
+                        <code>validate_checkpoint()</code>
                     </div>
-                    <div class="safety-card" style="border-color: #00d4ff;">
-                        <h3 style="font-size: 1rem;"><span class="check-pass">✅</span> User Confirmation</h3>
-                        <p style="font-size: 0.9rem; color: #a0aec0; margin-top: 0.5rem;">
+                    <div class="safety-card">
+                        <h3><span class="check-pass">✅</span> User Confirmation</h3>
+                        <p>
                             Shows diff preview (optional) and requires explicit user confirmation 
                             before executing rollback.
                         </p>
-                        <code style="font-size: 0.8rem; color: #00d4ff;">confirm_rollback()</code>
+                        <code>confirm_rollback()</code>
                     </div>
                 </div>
             </div>
         </section>
         
         <!-- Rollback Flow -->
-        <section class="section-flow" style="margin-bottom: 2rem;">
+        <section class="section-flow">
             <div class="glass-card diagram-card">
-                <h2><span style="font-size: 2rem;">🔄</span> Rollback Execution Flow</h2>
+                <h2><span>🔄</span> Rollback Execution Flow</h2>
                 <p class="diagram-title">Complete workflow from command to state restoration</p>
                 
                 <div class="mermaid">
@@ -193,9 +193,9 @@ flowchart TB
         </section>
         
         <!-- State Comparison -->
-        <section class="section-comparison" style="margin-bottom: 2rem;">
+        <section class="section-comparison">
             <div class="glass-card diagram-card">
-                <h2><span style="font-size: 2rem;">⚖️</span> State Comparison</h2>
+                <h2><span>⚖️</span> State Comparison</h2>
                 <p class="diagram-title">Before vs after rollback visualization</p>
                 
                 <div class="mermaid">
@@ -233,9 +233,9 @@ sequenceDiagram
         </section>
         
         <!-- Checkpoint Metadata -->
-        <section class="section-metadata" style="margin-bottom: 2rem;">
+        <section class="section-metadata">
             <div class="glass-card">
-                <h2><span style="font-size: 2rem;">📋</span> Checkpoint Summary Format</h2>
+                <h2><span>📋</span> Checkpoint Summary Format</h2>
                 
                 <div class="code-block">
                     <div class="code-block-header">
@@ -263,9 +263,9 @@ Files Changed:
         </section>
         
         <!-- Data Model -->
-        <section class="section-datamodel" style="margin-bottom: 2rem;">
+        <section class="section-datamodel">
             <div class="glass-card diagram-card">
-                <h2><span style="font-size: 2rem;">🗃️</span> Rollback Data Model</h2>
+                <h2><span>🗃️</span> Rollback Data Model</h2>
                 <p class="diagram-title">Key classes and methods for rollback operations</p>
                 
                 <div class="mermaid">
@@ -312,9 +312,9 @@ classDiagram
         </section>
         
         <!-- Command Options -->
-        <section class="section-options" style="margin-bottom: 2rem;">
+        <section class="section-options">
             <div class="glass-card">
-                <h2><span style="font-size: 2rem;">⚙️</span> Command Options</h2>
+                <h2><span>⚙️</span> Command Options</h2>
                 
                 <table class="glass-table">
                     <thead>
@@ -356,22 +356,22 @@ classDiagram
         </section>
         
         <!-- Related Features -->
-        <section class="section-related" style="margin-bottom: 2rem;">
+        <section class="section-related">
             <div class="glass-card">
-                <h2><span style="font-size: 2rem;">🔗</span> Related Orchestrators</h2>
+                <h2><span>🔗</span> Related Orchestrators</h2>
                 <div class="feature-grid feature-grid-3">
                     <a href="git-checkpoint.html" class="glass-card">
-                        <span class="feature-icon" style="font-size: 2.5rem;">📍</span>
+                        <span class="feature-icon">📍</span>
                         <h3 class="feature-title">Git Checkpoint</h3>
                         <p class="text-secondary">Creates checkpoints</p>
                     </a>
                     <a href="tdd-orchestrator.html" class="glass-card">
-                        <span class="feature-icon" style="font-size: 2.5rem;">✅</span>
+                        <span class="feature-icon">✅</span>
                         <h3 class="feature-title">TDD Mastery</h3>
                         <p class="text-secondary">Phase checkpoints</p>
                     </a>
                     <a href="cleanup-orchestrator.html" class="glass-card">
-                        <span class="feature-icon" style="font-size: 2.5rem;">🧹</span>
+                        <span class="feature-icon">🧹</span>
                         <h3 class="feature-title">Cleanup</h3>
                         <p class="text-secondary">Safe with backup</p>
                     </a>

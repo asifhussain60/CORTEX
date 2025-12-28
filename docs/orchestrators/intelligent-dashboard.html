@@ -36,18 +36,18 @@
     <!-- Logo Header -->
     <div class="logo-header">
         <a href="../index.html">
-            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo" style="width: 300px; height: 300px; border: none; background: transparent; border-radius: 0; padding: 0">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
         </a>
     </div>
     
     <!-- Main Content -->
     <main class="container" id="main-content">
         <!-- Main Content Card -->
-        <div class="glass-card" style="margin-bottom: 2rem;">
+        <div class="glass-card">
             <h1>Intelligent Dashboard Orchestrator</h1>
             <span class="badge badge-success">Production Ready</span>
             
-            <p style="margin-top: 1.5rem; font-size: 1.1rem; line-height: 1.7; color: var(--text-secondary);">
+            <p>
                 The Intelligent Dashboard Orchestrator reverse-engineers your repository to auto-populate 
                 dashboard data. Using language-specific AST analyzers with 80-95% confidence scores, it extracts 
                 API endpoints, use cases, code smells, and dependency graphs—all without manual input. With 
@@ -88,35 +88,35 @@
         </div>
         
         <!-- Language Analyzers -->
-        <section class="section-analyzers" style="margin-bottom: 2rem;">
+        <section class="section-analyzers">
             <div class="glass-card">
-                <h2><span style="font-size: 2rem;">🔬</span> Language-Specific AST Analyzers</h2>
+                <h2><span>🔬</span> Language-Specific AST Analyzers</h2>
                 
                 <div class="analyzer-grid">
-                    <div class="analyzer-card" style="border-color: #3572A5;">
-                        <h3 style="color: #3572A5;">🐍 Python Analyzer</h3>
-                        <p style="font-size: 0.9rem;">Confidence: <strong>90%</strong></p>
-                        <ul style="font-size: 0.85rem; margin-top: 0.5rem;">
+                    <div class="analyzer-card">
+                        <h3>🐍 Python Analyzer</h3>
+                        <p>Confidence: <strong>90%</strong></p>
+                        <ul>
                             <li>Code smell detection</li>
                             <li>Docstring extraction</li>
                             <li>Dependency analysis</li>
                             <li>Class/method extraction</li>
                         </ul>
                     </div>
-                    <div class="analyzer-card" style="border-color: #f1e05a;">
-                        <h3 style="color: #f1e05a;">🟨 JavaScript/TS</h3>
-                        <p style="font-size: 0.9rem;">Confidence: <strong>85%</strong></p>
-                        <ul style="font-size: 0.85rem; margin-top: 0.5rem;">
+                    <div class="analyzer-card">
+                        <h3>🟨 JavaScript/TS</h3>
+                        <p>Confidence: <strong>85%</strong></p>
+                        <ul>
                             <li>JSDoc extraction</li>
                             <li>Module dependencies</li>
                             <li>React component tree</li>
                             <li>Express routes</li>
                         </ul>
                     </div>
-                    <div class="analyzer-card" style="border-color: #178600;">
-                        <h3 style="color: #178600;">🟩 C# Analyzer</h3>
-                        <p style="font-size: 0.9rem;">Confidence: <strong>80%</strong></p>
-                        <ul style="font-size: 0.85rem; margin-top: 0.5rem;">
+                    <div class="analyzer-card">
+                        <h3>🟩 C# Analyzer</h3>
+                        <p>Confidence: <strong>80%</strong></p>
+                        <ul>
                             <li>XML doc extraction</li>
                             <li>Class hierarchy</li>
                             <li>ASP.NET controllers</li>
@@ -128,9 +128,9 @@
         </section>
         
         <!-- Analysis Pipeline -->
-        <section class="section-pipeline" style="margin-bottom: 2rem;">
+        <section class="section-pipeline">
             <div class="glass-card diagram-card">
-                <h2><span style="font-size: 2rem;">🔄</span> 4-Phase Analysis Pipeline</h2>
+                <h2><span>🔄</span> 4-Phase Analysis Pipeline</h2>
                 <p class="diagram-title">From raw files to dashboard-ready JSON</p>
                 
                 <div class="mermaid">
@@ -202,9 +202,9 @@ flowchart TD
         </section>
         
         <!-- Pattern Detection -->
-        <section class="section-patterns" style="margin-bottom: 2rem;">
+        <section class="section-patterns">
             <div class="glass-card diagram-card">
-                <h2><span style="font-size: 2rem;">🎯</span> API Endpoint Detection Patterns</h2>
+                <h2><span>🎯</span> API Endpoint Detection Patterns</h2>
                 <p class="diagram-title">How endpoints are discovered across languages</p>
                 
                 <div class="mermaid">
@@ -255,9 +255,9 @@ flowchart LR
         </section>
         
         <!-- Caching Strategy -->
-        <section class="section-cache" style="margin-bottom: 2rem;">
+        <section class="section-cache">
             <div class="glass-card diagram-card">
-                <h2><span style="font-size: 2rem;">💾</span> LRU Caching Strategy (D3.js)</h2>
+                <h2><span>💾</span> LRU Caching Strategy (D3.js)</h2>
                 <p class="diagram-title">How AST analysis results are cached for performance</p>
                 
                 <div id="cache-diagram" class="cache-diagram"></div>
@@ -265,9 +265,9 @@ flowchart LR
         </section>
         
         <!-- Code Smell Detection -->
-        <section class="section-smells" style="margin-bottom: 2rem;">
+        <section class="section-smells">
             <div class="glass-card">
-                <h2><span style="font-size: 2rem;">👃</span> Code Smell Detection</h2>
+                <h2><span>👃</span> Code Smell Detection</h2>
                 
                 <table class="glass-table">
                     <thead>
@@ -281,22 +281,22 @@ flowchart LR
                         <tr>
                             <td>Long Methods</td>
                             <td>Line count analysis</td>
-                            <td>&gt;50 lines</td>
+                            <td>>50 lines</td>
                         </tr>
                         <tr>
                             <td>Complex Conditionals</td>
                             <td>Cyclomatic complexity</td>
-                            <td>CC &gt;15</td>
+                            <td>CC >15</td>
                         </tr>
                         <tr>
                             <td>Deep Nesting</td>
                             <td>Indentation depth</td>
-                            <td>&gt;4 levels</td>
+                            <td>>4 levels</td>
                         </tr>
                         <tr>
                             <td>Long Parameter Lists</td>
                             <td>Parameter count</td>
-                            <td>&gt;5 params</td>
+                            <td>>5 params</td>
                         </tr>
                         <tr>
                             <td>Magic Numbers</td>
@@ -306,7 +306,7 @@ flowchart LR
                         <tr>
                             <td>God Classes</td>
                             <td>Method/attribute count</td>
-                            <td>&gt;20 methods</td>
+                            <td>>20 methods</td>
                         </tr>
                     </tbody>
                 </table>
@@ -314,9 +314,9 @@ flowchart LR
         </section>
         
         <!-- Parallelization -->
-        <section class="section-parallel" style="margin-bottom: 2rem;">
+        <section class="section-parallel">
             <div class="glass-card diagram-card">
-                <h2><span style="font-size: 2rem;">⚡</span> Parallel Processing Architecture</h2>
+                <h2><span>⚡</span> Parallel Processing Architecture</h2>
                 <p class="diagram-title">How files are analyzed concurrently</p>
                 
                 <div class="mermaid">
@@ -372,9 +372,9 @@ flowchart TD
         </section>
         
         <!-- Example Output -->
-        <section class="section-output" style="margin-bottom: 2rem;">
+        <section class="section-output">
             <div class="glass-card">
-                <h2><span style="font-size: 2rem;">📋</span> Example Dashboard Data Output</h2>
+                <h2><span>📋</span> Example Dashboard Data Output</h2>
                 
                 <div class="code-block">
                     <div class="code-block-header">
@@ -421,22 +421,22 @@ flowchart TD
         </section>
         
         <!-- Related Features -->
-        <section class="section-related" style="margin-bottom: 2rem;">
+        <section class="section-related">
             <div class="glass-card">
-                <h2><span style="font-size: 2rem;">🔗</span> Related Orchestrators</h2>
+                <h2><span>🔗</span> Related Orchestrators</h2>
                 <div class="feature-grid feature-grid-3">
                     <a href="cortex-lens.html" class="glass-card">
-                        <span class="feature-icon" style="font-size: 2.5rem;">🔬</span>
+                        <span class="feature-icon">🔬</span>
                         <h3 class="feature-title">CORTEX Lens</h3>
                         <p class="text-secondary">Visual dashboard rendering</p>
                     </a>
                     <a href="refinement-orchestrator.html" class="glass-card">
-                        <span class="feature-icon" style="font-size: 2.5rem;">🔧</span>
+                        <span class="feature-icon">🔧</span>
                         <h3 class="feature-title">Refinement</h3>
                         <p class="text-secondary">Act on detected smells</p>
                     </a>
                     <a href="planning-system.html" class="glass-card">
-                        <span class="feature-icon" style="font-size: 2.5rem;">📋</span>
+                        <span class="feature-icon">📋</span>
                         <h3 class="feature-title">Planning System</h3>
                         <p class="text-secondary">Inherits discovery logic</p>
                     </a>

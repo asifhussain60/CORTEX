@@ -37,18 +37,18 @@
     <!-- Logo Header -->
     <div class="logo-header">
         <a href="../index.html">
-            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo" style="width: 300px; height: 300px; border: none; background: transparent; border-radius: 0; padding: 0">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
         </a>
     </div>
     
     <!-- Main Content -->
     <main class="container" id="main-content">
         <!-- Main Content Card -->
-        <div class="glass-card" style="margin-bottom: 2rem;">
+        <div class="glass-card">
             <h1>Debug Orchestrator</h1>
             <span class="badge badge-success">Production Ready</span>
             
-            <p style="margin-top: 1.5rem; font-size: 1.1rem; line-height: 1.7; color: var(--text-secondary);">
+            <p>
                 The Debug Orchestrator transforms chaotic debugging into a systematic process. It parses bug reports 
                 (natural language or test failures), performs holistic root cause analysis by correlating architectural 
                 review findings with debug logs, injects template-based debug markers at strategic locations, and 
@@ -90,9 +90,9 @@
         </div>
         
         <!-- Debug Workflow Loop -->
-        <section class="section-workflow" style="margin-bottom: 2rem;">
+        <section class="section-workflow">
             <div class="glass-card diagram-card">
-                <h2><span style="font-size: 2rem;">🔄</span> Debug-Fix-Verify Loop</h2>
+                <h2><span>🔄</span> Debug-Fix-Verify Loop</h2>
                 <p class="diagram-title">The core iterative debugging workflow</p>
                 
                 <div class="mermaid">
@@ -150,9 +150,9 @@ flowchart TD
         </section>
         
         <!-- Root Cause Analysis Tree -->
-        <section class="section-rca" style="margin-bottom: 2rem;">
+        <section class="section-rca">
             <div class="glass-card diagram-card">
-                <h2><span style="font-size: 2rem;">🌳</span> Root Cause Analysis Tree (D3.js)</h2>
+                <h2><span>🌳</span> Root Cause Analysis Tree (D3.js)</h2>
                 <p class="diagram-title">Interactive fault tree showing how evidence converges to root cause</p>
                 
                 <div id="root-cause-tree" class="root-cause-tree"></div>
@@ -160,9 +160,9 @@ flowchart TD
         </section>
         
         <!-- Template-Based Debug Injection -->
-        <section class="section-templates" style="margin-bottom: 2rem;">
+        <section class="section-templates">
             <div class="glass-card diagram-card">
-                <h2><span style="font-size: 2rem;">📝</span> Template-Based Debug Injection</h2>
+                <h2><span>📝</span> Template-Based Debug Injection</h2>
                 <p class="diagram-title">Debug markers injected at strategic code locations</p>
                 
                 <div class="mermaid">
@@ -219,9 +219,9 @@ flowchart LR
         </section>
         
         <!-- Integration Network -->
-        <section class="section-integrations" style="margin-bottom: 2rem;">
+        <section class="section-integrations">
             <div class="glass-card diagram-card">
-                <h2><span style="font-size: 2rem;">🔗</span> Integration Network (D3.js Force Graph)</h2>
+                <h2><span>🔗</span> Integration Network (D3.js Force Graph)</h2>
                 <p class="diagram-title">How Debug Orchestrator connects with other CORTEX systems</p>
                 
                 <div id="integration-network" class="integration-network"></div>
@@ -229,40 +229,40 @@ flowchart LR
         </section>
         
         <!-- DoR/DoD Quality Gates -->
-        <section class="section-quality" style="margin-bottom: 2rem;">
+        <section class="section-quality">
             <div class="glass-card">
-                <h2><span style="font-size: 2rem;">✅</span> Debug Quality Gates (DoR/DoD)</h2>
+                <h2><span>✅</span> Debug Quality Gates (DoR/DoD)</h2>
                 
                 <div class="dor-dod-grid">
                     <div class="tier-card tier-1">
                         <div class="tier-header">
-                            <span class="tier-icon" style="font-size: 2.5rem;">📥</span>
+                            <span class="tier-icon">📥</span>
                             <div>
                                 <div class="tier-title">Definition of Ready</div>
                                 <div class="tier-subtitle">Before debug session starts</div>
                             </div>
                         </div>
-                        <ul class="feature-list" style="font-size: 1.1rem; line-height: 1.8; margin: 0.5rem 0;">
-                            <li style="padding: 0.25rem 0;">• Bug is reproducible</li>
-                            <li style="padding: 0.25rem 0;">• Affected files identified</li>
-                            <li style="padding: 0.25rem 0;">• Tests failing consistently</li>
-                            <li style="padding: 0.25rem 0;">• Git working directory clean</li>
+                        <ul class="feature-list">
+                            <li>• Bug is reproducible</li>
+                            <li>• Affected files identified</li>
+                            <li>• Tests failing consistently</li>
+                            <li>• Git working directory clean</li>
                         </ul>
                     </div>
                     
                     <div class="tier-card tier-3">
                         <div class="tier-header">
-                            <span class="tier-icon" style="font-size: 2.5rem;">📤</span>
+                            <span class="tier-icon">📤</span>
                             <div>
                                 <div class="tier-title">Definition of Done</div>
                                 <div class="tier-subtitle">After debug session completes</div>
                             </div>
                         </div>
-                        <ul class="feature-list" style="font-size: 1.1rem; line-height: 1.8; margin: 0.5rem 0;">
-                            <li style="padding: 0.25rem 0;">• All tests passing</li>
-                            <li style="padding: 0.25rem 0;">• Zero debug markers remaining</li>
-                            <li style="padding: 0.25rem 0;">• Patterns learned to Tier 2</li>
-                            <li style="padding: 0.25rem 0;">• Git checkpoint created</li>
+                        <ul class="feature-list">
+                            <li>• All tests passing</li>
+                            <li>• Zero debug markers remaining</li>
+                            <li>• Patterns learned to Tier 2</li>
+                            <li>• Git checkpoint created</li>
                         </ul>
                     </div>
                 </div>
@@ -270,9 +270,9 @@ flowchart LR
         </section>
         
         <!-- Event Tracing Sequence -->
-        <section class="section-tracing" style="margin-bottom: 2rem;">
+        <section class="section-tracing">
             <div class="glass-card diagram-card">
-                <h2><span style="font-size: 2rem;">📊</span> Event Tracing Sequence</h2>
+                <h2><span>📊</span> Event Tracing Sequence</h2>
                 <p class="diagram-title">How events are captured and correlated during debugging</p>
                 
                 <div class="mermaid">
@@ -321,9 +321,9 @@ sequenceDiagram
         </section>
         
         <!-- Marker Lifecycle -->
-        <section class="section-markers" style="margin-bottom: 2rem;">
+        <section class="section-markers">
             <div class="glass-card diagram-card">
-                <h2><span style="font-size: 2rem;">🏷️</span> Debug Marker Lifecycle</h2>
+                <h2><span>🏷️</span> Debug Marker Lifecycle</h2>
                 <p class="diagram-title">From injection to guaranteed cleanup</p>
                 
                 <div class="mermaid">
@@ -375,9 +375,9 @@ stateDiagram-v2
         </section>
         
         <!-- Example Output -->
-        <section class="section-output" style="margin-bottom: 2rem;">
+        <section class="section-output">
             <div class="glass-card">
-                <h2><span style="font-size: 2rem;">📋</span> Example Debug Session Report</h2>
+                <h2><span>📋</span> Example Debug Session Report</h2>
                 
                 <div class="code-block">
                     <div class="code-block-header">
@@ -432,22 +432,22 @@ stateDiagram-v2
         </section>
         
         <!-- Related Features -->
-        <section class="section-related" style="margin-bottom: 2rem;">
+        <section class="section-related">
             <div class="glass-card">
-                <h2><span style="font-size: 2rem;">🔗</span> Related Orchestrators</h2>
+                <h2><span>🔗</span> Related Orchestrators</h2>
                 <div class="feature-grid feature-grid-3">
                     <a href="tdd-orchestrator.html" class="glass-card">
-                        <span class="feature-icon" style="font-size: 2.5rem;">✅</span>
+                        <span class="feature-icon">✅</span>
                         <h3 class="feature-title">TDD Mastery</h3>
                         <p class="text-secondary">Triggers debug on test failure</p>
                     </a>
                     <a href="git-checkpoint.html" class="glass-card">
-                        <span class="feature-icon" style="font-size: 2.5rem;">📍</span>
+                        <span class="feature-icon">📍</span>
                         <h3 class="feature-title">Git Checkpoint</h3>
                         <p class="text-secondary">Rollback points during debug</p>
                     </a>
                     <a href="cortex-lens.html" class="glass-card">
-                        <span class="feature-icon" style="font-size: 2.5rem;">🔬</span>
+                        <span class="feature-icon">🔬</span>
                         <h3 class="feature-title">CORTEX Lens</h3>
                         <p class="text-secondary">Deep code analysis</p>
                     </a>
