@@ -518,6 +518,296 @@ domains:
 
 ---
 
+### Phase 1.5: 🔍 Quality Review & Styling Standards Compliance (Day 1.5 - 3 hours) 🆕
+
+**CRITICAL: Execute AFTER Phase 4 (all 17 category pages complete) and BEFORE Phase 5**
+
+**Objectives:**
+- Comprehensive review of ALL generated knowledge library files
+- Enforce compliance with **documentation-styling-standards.md v1.1.0** (PRIMARY authority)
+- Override any conflicting rules from **docgen.old v4.2** (SECONDARY authority)
+- Run automated HTML quality tools to detect violations
+- Fix all styling inconsistencies before proceeding to Phase 5 (knowledge file pages)
+
+**Scope:**
+- 6 completed category pages: api-design.html, microservices.html, database.html, testing.html, engineering.html, ddd.html
+- 11 pending category pages (once Phase 4 completes)
+- 1 domain overview page (docs/knowledge/index.html, once created)
+- 1 home page integration (docs/index.html tile, once updated)
+
+**Deliverables:**
+1. **Quality Review Checklist Report** (cortex-brain/documents/planning/active/knowledge-documentation/quality-review-checklist.md)
+2. **HTML Validator Report** (automated via html_validator.py)
+3. **Style Centralizer Report** (automated via html_style_centralizer.py)
+4. **Compliance Matrix** (documents which files passed/failed each standard)
+5. **Fix Log** (list of corrected violations with before/after examples)
+
+---
+
+#### **Automated Tools Execution (MANDATORY)**
+
+**Location:** `cortex-toolkit/documentation/html-tools/`
+
+**Step 1: HTML Syntax Validation**
+```bash
+# Run syntax validator on ALL knowledge library pages
+python3 cortex-toolkit/documentation/html-tools/html_validator.py
+
+# Expected Output:
+# ✅ All 17 files are syntactically correct
+# OR
+# ❌ Syntax errors in X files:
+#    - docs/knowledge/frontend.html: Line 42: Unclosed <div> tag
+#    - docs/knowledge/api-design.html: Line 89: Missing closing </section>
+```
+
+**Step 2: Inline Style Removal**
+```bash
+# Remove ALL inline styles, centralize to main.css
+python3 cortex-toolkit/documentation/html-tools/html_style_centralizer.py
+
+# Expected Output:
+# ✅ Processed 17 files
+# ✅ Removed 0 inline styles (if already compliant)
+# OR
+# 🔧 Removed X inline styles from Y files:
+#    - docs/knowledge/ddd.html: Removed 3 styles (lines 45, 67, 102)
+#    - docs/knowledge/engineering.html: Removed 1 style (line 234)
+```
+
+**Allowed Exceptions (DO NOT flag as violations):**
+1. `docs/story/viewer.html` - Legacy story viewer (3 inline styles preserved per docgen.old)
+2. D3.js dynamic styling - `style="background: ${d.color}"` (runtime-generated, cannot be centralized)
+
+**Failure Mode:**
+- If html_validator.py reports errors: STOP, fix syntax errors before proceeding
+- If html_style_centralizer.py removes >0 styles: Review changes, commit, re-validate
+
+---
+
+#### **Manual Compliance Checklist (Per File)**
+
+**Use this checklist for EACH of 17 category pages + domain overview + home tile:**
+
+**✅ Logo Compliance (documentation-styling-standards.md Section: Logo Standards)**
+- [ ] Logo uses `.page-logo` class (NO inline width attribute)
+- [ ] Desktop: Logo CSS width = 300px
+- [ ] Mobile (<768px): Logo CSS width = 200px
+- [ ] Logo has glow effect: `filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.5))`
+- [ ] Logo centered via `.logo-header` container
+
+**✅ Icon Compliance (documentation-styling-standards.md Section: Icon Sizing Standards)**
+- [ ] Phase icons use `.phase-icon` class with `font-size: 2.4rem`
+- [ ] Tier/card icons use `.tier-icon` class with `font-size: 2.4rem`
+- [ ] NO icons sized at 2rem (docgen.old base, must be 2.4rem per standards)
+
+**✅ Panel Spacing (documentation-styling-standards.md Section: Spacing Standards)**
+- [ ] All `.glass-card` have `margin-bottom: var(--spacing-2xl)` (48px)
+- [ ] All major sections have `margin-top: var(--spacing-2xl)` (48px)
+- [ ] NO panels with <48px spacing (prevents visual cramping)
+
+**✅ Typography (documentation-styling-standards.md Section: Typography Standards)**
+- [ ] Body text: `font-size: 1rem` (16px), `line-height: 1.7`
+- [ ] Feature list items: `font-size: 1.0625rem` (17px)
+- [ ] Phase titles: `font-size: 1.125rem` (18px)
+- [ ] Tier titles: `font-size: 1.375rem` (22px)
+- [ ] NO text smaller than 14px (accessibility minimum)
+
+**✅ List & Bullet Compliance (documentation-styling-standards.md Section: List & Bullet Standards)**
+- [ ] Lists use `.feature-list` class
+- [ ] Bullets generated via CSS `::before` with `content: "•"`
+- [ ] Bullets use `position: absolute`, `left: 0.5rem`, `top: 0.125rem`
+- [ ] Bullet size: `font-size: 1.5rem` (24px)
+- [ ] Bullet color: `color: var(--accent-primary)` (brand cyan)
+- [ ] NO bullet characters in HTML markup (e.g., `<li>• Item</li>` is FORBIDDEN)
+- [ ] List item padding: `padding: var(--spacing-xs) var(--spacing-sm) var(--spacing-xs) 2rem`
+- [ ] NO margin-bottom between list items (`margin-bottom: 0`)
+- [ ] Line-height: `line-height: 1.5` (compact for lists)
+
+**✅ Mobile Responsiveness (documentation-styling-standards.md Section: Responsive Design Requirements)**
+- [ ] Breakpoints: 320px (mobile), 768px (tablet), 1024px (desktop)
+- [ ] Logo scales: 200px at 768px and below
+- [ ] Cards stack vertically: `grid-template-columns: 1fr` at 480px and below
+- [ ] Touch targets: Minimum 44x44px (buttons, links)
+- [ ] Text remains readable: Never below 14px on mobile
+
+**✅ Color & Theme Compliance (documentation-styling-standards.md Section: Color & Visual Standards)**
+- [ ] Background gradient: `linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%)`
+- [ ] Accent primary: `#00d4ff` (CORTEX cyan)
+- [ ] Accent secondary: `#7b61ff` (purple)
+- [ ] All cards use glassmorphism: `background: rgba(26, 31, 58, 0.7)`, `backdrop-filter: blur(10px)`
+- [ ] Border: `border: 1px solid rgba(255, 255, 255, 0.1)`
+
+**✅ Inline Style Prohibition (documentation-styling-standards.md Section: Glassmorphism Styling Enforcement)**
+- [ ] ZERO inline `style=""` attributes (except story button image per docgen.old)
+- [ ] ZERO page-specific `<style>` tags
+- [ ] ALL styling via `<link rel="stylesheet" href="../assets/css/main.css">`
+- [ ] NO alternate CSS files (e.g., `technical/assets/styles/glassmorphism.css` is FORBIDDEN)
+
+**✅ Version Number Removal (documentation-styling-standards.md Section: Version Number Removal Policy)**
+- [ ] NO version numbers in page titles (e.g., "Planning System 2.0" → "Planning System")
+- [ ] NO version numbers in H1 headers
+- [ ] NO "Production Ready" or status badges in main content
+- [ ] Version metadata allowed in footer only
+
+---
+
+#### **Compliance Matrix Template**
+
+**Create:** `cortex-brain/documents/planning/active/knowledge-documentation/compliance-matrix.md`
+
+**Format:**
+```markdown
+# Knowledge Library Styling Standards Compliance Matrix
+
+**Review Date:** December 28, 2025  
+**Reviewer:** Asif Hussain  
+**Standards Version:** documentation-styling-standards.md v1.1.0
+
+| File | Logo | Icons | Spacing | Typography | Bullets | Mobile | Colors | Inline Styles | Status |
+|------|------|-------|---------|------------|---------|--------|--------|---------------|--------|
+| api-design.html | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | PASS |
+| microservices.html | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | PASS |
+| database.html | ✅ | ✅ | ✅ | ✅ | ⚠️ | ✅ | ✅ | ✅ | WARN |
+| testing.html | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | PASS |
+| engineering.html | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | PASS |
+| ddd.html | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | PASS |
+| devops.html | ⏳ | ⏳ | ⏳ | ⏳ | ⏳ | ⏳ | ⏳ | ⏳ | PENDING |
+| ... | ... | ... | ... | ... | ... | ... | ... | ... | ... |
+
+**Legend:**
+- ✅ PASS: Fully compliant
+- ⚠️ WARN: Minor issues (document in Fix Log)
+- ❌ FAIL: Major violations (MUST fix before Phase 5)
+- ⏳ PENDING: Not yet reviewed
+
+**Overall Compliance Rate:** 6/6 completed pages = 100% (as of Phase 4 completion)
+```
+
+---
+
+#### **Fix Log Template**
+
+**Create:** `cortex-brain/documents/planning/active/knowledge-documentation/fix-log.md`
+
+**Format:**
+```markdown
+# Knowledge Library Styling Fixes Log
+
+**Review Date:** December 28, 2025  
+**Standards Version:** documentation-styling-standards.md v1.1.0
+
+---
+
+## File: database.html
+
+**Issue #1: Bullet Characters in HTML**
+- **Category:** List & Bullet Standards (CRITICAL)
+- **Violation:** Line 67: `<li>• Use indexes for foreign keys</li>`
+- **Standard:** Bullets MUST be CSS-generated via `::before`, NOT HTML text
+- **Fix:** Remove "•" from HTML, ensure `.feature-list li::before` CSS exists
+- **Before:**
+  ```html
+  <li>• Use indexes for foreign keys</li>
+  ```
+- **After:**
+  ```html
+  <li>Use indexes for foreign keys</li>
+  ```
+- **Status:** ✅ FIXED (Commit: abc123)
+
+**Issue #2: Panel Spacing Too Tight**
+- **Category:** Spacing Standards (MEDIUM)
+- **Violation:** Line 102: `.glass-card` has `margin-bottom: 24px` (should be 48px)
+- **Standard:** Minimum 48px (`var(--spacing-2xl)`) between panels
+- **Fix:** Update CSS class usage
+- **Before:**
+  ```html
+  <div class="glass-card" style="margin-bottom: 24px;">
+  ```
+- **After:**
+  ```html
+  <div class="glass-card">
+  ```
+- **Status:** ✅ FIXED (Commit: abc124)
+
+---
+
+## File: frontend.html
+
+**No violations found.** ✅ FULLY COMPLIANT
+
+---
+```
+
+---
+
+#### **Validation Workflow**
+
+**Execute in this order:**
+
+1. **Run Automated Tools**
+   ```bash
+   # Step 1: Syntax validation
+   python3 cortex-toolkit/documentation/html-tools/html_validator.py > validation-report.txt
+   
+   # Step 2: Inline style removal
+   python3 cortex-toolkit/documentation/html-tools/html_style_centralizer.py > centralization-report.txt
+   
+   # Review reports
+   cat validation-report.txt
+   cat centralization-report.txt
+   ```
+
+2. **Manual Compliance Review**
+   - Open each category page in browser
+   - Go through checklist section by section
+   - Use browser DevTools to inspect CSS (logo width, icon size, spacing)
+   - Test mobile responsiveness (Chrome DevTools device emulation)
+   - Record findings in Compliance Matrix
+
+3. **Fix Violations**
+   - Prioritize CRITICAL issues first (inline styles, HTML syntax errors)
+   - Then MEDIUM issues (spacing, typography)
+   - Finally LOW issues (version numbers, minor styling)
+   - Document each fix in Fix Log
+
+4. **Re-validate**
+   - Re-run automated tools
+   - Verify fixes in browser
+   - Update Compliance Matrix status to PASS
+
+5. **Git Commit**
+   ```bash
+   git add docs/knowledge/*.html
+   git add cortex-brain/documents/planning/active/knowledge-documentation/compliance-matrix.md
+   git add cortex-brain/documents/planning/active/knowledge-documentation/fix-log.md
+   git commit -m "docs(knowledge): Phase 4.5 quality review - 100% styling standards compliance"
+   ```
+
+---
+
+#### **Success Criteria (MUST PASS before Phase 5)**
+
+- [ ] **html_validator.py:** 0 syntax errors across all 17 category pages
+- [ ] **html_style_centralizer.py:** 0 inline styles detected (or 0 remaining after removal)
+- [ ] **Compliance Matrix:** 100% PASS rate (all ✅, no ❌ FAIL status)
+- [ ] **Fix Log:** All documented issues marked as ✅ FIXED with commit hashes
+- [ ] **Manual Testing:**
+  - [ ] All pages render correctly in Chrome/Safari/Firefox
+  - [ ] Mobile responsive at 320px, 768px, 1024px breakpoints
+  - [ ] Logo scales properly (300px desktop, 200px mobile)
+  - [ ] Icons sized at 2.4rem (NOT 2rem)
+  - [ ] Panel spacing ≥48px between sections
+  - [ ] Bullets CSS-generated (absolute positioning, 1.5rem, brand color)
+  - [ ] Typography matches standards (17px lists, line-height 1.5/1.7)
+  - [ ] Zero inline styles (except story button)
+  - [ ] Single CSS file (main.css) used across all pages
+
+**If ANY criteria fails:** Fix issues, re-validate, and re-commit before proceeding to Phase 5.
+
+---
+
 ### Phase 2: Home Page Integration (Day 2 - 2 hours)
 
 **Objectives:**
@@ -1543,6 +1833,7 @@ class UserProfile extends React.Component {
   - ⏳ cloud.html
   - ⏳ containers.html
   - ⏳ 11 remaining stub pages (frontend, ui-ux, mobile, messaging, performance, security, rag-domains, etc.)
+- Phase 4.5: 🔍 **Quality Review & Styling Standards Compliance** - NOT STARTED (3h) 🆕
 - Phase 5: 🆕 Knowledge File Pages (80+ pages, Level 4) - NOT STARTED (8h)
 - Phase 6: 🎓 Educational Resources Integration - NOT STARTED (4h)
 - Phase 7: 🎨 Styling & Responsiveness - NOT STARTED (6h)
@@ -1551,7 +1842,7 @@ class UserProfile extends React.Component {
 
 **Overall Progress:** ~35% (6 of 17 category pages complete)
 
-**Timeline:** 6-8 days (69 hours total)
+**Timeline:** 6-8 days (72 hours total) ← Updated with Phase 4.5
 
 **Next Task:** Continue with devops.html, cloud.html, and containers.html
 
