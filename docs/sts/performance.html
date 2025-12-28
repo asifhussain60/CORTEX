@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="CORTEX Performance Showcase - Before & After Code Transformations">
+    <meta name="description" content="CORTEX Performance Showcase - N+1 Queries, Async, Caching Transformations">
     <meta name="author" content="Asif Hussain">
     <title>Performance | STS | CORTEX 4.0</title>
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
@@ -13,12 +13,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
 </head>
 <body class="sts-showcase">
-    <!-- Navigation -->
     <header class="site-header">
         <nav class="nav-container">
-            <a href="../index.html" class="nav-brand">
-                <i class="fas fa-brain"></i> CORTEX 4.0
-            </a>
+            <a href="../index.html" class="nav-brand"><i class="fas fa-brain"></i> CORTEX 4.0</a>
             <div class="nav-links">
                 <a href="index.html"><i class="fas fa-bullseye"></i> STS Hub</a>
                 <a href="../documentation.html"><i class="fas fa-book"></i> Docs</a>
@@ -27,608 +24,368 @@
     </header>
 
     <main class="sts-main">
-        <!-- Hero Section -->
         <section class="sts-hero">
-            <div class="hero-badge">
-                <i class="fas fa-tachometer-alt"></i> PERFORMANCE
-            </div>
-            <h1>Performance<br><span class="accent-text">Transformed</span></h1>
-            <p class="hero-subtitle">Watch CORTEX optimize slow code into lightning-fast, efficient solutions</p>
+            <div class="hero-badge"><i class="fas fa-tachometer-alt"></i> PERFORMANCE OPTIMIZATION</div>
+            <h1>Performance<br><span class="accent-text">Optimized</span></h1>
+            <p class="hero-subtitle">Watch CORTEX eliminate N+1 queries, optimize async patterns, and improve efficiency</p>
             <div class="sts-metrics">
-                <div class="metric-card">
-                    <div class="metric-value">4</div>
-                    <div class="metric-label">Issues Found</div>
-                </div>
-                <div class="metric-card accent">
-                    <div class="metric-value">10x</div>
-                    <div class="metric-label">Avg Speedup</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-value">100%</div>
-                    <div class="metric-label">Optimized</div>
-                </div>
+                <div class="metric-card"><div class="metric-value">4</div><div class="metric-label">Issues Found</div></div>
+                <div class="metric-card accent"><div class="metric-value">4</div><div class="metric-label">Optimized</div></div>
+                <div class="metric-card"><div class="metric-value">10x</div><div class="metric-label">Faster</div></div>
             </div>
         </section>
 
-        <!-- Educational Section -->
-        <section class="sts-education">
-            <div class="education-card">
-                <h3><i class="fas fa-graduation-cap"></i> Why Performance Matters</h3>
-                <p style="color: rgba(255,255,255,0.8); margin-bottom: 1.5rem;">
-                    Performance isn't just about speed—it's about user experience, server costs, and scalability.
-                    A 1-second delay in page load can cause a 7% reduction in conversions.
-                </p>
-                <div class="education-grid">
-                    <div class="education-item">
-                        <h4>N+1 Queries</h4>
-                        <p>The silent killer: 1 query for a list, then N queries for each item's details. Use eager loading.</p>
-                    </div>
-                    <div class="education-item">
-                        <h4>Big O Complexity</h4>
-                        <p>O(n²) loops can bring servers to their knees. Know your algorithms' time complexity.</p>
-                    </div>
-                    <div class="education-item">
-                        <h4>Caching</h4>
-                        <p>The fastest database query is the one you don't make. Cache frequently accessed data.</p>
-                    </div>
-                    <div class="education-item">
-                        <h4>Async Patterns</h4>
-                        <p>Don't block threads waiting for I/O. Use async/await for responsive applications.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- PERF-01: N+1 Query Problem -->
+        <!-- PERF-01: N+1 Query (C# + SQL) -->
         <section class="sts-issue-card">
             <div class="issue-header">
                 <div class="issue-badge critical">PERF-01</div>
                 <div class="issue-title">
                     <h2>N+1 Query Problem</h2>
-                    <p>101 database queries instead of 2</p>
+                    <p>Executing separate database queries for each item in a collection</p>
                 </div>
-                <span class="tech-badge tech-csharp">C# / EF Core</span>
+                <span class="tech-badge tech-csharp">C# EF Core</span>
+                <span class="tech-badge tech-sql">SQL</span>
+            </div>
+
+            <div class="refactor-explanation">
+                <h4><i class="fas fa-code-branch"></i> How This Was Refactored</h4>
+                <p>
+                    The loop executing N additional queries was replaced with <strong>eager loading</strong> using 
+                    <code>.Include()</code>. Entity Framework Core now generates a single SQL query with JOINs 
+                    to fetch orders and their related items in one database round-trip. For 100 orders, this 
+                    reduces 101 queries to just 1.
+                </p>
+                <div class="why-matters">
+                    <strong>Why this matters:</strong> N+1 is a silent performance killer. With 1000 orders, 
+                    you're making 1001 database calls instead of 1—that's 1000x more network latency.
+                </div>
             </div>
 
             <div class="transform-panels">
                 <div class="panel before-panel">
-                    <div class="panel-header">
-                        <i class="fas fa-times-circle"></i> Before CORTEX
-                    </div>
-                    <pre><code class="language-csharp">public class OrderService
+                    <div class="panel-header"><i class="fas fa-times-circle"></i> Before CORTEX</div>
+                    <pre><code class="language-csharp">public List&lt;OrderDto&gt; GetOrders()
 {
-    public async Task&lt;List&lt;OrderDto&gt;&gt; GetOrdersWithDetails()
-    {
-        // Query 1: Get all orders
-        var orders = await _context.Orders.ToListAsync();
-        
-        var result = new List&lt;OrderDto&gt;();
-        
-        foreach (var order in orders)
-        {
-            // Query 2-101: One query PER order for customer!
-            var customer = await _context.Customers
-                .FirstAsync(c => c.Id == order.CustomerId);
-            
-            // Query 102-201: One query PER order for items!
-            var items = await _context.OrderItems
-                .Where(i => i.OrderId == order.Id)
-                .ToListAsync();
-            
-            // Query 202-301+: One query PER item for product!
-            foreach (var item in items)
-            {
-                item.Product = await _context.Products
-                    .FirstAsync(p => p.Id == item.ProductId);
-            }
-            
-            result.Add(MapToDto(order, customer, items));
-        }
-        
-        return result;
-    }
-}
-
-// With 100 orders, 3 items each:
-// 1 + 100 + 100 + 300 = 501 queries!
-// Takes 15+ seconds on production database</code></pre>
-                </div>
-
-                <div class="transform-arrow">
-                    <i class="fas fa-magic"></i>
-                    <span>CORTEX</span>
-                </div>
-
-                <div class="panel after-panel">
-                    <div class="panel-header">
-                        <i class="fas fa-check-circle"></i> After CORTEX
-                    </div>
-                    <pre><code class="language-csharp">public class OrderService
-{
-    public async Task&lt;List&lt;OrderDto&gt;&gt; GetOrdersWithDetails()
-    {
-        // Single query with eager loading!
-        var orders = await _context.Orders
-            .Include(o => o.Customer)
-            .Include(o => o.Items)
-                .ThenInclude(i => i.Product)
-            .AsSplitQuery() // Optimize for many includes
-            .AsNoTracking() // Read-only optimization
-            .ToListAsync();
-        
-        return orders.Select(o => new OrderDto
-        {
-            Id = o.Id,
-            OrderDate = o.OrderDate,
-            CustomerName = o.Customer.Name,
-            Items = o.Items.Select(i => new OrderItemDto
-            {
-                ProductName = i.Product.Name,
-                Quantity = i.Quantity,
-                Price = i.Price
-            }).ToList()
-        }).ToList();
-    }
+    // Query 1: Get all orders
+    var orders = _context.Orders.ToList();
     
-    // For large datasets, use projection instead
-    public async Task&lt;List&lt;OrderSummaryDto&gt;&gt; GetOrderSummaries()
+    var result = new List&lt;OrderDto&gt;();
+    foreach (var order in orders)
     {
-        return await _context.Orders
-            .Select(o => new OrderSummaryDto
-            {
-                Id = o.Id,
-                CustomerName = o.Customer.Name,
-                TotalAmount = o.Items.Sum(i => i.Price * i.Quantity),
-                ItemCount = o.Items.Count
-            })
-            .AsNoTracking()
-            .ToListAsync();
+        // Query N: For EACH order, hit DB again!
+        var items = _context.OrderItems
+            .Where(i =&gt; i.OrderId == order.Id)
+            .ToList();
+            
+        result.Add(new OrderDto {
+            Order = order,
+            Items = items  // N+1 problem!
+        });
     }
+    return result;
 }
-
-// Now: 1-2 queries total
-// Takes ~50ms - 300x faster!</code></pre>
+// 100 orders = 101 database queries!</code></pre>
+                </div>
+                <div class="transform-arrow"><i class="fas fa-magic"></i><span>CORTEX</span></div>
+                <div class="panel after-panel">
+                    <div class="panel-header"><i class="fas fa-check-circle"></i> After CORTEX</div>
+                    <pre><code class="language-csharp">public async Task&lt;List&lt;OrderDto&gt;&gt; GetOrdersAsync()
+{
+    // Single query with eager loading
+    var orders = await _context.Orders
+        .Include(o =&gt; o.Items)      // JOIN in SQL
+        .Include(o =&gt; o.Customer)   // Another JOIN
+        .AsNoTracking()              // Read-only = faster
+        .ToListAsync();
+    
+    return orders.Select(o =&gt; new OrderDto {
+        Order = o,
+        Items = o.Items,
+        CustomerName = o.Customer.Name
+    }).ToList();
+}
+// 100 orders = 1 database query with JOINs!</code></pre>
                 </div>
             </div>
 
             <div class="fix-explanation">
-                <h4><i class="fas fa-lightbulb"></i> What CORTEX Fixed</h4>
+                <h4><i class="fas fa-lightbulb"></i> Key Improvements</h4>
                 <ul>
-                    <li><strong>Eager loading:</strong> Include() loads related data in single query</li>
-                    <li><strong>Split queries:</strong> AsSplitQuery() prevents Cartesian explosion</li>
-                    <li><strong>No tracking:</strong> AsNoTracking() skips change detection overhead</li>
-                    <li><strong>Projection:</strong> Select only needed fields, computed in database</li>
+                    <li><strong>Eager loading:</strong> <code>.Include()</code> loads related data in one query</li>
+                    <li><strong>AsNoTracking:</strong> Disables change tracking for read-only scenarios</li>
+                    <li><strong>Async:</strong> Non-blocking database operations</li>
                 </ul>
             </div>
         </section>
 
-        <!-- PERF-02: O(n²) Algorithm -->
+        <!-- PERF-02: Synchronous I/O (TypeScript) -->
         <section class="sts-issue-card">
             <div class="issue-header">
-                <div class="issue-badge critical">PERF-02</div>
+                <div class="issue-badge high">PERF-02</div>
                 <div class="issue-title">
-                    <h2>O(n²) Nested Loops</h2>
-                    <p>Quadratic complexity killing performance</p>
+                    <h2>Blocking Synchronous I/O</h2>
+                    <p>Sequential API calls blocking the event loop</p>
                 </div>
                 <span class="tech-badge tech-typescript">TypeScript</span>
             </div>
 
+            <div class="refactor-explanation">
+                <h4><i class="fas fa-code-branch"></i> How This Was Refactored</h4>
+                <p>
+                    Sequential <code>await</code> calls were parallelized using <code>Promise.all()</code>. 
+                    Independent API calls now execute concurrently instead of waiting for each other. 
+                    Three 100ms calls complete in ~100ms total instead of 300ms. For dependent calls, 
+                    we batch where possible.
+                </p>
+                <div class="why-matters">
+                    <strong>Why this matters:</strong> Users wait for the sum of all sequential calls. 
+                    Parallel execution reduces wait time to the longest single call.
+                </div>
+            </div>
+
             <div class="transform-panels">
                 <div class="panel before-panel">
-                    <div class="panel-header">
-                        <i class="fas fa-times-circle"></i> Before CORTEX
-                    </div>
-                    <pre><code class="language-typescript">interface User { id: string; name: string; }
-interface Order { id: string; userId: string; total: number; }
-
-function getUserOrderTotals(
-    users: User[], 
-    orders: Order[]
-): Map&lt;string, number&gt; {
-    const totals = new Map&lt;string, number&gt;();
+                    <div class="panel-header"><i class="fas fa-times-circle"></i> Before CORTEX</div>
+                    <pre><code class="language-typescript">async function loadDashboard(userId: string) {
+    // Sequential: Each waits for previous!
+    const user = await fetchUser(userId);      // 100ms
+    const orders = await fetchOrders(userId);  // 150ms
+    const reviews = await fetchReviews(userId); // 80ms
+    const recommendations = await fetchRecs(userId);
     
-    // O(n²) - nested loops!
-    for (const user of users) {
-        let userTotal = 0;
-        
-        // Scans ALL orders for EACH user
-        for (const order of orders) {
-            if (order.userId === user.id) {
-                userTotal += order.total;
-            }
-        }
-        
-        totals.set(user.id, userTotal);
-    }
-    
-    return totals;
+    // Total: 100 + 150 + 80 + 120 = 450ms!
+    return { user, orders, reviews, recommendations };
 }
 
-// With 10,000 users and 100,000 orders:
-// 10,000 × 100,000 = 1 BILLION iterations
-// Takes 30+ seconds</code></pre>
+// Even worse: sequential in a loop
+async function loadAllUsers(ids: string[]) {
+    const users = [];
+    for (const id of ids) {
+        users.push(await fetchUser(id)); // One at a time!
+    }
+    return users;
+}</code></pre>
                 </div>
-
-                <div class="transform-arrow">
-                    <i class="fas fa-magic"></i>
-                    <span>CORTEX</span>
-                </div>
-
+                <div class="transform-arrow"><i class="fas fa-magic"></i><span>CORTEX</span></div>
                 <div class="panel after-panel">
-                    <div class="panel-header">
-                        <i class="fas fa-check-circle"></i> After CORTEX
-                    </div>
-                    <pre><code class="language-typescript">function getUserOrderTotals(
-    users: User[], 
-    orders: Order[]
-): Map&lt;string, number&gt; {
-    // O(n) - Single pass to build index
-    const ordersByUser = new Map&lt;string, number&gt;();
+                    <div class="panel-header"><i class="fas fa-check-circle"></i> After CORTEX</div>
+                    <pre><code class="language-typescript">async function loadDashboard(userId: string) {
+    // Parallel: All requests fire simultaneously!
+    const [user, orders, reviews, recs] = await Promise.all([
+        fetchUser(userId),
+        fetchOrders(userId),
+        fetchReviews(userId),
+        fetchRecommendations(userId)
+    ]);
     
-    // One pass through orders - O(m)
-    for (const order of orders) {
-        const current = ordersByUser.get(order.userId) ?? 0;
-        ordersByUser.set(order.userId, current + order.total);
-    }
-    
-    // One pass through users - O(n)
-    const totals = new Map&lt;string, number&gt;();
-    for (const user of users) {
-        totals.set(user.id, ordersByUser.get(user.id) ?? 0);
-    }
-    
-    return totals;
+    // Total: max(100, 150, 80, 120) = 150ms!
+    return { user, orders, reviews, recommendations: recs };
 }
 
-// Even cleaner with reduce
-function getUserOrderTotalsClean(
-    users: User[], 
-    orders: Order[]
-): Map&lt;string, number&gt; {
-    // Build lookup in O(m)
-    const orderTotals = orders.reduce((acc, order) => {
-        acc.set(order.userId, (acc.get(order.userId) ?? 0) + order.total);
-        return acc;
-    }, new Map&lt;string, number&gt;());
-    
-    // Map users in O(n)
-    return new Map(
-        users.map(u => [u.id, orderTotals.get(u.id) ?? 0])
+// Parallel with error handling
+async function loadAllUsers(ids: string[]) {
+    const results = await Promise.allSettled(
+        ids.map(id =&gt; fetchUser(id))
     );
-}
-
-// O(n + m) instead of O(n × m)
-// 10,000 + 100,000 = 110,000 iterations
-// Takes ~5ms - 6000x faster!</code></pre>
+    return results
+        .filter(r =&gt; r.status === 'fulfilled')
+        .map(r =&gt; r.value);
+}</code></pre>
                 </div>
             </div>
 
             <div class="fix-explanation">
-                <h4><i class="fas fa-lightbulb"></i> What CORTEX Fixed</h4>
+                <h4><i class="fas fa-lightbulb"></i> Key Improvements</h4>
                 <ul>
-                    <li><strong>Index/lookup pattern:</strong> Build Map for O(1) lookups</li>
-                    <li><strong>Linear complexity:</strong> O(n + m) vs O(n × m)</li>
-                    <li><strong>Single passes:</strong> Each collection iterated only once</li>
-                    <li><strong>6000x speedup:</strong> From 30 seconds to 5 milliseconds</li>
+                    <li><strong>Promise.all:</strong> Executes independent promises in parallel</li>
+                    <li><strong>Promise.allSettled:</strong> Handles partial failures gracefully</li>
+                    <li><strong>3x faster:</strong> 450ms → 150ms for this dashboard</li>
                 </ul>
             </div>
         </section>
 
-        <!-- PERF-03: Missing Caching -->
+        <!-- PERF-03: Memory Leak (Angular) -->
         <section class="sts-issue-card">
             <div class="issue-header">
                 <div class="issue-badge high">PERF-03</div>
                 <div class="issue-title">
-                    <h2>Missing Cache Layer</h2>
-                    <p>Repeatedly fetching the same data from database</p>
+                    <h2>Memory Leak - Unsubscribed Observables</h2>
+                    <p>Subscriptions not cleaned up on component destroy</p>
                 </div>
-                <span class="tech-badge tech-angular">Angular / RxJS</span>
+                <span class="tech-badge tech-angular">Angular</span>
+            </div>
+
+            <div class="refactor-explanation">
+                <h4><i class="fas fa-code-branch"></i> How This Was Refactored</h4>
+                <p>
+                    Manual subscriptions were replaced with the <code>async</code> pipe and <code>takeUntilDestroyed()</code>. 
+                    The async pipe automatically subscribes in the template and unsubscribes when the component is destroyed. 
+                    For imperative subscriptions, we use Angular's <code>DestroyRef</code> to clean up automatically.
+                </p>
+                <div class="why-matters">
+                    <strong>Why this matters:</strong> Leaked subscriptions keep components alive in memory, 
+                    accumulating with each navigation. After 50 route changes, you have 50 zombie components.
+                </div>
             </div>
 
             <div class="transform-panels">
                 <div class="panel before-panel">
-                    <div class="panel-header">
-                        <i class="fas fa-times-circle"></i> Before CORTEX
-                    </div>
-                    <pre><code class="language-typescript">@Injectable({ providedIn: 'root' })
-export class ProductService {
-    constructor(private http: HttpClient) {}
+                    <div class="panel-header"><i class="fas fa-times-circle"></i> Before CORTEX</div>
+                    <pre><code class="language-typescript">@Component({ selector: 'app-dashboard' })
+export class DashboardComponent implements OnInit {
+    users: User[] = [];
     
-    // Called every time component mounts
-    getCategories(): Observable&lt;Category[]&gt; {
-        // Makes HTTP request EVERY time!
-        return this.http.get&lt;Category[]&gt;('/api/categories');
+    ngOnInit() {
+        // LEAK: Never unsubscribed!
+        this.userService.getUsers().subscribe(
+            users =&gt; this.users = users
+        );
+        
+        // LEAK: Interval keeps firing after destroy!
+        interval(5000).subscribe(() =&gt; {
+            this.refreshData();
+        });
+        
+        // LEAK: Route params subscription
+        this.route.params.subscribe(params =&gt; {
+            this.loadUser(params['id']);
+        });
     }
+    // No ngOnDestroy = memory leaks!
+}</code></pre>
+                </div>
+                <div class="transform-arrow"><i class="fas fa-magic"></i><span>CORTEX</span></div>
+                <div class="panel after-panel">
+                    <div class="panel-header"><i class="fas fa-check-circle"></i> After CORTEX</div>
+                    <pre><code class="language-typescript">@Component({ selector: 'app-dashboard' })
+export class DashboardComponent {
+    // Option 1: Async pipe (preferred)
+    users$ = this.userService.getUsers();
     
-    // User navigates back and forth - hits API each time
-    getProduct(id: string): Observable&lt;Product&gt; {
-        return this.http.get&lt;Product&gt;(`/api/products/${id}`);
-    }
+    private destroyRef = inject(DestroyRef);
     
-    // Called by multiple components simultaneously
-    getCurrentUser(): Observable&lt;User&gt; {
-        // 5 components = 5 identical API calls!
-        return this.http.get&lt;User&gt;('/api/users/me');
+    constructor() {
+        // Option 2: takeUntilDestroyed for imperative
+        interval(5000).pipe(
+            takeUntilDestroyed(this.destroyRef)
+        ).subscribe(() =&gt; this.refreshData());
+        
+        // Auto-cleanup with takeUntilDestroyed
+        this.route.params.pipe(
+            takeUntilDestroyed(this.destroyRef)
+        ).subscribe(p =&gt; this.loadUser(p['id']));
     }
 }
-
-// Result:
-// - Same categories fetched 50+ times per session
-// - 200ms latency on each call
-// - Server overloaded with redundant requests</code></pre>
-                </div>
-
-                <div class="transform-arrow">
-                    <i class="fas fa-magic"></i>
-                    <span>CORTEX</span>
-                </div>
-
-                <div class="panel after-panel">
-                    <div class="panel-header">
-                        <i class="fas fa-check-circle"></i> After CORTEX
-                    </div>
-                    <pre><code class="language-typescript">@Injectable({ providedIn: 'root' })
-export class ProductService {
-    private categoriesCache$?: Observable&lt;Category[]&gt;;
-    private productCache = new Map&lt;string, Observable&lt;Product&gt;&gt;();
-    private currentUser$?: Observable&lt;User&gt;;
-    
-    constructor(private http: HttpClient) {}
-    
-    // Cached with shareReplay - fetches once, shares result
-    getCategories(): Observable&lt;Category[]&gt; {
-        if (!this.categoriesCache$) {
-            this.categoriesCache$ = this.http
-                .get&lt;Category[]&gt;('/api/categories')
-                .pipe(
-                    shareReplay({ bufferSize: 1, refCount: true }),
-                    catchError(err => {
-                        this.categoriesCache$ = undefined; // Reset on error
-                        throw err;
-                    })
-                );
-        }
-        return this.categoriesCache$;
-    }
-    
-    // Per-item cache with TTL
-    getProduct(id: string): Observable&lt;Product&gt; {
-        if (!this.productCache.has(id)) {
-            const product$ = this.http
-                .get&lt;Product&gt;(`/api/products/${id}`)
-                .pipe(
-                    shareReplay({ bufferSize: 1, refCount: true }),
-                    tap(() => {
-                        // Auto-expire after 5 minutes
-                        setTimeout(() => this.productCache.delete(id), 
-                            5 * 60 * 1000);
-                    })
-                );
-            this.productCache.set(id, product$);
-        }
-        return this.productCache.get(id)!;
-    }
-    
-    // Share across all subscribers
-    getCurrentUser(): Observable&lt;User&gt; {
-        if (!this.currentUser$) {
-            this.currentUser$ = this.http
-                .get&lt;User&gt;('/api/users/me')
-                .pipe(shareReplay(1));
-        }
-        return this.currentUser$;
-    }
-    
-    // Manual cache invalidation
-    invalidateProductCache(id?: string): void {
-        if (id) {
-            this.productCache.delete(id);
-        } else {
-            this.productCache.clear();
-        }
-    }
-}</code></pre>
+// Template: &lt;div *ngFor="let u of users$ | async"&gt;</code></pre>
                 </div>
             </div>
 
             <div class="fix-explanation">
-                <h4><i class="fas fa-lightbulb"></i> What CORTEX Fixed</h4>
+                <h4><i class="fas fa-lightbulb"></i> Key Improvements</h4>
                 <ul>
-                    <li><strong>shareReplay:</strong> Multicasts results to all subscribers</li>
-                    <li><strong>Per-item caching:</strong> Map stores individual product observables</li>
-                    <li><strong>TTL expiration:</strong> Cache auto-invalidates after 5 minutes</li>
-                    <li><strong>Manual invalidation:</strong> Clear cache after updates</li>
+                    <li><strong>Async pipe:</strong> Auto-subscribes and unsubscribes in template</li>
+                    <li><strong>takeUntilDestroyed:</strong> Angular 16+ automatic cleanup</li>
+                    <li><strong>No manual tracking:</strong> Framework handles lifecycle</li>
                 </ul>
             </div>
         </section>
 
-        <!-- PERF-04: Blocking Async -->
+        <!-- PERF-04: Inefficient Algorithm (C#) -->
         <section class="sts-issue-card">
             <div class="issue-header">
-                <div class="issue-badge high">PERF-04</div>
+                <div class="issue-badge medium">PERF-04</div>
                 <div class="issue-title">
-                    <h2>Sequential Async Operations</h2>
-                    <p>Waiting for each operation instead of parallelizing</p>
+                    <h2>O(n²) Algorithm</h2>
+                    <p>Nested loops for lookups that should use hash-based structures</p>
                 </div>
                 <span class="tech-badge tech-csharp">C#</span>
             </div>
 
+            <div class="refactor-explanation">
+                <h4><i class="fas fa-code-branch"></i> How This Was Refactored</h4>
+                <p>
+                    The nested loop with O(n²) complexity was replaced with a <code>Dictionary</code> lookup 
+                    achieving O(n). We build a hash map of products once, then look up each order item in O(1). 
+                    For 10,000 items, this changes from 100,000,000 operations to ~20,000 operations.
+                </p>
+                <div class="why-matters">
+                    <strong>Why this matters:</strong> O(n²) algorithms work fine with 100 items but become 
+                    unusable with 10,000. The Dictionary approach scales linearly.
+                </div>
+            </div>
+
             <div class="transform-panels">
                 <div class="panel before-panel">
-                    <div class="panel-header">
-                        <i class="fas fa-times-circle"></i> Before CORTEX
-                    </div>
-                    <pre><code class="language-csharp">public async Task&lt;DashboardData&gt; GetDashboardAsync(Guid userId)
+                    <div class="panel-header"><i class="fas fa-times-circle"></i> Before CORTEX</div>
+                    <pre><code class="language-csharp">public decimal CalculateTotal(
+    List&lt;OrderItem&gt; items, 
+    List&lt;Product&gt; products)
 {
-    // Sequential - each waits for the previous!
-    var user = await _userService.GetUserAsync(userId);
-    // Wait 100ms...
+    decimal total = 0;
     
-    var orders = await _orderService.GetRecentOrdersAsync(userId);
-    // Wait 150ms...
-    
-    var notifications = await _notificationService
-        .GetUnreadAsync(userId);
-    // Wait 80ms...
-    
-    var recommendations = await _recommendationService
-        .GetPersonalizedAsync(userId);
-    // Wait 200ms...
-    
-    var analytics = await _analyticsService
-        .GetUserStatsAsync(userId);
-    // Wait 120ms...
-    
-    // Total: 650ms sequential wait time!
-    
-    return new DashboardData
+    // O(n²) - nested loops!
+    foreach (var item in items)  // n iterations
     {
-        User = user,
-        RecentOrders = orders,
-        Notifications = notifications,
-        Recommendations = recommendations,
-        Analytics = analytics
-    };
-}</code></pre>
-                </div>
-
-                <div class="transform-arrow">
-                    <i class="fas fa-magic"></i>
-                    <span>CORTEX</span>
-                </div>
-
-                <div class="panel after-panel">
-                    <div class="panel-header">
-                        <i class="fas fa-check-circle"></i> After CORTEX
-                    </div>
-                    <pre><code class="language-csharp">public async Task&lt;DashboardData&gt; GetDashboardAsync(Guid userId)
-{
-    // Parallel - all requests fire simultaneously!
-    var userTask = _userService.GetUserAsync(userId);
-    var ordersTask = _orderService.GetRecentOrdersAsync(userId);
-    var notificationsTask = _notificationService
-        .GetUnreadAsync(userId);
-    var recommendationsTask = _recommendationService
-        .GetPersonalizedAsync(userId);
-    var analyticsTask = _analyticsService
-        .GetUserStatsAsync(userId);
-    
-    // Wait for all to complete
-    await Task.WhenAll(
-        userTask, 
-        ordersTask, 
-        notificationsTask,
-        recommendationsTask,
-        analyticsTask
-    );
-    
-    // Total: ~200ms (slowest task) instead of 650ms!
-    
-    return new DashboardData
-    {
-        User = await userTask,
-        RecentOrders = await ordersTask,
-        Notifications = await notificationsTask,
-        Recommendations = await recommendationsTask,
-        Analytics = await analyticsTask
-    };
+        foreach (var product in products)  // × n iterations
+        {
+            if (product.Id == item.ProductId)
+            {
+                total += product.Price * item.Quantity;
+                break;
+            }
+        }
+    }
+    return total;
 }
-
-// Even cleaner with ValueTuple destructuring
-public async Task&lt;DashboardData&gt; GetDashboardCleanAsync(Guid userId)
+// 10,000 items × 10,000 products = 100M comparisons!</code></pre>
+                </div>
+                <div class="transform-arrow"><i class="fas fa-magic"></i><span>CORTEX</span></div>
+                <div class="panel after-panel">
+                    <div class="panel-header"><i class="fas fa-check-circle"></i> After CORTEX</div>
+                    <pre><code class="language-csharp">public decimal CalculateTotal(
+    List&lt;OrderItem&gt; items, 
+    List&lt;Product&gt; products)
 {
-    var (user, orders, notifications, recommendations, analytics) = 
-        await (
-            _userService.GetUserAsync(userId),
-            _orderService.GetRecentOrdersAsync(userId),
-            _notificationService.GetUnreadAsync(userId),
-            _recommendationService.GetPersonalizedAsync(userId),
-            _analyticsService.GetUserStatsAsync(userId)
-        ).WhenAll();
+    // O(n) - build dictionary once
+    var productLookup = products.ToDictionary(
+        p =&gt; p.Id, 
+        p =&gt; p.Price);
     
-    return new DashboardData { /* ... */ };
-}</code></pre>
+    // O(n) - single pass with O(1) lookups
+    return items.Sum(item =&gt; 
+        productLookup.TryGetValue(item.ProductId, out var price)
+            ? price * item.Quantity
+            : 0m);
+}
+// 10,000 items + 10,000 products = ~20K operations!</code></pre>
                 </div>
             </div>
 
             <div class="fix-explanation">
-                <h4><i class="fas fa-lightbulb"></i> What CORTEX Fixed</h4>
+                <h4><i class="fas fa-lightbulb"></i> Key Improvements</h4>
                 <ul>
-                    <li><strong>Parallel execution:</strong> All async operations start immediately</li>
-                    <li><strong>Task.WhenAll:</strong> Waits for all tasks efficiently</li>
-                    <li><strong>3x faster:</strong> 200ms (max) vs 650ms (sum)</li>
-                    <li><strong>Better resource usage:</strong> I/O bound work runs concurrently</li>
+                    <li><strong>Dictionary lookup:</strong> O(1) instead of O(n) per lookup</li>
+                    <li><strong>LINQ Sum:</strong> Clean, readable aggregation</li>
+                    <li><strong>5000x faster:</strong> For 10K items, 100M → 20K operations</li>
                 </ul>
             </div>
         </section>
 
-        <!-- Best Practices -->
-        <section class="sts-best-practices">
-            <h2><i class="fas fa-tachometer-alt"></i> Performance Best Practices</h2>
-            <div class="practices-grid">
-                <div class="practice-card">
-                    <div class="practice-icon">
-                        <i class="fas fa-database"></i>
-                    </div>
-                    <h3>Eager Loading</h3>
-                    <p>Use Include() and ThenInclude() to fetch related data in one query.</p>
-                    <code>.Include(o => o.Items)</code>
-                </div>
-                <div class="practice-card">
-                    <div class="practice-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h3>Know Your Big O</h3>
-                    <p>O(n²) loops are red flags. Use Maps/Sets for O(1) lookups.</p>
-                    <code>new Map() // O(1) access</code>
-                </div>
-                <div class="practice-card">
-                    <div class="practice-icon">
-                        <i class="fas fa-memory"></i>
-                    </div>
-                    <h3>Cache Wisely</h3>
-                    <p>Cache expensive operations with shareReplay, Redis, or in-memory stores.</p>
-                    <code>pipe(shareReplay(1))</code>
-                </div>
-                <div class="practice-card">
-                    <div class="practice-icon">
-                        <i class="fas fa-bolt"></i>
-                    </div>
-                    <h3>Parallelize I/O</h3>
-                    <p>Independent async operations should run in parallel with Task.WhenAll.</p>
-                    <code>await Task.WhenAll(...)</code>
-                </div>
-            </div>
-        </section>
-
-        <!-- Navigation -->
         <nav class="sts-nav">
-            <a href="code-quality.html" class="nav-prev">
-                <i class="fas fa-arrow-left"></i>
-                <span>Code Quality</span>
-            </a>
-            <a href="index.html" class="nav-hub">
-                <i class="fas fa-th"></i>
-                <span>STS Hub</span>
-            </a>
-            <a href="testing.html" class="nav-next">
-                <span>Testing</span>
-                <i class="fas fa-arrow-right"></i>
-            </a>
+            <a href="code-quality.html"><i class="fas fa-arrow-left"></i> Code Quality</a>
+            <a href="index.html" class="nav-hub"><i class="fas fa-th"></i> STS Hub</a>
+            <a href="testing.html">Testing <i class="fas fa-arrow-right"></i></a>
         </nav>
     </main>
 
-    <!-- Footer -->
-    <footer class="site-footer">
-        <div class="footer-content">
-            <p>CORTEX 4.0 — AI-Powered Code Intelligence</p>
-            <p class="footer-sub">Transforming codebases through intelligent analysis</p>
-        </div>
+    <footer style="text-align: center; padding: 2rem; color: rgba(255,255,255,0.5); font-size: 0.875rem;">
+        <p>&copy; 2024-2025 Asif Hussain. CORTEX 4.0 - Sharpen the Saw.</p>
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/typescript.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/typescript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/sql.min.js"></script>
     <script>hljs.highlightAll();</script>
 </body>
 </html>

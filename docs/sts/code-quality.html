@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="CORTEX Code Quality Showcase - Before & After Code Transformations">
+    <meta name="description" content="CORTEX Code Quality Showcase - DRY, KISS, YAGNI Transformations">
     <meta name="author" content="Asif Hussain">
     <title>Code Quality | STS | CORTEX 4.0</title>
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
@@ -30,22 +30,22 @@
         <!-- Hero Section -->
         <section class="sts-hero">
             <div class="hero-badge">
-                <i class="fas fa-gem"></i> CODE QUALITY
+                <i class="fas fa-gem"></i> CODE QUALITY PRINCIPLES
             </div>
-            <h1>Quality<br><span class="accent-text">Transformed</span></h1>
-            <p class="hero-subtitle">Watch CORTEX eliminate code smells and apply industry best practices</p>
+            <h1>Code Quality<br><span class="accent-text">Refined</span></h1>
+            <p class="hero-subtitle">Watch CORTEX apply DRY, KISS, and YAGNI principles to simplify your codebase</p>
             <div class="sts-metrics">
                 <div class="metric-card">
-                    <div class="metric-value">5</div>
-                    <div class="metric-label">Smells Found</div>
+                    <div class="metric-value">4</div>
+                    <div class="metric-label">Issues Found</div>
                 </div>
                 <div class="metric-card accent">
-                    <div class="metric-value">5</div>
-                    <div class="metric-label">Auto-Fixed</div>
+                    <div class="metric-value">4</div>
+                    <div class="metric-label">Simplified</div>
                 </div>
                 <div class="metric-card">
-                    <div class="metric-value">100%</div>
-                    <div class="metric-label">Resolved</div>
+                    <div class="metric-value">-40%</div>
+                    <div class="metric-label">Code Reduced</div>
                 </div>
             </div>
         </section>
@@ -55,39 +55,48 @@
             <div class="education-card">
                 <h3><i class="fas fa-graduation-cap"></i> Code Quality Principles</h3>
                 <p style="color: rgba(255,255,255,0.8); margin-bottom: 1.5rem;">
-                    Great code isn't just code that works—it's code that's easy to read, maintain, and extend. 
-                    These principles help you write code that your future self (and teammates) will thank you for.
+                    These timeless principles help you write code that's easier to understand, maintain, and extend.
                 </p>
                 <div class="education-grid">
                     <div class="education-item">
-                        <h4>DRY (Don't Repeat Yourself)</h4>
-                        <p>Every piece of knowledge should have a single, unambiguous representation in the system.</p>
+                        <h4>DRY - Don't Repeat Yourself</h4>
+                        <p>Every piece of knowledge should have a single, unambiguous representation.</p>
                     </div>
                     <div class="education-item">
-                        <h4>KISS (Keep It Simple, Stupid)</h4>
+                        <h4>KISS - Keep It Simple</h4>
                         <p>Simplicity is the ultimate sophistication. Avoid unnecessary complexity.</p>
                     </div>
                     <div class="education-item">
-                        <h4>YAGNI (You Aren't Gonna Need It)</h4>
-                        <p>Don't add functionality until you actually need it. Premature abstraction is the root of much evil.</p>
-                    </div>
-                    <div class="education-item">
-                        <h4>Clean Code</h4>
-                        <p>Code should be self-documenting. If you need comments to explain what it does, refactor it.</p>
+                        <h4>YAGNI - You Aren't Gonna Need It</h4>
+                        <p>Don't build features until they're actually needed.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- DRY-01: Copy-Paste Code -->
+        <!-- DRY-01: Duplicated Validation (Angular) -->
         <section class="sts-issue-card">
             <div class="issue-header">
-                <div class="issue-badge critical">DRY-01</div>
+                <div class="issue-badge high">DRY-01</div>
                 <div class="issue-title">
-                    <h2>Copy-Paste Duplication</h2>
-                    <p>Same validation logic repeated across multiple components</p>
+                    <h2>Duplicated Validation Logic</h2>
+                    <p>Same validation rules copy-pasted across multiple components</p>
                 </div>
                 <span class="tech-badge tech-angular">Angular</span>
+            </div>
+
+            <div class="refactor-explanation">
+                <h4><i class="fas fa-code-branch"></i> How This Was Refactored</h4>
+                <p>
+                    Copy-pasted validation logic was extracted into a shared <code>ValidationService</code> and 
+                    reusable Angular directives. Email validation, password strength checks, and phone formatting 
+                    now live in one place. Components use declarative validators like <code>[appEmailValidator]</code> 
+                    instead of duplicating regex patterns everywhere.
+                </p>
+                <div class="why-matters">
+                    <strong>Why this matters:</strong> When validation rules change (e.g., new password requirements), 
+                    you update one file instead of hunting through dozens of components.
+                </div>
             </div>
 
             <div class="transform-panels">
@@ -95,51 +104,41 @@
                     <div class="panel-header">
                         <i class="fas fa-times-circle"></i> Before CORTEX
                     </div>
-                    <pre><code class="language-typescript">// user-profile.component.ts
-@Component({ selector: 'app-user-profile', ... })
-export class UserProfileComponent {
+                    <pre><code class="language-typescript">// login.component.ts
+@Component({...})
+export class LoginComponent {
     validateEmail(email: string): boolean {
-        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return regex.test(email);
-    }
-    
-    validatePhone(phone: string): boolean {
-        const cleaned = phone.replace(/\D/g, '');
-        return cleaned.length === 10 || cleaned.length === 11;
-    }
-    
-    formatCurrency(amount: number): string {
-        return new Intl.NumberFormat('en-US', {
-            style: 'currency', currency: 'USD'
-        }).format(amount);
     }
 }
 
-// checkout.component.ts - SAME CODE COPIED!
-@Component({ selector: 'app-checkout', ... })
-export class CheckoutComponent {
+// register.component.ts - SAME CODE!
+@Component({...})
+export class RegisterComponent {
     validateEmail(email: string): boolean {
-        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return regex.test(email);
     }
     
-    validatePhone(phone: string): boolean {
-        const cleaned = phone.replace(/\D/g, '');
-        return cleaned.length === 10 || cleaned.length === 11;
-    }
-    
-    formatCurrency(amount: number): string {
-        return new Intl.NumberFormat('en-US', {
-            style: 'currency', currency: 'USD'
-        }).format(amount);
+    validatePassword(password: string): boolean {
+        return password.length >= 8 &&
+               /[A-Z]/.test(password) &&
+               /[0-9]/.test(password);
     }
 }
 
-// contact.component.ts - COPIED AGAIN!
-@Component({ selector: 'app-contact', ... })
-export class ContactComponent {
-    // Same methods copied a third time...
-}</code></pre>
+// profile.component.ts - SAME CODE AGAIN!
+@Component({...})
+export class ProfileComponent {
+    validateEmail(email: string): boolean {
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(email);
+    }
+}
+
+// Bug: regex is slightly different in forgot-password.component.ts!
+// Now you have 4 places to update if rules change...</code></pre>
                 </div>
 
                 <div class="transform-arrow">
@@ -154,77 +153,77 @@ export class ContactComponent {
                     <pre><code class="language-typescript">// shared/validators/validation.service.ts
 @Injectable({ providedIn: 'root' })
 export class ValidationService {
-    private readonly emailRegex = 
-        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    private readonly EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     
-    validateEmail(email: string): ValidationResult {
-        const isValid = this.emailRegex.test(email);
-        return {
-            isValid,
-            error: isValid ? null : 'Invalid email format'
-        };
+    isValidEmail(email: string): boolean {
+        return this.EMAIL_REGEX.test(email);
     }
     
-    validatePhone(phone: string): ValidationResult {
-        const cleaned = phone.replace(/\D/g, '');
-        const isValid = cleaned.length >= 10 && cleaned.length <= 11;
-        return {
-            isValid,
-            error: isValid ? null : 'Phone must be 10-11 digits'
-        };
+    validatePassword(password: string): ValidationResult {
+        const errors: string[] = [];
+        if (password.length < 8) 
+            errors.push('At least 8 characters');
+        if (!/[A-Z]/.test(password)) 
+            errors.push('One uppercase letter');
+        if (!/[0-9]/.test(password)) 
+            errors.push('One number');
+        return { valid: errors.length === 0, errors };
     }
 }
 
-// shared/pipes/currency.pipe.ts
-@Pipe({ name: 'appCurrency', standalone: true })
-export class CurrencyPipe implements PipeTransform {
-    transform(value: number, currency = 'USD'): string {
-        return new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency
-        }).format(value);
-    }
-}
-
-// Components now inject the service
-@Component({ selector: 'app-user-profile', ... })
-export class UserProfileComponent {
+// Reusable validator directive
+@Directive({
+    selector: '[appEmailValidator]',
+    providers: [{ provide: NG_VALIDATORS, useExisting: EmailValidatorDirective }]
+})
+export class EmailValidatorDirective implements Validator {
     constructor(private validation: ValidationService) {}
     
-    onEmailChange(email: string) {
-        const result = this.validation.validateEmail(email);
-        if (!result.isValid) {
-            this.emailError = result.error;
-        }
+    validate(control: AbstractControl): ValidationErrors | null {
+        return this.validation.isValidEmail(control.value) 
+            ? null 
+            : { email: 'Invalid email format' };
     }
 }
 
-// Template uses the pipe
-// {{ price | appCurrency }}
-// {{ price | appCurrency:'EUR' }}</code></pre>
+// Usage in any component
+&lt;input type="email" appEmailValidator /&gt;</code></pre>
                 </div>
             </div>
 
             <div class="fix-explanation">
-                <h4><i class="fas fa-lightbulb"></i> What CORTEX Fixed</h4>
+                <h4><i class="fas fa-lightbulb"></i> Key Improvements</h4>
                 <ul>
-                    <li><strong>Shared service:</strong> ValidationService provides all validation in one place</li>
-                    <li><strong>Custom pipe:</strong> Currency formatting available in any template</li>
-                    <li><strong>Single source of truth:</strong> Fix a bug once, it's fixed everywhere</li>
-                    <li><strong>Consistent behavior:</strong> All components use identical logic</li>
+                    <li><strong>Single source of truth:</strong> All validation rules in one service</li>
+                    <li><strong>Reusable directives:</strong> Declarative validation in templates</li>
+                    <li><strong>Consistent behavior:</strong> Same rules applied everywhere</li>
                 </ul>
             </div>
         </section>
 
-        <!-- KISS-01: Complex Conditionals -->
+        <!-- KISS-01: Over-Engineered Conditional (TypeScript) -->
         <section class="sts-issue-card">
             <div class="issue-header">
-                <div class="issue-badge high">KISS-01</div>
+                <div class="issue-badge medium">KISS-01</div>
                 <div class="issue-title">
-                    <h2>Overly Complex Conditionals</h2>
-                    <p>Nested if-else chains that are hard to follow</p>
+                    <h2>Over-Engineered Conditional</h2>
+                    <p>Complex nested logic that could be simplified</p>
                 </div>
                 <span class="tech-badge tech-typescript">TypeScript</span>
+            </div>
+
+            <div class="refactor-explanation">
+                <h4><i class="fas fa-code-branch"></i> How This Was Refactored</h4>
+                <p>
+                    Deeply nested if/else chains were replaced with <strong>early returns</strong> (guard clauses). 
+                    Each condition is checked at the start of the function, returning early if not met. This 
+                    "fail fast" approach flattens the code structure from 6 levels of nesting to 1, making the 
+                    happy path clearly visible at the end.
+                </p>
+                <div class="why-matters">
+                    <strong>Why this matters:</strong> Nested code is exponentially harder to understand and test. 
+                    Each nesting level doubles the cognitive load required to follow the logic.
+                </div>
             </div>
 
             <div class="transform-panels">
@@ -232,52 +231,38 @@ export class UserProfileComponent {
                     <div class="panel-header">
                         <i class="fas fa-times-circle"></i> Before CORTEX
                     </div>
-                    <pre><code class="language-typescript">function calculateDiscount(
-    user: User, 
-    order: Order, 
-    coupon?: Coupon
-): number {
-    let discount = 0;
-    
-    if (user) {
-        if (user.isPremium) {
-            if (order.total > 100) {
-                if (coupon) {
-                    if (coupon.type === 'percentage') {
-                        if (coupon.value > 50) {
-                            discount = order.total * 0.5;
+                    <pre><code class="language-typescript">function processOrder(order: Order): Result {
+    if (order) {
+        if (order.items && order.items.length > 0) {
+            if (order.customer) {
+                if (order.customer.isActive) {
+                    if (order.paymentMethod) {
+                        if (isValidPayment(order.paymentMethod)) {
+                            // Finally! The actual logic, 6 levels deep
+                            const total = calculateTotal(order);
+                            const tax = calculateTax(total);
+                            return {
+                                success: true,
+                                total: total + tax
+                            };
                         } else {
-                            discount = order.total * (coupon.value / 100);
+                            return { success: false, error: 'Invalid payment' };
                         }
-                    } else if (coupon.type === 'fixed') {
-                        discount = coupon.value;
+                    } else {
+                        return { success: false, error: 'No payment method' };
                     }
-                    discount += order.total * 0.1; // Premium bonus
                 } else {
-                    discount = order.total * 0.1;
+                    return { success: false, error: 'Inactive customer' };
                 }
             } else {
-                if (coupon) {
-                    if (coupon.type === 'percentage') {
-                        discount = order.total * (coupon.value / 100);
-                    } else {
-                        discount = coupon.value;
-                    }
-                }
-                discount += order.total * 0.05; // Small premium bonus
+                return { success: false, error: 'No customer' };
             }
         } else {
-            if (coupon) {
-                if (coupon.type === 'percentage') {
-                    discount = order.total * (coupon.value / 100);
-                } else {
-                    discount = coupon.value;
-                }
-            }
+            return { success: false, error: 'No items' };
         }
+    } else {
+        return { success: false, error: 'No order' };
     }
-    
-    return Math.min(discount, order.total);
 }</code></pre>
                 </div>
 
@@ -290,140 +275,117 @@ export class UserProfileComponent {
                     <div class="panel-header">
                         <i class="fas fa-check-circle"></i> After CORTEX
                     </div>
-                    <pre><code class="language-typescript">interface DiscountContext {
-    user: User;
-    order: Order;
-    coupon?: Coupon;
-}
-
-function calculateDiscount(ctx: DiscountContext): number {
-    const discounts: number[] = [];
-    
-    // Apply coupon discount
-    if (ctx.coupon) {
-        discounts.push(calculateCouponDiscount(ctx.coupon, ctx.order));
+                    <pre><code class="language-typescript">function processOrder(order: Order | null): Result {
+    // Guard clauses - fail fast and return early
+    if (!order) {
+        return { success: false, error: 'No order' };
     }
     
-    // Apply premium member discount
-    if (ctx.user.isPremium) {
-        discounts.push(calculatePremiumDiscount(ctx.order));
+    if (!order.items?.length) {
+        return { success: false, error: 'No items' };
     }
     
-    const totalDiscount = discounts.reduce((sum, d) => sum + d, 0);
-    return Math.min(totalDiscount, ctx.order.total);
-}
-
-function calculateCouponDiscount(coupon: Coupon, order: Order): number {
-    const maxPercentage = 50;
-    
-    switch (coupon.type) {
-        case 'percentage':
-            const cappedPercentage = Math.min(coupon.value, maxPercentage);
-            return order.total * (cappedPercentage / 100);
-        
-        case 'fixed':
-            return Math.min(coupon.value, order.total);
-        
-        default:
-            return 0;
-    }
-}
-
-function calculatePremiumDiscount(order: Order): number {
-    const thresholds = [
-        { minTotal: 100, rate: 0.10 },
-        { minTotal: 0, rate: 0.05 }
-    ];
-    
-    const tier = thresholds.find(t => order.total >= t.minTotal);
-    return tier ? order.total * tier.rate : 0;
-}
-
-// Even simpler with a discount engine
-class DiscountEngine {
-    private rules: DiscountRule[] = [];
-    
-    addRule(rule: DiscountRule): this {
-        this.rules.push(rule);
-        return this;
+    if (!order.customer) {
+        return { success: false, error: 'No customer' };
     }
     
-    calculate(ctx: DiscountContext): number {
-        return this.rules
-            .filter(rule => rule.applies(ctx))
-            .reduce((total, rule) => total + rule.calculate(ctx), 0);
+    if (!order.customer.isActive) {
+        return { success: false, error: 'Inactive customer' };
     }
+    
+    if (!order.paymentMethod) {
+        return { success: false, error: 'No payment method' };
+    }
+    
+    if (!isValidPayment(order.paymentMethod)) {
+        return { success: false, error: 'Invalid payment' };
+    }
+    
+    // Happy path is now clearly visible
+    const total = calculateTotal(order);
+    const tax = calculateTax(total);
+    
+    return {
+        success: true,
+        total: total + tax
+    };
 }</code></pre>
                 </div>
             </div>
 
             <div class="fix-explanation">
-                <h4><i class="fas fa-lightbulb"></i> What CORTEX Fixed</h4>
+                <h4><i class="fas fa-lightbulb"></i> Key Improvements</h4>
                 <ul>
-                    <li><strong>Flat structure:</strong> No more nested if-else chains</li>
-                    <li><strong>Single responsibility:</strong> Each function does one thing</li>
-                    <li><strong>Early returns:</strong> Guard clauses simplify logic</li>
-                    <li><strong>Rule engine:</strong> Extensible pattern for complex discounts</li>
+                    <li><strong>Guard clauses:</strong> Check and exit early for invalid cases</li>
+                    <li><strong>Flat structure:</strong> No nesting, easy to follow top to bottom</li>
+                    <li><strong>Clear happy path:</strong> Business logic is visible, not buried</li>
                 </ul>
             </div>
         </section>
 
-        <!-- YAGNI-01: Over-Engineering -->
+        <!-- YAGNI-01: Over-Engineered Abstraction (C#) -->
         <section class="sts-issue-card">
             <div class="issue-header">
                 <div class="issue-badge medium">YAGNI-01</div>
                 <div class="issue-title">
                     <h2>Premature Abstraction</h2>
-                    <p>Building complex systems for hypothetical future needs</p>
+                    <p>Complex factory pattern for a simple use case</p>
                 </div>
                 <span class="tech-badge tech-csharp">C#</span>
             </div>
 
+            <div class="refactor-explanation">
+                <h4><i class="fas fa-code-branch"></i> How This Was Refactored</h4>
+                <p>
+                    An elaborate factory/strategy/builder pattern hierarchy was collapsed into a simple class 
+                    that directly solves the current need. The original code had 8 classes to handle 2 notification 
+                    types "in case we add more later." We replaced it with a straightforward <code>NotificationService</code> 
+                    that can be refactored <em>when</em> (not if) requirements actually change.
+                </p>
+                <div class="why-matters">
+                    <strong>Why this matters:</strong> Over-engineering costs time now and makes the code harder 
+                    to understand. Build for today's requirements; refactor when tomorrow's arrive.
+                </div>
+            </div>
+
             <div class="transform-panels">
                 <div class="panel before-panel">
                     <div class="panel-header">
                         <i class="fas fa-times-circle"></i> Before CORTEX
                     </div>
-                    <pre><code class="language-csharp">// "We might need different loggers someday!"
-public interface ILogger { }
-public interface ILoggerFactory { }
-public interface ILogFormatter { }
-public interface ILogDestination { }
-public interface ILogFilter { }
-public interface ILogEnricher { }
+                    <pre><code class="language-csharp">// 8 classes for sending 2 types of notifications!
+public interface INotificationFactory { ... }
+public interface INotificationStrategy { ... }
+public interface INotificationBuilder { ... }
+public interface INotificationValidator { ... }
 
-public abstract class LoggerBase : ILogger
+public class NotificationFactory : INotificationFactory
 {
-    protected readonly ILogFormatter _formatter;
-    protected readonly ILogDestination _destination;
-    protected readonly IEnumerable&lt;ILogFilter&gt; _filters;
-    protected readonly IEnumerable&lt;ILogEnricher&gt; _enrichers;
-    
-    // Abstract methods for "flexibility"
-    protected abstract void PreProcess(LogEntry entry);
-    protected abstract void PostProcess(LogEntry entry);
+    public INotificationStrategy CreateStrategy(string type) =&gt;
+        type switch {
+            "email" =&gt; new EmailStrategy(),
+            "sms" =&gt; new SmsStrategy(),
+            _ =&gt; throw new NotSupportedException()
+        };
 }
 
-public class DefaultLoggerFactory : ILoggerFactory
+public class NotificationBuilder : INotificationBuilder
 {
-    private readonly IServiceProvider _provider;
-    private readonly LoggerOptions _options;
-    
-    public ILogger CreateLogger&lt;T&gt;()
-    {
-        // 50 lines of factory logic...
-    }
+    // 50 lines of builder pattern
 }
 
-// In startup - 20 lines of DI registration
-services.AddSingleton&lt;ILoggerFactory, DefaultLoggerFactory&gt;();
-services.AddTransient&lt;ILogFormatter, JsonLogFormatter&gt;();
-services.AddTransient&lt;ILogDestination, ConsoleLogDestination&gt;();
-// ... more registrations
+public class NotificationOrchestrator
+{
+    private readonly INotificationFactory _factory;
+    private readonly INotificationBuilder _builder;
+    private readonly INotificationValidator _validator;
+    
+    // Constructor with 4 dependencies
+    // Send method with 30 lines of orchestration
+}
 
-// Actual usage in the whole app:
-_logger.LogInformation("User logged in");
-// That's it. Just console logging.</code></pre>
+// "We might need push notifications someday!"
+// Spoiler: 2 years later, still just email and SMS</code></pre>
                 </div>
 
                 <div class="transform-arrow">
@@ -435,200 +397,81 @@ _logger.LogInformation("User logged in");
                     <div class="panel-header">
                         <i class="fas fa-check-circle"></i> After CORTEX
                     </div>
-                    <pre><code class="language-csharp">// Just use the built-in logger!
-public class UserService
+                    <pre><code class="language-csharp">// Simple, direct solution for current needs
+public class NotificationService
 {
-    private readonly ILogger&lt;UserService&gt; _logger;
+    private readonly IEmailSender _email;
+    private readonly ISmsSender _sms;
     
-    public UserService(ILogger&lt;UserService&gt; logger)
+    public NotificationService(
+        IEmailSender email, 
+        ISmsSender sms)
     {
-        _logger = logger;
+        _email = email;
+        _sms = sms;
     }
     
-    public async Task&lt;User&gt; LoginAsync(LoginRequest request)
+    public async Task SendAsync(Notification notification)
     {
-        _logger.LogInformation(
-            "Login attempt for {Email}", request.Email);
-        
-        // ... login logic
-        
-        _logger.LogInformation(
-            "User {UserId} logged in successfully", user.Id);
-        
-        return user;
-    }
-}
-
-// In startup - ONE line
-builder.Logging.AddConsole();
-
-// When you ACTUALLY need more (months later):
-builder.Logging.AddApplicationInsights();
-// Or
-builder.Logging.AddSerilog();
-
-// The abstraction already exists in .NET!
-// Microsoft.Extensions.Logging handles:
-// - Multiple providers
-// - Log levels
-// - Structured logging
-// - Filtering
-// - All the things you "might need"</code></pre>
-                </div>
-            </div>
-
-            <div class="fix-explanation">
-                <h4><i class="fas fa-lightbulb"></i> What CORTEX Fixed</h4>
-                <ul>
-                    <li><strong>Use built-in abstractions:</strong> ILogger&lt;T&gt; already provides flexibility</li>
-                    <li><strong>Deleted 6 interfaces:</strong> Removed unnecessary abstraction layers</li>
-                    <li><strong>1 line vs 50:</strong> Configuration reduced by 98%</li>
-                    <li><strong>Still extensible:</strong> Add Serilog/AppInsights when actually needed</li>
-                </ul>
-            </div>
-        </section>
-
-        <!-- CLEAN-01: Magic Numbers -->
-        <section class="sts-issue-card">
-            <div class="issue-header">
-                <div class="issue-badge medium">CLEAN-01</div>
-                <div class="issue-title">
-                    <h2>Magic Numbers & Strings</h2>
-                    <p>Unexplained literals scattered throughout code</p>
-                </div>
-                <span class="tech-badge tech-typescript">TypeScript</span>
-            </div>
-
-            <div class="transform-panels">
-                <div class="panel before-panel">
-                    <div class="panel-header">
-                        <i class="fas fa-times-circle"></i> Before CORTEX
-                    </div>
-                    <pre><code class="language-typescript">class OrderService {
-    processOrder(order: Order): void {
-        // What is 5? Why 100? What's 0.08?
-        if (order.items.length > 5) {
-            throw new Error('Too many items');
-        }
-        
-        if (order.total < 100) {
-            order.total += 9.99; // Shipping?
-        }
-        
-        order.total *= 1.08; // Tax? Which state?
-        
-        if (order.status === 2) { // What is 2?
-            this.sendEmail(order, 'order-confirm');
-        }
-        
-        // 86400000? What does that mean?
-        const expiry = Date.now() + 86400000;
-        
-        // Is 3 retries? Attempts? Something else?
-        for (let i = 0; i < 3; i++) {
-            try {
-                this.submitOrder(order);
+        switch (notification.Type)
+        {
+            case NotificationType.Email:
+                await _email.SendAsync(
+                    notification.To,
+                    notification.Subject,
+                    notification.Body);
                 break;
-            } catch (e) {
-                if (i === 2) throw e; // Why 2?
-            }
+                
+            case NotificationType.Sms:
+                await _sms.SendAsync(
+                    notification.Phone,
+                    notification.Body);
+                break;
         }
     }
-}</code></pre>
-                </div>
-
-                <div class="transform-arrow">
-                    <i class="fas fa-magic"></i>
-                    <span>CORTEX</span>
-                </div>
-
-                <div class="panel after-panel">
-                    <div class="panel-header">
-                        <i class="fas fa-check-circle"></i> After CORTEX
-                    </div>
-                    <pre><code class="language-typescript">// Named constants explain the business logic
-const ORDER_LIMITS = {
-    MAX_ITEMS_PER_ORDER: 5,
-    FREE_SHIPPING_THRESHOLD: 100,
-    STANDARD_SHIPPING_COST: 9.99
-} as const;
-
-const TAX_RATES = {
-    DEFAULT_SALES_TAX: 0.08,
-    CA_SALES_TAX: 0.0725,
-    NY_SALES_TAX: 0.08
-} as const;
-
-const TIME = {
-    ONE_DAY_MS: 24 * 60 * 60 * 1000,
-    ONE_HOUR_MS: 60 * 60 * 1000
-} as const;
-
-const RETRY_CONFIG = {
-    MAX_ATTEMPTS: 3,
-    DELAY_MS: 1000
-} as const;
-
-enum OrderStatus {
-    Pending = 1,
-    Confirmed = 2,
-    Shipped = 3,
-    Delivered = 4,
-    Cancelled = 5
 }
 
-class OrderService {
-    processOrder(order: Order): void {
-        this.validateItemCount(order);
-        this.applyShipping(order);
-        this.applyTax(order);
-        
-        if (order.status === OrderStatus.Confirmed) {
-            this.sendEmail(order, EmailTemplate.OrderConfirmation);
-        }
-        
-        const expiryDate = Date.now() + TIME.ONE_DAY_MS;
-        
-        this.submitWithRetry(order, RETRY_CONFIG.MAX_ATTEMPTS);
-    }
-    
-    private validateItemCount(order: Order): void {
-        if (order.items.length > ORDER_LIMITS.MAX_ITEMS_PER_ORDER) {
-            throw new OrderLimitExceededError(
-                `Maximum ${ORDER_LIMITS.MAX_ITEMS_PER_ORDER} items allowed`
-            );
-        }
-    }
-    
-    private applyShipping(order: Order): void {
-        if (order.total < ORDER_LIMITS.FREE_SHIPPING_THRESHOLD) {
-            order.shippingCost = ORDER_LIMITS.STANDARD_SHIPPING_COST;
-        }
-    }
-}</code></pre>
+// When push notifications ARE needed:
+// 1. Add IPushSender dependency
+// 2. Add case to switch
+// Total: 10 minutes, not 2 days of "architecture"</code></pre>
                 </div>
             </div>
 
             <div class="fix-explanation">
-                <h4><i class="fas fa-lightbulb"></i> What CORTEX Fixed</h4>
+                <h4><i class="fas fa-lightbulb"></i> Key Improvements</h4>
                 <ul>
-                    <li><strong>Named constants:</strong> Every number has a meaningful name</li>
-                    <li><strong>Enums for states:</strong> OrderStatus.Confirmed vs magic number 2</li>
-                    <li><strong>Grouped config:</strong> Related constants organized together</li>
-                    <li><strong>Self-documenting:</strong> Code explains itself without comments</li>
+                    <li><strong>Solve today's problem:</strong> Don't architect for imaginary requirements</li>
+                    <li><strong>Simple is maintainable:</strong> Anyone can understand and modify this</li>
+                    <li><strong>Easy to extend:</strong> When new types are needed, the path is clear</li>
                 </ul>
             </div>
         </section>
 
-        <!-- CLEAN-02: Long Methods -->
+        <!-- DRY-02: Magic Strings (SQL + C#) -->
         <section class="sts-issue-card">
             <div class="issue-header">
-                <div class="issue-badge high">CLEAN-02</div>
+                <div class="issue-badge high">DRY-02</div>
                 <div class="issue-title">
-                    <h2>Long Method / Function</h2>
-                    <p>200+ line methods doing too many things</p>
+                    <h2>Magic Strings Everywhere</h2>
+                    <p>Hardcoded strings scattered throughout the codebase</p>
                 </div>
-                <span class="tech-badge tech-angular">Angular</span>
+                <span class="tech-badge tech-csharp">C#</span>
+                <span class="tech-badge tech-sql">SQL</span>
+            </div>
+
+            <div class="refactor-explanation">
+                <h4><i class="fas fa-code-branch"></i> How This Was Refactored</h4>
+                <p>
+                    Scattered string literals were consolidated into strongly-typed constants and enums. Status 
+                    codes moved to an <code>OrderStatus</code> enum with a <code>[EnumMember]</code> attribute for 
+                    database mapping. Column names became constants in a <code>DbColumns</code> class. Now the 
+                    compiler catches typos, and IDE refactoring works across the entire codebase.
+                </p>
+                <div class="why-matters">
+                    <strong>Why this matters:</strong> A typo like "Pening" vs "Pending" won't be caught until 
+                    runtime. With constants, the compiler finds mistakes immediately.
+                </div>
             </div>
 
             <div class="transform-panels">
@@ -636,42 +479,30 @@ class OrderService {
                     <div class="panel-header">
                         <i class="fas fa-times-circle"></i> Before CORTEX
                     </div>
-                    <pre><code class="language-typescript">@Component({ ... })
-export class CheckoutComponent {
-    async submitOrder(): Promise&lt;void&gt; {
-        // 200+ lines in ONE method!
-        
-        // Validation (30 lines)
-        if (!this.cart.items.length) { throw new Error(); }
-        if (!this.user.email) { throw new Error(); }
-        // ... 25 more validation checks
-        
-        // Address formatting (20 lines)
-        let address = this.shippingAddress.line1;
-        if (this.shippingAddress.line2) {
-            address += ', ' + this.shippingAddress.line2;
-        }
-        // ... more formatting
-        
-        // Price calculation (40 lines)
-        let subtotal = 0;
-        for (const item of this.cart.items) {
-            let price = item.price;
-            if (item.discount) {
-                price -= item.discount;
-            }
-            // ... complex pricing logic
-        }
-        
-        // Tax calculation (20 lines)
-        // Shipping calculation (20 lines)
-        // Payment processing (30 lines)
-        // Order creation (20 lines)
-        // Email sending (15 lines)
-        // Analytics tracking (10 lines)
-        // UI updates (15 lines)
+                    <pre><code class="language-csharp">public class OrderService
+{
+    public void UpdateStatus(int orderId, string status)
+    {
+        // Magic strings everywhere!
+        if (status == "pending") { }
+        else if (status == "Pending") { } // Inconsistent!
+        else if (status == "PENDING") { } // Another variant!
     }
-}</code></pre>
+}
+
+public class OrderRepository
+{
+    public List&lt;Order&gt; GetByStatus(string status)
+    {
+        // Typo: "Pening" - won't find anything!
+        var sql = "SELECT * FROM Orders WHERE Status = @status";
+        return _db.Query&lt;Order&gt;(sql, new { status });
+    }
+}
+
+// In 15 different files:
+// "pending", "Pending", "PENDING", "Pening"
+// Good luck finding them all when requirements change!</code></pre>
                 </div>
 
                 <div class="transform-arrow">
@@ -683,141 +514,83 @@ export class CheckoutComponent {
                     <div class="panel-header">
                         <i class="fas fa-check-circle"></i> After CORTEX
                     </div>
-                    <pre><code class="language-typescript">@Component({ ... })
-export class CheckoutComponent {
-    constructor(
-        private validation: CheckoutValidationService,
-        private pricing: PricingService,
-        private orders: OrderService,
-        private notifications: NotificationService,
-        private analytics: AnalyticsService
-    ) {}
+                    <pre><code class="language-csharp">// Strongly typed status with database mapping
+public enum OrderStatus
+{
+    [EnumMember(Value = "pending")]
+    Pending,
     
-    // Main method is now a clear orchestrator
-    async submitOrder(): Promise&lt;void&gt; {
-        try {
-            this.setLoading(true);
-            
-            await this.validation.validateCheckout(this.checkoutData);
-            
-            const pricing = await this.pricing.calculate(this.cart);
-            
-            const order = await this.orders.create({
-                items: this.cart.items,
-                shipping: this.shippingAddress,
-                billing: this.billingAddress,
-                pricing
-            });
-            
-            await this.postOrderActions(order);
-            
-            this.navigateToConfirmation(order.id);
-        } catch (error) {
-            this.handleCheckoutError(error);
-        } finally {
-            this.setLoading(false);
-        }
+    [EnumMember(Value = "confirmed")]
+    Confirmed,
+    
+    [EnumMember(Value = "shipped")]
+    Shipped,
+    
+    [EnumMember(Value = "delivered")]
+    Delivered,
+    
+    [EnumMember(Value = "cancelled")]
+    Cancelled
+}
+
+public class OrderService
+{
+    public void UpdateStatus(int orderId, OrderStatus status)
+    {
+        // Compiler enforces valid values
+        if (status == OrderStatus.Pending) { }
+        
+        // Typo? Won't compile!
+        // if (status == OrderStatus.Pening) { } // Error!
     }
-    
-    private async postOrderActions(order: Order): Promise&lt;void&gt; {
-        await Promise.all([
-            this.notifications.sendConfirmation(order),
-            this.analytics.trackPurchase(order),
-            this.cart.clear()
-        ]);
-    }
-    
-    private handleCheckoutError(error: unknown): void {
-        if (error instanceof ValidationError) {
-            this.showValidationErrors(error.errors);
-        } else if (error instanceof PaymentError) {
-            this.showPaymentError(error);
-        } else {
-            this.showGenericError();
-        }
+}
+
+public class OrderRepository
+{
+    public List&lt;Order&gt; GetByStatus(OrderStatus status)
+    {
+        var sql = $"SELECT * FROM Orders WHERE Status = @status";
+        return _db.Query&lt;Order&gt;(sql, new { 
+            status = status.GetEnumMemberValue() 
+        });
     }
 }</code></pre>
                 </div>
             </div>
 
             <div class="fix-explanation">
-                <h4><i class="fas fa-lightbulb"></i> What CORTEX Fixed</h4>
+                <h4><i class="fas fa-lightbulb"></i> Key Improvements</h4>
                 <ul>
-                    <li><strong>Service extraction:</strong> Validation, pricing, orders moved to dedicated services</li>
-                    <li><strong>Clear orchestration:</strong> Main method shows the workflow at a glance</li>
-                    <li><strong>Error handling:</strong> Centralized with specific error types</li>
-                    <li><strong>Parallel execution:</strong> Independent tasks run concurrently</li>
+                    <li><strong>Enum type safety:</strong> Compiler catches invalid values</li>
+                    <li><strong>EnumMember mapping:</strong> Clean conversion to database strings</li>
+                    <li><strong>IDE support:</strong> Refactoring, find references, autocomplete all work</li>
                 </ul>
-            </div>
-        </section>
-
-        <!-- Best Practices -->
-        <section class="sts-best-practices">
-            <h2><i class="fas fa-gem"></i> Code Quality Best Practices</h2>
-            <div class="practices-grid">
-                <div class="practice-card">
-                    <div class="practice-icon">
-                        <i class="fas fa-clone"></i>
-                    </div>
-                    <h3>DRY</h3>
-                    <p>Extract shared logic into services, utilities, or base classes. One source of truth.</p>
-                    <code>@Injectable() ValidationService</code>
-                </div>
-                <div class="practice-card">
-                    <div class="practice-icon">
-                        <i class="fas fa-feather"></i>
-                    </div>
-                    <h3>KISS</h3>
-                    <p>Prefer simple, straightforward solutions. If it's hard to explain, it's too complex.</p>
-                    <code>return items.filter(x => x.active)</code>
-                </div>
-                <div class="practice-card">
-                    <div class="practice-icon">
-                        <i class="fas fa-cut"></i>
-                    </div>
-                    <h3>YAGNI</h3>
-                    <p>Build for today's requirements. Refactor when you actually need more.</p>
-                    <code>// TODO: Add when needed</code>
-                </div>
-                <div class="practice-card">
-                    <div class="practice-icon">
-                        <i class="fas fa-book-open"></i>
-                    </div>
-                    <h3>Self-Documenting</h3>
-                    <p>Use meaningful names. Code should read like prose, not puzzles.</p>
-                    <code>isEligibleForDiscount(user)</code>
-                </div>
             </div>
         </section>
 
         <!-- Navigation -->
         <nav class="sts-nav">
-            <a href="solid.html" class="nav-prev">
-                <i class="fas fa-arrow-left"></i>
-                <span>SOLID</span>
+            <a href="solid.html">
+                <i class="fas fa-arrow-left"></i> SOLID
             </a>
             <a href="index.html" class="nav-hub">
-                <i class="fas fa-th"></i>
-                <span>STS Hub</span>
+                <i class="fas fa-th"></i> STS Hub
             </a>
-            <a href="performance.html" class="nav-next">
-                <span>Performance</span>
-                <i class="fas fa-arrow-right"></i>
+            <a href="performance.html">
+                Performance <i class="fas fa-arrow-right"></i>
             </a>
         </nav>
     </main>
 
     <!-- Footer -->
-    <footer class="site-footer">
-        <div class="footer-content">
-            <p>CORTEX 4.0 — AI-Powered Code Intelligence</p>
-            <p class="footer-sub">Transforming codebases through intelligent analysis</p>
-        </div>
+    <footer style="text-align: center; padding: 2rem; color: rgba(255,255,255,0.5); font-size: 0.875rem;">
+        <p>&copy; 2024-2025 Asif Hussain. CORTEX 4.0 - Sharpen the Saw.</p>
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/typescript.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/typescript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/sql.min.js"></script>
     <script>hljs.highlightAll();</script>
 </body>
 </html>

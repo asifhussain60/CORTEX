@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="CORTEX Testing Showcase - Before & After Code Transformations">
+    <meta name="description" content="CORTEX Testing Showcase - Unit Tests, Integration Tests, Testability">
     <meta name="author" content="Asif Hussain">
     <title>Testing | STS | CORTEX 4.0</title>
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
@@ -13,12 +13,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
 </head>
 <body class="sts-showcase">
-    <!-- Navigation -->
     <header class="site-header">
         <nav class="nav-container">
-            <a href="../index.html" class="nav-brand">
-                <i class="fas fa-brain"></i> CORTEX 4.0
-            </a>
+            <a href="../index.html" class="nav-brand"><i class="fas fa-brain"></i> CORTEX 4.0</a>
             <div class="nav-links">
                 <a href="index.html"><i class="fas fa-bullseye"></i> STS Hub</a>
                 <a href="../documentation.html"><i class="fas fa-book"></i> Docs</a>
@@ -27,663 +24,428 @@
     </header>
 
     <main class="sts-main">
-        <!-- Hero Section -->
         <section class="sts-hero">
-            <div class="hero-badge">
-                <i class="fas fa-vial"></i> TESTING
-            </div>
-            <h1>Testing<br><span class="accent-text">Transformed</span></h1>
-            <p class="hero-subtitle">Watch CORTEX add comprehensive test coverage and make code testable</p>
+            <div class="hero-badge"><i class="fas fa-vial"></i> TESTING PRACTICES</div>
+            <h1>Testing<br><span class="accent-text">Mastered</span></h1>
+            <p class="hero-subtitle">Watch CORTEX transform untestable code into thoroughly tested, reliable systems</p>
             <div class="sts-metrics">
-                <div class="metric-card">
-                    <div class="metric-value">0%</div>
-                    <div class="metric-label">Before Coverage</div>
-                </div>
-                <div class="metric-card accent">
-                    <div class="metric-value">90%+</div>
-                    <div class="metric-label">After Coverage</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-value">3</div>
-                    <div class="metric-label">Issues Fixed</div>
-                </div>
+                <div class="metric-card"><div class="metric-value">4</div><div class="metric-label">Gaps Found</div></div>
+                <div class="metric-card accent"><div class="metric-value">4</div><div class="metric-label">Tests Added</div></div>
+                <div class="metric-card"><div class="metric-value">95%</div><div class="metric-label">Coverage</div></div>
             </div>
         </section>
 
-        <!-- Educational Section -->
-        <section class="sts-education">
-            <div class="education-card">
-                <h3><i class="fas fa-graduation-cap"></i> The Testing Pyramid</h3>
-                <p style="color: rgba(255,255,255,0.8); margin-bottom: 1.5rem;">
-                    Good test suites follow the testing pyramid: many fast unit tests at the base, 
-                    fewer integration tests in the middle, and minimal E2E tests at the top.
-                </p>
-                <div class="education-grid">
-                    <div class="education-item">
-                        <h4>Unit Tests (70%)</h4>
-                        <p>Test individual functions/classes in isolation. Fast, focused, run in milliseconds.</p>
-                    </div>
-                    <div class="education-item">
-                        <h4>Integration Tests (20%)</h4>
-                        <p>Test how components work together. Database, API, service interactions.</p>
-                    </div>
-                    <div class="education-item">
-                        <h4>E2E Tests (10%)</h4>
-                        <p>Test full user flows. Slow but verify real user scenarios work.</p>
-                    </div>
-                    <div class="education-item">
-                        <h4>TDD Benefits</h4>
-                        <p>Write tests first, then code. Results in better design and fewer bugs.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- TEST-01: No Unit Tests -->
+        <!-- TEST-01: Missing Unit Tests (TypeScript/Jest) -->
         <section class="sts-issue-card">
             <div class="issue-header">
-                <div class="issue-badge critical">TEST-01</div>
+                <div class="issue-badge high">TEST-01</div>
                 <div class="issue-title">
                     <h2>Missing Unit Tests</h2>
-                    <p>Business logic with zero test coverage</p>
+                    <p>Critical business logic with zero test coverage</p>
                 </div>
-                <span class="tech-badge tech-typescript">TypeScript / Jest</span>
+                <span class="tech-badge tech-typescript">TypeScript</span>
+            </div>
+
+            <div class="refactor-explanation">
+                <h4><i class="fas fa-code-branch"></i> How This Was Refactored</h4>
+                <p>
+                    The untested <code>calculateDiscount</code> function was covered with comprehensive unit tests 
+                    using Jest. Tests follow the <strong>AAA pattern</strong> (Arrange-Act-Assert) and cover edge 
+                    cases: tier boundaries, empty carts, negative values, and maximum discounts. Each business 
+                    rule now has at least one corresponding test.
+                </p>
+                <div class="why-matters">
+                    <strong>Why this matters:</strong> Untested code is legacy code. Without tests, every change 
+                    risks breaking existing functionality—and you won't know until customers report bugs.
+                </div>
             </div>
 
             <div class="transform-panels">
                 <div class="panel before-panel">
-                    <div class="panel-header">
-                        <i class="fas fa-times-circle"></i> Before CORTEX
-                    </div>
-                    <pre><code class="language-typescript">// discount.service.ts - No tests!
-export class DiscountService {
-    calculateDiscount(
-        order: Order, 
-        user: User, 
-        coupon?: Coupon
-    ): number {
-        let discount = 0;
-        
-        // Premium user discount
-        if (user.tier === 'premium') {
-            discount += order.total * 0.1;
-        } else if (user.tier === 'gold') {
-            discount += order.total * 0.15;
-        }
-        
-        // Coupon discount
-        if (coupon?.isValid) {
-            if (coupon.type === 'percentage') {
-                discount += order.total * (coupon.value / 100);
-            } else {
-                discount += coupon.value;
-            }
-        }
-        
-        // Cap discount at 50% of order
-        return Math.min(discount, order.total * 0.5);
-    }
-}
-
-// No tests = no confidence in:
-// - Edge cases (negative values, null inputs)
-// - Discount calculations are correct
-// - Cap logic works properly
-// - Refactoring won't break anything</code></pre>
-                </div>
-
-                <div class="transform-arrow">
-                    <i class="fas fa-magic"></i>
-                    <span>CORTEX</span>
-                </div>
-
-                <div class="panel after-panel">
-                    <div class="panel-header">
-                        <i class="fas fa-check-circle"></i> After CORTEX
-                    </div>
-                    <pre><code class="language-typescript">// discount.service.spec.ts
-describe('DiscountService', () => {
-    let service: DiscountService;
+                    <div class="panel-header"><i class="fas fa-times-circle"></i> Before CORTEX</div>
+                    <pre><code class="language-typescript">// discount.service.ts - NO TESTS!
+export function calculateDiscount(
+    cart: CartItem[], 
+    customerTier: string
+): number {
+    const subtotal = cart.reduce(
+        (sum, item) =&gt; sum + item.price * item.qty, 0
+    );
     
-    beforeEach(() => {
-        service = new DiscountService();
+    let discount = 0;
+    if (customerTier === 'gold') discount = 0.15;
+    else if (customerTier === 'silver') discount = 0.10;
+    else if (subtotal &gt; 100) discount = 0.05;
+    
+    // Bug: What if subtotal is negative?
+    // Bug: What about 'platinum' tier?
+    // No one knows until production breaks!
+    return subtotal * discount;
+}</code></pre>
+                </div>
+                <div class="transform-arrow"><i class="fas fa-magic"></i><span>CORTEX</span></div>
+                <div class="panel after-panel">
+                    <div class="panel-header"><i class="fas fa-check-circle"></i> After CORTEX</div>
+                    <pre><code class="language-typescript">// discount.service.spec.ts
+describe('calculateDiscount', () =&gt; {
+    it('applies 15% for gold tier', () =&gt; {
+        const cart = [{ price: 100, qty: 1 }];
+        expect(calculateDiscount(cart, 'gold')).toBe(15);
     });
     
-    describe('calculateDiscount', () => {
-        const baseOrder: Order = { total: 100, items: [] };
-        const baseUser: User = { id: '1', tier: 'standard' };
-        
-        describe('user tier discounts', () => {
-            it('should apply 10% discount for premium users', () => {
-                const user = { ...baseUser, tier: 'premium' };
-                
-                const discount = service.calculateDiscount(
-                    baseOrder, user
-                );
-                
-                expect(discount).toBe(10); // 10% of 100
-            });
-            
-            it('should apply 15% discount for gold users', () => {
-                const user = { ...baseUser, tier: 'gold' };
-                
-                const discount = service.calculateDiscount(
-                    baseOrder, user
-                );
-                
-                expect(discount).toBe(15);
-            });
-            
-            it('should apply no tier discount for standard users', () => {
-                const discount = service.calculateDiscount(
-                    baseOrder, baseUser
-                );
-                
-                expect(discount).toBe(0);
-            });
-        });
-        
-        describe('coupon discounts', () => {
-            it('should apply percentage coupon correctly', () => {
-                const coupon: Coupon = { 
-                    isValid: true, 
-                    type: 'percentage', 
-                    value: 20 
-                };
-                
-                const discount = service.calculateDiscount(
-                    baseOrder, baseUser, coupon
-                );
-                
-                expect(discount).toBe(20); // 20% of 100
-            });
-            
-            it('should apply fixed coupon correctly', () => {
-                const coupon: Coupon = { 
-                    isValid: true, 
-                    type: 'fixed', 
-                    value: 15 
-                };
-                
-                const discount = service.calculateDiscount(
-                    baseOrder, baseUser, coupon
-                );
-                
-                expect(discount).toBe(15);
-            });
-            
-            it('should ignore invalid coupons', () => {
-                const coupon: Coupon = { 
-                    isValid: false, 
-                    type: 'percentage', 
-                    value: 50 
-                };
-                
-                const discount = service.calculateDiscount(
-                    baseOrder, baseUser, coupon
-                );
-                
-                expect(discount).toBe(0);
-            });
-        });
-        
-        describe('discount cap', () => {
-            it('should cap total discount at 50% of order', () => {
-                const user = { ...baseUser, tier: 'gold' }; // 15%
-                const coupon: Coupon = { 
-                    isValid: true, 
-                    type: 'percentage', 
-                    value: 40  // 40%
-                };
-                // 15% + 40% = 55%, should cap at 50%
-                
-                const discount = service.calculateDiscount(
-                    baseOrder, user, coupon
-                );
-                
-                expect(discount).toBe(50); // 50% cap
-            });
-        });
+    it('applies 10% for silver tier', () =&gt; {
+        const cart = [{ price: 100, qty: 1 }];
+        expect(calculateDiscount(cart, 'silver')).toBe(10);
+    });
+    
+    it('applies 5% for orders over $100', () =&gt; {
+        const cart = [{ price: 150, qty: 1 }];
+        expect(calculateDiscount(cart, 'bronze')).toBe(7.5);
+    });
+    
+    it('returns 0 for empty cart', () =&gt; {
+        expect(calculateDiscount([], 'gold')).toBe(0);
+    });
+    
+    it('throws for unknown tier', () =&gt; {
+        expect(() =&gt; calculateDiscount([], 'invalid'))
+            .toThrow('Unknown tier');
     });
 });</code></pre>
                 </div>
             </div>
 
             <div class="fix-explanation">
-                <h4><i class="fas fa-lightbulb"></i> What CORTEX Fixed</h4>
+                <h4><i class="fas fa-lightbulb"></i> Key Improvements</h4>
                 <ul>
-                    <li><strong>Comprehensive coverage:</strong> All discount paths tested</li>
-                    <li><strong>Organized describe blocks:</strong> Tests grouped by feature</li>
-                    <li><strong>Edge cases:</strong> Invalid coupons, discount caps tested</li>
-                    <li><strong>Clear test names:</strong> Describe what should happen</li>
+                    <li><strong>AAA pattern:</strong> Arrange, Act, Assert for clarity</li>
+                    <li><strong>Edge cases:</strong> Empty cart, boundaries, invalid input</li>
+                    <li><strong>Error handling:</strong> Tests verify exceptions are thrown</li>
                 </ul>
             </div>
         </section>
 
-        <!-- TEST-02: Untestable Code -->
+        <!-- TEST-02: Untestable Code (C#) -->
         <section class="sts-issue-card">
             <div class="issue-header">
-                <div class="issue-badge high">TEST-02</div>
+                <div class="issue-badge critical">TEST-02</div>
                 <div class="issue-title">
-                    <h2>Untestable Code</h2>
-                    <p>Tight coupling makes unit testing impossible</p>
+                    <h2>Untestable Code - Tight Coupling</h2>
+                    <p>Direct instantiation prevents mocking dependencies</p>
                 </div>
-                <span class="tech-badge tech-csharp">C# / xUnit</span>
+                <span class="tech-badge tech-csharp">C# xUnit</span>
+            </div>
+
+            <div class="refactor-explanation">
+                <h4><i class="fas fa-code-branch"></i> How This Was Refactored</h4>
+                <p>
+                    Concrete dependencies created with <code>new</code> were replaced with <strong>constructor 
+                    injection</strong> of interfaces. The <code>OrderService</code> now receives <code>IOrderRepository</code> 
+                    and <code>IPaymentGateway</code> through its constructor. Tests can inject mocks using Moq 
+                    to verify behavior without hitting real databases or payment systems.
+                </p>
+                <div class="why-matters">
+                    <strong>Why this matters:</strong> Tight coupling means you can't test business logic without 
+                    a real database. Tests become slow, flaky, and expensive to maintain.
+                </div>
             </div>
 
             <div class="transform-panels">
                 <div class="panel before-panel">
-                    <div class="panel-header">
-                        <i class="fas fa-times-circle"></i> Before CORTEX
-                    </div>
-                    <pre><code class="language-csharp">public class OrderProcessor
+                    <div class="panel-header"><i class="fas fa-times-circle"></i> Before CORTEX</div>
+                    <pre><code class="language-csharp">public class OrderService
 {
-    public void ProcessOrder(Order order)
+    public Order CreateOrder(OrderRequest request)
     {
-        // Direct instantiation - can't mock!
-        var db = new SqlDatabase("connection-string");
+        // UNTESTABLE: Creates concrete dependencies!
+        var repository = new SqlOrderRepository();
+        var payment = new StripePaymentGateway();
         var emailer = new SmtpEmailService();
-        var paymentGateway = new StripeGateway("api-key");
         
-        // Static method call - can't intercept!
-        var taxRate = TaxCalculator.GetRate(order.ShippingState);
-        order.Tax = order.Subtotal * taxRate;
+        var order = new Order(request);
+        repository.Save(order);  // Hits real DB!
+        payment.Charge(order);   // Hits real Stripe!
+        emailer.Send(order);     // Sends real email!
         
-        // Singleton - global state!
-        Logger.Instance.Log("Processing order");
-        
-        // Direct file system access
-        var configPath = "C:\\config\\settings.json";
-        var config = File.ReadAllText(configPath);
-        
-        // All these make testing require:
-        // - Real database
-        // - Real email server
-        // - Real payment processing
-        // - Real file system
-        // - Global state cleanup
-        
-        paymentGateway.Charge(order.Total);
-        db.SaveOrder(order);
-        emailer.Send(order.CustomerEmail, "Order confirmed!");
+        return order;
     }
-}</code></pre>
+}
+// Cannot test without real database, Stripe, SMTP!</code></pre>
                 </div>
-
-                <div class="transform-arrow">
-                    <i class="fas fa-magic"></i>
-                    <span>CORTEX</span>
-                </div>
-
+                <div class="transform-arrow"><i class="fas fa-magic"></i><span>CORTEX</span></div>
                 <div class="panel after-panel">
-                    <div class="panel-header">
-                        <i class="fas fa-check-circle"></i> After CORTEX
-                    </div>
-                    <pre><code class="language-csharp">// Interfaces for all dependencies
-public interface IOrderRepository { Task SaveAsync(Order order); }
-public interface IEmailService { Task SendAsync(string to, string msg); }
-public interface IPaymentGateway { Task&lt;PaymentResult&gt; ChargeAsync(decimal amount); }
-public interface ITaxCalculator { decimal GetRate(string state); }
-
-public class OrderProcessor : IOrderProcessor
+                    <div class="panel-header"><i class="fas fa-check-circle"></i> After CORTEX</div>
+                    <pre><code class="language-csharp">public class OrderService
 {
-    private readonly IOrderRepository _repository;
-    private readonly IEmailService _emailService;
-    private readonly IPaymentGateway _paymentGateway;
-    private readonly ITaxCalculator _taxCalculator;
-    private readonly ILogger&lt;OrderProcessor&gt; _logger;
+    private readonly IOrderRepository _repo;
+    private readonly IPaymentGateway _payment;
     
-    // Dependencies injected - fully mockable!
-    public OrderProcessor(
-        IOrderRepository repository,
-        IEmailService emailService,
-        IPaymentGateway paymentGateway,
-        ITaxCalculator taxCalculator,
-        ILogger&lt;OrderProcessor&gt; logger)
+    public OrderService(IOrderRepository repo, 
+                        IPaymentGateway payment)
     {
-        _repository = repository;
-        _emailService = emailService;
-        _paymentGateway = paymentGateway;
-        _taxCalculator = taxCalculator;
-        _logger = logger;
+        _repo = repo;
+        _payment = payment;
     }
     
-    public async Task ProcessOrderAsync(Order order)
+    public async Task&lt;Order&gt; CreateOrderAsync(OrderRequest req)
     {
-        _logger.LogInformation("Processing order {OrderId}", order.Id);
-        
-        order.Tax = order.Subtotal * _taxCalculator.GetRate(order.ShippingState);
-        
-        await _paymentGateway.ChargeAsync(order.Total);
-        await _repository.SaveAsync(order);
-        await _emailService.SendAsync(order.CustomerEmail, "Order confirmed!");
+        var order = new Order(req);
+        await _repo.SaveAsync(order);
+        await _payment.ChargeAsync(order);
+        return order;
     }
 }
 
-// Now fully testable!
-public class OrderProcessorTests
+// Test with mocks:
+[Fact]
+public async Task CreateOrder_SavesAndCharges()
 {
-    [Fact]
-    public async Task ProcessOrder_ShouldCalculateTaxCorrectly()
-    {
-        // Arrange
-        var mockTax = new Mock&lt;ITaxCalculator&gt;();
-        mockTax.Setup(t => t.GetRate("CA")).Returns(0.0725m);
-        
-        var processor = new OrderProcessor(
-            Mock.Of&lt;IOrderRepository&gt;(),
-            Mock.Of&lt;IEmailService&gt;(),
-            Mock.Of&lt;IPaymentGateway&gt;(),
-            mockTax.Object,
-            Mock.Of&lt;ILogger&lt;OrderProcessor&gt;&gt;()
-        );
-        
-        var order = new Order { Subtotal = 100, ShippingState = "CA" };
-        
-        // Act
-        await processor.ProcessOrderAsync(order);
-        
-        // Assert
-        Assert.Equal(7.25m, order.Tax);
-    }
+    var mockRepo = new Mock&lt;IOrderRepository&gt;();
+    var mockPay = new Mock&lt;IPaymentGateway&gt;();
+    var svc = new OrderService(mockRepo.Object, mockPay.Object);
     
-    [Fact]
-    public async Task ProcessOrder_ShouldSendConfirmationEmail()
-    {
-        // Arrange
-        var mockEmail = new Mock&lt;IEmailService&gt;();
-        var processor = CreateProcessor(emailService: mockEmail.Object);
-        var order = new Order { CustomerEmail = "test@example.com" };
-        
-        // Act
-        await processor.ProcessOrderAsync(order);
-        
-        // Assert
-        mockEmail.Verify(
-            e => e.SendAsync("test@example.com", It.IsAny&lt;string&gt;()),
-            Times.Once
-        );
-    }
+    await svc.CreateOrderAsync(new OrderRequest());
+    
+    mockRepo.Verify(r =&gt; r.SaveAsync(It.IsAny&lt;Order&gt;()));
+    mockPay.Verify(p =&gt; p.ChargeAsync(It.IsAny&lt;Order&gt;()));
 }</code></pre>
                 </div>
             </div>
 
             <div class="fix-explanation">
-                <h4><i class="fas fa-lightbulb"></i> What CORTEX Fixed</h4>
+                <h4><i class="fas fa-lightbulb"></i> Key Improvements</h4>
                 <ul>
-                    <li><strong>Interface abstractions:</strong> All dependencies defined as interfaces</li>
                     <li><strong>Constructor injection:</strong> Dependencies provided externally</li>
-                    <li><strong>Mockable dependencies:</strong> Easy to substitute with test doubles</li>
-                    <li><strong>Pure unit tests:</strong> No database, email, or payment required</li>
+                    <li><strong>Interface abstraction:</strong> Mock implementations for testing</li>
+                    <li><strong>Verify behavior:</strong> Moq confirms methods were called correctly</li>
                 </ul>
             </div>
         </section>
 
-        <!-- TEST-03: Missing Integration Tests -->
+        <!-- TEST-03: Missing Integration Tests (Angular) -->
         <section class="sts-issue-card">
             <div class="issue-header">
                 <div class="issue-badge medium">TEST-03</div>
                 <div class="issue-title">
-                    <h2>Missing Integration Tests</h2>
-                    <p>No tests verifying components work together</p>
+                    <h2>Missing Component Integration Tests</h2>
+                    <p>Component never tested with its template and dependencies</p>
                 </div>
-                <span class="tech-badge tech-angular">Angular / Jasmine</span>
+                <span class="tech-badge tech-angular">Angular Jasmine</span>
+            </div>
+
+            <div class="refactor-explanation">
+                <h4><i class="fas fa-code-branch"></i> How This Was Refactored</h4>
+                <p>
+                    Isolated unit tests were supplemented with <strong>TestBed integration tests</strong> that 
+                    render the component with its real template. We use <code>HttpClientTestingModule</code> 
+                    to intercept HTTP calls, and <code>fakeAsync</code> with <code>tick()</code> to test 
+                    asynchronous behavior. Tests verify the rendered DOM, not just class methods.
+                </p>
+                <div class="why-matters">
+                    <strong>Why this matters:</strong> A component can have correct logic but broken template 
+                    bindings. Integration tests catch issues like missing <code>*ngIf</code> or wrong property names.
+                </div>
             </div>
 
             <div class="transform-panels">
                 <div class="panel before-panel">
-                    <div class="panel-header">
-                        <i class="fas fa-times-circle"></i> Before CORTEX
-                    </div>
-                    <pre><code class="language-typescript">// Component with no integration tests
+                    <div class="panel-header"><i class="fas fa-times-circle"></i> Before CORTEX</div>
+                    <pre><code class="language-typescript">// NO TESTS AT ALL for UserListComponent!
 @Component({
-    selector: 'app-product-list',
+    selector: 'app-user-list',
     template: `
-        &lt;div *ngFor="let product of products$ | async"&gt;
-            &lt;app-product-card 
-                [product]="product"
-                (addToCart)="onAddToCart($event)"&gt;
-            &lt;/app-product-card&gt;
-        &lt;/div&gt;
-        &lt;app-loading *ngIf="loading"&gt;&lt;/app-loading&gt;
-        &lt;app-error *ngIf="error" [message]="error"&gt;&lt;/app-error&gt;
+        &lt;div *ngIf="loading"&gt;Loading...&lt;/div&gt;
+        &lt;ul *ngIf="!loading"&gt;
+            &lt;li *ngFor="let user of users"&gt;
+                {{ user.name }} - {{ user.email }}
+            &lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;div *ngIf="error" class="error"&gt;{{ error }}&lt;/div&gt;
     `
 })
-export class ProductListComponent implements OnInit {
-    products$: Observable&lt;Product[]&gt;;
+export class UserListComponent implements OnInit {
+    users: User[] = [];
     loading = true;
-    error: string | null = null;
+    error?: string;
     
-    constructor(
-        private productService: ProductService,
-        private cartService: CartService,
-        private toastService: ToastService
-    ) {}
+    constructor(private userService: UserService) {}
     
     ngOnInit() {
-        this.products$ = this.productService.getProducts().pipe(
-            tap(() => this.loading = false),
-            catchError(err => {
-                this.error = err.message;
-                this.loading = false;
-                return of([]);
-            })
-        );
+        this.userService.getUsers().subscribe({
+            next: u =&gt; { this.users = u; this.loading = false; },
+            error: e =&gt; { this.error = e.message; this.loading = false; }
+        });
     }
-    
-    onAddToCart(product: Product) {
-        this.cartService.add(product);
-        this.toastService.success('Added to cart!');
-    }
-}
-
-// No tests to verify:
-// - Products load and display
-// - Loading state shows/hides
-// - Errors are handled
-// - Add to cart flow works</code></pre>
+}</code></pre>
                 </div>
-
-                <div class="transform-arrow">
-                    <i class="fas fa-magic"></i>
-                    <span>CORTEX</span>
-                </div>
-
+                <div class="transform-arrow"><i class="fas fa-magic"></i><span>CORTEX</span></div>
                 <div class="panel after-panel">
-                    <div class="panel-header">
-                        <i class="fas fa-check-circle"></i> After CORTEX
-                    </div>
-                    <pre><code class="language-typescript">describe('ProductListComponent', () => {
-    let component: ProductListComponent;
-    let fixture: ComponentFixture&lt;ProductListComponent&gt;;
-    let productService: jasmine.SpyObj&lt;ProductService&gt;;
-    let cartService: jasmine.SpyObj&lt;CartService&gt;;
-    let toastService: jasmine.SpyObj&lt;ToastService&gt;;
+                    <div class="panel-header"><i class="fas fa-check-circle"></i> After CORTEX</div>
+                    <pre><code class="language-typescript">describe('UserListComponent', () =&gt; {
+    let component: UserListComponent;
+    let fixture: ComponentFixture&lt;UserListComponent&gt;;
+    let httpMock: HttpTestingController;
     
-    const mockProducts: Product[] = [
-        { id: '1', name: 'Product A', price: 29.99 },
-        { id: '2', name: 'Product B', price: 49.99 }
-    ];
-    
-    beforeEach(async () => {
-        productService = jasmine.createSpyObj('ProductService', ['getProducts']);
-        cartService = jasmine.createSpyObj('CartService', ['add']);
-        toastService = jasmine.createSpyObj('ToastService', ['success']);
-        
+    beforeEach(async () =&gt; {
         await TestBed.configureTestingModule({
-            declarations: [
-                ProductListComponent,
-                ProductCardComponent,
-                LoadingComponent,
-                ErrorComponent
-            ],
-            providers: [
-                { provide: ProductService, useValue: productService },
-                { provide: CartService, useValue: cartService },
-                { provide: ToastService, useValue: toastService }
-            ]
+            imports: [HttpClientTestingModule],
+            declarations: [UserListComponent]
         }).compileComponents();
         
-        fixture = TestBed.createComponent(ProductListComponent);
+        fixture = TestBed.createComponent(UserListComponent);
         component = fixture.componentInstance;
+        httpMock = TestBed.inject(HttpTestingController);
     });
     
-    describe('loading products', () => {
-        it('should show loading indicator initially', () => {
-            productService.getProducts.and.returnValue(
-                new Subject&lt;Product[]&gt;() // Never completes
-            );
-            
-            fixture.detectChanges();
-            
-            const loading = fixture.debugElement
-                .query(By.directive(LoadingComponent));
-            expect(loading).toBeTruthy();
-        });
+    it('displays users after loading', fakeAsync(() =&gt; {
+        fixture.detectChanges(); // triggers ngOnInit
         
-        it('should display products when loaded', fakeAsync(() => {
-            productService.getProducts.and.returnValue(of(mockProducts));
-            
-            fixture.detectChanges();
-            tick();
-            fixture.detectChanges();
-            
-            const cards = fixture.debugElement
-                .queryAll(By.directive(ProductCardComponent));
-            expect(cards.length).toBe(2);
-            expect(cards[0].componentInstance.product.name)
-                .toBe('Product A');
-        }));
+        const req = httpMock.expectOne('/api/users');
+        req.flush([{ name: 'John', email: 'j@test.com' }]);
+        tick();
+        fixture.detectChanges();
         
-        it('should hide loading when products arrive', fakeAsync(() => {
-            productService.getProducts.and.returnValue(of(mockProducts));
-            
-            fixture.detectChanges();
-            tick();
-            fixture.detectChanges();
-            
-            const loading = fixture.debugElement
-                .query(By.directive(LoadingComponent));
-            expect(loading).toBeFalsy();
-        }));
-    });
+        const items = fixture.nativeElement.querySelectorAll('li');
+        expect(items.length).toBe(1);
+        expect(items[0].textContent).toContain('John');
+    }));
     
-    describe('error handling', () => {
-        it('should display error message on failure', fakeAsync(() => {
-            productService.getProducts.and.returnValue(
-                throwError(() => new Error('Network error'))
-            );
-            
-            fixture.detectChanges();
-            tick();
-            fixture.detectChanges();
-            
-            const error = fixture.debugElement
-                .query(By.directive(ErrorComponent));
-            expect(error).toBeTruthy();
-            expect(error.componentInstance.message).toBe('Network error');
-        }));
-    });
-    
-    describe('add to cart', () => {
-        it('should add product to cart and show toast', fakeAsync(() => {
-            productService.getProducts.and.returnValue(of(mockProducts));
-            fixture.detectChanges();
-            tick();
-            fixture.detectChanges();
-            
-            const card = fixture.debugElement
-                .query(By.directive(ProductCardComponent));
-            card.triggerEventHandler('addToCart', mockProducts[0]);
-            
-            expect(cartService.add)
-                .toHaveBeenCalledWith(mockProducts[0]);
-            expect(toastService.success)
-                .toHaveBeenCalledWith('Added to cart!');
-        }));
-    });
+    it('shows error on failure', fakeAsync(() =&gt; {
+        fixture.detectChanges();
+        httpMock.expectOne('/api/users').error(new ErrorEvent('fail'));
+        tick();
+        fixture.detectChanges();
+        
+        const error = fixture.nativeElement.querySelector('.error');
+        expect(error).toBeTruthy();
+    }));
 });</code></pre>
                 </div>
             </div>
 
             <div class="fix-explanation">
-                <h4><i class="fas fa-lightbulb"></i> What CORTEX Fixed</h4>
+                <h4><i class="fas fa-lightbulb"></i> Key Improvements</h4>
                 <ul>
-                    <li><strong>TestBed setup:</strong> Full Angular testing module configuration</li>
-                    <li><strong>Child component testing:</strong> ProductCard, Loading, Error included</li>
-                    <li><strong>Async handling:</strong> fakeAsync/tick for observable testing</li>
-                    <li><strong>Event testing:</strong> Verify add-to-cart flow works end-to-end</li>
+                    <li><strong>TestBed:</strong> Real Angular component testing environment</li>
+                    <li><strong>HttpTestingController:</strong> Mock HTTP without real network</li>
+                    <li><strong>DOM assertions:</strong> Verify what users actually see</li>
                 </ul>
             </div>
         </section>
 
-        <!-- Best Practices -->
-        <section class="sts-best-practices">
-            <h2><i class="fas fa-vial"></i> Testing Best Practices</h2>
-            <div class="practices-grid">
-                <div class="practice-card">
-                    <div class="practice-icon">
-                        <i class="fas fa-layer-group"></i>
-                    </div>
-                    <h3>Testing Pyramid</h3>
-                    <p>70% unit tests, 20% integration, 10% E2E. Fast feedback at the base.</p>
-                    <code>Unit → Integration → E2E</code>
+        <!-- TEST-04: Flaky Tests (SQL + C#) -->
+        <section class="sts-issue-card">
+            <div class="issue-header">
+                <div class="issue-badge medium">TEST-04</div>
+                <div class="issue-title">
+                    <h2>Flaky Tests - Time Dependencies</h2>
+                    <p>Tests fail randomly due to system time or race conditions</p>
                 </div>
-                <div class="practice-card">
-                    <div class="practice-icon">
-                        <i class="fas fa-code-branch"></i>
-                    </div>
-                    <h3>Arrange-Act-Assert</h3>
-                    <p>Structure tests clearly: setup, execute, verify. One assertion per test.</p>
-                    <code>// Arrange // Act // Assert</code>
+                <span class="tech-badge tech-csharp">C# NUnit</span>
+            </div>
+
+            <div class="refactor-explanation">
+                <h4><i class="fas fa-code-branch"></i> How This Was Refactored</h4>
+                <p>
+                    Direct calls to <code>DateTime.Now</code> were replaced with an injectable <code>ITimeProvider</code>. 
+                    Tests inject a <code>FakeTimeProvider</code> that returns controlled, predictable timestamps. 
+                    No more tests that fail at midnight or on weekends because they depend on real system time.
+                </p>
+                <div class="why-matters">
+                    <strong>Why this matters:</strong> Flaky tests erode trust in your test suite. Teams start 
+                    ignoring failures, thinking "it's probably just flaky"—until real bugs slip through.
                 </div>
-                <div class="practice-card">
-                    <div class="practice-icon">
-                        <i class="fas fa-mask"></i>
-                    </div>
-                    <h3>Mock External Dependencies</h3>
-                    <p>Isolate units by mocking databases, APIs, and services.</p>
-                    <code>Mock.Of&lt;IRepository&gt;()</code>
+            </div>
+
+            <div class="transform-panels">
+                <div class="panel before-panel">
+                    <div class="panel-header"><i class="fas fa-times-circle"></i> Before CORTEX</div>
+                    <pre><code class="language-csharp">public class SubscriptionService
+{
+    public bool IsExpired(Subscription sub)
+    {
+        // FLAKY: Uses real system time!
+        return sub.ExpiresAt &lt; DateTime.Now;
+    }
+    
+    public Subscription Renew(Subscription sub)
+    {
+        // Test results change based on when you run!
+        sub.ExpiresAt = DateTime.Now.AddMonths(1);
+        return sub;
+    }
+}
+
+[Test]
+public void IsExpired_ReturnsFalse_WhenNotExpired()
+{
+    var sub = new Subscription { 
+        ExpiresAt = DateTime.Now.AddDays(1) // Flaky!
+    };
+    Assert.IsFalse(_service.IsExpired(sub));
+    // Fails if test runs at 11:59 PM!
+}</code></pre>
                 </div>
-                <div class="practice-card">
-                    <div class="practice-icon">
-                        <i class="fas fa-sync"></i>
-                    </div>
-                    <h3>Test-Driven Development</h3>
-                    <p>Red → Green → Refactor. Write failing test first, then make it pass.</p>
-                    <code>expect().toBe() // fails first</code>
+                <div class="transform-arrow"><i class="fas fa-magic"></i><span>CORTEX</span></div>
+                <div class="panel after-panel">
+                    <div class="panel-header"><i class="fas fa-check-circle"></i> After CORTEX</div>
+                    <pre><code class="language-csharp">public class SubscriptionService
+{
+    private readonly ITimeProvider _time;
+    
+    public SubscriptionService(ITimeProvider time) =&gt; _time = time;
+    
+    public bool IsExpired(Subscription sub)
+    {
+        return sub.ExpiresAt &lt; _time.UtcNow;
+    }
+}
+
+// Test with controlled time
+public class FakeTime : ITimeProvider
+{
+    public DateTime UtcNow { get; set; }
+}
+
+[Test]
+public void IsExpired_ReturnsFalse_WhenNotExpired()
+{
+    var fakeTime = new FakeTime { UtcNow = new DateTime(2025, 1, 1) };
+    var service = new SubscriptionService(fakeTime);
+    
+    var sub = new Subscription { 
+        ExpiresAt = new DateTime(2025, 1, 15) // Fixed date
+    };
+    
+    Assert.IsFalse(service.IsExpired(sub)); // Always passes!
+}</code></pre>
                 </div>
+            </div>
+
+            <div class="fix-explanation">
+                <h4><i class="fas fa-lightbulb"></i> Key Improvements</h4>
+                <ul>
+                    <li><strong>ITimeProvider:</strong> Abstraction over system time</li>
+                    <li><strong>Deterministic tests:</strong> Same input = same output, always</li>
+                    <li><strong>Fixed dates:</strong> Tests use explicit, unchanging timestamps</li>
+                </ul>
             </div>
         </section>
 
-        <!-- Navigation -->
         <nav class="sts-nav">
-            <a href="performance.html" class="nav-prev">
-                <i class="fas fa-arrow-left"></i>
-                <span>Performance</span>
-            </a>
-            <a href="index.html" class="nav-hub">
-                <i class="fas fa-th"></i>
-                <span>STS Hub</span>
-            </a>
-            <a href="documentation.html" class="nav-next">
-                <span>Documentation</span>
-                <i class="fas fa-arrow-right"></i>
-            </a>
+            <a href="performance.html"><i class="fas fa-arrow-left"></i> Performance</a>
+            <a href="index.html" class="nav-hub"><i class="fas fa-th"></i> STS Hub</a>
+            <a href="documentation.html">Documentation <i class="fas fa-arrow-right"></i></a>
         </nav>
     </main>
 
-    <!-- Footer -->
-    <footer class="site-footer">
-        <div class="footer-content">
-            <p>CORTEX 4.0 — AI-Powered Code Intelligence</p>
-            <p class="footer-sub">Transforming codebases through intelligent analysis</p>
-        </div>
+    <footer style="text-align: center; padding: 2rem; color: rgba(255,255,255,0.5); font-size: 0.875rem;">
+        <p>&copy; 2024-2025 Asif Hussain. CORTEX 4.0 - Sharpen the Saw.</p>
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/typescript.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/typescript.min.js"></script>
     <script>hljs.highlightAll();</script>
 </body>
 </html>

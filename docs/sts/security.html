@@ -1,2277 +1,320 @@
-<!DOCTYPE html><!DOCTYPE html><!DOCTYPE html>
-
+<!DOCTYPE html>
 <html lang="en">
-
-<head><html lang="en"><html lang="en">
-
+<head>
     <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"><head><head>
-
-    <meta name="description" content="CORTEX Security Showcase - Before & After Code Transformations">
-
-    <meta name="author" content="Asif Hussain">    <meta charset="UTF-8">    <meta charset="UTF-8">
-
-    <title>Security Showcase | STS | CORTEX 4.0</title>
-
-    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX Security Showcase">
+    <meta name="author" content="Asif Hussain">
+    <title>Security | STS | CORTEX 4.0</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="../assets/css/main.css">
-
-    <link rel="stylesheet" href="../assets/css/sts.css">    <meta name="description" content="CORTEX Security Showcase - Before & After Code Transformations">    <meta name="description" content="CORTEX Security Showcase - Before & After Code Transformations">
-
+    <link rel="stylesheet" href="../assets/css/sts.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">    <meta name="author" content="Asif Hussain">    <meta name="author" content="Asif Hussain">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
 </head>
-
-<body class="sts-showcase">    <title>Security Showcase - CORTEX STS</title>    <title>Security Showcase - CORTEX STS</title>
-
-    <!-- Navigation -->
-
-    <header class="site-header">    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
-
+<body class="sts-showcase">
+    <header class="site-header">
         <nav class="nav-container">
-
-            <a href="../index.html" class="nav-brand">    <link rel="stylesheet" href="../assets/css/main.css?v=4.0.0">    <link rel="stylesheet" href="../assets/css/main.css?v=4.0.0">
-
+            <a href="../index.html" class="nav-brand">
                 <i class="fas fa-brain"></i> CORTEX 4.0
-
-            </a></head></head>
-
+            </a>
             <div class="nav-links">
-
-                <a href="index.html"><i class="fas fa-bullseye"></i> STS Hub</a><body class="sts-showcase"><body class="sts-showcase">
-
+                <a href="index.html"><i class="fas fa-bullseye"></i> STS Hub</a>
                 <a href="../documentation.html"><i class="fas fa-book"></i> Docs</a>
-
-            </div>    <!-- Breadcrumb Navigation -->    <!-- Breadcrumb Navigation -->
-
+            </div>
         </nav>
+    </header>
 
-    </header>    <nav class="breadcrumb-nav">    <nav class="breadcrumb-nav">
-
-
-
-    <main class="sts-main">        <div class="container">        <div class="container">
-
-        <!-- Hero Section -->
-
-        <section class="sts-hero">            <a href="../index.html">Home</a>            <a href="../index.html">Home</a>
-
+    <main class="sts-main">
+        <section class="sts-hero">
             <div class="hero-badge">
-
-                <i class="fas fa-shield-alt"></i> SECURITY VULNERABILITIES            <span class="separator">→</span>            <span class="separator">→</span>
-
+                <i class="fas fa-shield-alt"></i> SECURITY HARDENING
             </div>
-
-            <h1>Security<br><span class="accent-text">Transformed</span></h1>            <a href="index.html">Sharpen The Saw</a>            <a href="index.html">Sharpen The Saw</a>
-
-            <p class="hero-subtitle">Watch CORTEX eliminate critical security vulnerabilities and harden your codebase</p>
-
-            <div class="sts-metrics">            <span class="separator">→</span>            <span class="separator">→</span>
-
+            <h1>Security<br><span class="accent-text">Vulnerabilities</span></h1>
+            <p class="hero-subtitle">Watch CORTEX identify and fix critical security vulnerabilities</p>
+            <div class="sts-metrics">
                 <div class="metric-card">
-
-                    <div class="metric-value">8</div>            <span class="current">Security</span>            <span class="current">Security</span>
-
-                    <div class="metric-label">Flaws Found</div>
-
-                </div>        </div>        </div>
-
+                    <div class="metric-value">4</div>
+                    <div class="metric-label">Vulnerabilities</div>
+                </div>
                 <div class="metric-card accent">
-
-                    <div class="metric-value">8</div>    </nav>    </nav>
-
+                    <div class="metric-value">4</div>
                     <div class="metric-label">Auto-Fixed</div>
-
                 </div>
-
                 <div class="metric-card">
+                    <div class="metric-value">100%</div>
+                    <div class="metric-label">Secured</div>
+                </div>
+            </div>
+        </section>
 
-                    <div class="metric-value">100%</div>    <!-- Hero Section -->    <!-- Hero Section -->
-
-                    <div class="metric-label">Resolved</div>
-
-                </div>    <section class="hero">    <section class="hero">
-
+        <!-- SQL Injection - C# -->
+        <section class="comparison-section">
+            <div class="section-header">
+                <div class="principle-badge">
+                    <i class="fas fa-database"></i> SQL Injection Prevention
+                </div>
+                <span class="language-badge csharp">C#</span>
+            </div>
+            
+            <div class="refactor-explanation">
+                <h4><i class="fas fa-lightbulb"></i> How This Was Refactored</h4>
+                <ul>
+                    <li><strong>Vulnerability:</strong> String concatenation allows SQL injection</li>
+                    <li><strong>Fix:</strong> Parameterized queries separate data from SQL</li>
+                    <li><strong>Result:</strong> User input is data, never executable SQL</li>
+                </ul>
             </div>
 
-        </section>        <div class="logo-container">        <div class="logo-container">
-
-
-
-        <!-- Educational Section -->            <a href="../index.html">            <a href="../index.html">
-
-        <section class="sts-education">
-
-            <div class="education-card">                <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo" width="200" height="200">                <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo" width="200" height="200">
-
-                <h3><i class="fas fa-graduation-cap"></i> Why Security Matters</h3>
-
-                <div class="education-grid">            </a>            </a>
-
-                    <div class="education-item">
-
-                        <h4>OWASP Top 10</h4>        </div>        </div>
-
-                        <p>These flaws represent the most critical web application security risks identified by OWASP.</p>
-
-                    </div>        <h1 class="hero-title">🔒 Security Showcase</h1>        <h1 class="hero-title">🔒 Security Showcase</h1>
-
-                    <div class="education-item">
-
-                        <h4>Defense in Depth</h4>        <p class="hero-tagline">12 Critical Vulnerabilities → Production-Safe Code</p>        <p class="hero-tagline">12 Critical Vulnerabilities → Production-Safe Code</p>
-
-                        <p>Multiple layers of security controls ensure that if one fails, others still protect your system.</p>
-
-                    </div>    </section>    </section>
-
-                    <div class="education-item">
-
-                        <h4>Shift Left</h4>
-
-                        <p>Finding security issues during development is 100x cheaper than fixing them in production.</p>
-
-                    </div>    <!-- Overview Stats -->    <!-- Overview Stats -->
-
-                    <div class="education-item">
-
-                        <h4>Zero Trust</h4>    <section class="section">    <section class="section">
-
-                        <p>Never trust, always verify. Every input, request, and user should be validated.</p>
-
-                    </div>        <div class="container">        <div class="container">
-
-                </div>
-
-            </div>            <div class="metrics-grid-4">            <div class="metrics-grid-4">
-
-        </section>
-
-                <div class="metric-card metric-before">                <div class="metric-card metric-before">
-
-        <!-- SEC-01: Hardcoded JWT Secret -->
-
-        <section class="sts-issue-card">                    <span class="metric-value">12</span>                    <span class="metric-value">12</span>
-
-            <div class="issue-header">
-
-                <div class="issue-badge critical">SEC-01</div>                    <span class="metric-label">Security Flaws</span>                    <span class="metric-label">Security Flaws</span>
-
-                <div class="issue-title">
-
-                    <h2>Hardcoded JWT Secret</h2>                </div>                </div>
-
-                    <p>Secret key embedded directly in source code</p>
-
-                </div>                <div class="metric-card">                <div class="metric-card">
-
-                <span class="tech-badge tech-csharp">C#</span>
-
-            </div>                    <span class="metric-value">5</span>                    <span class="metric-value">5</span>
-
-
-
-            <div class="transform-panels">                    <span class="metric-label">Critical Severity</span>                    <span class="metric-label">Critical Severity</span>
-
+            <div class="comparison-container">
                 <div class="panel before-panel">
-
-                    <div class="panel-header">                </div>                </div>
-
-                        <i class="fas fa-times-circle"></i> Before CORTEX
-
-                    </div>                <div class="metric-card">                <div class="metric-card">
-
-                    <pre><code class="language-csharp">public class AuthService
-
-{                    <span class="metric-value">4</span>                    <span class="metric-value">4</span>
-
-    // CRITICAL: Secret exposed in source code!
-
-    private const string JWT_SECRET = "my-super-secret-key-12345";                    <span class="metric-label">OWASP Categories</span>                    <span class="metric-label">OWASP Categories</span>
-
-    
-
-    public string GenerateToken(User user)                </div>                </div>
-
-    {
-
-        var key = new SymmetricSecurityKey(                <div class="metric-card metric-after">                <div class="metric-card metric-after">
-
-            Encoding.UTF8.GetBytes(JWT_SECRET));
-
-                            <span class="metric-value">100%</span>                    <span class="metric-value">100%</span>
-
-        var credentials = new SigningCredentials(
-
-            key, SecurityAlgorithms.HmacSha256);                    <span class="metric-label">Remediated</span>                    <span class="metric-label">Remediated</span>
-
-        
-
-        var token = new JwtSecurityToken(                </div>                </div>
-
-            issuer: "myapp",
-
-            audience: "users",            </div>            </div>
-
-            expires: DateTime.Now.AddDays(30), // Too long!
-
-            signingCredentials: credentials        </div>        </div>
-
-        );
-
-            </section>    </section>
-
-        return new JwtSecurityTokenHandler()
-
-            .WriteToken(token);
-
-    }
-
-}</code></pre>    <!-- SEC-01: Hardcoded JWT Secret (C#) -->    <!-- SEC-01: Hardcoded JWT Secret -->
-
-                </div>
-
-    <section class="section section-alt" id="sec-01">    <section class="section section-alt" id="sec-01">
-
-                <div class="transform-arrow">
-
-                    <i class="fas fa-magic"></i>        <div class="container">        <div class="container">
-
-                    <span>CORTEX</span>
-
-                </div>            <div class="flaw-header">            <div class="flaw-header">
-
-
-
-                <div class="panel after-panel">                <span class="flaw-id">SEC-01</span>                <span class="flaw-id">SEC-01</span>
-
                     <div class="panel-header">
-
-                        <i class="fas fa-check-circle"></i> After CORTEX                <span class="severity-badge severity-critical">CRITICAL</span>                <span class="severity-badge severity-critical">CRITICAL</span>
-
+                        <i class="fas fa-times-circle"></i> Before: SQL Injection Vulnerable
                     </div>
-
-                    <pre><code class="language-csharp">public class AuthService : IAuthService                <span class="owasp-badge">OWASP A02:2021</span>                <span class="owasp-badge">OWASP A02:2021</span>
-
+                    <pre><code class="language-csharp">public class UserRepository
 {
-
-    private readonly JwtSettings _jwtSettings;                <span class="tech-badge tech-csharp">C#</span>            </div>
-
-    private readonly ILogger&lt;AuthService&gt; _logger;
-
-            </div>            <h2>Hardcoded JWT Secret Key</h2>
-
-    public AuthService(
-
-        IOptions&lt;JwtSettings&gt; jwtSettings,            <h2>Hardcoded JWT Secret Key</h2>            <p class="flaw-description">
-
-        ILogger&lt;AuthService&gt; logger)
-
-    {            <p class="flaw-description">                <strong>CWE-798:</strong> Use of Hard-coded Credentials. JWT secrets embedded in source code 
-
-        _jwtSettings = jwtSettings.Value;
-
-        _logger = logger;                <strong>CWE-798:</strong> Use of Hard-coded Credentials. JWT secrets embedded in source code                 can be extracted by attackers with code access, enabling token forgery.
-
-    }
-
-                can be extracted by attackers with code access, enabling token forgery.            </p>
-
-    public string GenerateToken(User user)
-
-    {            </p>            
-
-        var key = new SymmetricSecurityKey(
-
-            Encoding.UTF8.GetBytes(_jwtSettings.Secret));                        <div class="code-comparison">
-
+    public User GetUser(string username)
+    {
+        // VULNERABLE: String concatenation
+        var query = "SELECT * FROM Users WHERE Username = '" 
+                    + username + "'";
         
-
-        var credentials = new SigningCredentials(            <div class="code-comparison">                <div class="code-before">
-
-            key, SecurityAlgorithms.HmacSha512);
-
-                        <div class="code-before">                    <div class="code-header">
-
-        var claims = new[]
-
-        {                    <div class="code-header">                        <span class="code-label">❌ BEFORE</span>
-
-            new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-
-            new Claim(JwtRegisteredClaimNames.Jti,                         <span class="code-label">❌ BEFORE</span>                        <span class="code-file">src/api/auth.py:23</span>
-
-                Guid.NewGuid().ToString())
-
-        };                        <span class="code-file">AuthService.cs</span>                    </div>
-
-        
-
-        var token = new JwtSecurityToken(                    </div><pre><code class="language-python"># FLAW: Secret key hardcoded in source code
-
-            issuer: _jwtSettings.Issuer,
-
-            audience: _jwtSettings.Audience,<pre><code class="language-csharp">public class AuthService# Anyone with code access can forge tokens
-
-            claims: claims,
-
-            expires: DateTime.UtcNow.AddMinutes(15),{JWT_SECRET = "super_secret_key_12345"
-
-            signingCredentials: credentials
-
-        );    // FLAW: Secret key hardcoded in source code
-
-        
-
-        _logger.LogInformation(    private const string JwtSecret = "super_secret_key_12345";# Token generation uses hardcoded secret
-
-            "Token generated for user {UserId}", user.Id);
-
-            def create_token(user_id):
-
-        return new JwtSecurityTokenHandler()
-
-            .WriteToken(token);    public string CreateToken(int userId)    return jwt.encode({"user_id": user_id}, JWT_SECRET)</code></pre>
-
+        // Attack: "admin'--" bypasses auth
+        using var conn = new SqlConnection(connectionString);
+        using var cmd = new SqlCommand(query, conn);
+        conn.Open();
+        return MapUser(cmd.ExecuteReader());
     }
-
-}</code></pre>    {                </div>
-
-                </div>
-
-            </div>        var key = new SymmetricSecurityKey(                
-
-
-
-            <div class="fix-explanation">            Encoding.UTF8.GetBytes(JwtSecret));                <div class="code-after">
-
-                <h4><i class="fas fa-lightbulb"></i> What CORTEX Fixed</h4>
-
-                <ul>        var token = new JwtSecurityToken(                    <div class="code-header">
-
-                    <li><strong>Secret externalized:</strong> JWT secret moved to configuration/Azure Key Vault</li>
-
-                    <li><strong>Stronger algorithm:</strong> Upgraded from HmacSha256 to HmacSha512</li>            claims: new[] { new Claim("userId", userId.ToString()) },                        <span class="code-label">✅ AFTER</span>
-
-                    <li><strong>Short expiry:</strong> Token lifetime reduced from 30 days to 15 minutes</li>
-
-                    <li><strong>Audit logging:</strong> Token generation events are now logged</li>            signingCredentials: new SigningCredentials(key,                         <span class="code-file">CORTEX Sanitization</span>
-
-                </ul>
-
-            </div>                SecurityAlgorithms.HmacSha256));                    </div>
-
-        </section>
-
-        return new JwtSecurityTokenHandler().WriteToken(token);<pre><code class="language-python">import os
-
-        <!-- SEC-02: SQL Injection -->
-
-        <section class="sts-issue-card">    }
-
-            <div class="issue-header">
-
-                <div class="issue-badge critical">SEC-02</div>}</code></pre># Secret loaded from environment variable
-
-                <div class="issue-title">
-
-                    <h2>SQL Injection Vulnerability</h2>                </div># Never committed to source control
-
-                    <p>User input concatenated directly into SQL queries</p>
-
-                </div>                JWT_SECRET = os.getenv('JWT_SECRET')
-
-                <span class="tech-badge tech-typescript">TypeScript</span>
-
-            </div>                <div class="code-after">
-
-
-
-            <div class="transform-panels">                    <div class="code-header">if not JWT_SECRET:
-
-                <div class="panel before-panel">
-
-                    <div class="panel-header">                        <span class="code-label">✅ AFTER</span>    raise EnvironmentError(
-
-                        <i class="fas fa-times-circle"></i> Before CORTEX
-
-                    </div>                        <span class="code-file">CORTEX Sanitization</span>        "JWT_SECRET environment variable required"
-
-                    <pre><code class="language-typescript">class UserRepository {
-
-    async findByEmail(email: string): Promise&lt;User&gt; {                    </div>    )
-
-        // CRITICAL: SQL Injection vulnerability!
-
-        const query = `<pre><code class="language-csharp">public class AuthService
-
-            SELECT * FROM users 
-
-            WHERE email = '${email}'{def create_token(user_id):
-
-        `;
-
-            private readonly JwtSettings _settings;    return jwt.encode({"user_id": user_id}, JWT_SECRET)</code></pre>
-
-        const result = await this.db.query(query);
-
-        return result.rows[0];                    </div>
-
-    }
-
-        public AuthService(IOptions&lt;JwtSettings&gt; settings)            </div>
-
-    async searchUsers(term: string): Promise&lt;User[]&gt; {
-
-        // Another injection point!    {            
-
-        const query = `
-
-            SELECT * FROM users         _settings = settings.Value;            <div class="capability-used">
-
-            WHERE name LIKE '%${term}%'
-
-            ORDER BY ${term}        if (string.IsNullOrEmpty(_settings.Secret))                <strong>CORTEX Capability:</strong> Code Sanitization → Secret Detection & Extraction
-
-        `;
-
-                    throw new InvalidOperationException(            </div>
-
-        return (await this.db.query(query)).rows;
-
-    }                "JWT secret must be configured via appsettings");        </div>
-
 }</code></pre>
-
-                </div>    }    </section>
-
-
-
-                <div class="transform-arrow">    
-
-                    <i class="fas fa-magic"></i>
-
-                    <span>CORTEX</span>    public string CreateToken(int userId)    <!-- SEC-02: Plaintext Password Storage -->
-
                 </div>
-
-    {    <section class="section" id="sec-02">
 
                 <div class="panel after-panel">
-
-                    <div class="panel-header">        var key = new SymmetricSecurityKey(        <div class="container">
-
-                        <i class="fas fa-check-circle"></i> After CORTEX
-
-                    </div>            Encoding.UTF8.GetBytes(_settings.Secret));            <div class="flaw-header">
-
-                    <pre><code class="language-typescript">class UserRepository {
-
-    private readonly ALLOWED_SORT_COLUMNS = [        var token = new JwtSecurityToken(                <span class="flaw-id">SEC-02</span>
-
-        'name', 'email', 'created_at'
-
-    ] as const;            issuer: _settings.Issuer,                <span class="severity-badge severity-critical">CRITICAL</span>
-
-    
-
-    async findByEmail(email: string): Promise&lt;User | null&gt; {            expires: DateTime.UtcNow.AddHours(1),                <span class="owasp-badge">OWASP A02:2021</span>
-
-        const query = `
-
-            SELECT id, name, email, created_at             claims: new[] { new Claim("userId", userId.ToString()) },            </div>
-
-            FROM users 
-
-            WHERE email = $1            signingCredentials: new SigningCredentials(key,             <h2>Plaintext Password Storage</h2>
-
-        `;
-
-                        SecurityAlgorithms.HmacSha256));            <p class="flaw-description">
-
-        const result = await this.db.query(query, [email]);
-
-        return result.rows[0] ?? null;        return new JwtSecurityTokenHandler().WriteToken(token);                <strong>CWE-916:</strong> Use of Password Hash With Insufficient Computational Effort. 
-
-    }
-
-        }                Storing passwords in plaintext exposes all users if database is compromised.
-
-    async searchUsers(
-
-        term: string,}</code></pre>            </p>
-
-        sortBy: string = 'name'
-
-    ): Promise&lt;User[]&gt; {                </div>            
-
-        // Whitelist validation for dynamic column
-
-        const safeSort = this.ALLOWED_SORT_COLUMNS            </div>            <div class="code-comparison">
-
-            .includes(sortBy as any) ? sortBy : 'name';
-
-                                    <div class="code-before">
-
-        const query = `
-
-            SELECT id, name, email, created_at             <div class="capability-used">                    <div class="code-header">
-
-            FROM users 
-
-            WHERE name ILIKE $1                <strong>CORTEX Capability:</strong> Code Sanitization → Secret Detection & Extraction                        <span class="code-label">❌ BEFORE</span>
-
-            ORDER BY ${safeSort}
-
-            LIMIT 100            </div>                        <span class="code-file">src/api/auth.py:42</span>
-
-        `;
-
-                </div>                    </div>
-
-        // Parameterized with escaped wildcards
-
-        const safeTerm = `%${term.replace(/[%_]/g, '\\$&')}%`;    </section><pre><code class="language-python"># FLAW: Passwords stored and compared as plaintext
-
+                    <div class="panel-header">
+                        <i class="fas fa-check-circle"></i> After: Parameterized Query
+                    </div>
+                    <pre><code class="language-csharp">public class UserRepository
+{
+    public User GetUser(string username)
+    {
+        // SECURE: Parameterized query
+        const string query = @"
+            SELECT Id, Username, Email 
+            FROM Users WHERE Username = @Username";
         
-
-        return (await this.db.query(query, [safeTerm])).rows;USERS_DB = {
-
+        using var conn = new SqlConnection(connectionString);
+        using var cmd = new SqlCommand(query, conn);
+        cmd.Parameters.AddWithValue("@Username", username);
+        conn.Open();
+        return MapUser(cmd.ExecuteReader());
     }
-
-}</code></pre>    <!-- SEC-02: Plaintext Password Storage (C#) -->    "admin": {"password": "admin123", "role": "admin"},
-
+}</code></pre>
                 </div>
-
-            </div>    <section class="section" id="sec-02">    "user1": {"password": "password", "role": "user"}
-
-
-
-            <div class="fix-explanation">        <div class="container">}
-
-                <h4><i class="fas fa-lightbulb"></i> What CORTEX Fixed</h4>
-
-                <ul>            <div class="flaw-header">
-
-                    <li><strong>Parameterized queries:</strong> All user input passed as parameters ($1, $2)</li>
-
-                    <li><strong>Column whitelist:</strong> Dynamic ORDER BY validated against allowed list</li>                <span class="flaw-id">SEC-02</span>def authenticate(username, password):
-
-                    <li><strong>Wildcard escaping:</strong> LIKE patterns properly escape % and _</li>
-
-                    <li><strong>Result limiting:</strong> Added LIMIT to prevent data exfiltration</li>                <span class="severity-badge severity-critical">CRITICAL</span>    user = USERS_DB.get(username)
-
-                </ul>
-
-            </div>                <span class="owasp-badge">OWASP A02:2021</span>    # Plaintext comparison!
-
+            </div>
         </section>
 
-                <span class="tech-badge tech-csharp">C#</span>    if user and user["password"] == password:
+        <!-- XSS - Angular -->
+        <section class="comparison-section">
+            <div class="section-header">
+                <div class="principle-badge">
+                    <i class="fas fa-code"></i> Cross-Site Scripting (XSS)
+                </div>
+                <span class="language-badge angular">Angular</span>
+            </div>
+            
+            <div class="refactor-explanation">
+                <h4><i class="fas fa-lightbulb"></i> How This Was Refactored</h4>
+                <ul>
+                    <li><strong>Vulnerability:</strong> innerHTML bypasses sanitization</li>
+                    <li><strong>Fix:</strong> Use interpolation or DomSanitizer</li>
+                    <li><strong>Result:</strong> Malicious scripts are neutralized</li>
+                </ul>
+            </div>
 
-        <!-- SEC-03: XSS Vulnerability -->
-
-        <section class="sts-issue-card">            </div>        return create_token(username)
-
-            <div class="issue-header">
-
-                <div class="issue-badge critical">SEC-03</div>            <h2>Plaintext Password Storage</h2>    return None</code></pre>
-
-                <div class="issue-title">
-
-                    <h2>Cross-Site Scripting (XSS)</h2>            <p class="flaw-description">                </div>
-
-                    <p>Unsafe HTML rendering in Angular templates</p>
-
-                </div>                <strong>CWE-916:</strong> Use of Password Hash With Insufficient Computational Effort.                 
-
-                <span class="tech-badge tech-angular">Angular</span>
-
-            </div>                Storing passwords in plaintext exposes all users if database is compromised.                <div class="code-after">
-
-
-
-            <div class="transform-panels">            </p>                    <div class="code-header">
-
+            <div class="comparison-container">
                 <div class="panel before-panel">
-
-                    <div class="panel-header">                                    <span class="code-label">✅ AFTER</span>
-
-                        <i class="fas fa-times-circle"></i> Before CORTEX
-
-                    </div>            <div class="code-comparison">                        <span class="code-file">CORTEX TDD Mastery</span>
-
+                    <div class="panel-header">
+                        <i class="fas fa-times-circle"></i> Before: XSS Vulnerable
+                    </div>
                     <pre><code class="language-typescript">@Component({
-
-    selector: 'app-comment',                <div class="code-before">                    </div>
-
-    template: `
-
-        &lt;div class="comment"&gt;                    <div class="code-header"><pre><code class="language-python">from argon2 import PasswordHasher
-
-            &lt;!-- CRITICAL: XSS vulnerability! --&gt;
-
-            &lt;div [innerHTML]="comment.content"&gt;&lt;/div&gt;                        <span class="code-label">❌ BEFORE</span>from argon2.exceptions import VerifyMismatchError
-
-            
-
-            &lt;!-- Another XSS via URL --&gt;                        <span class="code-file">UserRepository.cs</span>
-
-            &lt;a [href]="comment.authorUrl"&gt;
-
-                {{ comment.author }}                    </div>ph = PasswordHasher(
-
-            &lt;/a&gt;
-
-            <pre><code class="language-csharp">public class UserRepository    time_cost=3,      # Iterations
-
-            &lt;!-- Unsafe style binding --&gt;
-
-            &lt;div [style]="comment.customStyle"&gt;{    memory_cost=65536, # 64MB
-
-                Custom styled content
-
-            &lt;/div&gt;    public async Task&lt;User&gt; CreateUser(string email, string password)    parallelism=4
-
-        &lt;/div&gt;
-
-    `    {)
-
+  selector: 'app-comment',
+  template: \`
+    &lt;!-- VULNERABLE: innerHTML executes scripts --&gt;
+    &lt;div [innerHTML]="userComment"&gt;&lt;/div&gt;
+  \`
 })
-
-export class CommentComponent {        var user = new User
-
-    @Input() comment: any;
-
-}</code></pre>        {def hash_password(password: str) -> str:
-
+export class CommentComponent {
+  @Input() userComment: string;
+  // No sanitization = XSS attacks possible
+}</code></pre>
                 </div>
 
-            Email = email,    """Hash password using Argon2id (winner of PHC)"""
-
-                <div class="transform-arrow">
-
-                    <i class="fas fa-magic"></i>            // FLAW: Storing password as plaintext!    return ph.hash(password)
-
-                    <span>CORTEX</span>
-
-                </div>            Password = password
-
-
-
-                <div class="panel after-panel">        };def verify_password(password: str, hash: str) -> bool:
-
+                <div class="panel after-panel">
                     <div class="panel-header">
-
-                        <i class="fas fa-check-circle"></i> After CORTEX        await _context.Users.AddAsync(user);    """Verify password with constant-time comparison"""
-
+                        <i class="fas fa-check-circle"></i> After: Sanitized Content
                     </div>
-
-                    <pre><code class="language-typescript">@Component({        return user;    try:
-
-    selector: 'app-comment',
-
-    template: `    }        ph.verify(hash, password)
-
-        &lt;div class="comment"&gt;
-
-            &lt;!-- Sanitized HTML with DomSanitizer --&gt;            return True
-
-            &lt;div [innerHTML]="sanitizedContent"&gt;&lt;/div&gt;
-
-                public async Task&lt;bool&gt; ValidateLogin(string email, string password)    except VerifyMismatchError:
-
-            &lt;!-- URL validated before rendering --&gt;
-
-            &lt;a *ngIf="isValidUrl" [href]="safeUrl"&gt;    {        return False</code></pre>
-
-                {{ comment.author }}
-
-            &lt;/a&gt;        var user = await _context.Users                </div>
-
-            
-
-            &lt;!-- Safe style using ngStyle --&gt;            .FirstOrDefaultAsync(u =&gt; u.Email == email);            </div>
-
-            &lt;div [ngStyle]="safeStyles"&gt;
-
-                Custom styled content        // Plaintext comparison - terrible!            
-
-            &lt;/div&gt;
-
-        &lt;/div&gt;        return user?.Password == password;            <div class="capability-used">
-
-    `
-
-})    }                <strong>CORTEX Capability:</strong> TDD Mastery → Test-driven security implementation
-
-export class CommentComponent implements OnChanges {
-
-    @Input() comment!: Comment;}</code></pre>            </div>
-
-    
-
-    sanitizedContent: SafeHtml = '';                </div>        </div>
-
-    safeUrl: SafeUrl = '';
-
-    isValidUrl = false;                    </section>
-
-    safeStyles: Record&lt;string, string&gt; = {};
-
-                    <div class="code-after">
-
-    private readonly ALLOWED_TAGS = ['p', 'b', 'i', 'a', 'br'];
-
-    private readonly URL_PATTERN = /^https?:\/\//i;                    <div class="code-header">    <!-- SEC-03: SQL Injection -->
-
-    
-
-    constructor(private sanitizer: DomSanitizer) {}                        <span class="code-label">✅ AFTER</span>    <section class="section section-alt" id="sec-03">
-
-    
-
-    ngOnChanges(): void {                        <span class="code-file">CORTEX TDD Mastery</span>        <div class="container">
-
-        this.sanitizedContent = this.sanitizer
-
-            .bypassSecurityTrustHtml(                    </div>            <div class="flaw-header">
-
-                DOMPurify.sanitize(this.comment.content, {
-
-                    ALLOWED_TAGS: this.ALLOWED_TAGS<pre><code class="language-csharp">public class UserRepository                <span class="flaw-id">SEC-03</span>
-
-                })
-
-            );{                <span class="severity-badge severity-critical">CRITICAL</span>
-
-        
-
-        this.isValidUrl = this.URL_PATTERN    private readonly IPasswordHasher&lt;User&gt; _hasher;                <span class="owasp-badge">OWASP A03:2021</span>
-
-            .test(this.comment.authorUrl);
-
-                        </div>
-
-        if (this.isValidUrl) {
-
-            this.safeUrl = this.sanitizer    public async Task&lt;User&gt; CreateUser(string email, string password)            <h2>SQL Injection via F-Strings</h2>
-
-                .bypassSecurityTrustUrl(this.comment.authorUrl);
-
-        }    {            <p class="flaw-description">
-
-        
-
-        this.safeStyles = this.parseAllowedStyles(        var user = new User { Email = email };                <strong>CWE-89:</strong> SQL Injection. Using f-strings or string concatenation 
-
-            this.comment.customStyle
-
-        );        // BCrypt/Argon2 via ASP.NET Core Identity                for SQL queries allows attackers to execute arbitrary database commands.
-
-    }
-
-}</code></pre>        user.PasswordHash = _hasher.HashPassword(user, password);            </p>
-
+                    <pre><code class="language-typescript">@Component({
+  selector: 'app-comment',
+  template: \`
+    &lt;!-- SECURE: Interpolation auto-escapes --&gt;
+    &lt;p&gt;{{ userComment }}&lt;/p&gt;
+    &lt;div [innerHTML]="sanitizedHtml"&gt;&lt;/div&gt;
+  \`
+})
+export class CommentComponent {
+  @Input() userComment: string;
+  sanitizedHtml: SafeHtml;
+  
+  constructor(private sanitizer: DomSanitizer) {}
+  
+  ngOnChanges() {
+    this.sanitizedHtml = this.sanitizer
+      .bypassSecurityTrustHtml(this.stripScripts(this.userComment));
+  }
+}</code></pre>
                 </div>
+            </div>
+        </section>
 
-            </div>        await _context.Users.AddAsync(user);            
-
-
-
-            <div class="fix-explanation">        return user;            <div class="code-comparison">
-
-                <h4><i class="fas fa-lightbulb"></i> What CORTEX Fixed</h4>
-
-                <ul>    }                <div class="code-before">
-
-                    <li><strong>DOMPurify sanitization:</strong> HTML content sanitized with whitelist</li>
-
-                    <li><strong>URL validation:</strong> Only http/https URLs allowed, no javascript:</li>                        <div class="code-header">
-
-                    <li><strong>Safe style parsing:</strong> Custom styles validated against allowed properties</li>
-
-                    <li><strong>Type safety:</strong> Proper Comment interface instead of any</li>    public async Task&lt;bool&gt; ValidateLogin(string email, string password)                        <span class="code-label">❌ BEFORE</span>
-
+        <!-- Auth - TypeScript -->
+        <section class="comparison-section">
+            <div class="section-header">
+                <div class="principle-badge">
+                    <i class="fas fa-key"></i> Secure Authentication
+                </div>
+                <span class="language-badge typescript">TypeScript</span>
+            </div>
+            
+            <div class="refactor-explanation">
+                <h4><i class="fas fa-lightbulb"></i> How This Was Refactored</h4>
+                <ul>
+                    <li><strong>Vulnerability:</strong> Plain text passwords</li>
+                    <li><strong>Fix:</strong> bcrypt hashing + rate limiting</li>
+                    <li><strong>Result:</strong> Passwords safe even if DB breached</li>
                 </ul>
+            </div>
 
-            </div>    {                        <span class="code-file">src/data/database.py:75</span>
-
-        </section>
-
-        var user = await _context.Users                    </div>
-
-        <!-- SEC-04: Insecure Password Storage -->
-
-        <section class="sts-issue-card">            .FirstOrDefaultAsync(u =&gt; u.Email == email);<pre><code class="language-python">def find_by_id(self, table: str, id: int):
-
-            <div class="issue-header">
-
-                <div class="issue-badge critical">SEC-04</div>        if (user == null) return false;    # FLAW: SQL injection via f-string
-
-                <div class="issue-title">
-
-                    <h2>Insecure Password Storage</h2>            # Attacker input: id = "1; DROP TABLE users;--"
-
-                    <p>Passwords stored with weak hashing or plain text</p>
-
-                </div>        var result = _hasher.VerifyHashedPassword(    query = f"SELECT * FROM {table} WHERE id = {id}"
-
-                <span class="tech-badge tech-csharp">C#</span>
-
-            </div>            user, user.PasswordHash, password);    return self.db.get_one(query)
-
-
-
-            <div class="transform-panels">        return result == PasswordVerificationResult.Success;
-
+            <div class="comparison-container">
                 <div class="panel before-panel">
-
-                    <div class="panel-header">    }def find_user(self, username: str):
-
-                        <i class="fas fa-times-circle"></i> Before CORTEX
-
-                    </div>}</code></pre>    # FLAW: Direct string interpolation
-
-                    <pre><code class="language-csharp">public class UserService
-
-{                </div>    query = f"SELECT * FROM users WHERE name = '{username}'"
-
-    public async Task&lt;User&gt; CreateUser(string email, string password)
-
-    {            </div>    return self.db.execute(query)</code></pre>
-
-        // CRITICAL: Weak MD5 hashing!
-
-        using var md5 = MD5.Create();                            </div>
-
-        var hash = md5.ComputeHash(
-
-            Encoding.UTF8.GetBytes(password));            <div class="capability-used">                
-
-        var passwordHash = Convert.ToBase64String(hash);
-
-                        <strong>CORTEX Capability:</strong> TDD Mastery → Test-driven security implementation                <div class="code-after">
-
-        var user = new User
-
-        {            </div>                    <div class="code-header">
-
-            Email = email,
-
-            PasswordHash = passwordHash        </div>                        <span class="code-label">✅ AFTER</span>
-
-        };
-
-            </section>                        <span class="code-file">CORTEX Refinement</span>
-
-        await _context.Users.AddAsync(user);
-
-        await _context.SaveChangesAsync();                    </div>
-
-        
-
-        return user;    <!-- SEC-03: SQL Injection (C# EF Core) --><pre><code class="language-python">from typing import Optional, Dict
-
+                    <div class="panel-header">
+                        <i class="fas fa-times-circle"></i> Before: Insecure Passwords
+                    </div>
+                    <pre><code class="language-typescript">class AuthService {
+  async login(email: string, password: string) {
+    const user = await this.db.findUser(email);
+    
+    // VULNERABLE: Plain text comparison
+    if (user.password === password) {
+      return user;
     }
-
-        <section class="section section-alt" id="sec-03">
-
-    public bool ValidatePassword(User user, string password)
-
-    {        <div class="container"># Whitelist of allowed table names
-
-        using var md5 = MD5.Create();
-
-        var hash = Convert.ToBase64String(            <div class="flaw-header">ALLOWED_TABLES = frozenset(['users', 'products', 'orders'])
-
-            md5.ComputeHash(Encoding.UTF8.GetBytes(password)));
-
-                        <span class="flaw-id">SEC-03</span>
-
-        return hash == user.PasswordHash;
-
-    }                <span class="severity-badge severity-critical">CRITICAL</span>def find_by_id(self, table: str, id: int) -> Optional[Dict]:
-
+    throw new Error('Invalid credentials');
+  }
+  
+  async register(email: string, password: string) {
+    // VULNERABLE: Storing plain text
+    await this.db.createUser({ email, password });
+  }
 }</code></pre>
-
-                </div>                <span class="owasp-badge">OWASP A03:2021</span>    if table not in ALLOWED_TABLES:
-
-
-
-                <div class="transform-arrow">                <span class="tech-badge tech-csharp">C#</span>        raise ValueError(f"Invalid table: {table}")
-
-                    <i class="fas fa-magic"></i>
-
-                    <span>CORTEX</span>            </div>    
-
                 </div>
-
-            <h2>SQL Injection via Raw Queries</h2>    # Parameterized query prevents injection
 
                 <div class="panel after-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-check-circle"></i> After: Secure Passwords
+                    </div>
+                    <pre><code class="language-typescript">import bcrypt from 'bcrypt';
 
-                    <div class="panel-header">            <p class="flaw-description">    query = f"SELECT * FROM {table} WHERE id = ?"
-
-                        <i class="fas fa-check-circle"></i> After CORTEX
-
-                    </div>                <strong>CWE-89:</strong> SQL Injection. Using string interpolation for SQL queries     return self.db.get_one(query, (id,))
-
-                    <pre><code class="language-csharp">public class UserService : IUserService
-
-{                allows attackers to execute arbitrary database commands.
-
-    private readonly IPasswordHasher&lt;User&gt; _passwordHasher;
-
-    private readonly ILogger&lt;UserService&gt; _logger;            </p>def find_user(self, username: str) -> Optional[Dict]:
-
+class AuthService {
+  private limiter = new RateLimiter({ maxAttempts: 5 });
+  
+  async login(email: string, password: string) {
+    await this.limiter.checkLimit(email);
+    const user = await this.db.findUser(email);
     
-
-    public UserService(                # Parameterized - username is safely escaped
-
-        IPasswordHasher&lt;User&gt; passwordHasher,
-
-        ILogger&lt;UserService&gt; logger)            <div class="code-comparison">    query = "SELECT * FROM users WHERE name = ?"
-
-    {
-
-        _passwordHasher = passwordHasher;                <div class="code-before">    return self.db.execute(query, (username,))</code></pre>
-
-        _logger = logger;
-
-    }                    <div class="code-header">                </div>
-
-    
-
-    public async Task&lt;User&gt; CreateUserAsync(                        <span class="code-label">❌ BEFORE</span>            </div>
-
-        string email, 
-
-        string password)                        <span class="code-file">ProductRepository.cs</span>            
-
-    {
-
-        // Validate password strength first                    </div>            <div class="capability-used">
-
-        ValidatePasswordStrength(password);
-
-        <pre><code class="language-csharp">public async Task&lt;List&lt;Product&gt;&gt; SearchProducts(string name)                <strong>CORTEX Capability:</strong> System Refinement → Security-focused code transformation
-
-        var user = new User { Email = email.ToLowerInvariant() };
-
-        {            </div>
-
-        // Uses PBKDF2 with 100k+ iterations by default
-
-        user.PasswordHash = _passwordHasher    // FLAW: SQL injection via string interpolation        </div>
-
-            .HashPassword(user, password);
-
-            // Input: name = "'; DROP TABLE Products;--"    </section>
-
-        await _context.Users.AddAsync(user);
-
-        await _context.SaveChangesAsync();    var sql = $"SELECT * FROM Products WHERE Name LIKE '%{name}%'";
-
-        
-
-        _logger.LogInformation(    return await _context.Products    <!-- SEC-05: Debug Mode in Production -->
-
-            "User created: {Email}", email);
-
-                .FromSqlRaw(sql)    <section class="section" id="sec-05">
-
-        return user;
-
-    }        .ToListAsync();        <div class="container">
-
-    
-
-    public PasswordVerificationResult ValidatePassword(}            <div class="flaw-header">
-
-        User user, 
-
-        string password)                <span class="flaw-id">SEC-05</span>
-
-    {
-
-        var result = _passwordHasherpublic async Task&lt;User&gt; GetUserByEmail(string email)                <span class="severity-badge severity-high">HIGH</span>
-
-            .VerifyHashedPassword(user, user.PasswordHash, password);
-
-        {                <span class="owasp-badge">OWASP A05:2021</span>
-
-        // Auto-rehash if using old algorithm
-
-        if (result == PasswordVerificationResult.SuccessRehashNeeded)    // FLAW: Direct string concatenation            </div>
-
-        {
-
-            user.PasswordHash = _passwordHasher    var query = "SELECT * FROM Users WHERE Email = '" + email + "'";            <h2>Debug Mode Enabled in Production</h2>
-
-                .HashPassword(user, password);
-
-            _context.SaveChanges();    return await _context.Users.FromSqlRaw(query).FirstAsync();            <p class="flaw-description">
-
-        }
-
-        }</code></pre>                <strong>CWE-489:</strong> Active Debug Code. Debug mode exposes stack traces, 
-
-        return result;
-
-    }                </div>                internal paths, and enables interactive debugger—goldmine for attackers.
-
+    // SECURE: bcrypt comparison
+    const isValid = await bcrypt.compare(password, user.passwordHash);
+    if (!isValid) throw new AuthError('Invalid credentials');
+    return this.sanitizeUser(user);
+  }
+  
+  async register(email: string, password: string) {
+    const passwordHash = await bcrypt.hash(password, 12);
+    await this.db.createUser({ email, passwordHash });
+  }
 }</code></pre>
-
-                </div>                            </p>
-
-            </div>
-
-                <div class="code-after">            
-
-            <div class="fix-explanation">
-
-                <h4><i class="fas fa-lightbulb"></i> What CORTEX Fixed</h4>                    <div class="code-header">            <div class="code-comparison">
-
-                <ul>
-
-                    <li><strong>ASP.NET Identity hasher:</strong> Uses PBKDF2 with 100k+ iterations</li>                        <span class="code-label">✅ AFTER</span>                <div class="code-before">
-
-                    <li><strong>Auto-rehashing:</strong> Old hashes upgraded on successful login</li>
-
-                    <li><strong>Password validation:</strong> Strength requirements enforced</li>                        <span class="code-file">CORTEX Refinement</span>                    <div class="code-header">
-
-                    <li><strong>Constant-time comparison:</strong> Prevents timing attacks</li>
-
-                </ul>                    </div>                        <span class="code-label">❌ BEFORE</span>
-
-            </div>
-
-        </section><pre><code class="language-csharp">public async Task&lt;List&lt;Product&gt;&gt; SearchProducts(string name)                        <span class="code-file">src/app.py:13</span>
-
-
-
-        <!-- SEC-05: Missing CORS Configuration -->{                    </div>
-
-        <section class="sts-issue-card">
-
-            <div class="issue-header">    // Use LINQ - completely safe from SQL injection<pre><code class="language-python"># FLAW: Debug mode hardcoded to True
-
-                <div class="issue-badge high">SEC-05</div>
-
-                <div class="issue-title">    return await _context.Products# Exposes stack traces, internal paths, allows code execution
-
-                    <h2>Insecure CORS Configuration</h2>
-
-                    <p>Wildcard origins allowing any domain</p>        .Where(p =&gt; p.Name.Contains(name))DEBUG_MODE = True  # Should NEVER be True in production
-
                 </div>
-
-                <span class="tech-badge tech-nodejs">Node.js</span>        .ToListAsync();
-
             </div>
-
-}def create_app():
-
-            <div class="transform-panels">
-
-                <div class="panel before-panel">    app = Flask(__name__)
-
-                    <div class="panel-header">
-
-                        <i class="fas fa-times-circle"></i> Before CORTEXpublic async Task&lt;User&gt; GetUserByEmail(string email)    app.config['DEBUG'] = DEBUG_MODE  # Werkzeug debugger enabled!
-
-                    </div>
-
-                    <pre><code class="language-typescript">import express from 'express';{    
-
-import cors from 'cors';
-
-    // If raw SQL needed, use parameterized queries    # Attackers can see full stack traces
-
-const app = express();
-
-    return await _context.Users    # Interactive debugger allows arbitrary code execution
-
-// HIGH RISK: Allows any origin!
-
-app.use(cors({        .FromSqlInterpolated(    return app</code></pre>
-
-    origin: '*',
-
-    credentials: true  // Dangerous with wildcard!            $"SELECT * FROM Users WHERE Email = {email}")                </div>
-
-}));
-
-        .FirstOrDefaultAsync();                
-
-// Or even worse - custom header bypass
-
-app.use((req, res, next) => {    // EF Core automatically parameterizes interpolated values                <div class="code-after">
-
-    res.header('Access-Control-Allow-Origin', '*');
-
-    res.header('Access-Control-Allow-Headers', '*');}</code></pre>                    <div class="code-header">
-
-    res.header('Access-Control-Allow-Methods', '*');
-
-    next();                </div>                        <span class="code-label">✅ AFTER</span>
-
-});
-
-            </div>                        <span class="code-file">CORTEX Maintenance</span>
-
-app.listen(3000);</code></pre>
-
-                </div>                                </div>
-
-
-
-                <div class="transform-arrow">            <div class="capability-used"><pre><code class="language-python">import os
-
-                    <i class="fas fa-magic"></i>
-
-                    <span>CORTEX</span>                <strong>CORTEX Capability:</strong> System Refinement → Security-focused code transformation
-
-                </div>
-
-            </div>def create_app():
-
-                <div class="panel after-panel">
-
-                    <div class="panel-header">        </div>    app = Flask(__name__)
-
-                        <i class="fas fa-check-circle"></i> After CORTEX
-
-                    </div>    </section>    
-
-                    <pre><code class="language-typescript">import express from 'express';
-
-import cors, { CorsOptions } from 'cors';    # Debug mode controlled by environment
-
-import helmet from 'helmet';
-
-    <!-- SEC-04: XSS in Angular -->    # Default to False (secure by default)
-
-const app = express();
-
-    <section class="section" id="sec-04">    debug = os.getenv('FLASK_DEBUG', 'false').lower() == 'true'
-
-// Whitelist of allowed origins
-
-const allowedOrigins = [        <div class="container">    
-
-    'https://myapp.com',
-
-    'https://admin.myapp.com',            <div class="flaw-header">    if debug and os.getenv('FLASK_ENV') == 'production':
-
-    process.env.NODE_ENV === 'development' 
-
-        ? 'http://localhost:4200'                 <span class="flaw-id">SEC-04</span>        raise RuntimeError(
-
-        : null
-
-].filter(Boolean) as string[];                <span class="severity-badge severity-high">HIGH</span>            "DEBUG cannot be enabled in production!"
-
-
-
-const corsOptions: CorsOptions = {                <span class="owasp-badge">OWASP A03:2021</span>        )
-
-    origin: (origin, callback) => {
-
-        // Allow requests with no origin (mobile apps, Postman)                <span class="tech-badge tech-angular">Angular</span>    
-
-        if (!origin) return callback(null, true);
-
-                    </div>    app.config['DEBUG'] = debug
-
-        if (allowedOrigins.includes(origin)) {
-
-            callback(null, true);            <h2>Cross-Site Scripting (XSS)</h2>    return app</code></pre>
-
-        } else {
-
-            callback(new Error('CORS policy violation'));            <p class="flaw-description">                </div>
-
-        }
-
-    },                <strong>CWE-79:</strong> Cross-site Scripting. Bypassing Angular's built-in sanitization             </div>
-
-    credentials: true,
-
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],                allows attackers to inject malicious scripts into web pages.            
-
-    allowedHeaders: ['Content-Type', 'Authorization'],
-
-    exposedHeaders: ['X-Request-Id'],            </p>            <div class="capability-used">
-
-    maxAge: 86400 // Cache preflight for 24 hours
-
-};                            <strong>CORTEX Capability:</strong> System Maintenance → Configuration security
-
-
-
-app.use(helmet()); // Security headers            <div class="code-comparison">            </div>
-
-app.use(cors(corsOptions));
-
-                <div class="code-before">        </div>
-
-app.listen(3000);</code></pre>
-
-                </div>                    <div class="code-header">    </section>
-
-            </div>
-
-                        <span class="code-label">❌ BEFORE</span>
-
-            <div class="fix-explanation">
-
-                <h4><i class="fas fa-lightbulb"></i> What CORTEX Fixed</h4>                        <span class="code-file">comment.component.ts</span>    <!-- SEC-06: Weak JWT Algorithm -->
-
-                <ul>
-
-                    <li><strong>Origin whitelist:</strong> Only specific domains allowed</li>                    </div>    <section class="section section-alt" id="sec-06">
-
-                    <li><strong>Method restrictions:</strong> Only necessary HTTP methods permitted</li>
-
-                    <li><strong>Header whitelist:</strong> Specific headers instead of wildcard</li><pre><code class="language-typescript">@Component({        <div class="container">
-
-                    <li><strong>Helmet middleware:</strong> Additional security headers added</li>
-
-                </ul>  template: `&lt;div [innerHTML]="userComment"&gt;&lt;/div&gt;`            <div class="flaw-header">
-
-            </div>
-
-        </section>})                <span class="flaw-id">SEC-06</span>
-
-
-
-        <!-- SEC-06: Sensitive Data Exposure -->export class CommentComponent {                <span class="severity-badge severity-high">HIGH</span>
-
-        <section class="sts-issue-card">
-
-            <div class="issue-header">  userComment: string;                <span class="owasp-badge">OWASP A02:2021</span>
-
-                <div class="issue-badge high">SEC-06</div>
-
-                <div class="issue-title">              </div>
-
-                    <h2>Sensitive Data Exposure</h2>
-
-                    <p>API responses leaking internal data</p>  constructor(private sanitizer: DomSanitizer) {}            <h2>Weak JWT Algorithm (MD5 Signature)</h2>
-
-                </div>
-
-                <span class="tech-badge tech-csharp">C#</span>              <p class="flaw-description">
-
-            </div>
-
-  displayComment(input: string) {                <strong>CWE-327:</strong> Use of a Broken Cryptographic Algorithm. Using MD5 
-
-            <div class="transform-panels">
-
-                <div class="panel before-panel">    // FLAW: Bypassing Angular's built-in XSS protection!                for JWT signatures allows collision attacks and token forgery.
-
-                    <div class="panel-header">
-
-                        <i class="fas fa-times-circle"></i> Before CORTEX    this.userComment = this.sanitizer            </p>
-
-                    </div>
-
-                    <pre><code class="language-csharp">[ApiController]      .bypassSecurityTrustHtml(input) as string;            
-
-[Route("api/users")]
-
-public class UsersController : ControllerBase    // Attacker input: &lt;script&gt;stealCookies()&lt;/script&gt;            <div class="code-comparison">
-
-{
-
-    [HttpGet("{id}")]  }                <div class="code-before">
-
-    public async Task&lt;User&gt; GetUser(int id)
-
-    {}</code></pre>                    <div class="code-header">
-
-        // Exposes entire entity including sensitive fields!
-
-        return await _context.Users.FindAsync(id);                </div>                        <span class="code-label">❌ BEFORE</span>
-
-    }
-
-                                            <span class="code-file">src/api/auth.py:58</span>
-
-    [HttpGet]
-
-    public async Task&lt;List&lt;User&gt;&gt; GetAll()                <div class="code-after">                    </div>
-
-    {
-
-        // Returns all users with passwords, SSNs, etc.                    <div class="code-header"><pre><code class="language-python">import hashlib
-
-        return await _context.Users.ToListAsync();
-
-    }                        <span class="code-label">✅ AFTER</span>
-
-}
-
-                        <span class="code-file">CORTEX Refinement</span>def simple_jwt_encode(payload: Dict) -> str:
-
-// Entity with sensitive data
-
-public class User                    </div>    """Custom JWT implementation (intentionally weak)"""
-
-{
-
-    public int Id { get; set; }<pre><code class="language-typescript">@Component({    header = {"alg": "HS256", "typ": "JWT"}
-
-    public string Email { get; set; }
-
-    public string PasswordHash { get; set; }  // Leaked!  template: `    header_encoded = base64.b64encode(json.dumps(header).encode())
-
-    public string SSN { get; set; }           // Leaked!
-
-    public decimal Salary { get; set; }       // Leaked!    &lt;div [innerHTML]="safeComment"&gt;&lt;/div&gt;    payload_encoded = base64.b64encode(json.dumps(payload).encode())
-
-    public string InternalNotes { get; set; } // Leaked!
-
-}</code></pre>    &lt;!-- Or better: use text binding --&gt;    
-
-                </div>
-
-    &lt;p&gt;{{ plainTextComment }}&lt;/p&gt;    # FLAW: Using MD5 for signature - cryptographically broken!
-
-                <div class="transform-arrow">
-
-                    <i class="fas fa-magic"></i>  `    signature_input = f"{header_encoded}.{payload_encoded}.{JWT_SECRET}"
-
-                    <span>CORTEX</span>
-
-                </div>})    signature = hashlib.md5(signature_input.encode()).hexdigest()
-
-
-
-                <div class="panel after-panel">export class CommentComponent {    
-
-                    <div class="panel-header">
-
-                        <i class="fas fa-check-circle"></i> After CORTEX  safeComment: SafeHtml;    return f"{header_encoded}.{payload_encoded}.{signature}"</code></pre>
-
-                    </div>
-
-                    <pre><code class="language-csharp">[ApiController]  plainTextComment: string;                </div>
-
-[Route("api/users")]
-
-public class UsersController : ControllerBase                  
-
-{
-
-    private readonly IMapper _mapper;  constructor(private sanitizer: DomSanitizer) {}                <div class="code-after">
-
-    
-
-    [HttpGet("{id}")]                      <div class="code-header">
-
-    [ProducesResponseType(typeof(UserDto), 200)]
-
-    [ProducesResponseType(404)]  displayComment(input: string) {                        <span class="code-label">✅ AFTER</span>
-
-    public async Task&lt;ActionResult&lt;UserDto&gt;&gt; GetUser(int id)
-
-    {    // Let Angular sanitize - strips dangerous content                        <span class="code-file">CORTEX Refinement</span>
-
-        var user = await _context.Users.FindAsync(id);
-
-        if (user == null) return NotFound();    this.safeComment = this.sanitizer.sanitize(                    </div>
-
-        
-
-        // Map to DTO - only safe fields exposed      SecurityContext.HTML, input) ?? '';<pre><code class="language-python">import jwt  # PyJWT library
-
-        return _mapper.Map&lt;UserDto&gt;(user);
-
-    }    // Or use text binding (safest)from datetime import datetime, timedelta
-
-    
-
-    [HttpGet]    this.plainTextComment = input; // Auto-escaped
-
-    [Authorize(Roles = "Admin")]
-
-    public async Task&lt;ActionResult&lt;PagedResult&lt;UserDto&gt;&gt;&gt;   }def create_jwt(payload: Dict, expires_in: int = 3600) -> str:
-
-        GetAll([FromQuery] int page = 1)
-
-    {}</code></pre>    """Create JWT using industry-standard library"""
-
-        var users = await _context.Users
-
-            .Skip((page - 1) * 20)                </div>    payload = {
-
-            .Take(20)
-
-            .ProjectTo&lt;UserDto&gt;(_mapper.ConfigurationProvider)            </div>        **payload,
-
-            .ToListAsync();
-
-                                'iat': datetime.utcnow(),
-
-        return new PagedResult&lt;UserDto&gt;(users, page);
-
-    }            <div class="capability-used">        'exp': datetime.utcnow() + timedelta(seconds=expires_in)
-
-}
-
-                <strong>CORTEX Capability:</strong> System Refinement → Frontend security hardening    }
-
-// Safe DTO - only public fields
-
-public record UserDto(            </div>    
-
-    int Id,
-
-    string Email,        </div>    # RS256 with RSA keys (asymmetric, more secure)
-
-    string DisplayName,
-
-    DateTime CreatedAt    </section>    # Or HS256 with 256-bit+ secret
-
-);</code></pre>
-
-                </div>    return jwt.encode(
-
-            </div>
-
-    <!-- SEC-05: Insecure API Calls (TypeScript) -->        payload,
-
-            <div class="fix-explanation">
-
-                <h4><i class="fas fa-lightbulb"></i> What CORTEX Fixed</h4>    <section class="section section-alt" id="sec-05">        JWT_SECRET,
-
-                <ul>
-
-                    <li><strong>DTO pattern:</strong> UserDto exposes only safe, public fields</li>        <div class="container">        algorithm='HS256'  # PyJWT uses HMAC-SHA256 properly
-
-                    <li><strong>AutoMapper projection:</strong> Query-level filtering prevents data loading</li>
-
-                    <li><strong>Authorization:</strong> List endpoint requires Admin role</li>            <div class="flaw-header">    )</code></pre>
-
-                    <li><strong>Pagination:</strong> Prevents bulk data extraction</li>
-
-                </ul>                <span class="flaw-id">SEC-05</span>                </div>
-
-            </div>
-
-        </section>                <span class="severity-badge severity-high">HIGH</span>            </div>
-
-
-
-        <!-- SEC-07: Missing Input Validation -->                <span class="owasp-badge">OWASP A07:2021</span>            
-
-        <section class="sts-issue-card">
-
-            <div class="issue-header">                <span class="tech-badge tech-typescript">TypeScript</span>            <div class="capability-used">
-
-                <div class="issue-badge medium">SEC-07</div>
-
-                <div class="issue-title">            </div>                <strong>CORTEX Capability:</strong> System Refinement → Cryptographic upgrade
-
-                    <h2>Missing Input Validation</h2>
-
-                    <p>No validation on user-submitted data</p>            <h2>Insecure HTTP & Missing Auth Headers</h2>            </div>
-
-                </div>
-
-                <span class="tech-badge tech-angular">Angular</span>            <p class="flaw-description">        </div>
-
-            </div>
-
-                <strong>CWE-319:</strong> Cleartext Transmission of Sensitive Information.     </section>
-
-            <div class="transform-panels">
-
-                <div class="panel before-panel">                Using HTTP instead of HTTPS and exposing tokens in URLs.
-
-                    <div class="panel-header">
-
-                        <i class="fas fa-times-circle"></i> Before CORTEX            </p>    <!-- SEC-07: No Signature Verification -->
-
-                    </div>
-
-                    <pre><code class="language-typescript">@Component({                <section class="section" id="sec-07">
-
-    selector: 'app-registration',
-
-    template: `            <div class="code-comparison">        <div class="container">
-
-        &lt;form (ngSubmit)="onSubmit()"&gt;
-
-            &lt;input [(ngModel)]="user.email" name="email"&gt;                <div class="code-before">            <div class="flaw-header">
-
-            &lt;input [(ngModel)]="user.password" name="password"&gt;
-
-            &lt;input [(ngModel)]="user.age" name="age"&gt;                    <div class="code-header">                <span class="flaw-id">SEC-07</span>
-
-            &lt;button type="submit"&gt;Register&lt;/button&gt;
-
-        &lt;/form&gt;                        <span class="code-label">❌ BEFORE</span>                <span class="severity-badge severity-critical">CRITICAL</span>
-
-    `
-
-})                        <span class="code-file">api.service.ts</span>                <span class="owasp-badge">OWASP A07:2021</span>
-
-export class RegistrationComponent {
-
-    user: any = {};                    </div>            </div>
-
-    
-
-    onSubmit() {<pre><code class="language-typescript">export class ApiService {            <h2>JWT Signature Not Verified</h2>
-
-        // No validation - sends anything to server!
-
-        this.http.post('/api/users', this.user).subscribe();  // FLAW: Using HTTP, not HTTPS            <p class="flaw-description">
-
-    }
-
-}</code></pre>  private baseUrl = 'http://api.myapp.com';                <strong>CWE-347:</strong> Improper Verification of Cryptographic Signature. 
-
-                </div>
-
-                  Accepting JWTs without signature verification allows complete authentication bypass.
-
-                <div class="transform-arrow">
-
-                    <i class="fas fa-magic"></i>  async getUser(token: string, userId: number) {            </p>
-
-                    <span>CORTEX</span>
-
-                </div>    // FLAW: Token in URL - visible in logs, history            
-
-
-
-                <div class="panel after-panel">    const response = await fetch(            <div class="code-comparison">
-
-                    <div class="panel-header">
-
-                        <i class="fas fa-check-circle"></i> After CORTEX      `${this.baseUrl}/users/${userId}?token=${token}`                <div class="code-before">
-
-                    </div>
-
-                    <pre><code class="language-typescript">@Component({    );                    <div class="code-header">
-
-    selector: 'app-registration',
-
-    template: `    return response.json();                        <span class="code-label">❌ BEFORE</span>
-
-        &lt;form [formGroup]="form" (ngSubmit)="onSubmit()"&gt;
-
-            &lt;input formControlName="email" type="email"&gt;  }                        <span class="code-file">src/api/auth.py:72</span>
-
-            &lt;div *ngIf="form.get('email')?.errors?.['email']" 
-
-                 class="error"&gt;                      </div>
-
-                Invalid email format
-
-            &lt;/div&gt;  async updateProfile(data: any) {<pre><code class="language-python">def simple_jwt_decode(token: str) -> Optional[Dict]:
-
-            
-
-            &lt;input formControlName="password" type="password"&gt;    // FLAW: No authentication header    """Decode JWT without proper verification"""
-
-            &lt;div *ngIf="form.get('password')?.errors?.['minlength']" 
-
-                 class="error"&gt;    return fetch(`${this.baseUrl}/profile`, {    try:
-
-                Password must be at least 12 characters
-
-            &lt;/div&gt;      method: 'POST',        parts = token.split('.')
-
-            
-
-            &lt;input formControlName="age" type="number"&gt;      body: JSON.stringify(data)        if len(parts) != 3:
-
-            
-
-            &lt;button type="submit" [disabled]="form.invalid"&gt;    });            return None
-
-                Register
-
-            &lt;/button&gt;  }        
-
-        &lt;/form&gt;
-
-    `}</code></pre>        payload_encoded = parts[1]
-
-})
-
-export class RegistrationComponent implements OnInit {                </div>        # FLAW: Not verifying signature at all!
-
-    form!: FormGroup;
-
-                            # Attacker can modify payload and we'll accept it
-
-    constructor(
-
-        private fb: FormBuilder,                <div class="code-after">        payload = json.loads(base64.b64decode(payload_encoded))
-
-        private http: HttpClient
-
-    ) {}                    <div class="code-header">        
-
-    
-
-    ngOnInit() {                        <span class="code-label">✅ AFTER</span>        return payload
-
-        this.form = this.fb.group({
-
-            email: ['', [                        <span class="code-file">CORTEX Architecture Review</span>    except:
-
-                Validators.required,
-
-                Validators.email,                    </div>        return None</code></pre>
-
-                Validators.maxLength(254)
-
-            ]],<pre><code class="language-typescript">export class ApiService {                </div>
-
-            password: ['', [
-
-                Validators.required,  // HTTPS enforced                
-
-                Validators.minLength(12),
-
-                this.passwordStrengthValidator  private baseUrl = 'https://api.myapp.com';                <div class="code-after">
-
-            ]],
-
-            age: [null, [                      <div class="code-header">
-
-                Validators.required,
-
-                Validators.min(13),  constructor(private authService: AuthService) {}                        <span class="code-label">✅ AFTER</span>
-
-                Validators.max(120)
-
-            ]]                          <span class="code-file">CORTEX TDD Mastery</span>
-
-        });
-
-    }  async getUser(userId: number): Promise&lt;User&gt; {                    </div>
-
-    
-
-    passwordStrengthValidator(control: AbstractControl) {    const response = await fetch(<pre><code class="language-python">import jwt
-
-        const value = control.value;
-
-        const hasUpper = /[A-Z]/.test(value);      `${this.baseUrl}/users/${userId}`,from jwt.exceptions import InvalidTokenError, ExpiredSignatureError
-
-        const hasLower = /[a-z]/.test(value);
-
-        const hasNumber = /\d/.test(value);      {
-
-        const hasSpecial = /[!@#$%^&*]/.test(value);
-
-                headers: {def decode_jwt(token: str) -> Optional[Dict]:
-
-        const valid = hasUpper && hasLower && 
-
-                      hasNumber && hasSpecial;          // Token in Authorization header, not URL    """Decode and verify JWT with full validation"""
-
-        return valid ? null : { passwordStrength: true };
-
-    }          'Authorization': `Bearer ${this.authService.getToken()}`,    try:
-
-}</code></pre>
-
-                </div>          'Content-Type': 'application/json'        # PyJWT verifies signature automatically
-
-            </div>
-
-        }        payload = jwt.decode(
-
-            <div class="fix-explanation">
-
-                <h4><i class="fas fa-lightbulb"></i> What CORTEX Fixed</h4>      }            token,
-
-                <ul>
-
-                    <li><strong>Reactive forms:</strong> Type-safe form with FormGroup</li>    );            JWT_SECRET,
-
-                    <li><strong>Built-in validators:</strong> Email, minLength, required patterns</li>
-
-                    <li><strong>Custom validator:</strong> Password strength requirements</li>    if (!response.ok) throw new ApiError(response.status);            algorithms=['HS256'],  # Whitelist algorithms
-
-                    <li><strong>Error messages:</strong> User-friendly validation feedback</li>
-
-                </ul>    return response.json();            options={
-
-            </div>
-
-        </section>  }                'require': ['exp', 'iat'],  # Required claims
-
-
-
-        <!-- SEC-08: Insecure File Upload -->}</code></pre>                'verify_exp': True,         # Check expiration
-
-        <section class="sts-issue-card">
-
-            <div class="issue-header">                </div>                'verify_iat': True          # Check issued-at
-
-                <div class="issue-badge high">SEC-08</div>
-
-                <div class="issue-title">            </div>            }
-
-                    <h2>Insecure File Upload</h2>
-
-                    <p>No validation of uploaded file types or content</p>                    )
-
-                </div>
-
-                <span class="tech-badge tech-csharp">C#</span>            <div class="capability-used">        return payload
-
-            </div>
-
-                <strong>CORTEX Capability:</strong> Architectural Review → Security configuration    except ExpiredSignatureError:
-
-            <div class="transform-panels">
-
-                <div class="panel before-panel">            </div>        logger.warning("Expired token attempted")
-
-                    <div class="panel-header">
-
-                        <i class="fas fa-times-circle"></i> Before CORTEX        </div>        return None
-
-                    </div>
-
-                    <pre><code class="language-csharp">[HttpPost("upload")]    </section>    except InvalidTokenError as e:
-
-public async Task&lt;IActionResult&gt; Upload(IFormFile file)
-
-{        logger.warning(f"Invalid token: {e}")
-
-    // CRITICAL: No validation at all!
-
-    var path = Path.Combine("uploads", file.FileName);    <!-- SEC-06: CSRF Vulnerability (Angular) -->        return None</code></pre>
-
-    
-
-    using var stream = new FileStream(path, FileMode.Create);    <section class="section" id="sec-06">                </div>
-
-    await file.CopyToAsync(stream);
-
-            <div class="container">            </div>
-
-    return Ok(new { path });
-
-}</code></pre>            <div class="flaw-header">            
-
-                </div>
-
-                <span class="flaw-id">SEC-06</span>            <div class="capability-used">
-
-                <div class="transform-arrow">
-
-                    <i class="fas fa-magic"></i>                <span class="severity-badge severity-high">HIGH</span>                <strong>CORTEX Capability:</strong> TDD Mastery → Test-driven token validation
-
-                    <span>CORTEX</span>
-
-                </div>                <span class="owasp-badge">OWASP A01:2021</span>            </div>
-
-
-
-                <div class="panel after-panel">                <span class="tech-badge tech-angular">Angular</span>        </div>
-
-                    <div class="panel-header">
-
-                        <i class="fas fa-check-circle"></i> After CORTEX            </div>    </section>
-
-                    </div>
-
-                    <pre><code class="language-csharp">[HttpPost("upload")]            <h2>Cross-Site Request Forgery (CSRF)</h2>
-
-[RequestSizeLimit(5 * 1024 * 1024)] // 5MB max
-
-public async Task&lt;ActionResult&lt;FileUploadResult&gt;&gt; Upload(            <p class="flaw-description">    <!-- SEC-12: Permissive CORS -->
-
-    IFormFile file,
-
-    [FromServices] IFileValidator validator)                <strong>CWE-352:</strong> Cross-Site Request Forgery. Without CSRF protection,     <section class="section section-alt" id="sec-12">
-
-{
-
-    // Validate file                attackers can trick users into making unwanted requests.        <div class="container">
-
-    var validation = await validator.ValidateAsync(file);
-
-    if (!validation.IsValid)            </p>            <div class="flaw-header">
-
-        return BadRequest(validation.Errors);
-
-                                <span class="flaw-id">SEC-12</span>
-
-    // Generate safe filename
-
-    var safeFileName = $"{Guid.NewGuid()}" +            <div class="code-comparison">                <span class="severity-badge severity-medium">MEDIUM</span>
-
-        $"{Path.GetExtension(file.FileName).ToLower()}";
-
-                    <div class="code-before">                <span class="owasp-badge">OWASP A05:2021</span>
-
-    // Store outside web root
-
-    var uploadsPath = Path.Combine(                    <div class="code-header">            </div>
-
-        _env.ContentRootPath, 
-
-        "secure-uploads",                        <span class="code-label">❌ BEFORE</span>            <h2>Permissive CORS (Allow All Origins)</h2>
-
-        DateTime.UtcNow.ToString("yyyy/MM/dd"));
-
-                            <span class="code-file">app.module.ts</span>            <p class="flaw-description">
-
-    Directory.CreateDirectory(uploadsPath);
-
-    var filePath = Path.Combine(uploadsPath, safeFileName);                    </div>                <strong>CWE-942:</strong> Permissive Cross-domain Policy. Allowing all origins 
-
-    
-
-    // Scan for malware before saving<pre><code class="language-typescript">@NgModule({                enables cross-site request forgery and data exfiltration attacks.
-
-    using var stream = file.OpenReadStream();
-
-    if (await _antivirusService.ContainsMalwareAsync(stream))  imports: [            </p>
-
-        return BadRequest("File failed security scan");
-
-        HttpClientModule,            
-
-    stream.Position = 0;
-
-    using var fileStream = new FileStream(    // FLAW: No CSRF/XSRF protection configured            <div class="code-comparison">
-
-        filePath, FileMode.Create);
-
-    await stream.CopyToAsync(fileStream);  ],                <div class="code-before">
-
-    
-
-    return new FileUploadResult(safeFileName);})                    <div class="code-header">
-
-}</code></pre>
-
-                </div>export class AppModule { }                        <span class="code-label">❌ BEFORE</span>
-
-            </div>
-
-                        <span class="code-file">src/app.py:24</span>
-
-            <div class="fix-explanation">
-
-                <h4><i class="fas fa-lightbulb"></i> What CORTEX Fixed</h4>// API calls have no CSRF token                    </div>
-
-                <ul>
-
-                    <li><strong>Size limit:</strong> Maximum 5MB enforced at attribute level</li>@Injectable()<pre><code class="language-python">@app.after_request
-
-                    <li><strong>File validation:</strong> MIME type, extension, and magic bytes checked</li>
-
-                    <li><strong>Safe filename:</strong> GUID-based name prevents path traversal</li>export class PaymentService {def after_request(response):
-
-                    <li><strong>Malware scan:</strong> Files scanned before storage</li>
-
-                </ul>  transferMoney(to: string, amount: number) {    # FLAW: Allows ANY origin to make requests
-
-            </div>
-
-        </section>    // Vulnerable to CSRF - attacker can forge this    # Enables CSRF and data theft from any website
-
-
-
-        <!-- Best Practices Section -->    return this.http.post('/api/transfer', { to, amount });    response.headers.add('Access-Control-Allow-Origin', '*')
-
-        <section class="sts-best-practices">
-
-            <h2><i class="fas fa-shield-alt"></i> Security Best Practices</h2>  }    response.headers.add('Access-Control-Allow-Headers', 
-
-            <div class="practices-grid">
-
-                <div class="practice-card">}</code></pre>                         'Content-Type,Authorization')
-
-                    <div class="practice-icon">
-
-                        <i class="fas fa-key"></i>                </div>    response.headers.add('Access-Control-Allow-Methods', 
-
-                    </div>
-
-                    <h3>Secrets Management</h3>                                         'GET,PUT,POST,DELETE,OPTIONS')
-
-                    <p>Use Azure Key Vault, AWS Secrets Manager, or HashiCorp Vault for all secrets.</p>
-
-                    <code>IConfiguration["Jwt:Secret"]</code>                <div class="code-after">    return response</code></pre>
-
-                </div>
-
-                <div class="practice-card">                    <div class="code-header">                </div>
-
-                    <div class="practice-icon">
-
-                        <i class="fas fa-database"></i>                        <span class="code-label">✅ AFTER</span>                
-
-                    </div>
-
-                    <h3>Parameterized Queries</h3>                        <span class="code-file">CORTEX TDD Mastery</span>                <div class="code-after">
-
-                    <p>Always use parameterized queries or ORMs. Never concatenate user input into SQL.</p>
-
-                    <code>WHERE id = @id</code>                    </div>                    <div class="code-header">
-
-                </div>
-
-                <div class="practice-card"><pre><code class="language-typescript">@NgModule({                        <span class="code-label">✅ AFTER</span>
-
-                    <div class="practice-icon">
-
-                        <i class="fas fa-filter"></i>  imports: [                        <span class="code-file">CORTEX Architecture Review</span>
-
-                    </div>
-
-                    <h3>Input Validation</h3>    HttpClientModule,                    </div>
-
-                    <p>Validate all input on both client and server. Use whitelists over blacklists.</p>
-
-                    <code>Validators.pattern()</code>    HttpClientXsrfModule.withOptions({<pre><code class="language-python">from flask_cors import CORS
-
-                </div>
-
-                <div class="practice-card">      cookieName: 'XSRF-TOKEN',
-
-                    <div class="practice-icon">
-
-                        <i class="fas fa-lock"></i>      headerName: 'X-XSRF-TOKEN'# Explicit origin whitelist
-
-                    </div>
-
-                    <h3>Output Encoding</h3>    })ALLOWED_ORIGINS = [
-
-                    <p>Encode all output based on context: HTML, JavaScript, URL, CSS.</p>
-
-                    <code>DOMPurify.sanitize()</code>  ],    'https://myapp.com',
-
-                </div>
-
-            </div>})    'https://admin.myapp.com'
-
         </section>
 
-export class AppModule { }]
+        <!-- SQL Procedure -->
+        <section class="comparison-section">
+            <div class="section-header">
+                <div class="principle-badge">
+                    <i class="fas fa-database"></i> Secure SQL Procedures
+                </div>
+                <span class="language-badge sql">SQL</span>
+            </div>
+            
+            <div class="refactor-explanation">
+                <h4><i class="fas fa-lightbulb"></i> How This Was Refactored</h4>
+                <ul>
+                    <li><strong>Vulnerability:</strong> EXEC with string concat</li>
+                    <li><strong>Fix:</strong> sp_executesql with parameters</li>
+                    <li><strong>Result:</strong> Parameters bound safely</li>
+                </ul>
+            </div>
 
-        <!-- Navigation -->
+            <div class="comparison-container">
+                <div class="panel before-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-times-circle"></i> Before: Dynamic SQL Injection
+                    </div>
+                    <pre><code class="language-sql">CREATE PROCEDURE SearchProducts
+    @SearchTerm NVARCHAR(100)
+AS
+BEGIN
+    -- VULNERABLE: String concatenation
+    DECLARE @SQL NVARCHAR(MAX)
+    SET @SQL = 'SELECT * FROM Products 
+                WHERE Name LIKE ''%' + @SearchTerm + '%'''
+    
+    -- Attack: "'; DROP TABLE Products;--"
+    EXEC(@SQL)
+END</code></pre>
+                </div>
 
-        <nav class="sts-nav">
-
-            <a href="documentation.html" class="nav-prev">
-
-                <i class="fas fa-arrow-left"></i>// Angular auto-adds XSRF token to mutating requestsif os.getenv('FLASK_ENV') == 'development':
-
-                <span>Documentation</span>
-
-            </a>@Injectable()    ALLOWED_ORIGINS.append('http://localhost:3000')
-
-            <a href="index.html" class="nav-hub">
-
-                <i class="fas fa-th"></i>export class PaymentService {
-
-                <span>STS Hub</span>
-
-            </a>  transferMoney(to: string, amount: number) {CORS(app, 
-
-            <a href="solid.html" class="nav-next">
-
-                <span>SOLID</span>    // HttpClient auto-includes X-XSRF-TOKEN header     origins=ALLOWED_ORIGINS,
-
-                <i class="fas fa-arrow-right"></i>
-
-            </a>    return this.http.post('/api/transfer', { to, amount });     methods=['GET', 'POST', 'PUT', 'DELETE'],
-
-        </nav>
-
-    </main>  }     allow_headers=['Content-Type', 'Authorization'],
-
-
-
-    <!-- Footer -->}</code></pre>     supports_credentials=True,
+                <div class="panel after-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-check-circle"></i> After: Parameterized Dynamic SQL
+                    </div>
+                    <pre><code class="language-sql">CREATE PROCEDURE SearchProducts
+    @SearchTerm NVARCHAR(100)
+AS
+BEGIN
+    -- SECURE: Parameterized dynamic SQL
+    DECLARE @SQL NVARCHAR(MAX)
+    DECLARE @Params NVARCHAR(200)
+    
+    SET @SQL = N'SELECT * FROM Products 
+                 WHERE Name LIKE @Search'
+    SET @Params = N'@Search NVARCHAR(102)'
+    
+    EXEC sp_executesql @SQL, @Params, 
+         @Search = N'%' + @SearchTerm + N'%'
+END</code></pre>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <footer class="site-footer">
-
-        <div class="footer-content">                </div>     max_age=3600)</code></pre>
-
-            <p>CORTEX 4.0 — AI-Powered Code Intelligence</p>
-
-            <p class="footer-sub">Transforming codebases through intelligent analysis</p>            </div>                </div>
-
+        <div class="footer-content">
+            <p>&copy; 2024 CORTEX 4.0 - AI-Powered Code Intelligence by Asif Hussain</p>
         </div>
+    </footer>
 
-    </footer>                        </div>
-
-
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>            <div class="capability-used">            
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/csharp.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/typescript.min.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/csharp.min.js"></script>                <strong>CORTEX Capability:</strong> TDD Mastery → Test-driven security implementation            <div class="capability-used">
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/sql.min.js"></script>
     <script>hljs.highlightAll();</script>
-
-</body>            </div>                <strong>CORTEX Capability:</strong> Architectural Review → Security configuration
-
-</html>
-
-        </div>            </div>
-
-    </section>        </div>
-
-    </section>
-
-    <!-- SEC-07: Missing Authorization (C# ASP.NET) -->
-
-    <section class="section section-alt" id="sec-07">    <!-- Summary -->
-
-        <div class="container">    <section class="section">
-
-            <div class="flaw-header">        <div class="container">
-
-                <span class="flaw-id">SEC-07</span>            <h2 class="section-title text-center">Security Transformation Summary</h2>
-
-                <span class="severity-badge severity-critical">CRITICAL</span>            
-
-                <span class="owasp-badge">OWASP A01:2021</span>            <div class="glass-card">
-
-                <span class="tech-badge tech-csharp">C#</span>                <h3>Key Patterns Applied</h3>
-
-            </div>                <ul class="summary-list">
-
-            <h2>Missing Authorization Checks</h2>                    <li><strong>Environment Variables:</strong> All secrets moved to environment configuration</li>
-
-            <p class="flaw-description">                    <li><strong>Parameterized Queries:</strong> SQL injection prevented via proper escaping</li>
-
-                <strong>CWE-862:</strong> Missing Authorization. Endpoints accessible without                     <li><strong>Strong Cryptography:</strong> Argon2id for passwords, proper JWT with PyJWT</li>
-
-                proper role/permission checks allow unauthorized access.                    <li><strong>Secure Defaults:</strong> Debug off, restrictive CORS, fail-closed validation</li>
-
-            </p>                    <li><strong>Defense in Depth:</strong> Input validation + parameterization + whitelisting</li>
-
-                            </ul>
-
-            <div class="code-comparison">            </div>
-
-                <div class="code-before">        </div>
-
-                    <div class="code-header">    </section>
-
-                        <span class="code-label">❌ BEFORE</span>
-
-                        <span class="code-file">AdminController.cs</span>    <!-- Navigation -->
-
-                    </div>    <section class="section section-alt">
-
-<pre><code class="language-csharp">[ApiController]        <div class="container">
-
-[Route("api/admin")]            <h2 class="section-title text-center">Explore More Categories</h2>
-
-public class AdminController : ControllerBase            <div class="nav-buttons">
-
-{                <a href="index.html" class="btn btn-secondary">← Back to STS</a>
-
-    // FLAW: No authorization attribute!                <a href="solid.html" class="btn btn-primary">SOLID Principles →</a>
-
-    [HttpPost("users/{id}/delete")]            </div>
-
-    public async Task&lt;IActionResult&gt; DeleteUser(int id)        </div>
-
-    {    </section>
-
-        await _userService.DeleteUser(id);
-
-        return Ok();    <!-- Back to Home -->
-
-    }    <div class="back-link-container">
-
-            <a href="../index.html" class="back-link">← Back to Home</a>
-
-    [HttpGet("reports/financial")]    </div>
-
-    public async Task&lt;IActionResult&gt; GetFinancialReports()</body>
-
-    {</html>
-
-        // Sensitive data accessible to everyone
-        return Ok(await _reportService.GetFinancialData());
-    }
-}</code></pre>
-                </div>
-                
-                <div class="code-after">
-                    <div class="code-header">
-                        <span class="code-label">✅ AFTER</span>
-                        <span class="code-file">CORTEX Architecture Review</span>
-                    </div>
-<pre><code class="language-csharp">[ApiController]
-[Route("api/admin")]
-[Authorize(Roles = "Admin")] // Controller-level protection
-public class AdminController : ControllerBase
-{
-    [HttpPost("users/{id}/delete")]
-    [Authorize(Policy = "CanDeleteUsers")] // Fine-grained
-    public async Task&lt;IActionResult&gt; DeleteUser(int id)
-    {
-        if (!await _authService.CanModifyUser(User, id))
-            return Forbid();
-        await _userService.DeleteUser(id);
-        return Ok();
-    }
-    
-    [HttpGet("reports/financial")]
-    [Authorize(Policy = "FinanceAccess")]
-    public async Task&lt;IActionResult&gt; GetFinancialReports()
-    {
-        return Ok(await _reportService.GetFinancialData());
-    }
-}</code></pre>
-                </div>
-            </div>
-            
-            <div class="capability-used">
-                <strong>CORTEX Capability:</strong> Architectural Review → Access control design
-            </div>
-        </div>
-    </section>
-
-    <!-- SEC-08: Permissive CORS (C# ASP.NET) -->
-    <section class="section" id="sec-08">
-        <div class="container">
-            <div class="flaw-header">
-                <span class="flaw-id">SEC-08</span>
-                <span class="severity-badge severity-medium">MEDIUM</span>
-                <span class="owasp-badge">OWASP A05:2021</span>
-                <span class="tech-badge tech-csharp">C#</span>
-            </div>
-            <h2>Permissive CORS Configuration</h2>
-            <p class="flaw-description">
-                <strong>CWE-942:</strong> Permissive Cross-domain Policy. Allowing all origins 
-                enables cross-site request forgery and data exfiltration attacks.
-            </p>
-            
-            <div class="code-comparison">
-                <div class="code-before">
-                    <div class="code-header">
-                        <span class="code-label">❌ BEFORE</span>
-                        <span class="code-file">Program.cs</span>
-                    </div>
-<pre><code class="language-csharp">builder.Services.AddCors(options =&gt;
-{
-    options.AddDefaultPolicy(policy =&gt;
-    {
-        // FLAW: Allows ANY origin
-        policy.AllowAnyOrigin()
-              .AllowAnyMethod()
-              .AllowAnyHeader();
-    });
-});
-
-app.UseCors(); // Wide open to attacks</code></pre>
-                </div>
-                
-                <div class="code-after">
-                    <div class="code-header">
-                        <span class="code-label">✅ AFTER</span>
-                        <span class="code-file">CORTEX Maintenance</span>
-                    </div>
-<pre><code class="language-csharp">builder.Services.AddCors(options =&gt;
-{
-    options.AddPolicy("Production", policy =&gt;
-    {
-        policy.WithOrigins(
-                "https://myapp.com",
-                "https://admin.myapp.com")
-              .WithMethods("GET", "POST", "PUT", "DELETE")
-              .WithHeaders("Authorization", "Content-Type")
-              .AllowCredentials()
-              .SetPreflightMaxAge(TimeSpan.FromHours(1));
-    });
-});
-
-app.UseCors("Production");</code></pre>
-                </div>
-            </div>
-            
-            <div class="capability-used">
-                <strong>CORTEX Capability:</strong> System Maintenance → Configuration security
-            </div>
-        </div>
-    </section>
-
-    <!-- Summary -->
-    <section class="section section-alt">
-        <div class="container">
-            <h2 class="section-title text-center">Security Transformation Summary</h2>
-            
-            <div class="glass-card">
-                <h3>Key Patterns Applied Across Technologies</h3>
-                <div class="tech-summary">
-                    <div class="tech-group">
-                        <h4><span class="tech-badge tech-csharp">C#</span> ASP.NET Core</h4>
-                        <ul>
-                            <li>IOptions pattern for secrets</li>
-                            <li>IPasswordHasher for secure hashing</li>
-                            <li>EF Core parameterized queries</li>
-                            <li>[Authorize] with policies</li>
-                        </ul>
-                    </div>
-                    <div class="tech-group">
-                        <h4><span class="tech-badge tech-angular">Angular</span> Frontend</h4>
-                        <ul>
-                            <li>DomSanitizer for XSS prevention</li>
-                            <li>HttpClientXsrfModule for CSRF</li>
-                            <li>Interceptors for auth headers</li>
-                            <li>Built-in template sanitization</li>
-                        </ul>
-                    </div>
-                    <div class="tech-group">
-                        <h4><span class="tech-badge tech-typescript">TypeScript</span> Best Practices</h4>
-                        <ul>
-                            <li>Strong typing for API contracts</li>
-                            <li>HTTPS enforcement</li>
-                            <li>Bearer token in headers</li>
-                            <li>Proper error handling</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Navigation -->
-    <section class="section">
-        <div class="container">
-            <h2 class="section-title text-center">Explore More Categories</h2>
-            <div class="nav-buttons">
-                <a href="index.html" class="btn btn-secondary">← Back to STS</a>
-                <a href="solid.html" class="btn btn-primary">SOLID Principles →</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Back to Home -->
-    <div class="back-link-container">
-        <a href="../index.html" class="back-link">← Back to Home</a>
-    </div>
 </body>
 </html>

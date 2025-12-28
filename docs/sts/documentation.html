@@ -3,130 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Documentation - Sharpen the Saw | CORTEX</title>
+    <meta name="description" content="CORTEX Documentation Showcase - TSDoc, XML Comments, API Documentation">
+    <meta name="author" content="Asif Hussain">
+    <title>Documentation | STS | CORTEX 4.0</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="../assets/css/main.css">
     <link rel="stylesheet" href="../assets/css/sts.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
 </head>
-<body>
+<body class="sts-showcase">
     <header class="site-header">
         <nav class="nav-container">
-            <a href="../index.html" class="logo">CORTEX</a>
-            <ul class="nav-links">
-                <li><a href="../index.html">Home</a></li>
-                <li><a href="index.html" class="active">Sharpen the Saw</a></li>
-                <li><a href="../architecture.html">Architecture</a></li>
-            </ul>
+            <a href="../index.html" class="nav-brand"><i class="fas fa-brain"></i> CORTEX 4.0</a>
+            <div class="nav-links">
+                <a href="index.html"><i class="fas fa-bullseye"></i> STS Hub</a>
+                <a href="../documentation.html"><i class="fas fa-book"></i> Docs</a>
+            </div>
         </nav>
     </header>
 
-    <main class="sts-page">
+    <main class="sts-main">
         <section class="sts-hero">
-            <div class="container">
-                <nav class="sts-breadcrumb">
-                    <a href="index.html">Sharpen the Saw</a>
-                    <span>/</span>
-                    <span>Documentation</span>
-                </nav>
-                <h1>Documentation Patterns</h1>
-                <p class="sts-subtitle">Write code that explains itself through meaningful documentation</p>
+            <div class="hero-badge"><i class="fas fa-file-alt"></i> DOCUMENTATION PATTERNS</div>
+            <h1>Documentation<br><span class="accent-text">Elevated</span></h1>
+            <p class="hero-subtitle">Watch CORTEX transform undocumented code into self-explanatory, maintainable systems</p>
+            <div class="sts-metrics">
+                <div class="metric-card"><div class="metric-value">4</div><div class="metric-label">Gaps Found</div></div>
+                <div class="metric-card accent"><div class="metric-value">4</div><div class="metric-label">Documented</div></div>
+                <div class="metric-card"><div class="metric-value">100%</div><div class="metric-label">API Coverage</div></div>
             </div>
         </section>
 
-        <section class="sts-content">
-            <div class="container">
-                <div class="sts-intro">
-                    <p>Good documentation is the bridge between your code and its users. These examples show how to transform undocumented code into self-explanatory, maintainable systems.</p>
+        <!-- DOC-01: Missing Code Documentation (TypeScript) -->
+        <section class="sts-issue-card">
+            <div class="issue-header">
+                <div class="issue-badge high">DOC-01</div>
+                <div class="issue-title">
+                    <h2>Missing Code Documentation</h2>
+                    <p>Functions without documentation force reading implementation details</p>
                 </div>
+                <span class="tech-badge tech-typescript">TypeScript TSDoc</span>
+            </div>
 
-                <!-- DOC-01: Missing Code Documentation -->
-                <div class="sts-showcase" id="doc-01">
-                    <div class="showcase-header">
-                        <span class="issue-id">DOC-01</span>
-                        <h2>Missing Code Documentation</h2>
-                        <span class="severity-badge severity-medium">Medium Impact</span>
-                    </div>
-                    
-                    <p class="showcase-description">Functions without documentation force developers to read implementation details to understand behavior. Add comprehensive TSDoc/JSDoc comments to public APIs.</p>
+            <div class="refactor-explanation">
+                <h4><i class="fas fa-code-branch"></i> How This Was Refactored</h4>
+                <p>
+                    Undocumented functions were annotated with comprehensive <strong>TSDoc comments</strong>. 
+                    Each function now includes <code>@param</code> descriptions, <code>@returns</code> documentation, 
+                    <code>@throws</code> for exceptions, and <code>@example</code> blocks showing usage. IDEs 
+                    display this documentation on hover, eliminating the need to read source code.
+                </p>
+                <div class="why-matters">
+                    <strong>Why this matters:</strong> Well-documented code is 10x faster to use. Developers 
+                    shouldn't need to read implementation details to understand how to call a function.
+                </div>
+            </div>
 
-                    <div class="comparison-grid">
-                        <div class="code-panel before">
-                            <div class="panel-header">
-                                <span class="panel-label">❌ Before: No Documentation</span>
-                                <span class="tech-badge typescript">TypeScript</span>
-                            </div>
-                            <pre><code class="language-typescript">export class UserService {
+            <div class="transform-panels">
+                <div class="panel before-panel">
+                    <div class="panel-header"><i class="fas fa-times-circle"></i> Before CORTEX</div>
+                    <pre><code class="language-typescript">export class UserService {
     private cache = new Map&lt;string, User&gt;();
 
-    async getUser(id: string, includeDeleted?: boolean): Promise&lt;User | null&gt; {
+    async getUser(id: string, includeDeleted?: boolean) {
         if (this.cache.has(id)) {
             return this.cache.get(id)!;
         }
-        
-        const user = await this.repository.findById(id);
+        const user = await this.repo.findById(id);
         if (!user || (user.deletedAt && !includeDeleted)) {
             return null;
         }
-        
         this.cache.set(id, user);
         return user;
     }
 
-    async updateUser(id: string, data: Partial&lt;User&gt;, merge?: boolean): Promise&lt;User&gt; {
-        const existing = await this.getUser(id);
-        if (!existing) {
-            throw new Error('User not found');
-        }
-        
-        const updated = merge 
-            ? { ...existing, ...data }
-            : { ...existing, ...data, updatedAt: new Date() };
-        
-        await this.repository.save(updated);
+    async updateUser(id: string, data: Partial&lt;User&gt;) {
+        const user = await this.getUser(id);
+        if (!user) throw new Error('Not found');
+        const updated = { ...user, ...data };
+        await this.repo.save(updated);
         this.cache.delete(id);
         return updated;
     }
 }</code></pre>
-                        </div>
-
-                        <div class="code-panel after">
-                            <div class="panel-header">
-                                <span class="panel-label">✅ After: Comprehensive TSDoc</span>
-                                <span class="tech-badge typescript">TypeScript</span>
-                            </div>
-                            <pre><code class="language-typescript">/**
- * Service for managing user data with caching support.
- * 
- * @remarks
- * This service implements a read-through cache pattern.
- * Cache invalidation occurs automatically on updates.
- * 
+                </div>
+                <div class="transform-arrow"><i class="fas fa-magic"></i><span>CORTEX</span></div>
+                <div class="panel after-panel">
+                    <div class="panel-header"><i class="fas fa-check-circle"></i> After CORTEX</div>
+                    <pre><code class="language-typescript">/**
+ * Service for managing user data with caching.
+ * @remarks Implements read-through cache pattern.
  * @example
- * ```typescript
- * const userService = new UserService(repository);
- * const user = await userService.getUser('123');
+ * ```ts
+ * const svc = new UserService(repo);
+ * const user = await svc.getUser('123');
  * ```
  */
 export class UserService {
-    private cache = new Map&lt;string, User&gt;();
-
     /**
-     * Retrieves a user by their unique identifier.
-     * 
-     * @param id - The unique user identifier
-     * @param includeDeleted - When true, returns soft-deleted users
-     * @returns The user if found, null otherwise
-     * 
-     * @throws {DatabaseError} When the database connection fails
-     * 
-     * @example
-     * ```typescript
-     * // Get active user only
-     * const user = await service.getUser('123');
-     * 
-     * // Include soft-deleted users
-     * const deleted = await service.getUser('123', true);
-     * ```
+     * Retrieves a user by ID with caching.
+     * @param id - Unique user identifier
+     * @param includeDeleted - Include soft-deleted users
+     * @returns User if found, null otherwise
+     * @throws {DatabaseError} On connection failure
      */
     async getUser(
         id: string, 
@@ -136,56 +116,56 @@ export class UserService {
     }
 
     /**
-     * Updates an existing user's data.
-     * 
-     * @param id - The unique user identifier
-     * @param data - Partial user data to update
-     * @param merge - When true, preserves updatedAt timestamp
-     * @returns The updated user entity
-     * 
-     * @throws {NotFoundError} When the user doesn't exist
-     * @throws {ValidationError} When the data is invalid
+     * Updates user data and invalidates cache.
+     * @param id - User to update
+     * @param data - Partial update data
+     * @throws {NotFoundError} If user doesn't exist
      */
-    async updateUser(
-        id: string, 
-        data: Partial&lt;User&gt;, 
-        merge = false
-    ): Promise&lt;User&gt; {
-        // Implementation...
-    }
+    async updateUser(id: string, data: Partial&lt;User&gt;) {}
 }</code></pre>
-                        </div>
-                    </div>
-
-                    <div class="key-concepts">
-                        <h4>Key Documentation Elements</h4>
-                        <ul>
-                            <li><strong>@param</strong> - Document every parameter with type and purpose</li>
-                            <li><strong>@returns</strong> - Describe what the function returns and when</li>
-                            <li><strong>@throws</strong> - List all exceptions that can be thrown</li>
-                            <li><strong>@example</strong> - Provide usage examples with code snippets</li>
-                            <li><strong>@remarks</strong> - Add implementation notes and caveats</li>
-                        </ul>
-                    </div>
                 </div>
+            </div>
 
-                <!-- DOC-02: Missing API Documentation -->
-                <div class="sts-showcase" id="doc-02">
-                    <div class="showcase-header">
-                        <span class="issue-id">DOC-02</span>
-                        <h2>Missing API Documentation</h2>
-                        <span class="severity-badge severity-high">High Impact</span>
-                    </div>
-                    
-                    <p class="showcase-description">APIs without documentation create integration barriers. Use Swagger/OpenAPI attributes to generate interactive documentation automatically.</p>
+            <div class="fix-explanation">
+                <h4><i class="fas fa-lightbulb"></i> Key Improvements</h4>
+                <ul>
+                    <li><strong>@param:</strong> Document every parameter with type and purpose</li>
+                    <li><strong>@returns:</strong> Describe what the function returns</li>
+                    <li><strong>@throws:</strong> List all exceptions that can be thrown</li>
+                    <li><strong>@example:</strong> Provide usage examples</li>
+                </ul>
+            </div>
+        </section>
 
-                    <div class="comparison-grid">
-                        <div class="code-panel before">
-                            <div class="panel-header">
-                                <span class="panel-label">❌ Before: Undocumented API</span>
-                                <span class="tech-badge csharp">C# ASP.NET</span>
-                            </div>
-                            <pre><code class="language-csharp">[ApiController]
+        <!-- DOC-02: Missing API Documentation (C# Swagger) -->
+        <section class="sts-issue-card">
+            <div class="issue-header">
+                <div class="issue-badge critical">DOC-02</div>
+                <div class="issue-title">
+                    <h2>Missing API Documentation</h2>
+                    <p>REST endpoints without Swagger/OpenAPI documentation</p>
+                </div>
+                <span class="tech-badge tech-csharp">C# Swagger</span>
+            </div>
+
+            <div class="refactor-explanation">
+                <h4><i class="fas fa-code-branch"></i> How This Was Refactored</h4>
+                <p>
+                    Bare controllers were annotated with <strong>Swagger attributes</strong> and XML documentation. 
+                    Each endpoint now declares its response types with <code>[ProducesResponseType]</code>, 
+                    parameters are documented, and the Swagger UI provides interactive "Try it out" functionality. 
+                    Clients can generate typed SDKs from the OpenAPI specification.
+                </p>
+                <div class="why-matters">
+                    <strong>Why this matters:</strong> API consumers shouldn't guess what endpoints return. 
+                    Self-documenting APIs reduce support burden and enable client code generation.
+                </div>
+            </div>
+
+            <div class="transform-panels">
+                <div class="panel before-panel">
+                    <div class="panel-header"><i class="fas fa-times-circle"></i> Before CORTEX</div>
+                    <pre><code class="language-csharp">[ApiController]
 [Route("api/[controller]")]
 public class OrdersController : ControllerBase
 {
@@ -194,139 +174,92 @@ public class OrdersController : ControllerBase
         CreateOrderRequest request)
     {
         var order = await _orderService.CreateAsync(request);
-        return CreatedAtAction(
-            nameof(GetOrder), 
-            new { id = order.Id }, 
-            order);
+        return CreatedAtAction(nameof(GetOrder), 
+            new { id = order.Id }, order);
     }
 
     [HttpGet("{id}")]
     public async Task&lt;IActionResult&gt; GetOrder(Guid id)
     {
         var order = await _orderService.GetByIdAsync(id);
-        if (order == null)
-            return NotFound();
+        if (order == null) return NotFound();
         return Ok(order);
     }
-
-    [HttpGet]
-    public async Task&lt;IActionResult&gt; GetOrders(
-        int page, int pageSize, string? status)
-    {
-        var orders = await _orderService.GetPagedAsync(
-            page, pageSize, status);
-        return Ok(orders);
-    }
 }</code></pre>
-                        </div>
-
-                        <div class="code-panel after">
-                            <div class="panel-header">
-                                <span class="panel-label">✅ After: Swagger/OpenAPI Documentation</span>
-                                <span class="tech-badge csharp">C# ASP.NET</span>
-                            </div>
-                            <pre><code class="language-csharp">/// &lt;summary&gt;
-/// Manages customer orders and order lifecycle.
-/// &lt;/summary&gt;
+                </div>
+                <div class="transform-arrow"><i class="fas fa-magic"></i><span>CORTEX</span></div>
+                <div class="panel after-panel">
+                    <div class="panel-header"><i class="fas fa-check-circle"></i> After CORTEX</div>
+                    <pre><code class="language-csharp">/// &lt;summary&gt;Manages order lifecycle.&lt;/summary&gt;
 [ApiController]
 [Route("api/[controller]")]
 [Produces("application/json")]
 [Tags("Orders")]
 public class OrdersController : ControllerBase
 {
-    /// &lt;summary&gt;
-    /// Creates a new order for the authenticated customer.
-    /// &lt;/summary&gt;
-    /// &lt;param name="request"&gt;Order details including items&lt;/param&gt;
-    /// &lt;returns&gt;The newly created order&lt;/returns&gt;
-    /// &lt;response code="201"&gt;Order created successfully&lt;/response&gt;
-    /// &lt;response code="400"&gt;Invalid order data&lt;/response&gt;
-    /// &lt;response code="401"&gt;User not authenticated&lt;/response&gt;
+    /// &lt;summary&gt;Creates a new order.&lt;/summary&gt;
+    /// &lt;param name="request"&gt;Order details&lt;/param&gt;
+    /// &lt;response code="201"&gt;Order created&lt;/response&gt;
+    /// &lt;response code="400"&gt;Invalid request&lt;/response&gt;
     [HttpPost]
     [ProducesResponseType(typeof(OrderResponse), 201)]
     [ProducesResponseType(typeof(ProblemDetails), 400)]
-    [ProducesResponseType(401)]
     public async Task&lt;IActionResult&gt; CreateOrder(
-        [FromBody] CreateOrderRequest request)
-    {
-        var order = await _orderService.CreateAsync(request);
-        return CreatedAtAction(
-            nameof(GetOrder), 
-            new { id = order.Id }, 
-            order);
-    }
+        [FromBody] CreateOrderRequest request) { }
 
-    /// &lt;summary&gt;
-    /// Retrieves a specific order by its unique identifier.
-    /// &lt;/summary&gt;
-    /// &lt;param name="id"&gt;The order's unique identifier&lt;/param&gt;
-    /// &lt;returns&gt;The order details if found&lt;/returns&gt;
+    /// &lt;summary&gt;Gets order by ID.&lt;/summary&gt;
+    /// &lt;param name="id"&gt;Order identifier&lt;/param&gt;
     /// &lt;response code="200"&gt;Order found&lt;/response&gt;
     /// &lt;response code="404"&gt;Order not found&lt;/response&gt;
     [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(OrderResponse), 200)]
     [ProducesResponseType(404)]
-    public async Task&lt;IActionResult&gt; GetOrder(
-        [FromRoute] Guid id)
-    {
-        var order = await _orderService.GetByIdAsync(id);
-        if (order == null) return NotFound();
-        return Ok(order);
-    }
-
-    /// &lt;summary&gt;
-    /// Lists orders with pagination and optional filtering.
-    /// &lt;/summary&gt;
-    /// &lt;param name="page"&gt;Page number (1-based)&lt;/param&gt;
-    /// &lt;param name="pageSize"&gt;Items per page (max 100)&lt;/param&gt;
-    /// &lt;param name="status"&gt;Filter by status&lt;/param&gt;
-    /// &lt;returns&gt;Paginated list of orders&lt;/returns&gt;
-    [HttpGet]
-    [ProducesResponseType(typeof(PagedResult&lt;OrderResponse&gt;), 200)]
-    public async Task&lt;IActionResult&gt; GetOrders(
-        [FromQuery] int page = 1,
-        [FromQuery][Range(1, 100)] int pageSize = 20,
-        [FromQuery] OrderStatus? status = null)
-    {
-        var orders = await _orderService.GetPagedAsync(
-            page, pageSize, status);
-        return Ok(orders);
-    }
+    public async Task&lt;IActionResult&gt; GetOrder(Guid id) { }
 }</code></pre>
-                        </div>
-                    </div>
-
-                    <div class="key-concepts">
-                        <h4>Swagger/OpenAPI Benefits</h4>
-                        <ul>
-                            <li><strong>Interactive docs</strong> - Try API calls directly from documentation</li>
-                            <li><strong>Client generation</strong> - Auto-generate TypeScript/C# clients</li>
-                            <li><strong>Response types</strong> - Document all possible response codes</li>
-                            <li><strong>Validation</strong> - Schema validation from annotations</li>
-                        </ul>
-                    </div>
                 </div>
+            </div>
 
-                <!-- DOC-03: Poor Component Documentation -->
-                <div class="sts-showcase" id="doc-03">
-                    <div class="showcase-header">
-                        <span class="issue-id">DOC-03</span>
-                        <h2>Poor Component Documentation</h2>
-                        <span class="severity-badge severity-medium">Medium Impact</span>
-                    </div>
-                    
-                    <p class="showcase-description">UI components without documentation make reuse difficult. Document inputs, outputs, and usage examples to enable team adoption.</p>
+            <div class="fix-explanation">
+                <h4><i class="fas fa-lightbulb"></i> Key Improvements</h4>
+                <ul>
+                    <li><strong>ProducesResponseType:</strong> Documents all response codes</li>
+                    <li><strong>XML comments:</strong> Appear in Swagger UI</li>
+                    <li><strong>Client generation:</strong> OpenAPI spec enables typed clients</li>
+                </ul>
+            </div>
+        </section>
 
-                    <div class="comparison-grid">
-                        <div class="code-panel before">
-                            <div class="panel-header">
-                                <span class="panel-label">❌ Before: Undocumented Component</span>
-                                <span class="tech-badge angular">Angular</span>
-                            </div>
-                            <pre><code class="language-typescript">@Component({
+        <!-- DOC-03: Missing Component Documentation (Angular) -->
+        <section class="sts-issue-card">
+            <div class="issue-header">
+                <div class="issue-badge medium">DOC-03</div>
+                <div class="issue-title">
+                    <h2>Undocumented Angular Components</h2>
+                    <p>Inputs and outputs without descriptions or usage examples</p>
+                </div>
+                <span class="tech-badge tech-angular">Angular</span>
+            </div>
+
+            <div class="refactor-explanation">
+                <h4><i class="fas fa-code-branch"></i> How This Was Refactored</h4>
+                <p>
+                    Component inputs and outputs were documented with TSDoc comments including 
+                    <code>@usageNotes</code> with template examples, <code>@default</code> values, and 
+                    <code>@see</code> references to related types. Storybook stories were added for 
+                    visual documentation. The component is now self-documenting in IDEs and component libraries.
+                </p>
+                <div class="why-matters">
+                    <strong>Why this matters:</strong> Reusable components need clear contracts. Without 
+                    documentation, developers copy-paste code instead of reusing existing components.
+                </div>
+            </div>
+
+            <div class="transform-panels">
+                <div class="panel before-panel">
+                    <div class="panel-header"><i class="fas fa-times-circle"></i> Before CORTEX</div>
+                    <pre><code class="language-typescript">@Component({
     selector: 'app-data-table',
-    templateUrl: './data-table.component.html',
-    styleUrls: ['./data-table.component.scss']
+    templateUrl: './data-table.html'
 })
 export class DataTableComponent&lt;T&gt; {
     @Input() data: T[] = [];
@@ -334,157 +267,91 @@ export class DataTableComponent&lt;T&gt; {
     @Input() pageSize = 10;
     @Input() sortable = true;
     @Input() selectable = false;
-    @Input() loading = false;
     
     @Output() rowClick = new EventEmitter&lt;T&gt;();
     @Output() selectionChange = new EventEmitter&lt;T[]&gt;();
     @Output() sortChange = new EventEmitter&lt;SortEvent&gt;();
-    @Output() pageChange = new EventEmitter&lt;PageEvent&gt;();
     
-    selectedRows: T[] = [];
-    currentPage = 1;
-    sortColumn?: string;
-    sortDirection: 'asc' | 'desc' = 'asc';
+    // No documentation - what does each input do?
+    // How do I use this component?
 }</code></pre>
-                        </div>
-
-                        <div class="code-panel after">
-                            <div class="panel-header">
-                                <span class="panel-label">✅ After: Well-Documented Component</span>
-                                <span class="tech-badge angular">Angular</span>
-                            </div>
-                            <pre><code class="language-typescript">/**
- * A flexible, generic data table component with sorting,
- * pagination, and row selection capabilities.
- * 
+                </div>
+                <div class="transform-arrow"><i class="fas fa-magic"></i><span>CORTEX</span></div>
+                <div class="panel after-panel">
+                    <div class="panel-header"><i class="fas fa-check-circle"></i> After CORTEX</div>
+                    <pre><code class="language-typescript">/**
+ * Generic data table with sorting and selection.
  * @usageNotes
- * ### Basic Usage
  * ```html
  * &lt;app-data-table
  *   [data]="users"
- *   [columns]="columnDefs"
- *   (rowClick)="onUserSelect($event)"&gt;
+ *   [columns]="cols"
+ *   (rowClick)="onSelect($event)"&gt;
  * &lt;/app-data-table&gt;
  * ```
- * 
- * ### With Selection
- * ```html
- * &lt;app-data-table
- *   [data]="products"
- *   [columns]="productColumns"
- *   [selectable]="true"
- *   (selectionChange)="onProductsSelected($event)"&gt;
- * &lt;/app-data-table&gt;
- * ```
- * 
- * @example
- * // Define columns in component
- * columnDefs: ColumnDef[] = [
- *   { field: 'name', header: 'Name', sortable: true },
- *   { field: 'email', header: 'Email' },
- *   { field: 'status', header: 'Status', template: statusTpl }
- * ];
  */
-@Component({
-    selector: 'app-data-table',
-    templateUrl: './data-table.component.html',
-    styleUrls: ['./data-table.component.scss']
-})
+@Component({ selector: 'app-data-table' })
 export class DataTableComponent&lt;T&gt; {
-    /**
-     * The data array to display in the table.
-     * Each item represents one row.
-     */
+    /** Array of items to display. */
     @Input() data: T[] = [];
-
-    /**
-     * Column definitions specifying which fields to display
-     * and how to render them.
-     * @see ColumnDef for configuration options
-     */
+    
+    /** Column definitions. @see ColumnDef */
     @Input() columns: ColumnDef[] = [];
-
-    /**
-     * Number of rows to display per page.
-     * @default 10
-     */
+    
+    /** Rows per page. @default 10 */
     @Input() pageSize = 10;
-
-    /**
-     * Enable column sorting functionality.
-     * When true, clicking headers toggles sort direction.
-     * @default true
-     */
+    
+    /** Enable column sorting. @default true */
     @Input() sortable = true;
-
-    /**
-     * Enable row selection with checkboxes.
-     * Selected rows are emitted via selectionChange.
-     * @default false
-     */
-    @Input() selectable = false;
-
-    /**
-     * Display loading skeleton while data is being fetched.
-     * @default false
-     */
-    @Input() loading = false;
-
-    /**
-     * Emitted when a row is clicked.
-     * @param row The data object for the clicked row
-     */
+    
+    /** Emitted when a row is clicked. */
     @Output() rowClick = new EventEmitter&lt;T&gt;();
-
-    /**
-     * Emitted when row selection changes.
-     * Contains all currently selected rows.
-     */
+    
+    /** Emitted when selection changes. */
     @Output() selectionChange = new EventEmitter&lt;T[]&gt;();
-
-    /**
-     * Emitted when sort column or direction changes.
-     * Use to implement server-side sorting.
-     */
-    @Output() sortChange = new EventEmitter&lt;SortEvent&gt;();
-
-    /**
-     * Emitted when the current page changes.
-     * Use to implement server-side pagination.
-     */
-    @Output() pageChange = new EventEmitter&lt;PageEvent&gt;();
 }</code></pre>
-                        </div>
-                    </div>
-
-                    <div class="key-concepts">
-                        <h4>Component Documentation Best Practices</h4>
-                        <ul>
-                            <li><strong>@usageNotes</strong> - Show HTML template examples</li>
-                            <li><strong>@example</strong> - Show TypeScript configuration</li>
-                            <li><strong>@default</strong> - Document default values for optional inputs</li>
-                            <li><strong>@see</strong> - Link to related interfaces and types</li>
-                        </ul>
-                    </div>
                 </div>
+            </div>
 
-                <!-- DOC-04: Missing README and Setup Documentation -->
-                <div class="sts-showcase" id="doc-04">
-                    <div class="showcase-header">
-                        <span class="issue-id">DOC-04</span>
-                        <h2>Missing README Documentation</h2>
-                        <span class="severity-badge severity-high">High Impact</span>
-                    </div>
-                    
-                    <p class="showcase-description">Projects without proper README files create onboarding friction. A good README enables developers to get started quickly and understand project conventions.</p>
+            <div class="fix-explanation">
+                <h4><i class="fas fa-lightbulb"></i> Key Improvements</h4>
+                <ul>
+                    <li><strong>@usageNotes:</strong> HTML template examples</li>
+                    <li><strong>@default:</strong> Document default values</li>
+                    <li><strong>Input/Output docs:</strong> Each binding explained</li>
+                </ul>
+            </div>
+        </section>
 
-                    <div class="comparison-grid">
-                        <div class="code-panel before">
-                            <div class="panel-header">
-                                <span class="panel-label">❌ Before: Minimal README</span>
-                                <span class="tech-badge javascript">Markdown</span>
-                            </div>
-                            <pre><code class="language-markdown"># My Project
+        <!-- DOC-04: Missing README (General) -->
+        <section class="sts-issue-card">
+            <div class="issue-header">
+                <div class="issue-badge high">DOC-04</div>
+                <div class="issue-title">
+                    <h2>Incomplete README</h2>
+                    <p>Project lacks setup instructions and architecture overview</p>
+                </div>
+                <span class="tech-badge tech-javascript">Markdown</span>
+            </div>
+
+            <div class="refactor-explanation">
+                <h4><i class="fas fa-code-branch"></i> How This Was Refactored</h4>
+                <p>
+                    The sparse README was expanded into a comprehensive project guide with badges, 
+                    prerequisites, quick-start commands, architecture overview, and contribution guidelines. 
+                    New developers can now clone, install, and run the project in under 5 minutes by following 
+                    the documented steps.
+                </p>
+                <div class="why-matters">
+                    <strong>Why this matters:</strong> The README is the front door to your project. A good 
+                    README converts visitors into contributors; a bad one drives them away.
+                </div>
+            </div>
+
+            <div class="transform-panels">
+                <div class="panel before-panel">
+                    <div class="panel-header"><i class="fas fa-times-circle"></i> Before CORTEX</div>
+                    <pre><code class="language-markdown"># My Project
 
 A web application.
 
@@ -494,149 +361,79 @@ npm install
 
 ## Run
 
-npm start</code></pre>
-                        </div>
+npm start
 
-                        <div class="code-panel after">
-                            <div class="panel-header">
-                                <span class="panel-label">✅ After: Comprehensive README</span>
-                                <span class="tech-badge javascript">Markdown</span>
-                            </div>
-                            <pre><code class="language-markdown"># Order Management System
+## License
 
-![Build Status](https://github.com/company/oms/workflows/CI/badge.svg)
-![Coverage](https://codecov.io/gh/company/oms/branch/main/graph/badge.svg)
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
+MIT</code></pre>
+                </div>
+                <div class="transform-arrow"><i class="fas fa-magic"></i><span>CORTEX</span></div>
+                <div class="panel after-panel">
+                    <div class="panel-header"><i class="fas fa-check-circle"></i> After CORTEX</div>
+                    <pre><code class="language-markdown"># Order Management System
 
-A scalable order management system built with Angular 17 
-and ASP.NET Core 8.
+![Build](https://github.com/co/oms/workflows/CI/badge.svg)
+![Coverage](https://codecov.io/gh/co/oms/badge.svg)
 
-## Features
-
-- 📦 Real-time order tracking
-- 🔐 Role-based access control
-- 📊 Analytics dashboard
-- 🔄 Third-party integrations
-
-## Prerequisites
-
-- Node.js 20.x or higher
-- .NET 8 SDK
-- PostgreSQL 15+
-- Redis (optional, for caching)
+Scalable order management with Angular 17 + .NET 8.
 
 ## Quick Start
 
 ```bash
-# Clone the repository
-git clone https://github.com/company/oms.git
-cd oms
-
-# Install dependencies
-npm install
-dotnet restore
-
-# Set up environment
-cp .env.example .env
-# Edit .env with your database credentials
-
-# Run database migrations
-dotnet ef database update
-
-# Start development servers
-npm run dev        # Frontend on http://localhost:4200
-dotnet run         # Backend on http://localhost:5000
+git clone https://github.com/co/oms.git && cd oms
+cp .env.example .env   # Configure secrets
+npm install && dotnet restore
+npm run dev            # Frontend :4200
+dotnet run             # Backend :5000
 ```
 
-## Project Structure
+## Architecture
 
 ```
 src/
-├── client/          # Angular frontend
-│   ├── app/
-│   └── assets/
-├── server/          # ASP.NET Core API
-│   ├── Controllers/
-│   ├── Services/
-│   └── Models/
-└── shared/          # Shared TypeScript types
+├── client/     # Angular frontend
+├── server/     # ASP.NET Core API
+└── shared/     # Shared types
 ```
 
-## Development
-
-### Running Tests
+## Testing
 
 ```bash
-# Frontend unit tests
-npm test
-
-# Backend unit tests
-dotnet test
-
-# E2E tests
-npm run e2e
+npm test              # Frontend
+dotnet test           # Backend
 ```
-
-### Code Style
-
-This project uses ESLint and Prettier. Run before committing:
-
-```bash
-npm run lint
-npm run format
-```
-
-## API Documentation
-
-Interactive API docs available at `/swagger` when running locally.
 
 ## Contributing
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
-
-## License
-
-MIT © Company Name</code></pre>
-                        </div>
-                    </div>
-
-                    <div class="key-concepts">
-                        <h4>README Essential Sections</h4>
-                        <ul>
-                            <li><strong>Badges</strong> - Build status, coverage, license at a glance</li>
-                            <li><strong>Prerequisites</strong> - Required tools and versions</li>
-                            <li><strong>Quick Start</strong> - Get running in minutes</li>
-                            <li><strong>Project Structure</strong> - Navigate the codebase</li>
-                            <li><strong>Development</strong> - Testing, linting, contributing</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Navigation -->
-                <div class="sts-navigation">
-                    <a href="testing.html" class="nav-link prev">
-                        <span class="nav-direction">← Previous</span>
-                        <span class="nav-title">Testing</span>
-                    </a>
-                    <a href="index.html" class="nav-link next">
-                        <span class="nav-direction">Back to Overview →</span>
-                        <span class="nav-title">All Categories</span>
-                    </a>
+See [CONTRIBUTING.md](./CONTRIBUTING.md)</code></pre>
                 </div>
             </div>
+
+            <div class="fix-explanation">
+                <h4><i class="fas fa-lightbulb"></i> Key Improvements</h4>
+                <ul>
+                    <li><strong>Badges:</strong> Build status, coverage at a glance</li>
+                    <li><strong>Quick start:</strong> Clone to running in 5 minutes</li>
+                    <li><strong>Architecture:</strong> Visual project structure</li>
+                </ul>
+            </div>
         </section>
+
+        <nav class="sts-nav">
+            <a href="testing.html"><i class="fas fa-arrow-left"></i> Testing</a>
+            <a href="index.html" class="nav-hub"><i class="fas fa-th"></i> STS Hub</a>
+            <a href="index.html">Back to Hub <i class="fas fa-arrow-right"></i></a>
+        </nav>
     </main>
 
-    <footer class="site-footer">
-        <div class="container">
-            <p>&copy; 2024 CORTEX. Built with continuous improvement in mind.</p>
-        </div>
+    <footer style="text-align: center; padding: 2rem; color: rgba(255,255,255,0.5); font-size: 0.875rem;">
+        <p>&copy; 2024-2025 Asif Hussain. CORTEX 4.0 - Sharpen the Saw.</p>
     </footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/typescript.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/markdown.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/typescript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/markdown.min.js"></script>
     <script>hljs.highlightAll();</script>
 </body>
 </html>

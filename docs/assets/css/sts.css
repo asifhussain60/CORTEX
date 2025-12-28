@@ -1,17 +1,30 @@
 /**
  * STS (Sharpen The Saw) Showcase Styles
  * ======================================
- * Dedicated styles for the STS code transformation showcase
+ * Blue Glassmorphism theme matching CORTEX design system
  * Author: Asif Hussain
- * Version: 4.0.0
+ * Version: 4.0.1
  */
+
+/* ==========================================================================
+   CSS Variables - Blue Glassmorphism Theme
+   ========================================================================== */
+
+:root {
+    --sts-accent: #00d4ff;
+    --sts-accent-secondary: #7b61ff;
+    --sts-accent-rgb: 0, 212, 255;
+    --sts-glass-bg: rgba(26, 31, 58, 0.7);
+    --sts-glass-border: rgba(255, 255, 255, 0.1);
+    --sts-glow: 0 0 20px rgba(0, 212, 255, 0.3);
+}
 
 /* ==========================================================================
    STS Layout & Structure
    ========================================================================== */
 
 .sts-showcase {
-    background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #0f0f1a 100%);
+    background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0a0e27 100%);
     min-height: 100vh;
 }
 
@@ -34,15 +47,16 @@
 .sts-hero .hero-badge {
     display: inline-block;
     padding: 0.5rem 1.5rem;
-    background: linear-gradient(135deg, rgba(138, 43, 226, 0.3), rgba(75, 0, 130, 0.3));
-    border: 1px solid rgba(138, 43, 226, 0.5);
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2));
+    border: 1px solid rgba(0, 212, 255, 0.4);
     border-radius: 50px;
     font-size: 0.875rem;
     font-weight: 600;
-    color: #a78bfa;
+    color: var(--sts-accent);
     text-transform: uppercase;
     letter-spacing: 0.1em;
     margin-bottom: 1.5rem;
+    box-shadow: var(--sts-glow);
 }
 
 .sts-hero h1 {
@@ -50,15 +64,15 @@
     font-weight: 800;
     line-height: 1.1;
     margin-bottom: 1rem;
-    background: linear-gradient(135deg, #fff 0%, #a78bfa 50%, #8b5cf6 100%);
+    background: linear-gradient(135deg, #fff 0%, var(--sts-accent) 50%, var(--sts-accent-secondary) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
 }
 
 .sts-hero .accent-text {
-    color: #a78bfa;
-    -webkit-text-fill-color: #a78bfa;
+    color: var(--sts-accent);
+    -webkit-text-fill-color: var(--sts-accent);
 }
 
 .sts-hero .hero-subtitle {
@@ -69,7 +83,7 @@
 }
 
 /* ==========================================================================
-   STS Metrics Cards
+   STS Metrics Cards - Glassmorphism
    ========================================================================== */
 
 .sts-metrics {
@@ -80,18 +94,24 @@
 }
 
 .sts-metrics .metric-card {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--sts-glass-bg);
+    border: 1px solid var(--sts-glass-border);
     border-radius: 12px;
     padding: 1rem 1.5rem;
     min-width: 120px;
     text-align: center;
     backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.sts-metrics .metric-card:hover {
+    border-color: rgba(0, 212, 255, 0.3);
+    box-shadow: var(--sts-glow);
 }
 
 .sts-metrics .metric-card.accent {
-    background: linear-gradient(135deg, rgba(138, 43, 226, 0.2), rgba(75, 0, 130, 0.2));
-    border-color: rgba(138, 43, 226, 0.4);
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(123, 97, 255, 0.15));
+    border-color: rgba(0, 212, 255, 0.3);
 }
 
 .sts-metrics .metric-value {
@@ -120,10 +140,11 @@
 }
 
 .sts-education .education-card {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--sts-glass-bg);
+    border: 1px solid var(--sts-glass-border);
     border-radius: 16px;
     padding: 2rem;
+    backdrop-filter: blur(10px);
 }
 
 .sts-education h3 {
@@ -136,7 +157,7 @@
 }
 
 .sts-education h3 i {
-    color: #a78bfa;
+    color: var(--sts-accent);
 }
 
 .education-grid {
@@ -147,7 +168,7 @@
 
 .education-item h4 {
     font-size: 1rem;
-    color: #a78bfa;
+    color: var(--sts-accent);
     margin-bottom: 0.5rem;
 }
 
@@ -158,15 +179,21 @@
 }
 
 /* ==========================================================================
-   STS Issue Cards
+   STS Issue Cards - Glassmorphism
    ========================================================================== */
 
 .sts-issue-card {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--sts-glass-bg);
+    border: 1px solid var(--sts-glass-border);
     border-radius: 20px;
     padding: 2rem;
     margin-bottom: 2rem;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.sts-issue-card:hover {
+    border-color: rgba(0, 212, 255, 0.2);
 }
 
 .issue-header {
@@ -271,6 +298,56 @@
     border: 1px solid rgba(51, 153, 51, 0.5);
 }
 
+.tech-badge.tech-sql {
+    background: rgba(0, 150, 199, 0.3);
+    color: #67e8f9;
+    border: 1px solid rgba(0, 150, 199, 0.5);
+}
+
+/* ==========================================================================
+   Refactoring Explanation Box (NEW)
+   ========================================================================== */
+
+.refactor-explanation {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.08), rgba(123, 97, 255, 0.08));
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.refactor-explanation h4 {
+    font-size: 0.9375rem;
+    color: var(--sts-accent);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.refactor-explanation h4 i {
+    font-size: 1rem;
+}
+
+.refactor-explanation p {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.refactor-explanation .why-matters {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(0, 212, 255, 0.15);
+    font-size: 0.8125rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.refactor-explanation .why-matters strong {
+    color: var(--sts-accent);
+}
+
 /* ==========================================================================
    Transform Panels (Before/After)
    ========================================================================== */
@@ -335,7 +412,7 @@
     align-items: center;
     justify-content: center;
     padding: 0 0.5rem;
-    color: #a78bfa;
+    color: var(--sts-accent);
 }
 
 .transform-arrow i {
@@ -350,14 +427,35 @@
     margin-top: 0.25rem;
 }
 
-/* Code blocks within panels */
+/* Code blocks within panels - scrollable with fixed height */
 .panel pre {
     margin: 0;
     padding: 1rem;
     flex: 1;
     overflow-x: auto;
+    overflow-y: auto;
+    max-height: 350px; /* ~15 lines of code */
     font-size: 0.8125rem;
     line-height: 1.5;
+}
+
+.panel pre::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.panel pre::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
+.panel pre::-webkit-scrollbar-thumb {
+    background: rgba(0, 212, 255, 0.3);
+    border-radius: 4px;
+}
+
+.panel pre::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 212, 255, 0.5);
 }
 
 .panel code {
@@ -365,19 +463,19 @@
 }
 
 /* ==========================================================================
-   Fix Explanation Box
+   Fix Explanation Box - Blue Theme
    ========================================================================== */
 
 .fix-explanation {
-    background: rgba(138, 43, 226, 0.1);
-    border: 1px solid rgba(138, 43, 226, 0.3);
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(123, 97, 255, 0.1));
+    border: 1px solid rgba(0, 212, 255, 0.25);
     border-radius: 12px;
     padding: 1.25rem;
 }
 
 .fix-explanation h4 {
     font-size: 0.9375rem;
-    color: #a78bfa;
+    color: var(--sts-accent);
     margin-bottom: 0.75rem;
     display: flex;
     align-items: center;
@@ -415,7 +513,7 @@
 }
 
 /* ==========================================================================
-   STS Best Practices Section
+   STS Best Practices Section - Blue Theme
    ========================================================================== */
 
 .sts-best-practices {
@@ -430,7 +528,7 @@
 }
 
 .sts-best-practices h2 i {
-    color: #a78bfa;
+    color: var(--sts-accent);
     margin-right: 0.5rem;
 }
 
@@ -441,25 +539,27 @@
 }
 
 .practice-card {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--sts-glass-bg);
+    border: 1px solid var(--sts-glass-border);
     border-radius: 16px;
     padding: 1.5rem;
     text-align: center;
     transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
 }
 
 .practice-card:hover {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(138, 43, 226, 0.3);
+    background: rgba(0, 212, 255, 0.08);
+    border-color: rgba(0, 212, 255, 0.3);
     transform: translateY(-2px);
+    box-shadow: var(--sts-glow);
 }
 
 .practice-icon {
     width: 48px;
     height: 48px;
     margin: 0 auto 1rem;
-    background: linear-gradient(135deg, rgba(138, 43, 226, 0.2), rgba(75, 0, 130, 0.2));
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2));
     border-radius: 12px;
     display: flex;
     align-items: center;
@@ -468,7 +568,7 @@
 
 .practice-icon i {
     font-size: 1.25rem;
-    color: #a78bfa;
+    color: var(--sts-accent);
 }
 
 .practice-card h3 {
@@ -494,7 +594,7 @@
 }
 
 /* ==========================================================================
-   STS Navigation
+   STS Navigation - Blue Theme
    ========================================================================== */
 
 .sts-nav {
@@ -503,7 +603,7 @@
     align-items: center;
     padding: 2rem 0;
     margin-top: 2rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid var(--sts-glass-border);
 }
 
 .sts-nav a {
@@ -511,28 +611,30 @@
     align-items: center;
     gap: 0.5rem;
     padding: 0.75rem 1.25rem;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--sts-glass-bg);
+    border: 1px solid var(--sts-glass-border);
     border-radius: 8px;
     color: rgba(255, 255, 255, 0.8);
     text-decoration: none;
     font-size: 0.875rem;
     transition: all 0.2s ease;
+    backdrop-filter: blur(10px);
 }
 
 .sts-nav a:hover {
-    background: rgba(138, 43, 226, 0.2);
-    border-color: rgba(138, 43, 226, 0.4);
+    background: rgba(0, 212, 255, 0.15);
+    border-color: rgba(0, 212, 255, 0.4);
     color: #fff;
+    box-shadow: var(--sts-glow);
 }
 
 .sts-nav .nav-hub {
-    background: linear-gradient(135deg, rgba(138, 43, 226, 0.2), rgba(75, 0, 130, 0.2));
-    border-color: rgba(138, 43, 226, 0.3);
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(123, 97, 255, 0.15));
+    border-color: rgba(0, 212, 255, 0.3);
 }
 
 /* ==========================================================================
-   STS Category Grid (Index Page)
+   STS Category Grid (Index Page) - Blue Theme
    ========================================================================== */
 
 .sts-category-grid {
@@ -543,13 +645,14 @@
 }
 
 .sts-category-card {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--sts-glass-bg);
+    border: 1px solid var(--sts-glass-border);
     border-radius: 16px;
     padding: 2rem;
     text-decoration: none;
     transition: all 0.3s ease;
     display: block;
+    backdrop-filter: blur(10px);
 }
 
 .sts-category-card:hover {
@@ -568,12 +671,13 @@
 }
 
 .sts-category-card.sts-solid {
-    border-color: rgba(59, 130, 246, 0.3);
+    border-color: rgba(0, 212, 255, 0.3);
 }
 
 .sts-category-card.sts-solid:hover {
-    background: rgba(59, 130, 246, 0.1);
-    border-color: rgba(59, 130, 246, 0.5);
+    background: rgba(0, 212, 255, 0.1);
+    border-color: rgba(0, 212, 255, 0.5);
+    box-shadow: var(--sts-glow);
 }
 
 .sts-category-card.sts-quality {
@@ -595,12 +699,12 @@
 }
 
 .sts-category-card.sts-testing {
-    border-color: rgba(168, 85, 247, 0.3);
+    border-color: rgba(123, 97, 255, 0.3);
 }
 
 .sts-category-card.sts-testing:hover {
-    background: rgba(168, 85, 247, 0.1);
-    border-color: rgba(168, 85, 247, 0.5);
+    background: rgba(123, 97, 255, 0.1);
+    border-color: rgba(123, 97, 255, 0.5);
 }
 
 .sts-category-card.sts-docs {
@@ -626,7 +730,7 @@
 
 .flaw-count {
     font-size: 0.875rem;
-    color: #a78bfa;
+    color: var(--sts-accent);
     font-weight: 600;
     margin-bottom: 1rem;
 }
@@ -653,17 +757,17 @@
 }
 
 /* ==========================================================================
-   STS Quote Styling
+   STS Quote Styling - Blue Theme
    ========================================================================== */
 
 .sts-quote {
     font-size: 1.125rem;
     font-style: italic;
     color: rgba(255, 255, 255, 0.8);
-    border-left: 3px solid #a78bfa;
+    border-left: 3px solid var(--sts-accent);
     padding: 1rem 1.5rem;
     margin: 1.5rem 0;
-    background: rgba(138, 43, 226, 0.1);
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.08), rgba(123, 97, 255, 0.08));
     border-radius: 0 8px 8px 0;
 }
 
@@ -713,5 +817,9 @@
     .sts-nav a {
         width: 100%;
         justify-content: center;
+    }
+    
+    .refactor-explanation {
+        padding: 1rem;
     }
 }

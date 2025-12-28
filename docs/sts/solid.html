@@ -84,7 +84,7 @@
             </div>
         </section>
 
-        <!-- SRP-01: God Class -->
+        <!-- SRP-01: God Class (C#) -->
         <section class="sts-issue-card">
             <div class="issue-header">
                 <div class="issue-badge critical">SRP-01</div>
@@ -93,6 +93,22 @@
                     <p>Single class handling multiple unrelated responsibilities</p>
                 </div>
                 <span class="tech-badge tech-csharp">C#</span>
+            </div>
+
+            <!-- NEW: Refactoring Explanation -->
+            <div class="refactor-explanation">
+                <h4><i class="fas fa-code-branch"></i> How This Was Refactored</h4>
+                <p>
+                    The monolithic <code>OrderManager</code> class was split into focused, single-purpose services. 
+                    Each service now owns exactly one responsibility: validation logic moved to <code>OrderValidator</code>, 
+                    pricing calculations to <code>PricingService</code>, database operations to <code>OrderRepository</code>, 
+                    and notifications to <code>NotificationService</code>. The main <code>OrderService</code> becomes 
+                    an orchestrator that coordinates these services through dependency injection.
+                </p>
+                <div class="why-matters">
+                    <strong>Why this matters:</strong> Each service can now be tested, modified, and deployed independently. 
+                    A change to email templates won't risk breaking price calculations.
+                </div>
             </div>
 
             <div class="transform-panels">
@@ -128,8 +144,7 @@
         // 3. Save to database
         using var conn = new SqlConnection(_connectionString);
         conn.Open();
-        var cmd = new SqlCommand(
-            "INSERT INTO Orders...", conn);
+        var cmd = new SqlCommand("INSERT INTO Orders...", conn);
         cmd.ExecuteNonQuery();
         
         // 4. Send confirmation email
@@ -141,12 +156,7 @@
         
         // 5. Update inventory
         foreach (var item in request.Items)
-        {
             UpdateInventory(item.ProductId, -item.Quantity);
-        }
-        
-        // 6. Log analytics
-        LogOrderAnalytics(request, total);
         
         return new Order { Total = total };
     }
@@ -171,33 +181,27 @@ public class OrderService : IOrderService
     private readonly IPricingService _pricing;
     private readonly IOrderRepository _repository;
     private readonly INotificationService _notifications;
-    private readonly IInventoryService _inventory;
     
     public OrderService(
         IOrderValidator validator,
         IPricingService pricing,
         IOrderRepository repository,
-        INotificationService notifications,
-        IInventoryService inventory)
+        INotificationService notifications)
     {
         _validator = validator;
         _pricing = pricing;
         _repository = repository;
         _notifications = notifications;
-        _inventory = inventory;
     }
     
     public async Task&lt;Order&gt; CreateOrderAsync(OrderRequest request)
     {
         // Orchestrates single-responsibility services
         await _validator.ValidateAsync(request);
-        
         var pricing = await _pricing.CalculateAsync(request);
-        
         var order = new Order(request, pricing);
-        await _repository.SaveAsync(order);
         
-        await _inventory.ReserveItemsAsync(request.Items);
+        await _repository.SaveAsync(order);
         await _notifications.SendConfirmationAsync(order);
         
         return order;
@@ -210,53 +214,29 @@ public class OrderValidator : IOrderValidator
     public Task ValidateAsync(OrderRequest request)
     {
         var errors = new List&lt;ValidationError&gt;();
-        
         if (string.IsNullOrEmpty(request.CustomerEmail))
             errors.Add(new("Email is required"));
-            
         if (!request.Items.Any())
             errors.Add(new("Order must have items"));
-            
         if (errors.Any())
             throw new ValidationException(errors);
-            
         return Task.CompletedTask;
-    }
-}
-
-// Single Responsibility: Pricing calculations only
-public class PricingService : IPricingService
-{
-    private readonly IDiscountEngine _discounts;
-    private readonly ITaxCalculator _tax;
-    private readonly IShippingCalculator _shipping;
-    
-    public async Task&lt;OrderPricing&gt; CalculateAsync(
-        OrderRequest request)
-    {
-        var subtotal = await CalculateSubtotal(request.Items);
-        var discount = await _discounts.ApplyAsync(request);
-        var shipping = await _shipping.CalculateAsync(request);
-        var tax = _tax.Calculate(subtotal - discount + shipping);
-        
-        return new OrderPricing(subtotal, discount, shipping, tax);
     }
 }</code></pre>
                 </div>
             </div>
 
             <div class="fix-explanation">
-                <h4><i class="fas fa-lightbulb"></i> What CORTEX Fixed</h4>
+                <h4><i class="fas fa-lightbulb"></i> Key Improvements</h4>
                 <ul>
-                    <li><strong>Separated concerns:</strong> Validation, pricing, persistence, notification, inventory are now separate services</li>
+                    <li><strong>Separated concerns:</strong> Validation, pricing, persistence, notification are now separate services</li>
                     <li><strong>Dependency injection:</strong> All dependencies injected via constructor</li>
-                    <li><strong>Interface abstractions:</strong> Each service implements an interface</li>
-                    <li><strong>Testability:</strong> Each service can be unit tested in isolation</li>
+                    <li><strong>Interface abstractions:</strong> Each service implements an interface for testability</li>
                 </ul>
             </div>
         </section>
 
-        <!-- OCP-01: Strategy Pattern -->
+        <!-- OCP-01: Strategy Pattern (TypeScript) -->
         <section class="sts-issue-card">
             <div class="issue-header">
                 <div class="issue-badge high">OCP-01</div>
@@ -265,6 +245,21 @@ public class PricingService : IPricingService
                     <p>Modifying existing code for every new payment type</p>
                 </div>
                 <span class="tech-badge tech-typescript">TypeScript</span>
+            </div>
+
+            <!-- Refactoring Explanation -->
+            <div class="refactor-explanation">
+                <h4><i class="fas fa-code-branch"></i> How This Was Refactored</h4>
+                <p>
+                    The giant if/else chain was replaced with the <strong>Strategy Pattern</strong>. We defined a 
+                    <code>PaymentStrategy</code> interface that all payment methods implement. The <code>PaymentProcessor</code> 
+                    now maintains a registry of strategies and delegates to the appropriate one at runtime. Adding a new 
+                    payment method means creating a new class—no existing code needs to change.
+                </p>
+                <div class="why-matters">
+                    <strong>Why this matters:</strong> You can add Venmo, Crypto, or any future payment method by simply 
+                    registering a new strategy class. The core processor remains untouched and stable.
+                </div>
             </div>
 
             <div class="transform-panels">
@@ -291,9 +286,6 @@ public class PricingService : IPricingService
         } else if (method === 'google_pay') {
             // Added even later - more modifications
             return this.processGooglePay(amount, details);
-        } else if (method === 'crypto') {
-            // Keeps growing...
-            return this.processCrypto(amount, details);
         }
         throw new Error(`Unknown payment method: ${method}`);
     }
@@ -303,10 +295,8 @@ public class PricingService : IPricingService
     }
     
     private processPayPal(amount: number, details: any) {
-        // PayPal specific logic
+        // PayPal specific logic  
     }
-    
-    // ... more methods for each payment type
 }</code></pre>
                 </div>
 
@@ -342,211 +332,57 @@ class PaymentProcessor {
     ): Promise&lt;PaymentResult&gt; {
         const strategy = this.strategies.get(method);
         if (!strategy) {
-            throw new PaymentError(`Unknown method: ${method}`);
+            throw new PaymentError(`Unknown: ${method}`);
         }
-        
-        const validation = strategy.validateDetails(details);
-        if (!validation.isValid) {
-            throw new ValidationError(validation.errors);
-        }
-        
         return strategy.processPayment(amount, details);
     }
 }
 
-// New payment types - just add new classes!
-class CreditCardStrategy implements PaymentStrategy {
-    readonly methodType = 'credit_card';
-    
+// New payment types = new classes, no modifications
+class StripeStrategy implements PaymentStrategy {
+    readonly methodType = 'stripe';
     async processPayment(amount: number, details: PaymentDetails) {
-        // Credit card specific logic
-        return { success: true, transactionId: '...' };
+        // Stripe-specific implementation
     }
-    
-    validateDetails(details: PaymentDetails) {
-        // Validate card number, CVV, expiry
-    }
-}
-
-class ApplePayStrategy implements PaymentStrategy {
-    readonly methodType = 'apple_pay';
-    
-    async processPayment(amount: number, details: PaymentDetails) {
-        // Apple Pay specific logic - no existing code modified!
-        return { success: true, transactionId: '...' };
-    }
-}
-
-// Registration - typically in DI container setup
-const processor = new PaymentProcessor();
-processor.registerStrategy(new CreditCardStrategy());
-processor.registerStrategy(new PayPalStrategy());
-processor.registerStrategy(new ApplePayStrategy());
-// Add new strategies without touching PaymentProcessor!</code></pre>
-                </div>
-            </div>
-
-            <div class="fix-explanation">
-                <h4><i class="fas fa-lightbulb"></i> What CORTEX Fixed</h4>
-                <ul>
-                    <li><strong>Strategy pattern:</strong> Each payment method is its own class</li>
-                    <li><strong>Open for extension:</strong> Add new payment methods without modifying PaymentProcessor</li>
-                    <li><strong>Closed for modification:</strong> Core processor code never changes</li>
-                    <li><strong>Registration system:</strong> New strategies registered at startup</li>
-                </ul>
-            </div>
-        </section>
-
-        <!-- LSP-01: Liskov Substitution -->
-        <section class="sts-issue-card">
-            <div class="issue-header">
-                <div class="issue-badge medium">LSP-01</div>
-                <div class="issue-title">
-                    <h2>Liskov Substitution Violation</h2>
-                    <p>Subclass that breaks base class contract</p>
-                </div>
-                <span class="tech-badge tech-csharp">C#</span>
-            </div>
-
-            <div class="transform-panels">
-                <div class="panel before-panel">
-                    <div class="panel-header">
-                        <i class="fas fa-times-circle"></i> Before CORTEX
-                    </div>
-                    <pre><code class="language-csharp">public class Rectangle
-{
-    public virtual int Width { get; set; }
-    public virtual int Height { get; set; }
-    
-    public int CalculateArea() => Width * Height;
-}
-
-// LSP Violation: Square changes Rectangle behavior!
-public class Square : Rectangle
-{
-    private int _side;
-    
-    public override int Width
-    {
-        get => _side;
-        set => _side = value; // Also changes height!
-    }
-    
-    public override int Height
-    {
-        get => _side;
-        set => _side = value; // Also changes width!
-    }
-}
-
-// This breaks when substituting Square for Rectangle
-public class AreaCalculator
-{
-    public void ProcessRectangle(Rectangle rect)
-    {
-        rect.Width = 5;
-        rect.Height = 10;
-        
-        // Expected: 50, but with Square: 100!
-        var area = rect.CalculateArea();
-        
-        if (area != 50) // Breaks with Square
-            throw new Exception("Unexpected area!");
-    }
-}</code></pre>
-                </div>
-
-                <div class="transform-arrow">
-                    <i class="fas fa-magic"></i>
-                    <span>CORTEX</span>
-                </div>
-
-                <div class="panel after-panel">
-                    <div class="panel-header">
-                        <i class="fas fa-check-circle"></i> After CORTEX
-                    </div>
-                    <pre><code class="language-csharp">// Common interface for all shapes
-public interface IShape
-{
-    double CalculateArea();
-    double CalculatePerimeter();
-}
-
-// Immutable Rectangle - no inheritance issues
-public sealed class Rectangle : IShape
-{
-    public int Width { get; }
-    public int Height { get; }
-    
-    public Rectangle(int width, int height)
-    {
-        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(width);
-        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(height);
-        
-        Width = width;
-        Height = height;
-    }
-    
-    public double CalculateArea() => Width * Height;
-    public double CalculatePerimeter() => 2 * (Width + Height);
-}
-
-// Square is NOT a Rectangle - separate implementation
-public sealed class Square : IShape
-{
-    public int Side { get; }
-    
-    public Square(int side)
-    {
-        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(side);
-        Side = side;
-    }
-    
-    public double CalculateArea() => Side * Side;
-    public double CalculatePerimeter() => 4 * Side;
-}
-
-// Works with any shape without assumptions
-public class AreaCalculator
-{
-    public double CalculateTotalArea(IEnumerable&lt;IShape&gt; shapes)
-    {
-        return shapes.Sum(s => s.CalculateArea());
-    }
-}
-
-// Factory for creating shapes
-public static class ShapeFactory
-{
-    public static IShape CreateRectangle(int w, int h) => 
-        new Rectangle(w, h);
-    
-    public static IShape CreateSquare(int side) => 
-        new Square(side);
 }</code></pre>
                 </div>
             </div>
 
             <div class="fix-explanation">
-                <h4><i class="fas fa-lightbulb"></i> What CORTEX Fixed</h4>
+                <h4><i class="fas fa-lightbulb"></i> Key Improvements</h4>
                 <ul>
-                    <li><strong>Composition over inheritance:</strong> Square and Rectangle both implement IShape</li>
-                    <li><strong>Immutable objects:</strong> Properties set via constructor, no setters</li>
-                    <li><strong>Sealed classes:</strong> Prevents problematic inheritance chains</li>
-                    <li><strong>Factory pattern:</strong> Centralized shape creation</li>
+                    <li><strong>Strategy Pattern:</strong> Each payment method is a separate, pluggable class</li>
+                    <li><strong>Registry approach:</strong> New methods registered without modifying core code</li>
+                    <li><strong>Type safety:</strong> Interface ensures all strategies implement required methods</li>
                 </ul>
             </div>
         </section>
 
-        <!-- ISP-01: Interface Segregation -->
+        <!-- ISP-01: Interface Segregation (Angular) -->
         <section class="sts-issue-card">
             <div class="issue-header">
                 <div class="issue-badge medium">ISP-01</div>
                 <div class="issue-title">
                     <h2>Interface Segregation Violation</h2>
-                    <p>Fat interface forcing unnecessary implementations</p>
+                    <p>Fat interface forcing implementations of unused methods</p>
                 </div>
-                <span class="tech-badge tech-typescript">TypeScript</span>
+                <span class="tech-badge tech-angular">Angular</span>
+            </div>
+
+            <!-- Refactoring Explanation -->
+            <div class="refactor-explanation">
+                <h4><i class="fas fa-code-branch"></i> How This Was Refactored</h4>
+                <p>
+                    The bloated <code>IDataService</code> interface was split into focused, role-specific interfaces: 
+                    <code>Readable</code>, <code>Writable</code>, <code>Deletable</code>, and <code>Searchable</code>. 
+                    Angular components now depend only on the capabilities they actually need. A read-only dashboard 
+                    injects <code>Readable&lt;T&gt;</code>, while an admin panel might inject both <code>Readable</code> 
+                    and <code>Writable</code>.
+                </p>
+                <div class="why-matters">
+                    <strong>Why this matters:</strong> Components declare their exact requirements. Mock implementations 
+                    for testing become trivial—just implement the one or two methods you need.
+                </div>
             </div>
 
             <div class="transform-panels">
@@ -554,43 +390,35 @@ public static class ShapeFactory
                     <div class="panel-header">
                         <i class="fas fa-times-circle"></i> Before CORTEX
                     </div>
-                    <pre><code class="language-typescript">// Fat interface - forces ALL implementations
-interface IWorker {
-    work(): void;
-    eat(): void;
-    sleep(): void;
-    attendMeeting(): void;
-    writeReport(): void;
-    managePeople(): void;
-    writeCode(): void;
-    reviewCode(): void;
-    deployCode(): void;
+                    <pre><code class="language-typescript">// Fat interface - forces implementation of everything
+interface IDataService&lt;T&gt; {
+    getAll(): Observable&lt;T[]&gt;;
+    getById(id: string): Observable&lt;T&gt;;
+    create(item: T): Observable&lt;T&gt;;
+    update(id: string, item: T): Observable&lt;T&gt;;
+    delete(id: string): Observable&lt;void&gt;;
+    search(query: string): Observable&lt;T[]&gt;;
+    export(): Observable&lt;Blob&gt;;
+    import(file: File): Observable&lt;T[]&gt;;
+    validate(item: T): boolean;
+    getHistory(id: string): Observable&lt;History[]&gt;;
 }
 
-// Human worker - implements everything
-class HumanDeveloper implements IWorker {
-    work() { /* ... */ }
-    eat() { /* ... */ }
-    sleep() { /* ... */ }
-    attendMeeting() { /* ... */ }
-    writeReport() { /* ... */ }
-    managePeople() { /* NOT A MANAGER! */ }
-    writeCode() { /* ... */ }
-    reviewCode() { /* ... */ }
-    deployCode() { /* ... */ }
-}
-
-// Robot - forced to implement eat/sleep!
-class RobotWorker implements IWorker {
-    work() { /* ... */ }
-    eat() { throw new Error("Robots don't eat!"); }
-    sleep() { throw new Error("Robots don't sleep!"); }
-    attendMeeting() { throw new Error("No meetings!"); }
-    writeReport() { /* ... */ }
-    managePeople() { throw new Error("Not a manager!"); }
-    writeCode() { /* ... */ }
-    reviewCode() { /* ... */ }
-    deployCode() { /* ... */ }
+// ReadOnly component forced to implement write methods!
+@Injectable()
+class ReadOnlyUserService implements IDataService&lt;User&gt; {
+    getAll() { return this.http.get&lt;User[]&gt;('/api/users'); }
+    getById(id: string) { return this.http.get&lt;User&gt;(`/api/users/${id}`); }
+    
+    // Forced to implement methods we don't need!
+    create() { throw new Error('Not supported'); }
+    update() { throw new Error('Not supported'); }
+    delete() { throw new Error('Not supported'); }
+    search() { throw new Error('Not supported'); }
+    export() { throw new Error('Not supported'); }
+    import() { throw new Error('Not supported'); }
+    validate() { throw new Error('Not supported'); }
+    getHistory() { throw new Error('Not supported'); }
 }</code></pre>
                 </div>
 
@@ -603,101 +431,82 @@ class RobotWorker implements IWorker {
                     <div class="panel-header">
                         <i class="fas fa-check-circle"></i> After CORTEX
                     </div>
-                    <pre><code class="language-typescript">// Segregated interfaces - implement only what's needed
-interface IWorkable {
-    work(): void;
+                    <pre><code class="language-typescript">// Segregated interfaces - implement only what you need
+interface Readable&lt;T&gt; {
+    getAll(): Observable&lt;T[]&gt;;
+    getById(id: string): Observable&lt;T&gt;;
 }
 
-interface IFeedable {
-    eat(): void;
+interface Writable&lt;T&gt; {
+    create(item: T): Observable&lt;T&gt;;
+    update(id: string, item: T): Observable&lt;T&gt;;
 }
 
-interface ISleepable {
-    sleep(): void;
+interface Deletable {
+    delete(id: string): Observable&lt;void&gt;;
 }
 
-interface IMeetingAttendee {
-    attendMeeting(): void;
-    writeReport(): void;
+interface Searchable&lt;T&gt; {
+    search(query: string): Observable&lt;T[]&gt;;
 }
 
-interface IManager {
-    managePeople(): void;
-    conductReview(): void;
-}
-
-interface IDeveloper {
-    writeCode(): void;
-    reviewCode(): void;
-}
-
-interface IDeployable {
-    deployCode(): void;
-}
-
-// Human developer - only relevant interfaces
-class HumanDeveloper implements 
-    IWorkable, 
-    IFeedable, 
-    ISleepable, 
-    IMeetingAttendee, 
-    IDeveloper,
-    IDeployable {
+// Clean implementation - only what's needed
+@Injectable({ providedIn: 'root' })
+class UserQueryService implements Readable&lt;User&gt; {
+    constructor(private http: HttpClient) {}
     
-    work() { console.log('Working...'); }
-    eat() { console.log('Lunch break!'); }
-    sleep() { console.log('8 hours sleep'); }
-    attendMeeting() { console.log('In standup'); }
-    writeReport() { console.log('Writing status'); }
-    writeCode() { console.log('Coding...'); }
-    reviewCode() { console.log('PR review'); }
-    deployCode() { console.log('Deploying...'); }
-}
-
-// Robot - only implements what it can do
-class RobotWorker implements 
-    IWorkable, 
-    IDeveloper,
-    IDeployable {
+    getAll(): Observable&lt;User[]&gt; {
+        return this.http.get&lt;User[]&gt;('/api/users');
+    }
     
-    work() { console.log('Processing...'); }
-    writeCode() { console.log('Generating code'); }
-    reviewCode() { console.log('Static analysis'); }
-    deployCode() { console.log('CI/CD pipeline'); }
+    getById(id: string): Observable&lt;User&gt; {
+        return this.http.get&lt;User&gt;(`/api/users/${id}`);
+    }
 }
 
-// Tech Lead - developer + manager capabilities
-class TechLead implements 
-    IWorkable,
-    IFeedable,
-    IMeetingAttendee,
-    IDeveloper,
-    IManager {
-    // Only implements relevant methods
+// Component declares exactly what it needs
+@Component({ selector: 'app-user-list' })
+class UserListComponent {
+    constructor(private users: Readable&lt;User&gt;) {}
 }</code></pre>
                 </div>
             </div>
 
             <div class="fix-explanation">
-                <h4><i class="fas fa-lightbulb"></i> What CORTEX Fixed</h4>
+                <h4><i class="fas fa-lightbulb"></i> Key Improvements</h4>
                 <ul>
-                    <li><strong>Small interfaces:</strong> Each interface has a single cohesive purpose</li>
-                    <li><strong>Selective implementation:</strong> Classes only implement what they need</li>
-                    <li><strong>No dummy methods:</strong> No more throwing "not supported" errors</li>
-                    <li><strong>Composable:</strong> Combine interfaces for complex roles</li>
+                    <li><strong>Focused interfaces:</strong> Each interface represents one capability</li>
+                    <li><strong>Composition:</strong> Services can implement multiple interfaces as needed</li>
+                    <li><strong>Explicit dependencies:</strong> Components declare exactly what they need</li>
                 </ul>
             </div>
         </section>
 
-        <!-- DIP-01: Dependency Inversion -->
+        <!-- DIP-01: Dependency Inversion (SQL + C#) -->
         <section class="sts-issue-card">
             <div class="issue-header">
                 <div class="issue-badge high">DIP-01</div>
                 <div class="issue-title">
                     <h2>Dependency Inversion Violation</h2>
-                    <p>High-level modules depending on concrete implementations</p>
+                    <p>High-level module depends on low-level database implementation</p>
                 </div>
                 <span class="tech-badge tech-csharp">C#</span>
+                <span class="tech-badge tech-sql">SQL</span>
+            </div>
+
+            <!-- Refactoring Explanation -->
+            <div class="refactor-explanation">
+                <h4><i class="fas fa-code-branch"></i> How This Was Refactored</h4>
+                <p>
+                    Direct SQL queries embedded in business logic were extracted behind an <code>IReportRepository</code> 
+                    interface. The <code>ReportService</code> (high-level policy) now depends on an abstraction, not 
+                    the concrete <code>SqlConnection</code>. The actual database implementation is injected at runtime, 
+                    making it possible to swap SQL Server for PostgreSQL, or use an in-memory store for testing.
+                </p>
+                <div class="why-matters">
+                    <strong>Why this matters:</strong> Business logic is insulated from database changes. You can test 
+                    report generation without a database, and migrate storage backends without touching business rules.
+                </div>
             </div>
 
             <div class="transform-panels">
@@ -705,39 +514,48 @@ class TechLead implements
                     <div class="panel-header">
                         <i class="fas fa-times-circle"></i> Before CORTEX
                     </div>
-                    <pre><code class="language-csharp">// High-level module depends on concrete implementations!
-public class OrderService
+                    <pre><code class="language-csharp">// High-level module directly depends on low-level SQL
+public class ReportService
 {
-    // Direct dependency on concrete classes
-    private readonly SqlServerDatabase _database;
-    private readonly SmtpEmailSender _emailSender;
-    private readonly StripePaymentGateway _paymentGateway;
-    private readonly FileLogger _logger;
+    private readonly string _connectionString;
     
-    public OrderService()
+    public ReportService(string connectionString)
     {
-        // Creating own dependencies - tightly coupled!
-        _database = new SqlServerDatabase(
-            "Server=prod;Database=orders");
-        _emailSender = new SmtpEmailSender(
-            "smtp.company.com", 587);
-        _paymentGateway = new StripePaymentGateway(
-            "sk_live_xxxxx");
-        _logger = new FileLogger("C:\\logs\\orders.log");
+        _connectionString = connectionString;
     }
     
-    public void ProcessOrder(Order order)
+    public SalesReport GenerateSalesReport(DateTime from, DateTime to)
     {
-        _logger.Log("Processing order");
-        _paymentGateway.Charge(order.Total);
-        _database.Save(order);
-        _emailSender.Send(order.CustomerEmail, "Confirmed");
+        // Tightly coupled to SQL Server implementation
+        using var conn = new SqlConnection(_connectionString);
+        conn.Open();
+        
+        var cmd = new SqlCommand(@"
+            SELECT 
+                p.Category,
+                SUM(oi.Quantity) as TotalSold,
+                SUM(oi.Quantity * oi.UnitPrice) as Revenue
+            FROM OrderItems oi
+            JOIN Products p ON oi.ProductId = p.Id
+            JOIN Orders o ON oi.OrderId = o.Id
+            WHERE o.OrderDate BETWEEN @from AND @to
+            GROUP BY p.Category", conn);
+            
+        cmd.Parameters.AddWithValue("@from", from);
+        cmd.Parameters.AddWithValue("@to", to);
+        
+        using var reader = cmd.ExecuteReader();
+        var report = new SalesReport();
+        while (reader.Read())
+        {
+            report.AddCategory(
+                reader.GetString(0),
+                reader.GetInt32(1),
+                reader.GetDecimal(2));
+        }
+        return report;
     }
-}
-
-// Cannot test without real database, email, payment!
-// Cannot switch to PostgreSQL, SendGrid, or PayPal
-// Cannot use different logger in production vs dev</code></pre>
+}</code></pre>
                 </div>
 
                 <div class="transform-arrow">
@@ -749,150 +567,233 @@ public class OrderService
                     <div class="panel-header">
                         <i class="fas fa-check-circle"></i> After CORTEX
                     </div>
-                    <pre><code class="language-csharp">// Abstractions that high-level modules depend on
-public interface IOrderRepository
+                    <pre><code class="language-csharp">// Abstraction owned by high-level module
+public interface IReportRepository
 {
-    Task SaveAsync(Order order);
-    Task&lt;Order?&gt; GetByIdAsync(Guid id);
+    Task&lt;IEnumerable&lt;CategorySales&gt;&gt; GetSalesByCategory(
+        DateTime from, DateTime to);
 }
 
-public interface INotificationService
+// High-level module depends on abstraction
+public class ReportService
 {
-    Task SendAsync(string recipient, string message);
-}
-
-public interface IPaymentGateway
-{
-    Task&lt;PaymentResult&gt; ChargeAsync(decimal amount, PaymentDetails details);
-}
-
-// High-level module depends on abstractions
-public class OrderService : IOrderService
-{
-    private readonly IOrderRepository _repository;
-    private readonly INotificationService _notifications;
-    private readonly IPaymentGateway _payments;
-    private readonly ILogger&lt;OrderService&gt; _logger;
+    private readonly IReportRepository _repository;
     
-    // Dependencies injected - not created internally
-    public OrderService(
-        IOrderRepository repository,
-        INotificationService notifications,
-        IPaymentGateway payments,
-        ILogger&lt;OrderService&gt; logger)
+    public ReportService(IReportRepository repository)
     {
         _repository = repository;
-        _notifications = notifications;
-        _payments = payments;
-        _logger = logger;
     }
     
-    public async Task ProcessOrderAsync(Order order)
+    public async Task&lt;SalesReport&gt; GenerateSalesReport(
+        DateTime from, DateTime to)
     {
-        _logger.LogInformation(
-            "Processing order {OrderId}", order.Id);
-            
-        var payment = await _payments.ChargeAsync(
-            order.Total, order.PaymentDetails);
-            
-        if (!payment.Success)
-            throw new PaymentFailedException(payment.Error);
-            
-        await _repository.SaveAsync(order);
-        await _notifications.SendAsync(
-            order.CustomerEmail, "Order confirmed!");
+        var sales = await _repository.GetSalesByCategory(from, to);
+        return SalesReport.FromCategorySales(sales);
     }
 }
 
-// DI Registration - swap implementations easily
-services.AddScoped&lt;IOrderRepository, PostgresOrderRepository&gt;();
-services.AddScoped&lt;INotificationService, SendGridNotificationService&gt;();
-services.AddScoped&lt;IPaymentGateway, StripePaymentGateway&gt;();
-
-// In tests - use mocks/fakes
-services.AddScoped&lt;IOrderRepository, InMemoryOrderRepository&gt;();
-services.AddScoped&lt;IPaymentGateway, FakePaymentGateway&gt;();</code></pre>
+// Low-level implementation depends on abstraction
+public class SqlReportRepository : IReportRepository
+{
+    private readonly IDbConnection _connection;
+    
+    public async Task&lt;IEnumerable&lt;CategorySales&gt;&gt; GetSalesByCategory(
+        DateTime from, DateTime to)
+    {
+        const string sql = @"
+            SELECT Category, SUM(Quantity), SUM(Revenue)
+            FROM vw_SalesByCategory
+            WHERE OrderDate BETWEEN @from AND @to
+            GROUP BY Category";
+            
+        return await _connection.QueryAsync&lt;CategorySales&gt;(
+            sql, new { from, to });
+    }
+}</code></pre>
                 </div>
             </div>
 
             <div class="fix-explanation">
-                <h4><i class="fas fa-lightbulb"></i> What CORTEX Fixed</h4>
+                <h4><i class="fas fa-lightbulb"></i> Key Improvements</h4>
                 <ul>
-                    <li><strong>Interface abstractions:</strong> All dependencies are interfaces</li>
-                    <li><strong>Constructor injection:</strong> Dependencies provided externally</li>
-                    <li><strong>Swappable implementations:</strong> Change database/payment/email without touching OrderService</li>
-                    <li><strong>Testability:</strong> Inject mocks for isolated unit testing</li>
+                    <li><strong>Abstraction layer:</strong> Interface defines contract, not implementation</li>
+                    <li><strong>Dependency injection:</strong> Repository injected, not created internally</li>
+                    <li><strong>Testability:</strong> Can test business logic with mock repository</li>
+                    <li><strong>Flexibility:</strong> Easy to swap SQL Server for another database</li>
                 </ul>
             </div>
         </section>
 
-        <!-- Best Practices -->
-        <section class="sts-best-practices">
-            <h2><i class="fas fa-drafting-compass"></i> SOLID Best Practices</h2>
-            <div class="practices-grid">
-                <div class="practice-card">
-                    <div class="practice-icon">
-                        <i class="fas fa-bullseye"></i>
-                    </div>
-                    <h3>Single Responsibility</h3>
-                    <p>If describing a class requires "and", it probably does too much. Split it.</p>
-                    <code>OrderValidator, OrderPricer, OrderSaver</code>
+        <!-- LSP-01: Liskov Substitution (TypeScript) -->
+        <section class="sts-issue-card">
+            <div class="issue-header">
+                <div class="issue-badge medium">LSP-01</div>
+                <div class="issue-title">
+                    <h2>Liskov Substitution Violation</h2>
+                    <p>Square class breaks Rectangle behavior expectations</p>
                 </div>
-                <div class="practice-card">
-                    <div class="practice-icon">
-                        <i class="fas fa-plug"></i>
-                    </div>
-                    <h3>Open/Closed</h3>
-                    <p>Use strategy, decorator, or factory patterns to extend without modifying.</p>
-                    <code>interface IPaymentStrategy</code>
+                <span class="tech-badge tech-typescript">TypeScript</span>
+            </div>
+
+            <!-- Refactoring Explanation -->
+            <div class="refactor-explanation">
+                <h4><i class="fas fa-code-branch"></i> How This Was Refactored</h4>
+                <p>
+                    The classic Rectangle/Square inheritance was replaced with a composition-based approach. Instead of 
+                    <code>Square extends Rectangle</code> (which violates LSP because setting width also changes height), 
+                    we use a common <code>Shape</code> interface. Both <code>Rectangle</code> and <code>Square</code> 
+                    implement <code>Shape</code> independently, each with appropriate behavior for their invariants.
+                </p>
+                <div class="why-matters">
+                    <strong>Why this matters:</strong> Code that works with <code>Shape</code> won't break when you 
+                    pass a Square instead of a Rectangle. The principle: subtypes must be substitutable for their base types.
                 </div>
-                <div class="practice-card">
-                    <div class="practice-icon">
-                        <i class="fas fa-exchange-alt"></i>
+            </div>
+
+            <div class="transform-panels">
+                <div class="panel before-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-times-circle"></i> Before CORTEX
                     </div>
-                    <h3>Liskov Substitution</h3>
-                    <p>Prefer composition over inheritance. Use interfaces for polymorphism.</p>
-                    <code>interface IShape { Area(); }</code>
+                    <pre><code class="language-typescript">class Rectangle {
+    constructor(
+        protected _width: number, 
+        protected _height: number
+    ) {}
+    
+    get width() { return this._width; }
+    set width(value: number) { this._width = value; }
+    
+    get height() { return this._height; }
+    set height(value: number) { this._height = value; }
+    
+    getArea(): number {
+        return this._width * this._height;
+    }
+}
+
+// LSP Violation: Square changes Rectangle's behavior!
+class Square extends Rectangle {
+    constructor(side: number) {
+        super(side, side);
+    }
+    
+    // Breaks expected Rectangle behavior
+    set width(value: number) {
+        this._width = value;
+        this._height = value; // Unexpected side effect!
+    }
+    
+    set height(value: number) {
+        this._width = value;  // Unexpected side effect!
+        this._height = value;
+    }
+}
+
+// This code breaks with Square!
+function doubleWidth(rect: Rectangle) {
+    const expectedArea = rect.width * 2 * rect.height;
+    rect.width = rect.width * 2;
+    console.log(rect.getArea() === expectedArea); // false for Square!
+}</code></pre>
                 </div>
-                <div class="practice-card">
-                    <div class="practice-icon">
-                        <i class="fas fa-puzzle-piece"></i>
+
+                <div class="transform-arrow">
+                    <i class="fas fa-magic"></i>
+                    <span>CORTEX</span>
+                </div>
+
+                <div class="panel after-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-check-circle"></i> After CORTEX
                     </div>
-                    <h3>Dependency Inversion</h3>
-                    <p>Program to interfaces. Let DI containers wire implementations.</p>
-                    <code>services.AddScoped&lt;IRepo, SqlRepo&gt;()</code>
+                    <pre><code class="language-typescript">// Common abstraction without inheritance issues
+interface Shape {
+    getArea(): number;
+    getPerimeter(): number;
+}
+
+// Immutable Rectangle - no setters, no surprises
+class Rectangle implements Shape {
+    constructor(
+        readonly width: number, 
+        readonly height: number
+    ) {}
+    
+    getArea(): number {
+        return this.width * this.height;
+    }
+    
+    getPerimeter(): number {
+        return 2 * (this.width + this.height);
+    }
+    
+    withWidth(width: number): Rectangle {
+        return new Rectangle(width, this.height);
+    }
+    
+    withHeight(height: number): Rectangle {
+        return new Rectangle(this.width, height);
+    }
+}
+
+// Square is independent, not a subtype of Rectangle
+class Square implements Shape {
+    constructor(readonly side: number) {}
+    
+    getArea(): number {
+        return this.side * this.side;
+    }
+    
+    getPerimeter(): number {
+        return 4 * this.side;
+    }
+    
+    withSide(side: number): Square {
+        return new Square(side);
+    }
+}
+
+// Works correctly with any Shape
+function printArea(shape: Shape) {
+    console.log(`Area: ${shape.getArea()}`);
+}</code></pre>
                 </div>
+            </div>
+
+            <div class="fix-explanation">
+                <h4><i class="fas fa-lightbulb"></i> Key Improvements</h4>
+                <ul>
+                    <li><strong>Composition over inheritance:</strong> Both implement Shape, neither extends the other</li>
+                    <li><strong>Immutable design:</strong> No setters = no unexpected behavior changes</li>
+                    <li><strong>LSP compliant:</strong> Any Shape can be substituted without breaking code</li>
+                </ul>
             </div>
         </section>
 
         <!-- Navigation -->
         <nav class="sts-nav">
-            <a href="security.html" class="nav-prev">
-                <i class="fas fa-arrow-left"></i>
-                <span>Security</span>
+            <a href="security.html">
+                <i class="fas fa-arrow-left"></i> Security
             </a>
             <a href="index.html" class="nav-hub">
-                <i class="fas fa-th"></i>
-                <span>STS Hub</span>
+                <i class="fas fa-th"></i> STS Hub
             </a>
-            <a href="code-quality.html" class="nav-next">
-                <span>Code Quality</span>
-                <i class="fas fa-arrow-right"></i>
+            <a href="code-quality.html">
+                Code Quality <i class="fas fa-arrow-right"></i>
             </a>
         </nav>
     </main>
 
     <!-- Footer -->
-    <footer class="site-footer">
-        <div class="footer-content">
-            <p>CORTEX 4.0 — AI-Powered Code Intelligence</p>
-            <p class="footer-sub">Transforming codebases through intelligent analysis</p>
-        </div>
+    <footer style="text-align: center; padding: 2rem; color: rgba(255,255,255,0.5); font-size: 0.875rem;">
+        <p>&copy; 2024-2025 Asif Hussain. CORTEX 4.0 - Sharpen the Saw.</p>
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/typescript.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/typescript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/sql.min.js"></script>
     <script>hljs.highlightAll();</script>
 </body>
 </html>
