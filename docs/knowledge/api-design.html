@@ -3,343 +3,1019 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="API Design - RESTful, GraphQL, gRPC, API versioning and security">
-    <meta name="keywords" content="api, rest, graphql, grpc, api design">
-    <meta name="author" content="Asif Hussain">
-    <title>API Design - CORTEX Knowledge</title>
-    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <title>API Design | CORTEX Knowledge Library</title>
     <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
-    <a href="#main-content" class="skip-link">Skip to main content</a>
-
-    <nav class="breadcrumb-container sticky-nav" aria-label="Breadcrumb">
-        <button class="back-button" onclick="history.back()" aria-label="Go back">← Back</button>
-        <ol class="breadcrumb">
-            <li><a href="../index.html">Home</a></li>
-            <li><a href="index.html">Knowledge Library</a></li>
-            <li><a href="index.html#backend-apis">Backend & APIs</a></li>
-            <li aria-current="page">API Design</li>
-        </ol>
+    <nav class="doc-nav">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">
+                <img src="../assets/images/cortex-logo.svg" alt="CORTEX" class="logo-image">
+            </a>
+            <ul class="nav-links">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="index.html" class="active">Knowledge Library</a></li>
+                <li><a href="../sts/index.html">STS Portal</a></li>
+            </ul>
+        </div>
     </nav>
 
-    <section class="hero" id="main-content">
-        <div class="logo-header">
-            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
-        </div>
-        <h1 class="hero-title">🌐 API Design</h1>
-        <p class="hero-subtitle">RESTful APIs, GraphQL, gRPC, and modern API patterns</p>
-    </section>
+    <main class="doc-main">
+        <div class="doc-container">
+            <header class="doc-header">
+                <div class="breadcrumb">
+                    <a href="../index.html">Home</a>
+                    <span class="separator">/</span>
+                    <a href="index.html">Knowledge Library</a>
+                    <span class="separator">/</span>
+                    <span>API Design</span>
+                </div>
+                <h1 class="doc-title">API Design Excellence</h1>
+                <p class="doc-subtitle">REST, GraphQL, and API versioning strategies for building robust, scalable APIs</p>
+            </header>
 
-    <aside class="category-sidebar" aria-label="Category navigation">
-        <h3>Backend & APIs</h3>
-        <nav class="category-nav">
-            <a href="api-design.html" class="category-nav-link active">🌐 API Design</a>
-            <a href="microservices.html" class="category-nav-link">🔷 Microservices</a>
-            <a href="messaging.html" class="category-nav-link">📨 Messaging</a>
-        </nav>
-    </aside>
-
-    <section class="section category-content">
-        <div class="container">
-            <div class="tabs-container">
-                <div class="tabs-nav" role="tablist" aria-label="Category sections">
-                    <button class="tab-button active" role="tab" aria-selected="true" aria-controls="overview-tab" id="overview-btn" data-tab="overview">Overview</button>
-                    <button class="tab-button" role="tab" aria-selected="false" aria-controls="files-tab" id="files-btn" data-tab="files">Knowledge Files</button>
-                    <button class="tab-button" role="tab" aria-selected="false" aria-controls="resources-tab" id="resources-btn" data-tab="resources">Learning Resources</button>
-                    <button class="tab-button" role="tab" aria-selected="false" aria-controls="usage-tab" id="usage-btn" data-tab="usage">CORTEX Usage</button>
+            <div class="tab-container">
+                <div class="tab-buttons">
+                    <button class="tab-button active" data-tab="overview">Overview</button>
+                    <button class="tab-button" data-tab="knowledge">Knowledge Files</button>
+                    <button class="tab-button" data-tab="resources">Learning Resources</button>
+                    <button class="tab-button" data-tab="cortex">CORTEX Usage</button>
                 </div>
 
-                <div class="tab-content active" id="overview-tab" role="tabpanel" aria-labelledby="overview-btn">
-                    <div class="glass-card">
-                        <h2>Overview</h2>
-                        <p>API design principles covering REST, GraphQL, gRPC, versioning strategies, authentication, and API security best practices.</p>
+                <!-- Overview Tab -->
+                <div class="tab-content active" id="overview">
+                    <section class="doc-section">
+                        <h2 class="section-header">🎯 Category Overview</h2>
+                        <div class="content-block">
+                            <p>API Design Excellence encompasses the principles, patterns, and practices for designing robust, scalable, and maintainable APIs. This category covers REST API design, GraphQL best practices, and API versioning strategies for backward compatibility.</p>
+                            
+                            <h3 class="subsection-header">Key Concepts</h3>
+                            <ul class="feature-list">
+                                <li><strong>REST Architecture:</strong> RESTful API design following architectural constraints (statelessness, client-server separation, uniform interface)</li>
+                                <li><strong>GraphQL:</strong> Query language and runtime for APIs with strongly-typed schemas and client-specified queries</li>
+                                <li><strong>API Versioning:</strong> Strategies for evolving APIs while maintaining backward compatibility</li>
+                                <li><strong>HTTP Semantics:</strong> Proper use of HTTP methods, status codes, headers, and content negotiation</li>
+                                <li><strong>Performance:</strong> Pagination, filtering, caching, and optimization techniques</li>
+                                <li><strong>Security:</strong> Authentication, authorization, rate limiting, and input validation</li>
+                            </ul>
+                        </div>
 
-                        <h3>Category Statistics</h3>
-                        <div class="stats-grid">
-                            <div class="stat-item">
-                                <div class="stat-value">4</div>
-                                <div class="stat-label">Knowledge Files</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-value">3</div>
-                                <div class="stat-label">API Styles</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-value">70+</div>
-                                <div class="stat-label">Design Rules</div>
+                        <div class="visual-diagram">
+                            <h3 class="subsection-header">API Design Landscape</h3>
+                            <div class="mermaid">
+graph TB
+    subgraph API["API Design Excellence"]
+        REST["REST APIs"]
+        GraphQL["GraphQL APIs"]
+        Versioning["API Versioning"]
+    end
+
+    subgraph RESTPatterns["REST Patterns"]
+        Resources["Resource Naming"]
+        Methods["HTTP Methods"]
+        Status["Status Codes"]
+        Pagination["Pagination"]
+        Filtering["Filtering/Sorting"]
+    end
+
+    subgraph GraphQLPatterns["GraphQL Patterns"]
+        Schema["Schema Design"]
+        Queries["Query Patterns"]
+        Mutations["Mutation Patterns"]
+        DataLoader["DataLoader"]
+        Performance["Performance"]
+    end
+
+    subgraph VersioningStrategies["Versioning Strategies"]
+        URI["URI Versioning"]
+        Header["Header Versioning"]
+        Deprecation["Deprecation"]
+        Migration["Migration"]
+    end
+
+    REST --> RESTPatterns
+    GraphQL --> GraphQLPatterns
+    Versioning --> VersioningStrategies
+
+    style API fill:#667eea
+    style REST fill:#48bb78
+    style GraphQL fill:#ed8936
+    style Versioning fill:#38b2ac
                             </div>
                         </div>
-                    </div>
 
-                    <div class="glass-card">
-                        <h2>Concept Map</h2>
-                        <div class="mermaid">
-graph TD
-    A[API Design] --> B[REST]
-    A --> C[GraphQL]
-    A --> D[gRPC]
+                        <div class="content-block">
+                            <h3 class="subsection-header">REST API Design Principles</h3>
+                            <p><strong>REST (Representational State Transfer)</strong> is an architectural style for building scalable web services. Key principles include:</p>
+                            
+                            <div class="code-example">
+                                <h4>Resource Naming Best Practices</h4>
+                                <pre><code class="language-bash"># ✅ GOOD: Use nouns, plural, lowercase with hyphens
+GET    /users                    # List all users
+GET    /users/123                # Get specific user
+POST   /users                    # Create user
+PUT    /users/123                # Replace user
+PATCH  /users/123                # Update user
+DELETE /users/123                # Delete user
+
+# Nested resources for relationships
+GET    /users/123/orders         # User's orders
+GET    /orders/456/items         # Order items
+
+# Query parameters for filtering/sorting
+GET    /users?role=admin&sort=created_at
+GET    /orders?status=pending&limit=20&page=2
+
+# ❌ BAD: RPC-style, verbs, inconsistent naming
+POST   /getUserOrders            # Don't use verbs
+GET    /user/123                 # Use plural
+GET    /OrderItems               # Use lowercase
+GET    /users_by_role?role=admin # Use query params</code></pre>
+                            </div>
+
+                            <div class="code-example">
+                                <h4>HTTP Methods and Status Codes</h4>
+                                <pre><code class="language-javascript">// GET - Retrieve resources (Safe, Idempotent)
+GET /users/123
+Response: 200 OK + user data
+         404 Not Found
+
+// POST - Create new resource (Not Safe, Not Idempotent)
+POST /users
+Body: { "email": "user@example.com", "name": "John" }
+Response: 201 Created + Location header + created resource
+         400 Bad Request (validation error)
+         409 Conflict (duplicate)
+
+// PUT - Replace entire resource (Not Safe, Idempotent)
+PUT /users/123
+Body: { "email": "...", "name": "..." } // All fields
+Response: 200 OK + updated resource
+         404 Not Found
+
+// PATCH - Partial update (Not Safe, Idempotent)
+PATCH /users/123
+Body: { "name": "Jane" } // Only changed fields
+Response: 200 OK + updated resource
+         400 Bad Request
+
+// DELETE - Remove resource (Not Safe, Idempotent)
+DELETE /users/123
+Response: 204 No Content
+         404 Not Found</code></pre>
+                            </div>
+
+                            <div class="code-example">
+                                <h4>Pagination Patterns</h4>
+                                <pre><code class="language-python"># Offset-based pagination
+@app.get("/users")
+def get_users(page: int = 1, limit: int = 20):
+    offset = (page - 1) * limit
+    users = db.query(User).offset(offset).limit(limit).all()
+    total = db.query(User).count()
     
-    B --> E[Resources]
-    B --> F[HTTP Methods]
-    B --> G[Status Codes]
+    return {
+        "data": users,
+        "pagination": {
+            "page": page,
+            "limit": limit,
+            "total_pages": math.ceil(total / limit),
+            "total_items": total,
+            "has_more": page < math.ceil(total / limit)
+        }
+    }
+
+# Cursor-based pagination (recommended for large datasets)
+@app.get("/users")
+def get_users(cursor: Optional[str] = None, limit: int = 20):
+    if cursor:
+        decoded_cursor = decode_cursor(cursor)
+        users = db.query(User).filter(
+            User.id > decoded_cursor['id']
+        ).limit(limit).all()
+    else:
+        users = db.query(User).limit(limit).all()
     
-    C --> H[Schema]
-    C --> I[Queries]
-    C --> J[Mutations]
+    next_cursor = encode_cursor({'id': users[-1].id}) if users else None
     
-    D --> K[Protocol Buffers]
-    D --> L[Streaming]
-    
-    A --> M[Security]
-    M --> N[OAuth 2.0]
-    M --> O[JWT]
-    M --> P[API Keys]
-    
-    A --> Q[Versioning]
-    Q --> R[URI Versioning]
-    Q --> S[Header Versioning]
-    
-    style A fill:#00d4ff,stroke:#7b61ff,stroke-width:2px
-    style B fill:#61dafb,stroke:#fff,stroke-width:2px
-    style C fill:#e535ab,stroke:#fff,stroke-width:2px
-    style D fill:#00d2b8,stroke:#fff,stroke-width:2px
+    return {
+        "data": users,
+        "pagination": {
+            "next_cursor": next_cursor,
+            "has_more": len(users) == limit
+        }
+    }</code></pre>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="glass-card">
-                        <h2>High-Priority Principles</h2>
-                        <div class="rules-showcase">
-                            <div class="rule-card" data-expandable>
-                                <div class="rule-header" onclick="toggleRule(this)">
-                                    <span class="rule-icon">📝</span>
-                                    <div class="rule-title-group">
-                                        <h3>RESTful Resource Naming</h3>
-                                        <span class="severity-badge severity-high">HIGH</span>
-                                    </div>
-                                    <button class="expand-btn" aria-label="Expand rule">+</button>
-                                </div>
-                                <div class="rule-body" hidden>
-                                    <p><strong>Description:</strong> Use nouns for resources, pluralize collections, and maintain consistent naming conventions.</p>
-                                    <p>✅ <code>/users</code> <code>/users/{id}</code> <code>/users/{id}/orders</code></p>
-                                    <p>❌ <code>/getUsers</code> <code>/user</code> <code>/userOrder</code></p>
-                                </div>
+                        <div class="content-block">
+                            <h3 class="subsection-header">GraphQL Design Principles</h3>
+                            <p><strong>GraphQL</strong> is a query language for APIs with strongly-typed schemas where clients request exactly what they need.</p>
+                            
+                            <div class="code-example">
+                                <h4>Schema Design Best Practices</h4>
+                                <pre><code class="language-graphql"># Use PascalCase for types, camelCase for fields
+type User {
+  id: ID!                          # Non-null ID
+  email: String!                   # Non-null required field
+  firstName: String!               # Use camelCase
+  lastName: String!
+  phoneNumber: String              # Nullable optional field
+  isActive: Boolean!               # Prefix booleans with is/has
+  role: UserRole!                  # Enum for fixed values
+  profile: UserProfile             # Nested type
+  orders(first: Int, after: String): OrderConnection!
+}
+
+# Input types for mutations
+input CreateUserInput {
+  email: String!
+  firstName: String!
+  lastName: String!
+  phoneNumber: String
+}
+
+input UpdateUserInput {
+  firstName: String
+  lastName: String
+  phoneNumber: String
+}
+
+# Enum for status fields
+enum UserRole {
+  USER
+  ADMIN
+  MODERATOR
+}
+
+# Interfaces for shared fields
+interface Node {
+  id: ID!
+}
+
+type Product implements Node {
+  id: ID!
+  title: String!
+  price: Float!
+}
+
+# Unions for polymorphic responses
+union SearchResult = User | Product | Article
+
+type Query {
+  search(query: String!): [SearchResult!]!
+}</code></pre>
                             </div>
 
-                            <div class="rule-card" data-expandable>
-                                <div class="rule-header" onclick="toggleRule(this)">
-                                    <span class="rule-icon">🔒</span>
-                                    <div class="rule-title-group">
-                                        <h3>Always Use HTTPS</h3>
-                                        <span class="severity-badge severity-high">HIGH</span>
-                                    </div>
-                                    <button class="expand-btn" aria-label="Expand rule">+</button>
-                                </div>
-                                <div class="rule-body" hidden>
-                                    <p><strong>Description:</strong> All API endpoints must use HTTPS to encrypt data in transit.</p>
-                                </div>
+                            <div class="code-example">
+                                <h4>Query Patterns - Relay-Style Pagination</h4>
+                                <pre><code class="language-javascript">// GraphQL query
+const GET_USERS = gql`
+  query GetUsers($first: Int, $after: String) {
+    users(first: $first, after: $after) {
+      edges {
+        node {
+          id
+          email
+          firstName
+          lastName
+        }
+        cursor
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      totalCount
+    }
+  }
+`;
+
+// Resolver with DataLoader (prevents N+1 queries)
+const resolvers = {
+  Query: {
+    users: async (_, { first = 10, after }, { dataSources }) => {
+      const users = await dataSources.userAPI.getUsers({ first, after });
+      return users;
+    }
+  },
+  User: {
+    orders: async (user, _, { loaders }) => {
+      // DataLoader batches requests
+      return loaders.orderLoader.load(user.id);
+    }
+  }
+};
+
+// DataLoader setup (batching and caching)
+const orderLoader = new DataLoader(async (userIds) => {
+  const orders = await db.orders.findAll({
+    where: { userId: { in: userIds } }
+  });
+  
+  // Map results back to user IDs
+  return userIds.map(id => 
+    orders.filter(order => order.userId === id)
+  );
+});</code></pre>
                             </div>
 
-                            <div class="rule-card" data-expandable>
-                                <div class="rule-header" onclick="toggleRule(this)">
-                                    <span class="rule-icon">📊</span>
-                                    <div class="rule-title-group">
-                                        <h3>Implement Pagination</h3>
-                                        <span class="severity-badge severity-medium">MEDIUM</span>
-                                    </div>
-                                    <button class="expand-btn" aria-label="Expand rule">+</button>
-                                </div>
-                                <div class="rule-body" hidden>
-                                    <p><strong>Description:</strong> All list endpoints should support pagination to limit response size.</p>
-                                    <p>Use <code>limit</code> and <code>offset</code> or <code>page</code> and <code>size</code> parameters.</p>
-                                </div>
+                            <div class="code-example">
+                                <h4>Mutation Patterns with Error Handling</h4>
+                                <pre><code class="language-graphql"># Mutation with payload type (recommended)
+type Mutation {
+  createUser(input: CreateUserInput!): CreateUserPayload!
+  updateUser(id: ID!, input: UpdateUserInput!): UpdateUserPayload!
+  deleteUser(id: ID!): DeleteUserPayload!
+}
+
+# Payload types include errors
+type CreateUserPayload {
+  user: User
+  errors: [UserError!]
+  clientMutationId: String
+}
+
+type UserError {
+  field: String!
+  message: String!
+  code: ErrorCode!
+}
+
+enum ErrorCode {
+  VALIDATION_ERROR
+  DUPLICATE_EMAIL
+  INSUFFICIENT_PERMISSIONS
+}
+
+# Usage in client
+mutation CreateUser($input: CreateUserInput!) {
+  createUser(input: $input) {
+    user {
+      id
+      email
+    }
+    errors {
+      field
+      message
+      code
+    }
+  }
+}</code></pre>
                             </div>
                         </div>
-                    </div>
+
+                        <div class="content-block">
+                            <h3 class="subsection-header">API Versioning Strategies</h3>
+                            <p>API versioning enables safe evolution while maintaining backward compatibility. Choose the right strategy for your use case.</p>
+                            
+                            <div class="comparison-table">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Strategy</th>
+                                            <th>Pattern</th>
+                                            <th>Pros</th>
+                                            <th>Cons</th>
+                                            <th>When to Use</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>URI Versioning</strong></td>
+                                            <td><code>/v1/users</code></td>
+                                            <td>Highly visible, easy to test, cache-friendly</td>
+                                            <td>Pollutes URI space, entire API versioned</td>
+                                            <td>Public APIs, many external clients</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Header Versioning</strong></td>
+                                            <td><code>X-API-Version: 1</code></td>
+                                            <td>Clean URLs, per-resource versioning</td>
+                                            <td>Not visible in URL, harder to test</td>
+                                            <td>Internal APIs, RESTful purists</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Content Negotiation</strong></td>
+                                            <td><code>Accept: application/vnd.api.v1+json</code></td>
+                                            <td>Most RESTful, standards-compliant</td>
+                                            <td>Complex, less common</td>
+                                            <td>Mature REST APIs, hypermedia</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Query Parameter</strong></td>
+                                            <td><code>/users?version=1</code></td>
+                                            <td>Simple, easy to test</td>
+                                            <td>Easily forgotten, caching issues</td>
+                                            <td>Quick prototyping (not recommended)</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>No Versioning</strong></td>
+                                            <td>Backward compatible only</td>
+                                            <td>No overhead, clean</td>
+                                            <td>Impossible for breaking changes</td>
+                                            <td>Internal APIs, stable requirements</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="code-example">
+                                <h4>URI Versioning Implementation</h4>
+                                <pre><code class="language-python"># FastAPI with URI versioning
+from fastapi import APIRouter
+
+# Version 1 router
+v1_router = APIRouter(prefix="/v1")
+
+@v1_router.get("/users/{user_id}")
+def get_user_v1(user_id: int):
+    user = db.get_user(user_id)
+    # V1 format: single name field
+    return {
+        "id": user.id,
+        "name": f"{user.first_name} {user.last_name}",
+        "email": user.email
+    }
+
+# Version 2 router
+v2_router = APIRouter(prefix="/v2")
+
+@v2_router.get("/users/{user_id}")
+def get_user_v2(user_id: int):
+    user = db.get_user(user_id)
+    # V2 format: separate first/last name
+    return {
+        "id": user.id,
+        "firstName": user.first_name,
+        "lastName": user.last_name,
+        "email": user.email,
+        "createdAt": user.created_at  # New field in V2
+    }
+
+# Register routers
+app.include_router(v1_router)
+app.include_router(v2_router)</code></pre>
+                            </div>
+
+                            <div class="code-example">
+                                <h4>Deprecation Workflow</h4>
+                                <pre><code class="language-javascript">// Express.js deprecation middleware
+const deprecationMiddleware = (version, sunsetDate, migrationUrl) => {
+  return (req, res, next) => {
+    // Add deprecation headers
+    res.set('Deprecation', 'true');
+    res.set('Sunset', sunsetDate);
+    res.set('Link', `<${migrationUrl}>; rel="deprecation"`);
+    
+    // Add warning to response body
+    const originalJson = res.json.bind(res);
+    res.json = (body) => {
+      return originalJson({
+        ...body,
+        _warnings: [{
+          code: 'DEPRECATED_VERSION',
+          message: `API version ${version} is deprecated`,
+          sunset_date: sunsetDate,
+          migration_guide: migrationUrl
+        }]
+      });
+    };
+    
+    next();
+  };
+};
+
+// Apply to v1 routes
+app.use('/v1', deprecationMiddleware(
+  'v1',
+  'Sat, 31 Dec 2025 23:59:59 GMT',
+  'https://api.example.com/docs/v1-to-v2-migration'
+));
+
+// GraphQL deprecation (built-in)
+const typeDefs = gql`
+  type User {
+    id: ID!
+    legacyId: String @deprecated(reason: "Use 'id' instead")
+    name: String @deprecated(reason: "Use 'firstName' and 'lastName'")
+    firstName: String
+    lastName: String
+  }
+`;</code></pre>
+                            </div>
+                        </div>
+
+                        <div class="content-block">
+                            <h3 class="subsection-header">Security Best Practices</h3>
+                            
+                            <div class="code-example">
+                                <h4>Authentication & Authorization</h4>
+                                <pre><code class="language-python"># JWT Authentication with FastAPI
+from fastapi import Depends, HTTPException, status
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+import jwt
+
+security = HTTPBearer()
+
+def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    try:
+        payload = jwt.decode(
+            credentials.credentials,
+            SECRET_KEY,
+            algorithms=["HS256"]
+        )
+        return payload
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token has expired"
+        )
+    except jwt.InvalidTokenError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid token"
+        )
+
+# Role-based authorization
+def require_role(required_role: str):
+    def role_checker(token_payload: dict = Depends(verify_token)):
+        user_role = token_payload.get("role")
+        if user_role != required_role:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Insufficient permissions"
+            )
+        return token_payload
+    return role_checker
+
+# Protected endpoints
+@app.get("/users", dependencies=[Depends(require_role("admin"))])
+def list_users():
+    return db.get_all_users()
+
+@app.get("/users/me", dependencies=[Depends(verify_token)])
+def get_current_user(token_payload: dict = Depends(verify_token)):
+    return db.get_user(token_payload["user_id"])</code></pre>
+                            </div>
+
+                            <div class="code-example">
+                                <h4>Rate Limiting</h4>
+                                <pre><code class="language-javascript">// Express rate limiting with Redis
+const rateLimit = require('express-rate-limit');
+const RedisStore = require('rate-limit-redis');
+
+const limiter = rateLimit({
+  store: new RedisStore({
+    client: redisClient
+  }),
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per window
+  standardHeaders: true, // Return rate limit info in headers
+  legacyHeaders: false,
+  handler: (req, res) => {
+    res.status(429).json({
+      error: {
+        code: 'RATE_LIMIT_EXCEEDED',
+        message: 'Too many requests, please try again later',
+        retry_after: req.rateLimit.resetTime
+      }
+    });
+  },
+  // Custom key generator (e.g., by user ID)
+  keyGenerator: (req) => {
+    return req.user?.id || req.ip;
+  }
+});
+
+app.use('/api', limiter);</code></pre>
+                            </div>
+                        </div>
+
+                        <div class="content-block">
+                            <h3 class="subsection-header">Performance Optimization</h3>
+                            
+                            <div class="code-example">
+                                <h4>HTTP Caching with ETags</h4>
+                                <pre><code class="language-python"># FastAPI with ETag support
+from fastapi import Response, Request
+import hashlib
+import json
+
+@app.get("/users/{user_id}")
+def get_user(user_id: int, request: Request, response: Response):
+    user = db.get_user(user_id)
+    user_json = json.dumps(user.__dict__, sort_keys=True)
+    
+    # Generate ETag
+    etag = hashlib.md5(user_json.encode()).hexdigest()
+    
+    # Check If-None-Match header
+    if request.headers.get("If-None-Match") == etag:
+        response.status_code = 304  # Not Modified
+        return None
+    
+    # Set caching headers
+    response.headers["ETag"] = etag
+    response.headers["Cache-Control"] = "private, max-age=300"  # 5 minutes
+    
+    return user</code></pre>
+                            </div>
+                        </div>
+                    </section>
                 </div>
 
-                <div class="tab-content" id="files-tab" role="tabpanel" aria-labelledby="files-btn" hidden>
-                    <div class="glass-card">
-                        <h2>Knowledge Files</h2>
-                        <p>Explore API design patterns and best practices:</p>
-                    </div>
+                <!-- Knowledge Files Tab -->
+                <div class="tab-content" id="knowledge">
+                    <section class="doc-section">
+                        <h2 class="section-header">📚 Knowledge Files</h2>
+                        <p class="section-intro">Detailed knowledge files covering API design patterns and best practices.</p>
 
-                    <div class="knowledge-files-accordion">
-                        <div class="accordion-item">
-                            <button class="accordion-header" aria-expanded="false" aria-controls="rest-content">
-                                <span class="accordion-icon">🌐</span>
-                                <div class="accordion-title-group">
-                                    <h3 class="accordion-title">RESTful API Design</h3>
-                                    <p class="accordion-subtitle">Resources, HTTP methods, status codes</p>
+                        <div class="accordion">
+                            <div class="accordion-item">
+                                <button class="accordion-header">
+                                    <span class="accordion-title">rest-api-design.yaml</span>
+                                    <span class="accordion-icon">▼</span>
+                                </button>
+                                <div class="accordion-content">
+                                    <p><strong>Category:</strong> API Design Excellence</p>
+                                    <p><strong>Focus:</strong> Comprehensive REST API design guidelines following industry best practices</p>
+                                    
+                                    <h4>Key Topics:</h4>
+                                    <ul>
+                                        <li><strong>REST Constraints:</strong> Client-server separation, statelessness, cacheability, uniform interface, layered system</li>
+                                        <li><strong>Resource Naming:</strong> Use nouns, plural forms, lowercase with hyphens, nested relationships, query parameters</li>
+                                        <li><strong>HTTP Methods:</strong> GET (retrieve), POST (create), PUT (replace), PATCH (partial update), DELETE (remove)</li>
+                                        <li><strong>Status Codes:</strong> 2xx success, 3xx redirection, 4xx client errors, 5xx server errors</li>
+                                        <li><strong>Pagination:</strong> Offset-based (page/limit) vs cursor-based pagination, Link headers</li>
+                                        <li><strong>Filtering & Sorting:</strong> Query parameters for field filters, comparison operators, multi-field sorting</li>
+                                        <li><strong>Error Responses:</strong> Standardized error format with codes, messages, field-level details</li>
+                                        <li><strong>Security:</strong> OAuth 2.0, JWT, API keys, RBAC authorization, rate limiting, HTTPS</li>
+                                        <li><strong>Performance:</strong> Caching (ETags, Cache-Control), compression, field selection, batching</li>
+                                        <li><strong>HATEOAS:</strong> Hypermedia links for resource discoverability</li>
+                                    </ul>
+                                    
+                                    <h4>Anti-Patterns to Avoid:</h4>
+                                    <ul>
+                                        <li>RPC-style URLs with verbs instead of resources</li>
+                                        <li>Ignoring HTTP methods and status codes</li>
+                                        <li>Breaking changes without versioning</li>
+                                        <li>No pagination for large collections</li>
+                                        <li>Exposing internal implementation details</li>
+                                        <li>Inconsistent naming conventions</li>
+                                    </ul>
+                                    
+                                    <div class="file-meta">
+                                        <span class="meta-item"><strong>Version:</strong> 1.0.0</span>
+                                        <span class="meta-item"><strong>Lines:</strong> 616</span>
+                                        <span class="meta-item"><strong>Target:</strong> Backend Engineers, API Developers, Architects</span>
+                                    </div>
                                 </div>
-                                <span class="badge">25 rules</span>
-                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                            </button>
-                            <div id="rest-content" class="accordion-content" hidden>
-                                <p>RESTful API design principles and conventions.</p>
-                                <p><em>📝 Knowledge file coming soon</em></p>
+                            </div>
+
+                            <div class="accordion-item">
+                                <button class="accordion-header">
+                                    <span class="accordion-title">graphql-best-practices.yaml</span>
+                                    <span class="accordion-icon">▼</span>
+                                </button>
+                                <div class="accordion-content">
+                                    <p><strong>Category:</strong> API Design Excellence</p>
+                                    <p><strong>Focus:</strong> GraphQL schema design, query optimization, and best practices</p>
+                                    
+                                    <h4>Key Topics:</h4>
+                                    <ul>
+                                        <li><strong>Core Principles:</strong> Strongly-typed schema, client-specified queries, introspection, single endpoint</li>
+                                        <li><strong>Schema Design:</strong> Naming conventions (PascalCase types, camelCase fields), object types, interfaces, unions, enums, input types</li>
+                                        <li><strong>Nullability:</strong> Use ! (non-null) sparingly, prefer nullable fields, non-null for guaranteed fields</li>
+                                        <li><strong>Query Patterns:</strong> Relay-style cursor pagination, filtering with input types, multi-field sorting</li>
+                                        <li><strong>Mutation Patterns:</strong> Verb + noun naming, single input argument, payload types with errors</li>
+                                        <li><strong>Performance:</strong> DataLoader for N+1 prevention, batching and caching, query complexity analysis, depth limiting</li>
+                                        <li><strong>Security:</strong> Authentication context, field-level authorization, input validation, rate limiting, introspection control</li>
+                                        <li><strong>Error Handling:</strong> User errors in payload vs system errors thrown, custom error codes, error masking</li>
+                                        <li><strong>Schema Evolution:</strong> Deprecation workflow, additive changes, avoid versioning</li>
+                                    </ul>
+                                    
+                                    <h4>N+1 Query Problem Solution:</h4>
+                                    <ul>
+                                        <li>Use DataLoader to batch database queries per request</li>
+                                        <li>Cache results within single request context</li>
+                                        <li>Reduce hundreds of queries to a single batched query</li>
+                                    </ul>
+                                    
+                                    <h4>GraphQL vs REST:</h4>
+                                    <ul>
+                                        <li><strong>Use GraphQL:</strong> Mobile apps, complex data requirements, frequent UI changes, real-time subscriptions</li>
+                                        <li><strong>Use REST:</strong> Simple CRUD, heavy caching needs, file uploads, third-party integrations</li>
+                                    </ul>
+                                    
+                                    <div class="file-meta">
+                                        <span class="meta-item"><strong>Version:</strong> 1.0.0</span>
+                                        <span class="meta-item"><strong>Lines:</strong> 707</span>
+                                        <span class="meta-item"><strong>Target:</strong> Backend Engineers, API Developers, Architects</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <button class="accordion-header">
+                                    <span class="accordion-title">api-versioning.yaml</span>
+                                    <span class="accordion-icon">▼</span>
+                                </button>
+                                <div class="accordion-content">
+                                    <p><strong>Category:</strong> API Design Excellence</p>
+                                    <p><strong>Focus:</strong> API versioning strategies for backward compatibility and evolution</p>
+                                    
+                                    <h4>Key Topics:</h4>
+                                    <ul>
+                                        <li><strong>Why Version:</strong> Safe API evolution, backward compatibility, clear migration paths, measurable deprecation</li>
+                                        <li><strong>Breaking Changes:</strong> Removing endpoints/fields, renaming, changing types, changing structure, authentication changes</li>
+                                        <li><strong>Non-Breaking Changes:</strong> Adding endpoints, optional fields, response fields, enum values, deprecating (not removing)</li>
+                                        <li><strong>Versioning Strategies:</strong>
+                                            <ul>
+                                                <li>URI Versioning (/v1/users) - Best for public APIs</li>
+                                                <li>Header Versioning (X-API-Version) - Clean URLs, per-resource</li>
+                                                <li>Content Negotiation (Accept header) - Most RESTful</li>
+                                                <li>Query Parameter (?version=1) - Not recommended</li>
+                                                <li>No Versioning - Backward compatible only</li>
+                                            </ul>
+                                        </li>
+                                        <li><strong>Semantic Versioning:</strong> MAJOR.MINOR.PATCH for API versions</li>
+                                        <li><strong>Deprecation Lifecycle:</strong> Announcement → Grace period (6-12 months) → Sunset warning (3 months) → Removal</li>
+                                        <li><strong>Deprecation Headers:</strong> Sunset header (RFC 8594), Deprecation header, Link header to migration guide</li>
+                                        <li><strong>Migration Strategies:</strong> Documentation, SDK updates, sandbox testing, dedicated support, monitoring</li>
+                                        <li><strong>Version Lifecycle:</strong> Current (full support) → Previous (maintenance) → Deprecated (security only) → Removed (410 Gone)</li>
+                                    </ul>
+                                    
+                                    <h4>Implementation Patterns:</h4>
+                                    <ul>
+                                        <li>Shared service layer with version-specific controllers</li>
+                                        <li>Request/response transformers between versions</li>
+                                        <li>Feature flags for gradual rollout</li>
+                                    </ul>
+                                    
+                                    <h4>Anti-Patterns to Avoid:</h4>
+                                    <ul>
+                                        <li>Supporting too many versions (5+)</li>
+                                        <li>No deprecation process</li>
+                                        <li>Micro-versioning for every small change</li>
+                                        <li>Inconsistent versioning strategy</li>
+                                        <li>Not monitoring version usage</li>
+                                        <li>Breaking changes without version bump</li>
+                                    </ul>
+                                    
+                                    <div class="file-meta">
+                                        <span class="meta-item"><strong>Version:</strong> 1.0.0</span>
+                                        <span class="meta-item"><strong>Lines:</strong> 667</span>
+                                        <span class="meta-item"><strong>Target:</strong> Backend Engineers, API Developers, Architects</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-
-                        <div class="accordion-item">
-                            <button class="accordion-header" aria-expanded="false" aria-controls="graphql-content">
-                                <span class="accordion-icon">🎯</span>
-                                <div class="accordion-title-group">
-                                    <h3 class="accordion-title">GraphQL Best Practices</h3>
-                                    <p class="accordion-subtitle">Schema design, resolvers, performance</p>
-                                </div>
-                                <span class="badge">20 rules</span>
-                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                            </button>
-                            <div id="graphql-content" class="accordion-content" hidden>
-                                <p>GraphQL schema design and query optimization.</p>
-                                <p><em>📝 Knowledge file coming soon</em></p>
-                            </div>
-                        </div>
-
-                        <div class="accordion-item">
-                            <button class="accordion-header" aria-expanded="false" aria-controls="grpc-content">
-                                <span class="accordion-icon">⚡</span>
-                                <div class="accordion-title-group">
-                                    <h3 class="accordion-title">gRPC Patterns</h3>
-                                    <p class="accordion-subtitle">Protocol Buffers, streaming</p>
-                                </div>
-                                <span class="badge">15 rules</span>
-                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                            </button>
-                            <div id="grpc-content" class="accordion-content" hidden>
-                                <p>gRPC service design and streaming patterns.</p>
-                                <p><em>📝 Knowledge file coming soon</em></p>
-                            </div>
-                        </div>
-
-                        <div class="accordion-item">
-                            <button class="accordion-header" aria-expanded="false" aria-controls="api-security-content">
-                                <span class="accordion-icon">🔐</span>
-                                <div class="accordion-title-group">
-                                    <h3 class="accordion-title">API Security</h3>
-                                    <p class="accordion-subtitle">OAuth, JWT, rate limiting</p>
-                                </div>
-                                <span class="badge">18 rules</span>
-                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                            </button>
-                            <div id="api-security-content" class="accordion-content" hidden>
-                                <p>API authentication, authorization, and security.</p>
-                                <p><em>📝 Knowledge file coming soon</em></p>
-                            </div>
-                        </div>
-                    </div>
+                    </section>
                 </div>
 
-                <div class="tab-content" id="resources-tab" role="tabpanel" aria-labelledby="resources-btn" hidden>
-                    <div class="glass-card">
-                        <h2>Learning Resources</h2>
+                <!-- Learning Resources Tab -->
+                <div class="tab-content" id="resources">
+                    <section class="doc-section">
+                        <h2 class="section-header">🎓 Learning Resources</h2>
                         
-                        <h3>Official Documentation</h3>
-                        <ul class="resource-list">
-                            <li>
-                                <a href="https://restfulapi.net/" target="_blank" rel="noopener noreferrer" class="resource-link">
-                                    <span class="resource-icon">📖</span>
-                                    <div>
-                                        <strong>RESTful API Tutorial</strong>
-                                        <p>Comprehensive REST API design guide</p>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="https://graphql.org/learn/" target="_blank" rel="noopener noreferrer" class="resource-link">
-                                    <span class="resource-icon">📖</span>
-                                    <div>
-                                        <strong>GraphQL Learn</strong>
-                                        <p>Official GraphQL documentation</p>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="https://grpc.io/docs/" target="_blank" rel="noopener noreferrer" class="resource-link">
-                                    <span class="resource-icon">📖</span>
-                                    <div>
-                                        <strong>gRPC Documentation</strong>
-                                        <p>Official gRPC guides and tutorials</p>
-                                    </div>
-                                </a>
-                            </li>
-                        </ul>
+                        <div class="resources-grid">
+                            <div class="resource-card">
+                                <h3>📖 REST API Design</h3>
+                                <ul>
+                                    <li><a href="https://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm" target="_blank">Roy Fielding's REST Dissertation</a> - Original REST architectural style definition</li>
+                                    <li><a href="https://spec.openapis.org/oas/latest.html" target="_blank">OpenAPI Specification</a> - Industry standard for REST API documentation</li>
+                                    <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status" target="_blank">HTTP Status Codes - MDN</a> - Complete HTTP status code reference</li>
+                                    <li><a href="https://tools.ietf.org/html/rfc6902" target="_blank">JSON Patch (RFC 6902)</a> - Standard for partial updates</li>
+                                </ul>
+                            </div>
 
-                        <h3>Books</h3>
-                        <ul class="resource-list">
-                            <li>
-                                <div class="resource-link">
-                                    <span class="resource-icon">📚</span>
-                                    <div>
-                                        <strong>RESTful Web APIs</strong>
-                                        <p>By Leonard Richardson - API design patterns</p>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
+                            <div class="resource-card">
+                                <h3>🔷 GraphQL</h3>
+                                <ul>
+                                    <li><a href="https://spec.graphql.org/" target="_blank">GraphQL Specification</a> - Official GraphQL spec</li>
+                                    <li><a href="https://www.apollographql.com/docs/apollo-server/" target="_blank">Apollo Server Documentation</a> - Production-ready GraphQL server</li>
+                                    <li><a href="https://graphql.org/learn/best-practices/" target="_blank">GraphQL Best Practices</a> - Official best practices guide</li>
+                                    <li><a href="https://github.com/graphql/dataloader" target="_blank">DataLoader</a> - Batching and caching utility for GraphQL</li>
+                                </ul>
+                            </div>
+
+                            <div class="resource-card">
+                                <h3>🔄 API Versioning</h3>
+                                <ul>
+                                    <li><a href="https://semver.org/" target="_blank">Semantic Versioning 2.0.0</a> - Version numbering standard</li>
+                                    <li><a href="https://tools.ietf.org/html/rfc8594" target="_blank">RFC 8594 - Sunset HTTP Header</a> - Standard for API deprecation</li>
+                                    <li><a href="https://apisyouwonthate.com/blog/api-versioning-has-no-right-way" target="_blank">API Versioning Has No Right Way</a> - Phil Sturgeon's analysis</li>
+                                    <li><a href="https://stripe.com/docs/api/versioning" target="_blank">Stripe API Versioning</a> - Real-world date-based versioning</li>
+                                </ul>
+                            </div>
+
+                            <div class="resource-card">
+                                <h3>📚 Books</h3>
+                                <ul>
+                                    <li><strong>RESTful Web APIs</strong> by Leonard Richardson & Mike Amundsen - Comprehensive REST guide</li>
+                                    <li><strong>Production Ready GraphQL</strong> by Marc-André Giroux - GraphQL at scale</li>
+                                    <li><strong>API Design Patterns</strong> by JJ Geewax - Patterns for building robust APIs</li>
+                                    <li><strong>Designing Web APIs</strong> by Brenda Jin, Saurabh Sahni, Amir Shevat - Practical API design</li>
+                                </ul>
+                            </div>
+
+                            <div class="resource-card">
+                                <h3>🛠️ Tools & Libraries</h3>
+                                <ul>
+                                    <li><strong>Postman:</strong> API testing and documentation</li>
+                                    <li><strong>Swagger/OpenAPI:</strong> API documentation generation</li>
+                                    <li><strong>GraphQL Playground:</strong> Interactive GraphQL IDE</li>
+                                    <li><strong>Insomnia:</strong> REST and GraphQL client</li>
+                                    <li><strong>graphql-inspector:</strong> Schema comparison and validation</li>
+                                    <li><strong>Pact:</strong> Consumer-driven contract testing</li>
+                                </ul>
+                            </div>
+
+                            <div class="resource-card">
+                                <h3>🎯 Real-World Examples</h3>
+                                <ul>
+                                    <li><a href="https://docs.github.com/en/rest" target="_blank">GitHub API</a> - Header-based versioning</li>
+                                    <li><a href="https://developer.twitter.com/en/docs/twitter-api" target="_blank">Twitter API</a> - URI versioning</li>
+                                    <li><a href="https://docs.aws.amazon.com/" target="_blank">AWS APIs</a> - Backward-compatible evolution</li>
+                                    <li><a href="https://shopify.dev/api/admin-graphql" target="_blank">Shopify GraphQL API</a> - Production GraphQL</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
                 </div>
 
-                <div class="tab-content" id="usage-tab" role="tabpanel" aria-labelledby="usage-btn" hidden>
-                    <div class="glass-card">
-                        <h2>How CORTEX Uses API Design Knowledge</h2>
-                        
-                        <h3>🏗️ API Generation</h3>
-                        <ul class="feature-list">
-                            <li><strong>REST Endpoints:</strong> Generates properly structured REST controllers</li>
-                            <li><strong>GraphQL Schemas:</strong> Creates type-safe GraphQL schemas and resolvers</li>
-                            <li><strong>OpenAPI Specs:</strong> Generates Swagger/OpenAPI documentation</li>
-                        </ul>
+                <!-- CORTEX Usage Tab -->
+                <div class="tab-content" id="cortex">
+                    <section class="doc-section">
+                        <h2 class="section-header">🧠 CORTEX Usage</h2>
+                        <p class="section-intro">How CORTEX leverages API design patterns in its architecture and development.</p>
 
-                        <h3>🔍 API Review</h3>
-                        <ul class="feature-list">
-                            <li><strong>Naming Conventions:</strong> Validates resource naming</li>
-                            <li><strong>HTTP Methods:</strong> Ensures proper verb usage</li>
-                            <li><strong>Status Codes:</strong> Checks appropriate response codes</li>
-                            <li><strong>Security:</strong> Validates authentication/authorization</li>
-                        </ul>
+                        <div class="content-block">
+                            <h3 class="subsection-header">REST API Patterns in CORTEX</h3>
+                            <p>CORTEX internal services and external integrations follow REST best practices:</p>
+                            <ul>
+                                <li><strong>Resource Naming:</strong> Knowledge domains use RESTful routes (/knowledge/engineering, /knowledge/security)</li>
+                                <li><strong>HTTP Semantics:</strong> Proper status codes (200 OK, 201 Created, 404 Not Found, 409 Conflict)</li>
+                                <li><strong>Pagination:</strong> Cursor-based pagination for large knowledge file collections</li>
+                                <li><strong>Caching:</strong> ETags for conditional requests on knowledge artifacts</li>
+                                <li><strong>Rate Limiting:</strong> Per-user limits on API operations to prevent abuse</li>
+                            </ul>
+                        </div>
 
-                        <h3>📝 Documentation</h3>
-                        <ul class="feature-list">
-                            <li><strong>API Docs:</strong> Auto-generates API documentation</li>
-                            <li><strong>Examples:</strong> Creates request/response examples</li>
-                            <li><strong>Testing:</strong> Generates API integration tests</li>
-                        </ul>
-                    </div>
+                        <div class="content-block">
+                            <h3 class="subsection-header">GraphQL in CORTEX Brain</h3>
+                            <p>CORTEX could implement GraphQL for complex knowledge graph queries:</p>
+                            <ul>
+                                <li><strong>Schema Design:</strong> Knowledge types (KnowledgeFile, Category, Domain) with relationships</li>
+                                <li><strong>Query Flexibility:</strong> Clients request exactly needed knowledge fields (title, content, metadata)</li>
+                                <li><strong>DataLoader:</strong> Batch loading related knowledge files to prevent N+1 queries</li>
+                                <li><strong>Real-time Subscriptions:</strong> Subscribe to knowledge base updates</li>
+                            </ul>
+
+                            <div class="code-example">
+                                <pre><code class="language-graphql"># Example CORTEX Knowledge Graph Schema
+type KnowledgeDomain {
+  id: ID!
+  name: String!
+  categories(first: Int, after: String): CategoryConnection!
+}
+
+type Category {
+  id: ID!
+  name: String!
+  files(first: Int, after: String): KnowledgeFileConnection!
+  relatedCategories: [Category!]!
+}
+
+type KnowledgeFile {
+  id: ID!
+  title: String!
+  content: String!
+  metadata: FileMetadata!
+  tags: [String!]!
+  relatedFiles: [KnowledgeFile!]!
+}
+
+type Query {
+  searchKnowledge(query: String!, domains: [String!]): [KnowledgeFile!]!
+  getDomain(id: ID!): KnowledgeDomain
+  getCategory(id: ID!): Category
+}</code></pre>
+                            </div>
+                        </div>
+
+                        <div class="content-block">
+                            <h3 class="subsection-header">API Versioning Strategy</h3>
+                            <p>CORTEX API evolution strategy:</p>
+                            <ul>
+                                <li><strong>URI Versioning:</strong> /api/v1/ for CORTEX public APIs (documentation, knowledge access)</li>
+                                <li><strong>Semantic Versioning:</strong> MAJOR.MINOR.PATCH (e.g., 4.0.0 for CORTEX current version)</li>
+                                <li><strong>Deprecation Workflow:</strong> 6-month grace period with Sunset headers before removing v1 APIs</li>
+                                <li><strong>Migration Guides:</strong> Comprehensive documentation for v1 → v2 migrations</li>
+                                <li><strong>Version Monitoring:</strong> Track usage metrics per API version to identify lagging clients</li>
+                            </ul>
+                        </div>
+
+                        <div class="content-block">
+                            <h3 class="subsection-header">Security Implementation</h3>
+                            <ul>
+                                <li><strong>Authentication:</strong> JWT tokens for CORTEX API access with 15-minute expiration</li>
+                                <li><strong>Authorization:</strong> RBAC for knowledge access (public vs admin-only knowledge)</li>
+                                <li><strong>Rate Limiting:</strong> 100 requests per 15 minutes per user/IP</li>
+                                <li><strong>Input Validation:</strong> Schema validation for all API inputs</li>
+                            </ul>
+                        </div>
+
+                        <div class="content-block">
+                            <h3 class="subsection-header">Error Handling Standards</h3>
+                            <div class="code-example">
+                                <pre><code class="language-json">{
+  "error": {
+    "code": "KNOWLEDGE_FILE_NOT_FOUND",
+    "message": "The requested knowledge file does not exist",
+    "details": {
+      "file_id": "rest-api-design",
+      "category": "api-design",
+      "domain": "engineering"
+    },
+    "request_id": "cortex_req_abc123xyz",
+    "timestamp": "2025-12-28T10:30:00Z"
+  }
+}</code></pre>
+                            </div>
+                        </div>
+
+                        <div class="content-block">
+                            <h3 class="subsection-header">Related CORTEX Knowledge</h3>
+                            <ul>
+                                <li><code>security.yaml</code> - OWASP security patterns for API protection</li>
+                                <li><code>performance-optimization.yaml</code> - Caching and performance strategies</li>
+                                <li><code>testing.yaml</code> - API testing strategies (contract, integration)</li>
+                                <li><code>microservices</code> domain - Service-to-service API communication</li>
+                            </ul>
+                        </div>
+                    </section>
                 </div>
             </div>
         </div>
-    </section>
+    </main>
 
-    <nav class="bottom-nav" aria-label="Category navigation">
-        <a href="api-design.html" class="bottom-nav-link active">
-            <span class="bottom-nav-icon">🌐</span>
-            <span class="bottom-nav-label">API Design</span>
-        </a>
-        <a href="microservices.html" class="bottom-nav-link">
-            <span class="bottom-nav-icon">🔷</span>
-            <span class="bottom-nav-label">Microservices</span>
-        </a>
-        <a href="messaging.html" class="bottom-nav-link">
-            <span class="bottom-nav-icon">📨</span>
-            <span class="bottom-nav-label">Messaging</span>
-        </a>
-    </nav>
+    <footer class="doc-footer">
+        <div class="footer-content">
+            <p>&copy; 2025 CORTEX Knowledge Library. Licensed under MIT License.</p>
+            <p>Author: Asif Hussain | Version: 4.0.0</p>
+        </div>
+    </footer>
 
-    <script src="../assets/js/category-page.js"></script>
     <script>
+        // Tab switching
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const tabName = button.dataset.tab;
+                
+                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                
+                button.classList.add('active');
+                document.getElementById(tabName).classList.add('active');
+            });
+        });
+
+        // Accordion functionality
+        document.querySelectorAll('.accordion-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const item = header.parentElement;
+                const wasActive = item.classList.contains('active');
+                
+                document.querySelectorAll('.accordion-item').forEach(i => i.classList.remove('active'));
+                
+                if (!wasActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // Initialize Mermaid
         mermaid.initialize({ 
             startOnLoad: true,
-            theme: 'dark',
+            theme: 'base',
             themeVariables: {
-                primaryColor: '#00d4ff',
+                primaryColor: '#667eea',
                 primaryTextColor: '#fff',
-                primaryBorderColor: '#7b61ff',
-                lineColor: '#00d4ff',
-                secondaryColor: '#7b61ff',
-                tertiaryColor: '#1a1f3a'
+                primaryBorderColor: '#5a67d8',
+                lineColor: '#cbd5e0',
+                secondaryColor: '#48bb78',
+                tertiaryColor: '#ed8936'
             }
         });
     </script>

@@ -3,185 +3,784 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Database Design - SQL, NoSQL, schema design, query optimization">
-    <meta name="author" content="Asif Hussain">
-    <title>Database Design - CORTEX Knowledge</title>
-    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <title>Database Design & Management | CORTEX Knowledge Library</title>
     <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
-    <a href="#main-content" class="skip-link">Skip to main content</a>
-
-    <nav class="breadcrumb-container sticky-nav" aria-label="Breadcrumb">
-        <button class="back-button" onclick="history.back()" aria-label="Go back">← Back</button>
-        <ol class="breadcrumb">
-            <li><a href="../index.html">Home</a></li>
-            <li><a href="index.html">Knowledge Library</a></li>
-            <li><a href="index.html#data-storage">Data & Storage</a></li>
-            <li aria-current="page">🗄️ D D</li>
-        </ol>
+    <nav class="doc-nav">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">
+                <img src="../assets/images/cortex-logo.svg" alt="CORTEX" class="logo-image">
+            </a>
+            <ul class="nav-links">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="index.html" class="active">Knowledge Library</a></li>
+                <li><a href="../sts/index.html">STS Portal</a></li>
+            </ul>
+        </div>
     </nav>
 
-    <section class="hero" id="main-content">
-        <div class="logo-header">
-            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
-        </div>
-        <h1 class="hero-title">🗄️ Database Design</h1>
-        <p class="hero-subtitle">SQL, NoSQL, schema design, query optimization</p>
-    </section>
+    <main class="doc-main">
+        <div class="doc-container">
+            <header class="doc-header">
+                <div class="breadcrumb">
+                    <a href="../index.html">Home</a>
+                    <span class="separator">/</span>
+                    <a href="index.html">Knowledge Library</a>
+                    <span class="separator">/</span>
+                    <span>Database</span>
+                </div>
+                <h1 class="doc-title">Database Design & Management</h1>
+                <p class="doc-subtitle">SQL, NoSQL, Oracle best practices, schema design, query optimization, and database migrations</p>
+            </header>
 
-    <aside class="category-sidebar" aria-label="Category navigation">
-        <h3>Data & Storage</h3>
-        <nav class="category-nav">
-            <a href="database.html" class="category-nav-link active">🗄️ Database</a>
-            <a href="performance.html" class="category-nav-link">⚡ Performance</a>
-        </nav>
-    </aside>
-
-    <section class="section category-content">
-        <div class="container">
-            <div class="tabs-container">
-                <div class="tabs-nav" role="tablist" aria-label="Category sections">
-                    <button class="tab-button active" role="tab" aria-selected="true" aria-controls="overview-tab" id="overview-btn" data-tab="overview">Overview</button>
-                    <button class="tab-button" role="tab" aria-selected="false" aria-controls="files-tab" id="files-btn" data-tab="files">Knowledge Files</button>
-                    <button class="tab-button" role="tab" aria-selected="false" aria-controls="resources-tab" id="resources-btn" data-tab="resources">Learning Resources</button>
-                    <button class="tab-button" role="tab" aria-selected="false" aria-controls="usage-tab" id="usage-btn" data-tab="usage">CORTEX Usage</button>
+            <div class="tab-container">
+                <div class="tab-buttons">
+                    <button class="tab-button active" data-tab="overview">Overview</button>
+                    <button class="tab-button" data-tab="knowledge">Knowledge Files</button>
+                    <button class="tab-button" data-tab="resources">Learning Resources</button>
+                    <button class="tab-button" data-tab="cortex">CORTEX Usage</button>
                 </div>
 
-                <div class="tab-content active" id="overview-tab" role="tabpanel" aria-labelledby="overview-btn">
-                    <div class="glass-card">
-                        <h2>Overview</h2>
-                        <p>SQL, NoSQL, schema design, query optimization</p>
+                <!-- Overview Tab -->
+                <div class="tab-content active" id="overview">
+                    <section class="doc-section">
+                        <h2 class="section-header">🎯 Category Overview</h2>
+                        <div class="content-block">
+                            <p>Database Design & Management covers relational (SQL) and non-relational (NoSQL) database systems, schema design, query optimization, transaction management, and database migration strategies. This category includes Oracle-specific best practices and general database patterns.</p>
+                            
+                            <h3 class="subsection-header">Key Concepts</h3>
+                            <ul class="feature-list">
+                                <li><strong>Relational Databases (SQL):</strong> ACID transactions, normalization, indexes, query optimization</li>
+                                <li><strong>NoSQL Databases:</strong> Document stores, key-value stores, column-family, graph databases</li>
+                                <li><strong>Oracle Best Practices:</strong> Connection pooling, bind variables, transaction management, security</li>
+                                <li><strong>Schema Design:</strong> Entity relationships, normalization forms, denormalization strategies</li>
+                                <li><strong>Query Optimization:</strong> Indexes, execution plans, join strategies, performance tuning</li>
+                                <li><strong>Database Migrations:</strong> Version control, schema changes, data migrations, zero-downtime deployments</li>
+                            </ul>
+                        </div>
 
-                        <h3>Category Statistics</h3>
-                        <div class="stats-grid">
-                            <div class="stat-item">
-                                <div class="stat-value">3</div>
-                                <div class="stat-label">Knowledge Files</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-value">75+</div>
-                                <div class="stat-label">Patterns</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-value">5</div>
-                                <div class="stat-label">Database Types</div>
+                        <div class="visual-diagram">
+                            <h3 class="subsection-header">Database Landscape</h3>
+                            <div class="mermaid">
+graph TB
+    subgraph SQL["SQL Databases"]
+        ACID["ACID Transactions"]
+        Schema["Fixed Schema"]
+        Joins["Complex Joins"]
+        Normalization["Normalization"]
+    end
+
+    subgraph NoSQL["NoSQL Databases"]
+        Document["Document Stores"]
+        KeyValue["Key-Value"]
+        ColumnFamily["Column-Family"]
+        Graph["Graph DB"]
+    end
+
+    subgraph Oracle["Oracle Best Practices"]
+        ConnPool["Connection Pooling"]
+        BindVars["Bind Variables"]
+        Transactions["Transaction Mgmt"]
+        Security["Security"]
+    end
+
+    subgraph Optimization["Query Optimization"]
+        Indexes["Indexes"]
+        ExecutionPlans["Execution Plans"]
+        BulkOps["Bulk Operations"]
+        Caching["Result Caching"]
+    end
+
+    style SQL fill:#48bb78
+    style NoSQL fill:#ed8936
+    style Oracle fill:#667eea
+    style Optimization fill:#38b2ac
                             </div>
                         </div>
-                    </div>
 
-                    <div class="glass-card">
-                        <h2>Concept Map</h2>
-                        <div class="mermaid">
-graph TD
-    A[Databases] --> B[Relational]
-    A --> C[NoSQL]
-    B --> D[PostgreSQL]
-    B --> E[MySQL]
-    C --> F[Document: MongoDB]
-    C --> G[Wide Column: Cassandra]
-    C --> H[Key-Value: Redis]
-    style A fill:#00d4ff,stroke:#7b61ff,stroke-width:2px
+                        <div class="content-block">
+                            <h3 class="subsection-header">SQL vs NoSQL: When to Use Each</h3>
+                            
+                            <div class="comparison-table">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Criteria</th>
+                                            <th>SQL (Relational)</th>
+                                            <th>NoSQL</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>Data Structure</strong></td>
+                                            <td>Structured, fixed schema</td>
+                                            <td>Flexible, schema-less or dynamic</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Transactions</strong></td>
+                                            <td>ACID guarantees, multi-row transactions</td>
+                                            <td>Eventual consistency (most), limited transactions</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Scaling</strong></td>
+                                            <td>Vertical scaling (scale up)</td>
+                                            <td>Horizontal scaling (scale out)</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Relationships</strong></td>
+                                            <td>Complex joins, foreign keys</td>
+                                            <td>Denormalized, embedded documents</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Query Language</strong></td>
+                                            <td>SQL standard</td>
+                                            <td>Vendor-specific APIs</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Use Cases</strong></td>
+                                            <td>Financial systems, ERP, transactional systems</td>
+                                            <td>Social networks, IoT, real-time analytics, content management</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Examples</strong></td>
+                                            <td>PostgreSQL, MySQL, Oracle, SQL Server</td>
+                                            <td>MongoDB, Cassandra, Redis, Neo4j, DynamoDB</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
+
+                        <div class="content-block">
+                            <h3 class="subsection-header">Oracle Best Practices</h3>
+                            <p>Critical patterns for Oracle database development following industry standards.</p>
+                            
+                            <div class="code-example">
+                                <h4>Connection Pooling</h4>
+                                <p>Always use connection pools to reuse connections efficiently. Dramatically improves performance by avoiding expensive connection creation.</p>
+                                <pre><code class="language-python">import oracledb
+
+# ✅ GOOD: Create connection pool (recommended)
+pool = oracledb.create_pool(
+    user="app_user",
+    password="secure_password",
+    dsn="mydb.example.com:1521/ORCLPDB1",
+    min=2,
+    max=10,
+    increment=1,
+    threaded=True
+)
+
+# Acquire connection from pool
+with pool.acquire() as connection:
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM employees WHERE dept_id = :dept", dept=10)
+        results = cursor.fetchall()
+
+# ❌ BAD: Creating new connection for each operation (inefficient)
+connection = oracledb.connect(
+    user="app_user",
+    password="secure_password",
+    dsn="mydb.example.com:1521/ORCLPDB1"
+)
+cursor = connection.cursor()
+cursor.execute("SELECT * FROM employees")
+connection.close()  # Expensive to create/destroy connections</code></pre>
+                            </div>
+
+                            <div class="code-example">
+                                <h4>Bind Variables (SQL Injection Prevention)</h4>
+                                <p>Always use bind variables to prevent SQL injection and enable statement caching.</p>
+                                <pre><code class="language-python"># ✅ GOOD: Named bind variables (recommended)
+cursor.execute("""
+    SELECT employee_id, first_name, last_name
+    FROM employees
+    WHERE department_id = :dept_id
+    AND salary > :min_salary
+""", dept_id=10, min_salary=50000)
+
+# ✅ GOOD: Positional bind variables
+cursor.execute("""
+    SELECT * FROM employees
+    WHERE department_id = :1 AND salary > :2
+""", [10, 50000])
+
+# ❌ BAD: String concatenation (DANGEROUS - SQL injection risk!)
+dept_id = request.get("dept_id")
+cursor.execute(f"SELECT * FROM employees WHERE department_id = {dept_id}")
+
+# ❌ BAD: String formatting (also dangerous)
+cursor.execute("SELECT * FROM employees WHERE dept_id = %s" % dept_id)</code></pre>
+                            </div>
+
+                            <div class="code-example">
+                                <h4>Efficient Data Fetching</h4>
+                                <p>Use arraysize and appropriate fetch methods for optimal data retrieval.</p>
+                                <pre><code class="language-python"># ✅ GOOD: Set arraysize for bulk fetching
+cursor.arraysize = 1000  # Fetch 1000 rows at a time
+cursor.execute("SELECT * FROM large_table WHERE status = :status", status='ACTIVE')
+
+# Fetch in batches
+while True:
+    rows = cursor.fetchmany()
+    if not rows:
+        break
+    process_batch(rows)
+
+# ❌ BAD: Fetching one row at a time (inefficient)
+cursor.execute("SELECT * FROM large_table")
+while True:
+    row = cursor.fetchone()
+    if not row:
+        break
+    process(row)  # Multiple round trips - very slow!</code></pre>
+                            </div>
+
+                            <div class="code-example">
+                                <h4>Transaction Management</h4>
+                                <p>Use explicit transactions for atomicity of related operations.</p>
+                                <pre><code class="language-python">connection.autocommit = False  # Explicit transaction control
+
+try:
+    # Transfer money between accounts (atomic operation)
+    cursor.execute(
+        "UPDATE accounts SET balance = balance - :amt WHERE id = :id",
+        amt=100, id=1
+    )
+    cursor.execute(
+        "UPDATE accounts SET balance = balance + :amt WHERE id = :id",
+        amt=100, id=2
+    )
+    connection.commit()  # Commit both operations
+except Exception as e:
+    connection.rollback()  # Rollback on error
+    raise</code></pre>
+                            </div>
+
+                            <div class="code-example">
+                                <h4>Bulk Operations</h4>
+                                <p>Use executemany() for batch inserts/updates - much faster than loops.</p>
+                                <pre><code class="language-python"># ✅ GOOD: Bulk insert (much faster)
+data = [
+    (1, 'John', 'Doe', 50000),
+    (2, 'Jane', 'Smith', 60000),
+    (3, 'Bob', 'Johnson', 55000)
+]
+
+cursor.executemany("""
+    INSERT INTO employees (id, first_name, last_name, salary)
+    VALUES (:1, :2, :3, :4)
+""", data)
+
+connection.commit()
+
+# ❌ BAD: Individual inserts (slow)
+for emp in employees:
+    cursor.execute("""
+        INSERT INTO employees (id, first_name, last_name, salary)
+        VALUES (:1, :2, :3, :4)
+    """, (emp['id'], emp['first_name'], emp['last_name'], emp['salary']))
+
+connection.commit()  # Multiple round trips - very slow!</code></pre>
+                            </div>
+                        </div>
+
+                        <div class="content-block">
+                            <h3 class="subsection-header">Query Optimization</h3>
+                            
+                            <div class="code-example">
+                                <h4>Indexes for Performance</h4>
+                                <pre><code class="language-sql">-- Single-column index for frequently searched columns
+CREATE INDEX idx_emp_dept ON employees(department_id);
+
+-- Composite index for multi-column searches
+CREATE INDEX idx_emp_dept_sal ON employees(department_id, salary);
+
+-- Function-based index for computed searches
+CREATE INDEX idx_emp_upper_name ON employees(UPPER(last_name));
+
+-- Unique index for primary/unique keys
+CREATE UNIQUE INDEX idx_emp_email ON employees(email);
+
+-- Check index usage
+SELECT * FROM v$object_usage WHERE index_name = 'IDX_EMP_DEPT';</code></pre>
+                            </div>
+
+                            <div class="code-example">
+                                <h4>Execution Plan Analysis</h4>
+                                <pre><code class="language-sql">-- Generate execution plan
+EXPLAIN PLAN FOR
+SELECT e.employee_id, e.first_name, d.department_name
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id
+WHERE e.salary > :min_salary;
+
+-- View execution plan
+SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY);
+
+-- Look for:
+-- - TABLE ACCESS FULL (full table scans - add indexes)
+-- - High COST values
+-- - Missing indexes on join/filter columns</code></pre>
+                            </div>
+
+                            <div class="code-example">
+                                <h4>Query Best Practices</h4>
+                                <pre><code class="language-sql">-- ✅ GOOD: Select only required columns
+SELECT employee_id, first_name, last_name, salary
+FROM employees
+WHERE department_id = :dept_id;
+
+-- ❌ BAD: SELECT * (wasteful)
+SELECT *
+FROM employees
+WHERE department_id = :dept_id;
+
+-- ✅ GOOD: Use appropriate JOIN types
+SELECT e.employee_id, e.first_name, d.department_name
+FROM employees e
+INNER JOIN departments d ON e.department_id = d.department_id
+WHERE e.salary > :min_salary;
+
+-- ❌ BAD: Cartesian product (missing JOIN condition)
+SELECT e.first_name, d.department_name
+FROM employees e, departments d
+WHERE e.salary > 50000;</code></pre>
+                            </div>
+                        </div>
+
+                        <div class="content-block">
+                            <h3 class="subsection-header">NoSQL Patterns</h3>
+                            
+                            <div class="code-example">
+                                <h4>MongoDB Document Design</h4>
+                                <pre><code class="language-javascript">// Embedded documents (denormalized - fast reads)
+{
+  "_id": ObjectId("507f1f77bcf86cd799439011"),
+  "name": "John Doe",
+  "email": "john@example.com",
+  "address": {
+    "street": "123 Main St",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10001"
+  },
+  "orders": [
+    {
+      "order_id": "ORD-001",
+      "date": ISODate("2025-01-15"),
+      "total": 99.99,
+      "items": [
+        { "product": "Widget", "quantity": 2, "price": 49.99 }
+      ]
+    }
+  ]
+}
+
+// Reference pattern (normalized - flexible)
+// Users collection
+{
+  "_id": ObjectId("507f1f77bcf86cd799439011"),
+  "name": "John Doe",
+  "email": "john@example.com"
+}
+
+// Orders collection (references user)
+{
+  "_id": ObjectId("507f191e810c19729de860ea"),
+  "user_id": ObjectId("507f1f77bcf86cd799439011"),
+  "date": ISODate("2025-01-15"),
+  "total": 99.99
+}</code></pre>
+                            </div>
+
+                            <div class="code-example">
+                                <h4>MongoDB Query Optimization</h4>
+                                <pre><code class="language-javascript">// Create indexes
+db.users.createIndex({ "email": 1 }, { unique: true })
+db.orders.createIndex({ "user_id": 1, "date": -1 })
+db.products.createIndex({ "category": 1, "price": 1 })
+
+// Query with indexes
+db.orders.find({
+  user_id: ObjectId("507f1f77bcf86cd799439011"),
+  date: { $gte: ISODate("2025-01-01") }
+}).sort({ date: -1 }).limit(10)
+
+// Aggregation pipeline (efficient for complex queries)
+db.orders.aggregate([
+  { $match: { status: "completed" } },
+  { $group: {
+      _id: "$user_id",
+      total_spent: { $sum: "$total" },
+      order_count: { $sum: 1 }
+  }},
+  { $sort: { total_spent: -1 } },
+  { $limit: 10 }
+])</code></pre>
+                            </div>
+                        </div>
+
+                        <div class="content-block">
+                            <h3 class="subsection-header">Database Migrations</h3>
+                            
+                            <div class="code-example">
+                                <h4>Flyway Migration (SQL)</h4>
+                                <pre><code class="language-sql">-- V1__create_users_table.sql
+CREATE TABLE users (
+    id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    email VARCHAR2(255) NOT NULL UNIQUE,
+    first_name VARCHAR2(100) NOT NULL,
+    last_name VARCHAR2(100) NOT NULL,
+    created_at TIMESTAMP DEFAULT SYSTIMESTAMP
+);
+
+CREATE INDEX idx_users_email ON users(email);
+
+-- V2__add_status_column.sql
+ALTER TABLE users ADD status VARCHAR2(20) DEFAULT 'active' NOT NULL;
+ALTER TABLE users ADD CONSTRAINT chk_users_status CHECK (status IN ('active', 'inactive', 'suspended'));
+
+-- V3__create_orders_table.sql
+CREATE TABLE orders (
+    id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    user_id NUMBER NOT NULL,
+    total NUMBER(10, 2) NOT NULL,
+    status VARCHAR2(20) DEFAULT 'pending' NOT NULL,
+    created_at TIMESTAMP DEFAULT SYSTIMESTAMP,
+    CONSTRAINT fk_orders_user FOREIGN KEY (user_id) REFERENCES users(id)
+);</code></pre>
+                            </div>
+
+                            <div class="code-example">
+                                <h4>Zero-Downtime Migrations</h4>
+                                <pre><code class="language-sql">-- Step 1: Add new column (nullable initially)
+ALTER TABLE users ADD phone_number VARCHAR2(20);
+
+-- Step 2: Deploy code that writes to both old and new columns
+-- (Application code deployment)
+
+-- Step 3: Backfill existing data
+UPDATE users SET phone_number = legacy_phone WHERE phone_number IS NULL;
+COMMIT;
+
+-- Step 4: Make column NOT NULL (after backfill complete)
+ALTER TABLE users MODIFY phone_number NOT NULL;
+
+-- Step 5: Deploy code that only uses new column
+-- (Application code deployment)
+
+-- Step 6: Drop old column
+ALTER TABLE users DROP COLUMN legacy_phone;</code></pre>
+                            </div>
+                        </div>
+
+                        <div class="content-block">
+                            <h3 class="subsection-header">Security Best Practices</h3>
+                            <ul class="feature-list">
+                                <li><strong>Least Privilege:</strong> Grant only necessary permissions to application users</li>
+                                <li><strong>Bind Variables:</strong> Always use bind variables to prevent SQL injection</li>
+                                <li><strong>Secure Credentials:</strong> Never hardcode credentials; use environment variables or secrets managers</li>
+                                <li><strong>Encrypted Connections:</strong> Enable TLS/SSL for network traffic</li>
+                                <li><strong>Audit Critical Operations:</strong> Enable auditing for sensitive data access</li>
+                                <li><strong>Row-Level Security:</strong> Implement row-level security policies for multi-tenant systems</li>
+                            </ul>
+                        </div>
+                    </section>
                 </div>
 
-                <div class="tab-content" id="files-tab" role="tabpanel" aria-labelledby="files-btn" hidden>
-                    <div class="glass-card">
-                        <h2>Knowledge Files</h2>
-                        <p>Explore database design patterns:</p>
-                    </div>
+                <!-- Knowledge Files Tab -->
+                <div class="tab-content" id="knowledge">
+                    <section class="doc-section">
+                        <h2 class="section-header">📚 Knowledge Files</h2>
+                        <p class="section-intro">Detailed knowledge files covering database design and management patterns.</p>
 
-                    <div class="knowledge-files-accordion">
-                        <div class="accordion-item">
-                            <button class="accordion-header" aria-expanded="false" aria-controls="sql-best-practices-content">
-                                <span class="accordion-icon">📊</span>
-                                <div class="accordion-title-group">
-                                    <h3 class="accordion-title">SQL Best Practices</h3>
-                                    <p class="accordion-subtitle">PostgreSQL, MySQL, indexes</p>
+                        <div class="accordion">
+                            <div class="accordion-item">
+                                <button class="accordion-header">
+                                    <span class="accordion-title">oracle-best-practices.yaml</span>
+                                    <span class="accordion-icon">▼</span>
+                                </button>
+                                <div class="accordion-content">
+                                    <p><strong>Category:</strong> Database Management</p>
+                                    <p><strong>Focus:</strong> Authoritative Oracle database guidelines for CORTEX-powered database operations</p>
+                                    
+                                    <h4>Key Topics:</h4>
+                                    <ul>
+                                        <li><strong>Connection Management:</strong> Connection pooling (min/max/increment), proper resource closing, timeout configuration</li>
+                                        <li><strong>SQL Query Optimization:</strong> Bind variables (SQL injection prevention), efficient fetching (arraysize), column selection, indexes, JOIN optimization</li>
+                                        <li><strong>Transaction Management:</strong> Explicit transactions (commit/rollback), short transaction duration, savepoints for complex operations</li>
+                                        <li><strong>Security Best Practices:</strong> Least privilege principle, secure credential storage (environment variables, Oracle Wallet), encrypted connections (TLS/SSL), auditing</li>
+                                        <li><strong>Performance Tuning:</strong> Execution plan analysis (EXPLAIN PLAN), bulk operations (executemany), table partitioning, statistics gathering, result caching</li>
+                                        <li><strong>Error Handling:</strong> Specific exception handling (IntegrityError, DatabaseError), detailed logging, retry logic for transient errors</li>
+                                        <li><strong>Data Types:</strong> Appropriate type selection (NUMBER, VARCHAR2, DATE, TIMESTAMP, CLOB, BLOB), character encoding (UTF-8), LOBs for large data</li>
+                                        <li><strong>Monitoring:</strong> Connection pool health, query performance tracking (v$sql), database health metrics</li>
+                                    </ul>
+                                    
+                                    <h4>Critical Practices:</h4>
+                                    <ul>
+                                        <li>Always use bind variables (prevents SQL injection, enables caching)</li>
+                                        <li>Use connection pooling (dramatically improves performance)</li>
+                                        <li>Close resources properly with context managers</li>
+                                        <li>Never hardcode credentials (security fundamental)</li>
+                                        <li>Use explicit transactions for data consistency</li>
+                                        <li>Grant least privileges (limits security exposure)</li>
+                                    </ul>
+                                    
+                                    <h4>Common Pitfalls:</h4>
+                                    <ul>
+                                        <li>String concatenation in SQL (SQL injection risk)</li>
+                                        <li>Not closing connections (resource leaks)</li>
+                                        <li>Fetching rows one at a time (performance issue)</li>
+                                        <li>Using SELECT * (inefficient data transfer)</li>
+                                        <li>Long-running transactions (lock contention)</li>
+                                        <li>Over-privileged database users (security risk)</li>
+                                    </ul>
+                                    
+                                    <div class="file-meta">
+                                        <span class="meta-item"><strong>Version:</strong> 1.0</span>
+                                        <span class="meta-item"><strong>Lines:</strong> 1,005</span>
+                                        <span class="meta-item"><strong>Applicable:</strong> Oracle 23c, 21c, 19c, 18c, 12c</span>
+                                    </div>
                                 </div>
-                                <span class="badge">28 rules</span>
-                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                            </button>
-                            <div id="sql-best-practices-content" class="accordion-content" hidden>
-                <p>PostgreSQL, MySQL, indexes patterns and best practices.</p>
-                <p><em>📝 Knowledge file coming soon</em></p>
                             </div>
                         </div>
-                        <div class="accordion-item">
-                            <button class="accordion-header" aria-expanded="false" aria-controls="nosql-patterns-content">
-                                <span class="accordion-icon">🍃</span>
-                                <div class="accordion-title-group">
-                                    <h3 class="accordion-title">NoSQL Patterns</h3>
-                                    <p class="accordion-subtitle">MongoDB, Cassandra, Redis</p>
-                                </div>
-                                <span class="badge">24 rules</span>
-                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                            </button>
-                            <div id="nosql-patterns-content" class="accordion-content" hidden>
-                <p>MongoDB, Cassandra, Redis patterns and best practices.</p>
-                <p><em>📝 Knowledge file coming soon</em></p>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <button class="accordion-header" aria-expanded="false" aria-controls="schema-design-content">
-                                <span class="accordion-icon">📐</span>
-                                <div class="accordion-title-group">
-                                    <h3 class="accordion-title">Schema Design</h3>
-                                    <p class="accordion-subtitle">Normalization, denormalization</p>
-                                </div>
-                                <span class="badge">20 rules</span>
-                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                            </button>
-                            <div id="schema-design-content" class="accordion-content" hidden>
-                <p>Normalization, denormalization patterns and best practices.</p>
-                <p><em>📝 Knowledge file coming soon</em></p>
-                            </div>
-                        </div>
-                    </div>
+                    </section>
                 </div>
 
-                <div class="tab-content" id="resources-tab" role="tabpanel" aria-labelledby="resources-btn" hidden>
-                    <div class="glass-card">
-                        <h2>Learning Resources</h2>
-                        <p><em>Curated resources coming soon</em></p>
-                    </div>
+                <!-- Learning Resources Tab -->
+                <div class="tab-content" id="resources">
+                    <section class="doc-section">
+                        <h2 class="section-header">🎓 Learning Resources</h2>
+                        
+                        <div class="resources-grid">
+                            <div class="resource-card">
+                                <h3>📖 SQL & Relational Databases</h3>
+                                <ul>
+                                    <li><strong>SQL Performance Explained</strong> by Markus Winand - Query optimization deep dive</li>
+                                    <li><strong>Database Internals</strong> by Alex Petrov - How databases work under the hood</li>
+                                    <li><a href="https://use-the-index-luke.com/" target="_blank">Use The Index, Luke</a> - SQL indexing and tuning</li>
+                                    <li><a href="https://www.postgresql.org/docs/" target="_blank">PostgreSQL Documentation</a> - Excellent reference for SQL concepts</li>
+                                </ul>
+                            </div>
+
+                            <div class="resource-card">
+                                <h3>🗄️ Oracle Databases</h3>
+                                <ul>
+                                    <li><a href="https://python-oracledb.readthedocs.io/" target="_blank">python-oracledb Documentation</a> - Official Python driver docs</li>
+                                    <li><a href="https://docs.oracle.com/en/database/" target="_blank">Oracle Database Documentation</a> - Complete Oracle reference</li>
+                                    <li><strong>Oracle Database Performance Tuning Guide</strong> - Official tuning documentation</li>
+                                    <li><strong>Oracle Database Security Guide</strong> - Security best practices</li>
+                                </ul>
+                            </div>
+
+                            <div class="resource-card">
+                                <h3>📄 NoSQL Databases</h3>
+                                <ul>
+                                    <li><strong>Designing Data-Intensive Applications</strong> by Martin Kleppmann - Modern database systems</li>
+                                    <li><a href="https://www.mongodb.com/docs/" target="_blank">MongoDB Documentation</a> - Document database guide</li>
+                                    <li><a href="https://redis.io/documentation" target="_blank">Redis Documentation</a> - In-memory data store</li>
+                                    <li><a href="https://cassandra.apache.org/doc/" target="_blank">Apache Cassandra</a> - Wide-column store</li>
+                                    <li><a href="https://neo4j.com/docs/" target="_blank">Neo4j Documentation</a> - Graph database</li>
+                                </ul>
+                            </div>
+
+                            <div class="resource-card">
+                                <h3>🔄 Database Migrations</h3>
+                                <ul>
+                                    <li><a href="https://flywaydb.org/documentation/" target="_blank">Flyway</a> - Database migration tool</li>
+                                    <li><a href="https://alembic.sqlalchemy.org/" target="_blank">Alembic</a> - Python database migrations</li>
+                                    <li><a href="https://github.com/pressly/goose" target="_blank">Goose</a> - Go database migration tool</li>
+                                    <li><strong>Refactoring Databases</strong> by Scott Ambler - Migration patterns</li>
+                                </ul>
+                            </div>
+
+                            <div class="resource-card">
+                                <h3>🔒 Security</h3>
+                                <ul>
+                                    <li><a href="https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html" target="_blank">OWASP SQL Injection Prevention</a></li>
+                                    <li><a href="https://cheatsheetseries.owasp.org/cheatsheets/Database_Security_Cheat_Sheet.html" target="_blank">OWASP Database Security</a></li>
+                                    <li><strong>Azure Key Vault</strong> - Secrets management</li>
+                                    <li><strong>HashiCorp Vault</strong> - Secrets management</li>
+                                </ul>
+                            </div>
+
+                            <div class="resource-card">
+                                <h3>🛠️ Tools</h3>
+                                <ul>
+                                    <li><strong>DBeaver:</strong> Universal database tool</li>
+                                    <li><strong>DataGrip:</strong> JetBrains database IDE</li>
+                                    <li><strong>pgAdmin:</strong> PostgreSQL administration</li>
+                                    <li><strong>SQL Developer:</strong> Oracle database tool</li>
+                                    <li><strong>MongoDB Compass:</strong> MongoDB GUI</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
                 </div>
 
-                <div class="tab-content" id="usage-tab" role="tabpanel" aria-labelledby="usage-btn" hidden>
-                    <div class="glass-card">
-                        <h2>How CORTEX Uses Database Design Knowledge</h2>
-                        <p><em>Usage patterns coming soon</em></p>
-                    </div>
+                <!-- CORTEX Usage Tab -->
+                <div class="tab-content" id="cortex">
+                    <section class="doc-section">
+                        <h2 class="section-header">🧠 CORTEX Usage</h2>
+                        <p class="section-intro">How CORTEX could leverage database best practices for its knowledge storage and operations.</p>
+
+                        <div class="content-block">
+                            <h3 class="subsection-header">CORTEX Database Architecture</h3>
+                            <p>CORTEX could use a hybrid approach combining SQL and NoSQL:</p>
+                            <ul>
+                                <li><strong>PostgreSQL:</strong> Structured data (orchestration state, user sessions, configuration)</li>
+                                <li><strong>MongoDB:</strong> Knowledge files, conversation history, flexible schemas</li>
+                                <li><strong>Redis:</strong> Caching, session state, rate limiting</li>
+                                <li><strong>Elasticsearch:</strong> Full-text search across knowledge base</li>
+                            </ul>
+                        </div>
+
+                        <div class="content-block">
+                            <h3 class="subsection-header">Oracle Best Practices Applied to CORTEX</h3>
+                            <ul>
+                                <li><strong>Connection Pooling:</strong> Pool size 10-50 for orchestrator database connections</li>
+                                <li><strong>Bind Variables:</strong> All queries use bind variables to prevent SQL injection</li>
+                                <li><strong>Transactions:</strong> Atomic operations for orchestration state updates</li>
+                                <li><strong>Bulk Operations:</strong> executemany() for batch knowledge file indexing</li>
+                                <li><strong>Indexes:</strong> Indexes on knowledge_file_id, category, tags for fast queries</li>
+                                <li><strong>Security:</strong> Separate users for read-only (queries) vs read-write (orchestrators)</li>
+                            </ul>
+                        </div>
+
+                        <div class="content-block">
+                            <h3 class="subsection-header">Knowledge Base Schema Design</h3>
+                            
+                            <div class="code-example">
+                                <pre><code class="language-sql">-- Knowledge files table
+CREATE TABLE knowledge_files (
+    id VARCHAR2(100) PRIMARY KEY,
+    category VARCHAR2(50) NOT NULL,
+    file_path VARCHAR2(500) NOT NULL,
+    content CLOB NOT NULL,
+    metadata JSON,
+    created_at TIMESTAMP DEFAULT SYSTIMESTAMP,
+    updated_at TIMESTAMP DEFAULT SYSTIMESTAMP
+);
+
+CREATE INDEX idx_kf_category ON knowledge_files(category);
+CREATE INDEX idx_kf_updated ON knowledge_files(updated_at);
+
+-- Knowledge tags (many-to-many)
+CREATE TABLE knowledge_tags (
+    file_id VARCHAR2(100),
+    tag VARCHAR2(50),
+    PRIMARY KEY (file_id, tag),
+    FOREIGN KEY (file_id) REFERENCES knowledge_files(id) ON DELETE CASCADE
+);
+
+CREATE INDEX idx_kt_tag ON knowledge_tags(tag);
+
+-- Orchestration history
+CREATE TABLE orchestration_runs (
+    run_id VARCHAR2(50) PRIMARY KEY,
+    orchestrator VARCHAR2(100) NOT NULL,
+    status VARCHAR2(20) NOT NULL,
+    started_at TIMESTAMP NOT NULL,
+    completed_at TIMESTAMP,
+    input_data JSON,
+    output_data JSON,
+    error_message CLOB
+);
+
+CREATE INDEX idx_or_status ON orchestration_runs(status, started_at);</code></pre>
+                            </div>
+                        </div>
+
+                        <div class="content-block">
+                            <h3 class="subsection-header">Database Migrations for CORTEX</h3>
+                            <p>Version-controlled schema changes:</p>
+                            <ul>
+                                <li><strong>V1__initial_schema.sql:</strong> Create core tables (knowledge_files, orchestration_runs)</li>
+                                <li><strong>V2__add_tags.sql:</strong> Add tags table for categorization</li>
+                                <li><strong>V3__add_search_indexes.sql:</strong> Create full-text search indexes</li>
+                                <li><strong>V4__add_conversation_history.sql:</strong> Add conversation capture tables</li>
+                            </ul>
+                        </div>
+
+                        <div class="content-block">
+                            <h3 class="subsection-header">Performance Optimizations</h3>
+                            <ul>
+                                <li><strong>Read Replicas:</strong> Separate read replicas for knowledge queries vs write master for updates</li>
+                                <li><strong>Caching Layer:</strong> Redis cache for frequently accessed knowledge files (TTL: 5 minutes)</li>
+                                <li><strong>Partitioning:</strong> Partition orchestration_runs by month for historical data</li>
+                                <li><strong>Archival:</strong> Move old orchestration runs to archive table after 90 days</li>
+                            </ul>
+                        </div>
+
+                        <div class="content-block">
+                            <h3 class="subsection-header">Related CORTEX Knowledge</h3>
+                            <ul>
+                                <li><code>performance/caching-strategies.yaml</code> - Redis caching patterns</li>
+                                <li><code>security/owasp-top-10.yaml</code> - SQL injection prevention (A03:2021)</li>
+                                <li><code>microservices/resilience-patterns.yaml</code> - Database retry patterns</li>
+                                <li><code>devops/monitoring-observability.yaml</code> - Database monitoring</li>
+                            </ul>
+                        </div>
+                    </section>
                 </div>
             </div>
         </div>
-    </section>
+    </main>
 
-    <nav class="bottom-nav" aria-label="Category navigation">
-        <a href="database.html" class="bottom-nav-link active">
-            <span class="bottom-nav-icon">🗄️</span>
-            <span class="bottom-nav-label">Database</span>
-        </a>
-        <a href="performance.html" class="bottom-nav-link">
-            <span class="bottom-nav-icon">⚡</span>
-            <span class="bottom-nav-label">Performance</span>
-        </a>
-    </nav>
+    <footer class="doc-footer">
+        <div class="footer-content">
+            <p>&copy; 2025 CORTEX Knowledge Library. Licensed under MIT License.</p>
+            <p>Author: Asif Hussain | Version: 4.0.0</p>
+        </div>
+    </footer>
 
-    <script src="../assets/js/category-page.js"></script>
     <script>
+        // Tab switching
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const tabName = button.dataset.tab;
+                
+                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                
+                button.classList.add('active');
+                document.getElementById(tabName).classList.add('active');
+            });
+        });
+
+        // Accordion functionality
+        document.querySelectorAll('.accordion-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const item = header.parentElement;
+                const wasActive = item.classList.contains('active');
+                
+                document.querySelectorAll('.accordion-item').forEach(i => i.classList.remove('active'));
+                
+                if (!wasActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // Initialize Mermaid
         mermaid.initialize({ 
             startOnLoad: true,
-            theme: 'dark',
+            theme: 'base',
             themeVariables: {
-                primaryColor: '#00d4ff',
+                primaryColor: '#667eea',
                 primaryTextColor: '#fff',
-                primaryBorderColor: '#7b61ff',
-                lineColor: '#00d4ff',
-                secondaryColor: '#7b61ff',
-                tertiaryColor: '#1a1f3a'
+                primaryBorderColor: '#5a67d8',
+                lineColor: '#cbd5e0',
+                secondaryColor: '#48bb78',
+                tertiaryColor: '#ed8936'
             }
         });
     </script>
