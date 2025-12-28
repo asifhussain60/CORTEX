@@ -528,6 +528,7 @@ domains:
 - Override any conflicting rules from **docgen.old v4.2** (SECONDARY authority)
 - Run automated HTML quality tools to detect violations
 - Fix all styling inconsistencies before proceeding to Phase 5 (knowledge file pages)
+- **CRITICAL CSS COMPLIANCE:** Ensure 100% single CSS file usage (`main.css` ONLY)
 
 **Scope:**
 - 6 completed category pages: api-design.html, microservices.html, database.html, testing.html, engineering.html, ddd.html
@@ -578,10 +579,205 @@ python3 cortex-toolkit/documentation/html-tools/html_style_centralizer.py
 **Allowed Exceptions (DO NOT flag as violations):**
 1. `docs/story/viewer.html` - Legacy story viewer (3 inline styles preserved per docgen.old)
 2. D3.js dynamic styling - `style="background: ${d.color}"` (runtime-generated, cannot be centralized)
+3. **Prism.js CDN:** `https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css` (external syntax highlighting)
 
-**Failure Mode:**
-- If html_validator.py reports errors: STOP, fix syntax errors before proceeding
-- If html_style_centralizer.py removes >0 styles: Review changes, commit, re-validate
+---
+
+#### **CSS Compliance Check (CRITICAL - Added to Phase 4.5)**
+
+**Problem Statement:**
+Knowledge library files MUST use a **single, centralized CSS file** (`main.css`) to ensure:
+- Design consistency across all 17 category pages
+- Single source of truth for glassmorphism theme (dark blue background `#0a0e27` → `#1a1f3a`)
+- Changes propagate automatically to all pages
+- No broken CSS references to non-existent files
+
+**Automated CSS Validation Script:**
+```bash
+#!/bin/bash
+# cortex-toolkit/documentation/html-tools/validate_css_compliance.sh
+
+echo "🎨 CSS Compliance Validator for Knowledge Library"
+echo "=================================================="
+
+KNOWLEDGE_DIR="docs/knowledge"
+CSS_VIOLATIONS=0
+INLINE_STYLE_VIOLATIONS=0
+BROKEN_CSS_REFS=0
+
+# Check 1: Verify single CSS file usage (main.css only)
+echo ""
+echo "✅ Check 1: Single CSS File Usage"
+echo "Expected: <link rel=\"stylesheet\" href=\"../assets/css/main.css\">"
+
+for file in $KNOWLEDGE_DIR/*.html; do
+    filename=$(basename "$file")
+    
+    # Count CSS link tags (exclude Prism.js CDN)
+    css_count=$(grep -c '<link rel="stylesheet" href="../assets/css/' "$file" 2>/dev/null || echo 0)
+    
+    # Check for non-existent CSS files
+    if grep -q 'documentation-styling-standards.css' "$file"; then
+        echo "❌ $filename: References NON-EXISTENT 'documentation-styling-standards.css'"
+        ((BROKEN_CSS_REFS++))
+    fi
+    
+    # Check for duplicate main.css links
+    main_css_count=$(grep -c 'href="../assets/css/main.css"' "$file" 2>/dev/null || echo 0)
+    if [ "$main_css_count" -gt 1 ]; then
+        echo "⚠️  $filename: Duplicate main.css links ($main_css_count times)"
+        ((CSS_VIOLATIONS++))
+    elif [ "$main_css_count" -eq 0 ]; then
+        echo "❌ $filename: Missing main.css link"
+        ((CSS_VIOLATIONS++))
+    fi
+    
+    # Check for other local CSS files (forbidden)
+    if grep -Eq 'href="\.\./assets/css/(?!main\.css)' "$file"; then
+        echo "❌ $filename: References alternate CSS file (FORBIDDEN)"
+        ((CSS_VIOLATIONS++))
+    fi
+done
+
+# Check 2: Inline style detection
+echo ""
+echo "✅ Check 2: Inline Style Detection"
+echo "Expected: ZERO inline styles (except story button exception)"
+
+for file in $KNOWLEDGE_DIR/*.html; do
+    filename=$(basename "$file")
+    
+    # Skip index.html if it has legitimate grid layouts
+    if [ "$filename" != "index.html" ]; then
+        inline_count=$(grep -c 'style="' "$file" 2>/dev/null || echo 0)
+        if [ "$inline_count" -gt 0 ]; then
+            echo "❌ $filename: $inline_count inline style(s) detected"
+            grep -n 'style="' "$file" | head -3
+            ((INLINE_STYLE_VIOLATIONS++))
+        fi
+    fi
+done
+
+# Check 3: Verify main.css exists and is valid
+echo ""
+echo "✅ Check 3: Verify main.css File"
+if [ -f "docs/assets/css/main.css" ]; then
+    size=$(du -h docs/assets/css/main.css | awk '{print $1}')
+    echo "✅ main.css exists ($size)"
+    
+    # Check for key glassmorphism variables
+    if grep -q 'bg-primary.*#0a0e27' docs/assets/css/main.css && \
+       grep -q 'bg-secondary.*#1a1f3a' docs/assets/css/main.css; then
+        echo "✅ Dark blue theme variables present"
+    else
+        echo "⚠️  Theme variables may be missing or incorrect"
+    fi
+else
+    echo "❌ main.css NOT FOUND at docs/assets/css/main.css"
+    ((CSS_VIOLATIONS++))
+fi
+
+# Summary
+echo ""
+echo "=================================================="
+echo "📊 CSS Compliance Summary"
+echo "=================================================="
+echo "Broken CSS references: $BROKEN_CSS_REFS"
+echo "CSS link violations: $CSS_VIOLATIONS"
+echo "Inline style violations: $INLINE_STYLE_VIOLATIONS"
+
+TOTAL_VIOLATIONS=$((BROKEN_CSS_REFS + CSS_VIOLATIONS + INLINE_STYLE_VIOLATIONS))
+
+if [ $TOTAL_VIOLATIONS -eq 0 ]; then
+    echo ""
+    echo "✅ ALL CHECKS PASSED - 100% CSS Compliance"
+    exit 0
+else
+    echo ""
+    echo "❌ FAILED - $TOTAL_VIOLATIONS violations found"
+    echo ""
+    echo "🔧 Required Actions:"
+    [ $BROKEN_CSS_REFS -gt 0 ] && echo "  1. Replace 'documentation-styling-standards.css' with 'main.css'"
+    [ $CSS_VIOLATIONS -gt 0 ] && echo "  2. Fix CSS link issues (missing, duplicate, or alternate files)"
+    [ $INLINE_STYLE_VIOLATIONS -gt 0 ] && echo "  3. Remove all inline styles, define classes in main.css"
+    exit 1
+fi
+```
+
+**Manual CSS Review Checklist:**
+```markdown
+# CSS Compliance Checklist (Per File)
+
+## File: [filename].html
+
+### Single CSS File ✅ / ❌
+- [ ] Uses `<link rel="stylesheet" href="../assets/css/main.css">`
+- [ ] Does NOT reference `documentation-styling-standards.css` (non-existent)
+- [ ] No duplicate `main.css` links
+- [ ] No alternate CSS files (e.g., `custom.css`, `knowledge.css`)
+
+### Inline Styles ✅ / ❌
+- [ ] ZERO inline `style=""` attributes in HTML
+- [ ] ZERO `<style>` tags in `<head>` or `<body>`
+- [ ] Exception: Prism.js CDN allowed for syntax highlighting
+
+### Theme Consistency ✅ / ❌
+- [ ] Dark blue gradient background renders correctly (view in browser)
+- [ ] Glassmorphism effects (blur, transparency) work properly
+- [ ] All text readable with correct contrast ratios
+- [ ] Buttons, cards, accordions styled consistently with other pages
+
+### Browser Test ✅ / ❌
+- [ ] Chrome: Renders correctly with glassmorphism effects
+- [ ] Safari: No CSS rendering issues
+- [ ] Firefox: Backdrop-filter blur works (may need -moz prefix)
+```
+
+**Execution Workflow (Step 2a in Phase 4.5):**
+```bash
+# Step 2a: Run CSS compliance validator
+chmod +x cortex-toolkit/documentation/html-tools/validate_css_compliance.sh
+./cortex-toolkit/documentation/html-tools/validate_css_compliance.sh
+
+# Expected Output (if compliant):
+# ✅ ALL CHECKS PASSED - 100% CSS Compliance
+
+# If violations found:
+# ❌ FAILED - X violations found
+# [List of specific issues with filenames and line numbers]
+```
+
+**Fix Actions (if violations detected):**
+
+1. **Replace Non-Existent CSS References:**
+   ```bash
+   # Fix engineering.html, ddd.html, testing.html, database.html
+   find docs/knowledge -name "*.html" -exec sed -i '' \
+     's|documentation-styling-standards.css|main.css|g' {} \;
+   ```
+
+2. **Remove Duplicate CSS Links:**
+   ```bash
+   # Remove duplicate main.css references
+   # Manual review required - check each file
+   ```
+
+3. **Remove Inline Styles:**
+   ```bash
+   # Run html_style_centralizer.py (existing tool)
+   python3 cortex-toolkit/documentation/html-tools/html_style_centralizer.py
+   ```
+
+4. **Verify Changes:**
+   ```bash
+   # Re-run CSS validator
+   ./cortex-toolkit/documentation/html-tools/validate_css_compliance.sh
+   
+   # Visual browser test
+   open docs/knowledge/engineering.html
+   open docs/knowledge/devops.html
+   # Verify both have identical styling (dark blue theme, glassmorphism)
+   ```
 
 ---
 
@@ -641,8 +837,11 @@ python3 cortex-toolkit/documentation/html-tools/html_style_centralizer.py
 **✅ Inline Style Prohibition (documentation-styling-standards.md Section: Glassmorphism Styling Enforcement)**
 - [ ] ZERO inline `style=""` attributes (except story button image per docgen.old)
 - [ ] ZERO page-specific `<style>` tags
-- [ ] ALL styling via `<link rel="stylesheet" href="../assets/css/main.css">`
+- [ ] **CRITICAL:** ALL pages use SINGLE CSS file: `<link rel="stylesheet" href="../assets/css/main.css">`
+- [ ] **FORBIDDEN:** References to non-existent CSS files (e.g., `documentation-styling-standards.css`)
+- [ ] **FORBIDDEN:** Duplicate CSS link tags on same page
 - [ ] NO alternate CSS files (e.g., `technical/assets/styles/glassmorphism.css` is FORBIDDEN)
+- [ ] **Prism.js exception:** Syntax highlighting CSS allowed: `https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css`
 
 **✅ Version Number Removal (documentation-styling-standards.md Section: Version Number Removal Policy)**
 - [ ] NO version numbers in page titles (e.g., "Planning System 2.0" → "Planning System")
