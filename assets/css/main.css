@@ -2992,12 +2992,25 @@ footer,
 .code-comparison {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 0;
+    gap: var(--spacing-md);
+    align-items: stretch;
+}
+
+.code-comparison > div {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.code-comparison pre {
+    flex: 1;
+    min-height: 0;
 }
 
 @media (max-width: 900px) {
     .code-comparison {
         grid-template-columns: 1fr;
+        gap: var(--spacing-sm);
     }
 }
 
@@ -3145,10 +3158,68 @@ footer,
    STS SHOWCASE - CODE COMPARISON STYLES
    ============================================ */
 
+/* Compact sections for STS flaw pages */
+.sts-showcase .section,
+.sts-showcase .section-alt {
+    padding: 1.5rem 0;
+}
+
+.sts-showcase h2 {
+    font-size: 1.3rem;
+    margin: var(--spacing-sm) 0;
+}
+
+/* Compact metrics for STS showcase */
+.sts-showcase .metric-card {
+    padding: 1rem;
+}
+
+.sts-showcase .metric-value {
+    font-size: 2rem;
+    margin-bottom: 0.25rem;
+}
+
+.sts-showcase .metric-label {
+    font-size: 0.7rem;
+}
+
+.sts-showcase .metrics-grid-4 {
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+/* Compact hero for STS */
+.sts-showcase .hero {
+    padding: 2rem 0 1rem;
+}
+
+.sts-showcase .hero-title {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.sts-showcase .hero-tagline {
+    font-size: 1rem;
+    margin-bottom: 0;
+}
+
+.sts-showcase .page-logo {
+    width: 100px;
+    height: 100px;
+}
+
 /* Flaw Header with Badges */
+.flaw-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-xs);
+}
+
 .flaw-id {
     font-family: 'Fira Code', monospace;
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 700;
     color: var(--accent-primary);
     background: rgba(0, 212, 255, 0.1);
@@ -3193,35 +3264,102 @@ footer,
     border: 1px solid rgba(123, 97, 255, 0.3);
 }
 
-.flaw-description {
-    font-size: 1rem;
-    line-height: 1.7;
+/* Technology Badges */
+.tech-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.2rem 0.6rem;
+    border-radius: var(--radius-full);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.tech-csharp {
+    background: rgba(104, 33, 122, 0.2);
+    color: #9b4dca;
+    border: 1px solid rgba(155, 77, 202, 0.4);
+}
+
+.tech-typescript {
+    background: rgba(49, 120, 198, 0.2);
+    color: #3178c6;
+    border: 1px solid rgba(49, 120, 198, 0.4);
+}
+
+.tech-angular {
+    background: rgba(221, 0, 49, 0.2);
+    color: #dd0031;
+    border: 1px solid rgba(221, 0, 49, 0.4);
+}
+
+.tech-javascript {
+    background: rgba(247, 223, 30, 0.2);
+    color: #f7df1e;
+    border: 1px solid rgba(247, 223, 30, 0.4);
+}
+
+/* Tech Summary Grid */
+.tech-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-md);
+}
+
+.tech-group h4 {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-sm);
+}
+
+.tech-group ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.tech-group li {
+    padding: var(--spacing-xs) 0;
     color: var(--text-secondary);
-    margin: var(--spacing-md) 0 var(--spacing-lg) 0;
+    font-size: 0.9rem;
+}
+
+.tech-group li::before {
+    content: "✓ ";
+    color: var(--accent-secondary);
+}
+
+.flaw-description {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin: var(--spacing-sm) 0 var(--spacing-md) 0;
 }
 
 /* Code Comparison - Before/After */
 .code-before, .code-after {
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-md);
     overflow: hidden;
-    margin-bottom: var(--spacing-md);
+    background: #0d1117;
+    border: 1px solid var(--glass-border);
 }
 
 .code-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: var(--spacing-sm) var(--spacing-md);
+    padding: var(--spacing-xs) var(--spacing-sm);
 }
 
 .code-before .code-header {
     background: rgba(248, 81, 73, 0.15);
-    border-left: 4px solid #f85149;
+    border-left: 3px solid #f85149;
 }
 
 .code-after .code-header {
     background: rgba(63, 185, 80, 0.15);
-    border-left: 4px solid #3fb950;
+    border-left: 3px solid #3fb950;
 }
 
 .code-label {
@@ -3246,10 +3384,10 @@ footer,
 .code-before pre, .code-after pre {
     background: #0d1117;
     margin: 0;
-    padding: var(--spacing-md);
+    padding: var(--spacing-sm);
     overflow-x: auto;
-    font-size: 0.85rem;
-    line-height: 1.6;
+    font-size: 0.8rem;
+    line-height: 1.5;
 }
 
 .code-before code, .code-after code {
@@ -3259,12 +3397,12 @@ footer,
 
 /* Capability Used Badge */
 .capability-used {
-    margin-top: var(--spacing-lg);
-    padding: var(--spacing-md);
+    margin-top: var(--spacing-md);
+    padding: var(--spacing-sm);
     background: rgba(0, 212, 255, 0.08);
-    border-radius: var(--radius-md);
-    border-left: 4px solid var(--accent-primary);
-    font-size: 0.9rem;
+    border-radius: var(--radius-sm);
+    border-left: 3px solid var(--accent-primary);
+    font-size: 0.85rem;
     color: var(--text-secondary);
 }
 
