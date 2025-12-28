@@ -1,7 +1,8 @@
 # 🎯 CORTEX Universal Entry Point
 
 **Version:** 4.0.0 | **Status:** ✅ PRODUCTION  
-**Author:** Asif Hussain | **Copyright © 2025 Asif Hussain. All rights reserved.**
+**Author:** Asif Hussain | **Website:** https://asifhussain60.github.io/CORTEX/  
+**Copyright © 2025 Asif Hussain. All rights reserved.**
 
 ---
 
