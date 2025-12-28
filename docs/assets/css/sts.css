@@ -35,6 +35,128 @@
 }
 
 /* ==========================================================================
+   Comparison Section - Container for each tech example
+   ========================================================================== */
+
+.comparison-section {
+    background: var(--sts-glass-bg);
+    border: 1px solid var(--sts-glass-border);
+    border-radius: 20px;
+    padding: 2rem 2.5rem;
+    margin-bottom: 2.5rem;
+    backdrop-filter: blur(10px);
+}
+
+.comparison-section:hover {
+    border-color: rgba(0, 212, 255, 0.2);
+}
+
+/* ==========================================================================
+   Section Header - Category Title + Tech Badge on Same Line
+   ========================================================================== */
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.section-header h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+}
+
+.section-header h3 i {
+    color: var(--sts-accent);
+    font-size: 1.25rem;
+}
+
+/* ==========================================================================
+   Language Badge - Compact Inline Style
+   ========================================================================== */
+
+.language-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    padding: 0.375rem 0.875rem;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* C# */
+.language-badge.csharp {
+    background: rgba(104, 33, 122, 0.25);
+    color: #c084fc;
+    border: 1px solid rgba(156, 39, 176, 0.4);
+}
+.language-badge.csharp::before {
+    content: "C#";
+    font-weight: 800;
+    margin-right: -0.25rem;
+}
+
+/* TypeScript */
+.language-badge.typescript {
+    background: rgba(49, 120, 198, 0.25);
+    color: #60a5fa;
+    border: 1px solid rgba(49, 120, 198, 0.4);
+}
+.language-badge.typescript::before {
+    content: "TS";
+    font-weight: 800;
+    margin-right: -0.25rem;
+}
+
+/* Angular */
+.language-badge.angular {
+    background: rgba(221, 0, 49, 0.2);
+    color: #f87171;
+    border: 1px solid rgba(221, 0, 49, 0.4);
+}
+.language-badge.angular::before {
+    content: "\f420";
+    font-family: 'Font Awesome 6 Brands';
+    font-size: 1rem;
+}
+
+/* SQL */
+.language-badge.sql {
+    background: rgba(0, 150, 199, 0.25);
+    color: #67e8f9;
+    border: 1px solid rgba(0, 150, 199, 0.4);
+}
+.language-badge.sql::before {
+    content: "\f1c0";
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    font-size: 0.875rem;
+}
+
+/* JavaScript */
+.language-badge.javascript {
+    background: rgba(247, 223, 30, 0.2);
+    color: #fde047;
+    border: 1px solid rgba(247, 223, 30, 0.4);
+}
+.language-badge.javascript::before {
+    content: "JS";
+    font-weight: 800;
+    margin-right: -0.25rem;
+}
+
+/* ==========================================================================
    STS Hero Section
    ========================================================================== */
 
@@ -348,6 +470,33 @@
     color: var(--sts-accent);
 }
 
+.refactor-explanation ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.refactor-explanation li {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.85);
+    padding: 0.375rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+    line-height: 1.5;
+}
+
+.refactor-explanation li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--sts-accent);
+    font-weight: bold;
+}
+
+.refactor-explanation li strong {
+    color: var(--sts-accent);
+}
+
 /* ==========================================================================
    Transform Panels (Before/After)
    ========================================================================== */
@@ -425,6 +574,23 @@
     text-transform: uppercase;
     letter-spacing: 0.1em;
     margin-top: 0.25rem;
+}
+
+/* ==========================================================================
+   Comparison Container - Side-by-Side Panels
+   ========================================================================== */
+
+.comparison-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    align-items: stretch;
+}
+
+@media (max-width: 900px) {
+    .comparison-container {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* Code blocks within panels - scrollable with fixed height */

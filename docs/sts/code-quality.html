@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="CORTEX Code Quality Showcase - DRY, KISS, YAGNI Transformations">
+    <meta name="description" content="CORTEX Code Quality Showcase - DRY, KISS, YAGNI">
     <meta name="author" content="Asif Hussain">
     <title>Code Quality | STS | CORTEX 4.0</title>
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
@@ -13,12 +13,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
 </head>
 <body class="sts-showcase">
-    <!-- Navigation -->
     <header class="site-header">
         <nav class="nav-container">
-            <a href="../index.html" class="nav-brand">
-                <i class="fas fa-brain"></i> CORTEX 4.0
-            </a>
+            <a href="../index.html" class="nav-brand"><i class="fas fa-brain"></i> CORTEX 4.0</a>
             <div class="nav-links">
                 <a href="index.html"><i class="fas fa-bullseye"></i> STS Hub</a>
                 <a href="../documentation.html"><i class="fas fa-book"></i> Docs</a>
@@ -27,570 +24,196 @@
     </header>
 
     <main class="sts-main">
-        <!-- Hero Section -->
         <section class="sts-hero">
-            <div class="hero-badge">
-                <i class="fas fa-gem"></i> CODE QUALITY PRINCIPLES
-            </div>
-            <h1>Code Quality<br><span class="accent-text">Refined</span></h1>
-            <p class="hero-subtitle">Watch CORTEX apply DRY, KISS, and YAGNI principles to simplify your codebase</p>
+            <div class="hero-badge"><i class="fas fa-gem"></i> CODE QUALITY</div>
+            <h1>Clean<br><span class="accent-text">Code Principles</span></h1>
+            <p class="hero-subtitle">DRY, KISS, and YAGNI transformations for maintainable code</p>
             <div class="sts-metrics">
-                <div class="metric-card">
-                    <div class="metric-value">4</div>
-                    <div class="metric-label">Issues Found</div>
-                </div>
-                <div class="metric-card accent">
-                    <div class="metric-value">4</div>
-                    <div class="metric-label">Simplified</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-value">-40%</div>
-                    <div class="metric-label">Code Reduced</div>
-                </div>
+                <div class="metric-card"><div class="metric-value">3</div><div class="metric-label">Anti-Patterns</div></div>
+                <div class="metric-card accent"><div class="metric-value">3</div><div class="metric-label">Refactored</div></div>
+                <div class="metric-card"><div class="metric-value">40%</div><div class="metric-label">Less Code</div></div>
             </div>
         </section>
 
-        <!-- Educational Section -->
-        <section class="sts-education">
-            <div class="education-card">
-                <h3><i class="fas fa-graduation-cap"></i> Code Quality Principles</h3>
-                <p style="color: rgba(255,255,255,0.8); margin-bottom: 1.5rem;">
-                    These timeless principles help you write code that's easier to understand, maintain, and extend.
-                </p>
-                <div class="education-grid">
-                    <div class="education-item">
-                        <h4>DRY - Don't Repeat Yourself</h4>
-                        <p>Every piece of knowledge should have a single, unambiguous representation.</p>
-                    </div>
-                    <div class="education-item">
-                        <h4>KISS - Keep It Simple</h4>
-                        <p>Simplicity is the ultimate sophistication. Avoid unnecessary complexity.</p>
-                    </div>
-                    <div class="education-item">
-                        <h4>YAGNI - You Aren't Gonna Need It</h4>
-                        <p>Don't build features until they're actually needed.</p>
-                    </div>
-                </div>
+        <!-- DRY - Angular -->
+        <section class="comparison-section">
+            <div class="section-header">
+                <h3><i class="fas fa-copy"></i> DRY - Don't Repeat Yourself</h3>
+                <span class="language-badge angular">Angular</span>
             </div>
-        </section>
-
-        <!-- DRY-01: Duplicated Validation (Angular) -->
-        <section class="sts-issue-card">
-            <div class="issue-header">
-                <div class="issue-badge high">DRY-01</div>
-                <div class="issue-title">
-                    <h2>Duplicated Validation Logic</h2>
-                    <p>Same validation rules copy-pasted across multiple components</p>
-                </div>
-                <span class="tech-badge tech-angular">Angular</span>
-            </div>
-
             <div class="refactor-explanation">
-                <h4><i class="fas fa-code-branch"></i> How This Was Refactored</h4>
-                <p>
-                    Copy-pasted validation logic was extracted into a shared <code>ValidationService</code> and 
-                    reusable Angular directives. Email validation, password strength checks, and phone formatting 
-                    now live in one place. Components use declarative validators like <code>[appEmailValidator]</code> 
-                    instead of duplicating regex patterns everywhere.
-                </p>
-                <div class="why-matters">
-                    <strong>Why this matters:</strong> When validation rules change (e.g., new password requirements), 
-                    you update one file instead of hunting through dozens of components.
-                </div>
+                <h4><i class="fas fa-lightbulb"></i> How This Was Refactored</h4>
+                <ul>
+                    <li><strong>Problem:</strong> Same validation logic duplicated across multiple components</li>
+                    <li><strong>Fix:</strong> Extract common validation into reusable service and directive</li>
+                    <li><strong>Result:</strong> Single source of truth - changes propagate automatically</li>
+                </ul>
             </div>
-
-            <div class="transform-panels">
+            <div class="comparison-container">
                 <div class="panel before-panel">
-                    <div class="panel-header">
-                        <i class="fas fa-times-circle"></i> Before CORTEX
-                    </div>
-                    <pre><code class="language-typescript">// login.component.ts
-@Component({...})
-export class LoginComponent {
-    validateEmail(email: string): boolean {
-        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return regex.test(email);
-    }
+                    <div class="panel-header"><i class="fas fa-times-circle"></i> Before: Duplicated Logic</div>
+                    <pre><code class="language-typescript">// user-form.component.ts
+validateEmail(email: string): boolean {
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return regex.test(email);
 }
 
-// register.component.ts - SAME CODE!
-@Component({...})
-export class RegisterComponent {
-    validateEmail(email: string): boolean {
-        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return regex.test(email);
-    }
-    
-    validatePassword(password: string): boolean {
-        return password.length >= 8 &&
-               /[A-Z]/.test(password) &&
-               /[0-9]/.test(password);
-    }
+// contact-form.component.ts
+validateEmail(email: string): boolean {
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return regex.test(email);
 }
 
-// profile.component.ts - SAME CODE AGAIN!
-@Component({...})
-export class ProfileComponent {
-    validateEmail(email: string): boolean {
-        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return regex.test(email);
-    }
-}
-
-// Bug: regex is slightly different in forgot-password.component.ts!
-// Now you have 4 places to update if rules change...</code></pre>
+// newsletter.component.ts  
+validateEmail(email: string): boolean {
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return regex.test(email);
+}</code></pre>
                 </div>
-
-                <div class="transform-arrow">
-                    <i class="fas fa-magic"></i>
-                    <span>CORTEX</span>
-                </div>
-
                 <div class="panel after-panel">
-                    <div class="panel-header">
-                        <i class="fas fa-check-circle"></i> After CORTEX
-                    </div>
-                    <pre><code class="language-typescript">// shared/validators/validation.service.ts
+                    <div class="panel-header"><i class="fas fa-check-circle"></i> After: Centralized</div>
+                    <pre><code class="language-typescript">// validation.service.ts
 @Injectable({ providedIn: 'root' })
 export class ValidationService {
-    private readonly EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    
-    isValidEmail(email: string): boolean {
-        return this.EMAIL_REGEX.test(email);
-    }
-    
-    validatePassword(password: string): ValidationResult {
-        const errors: string[] = [];
-        if (password.length < 8) 
-            errors.push('At least 8 characters');
-        if (!/[A-Z]/.test(password)) 
-            errors.push('One uppercase letter');
-        if (!/[0-9]/.test(password)) 
-            errors.push('One number');
-        return { valid: errors.length === 0, errors };
-    }
+  private emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  
+  validateEmail(email: string): boolean {
+    return this.emailRegex.test(email);
+  }
+  
+  validatePhone(phone: string): boolean { /*...*/ }
+  validatePostal(code: string): boolean { /*...*/ }
 }
 
-// Reusable validator directive
-@Directive({
-    selector: '[appEmailValidator]',
-    providers: [{ provide: NG_VALIDATORS, useExisting: EmailValidatorDirective }]
-})
-export class EmailValidatorDirective implements Validator {
-    constructor(private validation: ValidationService) {}
-    
-    validate(control: AbstractControl): ValidationErrors | null {
-        return this.validation.isValidEmail(control.value) 
-            ? null 
-            : { email: 'Invalid email format' };
-    }
-}
-
-// Usage in any component
-&lt;input type="email" appEmailValidator /&gt;</code></pre>
+// Any component
+constructor(private validation: ValidationService) {}
+isValid = this.validation.validateEmail(email);</code></pre>
                 </div>
-            </div>
-
-            <div class="fix-explanation">
-                <h4><i class="fas fa-lightbulb"></i> Key Improvements</h4>
-                <ul>
-                    <li><strong>Single source of truth:</strong> All validation rules in one service</li>
-                    <li><strong>Reusable directives:</strong> Declarative validation in templates</li>
-                    <li><strong>Consistent behavior:</strong> Same rules applied everywhere</li>
-                </ul>
             </div>
         </section>
 
-        <!-- KISS-01: Over-Engineered Conditional (TypeScript) -->
-        <section class="sts-issue-card">
-            <div class="issue-header">
-                <div class="issue-badge medium">KISS-01</div>
-                <div class="issue-title">
-                    <h2>Over-Engineered Conditional</h2>
-                    <p>Complex nested logic that could be simplified</p>
-                </div>
-                <span class="tech-badge tech-typescript">TypeScript</span>
+        <!-- KISS - TypeScript -->
+        <section class="comparison-section">
+            <div class="section-header">
+                <h3><i class="fas fa-feather"></i> KISS - Keep It Simple</h3>
+                <span class="language-badge typescript">TypeScript</span>
             </div>
-
             <div class="refactor-explanation">
-                <h4><i class="fas fa-code-branch"></i> How This Was Refactored</h4>
-                <p>
-                    Deeply nested if/else chains were replaced with <strong>early returns</strong> (guard clauses). 
-                    Each condition is checked at the start of the function, returning early if not met. This 
-                    "fail fast" approach flattens the code structure from 6 levels of nesting to 1, making the 
-                    happy path clearly visible at the end.
-                </p>
-                <div class="why-matters">
-                    <strong>Why this matters:</strong> Nested code is exponentially harder to understand and test. 
-                    Each nesting level doubles the cognitive load required to follow the logic.
+                <h4><i class="fas fa-lightbulb"></i> How This Was Refactored</h4>
+                <ul>
+                    <li><strong>Problem:</strong> Over-engineered solution with unnecessary complexity</li>
+                    <li><strong>Fix:</strong> Use simple, direct approach - leverage built-in methods</li>
+                    <li><strong>Result:</strong> Readable, maintainable code that does exactly what's needed</li>
+                </ul>
+            </div>
+            <div class="comparison-container">
+                <div class="panel before-panel">
+                    <div class="panel-header"><i class="fas fa-times-circle"></i> Before: Over-Engineered</div>
+                    <pre><code class="language-typescript">class ArrayProcessor&lt;T&gt; {
+  private items: T[] = [];
+  private filterFn: ((item: T) =&gt; boolean) | null = null;
+  
+  setItems(items: T[]): this { this.items = items; return this; }
+  setFilter(fn: (item: T) =&gt; boolean): this { this.filterFn = fn; return this; }
+  
+  execute(): T[] {
+    if (!this.filterFn) throw new Error('Filter required');
+    return this.items.filter(this.filterFn);
+  }
+}
+
+// Usage
+const result = new ArrayProcessor&lt;number&gt;()
+  .setItems([1, 2, 3, 4, 5])
+  .setFilter(n =&gt; n &gt; 2)
+  .execute();</code></pre>
+                </div>
+                <div class="panel after-panel">
+                    <div class="panel-header"><i class="fas fa-check-circle"></i> After: Simple & Direct</div>
+                    <pre><code class="language-typescript">// Just use the built-in array method!
+const numbers = [1, 2, 3, 4, 5];
+const result = numbers.filter(n =&gt; n &gt; 2);
+
+// For reusability, a simple function is enough
+function filterGreaterThan&lt;T extends number&gt;(
+  items: T[], 
+  threshold: T
+): T[] {
+  return items.filter(item =&gt; item &gt; threshold);
+}
+
+const filtered = filterGreaterThan(numbers, 2);</code></pre>
                 </div>
             </div>
+        </section>
 
-            <div class="transform-panels">
+        <!-- YAGNI - C# -->
+        <section class="comparison-section">
+            <div class="section-header">
+                <h3><i class="fas fa-cut"></i> YAGNI - You Aren't Gonna Need It</h3>
+                <span class="language-badge csharp">C#</span>
+            </div>
+            <div class="refactor-explanation">
+                <h4><i class="fas fa-lightbulb"></i> How This Was Refactored</h4>
+                <ul>
+                    <li><strong>Problem:</strong> Premature abstractions and features "just in case"</li>
+                    <li><strong>Fix:</strong> Remove unused code - implement only what's actually needed now</li>
+                    <li><strong>Result:</strong> Lean codebase that's easier to understand and maintain</li>
+                </ul>
+            </div>
+            <div class="comparison-container">
                 <div class="panel before-panel">
-                    <div class="panel-header">
-                        <i class="fas fa-times-circle"></i> Before CORTEX
-                    </div>
-                    <pre><code class="language-typescript">function processOrder(order: Order): Result {
-    if (order) {
-        if (order.items && order.items.length > 0) {
-            if (order.customer) {
-                if (order.customer.isActive) {
-                    if (order.paymentMethod) {
-                        if (isValidPayment(order.paymentMethod)) {
-                            // Finally! The actual logic, 6 levels deep
-                            const total = calculateTotal(order);
-                            const tax = calculateTax(total);
-                            return {
-                                success: true,
-                                total: total + tax
-                            };
-                        } else {
-                            return { success: false, error: 'Invalid payment' };
-                        }
-                    } else {
-                        return { success: false, error: 'No payment method' };
-                    }
-                } else {
-                    return { success: false, error: 'Inactive customer' };
-                }
-            } else {
-                return { success: false, error: 'No customer' };
-            }
-        } else {
-            return { success: false, error: 'No items' };
-        }
-    } else {
-        return { success: false, error: 'No order' };
-    }
+                    <div class="panel-header"><i class="fas fa-times-circle"></i> Before: Premature Features</div>
+                    <pre><code class="language-csharp">public interface IConfigProvider { }
+public interface IConfigProviderV2 : IConfigProvider { }
+public interface IConfigFactory { }
+
+public class ConfigManager
+{
+    private IConfigProvider _provider;
+    private IConfigFactory _factory; // Never used
+    private bool _enableCaching = false; // Never used
+    private Dictionary&lt;string, object&gt; _cache; // Never used
+    
+    public string GetSetting(string key) =&gt; 
+        Environment.GetEnvironmentVariable(key);
+    
+    // "Might need this later"
+    public void SetSetting(string key, string value) { }
+    public void RefreshCache() { }
+    public void EnableDistributedMode() { }
 }</code></pre>
                 </div>
-
-                <div class="transform-arrow">
-                    <i class="fas fa-magic"></i>
-                    <span>CORTEX</span>
-                </div>
-
                 <div class="panel after-panel">
-                    <div class="panel-header">
-                        <i class="fas fa-check-circle"></i> After CORTEX
-                    </div>
-                    <pre><code class="language-typescript">function processOrder(order: Order | null): Result {
-    // Guard clauses - fail fast and return early
-    if (!order) {
-        return { success: false, error: 'No order' };
+                    <div class="panel-header"><i class="fas fa-check-circle"></i> After: Only What's Needed</div>
+                    <pre><code class="language-csharp">public class ConfigService
+{
+    public string GetSetting(string key) =&gt;
+        Environment.GetEnvironmentVariable(key) 
+        ?? throw new KeyNotFoundException(key);
+    
+    public T GetSetting&lt;T&gt;(string key, T defaultValue = default)
+    {
+        var value = Environment.GetEnvironmentVariable(key);
+        if (string.IsNullOrEmpty(value)) return defaultValue;
+        return (T)Convert.ChangeType(value, typeof(T));
     }
-    
-    if (!order.items?.length) {
-        return { success: false, error: 'No items' };
-    }
-    
-    if (!order.customer) {
-        return { success: false, error: 'No customer' };
-    }
-    
-    if (!order.customer.isActive) {
-        return { success: false, error: 'Inactive customer' };
-    }
-    
-    if (!order.paymentMethod) {
-        return { success: false, error: 'No payment method' };
-    }
-    
-    if (!isValidPayment(order.paymentMethod)) {
-        return { success: false, error: 'Invalid payment' };
-    }
-    
-    // Happy path is now clearly visible
-    const total = calculateTotal(order);
-    const tax = calculateTax(total);
-    
-    return {
-        success: true,
-        total: total + tax
-    };
-}</code></pre>
-                </div>
-            </div>
+}
 
-            <div class="fix-explanation">
-                <h4><i class="fas fa-lightbulb"></i> Key Improvements</h4>
-                <ul>
-                    <li><strong>Guard clauses:</strong> Check and exit early for invalid cases</li>
-                    <li><strong>Flat structure:</strong> No nesting, easy to follow top to bottom</li>
-                    <li><strong>Clear happy path:</strong> Business logic is visible, not buried</li>
-                </ul>
+// Add caching WHEN you actually need it
+// Add distributed mode WHEN you actually need it</code></pre>
+                </div>
             </div>
         </section>
-
-        <!-- YAGNI-01: Over-Engineered Abstraction (C#) -->
-        <section class="sts-issue-card">
-            <div class="issue-header">
-                <div class="issue-badge medium">YAGNI-01</div>
-                <div class="issue-title">
-                    <h2>Premature Abstraction</h2>
-                    <p>Complex factory pattern for a simple use case</p>
-                </div>
-                <span class="tech-badge tech-csharp">C#</span>
-            </div>
-
-            <div class="refactor-explanation">
-                <h4><i class="fas fa-code-branch"></i> How This Was Refactored</h4>
-                <p>
-                    An elaborate factory/strategy/builder pattern hierarchy was collapsed into a simple class 
-                    that directly solves the current need. The original code had 8 classes to handle 2 notification 
-                    types "in case we add more later." We replaced it with a straightforward <code>NotificationService</code> 
-                    that can be refactored <em>when</em> (not if) requirements actually change.
-                </p>
-                <div class="why-matters">
-                    <strong>Why this matters:</strong> Over-engineering costs time now and makes the code harder 
-                    to understand. Build for today's requirements; refactor when tomorrow's arrive.
-                </div>
-            </div>
-
-            <div class="transform-panels">
-                <div class="panel before-panel">
-                    <div class="panel-header">
-                        <i class="fas fa-times-circle"></i> Before CORTEX
-                    </div>
-                    <pre><code class="language-csharp">// 8 classes for sending 2 types of notifications!
-public interface INotificationFactory { ... }
-public interface INotificationStrategy { ... }
-public interface INotificationBuilder { ... }
-public interface INotificationValidator { ... }
-
-public class NotificationFactory : INotificationFactory
-{
-    public INotificationStrategy CreateStrategy(string type) =&gt;
-        type switch {
-            "email" =&gt; new EmailStrategy(),
-            "sms" =&gt; new SmsStrategy(),
-            _ =&gt; throw new NotSupportedException()
-        };
-}
-
-public class NotificationBuilder : INotificationBuilder
-{
-    // 50 lines of builder pattern
-}
-
-public class NotificationOrchestrator
-{
-    private readonly INotificationFactory _factory;
-    private readonly INotificationBuilder _builder;
-    private readonly INotificationValidator _validator;
-    
-    // Constructor with 4 dependencies
-    // Send method with 30 lines of orchestration
-}
-
-// "We might need push notifications someday!"
-// Spoiler: 2 years later, still just email and SMS</code></pre>
-                </div>
-
-                <div class="transform-arrow">
-                    <i class="fas fa-magic"></i>
-                    <span>CORTEX</span>
-                </div>
-
-                <div class="panel after-panel">
-                    <div class="panel-header">
-                        <i class="fas fa-check-circle"></i> After CORTEX
-                    </div>
-                    <pre><code class="language-csharp">// Simple, direct solution for current needs
-public class NotificationService
-{
-    private readonly IEmailSender _email;
-    private readonly ISmsSender _sms;
-    
-    public NotificationService(
-        IEmailSender email, 
-        ISmsSender sms)
-    {
-        _email = email;
-        _sms = sms;
-    }
-    
-    public async Task SendAsync(Notification notification)
-    {
-        switch (notification.Type)
-        {
-            case NotificationType.Email:
-                await _email.SendAsync(
-                    notification.To,
-                    notification.Subject,
-                    notification.Body);
-                break;
-                
-            case NotificationType.Sms:
-                await _sms.SendAsync(
-                    notification.Phone,
-                    notification.Body);
-                break;
-        }
-    }
-}
-
-// When push notifications ARE needed:
-// 1. Add IPushSender dependency
-// 2. Add case to switch
-// Total: 10 minutes, not 2 days of "architecture"</code></pre>
-                </div>
-            </div>
-
-            <div class="fix-explanation">
-                <h4><i class="fas fa-lightbulb"></i> Key Improvements</h4>
-                <ul>
-                    <li><strong>Solve today's problem:</strong> Don't architect for imaginary requirements</li>
-                    <li><strong>Simple is maintainable:</strong> Anyone can understand and modify this</li>
-                    <li><strong>Easy to extend:</strong> When new types are needed, the path is clear</li>
-                </ul>
-            </div>
-        </section>
-
-        <!-- DRY-02: Magic Strings (SQL + C#) -->
-        <section class="sts-issue-card">
-            <div class="issue-header">
-                <div class="issue-badge high">DRY-02</div>
-                <div class="issue-title">
-                    <h2>Magic Strings Everywhere</h2>
-                    <p>Hardcoded strings scattered throughout the codebase</p>
-                </div>
-                <span class="tech-badge tech-csharp">C#</span>
-                <span class="tech-badge tech-sql">SQL</span>
-            </div>
-
-            <div class="refactor-explanation">
-                <h4><i class="fas fa-code-branch"></i> How This Was Refactored</h4>
-                <p>
-                    Scattered string literals were consolidated into strongly-typed constants and enums. Status 
-                    codes moved to an <code>OrderStatus</code> enum with a <code>[EnumMember]</code> attribute for 
-                    database mapping. Column names became constants in a <code>DbColumns</code> class. Now the 
-                    compiler catches typos, and IDE refactoring works across the entire codebase.
-                </p>
-                <div class="why-matters">
-                    <strong>Why this matters:</strong> A typo like "Pening" vs "Pending" won't be caught until 
-                    runtime. With constants, the compiler finds mistakes immediately.
-                </div>
-            </div>
-
-            <div class="transform-panels">
-                <div class="panel before-panel">
-                    <div class="panel-header">
-                        <i class="fas fa-times-circle"></i> Before CORTEX
-                    </div>
-                    <pre><code class="language-csharp">public class OrderService
-{
-    public void UpdateStatus(int orderId, string status)
-    {
-        // Magic strings everywhere!
-        if (status == "pending") { }
-        else if (status == "Pending") { } // Inconsistent!
-        else if (status == "PENDING") { } // Another variant!
-    }
-}
-
-public class OrderRepository
-{
-    public List&lt;Order&gt; GetByStatus(string status)
-    {
-        // Typo: "Pening" - won't find anything!
-        var sql = "SELECT * FROM Orders WHERE Status = @status";
-        return _db.Query&lt;Order&gt;(sql, new { status });
-    }
-}
-
-// In 15 different files:
-// "pending", "Pending", "PENDING", "Pening"
-// Good luck finding them all when requirements change!</code></pre>
-                </div>
-
-                <div class="transform-arrow">
-                    <i class="fas fa-magic"></i>
-                    <span>CORTEX</span>
-                </div>
-
-                <div class="panel after-panel">
-                    <div class="panel-header">
-                        <i class="fas fa-check-circle"></i> After CORTEX
-                    </div>
-                    <pre><code class="language-csharp">// Strongly typed status with database mapping
-public enum OrderStatus
-{
-    [EnumMember(Value = "pending")]
-    Pending,
-    
-    [EnumMember(Value = "confirmed")]
-    Confirmed,
-    
-    [EnumMember(Value = "shipped")]
-    Shipped,
-    
-    [EnumMember(Value = "delivered")]
-    Delivered,
-    
-    [EnumMember(Value = "cancelled")]
-    Cancelled
-}
-
-public class OrderService
-{
-    public void UpdateStatus(int orderId, OrderStatus status)
-    {
-        // Compiler enforces valid values
-        if (status == OrderStatus.Pending) { }
-        
-        // Typo? Won't compile!
-        // if (status == OrderStatus.Pening) { } // Error!
-    }
-}
-
-public class OrderRepository
-{
-    public List&lt;Order&gt; GetByStatus(OrderStatus status)
-    {
-        var sql = $"SELECT * FROM Orders WHERE Status = @status";
-        return _db.Query&lt;Order&gt;(sql, new { 
-            status = status.GetEnumMemberValue() 
-        });
-    }
-}</code></pre>
-                </div>
-            </div>
-
-            <div class="fix-explanation">
-                <h4><i class="fas fa-lightbulb"></i> Key Improvements</h4>
-                <ul>
-                    <li><strong>Enum type safety:</strong> Compiler catches invalid values</li>
-                    <li><strong>EnumMember mapping:</strong> Clean conversion to database strings</li>
-                    <li><strong>IDE support:</strong> Refactoring, find references, autocomplete all work</li>
-                </ul>
-            </div>
-        </section>
-
-        <!-- Navigation -->
-        <nav class="sts-nav">
-            <a href="solid.html">
-                <i class="fas fa-arrow-left"></i> SOLID
-            </a>
-            <a href="index.html" class="nav-hub">
-                <i class="fas fa-th"></i> STS Hub
-            </a>
-            <a href="performance.html">
-                Performance <i class="fas fa-arrow-right"></i>
-            </a>
-        </nav>
     </main>
 
-    <!-- Footer -->
-    <footer style="text-align: center; padding: 2rem; color: rgba(255,255,255,0.5); font-size: 0.875rem;">
-        <p>&copy; 2024-2025 Asif Hussain. CORTEX 4.0 - Sharpen the Saw.</p>
+    <footer class="site-footer">
+        <div class="footer-content"><p>&copy; 2024 CORTEX 4.0 - AI-Powered Code Intelligence by Asif Hussain</p></div>
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/csharp.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/typescript.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/sql.min.js"></script>
     <script>hljs.highlightAll();</script>
 </body>
 </html>

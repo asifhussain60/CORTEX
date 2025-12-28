@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="CORTEX Testing Showcase - Unit Tests, Integration Tests, Testability">
+    <meta name="description" content="CORTEX Testing Showcase - Best Practices">
     <meta name="author" content="Asif Hussain">
     <title>Testing | STS | CORTEX 4.0</title>
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
@@ -25,422 +25,188 @@
 
     <main class="sts-main">
         <section class="sts-hero">
-            <div class="hero-badge"><i class="fas fa-vial"></i> TESTING PRACTICES</div>
-            <h1>Testing<br><span class="accent-text">Mastered</span></h1>
-            <p class="hero-subtitle">Watch CORTEX transform untestable code into thoroughly tested, reliable systems</p>
+            <div class="hero-badge"><i class="fas fa-vial"></i> TESTING</div>
+            <h1>Testing<br><span class="accent-text">Best Practices</span></h1>
+            <p class="hero-subtitle">Write maintainable, reliable tests that catch real bugs</p>
             <div class="sts-metrics">
-                <div class="metric-card"><div class="metric-value">4</div><div class="metric-label">Gaps Found</div></div>
-                <div class="metric-card accent"><div class="metric-value">4</div><div class="metric-label">Tests Added</div></div>
-                <div class="metric-card"><div class="metric-value">95%</div><div class="metric-label">Coverage</div></div>
+                <div class="metric-card"><div class="metric-value">3</div><div class="metric-label">Patterns</div></div>
+                <div class="metric-card accent"><div class="metric-value">95%</div><div class="metric-label">Coverage</div></div>
+                <div class="metric-card"><div class="metric-value">10x</div><div class="metric-label">Faster</div></div>
             </div>
         </section>
 
-        <!-- TEST-01: Missing Unit Tests (TypeScript/Jest) -->
-        <section class="sts-issue-card">
-            <div class="issue-header">
-                <div class="issue-badge high">TEST-01</div>
-                <div class="issue-title">
-                    <h2>Missing Unit Tests</h2>
-                    <p>Critical business logic with zero test coverage</p>
-                </div>
-                <span class="tech-badge tech-typescript">TypeScript</span>
+        <!-- AAA Pattern - TypeScript Jest -->
+        <section class="comparison-section">
+            <div class="section-header">
+                <h3><i class="fas fa-check-double"></i> Arrange-Act-Assert Pattern</h3>
+                <span class="language-badge typescript">TypeScript</span>
             </div>
-
             <div class="refactor-explanation">
-                <h4><i class="fas fa-code-branch"></i> How This Was Refactored</h4>
-                <p>
-                    The untested <code>calculateDiscount</code> function was covered with comprehensive unit tests 
-                    using Jest. Tests follow the <strong>AAA pattern</strong> (Arrange-Act-Assert) and cover edge 
-                    cases: tier boundaries, empty carts, negative values, and maximum discounts. Each business 
-                    rule now has at least one corresponding test.
-                </p>
-                <div class="why-matters">
-                    <strong>Why this matters:</strong> Untested code is legacy code. Without tests, every change 
-                    risks breaking existing functionality—and you won't know until customers report bugs.
-                </div>
+                <h4><i class="fas fa-lightbulb"></i> How This Was Refactored</h4>
+                <ul>
+                    <li><strong>Problem:</strong> Tests are hard to read, unclear what's being tested</li>
+                    <li><strong>Fix:</strong> Structure tests with clear Arrange/Act/Assert sections</li>
+                    <li><strong>Result:</strong> Self-documenting tests that are easy to maintain</li>
+                </ul>
             </div>
-
-            <div class="transform-panels">
+            <div class="comparison-container">
                 <div class="panel before-panel">
-                    <div class="panel-header"><i class="fas fa-times-circle"></i> Before CORTEX</div>
-                    <pre><code class="language-typescript">// discount.service.ts - NO TESTS!
-export function calculateDiscount(
-    cart: CartItem[], 
-    customerTier: string
-): number {
-    const subtotal = cart.reduce(
-        (sum, item) =&gt; sum + item.price * item.qty, 0
-    );
-    
-    let discount = 0;
-    if (customerTier === 'gold') discount = 0.15;
-    else if (customerTier === 'silver') discount = 0.10;
-    else if (subtotal &gt; 100) discount = 0.05;
-    
-    // Bug: What if subtotal is negative?
-    // Bug: What about 'platinum' tier?
-    // No one knows until production breaks!
-    return subtotal * discount;
-}</code></pre>
+                    <div class="panel-header"><i class="fas fa-times-circle"></i> Before: Unclear Structure</div>
+                    <pre><code class="language-typescript">test('cart test', () => {
+  const cart = new ShoppingCart();
+  cart.addItem({ id: '1', name: 'Book', price: 10 });
+  cart.addItem({ id: '2', name: 'Pen', price: 2 });
+  expect(cart.items.length).toBe(2);
+  expect(cart.getTotal()).toBe(12);
+  cart.applyDiscount(0.1);
+  expect(cart.getTotal()).toBe(10.8);
+  cart.removeItem('1');
+  expect(cart.items.length).toBe(1);
+});</code></pre>
                 </div>
-                <div class="transform-arrow"><i class="fas fa-magic"></i><span>CORTEX</span></div>
                 <div class="panel after-panel">
-                    <div class="panel-header"><i class="fas fa-check-circle"></i> After CORTEX</div>
-                    <pre><code class="language-typescript">// discount.service.spec.ts
-describe('calculateDiscount', () =&gt; {
-    it('applies 15% for gold tier', () =&gt; {
-        const cart = [{ price: 100, qty: 1 }];
-        expect(calculateDiscount(cart, 'gold')).toBe(15);
+                    <div class="panel-header"><i class="fas fa-check-circle"></i> After: AAA Pattern</div>
+                    <pre><code class="language-typescript">describe('ShoppingCart', () => {
+  describe('applyDiscount', () => {
+    it('should reduce total by percentage', () => {
+      // Arrange
+      const cart = new ShoppingCart();
+      cart.addItem({ id: '1', name: 'Book', price: 100 });
+      
+      // Act
+      cart.applyDiscount(0.1); // 10% off
+      
+      // Assert
+      expect(cart.getTotal()).toBe(90);
     });
-    
-    it('applies 10% for silver tier', () =&gt; {
-        const cart = [{ price: 100, qty: 1 }];
-        expect(calculateDiscount(cart, 'silver')).toBe(10);
-    });
-    
-    it('applies 5% for orders over $100', () =&gt; {
-        const cart = [{ price: 150, qty: 1 }];
-        expect(calculateDiscount(cart, 'bronze')).toBe(7.5);
-    });
-    
-    it('returns 0 for empty cart', () =&gt; {
-        expect(calculateDiscount([], 'gold')).toBe(0);
-    });
-    
-    it('throws for unknown tier', () =&gt; {
-        expect(() =&gt; calculateDiscount([], 'invalid'))
-            .toThrow('Unknown tier');
-    });
+  });
 });</code></pre>
                 </div>
             </div>
-
-            <div class="fix-explanation">
-                <h4><i class="fas fa-lightbulb"></i> Key Improvements</h4>
-                <ul>
-                    <li><strong>AAA pattern:</strong> Arrange, Act, Assert for clarity</li>
-                    <li><strong>Edge cases:</strong> Empty cart, boundaries, invalid input</li>
-                    <li><strong>Error handling:</strong> Tests verify exceptions are thrown</li>
-                </ul>
-            </div>
         </section>
 
-        <!-- TEST-02: Untestable Code (C#) -->
-        <section class="sts-issue-card">
-            <div class="issue-header">
-                <div class="issue-badge critical">TEST-02</div>
-                <div class="issue-title">
-                    <h2>Untestable Code - Tight Coupling</h2>
-                    <p>Direct instantiation prevents mocking dependencies</p>
-                </div>
-                <span class="tech-badge tech-csharp">C# xUnit</span>
+        <!-- Dependency Injection - C# -->
+        <section class="comparison-section">
+            <div class="section-header">
+                <h3><i class="fas fa-puzzle-piece"></i> Testable Code with DI</h3>
+                <span class="language-badge csharp">C#</span>
             </div>
-
             <div class="refactor-explanation">
-                <h4><i class="fas fa-code-branch"></i> How This Was Refactored</h4>
-                <p>
-                    Concrete dependencies created with <code>new</code> were replaced with <strong>constructor 
-                    injection</strong> of interfaces. The <code>OrderService</code> now receives <code>IOrderRepository</code> 
-                    and <code>IPaymentGateway</code> through its constructor. Tests can inject mocks using Moq 
-                    to verify behavior without hitting real databases or payment systems.
-                </p>
-                <div class="why-matters">
-                    <strong>Why this matters:</strong> Tight coupling means you can't test business logic without 
-                    a real database. Tests become slow, flaky, and expensive to maintain.
-                </div>
+                <h4><i class="fas fa-lightbulb"></i> How This Was Refactored</h4>
+                <ul>
+                    <li><strong>Problem:</strong> Hardcoded dependencies make unit testing impossible</li>
+                    <li><strong>Fix:</strong> Inject dependencies through constructor</li>
+                    <li><strong>Result:</strong> Can mock dependencies in tests</li>
+                </ul>
             </div>
-
-            <div class="transform-panels">
+            <div class="comparison-container">
                 <div class="panel before-panel">
-                    <div class="panel-header"><i class="fas fa-times-circle"></i> Before CORTEX</div>
+                    <div class="panel-header"><i class="fas fa-times-circle"></i> Before: Untestable</div>
                     <pre><code class="language-csharp">public class OrderService
 {
-    public Order CreateOrder(OrderRequest request)
+    public async Task&lt;Order&gt; CreateOrder(OrderRequest request)
     {
-        // UNTESTABLE: Creates concrete dependencies!
-        var repository = new SqlOrderRepository();
-        var payment = new StripePaymentGateway();
+        // Hardcoded - can't mock in tests!
+        var db = new SqlConnection("Server=prod;...");
         var emailer = new SmtpEmailService();
+        var logger = new FileLogger("orders.log");
         
         var order = new Order(request);
-        repository.Save(order);  // Hits real DB!
-        payment.Charge(order);   // Hits real Stripe!
-        emailer.Send(order);     // Sends real email!
+        await db.SaveAsync(order);
+        await emailer.SendAsync(order.CustomerEmail, "...");
+        logger.Log($"Order {order.Id} created");
         
         return order;
     }
-}
-// Cannot test without real database, Stripe, SMTP!</code></pre>
+}</code></pre>
                 </div>
-                <div class="transform-arrow"><i class="fas fa-magic"></i><span>CORTEX</span></div>
                 <div class="panel after-panel">
-                    <div class="panel-header"><i class="fas fa-check-circle"></i> After CORTEX</div>
+                    <div class="panel-header"><i class="fas fa-check-circle"></i> After: Testable with DI</div>
                     <pre><code class="language-csharp">public class OrderService
 {
     private readonly IOrderRepository _repo;
-    private readonly IPaymentGateway _payment;
+    private readonly IEmailService _email;
+    private readonly ILogger _logger;
     
-    public OrderService(IOrderRepository repo, 
-                        IPaymentGateway payment)
+    public OrderService(
+        IOrderRepository repo,
+        IEmailService email, 
+        ILogger logger)
     {
         _repo = repo;
-        _payment = payment;
+        _email = email;
+        _logger = logger;
     }
     
-    public async Task&lt;Order&gt; CreateOrderAsync(OrderRequest req)
+    public async Task&lt;Order&gt; CreateOrder(OrderRequest request)
     {
-        var order = new Order(req);
+        var order = new Order(request);
         await _repo.SaveAsync(order);
-        await _payment.ChargeAsync(order);
+        await _email.SendAsync(order.CustomerEmail, "...");
+        _logger.Log($"Order {order.Id} created");
         return order;
     }
-}
-
-// Test with mocks:
-[Fact]
-public async Task CreateOrder_SavesAndCharges()
-{
-    var mockRepo = new Mock&lt;IOrderRepository&gt;();
-    var mockPay = new Mock&lt;IPaymentGateway&gt;();
-    var svc = new OrderService(mockRepo.Object, mockPay.Object);
-    
-    await svc.CreateOrderAsync(new OrderRequest());
-    
-    mockRepo.Verify(r =&gt; r.SaveAsync(It.IsAny&lt;Order&gt;()));
-    mockPay.Verify(p =&gt; p.ChargeAsync(It.IsAny&lt;Order&gt;()));
 }</code></pre>
                 </div>
-            </div>
-
-            <div class="fix-explanation">
-                <h4><i class="fas fa-lightbulb"></i> Key Improvements</h4>
-                <ul>
-                    <li><strong>Constructor injection:</strong> Dependencies provided externally</li>
-                    <li><strong>Interface abstraction:</strong> Mock implementations for testing</li>
-                    <li><strong>Verify behavior:</strong> Moq confirms methods were called correctly</li>
-                </ul>
             </div>
         </section>
 
-        <!-- TEST-03: Missing Integration Tests (Angular) -->
-        <section class="sts-issue-card">
-            <div class="issue-header">
-                <div class="issue-badge medium">TEST-03</div>
-                <div class="issue-title">
-                    <h2>Missing Component Integration Tests</h2>
-                    <p>Component never tested with its template and dependencies</p>
-                </div>
-                <span class="tech-badge tech-angular">Angular Jasmine</span>
+        <!-- Component Testing - Angular -->
+        <section class="comparison-section">
+            <div class="section-header">
+                <h3><i class="fas fa-cube"></i> Angular Component Testing</h3>
+                <span class="language-badge angular">Angular</span>
             </div>
-
             <div class="refactor-explanation">
-                <h4><i class="fas fa-code-branch"></i> How This Was Refactored</h4>
-                <p>
-                    Isolated unit tests were supplemented with <strong>TestBed integration tests</strong> that 
-                    render the component with its real template. We use <code>HttpClientTestingModule</code> 
-                    to intercept HTTP calls, and <code>fakeAsync</code> with <code>tick()</code> to test 
-                    asynchronous behavior. Tests verify the rendered DOM, not just class methods.
-                </p>
-                <div class="why-matters">
-                    <strong>Why this matters:</strong> A component can have correct logic but broken template 
-                    bindings. Integration tests catch issues like missing <code>*ngIf</code> or wrong property names.
-                </div>
+                <h4><i class="fas fa-lightbulb"></i> How This Was Refactored</h4>
+                <ul>
+                    <li><strong>Problem:</strong> Testing implementation details, brittle tests</li>
+                    <li><strong>Fix:</strong> Test behavior from user's perspective</li>
+                    <li><strong>Result:</strong> Tests survive refactoring, catch real bugs</li>
+                </ul>
             </div>
-
-            <div class="transform-panels">
+            <div class="comparison-container">
                 <div class="panel before-panel">
-                    <div class="panel-header"><i class="fas fa-times-circle"></i> Before CORTEX</div>
-                    <pre><code class="language-typescript">// NO TESTS AT ALL for UserListComponent!
-@Component({
-    selector: 'app-user-list',
-    template: `
-        &lt;div *ngIf="loading"&gt;Loading...&lt;/div&gt;
-        &lt;ul *ngIf="!loading"&gt;
-            &lt;li *ngFor="let user of users"&gt;
-                {{ user.name }} - {{ user.email }}
-            &lt;/li&gt;
-        &lt;/ul&gt;
-        &lt;div *ngIf="error" class="error"&gt;{{ error }}&lt;/div&gt;
-    `
-})
-export class UserListComponent implements OnInit {
-    users: User[] = [];
-    loading = true;
-    error?: string;
-    
-    constructor(private userService: UserService) {}
-    
-    ngOnInit() {
-        this.userService.getUsers().subscribe({
-            next: u =&gt; { this.users = u; this.loading = false; },
-            error: e =&gt; { this.error = e.message; this.loading = false; }
-        });
-    }
-}</code></pre>
+                    <div class="panel-header"><i class="fas fa-times-circle"></i> Before: Testing Internals</div>
+                    <pre><code class="language-typescript">it('should toggle', () => {
+  // Testing internal state - brittle!
+  expect(component.isExpanded).toBeFalse();
+  
+  component.toggle(); // Testing internal method
+  
+  expect(component.isExpanded).toBeTrue();
+  expect(component.ariaExpanded).toBe('true');
+});
+
+// Breaks if we rename isExpanded to isOpen
+// Doesn't test what user actually sees</code></pre>
                 </div>
-                <div class="transform-arrow"><i class="fas fa-magic"></i><span>CORTEX</span></div>
                 <div class="panel after-panel">
-                    <div class="panel-header"><i class="fas fa-check-circle"></i> After CORTEX</div>
-                    <pre><code class="language-typescript">describe('UserListComponent', () =&gt; {
-    let component: UserListComponent;
-    let fixture: ComponentFixture&lt;UserListComponent&gt;;
-    let httpMock: HttpTestingController;
-    
-    beforeEach(async () =&gt; {
-        await TestBed.configureTestingModule({
-            imports: [HttpClientTestingModule],
-            declarations: [UserListComponent]
-        }).compileComponents();
-        
-        fixture = TestBed.createComponent(UserListComponent);
-        component = fixture.componentInstance;
-        httpMock = TestBed.inject(HttpTestingController);
-    });
-    
-    it('displays users after loading', fakeAsync(() =&gt; {
-        fixture.detectChanges(); // triggers ngOnInit
-        
-        const req = httpMock.expectOne('/api/users');
-        req.flush([{ name: 'John', email: 'j@test.com' }]);
-        tick();
-        fixture.detectChanges();
-        
-        const items = fixture.nativeElement.querySelectorAll('li');
-        expect(items.length).toBe(1);
-        expect(items[0].textContent).toContain('John');
-    }));
-    
-    it('shows error on failure', fakeAsync(() =&gt; {
-        fixture.detectChanges();
-        httpMock.expectOne('/api/users').error(new ErrorEvent('fail'));
-        tick();
-        fixture.detectChanges();
-        
-        const error = fixture.nativeElement.querySelector('.error');
-        expect(error).toBeTruthy();
-    }));
+                    <div class="panel-header"><i class="fas fa-check-circle"></i> After: Testing Behavior</div>
+                    <pre><code class="language-typescript">it('should expand panel when header clicked', () => {
+  // Arrange
+  const header = fixture.debugElement
+    .query(By.css('[data-testid="panel-header"]'));
+  const content = fixture.debugElement
+    .query(By.css('[data-testid="panel-content"]'));
+  
+  // Assert initial state
+  expect(content.nativeElement).toHaveClass('hidden');
+  
+  // Act - simulate user action
+  header.triggerEventHandler('click', null);
+  fixture.detectChanges();
+  
+  // Assert - test what user sees
+  expect(content.nativeElement).not.toHaveClass('hidden');
 });</code></pre>
                 </div>
             </div>
-
-            <div class="fix-explanation">
-                <h4><i class="fas fa-lightbulb"></i> Key Improvements</h4>
-                <ul>
-                    <li><strong>TestBed:</strong> Real Angular component testing environment</li>
-                    <li><strong>HttpTestingController:</strong> Mock HTTP without real network</li>
-                    <li><strong>DOM assertions:</strong> Verify what users actually see</li>
-                </ul>
-            </div>
         </section>
-
-        <!-- TEST-04: Flaky Tests (SQL + C#) -->
-        <section class="sts-issue-card">
-            <div class="issue-header">
-                <div class="issue-badge medium">TEST-04</div>
-                <div class="issue-title">
-                    <h2>Flaky Tests - Time Dependencies</h2>
-                    <p>Tests fail randomly due to system time or race conditions</p>
-                </div>
-                <span class="tech-badge tech-csharp">C# NUnit</span>
-            </div>
-
-            <div class="refactor-explanation">
-                <h4><i class="fas fa-code-branch"></i> How This Was Refactored</h4>
-                <p>
-                    Direct calls to <code>DateTime.Now</code> were replaced with an injectable <code>ITimeProvider</code>. 
-                    Tests inject a <code>FakeTimeProvider</code> that returns controlled, predictable timestamps. 
-                    No more tests that fail at midnight or on weekends because they depend on real system time.
-                </p>
-                <div class="why-matters">
-                    <strong>Why this matters:</strong> Flaky tests erode trust in your test suite. Teams start 
-                    ignoring failures, thinking "it's probably just flaky"—until real bugs slip through.
-                </div>
-            </div>
-
-            <div class="transform-panels">
-                <div class="panel before-panel">
-                    <div class="panel-header"><i class="fas fa-times-circle"></i> Before CORTEX</div>
-                    <pre><code class="language-csharp">public class SubscriptionService
-{
-    public bool IsExpired(Subscription sub)
-    {
-        // FLAKY: Uses real system time!
-        return sub.ExpiresAt &lt; DateTime.Now;
-    }
-    
-    public Subscription Renew(Subscription sub)
-    {
-        // Test results change based on when you run!
-        sub.ExpiresAt = DateTime.Now.AddMonths(1);
-        return sub;
-    }
-}
-
-[Test]
-public void IsExpired_ReturnsFalse_WhenNotExpired()
-{
-    var sub = new Subscription { 
-        ExpiresAt = DateTime.Now.AddDays(1) // Flaky!
-    };
-    Assert.IsFalse(_service.IsExpired(sub));
-    // Fails if test runs at 11:59 PM!
-}</code></pre>
-                </div>
-                <div class="transform-arrow"><i class="fas fa-magic"></i><span>CORTEX</span></div>
-                <div class="panel after-panel">
-                    <div class="panel-header"><i class="fas fa-check-circle"></i> After CORTEX</div>
-                    <pre><code class="language-csharp">public class SubscriptionService
-{
-    private readonly ITimeProvider _time;
-    
-    public SubscriptionService(ITimeProvider time) =&gt; _time = time;
-    
-    public bool IsExpired(Subscription sub)
-    {
-        return sub.ExpiresAt &lt; _time.UtcNow;
-    }
-}
-
-// Test with controlled time
-public class FakeTime : ITimeProvider
-{
-    public DateTime UtcNow { get; set; }
-}
-
-[Test]
-public void IsExpired_ReturnsFalse_WhenNotExpired()
-{
-    var fakeTime = new FakeTime { UtcNow = new DateTime(2025, 1, 1) };
-    var service = new SubscriptionService(fakeTime);
-    
-    var sub = new Subscription { 
-        ExpiresAt = new DateTime(2025, 1, 15) // Fixed date
-    };
-    
-    Assert.IsFalse(service.IsExpired(sub)); // Always passes!
-}</code></pre>
-                </div>
-            </div>
-
-            <div class="fix-explanation">
-                <h4><i class="fas fa-lightbulb"></i> Key Improvements</h4>
-                <ul>
-                    <li><strong>ITimeProvider:</strong> Abstraction over system time</li>
-                    <li><strong>Deterministic tests:</strong> Same input = same output, always</li>
-                    <li><strong>Fixed dates:</strong> Tests use explicit, unchanging timestamps</li>
-                </ul>
-            </div>
-        </section>
-
-        <nav class="sts-nav">
-            <a href="performance.html"><i class="fas fa-arrow-left"></i> Performance</a>
-            <a href="index.html" class="nav-hub"><i class="fas fa-th"></i> STS Hub</a>
-            <a href="documentation.html">Documentation <i class="fas fa-arrow-right"></i></a>
-        </nav>
     </main>
 
-    <footer style="text-align: center; padding: 2rem; color: rgba(255,255,255,0.5); font-size: 0.875rem;">
-        <p>&copy; 2024-2025 Asif Hussain. CORTEX 4.0 - Sharpen the Saw.</p>
+    <footer class="site-footer">
+        <div class="footer-content"><p>&copy; 2024 CORTEX 4.0 - AI-Powered Code Intelligence by Asif Hussain</p></div>
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
