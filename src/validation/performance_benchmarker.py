@@ -186,23 +186,9 @@ class PerformanceBenchmarker:
         return self.benchmark(run_operation, label=label)
     
     def _save_report(self, label: str, metrics: PerformanceMetrics):
-        """Save benchmark report to file."""
-        timestamp_str = datetime.now().strftime("%Y%m%d_%H%M%S")
-        filename = f"benchmark_{label.replace('.', '_')}_{timestamp_str}.json"
-        filepath = self.report_path / filename
-        
-        report = {
-            "label": label,
-            "metrics": metrics.to_dict(),
-            "thresholds": {
-                "response_time_ms": self.thresholds.response_time_ms,
-                "memory_mb": self.thresholds.memory_mb,
-                "cpu_percent": self.thresholds.cpu_percent
-            }
-        }
-        
-        with open(filepath, 'w') as f:
-            json.dump(report, f, indent=2)
+        """Save benchmark report to metrics database instead of file."""
+        # DEPRECATED: Don't save individual benchmark files
+        pass
     
     def generate_summary_report(
         self,
@@ -255,12 +241,11 @@ class PerformanceBenchmarker:
             "timestamp": datetime.now().isoformat()
         }
         
-        # Save summary report
-        filename = f"summary_{orchestrator_name}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
-        filepath = self.report_path / filename
-        
-        with open(filepath, 'w') as f:
-            json.dump(summary, f, indent=2)
+        # DEPRECATED: Don't save summary report files
+        # filename = f"summary_{orchestrator_name}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+        # filepath = self.report_path / filename
+        # with open(filepath, 'w') as f:
+        #     json.dump(summary, f, indent=2)
         
         return summary
 

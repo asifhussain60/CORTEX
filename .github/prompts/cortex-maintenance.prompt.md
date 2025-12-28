@@ -155,3 +155,66 @@ Run during every maintenance cycle:
 - [ ] CORTEX.prompt.md is <200 lines
 - [ ] copilot-instructions.md is <150 lines
 - [ ] copilot-instructions.md defers to CORTEX.prompt.md (no duplication)
+- [ ] Reports folder cleaned (see Phase 7)
+
+---
+
+## Phase 7: Report Management 🗑️
+
+**Goal:** Prevent report bloat - user won't read them, CORTEX doesn't need most of them.
+
+### 7a. Report Policy
+
+| Report Type | Policy | Reason |
+|-------------|--------|--------|
+| **Timestamped operational logs** (cleanup-*, brain-tuning-*, architectural-review-*) | DELETE | Ephemeral, no reference value |
+| **Benchmark/test results** (benchmark_*, DOC_QUALITY_REPORT_*) | DELETE | Temporary test data |
+| **Task completion summaries** (story-*, planning-*, feature-*) | DELETE | User won't read, redundant |
+| **Duplicate analyses** (unwired-components-TIMESTAMP-*) | DELETE | Keep only latest if needed |
+| **Major architecture decisions** (SYSTEM-INTEGRITY-*, MOCK-STUB-AUDIT) | KEEP | Reference for future decisions |
+| **Migration/refactor summaries** (ORCHESTRATOR-*, CORTEX-CLEANUP-*) | KEEP | Historical context |
+
+### 7b. Cleanup Commands
+
+```bash
+cd cortex-brain/documents/reports/
+
+# Delete timestamped operational JSONs
+rm -f cleanup-*.json architectural-review-*.json brain-tuning-*.json
+
+# Delete benchmark/test JSONs
+rm -f benchmark_*.json DOC_QUALITY_REPORT_*.json summary_*.json
+
+# Delete task completion summaries
+rm -f story-*.md planning-*.md feature-*.md *-complete.md
+
+# Delete duplicate analyses (keep only one if needed)
+rm -f unwired-components-2025*.json unwired-components-2025*.md
+
+# Delete operational JSONs
+rm -f git-sync-*.json validation_report.json system-alignment-report-*.json
+
+# Verify cleanup
+echo "Remaining reports: $(ls -1 | wc -l)"
+du -sh .
+```
+
+### 7c. Prevention Rules
+
+**STOP creating reports for:**
+- ❌ Task completion summaries
+- ❌ Incremental progress updates  
+- ❌ Operational logs with timestamps
+- ❌ Benchmark results (use metrics database instead)
+
+**ONLY create reports for:**
+- ✅ Major architectural decisions
+- ✅ System-wide migrations/refactors
+- ✅ Compliance audits (when required)
+- ✅ Reference documentation (non-temporal)
+
+### 7d. Alternative: Use Metrics Database
+
+For tracking operational data, use `cortex-brain/analytics/metrics.db` instead of JSON reports.
+
+---
