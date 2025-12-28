@@ -3,169 +3,935 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="DevOps & CI/CD - Automation, pipelines, infrastructure as code">
-    <meta name="author" content="Asif Hussain">
-    <title>DevOps - CORTEX Knowledge</title>
-    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <meta name="description" content="CORTEX Knowledge Library - DevOps Best Practices: CI/CD Pipelines, Infrastructure as Code, Monitoring & Observability">
+    <title>CORTEX Knowledge - DevOps Best Practices</title>
     <link rel="stylesheet" href="../assets/css/main.css">
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
-    <a href="#main-content" class="skip-link">Skip to main content</a>
-    <nav class="breadcrumb-container sticky-nav" aria-label="Breadcrumb">
+    <!-- Sticky Breadcrumb Navigation -->
+    <nav class="breadcrumb-container sticky-nav">
         <button class="back-button" onclick="history.back()" aria-label="Go back">← Back</button>
         <ol class="breadcrumb">
             <li><a href="../index.html">Home</a></li>
             <li><a href="index.html">Knowledge Library</a></li>
-            <li><a href="index.html#infrastructure-cloud">Infrastructure & Cloud</a></li>
+            <li><a href="index.html#infrastructure">Infrastructure</a></li>
             <li aria-current="page">DevOps</li>
         </ol>
     </nav>
-    <section class="hero" id="main-content">
-        <div class="logo-header">
-            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
+
+    <!-- Logo Header -->
+    <div class="logo-header">
+        <img src="../assets/images/CORTEX-logo.png" class="page-logo" alt="CORTEX Logo">
+    </div>
+
+    <!-- Page Title -->
+    <h1>⚙️ DevOps Best Practices</h1>
+
+    <!-- Feature Benefit Panel -->
+    <div class="feature-benefit-panel">
+        <span class="icon">🚀</span>
+        <div class="content">
+            <h2>Automate Your Entire Software Delivery Pipeline</h2>
+            <p class="description">
+                DevOps transforms how teams build, test, and deploy software—shifting from manual, error-prone processes to automated pipelines that deploy code in minutes instead of days. Whether you're implementing CI/CD pipelines that automatically test every commit, defining infrastructure as code to eliminate configuration drift, or building comprehensive monitoring to detect issues before users notice them, these DevOps best practices reduce deployment time by 60%, cut production incidents by 40%, and give you confidence to deploy multiple times per day. Imagine pushing a feature to production and having automated tests, security scans, and infrastructure provisioning happen seamlessly—that's the power of modern DevOps.
+            </p>
         </div>
-        <h1 class="hero-title">🔧 DevOps & CI/CD</h1>
-        <p class="hero-subtitle">Automation, pipelines, infrastructure as code, monitoring</p>
-    </section>
-    <aside class="category-sidebar" aria-label="Category navigation">
-        <h3>Infrastructure & Cloud</h3>
-        <nav class="category-nav">
-            <a href="cloud.html" class="category-nav-link">☁️ Cloud</a>
-            <a href="containers.html" class="category-nav-link">🐳 Containers</a>
-            <a href="devops.html" class="category-nav-link active">🔧 DevOps</a>
-        </nav>
-    </aside>
-    <section class="section category-content">
-        <div class="container">
-            <div class="tabs-container">
-                <div class="tabs-nav" role="tablist" aria-label="Category sections">
-                    <button class="tab-button active" role="tab" aria-selected="true" aria-controls="overview-tab" id="overview-btn" data-tab="overview">Overview</button>
-                    <button class="tab-button" role="tab" aria-selected="false" aria-controls="files-tab" id="files-btn" data-tab="files">Knowledge Files</button>
-                    <button class="tab-button" role="tab" aria-selected="false" aria-controls="resources-tab" id="resources-btn" data-tab="resources">Learning Resources</button>
-                    <button class="tab-button" role="tab" aria-selected="false" aria-controls="usage-tab" id="usage-btn" data-tab="usage">CORTEX Usage</button>
-                </div>
-                <div class="tab-content active" id="overview-tab" role="tabpanel" aria-labelledby="overview-btn">
-                    <div class="glass-card">
-                        <h2>Overview</h2>
-                        <p>DevOps practices for continuous integration, delivery, infrastructure automation, and observability.</p>
-                        <h3>Category Statistics</h3>
-                        <div class="stats-grid">
-                            <div class="stat-item"><div class="stat-value">3</div><div class="stat-label">Knowledge Files</div></div>
-                            <div class="stat-item"><div class="stat-value">70+</div><div class="stat-label">Practices</div></div>
-                            <div class="stat-item"><div class="stat-value">4</div><div class="stat-label">Core Pillars</div></div>
-                        </div>
-                    </div>
-                    <div class="glass-card">
-                        <h2>Concept Map</h2>
-                        <div class="mermaid">
-graph LR
-    A[Code] --> B[Build]
-    B --> C[Test]
-    C --> D[Deploy]
-    D --> E[Monitor]
-    E --> A
-    F[Infrastructure as Code] --> D
-    G[Automated Testing] --> C
-    H[Observability] --> E
-    style A fill:#00d4ff,stroke:#7b61ff,stroke-width:2px
-    style E fill:#4ecdc4,stroke:#fff,stroke-width:2px
-                        </div>
-                    </div>
-                </div>
-                <div class="tab-content" id="files-tab" role="tabpanel" aria-labelledby="files-btn" hidden>
-                    <div class="glass-card">
-                        <h2>Knowledge Files</h2>
-                        <p>Explore DevOps automation and practices:</p>
-                    </div>
-                    <div class="knowledge-files-accordion">
-                        <div class="accordion-item">
-                            <button class="accordion-header" aria-expanded="false" aria-controls="cicd-content">
-                                <span class="accordion-icon">🔄</span>
-                                <div class="accordion-title-group">
-                                    <h3 class="accordion-title">CI/CD Pipelines</h3>
-                                    <p class="accordion-subtitle">GitHub Actions, GitLab CI, Jenkins</p>
-                                </div>
-                                <span class="badge">25 rules</span>
-                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                            </button>
-                            <div id="cicd-content" class="accordion-content" hidden>
-                                <p>CI/CD pipeline design and automation patterns.</p>
-                                <p><em>📝 Knowledge file coming soon</em></p>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <button class="accordion-header" aria-expanded="false" aria-controls="iac-content">
-                                <span class="accordion-icon">🏗️</span>
-                                <div class="accordion-title-group">
-                                    <h3 class="accordion-title">Infrastructure as Code</h3>
-                                    <p class="accordion-subtitle">Terraform, Pulumi, CloudFormation</p>
-                                </div>
-                                <span class="badge">22 rules</span>
-                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                            </button>
-                            <div id="iac-content" class="accordion-content" hidden>
-                                <p>Infrastructure as Code best practices.</p>
-                                <p><em>📝 Knowledge file coming soon</em></p>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <button class="accordion-header" aria-expanded="false" aria-controls="monitoring-content">
-                                <span class="accordion-icon">📊</span>
-                                <div class="accordion-title-group">
-                                    <h3 class="accordion-title">Monitoring & Observability</h3>
-                                    <p class="accordion-subtitle">Prometheus, Grafana, logs, traces</p>
-                                </div>
-                                <span class="badge">20 rules</span>
-                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                            </button>
-                            <div id="monitoring-content" class="accordion-content" hidden>
-                                <p>Monitoring, logging, and observability practices.</p>
-                                <p><em>📝 Knowledge file coming soon</em></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="tab-content" id="resources-tab" role="tabpanel" aria-labelledby="resources-btn" hidden>
-                    <div class="glass-card">
-                        <h2>Learning Resources</h2>
-                        <ul class="resource-list">
-                            <li><div class="resource-link">
-                                <span class="resource-icon">📚</span>
-                                <div><strong>The DevOps Handbook</strong><p>By Gene Kim - DevOps principles</p></div>
-                            </div></li>
-                            <li><div class="resource-link">
-                                <span class="resource-icon">📚</span>
-                                <div><strong>Accelerate</strong><p>By Nicole Forsgren - High-performing teams</p></div>
-                            </div></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="tab-content" id="usage-tab" role="tabpanel" aria-labelledby="usage-btn" hidden>
-                    <div class="glass-card">
-                        <h2>How CORTEX Uses DevOps Knowledge</h2>
-                        <h3>🔄 Pipeline Generation</h3>
-                        <ul class="feature-list">
-                            <li><strong>GitHub Actions:</strong> Workflow YAML generation</li>
-                            <li><strong>Build Steps:</strong> Multi-stage build optimization</li>
-                            <li><strong>Testing:</strong> Automated test execution</li>
-                        </ul>
-                        <h3>🏗️ IaC Templates</h3>
-                        <ul class="feature-list">
-                            <li><strong>Terraform:</strong> Module generation</li>
-                            <li><strong>State Management:</strong> Remote backend configuration</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+    </div>
+
+    <!-- Tabs Navigation -->
+    <div class="tabs-container">
+        <div class="tabs-nav" role="tablist">
+            <button class="tab-button active" role="tab" aria-selected="true" aria-controls="overview-tab" data-tab="overview">
+                📖 Overview
+            </button>
+            <button class="tab-button" role="tab" aria-selected="false" aria-controls="files-tab" data-tab="files">
+                📄 Knowledge Files
+            </button>
+            <button class="tab-button" role="tab" aria-selected="false" aria-controls="resources-tab" data-tab="resources">
+                🎓 Learning Resources
+            </button>
+            <button class="tab-button" role="tab" aria-selected="false" aria-controls="usage-tab" data-tab="usage">
+                🔧 CORTEX Usage
+            </button>
         </div>
-    </section>
-    <nav class="bottom-nav" aria-label="Category navigation">
-        <a href="cloud.html" class="bottom-nav-link"><span class="bottom-nav-icon">☁️</span><span class="bottom-nav-label">Cloud</span></a>
-        <a href="containers.html" class="bottom-nav-link"><span class="bottom-nav-icon">🐳</span><span class="bottom-nav-label">Containers</span></a>
-        <a href="devops.html" class="bottom-nav-link active"><span class="bottom-nav-icon">🔧</span><span class="bottom-nav-label">DevOps</span></a>
-    </nav>
+
+        <!-- Tab 1: Overview -->
+        <div class="tab-content active" id="overview-tab" role="tabpanel">
+            <section class="glass-card">
+                <h2>What is DevOps?</h2>
+                <p>
+                    DevOps is a cultural and technical movement that breaks down silos between development and operations teams, enabling faster, more reliable software delivery through automation, collaboration, and continuous improvement. It encompasses practices like CI/CD, Infrastructure as Code, monitoring, and incident response.
+                </p>
+
+                <h3>Core DevOps Principles</h3>
+                <ul class="feature-list">
+                    <li><strong>Automation First:</strong> Automate repetitive tasks (testing, deployment, infrastructure provisioning) to reduce human error and increase speed</li>
+                    <li><strong>Continuous Integration/Continuous Deployment (CI/CD):</strong> Merge code frequently, run automated tests, deploy to production automatically</li>
+                    <li><strong>Infrastructure as Code (IaC):</strong> Define infrastructure in version-controlled code files rather than manual configuration</li>
+                    <li><strong>Monitoring & Observability:</strong> Understand system behavior through metrics, logs, and traces—detect issues proactively</li>
+                    <li><strong>Collaboration & Culture:</strong> Shared responsibility between dev and ops, blameless postmortems, continuous learning</li>
+                    <li><strong>Feedback Loops:</strong> Fast feedback at every stage (code review, testing, deployment, monitoring) to catch issues early</li>
+                </ul>
+
+                <h3>Why DevOps Matters</h3>
+                <div class="metrics-grid-3">
+                    <div class="metric-card">
+                        <div class="metric-value">60%</div>
+                        <div class="metric-label">Faster Deployment</div>
+                        <div class="metric-description">Automated pipelines reduce deployment time from hours to minutes</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">40%</div>
+                        <div class="metric-label">Fewer Incidents</div>
+                        <div class="metric-description">IaC and automated testing catch errors before production</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">200+</div>
+                        <div class="metric-label">Deploys/Day</div>
+                        <div class="metric-description">Elite performers deploy multiple times per day with confidence</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="glass-card">
+                <h2>DevOps Knowledge Areas</h2>
+                <p>
+                    CORTEX's DevOps knowledge covers three critical domains that work together to create a reliable, automated software delivery system:
+                </p>
+
+                <div class="category-grid-3">
+                    <article class="category-card">
+                        <div class="category-icon">🔄</div>
+                        <h3>CI/CD Pipelines</h3>
+                        <p>Automated workflows that build, test, and deploy code with every commit—eliminating manual deployment steps and reducing errors.</p>
+                        <ul class="feature-list">
+                            <li>Pipeline architecture (stages, jobs, artifacts)</li>
+                            <li>Automated testing (unit, integration, E2E)</li>
+                            <li>Deployment strategies (blue-green, canary, rolling)</li>
+                            <li>Artifact management and versioning</li>
+                        </ul>
+                    </article>
+
+                    <article class="category-card">
+                        <div class="category-icon">🏗️</div>
+                        <h3>Infrastructure as Code</h3>
+                        <p>Define infrastructure using code (Terraform, CloudFormation) to version control, test, and reproduce environments consistently.</p>
+                        <ul class="feature-list">
+                            <li>Declarative infrastructure definitions (Terraform, CloudFormation)</li>
+                            <li>State management and remote backends</li>
+                            <li>Modularity and reusability (modules, workspaces)</li>
+                            <li>Security and secrets management</li>
+                        </ul>
+                    </article>
+
+                    <article class="category-card">
+                        <div class="category-icon">📊</div>
+                        <h3>Monitoring & Observability</h3>
+                        <p>Track system health with metrics, logs, and traces to detect issues proactively and resolve incidents faster (reduce MTTR by 50-70%).</p>
+                        <ul class="feature-list">
+                            <li>Three pillars: Metrics, Logs, Traces</li>
+                            <li>SLO/SLI/SLA frameworks for reliability</li>
+                            <li>Alerting strategies (actionable, not noisy)</li>
+                            <li>Distributed tracing for microservices</li>
+                        </ul>
+                    </article>
+                </div>
+            </section>
+
+            <section class="glass-card">
+                <h2>DevOps Maturity Model</h2>
+                <p>Organizations typically progress through these stages:</p>
+
+                <div class="phase-timeline">
+                    <div class="phase-card">
+                        <span class="phase-icon">1️⃣</span>
+                        <h3>Manual</h3>
+                        <p>Manual builds, deployments, testing. High error rate, slow releases.</p>
+                    </div>
+
+                    <div class="phase-card">
+                        <span class="phase-icon">2️⃣</span>
+                        <h3>Automated Builds</h3>
+                        <p>CI pipelines build and test code automatically. Deployments still manual.</p>
+                    </div>
+
+                    <div class="phase-card">
+                        <span class="phase-icon">3️⃣</span>
+                        <h3>Automated Deployments</h3>
+                        <p>CD pipelines deploy to staging/production. Infrastructure still manual.</p>
+                    </div>
+
+                    <div class="phase-card">
+                        <span class="phase-icon">4️⃣</span>
+                        <h3>Infrastructure as Code</h3>
+                        <p>Infrastructure defined in code, version controlled, reproducible.</p>
+                    </div>
+
+                    <div class="phase-card">
+                        <span class="phase-icon">5️⃣</span>
+                        <h3>Full Observability</h3>
+                        <p>Comprehensive monitoring, tracing, alerting. Proactive incident response.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Tab 2: Knowledge Files (3 accordions) -->
+        <div class="tab-content" id="files-tab" role="tabpanel" hidden>
+            <section class="glass-card">
+                <h2>📚 DevOps Knowledge Files</h2>
+                <p>3 comprehensive YAML files covering CI/CD, IaC, and monitoring best practices.</p>
+
+                <!-- Accordion 1: CI/CD Pipelines -->
+                <div class="accordion-container">
+                    <button class="accordion-header" aria-expanded="false">
+                        <span class="accordion-icon">🔄</span>
+                        <span class="accordion-title">CI/CD Pipelines</span>
+                        <span class="accordion-badge badge badge-info">cicd-pipelines.yaml</span>
+                        <span class="accordion-chevron">▼</span>
+                    </button>
+                    <div class="accordion-content" hidden>
+                        <p>
+                            <strong>Continuous Integration/Continuous Deployment</strong> automates software delivery from code commit to production through automated build, test, and deployment pipelines. Master pipeline stages, deployment strategies, and monitoring to achieve 200+ deploys per day with 95% success rate.
+                        </p>
+
+                        <h4>Pipeline Stages</h4>
+                        <ul class="feature-list">
+                            <li><strong>Source Stage:</strong> Trigger pipeline on Git push/PR using webhooks (GitHub Actions, GitLab CI, Jenkins). Use shallow clones and dependency caching for speed.</li>
+                            <li><strong>Build Stage:</strong> Compile code, resolve dependencies, run linters, generate artifacts (Docker images, JARs). Use multi-stage Docker builds to reduce image size by 70%.</li>
+                            <li><strong>Test Stage:</strong> Run unit tests (80-90% coverage, <2min), integration tests (60-80% coverage, 3-8min), E2E tests (critical paths only, 5-15min), security scans (Snyk, OWASP), code quality checks (SonarQube).</li>
+                            <li><strong>Artifact Storage:</strong> Tag artifacts with Git SHA/semantic version, store in artifact registry (Docker Registry, ECR, Nexus, Artifactory).</li>
+                            <li><strong>Deploy Stage:</strong> Automated deployment to staging/production using blue-green, canary, or rolling strategies. Include smoke tests and automatic rollback on failure.</li>
+                        </ul>
+
+                        <h4>Deployment Strategies</h4>
+                        <div class="code-example">
+                            <h5>Blue-Green Deployment</h5>
+                            <p>Run two identical production environments (blue = current, green = new version). Route traffic to green after validation, keep blue for instant rollback.</p>
+                            <pre><code class="language-yaml"># Example: AWS CodeDeploy Blue-Green
+deployment_config:
+  deployment_type: BLUE_GREEN
+  green_fleet_provisioning:
+    action: COPY_AUTO_SCALING_GROUP
+  blue_green_deployment_config:
+    terminate_blue_instances_on_deployment_success:
+      action: KEEP_ALIVE
+      termination_wait_time: 3600  # 1 hour
+    deployment_ready_option:
+      action_on_timeout: STOP_DEPLOYMENT
+      wait_time_in_minutes: 60</code></pre>
+                        </div>
+
+                        <div class="code-example">
+                            <h5>Canary Deployment</h5>
+                            <p>Gradually shift traffic to new version (5% → 25% → 50% → 100%) while monitoring error rates. Automatic rollback if error rate spikes.</p>
+                            <pre><code class="language-python"># Example: Canary strategy with monitoring
+def canary_deploy(new_version, stages=[5, 25, 50, 100]):
+    for traffic_percent in stages:
+        route_traffic(new_version, traffic_percent)
+        sleep(300)  # Wait 5 minutes
+        
+        error_rate = get_error_rate(new_version)
+        if error_rate > THRESHOLD:
+            rollback(new_version)
+            raise Exception(f"Canary failed at {traffic_percent}%")
+    
+    print("Canary deployment successful")</code></pre>
+                        </div>
+
+                        <div class="code-example">
+                            <h5>Rolling Deployment</h5>
+                            <p>Update instances one at a time (or in batches) while keeping app available. Slower but zero downtime.</p>
+                            <pre><code class="language-javascript">// Example: Kubernetes Rolling Update
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app
+spec:
+  replicas: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1   # Max 1 instance down during update
+      maxSurge: 2         # Max 2 extra instances during update
+  template:
+    spec:
+      containers:
+      - name: my-app
+        image: my-app:v2.0.0
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5</code></pre>
+                        </div>
+
+                        <h4>Pipeline Best Practices</h4>
+                        <ul class="feature-list">
+                            <li><strong>Fast Feedback:</strong> Keep total pipeline time under 15 minutes. Run unit tests first to fail fast, parallelize test execution.</li>
+                            <li><strong>Immutable Artifacts:</strong> Build once, deploy everywhere. Same Docker image/artifact from dev → staging → production (only config changes).</li>
+                            <li><strong>Automated Rollback:</strong> Automatically revert to previous version if health checks fail or error rates spike.</li>
+                            <li><strong>Security Integration:</strong> Scan dependencies for vulnerabilities (Snyk, OWASP), fail build on critical/high severity issues.</li>
+                            <li><strong>Monitoring Integration:</strong> Track deployment frequency, lead time, MTTR, change failure rate (DORA metrics).</li>
+                            <li><strong>Feature Flags:</strong> Decouple deployment from release—deploy code but enable features gradually for specific users.</li>
+                        </ul>
+
+                        <h4>Pipeline Performance Optimization</h4>
+                        <ul class="feature-list">
+                            <li><strong>Dependency Caching:</strong> Cache npm_modules, pip packages, Maven .m2 to reduce install time by 80%.</li>
+                            <li><strong>Docker Layer Caching:</strong> Use BuildKit caching to reuse unchanged layers (FROM, COPY package.json, RUN npm install).</li>
+                            <li><strong>Parallel Execution:</strong> Run unit tests, linters, security scans in parallel using matrix strategies.</li>
+                            <li><strong>Incremental Builds:</strong> Only rebuild changed modules/services in monorepos (Nx, Turborepo, Bazel).</li>
+                        </ul>
+
+                        <div class="code-example">
+                            <h5>Complete GitHub Actions CI/CD Pipeline</h5>
+                            <pre><code class="language-yaml">name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run linters
+        run: npm run lint
+      
+      - name: Run unit tests
+        run: npm test -- --coverage
+      
+      - name: Build Docker image
+        run: docker build -t my-app:${{ github.sha }} .
+      
+      - name: Security scan
+        uses: snyk/actions/node@master
+        with:
+          command: test
+          args: --severity-threshold=high
+      
+      - name: Push to ECR
+        if: github.ref == 'refs/heads/main'
+        run: |
+          aws ecr get-login-password | docker login --username AWS --password-stdin $ECR_REGISTRY
+          docker tag my-app:${{ github.sha }} $ECR_REGISTRY/my-app:${{ github.sha }}
+          docker push $ECR_REGISTRY/my-app:${{ github.sha }}
+  
+  deploy:
+    needs: build-and-test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to ECS
+        run: |
+          aws ecs update-service \
+            --cluster production \
+            --service my-app \
+            --force-new-deployment \
+            --task-definition my-app:${{ github.sha }}</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accordion 2: Infrastructure as Code -->
+                <div class="accordion-container">
+                    <button class="accordion-header" aria-expanded="false">
+                        <span class="accordion-icon">🏗️</span>
+                        <span class="accordion-title">Infrastructure as Code</span>
+                        <span class="accordion-badge badge badge-info">infrastructure-as-code.yaml</span>
+                        <span class="accordion-chevron">▼</span>
+                    </button>
+                    <div class="accordion-content" hidden>
+                        <p>
+                            <strong>Infrastructure as Code (IaC)</strong> defines infrastructure using version-controlled code files (Terraform, CloudFormation) rather than manual configuration. Achieve 10x faster environment creation, zero configuration drift, and 30-50% cost savings through reproducible, testable infrastructure.
+                        </p>
+
+                        <h4>Core IaC Principles</h4>
+                        <ul class="feature-list">
+                            <li><strong>Declarative:</strong> Define desired end state (3 EC2 instances, RDS database), tool figures out how to achieve it—no imperative scripts.</li>
+                            <li><strong>Idempotent:</strong> Running same code multiple times produces same result. Safe to re-run without unexpected side effects.</li>
+                            <li><strong>Version Controlled:</strong> Infrastructure definitions in Git enable code review, history tracking, and rollback capability.</li>
+                            <li><strong>Reproducible:</strong> Same code creates identical infrastructure every time—eliminates "works on my machine" and environment drift.</li>
+                        </ul>
+
+                        <h4>IaC Tool Comparison</h4>
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>Tool</th>
+                                    <th>Type</th>
+                                    <th>Language</th>
+                                    <th>Best For</th>
+                                    <th>Key Strengths</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Terraform</strong></td>
+                                    <td>Declarative</td>
+                                    <td>HCL</td>
+                                    <td>Multi-cloud, complex infra</td>
+                                    <td>Cloud-agnostic (3,000+ providers), strong state management, large community</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>CloudFormation</strong></td>
+                                    <td>Declarative</td>
+                                    <td>YAML/JSON</td>
+                                    <td>AWS-only</td>
+                                    <td>Native AWS integration, free, automatic rollback on errors</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Pulumi</strong></td>
+                                    <td>Declarative</td>
+                                    <td>Python/TypeScript/Go</td>
+                                    <td>Developers who prefer general-purpose languages</td>
+                                    <td>Use real programming languages (loops, functions), strong typing, testable</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Ansible</strong></td>
+                                    <td>Imperative</td>
+                                    <td>YAML</td>
+                                    <td>Configuration management + provisioning</td>
+                                    <td>Agentless (SSH-based), combines provisioning + config, easy to learn</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="code-example">
+                            <h5>Terraform Example: AWS Infrastructure</h5>
+                            <pre><code class="language-terraform"># Provider configuration
+provider "aws" {
+  region = "us-east-1"
+}
+
+# Variables for reusability
+variable "environment" {
+  description = "Environment name"
+  type        = string
+  default     = "production"
+}
+
+# Data source: Fetch latest Ubuntu AMI
+data "aws_ami" "ubuntu" {
+  most_recent = true
+  owners      = ["099720109477"]  # Canonical
+  
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+  }
+}
+
+# Resource: VPC
+resource "aws_vpc" "main" {
+  cidr_block           = "10.0.0.0/16"
+  enable_dns_hostnames = true
+  
+  tags = {
+    Name        = "${var.environment}-vpc"
+    Environment = var.environment
+  }
+}
+
+# Resource: Subnet
+resource "aws_subnet" "public" {
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "10.0.1.0/24"
+  availability_zone = "us-east-1a"
+  
+  tags = {
+    Name = "${var.environment}-public-subnet"
+  }
+}
+
+# Resource: EC2 Instance
+resource "aws_instance" "web" {
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = "t2.micro"
+  subnet_id     = aws_subnet.public.id
+  
+  tags = {
+    Name = "${var.environment}-web-server"
+  }
+}
+
+# Output: Instance public IP
+output "instance_ip" {
+  description = "Public IP of web server"
+  value       = aws_instance.web.public_ip
+}</code></pre>
+                        </div>
+
+                        <div class="code-example">
+                            <h5>Terraform State Management (Remote Backend)</h5>
+                            <p>Store Terraform state remotely (S3 + DynamoDB) for team collaboration, state locking, and versioning:</p>
+                            <pre><code class="language-terraform">terraform {
+  backend "s3" {
+    bucket         = "my-terraform-state"
+    key            = "prod/terraform.tfstate"
+    region         = "us-east-1"
+    dynamodb_table = "terraform-locks"  # State locking
+    encrypt        = true
+  }
+}
+
+# Commands
+# terraform init           # Initialize backend
+# terraform plan           # Preview changes
+# terraform apply          # Apply changes
+# terraform destroy        # Destroy infrastructure</code></pre>
+                        </div>
+
+                        <div class="code-example">
+                            <h5>Terraform Modules for Reusability</h5>
+                            <p>Encapsulate reusable infrastructure patterns into modules:</p>
+                            <pre><code class="language-terraform"># modules/web-server/main.tf
+variable "instance_type" { default = "t2.micro" }
+variable "ami_id" {}
+variable "subnet_id" {}
+
+resource "aws_instance" "web" {
+  ami           = var.ami_id
+  instance_type = var.instance_type
+  subnet_id     = var.subnet_id
+}
+
+output "instance_id" { value = aws_instance.web.id }
+
+# ===== Usage in root main.tf =====
+module "web_server_1" {
+  source        = "./modules/web-server"
+  ami_id        = data.aws_ami.ubuntu.id
+  subnet_id     = aws_subnet.public.id
+  instance_type = "t2.micro"
+}
+
+module "web_server_2" {
+  source        = "./modules/web-server"
+  ami_id        = data.aws_ami.ubuntu.id
+  subnet_id     = aws_subnet.private.id
+  instance_type = "t2.small"
+}</code></pre>
+                        </div>
+
+                        <h4>IaC Best Practices</h4>
+                        <ul class="feature-list">
+                            <li><strong>Remote State Storage:</strong> Use S3/Azure Blob/Terraform Cloud with state locking (DynamoDB) to enable team collaboration and prevent concurrent modifications.</li>
+                            <li><strong>Modularity:</strong> Break infrastructure into reusable modules (VPC, database, web server). DRY principle reduces duplication by 70%.</li>
+                            <li><strong>Variable-Driven:</strong> Parameterize all environment-specific values (region, instance type, environment name). Single codebase for dev/staging/prod.</li>
+                            <li><strong>Plan Before Apply:</strong> Always run `terraform plan` to preview changes. Catch unintended resource deletions before they happen.</li>
+                            <li><strong>Version Pinning:</strong> Pin provider and module versions to prevent breaking changes. Example: `version = "~> 4.0"`</li>
+                            <li><strong>Secrets Management:</strong> Never hardcode secrets in IaC. Use AWS Secrets Manager, Azure Key Vault, or HashiCorp Vault.</li>
+                            <li><strong>Drift Detection:</strong> Run `terraform plan` regularly to detect manual changes (configuration drift). Re-apply to bring infrastructure back to desired state.</li>
+                            <li><strong>Testing:</strong> Use Terratest (Go), Kitchen-Terraform, or Terraform Cloud's Policy as Code (Sentinel) to test infrastructure code.</li>
+                        </ul>
+
+                        <h4>Common IaC Anti-Patterns to Avoid</h4>
+                        <ul class="feature-list">
+                            <li><strong>❌ Manual Changes:</strong> Never modify infrastructure manually (AWS Console, Azure Portal). All changes via code or drift will occur.</li>
+                            <li><strong>❌ Hardcoded Values:</strong> Don't hardcode IPs, AMI IDs, regions. Use variables and data sources for dynamic lookups.</li>
+                            <li><strong>❌ God Files:</strong> Don't put all infrastructure in a single 5,000-line file. Break into logical modules (networking, compute, database).</li>
+                            <li><strong>❌ No State Locking:</strong> Local state without locking causes corruption when multiple people run Terraform simultaneously.</li>
+                            <li><strong>❌ Ignoring Outputs:</strong> Use outputs to expose critical values (IP addresses, DNS names) for dependent systems.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Accordion 3: Monitoring & Observability -->
+                <div class="accordion-container">
+                    <button class="accordion-header" aria-expanded="false">
+                        <span class="accordion-icon">📊</span>
+                        <span class="accordion-title">Monitoring & Observability</span>
+                        <span class="accordion-badge badge badge-info">monitoring-observability.yaml</span>
+                        <span class="accordion-chevron">▼</span>
+                    </button>
+                    <div class="accordion-content" hidden>
+                        <p>
+                            <strong>Monitoring & Observability</strong> enables you to understand system behavior through metrics, logs, and traces—detecting issues proactively and resolving incidents 50-70% faster. Build comprehensive observability to catch problems before users notice them and reduce Mean Time To Resolution (MTTR) from hours to minutes.
+                        </p>
+
+                        <h4>Three Pillars of Observability</h4>
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>Pillar</th>
+                                    <th>Description</th>
+                                    <th>Use Cases</th>
+                                    <th>Tools</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Metrics</strong></td>
+                                    <td>Numerical measurements over time (CPU, latency, request rate)</td>
+                                    <td>Dashboards, alerts, trend analysis, capacity planning</td>
+                                    <td>Prometheus, Datadog, New Relic, CloudWatch</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Logs</strong></td>
+                                    <td>Discrete events with timestamp and context (errors, access logs)</td>
+                                    <td>Debugging specific issues, audit trails, compliance</td>
+                                    <td>ELK Stack (Elasticsearch, Logstash, Kibana), Splunk, Loki</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Traces</strong></td>
+                                    <td>Request journey through distributed system (shows causality)</td>
+                                    <td>Performance bottlenecks, microservices debugging, latency analysis</td>
+                                    <td>Jaeger, Zipkin, AWS X-Ray, Datadog APM</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="code-example">
+                            <h5>Prometheus Metrics Example</h5>
+                            <pre><code class="language-python"># Python: Expose metrics with Prometheus client
+from prometheus_client import Counter, Histogram, Gauge, start_http_server
+import time
+
+# Define metrics
+request_count = Counter('http_requests_total', 'Total HTTP requests', ['method', 'endpoint'])
+request_duration = Histogram('http_request_duration_seconds', 'HTTP request latency')
+active_users = Gauge('active_users', 'Number of active users')
+
+@app.route('/api/users')
+@request_duration.time()  # Automatically track latency
+def get_users():
+    request_count.labels(method='GET', endpoint='/api/users').inc()
+    # ... business logic ...
+    return jsonify(users)
+
+# Expose metrics endpoint
+if __name__ == '__main__':
+    start_http_server(8000)  # Metrics at http://localhost:8000/metrics
+    app.run()</code></pre>
+                        </div>
+
+                        <div class="code-example">
+                            <h5>Distributed Tracing with OpenTelemetry</h5>
+                            <pre><code class="language-javascript">// Node.js: Trace request across microservices
+const { NodeTracerProvider } = require('@opentelemetry/sdk-trace-node');
+const { JaegerExporter } = require('@opentelemetry/exporter-jaeger');
+const { registerInstrumentations } = require('@opentelemetry/instrumentation');
+const { HttpInstrumentation } = require('@opentelemetry/instrumentation-http');
+const { ExpressInstrumentation } = require('@opentelemetry/instrumentation-express');
+
+// Initialize tracing
+const provider = new NodeTracerProvider();
+provider.addSpanProcessor(new BatchSpanProcessor(new JaegerExporter()));
+provider.register();
+
+// Auto-instrument HTTP and Express
+registerInstrumentations({
+  instrumentations: [
+    new HttpInstrumentation(),
+    new ExpressInstrumentation(),
+  ],
+});
+
+// Now all HTTP requests are automatically traced!
+// View traces in Jaeger UI: http://localhost:16686</code></pre>
+                        </div>
+
+                        <h4>SLO/SLI/SLA Framework</h4>
+                        <ul class="feature-list">
+                            <li><strong>SLI (Service Level Indicator):</strong> Measurable metric (e.g., "99.5% of requests return within 200ms"). Quantifies system behavior.</li>
+                            <li><strong>SLO (Service Level Objective):</strong> Target value for SLI (e.g., "99.9% availability over 30 days"). Internal goal, not contractual.</li>
+                            <li><strong>SLA (Service Level Agreement):</strong> Contractual commitment with consequences (e.g., "99.9% uptime or customer gets refund"). Legal obligation.</li>
+                            <li><strong>Error Budget:</strong> Allowed downtime (1 - SLO). Example: 99.9% SLO = 0.1% error budget = 43 minutes downtime per month.</li>
+                        </ul>
+
+                        <div class="code-example">
+                            <h5>Alerting Best Practices (Actionable Alerts)</h5>
+                            <pre><code class="language-yaml"># Prometheus AlertManager: SLO-based alert
+groups:
+- name: SLO Alerts
+  rules:
+  - alert: HighErrorRate
+    expr: |
+      (
+        sum(rate(http_requests_total{status=~"5.."}[5m]))
+        /
+        sum(rate(http_requests_total[5m]))
+      ) > 0.01  # Alert if error rate > 1%
+    for: 5m  # Must persist for 5 minutes
+    labels:
+      severity: critical
+      team: backend
+    annotations:
+      summary: "Error rate exceeds SLO"
+      description: "{{ $value | humanizePercentage }} error rate (threshold: 1%)"
+      runbook: "https://wiki.company.com/runbooks/high-error-rate"</code></pre>
+                        </div>
+
+                        <h4>Monitoring Best Practices</h4>
+                        <ul class="feature-list">
+                            <li><strong>Monitor Golden Signals:</strong> Latency (how long requests take), Traffic (request volume), Errors (failed requests), Saturation (resource utilization). These 4 metrics reveal 90% of issues.</li>
+                            <li><strong>Actionable Alerts Only:</strong> Every alert must require human action. Noisy alerts train people to ignore them (alert fatigue). Aim for <5 alerts per week.</li>
+                            <li><strong>Use Runbooks:</strong> Every alert should link to a runbook explaining diagnosis steps and mitigation. Reduces MTTR by 40%.</li>
+                            <li><strong>Dashboard for Humans:</strong> Show business metrics (orders/min, revenue) not just system metrics (CPU%). Stakeholders care about business impact.</li>
+                            <li><strong>Distributed Tracing for Microservices:</strong> Essential for debugging latency in systems with 10+ services. Correlate logs/metrics by trace ID.</li>
+                            <li><strong>Retention Policies:</strong> Keep metrics for 30 days (high resolution), 1 year (downsampled). Logs: 7-30 days. Traces: 24-72 hours (expensive storage).</li>
+                        </ul>
+
+                        <h4>Common Observability Anti-Patterns</h4>
+                        <ul class="feature-list">
+                            <li><strong>❌ Alert on Everything:</strong> 100 alerts/day = alert fatigue. Focus on SLO violations and user-impacting issues only.</li>
+                            <li><strong>❌ No Runbooks:</strong> Alerts without runbooks waste time during incidents. Every alert needs a "what to do" doc.</li>
+                            <li><strong>❌ Monitoring Without Context:</strong> "CPU is 80%" means nothing without knowing if that's normal. Set baselines and anomaly detection.</li>
+                            <li><strong>❌ Logs Without Structure:</strong> Unstructured logs ("User login failed") are hard to query. Use structured logging (JSON with user_id, error_code).</li>
+                            <li><strong>❌ No Distributed Tracing:</strong> In microservices, logs and metrics alone can't show request flow. Tracing is essential for debugging.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <!-- Tab 3: Learning Resources -->
+        <div class="tab-content" id="resources-tab" role="tabpanel" hidden>
+            <section class="glass-card">
+                <h2>🎓 Learning Resources</h2>
+                <p>Curated resources to master DevOps practices—from CI/CD pipelines to Infrastructure as Code to observability.</p>
+
+                <h3>📚 Books & Guides</h3>
+                <div class="resources-grid">
+                    <div class="resource-item">
+                        <span class="resource-icon">📖</span>
+                        <div class="resource-content">
+                            <strong>The Phoenix Project</strong> by Gene Kim, Kevin Behr, George Spafford
+                            <p>Novel that explains DevOps principles through a compelling story. Best introduction to DevOps culture and practices.</p>
+                            <a href="https://www.amazon.com/Phoenix-Project-DevOps-Helping-Business/dp/1942788290" target="_blank" rel="noopener">View Book →</a>
+                        </div>
+                    </div>
+
+                    <div class="resource-item">
+                        <span class="resource-icon">📖</span>
+                        <div class="resource-content">
+                            <strong>Accelerate</strong> by Nicole Forsgren, Jez Humble, Gene Kim
+                            <p>Data-driven book on DevOps performance metrics (DORA metrics: deployment frequency, lead time, MTTR, change failure rate).</p>
+                            <a href="https://www.amazon.com/Accelerate-Software-Performing-Technology-Organizations/dp/1942788339" target="_blank" rel="noopener">View Book →</a>
+                        </div>
+                    </div>
+
+                    <div class="resource-item">
+                        <span class="resource-icon">📖</span>
+                        <div class="resource-content">
+                            <strong>Terraform: Up & Running</strong> by Yevgeniy Brikman
+                            <p>Definitive guide to Infrastructure as Code with Terraform. Covers state management, modules, testing, and best practices.</p>
+                            <a href="https://www.terraformupandrunning.com/" target="_blank" rel="noopener">View Book →</a>
+                        </div>
+                    </div>
+
+                    <div class="resource-item">
+                        <span class="resource-icon">📖</span>
+                        <div class="resource-content">
+                            <strong>Observability Engineering</strong> by Charity Majors, Liz Fong-Jones, George Miranda
+                            <p>Modern observability practices for microservices. Covers metrics, logs, traces, and SLO-based alerting.</p>
+                            <a href="https://www.oreilly.com/library/view/observability-engineering/9781492076438/" target="_blank" rel="noopener">View Book →</a>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>🎥 Video Courses</h3>
+                <div class="resources-grid">
+                    <div class="resource-item">
+                        <span class="resource-icon">🎓</span>
+                        <div class="resource-content">
+                            <strong>GitHub Actions - The Complete Guide</strong> (Udemy)
+                            <p>Comprehensive CI/CD course covering GitHub Actions workflows, secrets, matrix strategies, and deployment patterns.</p>
+                            <a href="https://www.udemy.com/topic/github-actions/" target="_blank" rel="noopener">View Course →</a>
+                        </div>
+                    </div>
+
+                    <div class="resource-item">
+                        <span class="resource-icon">🎓</span>
+                        <div class="resource-content">
+                            <strong>HashiCorp Certified: Terraform Associate</strong> (A Cloud Guru)
+                            <p>Official Terraform certification prep. Covers providers, resources, state management, modules, and best practices.</p>
+                            <a href="https://www.hashicorp.com/certification/terraform-associate" target="_blank" rel="noopener">View Course →</a>
+                        </div>
+                    </div>
+
+                    <div class="resource-item">
+                        <span class="resource-icon">🎓</span>
+                        <div class="resource-content">
+                            <strong>Docker Mastery</strong> by Bret Fisher (Udemy)
+                            <p>Comprehensive Docker course covering images, containers, multi-stage builds, Docker Compose, and orchestration.</p>
+                            <a href="https://www.udemy.com/course/docker-mastery/" target="_blank" rel="noopener">View Course →</a>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>🔗 Official Documentation & Tools</h3>
+                <div class="resources-grid">
+                    <div class="resource-item">
+                        <span class="resource-icon">📚</span>
+                        <div class="resource-content">
+                            <strong>GitHub Actions Documentation</strong>
+                            <p>Official GitHub Actions docs with workflow syntax, examples, and best practices.</p>
+                            <a href="https://docs.github.com/en/actions" target="_blank" rel="noopener">Visit Docs →</a>
+                        </div>
+                    </div>
+
+                    <div class="resource-item">
+                        <span class="resource-icon">📚</span>
+                        <div class="resource-content">
+                            <strong>Terraform Registry</strong>
+                            <p>Official Terraform provider and module registry with 3,000+ providers (AWS, Azure, GCP, Kubernetes, etc.).</p>
+                            <a href="https://registry.terraform.io/" target="_blank" rel="noopener">Visit Registry →</a>
+                        </div>
+                    </div>
+
+                    <div class="resource-item">
+                        <span class="resource-icon">📚</span>
+                        <div class="resource-content">
+                            <strong>Prometheus Documentation</strong>
+                            <p>Official Prometheus docs covering metrics collection, PromQL queries, alerting rules, and exporters.</p>
+                            <a href="https://prometheus.io/docs/" target="_blank" rel="noopener">Visit Docs →</a>
+                        </div>
+                    </div>
+
+                    <div class="resource-item">
+                        <span class="resource-icon">📚</span>
+                        <div class="resource-content">
+                            <strong>OpenTelemetry Documentation</strong>
+                            <p>Official OpenTelemetry docs for distributed tracing, metrics, and logs in microservices.</p>
+                            <a href="https://opentelemetry.io/docs/" target="_blank" rel="noopener">Visit Docs →</a>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>🛠️ Hands-On Labs & Tutorials</h3>
+                <div class="resources-grid">
+                    <div class="resource-item">
+                        <span class="resource-icon">💻</span>
+                        <div class="resource-content">
+                            <strong>Katacoda Interactive Labs</strong>
+                            <p>Free interactive labs for Docker, Kubernetes, Terraform, Prometheus in your browser.</p>
+                            <a href="https://www.katacoda.com/" target="_blank" rel="noopener">Start Labs →</a>
+                        </div>
+                    </div>
+
+                    <div class="resource-item">
+                        <span class="resource-icon">💻</span>
+                        <div class="resource-content">
+                            <strong>AWS Well-Architected Labs</strong>
+                            <p>Free hands-on labs for AWS DevOps practices (CodePipeline, CloudFormation, monitoring, security).</p>
+                            <a href="https://www.wellarchitectedlabs.com/" target="_blank" rel="noopener">Start Labs →</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Tab 4: CORTEX Usage -->
+        <div class="tab-content" id="usage-tab" role="tabpanel" hidden>
+            <section class="glass-card">
+                <h2>🔧 How CORTEX Uses DevOps Knowledge</h2>
+                <p>CORTEX applies DevOps best practices across planning, execution, and validation workflows to ensure production-ready, maintainable code.</p>
+
+                <h3>CI/CD Integration in CORTEX Workflows</h3>
+                <ul class="feature-list">
+                    <li><strong>Planning System:</strong> When planning features, CORTEX references CI/CD knowledge to include pipeline definitions (GitHub Actions workflows, deployment configs) in implementation plans.</li>
+                    <li><strong>TDD Orchestrator:</strong> RED-GREEN-REFACTOR workflow integrates with CI pipelines—tests must pass before code merges. Enforces automated testing standards.</li>
+                    <li><strong>Code Review:</strong> CORTEX validates that pull requests include CI/CD configuration updates (pipeline files, Docker builds, deployment manifests).</li>
+                    <li><strong>Deployment Planning:</strong> Execution Orchestrator references deployment strategy knowledge (blue-green, canary, rolling) when creating deployment plans.</li>
+                </ul>
+
+                <h3>Infrastructure as Code in CORTEX</h3>
+                <ul class="feature-list">
+                    <li><strong>Architecture Planning:</strong> When designing system architecture, CORTEX includes Terraform/CloudFormation definitions for infrastructure components (VPCs, databases, load balancers).</li>
+                    <li><strong>Environment Provisioning:</strong> CORTEX can generate IaC templates for dev/staging/production environments based on architecture requirements.</li>
+                    <li><strong>State Management:</strong> Validates IaC code includes remote state configuration (S3 backend, state locking) for team collaboration.</li>
+                    <li><strong>Module Recommendations:</strong> Suggests reusable Terraform modules from public registries (terraform-aws-modules/vpc) to accelerate infrastructure provisioning.</li>
+                </ul>
+
+                <h3>Monitoring & Observability in CORTEX</h3>
+                <ul class="feature-list">
+                    <li><strong>Health Checks:</strong> System Maintenance Orchestrator monitors CORTEX's own health using metrics (response times, error rates, resource utilization).</li>
+                    <li><strong>Logging Standards:</strong> CORTEX enforces structured logging in generated code (JSON logs with trace IDs, error codes, context).</li>
+                    <li><strong>SLO Definition:</strong> When planning production features, CORTEX includes SLO/SLI definitions (e.g., "99.9% availability, p95 latency <200ms").</li>
+                    <li><strong>Alerting Configuration:</strong> Generates Prometheus/CloudWatch alert rules based on SLOs and golden signals (latency, traffic, errors, saturation).</li>
+                    <li><strong>Incident Response:</strong> During troubleshooting, CORTEX references observability knowledge to guide debugging (check traces → logs → metrics).</li>
+                </ul>
+
+                <h3>Example: CORTEX DevOps Workflow</h3>
+                <div class="code-example">
+                    <pre><code class="language-bash"># 1. Plan feature with CI/CD integration
+$ cortex plan "user authentication with OAuth"
+# Output: Master plan includes:
+# - GitHub Actions workflow (.github/workflows/auth-service.yml)
+# - Dockerfile with multi-stage build
+# - Terraform for RDS database + secrets
+# - Prometheus metrics for auth success/failure
+# - CloudWatch alerts for error rate > 1%
+
+# 2. TDD workflow enforces automated testing
+$ cortex start tdd
+# RED: Generates failing unit tests for OAuth flow
+# GREEN: Implements OAuth logic to pass tests
+# REFACTOR: Reviews code for security best practices
+
+# 3. Execute autonomous deployment
+$ cortex execute all phases autonomously
+# - Runs CI pipeline (build, test, security scan)
+# - Deploys to staging with canary strategy (5% → 25% → 100%)
+# - Monitors error rates and latency
+# - Automatic rollback if SLO violated
+
+# 4. System maintenance monitors health
+$ cortex system maintenance
+# Phase 3: Health Metrics
+# - CORTEX response time: p95 = 150ms ✅
+# - Error rate: 0.01% ✅
+# - Resource utilization: CPU 45%, Memory 60% ✅
+# - All SLOs met</code></pre>
+                </div>
+
+                <h3>DevOps Knowledge Files Usage Statistics</h3>
+                <div class="metrics-grid-3">
+                    <div class="metric-card">
+                        <div class="metric-value">cicd-pipelines.yaml</div>
+                        <div class="metric-label">Referenced in Planning</div>
+                        <div class="metric-description">Ensures every plan includes automated build/test/deploy workflows</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">infrastructure-as-code.yaml</div>
+                        <div class="metric-label">Used in Architecture</div>
+                        <div class="metric-description">Generates Terraform modules for repeatable infrastructure</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">monitoring-observability.yaml</div>
+                        <div class="metric-label">Applied in Validation</div>
+                        <div class="metric-description">Validates SLO definitions, alerting rules, tracing setup</div>
+                    </div>
+                </div>
+
+                <h3>DevOps-Driven Quality Assurance</h3>
+                <ul class="feature-list">
+                    <li><strong>Pipeline Validation:</strong> CORTEX checks that CI/CD pipelines include all stages (build, test, security scan, deploy) and have proper rollback mechanisms.</li>
+                    <li><strong>IaC Best Practices:</strong> Validates Terraform code uses remote state, variable-driven configs, and module reusability (no hardcoded values).</li>
+                    <li><strong>Observability Completeness:</strong> Ensures code includes metrics instrumentation, structured logging, and distributed tracing (OpenTelemetry integration).</li>
+                    <li><strong>Deployment Strategy:</strong> Recommends appropriate deployment strategy based on system criticality (blue-green for high-risk, rolling for routine updates).</li>
+                </ul>
+            </section>
+        </div>
+    </div>
+
+    <!-- JavaScript for Tabs & Accordions -->
     <script src="../assets/js/category-page.js"></script>
-    <script>mermaid.initialize({startOnLoad:true,theme:'dark',themeVariables:{primaryColor:'#00d4ff',primaryTextColor:'#fff',primaryBorderColor:'#7b61ff',lineColor:'#00d4ff',secondaryColor:'#7b61ff',tertiaryColor:'#1a1f3a'}});</script>
 </body>
 </html>
