@@ -188,14 +188,17 @@ function init() {
     // Check URL hash for chapter
     const hash = window.location.hash.slice(1);
     
+    // Setup mobile menu
+    setupMobileMenu();
+    
     // Setup navigation listeners first
     setupNavigation();
     
-    // Load initial view - show title if no hash, otherwise load chapter
+    // Load initial view - show mobile welcome or chapter
     if (hash) {
         loadChapter(hash);
     } else {
-        showTitleCover();
+        showInitialView();
     }
 
     // Handle browser back/forward
@@ -204,9 +207,82 @@ function init() {
         if (newHash) {
             loadChapter(newHash);
         } else {
-            showTitleCover();
+            showInitialView();
         }
     });
+}
+
+/**
+ * Setup mobile menu functionality
+ */
+function setupMobileMenu() {
+    const burgerMenu = document.getElementById('burgerMenu');
+    const sidebar = document.getElementById('chapterSidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    
+    if (!burgerMenu || !sidebar || !overlay) return;
+    
+    // Toggle sidebar on burger click
+    burgerMenu.addEventListener('click', () => {
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('active');
+    });
+    
+    // Close sidebar on overlay click
+    overlay.addEventListener('click', () => {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('active');
+    });
+    
+    // Close sidebar when chapter link is clicked (mobile)
+    const chapterLinks = document.querySelectorAll('.chapter-link');
+    chapterLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('active');
+            }
+        });
+    });
+}
+
+/**
+ * Show initial view (title cover on desktop, mobile welcome on mobile)
+ */
+function showInitialView() {
+    if (window.innerWidth <= 768) {
+        showMobileWelcome();
+    } else {
+        showTitleCover();
+    }
+}
+
+/**
+ * Show mobile welcome screen
+ */
+function showMobileWelcome() {
+    const container = document.getElementById('chapterContent');
+    
+    // Clear all active states in sidebar
+    const links = document.querySelectorAll('.chapter-link');
+    links.forEach(link => link.classList.remove('active'));
+    
+    // Display mobile-friendly welcome screen
+    container.innerHTML = `
+        <div class="mobile-welcome">
+            <h1>🧠 The Awakening of CORTEX</h1>
+            <a href="#prologue" class="mobile-welcome-button">Start Reading</a>
+            <img 
+                src="illustrations/images/TitleCover.png" 
+                alt="The Awakening of CORTEX - Title Cover" 
+                class="mobile-welcome-image"
+                onerror="this.style.display='none';"
+            />
+        </div>
+    `;
+    
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 /**
