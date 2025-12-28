@@ -216,7 +216,7 @@
 }
 
 .chapter-body {
-    font-size: 1.1rem;
+    font-size: 1.3rem;
     line-height: 1.8;
     color: var(--text-secondary);
 }
@@ -523,7 +523,7 @@
     }
 
     .chapter-body {
-        font-size: 1rem;
+        font-size: 1.3rem;
     }
 
     .chapter-body h2 {
