@@ -3,6 +3,16 @@
  * Responsive Design for Desktop and Mobile
  * Author: Asif Hussain
  * Version: 4.0.0
+ * 
+ * Font Strategy:
+ * - Primary: 'Comic Neue' (Google Fonts CDN - works on all devices)
+ * - Fallback 1: 'Comic Sans MS' (Windows)
+ * - Fallback 2: 'Comic Sans' (macOS)
+ * - Fallback 3: 'Chalkboard SE' (iOS/macOS)
+ * - Fallback 4: 'Marker Felt' (iOS/macOS)
+ * - Fallback 5: 'Tekton Pro' (Adobe/macOS)
+ * - Fallback 6: cursive (generic font family)
+ * - Fallback 7: sans-serif (last resort)
  */
 
 /* ============================================
@@ -224,7 +234,7 @@
 }
 
 .chapter-body p {
-    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
+    font-family: 'Comic Neue', 'Comic Sans MS', 'Comic Sans', 'Chalkboard SE', 'Marker Felt', 'Tekton Pro', cursive, sans-serif;
     font-size: 1.3em;
     margin-bottom: 1.5rem;
 }
@@ -242,7 +252,7 @@
 .chapter-body li,
 .chapter-body span,
 .chapter-body div:not(.chapter-image) {
-    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
+    font-family: 'Comic Neue', 'Comic Sans MS', 'Comic Sans', 'Chalkboard SE', 'Marker Felt', 'Tekton Pro', cursive, sans-serif;
     font-size: 1.3em;
 }
 
