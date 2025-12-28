@@ -7,218 +7,51 @@ on:
       - main
     paths:
       - 'docs/**'
-      - 'mkdocs.yml'
-      - 'cortex-brain/admin/documentation/**'
       - '.github/workflows/deploy-docs.yml'
-  workflow_dispatch: # Allow manual trigger
+  workflow_dispatch:
 
 permissions:
   contents: write
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment
 concurrency:
   group: "pages-${{ github.ref }}"
   cancel-in-progress: true
 
 jobs:
-  build-and-deploy:
-    name: Build and Deploy Documentation
+  deploy-html:
+    name: Deploy HTML Documentation
     runs-on: ubuntu-latest
     
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 # Full history for git info plugin
       
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-          cache: 'pip' # Cache pip dependencies
-      
-      - name: Cache MkDocs build
-        uses: actions/cache@v4
-        with:
-          path: |
-            .cache
-            site
-          key: mkdocs-${{ runner.os }}-${{ hashFiles('mkdocs.yml', 'docs/**') }}
-          restore-keys: |
-            mkdocs-${{ runner.os }}-
-      
-      - name: Install MkDocs and dependencies
+      - name: Verify docs directory
         run: |
-          pip install --upgrade pip
-          pip install mkdocs
-          pip install mkdocs-material
-          pip install mkdocs-mermaid2-plugin
-          pip install pymdown-extensions
-          pip install mkdocs-git-revision-date-localized-plugin
-          pip install mkdocs-minify-plugin
-      
-      - name: Install CORTEX dependencies (for generators)
-        continue-on-error: true
-        run: |
-          pip install -r requirements.txt || echo "⚠️ Some dependencies failed, continuing..."
-      
-      - name: Run IntelligentNavigationGenerator
-        continue-on-error: true
-        run: |
-          python -c "
-          import sys
-          from pathlib import Path
-          sys.path.insert(0, str(Path('cortex-brain/admin')))
-          try:
-              from documentation.generators.intelligent_navigation_generator import IntelligentNavigationGenerator
-              
-              generator = IntelligentNavigationGenerator(
-                  docs_path=Path('docs'),
-                  mkdocs_path=Path('mkdocs.yml')
-              )
-              generator.update_mkdocs_navigation()
-              print('✅ Navigation structure updated')
-          except Exception as e:
-              print(f'⚠️ Navigation update failed: {e}')
-          " || echo "⚠️ Navigation generator failed, using existing mkdocs.yml"
-      
-      - name: Run PageTemplateGenerator (API docs)
-        continue-on-error: true
-        run: |
-          python -c "
-          import sys
-          from pathlib import Path
-          sys.path.insert(0, str(Path('cortex-brain/admin')))
-          try:
-              from documentation.generators.page_template_generator import PageTemplateGenerator
-              
-              generator = PageTemplateGenerator(workspace_path=Path('.'))
-              
-              # Generate API reference pages
-              modules = generator.discover_python_modules()
-              print(f'Found {len(modules)} Python modules')
-              
-              api_docs_dir = Path('docs/api')
-              api_docs_dir.mkdir(exist_ok=True)
-              
-              for module_path in modules[:5]:  # Limit to 5 for demo
-                  api_page = generator.generate_api_reference(module_path)
-                  output_file = api_docs_dir / f'{module_path.stem}.md'
-                  output_file.write_text(api_page)
-                  print(f'✅ Generated {output_file}')
-              
-              print(f'✅ API documentation generated')
-          except Exception as e:
-              print(f'⚠️ API docs generation failed: {e}')
-          " || echo "⚠️ API docs generation failed, continuing..."
-      
-      - name: Run PageTemplateGenerator (Operation guides)
-        continue-on-error: true
-        run: |
-          python -c "
-          import sys
-          from pathlib import Path
-          sys.path.insert(0, str(Path('cortex-brain/admin')))
-          try:
-              from documentation.generators.page_template_generator import PageTemplateGenerator
-              
-              generator = PageTemplateGenerator(workspace_path=Path('.'))
-              
-              # Generate operation guide pages
-              operations_file = Path('cortex-operations.yaml')
-              if operations_file.exists():
-                  guides = generator.generate_operation_guides(operations_file)
-                  print(f'Found {len(guides)} operations')
-                  
-                  ops_docs_dir = Path('docs/operations/guides')
-                  ops_docs_dir.mkdir(parents=True, exist_ok=True)
-                  
-                  for guide in guides[:10]:  # Limit to 10 for demo
-                      output_file = ops_docs_dir / f\\\"{guide['name']}.md\\\"
-                      output_file.write_text(guide['content'])
-                      print(f\\\"✅ Generated {output_file}\\\")
-                  
-                  print(f'✅ Operation guides generated')
-              else:
-                  print('⚠️ No cortex-operations.yaml found')
-          except Exception as e:
-              print(f'⚠️ Operation guides generation failed: {e}')
-          " || echo "⚠️ Operation guides generation failed, continuing..."
-      
-      - name: Build MkDocs site
-        run: |
-          mkdocs build --verbose
-      
-      - name: Add cache busting headers
-        run: |
-          cat > site/.nojekyll << 'EOF'
-          EOF
-          
-          cat > site/_headers << 'EOF'
-          /*
-            Cache-Control: no-cache, no-store, must-revalidate
-            Pragma: no-cache
-            Expires: 0
-          EOF
-          
-          echo "✅ Added cache control headers"
-      
-      - name: Verify build output
-        run: |
-          if [ ! -d "site" ]; then
-            echo "::error::Build failed - site directory not found"
+          echo "📁 Checking docs directory..."
+          ls -la docs/
+          if [ ! -f "docs/index.html" ]; then
+            echo "::error::docs/index.html not found"
             exit 1
           fi
-          
-          file_count=$(find site -type f | wc -l)
-          echo "✅ Built $file_count files"
-          
-          if [ $file_count -lt 10 ]; then
-            echo "::error::Build produced too few files ($file_count)"
-            exit 1
-          fi
+          echo "✅ Found index.html"
       
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./site
+          publish_dir: ./docs
           publish_branch: gh-pages
-          force_orphan: true
+          force_orphan: false
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
-          commit_message: 'Deploy docs from ${{ github.sha }} [${{ github.ref_name }}]'
-          cname: false  # Disable CNAME to prevent conflicts
+          commit_message: 'Deploy CORTEX 4.0 docs from ${{ github.sha }}'
+          cname: false
       
-      - name: Report deployment
+      - name: Report success
         if: success()
         run: |
           echo "::notice::✅ Documentation deployed successfully!"
           echo "::notice::📝 Site URL: https://asifhussain60.github.io/CORTEX/"
-      
-      - name: Report failure
-        if: failure()
-        run: |
-          echo "::error::❌ Documentation deployment failed"
-          echo "::error::Check the logs above for details"
-
-  # Optional: Lighthouse performance check (disabled to reduce runs)
-  # lighthouse:
-  #   name: Lighthouse Performance Check
-  #   needs: build-and-deploy
-  #   runs-on: ubuntu-latest
-  #   if: github.ref == 'refs/heads/CORTEX-4.0' || github.ref == 'refs/heads/main'
-  #   
-  #   steps:
-  #     - name: Wait for deployment
-  #       run: sleep 30
-  #     
-  #     - name: Run Lighthouse CI
-  #       uses: treosh/lighthouse-ci-action@v10
-  #       with:
-  #         urls: |
-  #           https://asifhussain60.github.io/CORTEX/
-  #         uploadArtifacts: true
-  #         temporaryPublicStorage: true
