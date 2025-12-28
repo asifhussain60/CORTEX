@@ -3,405 +3,640 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="CORTEX Documentation Showcase - Before & After Code Transformations">
-    <meta name="author" content="Asif Hussain">
-    <title>Documentation Showcase - CORTEX STS</title>
-    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
-    <link rel="stylesheet" href="../assets/css/main.css?v=4.0.0">
+    <title>Documentation - Sharpen the Saw | CORTEX</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/sts.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
 </head>
 <body>
-    <!-- Breadcrumb Navigation -->
-    <nav class="breadcrumb-nav">
+    <header class="site-header">
+        <nav class="nav-container">
+            <a href="../index.html" class="logo">CORTEX</a>
+            <ul class="nav-links">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="index.html" class="active">Sharpen the Saw</a></li>
+                <li><a href="../architecture.html">Architecture</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="sts-page">
+        <section class="sts-hero">
+            <div class="container">
+                <nav class="sts-breadcrumb">
+                    <a href="index.html">Sharpen the Saw</a>
+                    <span>/</span>
+                    <span>Documentation</span>
+                </nav>
+                <h1>Documentation Patterns</h1>
+                <p class="sts-subtitle">Write code that explains itself through meaningful documentation</p>
+            </div>
+        </section>
+
+        <section class="sts-content">
+            <div class="container">
+                <div class="sts-intro">
+                    <p>Good documentation is the bridge between your code and its users. These examples show how to transform undocumented code into self-explanatory, maintainable systems.</p>
+                </div>
+
+                <!-- DOC-01: Missing Code Documentation -->
+                <div class="sts-showcase" id="doc-01">
+                    <div class="showcase-header">
+                        <span class="issue-id">DOC-01</span>
+                        <h2>Missing Code Documentation</h2>
+                        <span class="severity-badge severity-medium">Medium Impact</span>
+                    </div>
+                    
+                    <p class="showcase-description">Functions without documentation force developers to read implementation details to understand behavior. Add comprehensive TSDoc/JSDoc comments to public APIs.</p>
+
+                    <div class="comparison-grid">
+                        <div class="code-panel before">
+                            <div class="panel-header">
+                                <span class="panel-label">❌ Before: No Documentation</span>
+                                <span class="tech-badge typescript">TypeScript</span>
+                            </div>
+                            <pre><code class="language-typescript">export class UserService {
+    private cache = new Map&lt;string, User&gt;();
+
+    async getUser(id: string, includeDeleted?: boolean): Promise&lt;User | null&gt; {
+        if (this.cache.has(id)) {
+            return this.cache.get(id)!;
+        }
+        
+        const user = await this.repository.findById(id);
+        if (!user || (user.deletedAt && !includeDeleted)) {
+            return null;
+        }
+        
+        this.cache.set(id, user);
+        return user;
+    }
+
+    async updateUser(id: string, data: Partial&lt;User&gt;, merge?: boolean): Promise&lt;User&gt; {
+        const existing = await this.getUser(id);
+        if (!existing) {
+            throw new Error('User not found');
+        }
+        
+        const updated = merge 
+            ? { ...existing, ...data }
+            : { ...existing, ...data, updatedAt: new Date() };
+        
+        await this.repository.save(updated);
+        this.cache.delete(id);
+        return updated;
+    }
+}</code></pre>
+                        </div>
+
+                        <div class="code-panel after">
+                            <div class="panel-header">
+                                <span class="panel-label">✅ After: Comprehensive TSDoc</span>
+                                <span class="tech-badge typescript">TypeScript</span>
+                            </div>
+                            <pre><code class="language-typescript">/**
+ * Service for managing user data with caching support.
+ * 
+ * @remarks
+ * This service implements a read-through cache pattern.
+ * Cache invalidation occurs automatically on updates.
+ * 
+ * @example
+ * ```typescript
+ * const userService = new UserService(repository);
+ * const user = await userService.getUser('123');
+ * ```
+ */
+export class UserService {
+    private cache = new Map&lt;string, User&gt;();
+
+    /**
+     * Retrieves a user by their unique identifier.
+     * 
+     * @param id - The unique user identifier
+     * @param includeDeleted - When true, returns soft-deleted users
+     * @returns The user if found, null otherwise
+     * 
+     * @throws {DatabaseError} When the database connection fails
+     * 
+     * @example
+     * ```typescript
+     * // Get active user only
+     * const user = await service.getUser('123');
+     * 
+     * // Include soft-deleted users
+     * const deleted = await service.getUser('123', true);
+     * ```
+     */
+    async getUser(
+        id: string, 
+        includeDeleted = false
+    ): Promise&lt;User | null&gt; {
+        // Implementation...
+    }
+
+    /**
+     * Updates an existing user's data.
+     * 
+     * @param id - The unique user identifier
+     * @param data - Partial user data to update
+     * @param merge - When true, preserves updatedAt timestamp
+     * @returns The updated user entity
+     * 
+     * @throws {NotFoundError} When the user doesn't exist
+     * @throws {ValidationError} When the data is invalid
+     */
+    async updateUser(
+        id: string, 
+        data: Partial&lt;User&gt;, 
+        merge = false
+    ): Promise&lt;User&gt; {
+        // Implementation...
+    }
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="key-concepts">
+                        <h4>Key Documentation Elements</h4>
+                        <ul>
+                            <li><strong>@param</strong> - Document every parameter with type and purpose</li>
+                            <li><strong>@returns</strong> - Describe what the function returns and when</li>
+                            <li><strong>@throws</strong> - List all exceptions that can be thrown</li>
+                            <li><strong>@example</strong> - Provide usage examples with code snippets</li>
+                            <li><strong>@remarks</strong> - Add implementation notes and caveats</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- DOC-02: Missing API Documentation -->
+                <div class="sts-showcase" id="doc-02">
+                    <div class="showcase-header">
+                        <span class="issue-id">DOC-02</span>
+                        <h2>Missing API Documentation</h2>
+                        <span class="severity-badge severity-high">High Impact</span>
+                    </div>
+                    
+                    <p class="showcase-description">APIs without documentation create integration barriers. Use Swagger/OpenAPI attributes to generate interactive documentation automatically.</p>
+
+                    <div class="comparison-grid">
+                        <div class="code-panel before">
+                            <div class="panel-header">
+                                <span class="panel-label">❌ Before: Undocumented API</span>
+                                <span class="tech-badge csharp">C# ASP.NET</span>
+                            </div>
+                            <pre><code class="language-csharp">[ApiController]
+[Route("api/[controller]")]
+public class OrdersController : ControllerBase
+{
+    [HttpPost]
+    public async Task&lt;IActionResult&gt; CreateOrder(
+        CreateOrderRequest request)
+    {
+        var order = await _orderService.CreateAsync(request);
+        return CreatedAtAction(
+            nameof(GetOrder), 
+            new { id = order.Id }, 
+            order);
+    }
+
+    [HttpGet("{id}")]
+    public async Task&lt;IActionResult&gt; GetOrder(Guid id)
+    {
+        var order = await _orderService.GetByIdAsync(id);
+        if (order == null)
+            return NotFound();
+        return Ok(order);
+    }
+
+    [HttpGet]
+    public async Task&lt;IActionResult&gt; GetOrders(
+        int page, int pageSize, string? status)
+    {
+        var orders = await _orderService.GetPagedAsync(
+            page, pageSize, status);
+        return Ok(orders);
+    }
+}</code></pre>
+                        </div>
+
+                        <div class="code-panel after">
+                            <div class="panel-header">
+                                <span class="panel-label">✅ After: Swagger/OpenAPI Documentation</span>
+                                <span class="tech-badge csharp">C# ASP.NET</span>
+                            </div>
+                            <pre><code class="language-csharp">/// &lt;summary&gt;
+/// Manages customer orders and order lifecycle.
+/// &lt;/summary&gt;
+[ApiController]
+[Route("api/[controller]")]
+[Produces("application/json")]
+[Tags("Orders")]
+public class OrdersController : ControllerBase
+{
+    /// &lt;summary&gt;
+    /// Creates a new order for the authenticated customer.
+    /// &lt;/summary&gt;
+    /// &lt;param name="request"&gt;Order details including items&lt;/param&gt;
+    /// &lt;returns&gt;The newly created order&lt;/returns&gt;
+    /// &lt;response code="201"&gt;Order created successfully&lt;/response&gt;
+    /// &lt;response code="400"&gt;Invalid order data&lt;/response&gt;
+    /// &lt;response code="401"&gt;User not authenticated&lt;/response&gt;
+    [HttpPost]
+    [ProducesResponseType(typeof(OrderResponse), 201)]
+    [ProducesResponseType(typeof(ProblemDetails), 400)]
+    [ProducesResponseType(401)]
+    public async Task&lt;IActionResult&gt; CreateOrder(
+        [FromBody] CreateOrderRequest request)
+    {
+        var order = await _orderService.CreateAsync(request);
+        return CreatedAtAction(
+            nameof(GetOrder), 
+            new { id = order.Id }, 
+            order);
+    }
+
+    /// &lt;summary&gt;
+    /// Retrieves a specific order by its unique identifier.
+    /// &lt;/summary&gt;
+    /// &lt;param name="id"&gt;The order's unique identifier&lt;/param&gt;
+    /// &lt;returns&gt;The order details if found&lt;/returns&gt;
+    /// &lt;response code="200"&gt;Order found&lt;/response&gt;
+    /// &lt;response code="404"&gt;Order not found&lt;/response&gt;
+    [HttpGet("{id:guid}")]
+    [ProducesResponseType(typeof(OrderResponse), 200)]
+    [ProducesResponseType(404)]
+    public async Task&lt;IActionResult&gt; GetOrder(
+        [FromRoute] Guid id)
+    {
+        var order = await _orderService.GetByIdAsync(id);
+        if (order == null) return NotFound();
+        return Ok(order);
+    }
+
+    /// &lt;summary&gt;
+    /// Lists orders with pagination and optional filtering.
+    /// &lt;/summary&gt;
+    /// &lt;param name="page"&gt;Page number (1-based)&lt;/param&gt;
+    /// &lt;param name="pageSize"&gt;Items per page (max 100)&lt;/param&gt;
+    /// &lt;param name="status"&gt;Filter by status&lt;/param&gt;
+    /// &lt;returns&gt;Paginated list of orders&lt;/returns&gt;
+    [HttpGet]
+    [ProducesResponseType(typeof(PagedResult&lt;OrderResponse&gt;), 200)]
+    public async Task&lt;IActionResult&gt; GetOrders(
+        [FromQuery] int page = 1,
+        [FromQuery][Range(1, 100)] int pageSize = 20,
+        [FromQuery] OrderStatus? status = null)
+    {
+        var orders = await _orderService.GetPagedAsync(
+            page, pageSize, status);
+        return Ok(orders);
+    }
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="key-concepts">
+                        <h4>Swagger/OpenAPI Benefits</h4>
+                        <ul>
+                            <li><strong>Interactive docs</strong> - Try API calls directly from documentation</li>
+                            <li><strong>Client generation</strong> - Auto-generate TypeScript/C# clients</li>
+                            <li><strong>Response types</strong> - Document all possible response codes</li>
+                            <li><strong>Validation</strong> - Schema validation from annotations</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- DOC-03: Poor Component Documentation -->
+                <div class="sts-showcase" id="doc-03">
+                    <div class="showcase-header">
+                        <span class="issue-id">DOC-03</span>
+                        <h2>Poor Component Documentation</h2>
+                        <span class="severity-badge severity-medium">Medium Impact</span>
+                    </div>
+                    
+                    <p class="showcase-description">UI components without documentation make reuse difficult. Document inputs, outputs, and usage examples to enable team adoption.</p>
+
+                    <div class="comparison-grid">
+                        <div class="code-panel before">
+                            <div class="panel-header">
+                                <span class="panel-label">❌ Before: Undocumented Component</span>
+                                <span class="tech-badge angular">Angular</span>
+                            </div>
+                            <pre><code class="language-typescript">@Component({
+    selector: 'app-data-table',
+    templateUrl: './data-table.component.html',
+    styleUrls: ['./data-table.component.scss']
+})
+export class DataTableComponent&lt;T&gt; {
+    @Input() data: T[] = [];
+    @Input() columns: ColumnDef[] = [];
+    @Input() pageSize = 10;
+    @Input() sortable = true;
+    @Input() selectable = false;
+    @Input() loading = false;
+    
+    @Output() rowClick = new EventEmitter&lt;T&gt;();
+    @Output() selectionChange = new EventEmitter&lt;T[]&gt;();
+    @Output() sortChange = new EventEmitter&lt;SortEvent&gt;();
+    @Output() pageChange = new EventEmitter&lt;PageEvent&gt;();
+    
+    selectedRows: T[] = [];
+    currentPage = 1;
+    sortColumn?: string;
+    sortDirection: 'asc' | 'desc' = 'asc';
+}</code></pre>
+                        </div>
+
+                        <div class="code-panel after">
+                            <div class="panel-header">
+                                <span class="panel-label">✅ After: Well-Documented Component</span>
+                                <span class="tech-badge angular">Angular</span>
+                            </div>
+                            <pre><code class="language-typescript">/**
+ * A flexible, generic data table component with sorting,
+ * pagination, and row selection capabilities.
+ * 
+ * @usageNotes
+ * ### Basic Usage
+ * ```html
+ * &lt;app-data-table
+ *   [data]="users"
+ *   [columns]="columnDefs"
+ *   (rowClick)="onUserSelect($event)"&gt;
+ * &lt;/app-data-table&gt;
+ * ```
+ * 
+ * ### With Selection
+ * ```html
+ * &lt;app-data-table
+ *   [data]="products"
+ *   [columns]="productColumns"
+ *   [selectable]="true"
+ *   (selectionChange)="onProductsSelected($event)"&gt;
+ * &lt;/app-data-table&gt;
+ * ```
+ * 
+ * @example
+ * // Define columns in component
+ * columnDefs: ColumnDef[] = [
+ *   { field: 'name', header: 'Name', sortable: true },
+ *   { field: 'email', header: 'Email' },
+ *   { field: 'status', header: 'Status', template: statusTpl }
+ * ];
+ */
+@Component({
+    selector: 'app-data-table',
+    templateUrl: './data-table.component.html',
+    styleUrls: ['./data-table.component.scss']
+})
+export class DataTableComponent&lt;T&gt; {
+    /**
+     * The data array to display in the table.
+     * Each item represents one row.
+     */
+    @Input() data: T[] = [];
+
+    /**
+     * Column definitions specifying which fields to display
+     * and how to render them.
+     * @see ColumnDef for configuration options
+     */
+    @Input() columns: ColumnDef[] = [];
+
+    /**
+     * Number of rows to display per page.
+     * @default 10
+     */
+    @Input() pageSize = 10;
+
+    /**
+     * Enable column sorting functionality.
+     * When true, clicking headers toggles sort direction.
+     * @default true
+     */
+    @Input() sortable = true;
+
+    /**
+     * Enable row selection with checkboxes.
+     * Selected rows are emitted via selectionChange.
+     * @default false
+     */
+    @Input() selectable = false;
+
+    /**
+     * Display loading skeleton while data is being fetched.
+     * @default false
+     */
+    @Input() loading = false;
+
+    /**
+     * Emitted when a row is clicked.
+     * @param row The data object for the clicked row
+     */
+    @Output() rowClick = new EventEmitter&lt;T&gt;();
+
+    /**
+     * Emitted when row selection changes.
+     * Contains all currently selected rows.
+     */
+    @Output() selectionChange = new EventEmitter&lt;T[]&gt;();
+
+    /**
+     * Emitted when sort column or direction changes.
+     * Use to implement server-side sorting.
+     */
+    @Output() sortChange = new EventEmitter&lt;SortEvent&gt;();
+
+    /**
+     * Emitted when the current page changes.
+     * Use to implement server-side pagination.
+     */
+    @Output() pageChange = new EventEmitter&lt;PageEvent&gt;();
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="key-concepts">
+                        <h4>Component Documentation Best Practices</h4>
+                        <ul>
+                            <li><strong>@usageNotes</strong> - Show HTML template examples</li>
+                            <li><strong>@example</strong> - Show TypeScript configuration</li>
+                            <li><strong>@default</strong> - Document default values for optional inputs</li>
+                            <li><strong>@see</strong> - Link to related interfaces and types</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- DOC-04: Missing README and Setup Documentation -->
+                <div class="sts-showcase" id="doc-04">
+                    <div class="showcase-header">
+                        <span class="issue-id">DOC-04</span>
+                        <h2>Missing README Documentation</h2>
+                        <span class="severity-badge severity-high">High Impact</span>
+                    </div>
+                    
+                    <p class="showcase-description">Projects without proper README files create onboarding friction. A good README enables developers to get started quickly and understand project conventions.</p>
+
+                    <div class="comparison-grid">
+                        <div class="code-panel before">
+                            <div class="panel-header">
+                                <span class="panel-label">❌ Before: Minimal README</span>
+                                <span class="tech-badge javascript">Markdown</span>
+                            </div>
+                            <pre><code class="language-markdown"># My Project
+
+A web application.
+
+## Install
+
+npm install
+
+## Run
+
+npm start</code></pre>
+                        </div>
+
+                        <div class="code-panel after">
+                            <div class="panel-header">
+                                <span class="panel-label">✅ After: Comprehensive README</span>
+                                <span class="tech-badge javascript">Markdown</span>
+                            </div>
+                            <pre><code class="language-markdown"># Order Management System
+
+![Build Status](https://github.com/company/oms/workflows/CI/badge.svg)
+![Coverage](https://codecov.io/gh/company/oms/branch/main/graph/badge.svg)
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+
+A scalable order management system built with Angular 17 
+and ASP.NET Core 8.
+
+## Features
+
+- 📦 Real-time order tracking
+- 🔐 Role-based access control
+- 📊 Analytics dashboard
+- 🔄 Third-party integrations
+
+## Prerequisites
+
+- Node.js 20.x or higher
+- .NET 8 SDK
+- PostgreSQL 15+
+- Redis (optional, for caching)
+
+## Quick Start
+
+```bash
+# Clone the repository
+git clone https://github.com/company/oms.git
+cd oms
+
+# Install dependencies
+npm install
+dotnet restore
+
+# Set up environment
+cp .env.example .env
+# Edit .env with your database credentials
+
+# Run database migrations
+dotnet ef database update
+
+# Start development servers
+npm run dev        # Frontend on http://localhost:4200
+dotnet run         # Backend on http://localhost:5000
+```
+
+## Project Structure
+
+```
+src/
+├── client/          # Angular frontend
+│   ├── app/
+│   └── assets/
+├── server/          # ASP.NET Core API
+│   ├── Controllers/
+│   ├── Services/
+│   └── Models/
+└── shared/          # Shared TypeScript types
+```
+
+## Development
+
+### Running Tests
+
+```bash
+# Frontend unit tests
+npm test
+
+# Backend unit tests
+dotnet test
+
+# E2E tests
+npm run e2e
+```
+
+### Code Style
+
+This project uses ESLint and Prettier. Run before committing:
+
+```bash
+npm run lint
+npm run format
+```
+
+## API Documentation
+
+Interactive API docs available at `/swagger` when running locally.
+
+## Contributing
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
+
+## License
+
+MIT © Company Name</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="key-concepts">
+                        <h4>README Essential Sections</h4>
+                        <ul>
+                            <li><strong>Badges</strong> - Build status, coverage, license at a glance</li>
+                            <li><strong>Prerequisites</strong> - Required tools and versions</li>
+                            <li><strong>Quick Start</strong> - Get running in minutes</li>
+                            <li><strong>Project Structure</strong> - Navigate the codebase</li>
+                            <li><strong>Development</strong> - Testing, linting, contributing</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <div class="sts-navigation">
+                    <a href="testing.html" class="nav-link prev">
+                        <span class="nav-direction">← Previous</span>
+                        <span class="nav-title">Testing</span>
+                    </a>
+                    <a href="index.html" class="nav-link next">
+                        <span class="nav-direction">Back to Overview →</span>
+                        <span class="nav-title">All Categories</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
         <div class="container">
-            <a href="../index.html">Home</a>
-            <span class="separator">→</span>
-            <a href="index.html">Sharpen The Saw</a>
-            <span class="separator">→</span>
-            <span class="current">Documentation</span>
+            <p>&copy; 2024 CORTEX. Built with continuous improvement in mind.</p>
         </div>
-    </nav>
+    </footer>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="logo-container">
-            <a href="../index.html">
-                <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo" width="200" height="200">
-            </a>
-        </div>
-        <h1 class="hero-title">📚 Documentation Showcase</h1>
-        <p class="hero-tagline">Undocumented Code → Self-Documenting + API Docs</p>
-    </section>
-
-    <!-- What is Good Documentation? Educational Section -->
-    <section class="section">
-        <div class="container">
-            <div class="glass-card concept-card">
-                <h2>🎓 Documentation Concepts Explained</h2>
-                <p>
-                    Good documentation isn't about writing novels—it's about making code 
-                    <strong>discoverable</strong>, <strong>understandable</strong>, and <strong>maintainable</strong> 
-                    by future developers (including future you!).
-                </p>
-                
-                <div class="principle-explainer">
-                    <div class="principle-letter">📝</div>
-                    <div class="principle-content">
-                        <h4>Docstrings</h4>
-                        <p><em>"Built-in documentation strings in Python functions and classes."</em></p>
-                        <p class="principle-analogy">🏷️ <strong>Purpose:</strong> Explain WHAT a function does, its parameters, return values, and exceptions.</p>
-                    </div>
-                </div>
-                
-                <div class="principle-explainer">
-                    <div class="principle-letter">💡</div>
-                    <div class="principle-content">
-                        <h4>Type Hints</h4>
-                        <p><em>"Annotations that specify the expected types of parameters and returns."</em></p>
-                        <p class="principle-analogy">🎯 <strong>Benefit:</strong> IDEs provide autocomplete, errors are caught before runtime.</p>
-                    </div>
-                </div>
-                
-                <div class="principle-explainer">
-                    <div class="principle-letter">📖</div>
-                    <div class="principle-content">
-                        <h4>API Documentation</h4>
-                        <p><em>"Structured documentation for REST endpoints, generated from code."</em></p>
-                        <p class="principle-analogy">🗺️ <strong>Tools:</strong> OpenAPI/Swagger, automatically generated from annotations.</p>
-                    </div>
-                </div>
-                
-                <div class="principle-explainer">
-                    <div class="principle-letter">⚠️</div>
-                    <div class="principle-content">
-                        <h4>Comments vs. Self-Documenting Code</h4>
-                        <p><em>"Good code explains itself; comments explain WHY, not WHAT."</em></p>
-                        <p class="principle-analogy">🚫 <strong>Bad:</strong> <code># increment i by 1</code><br>
-                           ✅ <strong>Good:</strong> <code># Skip header row per CSV spec v2.1</code></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Overview Stats -->
-    <section class="section section-alt">
-        <div class="container">
-            <div class="metrics-grid-4">
-                <div class="metric-card metric-before">
-                    <span class="metric-value">0</span>
-                    <span class="metric-label">Docstrings</span>
-                </div>
-                <div class="metric-card">
-                    <span class="metric-value">0</span>
-                    <span class="metric-label">Type Hints</span>
-                </div>
-                <div class="metric-card metric-after">
-                    <span class="metric-value">100%</span>
-                    <span class="metric-label">Documented</span>
-                </div>
-                <div class="metric-card metric-after">
-                    <span class="metric-value">OpenAPI</span>
-                    <span class="metric-label">Generated</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- DOC-01: No Docstrings -->
-    <section class="section" id="doc-01">
-        <div class="container">
-            <div class="flaw-header">
-                <span class="flaw-id">DOC-01</span>
-                <span class="issue-badge">No Docstrings</span>
-                <span class="severity-badge severity-medium">MEDIUM</span>
-            </div>
-            <h2>Mystery Functions: What Does This Do?</h2>
-            <p class="flaw-description">
-                <strong>The Problem:</strong> Functions without docstrings force readers to analyze every line of 
-                code to understand purpose, parameters, and return values. This wastes time and leads to misuse.
-            </p>
-            
-            <div class="code-comparison">
-                <div class="code-before">
-                    <div class="code-header">
-                        <span class="code-label">❌ BEFORE</span>
-                        <span class="code-file">src/business/payment.py</span>
-                    </div>
-<pre><code class="language-python">def proc(d, t, c):
-    if t == "cc":
-        return h(d, c, 0.029)
-    elif t == "pp":
-        return h(d, c, 0.035)
-    return None
-
-def h(d, c, r):
-    a = d.get("a")
-    if a and a > 0:
-        f = a * r
-        return {"s": True, "f": f, "t": a + f}
-    return {"s": False}
-
-# Questions a reader must answer:
-# - What is 'd'? A dictionary? What keys?
-# - What is 't'? What values are valid?
-# - What does 'cc' mean? Credit card?
-# - What is 'r'? A rate? Percentage or decimal?
-# - What does this return on success vs failure?</code></pre>
-                </div>
-                
-                <div class="code-after">
-                    <div class="code-header">
-                        <span class="code-label">✅ AFTER</span>
-                        <span class="code-file">Properly Documented</span>
-                    </div>
-<pre><code class="language-python">def process_payment(
-    payment_data: dict,
-    payment_type: str,
-    currency: str = "USD"
-) -> dict:
-    """
-    Process a payment transaction through the appropriate gateway.
-    
-    Args:
-        payment_data: Dictionary containing:
-            - amount (float): Transaction amount in specified currency
-            - card_number (str): 16-digit card number (for card payments)
-            - email (str): PayPal email (for PayPal payments)
-        payment_type: Payment method - one of:
-            - "credit_card": Process via Stripe
-            - "paypal": Process via PayPal API
-        currency: ISO 4217 currency code (default: "USD")
-    
-    Returns:
-        dict with keys:
-            - success (bool): Whether payment was processed
-            - fee (float): Processing fee charged
-            - total (float): Amount + fee
-            - transaction_id (str): Unique identifier
-    
-    Raises:
-        PaymentError: If payment gateway is unavailable
-        ValidationError: If payment_data is invalid
-    
-    Example:
-        >>> process_payment({"amount": 100.00}, "credit_card")
-        {"success": True, "fee": 2.90, "total": 102.90}
-    """</code></pre>
-                </div>
-            </div>
-            
-            <div class="capability-used">
-                <strong>CORTEX Capability:</strong> Documentation Generation → Comprehensive docstrings
-            </div>
-        </div>
-    </section>
-
-    <!-- DOC-02: No Type Hints -->
-    <section class="section section-alt" id="doc-02">
-        <div class="container">
-            <div class="flaw-header">
-                <span class="flaw-id">DOC-02</span>
-                <span class="issue-badge">No Type Hints</span>
-                <span class="severity-badge severity-medium">MEDIUM</span>
-            </div>
-            <h2>Type Confusion: What Can I Pass Here?</h2>
-            <p class="flaw-description">
-                <strong>The Problem:</strong> Without type hints, developers guess what types are expected. 
-                Pass a string when an int is expected? Runtime error. Type hints enable IDE autocomplete 
-                and catch errors before code runs.
-            </p>
-            
-            <div class="code-comparison">
-                <div class="code-before">
-                    <div class="code-header">
-                        <span class="code-label">❌ BEFORE</span>
-                        <span class="code-file">No type information</span>
-                    </div>
-<pre><code class="language-python">def calculate_discount(price, quantity, customer):
-    # What type is price? int? float? Decimal?
-    # What type is customer? dict? object? ID?
-    
-    if customer.is_premium:  # Assumes customer has this attr
-        rate = 0.2
-    else:
-        rate = 0.1
-    
-    return price * quantity * (1 - rate)
-
-# Calling code - what's correct?
-calculate_discount(100, 5, user_dict)      # Wrong type?
-calculate_discount("100", "5", customer)   # Strings work?
-calculate_discount(99.99, 3, {"premium": True})  # Dict ok?</code></pre>
-                </div>
-                
-                <div class="code-after">
-                    <div class="code-header">
-                        <span class="code-label">✅ AFTER</span>
-                        <span class="code-file">Fully Typed</span>
-                    </div>
-<pre><code class="language-python">from decimal import Decimal
-from dataclasses import dataclass
-
-@dataclass
-class Customer:
-    id: int
-    name: str
-    is_premium: bool
-
-def calculate_discount(
-    price: Decimal,
-    quantity: int,
-    customer: Customer
-) -> Decimal:
-    """Calculate discounted total for customer order."""
-    discount_rate = Decimal("0.2") if customer.is_premium else Decimal("0.1")
-    subtotal = price * quantity
-    return subtotal * (1 - discount_rate)
-
-# IDE now provides:
-# ✓ Autocomplete for Customer attributes
-# ✓ Error squiggles if wrong type passed
-# ✓ Hover documentation for parameters
-# ✓ Refactoring support across codebase
-
-# Type checker catches errors before runtime:
-calculate_discount("100", 5, user)  # Error: str != Decimal
-calculate_discount(100.0, 5, {})    # Error: dict != Customer</code></pre>
-                </div>
-            </div>
-            
-            <div class="capability-used">
-                <strong>CORTEX Capability:</strong> Code Sanitization → Type hint inference & addition
-            </div>
-        </div>
-    </section>
-
-    <!-- DOC-03: Outdated Comments -->
-    <section class="section" id="doc-03">
-        <div class="container">
-            <div class="flaw-header">
-                <span class="flaw-id">DOC-03</span>
-                <span class="issue-badge">Stale Comments</span>
-                <span class="severity-badge severity-medium">MEDIUM</span>
-            </div>
-            <h2>Lying Comments: Code Changed, Comment Didn't</h2>
-            <p class="flaw-description">
-                <strong>The Problem:</strong> Comments that describe what code <em>used to do</em> are worse than 
-                no comments. They actively mislead readers. Comments should explain WHY, not WHAT—the code 
-                already shows what it does.
-            </p>
-            
-            <div class="code-comparison">
-                <div class="code-before">
-                    <div class="code-header">
-                        <span class="code-label">❌ BEFORE</span>
-                        <span class="code-file">Misleading comments</span>
-                    </div>
-<pre><code class="language-python"># Calculate 10% discount for all customers
-def apply_discount(price, customer):
-    # Premium customers get 10% off (WRONG - code says 20%!)
-    if customer.is_premium:
-        return price * 0.8  # Actually 20% discount
-    
-    # Regular customers pay full price (WRONG!)
-    return price * 0.95  # Actually 5% discount
-    
-# TODO: Add validation (added 3 years ago, still no validation)
-
-# Temporary fix - will refactor next sprint (dated 2019)
-def hack_fix():
-    pass
-
-# increment counter
-i = i + 1  # Useless comment - code is obvious</code></pre>
-                </div>
-                
-                <div class="code-after">
-                    <div class="code-header">
-                        <span class="code-label">✅ AFTER</span>
-                        <span class="code-file">Meaningful comments</span>
-                    </div>
-<pre><code class="language-python">def apply_discount(price: Decimal, customer: Customer) -> Decimal:
-    """Apply customer-tier discount to price."""
-    # Discount rates per customer tier (updated Q4 2024 pricing)
-    # See: https://wiki.company.com/pricing-strategy
-    PREMIUM_DISCOUNT = Decimal("0.20")  # 20% for premium
-    STANDARD_DISCOUNT = Decimal("0.05")  # 5% loyalty discount
-    
-    discount = PREMIUM_DISCOUNT if customer.is_premium else STANDARD_DISCOUNT
-    return price * (1 - discount)
-
-# Comments that add value:
-
-# Skip header row - CSV exported from SAP has 2-line header
-# per integration spec v2.3 (contact: data-team@company.com)
-data = csv_rows[2:]
-
-# Use insertion sort for nearly-sorted inventory lists
-# Benchmarked 3x faster than quicksort for our use case
-# See: performance-analysis-2024.md
-sorted_items = insertion_sort(inventory)</code></pre>
-                </div>
-            </div>
-            
-            <div class="capability-used">
-                <strong>CORTEX Capability:</strong> System Maintenance → Stale comment detection
-            </div>
-        </div>
-    </section>
-
-    <!-- Summary -->
-    <section class="section section-alt">
-        <div class="container">
-            <h2 class="section-title text-center">Documentation Transformation Summary</h2>
-            
-            <div class="glass-card">
-                <h3>Key Improvements</h3>
-                <ul class="summary-list">
-                    <li><strong>Docstrings:</strong> Every public function documented with Args, Returns, Raises</li>
-                    <li><strong>Type Hints:</strong> 100% coverage enables IDE support and static analysis</li>
-                    <li><strong>Comments:</strong> Explain WHY, not WHAT; linked to specs and decisions</li>
-                    <li><strong>API Docs:</strong> Auto-generated OpenAPI/Swagger from code annotations</li>
-                    <li><strong>README:</strong> Quick start, architecture overview, contribution guide</li>
-                </ul>
-            </div>
-        </div>
-    </section>
-
-    <!-- Completion Message -->
-    <section class="section">
-        <div class="container text-center">
-            <div class="glass-card" style="background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 212, 255, 0.1));">
-                <h2>🎉 You've Explored All 6 Categories!</h2>
-                <p style="font-size: 1.2rem; margin-bottom: var(--spacing-lg);">
-                    You've seen how CORTEX transforms 61 flaws across Security, SOLID, Code Quality, 
-                    Performance, Testing, and Documentation into production-quality code.
-                </p>
-                <div class="nav-buttons">
-                    <a href="../getting-started/index.html" class="btn btn-primary">Get Started with CORTEX →</a>
-                    <a href="index.html" class="btn btn-secondary">Back to STS Home</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Navigation -->
-    <section class="section section-alt">
-        <div class="container">
-            <h2 class="section-title text-center">Review Other Categories</h2>
-            <div class="nav-buttons">
-                <a href="security.html" class="btn btn-secondary">Security</a>
-                <a href="solid.html" class="btn btn-secondary">SOLID</a>
-                <a href="code-quality.html" class="btn btn-secondary">Code Quality</a>
-                <a href="performance.html" class="btn btn-secondary">Performance</a>
-                <a href="testing.html" class="btn btn-secondary">Testing</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Back to Home -->
-    <div class="back-link-container">
-        <a href="../index.html" class="back-link">← Back to Home</a>
-    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/typescript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/markdown.min.js"></script>
+    <script>hljs.highlightAll();</script>
 </body>
 </html>

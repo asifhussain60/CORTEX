@@ -5,474 +5,894 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="CORTEX SOLID Principles Showcase - Before & After Code Transformations">
     <meta name="author" content="Asif Hussain">
-    <title>SOLID Principles Showcase - CORTEX STS</title>
+    <title>SOLID Principles | STS | CORTEX 4.0</title>
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
-    <link rel="stylesheet" href="../assets/css/main.css?v=4.0.0">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/sts.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
 </head>
-<body>
-    <!-- Breadcrumb Navigation -->
-    <nav class="breadcrumb-nav">
-        <div class="container">
-            <a href="../index.html">Home</a>
-            <span class="separator">→</span>
-            <a href="index.html">Sharpen The Saw</a>
-            <span class="separator">→</span>
-            <span class="current">SOLID Principles</span>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="logo-container">
-            <a href="../index.html">
-                <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo" width="200" height="200">
+<body class="sts-showcase">
+    <!-- Navigation -->
+    <header class="site-header">
+        <nav class="nav-container">
+            <a href="../index.html" class="nav-brand">
+                <i class="fas fa-brain"></i> CORTEX 4.0
             </a>
-        </div>
-        <h1 class="hero-title">📐 SOLID Principles Showcase</h1>
-        <p class="hero-tagline">15 Architectural Violations → Clean, Maintainable Code</p>
-    </section>
+            <div class="nav-links">
+                <a href="index.html"><i class="fas fa-bullseye"></i> STS Hub</a>
+                <a href="../documentation.html"><i class="fas fa-book"></i> Docs</a>
+            </div>
+        </nav>
+    </header>
 
-    <!-- What is SOLID? Educational Section -->
-    <section class="section">
-        <div class="container">
-            <div class="glass-card concept-card">
-                <h2>🎓 What is SOLID?</h2>
-                <p>
-                    <strong>SOLID</strong> is an acronym for five design principles that make software easier to 
-                    understand, maintain, and extend. Think of them as "rules of thumb" that prevent code from 
-                    becoming a tangled mess over time.
+    <main class="sts-main">
+        <!-- Hero Section -->
+        <section class="sts-hero">
+            <div class="hero-badge">
+                <i class="fas fa-drafting-compass"></i> ARCHITECTURE PRINCIPLES
+            </div>
+            <h1>SOLID<br><span class="accent-text">Transformed</span></h1>
+            <p class="hero-subtitle">Watch CORTEX refactor monolithic code into clean, maintainable architecture</p>
+            <div class="sts-metrics">
+                <div class="metric-card">
+                    <div class="metric-value">5</div>
+                    <div class="metric-label">Violations Found</div>
+                </div>
+                <div class="metric-card accent">
+                    <div class="metric-value">5</div>
+                    <div class="metric-label">Auto-Fixed</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">100%</div>
+                    <div class="metric-label">Resolved</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Educational Section -->
+        <section class="sts-education">
+            <div class="education-card">
+                <h3><i class="fas fa-graduation-cap"></i> What are SOLID Principles?</h3>
+                <p style="color: rgba(255,255,255,0.8); margin-bottom: 1.5rem;">
+                    SOLID is an acronym for five design principles that make software designs more understandable, 
+                    flexible, and maintainable. Created by Robert C. Martin (Uncle Bob), these principles are 
+                    foundational to object-oriented design.
                 </p>
-                
-                <div class="principle-explainer">
-                    <div class="principle-letter">S</div>
-                    <div class="principle-content">
-                        <h4>Single Responsibility Principle (SRP)</h4>
-                        <p><em>"A class should have only one reason to change."</em></p>
-                        <p class="principle-analogy">🍳 <strong>Analogy:</strong> A chef shouldn't also be the accountant, waiter, and dishwasher. Each role should be separate.</p>
+                <div class="education-grid">
+                    <div class="education-item">
+                        <h4>S - Single Responsibility</h4>
+                        <p>A class should have only one reason to change. One class = one job.</p>
                     </div>
-                </div>
-                
-                <div class="principle-explainer">
-                    <div class="principle-letter">O</div>
-                    <div class="principle-content">
-                        <h4>Open/Closed Principle (OCP)</h4>
-                        <p><em>"Software should be open for extension, but closed for modification."</em></p>
-                        <p class="principle-analogy">🔌 <strong>Analogy:</strong> A power strip lets you add new devices without rewiring your house.</p>
+                    <div class="education-item">
+                        <h4>O - Open/Closed</h4>
+                        <p>Open for extension, closed for modification. Add new features without changing existing code.</p>
                     </div>
-                </div>
-                
-                <div class="principle-explainer">
-                    <div class="principle-letter">L</div>
-                    <div class="principle-content">
-                        <h4>Liskov Substitution Principle (LSP)</h4>
-                        <p><em>"Subtypes must be substitutable for their base types."</em></p>
-                        <p class="principle-analogy">🦆 <strong>Analogy:</strong> If it walks like a duck and quacks like a duck, your code should work with any duck.</p>
+                    <div class="education-item">
+                        <h4>L - Liskov Substitution</h4>
+                        <p>Subtypes must be substitutable for their base types without breaking the program.</p>
                     </div>
-                </div>
-                
-                <div class="principle-explainer">
-                    <div class="principle-letter">I</div>
-                    <div class="principle-content">
-                        <h4>Interface Segregation Principle (ISP)</h4>
-                        <p><em>"Clients shouldn't be forced to depend on methods they don't use."</em></p>
-                        <p class="principle-analogy">📱 <strong>Analogy:</strong> A TV remote shouldn't have buttons for a washing machine.</p>
+                    <div class="education-item">
+                        <h4>I - Interface Segregation</h4>
+                        <p>Many specific interfaces are better than one general-purpose interface.</p>
                     </div>
-                </div>
-                
-                <div class="principle-explainer">
-                    <div class="principle-letter">D</div>
-                    <div class="principle-content">
-                        <h4>Dependency Inversion Principle (DIP)</h4>
-                        <p><em>"Depend on abstractions, not concretions."</em></p>
-                        <p class="principle-analogy">🔌 <strong>Analogy:</strong> Your laptop uses a standard USB port, not a wire soldered directly to one specific mouse.</p>
+                    <div class="education-item">
+                        <h4>D - Dependency Inversion</h4>
+                        <p>Depend on abstractions, not concrete implementations.</p>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Overview Stats -->
-    <section class="section section-alt">
-        <div class="container">
-            <div class="metrics-grid-4">
-                <div class="metric-card metric-before">
-                    <span class="metric-value">15</span>
-                    <span class="metric-label">SOLID Violations</span>
+        <!-- SRP-01: God Class -->
+        <section class="sts-issue-card">
+            <div class="issue-header">
+                <div class="issue-badge critical">SRP-01</div>
+                <div class="issue-title">
+                    <h2>God Class Violation</h2>
+                    <p>Single class handling multiple unrelated responsibilities</p>
                 </div>
-                <div class="metric-card">
-                    <span class="metric-value">5</span>
-                    <span class="metric-label">Principles Violated</span>
-                </div>
-                <div class="metric-card">
-                    <span class="metric-value">800+</span>
-                    <span class="metric-label">LOC God Class</span>
-                </div>
-                <div class="metric-card metric-after">
-                    <span class="metric-value">100%</span>
-                    <span class="metric-label">Refactored</span>
-                </div>
+                <span class="tech-badge tech-csharp">C#</span>
             </div>
-        </div>
-    </section>
 
-    <!-- SOL-01: God Class (SRP Violation) -->
-    <section class="section" id="sol-01">
-        <div class="container">
-            <div class="flaw-header">
-                <span class="flaw-id">SOL-01</span>
-                <span class="principle-badge principle-srp">SRP</span>
-                <span class="severity-badge severity-critical">CRITICAL</span>
-            </div>
-            <h2>God Class: UserManager Does Everything</h2>
-            <p class="flaw-description">
-                <strong>Anti-Pattern: God Object</strong> — This single class handles authentication, CRUD operations, 
-                email sending, file uploads, and more. With 800+ lines and 35+ methods, it's nearly impossible to 
-                maintain or test. A change to email logic might break authentication!
-            </p>
+            <div class="transform-panels">
+                <div class="panel before-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-times-circle"></i> Before CORTEX
+                    </div>
+                    <pre><code class="language-csharp">public class OrderManager
+{
+    private readonly string _connectionString;
+    private readonly SmtpClient _smtp;
+    
+    // Does EVERYTHING - SRP violation!
+    public Order CreateOrder(OrderRequest request)
+    {
+        // 1. Validate order
+        if (string.IsNullOrEmpty(request.CustomerEmail))
+            throw new Exception("Email required");
+        if (request.Items.Count == 0)
+            throw new Exception("No items");
             
-            <div class="code-comparison">
-                <div class="code-before">
-                    <div class="code-header">
-                        <span class="code-label">❌ BEFORE</span>
-                        <span class="code-file">src/api/users.py (800+ lines)</span>
-                    </div>
-<pre><code class="language-python"># GOD CLASS: Does 12 different jobs!
-class UserManager:
-    """Handles EVERYTHING user-related"""
+        // 2. Calculate pricing
+        decimal total = 0;
+        foreach (var item in request.Items)
+        {
+            var price = GetProductPrice(item.ProductId);
+            var discount = CalculateDiscount(item, request.CustomerId);
+            total += (price - discount) * item.Quantity;
+        }
+        total += CalculateShipping(request.Address);
+        total += total * 0.08m; // Tax
+        
+        // 3. Save to database
+        using var conn = new SqlConnection(_connectionString);
+        conn.Open();
+        var cmd = new SqlCommand(
+            "INSERT INTO Orders...", conn);
+        cmd.ExecuteNonQuery();
+        
+        // 4. Send confirmation email
+        var message = new MailMessage();
+        message.To.Add(request.CustomerEmail);
+        message.Subject = "Order Confirmation";
+        message.Body = GenerateEmailBody(request);
+        _smtp.Send(message);
+        
+        // 5. Update inventory
+        foreach (var item in request.Items)
+        {
+            UpdateInventory(item.ProductId, -item.Quantity);
+        }
+        
+        // 6. Log analytics
+        LogOrderAnalytics(request, total);
+        
+        return new Order { Total = total };
+    }
     
-    def __init__(self):
-        self.db = sqlite3.connect("users.db")
-        self.smtp = smtplib.SMTP("smtp.gmail.com")
-    
-    # Authentication (responsibility 1)
-    def login(self, username, password): ...
-    def logout(self, user_id): ...
-    def reset_password(self, email): ...
-    
-    # CRUD Operations (responsibility 2)
-    def create_user(self, data): ...
-    def update_user(self, user_id, data): ...
-    def delete_user(self, user_id): ...
-    
-    # Email (responsibility 3)
-    def send_welcome_email(self, user): ...
-    def send_password_reset(self, user): ...
-    
-    # File Uploads (responsibility 4)
-    def upload_avatar(self, user_id, file): ...
-    
-    # ... 25 more methods for 8 more responsibilities</code></pre>
+    // ... 500 more lines of mixed responsibilities
+}</code></pre>
                 </div>
-                
-                <div class="code-after">
-                    <div class="code-header">
-                        <span class="code-label">✅ AFTER</span>
-                        <span class="code-file">CORTEX Refinement</span>
-                    </div>
-<pre><code class="language-python"># Each class has ONE responsibility
 
-class AuthenticationService:
-    """Only handles login/logout/sessions"""
-    def login(self, credentials): ...
-    def logout(self, session_id): ...
-    def verify_token(self, token): ...
-
-class UserRepository:
-    """Only handles database operations"""
-    def create(self, user_data): ...
-    def find_by_id(self, user_id): ...
-    def update(self, user_id, data): ...
-
-class EmailService:
-    """Only handles sending emails"""
-    def send(self, template, recipient, data): ...
-
-class FileUploadService:
-    """Only handles file operations"""
-    def upload(self, file, destination): ...
-
-# Now each can be tested, modified, and 
-# understood independently!</code></pre>
+                <div class="transform-arrow">
+                    <i class="fas fa-magic"></i>
+                    <span>CORTEX</span>
                 </div>
-            </div>
+
+                <div class="panel after-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-check-circle"></i> After CORTEX
+                    </div>
+                    <pre><code class="language-csharp">// Each class has ONE responsibility
+public class OrderService : IOrderService
+{
+    private readonly IOrderValidator _validator;
+    private readonly IPricingService _pricing;
+    private readonly IOrderRepository _repository;
+    private readonly INotificationService _notifications;
+    private readonly IInventoryService _inventory;
+    
+    public OrderService(
+        IOrderValidator validator,
+        IPricingService pricing,
+        IOrderRepository repository,
+        INotificationService notifications,
+        IInventoryService inventory)
+    {
+        _validator = validator;
+        _pricing = pricing;
+        _repository = repository;
+        _notifications = notifications;
+        _inventory = inventory;
+    }
+    
+    public async Task&lt;Order&gt; CreateOrderAsync(OrderRequest request)
+    {
+        // Orchestrates single-responsibility services
+        await _validator.ValidateAsync(request);
+        
+        var pricing = await _pricing.CalculateAsync(request);
+        
+        var order = new Order(request, pricing);
+        await _repository.SaveAsync(order);
+        
+        await _inventory.ReserveItemsAsync(request.Items);
+        await _notifications.SendConfirmationAsync(order);
+        
+        return order;
+    }
+}
+
+// Single Responsibility: Validation only
+public class OrderValidator : IOrderValidator
+{
+    public Task ValidateAsync(OrderRequest request)
+    {
+        var errors = new List&lt;ValidationError&gt;();
+        
+        if (string.IsNullOrEmpty(request.CustomerEmail))
+            errors.Add(new("Email is required"));
             
-            <div class="capability-used">
-                <strong>CORTEX Capability:</strong> System Refinement → Class extraction & responsibility separation
-            </div>
-        </div>
-    </section>
-
-    <!-- SOL-04: OCP Violation (If/Else Chains) -->
-    <section class="section section-alt" id="sol-04">
-        <div class="container">
-            <div class="flaw-header">
-                <span class="flaw-id">SOL-04</span>
-                <span class="principle-badge principle-ocp">OCP</span>
-                <span class="severity-badge severity-high">HIGH</span>
-            </div>
-            <h2>If/Else Chain: Adding Payment Methods Requires Code Changes</h2>
-            <p class="flaw-description">
-                <strong>OCP Violation</strong> — Every time we add a new payment type (Apple Pay, Google Pay, etc.), 
-                we must modify this function. The <strong>Strategy Pattern</strong> lets us add new payment methods 
-                without touching existing code.
-            </p>
+        if (!request.Items.Any())
+            errors.Add(new("Order must have items"));
             
-            <div class="code-comparison">
-                <div class="code-before">
-                    <div class="code-header">
-                        <span class="code-label">❌ BEFORE</span>
-                        <span class="code-file">src/business/payment.py:17</span>
-                    </div>
-<pre><code class="language-python">def process_payment(self, payment_type: str, amount: float):
-    """Must modify this function for every new payment type!"""
+        if (errors.Any())
+            throw new ValidationException(errors);
+            
+        return Task.CompletedTask;
+    }
+}
+
+// Single Responsibility: Pricing calculations only
+public class PricingService : IPricingService
+{
+    private readonly IDiscountEngine _discounts;
+    private readonly ITaxCalculator _tax;
+    private readonly IShippingCalculator _shipping;
     
-    # Adding Apple Pay? Modify this file.
-    # Adding Google Pay? Modify this file.
-    # Adding Crypto? Modify this file.
-    
-    if payment_type == "credit_card":
-        return self._process_credit_card(amount)
-    elif payment_type == "debit_card":
-        return self._process_debit_card(amount)
-    elif payment_type == "paypal":
-        return self._process_paypal(amount)
-    elif payment_type == "stripe":
-        return self._process_stripe(amount)
-    elif payment_type == "venmo":
-        return self._process_venmo(amount)
-    elif payment_type == "crypto":
-        return self._process_crypto(amount)
-    # ... chain grows forever
-    else:
-        return {"error": "Unknown payment type"}</code></pre>
-                </div>
-                
-                <div class="code-after">
-                    <div class="code-header">
-                        <span class="code-label">✅ AFTER</span>
-                        <span class="code-file">Strategy Pattern</span>
-                    </div>
-<pre><code class="language-python">from abc import ABC, abstractmethod
-
-class PaymentStrategy(ABC):
-    """Base class - new payments extend this"""
-    @abstractmethod
-    def process(self, amount: float) -> dict: ...
-
-class CreditCardPayment(PaymentStrategy):
-    def process(self, amount): ...
-
-class PayPalPayment(PaymentStrategy):
-    def process(self, amount): ...
-
-# Adding Apple Pay? Just create a new class!
-class ApplePayPayment(PaymentStrategy):
-    def process(self, amount): ...
-
-class PaymentProcessor:
-    def __init__(self):
-        self.strategies: dict[str, PaymentStrategy] = {}
-    
-    def register(self, name: str, strategy: PaymentStrategy):
-        self.strategies[name] = strategy
-    
-    def process(self, payment_type: str, amount: float):
-        strategy = self.strategies.get(payment_type)
-        return strategy.process(amount) if strategy else None</code></pre>
+    public async Task&lt;OrderPricing&gt; CalculateAsync(
+        OrderRequest request)
+    {
+        var subtotal = await CalculateSubtotal(request.Items);
+        var discount = await _discounts.ApplyAsync(request);
+        var shipping = await _shipping.CalculateAsync(request);
+        var tax = _tax.Calculate(subtotal - discount + shipping);
+        
+        return new OrderPricing(subtotal, discount, shipping, tax);
+    }
+}</code></pre>
                 </div>
             </div>
-            
-            <div class="capability-used">
-                <strong>CORTEX Capability:</strong> Planning System → Design pattern recommendation
-            </div>
-        </div>
-    </section>
 
-    <!-- SOL-09: DIP Violation (Direct Instantiation) -->
-    <section class="section" id="sol-09">
-        <div class="container">
-            <div class="flaw-header">
-                <span class="flaw-id">SOL-09</span>
-                <span class="principle-badge principle-dip">DIP</span>
-                <span class="severity-badge severity-high">HIGH</span>
-            </div>
-            <h2>Tight Coupling: Can't Swap Database Without Rewriting</h2>
-            <p class="flaw-description">
-                <strong>DIP Violation</strong> — The application creates a specific <code>Database</code> class directly. 
-                Want to switch from SQLite to PostgreSQL? You'd have to rewrite the entire app. 
-                <strong>Dependency Injection</strong> solves this by depending on an interface, not a concrete class.
-            </p>
-            
-            <div class="code-comparison">
-                <div class="code-before">
-                    <div class="code-header">
-                        <span class="code-label">❌ BEFORE</span>
-                        <span class="code-file">src/app.py:37</span>
-                    </div>
-<pre><code class="language-python"># High-level module directly depends on low-level module
-from src.data.database import Database  # Concrete class!
-
-def create_app():
-    app = Flask(__name__)
-    
-    # TIGHT COUPLING: App is married to SQLite Database
-    # Want PostgreSQL? Rewrite everything.
-    # Want to test with mock DB? Can't.
-    db = Database()  # Direct instantiation
-    
-    user_api = UserAPI(db)
-    product_api = ProductAPI(db)
-    order_api = OrderAPI(db)
-    
-    return app</code></pre>
-                </div>
-                
-                <div class="code-after">
-                    <div class="code-header">
-                        <span class="code-label">✅ AFTER</span>
-                        <span class="code-file">Dependency Injection</span>
-                    </div>
-<pre><code class="language-python">from abc import ABC, abstractmethod
-
-# Define an INTERFACE (abstraction)
-class DatabaseInterface(ABC):
-    @abstractmethod
-    def execute(self, query: str, params: tuple): ...
-    @abstractmethod
-    def get_one(self, query: str, params: tuple): ...
-
-# Concrete implementations
-class SQLiteDatabase(DatabaseInterface): ...
-class PostgresDatabase(DatabaseInterface): ...
-class MockDatabase(DatabaseInterface): ...  # For testing!
-
-def create_app(db: DatabaseInterface):  # Inject dependency
-    """App depends on abstraction, not concrete class"""
-    app = Flask(__name__)
-    
-    # Now we can swap databases easily!
-    user_api = UserAPI(db)
-    product_api = ProductAPI(db)
-    
-    return app
-
-# Production: create_app(PostgresDatabase())
-# Testing:    create_app(MockDatabase())</code></pre>
-                </div>
-            </div>
-            
-            <div class="capability-used">
-                <strong>CORTEX Capability:</strong> Architectural Review → Dependency inversion refactoring
-            </div>
-        </div>
-    </section>
-
-    <!-- SOL-02: God Object (helpers.py) -->
-    <section class="section section-alt" id="sol-02">
-        <div class="container">
-            <div class="flaw-header">
-                <span class="flaw-id">SOL-02</span>
-                <span class="principle-badge principle-srp">SRP</span>
-                <span class="severity-badge severity-high">HIGH</span>
-            </div>
-            <h2>Utility Junk Drawer: helpers.py with 23 Unrelated Functions</h2>
-            <p class="flaw-description">
-                <strong>Anti-Pattern: Utility Class / Junk Drawer</strong> — A file called "helpers" or "utils" 
-                that grows to contain every random function is a code smell. These functions have no cohesion 
-                and should be organized by domain.
-            </p>
-            
-            <div class="code-comparison">
-                <div class="code-before">
-                    <div class="code-header">
-                        <span class="code-label">❌ BEFORE</span>
-                        <span class="code-file">src/utils/helpers.py (587 lines)</span>
-                    </div>
-<pre><code class="language-python"># THE JUNK DRAWER: 23 unrelated functions!
-
-def format_date(date): ...           # Date formatting
-def validate_email(email): ...       # Validation
-def hash_password(pwd): ...          # Security
-def send_slack_notification(): ...   # Messaging
-def resize_image(img): ...           # Image processing
-def calculate_tax(amount): ...       # Business logic
-def parse_csv(file): ...             # File parsing
-def generate_pdf(data): ...          # PDF generation
-def do_stuff(x, y, z): ...           # ??? (bad name too)
-def old_helper(): ...                # Dead code
-def legacy_function(): ...           # More dead code
-# ... 12 more random functions</code></pre>
-                </div>
-                
-                <div class="code-after">
-                    <div class="code-header">
-                        <span class="code-label">✅ AFTER</span>
-                        <span class="code-file">Domain-Organized Modules</span>
-                    </div>
-<pre><code class="language-python"># utils/date_utils.py
-def format_date(date): ...
-def parse_date(date_str): ...
-
-# utils/validation.py
-def validate_email(email): ...
-def validate_phone(phone): ...
-
-# services/security.py
-def hash_password(password): ...
-def verify_password(password, hash): ...
-
-# services/notifications.py
-def send_slack(message): ...
-def send_email(to, subject, body): ...
-
-# services/media.py
-def resize_image(image, dimensions): ...
-def generate_pdf(template, data): ...
-
-# business/tax_calculator.py
-def calculate_tax(amount, region): ...</code></pre>
-                </div>
-            </div>
-            
-            <div class="capability-used">
-                <strong>CORTEX Capability:</strong> Holistic Discovery → Module organization & dead code removal
-            </div>
-        </div>
-    </section>
-
-    <!-- Summary -->
-    <section class="section">
-        <div class="container">
-            <h2 class="section-title text-center">SOLID Transformation Summary</h2>
-            
-            <div class="glass-card">
-                <h3>Why SOLID Matters</h3>
-                <ul class="summary-list">
-                    <li><strong>Maintainability:</strong> Small, focused classes are easier to understand and modify</li>
-                    <li><strong>Testability:</strong> Single-responsibility classes can be unit tested in isolation</li>
-                    <li><strong>Flexibility:</strong> Strategy pattern and DI make swapping implementations trivial</li>
-                    <li><strong>Reduced Risk:</strong> Changes to one area don't accidentally break unrelated features</li>
-                    <li><strong>Team Productivity:</strong> Multiple developers can work on different classes without conflicts</li>
+            <div class="fix-explanation">
+                <h4><i class="fas fa-lightbulb"></i> What CORTEX Fixed</h4>
+                <ul>
+                    <li><strong>Separated concerns:</strong> Validation, pricing, persistence, notification, inventory are now separate services</li>
+                    <li><strong>Dependency injection:</strong> All dependencies injected via constructor</li>
+                    <li><strong>Interface abstractions:</strong> Each service implements an interface</li>
+                    <li><strong>Testability:</strong> Each service can be unit tested in isolation</li>
                 </ul>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Navigation -->
-    <section class="section section-alt">
-        <div class="container">
-            <h2 class="section-title text-center">Explore More Categories</h2>
-            <div class="nav-buttons">
-                <a href="security.html" class="btn btn-secondary">← Security</a>
-                <a href="index.html" class="btn btn-secondary">STS Home</a>
-                <a href="code-quality.html" class="btn btn-primary">Code Quality →</a>
+        <!-- OCP-01: Strategy Pattern -->
+        <section class="sts-issue-card">
+            <div class="issue-header">
+                <div class="issue-badge high">OCP-01</div>
+                <div class="issue-title">
+                    <h2>Open/Closed Violation</h2>
+                    <p>Modifying existing code for every new payment type</p>
+                </div>
+                <span class="tech-badge tech-typescript">TypeScript</span>
             </div>
-        </div>
-    </section>
 
-    <!-- Back to Home -->
-    <div class="back-link-container">
-        <a href="../index.html" class="back-link">← Back to Home</a>
-    </div>
+            <div class="transform-panels">
+                <div class="panel before-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-times-circle"></i> Before CORTEX
+                    </div>
+                    <pre><code class="language-typescript">class PaymentProcessor {
+    processPayment(
+        amount: number, 
+        method: string, 
+        details: any
+    ): PaymentResult {
+        // Must modify this class for every new payment type!
+        if (method === 'credit_card') {
+            return this.processCreditCard(amount, details);
+        } else if (method === 'paypal') {
+            return this.processPayPal(amount, details);
+        } else if (method === 'stripe') {
+            return this.processStripe(amount, details);
+        } else if (method === 'apple_pay') {
+            // Added later - had to modify existing code
+            return this.processApplePay(amount, details);
+        } else if (method === 'google_pay') {
+            // Added even later - more modifications
+            return this.processGooglePay(amount, details);
+        } else if (method === 'crypto') {
+            // Keeps growing...
+            return this.processCrypto(amount, details);
+        }
+        throw new Error(`Unknown payment method: ${method}`);
+    }
+    
+    private processCreditCard(amount: number, details: any) {
+        // Credit card specific logic
+    }
+    
+    private processPayPal(amount: number, details: any) {
+        // PayPal specific logic
+    }
+    
+    // ... more methods for each payment type
+}</code></pre>
+                </div>
+
+                <div class="transform-arrow">
+                    <i class="fas fa-magic"></i>
+                    <span>CORTEX</span>
+                </div>
+
+                <div class="panel after-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-check-circle"></i> After CORTEX
+                    </div>
+                    <pre><code class="language-typescript">// Strategy interface - open for extension
+interface PaymentStrategy {
+    readonly methodType: string;
+    processPayment(amount: number, details: PaymentDetails): 
+        Promise&lt;PaymentResult&gt;;
+    validateDetails(details: PaymentDetails): ValidationResult;
+}
+
+// Closed for modification - never changes
+class PaymentProcessor {
+    private strategies = new Map&lt;string, PaymentStrategy&gt;();
+    
+    registerStrategy(strategy: PaymentStrategy): void {
+        this.strategies.set(strategy.methodType, strategy);
+    }
+    
+    async processPayment(
+        amount: number,
+        method: string,
+        details: PaymentDetails
+    ): Promise&lt;PaymentResult&gt; {
+        const strategy = this.strategies.get(method);
+        if (!strategy) {
+            throw new PaymentError(`Unknown method: ${method}`);
+        }
+        
+        const validation = strategy.validateDetails(details);
+        if (!validation.isValid) {
+            throw new ValidationError(validation.errors);
+        }
+        
+        return strategy.processPayment(amount, details);
+    }
+}
+
+// New payment types - just add new classes!
+class CreditCardStrategy implements PaymentStrategy {
+    readonly methodType = 'credit_card';
+    
+    async processPayment(amount: number, details: PaymentDetails) {
+        // Credit card specific logic
+        return { success: true, transactionId: '...' };
+    }
+    
+    validateDetails(details: PaymentDetails) {
+        // Validate card number, CVV, expiry
+    }
+}
+
+class ApplePayStrategy implements PaymentStrategy {
+    readonly methodType = 'apple_pay';
+    
+    async processPayment(amount: number, details: PaymentDetails) {
+        // Apple Pay specific logic - no existing code modified!
+        return { success: true, transactionId: '...' };
+    }
+}
+
+// Registration - typically in DI container setup
+const processor = new PaymentProcessor();
+processor.registerStrategy(new CreditCardStrategy());
+processor.registerStrategy(new PayPalStrategy());
+processor.registerStrategy(new ApplePayStrategy());
+// Add new strategies without touching PaymentProcessor!</code></pre>
+                </div>
+            </div>
+
+            <div class="fix-explanation">
+                <h4><i class="fas fa-lightbulb"></i> What CORTEX Fixed</h4>
+                <ul>
+                    <li><strong>Strategy pattern:</strong> Each payment method is its own class</li>
+                    <li><strong>Open for extension:</strong> Add new payment methods without modifying PaymentProcessor</li>
+                    <li><strong>Closed for modification:</strong> Core processor code never changes</li>
+                    <li><strong>Registration system:</strong> New strategies registered at startup</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- LSP-01: Liskov Substitution -->
+        <section class="sts-issue-card">
+            <div class="issue-header">
+                <div class="issue-badge medium">LSP-01</div>
+                <div class="issue-title">
+                    <h2>Liskov Substitution Violation</h2>
+                    <p>Subclass that breaks base class contract</p>
+                </div>
+                <span class="tech-badge tech-csharp">C#</span>
+            </div>
+
+            <div class="transform-panels">
+                <div class="panel before-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-times-circle"></i> Before CORTEX
+                    </div>
+                    <pre><code class="language-csharp">public class Rectangle
+{
+    public virtual int Width { get; set; }
+    public virtual int Height { get; set; }
+    
+    public int CalculateArea() => Width * Height;
+}
+
+// LSP Violation: Square changes Rectangle behavior!
+public class Square : Rectangle
+{
+    private int _side;
+    
+    public override int Width
+    {
+        get => _side;
+        set => _side = value; // Also changes height!
+    }
+    
+    public override int Height
+    {
+        get => _side;
+        set => _side = value; // Also changes width!
+    }
+}
+
+// This breaks when substituting Square for Rectangle
+public class AreaCalculator
+{
+    public void ProcessRectangle(Rectangle rect)
+    {
+        rect.Width = 5;
+        rect.Height = 10;
+        
+        // Expected: 50, but with Square: 100!
+        var area = rect.CalculateArea();
+        
+        if (area != 50) // Breaks with Square
+            throw new Exception("Unexpected area!");
+    }
+}</code></pre>
+                </div>
+
+                <div class="transform-arrow">
+                    <i class="fas fa-magic"></i>
+                    <span>CORTEX</span>
+                </div>
+
+                <div class="panel after-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-check-circle"></i> After CORTEX
+                    </div>
+                    <pre><code class="language-csharp">// Common interface for all shapes
+public interface IShape
+{
+    double CalculateArea();
+    double CalculatePerimeter();
+}
+
+// Immutable Rectangle - no inheritance issues
+public sealed class Rectangle : IShape
+{
+    public int Width { get; }
+    public int Height { get; }
+    
+    public Rectangle(int width, int height)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(width);
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(height);
+        
+        Width = width;
+        Height = height;
+    }
+    
+    public double CalculateArea() => Width * Height;
+    public double CalculatePerimeter() => 2 * (Width + Height);
+}
+
+// Square is NOT a Rectangle - separate implementation
+public sealed class Square : IShape
+{
+    public int Side { get; }
+    
+    public Square(int side)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(side);
+        Side = side;
+    }
+    
+    public double CalculateArea() => Side * Side;
+    public double CalculatePerimeter() => 4 * Side;
+}
+
+// Works with any shape without assumptions
+public class AreaCalculator
+{
+    public double CalculateTotalArea(IEnumerable&lt;IShape&gt; shapes)
+    {
+        return shapes.Sum(s => s.CalculateArea());
+    }
+}
+
+// Factory for creating shapes
+public static class ShapeFactory
+{
+    public static IShape CreateRectangle(int w, int h) => 
+        new Rectangle(w, h);
+    
+    public static IShape CreateSquare(int side) => 
+        new Square(side);
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="fix-explanation">
+                <h4><i class="fas fa-lightbulb"></i> What CORTEX Fixed</h4>
+                <ul>
+                    <li><strong>Composition over inheritance:</strong> Square and Rectangle both implement IShape</li>
+                    <li><strong>Immutable objects:</strong> Properties set via constructor, no setters</li>
+                    <li><strong>Sealed classes:</strong> Prevents problematic inheritance chains</li>
+                    <li><strong>Factory pattern:</strong> Centralized shape creation</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- ISP-01: Interface Segregation -->
+        <section class="sts-issue-card">
+            <div class="issue-header">
+                <div class="issue-badge medium">ISP-01</div>
+                <div class="issue-title">
+                    <h2>Interface Segregation Violation</h2>
+                    <p>Fat interface forcing unnecessary implementations</p>
+                </div>
+                <span class="tech-badge tech-typescript">TypeScript</span>
+            </div>
+
+            <div class="transform-panels">
+                <div class="panel before-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-times-circle"></i> Before CORTEX
+                    </div>
+                    <pre><code class="language-typescript">// Fat interface - forces ALL implementations
+interface IWorker {
+    work(): void;
+    eat(): void;
+    sleep(): void;
+    attendMeeting(): void;
+    writeReport(): void;
+    managePeople(): void;
+    writeCode(): void;
+    reviewCode(): void;
+    deployCode(): void;
+}
+
+// Human worker - implements everything
+class HumanDeveloper implements IWorker {
+    work() { /* ... */ }
+    eat() { /* ... */ }
+    sleep() { /* ... */ }
+    attendMeeting() { /* ... */ }
+    writeReport() { /* ... */ }
+    managePeople() { /* NOT A MANAGER! */ }
+    writeCode() { /* ... */ }
+    reviewCode() { /* ... */ }
+    deployCode() { /* ... */ }
+}
+
+// Robot - forced to implement eat/sleep!
+class RobotWorker implements IWorker {
+    work() { /* ... */ }
+    eat() { throw new Error("Robots don't eat!"); }
+    sleep() { throw new Error("Robots don't sleep!"); }
+    attendMeeting() { throw new Error("No meetings!"); }
+    writeReport() { /* ... */ }
+    managePeople() { throw new Error("Not a manager!"); }
+    writeCode() { /* ... */ }
+    reviewCode() { /* ... */ }
+    deployCode() { /* ... */ }
+}</code></pre>
+                </div>
+
+                <div class="transform-arrow">
+                    <i class="fas fa-magic"></i>
+                    <span>CORTEX</span>
+                </div>
+
+                <div class="panel after-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-check-circle"></i> After CORTEX
+                    </div>
+                    <pre><code class="language-typescript">// Segregated interfaces - implement only what's needed
+interface IWorkable {
+    work(): void;
+}
+
+interface IFeedable {
+    eat(): void;
+}
+
+interface ISleepable {
+    sleep(): void;
+}
+
+interface IMeetingAttendee {
+    attendMeeting(): void;
+    writeReport(): void;
+}
+
+interface IManager {
+    managePeople(): void;
+    conductReview(): void;
+}
+
+interface IDeveloper {
+    writeCode(): void;
+    reviewCode(): void;
+}
+
+interface IDeployable {
+    deployCode(): void;
+}
+
+// Human developer - only relevant interfaces
+class HumanDeveloper implements 
+    IWorkable, 
+    IFeedable, 
+    ISleepable, 
+    IMeetingAttendee, 
+    IDeveloper,
+    IDeployable {
+    
+    work() { console.log('Working...'); }
+    eat() { console.log('Lunch break!'); }
+    sleep() { console.log('8 hours sleep'); }
+    attendMeeting() { console.log('In standup'); }
+    writeReport() { console.log('Writing status'); }
+    writeCode() { console.log('Coding...'); }
+    reviewCode() { console.log('PR review'); }
+    deployCode() { console.log('Deploying...'); }
+}
+
+// Robot - only implements what it can do
+class RobotWorker implements 
+    IWorkable, 
+    IDeveloper,
+    IDeployable {
+    
+    work() { console.log('Processing...'); }
+    writeCode() { console.log('Generating code'); }
+    reviewCode() { console.log('Static analysis'); }
+    deployCode() { console.log('CI/CD pipeline'); }
+}
+
+// Tech Lead - developer + manager capabilities
+class TechLead implements 
+    IWorkable,
+    IFeedable,
+    IMeetingAttendee,
+    IDeveloper,
+    IManager {
+    // Only implements relevant methods
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="fix-explanation">
+                <h4><i class="fas fa-lightbulb"></i> What CORTEX Fixed</h4>
+                <ul>
+                    <li><strong>Small interfaces:</strong> Each interface has a single cohesive purpose</li>
+                    <li><strong>Selective implementation:</strong> Classes only implement what they need</li>
+                    <li><strong>No dummy methods:</strong> No more throwing "not supported" errors</li>
+                    <li><strong>Composable:</strong> Combine interfaces for complex roles</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- DIP-01: Dependency Inversion -->
+        <section class="sts-issue-card">
+            <div class="issue-header">
+                <div class="issue-badge high">DIP-01</div>
+                <div class="issue-title">
+                    <h2>Dependency Inversion Violation</h2>
+                    <p>High-level modules depending on concrete implementations</p>
+                </div>
+                <span class="tech-badge tech-csharp">C#</span>
+            </div>
+
+            <div class="transform-panels">
+                <div class="panel before-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-times-circle"></i> Before CORTEX
+                    </div>
+                    <pre><code class="language-csharp">// High-level module depends on concrete implementations!
+public class OrderService
+{
+    // Direct dependency on concrete classes
+    private readonly SqlServerDatabase _database;
+    private readonly SmtpEmailSender _emailSender;
+    private readonly StripePaymentGateway _paymentGateway;
+    private readonly FileLogger _logger;
+    
+    public OrderService()
+    {
+        // Creating own dependencies - tightly coupled!
+        _database = new SqlServerDatabase(
+            "Server=prod;Database=orders");
+        _emailSender = new SmtpEmailSender(
+            "smtp.company.com", 587);
+        _paymentGateway = new StripePaymentGateway(
+            "sk_live_xxxxx");
+        _logger = new FileLogger("C:\\logs\\orders.log");
+    }
+    
+    public void ProcessOrder(Order order)
+    {
+        _logger.Log("Processing order");
+        _paymentGateway.Charge(order.Total);
+        _database.Save(order);
+        _emailSender.Send(order.CustomerEmail, "Confirmed");
+    }
+}
+
+// Cannot test without real database, email, payment!
+// Cannot switch to PostgreSQL, SendGrid, or PayPal
+// Cannot use different logger in production vs dev</code></pre>
+                </div>
+
+                <div class="transform-arrow">
+                    <i class="fas fa-magic"></i>
+                    <span>CORTEX</span>
+                </div>
+
+                <div class="panel after-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-check-circle"></i> After CORTEX
+                    </div>
+                    <pre><code class="language-csharp">// Abstractions that high-level modules depend on
+public interface IOrderRepository
+{
+    Task SaveAsync(Order order);
+    Task&lt;Order?&gt; GetByIdAsync(Guid id);
+}
+
+public interface INotificationService
+{
+    Task SendAsync(string recipient, string message);
+}
+
+public interface IPaymentGateway
+{
+    Task&lt;PaymentResult&gt; ChargeAsync(decimal amount, PaymentDetails details);
+}
+
+// High-level module depends on abstractions
+public class OrderService : IOrderService
+{
+    private readonly IOrderRepository _repository;
+    private readonly INotificationService _notifications;
+    private readonly IPaymentGateway _payments;
+    private readonly ILogger&lt;OrderService&gt; _logger;
+    
+    // Dependencies injected - not created internally
+    public OrderService(
+        IOrderRepository repository,
+        INotificationService notifications,
+        IPaymentGateway payments,
+        ILogger&lt;OrderService&gt; logger)
+    {
+        _repository = repository;
+        _notifications = notifications;
+        _payments = payments;
+        _logger = logger;
+    }
+    
+    public async Task ProcessOrderAsync(Order order)
+    {
+        _logger.LogInformation(
+            "Processing order {OrderId}", order.Id);
+            
+        var payment = await _payments.ChargeAsync(
+            order.Total, order.PaymentDetails);
+            
+        if (!payment.Success)
+            throw new PaymentFailedException(payment.Error);
+            
+        await _repository.SaveAsync(order);
+        await _notifications.SendAsync(
+            order.CustomerEmail, "Order confirmed!");
+    }
+}
+
+// DI Registration - swap implementations easily
+services.AddScoped&lt;IOrderRepository, PostgresOrderRepository&gt;();
+services.AddScoped&lt;INotificationService, SendGridNotificationService&gt;();
+services.AddScoped&lt;IPaymentGateway, StripePaymentGateway&gt;();
+
+// In tests - use mocks/fakes
+services.AddScoped&lt;IOrderRepository, InMemoryOrderRepository&gt;();
+services.AddScoped&lt;IPaymentGateway, FakePaymentGateway&gt;();</code></pre>
+                </div>
+            </div>
+
+            <div class="fix-explanation">
+                <h4><i class="fas fa-lightbulb"></i> What CORTEX Fixed</h4>
+                <ul>
+                    <li><strong>Interface abstractions:</strong> All dependencies are interfaces</li>
+                    <li><strong>Constructor injection:</strong> Dependencies provided externally</li>
+                    <li><strong>Swappable implementations:</strong> Change database/payment/email without touching OrderService</li>
+                    <li><strong>Testability:</strong> Inject mocks for isolated unit testing</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Best Practices -->
+        <section class="sts-best-practices">
+            <h2><i class="fas fa-drafting-compass"></i> SOLID Best Practices</h2>
+            <div class="practices-grid">
+                <div class="practice-card">
+                    <div class="practice-icon">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <h3>Single Responsibility</h3>
+                    <p>If describing a class requires "and", it probably does too much. Split it.</p>
+                    <code>OrderValidator, OrderPricer, OrderSaver</code>
+                </div>
+                <div class="practice-card">
+                    <div class="practice-icon">
+                        <i class="fas fa-plug"></i>
+                    </div>
+                    <h3>Open/Closed</h3>
+                    <p>Use strategy, decorator, or factory patterns to extend without modifying.</p>
+                    <code>interface IPaymentStrategy</code>
+                </div>
+                <div class="practice-card">
+                    <div class="practice-icon">
+                        <i class="fas fa-exchange-alt"></i>
+                    </div>
+                    <h3>Liskov Substitution</h3>
+                    <p>Prefer composition over inheritance. Use interfaces for polymorphism.</p>
+                    <code>interface IShape { Area(); }</code>
+                </div>
+                <div class="practice-card">
+                    <div class="practice-icon">
+                        <i class="fas fa-puzzle-piece"></i>
+                    </div>
+                    <h3>Dependency Inversion</h3>
+                    <p>Program to interfaces. Let DI containers wire implementations.</p>
+                    <code>services.AddScoped&lt;IRepo, SqlRepo&gt;()</code>
+                </div>
+            </div>
+        </section>
+
+        <!-- Navigation -->
+        <nav class="sts-nav">
+            <a href="security.html" class="nav-prev">
+                <i class="fas fa-arrow-left"></i>
+                <span>Security</span>
+            </a>
+            <a href="index.html" class="nav-hub">
+                <i class="fas fa-th"></i>
+                <span>STS Hub</span>
+            </a>
+            <a href="code-quality.html" class="nav-next">
+                <span>Code Quality</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </nav>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <p>CORTEX 4.0 — AI-Powered Code Intelligence</p>
+            <p class="footer-sub">Transforming codebases through intelligent analysis</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/typescript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/csharp.min.js"></script>
+    <script>hljs.highlightAll();</script>
 </body>
 </html>

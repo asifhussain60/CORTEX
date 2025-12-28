@@ -5,582 +5,819 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="CORTEX Code Quality Showcase - Before & After Code Transformations">
     <meta name="author" content="Asif Hussain">
-    <title>Code Quality Showcase - CORTEX STS</title>
+    <title>Code Quality | STS | CORTEX 4.0</title>
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
-    <link rel="stylesheet" href="../assets/css/main.css?v=4.0.0">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/sts.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
 </head>
-<body>
-    <!-- Breadcrumb Navigation -->
-    <nav class="breadcrumb-nav">
-        <div class="container">
-            <a href="../index.html">Home</a>
-            <span class="separator">→</span>
-            <a href="index.html">Sharpen The Saw</a>
-            <span class="separator">→</span>
-            <span class="current">Code Quality</span>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="logo-container">
-            <a href="../index.html">
-                <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo" width="200" height="200">
+<body class="sts-showcase">
+    <!-- Navigation -->
+    <header class="site-header">
+        <nav class="nav-container">
+            <a href="../index.html" class="nav-brand">
+                <i class="fas fa-brain"></i> CORTEX 4.0
             </a>
-        </div>
-        <h1 class="hero-title">⚡ Code Quality Showcase</h1>
-        <p class="hero-tagline">20 Code Smells → Clean, Readable Code</p>
-    </section>
+            <div class="nav-links">
+                <a href="index.html"><i class="fas fa-bullseye"></i> STS Hub</a>
+                <a href="../documentation.html"><i class="fas fa-book"></i> Docs</a>
+            </div>
+        </nav>
+    </header>
 
-    <!-- What is Code Quality? Educational Section -->
-    <section class="section">
-        <div class="container">
-            <div class="glass-card concept-card">
-                <h2>🎓 Code Quality Principles Explained</h2>
-                <p>
-                    "Code quality" isn't just about whether code works—it's about whether code is 
-                    <strong>readable</strong>, <strong>maintainable</strong>, and <strong>bug-resistant</strong>. 
-                    Here are the key principles that separate good code from bad:
+    <main class="sts-main">
+        <!-- Hero Section -->
+        <section class="sts-hero">
+            <div class="hero-badge">
+                <i class="fas fa-gem"></i> CODE QUALITY
+            </div>
+            <h1>Quality<br><span class="accent-text">Transformed</span></h1>
+            <p class="hero-subtitle">Watch CORTEX eliminate code smells and apply industry best practices</p>
+            <div class="sts-metrics">
+                <div class="metric-card">
+                    <div class="metric-value">5</div>
+                    <div class="metric-label">Smells Found</div>
+                </div>
+                <div class="metric-card accent">
+                    <div class="metric-value">5</div>
+                    <div class="metric-label">Auto-Fixed</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">100%</div>
+                    <div class="metric-label">Resolved</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Educational Section -->
+        <section class="sts-education">
+            <div class="education-card">
+                <h3><i class="fas fa-graduation-cap"></i> Code Quality Principles</h3>
+                <p style="color: rgba(255,255,255,0.8); margin-bottom: 1.5rem;">
+                    Great code isn't just code that works—it's code that's easy to read, maintain, and extend. 
+                    These principles help you write code that your future self (and teammates) will thank you for.
                 </p>
-                
-                <div class="principle-explainer">
-                    <div class="principle-letter">DRY</div>
-                    <div class="principle-content">
-                        <h4>Don't Repeat Yourself</h4>
-                        <p><em>"Every piece of knowledge must have a single, unambiguous representation in a system."</em></p>
-                        <p class="principle-analogy">📝 <strong>Analogy:</strong> If you update your address, you shouldn't have to change it in 10 different places.</p>
+                <div class="education-grid">
+                    <div class="education-item">
+                        <h4>DRY (Don't Repeat Yourself)</h4>
+                        <p>Every piece of knowledge should have a single, unambiguous representation in the system.</p>
                     </div>
-                </div>
-                
-                <div class="principle-explainer">
-                    <div class="principle-letter">KISS</div>
-                    <div class="principle-content">
-                        <h4>Keep It Simple, Stupid</h4>
-                        <p><em>"Simplicity should be a key goal in design, and unnecessary complexity should be avoided."</em></p>
-                        <p class="principle-analogy">🔧 <strong>Analogy:</strong> Don't use a Swiss Army knife when a screwdriver will do.</p>
+                    <div class="education-item">
+                        <h4>KISS (Keep It Simple, Stupid)</h4>
+                        <p>Simplicity is the ultimate sophistication. Avoid unnecessary complexity.</p>
                     </div>
-                </div>
-                
-                <div class="principle-explainer">
-                    <div class="principle-letter">YAGNI</div>
-                    <div class="principle-content">
-                        <h4>You Aren't Gonna Need It</h4>
-                        <p><em>"Don't add functionality until it's actually needed."</em></p>
-                        <p class="principle-analogy">🏗️ <strong>Analogy:</strong> Don't build a helipad on your house "just in case" you buy a helicopter.</p>
+                    <div class="education-item">
+                        <h4>YAGNI (You Aren't Gonna Need It)</h4>
+                        <p>Don't add functionality until you actually need it. Premature abstraction is the root of much evil.</p>
                     </div>
-                </div>
-                
-                <div class="principle-explainer">
-                    <div class="principle-letter">CC</div>
-                    <div class="principle-content">
-                        <h4>Cyclomatic Complexity</h4>
-                        <p><em>"A measure of how many independent paths exist through code. Lower is better."</em></p>
-                        <p class="principle-analogy">🌳 <strong>Analogy:</strong> A function with 50 if/else branches is like a maze—hard to navigate and easy to get lost.</p>
+                    <div class="education-item">
+                        <h4>Clean Code</h4>
+                        <p>Code should be self-documenting. If you need comments to explain what it does, refactor it.</p>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Overview Stats -->
-    <section class="section section-alt">
-        <div class="container">
-            <div class="metrics-grid-4">
-                <div class="metric-card metric-before">
-                    <span class="metric-value">20</span>
-                    <span class="metric-label">Code Smells</span>
+        <!-- DRY-01: Copy-Paste Code -->
+        <section class="sts-issue-card">
+            <div class="issue-header">
+                <div class="issue-badge critical">DRY-01</div>
+                <div class="issue-title">
+                    <h2>Copy-Paste Duplication</h2>
+                    <p>Same validation logic repeated across multiple components</p>
                 </div>
-                <div class="metric-card">
-                    <span class="metric-value">68</span>
-                    <span class="metric-label">Max Complexity</span>
-                </div>
-                <div class="metric-card">
-                    <span class="metric-value">80%</span>
-                    <span class="metric-label">Duplicate Code</span>
-                </div>
-                <div class="metric-card metric-after">
-                    <span class="metric-value">100%</span>
-                    <span class="metric-label">Cleaned Up</span>
-                </div>
+                <span class="tech-badge tech-angular">Angular</span>
             </div>
-        </div>
-    </section>
 
-    <!-- CQ-03: DRY Violation (Copy-Paste Programming) -->
-    <section class="section" id="cq-03">
-        <div class="container">
-            <div class="flaw-header">
-                <span class="flaw-id">CQ-03</span>
-                <span class="issue-badge">DRY Violation</span>
-                <span class="severity-badge severity-high">HIGH</span>
-            </div>
-            <h2>Copy-Paste Programming: 80% Duplicate Code</h2>
-            <p class="flaw-description">
-                <strong>Anti-Pattern: Copy-Paste Programming</strong> — Three payment methods share 80% identical code. 
-                When a bug is found, it must be fixed in three places. When validation rules change, three methods 
-                need updating. This is a maintenance nightmare!
-            </p>
-            
-            <div class="code-comparison">
-                <div class="code-before">
-                    <div class="code-header">
-                        <span class="code-label">❌ BEFORE</span>
-                        <span class="code-file">src/business/payment.py</span>
+            <div class="transform-panels">
+                <div class="panel before-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-times-circle"></i> Before CORTEX
                     </div>
-<pre><code class="language-python">def _process_credit_card(self, amount: float, data: dict):
-    # Validate amount (DUPLICATE)
-    if amount <= 0:
-        return {"success": False, "error": "Invalid amount"}
-    if amount > 10000:
-        return {"success": False, "error": "Amount exceeds limit"}
+                    <pre><code class="language-typescript">// user-profile.component.ts
+@Component({ selector: 'app-user-profile', ... })
+export class UserProfileComponent {
+    validateEmail(email: string): boolean {
+        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        return regex.test(email);
+    }
     
-    # Validate card (DUPLICATE)
-    card_number = data.get("card_number")
-    if not card_number or len(card_number) != 16:
-        return {"success": False, "error": "Invalid card"}
+    validatePhone(phone: string): boolean {
+        const cleaned = phone.replace(/\D/g, '');
+        return cleaned.length === 10 || cleaned.length === 11;
+    }
     
-    transaction_id = f"CC-{card_number[:4]}-{amount}"
-    return {"success": True, "transaction_id": transaction_id}
+    formatCurrency(amount: number): string {
+        return new Intl.NumberFormat('en-US', {
+            style: 'currency', currency: 'USD'
+        }).format(amount);
+    }
+}
 
-def _process_debit_card(self, amount: float, data: dict):
-    # Same validation copied! (DUPLICATE)
-    if amount <= 0:
-        return {"success": False, "error": "Invalid amount"}
-    if amount > 10000:
-        return {"success": False, "error": "Amount exceeds limit"}
+// checkout.component.ts - SAME CODE COPIED!
+@Component({ selector: 'app-checkout', ... })
+export class CheckoutComponent {
+    validateEmail(email: string): boolean {
+        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        return regex.test(email);
+    }
     
-    # Same card validation! (DUPLICATE)
-    card_number = data.get("card_number")
-    if not card_number or len(card_number) != 16:
-        return {"success": False, "error": "Invalid card"}
+    validatePhone(phone: string): boolean {
+        const cleaned = phone.replace(/\D/g, '');
+        return cleaned.length === 10 || cleaned.length === 11;
+    }
     
-    transaction_id = f"DC-{card_number[:4]}-{amount}"
-    return {"success": True, "transaction_id": transaction_id}</code></pre>
+    formatCurrency(amount: number): string {
+        return new Intl.NumberFormat('en-US', {
+            style: 'currency', currency: 'USD'
+        }).format(amount);
+    }
+}
+
+// contact.component.ts - COPIED AGAIN!
+@Component({ selector: 'app-contact', ... })
+export class ContactComponent {
+    // Same methods copied a third time...
+}</code></pre>
                 </div>
-                
-                <div class="code-after">
-                    <div class="code-header">
-                        <span class="code-label">✅ AFTER</span>
-                        <span class="code-file">DRY Refactored</span>
+
+                <div class="transform-arrow">
+                    <i class="fas fa-magic"></i>
+                    <span>CORTEX</span>
+                </div>
+
+                <div class="panel after-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-check-circle"></i> After CORTEX
                     </div>
-<pre><code class="language-python">def _validate_amount(self, amount: float) -> tuple[bool, str]:
-    """Single source of truth for amount validation"""
-    if amount <= 0:
-        return False, "Invalid amount"
-    if amount > 10000:
-        return False, "Amount exceeds limit"
-    return True, ""
-
-def _validate_card(self, card_number: str) -> tuple[bool, str]:
-    """Single source of truth for card validation"""
-    if not card_number or len(card_number) != 16:
-        return False, "Invalid card"
-    return True, ""
-
-def _process_card_payment(
-    self, card_type: str, amount: float, data: dict
-):
-    """Unified card processing - no duplication!"""
-    valid, error = self._validate_amount(amount)
-    if not valid:
-        return {"success": False, "error": error}
+                    <pre><code class="language-typescript">// shared/validators/validation.service.ts
+@Injectable({ providedIn: 'root' })
+export class ValidationService {
+    private readonly emailRegex = 
+        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     
-    valid, error = self._validate_card(data.get("card_number", ""))
-    if not valid:
-        return {"success": False, "error": error}
+    validateEmail(email: string): ValidationResult {
+        const isValid = this.emailRegex.test(email);
+        return {
+            isValid,
+            error: isValid ? null : 'Invalid email format'
+        };
+    }
     
-    prefix = "CC" if card_type == "credit" else "DC"
-    transaction_id = f"{prefix}-{data['card_number'][:4]}-{amount}"
-    return {"success": True, "transaction_id": transaction_id}</code></pre>
+    validatePhone(phone: string): ValidationResult {
+        const cleaned = phone.replace(/\D/g, '');
+        const isValid = cleaned.length >= 10 && cleaned.length <= 11;
+        return {
+            isValid,
+            error: isValid ? null : 'Phone must be 10-11 digits'
+        };
+    }
+}
+
+// shared/pipes/currency.pipe.ts
+@Pipe({ name: 'appCurrency', standalone: true })
+export class CurrencyPipe implements PipeTransform {
+    transform(value: number, currency = 'USD'): string {
+        return new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency
+        }).format(value);
+    }
+}
+
+// Components now inject the service
+@Component({ selector: 'app-user-profile', ... })
+export class UserProfileComponent {
+    constructor(private validation: ValidationService) {}
+    
+    onEmailChange(email: string) {
+        const result = this.validation.validateEmail(email);
+        if (!result.isValid) {
+            this.emailError = result.error;
+        }
+    }
+}
+
+// Template uses the pipe
+// {{ price | appCurrency }}
+// {{ price | appCurrency:'EUR' }}</code></pre>
                 </div>
             </div>
-            
-            <div class="capability-used">
-                <strong>CORTEX Capability:</strong> Holistic Discovery → Duplicate code detection & extraction
-            </div>
-        </div>
-    </section>
 
-    <!-- CQ-07: Monster Method -->
-    <section class="section section-alt" id="cq-07">
-        <div class="container">
-            <div class="flaw-header">
-                <span class="flaw-id">CQ-07</span>
-                <span class="issue-badge">Complexity: 68</span>
-                <span class="severity-badge severity-critical">CRITICAL</span>
-            </div>
-            <h2>Monster Method: 250 Lines, Complexity 68</h2>
-            <p class="flaw-description">
-                <strong>Anti-Pattern: Monster Method</strong> — A single function with 250 lines and cyclomatic 
-                complexity of 68 (should be under 10). This function is impossible to understand, test, or modify 
-                safely. <strong>Cyclomatic Complexity</strong> measures the number of independent paths through 
-                code—68 means 68 different scenarios to test!
-            </p>
-            
-            <div class="code-comparison">
-                <div class="code-before">
-                    <div class="code-header">
-                        <span class="code-label">❌ BEFORE</span>
-                        <span class="code-file">src/utils/helpers.py:49</span>
-                    </div>
-<pre><code class="language-python">def process_data(data, options, config, flags, metadata):
-    """250 lines of nested if/else horror"""
-    result = []
-    
-    if options.get("mode") == "fast":
-        if config.validate:
-            if flags.strict:
-                for item in data:
-                    if item.type == "A":
-                        if item.status == "active":
-                            if metadata.region == "US":
-                                # ... 20 more nested levels
-                                pass
-                            elif metadata.region == "EU":
-                                # Different logic buried deep
-                                pass
-                        else:
-                            # More branches...
-                            pass
-                    elif item.type == "B":
-                        # Completely different logic
-                        pass
-    elif options.get("mode") == "slow":
-        # Another 100 lines of similar nesting
-        pass
-    
-    # ... 200 more lines
-    return result</code></pre>
-                </div>
-                
-                <div class="code-after">
-                    <div class="code-header">
-                        <span class="code-label">✅ AFTER</span>
-                        <span class="code-file">Extract Method + Strategy</span>
-                    </div>
-<pre><code class="language-python"># Each function has ONE job, complexity < 10
-
-def process_data(data: list, context: ProcessContext) -> list:
-    """Orchestrates processing - delegates to specialists"""
-    processor = ProcessorFactory.create(context.mode)
-    validator = ValidatorFactory.create(context.config)
-    
-    validated = validator.validate_batch(data)
-    return processor.process_batch(validated, context)
-
-class FastProcessor:
-    """Handles fast mode processing"""
-    def process_batch(self, data, context):
-        return [self._process_item(item, context) for item in data]
-    
-    def _process_item(self, item, context):
-        handler = self._get_handler(item.type)
-        return handler.process(item, context)
-
-class ItemTypeAHandler:
-    """Handles Type A items only"""
-    def process(self, item, context):
-        if not item.is_active:
-            return self._handle_inactive(item)
-        return self._process_by_region(item, context.region)
-    
-    def _process_by_region(self, item, region: str):
-        handlers = {"US": self._us_rules, "EU": self._eu_rules}
-        return handlers.get(region, self._default_rules)(item)</code></pre>
-                </div>
-            </div>
-            
-            <div class="capability-used">
-                <strong>CORTEX Capability:</strong> System Refinement → Method extraction & complexity reduction
-            </div>
-        </div>
-    </section>
-
-    <!-- CQ-11: Poor Naming -->
-    <section class="section" id="cq-11">
-        <div class="container">
-            <div class="flaw-header">
-                <span class="flaw-id">CQ-11</span>
-                <span class="issue-badge">Poor Naming</span>
-                <span class="severity-badge severity-medium">MEDIUM</span>
-            </div>
-            <h2>Cryptic Names: do_stuff(x, y, z)</h2>
-            <p class="flaw-description">
-                <strong>Code Smell: Meaningless Names</strong> — Function and variable names should explain what 
-                they do. Names like <code>do_stuff</code>, <code>x</code>, <code>y</code>, <code>z</code>, 
-                <code>data</code>, or <code>temp</code> force readers to decode the entire function to understand it.
-            </p>
-            
-            <div class="code-comparison">
-                <div class="code-before">
-                    <div class="code-header">
-                        <span class="code-label">❌ BEFORE</span>
-                        <span class="code-file">src/utils/helpers.py:100</span>
-                    </div>
-<pre><code class="language-python"># What does this do? Who knows!
-def do_stuff(x, y, z):
-    temp = []
-    for i in x:
-        if i.a > y:
-            temp.append(i.b * z)
-    return sum(temp) / len(temp) if temp else 0
-
-def proc(d, f):
-    r = []
-    for item in d:
-        if f(item):
-            r.append(item)
-    return r
-
-# Calling code is equally mysterious
-result = do_stuff(data, 100, 0.15)
-filtered = proc(items, lambda x: x.v > 5)</code></pre>
-                </div>
-                
-                <div class="code-after">
-                    <div class="code-header">
-                        <span class="code-label">✅ AFTER</span>
-                        <span class="code-file">Self-Documenting Names</span>
-                    </div>
-<pre><code class="language-python"># Names explain purpose without comments
-def calculate_average_discounted_price(
-    products: list[Product],
-    min_price: float,
-    discount_rate: float
-) -> float:
-    """Calculate average price after discount for premium products."""
-    discounted_prices = [
-        product.price * discount_rate
-        for product in products
-        if product.price > min_price
-    ]
-    if not discounted_prices:
-        return 0.0
-    return sum(discounted_prices) / len(discounted_prices)
-
-def filter_items_by_predicate(
-    items: list[T], 
-    predicate: Callable[[T], bool]
-) -> list[T]:
-    """Return items matching the given condition."""
-    return [item for item in items if predicate(item)]
-
-# Calling code is now readable
-avg_price = calculate_average_discounted_price(
-    products=catalog, min_price=100, discount_rate=0.15
-)
-active_users = filter_items_by_predicate(
-    users, predicate=lambda user: user.is_active
-)</code></pre>
-                </div>
-            </div>
-            
-            <div class="capability-used">
-                <strong>CORTEX Capability:</strong> Code Sanitization → Naming convention enforcement
-            </div>
-        </div>
-    </section>
-
-    <!-- CQ-09: Dead Code -->
-    <section class="section section-alt" id="cq-09">
-        <div class="container">
-            <div class="flaw-header">
-                <span class="flaw-id">CQ-09</span>
-                <span class="issue-badge">Dead Code</span>
-                <span class="severity-badge severity-medium">MEDIUM</span>
-            </div>
-            <h2>Zombie Code: Functions Nobody Calls</h2>
-            <p class="flaw-description">
-                <strong>Code Smell: Dead Code</strong> — Functions that are never called, variables that are never 
-                read, and imports that are never used. Dead code confuses readers ("Is this important?"), 
-                increases cognitive load, and can hide bugs.
-            </p>
-            
-            <div class="code-comparison">
-                <div class="code-before">
-                    <div class="code-header">
-                        <span class="code-label">❌ BEFORE</span>
-                        <span class="code-file">src/utils/helpers.py:189</span>
-                    </div>
-<pre><code class="language-python">import json          # Used
-import xml            # Never used!
-import deprecated_lib # Never used!
-
-def active_function():
-    """This is called from main.py"""
-    return calculate_total()
-
-def legacy_function():
-    """TODO: Remove after migration (dated 2019)"""
-    # 50 lines of code nobody calls anymore
-    pass
-
-def old_helper():
-    """Commented out call in user_api.py"""
-    # Another 30 lines of dead code
-    pass
-
-def experimental_feature():
-    """Was for a feature that got cancelled"""
-    pass
-
-# Dead variable
-UNUSED_CONFIG = {"key": "value_nobody_reads"}</code></pre>
-                </div>
-                
-                <div class="code-after">
-                    <div class="code-header">
-                        <span class="code-label">✅ AFTER</span>
-                        <span class="code-file">Clean & Minimal</span>
-                    </div>
-<pre><code class="language-python">import json  # Only what's actually used
-
-def active_function():
-    """This is called from main.py"""
-    return calculate_total()
-
-# Dead code removed:
-# - legacy_function() - no callers (git blame: 2019)
-# - old_helper() - commented call removed
-# - experimental_feature() - feature cancelled
-# - UNUSED_CONFIG - zero references
-# - xml import - not used
-# - deprecated_lib import - not used
-
-# If needed later, git history preserves everything.
-# "Deleted code is debugged code."</code></pre>
-                </div>
-            </div>
-            
-            <div class="capability-used">
-                <strong>CORTEX Capability:</strong> System Maintenance → Dead code detection & removal
-            </div>
-        </div>
-    </section>
-
-    <!-- CQ-13: No Error Handling -->
-    <section class="section" id="cq-13">
-        <div class="container">
-            <div class="flaw-header">
-                <span class="flaw-id">CQ-13</span>
-                <span class="issue-badge">No Try/Except</span>
-                <span class="severity-badge severity-high">HIGH</span>
-            </div>
-            <h2>Crash Waiting to Happen: No Error Handling</h2>
-            <p class="flaw-description">
-                <strong>Code Smell: Missing Error Handling</strong> — Code that assumes everything will work 
-                perfectly. In reality, networks fail, files go missing, and databases timeout. Without 
-                <code>try/except</code>, one error crashes the entire application.
-            </p>
-            
-            <div class="code-comparison">
-                <div class="code-before">
-                    <div class="code-header">
-                        <span class="code-label">❌ BEFORE</span>
-                        <span class="code-file">src/app.py:51</span>
-                    </div>
-<pre><code class="language-python">@app.route('/health')
-def health():
-    """Health check endpoint - crashes on any error!"""
-    # No try/except - any failure = 500 error
-    db_status = db.execute("SELECT 1")  # DB down? Crash!
-    cache_status = cache.ping()          # Cache down? Crash!
-    api_status = external_api.check()    # API timeout? Crash!
-    
-    return jsonify({
-        "database": db_status,
-        "cache": cache_status,
-        "external_api": api_status
-    })
-
-@app.route('/users/<int:user_id>')
-def get_user(user_id):
-    # What if user doesn't exist? KeyError!
-    # What if DB is down? ConnectionError!
-    user = db.get_one(f"SELECT * FROM users WHERE id = {user_id}")
-    return jsonify(user)</code></pre>
-                </div>
-                
-                <div class="code-after">
-                    <div class="code-header">
-                        <span class="code-label">✅ AFTER</span>
-                        <span class="code-file">Graceful Degradation</span>
-                    </div>
-<pre><code class="language-python">@app.route('/health')
-def health():
-    """Health check with graceful degradation"""
-    status = {"overall": "healthy"}
-    
-    # Each check is isolated - one failure doesn't crash all
-    try:
-        db.execute("SELECT 1")
-        status["database"] = "healthy"
-    except DatabaseError as e:
-        status["database"] = "unhealthy"
-        status["overall"] = "degraded"
-        logger.error(f"DB health check failed: {e}")
-    
-    try:
-        cache.ping()
-        status["cache"] = "healthy"
-    except CacheError as e:
-        status["cache"] = "unhealthy"
-        logger.warning(f"Cache unavailable: {e}")
-    
-    http_status = 200 if status["overall"] == "healthy" else 503
-    return jsonify(status), http_status
-
-@app.route('/users/<int:user_id>')
-def get_user(user_id: int):
-    try:
-        user = user_repository.find_by_id(user_id)
-        if not user:
-            return jsonify({"error": "User not found"}), 404
-        return jsonify(user)
-    except DatabaseError:
-        return jsonify({"error": "Service unavailable"}), 503</code></pre>
-                </div>
-            </div>
-            
-            <div class="capability-used">
-                <strong>CORTEX Capability:</strong> TDD Mastery → Error handling test coverage
-            </div>
-        </div>
-    </section>
-
-    <!-- Summary -->
-    <section class="section section-alt">
-        <div class="container">
-            <h2 class="section-title text-center">Code Quality Transformation Summary</h2>
-            
-            <div class="glass-card">
-                <h3>Key Improvements</h3>
-                <ul class="summary-list">
-                    <li><strong>DRY Applied:</strong> 80% duplicate code → single source of truth</li>
-                    <li><strong>Complexity Reduced:</strong> 68 → under 10 per function</li>
-                    <li><strong>Self-Documenting Names:</strong> No more guessing what code does</li>
-                    <li><strong>Dead Code Removed:</strong> Cleaner, leaner codebase</li>
-                    <li><strong>Error Handling:</strong> Graceful degradation instead of crashes</li>
+            <div class="fix-explanation">
+                <h4><i class="fas fa-lightbulb"></i> What CORTEX Fixed</h4>
+                <ul>
+                    <li><strong>Shared service:</strong> ValidationService provides all validation in one place</li>
+                    <li><strong>Custom pipe:</strong> Currency formatting available in any template</li>
+                    <li><strong>Single source of truth:</strong> Fix a bug once, it's fixed everywhere</li>
+                    <li><strong>Consistent behavior:</strong> All components use identical logic</li>
                 </ul>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Navigation -->
-    <section class="section">
-        <div class="container">
-            <h2 class="section-title text-center">Explore More Categories</h2>
-            <div class="nav-buttons">
-                <a href="solid.html" class="btn btn-secondary">← SOLID</a>
-                <a href="index.html" class="btn btn-secondary">STS Home</a>
-                <a href="performance.html" class="btn btn-primary">Performance →</a>
+        <!-- KISS-01: Complex Conditionals -->
+        <section class="sts-issue-card">
+            <div class="issue-header">
+                <div class="issue-badge high">KISS-01</div>
+                <div class="issue-title">
+                    <h2>Overly Complex Conditionals</h2>
+                    <p>Nested if-else chains that are hard to follow</p>
+                </div>
+                <span class="tech-badge tech-typescript">TypeScript</span>
             </div>
-        </div>
-    </section>
 
-    <!-- Back to Home -->
-    <div class="back-link-container">
-        <a href="../index.html" class="back-link">← Back to Home</a>
-    </div>
+            <div class="transform-panels">
+                <div class="panel before-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-times-circle"></i> Before CORTEX
+                    </div>
+                    <pre><code class="language-typescript">function calculateDiscount(
+    user: User, 
+    order: Order, 
+    coupon?: Coupon
+): number {
+    let discount = 0;
+    
+    if (user) {
+        if (user.isPremium) {
+            if (order.total > 100) {
+                if (coupon) {
+                    if (coupon.type === 'percentage') {
+                        if (coupon.value > 50) {
+                            discount = order.total * 0.5;
+                        } else {
+                            discount = order.total * (coupon.value / 100);
+                        }
+                    } else if (coupon.type === 'fixed') {
+                        discount = coupon.value;
+                    }
+                    discount += order.total * 0.1; // Premium bonus
+                } else {
+                    discount = order.total * 0.1;
+                }
+            } else {
+                if (coupon) {
+                    if (coupon.type === 'percentage') {
+                        discount = order.total * (coupon.value / 100);
+                    } else {
+                        discount = coupon.value;
+                    }
+                }
+                discount += order.total * 0.05; // Small premium bonus
+            }
+        } else {
+            if (coupon) {
+                if (coupon.type === 'percentage') {
+                    discount = order.total * (coupon.value / 100);
+                } else {
+                    discount = coupon.value;
+                }
+            }
+        }
+    }
+    
+    return Math.min(discount, order.total);
+}</code></pre>
+                </div>
+
+                <div class="transform-arrow">
+                    <i class="fas fa-magic"></i>
+                    <span>CORTEX</span>
+                </div>
+
+                <div class="panel after-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-check-circle"></i> After CORTEX
+                    </div>
+                    <pre><code class="language-typescript">interface DiscountContext {
+    user: User;
+    order: Order;
+    coupon?: Coupon;
+}
+
+function calculateDiscount(ctx: DiscountContext): number {
+    const discounts: number[] = [];
+    
+    // Apply coupon discount
+    if (ctx.coupon) {
+        discounts.push(calculateCouponDiscount(ctx.coupon, ctx.order));
+    }
+    
+    // Apply premium member discount
+    if (ctx.user.isPremium) {
+        discounts.push(calculatePremiumDiscount(ctx.order));
+    }
+    
+    const totalDiscount = discounts.reduce((sum, d) => sum + d, 0);
+    return Math.min(totalDiscount, ctx.order.total);
+}
+
+function calculateCouponDiscount(coupon: Coupon, order: Order): number {
+    const maxPercentage = 50;
+    
+    switch (coupon.type) {
+        case 'percentage':
+            const cappedPercentage = Math.min(coupon.value, maxPercentage);
+            return order.total * (cappedPercentage / 100);
+        
+        case 'fixed':
+            return Math.min(coupon.value, order.total);
+        
+        default:
+            return 0;
+    }
+}
+
+function calculatePremiumDiscount(order: Order): number {
+    const thresholds = [
+        { minTotal: 100, rate: 0.10 },
+        { minTotal: 0, rate: 0.05 }
+    ];
+    
+    const tier = thresholds.find(t => order.total >= t.minTotal);
+    return tier ? order.total * tier.rate : 0;
+}
+
+// Even simpler with a discount engine
+class DiscountEngine {
+    private rules: DiscountRule[] = [];
+    
+    addRule(rule: DiscountRule): this {
+        this.rules.push(rule);
+        return this;
+    }
+    
+    calculate(ctx: DiscountContext): number {
+        return this.rules
+            .filter(rule => rule.applies(ctx))
+            .reduce((total, rule) => total + rule.calculate(ctx), 0);
+    }
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="fix-explanation">
+                <h4><i class="fas fa-lightbulb"></i> What CORTEX Fixed</h4>
+                <ul>
+                    <li><strong>Flat structure:</strong> No more nested if-else chains</li>
+                    <li><strong>Single responsibility:</strong> Each function does one thing</li>
+                    <li><strong>Early returns:</strong> Guard clauses simplify logic</li>
+                    <li><strong>Rule engine:</strong> Extensible pattern for complex discounts</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- YAGNI-01: Over-Engineering -->
+        <section class="sts-issue-card">
+            <div class="issue-header">
+                <div class="issue-badge medium">YAGNI-01</div>
+                <div class="issue-title">
+                    <h2>Premature Abstraction</h2>
+                    <p>Building complex systems for hypothetical future needs</p>
+                </div>
+                <span class="tech-badge tech-csharp">C#</span>
+            </div>
+
+            <div class="transform-panels">
+                <div class="panel before-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-times-circle"></i> Before CORTEX
+                    </div>
+                    <pre><code class="language-csharp">// "We might need different loggers someday!"
+public interface ILogger { }
+public interface ILoggerFactory { }
+public interface ILogFormatter { }
+public interface ILogDestination { }
+public interface ILogFilter { }
+public interface ILogEnricher { }
+
+public abstract class LoggerBase : ILogger
+{
+    protected readonly ILogFormatter _formatter;
+    protected readonly ILogDestination _destination;
+    protected readonly IEnumerable&lt;ILogFilter&gt; _filters;
+    protected readonly IEnumerable&lt;ILogEnricher&gt; _enrichers;
+    
+    // Abstract methods for "flexibility"
+    protected abstract void PreProcess(LogEntry entry);
+    protected abstract void PostProcess(LogEntry entry);
+}
+
+public class DefaultLoggerFactory : ILoggerFactory
+{
+    private readonly IServiceProvider _provider;
+    private readonly LoggerOptions _options;
+    
+    public ILogger CreateLogger&lt;T&gt;()
+    {
+        // 50 lines of factory logic...
+    }
+}
+
+// In startup - 20 lines of DI registration
+services.AddSingleton&lt;ILoggerFactory, DefaultLoggerFactory&gt;();
+services.AddTransient&lt;ILogFormatter, JsonLogFormatter&gt;();
+services.AddTransient&lt;ILogDestination, ConsoleLogDestination&gt;();
+// ... more registrations
+
+// Actual usage in the whole app:
+_logger.LogInformation("User logged in");
+// That's it. Just console logging.</code></pre>
+                </div>
+
+                <div class="transform-arrow">
+                    <i class="fas fa-magic"></i>
+                    <span>CORTEX</span>
+                </div>
+
+                <div class="panel after-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-check-circle"></i> After CORTEX
+                    </div>
+                    <pre><code class="language-csharp">// Just use the built-in logger!
+public class UserService
+{
+    private readonly ILogger&lt;UserService&gt; _logger;
+    
+    public UserService(ILogger&lt;UserService&gt; logger)
+    {
+        _logger = logger;
+    }
+    
+    public async Task&lt;User&gt; LoginAsync(LoginRequest request)
+    {
+        _logger.LogInformation(
+            "Login attempt for {Email}", request.Email);
+        
+        // ... login logic
+        
+        _logger.LogInformation(
+            "User {UserId} logged in successfully", user.Id);
+        
+        return user;
+    }
+}
+
+// In startup - ONE line
+builder.Logging.AddConsole();
+
+// When you ACTUALLY need more (months later):
+builder.Logging.AddApplicationInsights();
+// Or
+builder.Logging.AddSerilog();
+
+// The abstraction already exists in .NET!
+// Microsoft.Extensions.Logging handles:
+// - Multiple providers
+// - Log levels
+// - Structured logging
+// - Filtering
+// - All the things you "might need"</code></pre>
+                </div>
+            </div>
+
+            <div class="fix-explanation">
+                <h4><i class="fas fa-lightbulb"></i> What CORTEX Fixed</h4>
+                <ul>
+                    <li><strong>Use built-in abstractions:</strong> ILogger&lt;T&gt; already provides flexibility</li>
+                    <li><strong>Deleted 6 interfaces:</strong> Removed unnecessary abstraction layers</li>
+                    <li><strong>1 line vs 50:</strong> Configuration reduced by 98%</li>
+                    <li><strong>Still extensible:</strong> Add Serilog/AppInsights when actually needed</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- CLEAN-01: Magic Numbers -->
+        <section class="sts-issue-card">
+            <div class="issue-header">
+                <div class="issue-badge medium">CLEAN-01</div>
+                <div class="issue-title">
+                    <h2>Magic Numbers & Strings</h2>
+                    <p>Unexplained literals scattered throughout code</p>
+                </div>
+                <span class="tech-badge tech-typescript">TypeScript</span>
+            </div>
+
+            <div class="transform-panels">
+                <div class="panel before-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-times-circle"></i> Before CORTEX
+                    </div>
+                    <pre><code class="language-typescript">class OrderService {
+    processOrder(order: Order): void {
+        // What is 5? Why 100? What's 0.08?
+        if (order.items.length > 5) {
+            throw new Error('Too many items');
+        }
+        
+        if (order.total < 100) {
+            order.total += 9.99; // Shipping?
+        }
+        
+        order.total *= 1.08; // Tax? Which state?
+        
+        if (order.status === 2) { // What is 2?
+            this.sendEmail(order, 'order-confirm');
+        }
+        
+        // 86400000? What does that mean?
+        const expiry = Date.now() + 86400000;
+        
+        // Is 3 retries? Attempts? Something else?
+        for (let i = 0; i < 3; i++) {
+            try {
+                this.submitOrder(order);
+                break;
+            } catch (e) {
+                if (i === 2) throw e; // Why 2?
+            }
+        }
+    }
+}</code></pre>
+                </div>
+
+                <div class="transform-arrow">
+                    <i class="fas fa-magic"></i>
+                    <span>CORTEX</span>
+                </div>
+
+                <div class="panel after-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-check-circle"></i> After CORTEX
+                    </div>
+                    <pre><code class="language-typescript">// Named constants explain the business logic
+const ORDER_LIMITS = {
+    MAX_ITEMS_PER_ORDER: 5,
+    FREE_SHIPPING_THRESHOLD: 100,
+    STANDARD_SHIPPING_COST: 9.99
+} as const;
+
+const TAX_RATES = {
+    DEFAULT_SALES_TAX: 0.08,
+    CA_SALES_TAX: 0.0725,
+    NY_SALES_TAX: 0.08
+} as const;
+
+const TIME = {
+    ONE_DAY_MS: 24 * 60 * 60 * 1000,
+    ONE_HOUR_MS: 60 * 60 * 1000
+} as const;
+
+const RETRY_CONFIG = {
+    MAX_ATTEMPTS: 3,
+    DELAY_MS: 1000
+} as const;
+
+enum OrderStatus {
+    Pending = 1,
+    Confirmed = 2,
+    Shipped = 3,
+    Delivered = 4,
+    Cancelled = 5
+}
+
+class OrderService {
+    processOrder(order: Order): void {
+        this.validateItemCount(order);
+        this.applyShipping(order);
+        this.applyTax(order);
+        
+        if (order.status === OrderStatus.Confirmed) {
+            this.sendEmail(order, EmailTemplate.OrderConfirmation);
+        }
+        
+        const expiryDate = Date.now() + TIME.ONE_DAY_MS;
+        
+        this.submitWithRetry(order, RETRY_CONFIG.MAX_ATTEMPTS);
+    }
+    
+    private validateItemCount(order: Order): void {
+        if (order.items.length > ORDER_LIMITS.MAX_ITEMS_PER_ORDER) {
+            throw new OrderLimitExceededError(
+                `Maximum ${ORDER_LIMITS.MAX_ITEMS_PER_ORDER} items allowed`
+            );
+        }
+    }
+    
+    private applyShipping(order: Order): void {
+        if (order.total < ORDER_LIMITS.FREE_SHIPPING_THRESHOLD) {
+            order.shippingCost = ORDER_LIMITS.STANDARD_SHIPPING_COST;
+        }
+    }
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="fix-explanation">
+                <h4><i class="fas fa-lightbulb"></i> What CORTEX Fixed</h4>
+                <ul>
+                    <li><strong>Named constants:</strong> Every number has a meaningful name</li>
+                    <li><strong>Enums for states:</strong> OrderStatus.Confirmed vs magic number 2</li>
+                    <li><strong>Grouped config:</strong> Related constants organized together</li>
+                    <li><strong>Self-documenting:</strong> Code explains itself without comments</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- CLEAN-02: Long Methods -->
+        <section class="sts-issue-card">
+            <div class="issue-header">
+                <div class="issue-badge high">CLEAN-02</div>
+                <div class="issue-title">
+                    <h2>Long Method / Function</h2>
+                    <p>200+ line methods doing too many things</p>
+                </div>
+                <span class="tech-badge tech-angular">Angular</span>
+            </div>
+
+            <div class="transform-panels">
+                <div class="panel before-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-times-circle"></i> Before CORTEX
+                    </div>
+                    <pre><code class="language-typescript">@Component({ ... })
+export class CheckoutComponent {
+    async submitOrder(): Promise&lt;void&gt; {
+        // 200+ lines in ONE method!
+        
+        // Validation (30 lines)
+        if (!this.cart.items.length) { throw new Error(); }
+        if (!this.user.email) { throw new Error(); }
+        // ... 25 more validation checks
+        
+        // Address formatting (20 lines)
+        let address = this.shippingAddress.line1;
+        if (this.shippingAddress.line2) {
+            address += ', ' + this.shippingAddress.line2;
+        }
+        // ... more formatting
+        
+        // Price calculation (40 lines)
+        let subtotal = 0;
+        for (const item of this.cart.items) {
+            let price = item.price;
+            if (item.discount) {
+                price -= item.discount;
+            }
+            // ... complex pricing logic
+        }
+        
+        // Tax calculation (20 lines)
+        // Shipping calculation (20 lines)
+        // Payment processing (30 lines)
+        // Order creation (20 lines)
+        // Email sending (15 lines)
+        // Analytics tracking (10 lines)
+        // UI updates (15 lines)
+    }
+}</code></pre>
+                </div>
+
+                <div class="transform-arrow">
+                    <i class="fas fa-magic"></i>
+                    <span>CORTEX</span>
+                </div>
+
+                <div class="panel after-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-check-circle"></i> After CORTEX
+                    </div>
+                    <pre><code class="language-typescript">@Component({ ... })
+export class CheckoutComponent {
+    constructor(
+        private validation: CheckoutValidationService,
+        private pricing: PricingService,
+        private orders: OrderService,
+        private notifications: NotificationService,
+        private analytics: AnalyticsService
+    ) {}
+    
+    // Main method is now a clear orchestrator
+    async submitOrder(): Promise&lt;void&gt; {
+        try {
+            this.setLoading(true);
+            
+            await this.validation.validateCheckout(this.checkoutData);
+            
+            const pricing = await this.pricing.calculate(this.cart);
+            
+            const order = await this.orders.create({
+                items: this.cart.items,
+                shipping: this.shippingAddress,
+                billing: this.billingAddress,
+                pricing
+            });
+            
+            await this.postOrderActions(order);
+            
+            this.navigateToConfirmation(order.id);
+        } catch (error) {
+            this.handleCheckoutError(error);
+        } finally {
+            this.setLoading(false);
+        }
+    }
+    
+    private async postOrderActions(order: Order): Promise&lt;void&gt; {
+        await Promise.all([
+            this.notifications.sendConfirmation(order),
+            this.analytics.trackPurchase(order),
+            this.cart.clear()
+        ]);
+    }
+    
+    private handleCheckoutError(error: unknown): void {
+        if (error instanceof ValidationError) {
+            this.showValidationErrors(error.errors);
+        } else if (error instanceof PaymentError) {
+            this.showPaymentError(error);
+        } else {
+            this.showGenericError();
+        }
+    }
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="fix-explanation">
+                <h4><i class="fas fa-lightbulb"></i> What CORTEX Fixed</h4>
+                <ul>
+                    <li><strong>Service extraction:</strong> Validation, pricing, orders moved to dedicated services</li>
+                    <li><strong>Clear orchestration:</strong> Main method shows the workflow at a glance</li>
+                    <li><strong>Error handling:</strong> Centralized with specific error types</li>
+                    <li><strong>Parallel execution:</strong> Independent tasks run concurrently</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Best Practices -->
+        <section class="sts-best-practices">
+            <h2><i class="fas fa-gem"></i> Code Quality Best Practices</h2>
+            <div class="practices-grid">
+                <div class="practice-card">
+                    <div class="practice-icon">
+                        <i class="fas fa-clone"></i>
+                    </div>
+                    <h3>DRY</h3>
+                    <p>Extract shared logic into services, utilities, or base classes. One source of truth.</p>
+                    <code>@Injectable() ValidationService</code>
+                </div>
+                <div class="practice-card">
+                    <div class="practice-icon">
+                        <i class="fas fa-feather"></i>
+                    </div>
+                    <h3>KISS</h3>
+                    <p>Prefer simple, straightforward solutions. If it's hard to explain, it's too complex.</p>
+                    <code>return items.filter(x => x.active)</code>
+                </div>
+                <div class="practice-card">
+                    <div class="practice-icon">
+                        <i class="fas fa-cut"></i>
+                    </div>
+                    <h3>YAGNI</h3>
+                    <p>Build for today's requirements. Refactor when you actually need more.</p>
+                    <code>// TODO: Add when needed</code>
+                </div>
+                <div class="practice-card">
+                    <div class="practice-icon">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <h3>Self-Documenting</h3>
+                    <p>Use meaningful names. Code should read like prose, not puzzles.</p>
+                    <code>isEligibleForDiscount(user)</code>
+                </div>
+            </div>
+        </section>
+
+        <!-- Navigation -->
+        <nav class="sts-nav">
+            <a href="solid.html" class="nav-prev">
+                <i class="fas fa-arrow-left"></i>
+                <span>SOLID</span>
+            </a>
+            <a href="index.html" class="nav-hub">
+                <i class="fas fa-th"></i>
+                <span>STS Hub</span>
+            </a>
+            <a href="performance.html" class="nav-next">
+                <span>Performance</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </nav>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <p>CORTEX 4.0 — AI-Powered Code Intelligence</p>
+            <p class="footer-sub">Transforming codebases through intelligent analysis</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/typescript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/csharp.min.js"></script>
+    <script>hljs.highlightAll();</script>
 </body>
 </html>
