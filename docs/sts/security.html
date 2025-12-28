@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX Security Showcase - Before & After Code Transformations">
+    <meta name="author" content="Asif Hussain">
+    <title>Security Showcase - CORTEX STS</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../assets/css/main.css?v=4.0.0">
+</head>
+<body>
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb-nav">
+        <div class="container">
+            <a href="../index.html">Home</a>
+            <span class="separator">→</span>
+            <a href="index.html">Sharpen The Saw</a>
+            <span class="separator">→</span>
+            <span class="current">Security</span>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="logo-container">
+            <a href="../index.html">
+                <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo" width="200" height="200">
+            </a>
+        </div>
+        <h1 class="hero-title">🔒 Security Showcase</h1>
+        <p class="hero-tagline">12 Critical Vulnerabilities → Production-Safe Code</p>
+    </section>
+
+    <!-- Overview Stats -->
+    <section class="section">
+        <div class="container">
+            <div class="metrics-grid-4">
+                <div class="metric-card metric-before">
+                    <span class="metric-value">12</span>
+                    <span class="metric-label">Security Flaws</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-value">5</span>
+                    <span class="metric-label">Critical Severity</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-value">4</span>
+                    <span class="metric-label">OWASP Categories</span>
+                </div>
+                <div class="metric-card metric-after">
+                    <span class="metric-value">100%</span>
+                    <span class="metric-label">Remediated</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEC-01: Hardcoded JWT Secret -->
+    <section class="section section-alt" id="sec-01">
+        <div class="container">
+            <div class="flaw-header">
+                <span class="flaw-id">SEC-01</span>
+                <span class="severity-badge severity-critical">CRITICAL</span>
+                <span class="owasp-badge">OWASP A02:2021</span>
+            </div>
+            <h2>Hardcoded JWT Secret Key</h2>
+            <p class="flaw-description">
+                <strong>CWE-798:</strong> Use of Hard-coded Credentials. JWT secrets embedded in source code 
+                can be extracted by attackers with code access, enabling token forgery.
+            </p>
+            
+            <div class="code-comparison">
+                <div class="code-before">
+                    <div class="code-header">
+                        <span class="code-label">❌ BEFORE</span>
+                        <span class="code-file">src/api/auth.py:23</span>
+                    </div>
+<pre><code class="language-python"># FLAW: Secret key hardcoded in source code
+# Anyone with code access can forge tokens
+JWT_SECRET = "super_secret_key_12345"
+
+# Token generation uses hardcoded secret
+def create_token(user_id):
+    return jwt.encode({"user_id": user_id}, JWT_SECRET)</code></pre>
+                </div>
+                
+                <div class="code-after">
+                    <div class="code-header">
+                        <span class="code-label">✅ AFTER</span>
+                        <span class="code-file">CORTEX Sanitization</span>
+                    </div>
+<pre><code class="language-python">import os
+
+# Secret loaded from environment variable
+# Never committed to source control
+JWT_SECRET = os.getenv('JWT_SECRET')
+
+if not JWT_SECRET:
+    raise EnvironmentError(
+        "JWT_SECRET environment variable required"
+    )
+
+def create_token(user_id):
+    return jwt.encode({"user_id": user_id}, JWT_SECRET)</code></pre>
+                </div>
+            </div>
+            
+            <div class="capability-used">
+                <strong>CORTEX Capability:</strong> Code Sanitization → Secret Detection & Extraction
+            </div>
+        </div>
+    </section>
+
+    <!-- SEC-02: Plaintext Password Storage -->
+    <section class="section" id="sec-02">
+        <div class="container">
+            <div class="flaw-header">
+                <span class="flaw-id">SEC-02</span>
+                <span class="severity-badge severity-critical">CRITICAL</span>
+                <span class="owasp-badge">OWASP A02:2021</span>
+            </div>
+            <h2>Plaintext Password Storage</h2>
+            <p class="flaw-description">
+                <strong>CWE-916:</strong> Use of Password Hash With Insufficient Computational Effort. 
+                Storing passwords in plaintext exposes all users if database is compromised.
+            </p>
+            
+            <div class="code-comparison">
+                <div class="code-before">
+                    <div class="code-header">
+                        <span class="code-label">❌ BEFORE</span>
+                        <span class="code-file">src/api/auth.py:42</span>
+                    </div>
+<pre><code class="language-python"># FLAW: Passwords stored and compared as plaintext
+USERS_DB = {
+    "admin": {"password": "admin123", "role": "admin"},
+    "user1": {"password": "password", "role": "user"}
+}
+
+def authenticate(username, password):
+    user = USERS_DB.get(username)
+    # Plaintext comparison!
+    if user and user["password"] == password:
+        return create_token(username)
+    return None</code></pre>
+                </div>
+                
+                <div class="code-after">
+                    <div class="code-header">
+                        <span class="code-label">✅ AFTER</span>
+                        <span class="code-file">CORTEX TDD Mastery</span>
+                    </div>
+<pre><code class="language-python">from argon2 import PasswordHasher
+from argon2.exceptions import VerifyMismatchError
+
+ph = PasswordHasher(
+    time_cost=3,      # Iterations
+    memory_cost=65536, # 64MB
+    parallelism=4
+)
+
+def hash_password(password: str) -> str:
+    """Hash password using Argon2id (winner of PHC)"""
+    return ph.hash(password)
+
+def verify_password(password: str, hash: str) -> bool:
+    """Verify password with constant-time comparison"""
+    try:
+        ph.verify(hash, password)
+        return True
+    except VerifyMismatchError:
+        return False</code></pre>
+                </div>
+            </div>
+            
+            <div class="capability-used">
+                <strong>CORTEX Capability:</strong> TDD Mastery → Test-driven security implementation
+            </div>
+        </div>
+    </section>
+
+    <!-- SEC-03: SQL Injection -->
+    <section class="section section-alt" id="sec-03">
+        <div class="container">
+            <div class="flaw-header">
+                <span class="flaw-id">SEC-03</span>
+                <span class="severity-badge severity-critical">CRITICAL</span>
+                <span class="owasp-badge">OWASP A03:2021</span>
+            </div>
+            <h2>SQL Injection via F-Strings</h2>
+            <p class="flaw-description">
+                <strong>CWE-89:</strong> SQL Injection. Using f-strings or string concatenation 
+                for SQL queries allows attackers to execute arbitrary database commands.
+            </p>
+            
+            <div class="code-comparison">
+                <div class="code-before">
+                    <div class="code-header">
+                        <span class="code-label">❌ BEFORE</span>
+                        <span class="code-file">src/data/database.py:75</span>
+                    </div>
+<pre><code class="language-python">def find_by_id(self, table: str, id: int):
+    # FLAW: SQL injection via f-string
+    # Attacker input: id = "1; DROP TABLE users;--"
+    query = f"SELECT * FROM {table} WHERE id = {id}"
+    return self.db.get_one(query)
+
+def find_user(self, username: str):
+    # FLAW: Direct string interpolation
+    query = f"SELECT * FROM users WHERE name = '{username}'"
+    return self.db.execute(query)</code></pre>
+                </div>
+                
+                <div class="code-after">
+                    <div class="code-header">
+                        <span class="code-label">✅ AFTER</span>
+                        <span class="code-file">CORTEX Refinement</span>
+                    </div>
+<pre><code class="language-python">from typing import Optional, Dict
+
+# Whitelist of allowed table names
+ALLOWED_TABLES = frozenset(['users', 'products', 'orders'])
+
+def find_by_id(self, table: str, id: int) -> Optional[Dict]:
+    if table not in ALLOWED_TABLES:
+        raise ValueError(f"Invalid table: {table}")
+    
+    # Parameterized query prevents injection
+    query = f"SELECT * FROM {table} WHERE id = ?"
+    return self.db.get_one(query, (id,))
+
+def find_user(self, username: str) -> Optional[Dict]:
+    # Parameterized - username is safely escaped
+    query = "SELECT * FROM users WHERE name = ?"
+    return self.db.execute(query, (username,))</code></pre>
+                </div>
+            </div>
+            
+            <div class="capability-used">
+                <strong>CORTEX Capability:</strong> System Refinement → Security-focused code transformation
+            </div>
+        </div>
+    </section>
+
+    <!-- SEC-05: Debug Mode in Production -->
+    <section class="section" id="sec-05">
+        <div class="container">
+            <div class="flaw-header">
+                <span class="flaw-id">SEC-05</span>
+                <span class="severity-badge severity-high">HIGH</span>
+                <span class="owasp-badge">OWASP A05:2021</span>
+            </div>
+            <h2>Debug Mode Enabled in Production</h2>
+            <p class="flaw-description">
+                <strong>CWE-489:</strong> Active Debug Code. Debug mode exposes stack traces, 
+                internal paths, and enables interactive debugger—goldmine for attackers.
+            </p>
+            
+            <div class="code-comparison">
+                <div class="code-before">
+                    <div class="code-header">
+                        <span class="code-label">❌ BEFORE</span>
+                        <span class="code-file">src/app.py:13</span>
+                    </div>
+<pre><code class="language-python"># FLAW: Debug mode hardcoded to True
+# Exposes stack traces, internal paths, allows code execution
+DEBUG_MODE = True  # Should NEVER be True in production
+
+def create_app():
+    app = Flask(__name__)
+    app.config['DEBUG'] = DEBUG_MODE  # Werkzeug debugger enabled!
+    
+    # Attackers can see full stack traces
+    # Interactive debugger allows arbitrary code execution
+    return app</code></pre>
+                </div>
+                
+                <div class="code-after">
+                    <div class="code-header">
+                        <span class="code-label">✅ AFTER</span>
+                        <span class="code-file">CORTEX Maintenance</span>
+                    </div>
+<pre><code class="language-python">import os
+
+def create_app():
+    app = Flask(__name__)
+    
+    # Debug mode controlled by environment
+    # Default to False (secure by default)
+    debug = os.getenv('FLASK_DEBUG', 'false').lower() == 'true'
+    
+    if debug and os.getenv('FLASK_ENV') == 'production':
+        raise RuntimeError(
+            "DEBUG cannot be enabled in production!"
+        )
+    
+    app.config['DEBUG'] = debug
+    return app</code></pre>
+                </div>
+            </div>
+            
+            <div class="capability-used">
+                <strong>CORTEX Capability:</strong> System Maintenance → Configuration security
+            </div>
+        </div>
+    </section>
+
+    <!-- SEC-06: Weak JWT Algorithm -->
+    <section class="section section-alt" id="sec-06">
+        <div class="container">
+            <div class="flaw-header">
+                <span class="flaw-id">SEC-06</span>
+                <span class="severity-badge severity-high">HIGH</span>
+                <span class="owasp-badge">OWASP A02:2021</span>
+            </div>
+            <h2>Weak JWT Algorithm (MD5 Signature)</h2>
+            <p class="flaw-description">
+                <strong>CWE-327:</strong> Use of a Broken Cryptographic Algorithm. Using MD5 
+                for JWT signatures allows collision attacks and token forgery.
+            </p>
+            
+            <div class="code-comparison">
+                <div class="code-before">
+                    <div class="code-header">
+                        <span class="code-label">❌ BEFORE</span>
+                        <span class="code-file">src/api/auth.py:58</span>
+                    </div>
+<pre><code class="language-python">import hashlib
+
+def simple_jwt_encode(payload: Dict) -> str:
+    """Custom JWT implementation (intentionally weak)"""
+    header = {"alg": "HS256", "typ": "JWT"}
+    header_encoded = base64.b64encode(json.dumps(header).encode())
+    payload_encoded = base64.b64encode(json.dumps(payload).encode())
+    
+    # FLAW: Using MD5 for signature - cryptographically broken!
+    signature_input = f"{header_encoded}.{payload_encoded}.{JWT_SECRET}"
+    signature = hashlib.md5(signature_input.encode()).hexdigest()
+    
+    return f"{header_encoded}.{payload_encoded}.{signature}"</code></pre>
+                </div>
+                
+                <div class="code-after">
+                    <div class="code-header">
+                        <span class="code-label">✅ AFTER</span>
+                        <span class="code-file">CORTEX Refinement</span>
+                    </div>
+<pre><code class="language-python">import jwt  # PyJWT library
+from datetime import datetime, timedelta
+
+def create_jwt(payload: Dict, expires_in: int = 3600) -> str:
+    """Create JWT using industry-standard library"""
+    payload = {
+        **payload,
+        'iat': datetime.utcnow(),
+        'exp': datetime.utcnow() + timedelta(seconds=expires_in)
+    }
+    
+    # RS256 with RSA keys (asymmetric, more secure)
+    # Or HS256 with 256-bit+ secret
+    return jwt.encode(
+        payload,
+        JWT_SECRET,
+        algorithm='HS256'  # PyJWT uses HMAC-SHA256 properly
+    )</code></pre>
+                </div>
+            </div>
+            
+            <div class="capability-used">
+                <strong>CORTEX Capability:</strong> System Refinement → Cryptographic upgrade
+            </div>
+        </div>
+    </section>
+
+    <!-- SEC-07: No Signature Verification -->
+    <section class="section" id="sec-07">
+        <div class="container">
+            <div class="flaw-header">
+                <span class="flaw-id">SEC-07</span>
+                <span class="severity-badge severity-critical">CRITICAL</span>
+                <span class="owasp-badge">OWASP A07:2021</span>
+            </div>
+            <h2>JWT Signature Not Verified</h2>
+            <p class="flaw-description">
+                <strong>CWE-347:</strong> Improper Verification of Cryptographic Signature. 
+                Accepting JWTs without signature verification allows complete authentication bypass.
+            </p>
+            
+            <div class="code-comparison">
+                <div class="code-before">
+                    <div class="code-header">
+                        <span class="code-label">❌ BEFORE</span>
+                        <span class="code-file">src/api/auth.py:72</span>
+                    </div>
+<pre><code class="language-python">def simple_jwt_decode(token: str) -> Optional[Dict]:
+    """Decode JWT without proper verification"""
+    try:
+        parts = token.split('.')
+        if len(parts) != 3:
+            return None
+        
+        payload_encoded = parts[1]
+        # FLAW: Not verifying signature at all!
+        # Attacker can modify payload and we'll accept it
+        payload = json.loads(base64.b64decode(payload_encoded))
+        
+        return payload
+    except:
+        return None</code></pre>
+                </div>
+                
+                <div class="code-after">
+                    <div class="code-header">
+                        <span class="code-label">✅ AFTER</span>
+                        <span class="code-file">CORTEX TDD Mastery</span>
+                    </div>
+<pre><code class="language-python">import jwt
+from jwt.exceptions import InvalidTokenError, ExpiredSignatureError
+
+def decode_jwt(token: str) -> Optional[Dict]:
+    """Decode and verify JWT with full validation"""
+    try:
+        # PyJWT verifies signature automatically
+        payload = jwt.decode(
+            token,
+            JWT_SECRET,
+            algorithms=['HS256'],  # Whitelist algorithms
+            options={
+                'require': ['exp', 'iat'],  # Required claims
+                'verify_exp': True,         # Check expiration
+                'verify_iat': True          # Check issued-at
+            }
+        )
+        return payload
+    except ExpiredSignatureError:
+        logger.warning("Expired token attempted")
+        return None
+    except InvalidTokenError as e:
+        logger.warning(f"Invalid token: {e}")
+        return None</code></pre>
+                </div>
+            </div>
+            
+            <div class="capability-used">
+                <strong>CORTEX Capability:</strong> TDD Mastery → Test-driven token validation
+            </div>
+        </div>
+    </section>
+
+    <!-- SEC-12: Permissive CORS -->
+    <section class="section section-alt" id="sec-12">
+        <div class="container">
+            <div class="flaw-header">
+                <span class="flaw-id">SEC-12</span>
+                <span class="severity-badge severity-medium">MEDIUM</span>
+                <span class="owasp-badge">OWASP A05:2021</span>
+            </div>
+            <h2>Permissive CORS (Allow All Origins)</h2>
+            <p class="flaw-description">
+                <strong>CWE-942:</strong> Permissive Cross-domain Policy. Allowing all origins 
+                enables cross-site request forgery and data exfiltration attacks.
+            </p>
+            
+            <div class="code-comparison">
+                <div class="code-before">
+                    <div class="code-header">
+                        <span class="code-label">❌ BEFORE</span>
+                        <span class="code-file">src/app.py:24</span>
+                    </div>
+<pre><code class="language-python">@app.after_request
+def after_request(response):
+    # FLAW: Allows ANY origin to make requests
+    # Enables CSRF and data theft from any website
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 
+                         'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 
+                         'GET,PUT,POST,DELETE,OPTIONS')
+    return response</code></pre>
+                </div>
+                
+                <div class="code-after">
+                    <div class="code-header">
+                        <span class="code-label">✅ AFTER</span>
+                        <span class="code-file">CORTEX Architecture Review</span>
+                    </div>
+<pre><code class="language-python">from flask_cors import CORS
+
+# Explicit origin whitelist
+ALLOWED_ORIGINS = [
+    'https://myapp.com',
+    'https://admin.myapp.com'
+]
+
+if os.getenv('FLASK_ENV') == 'development':
+    ALLOWED_ORIGINS.append('http://localhost:3000')
+
+CORS(app, 
+     origins=ALLOWED_ORIGINS,
+     methods=['GET', 'POST', 'PUT', 'DELETE'],
+     allow_headers=['Content-Type', 'Authorization'],
+     supports_credentials=True,
+     max_age=3600)</code></pre>
+                </div>
+            </div>
+            
+            <div class="capability-used">
+                <strong>CORTEX Capability:</strong> Architectural Review → Security configuration
+            </div>
+        </div>
+    </section>
+
+    <!-- Summary -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title text-center">Security Transformation Summary</h2>
+            
+            <div class="glass-card">
+                <h3>Key Patterns Applied</h3>
+                <ul class="summary-list">
+                    <li><strong>Environment Variables:</strong> All secrets moved to environment configuration</li>
+                    <li><strong>Parameterized Queries:</strong> SQL injection prevented via proper escaping</li>
+                    <li><strong>Strong Cryptography:</strong> Argon2id for passwords, proper JWT with PyJWT</li>
+                    <li><strong>Secure Defaults:</strong> Debug off, restrictive CORS, fail-closed validation</li>
+                    <li><strong>Defense in Depth:</strong> Input validation + parameterization + whitelisting</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Navigation -->
+    <section class="section section-alt">
+        <div class="container">
+            <h2 class="section-title text-center">Explore More Categories</h2>
+            <div class="nav-buttons">
+                <a href="index.html" class="btn btn-secondary">← Back to STS</a>
+                <a href="solid.html" class="btn btn-primary">SOLID Principles →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Back to Home -->
+    <div class="back-link-container">
+        <a href="../index.html" class="back-link">← Back to Home</a>
+    </div>
+</body>
+</html>

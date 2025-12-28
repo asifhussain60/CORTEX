@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX Code Quality Showcase - Before & After Code Transformations">
+    <meta name="author" content="Asif Hussain">
+    <title>Code Quality Showcase - CORTEX STS</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../assets/css/main.css?v=4.0.0">
+</head>
+<body>
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb-nav">
+        <div class="container">
+            <a href="../index.html">Home</a>
+            <span class="separator">→</span>
+            <a href="index.html">Sharpen The Saw</a>
+            <span class="separator">→</span>
+            <span class="current">Code Quality</span>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="logo-container">
+            <a href="../index.html">
+                <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo" width="200" height="200">
+            </a>
+        </div>
+        <h1 class="hero-title">⚡ Code Quality Showcase</h1>
+        <p class="hero-tagline">20 Code Smells → Clean, Readable Code</p>
+    </section>
+
+    <!-- What is Code Quality? Educational Section -->
+    <section class="section">
+        <div class="container">
+            <div class="glass-card concept-card">
+                <h2>🎓 Code Quality Principles Explained</h2>
+                <p>
+                    "Code quality" isn't just about whether code works—it's about whether code is 
+                    <strong>readable</strong>, <strong>maintainable</strong>, and <strong>bug-resistant</strong>. 
+                    Here are the key principles that separate good code from bad:
+                </p>
+                
+                <div class="principle-explainer">
+                    <div class="principle-letter">DRY</div>
+                    <div class="principle-content">
+                        <h4>Don't Repeat Yourself</h4>
+                        <p><em>"Every piece of knowledge must have a single, unambiguous representation in a system."</em></p>
+                        <p class="principle-analogy">📝 <strong>Analogy:</strong> If you update your address, you shouldn't have to change it in 10 different places.</p>
+                    </div>
+                </div>
+                
+                <div class="principle-explainer">
+                    <div class="principle-letter">KISS</div>
+                    <div class="principle-content">
+                        <h4>Keep It Simple, Stupid</h4>
+                        <p><em>"Simplicity should be a key goal in design, and unnecessary complexity should be avoided."</em></p>
+                        <p class="principle-analogy">🔧 <strong>Analogy:</strong> Don't use a Swiss Army knife when a screwdriver will do.</p>
+                    </div>
+                </div>
+                
+                <div class="principle-explainer">
+                    <div class="principle-letter">YAGNI</div>
+                    <div class="principle-content">
+                        <h4>You Aren't Gonna Need It</h4>
+                        <p><em>"Don't add functionality until it's actually needed."</em></p>
+                        <p class="principle-analogy">🏗️ <strong>Analogy:</strong> Don't build a helipad on your house "just in case" you buy a helicopter.</p>
+                    </div>
+                </div>
+                
+                <div class="principle-explainer">
+                    <div class="principle-letter">CC</div>
+                    <div class="principle-content">
+                        <h4>Cyclomatic Complexity</h4>
+                        <p><em>"A measure of how many independent paths exist through code. Lower is better."</em></p>
+                        <p class="principle-analogy">🌳 <strong>Analogy:</strong> A function with 50 if/else branches is like a maze—hard to navigate and easy to get lost.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview Stats -->
+    <section class="section section-alt">
+        <div class="container">
+            <div class="metrics-grid-4">
+                <div class="metric-card metric-before">
+                    <span class="metric-value">20</span>
+                    <span class="metric-label">Code Smells</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-value">68</span>
+                    <span class="metric-label">Max Complexity</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-value">80%</span>
+                    <span class="metric-label">Duplicate Code</span>
+                </div>
+                <div class="metric-card metric-after">
+                    <span class="metric-value">100%</span>
+                    <span class="metric-label">Cleaned Up</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CQ-03: DRY Violation (Copy-Paste Programming) -->
+    <section class="section" id="cq-03">
+        <div class="container">
+            <div class="flaw-header">
+                <span class="flaw-id">CQ-03</span>
+                <span class="issue-badge">DRY Violation</span>
+                <span class="severity-badge severity-high">HIGH</span>
+            </div>
+            <h2>Copy-Paste Programming: 80% Duplicate Code</h2>
+            <p class="flaw-description">
+                <strong>Anti-Pattern: Copy-Paste Programming</strong> — Three payment methods share 80% identical code. 
+                When a bug is found, it must be fixed in three places. When validation rules change, three methods 
+                need updating. This is a maintenance nightmare!
+            </p>
+            
+            <div class="code-comparison">
+                <div class="code-before">
+                    <div class="code-header">
+                        <span class="code-label">❌ BEFORE</span>
+                        <span class="code-file">src/business/payment.py</span>
+                    </div>
+<pre><code class="language-python">def _process_credit_card(self, amount: float, data: dict):
+    # Validate amount (DUPLICATE)
+    if amount <= 0:
+        return {"success": False, "error": "Invalid amount"}
+    if amount > 10000:
+        return {"success": False, "error": "Amount exceeds limit"}
+    
+    # Validate card (DUPLICATE)
+    card_number = data.get("card_number")
+    if not card_number or len(card_number) != 16:
+        return {"success": False, "error": "Invalid card"}
+    
+    transaction_id = f"CC-{card_number[:4]}-{amount}"
+    return {"success": True, "transaction_id": transaction_id}
+
+def _process_debit_card(self, amount: float, data: dict):
+    # Same validation copied! (DUPLICATE)
+    if amount <= 0:
+        return {"success": False, "error": "Invalid amount"}
+    if amount > 10000:
+        return {"success": False, "error": "Amount exceeds limit"}
+    
+    # Same card validation! (DUPLICATE)
+    card_number = data.get("card_number")
+    if not card_number or len(card_number) != 16:
+        return {"success": False, "error": "Invalid card"}
+    
+    transaction_id = f"DC-{card_number[:4]}-{amount}"
+    return {"success": True, "transaction_id": transaction_id}</code></pre>
+                </div>
+                
+                <div class="code-after">
+                    <div class="code-header">
+                        <span class="code-label">✅ AFTER</span>
+                        <span class="code-file">DRY Refactored</span>
+                    </div>
+<pre><code class="language-python">def _validate_amount(self, amount: float) -> tuple[bool, str]:
+    """Single source of truth for amount validation"""
+    if amount <= 0:
+        return False, "Invalid amount"
+    if amount > 10000:
+        return False, "Amount exceeds limit"
+    return True, ""
+
+def _validate_card(self, card_number: str) -> tuple[bool, str]:
+    """Single source of truth for card validation"""
+    if not card_number or len(card_number) != 16:
+        return False, "Invalid card"
+    return True, ""
+
+def _process_card_payment(
+    self, card_type: str, amount: float, data: dict
+):
+    """Unified card processing - no duplication!"""
+    valid, error = self._validate_amount(amount)
+    if not valid:
+        return {"success": False, "error": error}
+    
+    valid, error = self._validate_card(data.get("card_number", ""))
+    if not valid:
+        return {"success": False, "error": error}
+    
+    prefix = "CC" if card_type == "credit" else "DC"
+    transaction_id = f"{prefix}-{data['card_number'][:4]}-{amount}"
+    return {"success": True, "transaction_id": transaction_id}</code></pre>
+                </div>
+            </div>
+            
+            <div class="capability-used">
+                <strong>CORTEX Capability:</strong> Holistic Discovery → Duplicate code detection & extraction
+            </div>
+        </div>
+    </section>
+
+    <!-- CQ-07: Monster Method -->
+    <section class="section section-alt" id="cq-07">
+        <div class="container">
+            <div class="flaw-header">
+                <span class="flaw-id">CQ-07</span>
+                <span class="issue-badge">Complexity: 68</span>
+                <span class="severity-badge severity-critical">CRITICAL</span>
+            </div>
+            <h2>Monster Method: 250 Lines, Complexity 68</h2>
+            <p class="flaw-description">
+                <strong>Anti-Pattern: Monster Method</strong> — A single function with 250 lines and cyclomatic 
+                complexity of 68 (should be under 10). This function is impossible to understand, test, or modify 
+                safely. <strong>Cyclomatic Complexity</strong> measures the number of independent paths through 
+                code—68 means 68 different scenarios to test!
+            </p>
+            
+            <div class="code-comparison">
+                <div class="code-before">
+                    <div class="code-header">
+                        <span class="code-label">❌ BEFORE</span>
+                        <span class="code-file">src/utils/helpers.py:49</span>
+                    </div>
+<pre><code class="language-python">def process_data(data, options, config, flags, metadata):
+    """250 lines of nested if/else horror"""
+    result = []
+    
+    if options.get("mode") == "fast":
+        if config.validate:
+            if flags.strict:
+                for item in data:
+                    if item.type == "A":
+                        if item.status == "active":
+                            if metadata.region == "US":
+                                # ... 20 more nested levels
+                                pass
+                            elif metadata.region == "EU":
+                                # Different logic buried deep
+                                pass
+                        else:
+                            # More branches...
+                            pass
+                    elif item.type == "B":
+                        # Completely different logic
+                        pass
+    elif options.get("mode") == "slow":
+        # Another 100 lines of similar nesting
+        pass
+    
+    # ... 200 more lines
+    return result</code></pre>
+                </div>
+                
+                <div class="code-after">
+                    <div class="code-header">
+                        <span class="code-label">✅ AFTER</span>
+                        <span class="code-file">Extract Method + Strategy</span>
+                    </div>
+<pre><code class="language-python"># Each function has ONE job, complexity < 10
+
+def process_data(data: list, context: ProcessContext) -> list:
+    """Orchestrates processing - delegates to specialists"""
+    processor = ProcessorFactory.create(context.mode)
+    validator = ValidatorFactory.create(context.config)
+    
+    validated = validator.validate_batch(data)
+    return processor.process_batch(validated, context)
+
+class FastProcessor:
+    """Handles fast mode processing"""
+    def process_batch(self, data, context):
+        return [self._process_item(item, context) for item in data]
+    
+    def _process_item(self, item, context):
+        handler = self._get_handler(item.type)
+        return handler.process(item, context)
+
+class ItemTypeAHandler:
+    """Handles Type A items only"""
+    def process(self, item, context):
+        if not item.is_active:
+            return self._handle_inactive(item)
+        return self._process_by_region(item, context.region)
+    
+    def _process_by_region(self, item, region: str):
+        handlers = {"US": self._us_rules, "EU": self._eu_rules}
+        return handlers.get(region, self._default_rules)(item)</code></pre>
+                </div>
+            </div>
+            
+            <div class="capability-used">
+                <strong>CORTEX Capability:</strong> System Refinement → Method extraction & complexity reduction
+            </div>
+        </div>
+    </section>
+
+    <!-- CQ-11: Poor Naming -->
+    <section class="section" id="cq-11">
+        <div class="container">
+            <div class="flaw-header">
+                <span class="flaw-id">CQ-11</span>
+                <span class="issue-badge">Poor Naming</span>
+                <span class="severity-badge severity-medium">MEDIUM</span>
+            </div>
+            <h2>Cryptic Names: do_stuff(x, y, z)</h2>
+            <p class="flaw-description">
+                <strong>Code Smell: Meaningless Names</strong> — Function and variable names should explain what 
+                they do. Names like <code>do_stuff</code>, <code>x</code>, <code>y</code>, <code>z</code>, 
+                <code>data</code>, or <code>temp</code> force readers to decode the entire function to understand it.
+            </p>
+            
+            <div class="code-comparison">
+                <div class="code-before">
+                    <div class="code-header">
+                        <span class="code-label">❌ BEFORE</span>
+                        <span class="code-file">src/utils/helpers.py:100</span>
+                    </div>
+<pre><code class="language-python"># What does this do? Who knows!
+def do_stuff(x, y, z):
+    temp = []
+    for i in x:
+        if i.a > y:
+            temp.append(i.b * z)
+    return sum(temp) / len(temp) if temp else 0
+
+def proc(d, f):
+    r = []
+    for item in d:
+        if f(item):
+            r.append(item)
+    return r
+
+# Calling code is equally mysterious
+result = do_stuff(data, 100, 0.15)
+filtered = proc(items, lambda x: x.v > 5)</code></pre>
+                </div>
+                
+                <div class="code-after">
+                    <div class="code-header">
+                        <span class="code-label">✅ AFTER</span>
+                        <span class="code-file">Self-Documenting Names</span>
+                    </div>
+<pre><code class="language-python"># Names explain purpose without comments
+def calculate_average_discounted_price(
+    products: list[Product],
+    min_price: float,
+    discount_rate: float
+) -> float:
+    """Calculate average price after discount for premium products."""
+    discounted_prices = [
+        product.price * discount_rate
+        for product in products
+        if product.price > min_price
+    ]
+    if not discounted_prices:
+        return 0.0
+    return sum(discounted_prices) / len(discounted_prices)
+
+def filter_items_by_predicate(
+    items: list[T], 
+    predicate: Callable[[T], bool]
+) -> list[T]:
+    """Return items matching the given condition."""
+    return [item for item in items if predicate(item)]
+
+# Calling code is now readable
+avg_price = calculate_average_discounted_price(
+    products=catalog, min_price=100, discount_rate=0.15
+)
+active_users = filter_items_by_predicate(
+    users, predicate=lambda user: user.is_active
+)</code></pre>
+                </div>
+            </div>
+            
+            <div class="capability-used">
+                <strong>CORTEX Capability:</strong> Code Sanitization → Naming convention enforcement
+            </div>
+        </div>
+    </section>
+
+    <!-- CQ-09: Dead Code -->
+    <section class="section section-alt" id="cq-09">
+        <div class="container">
+            <div class="flaw-header">
+                <span class="flaw-id">CQ-09</span>
+                <span class="issue-badge">Dead Code</span>
+                <span class="severity-badge severity-medium">MEDIUM</span>
+            </div>
+            <h2>Zombie Code: Functions Nobody Calls</h2>
+            <p class="flaw-description">
+                <strong>Code Smell: Dead Code</strong> — Functions that are never called, variables that are never 
+                read, and imports that are never used. Dead code confuses readers ("Is this important?"), 
+                increases cognitive load, and can hide bugs.
+            </p>
+            
+            <div class="code-comparison">
+                <div class="code-before">
+                    <div class="code-header">
+                        <span class="code-label">❌ BEFORE</span>
+                        <span class="code-file">src/utils/helpers.py:189</span>
+                    </div>
+<pre><code class="language-python">import json          # Used
+import xml            # Never used!
+import deprecated_lib # Never used!
+
+def active_function():
+    """This is called from main.py"""
+    return calculate_total()
+
+def legacy_function():
+    """TODO: Remove after migration (dated 2019)"""
+    # 50 lines of code nobody calls anymore
+    pass
+
+def old_helper():
+    """Commented out call in user_api.py"""
+    # Another 30 lines of dead code
+    pass
+
+def experimental_feature():
+    """Was for a feature that got cancelled"""
+    pass
+
+# Dead variable
+UNUSED_CONFIG = {"key": "value_nobody_reads"}</code></pre>
+                </div>
+                
+                <div class="code-after">
+                    <div class="code-header">
+                        <span class="code-label">✅ AFTER</span>
+                        <span class="code-file">Clean & Minimal</span>
+                    </div>
+<pre><code class="language-python">import json  # Only what's actually used
+
+def active_function():
+    """This is called from main.py"""
+    return calculate_total()
+
+# Dead code removed:
+# - legacy_function() - no callers (git blame: 2019)
+# - old_helper() - commented call removed
+# - experimental_feature() - feature cancelled
+# - UNUSED_CONFIG - zero references
+# - xml import - not used
+# - deprecated_lib import - not used
+
+# If needed later, git history preserves everything.
+# "Deleted code is debugged code."</code></pre>
+                </div>
+            </div>
+            
+            <div class="capability-used">
+                <strong>CORTEX Capability:</strong> System Maintenance → Dead code detection & removal
+            </div>
+        </div>
+    </section>
+
+    <!-- CQ-13: No Error Handling -->
+    <section class="section" id="cq-13">
+        <div class="container">
+            <div class="flaw-header">
+                <span class="flaw-id">CQ-13</span>
+                <span class="issue-badge">No Try/Except</span>
+                <span class="severity-badge severity-high">HIGH</span>
+            </div>
+            <h2>Crash Waiting to Happen: No Error Handling</h2>
+            <p class="flaw-description">
+                <strong>Code Smell: Missing Error Handling</strong> — Code that assumes everything will work 
+                perfectly. In reality, networks fail, files go missing, and databases timeout. Without 
+                <code>try/except</code>, one error crashes the entire application.
+            </p>
+            
+            <div class="code-comparison">
+                <div class="code-before">
+                    <div class="code-header">
+                        <span class="code-label">❌ BEFORE</span>
+                        <span class="code-file">src/app.py:51</span>
+                    </div>
+<pre><code class="language-python">@app.route('/health')
+def health():
+    """Health check endpoint - crashes on any error!"""
+    # No try/except - any failure = 500 error
+    db_status = db.execute("SELECT 1")  # DB down? Crash!
+    cache_status = cache.ping()          # Cache down? Crash!
+    api_status = external_api.check()    # API timeout? Crash!
+    
+    return jsonify({
+        "database": db_status,
+        "cache": cache_status,
+        "external_api": api_status
+    })
+
+@app.route('/users/<int:user_id>')
+def get_user(user_id):
+    # What if user doesn't exist? KeyError!
+    # What if DB is down? ConnectionError!
+    user = db.get_one(f"SELECT * FROM users WHERE id = {user_id}")
+    return jsonify(user)</code></pre>
+                </div>
+                
+                <div class="code-after">
+                    <div class="code-header">
+                        <span class="code-label">✅ AFTER</span>
+                        <span class="code-file">Graceful Degradation</span>
+                    </div>
+<pre><code class="language-python">@app.route('/health')
+def health():
+    """Health check with graceful degradation"""
+    status = {"overall": "healthy"}
+    
+    # Each check is isolated - one failure doesn't crash all
+    try:
+        db.execute("SELECT 1")
+        status["database"] = "healthy"
+    except DatabaseError as e:
+        status["database"] = "unhealthy"
+        status["overall"] = "degraded"
+        logger.error(f"DB health check failed: {e}")
+    
+    try:
+        cache.ping()
+        status["cache"] = "healthy"
+    except CacheError as e:
+        status["cache"] = "unhealthy"
+        logger.warning(f"Cache unavailable: {e}")
+    
+    http_status = 200 if status["overall"] == "healthy" else 503
+    return jsonify(status), http_status
+
+@app.route('/users/<int:user_id>')
+def get_user(user_id: int):
+    try:
+        user = user_repository.find_by_id(user_id)
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+        return jsonify(user)
+    except DatabaseError:
+        return jsonify({"error": "Service unavailable"}), 503</code></pre>
+                </div>
+            </div>
+            
+            <div class="capability-used">
+                <strong>CORTEX Capability:</strong> TDD Mastery → Error handling test coverage
+            </div>
+        </div>
+    </section>
+
+    <!-- Summary -->
+    <section class="section section-alt">
+        <div class="container">
+            <h2 class="section-title text-center">Code Quality Transformation Summary</h2>
+            
+            <div class="glass-card">
+                <h3>Key Improvements</h3>
+                <ul class="summary-list">
+                    <li><strong>DRY Applied:</strong> 80% duplicate code → single source of truth</li>
+                    <li><strong>Complexity Reduced:</strong> 68 → under 10 per function</li>
+                    <li><strong>Self-Documenting Names:</strong> No more guessing what code does</li>
+                    <li><strong>Dead Code Removed:</strong> Cleaner, leaner codebase</li>
+                    <li><strong>Error Handling:</strong> Graceful degradation instead of crashes</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Navigation -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title text-center">Explore More Categories</h2>
+            <div class="nav-buttons">
+                <a href="solid.html" class="btn btn-secondary">← SOLID</a>
+                <a href="index.html" class="btn btn-secondary">STS Home</a>
+                <a href="performance.html" class="btn btn-primary">Performance →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Back to Home -->
+    <div class="back-link-container">
+        <a href="../index.html" class="back-link">← Back to Home</a>
+    </div>
+</body>
+</html>

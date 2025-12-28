@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX Documentation Showcase - Before & After Code Transformations">
+    <meta name="author" content="Asif Hussain">
+    <title>Documentation Showcase - CORTEX STS</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../assets/css/main.css?v=4.0.0">
+</head>
+<body>
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb-nav">
+        <div class="container">
+            <a href="../index.html">Home</a>
+            <span class="separator">→</span>
+            <a href="index.html">Sharpen The Saw</a>
+            <span class="separator">→</span>
+            <span class="current">Documentation</span>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="logo-container">
+            <a href="../index.html">
+                <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo" width="200" height="200">
+            </a>
+        </div>
+        <h1 class="hero-title">📚 Documentation Showcase</h1>
+        <p class="hero-tagline">Undocumented Code → Self-Documenting + API Docs</p>
+    </section>
+
+    <!-- What is Good Documentation? Educational Section -->
+    <section class="section">
+        <div class="container">
+            <div class="glass-card concept-card">
+                <h2>🎓 Documentation Concepts Explained</h2>
+                <p>
+                    Good documentation isn't about writing novels—it's about making code 
+                    <strong>discoverable</strong>, <strong>understandable</strong>, and <strong>maintainable</strong> 
+                    by future developers (including future you!).
+                </p>
+                
+                <div class="principle-explainer">
+                    <div class="principle-letter">📝</div>
+                    <div class="principle-content">
+                        <h4>Docstrings</h4>
+                        <p><em>"Built-in documentation strings in Python functions and classes."</em></p>
+                        <p class="principle-analogy">🏷️ <strong>Purpose:</strong> Explain WHAT a function does, its parameters, return values, and exceptions.</p>
+                    </div>
+                </div>
+                
+                <div class="principle-explainer">
+                    <div class="principle-letter">💡</div>
+                    <div class="principle-content">
+                        <h4>Type Hints</h4>
+                        <p><em>"Annotations that specify the expected types of parameters and returns."</em></p>
+                        <p class="principle-analogy">🎯 <strong>Benefit:</strong> IDEs provide autocomplete, errors are caught before runtime.</p>
+                    </div>
+                </div>
+                
+                <div class="principle-explainer">
+                    <div class="principle-letter">📖</div>
+                    <div class="principle-content">
+                        <h4>API Documentation</h4>
+                        <p><em>"Structured documentation for REST endpoints, generated from code."</em></p>
+                        <p class="principle-analogy">🗺️ <strong>Tools:</strong> OpenAPI/Swagger, automatically generated from annotations.</p>
+                    </div>
+                </div>
+                
+                <div class="principle-explainer">
+                    <div class="principle-letter">⚠️</div>
+                    <div class="principle-content">
+                        <h4>Comments vs. Self-Documenting Code</h4>
+                        <p><em>"Good code explains itself; comments explain WHY, not WHAT."</em></p>
+                        <p class="principle-analogy">🚫 <strong>Bad:</strong> <code># increment i by 1</code><br>
+                           ✅ <strong>Good:</strong> <code># Skip header row per CSV spec v2.1</code></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview Stats -->
+    <section class="section section-alt">
+        <div class="container">
+            <div class="metrics-grid-4">
+                <div class="metric-card metric-before">
+                    <span class="metric-value">0</span>
+                    <span class="metric-label">Docstrings</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-value">0</span>
+                    <span class="metric-label">Type Hints</span>
+                </div>
+                <div class="metric-card metric-after">
+                    <span class="metric-value">100%</span>
+                    <span class="metric-label">Documented</span>
+                </div>
+                <div class="metric-card metric-after">
+                    <span class="metric-value">OpenAPI</span>
+                    <span class="metric-label">Generated</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DOC-01: No Docstrings -->
+    <section class="section" id="doc-01">
+        <div class="container">
+            <div class="flaw-header">
+                <span class="flaw-id">DOC-01</span>
+                <span class="issue-badge">No Docstrings</span>
+                <span class="severity-badge severity-medium">MEDIUM</span>
+            </div>
+            <h2>Mystery Functions: What Does This Do?</h2>
+            <p class="flaw-description">
+                <strong>The Problem:</strong> Functions without docstrings force readers to analyze every line of 
+                code to understand purpose, parameters, and return values. This wastes time and leads to misuse.
+            </p>
+            
+            <div class="code-comparison">
+                <div class="code-before">
+                    <div class="code-header">
+                        <span class="code-label">❌ BEFORE</span>
+                        <span class="code-file">src/business/payment.py</span>
+                    </div>
+<pre><code class="language-python">def proc(d, t, c):
+    if t == "cc":
+        return h(d, c, 0.029)
+    elif t == "pp":
+        return h(d, c, 0.035)
+    return None
+
+def h(d, c, r):
+    a = d.get("a")
+    if a and a > 0:
+        f = a * r
+        return {"s": True, "f": f, "t": a + f}
+    return {"s": False}
+
+# Questions a reader must answer:
+# - What is 'd'? A dictionary? What keys?
+# - What is 't'? What values are valid?
+# - What does 'cc' mean? Credit card?
+# - What is 'r'? A rate? Percentage or decimal?
+# - What does this return on success vs failure?</code></pre>
+                </div>
+                
+                <div class="code-after">
+                    <div class="code-header">
+                        <span class="code-label">✅ AFTER</span>
+                        <span class="code-file">Properly Documented</span>
+                    </div>
+<pre><code class="language-python">def process_payment(
+    payment_data: dict,
+    payment_type: str,
+    currency: str = "USD"
+) -> dict:
+    """
+    Process a payment transaction through the appropriate gateway.
+    
+    Args:
+        payment_data: Dictionary containing:
+            - amount (float): Transaction amount in specified currency
+            - card_number (str): 16-digit card number (for card payments)
+            - email (str): PayPal email (for PayPal payments)
+        payment_type: Payment method - one of:
+            - "credit_card": Process via Stripe
+            - "paypal": Process via PayPal API
+        currency: ISO 4217 currency code (default: "USD")
+    
+    Returns:
+        dict with keys:
+            - success (bool): Whether payment was processed
+            - fee (float): Processing fee charged
+            - total (float): Amount + fee
+            - transaction_id (str): Unique identifier
+    
+    Raises:
+        PaymentError: If payment gateway is unavailable
+        ValidationError: If payment_data is invalid
+    
+    Example:
+        >>> process_payment({"amount": 100.00}, "credit_card")
+        {"success": True, "fee": 2.90, "total": 102.90}
+    """</code></pre>
+                </div>
+            </div>
+            
+            <div class="capability-used">
+                <strong>CORTEX Capability:</strong> Documentation Generation → Comprehensive docstrings
+            </div>
+        </div>
+    </section>
+
+    <!-- DOC-02: No Type Hints -->
+    <section class="section section-alt" id="doc-02">
+        <div class="container">
+            <div class="flaw-header">
+                <span class="flaw-id">DOC-02</span>
+                <span class="issue-badge">No Type Hints</span>
+                <span class="severity-badge severity-medium">MEDIUM</span>
+            </div>
+            <h2>Type Confusion: What Can I Pass Here?</h2>
+            <p class="flaw-description">
+                <strong>The Problem:</strong> Without type hints, developers guess what types are expected. 
+                Pass a string when an int is expected? Runtime error. Type hints enable IDE autocomplete 
+                and catch errors before code runs.
+            </p>
+            
+            <div class="code-comparison">
+                <div class="code-before">
+                    <div class="code-header">
+                        <span class="code-label">❌ BEFORE</span>
+                        <span class="code-file">No type information</span>
+                    </div>
+<pre><code class="language-python">def calculate_discount(price, quantity, customer):
+    # What type is price? int? float? Decimal?
+    # What type is customer? dict? object? ID?
+    
+    if customer.is_premium:  # Assumes customer has this attr
+        rate = 0.2
+    else:
+        rate = 0.1
+    
+    return price * quantity * (1 - rate)
+
+# Calling code - what's correct?
+calculate_discount(100, 5, user_dict)      # Wrong type?
+calculate_discount("100", "5", customer)   # Strings work?
+calculate_discount(99.99, 3, {"premium": True})  # Dict ok?</code></pre>
+                </div>
+                
+                <div class="code-after">
+                    <div class="code-header">
+                        <span class="code-label">✅ AFTER</span>
+                        <span class="code-file">Fully Typed</span>
+                    </div>
+<pre><code class="language-python">from decimal import Decimal
+from dataclasses import dataclass
+
+@dataclass
+class Customer:
+    id: int
+    name: str
+    is_premium: bool
+
+def calculate_discount(
+    price: Decimal,
+    quantity: int,
+    customer: Customer
+) -> Decimal:
+    """Calculate discounted total for customer order."""
+    discount_rate = Decimal("0.2") if customer.is_premium else Decimal("0.1")
+    subtotal = price * quantity
+    return subtotal * (1 - discount_rate)
+
+# IDE now provides:
+# ✓ Autocomplete for Customer attributes
+# ✓ Error squiggles if wrong type passed
+# ✓ Hover documentation for parameters
+# ✓ Refactoring support across codebase
+
+# Type checker catches errors before runtime:
+calculate_discount("100", 5, user)  # Error: str != Decimal
+calculate_discount(100.0, 5, {})    # Error: dict != Customer</code></pre>
+                </div>
+            </div>
+            
+            <div class="capability-used">
+                <strong>CORTEX Capability:</strong> Code Sanitization → Type hint inference & addition
+            </div>
+        </div>
+    </section>
+
+    <!-- DOC-03: Outdated Comments -->
+    <section class="section" id="doc-03">
+        <div class="container">
+            <div class="flaw-header">
+                <span class="flaw-id">DOC-03</span>
+                <span class="issue-badge">Stale Comments</span>
+                <span class="severity-badge severity-medium">MEDIUM</span>
+            </div>
+            <h2>Lying Comments: Code Changed, Comment Didn't</h2>
+            <p class="flaw-description">
+                <strong>The Problem:</strong> Comments that describe what code <em>used to do</em> are worse than 
+                no comments. They actively mislead readers. Comments should explain WHY, not WHAT—the code 
+                already shows what it does.
+            </p>
+            
+            <div class="code-comparison">
+                <div class="code-before">
+                    <div class="code-header">
+                        <span class="code-label">❌ BEFORE</span>
+                        <span class="code-file">Misleading comments</span>
+                    </div>
+<pre><code class="language-python"># Calculate 10% discount for all customers
+def apply_discount(price, customer):
+    # Premium customers get 10% off (WRONG - code says 20%!)
+    if customer.is_premium:
+        return price * 0.8  # Actually 20% discount
+    
+    # Regular customers pay full price (WRONG!)
+    return price * 0.95  # Actually 5% discount
+    
+# TODO: Add validation (added 3 years ago, still no validation)
+
+# Temporary fix - will refactor next sprint (dated 2019)
+def hack_fix():
+    pass
+
+# increment counter
+i = i + 1  # Useless comment - code is obvious</code></pre>
+                </div>
+                
+                <div class="code-after">
+                    <div class="code-header">
+                        <span class="code-label">✅ AFTER</span>
+                        <span class="code-file">Meaningful comments</span>
+                    </div>
+<pre><code class="language-python">def apply_discount(price: Decimal, customer: Customer) -> Decimal:
+    """Apply customer-tier discount to price."""
+    # Discount rates per customer tier (updated Q4 2024 pricing)
+    # See: https://wiki.company.com/pricing-strategy
+    PREMIUM_DISCOUNT = Decimal("0.20")  # 20% for premium
+    STANDARD_DISCOUNT = Decimal("0.05")  # 5% loyalty discount
+    
+    discount = PREMIUM_DISCOUNT if customer.is_premium else STANDARD_DISCOUNT
+    return price * (1 - discount)
+
+# Comments that add value:
+
+# Skip header row - CSV exported from SAP has 2-line header
+# per integration spec v2.3 (contact: data-team@company.com)
+data = csv_rows[2:]
+
+# Use insertion sort for nearly-sorted inventory lists
+# Benchmarked 3x faster than quicksort for our use case
+# See: performance-analysis-2024.md
+sorted_items = insertion_sort(inventory)</code></pre>
+                </div>
+            </div>
+            
+            <div class="capability-used">
+                <strong>CORTEX Capability:</strong> System Maintenance → Stale comment detection
+            </div>
+        </div>
+    </section>
+
+    <!-- Summary -->
+    <section class="section section-alt">
+        <div class="container">
+            <h2 class="section-title text-center">Documentation Transformation Summary</h2>
+            
+            <div class="glass-card">
+                <h3>Key Improvements</h3>
+                <ul class="summary-list">
+                    <li><strong>Docstrings:</strong> Every public function documented with Args, Returns, Raises</li>
+                    <li><strong>Type Hints:</strong> 100% coverage enables IDE support and static analysis</li>
+                    <li><strong>Comments:</strong> Explain WHY, not WHAT; linked to specs and decisions</li>
+                    <li><strong>API Docs:</strong> Auto-generated OpenAPI/Swagger from code annotations</li>
+                    <li><strong>README:</strong> Quick start, architecture overview, contribution guide</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Completion Message -->
+    <section class="section">
+        <div class="container text-center">
+            <div class="glass-card" style="background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 212, 255, 0.1));">
+                <h2>🎉 You've Explored All 6 Categories!</h2>
+                <p style="font-size: 1.2rem; margin-bottom: var(--spacing-lg);">
+                    You've seen how CORTEX transforms 61 flaws across Security, SOLID, Code Quality, 
+                    Performance, Testing, and Documentation into production-quality code.
+                </p>
+                <div class="nav-buttons">
+                    <a href="../getting-started/index.html" class="btn btn-primary">Get Started with CORTEX →</a>
+                    <a href="index.html" class="btn btn-secondary">Back to STS Home</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Navigation -->
+    <section class="section section-alt">
+        <div class="container">
+            <h2 class="section-title text-center">Review Other Categories</h2>
+            <div class="nav-buttons">
+                <a href="security.html" class="btn btn-secondary">Security</a>
+                <a href="solid.html" class="btn btn-secondary">SOLID</a>
+                <a href="code-quality.html" class="btn btn-secondary">Code Quality</a>
+                <a href="performance.html" class="btn btn-secondary">Performance</a>
+                <a href="testing.html" class="btn btn-secondary">Testing</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Back to Home -->
+    <div class="back-link-container">
+        <a href="../index.html" class="back-link">← Back to Home</a>
+    </div>
+</body>
+</html>

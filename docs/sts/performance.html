@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX Performance Showcase - Before & After Code Transformations">
+    <meta name="author" content="Asif Hussain">
+    <title>Performance Showcase - CORTEX STS</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../assets/css/main.css?v=4.0.0">
+</head>
+<body>
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb-nav">
+        <div class="container">
+            <a href="../index.html">Home</a>
+            <span class="separator">→</span>
+            <a href="index.html">Sharpen The Saw</a>
+            <span class="separator">→</span>
+            <span class="current">Performance</span>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="logo-container">
+            <a href="../index.html">
+                <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo" width="200" height="200">
+            </a>
+        </div>
+        <h1 class="hero-title">🚀 Performance Showcase</h1>
+        <p class="hero-tagline">8 Bottlenecks → Optimized, Scalable Code</p>
+    </section>
+
+    <!-- What is Performance? Educational Section -->
+    <section class="section">
+        <div class="container">
+            <div class="glass-card concept-card">
+                <h2>🎓 Performance Concepts Explained</h2>
+                <p>
+                    Performance isn't just about speed—it's about <strong>scalability</strong>, 
+                    <strong>resource efficiency</strong>, and <strong>user experience</strong>. 
+                    A function that works fine with 100 records might crash with 100,000.
+                </p>
+                
+                <div class="principle-explainer">
+                    <div class="principle-letter">N+1</div>
+                    <div class="principle-content">
+                        <h4>N+1 Query Problem</h4>
+                        <p><em>"Making 1 query to get N records, then N more queries to get related data."</em></p>
+                        <p class="principle-analogy">🛒 <strong>Analogy:</strong> Instead of getting all groceries in one trip, you drive to the store once per item.</p>
+                    </div>
+                </div>
+                
+                <div class="principle-explainer">
+                    <div class="principle-letter">O(n)</div>
+                    <div class="principle-content">
+                        <h4>Big O Notation</h4>
+                        <p><em>"A way to describe how performance scales with input size."</em></p>
+                        <p class="principle-analogy">📈 <strong>O(1)</strong> = constant (instant lookup)<br>
+                           <strong>O(n)</strong> = linear (twice the data = twice the time)<br>
+                           <strong>O(n²)</strong> = quadratic (twice the data = 4x the time)</p>
+                    </div>
+                </div>
+                
+                <div class="principle-explainer">
+                    <div class="principle-letter">💾</div>
+                    <div class="principle-content">
+                        <h4>Caching</h4>
+                        <p><em>"Storing expensive computation results for reuse."</em></p>
+                        <p class="principle-analogy">📒 <strong>Analogy:</strong> Writing down a phone number instead of looking it up every time you call.</p>
+                    </div>
+                </div>
+                
+                <div class="principle-explainer">
+                    <div class="principle-letter">🔄</div>
+                    <div class="principle-content">
+                        <h4>Connection Pooling</h4>
+                        <p><em>"Reusing database connections instead of creating new ones for each request."</em></p>
+                        <p class="principle-analogy">🚗 <strong>Analogy:</strong> Car sharing instead of buying a new car for every trip.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview Stats -->
+    <section class="section section-alt">
+        <div class="container">
+            <div class="metrics-grid-4">
+                <div class="metric-card metric-before">
+                    <span class="metric-value">8</span>
+                    <span class="metric-label">Bottlenecks</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-value">O(n²)</span>
+                    <span class="metric-label">Worst Case</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-value">0</span>
+                    <span class="metric-label">Caching</span>
+                </div>
+                <div class="metric-card metric-after">
+                    <span class="metric-value">10x</span>
+                    <span class="metric-label">Faster</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PERF-01: N+1 Query Problem -->
+    <section class="section" id="perf-01">
+        <div class="container">
+            <div class="flaw-header">
+                <span class="flaw-id">PERF-01</span>
+                <span class="issue-badge">N+1 Queries</span>
+                <span class="severity-badge severity-critical">CRITICAL</span>
+            </div>
+            <h2>N+1 Query Problem: 1001 Queries for 1000 Orders</h2>
+            <p class="flaw-description">
+                <strong>Performance Killer:</strong> To display 1000 orders with customer names, this code makes 
+                1 query to get orders + 1000 queries to get each customer. That's 1001 database round-trips 
+                instead of 1 or 2!
+            </p>
+            
+            <div class="code-comparison">
+                <div class="code-before">
+                    <div class="code-header">
+                        <span class="code-label">❌ BEFORE</span>
+                        <span class="code-file">src/data/database.py</span>
+                    </div>
+<pre><code class="language-python">def get_orders_with_customers():
+    """N+1 Query Problem - 1001 queries for 1000 orders!"""
+    
+    # Query 1: Get all orders
+    orders = db.execute("SELECT * FROM orders")  # 1 query
+    
+    result = []
+    for order in orders:  # 1000 iterations
+        # Query 2-1001: Get customer for EACH order
+        customer = db.get_one(
+            f"SELECT * FROM customers WHERE id = {order['customer_id']}"
+        )  # 1000 more queries!
+        
+        result.append({
+            "order": order,
+            "customer": customer
+        })
+    
+    return result  # Total: 1001 queries 😱</code></pre>
+                </div>
+                
+                <div class="code-after">
+                    <div class="code-header">
+                        <span class="code-label">✅ AFTER</span>
+                        <span class="code-file">JOIN Query</span>
+                    </div>
+<pre><code class="language-python">def get_orders_with_customers():
+    """Single JOIN query - O(1) queries regardless of size!"""
+    
+    # One query with JOIN - gets everything at once
+    query = """
+        SELECT 
+            o.id as order_id,
+            o.total,
+            o.created_at,
+            c.id as customer_id,
+            c.name as customer_name,
+            c.email as customer_email
+        FROM orders o
+        INNER JOIN customers c ON o.customer_id = c.id
+        ORDER BY o.created_at DESC
+    """
+    
+    rows = db.execute(query)  # 1 query total! 🚀
+    
+    return [
+        {
+            "order": {"id": r["order_id"], "total": r["total"]},
+            "customer": {"name": r["customer_name"], "email": r["customer_email"]}
+        }
+        for r in rows
+    ]</code></pre>
+                </div>
+            </div>
+            
+            <div class="capability-used">
+                <strong>CORTEX Capability:</strong> System Refinement → Query optimization
+            </div>
+        </div>
+    </section>
+
+    <!-- PERF-02: No Pagination -->
+    <section class="section section-alt" id="perf-02">
+        <div class="container">
+            <div class="flaw-header">
+                <span class="flaw-id">PERF-02</span>
+                <span class="issue-badge">No Pagination</span>
+                <span class="severity-badge severity-high">HIGH</span>
+            </div>
+            <h2>Memory Bomb: Loading 1 Million Products at Once</h2>
+            <p class="flaw-description">
+                <strong>Scalability Failure:</strong> Loading all records into memory works fine with 100 products. 
+                With 1 million? Your server runs out of memory and crashes. <strong>Pagination</strong> loads 
+                data in small chunks (e.g., 20 at a time).
+            </p>
+            
+            <div class="code-comparison">
+                <div class="code-before">
+                    <div class="code-header">
+                        <span class="code-label">❌ BEFORE</span>
+                        <span class="code-file">src/api/products.py</span>
+                    </div>
+<pre><code class="language-python">@app.route('/products')
+def get_products():
+    """Loads ALL products into memory - crashes at scale!"""
+    
+    # No LIMIT = load everything
+    # 1 million products = 1 million objects in memory
+    # Memory usage: potentially gigabytes!
+    products = db.execute("SELECT * FROM products")
+    
+    return jsonify(products)  # Timeout or OOM crash</code></pre>
+                </div>
+                
+                <div class="code-after">
+                    <div class="code-header">
+                        <span class="code-label">✅ AFTER</span>
+                        <span class="code-file">Cursor Pagination</span>
+                    </div>
+<pre><code class="language-python">@app.route('/products')
+def get_products():
+    """Paginated - constant memory regardless of total size"""
+    
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 20, type=int)
+    per_page = min(per_page, 100)  # Cap at 100 max
+    
+    offset = (page - 1) * per_page
+    
+    products = db.execute(
+        "SELECT * FROM products ORDER BY id LIMIT ? OFFSET ?",
+        (per_page, offset)
+    )
+    
+    total = db.get_one("SELECT COUNT(*) as count FROM products")
+    
+    return jsonify({
+        "data": products,
+        "pagination": {
+            "page": page,
+            "per_page": per_page,
+            "total": total["count"],
+            "pages": (total["count"] + per_page - 1) // per_page
+        }
+    })</code></pre>
+                </div>
+            </div>
+            
+            <div class="capability-used">
+                <strong>CORTEX Capability:</strong> Architectural Review → Pagination patterns
+            </div>
+        </div>
+    </section>
+
+    <!-- PERF-04: No Connection Pooling -->
+    <section class="section" id="perf-04">
+        <div class="container">
+            <div class="flaw-header">
+                <span class="flaw-id">PERF-04</span>
+                <span class="issue-badge">No Pooling</span>
+                <span class="severity-badge severity-high">HIGH</span>
+            </div>
+            <h2>Connection Overhead: New Connection Per Request</h2>
+            <p class="flaw-description">
+                <strong>Resource Waste:</strong> Creating a database connection takes 50-100ms. If every request 
+                creates a new connection, you add 50-100ms latency to every request. <strong>Connection pooling</strong> 
+                keeps connections open and reuses them.
+            </p>
+            
+            <div class="code-comparison">
+                <div class="code-before">
+                    <div class="code-header">
+                        <span class="code-label">❌ BEFORE</span>
+                        <span class="code-file">src/data/database.py:18</span>
+                    </div>
+<pre><code class="language-python">class Database:
+    def __init__(self, db_path: str):
+        # New connection created in constructor
+        # Each request = new Database() = new connection
+        # 100ms overhead per request!
+        self.connection = sqlite3.connect(db_path)
+    
+    def execute(self, query: str):
+        # Uses single connection, but it's created fresh
+        cursor = self.connection.cursor()
+        return cursor.execute(query).fetchall()
+    
+    def close(self):
+        self.connection.close()
+
+# In request handler:
+def handle_request():
+    db = Database("app.db")  # 100ms to connect
+    result = db.execute("SELECT * FROM users")
+    db.close()  # Connection thrown away
+    return result</code></pre>
+                </div>
+                
+                <div class="code-after">
+                    <div class="code-header">
+                        <span class="code-label">✅ AFTER</span>
+                        <span class="code-file">Connection Pool</span>
+                    </div>
+<pre><code class="language-python">from sqlalchemy import create_engine
+from sqlalchemy.pool import QueuePool
+
+# Create engine with connection pool (once at startup)
+engine = create_engine(
+    "sqlite:///app.db",
+    poolclass=QueuePool,
+    pool_size=5,           # Keep 5 connections ready
+    max_overflow=10,       # Allow 10 more under load
+    pool_pre_ping=True,    # Verify connections are alive
+    pool_recycle=3600      # Refresh connections hourly
+)
+
+class Database:
+    def execute(self, query: str):
+        # Get connection from pool (instant!)
+        with engine.connect() as conn:
+            result = conn.execute(text(query))
+            return result.fetchall()
+        # Connection returned to pool, not closed
+
+# In request handler:
+def handle_request():
+    # No connection overhead - reuses pooled connection
+    return db.execute("SELECT * FROM users")  # ~0ms connect</code></pre>
+                </div>
+            </div>
+            
+            <div class="capability-used">
+                <strong>CORTEX Capability:</strong> System Refinement → Infrastructure optimization
+            </div>
+        </div>
+    </section>
+
+    <!-- Summary -->
+    <section class="section section-alt">
+        <div class="container">
+            <h2 class="section-title text-center">Performance Transformation Summary</h2>
+            
+            <div class="glass-card">
+                <h3>Key Optimizations</h3>
+                <ul class="summary-list">
+                    <li><strong>N+1 Eliminated:</strong> 1001 queries → 1 query with JOIN</li>
+                    <li><strong>Pagination Added:</strong> Constant memory usage at any scale</li>
+                    <li><strong>Connection Pooling:</strong> 100ms → ~0ms connection overhead</li>
+                    <li><strong>Caching:</strong> Expensive computations stored for reuse</li>
+                    <li><strong>Async Operations:</strong> Non-blocking I/O for better throughput</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Navigation -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title text-center">Explore More Categories</h2>
+            <div class="nav-buttons">
+                <a href="code-quality.html" class="btn btn-secondary">← Code Quality</a>
+                <a href="index.html" class="btn btn-secondary">STS Home</a>
+                <a href="testing.html" class="btn btn-primary">Testing →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Back to Home -->
+    <div class="back-link-container">
+        <a href="../index.html" class="back-link">← Back to Home</a>
+    </div>
+</body>
+</html>
