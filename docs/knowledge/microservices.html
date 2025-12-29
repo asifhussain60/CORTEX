@@ -3,1069 +3,594 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Microservices Architecture | CORTEX Knowledge Library</title>
+    <meta name="description" content="Microservices Architecture - Patterns, resilience, and distributed system design">
+    <meta name="keywords" content="microservices, distributed systems, architecture, resilience, patterns, event-driven">
+    <meta name="author" content="Asif Hussain">
+    <title>Microservices Architecture | CORTEX Knowledge</title>
     <link rel="stylesheet" href="../assets/css/main.css">
-    <link rel="stylesheet" href="../assets/css/knowledge.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
-    <nav class="doc-nav">
-        <div class="nav-container">
-            <a href="../index.html" class="nav-logo">
-                <img src="../assets/images/cortex-logo.svg" alt="CORTEX" class="logo-image">
-            </a>
-            <ul class="nav-links">
-                <li><a href="../index.html">Home</a></li>
-                <li><a href="index.html" class="active">Knowledge Library</a></li>
-                <li><a href="../sts/index.html">STS Portal</a></li>
-            </ul>
-        </div>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">→</span>
+        <a href="index.html">Knowledge Library</a>
+        <span class="breadcrumb-separator">→</span>
+        <span class="breadcrumb-current">Microservices</span>
     </nav>
 
-    <main class="doc-main">
-        <div class="doc-container">
-            <header class="doc-header">
-                <div class="breadcrumb">
-                    <a href="../index.html">Home</a>
-                    <span class="separator">/</span>
-                    <a href="index.html">Knowledge Library</a>
-                    <span class="separator">/</span>
-                    <span>Microservices</span>
-                </div>
-                <h1 class="doc-title">Microservices Architecture</h1>
-                <p class="doc-subtitle">Resilience patterns, CQRS, Sagas, and distributed system design for scalable, fault-tolerant services</p>
-            </header>
+    <section class="hero" id="main-content">
+        <h1 class="hero-title">🏗️ Microservices Architecture</h1>
+        <p class="hero-subtitle">Distributed Systems, Resilience Patterns, and Service Design</p>
+        <div class="file-metadata">
+            <span class="metadata-item">🔧 Architecture</span>
+            <span class="metadata-item">🌐 Distributed Systems</span>
+            <span class="metadata-item">📅 Updated: Dec 2025</span>
+        </div>
+    </section>
 
-            <div class="tab-container">
-                <div class="tab-buttons">
-                    <button class="tab-button active" data-tab="overview">Overview</button>
-                    <button class="tab-button" data-tab="knowledge">Knowledge Files</button>
-                    <button class="tab-button" data-tab="resources">Learning Resources</button>
-                    <button class="tab-button" data-tab="cortex">CORTEX Usage</button>
-                </div>
+    <section class="section file-content">
+        <div class="container">
+            <!-- Overview -->
+            <div id="overview" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">📋 Overview</h2>
+                    <p>Microservices architecture structures applications as collections of loosely coupled, independently deployable services. Each service owns its domain logic and data, communicating through well-defined APIs. This architecture enables scalability, fault isolation, and technology diversity.</p>
+                    
+                    <div class="info-box info-box-primary">
+                        <strong>Key Principles:</strong>
+                        <ul class="feature-list">
+                            <li><strong>Single Responsibility:</strong> Each service handles one business capability</li>
+                            <li><strong>Independence:</strong> Deploy, scale, and fail independently</li>
+                            <li><strong>Decentralization:</strong> Distributed data management and governance</li>
+                            <li><strong>Resilience:</strong> Design for failure with circuit breakers and retries</li>
+                        </ul>
+                    </div>
 
-                <!-- Overview Tab -->
-                <div class="tab-content active" id="overview">
-                    <section class="doc-section">
-                        <h2 class="section-header">🎯 Category Overview</h2>
-                        <div class="content-block">
-                            <p>Microservices Architecture decomposes applications into independently deployable services, each with clear boundaries and single responsibilities. This category covers resilience patterns, event-driven communication, CQRS, Sagas, and strategies for building fault-tolerant distributed systems.</p>
-                            
-                            <h3 class="subsection-header">Key Concepts</h3>
-                            <ul class="feature-list">
-                                <li><strong>Resilience Patterns:</strong> Circuit breaker, retry, timeout, bulkhead, and fallback patterns for fault tolerance</li>
-                                <li><strong>Event-Driven Architecture:</strong> Domain events, event sourcing, and asynchronous communication between services</li>
-                                <li><strong>CQRS:</strong> Command Query Responsibility Segregation for optimized read and write models</li>
-                                <li><strong>Sagas:</strong> Distributed transaction management with compensation logic</li>
-                                <li><strong>Service Boundaries:</strong> Defining service boundaries based on bounded contexts</li>
-                                <li><strong>Communication Patterns:</strong> Synchronous REST/gRPC and asynchronous messaging</li>
-                            </ul>
-                        </div>
-
-                        <div class="visual-diagram">
-                            <h3 class="subsection-header">Microservices Architecture Landscape</h3>
-                            <div class="mermaid">
+                    <h3>Microservices Architecture Landscape</h3>
+                    <div class="mermaid">
 graph TB
-    subgraph Resilience["Resilience Patterns"]
-        CB["Circuit Breaker"]
-        Retry["Retry & Backoff"]
-        Timeout["Timeouts"]
-        Bulkhead["Bulkhead"]
-        Fallback["Fallback"]
-    end
+    A[Microservices Architecture]
+    A --> B[Service Design]
+    A --> C[Communication]
+    A --> D[Data Management]
+    A --> E[Resilience]
+    
+    B --> B1[Domain-Driven Design]
+    B --> B2[Bounded Contexts]
+    B --> B3[Service Boundaries]
+    
+    C --> C1[Sync: REST/gRPC]
+    C --> C2[Async: Events/Messages]
+    C --> C3[Service Mesh]
+    
+    D --> D1[Database per Service]
+    D --> D2[CQRS]
+    D --> D3[Event Sourcing]
+    
+    E --> E1[Circuit Breaker]
+    E --> E2[Retry/Timeout]
+    E --> E3[Bulkhead Pattern]
+    
+    style A fill:#7b61ff,color:#fff
+    style B fill:#10b981,color:#fff
+    style C fill:#3b82f6,color:#fff
+    style D fill:#f59e0b,color:#fff
+    style E fill:#ef4444,color:#fff
+                    </div>
+                </div>
+            </div>
 
-    subgraph EventDriven["Event-Driven Architecture"]
-        Events["Domain Events"]
-        ES["Event Sourcing"]
-        CQRS["CQRS"]
-        Projections["Read Models"]
-    end
-
-    subgraph Coordination["Service Coordination"]
-        Saga["Sagas"]
-        Orchestration["Orchestration"]
-        Choreography["Choreography"]
-        Compensation["Compensation"]
-    end
-
-    subgraph Communication["Communication"]
-        Sync["REST/gRPC"]
-        Async["Message Broker"]
-        Gateway["API Gateway"]
-    end
-
-    CB --> Fallback
-    Events --> ES
-    ES --> CQRS
-    CQRS --> Projections
-    Saga --> Orchestration
-    Saga --> Choreography
-    Orchestration --> Compensation
-
-    style Resilience fill:#48bb78
-    style EventDriven fill:#ed8936
-    style Coordination fill:#667eea
-    style Communication fill:#38b2ac
-                            </div>
-                        </div>
-
-                        <div class="content-block">
-                            <h3 class="subsection-header">Resilience Patterns</h3>
-                            <p>Resilience patterns protect your system from cascading failures and enable graceful degradation. Critical for distributed systems where failures are inevitable.</p>
-                            
-                            <div class="code-example">
-                                <h4>Circuit Breaker Pattern</h4>
-                                <p>Automatically stop calling failing service to prevent cascade failures. Opens circuit after threshold of failures, closes after recovery period.</p>
-                                <pre><code class="language-csharp">// Using Polly library in C#
-var circuitBreakerPolicy = Policy
-    .Handle<HttpRequestException>()
-    .CircuitBreakerAsync(
-        exceptionsAllowedBeforeBreaking: 3,
-        durationOfBreak: TimeSpan.FromSeconds(30),
-        onBreak: (exception, duration) => {
-            Log.Warning("Circuit breaker opened");
-        },
-        onReset: () => {
-            Log.Information("Circuit breaker reset");
-        }
-    );
-
-// Use the policy
-var result = await circuitBreakerPolicy.ExecuteAsync(async () => {
-    return await httpClient.GetAsync("https://api.example.com/data");
-});</code></pre>
-
-                                <pre><code class="language-java">// Using Resilience4j in Java
-CircuitBreakerConfig config = CircuitBreakerConfig.custom()
-    .failureRateThreshold(50)              // Open at 50% failure rate
-    .waitDurationInOpenState(Duration.ofSeconds(30))
-    .slidingWindowSize(10)                  // Last 10 calls
-    .permittedNumberOfCallsInHalfOpenState(3)
-    .build();
-
-CircuitBreakerRegistry registry = CircuitBreakerRegistry.of(config);
-CircuitBreaker circuitBreaker = registry.circuitBreaker("paymentService");
-
-Supplier<String> decoratedSupplier = CircuitBreaker
-    .decorateSupplier(circuitBreaker, () -> callExternalService());
-
-Try<String> result = Try.ofSupplier(decoratedSupplier)
-    .recover(throwable -> "Fallback response");</code></pre>
-                            </div>
-
-                            <div class="code-example">
-                                <h4>Retry Pattern with Exponential Backoff</h4>
-                                <p>Handle transient failures by retrying with increasing delays. Use jitter to prevent thundering herd.</p>
-                                <pre><code class="language-python">import time
-import random
-from functools import wraps
-
-def retry_with_backoff(max_retries=3, base_delay=1, max_delay=60):
-    def decorator(func):
-        @wraps(func)
-        def wrapper(*args, **kwargs):
-            retries = 0
-            while retries < max_retries:
-                try:
-                    return func(*args, **kwargs)
-                except Exception as e:
-                    retries += 1
-                    if retries >= max_retries:
-                        raise
+            <!-- Service Design -->
+            <div id="service-design" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🎯 Service Design Principles</h2>
                     
-                    # Exponential backoff with jitter
-                    delay = min(base_delay * (2 ** retries), max_delay)
-                    jitter = random.uniform(0, delay * 0.1)
-                    time.sleep(delay + jitter)
-                    
-                    print(f"Retry {retries}/{max_retries} after {delay}s")
-        return wrapper
-    return decorator
-
-@retry_with_backoff(max_retries=3)
-def call_external_api():
-    response = requests.get("https://api.example.com/data")
-    response.raise_for_status()
-    return response.json()
-
-# Retries: 1s, 2s, 4s with jitter</code></pre>
-                            </div>
-
-                            <div class="code-example">
-                                <h4>Bulkhead Pattern - Thread Pool Isolation</h4>
-                                <p>Isolate resources to prevent total system failure. Separate thread pools for different dependencies.</p>
-                                <pre><code class="language-java">// Separate thread pools
-ExecutorService paymentThreadPool = Executors.newFixedThreadPool(10);
-ExecutorService inventoryThreadPool = Executors.newFixedThreadPool(20);
-ExecutorService notificationThreadPool = Executors.newFixedThreadPool(5);
-
-// Submit tasks to isolated pools
-Future<PaymentResult> payment = paymentThreadPool.submit(() -> 
-    processPayment(order));
-
-Future<InventoryResult> inventory = inventoryThreadPool.submit(() -> 
-    reserveInventory(order));
-
-// Slow payment API doesn't block inventory service</code></pre>
-                            </div>
-
-                            <div class="code-example">
-                                <h4>Fallback Pattern - Graceful Degradation</h4>
-                                <p>Return cached data or degraded functionality when service fails. Never show full error to users.</p>
-                                <pre><code class="language-javascript">async function getUserProfile(userId) {
-    try {
-        // Try primary service
-        const profile = await userService.getProfile(userId);
-        await cache.set(`user:${userId}`, profile, 300);  // Cache 5 min
-        return profile;
-    } catch (error) {
-        // Fallback to cache
-        const cachedProfile = await cache.get(`user:${userId}`);
-        if (cachedProfile) {
-            logger.warn('Serving cached profile due to service failure');
-            return { ...cachedProfile, stale: true };
-        }
-        
-        // Final fallback - basic profile
-        return getDefaultProfile();
-    }
-}</code></pre>
-                            </div>
-                        </div>
-
-                        <div class="content-block">
-                            <h3 class="subsection-header">Event-Driven Architecture</h3>
-                            <p>Domain events enable loose coupling between services. Events record what happened in the domain (past tense, immutable).</p>
-                            
-                            <div class="code-example">
-                                <h4>Domain Event Design</h4>
-                                <pre><code class="language-csharp">// Base domain event
-public abstract class DomainEvent {
-    public Guid EventId { get; }
-    public DateTime OccurredOn { get; }
-    
-    protected DomainEvent() {
-        EventId = Guid.NewGuid();
-        OccurredOn = DateTime.UtcNow;
-    }
-}
-
-// Specific event (past tense naming)
-public class OrderPlaced : DomainEvent {
-    public Guid OrderId { get; }
-    public Guid CustomerId { get; }
-    public Money Total { get; }
-    public DateTime OrderDate { get; }
-    
-    public OrderPlaced(Guid orderId, Guid customerId, Money total, DateTime orderDate) {
-        OrderId = orderId;
-        CustomerId = customerId;
-        Total = total;
-        OrderDate = orderDate;
-    }
-}
-
-// Aggregate collects events
-public abstract class AggregateRoot : Entity {
-    private readonly List<DomainEvent> _domainEvents = new();
-    
-    public IReadOnlyList<DomainEvent> DomainEvents => _domainEvents.AsReadOnly();
-    
-    protected void AddDomainEvent(DomainEvent eventItem) {
-        _domainEvents.Add(eventItem);
-    }
-    
-    public void ClearDomainEvents() {
-        _domainEvents.Clear();
-    }
-}
-
-// Usage in aggregate
-public class Order : AggregateRoot {
-    public void Confirm() {
-        if (Status != OrderStatus.Pending)
-            throw new DomainException("Only pending orders can be confirmed");
-        
-        Status = OrderStatus.Confirmed;
-        
-        // Add domain event
-        AddDomainEvent(new OrderConfirmed(Id, Total, DateTime.UtcNow));
-    }
-}</code></pre>
-                            </div>
-
-                            <div class="code-example">
-                                <h4>Outbox Pattern - Guaranteed Event Delivery</h4>
-                                <p>Save events to database in same transaction as aggregate. Background worker publishes events later.</p>
-                                <pre><code class="language-csharp">public class OrderRepository : IOrderRepository {
-    public async Task SaveAsync(Order order) {
-        using var transaction = await _context.Database.BeginTransactionAsync();
-        
-        try {
-            // Save aggregate
-            _context.Orders.Update(order);
-            
-            // Save events to outbox table (same transaction)
-            foreach (var @event in order.DomainEvents) {
-                _context.OutboxEvents.Add(new OutboxEvent {
-                    EventId = @event.EventId,
-                    EventType = @event.GetType().Name,
-                    EventData = JsonSerializer.Serialize(@event),
-                    CreatedAt = DateTime.UtcNow,
-                    Processed = false
-                });
-            }
-            
-            await _context.SaveChangesAsync();
-            await transaction.CommitAsync();
-            
-            order.ClearDomainEvents();
-        } catch {
-            await transaction.RollbackAsync();
-            throw;
-        }
-    }
-}
-
-// Background worker processes outbox
-public class OutboxProcessor : BackgroundService {
-    protected override async Task ExecuteAsync(CancellationToken stoppingToken) {
-        while (!stoppingToken.IsCancellationRequested) {
-            var pendingEvents = await _context.OutboxEvents
-                .Where(e => !e.Processed)
-                .Take(100)
-                .ToListAsync();
-            
-            foreach (var outboxEvent in pendingEvents) {
-                try {
-                    var @event = DeserializeEvent(outboxEvent);
-                    await _eventBus.PublishAsync(@event);
-                    
-                    outboxEvent.Processed = true;
-                    outboxEvent.ProcessedAt = DateTime.UtcNow;
-                } catch (Exception ex) {
-                    outboxEvent.RetryCount++;
-                    outboxEvent.LastError = ex.Message;
-                }
-            }
-            
-            await _context.SaveChangesAsync();
-            await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
-        }
-    }
-}</code></pre>
-                            </div>
-                        </div>
-
-                        <div class="content-block">
-                            <h3 class="subsection-header">Event Sourcing</h3>
-                            <p>Store all state changes as sequence of events. Rebuild aggregate state by replaying events. Provides complete audit trail and temporal queries.</p>
-                            
-                            <div class="code-example">
-                                <h4>Event-Sourced Aggregate</h4>
-                                <pre><code class="language-csharp">public class BankAccount : EventSourcedAggregate {
-    public Guid AccountId { get; private set; }
-    public decimal Balance { get; private set; }
-    public AccountStatus Status { get; private set; }
-    
-    // Event application methods (state changes)
-    private void When(AccountOpened @event) {
-        AccountId = @event.AccountId;
-        Balance = @event.InitialBalance;
-        Status = AccountStatus.Active;
-    }
-    
-    private void When(MoneyDeposited @event) {
-        Balance += @event.Amount;
-    }
-    
-    private void When(MoneyWithdrawn @event) {
-        Balance -= @event.Amount;
-    }
-    
-    private void When(AccountClosed @event) {
-        Status = AccountStatus.Closed;
-    }
-    
-    // Commands generate events
-    public static BankAccount Open(Guid accountId, decimal initialBalance) {
-        var account = new BankAccount();
-        account.ApplyEvent(new AccountOpened(accountId, initialBalance));
-        return account;
-    }
-    
-    public void Deposit(decimal amount) {
-        if (Status != AccountStatus.Active)
-            throw new DomainException("Cannot deposit to inactive account");
-        
-        if (amount <= 0)
-            throw new DomainException("Amount must be positive");
-        
-        ApplyEvent(new MoneyDeposited(AccountId, amount));
-    }
-    
-    public void Withdraw(decimal amount) {
-        if (Status != AccountStatus.Active)
-            throw new DomainException("Cannot withdraw from inactive account");
-        
-        if (amount <= 0)
-            throw new DomainException("Amount must be positive");
-        
-        if (Balance < amount)
-            throw new DomainException("Insufficient funds");
-        
-        ApplyEvent(new MoneyWithdrawn(AccountId, amount));
-    }
-}
-
-// Repository reconstructs from events
-public async Task<T> GetByIdAsync(Guid id) {
-    var events = await _eventStore.GetEventsAsync(id);
-    
-    if (!events.Any())
-        return null;
-    
-    var aggregate = (T)Activator.CreateInstance(typeof(T), true);
-    aggregate.LoadFromHistory(events);  // Replay all events
-    
-    return aggregate;
-}</code></pre>
-                            </div>
-                        </div>
-
-                        <div class="content-block">
-                            <h3 class="subsection-header">CQRS - Command Query Responsibility Segregation</h3>
-                            <p>Separate read and write models. Optimize each independently. Natural fit with event sourcing and microservices.</p>
-                            
-                            <div class="comparison-table">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Level</th>
-                                            <th>Description</th>
-                                            <th>Complexity</th>
-                                            <th>Use Case</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td><strong>CQRS Lite</strong></td>
-                                            <td>Separate read/write methods, same database</td>
-                                            <td>LOW</td>
-                                            <td>Different classes for commands and queries</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>CQRS with Read Models</strong></td>
-                                            <td>Separate read models (projections), same database</td>
-                                            <td>MEDIUM</td>
-                                            <td>Write to normalized tables, read from denormalized views</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>CQRS with Separate Stores</strong></td>
-                                            <td>Different databases for reads and writes</td>
-                                            <td>HIGH</td>
-                                            <td>Write to SQL, read from Elasticsearch</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <div class="code-example">
-                                <h4>CQRS Implementation</h4>
-                                <pre><code class="language-csharp">// Commands (write operations)
-public class CreateOrderCommand {
-    public Guid CustomerId { get; }
-    public List<OrderItemDto> Items { get; }
-}
-
-public class CreateOrderCommandHandler {
-    private readonly IOrderRepository _repository;
-    
-    public async Task<Guid> Handle(CreateOrderCommand command) {
-        var order = Order.Create(command.CustomerId);
-        
-        foreach (var item in command.Items) {
-            order.AddItem(item.ProductId, item.Quantity, item.UnitPrice);
-        }
-        
-        await _repository.SaveAsync(order);
-        return order.Id;
-    }
-}
-
-// Queries (read operations)
-public class GetOrderQuery {
-    public Guid OrderId { get; }
-}
-
-public class GetOrderQueryHandler {
-    private readonly AppDbContext _context;
-    
-    public async Task<OrderDto> Handle(GetOrderQuery query) {
-        // Read from denormalized view (optimized for reads)
-        return await _context.OrderViews
-            .Where(o => o.OrderId == query.OrderId)
-            .Select(o => new OrderDto {
-                OrderId = o.OrderId,
-                CustomerName = o.CustomerName,
-                Total = o.Total,
-                Items = o.Items
-            })
-            .FirstOrDefaultAsync();
-    }
-}
-
-// Event handler builds read model (projection)
-public class OrderViewProjection : INotificationHandler<OrderPlaced> {
-    private readonly AppDbContext _context;
-    
-    public async Task Handle(OrderPlaced @event) {
-        var orderView = new OrderView {
-            OrderId = @event.OrderId,
-            CustomerId = @event.CustomerId,
-            CustomerName = await GetCustomerName(@event.CustomerId),
-            Total = @event.Total,
-            OrderDate = @event.OrderDate,
-            Status = "Placed"
-        };
-        
-        _context.OrderViews.Add(orderView);
-        await _context.SaveChangesAsync();
-    }
-}</code></pre>
-                            </div>
-                        </div>
-
-                        <div class="content-block">
-                            <h3 class="subsection-header">Sagas - Distributed Transaction Management</h3>
-                            <p>Coordinate long-running business processes across multiple services. Handle failures with compensating transactions.</p>
-                            
-                            <div class="visual-diagram">
-                                <h4>Saga Patterns</h4>
-                                <div class="mermaid">
-graph LR
-    subgraph Choreography["Choreography-Based Saga"]
-        O1[Order Service] -->|OrderPlaced| P1[Payment Service]
-        P1 -->|PaymentProcessed| I1[Inventory Service]
-        I1 -->|InventoryReserved| S1[Shipping Service]
-    end
-
-    subgraph Orchestration["Orchestration-Based Saga"]
-        Saga[Order Saga] -->|ProcessPayment| P2[Payment Service]
-        Saga -->|ReserveInventory| I2[Inventory Service]
-        Saga -->|CreateShipment| S2[Shipping Service]
-    end
-
-    style Choreography fill:#48bb78
-    style Orchestration fill:#667eea
-                                </div>
-                            </div>
-
-                            <div class="code-example">
-                                <h4>Orchestration-Based Saga</h4>
-                                <pre><code class="language-csharp">public class OrderFulfillmentSaga {
-    public Guid SagaId { get; private set; }
-    public Guid OrderId { get; private set; }
-    public SagaState State { get; private set; }
-    public PaymentResult Payment { get; private set; }
-    public ReservationResult Inventory { get; private set; }
-    
-    public enum SagaState {
-        Started,
-        PaymentProcessed,
-        InventoryReserved,
-        ShipmentCreated,
-        Completed,
-        Failed
-    }
-    
-    public void Start(Guid orderId) {
-        SagaId = Guid.NewGuid();
-        OrderId = orderId;
-        State = SagaState.Started;
-        
-        // Send command to payment service
-        SendCommand(new ProcessPayment(orderId));
-    }
-    
-    public void Handle(PaymentProcessed @event) {
-        Payment = @event.Result;
-        State = SagaState.PaymentProcessed;
-        
-        // Send command to inventory service
-        SendCommand(new ReserveInventory(OrderId, @event.Items));
-    }
-    
-    public void Handle(InventoryReserved @event) {
-        Inventory = @event.Result;
-        State = SagaState.InventoryReserved;
-        
-        // Send command to shipping service
-        SendCommand(new CreateShipment(OrderId, @event.ReservationId));
-    }
-    
-    public void Handle(ShipmentCreated @event) {
-        State = SagaState.Completed;
-    }
-    
-    // Compensating transactions for failures
-    public void Handle(PaymentFailed @event) {
-        State = SagaState.Failed;
-        // No compensation needed - payment never happened
-    }
-    
-    public void Handle(InventoryReservationFailed @event) {
-        State = SagaState.Failed;
-        
-        // Compensate: Refund payment
-        SendCommand(new RefundPayment(OrderId, Payment.TransactionId));
-    }
-    
-    public void Handle(ShipmentCreationFailed @event) {
-        State = SagaState.Failed;
-        
-        // Compensate: Release inventory and refund payment
-        SendCommand(new ReleaseInventory(OrderId, Inventory.ReservationId));
-        SendCommand(new RefundPayment(OrderId, Payment.TransactionId));
-    }
-}</code></pre>
-                            </div>
-                        </div>
-
-                        <div class="content-block">
-                            <h3 class="subsection-header">Best Practices</h3>
-                            <ul class="feature-list">
-                                <li><strong>Design for Failure:</strong> Assume services will fail, use resilience patterns</li>
-                                <li><strong>Idempotent Operations:</strong> Make handlers safe to retry (check if already processed)</li>
-                                <li><strong>Events are Immutable:</strong> Past tense naming, no setters, include relevant data</li>
-                                <li><strong>Eventual Consistency:</strong> Most business processes are async - embrace it</li>
-                                <li><strong>Use Outbox Pattern:</strong> Guarantees event delivery with transactional consistency</li>
-                                <li><strong>Bounded Contexts:</strong> Define service boundaries based on domain concepts, not technology</li>
-                                <li><strong>Health Checks:</strong> Implement /health endpoints for monitoring and orchestration</li>
-                                <li><strong>Distributed Tracing:</strong> Use correlation IDs to trace requests across services</li>
+                    <h3>Core Concepts</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📐</span>
+                            <h3>Domain-Driven Design</h3>
+                            <h4>Strategic Design</h4>
+                            <ul>
+                                <li><strong>Bounded Contexts:</strong> Explicit boundaries around models</li>
+                                <li><strong>Ubiquitous Language:</strong> Shared team vocabulary</li>
+                                <li><strong>Context Mapping:</strong> Define relationships between contexts</li>
+                                <li><strong>Aggregates:</strong> Consistency boundaries within domain</li>
                             </ul>
                         </div>
-                    </section>
-                </div>
 
-                <!-- Knowledge Files Tab -->
-                <div class="tab-content" id="knowledge">
-                    <section class="doc-section">
-                        <h2 class="section-header">📚 Knowledge Files</h2>
-                        <p class="section-intro">Detailed knowledge files covering microservices patterns and distributed systems design.</p>
-
-                        <div class="accordion">
-                            <div class="accordion-item">
-                                <button class="accordion-header">
-                                    <span class="accordion-title">resilience-patterns.yaml</span>
-                                    <span class="accordion-icon">▼</span>
-                                </button>
-                                <div class="accordion-content">
-                                    <p><strong>Category:</strong> Microservices Architecture</p>
-                                    <p><strong>Focus:</strong> Resilience patterns for distributed systems following Release It! and Microservices Patterns</p>
-                                    
-                                    <h4>Key Topics:</h4>
-                                    <ul>
-                                        <li><strong>Circuit Breaker:</strong> Prevent cascading failures by failing fast after threshold of failures</li>
-                                        <li><strong>Retry Patterns:</strong> Exponential backoff with jitter, idempotent operations only</li>
-                                        <li><strong>Timeout Patterns:</strong> Aggressive timeouts prevent resource exhaustion, chain timeouts appropriately</li>
-                                        <li><strong>Bulkhead:</strong> Thread pool isolation, connection pool limits per downstream service</li>
-                                        <li><strong>Fallback:</strong> Return cached data, graceful degradation, remove non-essential features</li>
-                                        <li><strong>Health Checks:</strong> /health endpoint for monitoring with dependency checks</li>
-                                    </ul>
-                                    
-                                    <h4>Circuit Breaker States:</h4>
-                                    <ul>
-                                        <li><strong>CLOSED:</strong> Normal operation, requests pass through</li>
-                                        <li><strong>OPEN:</strong> Circuit tripped after failures, requests fail fast</li>
-                                        <li><strong>HALF_OPEN:</strong> Testing if service recovered with limited requests</li>
-                                    </ul>
-                                    
-                                    <h4>Implementation Libraries:</h4>
-                                    <ul>
-                                        <li><strong>C# / .NET:</strong> Polly - comprehensive resilience library</li>
-                                        <li><strong>Java:</strong> Resilience4j - lightweight fault tolerance library</li>
-                                        <li><strong>Python:</strong> tenacity, backoff for retry patterns</li>
-                                    </ul>
-                                    
-                                    <div class="file-meta">
-                                        <span class="meta-item"><strong>Source:</strong> Release It! (Michael Nygard), Microservices Patterns (Chris Richardson)</span>
-                                        <span class="meta-item"><strong>Version:</strong> 1.0</span>
-                                        <span class="meta-item"><strong>Lines:</strong> 392</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="accordion-item">
-                                <button class="accordion-header">
-                                    <span class="accordion-title">domain-events.yaml</span>
-                                    <span class="accordion-icon">▼</span>
-                                </button>
-                                <div class="accordion-content">
-                                    <p><strong>Category:</strong> Domain-Driven Design (cross-referenced with Microservices)</p>
-                                    <p><strong>Focus:</strong> Event-Driven Architecture, Domain Events, Event Sourcing, CQRS, Sagas</p>
-                                    
-                                    <h4>Domain Events:</h4>
-                                    <ul>
-                                        <li><strong>Definition:</strong> Record of something significant that happened in the domain (past tense, immutable)</li>
-                                        <li><strong>Types:</strong> Internal events (within context), Integration events (across contexts), Event sourcing events</li>
-                                        <li><strong>Structure:</strong> Event ID, Aggregate ID, Event Type, Event Data, Metadata (timestamp, user, correlation ID)</li>
-                                        <li><strong>Naming:</strong> Past tense (OrderPlaced, PaymentProcessed), domain language, specific over generic</li>
-                                        <li><strong>Dispatch:</strong> Immediate, deferred (after save), Outbox pattern (guaranteed delivery)</li>
-                                    </ul>
-                                    
-                                    <h4>Event Sourcing:</h4>
-                                    <ul>
-                                        <li><strong>Concept:</strong> Store all state changes as events, rebuild state by replaying events</li>
-                                        <li><strong>Benefits:</strong> Complete audit trail, temporal queries, event replay, new projections</li>
-                                        <li><strong>Costs:</strong> Increased complexity, event versioning, query performance, storage overhead</li>
-                                        <li><strong>When to Use:</strong> Audit trail critical (finance, healthcare), temporal queries, event-driven systems</li>
-                                        <li><strong>Snapshots:</strong> Periodic state snapshots to avoid replaying millions of events</li>
-                                    </ul>
-                                    
-                                    <h4>CQRS:</h4>
-                                    <ul>
-                                        <li><strong>Concept:</strong> Separate command model (write) and query model (read)</li>
-                                        <li><strong>Benefits:</strong> Optimize independently, scale separately, simpler single-purpose models</li>
-                                        <li><strong>Levels:</strong> CQRS Lite (same DB), with Read Models (projections), Separate Stores (different DBs)</li>
-                                        <li><strong>Projections:</strong> Event handlers build denormalized read models optimized for queries</li>
-                                    </ul>
-                                    
-                                    <h4>Sagas:</h4>
-                                    <ul>
-                                        <li><strong>Purpose:</strong> Coordinate long-running processes across services with compensation logic</li>
-                                        <li><strong>Choreography:</strong> Each service listens to events and reacts (no central coordinator)</li>
-                                        <li><strong>Orchestration:</strong> Central saga coordinates all steps (clear flow, easier error handling)</li>
-                                        <li><strong>Compensation:</strong> Undo previous steps when later steps fail (RefundPayment, ReleaseInventory)</li>
-                                    </ul>
-                                    
-                                    <div class="file-meta">
-                                        <span class="meta-item"><strong>Version:</strong> 1.0</span>
-                                        <span class="meta-item"><strong>Lines:</strong> 973</span>
-                                        <span class="meta-item"><strong>Author:</strong> Asif Hussain</span>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔲</span>
+                            <h3>Service Boundaries</h3>
+                            <h4>Decomposition Strategies</h4>
+                            <ul>
+                                <li><strong>Business Capability:</strong> Service per capability</li>
+                                <li><strong>Subdomain:</strong> DDD subdomain alignment</li>
+                                <li><strong>Team Ownership:</strong> Conway's Law consideration</li>
+                                <li><strong>Data Cohesion:</strong> High cohesion within service</li>
+                            </ul>
                         </div>
-                    </section>
-                </div>
 
-                <!-- Learning Resources Tab -->
-                <div class="tab-content" id="resources">
-                    <section class="doc-section">
-                        <h2 class="section-header">🎓 Learning Resources</h2>
-                        
-                        <div class="resources-grid">
-                            <div class="resource-card">
-                                <h3>📖 Essential Books</h3>
-                                <ul>
-                                    <li><strong>Release It! (2nd Edition)</strong> by Michael Nygard - Resilience patterns, circuit breakers, stability anti-patterns</li>
-                                    <li><strong>Microservices Patterns</strong> by Chris Richardson - Comprehensive microservices patterns catalog</li>
-                                    <li><strong>Building Microservices (2nd Edition)</strong> by Sam Newman - Service design, decomposition, communication</li>
-                                    <li><strong>Domain-Driven Design</strong> by Eric Evans - Bounded contexts, aggregates, domain events</li>
-                                    <li><strong>Implementing Domain-Driven Design</strong> by Vaughn Vernon - Event sourcing, CQRS, sagas</li>
-                                </ul>
-                            </div>
-
-                            <div class="resource-card">
-                                <h3>🔧 Resilience Libraries</h3>
-                                <ul>
-                                    <li><strong>Polly (.NET):</strong> Circuit breaker, retry, timeout, bulkhead, fallback policies</li>
-                                    <li><strong>Resilience4j (Java):</strong> Lightweight fault tolerance inspired by Netflix Hystrix</li>
-                                    <li><strong>tenacity (Python):</strong> Retry decorator with exponential backoff</li>
-                                    <li><strong>Istio:</strong> Service mesh with built-in circuit breakers and retries</li>
-                                    <li><strong>Linkerd:</strong> Lightweight service mesh for reliability</li>
-                                </ul>
-                            </div>
-
-                            <div class="resource-card">
-                                <h3>📨 Messaging & Events</h3>
-                                <ul>
-                                    <li><strong>Apache Kafka:</strong> Distributed event streaming platform</li>
-                                    <li><strong>RabbitMQ:</strong> Message broker with robust delivery guarantees</li>
-                                    <li><strong>Azure Service Bus:</strong> Enterprise messaging with topics and queues</li>
-                                    <li><strong>NATS:</strong> High-performance cloud-native messaging</li>
-                                    <li><strong>MassTransit:</strong> Distributed application framework for .NET (Saga support)</li>
-                                </ul>
-                            </div>
-
-                            <div class="resource-card">
-                                <h3>🏗️ Event Sourcing & CQRS</h3>
-                                <ul>
-                                    <li><strong>EventStore:</strong> Purpose-built event sourcing database</li>
-                                    <li><strong>Axon Framework (Java):</strong> CQRS and event sourcing framework</li>
-                                    <li><strong>Marten (.NET):</strong> PostgreSQL as event store and document DB</li>
-                                    <li><strong>Lagom (Scala/Java):</strong> Reactive microservices with event sourcing</li>
-                                </ul>
-                            </div>
-
-                            <div class="resource-card">
-                                <h3>🌐 Online Resources</h3>
-                                <ul>
-                                    <li><a href="https://microservices.io/patterns/" target="_blank">Microservices.io Patterns</a> - Chris Richardson's pattern catalog</li>
-                                    <li><a href="https://martinfowler.com/articles/microservices.html" target="_blank">Martin Fowler - Microservices</a> - Foundational article</li>
-                                    <li><a href="https://github.com/App-vNext/Polly" target="_blank">Polly Documentation</a> - Resilience patterns in .NET</li>
-                                    <li><a href="https://resilience4j.readme.io/" target="_blank">Resilience4j Docs</a> - Java resilience library</li>
-                                    <li><a href="https://www.eventstorming.com/" target="_blank">EventStorming</a> - Collaborative domain modeling</li>
-                                </ul>
-                            </div>
-
-                            <div class="resource-card">
-                                <h3>🎯 Conferences & Talks</h3>
-                                <ul>
-                                    <li><strong>microXchg:</strong> Berlin microservices conference</li>
-                                    <li><strong>DDD Europe:</strong> Domain-Driven Design conference</li>
-                                    <li><strong>goto; Conference:</strong> Microservices and architecture tracks</li>
-                                    <li><strong>QCon:</strong> Software development conference with microservices content</li>
-                                </ul>
-                            </div>
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📦</span>
+                            <h3>Service Size</h3>
+                            <h4>Right-Sizing Guidelines</h4>
+                            <ul>
+                                <li><strong>Not Too Small:</strong> Avoid nano-services</li>
+                                <li><strong>Not Too Large:</strong> Avoid distributed monoliths</li>
+                                <li><strong>Team Ownership:</strong> 2-pizza team can maintain</li>
+                                <li><strong>Deployment Unit:</strong> Independent release cycle</li>
+                            </ul>
                         </div>
-                    </section>
-                </div>
+                    </div>
 
-                <!-- CORTEX Usage Tab -->
-                <div class="tab-content" id="cortex">
-                    <section class="doc-section">
-                        <h2 class="section-header">🧠 CORTEX Usage</h2>
-                        <p class="section-intro">How CORTEX could leverage microservices patterns for scalable, resilient architecture.</p>
-
-                        <div class="content-block">
-                            <h3 class="subsection-header">Potential CORTEX Microservices Architecture</h3>
-                            <p>CORTEX could be decomposed into domain-aligned microservices:</p>
-                            
-                            <div class="visual-diagram">
-                                <div class="mermaid">
+                    <h3>Service Architecture Pattern</h3>
+                    <div class="mermaid">
 graph TB
-    Gateway[API Gateway] --> KnowledgeService[Knowledge Service]
-    Gateway --> OrchestrationService[Orchestration Service]
-    Gateway --> ConversationService[Conversation Service]
-    Gateway --> DocumentService[Document Service]
-    
-    KnowledgeService --> KnowledgeDB[(Knowledge DB)]
-    OrchestrationService --> OrchestratorDB[(Orchestrator DB)]
-    ConversationService --> ConversationDB[(Conversation DB)]
-    DocumentService --> DocumentDB[(Document DB)]
-    
-    KnowledgeService --> EventBus[Event Bus]
-    OrchestrationService --> EventBus
-    ConversationService --> EventBus
-    DocumentService --> EventBus
-    
-    EventBus --> Cache[(Redis Cache)]
-    
-    style Gateway fill:#667eea
-    style EventBus fill:#48bb78
-    style KnowledgeService fill:#ed8936
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="content-block">
-                            <h3 class="subsection-header">Resilience Patterns in CORTEX</h3>
-                            <ul>
-                                <li><strong>Circuit Breaker:</strong> Protect against failing external APIs (GitHub, OpenAI) with Polly policies</li>
-                                <li><strong>Retry with Backoff:</strong> Retry transient failures with exponential backoff (network timeouts, rate limits)</li>
-                                <li><strong>Timeout:</strong> 30s timeout for orchestrator operations, 5s for knowledge queries</li>
-                                <li><strong>Bulkhead:</strong> Separate thread pools for knowledge queries vs document generation</li>
-                                <li><strong>Fallback:</strong> Return cached knowledge if service unavailable, degrade to basic responses</li>
-                                <li><strong>Health Checks:</strong> /health endpoint checking database, Redis, external API availability</li>
-                            </ul>
-                        </div>
-
-                        <div class="content-block">
-                            <h3 class="subsection-header">Event-Driven CORTEX</h3>
-                            <p>Domain events for loose coupling between CORTEX components:</p>
-                            <ul>
-                                <li><strong>KnowledgeFileCreated:</strong> Triggers indexing, documentation generation</li>
-                                <li><strong>OrchestrationCompleted:</strong> Triggers cleanup, reporting, notifications</li>
-                                <li><strong>ConversationCaptured:</strong> Triggers analysis, knowledge extraction</li>
-                                <li><strong>DocumentGenerated:</strong> Triggers validation, publishing, archival</li>
-                            </ul>
-
-                            <div class="code-example">
-                                <pre><code class="language-csharp">// CORTEX domain event
-public class KnowledgeFileCreated : DomainEvent {
-    public Guid FileId { get; }
-    public string Category { get; }
-    public string FilePath { get; }
-    public string[] Tags { get; }
-    
-    public KnowledgeFileCreated(Guid fileId, string category, string filePath, string[] tags) {
-        FileId = fileId;
-        Category = category;
-        FilePath = filePath;
-        Tags = tags;
-    }
-}
-
-// Handler indexes for search
-public class IndexKnowledgeFileHandler : INotificationHandler<KnowledgeFileCreated> {
-    private readonly ISearchIndexService _searchIndex;
-    
-    public async Task Handle(KnowledgeFileCreated @event) {
-        await _searchIndex.IndexFileAsync(@event.FileId, @event.FilePath, @event.Tags);
-    }
-}
-
-// Handler generates documentation
-public class GenerateDocumentationHandler : INotificationHandler<KnowledgeFileCreated> {
-    private readonly IDocumentationGenerator _docGen;
-    
-    public async Task Handle(KnowledgeFileCreated @event) {
-        await _docGen.GenerateAsync(@event.FileId, @event.Category);
-    }
-}</code></pre>
-                            </div>
-                        </div>
-
-                        <div class="content-block">
-                            <h3 class="subsection-header">CQRS in CORTEX Knowledge Base</h3>
-                            <p>Separate write model (YAML files) from read model (indexed search, HTML docs):</p>
-                            <ul>
-                                <li><strong>Write Model:</strong> YAML knowledge files in `cortex-brain/knowledge/` (normalized, structured)</li>
-                                <li><strong>Read Models:</strong> 
-                                    <ul>
-                                        <li>Elasticsearch index for semantic search</li>
-                                        <li>Generated HTML documentation for browsing</li>
-                                        <li>Redis cache for frequently accessed knowledge</li>
-                                    </ul>
-                                </li>
-                                <li><strong>Projections:</strong> Event handlers update read models when knowledge files change</li>
-                            </ul>
-                        </div>
-
-                        <div class="content-block">
-                            <h3 class="subsection-header">Saga Example - Document Generation Workflow</h3>
-                            <p>Orchestrated saga coordinating multi-step document generation:</p>
-                            
-                            <div class="code-example">
-                                <pre><code class="language-csharp">public class DocumentGenerationSaga {
-    public Guid SagaId { get; private set; }
-    public Guid DocumentId { get; private set; }
-    public SagaState State { get; private set; }
-    
-    public enum SagaState {
-        Started,
-        KnowledgeCollected,
-        ContentGenerated,
-        HTMLCreated,
-        Validated,
-        Published,
-        Completed,
-        Failed
-    }
-    
-    public void Start(Guid documentId) {
-        SagaId = Guid.NewGuid();
-        DocumentId = documentId;
-        State = SagaState.Started;
+    subgraph "Service Boundary"
+        API[API Layer<br/>REST/gRPC]
+        BL[Business Logic Layer<br/>Domain Models]
+        DA[Data Access Layer<br/>Repository Pattern]
+        DB[(Service Database)]
         
-        SendCommand(new CollectKnowledge(documentId));
-    }
+        API --> BL
+        BL --> DA
+        DA --> DB
+    end
     
-    public void Handle(KnowledgeCollected @event) {
-        State = SagaState.KnowledgeCollected;
-        SendCommand(new GenerateContent(DocumentId, @event.KnowledgeData));
-    }
+    EXT[External Clients] --> API
+    MSG[Message Bus] -.->|Events| API
+    API -.->|Events| MSG
     
-    public void Handle(ContentGenerated @event) {
-        State = SagaState.ContentGenerated;
-        SendCommand(new CreateHTML(DocumentId, @event.Content));
-    }
-    
-    public void Handle(HTMLCreated @event) {
-        State = SagaState.HTMLCreated;
-        SendCommand(new ValidateDocument(DocumentId, @event.HTMLPath));
-    }
-    
-    public void Handle(ValidationPassed @event) {
-        State = SagaState.Validated;
-        SendCommand(new PublishDocument(DocumentId));
-    }
-    
-    public void Handle(DocumentPublished @event) {
-        State = SagaState.Completed;
-    }
-    
-    // Compensation
-    public void Handle(ValidationFailed @event) {
-        State = SagaState.Failed;
-        SendCommand(new CleanupFailedDocument(DocumentId));
-    }
-}</code></pre>
-                            </div>
-                        </div>
+    style API fill:#3b82f6,color:#fff
+    style BL fill:#10b981,color:#fff
+    style DA fill:#f59e0b,color:#fff
+    style DB fill:#ef4444,color:#fff
+                    </div>
+                </div>
+            </div>
 
-                        <div class="content-block">
-                            <h3 class="subsection-header">Related CORTEX Knowledge</h3>
+            <!-- Communication Patterns -->
+            <div id="communication" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🔄 Communication Patterns</h2>
+                    
+                    <h3>Synchronous Communication</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🌐</span>
+                            <h3>REST APIs</h3>
+                            <p class="framework-subtitle">HTTP-based Communication</p>
+                            <h4>Characteristics</h4>
                             <ul>
-                                <li><code>api-design.yaml</code> - REST API patterns for service-to-service communication</li>
-                                <li><code>messaging.yaml</code> - Message broker patterns (Kafka, RabbitMQ, Azure Service Bus)</li>
-                                <li><code>ddd/bounded-contexts.yaml</code> - Defining service boundaries</li>
-                                <li><code>ddd/domain-events.yaml</code> - Event-driven architecture patterns</li>
-                                <li><code>devops/monitoring-observability.yaml</code> - Distributed tracing, monitoring</li>
-                                <li><code>cloud/serverless-patterns.yaml</code> - Event-driven serverless microservices</li>
+                                <li>Request-response pattern</li>
+                                <li>Simple and widely adopted</li>
+                                <li>Text-based (JSON)</li>
+                                <li>HTTP status codes</li>
+                            </ul>
+                            <h4>Best For</h4>
+                            <ul>
+                                <li>CRUD operations</li>
+                                <li>Public APIs</li>
+                                <li>Browser clients</li>
                             </ul>
                         </div>
-                    </section>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">⚡</span>
+                            <h3>gRPC</h3>
+                            <p class="framework-subtitle">High-Performance RPC</p>
+                            <h4>Characteristics</h4>
+                            <ul>
+                                <li>HTTP/2 based</li>
+                                <li>Binary protocol (Protobuf)</li>
+                                <li>Bidirectional streaming</li>
+                                <li>Code generation</li>
+                            </ul>
+                            <h4>Best For</h4>
+                            <ul>
+                                <li>Internal service-to-service</li>
+                                <li>High throughput</li>
+                                <li>Polyglot environments</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔗</span>
+                            <h3>Service Mesh</h3>
+                            <p class="framework-subtitle">Infrastructure Layer</p>
+                            <h4>Capabilities</h4>
+                            <ul>
+                                <li>Load balancing</li>
+                                <li>Service discovery</li>
+                                <li>Mutual TLS</li>
+                                <li>Traffic management</li>
+                            </ul>
+                            <h4>Popular Options</h4>
+                            <ul>
+                                <li>Istio</li>
+                                <li>Linkerd</li>
+                                <li>Consul Connect</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>Asynchronous Communication</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📨</span>
+                            <h3>Event-Driven</h3>
+                            <p class="framework-subtitle">Publish-Subscribe Pattern</p>
+                            <h4>Implementation</h4>
+                            <ul>
+                                <li>Event producers publish to topics</li>
+                                <li>Multiple consumers subscribe</li>
+                                <li>Decoupled services</li>
+                                <li>Eventual consistency</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📬</span>
+                            <h3>Message Queues</h3>
+                            <p class="framework-subtitle">Point-to-Point Pattern</p>
+                            <h4>Implementation</h4>
+                            <ul>
+                                <li>Single consumer per message</li>
+                                <li>Work distribution</li>
+                                <li>Guaranteed delivery</li>
+                                <li>Dead letter queues</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🎭</span>
+                            <h3>Saga Pattern</h3>
+                            <p class="framework-subtitle">Distributed Transactions</p>
+                            <h4>Approaches</h4>
+                            <ul>
+                                <li><strong>Choreography:</strong> Event-based coordination</li>
+                                <li><strong>Orchestration:</strong> Central coordinator</li>
+                                <li>Compensating transactions</li>
+                                <li>Eventual consistency</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Management -->
+            <div id="data-management" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">💾 Data Management</h2>
+                    
+                    <h3>Database Patterns</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🗄️</span>
+                            <h3>Database per Service</h3>
+                            <h4>Benefits</h4>
+                            <ul>
+                                <li><strong>Independence:</strong> Deploy and scale separately</li>
+                                <li><strong>Technology Choice:</strong> Right DB for the job</li>
+                                <li><strong>Fault Isolation:</strong> Database failures contained</li>
+                                <li><strong>Clear Ownership:</strong> Service owns its data</li>
+                            </ul>
+                            <h4>Challenges</h4>
+                            <ul>
+                                <li>Distributed queries</li>
+                                <li>Data consistency</li>
+                                <li>Transaction management</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔄</span>
+                            <h3>CQRS</h3>
+                            <p class="framework-subtitle">Command Query Responsibility Segregation</p>
+                            <h4>Pattern</h4>
+                            <ul>
+                                <li><strong>Write Model:</strong> Commands for updates</li>
+                                <li><strong>Read Model:</strong> Optimized queries</li>
+                                <li><strong>Separation:</strong> Different models for reads/writes</li>
+                                <li><strong>Scalability:</strong> Scale reads independently</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📜</span>
+                            <h3>Event Sourcing</h3>
+                            <p class="framework-subtitle">Immutable Event Log</p>
+                            <h4>Pattern</h4>
+                            <ul>
+                                <li><strong>Events:</strong> Store state changes as events</li>
+                                <li><strong>Replay:</strong> Rebuild state from events</li>
+                                <li><strong>Audit Trail:</strong> Complete history</li>
+                                <li><strong>Time Travel:</strong> Query past states</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>Data Consistency Patterns</h3>
+                    <table class="glass-table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Pattern</th>
+                                <th>Consistency Level</th>
+                                <th>Use Case</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Transactional Outbox</td>
+                                <td>Eventual Consistency</td>
+                                <td>Reliable event publishing with local transactions</td>
+                            </tr>
+                            <tr>
+                                <td>Saga Pattern</td>
+                                <td>Eventual Consistency</td>
+                                <td>Multi-service business transactions</td>
+                            </tr>
+                            <tr>
+                                <td>Change Data Capture</td>
+                                <td>Eventual Consistency</td>
+                                <td>Database change propagation</td>
+                            </tr>
+                            <tr>
+                                <td>API Composition</td>
+                                <td>Strong Consistency</td>
+                                <td>Querying data from multiple services</td>
+                            </tr>
+                            <tr>
+                                <td>Materialized Views</td>
+                                <td>Eventual Consistency</td>
+                                <td>Pre-computed query results</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Resilience Patterns -->
+            <div id="resilience" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🛡️ Resilience Patterns</h2>
+                    
+                    <h3>Failure Handling</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">⚡</span>
+                            <h3>Circuit Breaker</h3>
+                            <p class="framework-subtitle">Prevent Cascading Failures</p>
+                            <h4>States</h4>
+                            <ul>
+                                <li><strong>Closed:</strong> Normal operation, requests pass through</li>
+                                <li><strong>Open:</strong> Failures exceeded threshold, fail fast</li>
+                                <li><strong>Half-Open:</strong> Test if service recovered</li>
+                            </ul>
+                            <h4>Configuration</h4>
+                            <ul>
+                                <li>Failure threshold (e.g., 50% errors)</li>
+                                <li>Timeout duration (e.g., 30s)</li>
+                                <li>Half-open retry count</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔄</span>
+                            <h3>Retry Pattern</h3>
+                            <p class="framework-subtitle">Handle Transient Failures</p>
+                            <h4>Strategies</h4>
+                            <ul>
+                                <li><strong>Exponential Backoff:</strong> Increase delay between retries</li>
+                                <li><strong>Jitter:</strong> Random delay to prevent thundering herd</li>
+                                <li><strong>Max Attempts:</strong> Limit retry count (e.g., 3)</li>
+                                <li><strong>Idempotency:</strong> Safe to retry operations</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">⏱️</span>
+                            <h3>Timeout Pattern</h3>
+                            <p class="framework-subtitle">Prevent Resource Blocking</p>
+                            <h4>Best Practices</h4>
+                            <ul>
+                                <li><strong>Set Deadlines:</strong> Every external call</li>
+                                <li><strong>Context Propagation:</strong> Pass deadlines downstream</li>
+                                <li><strong>Aggressive Timeouts:</strong> Fail fast, retry quickly</li>
+                                <li><strong>Monitoring:</strong> Track timeout occurrences</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>Circuit Breaker State Machine</h3>
+                    <div class="mermaid">
+stateDiagram-v2
+    [*] --> Closed
+    Closed --> Open: Failure threshold exceeded
+    Open --> HalfOpen: Timeout expires
+    HalfOpen --> Closed: Success
+    HalfOpen --> Open: Failure
+    Closed --> Closed: Success
+    
+    note right of Closed
+        Normal operation
+        Count failures
+    end note
+    
+    note right of Open
+        Fast fail requests
+        Wait for timeout
+    end note
+    
+    note right of HalfOpen
+        Test with limited requests
+        Check if recovered
+    end note
+                    </div>
+
+                    <h3>Additional Resilience Patterns</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🚢</span>
+                            <h3>Bulkhead Pattern</h3>
+                            <h4>Resource Isolation</h4>
+                            <ul>
+                                <li>Separate thread pools per service</li>
+                                <li>Connection pool limits</li>
+                                <li>Prevent resource exhaustion</li>
+                                <li>Failure isolation</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔙</span>
+                            <h3>Fallback Pattern</h3>
+                            <h4>Graceful Degradation</h4>
+                            <ul>
+                                <li>Return cached data</li>
+                                <li>Default values</li>
+                                <li>Alternative service</li>
+                                <li>Partial response</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📊</span>
+                            <h3>Health Checks</h3>
+                            <h4>Service Monitoring</h4>
+                            <ul>
+                                <li>Liveness probes</li>
+                                <li>Readiness probes</li>
+                                <li>Dependency checks</li>
+                                <li>Graceful shutdown</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="info-box info-box-warning">
+                        <strong>Resilience Best Practices:</strong>
+                        <ul class="feature-list">
+                            <li><strong>Design for Failure:</strong> Assume every call can fail</li>
+                            <li><strong>Fail Fast:</strong> Use timeouts and circuit breakers</li>
+                            <li><strong>Isolate Failures:</strong> Bulkheads prevent cascade</li>
+                            <li><strong>Monitor Everything:</strong> Metrics, logs, traces</li>
+                            <li><strong>Test Chaos:</strong> Inject failures in production</li>
+                            <li><strong>Gradual Rollout:</strong> Canary and blue-green deployments</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Observability -->
+            <div id="observability" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">👁️ Observability</h2>
+                    
+                    <h3>Three Pillars</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📊</span>
+                            <h3>Metrics</h3>
+                            <h4>Key Metrics</h4>
+                            <ul>
+                                <li><strong>RED Method:</strong> Rate, Errors, Duration</li>
+                                <li><strong>USE Method:</strong> Utilization, Saturation, Errors</li>
+                                <li><strong>Business Metrics:</strong> Orders, revenue, signups</li>
+                                <li><strong>Tools:</strong> Prometheus, Grafana</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📝</span>
+                            <h3>Logs</h3>
+                            <h4>Structured Logging</h4>
+                            <ul>
+                                <li><strong>JSON Format:</strong> Machine-readable</li>
+                                <li><strong>Correlation IDs:</strong> Trace across services</li>
+                                <li><strong>Log Levels:</strong> ERROR, WARN, INFO, DEBUG</li>
+                                <li><strong>Tools:</strong> ELK Stack, Loki</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔍</span>
+                            <h3>Distributed Tracing</h3>
+                            <h4>Request Flow</h4>
+                            <ul>
+                                <li><strong>Trace ID:</strong> Unique per request</li>
+                                <li><strong>Span ID:</strong> Per operation</li>
+                                <li><strong>Context Propagation:</strong> Headers across services</li>
+                                <li><strong>Tools:</strong> Jaeger, Zipkin, OpenTelemetry</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resources -->
+            <div id="resources" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">📚 Resources & Learning</h2>
+                    
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📖</span>
+                            <h3>Essential Books</h3>
+                            <ul>
+                                <li><strong>Building Microservices</strong> - Sam Newman</li>
+                                <li><strong>Microservices Patterns</strong> - Chris Richardson</li>
+                                <li><strong>Domain-Driven Design</strong> - Eric Evans</li>
+                                <li><strong>Release It!</strong> - Michael Nygard</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🛠️</span>
+                            <h3>Tools & Frameworks</h3>
+                            <ul>
+                                <li><a href="https://kubernetes.io/" target="_blank" rel="noopener">Kubernetes</a> - Container orchestration</li>
+                                <li><a href="https://istio.io/" target="_blank" rel="noopener">Istio</a> - Service mesh</li>
+                                <li><a href="https://www.jaegertracing.io/" target="_blank" rel="noopener">Jaeger</a> - Distributed tracing</li>
+                                <li><a href="https://prometheus.io/" target="_blank" rel="noopener">Prometheus</a> - Monitoring</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🌐</span>
+                            <h3>Online Resources</h3>
+                            <ul>
+                                <li><a href="https://microservices.io/patterns/" target="_blank" rel="noopener">Microservices.io Patterns</a></li>
+                                <li><a href="https://12factor.net/" target="_blank" rel="noopener">The Twelve-Factor App</a></li>
+                                <li><a href="https://martinfowler.com/microservices/" target="_blank" rel="noopener">Martin Fowler on Microservices</a></li>
+                                <li><a href="https://cloud.google.com/architecture/microservices-architecture-introduction" target="_blank" rel="noopener">Google Cloud Microservices</a></li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </main>
+    </section>
 
-    <footer class="doc-footer">
-        <div class="footer-content">
-            <p>&copy; 2025 CORTEX Knowledge Library. Licensed under MIT License.</p>
-            <p>Author: Asif Hussain | Version: 4.0.0</p>
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 CORTEX Knowledge Base. Created by Asif Hussain.</p>
+            <p>
+                <a href="../index.html">Home</a> |
+                <a href="index.html">Knowledge Library</a> |
+                <a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener">GitHub</a>
+            </p>
         </div>
     </footer>
 
     <script>
-        // Tab switching
-        document.querySelectorAll('.tab-button').forEach(button => {
-            button.addEventListener('click', () => {
-                const tabName = button.dataset.tab;
-                
-                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-                
-                button.classList.add('active');
-                document.getElementById(tabName).classList.add('active');
-            });
-        });
-
-        // Accordion functionality
-        document.querySelectorAll('.accordion-header').forEach(header => {
-            header.addEventListener('click', () => {
-                const item = header.parentElement;
-                const wasActive = item.classList.contains('active');
-                
-                document.querySelectorAll('.accordion-item').forEach(i => i.classList.remove('active'));
-                
-                if (!wasActive) {
-                    item.classList.add('active');
-                }
-            });
-        });
-
-        // Initialize Mermaid
         mermaid.initialize({ 
             startOnLoad: true,
-            theme: 'base',
-            themeVariables: {
-                primaryColor: '#667eea',
-                primaryTextColor: '#fff',
-                primaryBorderColor: '#5a67d8',
-                lineColor: '#cbd5e0',
-                secondaryColor: '#48bb78',
-                tertiaryColor: '#ed8936'
-            }
+            theme: 'dark'
         });
     </script>
 </body>

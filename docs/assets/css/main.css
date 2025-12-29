@@ -3667,6 +3667,322 @@ footer,
 }
 
 /* ============================================
+   FRAMEWORK/TECHNOLOGY PANEL GRID
+   ============================================ */
+.framework-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+@media (max-width: 1024px) {
+    .framework-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    .framework-grid[style*="repeat(4"] {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+.framework-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    transition: all var(--transition-base);
+}
+
+.framework-panel:hover {
+    transform: translateY(-4px);
+    border-color: rgba(0, 212, 255, 0.3);
+    box-shadow: 0 12px 40px rgba(0, 212, 255, 0.2);
+}
+
+.framework-panel-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.framework-panel h3 {
+    color: var(--accent-primary);
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.framework-panel .framework-subtitle {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    margin-bottom: 1.5rem;
+    font-style: italic;
+}
+
+.framework-panel h4 {
+    color: var(--text-primary);
+    font-size: 1rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+}
+
+.framework-panel ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.framework-panel li {
+    color: var(--text-secondary);
+    padding: 0.5rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.framework-panel li::before {
+    content: "▸";
+    color: var(--accent-primary);
+    position: absolute;
+    left: 0;
+    font-weight: bold;
+}
+
+/* ============================================
+   BORDERED TABLE STYLING
+   ============================================ */
+.glass-table-bordered {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: var(--spacing-lg) 0;
+    border: 2px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.glass-table-bordered th,
+.glass-table-bordered td {
+    padding: 1rem 1.5rem;
+    text-align: center;
+    border: 1px solid var(--glass-border);
+}
+
+.glass-table-bordered th {
+    background: rgba(0, 212, 255, 0.15);
+    color: var(--accent-primary);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.9375rem;
+    letter-spacing: 0.05em;
+    border-bottom: 2px solid var(--accent-primary);
+}
+
+.glass-table-bordered th:first-child {
+    text-align: left;
+}
+
+.glass-table-bordered td {
+    background: rgba(26, 31, 58, 0.5);
+    color: var(--text-primary);
+}
+
+.glass-table-bordered td:first-child {
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.glass-table-bordered tbody tr:hover td {
+    background: rgba(0, 212, 255, 0.08);
+}
+
+/* ============================================
+   D3.JS VISUALIZATION COMPONENTS
+   ============================================ */
+
+/* Orchestrator Visualization Section */
+.orchestrator-viz-section {
+    margin-bottom: var(--spacing-2xl);
+}
+
+.orchestrator-viz-section .glass-card {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Visualization Controls */
+.viz-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.viz-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    font-size: 0.875rem;
+    min-height: 44px; /* Touch target */
+}
+
+.viz-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.viz-btn.active {
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5);
+}
+
+.viz-all {
+    background: linear-gradient(135deg, #00d4ff 0%, #7b61ff 100%);
+    color: white;
+}
+
+.viz-planning {
+    background: #2196F3;
+    color: white;
+}
+
+.viz-execution {
+    background: #4CAF50;
+    color: white;
+}
+
+.viz-system {
+    background: #FF9800;
+    color: white;
+}
+
+.viz-analysis {
+    background: #9C27B0;
+    color: white;
+}
+
+.viz-debug {
+    background: #F44336;
+    color: white;
+}
+
+/* D3.js SVG Container */
+#orchestratorMapMain {
+    width: 100%;
+    height: 600px;
+    position: relative;
+    background: rgba(10, 14, 39, 0.3);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+/* D3.js Node Styles */
+#orchestratorMapMain .node circle {
+    cursor: pointer;
+    stroke: #fff;
+    stroke-width: 3px;
+    transition: all 0.3s ease;
+}
+
+#orchestratorMapMain .node:hover circle {
+    stroke-width: 5px;
+    filter: brightness(1.2);
+}
+
+#orchestratorMapMain .node text {
+    font-size: 11px;
+    font-weight: 600;
+    text-anchor: middle;
+    pointer-events: none;
+    fill: #ffffff;
+}
+
+/* D3.js Link Styles */
+#orchestratorMapMain .link {
+    fill: none;
+    stroke: #999;
+    stroke-opacity: 0.3;
+    stroke-width: 2px;
+}
+
+/* Visualization Tooltip */
+.viz-tooltip {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    max-width: 300px;
+    font-size: 13px;
+    z-index: 1000;
+    border: 1px solid var(--accent-primary);
+    backdrop-filter: blur(10px);
+}
+
+.viz-tooltip h3 {
+    margin: 0 0 8px 0;
+    font-size: 15px;
+    border-bottom: 2px solid #00d4ff;
+    padding-bottom: 5px;
+    color: var(--accent-primary);
+}
+
+.viz-tooltip .badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    margin-right: 5px;
+    margin-top: 5px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+/* Mobile Optimization for Visualization */
+@media (max-width: 768px) {
+    #orchestratorMapMain {
+        height: 400px;
+    }
+    
+    .viz-controls {
+        gap: 0.5rem;
+    }
+    
+    .viz-btn {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.75rem;
+    }
+    
+    #orchestratorMapMain .node text {
+        font-size: 9px;
+    }
+}
+
+@media (max-width: 480px) {
+    #orchestratorMapMain {
+        height: 300px;
+    }
+    
+    .viz-tooltip {
+        max-width: 200px;
+        font-size: 11px;
+        padding: 10px;
+    }
+}
+
+/* ============================================
    PRINT STYLES
    ============================================ */
 @media print {

@@ -50,8 +50,8 @@
                         </ul>
                     </div>
 
-                    <h3>Mobile Platform Statistics (2025)</h3>
-                    <table>
+                    <h3>Mobile Platform Statistics</h3>
+                    <table class="glass-table-bordered">
                         <thead>
                             <tr>
                                 <th>Platform</th>
@@ -164,10 +164,11 @@ graph TB
                     </table>
 
                     <h3>When to Choose Each Approach</h3>
-                    <div class="grid-2col">
-                        <div class="info-box info-box-success">
-                            <h4>Choose Native When:</h4>
-                            <ul class="feature-list">
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🎯</span>
+                            <h3>Choose Native When:</h3>
+                            <ul>
                                 <li>Performance is critical (games, AR/VR)</li>
                                 <li>Deep platform integration required</li>
                                 <li>Platform-specific UI is essential</li>
@@ -175,9 +176,10 @@ graph TB
                             </ul>
                         </div>
 
-                        <div class="info-box info-box-info">
-                            <h4>Choose Cross-Platform When:</h4>
-                            <ul class="feature-list">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🚀</span>
+                            <h3>Choose Cross-Platform When:</h3>
+                            <ul>
                                 <li>Faster time-to-market required</li>
                                 <li>Limited development resources</li>
                                 <li>Consistent UI across platforms</li>
@@ -223,10 +225,11 @@ graph LR
                     </div>
 
                     <h3>Core Components</h3>
-                    <div class="grid-2col">
-                        <div class="info-box info-box-secondary">
-                            <h4>Built-in Components</h4>
-                            <ul class="feature-list">
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📦</span>
+                            <h3>Built-in Components</h3>
+                            <ul>
                                 <li><strong>View:</strong> Container component (like div)</li>
                                 <li><strong>Text:</strong> Text rendering component</li>
                                 <li><strong>Image:</strong> Display images</li>
@@ -236,9 +239,10 @@ graph LR
                             </ul>
                         </div>
 
-                        <div class="info-box info-box-secondary">
-                            <h4>Platform-Specific APIs</h4>
-                            <ul class="feature-list">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📱</span>
+                            <h3>Platform-Specific APIs</h3>
+                            <ul>
                                 <li><strong>Platform:</strong> Detect OS (iOS/Android)</li>
                                 <li><strong>Dimensions:</strong> Screen dimensions</li>
                                 <li><strong>Keyboard:</strong> Keyboard events</li>
@@ -247,23 +251,23 @@ graph LR
                                 <li><strong>StatusBar:</strong> Status bar control</li>
                             </ul>
                         </div>
-                    </div>
 
-                    <h3>Popular Libraries</h3>
-                    <div class="info-box info-box-info">
-                        <strong>React Native Ecosystem:</strong>
-                        <ul class="feature-list">
-                            <li><strong>React Navigation:</strong> Routing and navigation</li>
-                            <li><strong>Redux/Zustand:</strong> State management</li>
-                            <li><strong>React Native Paper:</strong> Material Design components</li>
-                            <li><strong>Expo:</strong> Development toolkit and services</li>
-                            <li><strong>Reanimated:</strong> Advanced animations</li>
-                            <li><strong>React Native Elements:</strong> Cross-platform UI toolkit</li>
-                        </ul>
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📚</span>
+                            <h3>Popular Libraries</h3>
+                            <ul>
+                                <li><strong>React Navigation:</strong> Routing and navigation</li>
+                                <li><strong>Redux/Zustand:</strong> State management</li>
+                                <li><strong>React Native Paper:</strong> Material Design components</li>
+                                <li><strong>Expo:</strong> Development toolkit and services</li>
+                                <li><strong>Reanimated:</strong> Advanced animations</li>
+                                <li><strong>React Native Elements:</strong> Cross-platform UI toolkit</li>
+                            </ul>
+                        </div>
                     </div>
 
                     <h3>Expo vs React Native CLI</h3>
-                    <table>
+                    <table class="glass-table-bordered">
                         <thead>
                             <tr>
                                 <th>Feature</th>
@@ -344,10 +348,11 @@ graph TB
                     </div>
 
                     <h3>Core Concepts</h3>
-                    <div class="grid-2col">
-                        <div class="info-box info-box-success">
-                            <h4>Widgets</h4>
-                            <ul class="feature-list">
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🧩</span>
+                            <h3>Widgets</h3>
+                            <ul>
                                 <li><strong>Stateless:</strong> Immutable widgets</li>
                                 <li><strong>Stateful:</strong> Mutable state widgets</li>
                                 <li><strong>Inherited:</strong> Propagate data down tree</li>
@@ -356,9 +361,10 @@ graph TB
                             </ul>
                         </div>
 
-                        <div class="info-box info-box-success">
-                            <h4>State Management</h4>
-                            <ul class="feature-list">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔄</span>
+                            <h3>State Management</h3>
+                            <ul>
                                 <li><strong>setState:</strong> Simple local state</li>
                                 <li><strong>Provider:</strong> Recommended by Flutter team</li>
                                 <li><strong>Bloc:</strong> Business logic separation</li>
@@ -413,10 +419,11 @@ graph TB
                     </div>
 
                     <h3>Native vs Cross-Platform</h3>
-                    <div class="grid-2col">
-                        <div class="info-box info-box-warning">
-                            <h4>Native Advantages</h4>
-                            <ul class="feature-list">
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">✨</span>
+                            <h3>Native Advantages</h3>
+                            <ul>
                                 <li>Maximum performance</li>
                                 <li>Full platform API access</li>
                                 <li>Best user experience</li>
@@ -425,9 +432,10 @@ graph TB
                             </ul>
                         </div>
 
-                        <div class="info-box info-box-danger">
-                            <h4>Native Challenges</h4>
-                            <ul class="feature-list">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">⚠️</span>
+                            <h3>Native Challenges</h3>
+                            <ul>
                                 <li>Separate codebases (2x work)</li>
                                 <li>Different languages/tools</li>
                                 <li>Higher development cost</li>
@@ -477,10 +485,11 @@ graph TB
                     </div>
 
                     <h3>Clean Architecture Layers</h3>
-                    <div class="grid-3col">
-                        <div class="info-box info-box-info">
-                            <h4>Presentation Layer</h4>
-                            <ul class="feature-list">
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🎨</span>
+                            <h3>Presentation Layer</h3>
+                            <ul>
                                 <li>UI Components</li>
                                 <li>ViewModels</li>
                                 <li>Navigation</li>
@@ -488,9 +497,10 @@ graph TB
                             </ul>
                         </div>
 
-                        <div class="info-box info-box-info">
-                            <h4>Domain Layer</h4>
-                            <ul class="feature-list">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">⚙️</span>
+                            <h3>Domain Layer</h3>
+                            <ul>
                                 <li>Business Logic</li>
                                 <li>Use Cases</li>
                                 <li>Entities</li>
@@ -498,9 +508,10 @@ graph TB
                             </ul>
                         </div>
 
-                        <div class="info-box info-box-info">
-                            <h4>Data Layer</h4>
-                            <ul class="feature-list">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">💾</span>
+                            <h3>Data Layer</h3>
+                            <ul>
                                 <li>Repository Implementations</li>
                                 <li>Data Sources</li>
                                 <li>API Clients</li>
@@ -517,10 +528,11 @@ graph TB
                     <h2 class="section-title">🧪 Mobile Testing</h2>
                     
                     <h3>Testing Types</h3>
-                    <div class="grid-2col">
-                        <div class="info-box info-box-primary">
-                            <h4>React Native Testing</h4>
-                            <ul class="feature-list">
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">⚛️</span>
+                            <h3>React Native Testing</h3>
+                            <ul>
                                 <li><strong>Jest:</strong> Unit and integration tests</li>
                                 <li><strong>React Native Testing Library:</strong> Component testing</li>
                                 <li><strong>Detox:</strong> E2E testing framework</li>
@@ -528,9 +540,10 @@ graph TB
                             </ul>
                         </div>
 
-                        <div class="info-box info-box-primary">
-                            <h4>Flutter Testing</h4>
-                            <ul class="feature-list">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🐦</span>
+                            <h3>Flutter Testing</h3>
+                            <ul>
                                 <li><strong>flutter_test:</strong> Unit and widget tests</li>
                                 <li><strong>mockito:</strong> Mocking dependencies</li>
                                 <li><strong>integration_test:</strong> E2E testing</li>
@@ -540,7 +553,7 @@ graph TB
                     </div>
 
                     <h3>Native Testing Tools</h3>
-                    <table>
+                    <table class="glass-table-bordered">
                         <thead>
                             <tr>
                                 <th>Platform</th>
@@ -582,10 +595,12 @@ graph TB
                 <div class="glass-card">
                     <h2 class="section-title">📚 Resources & Learning</h2>
                     
-                    <div class="grid-2col">
-                        <div class="info-box info-box-info">
+                    <!-- First Row: React Native, Flutter, iOS -->
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">⚛️</span>
                             <h3>React Native</h3>
-                            <ul class="feature-list">
+                            <ul>
                                 <li><a href="https://reactnative.dev/" target="_blank" rel="noopener">React Native Docs</a> - Official documentation</li>
                                 <li><a href="https://docs.expo.dev/" target="_blank" rel="noopener">Expo Docs</a> - Expo development platform</li>
                                 <li><a href="https://reactnavigation.org/" target="_blank" rel="noopener">React Navigation</a> - Routing library</li>
@@ -593,9 +608,10 @@ graph TB
                             </ul>
                         </div>
 
-                        <div class="info-box info-box-info">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🐦</span>
                             <h3>Flutter</h3>
-                            <ul class="feature-list">
+                            <ul>
                                 <li><a href="https://flutter.dev/" target="_blank" rel="noopener">Flutter Docs</a> - Official documentation</li>
                                 <li><a href="https://pub.dev/" target="_blank" rel="noopener">pub.dev</a> - Flutter package repository</li>
                                 <li><a href="https://api.flutter.dev/" target="_blank" rel="noopener">Flutter API Reference</a> - API documentation</li>
@@ -603,19 +619,24 @@ graph TB
                             </ul>
                         </div>
 
-                        <div class="info-box info-box-info">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🍎</span>
                             <h3>iOS Development</h3>
-                            <ul class="feature-list">
+                            <ul>
                                 <li><a href="https://developer.apple.com/documentation/" target="_blank" rel="noopener">Apple Developer</a> - Official iOS documentation</li>
                                 <li><a href="https://developer.apple.com/swift/" target="_blank" rel="noopener">Swift.org</a> - Swift language guide</li>
                                 <li><a href="https://developer.apple.com/design/human-interface-guidelines/" target="_blank" rel="noopener">HIG</a> - Human Interface Guidelines</li>
                                 <li><a href="https://www.hackingwithswift.com/" target="_blank" rel="noopener">Hacking with Swift</a> - Swift tutorials</li>
                             </ul>
                         </div>
+                    </div>
 
-                        <div class="info-box info-box-info">
+                    <!-- Second Row: Android -->
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🤖</span>
                             <h3>Android Development</h3>
-                            <ul class="feature-list">
+                            <ul>
                                 <li><a href="https://developer.android.com/" target="_blank" rel="noopener">Android Developers</a> - Official documentation</li>
                                 <li><a href="https://kotlinlang.org/" target="_blank" rel="noopener">Kotlin Docs</a> - Kotlin language guide</li>
                                 <li><a href="https://developer.android.com/jetpack/compose" target="_blank" rel="noopener">Jetpack Compose</a> - Modern Android UI</li>

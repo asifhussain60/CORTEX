@@ -74,33 +74,34 @@ graph LR
                 <div class="glass-card">
                     <h2 class="section-title">🎯 Frontend Frameworks</h2>
                     
-                    <h3>React</h3>
-                    <div class="info-box info-box-info">
-                        <p><strong>Meta's Component-Based Library</strong></p>
-                        <ul class="feature-list">
-                            <li><strong>Virtual DOM:</strong> Efficient UI updates through reconciliation</li>
-                            <li><strong>Component Model:</strong> Reusable, composable UI building blocks</li>
-                            <li><strong>Hooks:</strong> State and lifecycle management in functional components</li>
-                            <li><strong>Ecosystem:</strong> Rich third-party libraries and tools</li>
-                            <li><strong>JSX:</strong> JavaScript syntax extension for declarative UIs</li>
-                        </ul>
-                    </div>
+                    <h3>Modern JavaScript Frameworks</h3>
+                    <div class="framework-grid">
+                        <!-- React Panel -->
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">⚛️</span>
+                            <h3>React</h3>
+                            <p class="framework-subtitle">Meta's Component-Based Library</p>
+                            
+                            <h4>Core Features</h4>
+                            <ul>
+                                <li><strong>Virtual DOM:</strong> Efficient UI updates through reconciliation</li>
+                                <li><strong>Component Model:</strong> Reusable, composable UI building blocks</li>
+                                <li><strong>Hooks:</strong> State and lifecycle management in functional components</li>
+                                <li><strong>Ecosystem:</strong> Rich third-party libraries and tools</li>
+                                <li><strong>JSX:</strong> JavaScript syntax extension for declarative UIs</li>
+                            </ul>
 
-                    <div class="grid-2col">
-                        <div class="info-box info-box-secondary">
-                            <h4>React Best Practices</h4>
-                            <ul class="feature-list">
+                            <h4>Best Practices</h4>
+                            <ul>
                                 <li>Use functional components with hooks</li>
                                 <li>Implement proper key props in lists</li>
                                 <li>Memoize expensive computations</li>
                                 <li>Split code with React.lazy()</li>
                                 <li>Use Context API judiciously</li>
                             </ul>
-                        </div>
 
-                        <div class="info-box info-box-secondary">
-                            <h4>React Ecosystem</h4>
-                            <ul class="feature-list">
+                            <h4>Ecosystem</h4>
+                            <ul>
                                 <li><strong>Next.js:</strong> Full-stack React framework</li>
                                 <li><strong>React Router:</strong> Client-side routing</li>
                                 <li><strong>React Query:</strong> Server state management</li>
@@ -108,34 +109,78 @@ graph LR
                                 <li><strong>Styled Components:</strong> CSS-in-JS styling</li>
                             </ul>
                         </div>
-                    </div>
 
-                    <h3>Vue.js</h3>
-                    <div class="info-box info-box-success">
-                        <p><strong>Progressive JavaScript Framework</strong></p>
-                        <ul class="feature-list">
-                            <li><strong>Reactive System:</strong> Automatic dependency tracking and updates</li>
-                            <li><strong>Single File Components:</strong> Template, script, and style in one file</li>
-                            <li><strong>Composition API:</strong> Flexible component logic organization</li>
-                            <li><strong>Vue Router:</strong> Official routing solution</li>
-                            <li><strong>Pinia:</strong> Modern state management library</li>
-                        </ul>
-                    </div>
+                        <!-- Vue.js Panel -->
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🟢</span>
+                            <h3>Vue.js</h3>
+                            <p class="framework-subtitle">Progressive JavaScript Framework</p>
+                            
+                            <h4>Core Features</h4>
+                            <ul>
+                                <li><strong>Reactive System:</strong> Automatic dependency tracking and updates</li>
+                                <li><strong>Single File Components:</strong> Template, script, and style in one file</li>
+                                <li><strong>Composition API:</strong> Flexible component logic organization</li>
+                                <li><strong>Vue Router:</strong> Official routing solution</li>
+                                <li><strong>Pinia:</strong> Modern state management library</li>
+                            </ul>
 
-                    <h3>Angular</h3>
-                    <div class="info-box info-box-warning">
-                        <p><strong>Enterprise-Grade Framework</strong></p>
-                        <ul class="feature-list">
-                            <li><strong>Full Framework:</strong> Batteries-included development platform</li>
-                            <li><strong>TypeScript First:</strong> Built with TypeScript from the ground up</li>
-                            <li><strong>Dependency Injection:</strong> Powerful DI system for services</li>
-                            <li><strong>RxJS Integration:</strong> Reactive programming with observables</li>
-                            <li><strong>CLI Tools:</strong> Comprehensive code generation and scaffolding</li>
-                        </ul>
+                            <h4>Best Practices</h4>
+                            <ul>
+                                <li>Use Composition API for complex logic</li>
+                                <li>Keep components single-responsibility</li>
+                                <li>Leverage computed properties</li>
+                                <li>Use scoped styles in SFCs</li>
+                                <li>Implement proper error boundaries</li>
+                            </ul>
+
+                            <h4>Ecosystem</h4>
+                            <ul>
+                                <li><strong>Nuxt.js:</strong> Meta-framework for SSR and SSG</li>
+                                <li><strong>Pinia:</strong> Intuitive state management</li>
+                                <li><strong>Vuetify:</strong> Material Design component library</li>
+                                <li><strong>VueUse:</strong> Collection of composition utilities</li>
+                                <li><strong>Vite:</strong> Lightning-fast dev server and bundler</li>
+                            </ul>
+                        </div>
+
+                        <!-- Angular Panel -->
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🅰️</span>
+                            <h3>Angular</h3>
+                            <p class="framework-subtitle">Enterprise-Grade Framework</p>
+                            
+                            <h4>Core Features</h4>
+                            <ul>
+                                <li><strong>Full Framework:</strong> Batteries-included development platform</li>
+                                <li><strong>TypeScript First:</strong> Built with TypeScript from the ground up</li>
+                                <li><strong>Dependency Injection:</strong> Powerful DI system for services</li>
+                                <li><strong>RxJS Integration:</strong> Reactive programming with observables</li>
+                                <li><strong>CLI Tools:</strong> Comprehensive code generation and scaffolding</li>
+                            </ul>
+
+                            <h4>Best Practices</h4>
+                            <ul>
+                                <li>Follow Angular style guide strictly</li>
+                                <li>Use OnPush change detection</li>
+                                <li>Implement lazy loading for modules</li>
+                                <li>Leverage RxJS operators effectively</li>
+                                <li>Use standalone components (v14+)</li>
+                            </ul>
+
+                            <h4>Ecosystem</h4>
+                            <ul>
+                                <li><strong>Angular CLI:</strong> Powerful scaffolding and build tools</li>
+                                <li><strong>NgRx:</strong> Redux-inspired state management</li>
+                                <li><strong>Angular Material:</strong> Material Design components</li>
+                                <li><strong>Nx:</strong> Monorepo development tools</li>
+                                <li><strong>Universal:</strong> Server-side rendering solution</li>
+                            </ul>
+                        </div>
                     </div>
 
                     <h3>Framework Comparison</h3>
-                    <table>
+                    <table class="glass-table-bordered">
                         <thead>
                             <tr>
                                 <th>Feature</th>
@@ -180,10 +225,14 @@ graph LR
                     <h2 class="section-title">📘 TypeScript</h2>
                     
                     <h3>Why TypeScript?</h3>
-                    <div class="grid-2col">
-                        <div class="info-box info-box-primary">
-                            <h4>Benefits</h4>
-                            <ul class="feature-list">
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">✅</span>
+                            <h3>Benefits</h3>
+                            <p class="framework-subtitle">Advantages of Using TypeScript</p>
+                            
+                            <h4>Key Advantages</h4>
+                            <ul>
                                 <li><strong>Type Safety:</strong> Catch errors at compile time</li>
                                 <li><strong>Better Tooling:</strong> Enhanced IDE support and autocomplete</li>
                                 <li><strong>Self-Documenting:</strong> Types serve as inline documentation</li>
@@ -192,9 +241,13 @@ graph LR
                             </ul>
                         </div>
 
-                        <div class="info-box info-box-secondary">
-                            <h4>Common Types</h4>
-                            <ul class="feature-list">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📝</span>
+                            <h3>Common Types</h3>
+                            <p class="framework-subtitle">Essential TypeScript Type System</p>
+                            
+                            <h4>Type Categories</h4>
+                            <ul>
                                 <li><strong>Primitives:</strong> string, number, boolean</li>
                                 <li><strong>Arrays:</strong> string[], Array&lt;number&gt;</li>
                                 <li><strong>Objects:</strong> Interfaces and type aliases</li>
@@ -251,44 +304,92 @@ graph TB
                     </div>
 
                     <h3>State Management Solutions</h3>
-                    <div class="grid-2col">
-                        <div class="info-box info-box-info">
-                            <h4>Redux Toolkit</h4>
-                            <ul class="feature-list">
-                                <li><strong>Predictable:</strong> Single source of truth</li>
-                                <li><strong>Debuggable:</strong> Time-travel debugging</li>
-                                <li><strong>Middleware:</strong> Redux Thunk, Saga for async</li>
-                                <li><strong>DevTools:</strong> Powerful browser extension</li>
+                    <!-- First Row: Redux Toolkit, Zustand, React Query -->
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔄</span>
+                            <h3>Redux Toolkit</h3>
+                            <p class="framework-subtitle">Predictable State Container</p>
+                            
+                            <h4>Core Features</h4>
+                            <ul>
+                                <li><strong>Single Source:</strong> Centralized state tree</li>
+                                <li><strong>Immutable Updates:</strong> Immer-powered reducers</li>
+                                <li><strong>DevTools:</strong> Time-travel debugging</li>
+                                <li><strong>Middleware:</strong> Thunk, Saga for async</li>
+                            </ul>
+                            
+                            <h4>Best For</h4>
+                            <ul>
+                                <li>Complex global state</li>
+                                <li>Large team applications</li>
+                                <li>Predictable state updates</li>
                             </ul>
                         </div>
 
-                        <div class="info-box info-box-info">
-                            <h4>Zustand</h4>
-                            <ul class="feature-list">
-                                <li><strong>Minimal:</strong> Small bundle size (~1KB)</li>
-                                <li><strong>Simple:</strong> No boilerplate required</li>
-                                <li><strong>Flexible:</strong> No providers needed</li>
-                                <li><strong>TypeScript:</strong> Excellent type inference</li>
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🐻</span>
+                            <h3>Zustand</h3>
+                            <p class="framework-subtitle">Minimal State Management</p>
+                            
+                            <h4>Core Features</h4>
+                            <ul>
+                                <li><strong>Minimal:</strong> ~1KB bundle size</li>
+                                <li><strong>No Boilerplate:</strong> Simple API</li>
+                                <li><strong>No Providers:</strong> Direct store access</li>
+                                <li><strong>TypeScript:</strong> Excellent inference</li>
+                            </ul>
+                            
+                            <h4>Best For</h4>
+                            <ul>
+                                <li>Small to medium apps</li>
+                                <li>Simple state needs</li>
+                                <li>Performance-critical apps</li>
                             </ul>
                         </div>
 
-                        <div class="info-box info-box-info">
-                            <h4>React Query</h4>
-                            <ul class="feature-list">
-                                <li><strong>Server State:</strong> Specialized for async data</li>
-                                <li><strong>Caching:</strong> Automatic background refetching</li>
-                                <li><strong>Optimistic Updates:</strong> Instant UI feedback</li>
-                                <li><strong>Pagination:</strong> Built-in infinite scroll support</li>
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔍</span>
+                            <h3>React Query</h3>
+                            <p class="framework-subtitle">Server State Management</p>
+                            
+                            <h4>Core Features</h4>
+                            <ul>
+                                <li><strong>Server Cache:</strong> Automatic caching</li>
+                                <li><strong>Background Sync:</strong> Auto refetching</li>
+                                <li><strong>Optimistic UI:</strong> Instant feedback</li>
+                                <li><strong>Pagination:</strong> Infinite scroll support</li>
+                            </ul>
+                            
+                            <h4>Best For</h4>
+                            <ul>
+                                <li>API-driven applications</li>
+                                <li>Real-time data sync</li>
+                                <li>Complex data fetching</li>
                             </ul>
                         </div>
+                    </div>
 
-                        <div class="info-box info-box-info">
-                            <h4>Context API</h4>
-                            <ul class="feature-list">
-                                <li><strong>Built-in:</strong> No external dependencies</li>
-                                <li><strong>Simple:</strong> Good for small apps</li>
-                                <li><strong>Component Coupling:</strong> Provider/Consumer pattern</li>
-                                <li><strong>Performance:</strong> Can cause unnecessary re-renders</li>
+                    <!-- Second Row: Context API -->
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">⚙️</span>
+                            <h3>Context API</h3>
+                            <p class="framework-subtitle">Built-in React State</p>
+                            
+                            <h4>Core Features</h4>
+                            <ul>
+                                <li><strong>Built-in:</strong> No dependencies</li>
+                                <li><strong>Simple:</strong> Provider/Consumer pattern</li>
+                                <li><strong>Lightweight:</strong> Good for themes, auth</li>
+                                <li><strong>Composable:</strong> Multiple contexts</li>
+                            </ul>
+                            
+                            <h4>Best For</h4>
+                            <ul>
+                                <li>Small apps</li>
+                                <li>Theme/locale state</li>
+                                <li>Avoiding prop drilling</li>
                             </ul>
                         </div>
                     </div>
@@ -313,7 +414,7 @@ graph TB
                     <h2 class="section-title">⚡ Performance Optimization</h2>
                     
                     <h3>Core Web Vitals</h3>
-                    <table>
+                    <table class="glass-table-bordered">
                         <thead>
                             <tr>
                                 <th>Metric</th>
@@ -345,34 +446,67 @@ graph TB
                     </table>
 
                     <h3>Performance Techniques</h3>
-                    <div class="grid-3col">
-                        <div class="info-box info-box-success">
-                            <h4>Code Splitting</h4>
-                            <ul class="feature-list">
-                                <li>React.lazy() for components</li>
-                                <li>Dynamic imports</li>
-                                <li>Route-based splitting</li>
-                                <li>Vendor chunk separation</li>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📦</span>
+                            <h3>Code Splitting</h3>
+                            <p class="framework-subtitle">Reduce Initial Bundle Size</p>
+                            
+                            <h4>Techniques</h4>
+                            <ul>
+                                <li><strong>React.lazy():</strong> Component-level splitting</li>
+                                <li><strong>Dynamic Imports:</strong> Load modules on demand</li>
+                                <li><strong>Route-Based:</strong> Split by page routes</li>
+                                <li><strong>Vendor Chunks:</strong> Separate third-party code</li>
+                            </ul>
+                            
+                            <h4>Benefits</h4>
+                            <ul>
+                                <li>Faster initial page load</li>
+                                <li>Better browser caching</li>
+                                <li>Improved Time to Interactive</li>
                             </ul>
                         </div>
 
-                        <div class="info-box info-box-success">
-                            <h4>Rendering</h4>
-                            <ul class="feature-list">
-                                <li>React.memo() for memoization</li>
-                                <li>useMemo for expensive computations</li>
-                                <li>useCallback for function stability</li>
-                                <li>Virtual scrolling for long lists</li>
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🎨</span>
+                            <h3>Rendering</h3>
+                            <p class="framework-subtitle">Optimize Component Updates</p>
+                            
+                            <h4>Techniques</h4>
+                            <ul>
+                                <li><strong>React.memo():</strong> Prevent unnecessary renders</li>
+                                <li><strong>useMemo:</strong> Cache expensive computations</li>
+                                <li><strong>useCallback:</strong> Stabilize function references</li>
+                                <li><strong>Virtual Scrolling:</strong> Render visible items only</li>
+                            </ul>
+                            
+                            <h4>Benefits</h4>
+                            <ul>
+                                <li>Reduced CPU usage</li>
+                                <li>Smoother user interactions</li>
+                                <li>Better frame rates</li>
                             </ul>
                         </div>
 
-                        <div class="info-box info-box-success">
-                            <h4>Assets</h4>
-                            <ul class="feature-list">
-                                <li>Image optimization (WebP, AVIF)</li>
-                                <li>Lazy loading images</li>
-                                <li>Tree-shaking unused code</li>
-                                <li>Minification and compression</li>
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🖼️</span>
+                            <h3>Assets</h3>
+                            <p class="framework-subtitle">Optimize Media & Resources</p>
+                            
+                            <h4>Techniques</h4>
+                            <ul>
+                                <li><strong>Modern Formats:</strong> WebP, AVIF images</li>
+                                <li><strong>Lazy Loading:</strong> Load images on scroll</li>
+                                <li><strong>Tree-Shaking:</strong> Remove unused code</li>
+                                <li><strong>Compression:</strong> Gzip, Brotli compression</li>
+                            </ul>
+                            
+                            <h4>Benefits</h4>
+                            <ul>
+                                <li>Smaller payload sizes</li>
+                                <li>Faster download times</li>
+                                <li>Better LCP scores</li>
                             </ul>
                         </div>
                     </div>
@@ -415,24 +549,46 @@ graph TB
                     </div>
 
                     <h3>Testing Tools</h3>
-                    <div class="grid-2col">
-                        <div class="info-box info-box-info">
-                            <h4>Unit Testing</h4>
-                            <ul class="feature-list">
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🧪</span>
+                            <h3>Unit Testing</h3>
+                            <p class="framework-subtitle">Component & Logic Testing</p>
+                            
+                            <h4>Popular Tools</h4>
+                            <ul>
                                 <li><strong>Jest:</strong> Popular JavaScript testing framework</li>
                                 <li><strong>Vitest:</strong> Vite-native unit test framework</li>
                                 <li><strong>Testing Library:</strong> User-centric testing utilities</li>
                                 <li><strong>Mock Service Worker:</strong> API mocking library</li>
                             </ul>
+                            
+                            <h4>Focus Areas</h4>
+                            <ul>
+                                <li>Component rendering</li>
+                                <li>User interactions</li>
+                                <li>Business logic</li>
+                            </ul>
                         </div>
 
-                        <div class="info-box info-box-info">
-                            <h4>E2E Testing</h4>
-                            <ul class="feature-list">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🌐</span>
+                            <h3>E2E Testing</h3>
+                            <p class="framework-subtitle">End-to-End User Flows</p>
+                            
+                            <h4>Popular Tools</h4>
+                            <ul>
                                 <li><strong>Cypress:</strong> Developer-friendly E2E testing</li>
                                 <li><strong>Playwright:</strong> Cross-browser automation</li>
                                 <li><strong>Puppeteer:</strong> Chrome DevTools Protocol API</li>
                                 <li><strong>Selenium:</strong> Legacy browser automation</li>
+                            </ul>
+                            
+                            <h4>Focus Areas</h4>
+                            <ul>
+                                <li>Complete user journeys</li>
+                                <li>Cross-browser testing</li>
+                                <li>Integration scenarios</li>
                             </ul>
                         </div>
                     </div>
@@ -458,50 +614,98 @@ graph TB
                     <h2 class="section-title">🔧 Build Tools & Bundlers</h2>
                     
                     <h3>Modern Build Tools</h3>
-                    <div class="grid-2col">
-                        <div class="info-box info-box-primary">
-                            <h4>Vite</h4>
-                            <ul class="feature-list">
-                                <li><strong>Speed:</strong> Instant server start with native ESM</li>
-                                <li><strong>HMR:</strong> Lightning-fast hot module replacement</li>
-                                <li><strong>Framework Agnostic:</strong> React, Vue, Svelte support</li>
-                                <li><strong>Modern:</strong> ES modules, TypeScript out-of-the-box</li>
+                    <!-- First Row: Vite, Webpack, Turbopack -->
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">⚡</span>
+                            <h3>Vite</h3>
+                            <p class="framework-subtitle">Next Generation Frontend Tooling</p>
+                            
+                            <h4>Core Features</h4>
+                            <ul>
+                                <li><strong>Instant Start:</strong> Native ESM dev server</li>
+                                <li><strong>Lightning HMR:</strong> Fast hot module replacement</li>
+                                <li><strong>Framework Agnostic:</strong> React, Vue, Svelte</li>
+                                <li><strong>Modern:</strong> TypeScript out-of-the-box</li>
+                            </ul>
+                            
+                            <h4>Best For</h4>
+                            <ul>
+                                <li>Modern web apps</li>
+                                <li>Fast development</li>
+                                <li>SPA and SSR projects</li>
                             </ul>
                         </div>
 
-                        <div class="info-box info-box-primary">
-                            <h4>Webpack</h4>
-                            <ul class="feature-list">
-                                <li><strong>Mature:</strong> Battle-tested, extensive ecosystem</li>
-                                <li><strong>Configurable:</strong> Highly customizable via loaders/plugins</li>
-                                <li><strong>Code Splitting:</strong> Advanced chunking strategies</li>
-                                <li><strong>Legacy Support:</strong> Wide browser compatibility</li>
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📦</span>
+                            <h3>Webpack</h3>
+                            <p class="framework-subtitle">Industry Standard Bundler</p>
+                            
+                            <h4>Core Features</h4>
+                            <ul>
+                                <li><strong>Mature:</strong> Battle-tested ecosystem</li>
+                                <li><strong>Configurable:</strong> Loaders and plugins</li>
+                                <li><strong>Code Splitting:</strong> Advanced chunking</li>
+                                <li><strong>Legacy Support:</strong> Wide compatibility</li>
+                            </ul>
+                            
+                            <h4>Best For</h4>
+                            <ul>
+                                <li>Complex build needs</li>
+                                <li>Enterprise applications</li>
+                                <li>Legacy browser support</li>
                             </ul>
                         </div>
 
-                        <div class="info-box info-box-secondary">
-                            <h4>Turbopack</h4>
-                            <ul class="feature-list">
-                                <li><strong>Next-Gen:</strong> Rust-based bundler by Vercel</li>
-                                <li><strong>Performance:</strong> Up to 700x faster than Webpack</li>
-                                <li><strong>Incremental:</strong> Only rebuilds changed modules</li>
-                                <li><strong>Next.js Integration:</strong> Built for Next.js 13+</li>
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🦀</span>
+                            <h3>Turbopack</h3>
+                            <p class="framework-subtitle">Rust-Powered Bundler</p>
+                            
+                            <h4>Core Features</h4>
+                            <ul>
+                                <li><strong>Extreme Speed:</strong> 700x faster than Webpack</li>
+                                <li><strong>Incremental:</strong> Only rebuilds changes</li>
+                                <li><strong>Next.js Native:</strong> Built for Next.js 13+</li>
+                                <li><strong>Rust-Based:</strong> System-level performance</li>
+                            </ul>
+                            
+                            <h4>Best For</h4>
+                            <ul>
+                                <li>Next.js projects</li>
+                                <li>Large monorepos</li>
+                                <li>Maximum build speed</li>
                             </ul>
                         </div>
+                    </div>
 
-                        <div class="info-box info-box-secondary">
-                            <h4>esbuild</h4>
-                            <ul class="feature-list">
-                                <li><strong>Speed:</strong> 10-100x faster than JavaScript bundlers</li>
-                                <li><strong>Go-Powered:</strong> Written in Go for performance</li>
-                                <li><strong>TypeScript:</strong> Native TypeScript support</li>
-                                <li><strong>Simple:</strong> Minimal configuration required</li>
+                    <!-- Second Row: esbuild -->
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🚀</span>
+                            <h3>esbuild</h3>
+                            <p class="framework-subtitle">Ultra-Fast JavaScript Bundler</p>
+                            
+                            <h4>Core Features</h4>
+                            <ul>
+                                <li><strong>Blazing Fast:</strong> 10-100x faster</li>
+                                <li><strong>Go-Powered:</strong> Written in Go</li>
+                                <li><strong>TypeScript:</strong> Native TS support</li>
+                                <li><strong>Simple:</strong> Minimal configuration</li>
+                            </ul>
+                            
+                            <h4>Best For</h4>
+                            <ul>
+                                <li>Library bundling</li>
+                                <li>Fast CI/CD builds</li>
+                                <li>Simple projects</li>
                             </ul>
                         </div>
                     </div>
 
                     <h3>Package Managers</h3>
-                    <table>
+                    <table class="glass-table-bordered">
                         <thead>
                             <tr>
                                 <th>Tool</th>
@@ -540,44 +744,60 @@ graph TB
                 <div class="glass-card">
                     <h2 class="section-title">📚 Resources & Learning</h2>
                     
-                    <div class="grid-2col">
-                        <div class="info-box info-box-info">
+                    <!-- First Row: Official Docs, Learning, Tools -->
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📚</span>
                             <h3>Official Documentation</h3>
-                            <ul class="feature-list">
-                                <li><a href="https://react.dev/" target="_blank" rel="noopener">React Docs</a> - Official React documentation</li>
-                                <li><a href="https://vuejs.org/" target="_blank" rel="noopener">Vue.js Guide</a> - Vue.js official guide</li>
-                                <li><a href="https://angular.io/docs" target="_blank" rel="noopener">Angular Docs</a> - Angular documentation</li>
-                                <li><a href="https://www.typescriptlang.org/docs/" target="_blank" rel="noopener">TypeScript Handbook</a> - TypeScript documentation</li>
+                            <p class="framework-subtitle">Authoritative Framework Docs</p>
+                            
+                            <ul>
+                                <li><a href="https://react.dev/" target="_blank" rel="noopener"><strong>React Docs:</strong> Official React documentation</a></li>
+                                <li><a href="https://vuejs.org/" target="_blank" rel="noopener"><strong>Vue.js Guide:</strong> Vue.js official guide</a></li>
+                                <li><a href="https://angular.io/docs" target="_blank" rel="noopener"><strong>Angular Docs:</strong> Angular documentation</a></li>
+                                <li><a href="https://www.typescriptlang.org/docs/" target="_blank" rel="noopener"><strong>TypeScript Handbook:</strong> TypeScript documentation</a></li>
                             </ul>
                         </div>
 
-                        <div class="info-box info-box-info">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🎓</span>
                             <h3>Learning Platforms</h3>
-                            <ul class="feature-list">
-                                <li><a href="https://kentcdodds.com/" target="_blank" rel="noopener">Kent C. Dodds</a> - React testing and patterns</li>
-                                <li><a href="https://javascript.info/" target="_blank" rel="noopener">JavaScript.info</a> - Modern JavaScript tutorial</li>
-                                <li><a href="https://web.dev/" target="_blank" rel="noopener">web.dev</a> - Modern web development</li>
-                                <li><a href="https://frontendmasters.com/" target="_blank" rel="noopener">Frontend Masters</a> - In-depth courses</li>
+                            <p class="framework-subtitle">Educational Resources</p>
+                            
+                            <ul>
+                                <li><a href="https://kentcdodds.com/" target="_blank" rel="noopener"><strong>Kent C. Dodds:</strong> React testing and patterns</a></li>
+                                <li><a href="https://javascript.info/" target="_blank" rel="noopener"><strong>JavaScript.info:</strong> Modern JavaScript tutorial</a></li>
+                                <li><a href="https://web.dev/" target="_blank" rel="noopener"><strong>web.dev:</strong> Modern web development</a></li>
+                                <li><a href="https://frontendmasters.com/" target="_blank" rel="noopener"><strong>Frontend Masters:</strong> In-depth courses</a></li>
                             </ul>
                         </div>
 
-                        <div class="info-box info-box-info">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔧</span>
                             <h3>Tools & Extensions</h3>
-                            <ul class="feature-list">
-                                <li><a href="https://react-devtools.dev/" target="_blank" rel="noopener">React DevTools</a> - React debugging</li>
-                                <li><a href="https://devtools.vuejs.org/" target="_blank" rel="noopener">Vue DevTools</a> - Vue debugging</li>
-                                <li><a href="https://prettier.io/" target="_blank" rel="noopener">Prettier</a> - Code formatting</li>
-                                <li><a href="https://eslint.org/" target="_blank" rel="noopener">ESLint</a> - JavaScript linting</li>
+                            <p class="framework-subtitle">Developer Tools</p>
+                            
+                            <ul>
+                                <li><a href="https://react-devtools.dev/" target="_blank" rel="noopener"><strong>React DevTools:</strong> React debugging</a></li>
+                                <li><a href="https://devtools.vuejs.org/" target="_blank" rel="noopener"><strong>Vue DevTools:</strong> Vue debugging</a></li>
+                                <li><a href="https://prettier.io/" target="_blank" rel="noopener"><strong>Prettier:</strong> Code formatting</a></li>
+                                <li><a href="https://eslint.org/" target="_blank" rel="noopener"><strong>ESLint:</strong> JavaScript linting</a></li>
                             </ul>
                         </div>
+                    </div>
 
-                        <div class="info-box info-box-info">
+                    <!-- Second Row: Community -->
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">👥</span>
                             <h3>Community</h3>
-                            <ul class="feature-list">
-                                <li><a href="https://dev.to/t/javascript" target="_blank" rel="noopener">DEV Community</a> - JavaScript articles</li>
-                                <li><a href="https://css-tricks.com/" target="_blank" rel="noopener">CSS-Tricks</a> - Frontend techniques</li>
-                                <li><a href="https://github.com/topics/react" target="_blank" rel="noopener">GitHub Topics</a> - Open source projects</li>
-                                <li><a href="https://www.reddit.com/r/reactjs/" target="_blank" rel="noopener">r/reactjs</a> - React community</li>
+                            <p class="framework-subtitle">Developer Communities</p>
+                            
+                            <ul>
+                                <li><a href="https://dev.to/t/javascript" target="_blank" rel="noopener"><strong>DEV Community:</strong> JavaScript articles</a></li>
+                                <li><a href="https://css-tricks.com/" target="_blank" rel="noopener"><strong>CSS-Tricks:</strong> Frontend techniques</a></li>
+                                <li><a href="https://github.com/topics/react" target="_blank" rel="noopener"><strong>GitHub Topics:</strong> Open source projects</a></li>
+                                <li><a href="https://www.reddit.com/r/reactjs/" target="_blank" rel="noopener"><strong>r/reactjs:</strong> React community</a></li>
                             </ul>
                         </div>
                     </div>

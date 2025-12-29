@@ -28,6 +28,8 @@ scripts/
 - **`cortex_cli.py`** - CLI interface for CORTEX operations
 - **`record-mkdocs-session.py`** - Records documentation sessions
 - **`test-conversation-tracking.py`** - Tests conversation tracking
+- **`launch_docs.ps1`** - **[NEW]** PowerShell documentation server with auto-browser launch (Windows)
+- **`launch_docs.sh`** - **[NEW]** Bash documentation server with auto-browser launch (macOS/Linux/Git Bash)
 
 ## Usage
 
