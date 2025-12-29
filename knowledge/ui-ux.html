@@ -87,44 +87,64 @@ graph LR
                     </div>
 
                     <h3>Popular Design Systems</h3>
-                    <div class="grid-2col">
-                        <div class="info-box info-box-secondary">
-                            <h4>Material Design (Google)</h4>
-                            <ul class="feature-list">
-                                <li>Motion-based design language</li>
-                                <li>Elevation and shadows</li>
-                                <li>Bold colors and typography</li>
-                                <li>Comprehensive component library</li>
+                    <!-- First Row: Material, HIG, Fluent -->
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🎨</span>
+                            <h3>Material Design</h3>
+                            <p class="framework-subtitle">Google's Design Language</p>
+                            
+                            <h4>Core Principles</h4>
+                            <ul>
+                                <li><strong>Motion-Based:</strong> Physics-inspired animations</li>
+                                <li><strong>Elevation:</strong> Depth through shadows</li>
+                                <li><strong>Bold Design:</strong> Vibrant colors & typography</li>
+                                <li><strong>Components:</strong> Comprehensive library</li>
                             </ul>
                         </div>
 
-                        <div class="info-box info-box-secondary">
-                            <h4>Human Interface Guidelines (Apple)</h4>
-                            <ul class="feature-list">
-                                <li>Clarity and depth</li>
-                                <li>Platform-specific patterns</li>
-                                <li>Emphasis on content</li>
-                                <li>iOS, macOS, watchOS guidelines</li>
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🍎</span>
+                            <h3>Human Interface Guidelines</h3>
+                            <p class="framework-subtitle">Apple's Design Principles</p>
+                            
+                            <h4>Core Principles</h4>
+                            <ul>
+                                <li><strong>Clarity & Depth:</strong> Clear visual hierarchy</li>
+                                <li><strong>Platform-Specific:</strong> Native patterns</li>
+                                <li><strong>Content First:</strong> Emphasis on content</li>
+                                <li><strong>Cross-Platform:</strong> iOS, macOS, watchOS</li>
                             </ul>
                         </div>
 
-                        <div class="info-box info-box-secondary">
-                            <h4>Fluent Design (Microsoft)</h4>
-                            <ul class="feature-list">
-                                <li>Light, depth, motion, material</li>
-                                <li>Acrylic materials and reveals</li>
-                                <li>Cross-platform consistency</li>
-                                <li>Windows, web, mobile support</li>
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">💻</span>
+                            <h3>Fluent Design</h3>
+                            <p class="framework-subtitle">Microsoft's Design System</p>
+                            
+                            <h4>Core Principles</h4>
+                            <ul>
+                                <li><strong>Light & Depth:</strong> Layered interfaces</li>
+                                <li><strong>Motion & Material:</strong> Acrylic surfaces</li>
+                                <li><strong>Cross-Platform:</strong> Consistent UX</li>
+                                <li><strong>Coverage:</strong> Windows, web, mobile</li>
                             </ul>
                         </div>
+                    </div>
 
-                        <div class="info-box info-box-secondary">
-                            <h4>Carbon Design (IBM)</h4>
-                            <ul class="feature-list">
-                                <li>Enterprise-focused</li>
-                                <li>Accessibility-first approach</li>
-                                <li>Data visualization components</li>
-                                <li>Open-source component library</li>
+                    <!-- Second Row: Carbon -->
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🏭</span>
+                            <h3>Carbon Design</h3>
+                            <p class="framework-subtitle">IBM's Enterprise System</p>
+                            
+                            <h4>Core Principles</h4>
+                            <ul>
+                                <li><strong>Enterprise-Focused:</strong> Business apps</li>
+                                <li><strong>Accessibility First:</strong> WCAG compliant</li>
+                                <li><strong>Data Visualization:</strong> Chart components</li>
+                                <li><strong>Open Source:</strong> Component library</li>
                             </ul>
                         </div>
                     </div>
@@ -150,50 +170,70 @@ graph LR
                     <h2 class="section-title">♿ Accessibility (A11y)</h2>
                     
                     <h3>WCAG 2.1 Principles (POUR)</h3>
-                    <div class="grid-2col">
-                        <div class="info-box info-box-success">
-                            <h4>Perceivable</h4>
-                            <ul class="feature-list">
+                    <!-- First Row: Perceivable, Operable, Understandable -->
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">👁️</span>
+                            <h3>Perceivable</h3>
+                            <p class="framework-subtitle">Information Must Be Presentable</p>
+                            
+                            <h4>Requirements</h4>
+                            <ul>
                                 <li><strong>Text Alternatives:</strong> Alt text for images</li>
-                                <li><strong>Adaptable:</strong> Multiple ways to present content</li>
-                                <li><strong>Distinguishable:</strong> Sufficient color contrast</li>
-                                <li><strong>Captions:</strong> For audio and video content</li>
+                                <li><strong>Adaptable:</strong> Multiple presentation ways</li>
+                                <li><strong>Distinguishable:</strong> Sufficient contrast</li>
+                                <li><strong>Captions:</strong> Audio/video alternatives</li>
                             </ul>
                         </div>
 
-                        <div class="info-box info-box-success">
-                            <h4>Operable</h4>
-                            <ul class="feature-list">
-                                <li><strong>Keyboard Accessible:</strong> All functions via keyboard</li>
-                                <li><strong>Enough Time:</strong> Users control time limits</li>
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">⌨️</span>
+                            <h3>Operable</h3>
+                            <p class="framework-subtitle">Interface Must Be Usable</p>
+                            
+                            <h4>Requirements</h4>
+                            <ul>
+                                <li><strong>Keyboard Access:</strong> All functions via keyboard</li>
+                                <li><strong>Enough Time:</strong> User controls timing</li>
                                 <li><strong>Seizures:</strong> No flashing content</li>
-                                <li><strong>Navigable:</strong> Clear navigation and focus</li>
+                                <li><strong>Navigable:</strong> Clear navigation paths</li>
                             </ul>
                         </div>
 
-                        <div class="info-box info-box-success">
-                            <h4>Understandable</h4>
-                            <ul class="feature-list">
-                                <li><strong>Readable:</strong> Clear language and structure</li>
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📖</span>
+                            <h3>Understandable</h3>
+                            <p class="framework-subtitle">Information Must Be Comprehensible</p>
+                            
+                            <h4>Requirements</h4>
+                            <ul>
+                                <li><strong>Readable:</strong> Clear language structure</li>
                                 <li><strong>Predictable:</strong> Consistent behavior</li>
-                                <li><strong>Input Assistance:</strong> Error prevention and recovery</li>
-                                <li><strong>Instructions:</strong> Clear form labels and guidance</li>
+                                <li><strong>Input Assistance:</strong> Error prevention</li>
+                                <li><strong>Instructions:</strong> Clear form guidance</li>
                             </ul>
                         </div>
+                    </div>
 
-                        <div class="info-box info-box-success">
-                            <h4>Robust</h4>
-                            <ul class="feature-list">
-                                <li><strong>Compatible:</strong> Works with assistive technologies</li>
-                                <li><strong>Valid HTML:</strong> Proper semantic markup</li>
-                                <li><strong>ARIA:</strong> Accessible Rich Internet Applications</li>
-                                <li><strong>Future-Proof:</strong> Support for new technologies</li>
+                    <!-- Second Row: Robust -->
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔧</span>
+                            <h3>Robust</h3>
+                            <p class="framework-subtitle">Content Must Be Compatible</p>
+                            
+                            <h4>Requirements</h4>
+                            <ul>
+                                <li><strong>Compatible:</strong> Works with assistive tech</li>
+                                <li><strong>Valid HTML:</strong> Semantic markup</li>
+                                <li><strong>ARIA:</strong> Accessible attributes</li>
+                                <li><strong>Future-Proof:</strong> New technology support</li>
                             </ul>
                         </div>
                     </div>
 
                     <h3>WCAG Conformance Levels</h3>
-                    <table>
+                    <table class="glass-table-bordered">
                         <thead>
                             <tr>
                                 <th>Level</th>
@@ -256,34 +296,44 @@ graph LR
                     <h2 class="section-title">🧩 Usability Patterns</h2>
                     
                     <h3>Jakob Nielsen's 10 Usability Heuristics</h3>
-                    <div class="grid-2col">
-                        <div class="info-box info-box-primary">
-                            <h4>Visibility of System Status</h4>
+                    <!-- First Row: First 3 Heuristics -->
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">👁️</span>
+                            <h3>Visibility of System Status</h3>
                             <p>Keep users informed about what's happening through appropriate feedback within a reasonable time.</p>
                         </div>
 
-                        <div class="info-box info-box-primary">
-                            <h4>Match Between System and Real World</h4>
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🌍</span>
+                            <h3>Match Between System and Real World</h3>
                             <p>Use familiar language, concepts, and conventions that users understand from the real world.</p>
                         </div>
 
-                        <div class="info-box info-box-primary">
-                            <h4>User Control and Freedom</h4>
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">↩️</span>
+                            <h3>User Control and Freedom</h3>
                             <p>Provide undo/redo actions and clear exit options for users who make mistakes.</p>
                         </div>
+                    </div>
 
-                        <div class="info-box info-box-primary">
-                            <h4>Consistency and Standards</h4>
+                    <!-- Second Row: Next 3 Heuristics -->
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📊</span>
+                            <h3>Consistency and Standards</h3>
                             <p>Follow platform and industry conventions so users don't have to learn new patterns.</p>
                         </div>
 
-                        <div class="info-box info-box-primary">
-                            <h4>Error Prevention</h4>
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">⛔</span>
+                            <h3>Error Prevention</h3>
                             <p>Eliminate error-prone conditions and provide confirmation for destructive actions.</p>
                         </div>
 
-                        <div class="info-box info-box-primary">
-                            <h4>Recognition Rather Than Recall</h4>
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">👀</span>
+                            <h3>Recognition Rather Than Recall</h3>
                             <p>Minimize memory load by making objects, actions, and options visible.</p>
                         </div>
                     </div>
@@ -345,7 +395,7 @@ graph TB
                     <h2 class="section-title">📱 Responsive Design</h2>
                     
                     <h3>Breakpoints</h3>
-                    <table>
+                    <table class="glass-table-bordered">
                         <thead>
                             <tr>
                                 <th>Device</th>
@@ -389,10 +439,12 @@ graph TB
                     </div>
 
                     <h3>Responsive Techniques</h3>
-                    <div class="grid-2col">
-                        <div class="info-box info-box-info">
-                            <h4>Fluid Layouts</h4>
-                            <ul class="feature-list">
+                    <!-- First Row: First 3 Techniques -->
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📊</span>
+                            <h3>Fluid Layouts</h3>
+                            <ul>
                                 <li>Percentage-based widths</li>
                                 <li>CSS Grid and Flexbox</li>
                                 <li>Viewport units (vw, vh)</li>
@@ -400,9 +452,10 @@ graph TB
                             </ul>
                         </div>
 
-                        <div class="info-box info-box-info">
-                            <h4>Flexible Media</h4>
-                            <ul class="feature-list">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🖼️</span>
+                            <h3>Flexible Media</h3>
+                            <ul>
                                 <li>Responsive images (srcset)</li>
                                 <li>Picture element for art direction</li>
                                 <li>SVG for scalable graphics</li>
@@ -410,19 +463,24 @@ graph TB
                             </ul>
                         </div>
 
-                        <div class="info-box info-box-info">
-                            <h4>Media Queries</h4>
-                            <ul class="feature-list">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📱</span>
+                            <h3>Media Queries</h3>
+                            <ul>
                                 <li>Breakpoint-based styling</li>
                                 <li>Orientation queries</li>
                                 <li>Feature detection</li>
                                 <li>Container queries (new)</li>
                             </ul>
                         </div>
+                    </div>
 
-                        <div class="info-box info-box-info">
-                            <h4>Touch Optimization</h4>
-                            <ul class="feature-list">
+                    <!-- Second Row: Touch Optimization -->
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">👆</span>
+                            <h3>Touch Optimization</h3>
+                            <ul>
                                 <li>44x44px minimum touch targets</li>
                                 <li>Adequate spacing between elements</li>
                                 <li>Touch gesture support</li>
@@ -438,10 +496,12 @@ graph TB
                 <div class="glass-card">
                     <h2 class="section-title">📚 Resources & Learning</h2>
                     
-                    <div class="grid-2col">
-                        <div class="info-box info-box-info">
+                    <!-- First Row: First 3 Resources -->
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🎨</span>
                             <h3>Design Resources</h3>
-                            <ul class="feature-list">
+                            <ul>
                                 <li><a href="https://www.w3.org/WAI/WCAG21/quickref/" target="_blank" rel="noopener">WCAG Quick Reference</a> - Accessibility guidelines</li>
                                 <li><a href="https://www.nngroup.com/" target="_blank" rel="noopener">Nielsen Norman Group</a> - UX research and articles</li>
                                 <li><a href="https://material.io/design" target="_blank" rel="noopener">Material Design</a> - Google's design system</li>
@@ -449,9 +509,10 @@ graph TB
                             </ul>
                         </div>
 
-                        <div class="info-box info-box-info">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">♿</span>
                             <h3>Accessibility Tools</h3>
-                            <ul class="feature-list">
+                            <ul>
                                 <li><a href="https://wave.webaim.org/" target="_blank" rel="noopener">WAVE</a> - Web accessibility evaluation tool</li>
                                 <li><a href="https://www.deque.com/axe/" target="_blank" rel="noopener">axe DevTools</a> - Accessibility testing</li>
                                 <li><a href="https://webaim.org/resources/contrastchecker/" target="_blank" rel="noopener">Contrast Checker</a> - Color contrast analyzer</li>
@@ -459,19 +520,24 @@ graph TB
                             </ul>
                         </div>
 
-                        <div class="info-box info-box-info">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">👥</span>
                             <h3>Design Communities</h3>
-                            <ul class="feature-list">
+                            <ul>
                                 <li><a href="https://dribbble.com/" target="_blank" rel="noopener">Dribbble</a> - Design inspiration</li>
                                 <li><a href="https://www.behance.net/" target="_blank" rel="noopener">Behance</a> - Creative portfolios</li>
                                 <li><a href="https://uxdesign.cc/" target="_blank" rel="noopener">UX Collective</a> - UX articles and insights</li>
                                 <li><a href="https://www.smashingmagazine.com/" target="_blank" rel="noopener">Smashing Magazine</a> - Web design resources</li>
                             </ul>
                         </div>
+                    </div>
 
-                        <div class="info-box info-box-info">
+                    <!-- Second Row: Learning Platforms -->
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🎓</span>
                             <h3>Learning Platforms</h3>
-                            <ul class="feature-list">
+                            <ul>
                                 <li><a href="https://www.interaction-design.org/" target="_blank" rel="noopener">Interaction Design Foundation</a> - UX courses</li>
                                 <li><a href="https://www.coursera.org/specializations/ui-ux-design" target="_blank" rel="noopener">Coursera UI/UX</a> - Specialization courses</li>
                                 <li><a href="https://www.udacity.com/course/ux-designer-nanodegree--nd578" target="_blank" rel="noopener">Udacity UX Nanodegree</a> - UX program</li>

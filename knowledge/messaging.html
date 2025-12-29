@@ -3,740 +3,630 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Messaging & Events - Apache Kafka, RabbitMQ, Event-Driven Architecture, CQRS patterns">
-    <meta name="keywords" content="messaging, kafka, rabbitmq, event-driven, cqrs, event-sourcing, pub-sub">
+    <meta name="description" content="Message-Driven Architecture - Kafka, RabbitMQ, and event streaming patterns">
+    <meta name="keywords" content="messaging, kafka, rabbitmq, event streaming, pub-sub, message queues">
     <meta name="author" content="Asif Hussain">
-    <title>Messaging & Events - CORTEX Knowledge</title>
-    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <title>Message-Driven Architecture | CORTEX Knowledge</title>
     <link rel="stylesheet" href="../assets/css/main.css">
-    <link rel="stylesheet" href="../assets/css/knowledge.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <!-- Sticky Navigation -->
-    <nav class="breadcrumb-container sticky-nav" aria-label="Breadcrumb">
-        <button class="back-button" onclick="history.back()" aria-label="Go back">
-            ← Back
-        </button>
-        <ol class="breadcrumb">
-            <li><a href="../index.html">Home</a></li>
-            <li><a href="index.html">Knowledge Library</a></li>
-            <li><a href="index.html#backend-apis">Backend & APIs</a></li>
-            <li aria-current="page">Messaging</li>
-        </ol>
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">→</span>
+        <a href="index.html">Knowledge Library</a>
+        <span class="breadcrumb-separator">→</span>
+        <span class="breadcrumb-current">Messaging</span>
     </nav>
 
-    <!-- Hero Section -->
     <section class="hero" id="main-content">
-        <div class="logo-header">
-            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
+        <h1 class="hero-title">📨 Message-Driven Architecture</h1>
+        <p class="hero-subtitle">Kafka, RabbitMQ, Event Streaming, and Async Communication</p>
+        <div class="file-metadata">
+            <span class="metadata-item">🔄 Asynchronous</span>
+            <span class="metadata-item">📡 Event Streaming</span>
+            <span class="metadata-item">📅 Updated: Dec 2025</span>
         </div>
-        <h1 class="hero-title">📨 Messaging & Events</h1>
-        <p class="hero-subtitle">
-            Apache Kafka, RabbitMQ, Event-Driven Architecture, and Pub/Sub Patterns
-        </p>
     </section>
 
-    <!-- Category Sidebar (Desktop) -->
-    <aside class="category-sidebar" aria-label="Category navigation">
-        <h3>Backend & APIs</h3>
-        <nav class="category-nav">
-            <a href="api-design.html" class="category-nav-link">🌐 API Design</a>
-            <a href="microservices.html" class="category-nav-link">🔷 Microservices</a>
-            <a href="messaging.html" class="category-nav-link active">📨 Messaging</a>
-        </nav>
-    </aside>
-
-    <!-- Main Content -->
-    <section class="section category-content">
+    <section class="section file-content">
         <div class="container">
-            <!-- Tabs Navigation -->
-            <div class="tabs-container">
-                <div class="tabs-nav" role="tablist" aria-label="Category sections">
-                    <button class="tab-button active" 
-                            role="tab" 
-                            aria-selected="true" 
-                            aria-controls="overview-tab"
-                            id="overview-btn"
-                            data-tab="overview">
-                        Overview
-                    </button>
-                    <button class="tab-button" 
-                            role="tab" 
-                            aria-selected="false" 
-                            aria-controls="files-tab"
-                            id="files-btn"
-                            data-tab="files">
-                        Knowledge Files
-                    </button>
-                    <button class="tab-button" 
-                            role="tab" 
-                            aria-selected="false" 
-                            aria-controls="resources-tab"
-                            id="resources-btn"
-                            data-tab="resources">
-                        Learning Resources
-                    </button>
-                    <button class="tab-button" 
-                            role="tab" 
-                            aria-selected="false" 
-                            aria-controls="usage-tab"
-                            id="usage-btn"
-                            data-tab="usage">
-                        CORTEX Usage
-                    </button>
-                </div>
-
-                <!-- Tab 1: Overview -->
-                <div class="tab-content active" id="overview-tab" role="tabpanel" aria-labelledby="overview-btn">
-                    <div class="glass-card">
-                        <h2>Overview</h2>
-                        <p>
-                            Messaging systems enable asynchronous communication between distributed services,
-                            improving scalability, resilience, and decoupling. This category covers message 
-                            brokers like Apache Kafka and RabbitMQ, event-driven architecture patterns, 
-                            CQRS (Command Query Responsibility Segregation), and event sourcing.
-                        </p>
-
-                        <h3>Category Statistics</h3>
-                        <div class="stats-grid">
-                            <div class="stat-item">
-                                <div class="stat-value">4</div>
-                                <div class="stat-label">Knowledge Files</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-value">80+</div>
-                                <div class="stat-label">Best Practices</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-value">3</div>
-                                <div class="stat-label">Major Protocols</div>
-                            </div>
-                        </div>
+            <!-- Overview -->
+            <div id="overview" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">📋 Overview</h2>
+                    <p>Message-driven architecture enables asynchronous communication between services through message brokers and event streams. This approach decouples producers from consumers, enables scalability, and provides resilience through buffering and retry mechanisms.</p>
+                    
+                    <div class="info-box info-box-primary">
+                        <strong>Key Benefits:</strong>
+                        <ul class="feature-list">
+                            <li><strong>Decoupling:</strong> Services don't need to know about each other</li>
+                            <li><strong>Scalability:</strong> Scale producers and consumers independently</li>
+                            <li><strong>Resilience:</strong> Messages buffered during service downtime</li>
+                            <li><strong>Flexibility:</strong> Easy to add new consumers without changes</li>
+                        </ul>
                     </div>
 
-                    <!-- Mermaid Concept Diagram -->
-                    <div class="glass-card">
-                        <h2>Event-Driven Architecture Concept Map</h2>
-                        <div class="mermaid">
-graph TD
-    A[Messaging Systems] --> B[Message Brokers]
-    A --> C[Architectural Patterns]
+                    <h3>Messaging Architecture Landscape</h3>
+                    <div class="mermaid">
+graph TB
+    A[Message-Driven Architecture]
+    A --> B[Message Brokers]
+    A --> C[Patterns]
     A --> D[Delivery Guarantees]
     
-    B --> E[Apache Kafka]
-    B --> F[RabbitMQ]
-    B --> G[Azure Service Bus]
+    B --> B1[RabbitMQ]
+    B --> B2[Apache Kafka]
+    B --> B3[AWS SQS/SNS]
     
-    C --> I[Pub/Sub]
-    C --> J[Event Sourcing]
-    C --> K[CQRS]
-    C --> L[Saga Pattern]
+    C --> C1[Pub/Sub]
+    C --> C2[Point-to-Point]
+    C --> C3[Event Streaming]
     
-    D --> M[At-Most-Once]
-    D --> N[At-Least-Once]
-    D --> O[Exactly-Once]
+    D --> D1[At Most Once]
+    D --> D2[At Least Once]
+    D --> D3[Exactly Once]
     
-    E --> P[Topics]
-    E --> Q[Partitions]
-    
-    F --> S[Exchanges]
-    F --> T[Queues]
-    
-    J --> X[Event Store]
-    J --> Y[Projections]
-    
-    K --> Z[Command Model]
-    K --> AA[Query Model]
-    
-    style A fill:#00d4ff,stroke:#7b61ff,stroke-width:2px
-    style E fill:#231f20,stroke:#fff,stroke-width:2px
-    style F fill:#ff6600,stroke:#fff,stroke-width:2px
-    style J fill:#9c27b0,stroke:#fff,stroke-width:2px
+    style A fill:#7b61ff,color:#fff
+    style B fill:#10b981,color:#fff
+    style C fill:#3b82f6,color:#fff
+    style D fill:#f59e0b,color:#fff
+                    </div>
+                </div>
+            </div>
+
+            <!-- Message Brokers -->
+            <div id="message-brokers" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🔧 Message Brokers</h2>
+                    
+                    <h3>Apache Kafka vs RabbitMQ</h3>
+                    <table class="glass-table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Feature</th>
+                                <th>Apache Kafka</th>
+                                <th>RabbitMQ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Model</strong></td>
+                                <td>Distributed commit log</td>
+                                <td>Traditional message broker</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Message Retention</strong></td>
+                                <td>Persistent log (configurable retention)</td>
+                                <td>Deleted after consumption</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Throughput</strong></td>
+                                <td>Very high (millions/sec)</td>
+                                <td>Lower (tens of thousands/sec)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Message Order</strong></td>
+                                <td>Per partition guarantee</td>
+                                <td>Per queue (single consumer)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Use Case</strong></td>
+                                <td>Event streaming, log aggregation, analytics</td>
+                                <td>Task queues, RPC, job scheduling</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Replay</strong></td>
+                                <td>Can replay historical messages</td>
+                                <td>Messages consumed once</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Apache Kafka Deep Dive</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🗂️</span>
+                            <h3>Core Concepts</h3>
+                            <h4>Architecture</h4>
+                            <ul>
+                                <li><strong>Topics:</strong> Named streams of records</li>
+                                <li><strong>Partitions:</strong> Ordered, immutable sequences</li>
+                                <li><strong>Producers:</strong> Publish to topics</li>
+                                <li><strong>Consumers:</strong> Subscribe to topics</li>
+                                <li><strong>Consumer Groups:</strong> Load balancing</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">⚖️</span>
+                            <h3>Partitioning</h3>
+                            <h4>Key Strategies</h4>
+                            <ul>
+                                <li><strong>Key-Based:</strong> Same key → same partition</li>
+                                <li><strong>Round-Robin:</strong> Distribute evenly</li>
+                                <li><strong>Custom:</strong> Implement partitioner</li>
+                                <li><strong>Benefits:</strong> Parallelism + ordering</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📦</span>
+                            <h3>Consumer Groups</h3>
+                            <h4>Scalability Pattern</h4>
+                            <ul>
+                                <li><strong>Load Balancing:</strong> Partition per consumer</li>
+                                <li><strong>Max Consumers:</strong> One per partition</li>
+                                <li><strong>Rebalancing:</strong> Auto partition reassignment</li>
+                                <li><strong>Isolation:</strong> Different apps = different groups</li>
+                            </ul>
                         </div>
                     </div>
 
-                    <!-- High-Priority Patterns Showcase -->
-                    <div class="glass-card">
-                        <h2>Key Messaging Patterns</h2>
-                        <div class="rules-showcase">
-                            <div class="rule-card" data-expandable>
-                                <div class="rule-header" onclick="toggleRule(this)">
-                                    <span class="rule-icon">📤</span>
-                                    <div class="rule-title-group">
-                                        <h3>Publish-Subscribe Pattern</h3>
-                                        <span class="severity-badge severity-high">HIGH</span>
-                                    </div>
-                                    <button class="expand-btn" aria-label="Expand rule">+</button>
-                                </div>
-                                <div class="rule-body" hidden>
-                                    <p><strong>Description:</strong> Publishers send messages to topics without knowing subscribers. Subscribers receive all messages from subscribed topics, enabling loose coupling.</p>
-                                    
-                                    <div class="code-comparison">
-                                        <div class="code-good">
-                                            <h4>✅ Kafka Producer</h4>
-                                            <pre><code class="language-python">from kafka import KafkaProducer
-import json
-
-producer = KafkaProducer(
-    bootstrap_servers=['localhost:9092'],
-    value_serializer=lambda v: json.dumps(v).encode('utf-8'),
-    acks='all',  # Wait for all replicas
-    retries=3
-)
-
-# Publish event
-event = {'user_id': 123, 'action': 'order_placed'}
-producer.send('orders', value=event, key=b'user-123')
-producer.flush()</code></pre>
-                                        </div>
-                                        <div class="code-good">
-                                            <h4>✅ Kafka Consumer</h4>
-                                            <pre><code class="language-python">from kafka import KafkaConsumer
-import json
-
-consumer = KafkaConsumer(
-    'orders',
-    bootstrap_servers=['localhost:9092'],
-    group_id='order-processor',
-    auto_offset_reset='earliest',
-    value_deserializer=lambda v: json.loads(v.decode('utf-8'))
-)
-
-for message in consumer:
-    event = message.value
-    process_order(event)</code></pre>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="rule-card" data-expandable>
-                                <div class="rule-header" onclick="toggleRule(this)">
-                                    <span class="rule-icon">🔄</span>
-                                    <div class="rule-title-group">
-                                        <h3>Event Sourcing Pattern</h3>
-                                        <span class="severity-badge severity-high">HIGH</span>
-                                    </div>
-                                    <button class="expand-btn" aria-label="Expand rule">+</button>
-                                </div>
-                                <div class="rule-body" hidden>
-                                    <p><strong>Description:</strong> Store all changes as a sequence of events rather than just current state. Rebuild state by replaying events. Enables audit trails and temporal queries.</p>
-                                    
-                                    <div class="code-comparison">
-                                        <div class="code-good">
-                                            <h4>✅ Event Store Pattern</h4>
-                                            <pre><code class="language-python">class Event:
-    def __init__(self, event_type, data, timestamp=None):
-        self.event_type = event_type
-        self.data = data
-        self.timestamp = timestamp or datetime.utcnow()
-
-class EventStore:
-    def __init__(self):
-        self.events = []
+                    <h3>Kafka Architecture</h3>
+                    <div class="mermaid">
+graph TB
+    subgraph "Kafka Cluster"
+        B1[Broker 1<br/>Leader P0, P3]
+        B2[Broker 2<br/>Leader P1, P4]
+        B3[Broker 3<br/>Leader P2, P5]
+        ZK[ZooKeeper/KRaft<br/>Metadata]
+    end
     
-    def append(self, stream_id, event):
-        self.events.append({
-            'stream_id': stream_id,
-            'event': event,
-            'version': len(self.events)
-        })
+    P1[Producer 1] -->|Messages| B1
+    P2[Producer 2] -->|Messages| B2
     
-    def get_events(self, stream_id):
-        return [e['event'] for e in self.events 
-                if e['stream_id'] == stream_id]
+    B1 --> C1[Consumer Group A]
+    B2 --> C1
+    B3 --> C1
+    
+    B1 --> C2[Consumer Group B]
+    B2 --> C2
+    
+    style B1 fill:#10b981,color:#fff
+    style B2 fill:#10b981,color:#fff
+    style B3 fill:#10b981,color:#fff
+    style ZK fill:#7b61ff,color:#fff
+                    </div>
 
-# Reconstruct state from events
-def rebuild_order(events):
-    order = Order()
-    for event in events:
-        order.apply(event)
-    return order</code></pre>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                    <h3>RabbitMQ Deep Dive</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔀</span>
+                            <h3>Exchange Types</h3>
+                            <h4>Routing Patterns</h4>
+                            <ul>
+                                <li><strong>Direct:</strong> Exact routing key match</li>
+                                <li><strong>Topic:</strong> Pattern matching (*.log.error)</li>
+                                <li><strong>Fanout:</strong> Broadcast to all queues</li>
+                                <li><strong>Headers:</strong> Route by message headers</li>
+                            </ul>
+                        </div>
 
-                            <div class="rule-card" data-expandable>
-                                <div class="rule-header" onclick="toggleRule(this)">
-                                    <span class="rule-icon">⚖️</span>
-                                    <div class="rule-title-group">
-                                        <h3>CQRS Pattern</h3>
-                                        <span class="severity-badge severity-high">HIGH</span>
-                                    </div>
-                                    <button class="expand-btn" aria-label="Expand rule">+</button>
-                                </div>
-                                <div class="rule-body" hidden>
-                                    <p><strong>Description:</strong> Separate read and write models. Commands modify state, queries read from optimized projections. Enables independent scaling and optimization.</p>
-                                    
-                                    <div class="code-comparison">
-                                        <div class="code-good">
-                                            <h4>✅ CQRS Implementation</h4>
-                                            <pre><code class="language-python"># Command Side (Write Model)
-class CreateOrderCommand:
-    def __init__(self, customer_id, items):
-        self.customer_id = customer_id
-        self.items = items
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📬</span>
+                            <h3>Queue Features</h3>
+                            <h4>Advanced Capabilities</h4>
+                            <ul>
+                                <li><strong>Durable:</strong> Survive broker restarts</li>
+                                <li><strong>Priority:</strong> High-priority messages first</li>
+                                <li><strong>TTL:</strong> Message expiration</li>
+                                <li><strong>Dead Letter:</strong> Handle failed messages</li>
+                            </ul>
+                        </div>
 
-class OrderCommandHandler:
-    def handle(self, command: CreateOrderCommand):
-        order = Order.create(command.customer_id, command.items)
-        self.event_store.append(order.id, OrderCreatedEvent(order))
-        return order.id
-
-# Query Side (Read Model)
-class OrderReadModel:
-    """Denormalized view optimized for reads"""
-    def __init__(self, order_id, customer_name, total, status):
-        self.order_id = order_id
-        self.customer_name = customer_name
-        self.total = total
-        self.status = status
-
-class OrderQueryService:
-    def get_customer_orders(self, customer_id):
-        return self.read_db.query(OrderReadModel)\
-                          .filter_by(customer_id=customer_id)\
-                          .all()</code></pre>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="rule-card" data-expandable>
-                                <div class="rule-header" onclick="toggleRule(this)">
-                                    <span class="rule-icon">🐰</span>
-                                    <div class="rule-title-group">
-                                        <h3>RabbitMQ Exchange Patterns</h3>
-                                        <span class="severity-badge severity-medium">MEDIUM</span>
-                                    </div>
-                                    <button class="expand-btn" aria-label="Expand rule">+</button>
-                                </div>
-                                <div class="rule-body" hidden>
-                                    <p><strong>Description:</strong> RabbitMQ supports different exchange types: Direct (exact routing), Fanout (broadcast), Topic (pattern matching), and Headers (attribute-based routing).</p>
-                                    
-                                    <div class="code-comparison">
-                                        <div class="code-good">
-                                            <h4>✅ Topic Exchange</h4>
-                                            <pre><code class="language-python">import pika
-
-connection = pika.BlockingConnection(
-    pika.ConnectionParameters('localhost')
-)
-channel = connection.channel()
-
-# Declare topic exchange
-channel.exchange_declare(
-    exchange='orders', 
-    exchange_type='topic',
-    durable=True
-)
-
-# Publish with routing key
-channel.basic_publish(
-    exchange='orders',
-    routing_key='order.created.usa',
-    body=json.dumps(order_data),
-    properties=pika.BasicProperties(
-        delivery_mode=2,  # Persistent
-        content_type='application/json'
-    )
-)
-
-# Subscribe to pattern
-channel.queue_bind(
-    exchange='orders',
-    queue='usa_orders',
-    routing_key='order.*.usa'
-)</code></pre>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">✅</span>
+                            <h3>Acknowledgments</h3>
+                            <h4>Delivery Confirmation</h4>
+                            <ul>
+                                <li><strong>Auto Ack:</strong> On delivery (at most once)</li>
+                                <li><strong>Manual Ack:</strong> After processing</li>
+                                <li><strong>Publisher Confirms:</strong> Broker received</li>
+                                <li><strong>Nack/Reject:</strong> Requeue or discard</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Tab 2: Knowledge Files -->
-                <div class="tab-content" id="files-tab" role="tabpanel" aria-labelledby="files-btn" hidden>
-                    <div class="glass-card">
-                        <h2>Knowledge Files (4)</h2>
-                        <p>Click to expand each knowledge file for details, key patterns, and code examples.</p>
-                    </div>
-
-                    <div class="knowledge-files-accordion">
-                        <!-- Apache Kafka -->
-                        <div class="accordion-item">
-                            <button class="accordion-header" aria-expanded="false" aria-controls="kafka-content">
-                                <span class="accordion-icon">🔄</span>
-                                <div class="accordion-title-group">
-                                    <h3 class="accordion-title">Apache Kafka Best Practices</h3>
-                                    <p class="accordion-subtitle">Topics, partitions, consumer groups, exactly-once</p>
-                                </div>
-                                <span class="badge badge-high">25 patterns</span>
-                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                            </button>
-                            <div id="kafka-content" class="accordion-content" hidden>
-                                <p>Distributed streaming platform for building real-time data pipelines and streaming applications.</p>
-                                
-                                <h4>Key Concepts:</h4>
-                                <ul class="rule-list">
-                                    <li><strong>Topics:</strong> Logical channels for organizing messages by category</li>
-                                    <li><strong>Partitions:</strong> Enable parallel processing and horizontal scaling</li>
-                                    <li><strong>Consumer Groups:</strong> Allow multiple consumers to share workload</li>
-                                    <li><strong>Offsets:</strong> Track consumer position in partition log</li>
-                                    <li><strong>Exactly-Once Semantics:</strong> Idempotent producers + transactional consumers</li>
-                                </ul>
-
-                                <h4>Best Practices:</h4>
-                                <ul class="rule-list">
-                                    <li><span class="severity-badge severity-high">HIGH</span> Use partition keys for ordered processing</li>
-                                    <li><span class="severity-badge severity-high">HIGH</span> Set acks=all for durability guarantees</li>
-                                    <li><span class="severity-badge severity-medium">MED</span> Choose appropriate replication factor (usually 3)</li>
-                                    <li><span class="severity-badge severity-medium">MED</span> Monitor consumer lag for performance issues</li>
-                                </ul>
-                                
-                                <a href="messaging/kafka.html" class="btn-link">View Full Details →</a>
-                            </div>
+            <!-- Messaging Patterns -->
+            <div id="patterns" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🎯 Messaging Patterns</h2>
+                    
+                    <h3>Core Patterns</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📡</span>
+                            <h3>Publish-Subscribe</h3>
+                            <p class="framework-subtitle">One-to-Many Communication</p>
+                            <h4>Characteristics</h4>
+                            <ul>
+                                <li>Publisher sends to topic/exchange</li>
+                                <li>Multiple subscribers receive copy</li>
+                                <li>Decoupled producers/consumers</li>
+                                <li>Easy to add subscribers</li>
+                            </ul>
+                            <h4>Use Cases</h4>
+                            <ul>
+                                <li>Event notifications</li>
+                                <li>Data replication</li>
+                                <li>Real-time updates</li>
+                            </ul>
                         </div>
 
-                        <!-- RabbitMQ -->
-                        <div class="accordion-item">
-                            <button class="accordion-header" aria-expanded="false" aria-controls="rabbitmq-content">
-                                <span class="accordion-icon">🐰</span>
-                                <div class="accordion-title-group">
-                                    <h3 class="accordion-title">RabbitMQ Patterns</h3>
-                                    <p class="accordion-subtitle">Exchanges, queues, bindings, routing</p>
-                                </div>
-                                <span class="badge badge-high">20 patterns</span>
-                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                            </button>
-                            <div id="rabbitmq-content" class="accordion-content" hidden>
-                                <p>Message broker implementing AMQP protocol with flexible routing capabilities.</p>
-                                
-                                <h4>Exchange Types:</h4>
-                                <ul class="rule-list">
-                                    <li><strong>Direct:</strong> Route by exact routing key match</li>
-                                    <li><strong>Fanout:</strong> Broadcast to all bound queues</li>
-                                    <li><strong>Topic:</strong> Pattern-based routing with wildcards</li>
-                                    <li><strong>Headers:</strong> Route by message attributes</li>
-                                </ul>
-
-                                <h4>Best Practices:</h4>
-                                <ul class="rule-list">
-                                    <li><span class="severity-badge severity-high">HIGH</span> Use durable queues for persistence</li>
-                                    <li><span class="severity-badge severity-high">HIGH</span> Implement manual acknowledgments</li>
-                                    <li><span class="severity-badge severity-medium">MED</span> Set TTL and dead-letter queues</li>
-                                    <li><span class="severity-badge severity-medium">MED</span> Configure prefetch count for consumers</li>
-                                </ul>
-                                
-                                <a href="messaging/rabbitmq.html" class="btn-link">View Full Details →</a>
-                            </div>
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🎯</span>
+                            <h3>Point-to-Point</h3>
+                            <p class="framework-subtitle">One-to-One Communication</p>
+                            <h4>Characteristics</h4>
+                            <ul>
+                                <li>Producer sends to queue</li>
+                                <li>Single consumer processes message</li>
+                                <li>Load distribution</li>
+                                <li>Guaranteed processing</li>
+                            </ul>
+                            <h4>Use Cases</h4>
+                            <ul>
+                                <li>Background jobs</li>
+                                <li>Work queues</li>
+                                <li>Task distribution</li>
+                            </ul>
                         </div>
 
-                        <!-- Event-Driven Architecture -->
-                        <div class="accordion-item">
-                            <button class="accordion-header" aria-expanded="false" aria-controls="event-driven-content">
-                                <span class="accordion-icon">🎯</span>
-                                <div class="accordion-title-group">
-                                    <h3 class="accordion-title">Event-Driven Architecture</h3>
-                                    <p class="accordion-subtitle">Event sourcing, CQRS, saga pattern</p>
-                                </div>
-                                <span class="badge badge-high">22 patterns</span>
-                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                            </button>
-                            <div id="event-driven-content" class="accordion-content" hidden>
-                                <p>Architectural patterns for building loosely coupled, scalable systems based on events.</p>
-                                
-                                <h4>Core Patterns:</h4>
-                                <ul class="rule-list">
-                                    <li><strong>Event Sourcing:</strong> Store all state changes as events</li>
-                                    <li><strong>CQRS:</strong> Separate read/write models</li>
-                                    <li><strong>Saga Pattern:</strong> Manage distributed transactions</li>
-                                    <li><strong>Event Notification:</strong> Notify subscribers of changes</li>
-                                    <li><strong>Event-Carried State Transfer:</strong> Include data in events</li>
-                                </ul>
-
-                                <h4>Best Practices:</h4>
-                                <ul class="rule-list">
-                                    <li><span class="severity-badge severity-high">HIGH</span> Design idempotent event handlers</li>
-                                    <li><span class="severity-badge severity-high">HIGH</span> Include correlation IDs for tracing</li>
-                                    <li><span class="severity-badge severity-medium">MED</span> Version event schemas for evolution</li>
-                                    <li><span class="severity-badge severity-medium">MED</span> Implement compensating transactions</li>
-                                </ul>
-                                
-                                <a href="messaging/event-driven.html" class="btn-link">View Full Details →</a>
-                            </div>
-                        </div>
-
-                        <!-- Message Queue Patterns -->
-                        <div class="accordion-item">
-                            <button class="accordion-header" aria-expanded="false" aria-controls="queue-patterns-content">
-                                <span class="accordion-icon">📬</span>
-                                <div class="accordion-title-group">
-                                    <h3 class="accordion-title">Message Queue Patterns</h3>
-                                    <p class="accordion-subtitle">Delivery guarantees, dead letters, retry</p>
-                                </div>
-                                <span class="badge badge-medium">18 patterns</span>
-                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                            </button>
-                            <div id="queue-patterns-content" class="accordion-content" hidden>
-                                <p>Common patterns for reliable message processing and error handling.</p>
-                                
-                                <h4>Key Patterns:</h4>
-                                <ul class="rule-list">
-                                    <li><strong>Competing Consumers:</strong> Multiple consumers share workload</li>
-                                    <li><strong>Dead Letter Queue:</strong> Handle failed messages</li>
-                                    <li><strong>Retry with Backoff:</strong> Exponential retry delays</li>
-                                    <li><strong>Circuit Breaker:</strong> Prevent cascade failures</li>
-                                    <li><strong>Outbox Pattern:</strong> Ensure message delivery with DB transactions</li>
-                                </ul>
-
-                                <h4>Delivery Guarantees:</h4>
-                                <ul class="rule-list">
-                                    <li><span class="severity-badge severity-low">LOW</span> At-most-once: Fire and forget</li>
-                                    <li><span class="severity-badge severity-medium">MED</span> At-least-once: May have duplicates</li>
-                                    <li><span class="severity-badge severity-high">HIGH</span> Exactly-once: Idempotent processing</li>
-                                </ul>
-                                
-                                <a href="messaging/queue-patterns.html" class="btn-link">View Full Details →</a>
-                            </div>
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔄</span>
+                            <h3>Request-Reply</h3>
+                            <p class="framework-subtitle">Async RPC Pattern</p>
+                            <h4>Characteristics</h4>
+                            <ul>
+                                <li>Client sends request to queue</li>
+                                <li>Server processes and replies</li>
+                                <li>Correlation ID links messages</li>
+                                <li>Reply-to queue for response</li>
+                            </ul>
+                            <h4>Use Cases</h4>
+                            <ul>
+                                <li>Async API calls</li>
+                                <li>Long-running operations</li>
+                                <li>Distributed RPC</li>
+                            </ul>
                         </div>
                     </div>
-                </div>
 
-                <!-- Tab 3: Learning Resources -->
-                <div class="tab-content" id="resources-tab" role="tabpanel" aria-labelledby="resources-btn" hidden>
-                    <div class="glass-card">
-                        <h2>🎓 Learning Resources</h2>
-                        <p>Curated resources to master messaging systems and event-driven architecture.</p>
-                    </div>
-
-                    <div class="glass-card">
-                        <h3>📖 Official Documentation</h3>
-                        <ul class="resource-list">
-                            <li>
-                                <a href="https://kafka.apache.org/documentation/" target="_blank" rel="noopener noreferrer" class="resource-link">
-                                    <span class="resource-icon">🔄</span>
-                                    <div>
-                                        <strong>Apache Kafka Documentation</strong>
-                                        <p>Official Kafka docs with concepts, APIs, and operations</p>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="https://www.rabbitmq.com/documentation.html" target="_blank" rel="noopener noreferrer" class="resource-link">
-                                    <span class="resource-icon">🐰</span>
-                                    <div>
-                                        <strong>RabbitMQ Documentation</strong>
-                                        <p>Tutorials, guides, and AMQP reference</p>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/" target="_blank" rel="noopener noreferrer" class="resource-link">
-                                    <span class="resource-icon">☁️</span>
-                                    <div>
-                                        <strong>Azure Cloud Patterns</strong>
-                                        <p>Event-driven patterns including CQRS and Event Sourcing</p>
-                                    </div>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="glass-card">
-                        <h3>🎬 Video Courses</h3>
-                        <ul class="resource-list">
-                            <li>
-                                <a href="https://developer.confluent.io/learn-kafka/" target="_blank" rel="noopener noreferrer" class="resource-link">
-                                    <span class="resource-icon">🎓</span>
-                                    <div>
-                                        <strong>Confluent Developer - Learn Kafka</strong>
-                                        <p>FREE courses from Kafka creators on streams, connect, and ksqlDB</p>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="https://www.cloudamqp.com/blog/part1-rabbitmq-for-beginners-what-is-rabbitmq.html" target="_blank" rel="noopener noreferrer" class="resource-link">
-                                    <span class="resource-icon">📚</span>
-                                    <div>
-                                        <strong>RabbitMQ for Beginners</strong>
-                                        <p>CloudAMQP tutorial series with examples</p>
-                                    </div>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="glass-card">
-                        <h3>📚 Recommended Books</h3>
-                        <ul class="resource-list">
-                            <li>
-                                <span class="resource-icon">📕</span>
-                                <div>
-                                    <strong>Kafka: The Definitive Guide</strong>
-                                    <p>by Neha Narkhede et al. - Comprehensive Kafka coverage</p>
-                                </div>
-                            </li>
-                            <li>
-                                <span class="resource-icon">📗</span>
-                                <div>
-                                    <strong>Enterprise Integration Patterns</strong>
-                                    <p>by Gregor Hohpe - Classic messaging patterns reference</p>
-                                </div>
-                            </li>
-                            <li>
-                                <span class="resource-icon">📘</span>
-                                <div>
-                                    <strong>Designing Data-Intensive Applications</strong>
-                                    <p>by Martin Kleppmann - Distributed systems fundamentals</p>
-                                </div>
-                            </li>
-                            <li>
-                                <span class="resource-icon">📙</span>
-                                <div>
-                                    <strong>Building Event-Driven Microservices</strong>
-                                    <p>by Adam Bellemare - Modern event-driven architecture</p>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="glass-card">
-                        <h3>🛠️ Tools & Platforms</h3>
-                        <ul class="resource-list">
-                            <li>
-                                <a href="https://www.confluent.io/" target="_blank" rel="noopener noreferrer" class="resource-link">
-                                    <span class="resource-icon">☁️</span>
-                                    <div>
-                                        <strong>Confluent Cloud</strong>
-                                        <p>Managed Kafka with Schema Registry and ksqlDB</p>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="https://www.cloudamqp.com/" target="_blank" rel="noopener noreferrer" class="resource-link">
-                                    <span class="resource-icon">🐰</span>
-                                    <div>
-                                        <strong>CloudAMQP</strong>
-                                        <p>Managed RabbitMQ hosting</p>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="https://eventstore.com/" target="_blank" rel="noopener noreferrer" class="resource-link">
-                                    <span class="resource-icon">📦</span>
-                                    <div>
-                                        <strong>EventStoreDB</strong>
-                                        <p>Purpose-built database for event sourcing</p>
-                                    </div>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Tab 4: CORTEX Usage -->
-                <div class="tab-content" id="usage-tab" role="tabpanel" aria-labelledby="usage-btn" hidden>
-                    <div class="glass-card">
-                        <h2>How CORTEX Uses Messaging Knowledge</h2>
-                        <p>
-                            CORTEX leverages messaging patterns to help you design scalable, 
-                            event-driven architectures with proper error handling and delivery guarantees.
-                        </p>
-                    </div>
-
-                    <div class="glass-card">
-                        <h3>🏗️ Architecture Design</h3>
-                        <p>CORTEX helps design messaging architectures by recommending:</p>
-                        <ul class="feature-list">
-                            <li><strong>Pattern Selection:</strong> Pub/Sub vs Point-to-Point based on requirements</li>
-                            <li><strong>Broker Choice:</strong> Kafka for streams, RabbitMQ for task queues</li>
-                            <li><strong>Partitioning Strategy:</strong> Optimize for parallel processing</li>
-                            <li><strong>Event Schema Design:</strong> Version-safe event contracts</li>
-                            <li><strong>Dead Letter Handling:</strong> Graceful failure recovery</li>
-                        </ul>
-                    </div>
-
-                    <div class="glass-card">
-                        <h3>📝 Code Generation</h3>
-                        <p>When generating messaging code, CORTEX applies best practices:</p>
-                        <ul class="feature-list">
-                            <li><strong>Idempotent Handlers:</strong> Safe to process duplicates</li>
-                            <li><strong>Correlation IDs:</strong> Request tracing across services</li>
-                            <li><strong>Retry Logic:</strong> Exponential backoff with jitter</li>
-                            <li><strong>Circuit Breakers:</strong> Prevent cascade failures</li>
-                            <li><strong>Outbox Pattern:</strong> Reliable event publishing</li>
-                        </ul>
-
-                        <h4>Example Generated Code:</h4>
-                        <pre><code class="language-python"># CORTEX generates idempotent event handlers
-class OrderEventHandler:
-    def __init__(self, processed_events: Set[str]):
-        self.processed = processed_events
+                    <h3>Publish-Subscribe Flow</h3>
+                    <div class="mermaid">
+sequenceDiagram
+    participant P as Publisher
+    participant T as Topic/Exchange
+    participant S1 as Subscriber 1
+    participant S2 as Subscriber 2
+    participant S3 as Subscriber 3
     
-    def handle(self, event: OrderCreatedEvent):
-        # Idempotency check
-        if event.event_id in self.processed:
-            logger.info(f"Skipping duplicate: {event.event_id}")
-            return
-        
-        try:
-            self.process_order(event)
-            self.processed.add(event.event_id)
-        except Exception as e:
-            # Send to dead letter queue
-            self.dlq.send(event, error=str(e))</code></pre>
+    P->>T: Publish Event
+    T->>S1: Deliver Copy
+    T->>S2: Deliver Copy
+    T->>S3: Deliver Copy
+    
+    S1->>S1: Process
+    S2->>S2: Process
+    S3->>S3: Process
+    
+    Note over P,T: Publisher doesn't know subscribers
+    Note over S1,S3: Subscribers process independently
                     </div>
 
-                    <div class="glass-card">
-                        <h3>🔍 Code Review Integration</h3>
-                        <p>CORTEX reviews messaging code for common issues:</p>
+                    <h3>Advanced Patterns</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🎭</span>
+                            <h3>Event Sourcing</h3>
+                            <h4>Pattern</h4>
+                            <ul>
+                                <li>Store events, not state</li>
+                                <li>Rebuild state by replaying</li>
+                                <li>Complete audit trail</li>
+                                <li>Kafka ideal for this</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔄</span>
+                            <h3>CQRS with Messaging</h3>
+                            <h4>Pattern</h4>
+                            <ul>
+                                <li>Commands to write queue</li>
+                                <li>Events to read models</li>
+                                <li>Eventual consistency</li>
+                                <li>Scale reads/writes separately</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📊</span>
+                            <h3>Stream Processing</h3>
+                            <h4>Pattern</h4>
+                            <ul>
+                                <li>Real-time data processing</li>
+                                <li>Kafka Streams / Flink</li>
+                                <li>Windowing operations</li>
+                                <li>Aggregations and joins</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Delivery Guarantees -->
+            <div id="delivery-guarantees" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">✅ Delivery Guarantees</h2>
+                    
+                    <h3>Guarantee Levels</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">⚠️</span>
+                            <h3>At Most Once</h3>
+                            <p class="framework-subtitle">Fire and Forget</p>
+                            <h4>Behavior</h4>
+                            <ul>
+                                <li>Message may be lost</li>
+                                <li>Never duplicated</li>
+                                <li>No acknowledgment</li>
+                                <li>Lowest latency</li>
+                            </ul>
+                            <h4>Implementation</h4>
+                            <ul>
+                                <li>Kafka: acks=0</li>
+                                <li>RabbitMQ: Auto-ack</li>
+                                <li>No retries</li>
+                            </ul>
+                            <h4>Use Cases</h4>
+                            <ul>
+                                <li>Metrics collection</li>
+                                <li>Logs (non-critical)</li>
+                                <li>Telemetry data</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔄</span>
+                            <h3>At Least Once</h3>
+                            <p class="framework-subtitle">Guaranteed Delivery</p>
+                            <h4>Behavior</h4>
+                            <ul>
+                                <li>Message never lost</li>
+                                <li>May be duplicated</li>
+                                <li>Requires acknowledgment</li>
+                                <li>Requires idempotency</li>
+                            </ul>
+                            <h4>Implementation</h4>
+                            <ul>
+                                <li>Kafka: acks=all + retries</li>
+                                <li>RabbitMQ: Manual ack</li>
+                                <li>Retry on failure</li>
+                            </ul>
+                            <h4>Use Cases</h4>
+                            <ul>
+                                <li>Payment processing</li>
+                                <li>Order fulfillment</li>
+                                <li>Critical notifications</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">✨</span>
+                            <h3>Exactly Once</h3>
+                            <p class="framework-subtitle">Holy Grail</p>
+                            <h4>Behavior</h4>
+                            <ul>
+                                <li>Message delivered once</li>
+                                <li>No loss, no duplication</li>
+                                <li>Complex implementation</li>
+                                <li>Performance overhead</li>
+                            </ul>
+                            <h4>Implementation</h4>
+                            <ul>
+                                <li>Kafka: Transactional API</li>
+                                <li>Idempotent producer</li>
+                                <li>Transaction coordinator</li>
+                            </ul>
+                            <h4>Use Cases</h4>
+                            <ul>
+                                <li>Financial transactions</li>
+                                <li>Inventory management</li>
+                                <li>Audit trails</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>Comparison Table</h3>
+                    <table class="glass-table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Guarantee</th>
+                                <th>Message Loss</th>
+                                <th>Duplicates</th>
+                                <th>Latency</th>
+                                <th>Complexity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>At Most Once</td>
+                                <td><span class="badge-high">Possible</span></td>
+                                <td><span class="badge-low">Never</span></td>
+                                <td><span class="badge-low">Lowest</span></td>
+                                <td><span class="badge-low">Simple</span></td>
+                            </tr>
+                            <tr>
+                                <td>At Least Once</td>
+                                <td><span class="badge-low">Never</span></td>
+                                <td><span class="badge-high">Possible</span></td>
+                                <td><span class="badge-medium">Medium</span></td>
+                                <td><span class="badge-medium">Moderate</span></td>
+                            </tr>
+                            <tr>
+                                <td>Exactly Once</td>
+                                <td><span class="badge-low">Never</span></td>
+                                <td><span class="badge-low">Never</span></td>
+                                <td><span class="badge-high">Highest</span></td>
+                                <td><span class="badge-high">Complex</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="info-box info-box-warning">
+                        <strong>Idempotency is Critical:</strong>
                         <ul class="feature-list">
-                            <li><strong>Missing ACKs:</strong> Detects unacknowledged messages</li>
-                            <li><strong>No Idempotency:</strong> Flags handlers without deduplication</li>
-                            <li><strong>Blocking Consumers:</strong> Warns about sync processing in async code</li>
-                            <li><strong>Unbounded Queues:</strong> Identifies memory leak risks</li>
-                            <li><strong>Missing Timeouts:</strong> Detects hanging connections</li>
+                            <li><strong>Duplicate Detection:</strong> Track processed message IDs</li>
+                            <li><strong>Idempotent Operations:</strong> Same input = same result</li>
+                            <li><strong>Unique Keys:</strong> Use UUIDs or business keys</li>
+                            <li><strong>Database Constraints:</strong> Unique indexes prevent duplicates</li>
+                            <li><strong>At-Least-Once Default:</strong> Most systems use this + idempotency</li>
                         </ul>
                     </div>
+                </div>
+            </div>
 
-                    <div class="glass-card">
-                        <h3>🔄 Orchestrator Integration</h3>
-                        <p>Messaging knowledge is used by multiple CORTEX orchestrators:</p>
-                        <div class="orchestrator-grid">
-                            <div class="orchestrator-item">
-                                <span class="orchestrator-icon">🏗️</span>
-                                <div>
-                                    <strong>Architecture Planner</strong>
-                                    <p>Designs event-driven systems</p>
-                                </div>
-                            </div>
-                            <div class="orchestrator-item">
-                                <span class="orchestrator-icon">🔍</span>
-                                <div>
-                                    <strong>Code Review</strong>
-                                    <p>Validates messaging patterns</p>
-                                </div>
-                            </div>
-                            <div class="orchestrator-item">
-                                <span class="orchestrator-icon">🧪</span>
-                                <div>
-                                    <strong>TDD Orchestrator</strong>
-                                    <p>Generates consumer tests</p>
-                                </div>
-                            </div>
-                            <div class="orchestrator-item">
-                                <span class="orchestrator-icon">📝</span>
-                                <div>
-                                    <strong>Documentation</strong>
-                                    <p>Creates event flow diagrams</p>
-                                </div>
-                            </div>
+            <!-- Best Practices -->
+            <div id="best-practices" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">💡 Best Practices</h2>
+                    
+                    <h3>Message Design</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📋</span>
+                            <h3>Schema Management</h3>
+                            <h4>Best Practices</h4>
+                            <ul>
+                                <li><strong>Schema Registry:</strong> Centralized schema storage</li>
+                                <li><strong>Versioning:</strong> Backward/forward compatibility</li>
+                                <li><strong>Avro/Protobuf:</strong> Binary formats with schema</li>
+                                <li><strong>Evolution:</strong> Add fields, don't remove</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔍</span>
+                            <h3>Message Metadata</h3>
+                            <h4>Include in Messages</h4>
+                            <ul>
+                                <li><strong>Correlation ID:</strong> Trace across services</li>
+                                <li><strong>Timestamp:</strong> Event time + processing time</li>
+                                <li><strong>Source:</strong> Originating service</li>
+                                <li><strong>Schema Version:</strong> Message format version</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">⚠️</span>
+                            <h3>Error Handling</h3>
+                            <h4>Strategies</h4>
+                            <ul>
+                                <li><strong>Dead Letter Queue:</strong> Failed message storage</li>
+                                <li><strong>Retry Policy:</strong> Exponential backoff</li>
+                                <li><strong>Max Attempts:</strong> Prevent infinite loops</li>
+                                <li><strong>Alerting:</strong> Monitor DLQ depth</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>Performance Optimization</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📦</span>
+                            <h3>Batching</h3>
+                            <h4>Kafka Producers</h4>
+                            <ul>
+                                <li>Batch multiple messages</li>
+                                <li>Reduce network overhead</li>
+                                <li>Trade latency for throughput</li>
+                                <li>Configure batch.size + linger.ms</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🗜️</span>
+                            <h3>Compression</h3>
+                            <h4>Message Size Reduction</h4>
+                            <ul>
+                                <li>Kafka: snappy, gzip, lz4, zstd</li>
+                                <li>RabbitMQ: gzip plugin</li>
+                                <li>Network bandwidth savings</li>
+                                <li>Storage savings</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">⚖️</span>
+                            <h3>Partitioning Strategy</h3>
+                            <h4>Kafka Optimization</h4>
+                            <ul>
+                                <li>More partitions = more parallelism</li>
+                                <li>Key-based for ordering</li>
+                                <li>Avoid hot partitions</li>
+                                <li>Monitor lag per partition</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="info-box info-box-success">
+                        <strong>Production Checklist:</strong>
+                        <ul class="feature-list">
+                            <li><strong>Monitoring:</strong> Message rates, lag, error rates</li>
+                            <li><strong>Alerting:</strong> Consumer lag > threshold, DLQ depth</li>
+                            <li><strong>Security:</strong> TLS encryption, SASL authentication</li>
+                            <li><strong>Backup:</strong> Kafka replication factor ≥ 3</li>
+                            <li><strong>Capacity Planning:</strong> Storage retention, throughput limits</li>
+                            <li><strong>Testing:</strong> Chaos testing, failure injection</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resources -->
+            <div id="resources" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">📚 Resources & Learning</h2>
+                    
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📖</span>
+                            <h3>Essential Books</h3>
+                            <ul>
+                                <li><strong>Kafka: The Definitive Guide</strong> - Narkhede, Shapira, Palino</li>
+                                <li><strong>RabbitMQ in Action</strong> - Alvaro Videla</li>
+                                <li><strong>Designing Event-Driven Systems</strong> - Ben Stopford</li>
+                                <li><strong>Enterprise Integration Patterns</strong> - Hohpe, Woolf</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🛠️</span>
+                            <h3>Tools & Platforms</h3>
+                            <ul>
+                                <li><a href="https://kafka.apache.org/" target="_blank" rel="noopener">Apache Kafka</a> - Event streaming platform</li>
+                                <li><a href="https://www.rabbitmq.com/" target="_blank" rel="noopener">RabbitMQ</a> - Message broker</li>
+                                <li><a href="https://nats.io/" target="_blank" rel="noopener">NATS</a> - Cloud-native messaging</li>
+                                <li><a href="https://www.confluent.io/product/confluent-platform/" target="_blank" rel="noopener">Confluent Platform</a> - Kafka distribution</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🌐</span>
+                            <h3>Online Resources</h3>
+                            <ul>
+                                <li><a href="https://kafka.apache.org/documentation/" target="_blank" rel="noopener">Kafka Documentation</a></li>
+                                <li><a href="https://www.rabbitmq.com/tutorials/" target="_blank" rel="noopener">RabbitMQ Tutorials</a></li>
+                                <li><a href="https://www.enterpriseintegrationpatterns.com/" target="_blank" rel="noopener">EIP Patterns</a></li>
+                                <li><a href="https://developer.confluent.io/" target="_blank" rel="noopener">Confluent Developer Portal</a></li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -744,47 +634,22 @@ class OrderEventHandler:
         </div>
     </section>
 
-    <!-- Mobile Bottom Navigation -->
-    <nav class="bottom-nav" aria-label="Category navigation">
-        <a href="api-design.html" class="bottom-nav-link">
-            <span class="bottom-nav-icon">🌐</span>
-            <span class="bottom-nav-label">API Design</span>
-        </a>
-        <a href="microservices.html" class="bottom-nav-link">
-            <span class="bottom-nav-icon">🔷</span>
-            <span class="bottom-nav-label">Microservices</span>
-        </a>
-        <a href="messaging.html" class="bottom-nav-link active">
-            <span class="bottom-nav-icon">📨</span>
-            <span class="bottom-nav-label">Messaging</span>
-        </a>
-    </nav>
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 CORTEX Knowledge Base. Created by Asif Hussain.</p>
+            <p>
+                <a href="../index.html">Home</a> |
+                <a href="index.html">Knowledge Library</a> |
+                <a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener">GitHub</a>
+            </p>
+        </div>
+    </footer>
 
-    <!-- JavaScript -->
-    <script src="../assets/js/category-page.js"></script>
     <script>
         mermaid.initialize({ 
-            startOnLoad: true, 
-            theme: 'dark',
-            themeVariables: {
-                primaryColor: '#00d4ff',
-                primaryTextColor: '#fff',
-                primaryBorderColor: '#7b61ff',
-                lineColor: '#00d4ff',
-                secondaryColor: '#7b61ff',
-                tertiaryColor: '#1a1f3a'
-            }
+            startOnLoad: true,
+            theme: 'dark'
         });
-
-        // Rule card toggle function
-        function toggleRule(header) {
-            const body = header.nextElementSibling;
-            const btn = header.querySelector('.expand-btn');
-            const isHidden = body.hidden;
-            
-            body.hidden = !isHidden;
-            btn.textContent = isHidden ? '−' : '+';
-        }
     </script>
 </body>
 </html>
