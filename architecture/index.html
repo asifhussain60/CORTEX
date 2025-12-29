@@ -1,365 +1,981 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Architecture Overview - CORTEX</title>
+    <meta name="description" content="CORTEX Architecture - Four-Tier Brain, Agent System, and Orchestrator Ecosystem">
+    <meta name="keywords" content="cortex, architecture, brain tiers, agents, orchestrators, ai assistant">
+    <meta name="author" content="Asif Hussain">
+    <title>CORTEX Architecture | Enterprise AI Assistant</title>
     <link rel="stylesheet" href="../assets/css/main.css">
-    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
     <!-- Breadcrumb Navigation -->
-    <nav class="breadcrumb">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
         <a href="../index.html">Home</a>
-        <span class="breadcrumb-separator">›</span>
-        <a href="index.html">Architecture</a>
-        <span class="breadcrumb-separator">›</span>
-        <span class="breadcrumb-current">Overview</span>
+        <span class="breadcrumb-separator">→</span>
+        <span class="breadcrumb-current">Architecture</span>
     </nav>
 
+    <!-- Logo Header -->
+    <div class="logo-header">
+        <a href="../index.html">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
+        </a>
+    </div>
+
     <!-- Hero Section -->
-    <section class="section">
+    <section class="hero" id="main-content">
+        <h1 class="hero-title">🏛️ CORTEX Architecture</h1>
+        <p class="hero-subtitle">Four-Tier Brain, Agent System, and Orchestrator Ecosystem</p>
+        <div class="file-metadata">
+            <span class="metadata-item">🧠 4 Brain Tiers</span>
+            <span class="metadata-item">🤖 2 Specialist Agents</span>
+            <span class="metadata-item">⚙️ 8 Orchestrators</span>
+            <span class="metadata-item">📅 Updated: Dec 2025</span>
+        </div>
+    </section>
+
+    <section class="section file-content">
         <div class="container">
-            <div class="glass-card">
-                <div>
-                    <div class="icon">🏛️</div>
-                    <div>
-                        <h1>CORTEX Architecture Overview</h1>
-                        <p>Four-Tier Brain, Agent System, and Orchestrator Ecosystem</p>
+            <!-- Overview -->
+            <div id="overview" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">📋 Executive Summary</h2>
+                    <p>CORTEX is built on a <strong>four-tier brain architecture</strong> that provides intelligent memory management, pattern learning, and context preservation across conversations. Two <strong>specialist agents</strong> (Planning and Strategic Reasoning) work within orchestrators to coordinate complex multi-phase workflows. The system enforces safety through <strong>SKULL brain protection rules</strong> at Tier 0, while maintaining sub-100ms working memory access at Tier 1.</p>
+                    
+                    <div class="info-box info-box-primary">
+                        <strong>Key Architectural Principles:</strong>
+                        <ul class="feature-list">
+                            <li><strong>Brain Protection First:</strong> Tier 0 SKULL rules enforce safety</li>
+                            <li><strong>Test-Driven Development:</strong> TDD mandatory for all production code</li>
+                            <li><strong>Git Isolation:</strong> CORTEX code never mixed with user repos</li>
+                            <li><strong>Context Preservation:</strong> Four-Tier Brain maintains long-term memory</li>
+                        </ul>
+                    </div>
+
+                    <h3>System Architecture Overview</h3>
+                    <div style="background: rgba(0, 0, 0, 0.3); padding: 2rem; border-radius: 12px; margin: 1.5rem 0; overflow-x: auto; text-align: center;">
+                        <div class="mermaid">
+graph LR
+    A["🧠 CORTEX<br/>Core System"]
+    
+    A --> B["🏛️ Four-Tier Brain<br/>Memory Architecture"]
+    A --> C["🤖 Agent System<br/>Specialist Intelligence"]
+    A --> D["⚙️ Orchestrators<br/>Workflow Coordination"]
+    
+    B --> B1["🛡️ Tier 0<br/>SKULL Rules"]
+    B --> B2["💾 Tier 1<br/>Working Memory"]
+    B --> B3["🕸️ Tier 2<br/>Knowledge Graph"]
+    B --> B4["📊 Tier 3<br/>Dev Context"]
+    
+    C --> C1["📋 Planning Agent<br/>Task Decomposition"]
+    C --> C2["🔍 Strategic Agent<br/>Architecture Analysis"]
+    
+    D --> D1["🎯 Planning System"]
+    D --> D2["✅ TDD Orchestrator"]
+    D --> D3["🔧 Maintenance"]
+    D --> D4["🧹 Sanitization"]
+    
+    style A fill:#7b61ff,stroke:#9f87ff,stroke-width:3px,color:#fff
+    style B fill:#10b981,stroke:#34d399,stroke-width:2px,color:#fff
+    style C fill:#3b82f6,stroke:#60a5fa,stroke-width:2px,color:#fff
+    style D fill:#f59e0b,stroke:#fbbf24,stroke-width:2px,color:#fff
+    
+    style B1 fill:#064e3b,color:#fff
+    style B2 fill:#064e3b,color:#fff
+    style B3 fill:#064e3b,color:#fff
+    style B4 fill:#064e3b,color:#fff
+    
+    style C1 fill:#1e3a8a,color:#fff
+    style C2 fill:#1e3a8a,color:#fff
+    
+    style D1 fill:#78350f,color:#fff
+    style D2 fill:#78350f,color:#fff
+    style D3 fill:#78350f,color:#fff
+    style D4 fill:#78350f,color:#fff
+                        </div>
                     </div>
                 </div>
-                
-                <div class="metrics-grid">
-                    <div>
-                        <div class="metric-value">4</div>
-                        <div class="metric-label">Brain Tiers</div>
+            </div>
+
+            <!-- Four-Tier Brain -->
+            <div id="brain-architecture" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🧠 Four-Tier Brain Architecture</h2>
+                    <p>The brain is organized into four hierarchical tiers, each serving a distinct purpose in memory management and intelligence. Data flows from Tier 0 governance through working memory to long-term pattern storage.</p>
+
+                    <h3>Brain Data Flow</h3>
+                    <div style="background: rgba(0, 0, 0, 0.3); padding: 2rem; border-radius: 12px; margin: 1.5rem 0; overflow-x: auto; text-align: center;">
+                        <div class="mermaid">
+graph TB
+    T0["🛡️ Tier 0: SKULL Rules<br/><small>Brain Protection & Safety</small>"]
+    T1["💾 Tier 1: Working Memory<br/><small>70-Conversation FIFO</small>"]
+    T2["🕸️ Tier 2: Knowledge Graph<br/><small>Pattern Learning</small>"]
+    T3["📊 Tier 3: Development Context<br/><small>Per-Repo Metrics</small>"]
+    
+    T0 -->|"Validates"| T1
+    T1 -->|"Stores"| T2
+    T2 -->|"Enriches"| T3
+    T3 -->|"Informs"| T1
+    T2 -->|"Patterns"| T1
+    
+    T0 -.->|"Enforces TDD"| T2
+    T0 -.->|"Git Isolation"| T3
+    
+    style T0 fill:#ef4444,stroke:#f87171,stroke-width:3px,color:#fff
+    style T1 fill:#10b981,stroke:#34d399,stroke-width:3px,color:#fff
+    style T2 fill:#3b82f6,stroke:#60a5fa,stroke-width:3px,color:#fff
+    style T3 fill:#f59e0b,stroke:#fbbf24,stroke-width:3px,color:#fff
+                        </div>
                     </div>
-                    <div>
-                        <div class="metric-value">2</div>
-                        <div class="metric-label">Specialist Agents</div>
+
+                    <h3>Tier Details</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🛡️</span>
+                            <h3>Tier 0: Governance</h3>
+                            <p class="framework-subtitle">SKULL Brain Protection Rules</p>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Brain protection and safety enforcement</li>
+                                <li>Validates all operations before execution</li>
+                                <li>Prevents code duplication and anti-patterns</li>
+                            </ul>
+                            <h4>SKULL Rules</h4>
+                            <ul>
+                                <li><strong>TDD_ENFORCEMENT:</strong> RED→GREEN→REFACTOR mandatory</li>
+                                <li><strong>HOLISTIC_DISCOVERY:</strong> Search before create</li>
+                                <li><strong>REFACTOR_CLEANUP:</strong> Remove orphaned code</li>
+                                <li><strong>GIT_ISOLATION:</strong> CORTEX/user separation</li>
+                            </ul>
+                            <h4>Storage</h4>
+                            <ul>
+                                <li><code>cortex-brain/brain-protection-rules.yaml</code></li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">💾</span>
+                            <h3>Tier 1: Working Memory</h3>
+                            <p class="framework-subtitle">70-Conversation FIFO Buffer</p>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Recent conversation history with fast access</li>
+                                <li>Sub-100ms retrieval performance</li>
+                                <li>Context for current session</li>
+                            </ul>
+                            <h4>Capabilities</h4>
+                            <ul>
+                                <li><strong>Retention:</strong> Last 70 conversations</li>
+                                <li><strong>Format:</strong> JSON Lines (JSONL)</li>
+                                <li><strong>Cleanup:</strong> Automatic FIFO eviction</li>
+                                <li><strong>Performance:</strong> &lt; 100ms retrieval</li>
+                            </ul>
+                            <h4>Storage</h4>
+                            <ul>
+                                <li><code>cortex-brain/conversation-context.jsonl</code></li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🕸️</span>
+                            <h3>Tier 2: Knowledge Graph</h3>
+                            <p class="framework-subtitle">Pattern Learning & Relationships</p>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Long-term pattern storage</li>
+                                <li>Relationship mapping between modules</li>
+                                <li>Technology stack learning</li>
+                            </ul>
+                            <h4>Capabilities</h4>
+                            <ul>
+                                <li><strong>Patterns:</strong> Code patterns, architectural decisions</li>
+                                <li><strong>Relationships:</strong> Module dependencies</li>
+                                <li><strong>Learning:</strong> Technology stack patterns</li>
+                                <li><strong>Retrieval:</strong> Context-aware matching</li>
+                            </ul>
+                            <h4>Storage</h4>
+                            <ul>
+                                <li><code>cortex-brain/knowledge-graph.yaml</code></li>
+                            </ul>
+                        </div>
                     </div>
-                    <div>
-                        <div class="metric-value">8</div>
-                        <div class="metric-label">Orchestrators</div>
+
+                    <div class="framework-grid" style="margin-top: 2rem;">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📊</span>
+                            <h3>Tier 3: Development Context</h3>
+                            <p class="framework-subtitle">Per-Repository Metrics</p>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Repository-specific context and metrics</li>
+                                <li>Multi-repo support (1:∞ scaling)</li>
+                                <li>Hotspot and complexity tracking</li>
+                            </ul>
+                            <h4>Capabilities</h4>
+                            <ul>
+                                <li><strong>Hotspots:</strong> High change frequency files</li>
+                                <li><strong>Complexity:</strong> Cyclomatic complexity tracking</li>
+                                <li><strong>Coverage:</strong> Per-module test coverage</li>
+                                <li><strong>Multi-Repo:</strong> Separate context per repo</li>
+                            </ul>
+                            <h4>Storage</h4>
+                            <ul>
+                                <li><code>cortex-brain/development-context.yaml</code></li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">⚡</span>
+                            <h3>Performance Profile</h3>
+                            <p class="framework-subtitle">Speed & Efficiency</p>
+                            <h4>Response Times</h4>
+                            <ul>
+                                <li><strong>Tier 0:</strong> Instant (rule validation)</li>
+                                <li><strong>Tier 1:</strong> &lt; 100ms (memory access)</li>
+                                <li><strong>Tier 2:</strong> &lt; 500ms (pattern matching)</li>
+                                <li><strong>Tier 3:</strong> &lt; 1s (metric retrieval)</li>
+                            </ul>
+                            <h4>Storage Size</h4>
+                            <ul>
+                                <li><strong>Total:</strong> ~500MB (codebase + brain)</li>
+                                <li><strong>Tier 1:</strong> ~5MB (70 conversations)</li>
+                                <li><strong>Tier 2:</strong> ~50MB (patterns)</li>
+                                <li><strong>Tier 3:</strong> ~10MB per repo</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔄</span>
+                            <h3>Brain Maintenance</h3>
+                            <p class="framework-subtitle">Automatic Optimization</p>
+                            <h4>Cleanup Operations</h4>
+                            <ul>
+                                <li><strong>FIFO Eviction:</strong> Tier 1 (automatic)</li>
+                                <li><strong>Pattern Pruning:</strong> Tier 2 (monthly)</li>
+                                <li><strong>Metric Refresh:</strong> Tier 3 (per commit)</li>
+                                <li><strong>Backup:</strong> All tiers (weekly)</li>
+                            </ul>
+                            <h4>Health Checks</h4>
+                            <ul>
+                                <li>SKULL rule validation</li>
+                                <li>Storage capacity monitoring</li>
+                                <li>Performance benchmarking</li>
+                                <li>Integrity verification</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Agent System -->
+            <div id="agent-system" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🤖 Specialist Agent System</h2>
+                    <p>Two specialist agents provide focused intelligence for complex operations. Agents are <strong>embedded within orchestrators</strong>, not standalone services. They analyze requests, generate plans, and provide strategic recommendations.</p>
+
+                    <h3>Agent Architecture</h3>
+                    <div style="background: rgba(0, 0, 0, 0.3); padding: 2rem; border-radius: 12px; margin: 1.5rem 0; overflow-x: auto; text-align: center;">
+                        <div class="mermaid">
+graph LR
+    User["👤 User Request"]
+    
+    User --> O1["📋 Planning System<br/>Orchestrator"]
+    User --> O2["🔍 Architectural Review<br/>Orchestrator"]
+    
+    O1 --> A1["🎯 Planning Agent<br/><small>Task Decomposition</small>"]
+    O2 --> A2["🧠 Strategic Agent<br/><small>Architecture Analysis</small>"]
+    
+    A1 --> P1["📝 Plan Generation"]
+    A1 --> P2["⚡ Complexity Analysis"]
+    A1 --> P3["✅ DoR/DoD Validation"]
+    
+    A2 --> S1["🏗️ Pattern Detection"]
+    A2 --> S2["📊 Dependency Analysis"]
+    A2 --> S3["💡 Recommendations"]
+    
+    P1 --> Brain["🧠 Four-Tier Brain"]
+    P2 --> Brain
+    P3 --> Brain
+    S1 --> Brain
+    S2 --> Brain
+    S3 --> Brain
+    
+    style User fill:#7b61ff,stroke:#9f87ff,stroke-width:3px,color:#fff
+    style O1 fill:#10b981,stroke:#34d399,stroke-width:2px,color:#fff
+    style O2 fill:#10b981,stroke:#34d399,stroke-width:2px,color:#fff
+    
+    style A1 fill:#3b82f6,stroke:#60a5fa,stroke-width:3px,color:#fff
+    style A2 fill:#3b82f6,stroke:#60a5fa,stroke-width:3px,color:#fff
+    
+    style Brain fill:#f59e0b,stroke:#fbbf24,stroke-width:2px,color:#fff
+                        </div>
+                    </div>
+
+                    <h3>Agent Capabilities</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🎯</span>
+                            <h3>Planning Agent</h3>
+                            <p class="framework-subtitle">Feature Planning & Task Decomposition</p>
+                            <h4>Core Capabilities</h4>
+                            <ul>
+                                <li><strong>Complexity Analysis:</strong> AUTO detection (HIGH/MEDIUM/LOW)</li>
+                                <li><strong>Plan Generation:</strong> Multi-phase plans with TDD</li>
+                                <li><strong>DoR/DoD:</strong> Definition of Ready/Done validation</li>
+                                <li><strong>Manifest Creation:</strong> YAML-based structure</li>
+                            </ul>
+                            <h4>Output Structure</h4>
+                            <ul>
+                                <li>Master plan document</li>
+                                <li>Phase breakdown with checkpoints</li>
+                                <li>TDD test specifications</li>
+                                <li>Progress tracking JSON</li>
+                            </ul>
+                            <h4>Integration</h4>
+                            <ul>
+                                <li>Works within Planning System orchestrator</li>
+                                <li>Consults Tier 2 for patterns</li>
+                                <li>Updates Tier 3 with plan context</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🧠</span>
+                            <h3>Strategic Reasoning Agent</h3>
+                            <p class="framework-subtitle">Architecture Analysis & Pattern Recognition</p>
+                            <h4>Core Capabilities</h4>
+                            <ul>
+                                <li><strong>Architecture Review:</strong> 6-phase analysis (0-100 scoring)</li>
+                                <li><strong>Pattern Detection:</strong> Design patterns and anti-patterns</li>
+                                <li><strong>Dependency Analysis:</strong> Coupling and cohesion metrics</li>
+                                <li><strong>Recommendations:</strong> Actionable improvement suggestions</li>
+                            </ul>
+                            <h4>Analysis Output</h4>
+                            <ul>
+                                <li>Architecture health score</li>
+                                <li>Pattern identification report</li>
+                                <li>Dependency graph visualization</li>
+                                <li>Priority-ranked improvements</li>
+                            </ul>
+                            <h4>Integration</h4>
+                            <ul>
+                                <li>Works within Architectural Review orchestrator</li>
+                                <li>Queries Tier 2 for historical patterns</li>
+                                <li>Updates Tier 3 with complexity metrics</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔗</span>
+                            <h3>Agent Collaboration</h3>
+                            <p class="framework-subtitle">Orchestrator Integration Pattern</p>
+                            <h4>How Agents Work</h4>
+                            <ul>
+                                <li><strong>Embedded:</strong> Not standalone services</li>
+                                <li><strong>Context-Aware:</strong> Access to Four-Tier Brain</li>
+                                <li><strong>Orchestrator-Driven:</strong> Invoked by workflow phases</li>
+                                <li><strong>Stateless:</strong> No persistent agent state</li>
+                            </ul>
+                            <h4>Communication Pattern</h4>
+                            <ul>
+                                <li>Orchestrator passes context bundle</li>
+                                <li>Agent analyzes and generates output</li>
+                                <li>Output stored in brain tiers</li>
+                                <li>Orchestrator proceeds to next phase</li>
+                            </ul>
+                            <h4>Future Expansion</h4>
+                            <ul>
+                                <li>Testing Agent (test generation)</li>
+                                <li>Refactoring Agent (code improvement)</li>
+                                <li>Documentation Agent (doc generation)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Orchestrator Ecosystem -->
+            <div id="orchestrators" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">⚙️ Orchestrator Ecosystem</h2>
+                    <p>Orchestrators coordinate complex multi-phase workflows with validation gates, checkpoints, and rollback support. All orchestrators inherit from <code>BaseOrchestrator</code> and follow a consistent execution pattern.</p>
+
+                    <h3>Orchestrator Execution Flow</h3>
+                    <div style="background: rgba(0, 0, 0, 0.3); padding: 2rem; border-radius: 12px; margin: 1.5rem 0; overflow-x: auto; text-align: center;">
+                        <div class="mermaid">
+graph LR
+    Start["🚀 Start<br/><small>User command</small>"]
+    Load["📥 Load Manifest<br/><small>YAML config</small>"]
+    Validate["✅ Validate Context<br/><small>DoR check</small>"]
+    Phase1["📍 Phase 1<br/><small>Execute + checkpoint</small>"]
+    Gate1["🚪 Validation Gate<br/><small>Continue?</small>"]
+    Phase2["📍 Phase N<br/><small>Repeat pattern</small>"]
+    Complete["🎉 Complete<br/><small>Final report</small>"]
+    Rollback["⏮️ Rollback<br/><small>Git revert</small>"]
+    
+    Start --> Load
+    Load --> Validate
+    Validate -->|"Pass"| Phase1
+    Validate -->|"Fail"| Rollback
+    Phase1 --> Gate1
+    Gate1 -->|"Pass"| Phase2
+    Gate1 -->|"Fail"| Rollback
+    Phase2 --> Complete
+    
+    style Start fill:#10b981,stroke:#34d399,stroke-width:3px,color:#fff
+    style Complete fill:#10b981,stroke:#34d399,stroke-width:3px,color:#fff
+    style Rollback fill:#ef4444,stroke:#f87171,stroke-width:3px,color:#fff
+    style Gate1 fill:#f59e0b,stroke:#fbbf24,stroke-width:2px,color:#fff
+                        </div>
+                    </div>
+
+                    <h3>8 Core Orchestrators</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📋</span>
+                            <h3>Planning System</h3>
+                            <p class="framework-subtitle">Multi-Phase Feature Planning</p>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Feature planning and task decomposition</li>
+                                <li>Automatic TDD test specification</li>
+                                <li>Complexity-based phase generation</li>
+                            </ul>
+                            <h4>Phases</h4>
+                            <ul>
+                                <li><strong>Analysis:</strong> Understand requirements</li>
+                                <li><strong>Design:</strong> Architecture and patterns</li>
+                                <li><strong>Planning:</strong> Task breakdown</li>
+                                <li><strong>TDD Spec:</strong> Test requirements</li>
+                            </ul>
+                            <h4>Output</h4>
+                            <ul>
+                                <li><code>cortex-brain/documents/planning/active/{name}/</code></li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">✅</span>
+                            <h3>TDD Orchestrator</h3>
+                            <p class="framework-subtitle">RED→GREEN→REFACTOR Workflow</p>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Enforce test-driven development</li>
+                                <li>Prevent untested production code</li>
+                                <li>Maintain >80% coverage</li>
+                            </ul>
+                            <h4>Phases</h4>
+                            <ul>
+                                <li><strong>RED:</strong> Write failing tests</li>
+                                <li><strong>GREEN:</strong> Minimal passing code</li>
+                                <li><strong>REFACTOR:</strong> Improve design</li>
+                            </ul>
+                            <h4>Validation</h4>
+                            <ul>
+                                <li>Tests must fail initially (RED)</li>
+                                <li>All tests must pass (GREEN)</li>
+                                <li>Coverage maintained (REFACTOR)</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔧</span>
+                            <h3>System Maintenance</h3>
+                            <p class="framework-subtitle">7-Phase Health Pipeline</p>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Comprehensive system health check</li>
+                                <li>Performance optimization</li>
+                                <li>Brain maintenance and cleanup</li>
+                            </ul>
+                            <h4>Phases</h4>
+                            <ul>
+                                <li><strong>Health Check:</strong> System diagnostics</li>
+                                <li><strong>Brain Optimization:</strong> Tier cleanup</li>
+                                <li><strong>Test Validation:</strong> Coverage analysis</li>
+                                <li><strong>Documentation:</strong> Doc freshness</li>
+                                <li><strong>Security:</strong> Vulnerability scan</li>
+                                <li><strong>Performance:</strong> Benchmarking</li>
+                                <li><strong>Reporting:</strong> Generate report</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="framework-grid" style="margin-top: 2rem;">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🧹</span>
+                            <h3>Code Sanitization</h3>
+                            <p class="framework-subtitle">5-Phase Data Removal</p>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Remove sensitive company data</li>
+                                <li>Make codebase generic/shareable</li>
+                                <li>Preserve functionality</li>
+                            </ul>
+                            <h4>Phases</h4>
+                            <ul>
+                                <li><strong>Discovery:</strong> Find sensitive data</li>
+                                <li><strong>Analysis:</strong> Impact assessment</li>
+                                <li><strong>Replacement:</strong> Generic substitutes</li>
+                                <li><strong>Validation:</strong> Test still pass</li>
+                                <li><strong>Reporting:</strong> Change summary</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">✨</span>
+                            <h3>System Refinement</h3>
+                            <p class="framework-subtitle">7-Phase Improvement</p>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Holistic system improvement</li>
+                                <li>Code quality enhancement</li>
+                                <li>Architecture optimization</li>
+                            </ul>
+                            <h4>Phases</h4>
+                            <ul>
+                                <li><strong>Analysis:</strong> Current state assessment</li>
+                                <li><strong>Architecture:</strong> Strategic agent review</li>
+                                <li><strong>Refactoring:</strong> Code improvements</li>
+                                <li><strong>Testing:</strong> Coverage enhancement</li>
+                                <li><strong>Documentation:</strong> Doc updates</li>
+                                <li><strong>Performance:</strong> Optimization</li>
+                                <li><strong>Validation:</strong> Final checks</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📊</span>
+                            <h3>ADO Operations</h3>
+                            <p class="framework-subtitle">Azure DevOps Integration</p>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Generate Azure DevOps work items</li>
+                                <li>Convert plans to user stories</li>
+                                <li>Sprint planning automation</li>
+                            </ul>
+                            <h4>Capabilities</h4>
+                            <ul>
+                                <li>User story generation</li>
+                                <li>Feature breakdown</li>
+                                <li>Acceptance criteria creation</li>
+                                <li>Story point estimation</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="framework-grid" style="margin-top: 2rem;">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🏗️</span>
+                            <h3>Architectural Review</h3>
+                            <p class="framework-subtitle">6-Phase Analysis</p>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Comprehensive architecture assessment</li>
+                                <li>Pattern identification</li>
+                                <li>Strategic recommendations</li>
+                            </ul>
+                            <h4>Uses Strategic Agent</h4>
+                            <ul>
+                                <li>0-100 health scoring</li>
+                                <li>Design pattern detection</li>
+                                <li>Coupling analysis</li>
+                                <li>Prioritized improvements</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">💾</span>
+                            <h3>Git Checkpoint</h3>
+                            <p class="framework-subtitle">Automatic Commit System</p>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Phase-boundary commits</li>
+                                <li>Rollback safety net</li>
+                                <li>Change history tracking</li>
+                            </ul>
+                            <h4>Features</h4>
+                            <ul>
+                                <li><strong>Metadata:</strong> Phase info in commit message</li>
+                                <li><strong>Rollback:</strong> Revert to any checkpoint</li>
+                                <li><strong>Performance:</strong> &lt; 1 second</li>
+                                <li><strong>Validation:</strong> Pre-commit tests</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📦</span>
+                            <h3>BaseOrchestrator</h3>
+                            <p class="framework-subtitle">Inheritance Pattern</p>
+                            <h4>Common Features</h4>
+                            <ul>
+                                <li>Manifest loading (YAML)</li>
+                                <li>Phase execution framework</li>
+                                <li>Validation gate enforcement</li>
+                                <li>Checkpoint management</li>
+                            </ul>
+                            <h4>Extensibility</h4>
+                            <ul>
+                                <li>Override phase methods</li>
+                                <li>Custom validation logic</li>
+                                <li>Agent integration hooks</li>
+                                <li>Error handling patterns</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="info-box info-box-info" style="margin-top: 2rem;">
+                        <strong>Orchestrator Manifest Location:</strong>
+                        <p style="margin-top: 0.5rem;">All orchestrator manifests are stored in <code>cortex-brain/manifests/orchestrators/</code>. Each manifest defines phases, validation rules, checkpoints, and agent integration points.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Flow -->
+            <div id="system-flow" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🔄 Complete System Flow</h2>
+                    <p>Understanding how a user request flows through CORTEX from initial command to final response with brain updates.</p>
+
+                    <h3>Request → Response Pipeline</h3>
+                    <div style="background: rgba(0, 0, 0, 0.3); padding: 2rem; border-radius: 12px; margin: 1.5rem 0; overflow-x: auto; text-align: center;">
+                        <div class="mermaid">
+graph TB
+    User["👤 User Command<br/><small>Copilot Chat</small>"]
+    Intent["🎯 Intent Classification<br/><small>Route to orchestrator</small>"]
+    T0["🛡️ Tier 0 Validation<br/><small>SKULL rules check</small>"]
+    Context["📚 Context Retrieval<br/><small>Pull from brain tiers</small>"]
+    Agent["🤖 Agent Analysis<br/><small>If needed</small>"]
+    Orch["⚙️ Orchestrator Execution<br/><small>Multi-phase workflow</small>"]
+    Checkpoint["💾 Git Checkpoints<br/><small>Phase boundaries</small>"]
+    Response["📤 Response Generation<br/><small>Template-based</small>"]
+    Update["🧠 Brain Update<br/><small>Store patterns</small>"]
+    
+    User --> Intent
+    Intent --> T0
+    T0 -->|"Pass"| Context
+    T0 -->|"Fail"| Response
+    Context --> Agent
+    Agent --> Orch
+    Orch --> Checkpoint
+    Checkpoint --> Response
+    Response --> Update
+    
+    style User fill:#7b61ff,stroke:#9f87ff,stroke-width:3px,color:#fff
+    style T0 fill:#ef4444,stroke:#f87171,stroke-width:2px,color:#fff
+    style Agent fill:#3b82f6,stroke:#60a5fa,stroke-width:2px,color:#fff
+    style Orch fill:#f59e0b,stroke:#fbbf24,stroke-width:2px,color:#fff
+    style Response fill:#10b981,stroke:#34d399,stroke-width:3px,color:#fff
+    style Update fill:#10b981,stroke:#34d399,stroke-width:2px,color:#fff
+                        </div>
+                    </div>
+
+                    <h3>Execution Methods</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">💻</span>
+                            <h3>CLI Wrapper</h3>
+                            <p class="framework-subtitle">Command-Line Operations</p>
+                            <h4>Use Cases</h4>
+                            <ul>
+                                <li>File I/O operations</li>
+                                <li>Git operations (commit, push)</li>
+                                <li>System maintenance scripts</li>
+                                <li>Batch processing</li>
+                            </ul>
+                            <h4>Commands</h4>
+                            <ul>
+                                <li><code>cortex align</code></li>
+                                <li><code>cortex healthcheck</code></li>
+                                <li><code>cortex optimize</code></li>
+                            </ul>
+                            <h4>Performance</h4>
+                            <ul>
+                                <li><strong>Fast:</strong> Direct Python execution</li>
+                                <li><strong>Scriptable:</strong> CI/CD integration</li>
+                                <li><strong>Silent:</strong> No interactive prompts</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">💬</span>
+                            <h3>Copilot Chat</h3>
+                            <p class="framework-subtitle">Interactive Workflows</p>
+                            <h4>Use Cases</h4>
+                            <ul>
+                                <li>Feature planning</li>
+                                <li>TDD development</li>
+                                <li>Interactive feedback</li>
+                                <li>Exploratory analysis</li>
+                            </ul>
+                            <h4>Commands</h4>
+                            <ul>
+                                <li><code>plan [feature]</code></li>
+                                <li><code>start tdd</code></li>
+                                <li><code>refine</code></li>
+                            </ul>
+                            <h4>Performance</h4>
+                            <ul>
+                                <li><strong>Interactive:</strong> User feedback loops</li>
+                                <li><strong>Adaptive:</strong> Template-based responses</li>
+                                <li><strong>Contextual:</strong> Brain-aware</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔧</span>
+                            <h3>Internal</h3>
+                            <p class="framework-subtitle">Infrastructure Components</p>
+                            <h4>Components</h4>
+                            <ul>
+                                <li>Brain tier managers</li>
+                                <li>Manifest loaders</li>
+                                <li>Template renderers</li>
+                                <li>Validation engines</li>
+                            </ul>
+                            <h4>Not User-Facing</h4>
+                            <ul>
+                                <li>Called by orchestrators</li>
+                                <li>Support infrastructure</li>
+                                <li>Background processes</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Technology Stack -->
+            <div id="technology-stack" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🛠️ Technology Stack</h2>
+
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🐍</span>
+                            <h3>Core Technologies</h3>
+                            <h4>Primary Stack</h4>
+                            <ul>
+                                <li><strong>Python 3.8+:</strong> Core language</li>
+                                <li><strong>GitHub Copilot:</strong> AI pair programming</li>
+                                <li><strong>VS Code:</strong> Development environment</li>
+                                <li><strong>Git:</strong> Version control + checkpointing</li>
+                            </ul>
+                            <h4>Data Formats</h4>
+                            <ul>
+                                <li><strong>YAML:</strong> Configuration and manifests</li>
+                                <li><strong>JSON/JSONL:</strong> Brain storage</li>
+                                <li><strong>Markdown:</strong> Documentation</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📦</span>
+                            <h3>Key Libraries</h3>
+                            <h4>Testing & Quality</h4>
+                            <ul>
+                                <li><strong>pytest:</strong> Testing framework</li>
+                                <li><strong>coverage.py:</strong> Code coverage tracking</li>
+                                <li><strong>radon:</strong> Complexity analysis</li>
+                                <li><strong>mypy:</strong> Type checking</li>
+                            </ul>
+                            <h4>Utilities</h4>
+                            <ul>
+                                <li><strong>pyyaml:</strong> YAML parsing</li>
+                                <li><strong>click:</strong> CLI framework</li>
+                                <li><strong>jinja2:</strong> Template rendering</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🌐</span>
+                            <h3>Documentation</h3>
+                            <h4>Static Site</h4>
+                            <ul>
+                                <li><strong>HTML5:</strong> Semantic markup</li>
+                                <li><strong>CSS3:</strong> Glassmorphism design</li>
+                                <li><strong>Mermaid.js:</strong> Diagram rendering</li>
+                                <li><strong>D3.js:</strong> Interactive visualizations</li>
+                            </ul>
+                            <h4>Hosting</h4>
+                            <ul>
+                                <li><strong>GitHub Pages:</strong> Static hosting</li>
+                                <li><strong>Custom Domain:</strong> asifhussain60.github.io</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance Metrics -->
+            <div id="performance" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">⚡ Performance Characteristics</h2>
+
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">💾</span>
+                            <h3>Working Memory</h3>
+                            <div style="text-align: center; margin: 1.5rem 0;">
+                                <div style="font-size: 3rem; font-weight: 700; color: var(--accent-primary);">&lt; 100ms</div>
+                                <div style="font-size: 1rem; color: var(--text-secondary);">Tier 1 Retrieval Time</div>
+                            </div>
+                            <ul>
+                                <li>JSONL sequential read</li>
+                                <li>In-memory caching</li>
+                                <li>70 conversation buffer</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📋</span>
+                            <h3>Planning</h3>
+                            <div style="text-align: center; margin: 1.5rem 0;">
+                                <div style="font-size: 3rem; font-weight: 700; color: var(--success);">&lt; 5s</div>
+                                <div style="font-size: 1rem; color: var(--text-secondary);">8-Phase Plan Generation</div>
+                            </div>
+                            <ul>
+                                <li>Planning Agent analysis</li>
+                                <li>Manifest creation</li>
+                                <li>TDD specification</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">💾</span>
+                            <h3>Git Checkpoint</h3>
+                            <div style="text-align: center; margin: 1.5rem 0;">
+                                <div style="font-size: 3rem; font-weight: 700; color: var(--info);">&lt; 1s</div>
+                                <div style="font-size: 1rem; color: var(--text-secondary);">Commit with Metadata</div>
+                            </div>
+                            <ul>
+                                <li>Phase boundary commits</li>
+                                <li>Rollback ready</li>
+                                <li>Automatic staging</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="framework-grid" style="margin-top: 2rem;">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔧</span>
+                            <h3>Maintenance</h3>
+                            <div style="text-align: center; margin: 1.5rem 0;">
+                                <div style="font-size: 3rem; font-weight: 700; color: var(--warning);">&lt; 5min</div>
+                                <div style="font-size: 1rem; color: var(--text-secondary);">Full 7-Phase Cycle</div>
+                            </div>
+                            <ul>
+                                <li>Health checks</li>
+                                <li>Brain optimization</li>
+                                <li>Report generation</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">💿</span>
+                            <h3>Disk Usage</h3>
+                            <div style="text-align: center; margin: 1.5rem 0;">
+                                <div style="font-size: 3rem; font-weight: 700; color: var(--accent-secondary);">~500MB</div>
+                                <div style="font-size: 1rem; color: var(--text-secondary);">Codebase + Brain Storage</div>
+                            </div>
+                            <ul>
+                                <li>Source code: ~200MB</li>
+                                <li>Brain storage: ~65MB</li>
+                                <li>Documentation: ~150MB</li>
+                                <li>Dependencies: ~85MB</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📊</span>
+                            <h3>Template Response</h3>
+                            <div style="text-align: center; margin: 1.5rem 0;">
+                                <div style="font-size: 3rem; font-weight: 700; color: var(--success);">Instant</div>
+                                <div style="font-size: 1rem; color: var(--text-secondary);">No Python Execution</div>
+                            </div>
+                            <ul>
+                                <li>YAML-based templates</li>
+                                <li>4-tier response scaling</li>
+                                <li>Context-aware formatting</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Deep Dive Links -->
+            <div id="resources" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">📚 Deep Dive Documentation</h2>
+                    
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🧠</span>
+                            <h3>Brain Architecture</h3>
+                            <ul>
+                                <li><a href="four-tier-brain.html">Four-Tier Brain Architecture</a></li>
+                                <li><a href="skull-protection.html">SKULL Protection (Tier 0)</a></li>
+                                <li><a href="working-memory.html">Working Memory (Tier 1)</a></li>
+                                <li><a href="knowledge-graph.html">Knowledge Graph (Tier 2)</a></li>
+                                <li><a href="development-context.html">Development Context (Tier 3)</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🤖</span>
+                            <h3>Agents & Orchestrators</h3>
+                            <ul>
+                                <li><a href="agent-system.html">Agent System</a></li>
+                                <li><a href="orchestrator-ecosystem.html">Orchestrator Ecosystem</a></li>
+                                <li><a href="../orchestrators/index.html">Interactive Orchestrator Map</a></li>
+                                <li><a href="../orchestrators/planning-system.html">Planning System Details</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📖</span>
+                            <h3>Complete Specifications</h3>
+                            <ul>
+                                <li><a href="architecture-FULL.html">Full Architecture Document</a></li>
+                                <li><a href="../sts/index.html">Shippable Test Suite (STS)</a></li>
+                                <li><a href="../index.html">CORTEX Home</a></li>
+                                <li><a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener">GitHub Repository</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Executive Summary -->
-    <section class="section">
+    <footer>
         <div class="container">
-            <h2>Executive Summary</h2>
-            <div class="glass-card">
-                <p>
-                    CORTEX is built on a four-tier brain architecture that provides intelligent memory management,
-                    pattern learning, and context preservation across conversations. Two specialist agents (Planning and
-                    Strategic Reasoning) work within orchestrators to coordinate complex multi-phase workflows. The system
-                    enforces safety through SKULL brain protection rules at Tier 0, while maintaining sub-100ms working
-                    memory access at Tier 1.
-                </p>
-            </div>
+            <p>&copy; 2025 CORTEX Architecture. Created by Asif Hussain.</p>
+            <p>
+                <a href="../index.html">Home</a> |
+                <a href="index.html">Architecture</a> |
+                <a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener">GitHub</a>
+            </p>
         </div>
-    </section>
+    </footer>
 
-    <!-- Four-Tier Brain -->
-    <section class="section">
-        <div class="container">
-            <h2>Four-Tier Brain Architecture</h2>
-            
-            <div class="collapsible">
-                <div class="collapsible-header glass-card">
-                    <h3>Tier 0: Governance (SKULL Rules)</h3>
-                    <span class="collapsible-icon">▼</span>
-                </div>
-                <div class="collapsible-content glass-card-flat">
-                    <p><strong>Purpose:</strong> Brain protection and safety enforcement</p>
-                    
-                    <p><strong>SKULL Rules:</strong></p>
-                    <ul>
-                        <li><strong>TDD_ENFORCEMENT:</strong> RED→GREEN→REFACTOR mandatory</li>
-                        <li><strong>HOLISTIC_CODE_DISCOVERY:</strong> Search before create (prevent duplication)</li>
-                        <li><strong>REFACTOR_CODE_CLEANUP:</strong> Remove orphaned/duplicate code</li>
-                        <li><strong>GIT_ISOLATION:</strong> CORTEX code never in user repos</li>
-                    </ul>
-                    
-                    <p><strong>Storage:</strong> <code>cortex-brain/brain-protection-rules.yaml</code></p>
-                    
-                    <p><a href="skull-protection.html">Learn more about SKULL →</a></p>
-                </div>
-            </div>
-
-            <div class="collapsible">
-                <div class="collapsible-header glass-card">
-                    <h3>Tier 1: Working Memory (70-Conversation FIFO)</h3>
-                    <span class="collapsible-icon">▼</span>
-                </div>
-                <div class="collapsible-content glass-card-flat">
-                    <p><strong>Purpose:</strong> Recent conversation history with fast access</p>
-                    
-                    <p><strong>Capabilities:</strong></p>
-                    <ul>
-                        <li><strong>Retention:</strong> Last 70 conversations preserved</li>
-                        <li><strong>Performance:</strong> Sub-100ms retrieval</li>
-                        <li><strong>Format:</strong> JSON Lines (JSONL)</li>
-                        <li><strong>Cleanup:</strong> Automatic FIFO eviction</li>
-                    </ul>
-                    
-                    <p><strong>Storage:</strong> <code>cortex-brain/conversation-context.jsonl</code></p>
-                    
-                    <p><a href="working-memory.html">Learn more about Working Memory →</a></p>
-                </div>
-            </div>
-
-            <div class="collapsible">
-                <div class="collapsible-header glass-card">
-                    <h3>Tier 2: Knowledge Graph (Pattern Learning)</h3>
-                    <span class="collapsible-icon">▼</span>
-                </div>
-                <div class="collapsible-content glass-card-flat">
-                    <p><strong>Purpose:</strong> Long-term pattern storage and relationship mapping</p>
-                    
-                    <p><strong>Capabilities:</strong></p>
-                    <ul>
-                        <li><strong>Pattern Storage:</strong> Code patterns, architectural decisions</li>
-                        <li><strong>Relationship Mapping:</strong> Module dependencies, file relationships</li>
-                        <li><strong>Learning:</strong> Technology stack patterns, best practices</li>
-                        <li><strong>Retrieval:</strong> Context-aware pattern matching</li>
-                    </ul>
-                    
-                    <p><strong>Storage:</strong> <code>cortex-brain/knowledge-graph.yaml</code></p>
-                    
-                    <p><a href="knowledge-graph.html">Learn more about Knowledge Graph →</a></p>
-                </div>
-            </div>
-
-            <div class="collapsible">
-                <div class="collapsible-header glass-card">
-                    <h3>Tier 3: Development Context (Per-Repo Metrics)</h3>
-                    <span class="collapsible-icon">▼</span>
-                </div>
-                <div class="collapsible-content glass-card-flat">
-                    <p><strong>Purpose:</strong> Repository-specific context and metrics</p>
-                    
-                    <p><strong>Capabilities:</strong></p>
-                    <ul>
-                        <li><strong>Hotspot Detection:</strong> Files with high change frequency</li>
-                        <li><strong>Complexity Tracking:</strong> Function-level cyclomatic complexity</li>
-                        <li><strong>Test Coverage:</strong> Per-module coverage metrics</li>
-                        <li><strong>Multi-Repo Support:</strong> Separate context per repository</li>
-                    </ul>
-                    
-                    <p><strong>Storage:</strong> <code>cortex-brain/development-context.yaml</code></p>
-                    
-                    <p><a href="development-context.html">Learn more about Development Context →</a></p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Agent System -->
-    <section class="section">
-        <div class="container">
-            <h2>Agent System</h2>
-            
-            <div class="collapsible">
-                <div class="collapsible-header glass-card">
-                    <h3>Planning Agent</h3>
-                    <span class="collapsible-icon">▼</span>
-                </div>
-                <div class="collapsible-content glass-card-flat">
-                    <p><strong>Purpose:</strong> Feature planning and task decomposition</p>
-                    
-                    <p><strong>Capabilities:</strong></p>
-                    <ul>
-                        <li><strong>Complexity Analysis:</strong> AUTO detection (HIGH/MEDIUM/LOW)</li>
-                        <li><strong>Plan Generation:</strong> Multi-phase plans with TDD integration</li>
-                        <li><strong>DoR/DoD Enforcement:</strong> Definition of Ready/Done validation</li>
-                        <li><strong>Manifest Creation:</strong> YAML-based plan structure</li>
-                    </ul>
-                    
-                    <p><strong>Integration:</strong> Works within Planning System orchestrator</p>
-                    
-                    <p><a href="agent-system.html">Learn more about Agents →</a></p>
-                </div>
-            </div>
-
-            <div class="collapsible">
-                <div class="collapsible-header glass-card">
-                    <h3>Strategic Reasoning Agent</h3>
-                    <span class="collapsible-icon">▼</span>
-                </div>
-                <div class="collapsible-content glass-card-flat">
-                    <p><strong>Purpose:</strong> Architecture analysis and pattern identification</p>
-                    
-                    <p><strong>Capabilities:</strong></p>
-                    <ul>
-                        <li><strong>Architecture Review:</strong> 6-phase analysis with 0-100 scoring</li>
-                        <li><strong>Pattern Detection:</strong> Identifies design patterns and anti-patterns</li>
-                        <li><strong>Dependency Analysis:</strong> Module relationships and coupling metrics</li>
-                        <li><strong>Recommendations:</strong> Actionable improvement suggestions</li>
-                    </ul>
-                    
-                    <p><strong>Integration:</strong> Works within Architectural Review orchestrator</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Orchestrator Ecosystem -->
-    <section class="section">
-        <div class="container">
-            <h2>Orchestrator Ecosystem</h2>
-            <div class="glass-card">
-                <p>
-                    Orchestrators coordinate complex multi-phase workflows with validation gates, checkpoints,
-                    and rollback support. All orchestrators inherit from BaseOrchestrator.
-                </p>
-                
-                <h3>8 Core Orchestrators</h3>
-                <ul>
-                    <li><strong>Planning System:</strong> Multi-phase feature planning with auto-TDD</li>
-                    <li><strong>TDD Orchestrator:</strong> RED→GREEN→REFACTOR enforcement</li>
-                    <li><strong>System Maintenance:</strong> 7-phase health and optimization</li>
-                    <li><strong>Code Sanitization:</strong> 5-phase sensitive data removal</li>
-                    <li><strong>System Refinement:</strong> 7-phase holistic improvement</li>
-                    <li><strong>ADO Operations:</strong> Azure DevOps work item generation</li>
-                    <li><strong>Architectural Review:</strong> 6-phase architecture analysis</li>
-                    <li><strong>Git Checkpoint:</strong> Automatic commits with rollback</li>
-                </ul>
-                
-                <p><a href="orchestrator-ecosystem.html">Learn more about Orchestrators →</a></p>
-            </div>
-        </div>
-    </section>
-
-    <!-- System Flow -->
-    <section class="section">
-        <div class="container">
-            <h2>System Flow</h2>
-            <div class="glass-card">
-                <h3>User Request → Response</h3>
-                <ol>
-                    <li><strong>Entry Point:</strong> User says command in Copilot Chat</li>
-                    <li><strong>Intent Classification:</strong> Determine operation type (plan, tdd, maintenance, etc.)</li>
-                    <li><strong>Context Retrieval:</strong> Pull relevant context from Four-Tier Brain</li>
-                    <li><strong>Agent Engagement:</strong> Planning or Strategic Reasoning agent analyzes request</li>
-                    <li><strong>Orchestrator Selection:</strong> Route to appropriate orchestrator</li>
-                    <li><strong>Phase Execution:</strong> Execute workflow phases with validation gates</li>
-                    <li><strong>Checkpoint Creation:</strong> Git commits at phase boundaries</li>
-                    <li><strong>Response Generation:</strong> Template-based adaptive response</li>
-                    <li><strong>Brain Update:</strong> Store conversation in Tier 1, patterns in Tier 2</li>
-                </ol>
-                
-                <h3>Execution Methods</h3>
-                <ul>
-                    <li><strong>cli_wrapper:</strong> File I/O, git operations (align, healthcheck, optimize)</li>
-                    <li><strong>copilot_chat:</strong> Interactive workflows (planning, tdd, feedback)</li>
-                    <li><strong>internal:</strong> Infrastructure not directly invoked by users</li>
-                </ul>
-            </div>
-        </div>
-    </section>
-
-    <!-- Technology Stack -->
-    <section class="section">
-        <div class="container">
-            <h2>Technology Stack</h2>
-            <div class="glass-card">
-                <h3>Core Technologies</h3>
-                <ul>
-                    <li><strong>Python 3.8+:</strong> Core language</li>
-                    <li><strong>GitHub Copilot:</strong> AI pair programming</li>
-                    <li><strong>VS Code:</strong> Development environment</li>
-                    <li><strong>YAML:</strong> Configuration and manifests</li>
-                    <li><strong>JSON/JSONL:</strong> Data storage</li>
-                    <li><strong>Git:</strong> Version control and checkpointing</li>
-                </ul>
-                
-                <h3>Key Libraries</h3>
-                <ul>
-                    <li><strong>pytest:</strong> Testing framework</li>
-                    <li><strong>coverage.py:</strong> Code coverage tracking</li>
-                    <li><strong>radon:</strong> Complexity analysis</li>
-                    <li><strong>pyyaml:</strong> YAML parsing</li>
-                </ul>
-            </div>
-        </div>
-    </section>
-
-    <!-- Design Principles -->
-    <section class="section">
-        <div class="container">
-            <h2>Design Principles</h2>
-            <div class="glass-card">
-                <ul>
-                    <li><strong>Brain Protection First:</strong> Tier 0 SKULL rules enforce safety</li>
-                    <li><strong>Test-Driven Development:</strong> TDD mandatory for all production code</li>
-                    <li><strong>Git Isolation:</strong> CORTEX code never mixed with user repos</li>
-                    <li><strong>Adaptive Responses:</strong> Template-based responses scale by complexity</li>
-                    <li><strong>Context Preservation:</strong> Four-Tier Brain maintains long-term memory</li>
-                    <li><strong>Multi-Repo Support:</strong> 1:∞ scaling with workspace detection</li>
-                    <li><strong>Rollback Safety:</strong> Git checkpoints enable safe experimentation</li>
-                    <li><strong>Phase Gating:</strong> Validation gates prevent invalid state transitions</li>
-                </ul>
-            </div>
-        </div>
-    </section>
-
-    <!-- Performance -->
-    <section class="section">
-        <div class="container">
-            <h2>Performance Characteristics</h2>
-            <div class="glass-card">
-                <div class="metrics-grid">
-                    <div>
-                        <h3>Working Memory</h3>
-                        <p><strong>&lt; 100ms</strong><br>Tier 1 retrieval time</p>
-                    </div>
-                    <div>
-                        <h3>Template Response</h3>
-                        <p><strong>Instant</strong><br>No Python execution</p>
-                    </div>
-                    <div>
-                        <h3>Planning</h3>
-                        <p><strong>&lt; 5 seconds</strong><br>8-phase plan generation</p>
-                    </div>
-                    <div>
-                        <h3>Git Checkpoint</h3>
-                        <p><strong>&lt; 1 second</strong><br>Commit with metadata</p>
-                    </div>
-                    <div>
-                        <h3>Maintenance</h3>
-                        <p><strong>&lt; 5 minutes</strong><br>Full 7-phase cycle</p>
-                    </div>
-                    <div>
-                        <h3>Disk Usage</h3>
-                        <p><strong>~500MB</strong><br>Codebase + brain storage</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Deep Dive Links -->
-    <section class="section">
-        <div class="container">
-            <h2>Deep Dive Documentation</h2>
-            <div class="glass-card">
-                <ul>
-                    <li><a href="four-tier-brain.html">Four-Tier Brain Architecture</a> - Detailed brain structure</li>
-                    <li><a href="agent-system.html">Agent System</a> - Planning and Strategic Reasoning agents</li>
-                    <li><a href="orchestrator-ecosystem.html">Orchestrator Ecosystem</a> - BaseOrchestrator pattern</li>
-                    <li><a href="working-memory.html">Working Memory</a> - Tier 1 implementation details</li>
-                    <li><a href="knowledge-graph.html">Knowledge Graph</a> - Tier 2 pattern learning</li>
-                    <li><a href="development-context.html">Development Context</a> - Tier 3 per-repo metrics</li>
-                    <li><a href="skull-protection.html">SKULL Protection</a> - Tier 0 brain protection</li>
-                    <li><a href="architecture-FULL.html">Complete Architecture Document</a> - Full technical specification</li>
-                </ul>
-            </div>
-        </div>
-    </section>
-<script src="../assets/js/main.js" defer></script>
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#7b61ff',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#9f87ff',
+                lineColor: '#60a5fa',
+                secondaryColor: '#10b981',
+                tertiaryColor: '#f59e0b'
+            }
+        });
+    </script>
 </body>
 </html>
