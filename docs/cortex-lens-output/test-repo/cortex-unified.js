@@ -9,33 +9,23 @@
  * - Responsive interactions
  * 
  * Author: Asif Hussain
- * Version: 1.0.2
+ * Version: 1.0.0
  * Date: December 2025
  */
 
 // ========== Global State ==========
-// Note: analysisData is defined inline in index.html as const
+let analysisData = {};
 let charts = {};
 
 // ========== Initialization ==========
-function initialize() {
-    console.log('🚀 Initializing CORTEX Dashboard');
+document.addEventListener('DOMContentLoaded', () => {
     initializeData();
     initializeTabs();
     initializeTheme();
     initializeCharts();
     initializeNarratives();
     console.log('🧠 CORTEX Dashboard initialized');
-}
-
-// Run initialization when DOM is ready
-// Note: With defer attribute, scripts run after DOM parsing but DOMContentLoaded may already have fired
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initialize);
-} else {
-    // DOM already loaded (common with deferred scripts)
-    initialize();
-}
+});
 
 // ========== Data Loading ==========
 function initializeData() {
@@ -47,28 +37,17 @@ function initializeData() {
         } catch (error) {
             console.error('Failed to load analysis data:', error);
         }
-    } else {
-        console.log('⚠️ No analysisData script found');
     }
 }
 
 // ========== Tab Navigation ==========
 function initializeTabs() {
-    console.log('🔧 Initializing tabs...');
     const tabButtons = document.querySelectorAll('.tab-button');
     const tabContents = document.querySelectorAll('.tab-content');
     
-    console.log(`Found ${tabButtons.length} tab buttons and ${tabContents.length} tab contents`);
-    
-    if (tabButtons.length === 0) {
-        console.error('❌ No tab buttons found! Check HTML structure.');
-        return;
-    }
-    
-    tabButtons.forEach((button, index) => {
+    tabButtons.forEach(button => {
         button.addEventListener('click', () => {
             const targetTab = button.dataset.tab;
-            console.log(`Tab clicked: ${targetTab}`);
             
             // Remove active class from all buttons and contents
             tabButtons.forEach(btn => btn.classList.remove('active'));
@@ -79,9 +58,6 @@ function initializeTabs() {
             const targetContent = document.getElementById(targetTab);
             if (targetContent) {
                 targetContent.classList.add('active');
-                console.log(`✅ Activated tab: ${targetTab}`);
-            } else {
-                console.error(`❌ Tab content not found: ${targetTab}`);
             }
             
             // Update URL hash
@@ -91,13 +67,9 @@ function initializeTabs() {
     
     // Handle initial hash or default to overview
     const initialTab = window.location.hash.slice(1) || 'overview';
-    console.log(`Initial tab: ${initialTab}`);
     const initialButton = document.querySelector(`[data-tab="${initialTab}"]`);
     if (initialButton) {
         initialButton.click();
-        console.log(`✅ Clicked initial tab: ${initialTab}`);
-    } else {
-        console.error(`❌ Initial tab button not found: ${initialTab}`);
     }
 }
 

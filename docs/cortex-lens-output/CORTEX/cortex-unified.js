@@ -29,11 +29,10 @@ function initialize() {
 }
 
 // Run initialization when DOM is ready
-// Note: With defer attribute, scripts run after DOM parsing but DOMContentLoaded may already have fired
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initialize);
 } else {
-    // DOM already loaded (common with deferred scripts)
+    // DOM already loaded (deferred script)
     initialize();
 }
 
@@ -66,6 +65,7 @@ function initializeTabs() {
     }
     
     tabButtons.forEach((button, index) => {
+        console.log(`Setting up tab button ${index}: ${button.dataset.tab}`);
         button.addEventListener('click', () => {
             const targetTab = button.dataset.tab;
             console.log(`Tab clicked: ${targetTab}`);
