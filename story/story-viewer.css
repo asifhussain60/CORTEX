@@ -216,7 +216,7 @@
 }
 
 .chapter-body {
-    font-size: 1.3rem;
+    font-size: 1.0rem;
     line-height: 1.8;
     color: var(--text-secondary);
 }
@@ -235,7 +235,7 @@
 
 .chapter-body p {
     font-family: 'Comic Neue', 'Comic Sans MS', 'Comic Sans', 'Chalkboard SE', 'Marker Felt', 'Tekton Pro', cursive, sans-serif;
-    font-size: 1.2em;
+    font-size: 1.55rem;
     margin-bottom: 1.5rem;
     line-height: 1.6;
 }
@@ -254,7 +254,7 @@
 .chapter-body span,
 .chapter-body div:not(.chapter-image) {
     font-family: 'Comic Neue', 'Comic Sans MS', 'Comic Sans', 'Chalkboard SE', 'Marker Felt', 'Tekton Pro', cursive, sans-serif;
-    font-size: 1.5em;
+    font-size: 1.55rem;
     line-height: 1.6;
 }
 
@@ -536,7 +536,7 @@
     }
 
     .chapter-body p {
-        font-size: 1.2em;
+        font-size: 1.0rem;
         margin-bottom: 1.25rem;
         line-height: 1.7;
     }
@@ -544,8 +544,8 @@
     .chapter-body li,
     .chapter-body span,
     .chapter-body div:not(.chapter-image) {
-        font-size: 1.4em;
-        line-height: 1.7;
+        font-size: 1.0rem !important;
+        line-height: 1.6;
     }
 
     /* Make images full width on mobile */
@@ -706,7 +706,7 @@
     }
 
     .chapter-body p {
-        font-size: 1.2em;
+        font-size: 1.0rem;
     }
 
     .breadcrumb {

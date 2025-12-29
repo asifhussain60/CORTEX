@@ -13,7 +13,7 @@ const CHAPTERS = {
         id: 'prologue',
         number: 'PROLOGUE',
         title: 'The Basement Laboratory',
-        file: 'Prologue/index.md',
+        file: 'Prologue/index.html',
         images: [
             { src: 'illustrations/images/essentials/cortex-awakening-prologue-01.jpeg', position: 'right' },
             { src: 'illustrations/images/essentials/cortex-awakening-prologue-02.jpeg', position: 'left' }
@@ -25,7 +25,7 @@ const CHAPTERS = {
         id: 'chapter-01',
         number: 'CHAPTER 1',
         title: 'The Amnesia Crisis',
-        file: 'Chapter-01/index.md',
+        file: 'Chapter-01/index.html',
         images: [
             { src: 'illustrations/images/essentials/cortex-awakening-ch01-01.jpeg', position: 'left' },
             { src: 'illustrations/images/valuable/cortex-awakening-ch01-02.jpeg', position: 'right' },
@@ -38,7 +38,7 @@ const CHAPTERS = {
         id: 'chapter-02',
         number: 'CHAPTER 2',
         title: 'Tier 0 - The Gatekeeper',
-        file: 'Chapter-02/index.md',
+        file: 'Chapter-02/index.html',
         images: [
             { src: 'illustrations/images/essentials/cortex-awakening-ch02-01.jpeg', position: 'right' },
             { src: 'illustrations/images/essentials/cortex-awakening-ch02-02.jpeg', position: 'left' }
@@ -50,7 +50,7 @@ const CHAPTERS = {
         id: 'chapter-03',
         number: 'CHAPTER 3',
         title: 'Tier 1 - Memory Awakens',
-        file: 'Chapter-03/index.md',
+        file: 'Chapter-03/index.html',
         images: [
             { src: 'illustrations/images/essentials/cortex-awakening-ch03-01.jpeg', position: 'left' },
             { src: 'illustrations/images/valuable/cortex-awakening-ch03-02.jpeg', position: 'right' }
@@ -62,7 +62,7 @@ const CHAPTERS = {
         id: 'chapter-04',
         number: 'CHAPTER 4',
         title: 'Tier 2 - The Learning Machine',
-        file: 'Chapter-04/index.md',
+        file: 'Chapter-04/index.html',
         images: [
             { src: 'illustrations/images/essentials/cortex-awakening-ch04-01.jpeg', position: 'left' },
             { src: 'illustrations/images/valuable/cortex-awakening-ch04-02.jpeg', position: 'right' }
@@ -74,7 +74,7 @@ const CHAPTERS = {
         id: 'chapter-05',
         number: 'CHAPTER 5',
         title: 'The Test-Driven Rebellion',
-        file: 'Chapter-05/index.md',
+        file: 'Chapter-05/index.html',
         images: [
             { src: 'illustrations/images/valuable/cortex-awakening-ch05-01.jpeg', position: 'left' },
             { src: 'illustrations/images/valuable/cortex-awakening-ch05-02.jpeg', position: 'right' }
@@ -86,7 +86,7 @@ const CHAPTERS = {
         id: 'chapter-06',
         number: 'CHAPTER 6',
         title: 'The Great Orchestration',
-        file: 'Chapter-06/index.md',
+        file: 'Chapter-06/index.html',
         images: [
             { src: 'illustrations/images/essentials/cortex-awakening-ch06-01.jpeg', position: 'left' },
             { src: 'illustrations/images/valuable/cortex-awakening-ch06-01.jpeg', position: 'right' },
@@ -99,7 +99,7 @@ const CHAPTERS = {
         id: 'chapter-07',
         number: 'CHAPTER 7',
         title: 'The Planning Revolution',
-        file: 'Chapter-07/index.md',
+        file: 'Chapter-07/index.html',
         images: [
             { src: 'illustrations/images/essentials/cortex-awakening-ch07-01.jpeg', position: 'right' },
             { src: 'illustrations/images/valuable/cortex-awakening-ch07-02.jpeg', position: 'left' }
@@ -111,7 +111,7 @@ const CHAPTERS = {
         id: 'chapter-08',
         number: 'CHAPTER 8',
         title: 'The Enterprise Awakening',
-        file: 'Chapter-08/index.md',
+        file: 'Chapter-08/index.html',
         images: [
             { src: 'illustrations/images/essentials/cortex-awakening-ch08-01.jpeg', position: 'left' },
             { src: 'illustrations/images/valuable/cortex-awakening-ch08-02.jpeg', position: 'right' }
@@ -123,7 +123,7 @@ const CHAPTERS = {
         id: 'chapter-09',
         number: 'CHAPTER 9',
         title: 'The Sanitizer\'s Dilemma',
-        file: 'Chapter-09/index.md',
+        file: 'Chapter-09/index.html',
         images: [
             { src: 'illustrations/images/essentials/cortex-awakening-ch09-01.jpeg', position: 'right' },
             { src: 'illustrations/images/valuable/cortex-awakening-ch09-02.jpeg', position: 'left' }
@@ -135,7 +135,7 @@ const CHAPTERS = {
         id: 'chapter-10',
         number: 'CHAPTER 10',
         title: 'The Self-Healing System',
-        file: 'Chapter-10/index.md',
+        file: 'Chapter-10/index.html',
         images: [
             { src: 'illustrations/images/essentials/cortex-awakening-ch10-01.jpeg', position: 'left' },
             { src: 'illustrations/images/valuable/cortex-awakening-ch10-02.jpeg', position: 'right' }
@@ -147,7 +147,7 @@ const CHAPTERS = {
         id: 'chapter-11',
         number: 'CHAPTER 11',
         title: 'The Knowledge Keeper',
-        file: 'Chapter-11/index.md',
+        file: 'Chapter-11/index.html',
         images: [
             { src: 'illustrations/images/essentials/cortex-awakening-ch11-01.jpeg', position: 'left' },
             { src: 'illustrations/images/valuable/cortex-awakening-ch11-01.jpeg', position: 'right' },
@@ -160,7 +160,7 @@ const CHAPTERS = {
         id: 'chapter-12',
         number: 'CHAPTER 12',
         title: 'The Convergence',
-        file: 'Chapter-12/index.md',
+        file: 'Chapter-12/index.html',
         images: [
             { src: 'illustrations/images/essentials/cortex-awakening-epilogue-01.jpeg', position: 'right' }
         ],
@@ -171,7 +171,7 @@ const CHAPTERS = {
         id: 'chapter-13',
         number: 'CHAPTER 13',
         title: 'The Refiner',
-        file: 'Chapter-13/index.md',
+        file: 'Chapter-13/index.html',
         images: [
             { src: 'illustrations/images/essentials/cortex-awakening-ch13-01.jpeg', position: 'left' },
             { src: 'illustrations/images/valuable/cortex-awakening-ch13-02.jpeg', position: 'right' }
