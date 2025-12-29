@@ -10,6 +10,8 @@
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="../assets/css/main.css">
     <link rel="stylesheet" href="../assets/css/knowledge.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -34,6 +36,31 @@
         <p class="hero-subtitle">
             65+ knowledge files across 17 categories covering frontend, backend, cloud, and software craft
         </p>
+    </section>
+
+    <!-- Interactive Knowledge Map -->
+    <section class="orchestrator-viz-section" style="margin-top: 3rem;">
+        <div class="glass-card">
+            <h2 class="section-title">🗺️ Interactive Knowledge Map</h2>
+            <p style="text-align: center; color: var(--text-secondary); margin-bottom: 2rem;">
+                Click domains to expand • Drag nodes to explore • Double-click topics to view details
+            </p>
+            
+            <div class="viz-controls" style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center;">
+                <button class="viz-btn active" data-view="domains" style="background: linear-gradient(135deg, #00d4ff 0%, #7b61ff 100%); color: white;">
+                    <i class="fas fa-layer-group"></i> Domains
+                </button>
+                <button class="viz-btn" data-view="all" style="background: #2196F3; color: white;">
+                    <i class="fas fa-sitemap"></i> Full Map
+                </button>
+                <button class="viz-btn" id="resetKnowledgeBtn" style="background: linear-gradient(135deg, #7b61ff 0%, #00d4ff 100%); color: white; margin-left: 10px;">
+                    <i class="fas fa-redo-alt"></i> Reset View
+                </button>
+            </div>
+            
+            <div id="knowledgeMapMain"></div>
+            <div class="viz-tooltip"></div>
+        </div>
     </section>
 
     <!-- Quick Stats Section -->
@@ -699,5 +726,328 @@
             }
         }
     </style>
+
+    <script>
+    // Knowledge Map Data Structure
+    const knowledgeData = {
+        domains: [
+            { 
+                id: 'frontend-ui', 
+                name: 'Frontend & UI', 
+                icon: '🎨',
+                color: '#2196F3',
+                topics: [
+                    { id: 'frontend', name: 'Frontend', url: 'frontend.html', icon: '💻' },
+                    { id: 'ui-ux', name: 'UI/UX', url: 'ui-ux.html', icon: '🎨' },
+                    { id: 'mobile', name: 'Mobile', url: 'mobile.html', icon: '📱' }
+                ]
+            },
+            { 
+                id: 'backend-apis', 
+                name: 'Backend & APIs', 
+                icon: '🔌',
+                color: '#4CAF50',
+                topics: [
+                    { id: 'api-design', name: 'API Design', url: 'api-design.html', icon: '🔌' },
+                    { id: 'microservices', name: 'Microservices', url: 'microservices.html', icon: '⚙️' },
+                    { id: 'messaging', name: 'Messaging', url: 'messaging.html', icon: '📬' }
+                ]
+            },
+            { 
+                id: 'data-storage', 
+                name: 'Data & Storage', 
+                icon: '🗄️',
+                color: '#FF9800',
+                topics: [
+                    { id: 'database', name: 'Database', url: 'database.html', icon: '🗄️' },
+                    { id: 'performance', name: 'Performance', url: 'performance.html', icon: '⚡' }
+                ]
+            },
+            { 
+                id: 'cloud-infra', 
+                name: 'Cloud & Infrastructure', 
+                icon: '☁️',
+                color: '#9C27B0',
+                topics: [
+                    { id: 'cloud', name: 'Cloud', url: 'cloud.html', icon: '☁️' },
+                    { id: 'containers', name: 'Containers', url: 'containers.html', icon: '📦' },
+                    { id: 'devops', name: 'DevOps', url: 'devops.html', icon: '🔄' }
+                ]
+            },
+            { 
+                id: 'craft-quality', 
+                name: 'Software Craft & Quality', 
+                icon: '🎯',
+                color: '#F44336',
+                topics: [
+                    { id: 'engineering', name: 'Engineering', url: 'engineering.html', icon: '⚙️' },
+                    { id: 'ddd', name: 'DDD', url: 'ddd.html', icon: '🏗️' },
+                    { id: 'security', name: 'Security', url: 'security.html', icon: '🔒' },
+                    { id: 'testing', name: 'Testing', url: 'testing.html', icon: '✅' }
+                ]
+            }
+        ]
+    };
+
+    // Setup SVG
+    const container = document.getElementById('knowledgeMapMain');
+    const width = container.offsetWidth || 1200;
+    const height = 600;
+
+    const svg = d3.select('#knowledgeMapMain')
+        .append('svg')
+        .attr('width', width)
+        .attr('height', height)
+        .style('background', 'rgba(10, 14, 39, 0.3)')
+        .style('border-radius', '8px');
+
+    const g = svg.append('g');
+
+    // Zoom
+    const zoom = d3.zoom()
+        .scaleExtent([0.5, 2])
+        .on('zoom', (event) => { g.attr('transform', event.transform); });
+    svg.call(zoom);
+
+    const tooltip = d3.select('.viz-tooltip');
+
+    let currentView = 'domains';
+    let expandedDomains = new Set();
+    let nodes = [];
+    let links = [];
+    let simulation;
+
+    // Initialize with domains view
+    function initDomains() {
+        nodes = knowledgeData.domains.map((d, i) => ({
+            ...d,
+            type: 'domain',
+            x: width / 2 + (i - 2) * 150,
+            y: height / 2,
+            radius: 45
+        }));
+        links = [];
+        expandedDomains.clear();
+        updateVisualization();
+    }
+
+    function expandDomain(domain) {
+        if (expandedDomains.has(domain.id)) {
+            // Collapse
+            expandedDomains.delete(domain.id);
+            nodes = nodes.filter(n => !(n.domainId === domain.id && n.type === 'topic'));
+            links = links.filter(l => l.source.id !== domain.id);
+        } else {
+            // Expand
+            expandedDomains.add(domain.id);
+            const domainNode = nodes.find(n => n.id === domain.id);
+            
+            domain.topics.forEach((topic, i) => {
+                const angle = (i / domain.topics.length) * 2 * Math.PI;
+                const distance = 120;
+                nodes.push({
+                    ...topic,
+                    type: 'topic',
+                    domainId: domain.id,
+                    color: domain.color,
+                    x: domainNode.x + Math.cos(angle) * distance,
+                    y: domainNode.y + Math.sin(angle) * distance,
+                    radius: 30
+                });
+                links.push({
+                    source: domain.id,
+                    target: topic.id
+                });
+            });
+        }
+        updateVisualization();
+    }
+
+    function showAllNodes() {
+        nodes = [];
+        links = [];
+        expandedDomains.clear();
+
+        // Add all domains
+        knowledgeData.domains.forEach((d, i) => {
+            nodes.push({
+                ...d,
+                type: 'domain',
+                radius: 40
+            });
+        });
+
+        // Add all topics
+        knowledgeData.domains.forEach(domain => {
+            domain.topics.forEach(topic => {
+                nodes.push({
+                    ...topic,
+                    type: 'topic',
+                    domainId: domain.id,
+                    color: domain.color,
+                    radius: 28
+                });
+                links.push({
+                    source: domain.id,
+                    target: topic.id
+                });
+            });
+        });
+
+        updateVisualization();
+    }
+
+    function updateVisualization() {
+        // Update simulation
+        if (simulation) simulation.stop();
+
+        simulation = d3.forceSimulation(nodes)
+            .force('link', d3.forceLink(links).id(d => d.id).distance(100))
+            .force('charge', d3.forceManyBody().strength(-300))
+            .force('center', d3.forceCenter(width / 2, height / 2))
+            .force('collision', d3.forceCollide().radius(d => d.radius + 10));
+
+        // Update links
+        const link = g.selectAll('.link')
+            .data(links, d => `${d.source.id || d.source}-${d.target.id || d.target}`);
+
+        link.exit().remove();
+
+        link.enter()
+            .append('line')
+            .attr('class', 'link')
+            .style('stroke', '#999')
+            .style('stroke-opacity', 0.3)
+            .style('stroke-width', 2);
+
+        // Update nodes
+        const node = g.selectAll('.node')
+            .data(nodes, d => d.id);
+
+        node.exit().remove();
+
+        const nodeEnter = node.enter()
+            .append('g')
+            .attr('class', 'node')
+            .call(d3.drag()
+                .on('start', dragstarted)
+                .on('drag', dragged)
+                .on('end', dragended));
+
+        nodeEnter.append('circle')
+            .attr('r', d => d.radius)
+            .attr('fill', d => d.color || '#2196F3')
+            .style('stroke', '#fff')
+            .style('stroke-width', 3)
+            .style('cursor', 'pointer');
+
+        nodeEnter.append('text')
+            .attr('dy', d => d.radius + 18)
+            .attr('text-anchor', 'middle')
+            .style('font-size', '12px')
+            .style('font-weight', '600')
+            .style('fill', '#ffffff')
+            .style('pointer-events', 'none')
+            .text(d => d.icon + ' ' + d.name);
+
+        // Event handlers
+        g.selectAll('.node')
+            .on('click', function(event, d) {
+                event.stopPropagation();
+                if (d.type === 'domain') {
+                    expandDomain(d);
+                }
+            })
+            .on('dblclick', function(event, d) {
+                event.stopPropagation();
+                if (d.type === 'topic' && d.url) {
+                    window.location.href = d.url;
+                }
+            })
+            .on('mouseover', function(event, d) {
+                d3.select(this).select('circle')
+                    .transition().duration(200)
+                    .attr('r', d.radius + 5);
+
+                let tooltipContent = `<h3>${d.icon} ${d.name}</h3>`;
+                if (d.type === 'domain') {
+                    tooltipContent += `<p>Click to ${expandedDomains.has(d.id) ? 'collapse' : 'expand'}</p>`;
+                    tooltipContent += `<p><span class="badge" style="background: ${d.color};">${d.topics.length} topics</span></p>`;
+                } else {
+                    tooltipContent += `<p>Double-click to view</p>`;
+                }
+
+                tooltip.html(tooltipContent)
+                    .style('left', (event.pageX + 15) + 'px')
+                    .style('top', (event.pageY - 15) + 'px')
+                    .style('opacity', 1);
+            })
+            .on('mouseout', function(event, d) {
+                d3.select(this).select('circle')
+                    .transition().duration(200)
+                    .attr('r', d.radius);
+                tooltip.style('opacity', 0);
+            });
+
+        simulation.on('tick', () => {
+            g.selectAll('.link')
+                .attr('x1', d => d.source.x)
+                .attr('y1', d => d.source.y)
+                .attr('x2', d => d.target.x)
+                .attr('y2', d => d.target.y);
+
+            g.selectAll('.node')
+                .attr('transform', d => `translate(${d.x},${d.y})`);
+        });
+    }
+
+    function dragstarted(event, d) {
+        if (!event.active) simulation.alphaTarget(0.3).restart();
+        d.fx = d.x;
+        d.fy = d.y;
+    }
+
+    function dragged(event, d) {
+        d.fx = event.x;
+        d.fy = event.y;
+    }
+
+    function dragended(event, d) {
+        if (!event.active) simulation.alphaTarget(0);
+        d.fx = null;
+        d.fy = null;
+    }
+
+    // View controls
+    document.querySelectorAll('[data-view]').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const view = this.dataset.view;
+            document.querySelectorAll('[data-view]').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+
+            if (view === 'domains') {
+                currentView = 'domains';
+                initDomains();
+            } else if (view === 'all') {
+                currentView = 'all';
+                showAllNodes();
+            }
+        });
+    });
+
+    // Reset button
+    document.getElementById('resetKnowledgeBtn').addEventListener('click', function() {
+        nodes.forEach(d => {
+            d.fx = null;
+            d.fy = null;
+        });
+
+        svg.transition().duration(750).call(zoom.transform, d3.zoomIdentity);
+        simulation.alpha(1).restart();
+    });
+
+    // Initialize
+    initDomains();
+    </script>
 </body>
 </html>
