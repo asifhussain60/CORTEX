@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { OutputChannelManager } from '../utils/outputChannel';
 import { PythonExecutor } from '../utils/pythonExecutor';
 import { WorkspaceDetector } from '../utils/workspaceDetector';
+import { DashboardProvider } from '../utils/dashboardProvider';
 
 /**
  * Register all CORTEX commands
@@ -402,10 +403,9 @@ Use @cortex in GitHub Copilot Chat for natural language interaction.
         vscode.commands.registerCommand('cortex.showDashboard', async () => {
             outputChannel.log('Executing command: cortex.showDashboard');
             
-            // TODO: Implement webview dashboard in Task 12.1.3
-            vscode.window.showInformationMessage(
-                'CORTEX Dashboard coming soon! Use individual commands or @cortex in Copilot Chat.'
-            );
+            // Initialize and show dashboard
+            const dashboard = DashboardProvider.getInstance(context);
+            dashboard.show();
         })
     );
 
