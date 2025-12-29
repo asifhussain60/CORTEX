@@ -277,7 +277,7 @@ body {
   padding: 0.2rem 0.4rem;
   border-radius: 4px;
   font-family: 'Monaco', 'Courier New', monospace;
-  font-size: 0.9em;
+  font-size: 0.9rem;
 }
 
 .story-content pre {
@@ -434,47 +434,47 @@ button:focus {
   outline-offset: 2px;
 }
 
-/* Character Dialogue Styling */
+/* Character Dialogue Styling - PURPLE & CYAN ONLY */
 .dialogue-asif {
   color: #00d4ff;
   font-weight: 500;
-  text-shadow: 0 0 20px #00d4ff40;
-  font-size: 0.9em;
+  text-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+  font-size: 1.0rem !important;
 }
 
 .dialogue-miss-g {
-  color: #ba55d3;
+  color: #9d4edd;
   font-weight: 500;
-  text-shadow: 0 0 20px #ba55d340;
-  font-size: 0.9em;
+  text-shadow: 0 0 20px rgba(157, 78, 221, 0.4);
+  font-size: 1.0rem !important;
 }
 
 .dialogue-copilot {
-  color: #7b61ff;
+  color: #9d4edd;
   font-weight: 500;
-  text-shadow: 0 0 20px #7b61ff40;
-  font-size: 0.9em;
+  text-shadow: 0 0 20px rgba(157, 78, 221, 0.4);
+  font-size: 1.0rem !important;
 }
 
 .dialogue-cortex {
-  color: #ff6b6b;
+  color: #9d4edd;
   font-weight: 500;
-  text-shadow: 0 0 20px #ff6b6b40;
-  font-size: 0.9em;
+  text-shadow: 0 0 20px rgba(157, 78, 221, 0.4);
+  font-size: 1.0rem !important;
 }
 
 .dialogue-client {
-  color: #ffb347;
+  color: #9d4edd;
   font-weight: 500;
-  text-shadow: 0 0 20px #ffb34740;
-  font-size: 0.9em;
+  text-shadow: 0 0 20px rgba(157, 78, 221, 0.4);
+  font-size: 1.0rem !important;
 }
 
 .dialogue-default {
   color: #00d4ff;
   font-weight: 500;
-  text-shadow: 0 0 20px #00d4ff40;
-  font-size: 0.9em;
+  text-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+  font-size: 1.0rem !important;
 }
 
 /* JavaScript-generated elements */
@@ -483,7 +483,7 @@ button:focus {
   padding: 0.2rem 0.4rem;
   border-radius: 4px;
   font-family: var(--font-mono);
-  font-size: 0.9em;
+  font-size: 0.9rem;
 }
 
 .story-hr {

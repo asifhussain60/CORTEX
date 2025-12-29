@@ -3,56 +3,56 @@
    Dedicated CSS for dialogue coloring and inline styles
    ================================================ */
 
-/* Character Dialogue Colors - TWO COLOR SYSTEM */
+/* Character Dialogue Colors - TWO COLOR SYSTEM: PURPLE & CYAN ONLY */
 :root {
   --asif-color: #00d4ff;          /* Cyan - Asif Codenstein (protagonist, narrator) */
-  --miss-g-color: #ba55d3;        /* Medium Orchid - Miss G (imaginary girlfriend) */
-  --copilot-color: #7b61ff;       /* Purple - Copilot */
-  --cortex-color: #ff6b6b;        /* Coral Red - CORTEX system */
-  --client-color: #ffb347;        /* Orange - clients */
+  --miss-g-color: #9d4edd;        /* Purple - Miss G (imaginary girlfriend) */
+  --copilot-color: #9d4edd;       /* Purple - Copilot */
+  --cortex-color: #9d4edd;        /* Purple - CORTEX system */
+  --client-color: #9d4edd;        /* Purple - clients */
   --default-color: #00d4ff;       /* Default to Asif's color for consistency */
 }
 
-/* Dialogue Span Classes - For JS-generated content */
+/* Dialogue Span Classes - For JS-generated content - PURPLE & CYAN ONLY */
 .dialogue-asif {
   color: var(--asif-color) !important;
   font-weight: 500;
-  text-shadow: 0 0 20px rgba(0, 212, 255, 0.25);
-  font-size: 1.2em;
+  text-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+  font-size: 1.55rem !important;
 }
 
 .dialogue-miss-g {
   color: var(--miss-g-color) !important;
   font-weight: 500;
-  text-shadow: 0 0 20px rgba(186, 85, 211, 0.25);
-  font-size: 1.2em;
+  text-shadow: 0 0 20px rgba(157, 78, 221, 0.4);
+  font-size: 1.55rem !important;
 }
 
 .dialogue-copilot {
   color: var(--copilot-color) !important;
   font-weight: 500;
-  text-shadow: 0 0 20px rgba(123, 97, 255, 0.25);
-  font-size: 1.2em;
+  text-shadow: 0 0 20px rgba(157, 78, 221, 0.4);
+  font-size: 1.55rem !important;
 }
 
 .dialogue-cortex {
   color: var(--cortex-color) !important;
   font-weight: 500;
-  text-shadow: 0 0 20px rgba(255, 107, 107, 0.25);
-  font-size: 1.2em;
+  text-shadow: 0 0 20px rgba(157, 78, 221, 0.4);
+  font-size: 1.55rem !important;
 }
 
 .dialogue-client {
   color: var(--client-color) !important;
   font-weight: 500;
-  text-shadow: 0 0 20px rgba(255, 179, 71, 0.25);
-  font-size: 1.2em;
+  text-shadow: 0 0 20px rgba(157, 78, 221, 0.4);
+  font-size: 1.55rem !important;
 }
 
 .dialogue-default {
   color: var(--default-color) !important;
   font-weight: 500;
-  font-size: 1.2em;
+  font-size: 1.55rem !important;
 }
 
 /* Image Positioning Classes - Replace inline styles */
@@ -94,6 +94,14 @@
 
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
+  .dialogue-asif,
+  .dialogue-miss-g,
+  .dialogue-copilot,
+  .dialogue-cortex,
+  .dialogue-client {
+    font-size: 1.55rem !important;
+  }
+  
   .story-image-right,
   .story-image-left {
     float: none;
