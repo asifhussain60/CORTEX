@@ -68,6 +68,7 @@ tier0_instincts:
 - API_DOCUMENTATION_REQUIRED
 - OPERATIONAL_READINESS_ENFORCEMENT
 - DEBUG_MARKER_REMOVAL_ENFORCEMENT
+- KNOWLEDGE_LIBRARY_SYNC_ENFORCEMENT
 application_paths:
 - SPA/
 - KSESSIONS/
@@ -2276,3 +2277,7 @@ validation:
   params:
     has_placeholders: true
     has_options: true
+
+# Rule added: KNOWLEDGE_LIBRARY_SYNC_ENFORCEMENT
+# This rule enforces synchronization between markdown templates and YAML knowledge files
+# during maintenance Phase 5c

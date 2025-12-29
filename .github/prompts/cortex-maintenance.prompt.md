@@ -151,7 +151,40 @@ Verify these systems wire to knowledge library:
 | **TDD Orchestrator** | Guides test design | Check test pattern references |
 | **Documentation Generator** | Auto-generates docs from guidelines | Check template references |
 
-### 5c. Knowledge File Schema Validation
+### 5c. Knowledge Library Sync Validation (NEW)
+
+**Critical:** Ensure markdown templates stay in sync with YAML knowledge library.
+
+```bash
+# Run knowledge library sync check
+python3 scripts/sync_knowledge_library.py --check-status
+
+# Generate sync report
+python3 scripts/sync_knowledge_library.py --report > cortex-brain/health-reports/knowledge-sync-report.md
+```
+
+**Expected Output:**
+```
+📊 Knowledge Library Sync Status
+
+✅ glassmorphism-design-standards: none (in sync)
+⚠️  [other-file]: sync_md_to_yaml (markdown changed)
+```
+
+**If out of sync detected:**
+```bash
+# Dry run to preview changes
+python3 scripts/sync_knowledge_library.py --sync-all --dry-run
+
+# Perform sync (updates hashes, flags manual review)
+python3 scripts/sync_knowledge_library.py --sync-all
+```
+
+**Sync Registry Files:**
+- `glassmorphism-design-standards.yaml` ↔ `glassmorphism-design-standards-v2.md`
+- Future template ↔ YAML pairs automatically detected via `metadata.sync` section
+
+### 5d. Knowledge File Schema Validation
 
 Each knowledge YAML must have:
 
@@ -163,6 +196,14 @@ metadata:
   created: "YYYY-MM-DD"
   updated: "YYYY-MM-DD"
   tags: [tag1, tag2, ...]
+  
+  # Sync configuration (if synced with markdown template)
+  sync:
+    source_markdown: "cortex-brain/documents/templates/filename.md"
+    sync_enabled: true
+    sync_direction: "bidirectional"
+    last_sync: "2025-12-29T00:00:00Z"
+  
   generated_docs:
     - path: "docs/guidelines/{category}/{filename}.md"
 
