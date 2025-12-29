@@ -557,26 +557,280 @@ class ShapeFactory:
 | Technology Landscape | Hierarchical graph | Mermaid graph TB |
 | Circuit Breaker States | State diagram | Mermaid stateDiagram-v2 |
 
-**Example: Mermaid Diagram Integration**
+---
+
+#### 📐 Diagram Layout & Orientation Rules
+
+**Critical Design Decision:** Choose diagram orientation based on **node count and content complexity**, NOT visual preference.
+
+| Node Count | Primary Layout | Secondary Layout | Rationale |
+|------------|---------------|------------------|-----------|
+| **≤ 6 nodes** | `graph TB` (top-bottom) | `graph LR` (left-right) | Compact, fits screen width |
+| **7-12 nodes** | `graph LR` (left-right) | `graph TD` (top-down) | Better readability, prevents cramping |
+| **13+ nodes** | Hierarchical D3.js | `graph LR` with subgraphs | Mermaid struggles at scale |
+
+**Visual Clarity Assessment:**
+
+✅ **Use Vertical (LR) When:**
+- Node labels are longer than 20 characters
+- 3+ levels of hierarchy present
+- Diagram width would exceed 800px horizontally
+- Mobile responsiveness is critical
+- Multiple branches from single node (e.g., API Design with 3 main branches)
+
+❌ **Avoid Horizontal (TB) When:**
+- Complex labels get truncated
+- Nodes overlap or compress visually
+- Touch targets become too small on mobile (< 44px)
+
+**Layout Syntax:**
+```
+graph LR    → Left-to-Right (vertical flow)
+graph TB    → Top-to-Bottom (horizontal spread)
+graph TD    → Top-Down (same as TB)
+graph RL    → Right-to-Left (rare, RTL languages)
+```
+
+---
+
+#### 🎨 Enhanced Diagram Styling Standards
+
+**Container Styling (MANDATORY):**
 ```html
-<div class="diagram-container">
-    <h4>Request/Response Flow</h4>
+<!-- Enhanced container with dark backdrop for visual emphasis -->
+<div style="background: rgba(0, 0, 0, 0.3); padding: 2rem; border-radius: 12px; margin: 1.5rem 0; overflow-x: auto; text-align: center;">
     <div class="mermaid">
-    sequenceDiagram
-        participant Client
-        participant API
-        participant Database
-        
-        Client->>API: HTTP Request
-        API->>Database: Query
-        Database-->>API: Results
-        API-->>Client: JSON Response
+        <!-- Diagram code here -->
     </div>
-    <p class="diagram-caption">
-        <i class="fas fa-info-circle"></i> Standard REST API flow with database interaction
+</div>
+```
+
+**Rationale:**
+- `rgba(0, 0, 0, 0.3)` → Dark backdrop separates diagram from page background
+- `padding: 2rem` → Breathing room around diagram (minimum 32px)
+- `border-radius: 12px` → Matches glassmorphism radius standards
+- `overflow-x: auto` → Enables horizontal scroll on mobile if needed
+- `margin: 1.5rem 0` → Vertical spacing from surrounding content
+- **`text-align: center`** → **CRITICAL: Centers Mermaid diagram within container (not left-justified)**
+
+**Diagram Alignment Rules:**
+- ✅ **ALWAYS center diagrams** using `text-align: center` on container
+- ✅ Mermaid SVGs render inline and respect text-align property
+- ❌ **NEVER left-justify diagrams** (creates visual imbalance)
+- ✅ Centered diagrams improve visual hierarchy and scannability
+
+**Node Styling (Color + Stroke):**
+```
+style NodeID fill:#7b61ff,stroke:#9f87ff,stroke-width:3px,color:#fff
+```
+
+**Color Palette by Purpose:**
+
+| Purpose | Fill Color | Stroke Color | Text Color | Use Case |
+|---------|-----------|--------------|------------|----------|
+| **Primary/Root** | `#7b61ff` | `#9f87ff` | `#fff` | Main entry point |
+| **Category 1** | `#10b981` (green) | `#34d399` | `#fff` | Success, REST, GET |
+| **Category 2** | `#3b82f6` (blue) | `#60a5fa` | `#fff` | Info, GraphQL, POST |
+| **Category 3** | `#f59e0b` (orange) | `#fbbf24` | `#fff` | Warning, versioning |
+| **Danger/Critical** | `#ef4444` (red) | `#f87171` | `#fff` | Errors, deletion |
+| **Subcategory Dark** | `#064e3b` (dark green) | N/A | `#fff` | Child nodes for green category |
+| **Subcategory Dark** | `#1e3a8a` (dark blue) | N/A | `#fff` | Child nodes for blue category |
+| **Subcategory Dark** | `#78350f` (dark orange) | N/A | `#fff` | Child nodes for orange category |
+
+**Stroke Width Guidelines:**
+- **Primary nodes:** `stroke-width: 3px` (emphasize hierarchy)
+- **Secondary nodes:** `stroke-width: 2px` (clear but not dominant)
+- **Leaf nodes:** No stroke override (use default)
+
+---
+
+#### 🔤 Node Label Best Practices
+
+**Multi-Line Labels (Vertical Orientation):**
+```
+A["🎯 API Design<br/>Core Architecture"]
+B["🔷 REST APIs<br/>Resource-Based"]
+C["💎 GraphQL APIs<br/>Query Language"]
+```
+
+**Structure:**
+1. **Icon** → Visual identifier (emoji or unicode)
+2. **Primary Label** → Core concept (bold in mental model)
+3. **Line Break** (`<br/>`) → Separator
+4. **Subtitle/Context** → Additional detail (lighter weight)
+
+**Character Limits:**
+- **Primary label:** 2-4 words (max 30 characters)
+- **Subtitle:** 1-3 words (max 25 characters)
+- **Total node height:** Max 3 lines (prevents vertical expansion)
+
+**Small Text Annotations:**
+```html
+A["📢 Phase 1<br/>Announce Deprecation<br/><small>Public notification</small>"]
+```
+
+Use `<small>` tag for tertiary details (timestamps, counts, hints).
+
+---
+
+#### 🔗 D3.js vs Mermaid Decision Matrix
+
+| Criteria | Use Mermaid | Use D3.js |
+|----------|-------------|-----------|
+| **Node count** | ≤ 12 nodes | 13+ nodes |
+| **Interactivity** | Static view | Zoom, pan, click events |
+| **Complexity** | Linear/tree hierarchies | Complex networks, force layouts |
+| **Dev effort** | Low (declarative syntax) | High (custom JavaScript) |
+| **Performance** | Fast render | Optimized for large graphs |
+| **Accessibility** | SVG with text fallback | Requires ARIA implementation |
+| **Mobile support** | Excellent (responsive SVG) | Requires touch event handling |
+
+**When to Choose D3.js:**
+1. **Interactive dashboards** (Orchestrator Index - force-directed layout)
+2. **Drill-down navigation** (Click nodes to expand details)
+3. **Real-time data visualization** (Animated updates)
+4. **Complex relationships** (Many-to-many, cyclical dependencies)
+
+**When to Choose Mermaid:**
+1. **Documentation** (Knowledge library, concept explanations)
+2. **Static architecture diagrams** (System overviews)
+3. **Simple flows** (Process steps, state machines)
+4. **Rapid prototyping** (Fast iteration without custom code)
+
+**Best of Both Worlds:**
+- Use **Mermaid** for initial design/documentation
+- Upgrade to **D3.js** when interactivity adds significant value
+- Maintain both versions if users need static exports (PDF/print)
+
+---
+
+#### 📱 Mobile Responsiveness for Diagrams
+
+**Container Responsive Wrapper:**
+```html
+<div class="diagram-responsive-wrapper">
+    <div style="background: rgba(0, 0, 0, 0.3); padding: 2rem; border-radius: 12px; margin: 1.5rem 0; overflow-x: auto;">
+        <div class="mermaid">
+            <!-- Diagram -->
+        </div>
+    </div>
+    <p class="diagram-mobile-hint" style="font-size: 0.875rem; color: var(--text-muted); text-align: center; margin-top: 0.5rem;">
+        <i class="fas fa-hand-pointer"></i> Swipe horizontally to view full diagram on mobile
     </p>
 </div>
 ```
+
+**CSS Enhancements:**
+```css
+@media (max-width: 768px) {
+    .mermaid svg {
+        max-width: 200%; /* Allow diagram to be wider than viewport */
+        height: auto;
+    }
+    
+    .diagram-mobile-hint {
+        display: block;
+    }
+}
+
+@media (min-width: 769px) {
+    .diagram-mobile-hint {
+        display: none; /* Hide hint on desktop */
+    }
+}
+```
+
+---
+
+#### ✅ Diagram Implementation Checklist
+
+Before committing any diagram to production, verify:
+
+- [ ] **Orientation**: Chosen based on node count matrix (≤6 TB, 7-12 LR, 13+ D3.js)
+- [ ] **Container**: Dark backdrop with padding (`rgba(0, 0, 0, 0.3)`, `2rem`)
+- [ ] **Alignment**: Diagram centered with `text-align: center` on container
+- [ ] **Styling**: Primary nodes have stroke emphasis (`stroke-width: 3px`)
+- [ ] **Labels**: Multi-line with icons, max 3 lines per node
+- [ ] **Colors**: Follow purpose-based palette (primary purple, categories RGB)
+- [ ] **Mobile**: Horizontal scroll enabled (`overflow-x: auto`)
+- [ ] **Spacing**: 1.5rem vertical margin from surrounding content
+- [ ] **Accessibility**: SVG rendered (Mermaid default) or ARIA labels (D3.js)
+
+---
+
+**Example: Complete Enhanced Diagram**
+```html
+<h3>API Design Landscape</h3>
+<div style="background: rgba(0, 0, 0, 0.3); padding: 2rem; border-radius: 12px; margin: 1.5rem 0; overflow-x: auto; text-align: center;">
+    <div class="mermaid">
+graph LR
+    A["🎯 API Design<br/>Core Architecture"]
+    
+    A --> B["🔷 REST APIs<br/>Resource-Based"]
+    A --> C["💎 GraphQL APIs<br/>Query Language"]
+    A --> D["🔄 API Versioning<br/>Evolution Strategy"]
+    
+    B --> B1["📦 Resource Naming"]
+    B --> B2["⚡ HTTP Methods"]
+    B --> B3["✅ Status Codes"]
+    B --> B4["📄 Pagination"]
+    
+    C --> C1["📐 Schema Design"]
+    C --> C2["🔍 Query Patterns"]
+    C --> C3["✏️ Mutation Patterns"]
+    C --> C4["🔄 DataLoader"]
+    
+    D --> D1["🔗 URI Versioning"]
+    D --> D2["📝 Header Versioning"]
+    D --> D3["⚠️ Deprecation"]
+    D --> D4["🚀 Migration"]
+    
+    style A fill:#7b61ff,stroke:#9f87ff,stroke-width:3px,color:#fff
+    style B fill:#10b981,stroke:#34d399,stroke-width:2px,color:#fff
+    style C fill:#3b82f6,stroke:#60a5fa,stroke-width:2px,color:#fff
+    style D fill:#f59e0b,stroke:#fbbf24,stroke-width:2px,color:#fff
+    
+    style B1 fill:#064e3b,color:#fff
+    style B2 fill:#064e3b,color:#fff
+    style B3 fill:#064e3b,color:#fff
+    style B4 fill:#064e3b,color:#fff
+    
+    style C1 fill:#1e3a8a,color:#fff
+    style C2 fill:#1e3a8a,color:#fff
+    style C3 fill:#1e3a8a,color:#fff
+    style C4 fill:#1e3a8a,color:#fff
+    
+    style D1 fill:#78350f,color:#fff
+    style D2 fill:#78350f,color:#fff
+    style D3 fill:#78350f,color:#fff
+    style D4 fill:#78350f,color:#fff
+    </div>
+</div>
+```
+
+**Visual Result:**
+- ✅ Vertical layout prevents horizontal cramping
+- ✅ Dark backdrop emphasizes diagram against page background
+- ✅ **Diagram centered within container (not left-justified)**
+- ✅ Enhanced stroke widths create visual hierarchy
+- ✅ Multi-line labels with icons improve scannability
+- ✅ Color-coded categories with dark child nodes
+- ✅ Mobile-friendly with horizontal scroll support
+
+---
+
+**Legacy Mermaid Container (DEPRECATED):**
+```html
+<!-- ❌ OLD: No container styling, poor mobile support -->
+<div class="mermaid">
+graph TB
+    A[API Design]
+    A --> B[REST APIs]
+    <!-- ... -->
+</div>
+```
+
+Replace all instances with enhanced container pattern shown above.
 
 ### Text Formatting Standards
 

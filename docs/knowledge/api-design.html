@@ -51,32 +51,50 @@
                     </div>
 
                     <h3>API Design Landscape</h3>
-                    <div class="mermaid">
-graph TB
-    A[API Design]
-    A --> B[REST APIs]
-    A --> C[GraphQL APIs]
-    A --> D[API Versioning]
+                    <div style="background: rgba(0, 0, 0, 0.3); padding: 2rem; border-radius: 12px; margin: 1.5rem 0; overflow-x: auto;">
+                        <div class="mermaid">
+graph LR
+    A["🎯 API Design<br/>Core Architecture"]
     
-    B --> B1[Resource Naming]
-    B --> B2[HTTP Methods]
-    B --> B3[Status Codes]
-    B --> B4[Pagination]
+    A --> B["🔷 REST APIs<br/>Resource-Based"]
+    A --> C["💎 GraphQL APIs<br/>Query Language"]
+    A --> D["🔄 API Versioning<br/>Evolution Strategy"]
     
-    C --> C1[Schema Design]
-    C --> C2[Query Patterns]
-    C --> C3[Mutation Patterns]
-    C --> C4[DataLoader]
+    B --> B1["📦 Resource Naming"]
+    B --> B2["⚡ HTTP Methods"]
+    B --> B3["✅ Status Codes"]
+    B --> B4["📄 Pagination"]
     
-    D --> D1[URI Versioning]
-    D --> D2[Header Versioning]
-    D --> D3[Deprecation]
-    D --> D4[Migration]
+    C --> C1["📐 Schema Design"]
+    C --> C2["🔍 Query Patterns"]
+    C --> C3["✏️ Mutation Patterns"]
+    C --> C4["🔄 DataLoader"]
     
-    style A fill:#7b61ff,color:#fff
-    style B fill:#10b981,color:#fff
-    style C fill:#3b82f6,color:#fff
-    style D fill:#f59e0b,color:#fff
+    D --> D1["🔗 URI Versioning"]
+    D --> D2["📝 Header Versioning"]
+    D --> D3["⚠️ Deprecation"]
+    D --> D4["🚀 Migration"]
+    
+    style A fill:#7b61ff,stroke:#9f87ff,stroke-width:3px,color:#fff
+    style B fill:#10b981,stroke:#34d399,stroke-width:2px,color:#fff
+    style C fill:#3b82f6,stroke:#60a5fa,stroke-width:2px,color:#fff
+    style D fill:#f59e0b,stroke:#fbbf24,stroke-width:2px,color:#fff
+    
+    style B1 fill:#064e3b,color:#fff
+    style B2 fill:#064e3b,color:#fff
+    style B3 fill:#064e3b,color:#fff
+    style B4 fill:#064e3b,color:#fff
+    
+    style C1 fill:#1e3a8a,color:#fff
+    style C2 fill:#1e3a8a,color:#fff
+    style C3 fill:#1e3a8a,color:#fff
+    style C4 fill:#1e3a8a,color:#fff
+    
+    style D1 fill:#78350f,color:#fff
+    style D2 fill:#78350f,color:#fff
+    style D3 fill:#78350f,color:#fff
+    style D4 fill:#78350f,color:#fff
+                        </div>
                     </div>
                 </div>
             </div>
@@ -397,21 +415,23 @@ graph TB
                     </table>
 
                     <h3>Deprecation Workflow</h3>
-                    <div class="mermaid">
+                    <div style="background: rgba(0, 0, 0, 0.3); padding: 2rem; border-radius: 12px; margin: 1.5rem 0;">
+                        <div class="mermaid">
 graph LR
-    A[Announce Deprecation]
-    B[Grace Period<br/>6-12 months]
-    C[Sunset Warning<br/>3 months]
-    D[Removal]
+    A["📢 Phase 1<br/>Announce Deprecation<br/><small>Public notification</small>"]
+    B["⏳ Phase 2<br/>Grace Period<br/><small>6-12 months support</small>"]
+    C["⚠️ Phase 3<br/>Sunset Warning<br/><small>Final 3 months</small>"]
+    D["🔚 Phase 4<br/>Removal<br/><small>Complete shutdown</small>"]
     
-    A --> B
-    B --> C
-    C --> D
+    A -->|"Start timeline"| B
+    B -->|"Monitor usage"| C
+    C -->|"Final migration"| D
     
-    style A fill:#3b82f6,color:#fff
-    style B fill:#10b981,color:#fff
-    style C fill:#f59e0b,color:#fff
-    style D fill:#ef4444,color:#fff
+    style A fill:#3b82f6,stroke:#60a5fa,stroke-width:3px,color:#fff
+    style B fill:#10b981,stroke:#34d399,stroke-width:3px,color:#fff
+    style C fill:#f59e0b,stroke:#fbbf24,stroke-width:3px,color:#fff
+    style D fill:#ef4444,stroke:#f87171,stroke-width:3px,color:#fff
+                        </div>
                     </div>
 
                     <div class="info-box info-box-warning">
