@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX LENS - AST-Powered Code Analysis and Reverse Engineering">
+    <meta name="keywords" content="CORTEX, AST analysis, reverse engineering, code intelligence, dependency graphs">
+    <meta name="author" content="Asif Hussain">
+    <title>CORTEX LENS - AST Analysis & Reverse Engineering</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        /* AST Visualization Container */
+        #ast-visualization {
+            width: 100%;
+            min-height: 600px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Node styling for D3.js graph */
+        .ast-node {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .ast-node circle {
+            stroke-width: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .ast-node:hover circle {
+            stroke-width: 4px;
+            filter: drop-shadow(0 0 10px currentColor);
+        }
+
+        .ast-node text {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 12px;
+            font-weight: 500;
+            pointer-events: none;
+            text-shadow: 0 0 3px rgba(0, 0, 0, 0.8);
+        }
+
+        .ast-link {
+            stroke: rgba(0, 212, 255, 0.4);
+            stroke-width: 2px;
+            fill: none;
+            transition: all 0.3s ease;
+        }
+
+        .ast-link.dependency {
+            stroke: rgba(123, 97, 255, 0.4);
+            stroke-dasharray: 5, 5;
+        }
+
+        .ast-link.call {
+            stroke: rgba(16, 185, 129, 0.4);
+        }
+
+        /* Legend styling */
+        .legend {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 1rem;
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            z-index: 10;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0.5rem 0;
+            font-size: 0.875rem;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            border: 2px solid currentColor;
+        }
+
+        /* Info panels */
+        .info-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .info-panel h3 {
+            color: var(--accent-primary);
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .info-panel h3 i {
+            font-size: 1.5rem;
+        }
+
+        /* Feature grid */
+        .lens-feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .lens-feature-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .lens-feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 32px rgba(0, 212, 255, 0.2);
+            border-color: var(--accent-primary);
+        }
+
+        .lens-feature-card h4 {
+            color: var(--accent-primary);
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .lens-feature-card i {
+            color: var(--accent-secondary);
+        }
+
+        /* Dashboard iframe styling */
+        .dashboard-embed-container {
+            position: relative;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 1rem;
+            border-radius: 12px;
+            border: 2px solid var(--glass-border);
+            box-shadow: 0 8px 32px rgba(0, 212, 255, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-embed-container:hover {
+            border-color: var(--accent-primary);
+            box-shadow: 0 12px 48px rgba(0, 212, 255, 0.25);
+        }
+
+        .dashboard-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding: 0.75rem 1rem;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-primary);
+        }
+
+        .dashboard-title {
+            color: var(--accent-primary);
+            font-weight: 600;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .dashboard-open-btn {
+            color: var(--accent-primary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 212, 255, 0.2);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .dashboard-open-btn:hover {
+            background: var(--accent-primary);
+            color: #000;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 212, 255, 0.4);
+        }
+
+        .dashboard-iframe {
+            width: 100%;
+            height: 800px;
+            border: none;
+            border-radius: 8px;
+            background: #000;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .dashboard-tip {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid #10b981;
+        }
+
+        .dashboard-tip p {
+            margin: 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .dashboard-tip strong {
+            color: #10b981;
+        }
+
+        .dashboard-tip i {
+            color: #10b981;
+        }
+
+        /* Tab display boxes */
+        .tab-showcase-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .tab-showcase-item {
+            padding: 1.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .tab-showcase-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .tab-showcase-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .tab-showcase-title {
+            margin: 0.5rem 0;
+            font-weight: 600;
+        }
+
+        .tab-showcase-desc {
+            margin: 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Code block styling */
+        .usage-code-block {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        .usage-code-block code {
+            color: #10b981;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        /* Mobile-friendly iframe handling */
+        .mobile-fallback {
+            display: none;
+            padding: 2rem;
+            text-align: center;
+            background: rgba(123, 97, 255, 0.1);
+            border-radius: 8px;
+            border: 2px dashed var(--accent-primary);
+        }
+
+        .mobile-fallback-icon {
+            font-size: 3rem;
+            color: var(--accent-primary);
+            margin-bottom: 1rem;
+        }
+
+        .mobile-fallback-btn {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 1rem 2rem;
+            background: var(--accent-primary);
+            color: #000;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-fallback-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0, 212, 255, 0.4);
+        }
+
+        /* Demo Tabs Styling */
+        .demo-tab-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .demo-tab-btn:hover {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+            transform: translateY(-2px);
+        }
+
+        .demo-tab-btn.active {
+            background: var(--accent-primary);
+            color: #000;
+            border-color: var(--accent-primary);
+        }
+
+        .demo-tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .demo-tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Metric cards */
+        .metrics-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .metric-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            display: block;
+            margin: 0.5rem 0;
+        }
+
+        .metric-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Controls */
+        .viz-controls {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+            justify-content: center;
+        }
+
+        .viz-btn {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.875rem;
+            font-weight: 600;
+            min-height: 44px;
+        }
+
+        .viz-btn:hover {
+            background: var(--accent-primary);
+            color: #000;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0, 212, 255, 0.4);
+        }
+
+        .viz-btn.active {
+            background: var(--accent-primary);
+            color: #000;
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            #ast-visualization {
+                min-height: 400px;
+            }
+
+            .legend {
+                position: static;
+                margin: 1rem 0;
+            }
+
+            .lens-feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .metrics-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            /* Responsive iframe for tablets */
+            .dashboard-iframe {
+                height: 600px;
+            }
+
+            .dashboard-header {
+                flex-direction: column;
+                gap: 0.5rem;
+                text-align: center;
+            }
+
+            .tab-showcase-grid {
+                grid-template-columns: 1fr;
+            }
+
+            /* Demo tabs responsive */
+            .demo-tabs {
+                flex-direction: column !important;
+                gap: 0.25rem !important;
+            }
+
+            .demo-tab-btn {
+                padding: 0.5rem 1rem !important;
+                font-size: 0.85rem !important;
+            }
+        }
+
+        /* Extra small devices (phones) */
+        @media (max-width: 480px) {
+            /* Hide iframe on very small screens, show fallback */
+            .dashboard-embed-container iframe {
+                display: none;
+            }
+
+            .mobile-fallback {
+                display: block !important;
+            }
+
+            .metrics-container {
+                grid-template-columns: 1fr;
+            }
+
+            .workflow-phases {
+                flex-direction: column;
+            }
+
+            /* Demo tabs even smaller on phones */
+            .demo-tabs-content {
+                padding: 1rem !important;
+                min-height: 400px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html"><i class="fas fa-home"></i> Home</a>
+        <span class="breadcrumb-separator">→</span>
+        <span class="breadcrumb-current">CORTEX LENS</span>
+    </nav>
+
+    <!-- Page Logo -->
+    <div class="logo-header">
+        <a href="../index.html">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
+        </a>
+    </div>
+
+    <main class="container">
+        <!-- Hero Section -->
+        <section class="glass-card" style="padding: 3rem; text-align: center; margin-bottom: 3rem;">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; margin-bottom: 1rem;">
+                <i class="fas fa-search-plus" style="font-size: 3rem; color: var(--accent-primary);"></i>
+                <h1 style="margin: 0; font-size: 2.5rem;">CORTEX LENS</h1>
+            </div>
+            <p style="font-size: 1.25rem; color: var(--text-secondary); max-width: 800px; margin: 0 auto;">
+                Deep code intelligence through AST analysis, dependency mapping, and pattern recognition
+            </p>
+        </section>
+
+        <!-- Overview -->
+        <section class="info-panel">
+            <h3><i class="fas fa-brain"></i> What is CORTEX LENS?</h3>
+            <p style="font-size: 1rem; line-height: 1.7; color: var(--text-secondary);">
+                CORTEX LENS is an advanced code intelligence system that transforms raw source code into actionable insights. 
+                By parsing Abstract Syntax Trees (AST), analyzing dependencies, and identifying architectural patterns, 
+                CORTEX LENS enables deep understanding of codebases at scale.
+            </p>
+            <p style="font-size: 1rem; line-height: 1.7; color: var(--text-secondary); margin-top: 1rem;">
+                Unlike traditional static analysis tools, CORTEX LENS goes beyond surface-level metrics to understand 
+                <strong style="color: var(--accent-primary);">semantic relationships</strong>, 
+                <strong style="color: var(--accent-primary);">architectural intent</strong>, and 
+                <strong style="color: var(--accent-primary);">code evolution patterns</strong>—empowering AI agents 
+                to make intelligent decisions about refactoring, testing, and optimization.
+            </p>
+        </section>
+
+        <!-- Key Capabilities -->
+        <section style="margin: 3rem 0;">
+            <h2 class="section-title"><i class="fas fa-cogs"></i> Core Capabilities</h2>
+            <div class="feature-grid-3">
+                <div class="glass-card feature-card">
+                    <h3><i class="fas fa-project-diagram"></i> AST Parsing</h3>
+                    <p>Deep structural analysis of Python, JavaScript, TypeScript, and more. Extract classes, functions, decorators, and control flow with precision.</p>
+                </div>
+                <div class="glass-card feature-card">
+                    <h3><i class="fas fa-network-wired"></i> Dependency Mapping</h3>
+                    <p>Trace import chains, function calls, and module relationships. Visualize how components interact across your entire codebase.</p>
+                </div>
+                <div class="glass-card feature-card">
+                    <h3><i class="fas fa-search"></i> Pattern Recognition</h3>
+                    <p>Identify design patterns, anti-patterns, and architectural styles. Detect SOLID violations, code smells, and refactoring opportunities.</p>
+                </div>
+                <div class="glass-card feature-card">
+                    <h3><i class="fas fa-code-branch"></i> Change Impact Analysis</h3>
+                    <p>Predict ripple effects of code changes. Understand which tests, modules, and APIs will be affected before you commit.</p>
+                </div>
+                <div class="glass-card feature-card">
+                    <h3><i class="fas fa-sitemap"></i> Architecture Extraction</h3>
+                    <p>Reverse-engineer system architecture from code. Generate C4 diagrams, layer visualizations, and component hierarchies automatically.</p>
+                </div>
+                <div class="glass-card feature-card">
+                    <h3><i class="fas fa-chart-line"></i> Technical Debt Scoring</h3>
+                    <p>Quantify complexity, coupling, and maintainability. Track code health metrics over time and prioritize refactoring efforts.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reverse Engineering Pipeline Diagram -->
+        <section style="margin: 3rem 0;">
+            <h2 class="section-title"><i class="fas fa-cogs"></i> Reverse Engineering Pipeline</h2>
+            <div style="background: rgba(0, 0, 0, 0.3); padding: 2rem; border-radius: 12px; margin: 1.5rem 0; overflow-x: auto; text-align: center;">
+                <div class="mermaid">
+graph LR
+    A["<i class='fas fa-file-code'></i> Source Code<br/>Raw Files"]
+    B["<i class='fas fa-project-diagram'></i> AST Parser<br/>Syntax Trees"]
+    C["<i class='fas fa-search'></i> Semantic Analyzer<br/>Relationships"]
+    D["<i class='fas fa-brain'></i> Knowledge Graph<br/>Tier 2 Brain"]
+    E["<i class='fas fa-lightbulb'></i> Insights<br/>AI Recommendations"]
+    
+    A -->|Parse| B
+    B -->|Extract| C
+    C -->|Index| D
+    D -->|Generate| E
+    
+    style A fill:#7b61ff,stroke:#9f87ff,stroke-width:3px,color:#fff
+    style B fill:#10b981,stroke:#34d399,stroke-width:2px,color:#fff
+    style C fill:#3b82f6,stroke:#60a5fa,stroke-width:2px,color:#fff
+    style D fill:#f59e0b,stroke:#fbbf24,stroke-width:2px,color:#fff
+    style E fill:#ef4444,stroke:#f87171,stroke-width:2px,color:#fff
+                </div>
+            </div>
+            <p style="text-align: center; color: var(--text-secondary); margin-top: 1rem;">
+                CORTEX LENS transforms raw code into structured knowledge through a multi-stage pipeline
+            </p>
+        </section>
+
+        <!-- Interactive AST Visualization -->
+        <section style="margin: 3rem 0;">
+            <h2 class="section-title"><i class="fas fa-project-diagram"></i> Interactive Code Graph</h2>
+            <p style="text-align: center; color: var(--text-secondary); margin-bottom: 1rem;">
+                Explore how CORTEX LENS maps code relationships. Click and drag nodes to explore connections.
+            </p>
+            
+            <div class="viz-controls">
+                <button class="viz-btn active" onclick="showView('full')"><i class="fas fa-project-diagram"></i> Full Graph</button>
+                <button class="viz-btn" onclick="showView('dependencies')"><i class="fas fa-network-wired"></i> Dependencies Only</button>
+                <button class="viz-btn" onclick="showView('calls')"><i class="fas fa-phone"></i> Call Graph</button>
+                <button class="viz-btn" onclick="resetSimulation()"><i class="fas fa-redo"></i> Reset Layout</button>
+            </div>
+
+            <div id="ast-visualization">
+                <div class="legend">
+                    <h4 style="margin-top: 0; font-size: 1rem; color: var(--accent-primary);">Legend</h4>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #7b61ff; border-color: #9f87ff;"></div>
+                        <span>Core Module</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #10b981; border-color: #34d399;"></div>
+                        <span>Agent</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #3b82f6; border-color: #60a5fa;"></div>
+                        <span>Orchestrator</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #f59e0b; border-color: #fbbf24;"></div>
+                        <span>Utility</span>
+                    </div>
+                    <div class="legend-item">
+                        <span style="color: rgba(0, 212, 255, 0.8);">━━</span>
+                        <span>Import</span>
+                    </div>
+                    <div class="legend-item">
+                        <span style="color: rgba(16, 185, 129, 0.8);">━━</span>
+                        <span>Function Call</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Analysis Metrics -->
+        <section style="margin: 3rem 0;">
+            <h2 class="section-title"><i class="fas fa-chart-bar"></i> Example Analysis Metrics</h2>
+            <p style="text-align: center; color: var(--text-secondary); margin-bottom: 1rem;">
+                CORTEX LENS provides quantitative insights into code quality and complexity
+            </p>
+            <div class="metrics-container">
+                <div class="metric-card">
+                    <i class="fas fa-file-code" style="font-size: 2rem; color: var(--accent-primary);"></i>
+                    <span class="metric-value">1,247</span>
+                    <span class="metric-label">Files Analyzed</span>
+                </div>
+                <div class="metric-card">
+                    <i class="fas fa-project-diagram" style="font-size: 2rem; color: var(--accent-secondary);"></i>
+                    <span class="metric-value">8,934</span>
+                    <span class="metric-label">AST Nodes</span>
+                </div>
+                <div class="metric-card">
+                    <i class="fas fa-network-wired" style="font-size: 2rem; color: #10b981;"></i>
+                    <span class="metric-value">2,156</span>
+                    <span class="metric-label">Dependencies</span>
+                </div>
+                <div class="metric-card">
+                    <i class="fas fa-code" style="font-size: 2rem; color: #f59e0b;"></i>
+                    <span class="metric-value">342</span>
+                    <span class="metric-label">Functions</span>
+                </div>
+                <div class="metric-card">
+                    <i class="fas fa-cube" style="font-size: 2rem; color: #ef4444;"></i>
+                    <span class="metric-value">89</span>
+                    <span class="metric-label">Classes</span>
+                </div>
+                <div class="metric-card">
+                    <i class="fas fa-sitemap" style="font-size: 2rem; color: #8b5cf6;"></i>
+                    <span class="metric-value">23</span>
+                    <span class="metric-label">Modules</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works -->
+        <section style="margin: 3rem 0;">
+            <div class="glass-card" style="padding: 2.5rem;">
+                <h2 class="section-title" style="margin-top: 0;"><i class="fas fa-cogs"></i> How CORTEX LENS Works</h2>
+                <p style="text-align: center; color: var(--text-secondary); margin-bottom: 2rem; font-size: 1.1rem;">
+                    CORTEX LENS transforms raw code into structured intelligence through a multi-stage analysis pipeline:
+                </p>
+                
+                <div class="workflow-phases">
+                <div class="phase-card">
+                    <span class="phase-number">1</span>
+                    <span class="phase-icon"><i class="fas fa-file-code"></i></span>
+                    <div class="phase-title">Code Ingestion</div>
+                    <p class="phase-description">Scan workspace and identify supported languages</p>
+                </div>
+                <div class="phase-card">
+                    <span class="phase-number">2</span>
+                    <span class="phase-icon"><i class="fas fa-project-diagram"></i></span>
+                    <div class="phase-title">AST Parsing</div>
+                    <p class="phase-description">Parse files into Abstract Syntax Trees</p>
+                </div>
+                <div class="phase-card">
+                    <span class="phase-number">3</span>
+                    <span class="phase-icon"><i class="fas fa-cube"></i></span>
+                    <div class="phase-title">Node Extraction</div>
+                    <p class="phase-description">Extract classes, functions, and metadata</p>
+                </div>
+                <div class="phase-card">
+                    <span class="phase-number">4</span>
+                    <span class="phase-icon"><i class="fas fa-network-wired"></i></span>
+                    <div class="phase-title">Relationship Mapping</div>
+                    <p class="phase-description">Trace dependencies and inheritance chains</p>
+                </div>
+                <div class="phase-card">
+                    <span class="phase-number">5</span>
+                    <span class="phase-icon"><i class="fas fa-search"></i></span>
+                    <div class="phase-title">Pattern Detection</div>
+                    <p class="phase-description">Identify architectural patterns and anti-patterns</p>
+                </div>
+                <div class="phase-card">
+                    <span class="phase-number">6</span>
+                    <span class="phase-icon"><i class="fas fa-brain"></i></span>
+                    <div class="phase-title">Knowledge Graph Integration</div>
+                    <p class="phase-description">Index results in Tier 2 Brain</p>
+                </div>
+                <div class="phase-card">
+                    <span class="phase-number">7</span>
+                    <span class="phase-icon"><i class="fas fa-lightbulb"></i></span>
+                    <div class="phase-title">AI-Powered Insights</div>
+                    <p class="phase-description">Generate refactoring and optimization suggestions</p>
+                </div>
+            </div>
+            </div>
+        </section>
+
+        <!-- Static Dashboard Generation -->
+        <section style="margin: 3rem 0;">
+            <div class="glass-card" style="padding: 2.5rem;">
+                <h2 class="section-title" style="margin-top: 0;"><i class="fas fa-globe"></i> Static Dashboard Generation</h2>
+                <p style="text-align: center; color: var(--text-secondary); margin-bottom: 2rem; font-size: 1.1rem;">
+                    CORTEX LENS generates fully-functional static HTML dashboards with interactive multi-tab interfaces:
+                </p>
+                
+                <!-- Process Overview -->
+                <div style="background: rgba(0, 0, 0, 0.3); padding: 2rem; border-radius: 12px; margin-bottom: 2rem;">
+                    <h3 style="color: var(--accent-primary); margin-top: 0;"><i class="fas fa-magic"></i> From Repository to Dashboard</h3>
+                    <div class="workflow-phases" style="margin-top: 1.5rem;">
+                        <div class="phase-card" style="flex: 1; min-width: 200px;">
+                            <span class="phase-number">1</span>
+                            <span class="phase-icon"><i class="fas fa-folder-open"></i></span>
+                            <div class="phase-title">Analyze Repository</div>
+                            <p class="phase-description">AST parsing + dependency mapping</p>
+                        </div>
+                        <div class="phase-card" style="flex: 1; min-width: 200px;">
+                            <span class="phase-number">2</span>
+                            <span class="phase-icon"><i class="fas fa-file-code"></i></span>
+                            <div class="phase-title">Select Template</div>
+                            <p class="phase-description">Auto-detect repo type (Console, API, Web)</p>
+                        </div>
+                        <div class="phase-card" style="flex: 1; min-width: 200px;">
+                            <span class="phase-number">3</span>
+                            <span class="phase-icon"><i class="fas fa-chart-bar"></i></span>
+                            <div class="phase-title">Generate Visualizations</div>
+                            <p class="phase-description">D3.js graphs, Chart.js metrics</p>
+                        </div>
+                        <div class="phase-card" style="flex: 1; min-width: 200px;">
+                            <span class="phase-number">4</span>
+                            <span class="phase-icon"><i class="fas fa-globe"></i></span>
+                            <div class="phase-title">Export Static Site</div>
+                            <p class="phase-description">HTML + CSS + JS (no backend required)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard Features -->
+                <div style="margin: 2rem 0;">
+                    <h3 style="color: var(--accent-secondary); margin-bottom: 1rem;"><i class="fas fa-layer-group"></i> Multi-Tab Dashboard Structure</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                        <div style="background: rgba(123, 97, 255, 0.1); padding: 1.5rem; border-radius: 8px; border-left: 4px solid #7b61ff;">
+                            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">📊</div>
+                            <h4 style="margin: 0.5rem 0; color: #7b61ff;">Overview Tab</h4>
+                            <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">KPIs, file counts, LOC, repository metadata</p>
+                        </div>
+                        <div style="background: rgba(16, 185, 129, 0.1); padding: 1.5rem; border-radius: 8px; border-left: 4px solid #10b981;">
+                            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🏗️</div>
+                            <h4 style="margin: 0.5rem 0; color: #10b981;">Architecture Tab</h4>
+                            <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">Interactive D3.js force graphs, module hierarchies</p>
+                        </div>
+                        <div style="background: rgba(59, 130, 246, 0.1); padding: 1.5rem; border-radius: 8px; border-left: 4px solid #3b82f6;">
+                            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">✨</div>
+                            <h4 style="margin: 0.5rem 0; color: #3b82f6;">Code Quality Tab</h4>
+                            <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">Cyclomatic complexity, maintainability scores</p>
+                        </div>
+                        <div style="background: rgba(245, 158, 11, 0.1); padding: 1.5rem; border-radius: 8px; border-left: 4px solid #f59e0b;">
+                            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">📦</div>
+                            <h4 style="margin: 0.5rem 0; color: #f59e0b;">Dependencies Tab</h4>
+                            <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">Import chains, external packages, version tracking</p>
+                        </div>
+                        <div style="background: rgba(239, 68, 68, 0.1); padding: 1.5rem; border-radius: 8px; border-left: 4px solid #ef4444;">
+                            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🧪</div>
+                            <h4 style="margin: 0.5rem 0; color: #ef4444;">Testing Tab</h4>
+                            <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">Test coverage, test files, assertions count</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Demo Section -->
+                <div style="margin: 3rem 0;">
+                    <h3 style="color: var(--accent-primary); text-align: center; margin-bottom: 1.5rem;">
+                        <i class="fas fa-play-circle"></i> Live Demo: CORTEX Repository Analysis
+                    </h3>
+                    <p style="text-align: center; color: var(--text-secondary); margin-bottom: 2rem;">
+                        Explore an interactive dashboard preview. Click tabs to see different analysis views.
+                        <a href="../cortex-lens-output/CORTEX/index.html" target="_blank" 
+                           style="color: var(--accent-primary); text-decoration: none; font-weight: 600;">
+                            Open full dashboard <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    </p>
+                    
+                    <!-- Embedded Dashboard Demo -->
+                    <div class="dashboard-embed-container">
+                        <div class="dashboard-header">
+                            <span class="dashboard-title">
+                                <i class="fas fa-chart-line"></i> Interactive Dashboard Preview
+                            </span>
+                            <a href="../cortex-lens-output/CORTEX/index.html" target="_blank" 
+                               class="dashboard-open-btn">
+                                <i class="fas fa-expand"></i> Open Full Dashboard
+                            </a>
+                        </div>
+                        
+                        <!-- Tab Navigation -->
+                        <nav class="demo-tabs" style="display: flex; gap: 0.5rem; padding: 1rem; background: rgba(0, 0, 0, 0.3); border-radius: 8px 8px 0 0; border-bottom: 2px solid var(--glass-border);">
+                            <button class="demo-tab-btn active" data-demo-tab="demo-overview">📊 Overview</button>
+                            <button class="demo-tab-btn" data-demo-tab="demo-architecture">🏗️ Architecture</button>
+                            <button class="demo-tab-btn" data-demo-tab="demo-quality">✨ Code Quality</button>
+                            <button class="demo-tab-btn" data-demo-tab="demo-dependencies">📦 Dependencies</button>
+                            <button class="demo-tab-btn" data-demo-tab="demo-testing">🧪 Testing</button>
+                        </nav>
+                        
+                        <!-- Tab Content -->
+                        <div class="demo-tabs-content" style="background: rgba(0, 0, 0, 0.5); padding: 2rem; border-radius: 0 0 8px 8px; min-height: 600px;">
+                            <!-- Overview Tab -->
+                            <div id="demo-overview" class="demo-tab-content active">
+                                <h3 style="color: var(--accent-primary); margin-top: 0;">📊 Repository Overview</h3>
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 2rem 0;">
+                                    <div style="background: rgba(123, 97, 255, 0.1); padding: 1.5rem; border-radius: 8px; text-align: center; border-left: 4px solid #7b61ff;">
+                                        <div style="font-size: 2.5rem; color: #7b61ff; font-weight: 700;">247</div>
+                                        <div style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.5rem;">Total Files</div>
+                                    </div>
+                                    <div style="background: rgba(16, 185, 129, 0.1); padding: 1.5rem; border-radius: 8px; text-align: center; border-left: 4px solid #10b981;">
+                                        <div style="font-size: 2.5rem; color: #10b981; font-weight: 700;">45.2K</div>
+                                        <div style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.5rem;">Lines of Code</div>
+                                    </div>
+                                    <div style="background: rgba(59, 130, 246, 0.1); padding: 1.5rem; border-radius: 8px; text-align: center; border-left: 4px solid #3b82f6;">
+                                        <div style="font-size: 2.5rem; color: #3b82f6; font-weight: 700;">89</div>
+                                        <div style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.5rem;">Classes</div>
+                                    </div>
+                                    <div style="background: rgba(245, 158, 11, 0.1); padding: 1.5rem; border-radius: 8px; text-align: center; border-left: 4px solid #f59e0b;">
+                                        <div style="font-size: 2.5rem; color: #f59e0b; font-weight: 700;">342</div>
+                                        <div style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.5rem;">Functions</div>
+                                    </div>
+                                </div>
+                                <div style="background: rgba(0, 0, 0, 0.3); padding: 1.5rem; border-radius: 8px; margin-top: 1rem;">
+                                    <h4 style="color: #10b981; margin: 0 0 1rem 0;">Repository Health</h4>
+                                    <div style="display: flex; justify-content: space-between; margin: 0.5rem 0;">
+                                        <span style="color: var(--text-secondary);">Code Quality</span>
+                                        <span style="color: #10b981; font-weight: 600;">85%</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; margin: 0.5rem 0;">
+                                        <span style="color: var(--text-secondary);">Test Coverage</span>
+                                        <span style="color: #f59e0b; font-weight: 600;">72%</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; margin: 0.5rem 0;">
+                                        <span style="color: var(--text-secondary);">Documentation</span>
+                                        <span style="color: #3b82f6; font-weight: 600;">91%</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Architecture Tab -->
+                            <div id="demo-architecture" class="demo-tab-content">
+                                <h3 style="color: var(--accent-primary); margin-top: 0;">🏗️ System Architecture</h3>
+                                <p style="color: var(--text-secondary);">Interactive force-directed graph showing module dependencies and relationships.</p>
+                                <div style="background: rgba(0, 0, 0, 0.3); padding: 2rem; border-radius: 8px; margin: 1rem 0; text-align: center;">
+                                    <div style="color: var(--accent-secondary); font-size: 3rem; margin-bottom: 1rem;">🕸️</div>
+                                    <p style="color: var(--text-secondary); margin: 0;">
+                                        <strong style="color: var(--accent-primary);">D3.js Interactive Graph</strong><br>
+                                        Visualizes 23 modules, 156 dependencies, and 8 circular dependencies detected
+                                    </p>
+                                </div>
+                                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-top: 1rem;">
+                                    <div style="background: rgba(123, 97, 255, 0.1); padding: 1rem; border-radius: 8px;">
+                                        <div style="font-size: 1.5rem; color: #7b61ff;">Core Modules</div>
+                                        <div style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.5rem;">8 orchestrators, 2 agents</div>
+                                    </div>
+                                    <div style="background: rgba(16, 185, 129, 0.1); padding: 1rem; border-radius: 8px;">
+                                        <div style="font-size: 1.5rem; color: #10b981;">Utilities</div>
+                                        <div style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.5rem;">15 helper modules</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Code Quality Tab -->
+                            <div id="demo-quality" class="demo-tab-content">
+                                <h3 style="color: var(--accent-primary); margin-top: 0;">✨ Code Quality Metrics</h3>
+                                <div style="background: rgba(0, 0, 0, 0.3); padding: 1.5rem; border-radius: 8px; margin: 1rem 0;">
+                                    <h4 style="color: #10b981; margin: 0 0 1rem 0;">Complexity Analysis</h4>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin: 1rem 0; padding: 1rem; background: rgba(16, 185, 129, 0.1); border-radius: 4px;">
+                                        <span style="color: var(--text-secondary);">Cyclomatic Complexity (avg)</span>
+                                        <span style="color: #10b981; font-weight: 700; font-size: 1.2rem;">4.2</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin: 1rem 0; padding: 1rem; background: rgba(245, 158, 11, 0.1); border-radius: 4px;">
+                                        <span style="color: var(--text-secondary);">Maintainability Index</span>
+                                        <span style="color: #f59e0b; font-weight: 700; font-size: 1.2rem;">68/100</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin: 1rem 0; padding: 1rem; background: rgba(59, 130, 246, 0.1); border-radius: 4px;">
+                                        <span style="color: var(--text-secondary);">Code Duplication</span>
+                                        <span style="color: #3b82f6; font-weight: 700; font-size: 1.2rem;">12%</span>
+                                    </div>
+                                </div>
+                                <div style="background: rgba(239, 68, 68, 0.1); padding: 1rem; border-radius: 8px; border-left: 4px solid #ef4444;">
+                                    <strong style="color: #ef4444;">⚠️ Code Smells Detected:</strong>
+                                    <ul style="color: var(--text-secondary); margin: 0.5rem 0;">
+                                        <li>3 functions exceed complexity threshold</li>
+                                        <li>5 files exceed 500 lines</li>
+                                        <li>8 circular dependencies found</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <!-- Dependencies Tab -->
+                            <div id="demo-dependencies" class="demo-tab-content">
+                                <h3 style="color: var(--accent-primary); margin-top: 0;">📦 Dependency Analysis</h3>
+                                <div style="background: rgba(0, 0, 0, 0.3); padding: 1.5rem; border-radius: 8px; margin: 1rem 0;">
+                                    <h4 style="color: #f59e0b; margin: 0 0 1rem 0;">External Packages</h4>
+                                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 0.75rem;">
+                                        <div style="background: rgba(123, 97, 255, 0.1); padding: 0.75rem; border-radius: 4px; display: flex; justify-content: space-between; align-items: center;">
+                                            <span style="color: var(--text-primary); font-weight: 600;">Flask</span>
+                                            <span style="color: var(--text-secondary); font-size: 0.85rem;">v2.3.2</span>
+                                        </div>
+                                        <div style="background: rgba(16, 185, 129, 0.1); padding: 0.75rem; border-radius: 4px; display: flex; justify-content: space-between; align-items: center;">
+                                            <span style="color: var(--text-primary); font-weight: 600;">SQLAlchemy</span>
+                                            <span style="color: var(--text-secondary); font-size: 0.85rem;">v2.0.15</span>
+                                        </div>
+                                        <div style="background: rgba(59, 130, 246, 0.1); padding: 0.75rem; border-radius: 4px; display: flex; justify-content: space-between; align-items: center;">
+                                            <span style="color: var(--text-primary); font-weight: 600;">pytest</span>
+                                            <span style="color: var(--text-secondary); font-size: 0.85rem;">v7.4.0</span>
+                                        </div>
+                                        <div style="background: rgba(245, 158, 11, 0.1); padding: 0.75rem; border-radius: 4px; display: flex; justify-content: space-between; align-items: center;">
+                                            <span style="color: var(--text-primary); font-weight: 600;">networkx</span>
+                                            <span style="color: var(--text-secondary); font-size: 0.85rem;">v3.1</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="background: rgba(16, 185, 129, 0.1); padding: 1rem; border-radius: 8px; border-left: 4px solid #10b981; margin-top: 1rem;">
+                                    <strong style="color: #10b981;">✅ Dependency Health:</strong>
+                                    <p style="color: var(--text-secondary); margin: 0.5rem 0 0 0;">All packages up-to-date. No security vulnerabilities detected.</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Testing Tab -->
+                            <div id="demo-testing" class="demo-tab-content">
+                                <h3 style="color: var(--accent-primary); margin-top: 0;">🧪 Test Coverage & Quality</h3>
+                                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 2rem 0;">
+                                    <div style="background: rgba(16, 185, 129, 0.1); padding: 1.5rem; border-radius: 8px; text-align: center;">
+                                        <div style="font-size: 2.5rem; color: #10b981; font-weight: 700;">72%</div>
+                                        <div style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.5rem;">Code Coverage</div>
+                                    </div>
+                                    <div style="background: rgba(123, 97, 255, 0.1); padding: 1.5rem; border-radius: 8px; text-align: center;">
+                                        <div style="font-size: 2.5rem; color: #7b61ff; font-weight: 700;">156</div>
+                                        <div style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.5rem;">Total Tests</div>
+                                    </div>
+                                    <div style="background: rgba(245, 158, 11, 0.1); padding: 1.5rem; border-radius: 8px; text-align: center;">
+                                        <div style="font-size: 2.5rem; color: #f59e0b; font-weight: 700;">2.3s</div>
+                                        <div style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.5rem;">Avg Time</div>
+                                    </div>
+                                </div>
+                                <div style="background: rgba(0, 0, 0, 0.3); padding: 1.5rem; border-radius: 8px;">
+                                    <h4 style="color: #3b82f6; margin: 0 0 1rem 0;">Test Suites</h4>
+                                    <div style="display: flex; justify-content: space-between; margin: 0.5rem 0; padding: 0.75rem; background: rgba(59, 130, 246, 0.1); border-radius: 4px;">
+                                        <span style="color: var(--text-primary);">Unit Tests</span>
+                                        <span style="color: #10b981; font-weight: 600;">98 passed</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; margin: 0.5rem 0; padding: 0.75rem; background: rgba(59, 130, 246, 0.1); border-radius: 4px;">
+                                        <span style="color: var(--text-primary);">Integration Tests</span>
+                                        <span style="color: #10b981; font-weight: 600;">42 passed</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; margin: 0.5rem 0; padding: 0.75rem; background: rgba(59, 130, 246, 0.1); border-radius: 4px;">
+                                        <span style="color: var(--text-primary);">E2E Tests</span>
+                                        <span style="color: #10b981; font-weight: 600;">16 passed</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="dashboard-tip">
+                            <p>
+                                <i class="fas fa-info-circle"></i>
+                                <strong>Tip:</strong> This is a preview with sample data. 
+                                Click "Open Full Dashboard" above to see the complete CORTEX analysis with interactive visualizations, real-time data, and D3.js graphs.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Usage Instructions -->
+                <div style="margin: 2rem 0; padding: 1.5rem; background: rgba(123, 97, 255, 0.1); border-radius: 8px; border-left: 4px solid #7b61ff;">
+                    <h4 style="color: #7b61ff; margin-top: 0;"><i class="fas fa-terminal"></i> Generate Your Own Dashboard</h4>
+                    <pre style="background: rgba(0, 0, 0, 0.5); padding: 1rem; border-radius: 8px; overflow-x: auto; margin: 1rem 0;">
+<code style="color: #10b981;"># Install CORTEX
+pip install cortex-lens
+
+# Run analysis on any repository
+cortex-lens analyze /path/to/your/repo
+
+# Output generated at: cortex-lens-output/{repo-name}/index.html
+# Open in browser and explore!</code></pre>
+                    <p style="margin: 0.5rem 0 0 0; color: var(--text-secondary); font-size: 0.9rem;">
+                        The dashboard is completely self-contained with embedded CSS, JavaScript, and data—ready for deployment or sharing.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Use Cases -->
+        <section style="margin: 3rem 0;">
+            <div class="glass-card" style="padding: 2.5rem;">
+                <h2 class="section-title" style="margin-top: 0;"><i class="fas fa-lightbulb"></i> Use Cases</h2>
+                <p style="text-align: center; color: var(--text-secondary); margin-bottom: 2rem; font-size: 1.1rem;">
+                    Discover how CORTEX LENS empowers development teams with intelligent code analysis:
+                </p>
+                <div class="feature-grid-3">
+                <div class="glass-card feature-card">
+                    <h3><i class="fas fa-search"></i> Code Discovery</h3>
+                    <p>"Find all classes that implement the Observer pattern"</p>
+                    <p>"Show me functions that call the database layer"</p>
+                </div>
+                <div class="glass-card feature-card">
+                    <h3><i class="fas fa-wrench"></i> Refactoring Planning</h3>
+                    <p>"What will break if I rename this function?"</p>
+                    <p>"Which tests cover this module?"</p>
+                </div>
+                <div class="glass-card feature-card">
+                    <h3><i class="fas fa-shield-alt"></i> Security Audits</h3>
+                    <p>"Find all functions that accept user input"</p>
+                    <p>"Trace data flow from API to database"</p>
+                </div>
+                <div class="glass-card feature-card">
+                    <h3><i class="fas fa-graduation-cap"></i> Onboarding</h3>
+                    <p>"Generate a visual map of the authentication system"</p>
+                    <p>"Explain how the payment flow works"</p>
+                </div>
+                <div class="glass-card feature-card">
+                    <h3><i class="fas fa-clipboard-check"></i> Technical Debt</h3>
+                    <p>"Which modules have the highest cyclomatic complexity?"</p>
+                    <p>"Find tightly coupled components"</p>
+                </div>
+                <div class="glass-card feature-card">
+                    <h3><i class="fas fa-rocket"></i> Migration Planning</h3>
+                    <p>"Map dependencies for microservices extraction"</p>
+                    <p>"Identify shared utilities across modules"</p>
+                </div>
+            </div>
+            </div>
+        </section>
+
+        <!-- Technical Details -->
+        <section style="margin: 3rem 0;">
+            <div class="glass-card" style="padding: 2.5rem;">
+                <h2 class="section-title" style="margin-top: 0;"><i class="fas fa-code"></i> Technical Implementation</h2>
+                <p style="text-align: center; color: var(--text-secondary); margin-bottom: 2rem; font-size: 1.1rem;">
+                    CORTEX LENS leverages battle-tested parsing technologies for enterprise-grade code analysis:
+                </p>
+                
+                <div class="feature-grid-3">
+                    <div class="glass-card feature-card">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">
+                            <i class="fab fa-python" style="color: #3776ab;"></i>
+                        </div>
+                        <h3>Python</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.95rem; margin: 0.5rem 0;">Built-in <code style="background: rgba(0,212,255,0.1); padding: 2px 6px; border-radius: 4px;">ast</code> module</p>
+                        <p style="color: var(--text-muted); font-size: 0.875rem;">Native AST parsing</p>
+                    </div>
+                    
+                    <div class="glass-card feature-card">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">
+                            <i class="fab fa-js-square" style="color: #f7df1e;"></i>
+                        </div>
+                        <h3>JavaScript/TypeScript</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.95rem; margin: 0.5rem 0;">Babel parser with TypeScript plugin</p>
+                        <p style="color: var(--text-muted); font-size: 0.875rem;">Modern JS/TS support</p>
+                    </div>
+                    
+                    <div class="glass-card feature-card">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">
+                            <i class="fas fa-project-diagram" style="color: #10b981;"></i>
+                        </div>
+                        <h3>Graph Storage</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.95rem; margin: 0.5rem 0;">NetworkX library</p>
+                        <p style="color: var(--text-muted); font-size: 0.875rem;">In-memory graph operations</p>
+                    </div>
+                    
+                    <div class="glass-card feature-card">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">
+                            <i class="fas fa-chart-network" style="color: #f59e0b;"></i>
+                        </div>
+                        <h3>Visualization</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.95rem; margin: 0.5rem 0;">D3.js + Mermaid</p>
+                        <p style="color: var(--text-muted); font-size: 0.875rem;">Interactive diagrams</p>
+                    </div>
+                    
+                    <div class="glass-card feature-card">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">
+                            <i class="fas fa-database" style="color: #3b82f6;"></i>
+                        </div>
+                        <h3>Persistence</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.95rem; margin: 0.5rem 0;">SQLite in Tier 2 Brain</p>
+                        <p style="color: var(--text-muted); font-size: 0.875rem;">Fast indexed queries</p>
+                    </div>
+                    
+                    <div class="glass-card feature-card" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(0, 212, 255, 0.1));">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">
+                            <i class="fas fa-shield-alt" style="color: #10b981;"></i>
+                        </div>
+                        <h3 style="color: #10b981;">Privacy First</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.95rem; margin: 0.5rem 0; font-weight: 600;">100% Local Analysis</p>
+                        <p style="color: var(--text-muted); font-size: 0.875rem;">No code leaves your machine</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#7b61ff',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#9f87ff',
+                lineColor: '#00d4ff',
+                secondaryColor: '#10b981',
+                tertiaryColor: '#3b82f6'
+            }
+        });
+
+        // D3.js Force-Directed Graph
+        const width = document.getElementById('ast-visualization').clientWidth;
+        const height = 600;
+
+        // Sample data representing CORTEX codebase structure
+        const graphData = {
+            nodes: [
+                // Core modules
+                { id: 'cortex_brain', label: 'cortex_brain', type: 'core', group: 1 },
+                { id: 'tier0', label: 'Tier 0\nGovernance', type: 'core', group: 1 },
+                { id: 'tier1', label: 'Tier 1\nWorking Memory', type: 'core', group: 1 },
+                { id: 'tier2', label: 'Tier 2\nKnowledge Graph', type: 'core', group: 1 },
+                { id: 'tier3', label: 'Tier 3\nDev Context', type: 'core', group: 1 },
+                
+                // Agents
+                { id: 'planning_agent', label: 'Planning Agent', type: 'agent', group: 2 },
+                { id: 'tdd_agent', label: 'TDD Agent', type: 'agent', group: 2 },
+                
+                // Orchestrators
+                { id: 'planning_orch', label: 'Planning\nOrchestrator', type: 'orchestrator', group: 3 },
+                { id: 'tdd_orch', label: 'TDD\nOrchestrator', type: 'orchestrator', group: 3 },
+                { id: 'debug_orch', label: 'Debug\nOrchestrator', type: 'orchestrator', group: 3 },
+                { id: 'sanitize_orch', label: 'Sanitization\nOrchestrator', type: 'orchestrator', group: 3 },
+                
+                // Utilities
+                { id: 'ast_parser', label: 'AST Parser', type: 'utility', group: 4 },
+                { id: 'graph_builder', label: 'Graph Builder', type: 'utility', group: 4 },
+                { id: 'response_engine', label: 'Response Engine', type: 'utility', group: 4 },
+                { id: 'token_optimizer', label: 'Token Optimizer', type: 'utility', group: 4 }
+            ],
+            links: [
+                // Core connections
+                { source: 'cortex_brain', target: 'tier0', type: 'import' },
+                { source: 'cortex_brain', target: 'tier1', type: 'import' },
+                { source: 'cortex_brain', target: 'tier2', type: 'import' },
+                { source: 'cortex_brain', target: 'tier3', type: 'import' },
+                
+                // Agent connections
+                { source: 'planning_agent', target: 'tier2', type: 'call' },
+                { source: 'tdd_agent', target: 'tier2', type: 'call' },
+                { source: 'planning_agent', target: 'ast_parser', type: 'call' },
+                
+                // Orchestrator connections
+                { source: 'planning_orch', target: 'planning_agent', type: 'import' },
+                { source: 'tdd_orch', target: 'tdd_agent', type: 'import' },
+                { source: 'debug_orch', target: 'ast_parser', type: 'call' },
+                { source: 'sanitize_orch', target: 'graph_builder', type: 'call' },
+                
+                // Utility connections
+                { source: 'ast_parser', target: 'tier2', type: 'call' },
+                { source: 'graph_builder', target: 'tier2', type: 'call' },
+                { source: 'response_engine', target: 'tier1', type: 'call' },
+                { source: 'token_optimizer', target: 'tier0', type: 'call' },
+                
+                // Cross-connections
+                { source: 'planning_orch', target: 'response_engine', type: 'call' },
+                { source: 'tdd_orch', target: 'token_optimizer', type: 'call' }
+            ]
+        };
+
+        // Color mapping for node types
+        const colorMap = {
+            core: '#7b61ff',
+            agent: '#10b981',
+            orchestrator: '#3b82f6',
+            utility: '#f59e0b'
+        };
+
+        // Create SVG
+        const svg = d3.select('#ast-visualization')
+            .append('svg')
+            .attr('width', '100%')
+            .attr('height', height)
+            .attr('viewBox', [0, 0, width, height]);
+
+        // Create force simulation
+        let simulation = d3.forceSimulation(graphData.nodes)
+            .force('link', d3.forceLink(graphData.links).id(d => d.id).distance(120))
+            .force('charge', d3.forceManyBody().strength(-400))
+            .force('center', d3.forceCenter(width / 2, height / 2))
+            .force('collision', d3.forceCollide().radius(40));
+
+        // Create links
+        let link = svg.append('g')
+            .selectAll('line')
+            .data(graphData.links)
+            .join('line')
+            .attr('class', d => `ast-link ${d.type}`)
+            .style('stroke', d => d.type === 'call' ? 'rgba(16, 185, 129, 0.4)' : 'rgba(0, 212, 255, 0.4)');
+
+        // Create nodes
+        let node = svg.append('g')
+            .selectAll('g')
+            .data(graphData.nodes)
+            .join('g')
+            .attr('class', 'ast-node')
+            .call(d3.drag()
+                .on('start', dragstarted)
+                .on('drag', dragged)
+                .on('end', dragended));
+
+        // Add circles to nodes
+        node.append('circle')
+            .attr('r', 25)
+            .style('fill', d => colorMap[d.type])
+            .style('stroke', d => d3.color(colorMap[d.type]).brighter(0.5));
+
+        // Add labels to nodes
+        node.append('text')
+            .text(d => d.label)
+            .attr('text-anchor', 'middle')
+            .attr('dy', '0.35em')
+            .style('fill', '#fff')
+            .style('font-size', '11px')
+            .style('font-weight', '600')
+            .each(function(d) {
+                // Handle multi-line labels
+                const lines = d.label.split('\n');
+                if (lines.length > 1) {
+                    d3.select(this).text('');
+                    lines.forEach((line, i) => {
+                        d3.select(this).append('tspan')
+                            .text(line)
+                            .attr('x', 0)
+                            .attr('dy', i === 0 ? '-0.3em' : '1.2em');
+                    });
+                }
+            });
+
+        // Update positions on simulation tick
+        simulation.on('tick', () => {
+            link
+                .attr('x1', d => d.source.x)
+                .attr('y1', d => d.source.y)
+                .attr('x2', d => d.target.x)
+                .attr('y2', d => d.target.y);
+
+            node.attr('transform', d => `translate(${d.x},${d.y})`);
+        });
+
+        // Drag functions
+        function dragstarted(event) {
+            if (!event.active) simulation.alphaTarget(0.3).restart();
+            event.subject.fx = event.subject.x;
+            event.subject.fy = event.subject.y;
+        }
+
+        function dragged(event) {
+            event.subject.fx = event.x;
+            event.subject.fy = event.y;
+        }
+
+        function dragended(event) {
+            if (!event.active) simulation.alphaTarget(0);
+            event.subject.fx = null;
+            event.subject.fy = null;
+        }
+
+        // View filtering functions
+        function showView(view) {
+            // Update button states
+            document.querySelectorAll('.viz-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.closest('.viz-btn').classList.add('active');
+
+            // Filter links based on view
+            link.style('opacity', d => {
+                if (view === 'full') return 1;
+                if (view === 'dependencies') return d.type === 'import' ? 1 : 0.1;
+                if (view === 'calls') return d.type === 'call' ? 1 : 0.1;
+            });
+
+            // Adjust node opacity based on visible links
+            node.style('opacity', d => {
+                if (view === 'full') return 1;
+                const hasVisibleLink = graphData.links.some(l => 
+                    (l.source.id === d.id || l.target.id === d.id) && 
+                    (view === 'dependencies' ? l.type === 'import' : l.type === 'call')
+                );
+                return hasVisibleLink ? 1 : 0.3;
+            });
+        }
+
+        function resetSimulation() {
+            simulation.alpha(1).restart();
+        }
+
+        // Responsive resize
+        window.addEventListener('resize', () => {
+            const newWidth = document.getElementById('ast-visualization').clientWidth;
+            svg.attr('viewBox', [0, 0, newWidth, height]);
+            simulation.force('center', d3.forceCenter(newWidth / 2, height / 2));
+            simulation.alpha(1).restart();
+        });
+
+        // ========== Demo Tab Switching ==========
+        document.addEventListener('DOMContentLoaded', () => {
+            const demoTabButtons = document.querySelectorAll('.demo-tab-btn');
+            const demoTabContents = document.querySelectorAll('.demo-tab-content');
+            
+            demoTabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetTab = button.dataset.demoTab;
+                    
+                    // Remove active class from all buttons and contents
+                    demoTabButtons.forEach(btn => btn.classList.remove('active'));
+                    demoTabContents.forEach(content => content.classList.remove('active'));
+                    
+                    // Add active class to clicked button and target content
+                    button.classList.add('active');
+                    const targetContent = document.getElementById(targetTab);
+                    if (targetContent) {
+                        targetContent.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
