@@ -93,6 +93,11 @@
         "category": "CORTEX"
       },
       {
+        "command": "cortex.showConfiguration",
+        "title": "CORTEX: Show Configuration",
+        "category": "CORTEX"
+      },
+      {
         "command": "cortex.executeNaturalLanguage",
         "title": "CORTEX: Execute Natural Language Command",
         "category": "CORTEX"

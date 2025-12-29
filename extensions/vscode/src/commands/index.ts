@@ -4,6 +4,7 @@ import { PythonExecutor } from '../utils/pythonExecutor';
 import { WorkspaceDetector } from '../utils/workspaceDetector';
 import { DashboardProvider } from '../utils/dashboardProvider';
 import { CopilotIntegration } from '../utils/copilotIntegration';
+import { ConfigurationProvider } from '../utils/configurationProvider';
 
 /**
  * Register all CORTEX commands
@@ -411,6 +412,17 @@ Use @cortex in GitHub Copilot Chat for natural language interaction.
         })
     );
 
+    // CORTEX: Show Configuration
+    context.subscriptions.push(
+        vscode.commands.registerCommand('cortex.showConfiguration', async () => {
+            outputChannel.log('Executing command: cortex.showConfiguration');
+            
+            // Initialize and show configuration UI
+            const configuration = ConfigurationProvider.getInstance(context);
+            configuration.show();
+        })
+    );
+
     // CORTEX: Execute Natural Language Command (for Copilot integration)
     context.subscriptions.push(
         vscode.commands.registerCommand('cortex.executeNaturalLanguage', async (input?: string) => {
@@ -439,6 +451,6 @@ Use @cortex in GitHub Copilot Chat for natural language interaction.
         })
     );
 
-    outputChannel.log('Registered 10 commands');
+    outputChannel.log('Registered 11 commands');
 }
 

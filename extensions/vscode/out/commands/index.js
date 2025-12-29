@@ -40,6 +40,7 @@ const pythonExecutor_1 = require("../utils/pythonExecutor");
 const workspaceDetector_1 = require("../utils/workspaceDetector");
 const dashboardProvider_1 = require("../utils/dashboardProvider");
 const copilotIntegration_1 = require("../utils/copilotIntegration");
+const configurationProvider_1 = require("../utils/configurationProvider");
 /**
  * Register all CORTEX commands
  */
@@ -325,6 +326,13 @@ Use @cortex in GitHub Copilot Chat for natural language interaction.
         const dashboard = dashboardProvider_1.DashboardProvider.getInstance(context);
         dashboard.show();
     }));
+    // CORTEX: Show Configuration
+    context.subscriptions.push(vscode.commands.registerCommand('cortex.showConfiguration', async () => {
+        outputChannel.log('Executing command: cortex.showConfiguration');
+        // Initialize and show configuration UI
+        const configuration = configurationProvider_1.ConfigurationProvider.getInstance(context);
+        configuration.show();
+    }));
     // CORTEX: Execute Natural Language Command (for Copilot integration)
     context.subscriptions.push(vscode.commands.registerCommand('cortex.executeNaturalLanguage', async (input) => {
         outputChannel.log('Executing command: cortex.executeNaturalLanguage');
@@ -344,6 +352,6 @@ Use @cortex in GitHub Copilot Chat for natural language interaction.
             vscode.window.showWarningMessage(`Could not understand command: "${input}". Try "CORTEX: Show Help" for available commands.`);
         }
     }));
-    outputChannel.log('Registered 10 commands');
+    outputChannel.log('Registered 11 commands');
 }
 //# sourceMappingURL=index.js.map
