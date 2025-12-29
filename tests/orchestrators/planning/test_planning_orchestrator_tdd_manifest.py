@@ -13,11 +13,15 @@ Version: 4.0.0
 """
 
 import pytest
+import sys
 from pathlib import Path
 from unittest.mock import Mock, patch
 import yaml
 import tempfile
 from typing import Dict, Any
+
+# Add cortex-toolkit to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent / "cortex-toolkit"))
 
 from src.orchestrators.planning.planning_orchestrator import PlanningOrchestrator
 
@@ -36,6 +40,25 @@ def temp_dir():
 @pytest.fixture
 def orchestrator(temp_dir):
     """Create PlanningOrchestrator instance for testing."""
+    # Create cortex-toolkit structure for imports
+    toolkit_path = temp_dir / "cortex-toolkit" / "core" / "utilities"
+    toolkit_path.mkdir(parents=True, exist_ok=True)
+    
+    # Create minimal plan_scaffold_generator.py
+    scaffold_code = '''
+class PlanScaffoldGenerator:
+    def __init__(self, cortex_root=None):
+        self.cortex_root = cortex_root
+    
+    def create_scaffold(self, plan_name, plan_type="feature"):
+        return {
+            "status": "created",
+            "plan_name": plan_name,
+            "folder_name": f"{plan_type}s/active/{plan_name}"
+        }
+'''
+    (toolkit_path / "plan_scaffold_generator.py").write_text(scaffold_code)
+    
     config = {
         "cortex_root": str(temp_dir),
         "schema_path": str(temp_dir / "schema.yaml"),

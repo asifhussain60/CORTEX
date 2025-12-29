@@ -55,8 +55,29 @@ def temp_workspace():
         
         # Create required directories
         (cortex_root / "cortex-brain" / "config").mkdir(parents=True, exist_ok=True)
+        (cortex_root / "cortex-brain" / "documents" / "planning" / "active").mkdir(parents=True, exist_ok=True)
         (cortex_root / "cortex-brain" / "documents" / "planning" / "features" / "active").mkdir(parents=True, exist_ok=True)
         (cortex_root / "cortex-brain" / "documents" / "planning" / "features" / "completed").mkdir(parents=True, exist_ok=True)
+        
+        # Create cortex-toolkit structure for imports
+        (cortex_root / "cortex-toolkit" / "core" / "utilities").mkdir(parents=True, exist_ok=True)
+        toolkit_file = cortex_root / "cortex-toolkit" / "core" / "utilities" / "plan_scaffold_generator.py"
+        toolkit_file.write_text("""
+class PlanScaffoldGenerator:
+    def __init__(self, cortex_root=None):
+        self.cortex_root = cortex_root
+        
+    def create_scaffold(self, plan_name, plan_type="feature"):
+        return {
+            "status": "created",
+            "plan_name": plan_name,
+            "folder_name": f"{plan_type}s/active/{plan_name}"
+        }
+""")
+        
+        # Add toolkit to path
+        import sys
+        sys.path.insert(0, str(cortex_root / "cortex-toolkit"))
         
         # Create minimal schema
         schema_path = cortex_root / "cortex-brain" / "config" / "plan-schema.yaml"
@@ -77,6 +98,10 @@ plan:
 """)
         
         yield cortex_root
+        
+        # Cleanup: Remove toolkit path
+        if str(cortex_root / "cortex-toolkit") in sys.path:
+            sys.path.remove(str(cortex_root / "cortex-toolkit"))
 
 
 @pytest.fixture

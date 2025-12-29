@@ -137,6 +137,8 @@ class PlanScaffoldGenerator:
         if plan_dir.exists() and not dry_run:
             return {
                 "status": "exists",
+                "plan_name": plan_name,
+                "folder_name": folder_name,
                 "message": f"Plan already exists: {folder_name}",
                 "plan_dir": str(plan_dir),
                 "folders": {k: str(v) for k, v in folders.items()}

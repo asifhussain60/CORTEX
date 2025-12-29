@@ -11,22 +11,24 @@ description: "CORTEX System Maintenance - Health checks, intent router validatio
 
 ---
 
-## 🎯 8-Phase Maintenance Pipeline
+## 🎯 9-Phase Maintenance Pipeline
 
 | Phase | Action | Success Criteria |
 |-------|--------|------------------|
-| **1** | Toolkit Automation Validation | Scaffold generators working |
+| **1** | Toolkit + Interactive + Vision Validation | Scaffold generators + session workflow + auto-engagement working |
 | **2** | Quick Health Check | Health score ≥90 |
 | **3** | Full Diagnostic | All components wired |
 | **4** | Wiring Integrity | 100% wiring coverage |
+| **4.5** | Test Suite Health 🆕 | Core 100%, full ≥99% |
 | **5** | Knowledge Library Validation | All guidelines accessible |
 | **6** | Review Reports | Reports generated |
 | **7** | Intent Router Validation | All manifests synced |
 | **8** | Regenerate Lean Prompts | <200 lines each |
+| **9** | Report Management | Cleanup old reports |
 
 ---
 
-## Phase 1: Toolkit Automation Validation 🛠️ NEW
+## Phase 1: Toolkit Automation Validation 🛠️
 
 ### 1a. Verify Scaffold Generators Exist
 
@@ -42,6 +44,90 @@ test -f cortex-toolkit/core/utilities/orchestrator_scaffold_generator.py || echo
 # Verify both are registered in toolkit manifest
 grep -q "plan-scaffold" cortex-toolkit/toolkit-manifest.yaml || echo "ERROR: Plan scaffold not registered!"
 grep -q "orchestrator-scaffold" cortex-toolkit/toolkit-manifest.yaml || echo "ERROR: Orchestrator scaffold not registered!"
+```
+
+### 1a-2. Verify Interactive Planning Session ✨ NEW
+
+**Critical:** Ensure interactive planning workflow is properly wired.
+
+```bash
+# Check interactive session module exists
+test -f src/orchestrators/planning/interactive_session.py || echo "ERROR: Interactive session module missing!"
+
+# Verify session states are defined
+grep -q "class SessionState" src/orchestrators/planning/interactive_session.py || echo "ERROR: SessionState enum missing!"
+
+# Check for key workflow classes
+grep -q "class PlanningSession" src/orchestrators/planning/interactive_session.py || echo "ERROR: PlanningSession class missing!"
+grep -q "class DiscoveryEngine" src/orchestrators/planning/interactive_session.py || echo "ERROR: DiscoveryEngine class missing!"
+grep -q "class ApprovalWorkflow" src/orchestrators/planning/interactive_session.py || echo "ERROR: ApprovalWorkflow class missing!"
+grep -q "class CleanupPhase" src/orchestrators/planning/interactive_session.py || echo "ERROR: CleanupPhase class missing!"
+```
+
+**Expected Workflow States:**
+- `INITIALIZING` → `DISCOVERY` → `CONTEXT_GATHERING` → `USER_REVIEW`
+- `USER_REVIEW` → `APPROVED` or `REFINING`
+- `APPROVED` → `DRAFTING` → `CLEANUP` → `FINALIZED`
+
+**Test Interactive Planning:**
+```bash
+# Run interactive planning tests (29 tests expected)
+python3 -m pytest tests/orchestrators/planning/test_interactive_planning_session.py -v
+
+# Expected: 18 session tests + 11 workflow tests = 29 total
+```
+
+### 1a-3. Verify Vision API Auto-Engagement 👁️ NEW
+
+**Critical:** Ensure Vision API automatically engages when images are attached.
+
+```bash
+# Check vision orchestrator exists
+test -f src/tier1/vision_orchestrator.py || echo "ERROR: Vision orchestrator missing!"
+
+# Check image detector exists
+test -f src/tier1/image_detector.py || echo "ERROR: Image detector missing!"
+
+# Check vision context middleware
+test -f src/operations/utilities/vision_context_middleware.py || echo "ERROR: Vision context middleware missing!"
+
+# Verify auto-detection is enabled in config
+grep -q "auto_detect_images" cortex.config.json || echo "WARNING: Auto-detect not configured!"
+grep -q "auto_analyze_on_detect" cortex.config.json || echo "WARNING: Auto-analyze not configured!"
+```
+
+**Expected Features:**
+- ✅ Automatic image detection in chat attachments
+- ✅ Auto-engage Vision API without user prompting
+- ✅ Context injection into planning/debugging workflows
+- ✅ Duplicate image caching (24hr TTL)
+- ✅ Token budget enforcement (500 token limit)
+
+**Test Vision Auto-Engagement:**
+```python
+# Smoke test: Verify vision orchestrator detects images
+from src.tier1.vision_orchestrator import VisionOrchestrator
+from src.tier1.image_detector import ImageDetector
+
+# Load config
+import json
+with open('cortex.config.json') as f:
+    config = json.load(f)
+
+# Initialize orchestrator
+orchestrator = VisionOrchestrator(config)
+
+# Test image detection (dry run)
+result = orchestrator.process_request(
+    user_request="analyze this",
+    attachments=[
+        {'type': 'image', 'path': '/path/to/test.png', 'mime': 'image/png'}
+    ]
+)
+
+print(f"✅ Images found: {result['images_found']}")
+print(f"✅ Auto-analyze: {orchestrator.auto_analyze}")
+print(f"✅ Auto-inject: {orchestrator.inject_context}")
 ```
 
 ### 1b. Test Scaffold Generators
@@ -99,6 +185,67 @@ python3 scripts/cortex_system_doctor.py --phase diagnose --phase scan
 # Phase 4: Wiring integrity
 python3 scripts/check_wiring_integrity.py
 ```
+
+---
+
+## Phase 4.5: Test Suite Health 🧪 NEW
+
+### When to Run Tests
+
+Run the full test suite during maintenance when:
+- ✅ **Interactive planning system** has been modified
+- ✅ **Core orchestrators** have been updated
+- ✅ **Brain protection rules** have changed
+- ✅ **Fixture patterns** need validation
+- ❌ **Minor documentation updates** (skip tests)
+- ❌ **Knowledge library additions** (skip tests unless validation required)
+
+### Test Suite Execution
+
+```bash
+# Run full planning orchestrator test suite (recommended during maintenance)
+python3 -m pytest tests/orchestrators/planning/ --tb=no -q
+
+# Expected: 396+ passing, <5 failing
+# Target: 99%+ pass rate
+
+# Run core functionality tests only (faster, 29 tests)
+python3 -m pytest tests/orchestrators/planning/test_interactive_planning_session.py \
+                 tests/orchestrators/planning/test_toolkit_integration.py -v
+
+# Expected: 29/29 passing (100%)
+
+# Use test runner script for specific categories
+./test_planning.sh interactive   # 18 tests - Interactive session workflow
+./test_planning.sh toolkit        # 11 tests - Toolkit integration
+./test_planning.sh quick          # 29 tests - Core functionality only
+./test_planning.sh all            # 397 tests - Full suite
+```
+
+### Test Health Metrics
+
+| Metric | Target | Action if Below |
+|--------|--------|-----------------|
+| **Core Tests Pass Rate** | 100% | CRITICAL - Fix immediately |
+| **Full Suite Pass Rate** | ≥99% | Review failures, assess if obsolete |
+| **Error Count** | 0 | CRITICAL - All errors must be fixed |
+| **Test Execution Time** | <30s | Acceptable, monitor for regression |
+
+### Common Test Failures
+
+**Issue:** `ModuleNotFoundError: No module named 'core'`
+- **Fix:** Fixture missing `sys.path.insert(0, cortex-toolkit/)` and toolkit structure
+
+**Issue:** `RuntimeError: Planning root not found`
+- **Fix:** Fixture missing `(tmp_path / "cortex-brain" / "documents" / "planning" / "active").mkdir(parents=True)`
+
+**Issue:** Tests passing but functionality broken
+- **Fix:** Check if test is obsolete (testing old API that was refactored)
+
+### Test Report Location
+
+After running tests, check:
+- `cortex-brain/documents/reports/test-suite-cleanup-report-{DATE}.md` for latest health report
 
 ---
 
@@ -380,6 +527,9 @@ Version | Author | Status
 | CORTEX.prompt.md | <200 lines, all manifests wired |
 | copilot-instructions.md | <150 lines, defers to CORTEX.prompt.md |
 | Output Structures | Planning System has folder spec |
+| **Interactive Planning** 🆕 | Session workflow tests 29/29 passing |
+| **Vision Auto-Engagement** 🆕 | Image detection and analysis wired |
+| **Test Suite Health** 🆕 | Core tests 100%, full suite ≥99% |
 
 ---
 
@@ -387,11 +537,18 @@ Version | Author | Status
 
 Run during every maintenance cycle:
 
+### Core System
 - [ ] Health score ≥90
 - [ ] All manifest paths resolve to existing files
 - [ ] No references to deprecated `orchestrator-manifests/` path
 - [ ] Each orchestrator has ≥3 trigger phrases
 - [ ] Planning System has output folder structure specified
+- [ ] CORTEX.prompt.md is <200 lines
+- [ ] copilot-instructions.md is <150 lines
+- [ ] copilot-instructions.md defers to CORTEX.prompt.md (no duplication)
+- [ ] Reports folder cleaned (see Phase 9)
+
+### Knowledge Library
 - [ ] Knowledge library has all 9 categories present
 - [ ] Knowledge library README.md is current (stats match actual files)
 - [ ] All knowledge YAML files have valid metadata section
@@ -399,10 +556,38 @@ Run during every maintenance cycle:
 - [ ] No duplicate rule IDs across knowledge library
 - [ ] Orchestrators reference knowledge library in code/manifests
 - [ ] Brain protection rules reference knowledge library
-- [ ] CORTEX.prompt.md is <200 lines
-- [ ] copilot-instructions.md is <150 lines
-- [ ] copilot-instructions.md defers to CORTEX.prompt.md (no duplication)
-- [ ] Reports folder cleaned (see Phase 8)
+
+### Interactive Planning 🆕
+- [ ] Interactive session module exists (`src/orchestrators/planning/interactive_session.py`)
+- [ ] SessionState enum with 8 states (INITIALIZING → FINALIZED)
+- [ ] PlanningSession, DiscoveryEngine, ApprovalWorkflow, CleanupPhase classes exist
+- [ ] Session state transitions validated (DISCOVERY → CONTEXT_GATHERING → USER_REVIEW → APPROVED → DRAFTING → CLEANUP → FINALIZED)
+- [ ] Interactive planning tests: 29/29 passing (100%)
+- [ ] End-to-end workflow test passing (full lifecycle validation)
+- [ ] Conversation history tracking operational
+- [ ] Iterative refinement loop functional
+
+### Vision API Auto-Engagement 🆕
+- [ ] Vision orchestrator exists (`src/tier1/vision_orchestrator.py`)
+- [ ] Image detector exists (`src/tier1/image_detector.py`)
+- [ ] Vision context middleware exists (`src/operations/utilities/vision_context_middleware.py`)
+- [ ] Config has `auto_detect_images: true`
+- [ ] Config has `auto_analyze_on_detect: true`
+- [ ] Config has `auto_inject_context: true`
+- [ ] Image detection works for PNG, JPG, JPEG formats
+- [ ] Vision API auto-engages without user prompting
+- [ ] Duplicate image caching operational (24hr TTL)
+- [ ] Token budget enforcement active (500 token limit)
+- [ ] Context injection into planning/debugging workflows verified
+
+### Test Suite Health 🆕
+- [ ] Core tests (interactive + toolkit): 29/29 passing (100%)
+- [ ] Full planning test suite: ≥396 passing (≥99% pass rate)
+- [ ] Error count: 0 (no collection or import errors)
+- [ ] Test execution time: <30 seconds
+- [ ] Test report generated in `cortex-brain/documents/reports/`
+- [ ] Known issues documented (if any failures remain)
+- [ ] Obsolete tests deleted (tests for removed/refactored APIs)
 
 ---
 

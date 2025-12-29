@@ -47,7 +47,10 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum, IntEnum
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from src.orchestrators.planning.interactive_session import PlanningSession
 import yaml
 
 from src.orchestrators.base.base_orchestrator import (
@@ -296,10 +299,20 @@ class PlanningOrchestrator(BaseOrchestrator):
             modularization_threshold=modularization_threshold
         )
         
-        # Task 13A: Initialize PlanFolderManager for hierarchical structure
+        # Task 13A: Initialize CORTEX Toolkit scaffold generator (canonical implementation)
+        import sys
+        toolkit_path = self.cortex_root / "cortex-toolkit"
+        if str(toolkit_path) not in sys.path:
+            sys.path.insert(0, str(toolkit_path))
+        
+        from core.utilities.plan_scaffold_generator import PlanScaffoldGenerator
+        self.scaffold_generator = PlanScaffoldGenerator(cortex_root=self.cortex_root)
+        self.folder_structure_enabled = config.get("enable_folder_structure", True)
+        
+        # DEPRECATED: Keep PlanFolderManager for backward compatibility only
         from src.utils.plan_folder_manager import PlanFolderManager
         self.folder_manager = PlanFolderManager(project_root=self.cortex_root)
-        self.folder_structure_enabled = config.get("enable_folder_structure", True)
+        self.logger.warning("PlanFolderManager is deprecated - use scaffold_generator instead")
         
         # Execution engine (Week 8 Day 3)
         self.plan_executor = PlanExecutor(
@@ -1025,6 +1038,136 @@ class PlanningOrchestrator(BaseOrchestrator):
             PlanComplexity.CRITICAL: "Critical feature, full plan with security analysis"
         }
         return descriptions.get(complexity, "Unknown complexity level")
+    
+    # ========================================================================
+    # Planning Folder Creation (Task 13A - Toolkit Integration)
+    # ========================================================================
+    
+    def interactive_plan_creation(
+        self,
+        plan_name: str,
+        user_context: Optional[Dict[str, Any]] = None
+    ) -> "PlanningSession":
+        """
+        Start interactive planning session with user collaboration.
+        
+        This method initiates a collaborative planning process:
+        1. Discovery questions (DoR)
+        2. Context gathering (AST, code graphs, brain)
+        3. User approval loop with iterative refinement
+        4. Cleanup phase with documentation
+        
+        Args:
+            plan_name: Name of plan to create
+            user_context: Optional initial context from user
+        
+        Returns:
+            PlanningSession instance for tracking interactive workflow
+        """
+        from src.orchestrators.planning.interactive_session import PlanningSession, SessionState
+        
+        # Create new session
+        session = PlanningSession(
+            plan_name=plan_name,
+            user_context=user_context or {}
+        )
+        
+        # Transition to discovery phase
+        session.transition_to(SessionState.DISCOVERY)
+        
+        self.logger.info(f"Started interactive planning session: {session.session_id}")
+        
+        return session
+    
+    def create_plan_folders(self, plan_name: str, plan_data: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        """
+        Create planning folder structure using CORTEX toolkit.
+        
+        This method delegates to cortex-toolkit/core/utilities/plan_scaffold_generator.py
+        which is the canonical implementation for folder creation.
+        
+        Args:
+            plan_name: Plan name (will be sanitized)
+            plan_data: Optional plan metadata (title, description, etc.)
+        
+        Returns:
+            Dictionary with creation result:
+            {
+                "status": "created" | "exists" | "error",
+                "plan_name": str,
+                "folder_name": str,
+                "plan_dir": str,
+                "folders": {...},
+                "tracker": str,
+                "message": str (optional)
+            }
+        """
+        if not self.folder_structure_enabled:
+            return {
+                "status": "disabled",
+                "message": "Folder structure creation is disabled",
+                "plan_name": plan_name
+            }
+        
+        try:
+            # Extract metadata from plan_data
+            description = None
+            metadata = {}
+            
+            if plan_data and "metadata" in plan_data:
+                meta = plan_data["metadata"]
+                description = meta.get("description")
+                metadata = {
+                    "title": meta.get("title", plan_name),
+                    "author": meta.get("author", "CORTEX"),
+                    "complexity": str(meta.get("complexity", "medium")),
+                    "plan_type": str(meta.get("plan_type", "feature"))
+                }
+            
+            # Call toolkit scaffold generator
+            result = self.scaffold_generator.create_scaffold(
+                plan_name=plan_name,
+                description=description,
+                metadata=metadata,
+                dry_run=False
+            )
+            
+            # Handle result status
+            if result["status"] == "exists":
+                self.logger.info(f"Plan folder already exists: {result['folder_name']}")
+            elif result["status"] == "created":
+                self.logger.info(f"✅ Created plan folders via toolkit: {result['folder_name']}")
+            
+            return result
+            
+        except ValueError as e:
+            # Plan already exists or invalid name
+            error_msg = str(e)
+            self.logger.warning(f"Plan folder issue: {error_msg}")
+            
+            # Check if it's an "already exists" error
+            if "already exists" in error_msg.lower() or "exists" in error_msg.lower():
+                return {
+                    "status": "exists",
+                    "plan_name": plan_name,
+                    "message": error_msg
+                }
+            else:
+                # Other ValueError (e.g., invalid name)
+                return {
+                    "status": "error",
+                    "plan_name": plan_name,
+                    "message": error_msg
+                }
+            
+        except Exception as e:
+            # Unexpected error
+            self.logger.error(f"Failed to create plan folders: {e}")
+            return {
+                "status": "error",
+                "plan_name": plan_name,
+                "message": f"Failed to create folders: {e}"
+            }
     
     # ========================================================================
     # Git Checkpoint Methods (Task 8.4 - Test Compliance, Enhanced Task 13.4)
