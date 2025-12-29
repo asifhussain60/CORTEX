@@ -14,7 +14,7 @@ The laptop crashed at 2:17 AM on Thursday.
 
 Not a graceful shutdown. Not a gentle sleep. A full, catastrophic, blue-screen-of-death crash that took with it three hours of in-memory conversation context, two brilliant implementation insights, and my remaining faith in volatile storage.
 
-<img src="../illustrations/images/essentials/cortex-awakening-ch03-01.jpeg" alt="The Blue Screen of Death" style="float: right; margin: 0 0 1em 1em; max-width: 45%; height: auto;">
+<img src="../illustrations/images/essentials/cortex-awakening-ch03-01.jpeg" alt="The Blue Screen of Death" class="story-image-right">
 
 "No." I stared at the restart screen. "No no no no no."
 

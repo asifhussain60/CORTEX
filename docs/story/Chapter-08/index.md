@@ -24,7 +24,7 @@ I didn't change. Too late now.
 
 "We need it integrated with Azure DevOps."
 
-<img src="../illustrations/images/essentials/cortex-awakening-ch08-01.jpeg" alt="Corporate Meeting Tension" style="float: right; margin: 0 0 1em 1em; max-width: 45%; height: auto;">
+<img src="../illustrations/images/essentials/cortex-awakening-ch08-01.jpeg" alt="Corporate Meeting Tension" class="story-image-right">
 
 My brain stuttered. "ADO integration?"
 

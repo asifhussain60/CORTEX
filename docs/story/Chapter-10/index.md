@@ -24,7 +24,7 @@ My codebase looked similar. Drift. Accumulation. Things that made sense two mont
 
 "How did I let it get this bad?" I muttered.
 
-<img src="../illustrations/images/essentials/cortex-awakening-ch10-01.jpeg" alt="Self-Healing System Vision" style="float: left; margin: 0 1em 1em 0; max-width: 45%; height: auto;">
+<img src="../illustrations/images/essentials/cortex-awakening-ch10-01.jpeg" alt="Self-Healing System Vision" class="story-image-left">
 
 Then I had a thought. A dangerous thought.
 

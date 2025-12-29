@@ -1,6 +1,6 @@
 # Chapter 13: The Refiner
 
-<img src="../illustrations/images/essentials/cortex-awakening-ch13-01.jpeg" alt="The Refiner" style="float: right; margin: 0 0 1em 1em; max-width: 45%; height: auto;">
+<img src="../illustrations/images/essentials/cortex-awakening-ch13-01.jpeg" alt="The Refiner" class="story-image-right">
 
 **6:47 AM Friday.** Christmas decorations deadline: **PASSED** (by 47 minutes). Christmas decorations status: **COMPLETE**.
 
@@ -363,7 +363,7 @@ Progress through autonomous refinement.
 
 ---
 
-<div style="text-align: center; margin-top: 40px; padding: 20px; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); border-radius: 10px;">
+<div class="epilogue-container">
 
 ### Navigation
 

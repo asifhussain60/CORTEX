@@ -28,7 +28,7 @@ Fifteen minutes in, I hit a wall: JWT token refresh strategy with Redis-backed s
 
 Which project was it? The healthcare app? The e-commerce platform? That internal tool from three months ago?
 
-<img src="../illustrations/images/valuable/cortex-awakening-ch11-01.jpeg" alt="Cross-Project Knowledge Search" style="float: right; margin: 0 0 1em 1em; max-width: 45%; height: auto;">
+<img src="../illustrations/images/valuable/cortex-awakening-ch11-01.jpeg" alt="Cross-Project Knowledge Search" class="story-image-right">
 
 Forty minutes wasted hunting for a solution I KNEW I'd implemented.
 
@@ -68,7 +68,7 @@ But Project B's CORTEX had no idea. Starting fresh. Relearning.
 
 ## Tier 3: The Knowledge Library
 
-<img src="../illustrations/images/valuable/cortex-awakening-ch11-02.jpeg" alt="Tier 3 Knowledge Library" style="float: left; margin: 0 1em 1em 0; max-width: 45%; height: auto;">
+<img src="../illustrations/images/valuable/cortex-awakening-ch11-02.jpeg" alt="Tier 3 Knowledge Library" class="story-image-left">
 
 Not project-specific. Not conversation-specific. Universal development wisdom across ALL work.
 

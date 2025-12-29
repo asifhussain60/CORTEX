@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Story Inline Style Test - CORTEX</title>
+<style>
+body {
+    font-family: 'Consolas', 'Monaco', monospace;
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 20px;
+    line-height: 1.6;
+}
+.test-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.test-header {
+    background: #252526;
+    border: 1px solid #3e3e42;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+.test-header h1 {
+    margin: 0 0 10px 0;
+    color: #00d4ff;
+}
+.test-results {
+    background: #252526;
+    border: 1px solid #3e3e42;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+.chapter-test {
+    margin-bottom: 30px;
+    padding: 15px;
+    background: #1e1e1e;
+    border-left: 4px solid #007acc;
+    border-radius: 4px;
+}
+.chapter-test.pass {
+    border-left-color: #4ec9b0;
+}
+.chapter-test.fail {
+    border-left-color: #f48771;
+}
+.chapter-name {
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    color: #00d4ff;
+}
+.test-stat {
+    display: inline-block;
+    margin-right: 20px;
+    padding: 5px 10px;
+    border-radius: 4px;
+    background: #3e3e42;
+}
+.test-stat.pass {
+    background: #2d4f3e;
+    color: #4ec9b0;
+}
+.test-stat.fail {
+    background: #4f2d2d;
+    color: #f48771;
+}
+.inline-style-found {
+    background: #4f2d2d;
+    color: #f48771;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 0.9em;
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+.summary {
+    background: #252526;
+    border: 2px solid #00d4ff;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 8px;
+}
+.summary h2 {
+    margin-top: 0;
+    color: #00d4ff;
+}
+.progress {
+    width: 100%;
+    height: 30px;
+    background: #3e3e42;
+    border-radius: 15px;
+    overflow: hidden;
+    margin: 10px 0;
+}
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #4ec9b0, #00d4ff);
+    transition: width 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+}
+#output {
+    display: none;
+}
+</style>
+</head>
+<body>
+<div class="test-container">
+    <div class="test-header">
+        <h1>🧪 CORTEX Story Inline Style Test</h1>
+        <p>Testing all chapters for inline styling after JavaScript rendering</p>
+        <div class="progress">
+            <div class="progress-bar" id="progressBar" style="width: 0%">0%</div>
+        </div>
+    </div>
+
+    <div class="test-results" id="testResults">
+        <p>Initializing tests...</p>
+    </div>
+
+    <div class="summary" id="summary" style="display: none;">
+        <h2>📊 Test Summary</h2>
+        <div id="summaryContent"></div>
+    </div>
+</div>
+
+<div id="output"></div>
+
+<script src="../docs/story/story-viewer.js"></script>
+
+<script>
+// Chapter list to test
+const TEST_CHAPTERS = [
+    { id: 'prologue', name: 'Prologue: The Basement Laboratory' },
+    { id: 'chapter-01', name: 'Chapter 1: The Amnesia Crisis' },
+    { id: 'chapter-02', name: 'Chapter 2: Tier 0 - The Gatekeeper' },
+    { id: 'chapter-03', name: 'Chapter 3: Tier 1 - Memory Awakens' },
+    { id: 'chapter-04', name: 'Chapter 4: Tier 2 - The Learning Machine' },
+    { id: 'chapter-05', name: 'Chapter 5: The Test-Driven Rebellion' },
+    { id: 'chapter-06', name: 'Chapter 6: The Great Orchestration' },
+    { id: 'chapter-07', name: 'Chapter 7: The Planning Revolution' },
+    { id: 'chapter-08', name: 'Chapter 8: The Enterprise Awakening' },
+    { id: 'chapter-09', name: 'Chapter 9: The Sanitizer\'s Dilemma' },
+    { id: 'chapter-10', name: 'Chapter 10: The Self-Healing System' },
+    { id: 'chapter-11', name: 'Chapter 11: The Knowledge Keeper' },
+    { id: 'chapter-12', name: 'Chapter 12: The Convergence' },
+    { id: 'chapter-13', name: 'Chapter 13: The Refiner' }
+];
+
+let testResults = [];
+let currentTest = 0;
+
+// Inline style patterns to detect
+const INLINE_STYLE_PATTERNS = [
+    /style\s*=\s*["'][^"']*["']/gi,
+    /style\s*=\s*"[^"]*"/gi,
+    /style\s*=\s*'[^']*'/gi
+];
+
+async function runTests() {
+    const resultsDiv = document.getElementById('testResults');
+    resultsDiv.innerHTML = '<h3>Running Tests...</h3>';
+    
+    for (let i = 0; i < TEST_CHAPTERS.length; i++) {
+        currentTest = i;
+        updateProgress();
+        
+        const chapter = TEST_CHAPTERS[i];
+        const result = await testChapter(chapter);
+        testResults.push(result);
+        
+        displayChapterResult(result);
+        
+        // Small delay to allow UI updates
+        await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    
+    displaySummary();
+}
+
+async function testChapter(chapter) {
+    const result = {
+        id: chapter.id,
+        name: chapter.name,
+        passed: true,
+        inlineStyles: [],
+        totalElements: 0,
+        elementsWithInlineStyles: 0
+    };
+    
+    try {
+        // Fetch chapter content
+        const chapterData = CHAPTERS[chapter.id];
+        if (!chapterData) {
+            result.passed = false;
+            result.error = 'Chapter not found in CHAPTERS configuration';
+            return result;
+        }
+        
+        const response = await fetch(`../docs/story/${chapterData.file}`);
+        if (!response.ok) {
+            result.passed = false;
+            result.error = `Failed to fetch: ${response.status} ${response.statusText}`;
+            return result;
+        }
+        
+        const content = await response.text();
+        
+        // Parse content using the story-viewer.js function
+        const html = parseChapterContent(content, chapterData.images || []);
+        
+        // Create temporary container to test the HTML
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = html;
+        
+        // Check all elements for inline styles
+        const allElements = tempDiv.getElementsByTagName('*');
+        result.totalElements = allElements.length;
+        
+        for (let elem of allElements) {
+            if (elem.hasAttribute('style')) {
+                result.elementsWithInlineStyles++;
+                result.inlineStyles.push({
+                    tag: elem.tagName.toLowerCase(),
+                    style: elem.getAttribute('style'),
+                    context: elem.outerHTML.substring(0, 150) + '...'
+                });
+            }
+        }
+        
+        // Also check the raw HTML string for any inline styles
+        for (let pattern of INLINE_STYLE_PATTERNS) {
+            const matches = html.match(pattern);
+            if (matches) {
+                matches.forEach(match => {
+                    // Find context
+                    const index = html.indexOf(match);
+                    const contextStart = Math.max(0, index - 50);
+                    const contextEnd = Math.min(html.length, index + match.length + 50);
+                    const context = html.substring(contextStart, contextEnd);
+                    
+                    result.inlineStyles.push({
+                        tag: 'raw-html',
+                        style: match,
+                        context: context
+                    });
+                });
+            }
+        }
+        
+        result.passed = result.inlineStyles.length === 0;
+        
+    } catch (error) {
+        result.passed = false;
+        result.error = error.message;
+    }
+    
+    return result;
+}
+
+function displayChapterResult(result) {
+    const resultsDiv = document.getElementById('testResults');
+    
+    const chapterDiv = document.createElement('div');
+    chapterDiv.className = `chapter-test ${result.passed ? 'pass' : 'fail'}`;
+    
+    let html = `
+        <div class="chapter-name">${result.name}</div>
+        <div>
+            <span class="test-stat ${result.passed ? 'pass' : 'fail'}">
+                ${result.passed ? '✅ PASS' : '❌ FAIL'}
+            </span>
+            <span class="test-stat">Total Elements: ${result.totalElements}</span>
+            <span class="test-stat ${result.elementsWithInlineStyles > 0 ? 'fail' : 'pass'}">
+                Inline Styles Found: ${result.inlineStyles.length}
+            </span>
+        </div>
+    `;
+    
+    if (result.error) {
+        html += `<div class="inline-style-found">ERROR: ${result.error}</div>`;
+    }
+    
+    if (result.inlineStyles.length > 0) {
+        html += '<div style="margin-top: 15px;"><strong>Inline Styles Found:</strong></div>';
+        result.inlineStyles.forEach((style, idx) => {
+            html += `
+                <div class="inline-style-found">
+                    <strong>#${idx + 1} - ${style.tag}</strong><br>
+                    Style: ${style.style}<br>
+                    Context: ${style.context}
+                </div>
+            `;
+        });
+    }
+    
+    chapterDiv.innerHTML = html;
+    resultsDiv.appendChild(chapterDiv);
+}
+
+function updateProgress() {
+    const progress = ((currentTest + 1) / TEST_CHAPTERS.length) * 100;
+    const progressBar = document.getElementById('progressBar');
+    progressBar.style.width = progress + '%';
+    progressBar.textContent = Math.round(progress) + '%';
+}
+
+function displaySummary() {
+    const summaryDiv = document.getElementById('summary');
+    const summaryContent = document.getElementById('summaryContent');
+    
+    const totalTests = testResults.length;
+    const passedTests = testResults.filter(r => r.passed).length;
+    const failedTests = totalTests - passedTests;
+    const totalInlineStyles = testResults.reduce((sum, r) => sum + r.inlineStyles.length, 0);
+    
+    const passRate = ((passedTests / totalTests) * 100).toFixed(1);
+    
+    summaryContent.innerHTML = `
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 20px 0;">
+            <div class="test-stat">
+                <strong>Total Chapters:</strong><br>
+                ${totalTests}
+            </div>
+            <div class="test-stat ${passedTests === totalTests ? 'pass' : ''}">
+                <strong>Passed:</strong><br>
+                ${passedTests}
+            </div>
+            <div class="test-stat ${failedTests > 0 ? 'fail' : ''}">
+                <strong>Failed:</strong><br>
+                ${failedTests}
+            </div>
+            <div class="test-stat ${totalInlineStyles === 0 ? 'pass' : 'fail'}">
+                <strong>Total Inline Styles:</strong><br>
+                ${totalInlineStyles}
+            </div>
+            <div class="test-stat ${passRate === '100.0' ? 'pass' : 'fail'}">
+                <strong>Pass Rate:</strong><br>
+                ${passRate}%
+            </div>
+        </div>
+        
+        ${passedTests === totalTests ? `
+            <div style="background: #2d4f3e; color: #4ec9b0; padding: 20px; border-radius: 8px; text-align: center; margin-top: 20px;">
+                <h3 style="margin: 0;">🎉 ALL TESTS PASSED!</h3>
+                <p style="margin: 10px 0 0 0;">No inline styles detected in any chapter.</p>
+            </div>
+        ` : `
+            <div style="background: #4f2d2d; color: #f48771; padding: 20px; border-radius: 8px; text-align: center; margin-top: 20px;">
+                <h3 style="margin: 0;">⚠️ TESTS FAILED</h3>
+                <p style="margin: 10px 0 0 0;">${totalInlineStyles} inline style(s) found across ${failedTests} chapter(s).</p>
+            </div>
+        `}
+    `;
+    
+    summaryDiv.style.display = 'block';
+}
+
+// Run tests when page loads
+window.addEventListener('DOMContentLoaded', () => {
+    // Wait a bit for story-viewer.js to fully load
+    setTimeout(runTests, 500);
+});
+</script>
+
+</body>
+</html>

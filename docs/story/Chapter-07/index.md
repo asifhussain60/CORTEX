@@ -44,7 +44,7 @@ I stared at the document:
 
 The SAME structure. Every. Single. Time.
 
-<img src="../illustrations/images/essentials/cortex-awakening-ch07-01.jpeg" alt="Manual Planning Fatigue" style="float: right; margin: 0 0 1em 1em; max-width: 45%; height: auto;">
+<img src="../illustrations/images/essentials/cortex-awakening-ch07-01.jpeg" alt="Manual Planning Fatigue" class="story-image-right">
 
 "There must be a better way," I muttered.
 
@@ -138,7 +138,7 @@ Building the manifests took three days. Not because the orchestrator pattern was
 
 "Can't skip DoR. Can't skip DoD. Can't skip TDD. The manifest makes it MANDATORY."
 
-<img src="../illustrations/images/valuable/cortex-awakening-ch07-02.jpeg" alt="Planning System Manifest" style="float: left; margin: 0 1em 1em 0; max-width: 45%; height: auto;">
+<img src="../illustrations/images/valuable/cortex-awakening-ch07-02.jpeg" alt="Planning System Manifest" class="story-image-left">
 
 *"The AI is now your responsible parent."*
 
