@@ -25,6 +25,110 @@ This document establishes the definitive glassmorphism design standard for CORTE
 4. **Readability:** Text remains legible across all device sizes
 5. **Glassmorphism:** Consistent blur and transparency effects
 6. **Accessibility:** WCAG 2.1 AA compliant color contrast and navigation
+7. **Icons:** Use FontAwesome icons instead of emojis for better browser compatibility
+
+---
+
+## 🎨 Icon Standards
+
+### FontAwesome vs Emoji
+
+**ALWAYS use FontAwesome icons** in production views for:
+- ✅ **Universal browser support** (works in all browsers, all versions)
+- ✅ **Consistent rendering** (same appearance across platforms)
+- ✅ **Accessibility** (screen reader friendly with `aria-hidden="true"`)
+- ✅ **Customization** (size, color, styling via CSS)
+- ✅ **Professional appearance** (clean, crisp vector graphics)
+
+**AVOID emojis** because:
+- ❌ **Inconsistent rendering** (different on Windows/Mac/Linux/iOS/Android)
+- ❌ **Font dependency** (missing glyphs if font doesn't support Unicode version)
+- ❌ **Poor accessibility** (screen readers may not interpret correctly)
+- ❌ **Limited styling** (can't change color or size reliably)
+
+### FontAwesome Implementation
+
+**Required CDN Link:**
+```html
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+```
+
+**Usage in HTML:**
+```html
+<!-- Heading with icon -->
+<h1><i class="fas fa-tools"></i> Sharpen The Saw</h1>
+
+<!-- Button with icon -->
+<button><i class="fas fa-download"></i> Download</button>
+
+<!-- Navigation link -->
+<a href="index.html"><i class="fas fa-home"></i> Home</a>
+
+<!-- Icon with screen reader label -->
+<i class="fas fa-check" aria-hidden="true"></i>
+<span class="sr-only">Success</span>
+```
+
+### Common Icon Mappings
+
+**Replace emojis with these FontAwesome equivalents:**
+
+| Purpose | Emoji | FontAwesome Class | Icon |
+|---------|-------|-------------------|------|
+| **Tools/Build** | 🔧 🛠️ | `fa-tools` | <i class="fas fa-tools"></i> |
+| **Security** | 🔒 🛡️ | `fa-shield-alt`, `fa-lock` | <i class="fas fa-shield-alt"></i> |
+| **Architecture** | 📐 🏗️ | `fa-drafting-compass`, `fa-sitemap` | <i class="fas fa-drafting-compass"></i> |
+| **Code Quality** | ✨ 💎 | `fa-gem`, `fa-code` | <i class="fas fa-gem"></i> |
+| **Performance** | ⚡ 🚀 | `fa-tachometer-alt`, `fa-bolt` | <i class="fas fa-tachometer-alt"></i> |
+| **Testing** | 🧪 ✅ | `fa-vial`, `fa-check-circle` | <i class="fas fa-vial"></i> |
+| **Documentation** | 📖 📚 | `fa-book-open`, `fa-file-alt` | <i class="fas fa-book-open"></i> |
+| **Home** | 🏠 | `fa-home` | <i class="fas fa-home"></i> |
+| **Settings** | ⚙️ | `fa-cog` | <i class="fas fa-cog"></i> |
+| **Success** | ✅ | `fa-check-circle` | <i class="fas fa-check-circle"></i> |
+| **Error** | ❌ | `fa-times-circle` | <i class="fas fa-times-circle"></i> |
+| **Warning** | ⚠️ | `fa-exclamation-triangle` | <i class="fas fa-exclamation-triangle"></i> |
+| **Info** | ℹ️ | `fa-info-circle` | <i class="fas fa-info-circle"></i> |
+
+### Icon Styling Standards
+
+**CSS for icons in headings:**
+```css
+h1 i, h2 i, h3 i {
+    color: var(--accent-primary); /* Cyan */
+    margin-right: 0.5rem;
+    font-size: 1em; /* Match heading size */
+}
+
+h1 i {
+    text-shadow: 0 0 20px rgba(0, 212, 255, 0.5); /* Glow effect */
+}
+```
+
+**Icon sizing:**
+```html
+<!-- Small icon -->
+<i class="fas fa-check" style="font-size: 0.875rem;"></i>
+
+<!-- Normal icon (default) -->
+<i class="fas fa-check"></i>
+
+<!-- Large icon -->
+<i class="fas fa-check" style="font-size: 1.5rem;"></i>
+
+<!-- Extra large icon -->
+<i class="fas fa-check" style="font-size: 2rem;"></i>
+```
+
+**Accessibility:**
+```html
+<!-- Decorative icon (hide from screen readers) -->
+<i class="fas fa-star" aria-hidden="true"></i>
+
+<!-- Meaningful icon (include label) -->
+<button aria-label="Close dialog">
+    <i class="fas fa-times" aria-hidden="true"></i>
+</button>
+```
 
 ---
 
@@ -764,13 +868,15 @@ style NodeID fill:#7b61ff,stroke:#9f87ff,stroke-width:3px,color:#fff
 
 **Multi-Line Labels (Vertical Orientation):**
 ```
-A["🎯 API Design<br/>Core Architecture"]
-B["🔷 REST APIs<br/>Resource-Based"]
-C["💎 GraphQL APIs<br/>Query Language"]
+A["[API] API Design<br/>Core Architecture"]
+B["[REST] REST APIs<br/>Resource-Based"]
+C["[GQL] GraphQL APIs<br/>Query Language"]
 ```
 
+**Note:** In Mermaid diagrams, use **text-based icons in brackets** like `[API]`, `[REST]`, `[DB]` instead of emojis for consistency across browsers.
+
 **Structure:**
-1. **Icon** → Visual identifier (emoji or unicode)
+1. **Icon Label** → Text identifier in brackets (e.g., `[API]`, `[SEC]`, `[DB]`)
 2. **Primary Label** → Core concept (bold in mental model)
 3. **Line Break** (`<br/>`) → Separator
 4. **Subtitle/Context** → Additional detail (lighter weight)
@@ -781,8 +887,8 @@ C["💎 GraphQL APIs<br/>Query Language"]
 - **Total node height:** Max 3 lines (prevents vertical expansion)
 
 **Small Text Annotations:**
-```html
-A["📢 Phase 1<br/>Announce Deprecation<br/><small>Public notification</small>"]
+```
+A["[INFO] Phase 1<br/>Announce Deprecation<br/><small>Public notification</small>"]
 ```
 
 Use `<small>` tag for tertiary details (timestamps, counts, hints).

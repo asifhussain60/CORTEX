@@ -186,15 +186,8 @@
     font-weight: 800;
     line-height: 1.1;
     margin-bottom: 1rem;
-    background: linear-gradient(135deg, #fff 0%, var(--sts-accent) 50%, var(--sts-accent-secondary) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.sts-hero .accent-text {
-    color: var(--sts-accent);
-    -webkit-text-fill-color: var(--sts-accent);
+    color: #fff;
+    text-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
 }
 
 .sts-hero .hero-subtitle {
@@ -205,14 +198,19 @@
 }
 
 /* ==========================================================================
-   STS Metrics Cards - Glassmorphism
+   STS Metrics Cards - Glassmorphism (Single-Line Panel)
    ========================================================================== */
 
 .sts-metrics {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin: 1.5rem 0;
+    overflow-x: auto;
     display: flex;
     justify-content: center;
     gap: 1.5rem;
-    flex-wrap: wrap;
+    flex-wrap: nowrap; /* CRITICAL: Single line only */
 }
 
 .sts-metrics .metric-card {
@@ -221,6 +219,7 @@
     border-radius: 12px;
     padding: 1rem 1.5rem;
     min-width: 120px;
+    flex-shrink: 0; /* Prevent cards from shrinking */
     text-align: center;
     backdrop-filter: blur(10px);
     transition: all 0.3s ease;
@@ -956,6 +955,8 @@
     
     .sts-metrics {
         gap: 0.75rem;
+        padding: 1rem;
+        justify-content: flex-start; /* Left-align on mobile for better scroll UX */
     }
     
     .sts-metrics .metric-card {
