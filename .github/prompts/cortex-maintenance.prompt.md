@@ -1,11 +1,62 @@
 ---
 mode: agent
-description: "CORTEX System Maintenance - Health checks, intent router validation, and prompt regeneration"
+description: "CORTEX System Maintenance - Automated health checks, auto-repair, and system optimization"
 ---
 
 # 🩺 CORTEX System Maintenance
 
-**Purpose:***Enforcement Rule:** During Phase 7 (Regenerate Prompts), verify CORTEX.prompt.md and planning-system-4.0-manifest.yaml both enforce scaffold usage.
+**Purpose:** Automatically diagnose AND repair CORTEX system issues to maintain peak performance. This is NOT a diagnostic-only tool - it FIXES problems automatically.
+
+**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+---
+
+## 🎯 Core Philosophy
+
+**MAINTENANCE = DIAGNOSE + AUTO-REPAIR + VERIFY**
+
+| Phase | Action | Automation Level |
+|-------|--------|------------------|
+| **DIAGNOSE** | Identify gaps, errors, unwired components | ✅ Fully Automated |
+| **AUTO-REPAIR** | Patch source code, wire components, fix issues | ✅ Fully Automated |
+| **VERIFY** | Confirm 100% health, run tests, validate fixes | ✅ Fully Automated |
+
+**⚠️ CRITICAL:** If maintenance only identifies problems but doesn't fix them, it's a BUG in the maintenance system itself.
+
+---
+
+## 🚨 Enforcement Rules
+
+### Rule 1: AUTO-REPAIR is MANDATORY
+
+**❌ FORBIDDEN:**
+- Generating reports without fixing issues
+- Leaving wiring gaps after maintenance completes
+- Requiring manual intervention for known issues
+- Outputting "TODO: Fix manually" messages
+
+**✅ REQUIRED:**
+- Every detected issue has an auto-repair handler
+- 100% wiring coverage achieved automatically
+- All tests passing (100%) after maintenance
+- Source code committed with fixes
+
+### Rule 2: Idempotency
+
+Running maintenance twice on the same system should:
+- ✅ Produce identical results (no changes second time)
+- ✅ Report "All systems healthy" if no issues
+- ✅ Not break previously working components
+
+### Rule 3: Persistence
+
+Maintenance fixes MUST:
+- ✅ Modify source code (not just configs)
+- ✅ Be git-committable
+- ✅ Persist across `git pull` operations
+- ✅ Work on all machines without re-running maintenance
+
+**Reference:** `cortex-brain/documents/analysis/maintenance-wiring-persistence-gap.md`
 
 ---
 
@@ -28,9 +79,9 @@ Orchestrators that SHOULD support interactive mode:
 | **Maintenance** | Future | TBD | ⏸️ Deferred |
 | **Sanitization** | Future | TBD | ⏸️ Deferred |
 
-### 1.5b. Universal Wiring Checklist
+### 1.5b. Universal Wiring Checklist + AUTO-REPAIR
 
-For EACH orchestrator with interactive mode, verify all 6 components:
+For EACH orchestrator with interactive mode, verify AND FIX all 6 components:
 
 #### Component 1: Decision Logic ✅
 
@@ -56,13 +107,18 @@ def _should_use_interactive_mode(self, kwargs: Dict) -> bool:
 ```bash
 # Check if method exists
 grep -n "_should_use_interactive_mode" src/orchestrators/planning/planning_orchestrator.py
-grep -n "_should_use_interactive_mode" src/orchestrators/ado/ado_orchestrator.py
 
 # Check if method is CALLED in execute()
 grep -A 3 "_should_use_interactive_mode" src/orchestrators/planning/planning_orchestrator.py
 ```
 
 **Expected:** Method exists AND is called before generation phase.
+
+**❌ IF MISSING → AUTO-REPAIR:**
+```python
+# If method not called in execute(), patch it automatically
+# See Phase 4a for auto_wire_orchestrators.py implementation
+```
 
 ---
 
@@ -453,19 +509,22 @@ fi
 
 ## 🎯 10-Phase Maintenance Pipeline
 
-| Phase | Action | Success Criteria |
-|-------|--------|------------------|
-| **1** | Toolkit + Interactive + Vision Validation | Scaffold generators + session workflow + auto-engagement working |
-| **1.5** | Interactive Workflow Wiring 🆕 | Decision logic, agent registration, execution flow all wired |
-| **2** | Quick Health Check | Health score ≥90 |
-| **3** | Full Diagnostic | All components wired |
-| **4** | Wiring Integrity | 100% wiring coverage |
-| **4.5** | Test Suite Health 🆕 | Core 100%, full ≥99% |
-| **5** | Knowledge Library Validation | All guidelines accessible |
-| **6** | Review Reports | Reports generated |
-| **7** | Intent Router Validation | All manifests synced |
-| **8** | Regenerate Lean Prompts | <200 lines each |
-| **9** | Report Management | Cleanup old reports |
+**⚠️ EVERY PHASE = DIAGNOSE + AUTO-REPAIR + VERIFY**
+
+| Phase | Diagnose | Auto-Repair | Verify |
+|-------|----------|-------------|--------|
+| **1** | Check scaffold generators exist | Create missing generators | Test generation works |
+| **1.5** | Check interactive wiring gaps | Wire all 6 components | Run integration tests |
+| **2** | Quick health scan | Fix critical issues | Health score ≥90 |
+| **3** | Full component diagnostic | Patch unwired components | All components functional |
+| **4** | Detect wiring gaps | Patch source code | 100% wiring coverage |
+| **4a** | Parse wiring reports | Execute auto_wire_orchestrators.py | Commit fixes to git |
+| **4.5** | Run test suite | Delete obsolete tests, fix bugs | 100% pass rate |
+| **5** | Scan knowledge library | Fix broken refs, sync YAML↔MD | All guidelines accessible |
+| **6** | Check report age/size | Archive old reports, cleanup | Reports organized |
+| **7** | Validate manifest paths | Fix broken references | All manifests synced |
+| **8** | Measure prompt bloat | Regenerate lean prompts | Each <200 lines |
+| **9** | Find duplicate reports | Delete duplicates, consolidate | Clean report structure |
 
 ---
 
@@ -614,17 +673,160 @@ grep -A 5 "automation:" cortex-brain/manifests/orchestrators/planning-system-4.0
 
 ---
 
-## Phase 2-4: Health & Diagnostics
+## Phase 2-4: Health Diagnostics + Auto-Repair
+
+### Phase 2: Quick Health Check (DIAGNOSE)
 
 ```bash
-# Phase 2: Quick check
+# Run quick health diagnostic
 python3 scripts/cortex_system_doctor.py --quick
+```
 
-# Phase 3: Full diagnostic
+**Expected Output:** Health score with breakdown of issues.
+
+### Phase 3: Full Diagnostic (DEEP SCAN)
+
+```bash
+# Run comprehensive system scan
 python3 scripts/cortex_system_doctor.py --phase diagnose --phase scan
+```
 
-# Phase 4: Wiring integrity
+**Expected Output:** Detailed report of all unwired components, duplicates, unnecessary files.
+
+### Phase 4: Wiring Integrity Check (DETECT GAPS)
+
+```bash
+# Detect wiring gaps (generates report for Phase 4a)
 python3 scripts/check_wiring_integrity.py
+```
+
+**Expected Output:** JSON report showing which components are unwired.
+
+**⚠️ CRITICAL:** Phases 2-4 are DIAGNOSTIC ONLY. They identify problems but **DO NOT FIX THEM**.
+
+**Next:** Phase 4a AUTO-REPAIRS the issues identified above.
+
+---
+
+## Phase 4a: Auto-Wire Components 🔥 NEW - CRITICAL FOR PERSISTENCE
+
+### ⚠️ WHY THIS PHASE IS MANDATORY
+
+**Problem:** Running maintenance on Machine A and committing changes does NOT wire components on Machine B after `git pull`.
+
+**Root Cause:** Phases 2-4 are **diagnostic only** - they generate reports but **don't modify source code**.
+
+**Solution:** Phase 4a **patches source files** to fix wiring gaps, making changes **git-committable** and **persistent across machines**.
+
+**Reference:** `cortex-brain/documents/analysis/maintenance-wiring-persistence-gap.md`
+
+### 4a. Run Auto-Wiring Script
+
+```bash
+# Preview what will be fixed (dry-run, default)
+python3 scripts/auto_wire_orchestrators.py
+
+# Apply wiring fixes to source code
+python3 scripts/auto_wire_orchestrators.py --execute
+
+# Verify 100% wiring coverage
+python3 scripts/check_wiring_integrity.py
+```
+
+**Expected Output:**
+```
+🔧 CORTEX Auto-Wiring Script v1.0
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 Wiring Gaps Detected:
+  ❌ Planning Orchestrator: Decision logic not called
+  ❌ Agent Registry: InteractivePlanner missing
+
+🔧 Applying Fixes...
+  [1/4] Wiring decision logic... ✅ SUCCESS (18 lines modified)
+  [2/4] Creating agent registry... ✅ SUCCESS (23 lines added)
+  [3/4] Wiring execution method... ⏭️  SKIPPED (exists)
+  [4/4] Updating operations config... ✅ SUCCESS (1 field modified)
+
+✅ Wiring Coverage: 100% (was 50%)
+```
+
+### 4b. Commit Wiring Fixes
+
+**⚠️ CRITICAL:** These changes MUST be committed to persist across machines.
+
+```bash
+# Review changes
+git diff src/orchestrators/ src/cortex_agents/ cortex-operations.yaml
+
+# Stage wiring fixes
+git add src/orchestrators/planning/planning_orchestrator.py
+git add src/cortex_agents/agent_registry.py
+git add cortex-operations.yaml
+
+# Commit with descriptive message
+git commit -m "fix: auto-wire planning orchestrator interactive mode
+
+- Added interactive mode check in execute() method
+- Created agent_registry.py with InteractivePlanner registration
+- Updated cortex-operations.yaml with interactive_mode flag
+
+Wiring coverage: 50% → 100%
+Generated by: scripts/auto_wire_orchestrators.py"
+
+# Push to remote
+git push origin CORTEX-4.0
+```
+
+### 4c. Verify Persistence on Another Machine
+
+```bash
+# On Machine B (fresh clone or pull)
+git pull origin CORTEX-4.0
+
+# Verify wiring WITHOUT running auto-wire script
+python3 scripts/check_wiring_integrity.py
+
+# Expected: 100% wiring coverage (no manual fixes needed)
+```
+
+**Success Criteria:**
+- ✅ Auto-wire script runs without errors
+- ✅ Source files modified (planning_orchestrator.py, agent_registry.py, cortex-operations.yaml)
+- ✅ Wiring check shows 100% coverage
+- ✅ Changes committed and pushed to remote
+- ✅ `git pull` on Machine B shows 100% wiring (without re-running auto-wire)
+
+### 4d. Troubleshooting
+
+**Issue:** Auto-wire script fails with "No wiring report found"
+
+**Solution:**
+```bash
+# Generate fresh wiring report first
+python3 scripts/check_wiring_integrity.py
+# Then run auto-wire
+python3 scripts/auto_wire_orchestrators.py --execute
+```
+
+**Issue:** Wiring coverage still <100% after auto-wire
+
+**Solution:**
+```bash
+# Check which components are still unwired
+python3 scripts/check_wiring_integrity.py | grep "❌"
+# Review auto-wire log for skipped patterns
+cat cortex-brain/health-reports/auto-wire-log-*.txt
+```
+
+**Issue:** Need to undo auto-wiring changes
+
+**Solution:**
+```bash
+# Restore from automatic backups
+python3 scripts/auto_wire_orchestrators.py --undo
+# Or manually restore from .bak files
+ls -lah src/**/*.bak.*
 ```
 
 ---

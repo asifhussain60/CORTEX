@@ -431,7 +431,8 @@ operations:
     category: system
   generate_ra_specs:
     name: Generate RA Specifications
-    description: Legacy API specification generator for PM/BA documentation from C# code
+    description: Legacy API specification generator for PM/BA documentation from C#
+      code
     deployment_tier: admin
     execution_method: cli_wrapper
     cli_script: scripts/cli_wrappers/generate_ra_specs.py
@@ -447,57 +448,61 @@ operations:
       modules_implemented: 1
       modules_total: 1
       completion_percentage: 100
-      notes: Generates PM/BA specifications from legacy C# code with business rules, validations, and database operations
+      notes: Generates PM/BA specifications from legacy C# code with business rules,
+        validations, and database operations
     examples:
     - generate ra specs
     - create ra documentation
     - document legacy apis
   realign_plans:
-    name: Realign Plans
-    description: Migrate plans to Planning System canonical structure (WP## naming, execution/ subfolder, context/ subfolder)
+    name: Plan Realignment
+    description: Migrate plans to Planning System canonical structure (WP## naming,
+      execution/context subfolders)
     deployment_tier: admin
     execution_method: cli_wrapper
     cli_script: scripts/cli_wrappers/realign_plans_wrapper.py
     natural_language:
     - realign plans
-    - migrate plans
-    - realign plan structure
-    - fix plan structure
-    - migrate to canonical structure
+    - migrate plans to canonical structure
+    - reorganize plans
+    - update plan structure
     category: planning
+    modules:
+    - plan_realignment_engine
     implementation_status:
       status: ready
       modules_implemented: 1
       modules_total: 1
       completion_percentage: 100
-      notes: Migrates old-format plans to Planning System canonical structure with WP## naming and standard task injection
+      notes: Realigns plans to WP## naming, moves YAML to execution/, graphs to context/
     examples:
     - realign plans
-    - migrate plan CORTEX-3.0-4.0
-    - fix plan structure
+    - migrate plans to canonical structure
   cleanup_plans:
-    name: Cleanup Plans
-    description: Automated plan lifecycle management - delete temp plans, archive completed/failed plans, detect orphaned plans
+    name: Plan Cleanup
+    description: Automated plan lifecycle management - delete temp plans, archive
+      completed/failed plans
     deployment_tier: admin
     execution_method: cli_wrapper
     cli_script: scripts/cli_wrappers/cleanup_plans_wrapper.py
     natural_language:
     - cleanup plans
-    - clean up plans
-    - cleanup old plans
+    - clean up old plans
     - archive completed plans
-    - delete temp plans
+    - manage plan lifecycle
     category: planning
+    modules:
+    - plan_cleanup_manager
     implementation_status:
       status: ready
       modules_implemented: 1
       modules_total: 1
       completion_percentage: 100
-      notes: Automated cleanup with configurable retention policies - temp plans (7 days), completed (30 days), failed (14 days)
+      notes: Cleans temp plans (7 days), archives completed (30 days) and failed (14
+        days) plans
     examples:
     - cleanup plans
-    - cleanup old plans
-    - archive completed plans
+    - archive old plans
   threat_modeler_agent:
     name: Threat Modeler Agent
     description: Threat Modeler Agent
@@ -576,18 +581,33 @@ operations:
       completion_percentage: 100
       notes: Builds clean production package and publishes to downloadable repository
   regenerate_diagrams:
-    name: Regenerate All Diagrams
-    description: Analyze CORTEX design and regenerate all visual assets from scratch
-    deployment_tier: developer
-    execution_method: internal
+    name: Regenerate Diagrams
+    description: Regenerate architecture diagrams from code. Updates Mermaid diagrams,
+      component relationships, and system architecture visuals.
+    deployment_tier: admin
+    execution_method: copilot_chat
     natural_language:
     - regenerate diagrams
-    - regenerate all diagrams
-    - refresh diagrams
     - update diagrams
-    - generate diagrams
-    - create diagrams
+    - refresh architecture diagrams
+    - regenerate architecture
+    - update mermaid diagrams
+    - refresh diagrams
+    - rebuild diagrams
     category: documentation
+    modules:
+    - diagram_regeneration_orchestrator
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Scans codebase structure, generates Mermaid diagrams, updates architecture
+        documentation.
+    examples:
+    - regenerate diagrams
+    - update architecture diagrams
+    - refresh mermaid diagrams
   generate_orchestration_docs:
     name: Generate Orchestration Documentation
     description: Auto-generate comprehensive documentation for all CORTEX orchestrators
@@ -1061,16 +1081,33 @@ operations:
     category: setup
   git_checkpoint:
     name: Git Checkpoint
-    description: Git Checkpoint CLI Wrapper
-    deployment_tier: user_facing
-    execution_method: internal
+    description: "Automated git commits during TDD workflow (RED\u2192GREEN\u2192\
+      REFACTOR) with session tracking and meaningful commit messages"
+    deployment_tier: dual_context
+    execution_method: copilot_chat
     natural_language:
-    - checkpoints
-    - cortex git checkpoint utility
-    - create
-    category: git
+    - git checkpoint
+    - commit progress
+    - save checkpoint
+    - checkpoint commit
+    - tdd checkpoint
+    - create checkpoint
+    - save tdd progress
+    category: development
     modules:
+    - git_checkpoint_orchestrator
     - git_checkpoint
+    implementation_status:
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: "Integrates with TDD workflow for automated checkpoint commits during\
+        \ RED\u2192GREEN\u2192REFACTOR cycle. Session-based tracking with UUID."
+    examples:
+    - git checkpoint
+    - save checkpoint for RED phase
+    - checkpoint commit with message
   header_formatter:
     name: Header Formatter
     description: CORTEX Orchestrator Header Formatter
@@ -1110,7 +1147,9 @@ operations:
     category: general
   onboarding:
     name: CORTEX Onboarding
-    description: Interactive 6-phase onboarding guide - Welcome to CORTEX! Learn installation, core concepts, planning, TDD workflow, documentation, and common operations in 60 minutes
+    description: Interactive 6-phase onboarding guide - Welcome to CORTEX! Learn installation,
+      core concepts, planning, TDD workflow, documentation, and common operations
+      in 60 minutes
     deployment_tier: user
     execution_method: cli_wrapper
     cli_script: cortex-toolkit/core/utilities/onboarding_interactive.py
@@ -1130,7 +1169,8 @@ operations:
     - onboarding_orchestrator
     profiles:
       full:
-        description: "Complete 6-phase onboarding (Quick Start → Core Concepts → Planning → TDD → Documentation → Common Operations)"
+        description: "Complete 6-phase onboarding (Quick Start \u2192 Core Concepts\
+          \ \u2192 Planning \u2192 TDD \u2192 Documentation \u2192 Common Operations)"
         phases:
         - Quick Start (5 min)
         - Core Concepts (10 min)
@@ -1139,15 +1179,15 @@ operations:
         - Documentation (5 min)
         - Common Operations (10 min)
       quick:
-        description: "Quick start only - get CORTEX running in 5 minutes"
+        description: Quick start only - get CORTEX running in 5 minutes
         phases:
         - Quick Start
       concepts:
-        description: "Core concepts only - understand 4-tier brain and SKULL"
+        description: Core concepts only - understand 4-tier brain and SKULL
         phases:
         - Core Concepts
       tdd:
-        description: "TDD workshop - master RED→GREEN→REFACTOR cycle"
+        description: "TDD workshop - master RED\u2192GREEN\u2192REFACTOR cycle"
         phases:
         - TDD Workflow
     implementation_status:
@@ -1155,7 +1195,9 @@ operations:
       modules_implemented: 2
       modules_total: 2
       completion_percentage: 100
-      notes: Interactive CLI-based onboarding with 6 phases, progress persistence, real-time feedback, and certificate generation. Includes architecture diagram and TDD workflow guide artifacts.
+      notes: Interactive CLI-based onboarding with 6 phases, progress persistence,
+        real-time feedback, and certificate generation. Includes architecture diagram
+        and TDD workflow guide artifacts.
     examples:
     - onboard me
     - start onboarding
@@ -1224,52 +1266,6 @@ operations:
     - deploy
     - validate
     category: maintenance
-  realign_plans:
-    name: Plan Realignment
-    description: Migrate plans to Planning System canonical structure (WP## naming, execution/context subfolders)
-    deployment_tier: admin
-    execution_method: cli_wrapper
-    cli_script: scripts/cli_wrappers/realign_plans_wrapper.py
-    natural_language:
-    - realign plans
-    - migrate plans to canonical structure
-    - reorganize plans
-    - update plan structure
-    category: planning
-    modules:
-    - plan_realignment_engine
-    implementation_status:
-      status: ready
-      modules_implemented: 1
-      modules_total: 1
-      completion_percentage: 100
-      notes: Realigns plans to WP## naming, moves YAML to execution/, graphs to context/
-    examples:
-    - realign plans
-    - migrate plans to canonical structure
-  cleanup_plans:
-    name: Plan Cleanup
-    description: Automated plan lifecycle management - delete temp plans, archive completed/failed plans
-    deployment_tier: admin
-    execution_method: cli_wrapper
-    cli_script: scripts/cli_wrappers/cleanup_plans_wrapper.py
-    natural_language:
-    - cleanup plans
-    - clean up old plans
-    - archive completed plans
-    - manage plan lifecycle
-    category: planning
-    modules:
-    - plan_cleanup_manager
-    implementation_status:
-      status: ready
-      modules_implemented: 1
-      modules_total: 1
-      completion_percentage: 100
-      notes: Cleans temp plans (7 days), archives completed (30 days) and failed (14 days) plans
-    examples:
-    - cleanup plans
-    - archive old plans
   optimize_tokens:
     name: Optimize Tokens
     description: CORTEX Token Optimization CLI
@@ -1280,7 +1276,8 @@ operations:
     category: maintenance
   planning:
     name: Planning
-    description: Universal Planning Gate - ALL requests create temp plan first, execute after approval
+    description: Universal Planning Gate - ALL requests create temp plan first, execute
+      after approval
     deployment_tier: user_facing
     execution_method: copilot_chat
     natural_language:
@@ -1295,6 +1292,7 @@ operations:
     - promote plan
     - finalize plan
     category: planning
+    interactive_mode: true
   policy_scanner:
     name: Policy Scanner
     description: Policy Scanner - Multi-format policy document detection and parsing
@@ -2466,22 +2464,29 @@ operations:
       related_operations:
       - maintain_cortex
   optimize_cortex:
-    name: CORTEX Optimization
-    description: '[DEPRECATED] Use ''maintain_cortex'' instead - Holistic architecture
-      review with SKULL tests and automated optimizations'
+    name: Optimize CORTEX
+    description: Comprehensive CORTEX optimization - performance tuning, cache optimization,
+      and resource management.
     deployment_tier: admin
-    execution_method: internal
-    status: deprecated
-    consolidation_target: maintain_cortex
+    execution_method: copilot_chat
     natural_language:
-    - optimize (deprecated - use maintain)
+    - optimize cortex
+    - cortex optimization
+    - performance tuning
+    - tune cortex
+    - optimize performance
     category: maintenance
+    modules:
+    - optimize_cortex_orchestrator
     implementation_status:
-      status: deprecated
-      notes: 'DEPRECATED: Consolidated into ''maintain_cortex'' operation for simplification.
-        All functionality preserved in the new consolidated operation.'
-      consolidation_date: '2025-11-14'
-      replacement: maintain_cortex
+      status: ready
+      modules_implemented: 1
+      modules_total: 1
+      completion_percentage: 100
+      notes: Performance optimization for CORTEX system
+    examples:
+    - optimize cortex
+    - run performance tuning
   deploy_to_app:
     name: Deploy CORTEX to Application
     description: '[FUTURE] Deploy CORTEX package to target application - Advanced
@@ -2504,49 +2509,33 @@ operations:
       related_operations:
       - application_onboarding
   design_sync:
-    name: Design-Implementation Synchronization
-    description: Resynchronizes CORTEX design documents with actual implementation,
-      consolidates to single status doc, integrates optimization recommendations,
-      converts verbose MD to YAML schemas
+    name: Design Sync
+    description: Sync design documents with implementation reality. Detects gaps between
+      documented design and actual code, generates sync reports.
     deployment_tier: admin
-    execution_method: internal
+    execution_method: copilot_chat
     natural_language:
-    - sync design
     - design sync
-    - synchronize design
-    - align design with implementation
-    - update design docs
-    - consolidate design
-    - fix design drift
-    - resync design
+    - sync design
+    - align design docs
+    - sync design documents
     - design implementation sync
-    category: maintenance
+    - check design alignment
+    - verify design matches code
+    category: documentation
     modules:
     - design_sync_orchestrator
-    profiles:
-      quick:
-        description: Quick sync - discovery and gap analysis only (no changes)
-        modules:
-        - design_sync_orchestrator
-      standard:
-        description: Standard sync - discovery, analysis, consolidation (safe updates)
-        modules:
-        - design_sync_orchestrator
-      comprehensive:
-        description: Full sync - discovery, optimization, YAML conversion, consolidation
-          (all changes with git tracking)
-        modules:
-        - design_sync_orchestrator
     implementation_status:
       status: ready
       modules_implemented: 1
       modules_total: 1
       completion_percentage: 100
-      notes: 'Single orchestrator module coordinates: (1) Live implementation discovery,
-        (2) Design-implementation gap analysis, (3) Optimization integration, (4)
-        MD-to-YAML conversion, (5) Single status doc consolidation, (6) Git tracking.
-        Always works on LATEST design version (currently CORTEX 2.0).'
-      estimated_hours: 14
+      notes: Analyzes design documents vs implementation, generates gap analysis reports,
+        suggests updates.
+    examples:
+    - design sync
+    - sync design documents
+    - check design alignment
   feedback_report:
     name: Generate Comprehensive Feedback Report
     description: Generate detailed performance and metrics report covering 8 categories
@@ -3243,99 +3232,6 @@ operations:
     author: Asif Hussain
     modules:
     - src.operations.modules.validation/session_utility
-
-  # ============================================================================
-  # NEWLY WIRED ORCHESTRATORS (Wiring Remediation - December 2025)
-  # ============================================================================
-
-  git_checkpoint:
-    name: Git Checkpoint
-    description: Automated git commits during TDD workflow (RED→GREEN→REFACTOR) with
-      session tracking and meaningful commit messages
-    deployment_tier: dual_context
-    execution_method: copilot_chat
-    natural_language:
-    - git checkpoint
-    - commit progress
-    - save checkpoint
-    - checkpoint commit
-    - tdd checkpoint
-    - create checkpoint
-    - save tdd progress
-    category: development
-    modules:
-    - git_checkpoint_orchestrator
-    - git_checkpoint
-    implementation_status:
-      status: ready
-      modules_implemented: 1
-      modules_total: 1
-      completion_percentage: 100
-      notes: Integrates with TDD workflow for automated checkpoint commits during
-        RED→GREEN→REFACTOR cycle. Session-based tracking with UUID.
-    examples:
-    - git checkpoint
-    - save checkpoint for RED phase
-    - checkpoint commit with message
-
-  design_sync:
-    name: Design Sync
-    description: Sync design documents with implementation reality. Detects gaps between
-      documented design and actual code, generates sync reports.
-    deployment_tier: admin
-    execution_method: copilot_chat
-    natural_language:
-    - design sync
-    - sync design
-    - align design docs
-    - sync design documents
-    - design implementation sync
-    - check design alignment
-    - verify design matches code
-    category: documentation
-    modules:
-    - design_sync_orchestrator
-    implementation_status:
-      status: ready
-      modules_implemented: 1
-      modules_total: 1
-      completion_percentage: 100
-      notes: Analyzes design documents vs implementation, generates gap analysis
-        reports, suggests updates.
-    examples:
-    - design sync
-    - sync design documents
-    - check design alignment
-
-  regenerate_diagrams:
-    name: Regenerate Diagrams
-    description: Regenerate architecture diagrams from code. Updates Mermaid diagrams,
-      component relationships, and system architecture visuals.
-    deployment_tier: admin
-    execution_method: copilot_chat
-    natural_language:
-    - regenerate diagrams
-    - update diagrams
-    - refresh architecture diagrams
-    - regenerate architecture
-    - update mermaid diagrams
-    - refresh diagrams
-    - rebuild diagrams
-    category: documentation
-    modules:
-    - diagram_regeneration_orchestrator
-    implementation_status:
-      status: ready
-      modules_implemented: 1
-      modules_total: 1
-      completion_percentage: 100
-      notes: Scans codebase structure, generates Mermaid diagrams, updates
-        architecture documentation.
-    examples:
-    - regenerate diagrams
-    - update architecture diagrams
-    - refresh mermaid diagrams
-
   app_health:
     name: Application Health
     description: Comprehensive application health monitoring and diagnostics. Checks
@@ -3364,7 +3260,6 @@ operations:
     - app health
     - check application health
     - system health status
-
   vacuum:
     name: Vacuum Databases
     description: SQLite database optimization - VACUUM command to reclaim space and
@@ -3392,7 +3287,6 @@ operations:
     - vacuum databases
     - optimize cortex databases
     - clean sqlite databases
-
   holistic_cleanup:
     name: Holistic Cleanup
     description: Comprehensive cleanup across entire CORTEX system - removes orphaned
@@ -3419,7 +3313,6 @@ operations:
     - holistic cleanup
     - run full cleanup
     - comprehensive system cleanup
-
   architectural_review:
     name: Architectural Review
     description: Automated architecture analysis - checks for anti-patterns, suggests
@@ -3446,7 +3339,6 @@ operations:
     - architectural review
     - analyze system architecture
     - check for anti-patterns
-
   brain_tuning:
     name: Brain Tuning
     description: Optimize CORTEX brain databases and knowledge structures for improved
@@ -3473,11 +3365,6 @@ operations:
     - brain tuning
     - optimize cortex brain
     - tune knowledge structures
-
-  # ============================================================================
-  # PHASE 4: REMAINING ORCHESTRATORS (Wiring Remediation - December 2025)
-  # ============================================================================
-
   master_setup:
     name: Master Setup
     description: Master setup orchestrator for coordinating all setup modules in correct
@@ -3503,7 +3390,6 @@ operations:
     examples:
     - master setup
     - run full cortex setup
-
   setup_epm:
     name: Setup EPM
     description: Enterprise Portfolio Management setup - configures EPM integration
@@ -3528,7 +3414,6 @@ operations:
     examples:
     - setup epm
     - configure enterprise portfolio
-
   onboarding_acknowledgment:
     name: Onboarding Acknowledgment
     description: Handles user acknowledgment during onboarding process. Tracks user
@@ -3553,7 +3438,6 @@ operations:
     examples:
     - acknowledge onboarding
     - confirm onboarding completion
-
   upgrade_v2:
     name: Upgrade V2
     description: Enhanced upgrade orchestrator v2 with improved safety checks, rollback
@@ -3578,7 +3462,6 @@ operations:
     examples:
     - upgrade v2
     - run enhanced upgrade
-
   pre_flight:
     name: Pre-flight Check
     description: Pre-flight validation before major operations. Checks system readiness,
@@ -3604,7 +3487,6 @@ operations:
     examples:
     - run pre-flight
     - check system readiness
-
   intelligence:
     name: Intelligence Gathering
     description: Gather intelligence about codebase, patterns, and system state for
@@ -3629,7 +3511,6 @@ operations:
     examples:
     - gather intelligence
     - generate intelligence report
-
   system_integrity_check:
     name: System Integrity Check
     description: Deep system integrity validation - verifies file integrity, configuration
@@ -3654,7 +3535,6 @@ operations:
     examples:
     - run integrity check
     - verify system integrity
-
   story_enhancement:
     name: Story Enhancement
     description: Enhance user stories with technical details, acceptance criteria,
@@ -3679,7 +3559,6 @@ operations:
     examples:
     - enhance story
     - add technical details to story
-
   hands_on_tutorial:
     name: Hands-on Tutorial
     description: Interactive tutorial system for learning CORTEX features through
@@ -3705,7 +3584,6 @@ operations:
     examples:
     - start hands-on tutorial
     - learn cortex interactively
-
   enterprise_documentation:
     name: Enterprise Documentation
     description: Generate enterprise-grade documentation with compliance headers,
@@ -3730,7 +3608,6 @@ operations:
     examples:
     - generate enterprise docs
     - create compliance documentation
-
   auto_registration:
     name: Auto Registration
     description: Automatic component registration for dynamic discovery and wiring
@@ -3755,32 +3632,6 @@ operations:
     examples:
     - run auto registration
     - register new components
-
-  optimize_cortex:
-    name: Optimize CORTEX
-    description: Comprehensive CORTEX optimization - performance tuning, cache optimization,
-      and resource management.
-    deployment_tier: admin
-    execution_method: copilot_chat
-    natural_language:
-    - optimize cortex
-    - cortex optimization
-    - performance tuning
-    - tune cortex
-    - optimize performance
-    category: maintenance
-    modules:
-    - optimize_cortex_orchestrator
-    implementation_status:
-      status: ready
-      modules_implemented: 1
-      modules_total: 1
-      completion_percentage: 100
-      notes: Performance optimization for CORTEX system
-    examples:
-    - optimize cortex
-    - run performance tuning
-
   optimize_system:
     name: Optimize System
     description: System-level optimization for host machine - memory management, process
@@ -3805,7 +3656,6 @@ operations:
     examples:
     - optimize system
     - tune host system
-
   publish_branch:
     name: Publish Branch
     description: Publish feature branch for deployment - validates, packages, and
@@ -3830,7 +3680,6 @@ operations:
     examples:
     - publish branch
     - prepare branch for release
-
   user_cleanup:
     name: User Cleanup
     description: Clean up user-specific artifacts - temporary files, cache, and session
@@ -3855,7 +3704,6 @@ operations:
     examples:
     - run user cleanup
     - clean my workspace
-
   ado_validation:
     name: ADO Validation
     description: Validate Azure DevOps work items - checks format, required fields,
@@ -3880,7 +3728,6 @@ operations:
     examples:
     - validate ado work items
     - check ado compliance
-
   holistic_discovery:
     name: Holistic Discovery
     description: Comprehensive codebase discovery - scans all components, maps relationships,
@@ -3906,7 +3753,6 @@ operations:
     examples:
     - run holistic discovery
     - discover all components
-
   vision_api_validation:
     name: Vision API Validation
     description: Validate Vision API configuration and connectivity. Tests image analysis
@@ -3931,7 +3777,6 @@ operations:
     examples:
     - validate vision api
     - test vision api connectivity
-
 modules:
   project_validation:
     name: Project Validation
