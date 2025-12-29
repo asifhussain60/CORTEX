@@ -5,17 +5,458 @@ description: "CORTEX System Maintenance - Health checks, intent router validatio
 
 # 🩺 CORTEX System Maintenance
 
-**Purpose:** Keep CORTEX 4.0 at peak performance through health checks, intent router validation, and automated prompt regeneration.
+**Purpose:***Enforcement Rule:** During Phase 7 (Regenerate Prompts), verify CORTEX.prompt.md and planning-system-4.0-manifest.yaml both enforce scaffold usage.
+
+---
+
+## Phase 1.5: Interactive Workflow Wiring Validation 🔄 NEW
+
+**Purpose:** Ensure orchestrators with interactive capabilities have complete wiring from decision logic through user interface.
+
+**Reference:** `cortex-brain/documents/analysis/interactive-workflow-wiring-gap-analysis.md`
+
+**Critical:** Interactive components built but not wired = technical debt + broken user experience.
+
+### 1.5a. Identify Interactive Orchestrators
+
+Orchestrators that SHOULD support interactive mode:
+
+| Orchestrator | Status | Interactive Components | Wired? |
+|--------------|--------|----------------------|--------|
+| **Planning** | Built | `interactive_session.py` (648 LOC) | ❌ No |
+| **ADO** | Not Built | Should have `interactive_ado_session.py` | ❌ No |
+| **Maintenance** | Future | TBD | ⏸️ Deferred |
+| **Sanitization** | Future | TBD | ⏸️ Deferred |
+
+### 1.5b. Universal Wiring Checklist
+
+For EACH orchestrator with interactive mode, verify all 6 components:
+
+#### Component 1: Decision Logic ✅
+
+**File:** `src/orchestrators/{name}/{name}_orchestrator.py`
+
+**Required Method:**
+```python
+def _should_use_interactive_mode(self, kwargs: Dict) -> bool:
+    """
+    Decide if interactive mode is needed.
+    
+    Criteria:
+    - Explicit request: kwargs.get("interactive", False)
+    - User preference: config.get("prefer_interactive", False)
+    - Complexity: Tier 4 (complex operations)
+    - Confidence: Low (<60%)
+    - Conflicts: Existing artifact detected
+    """
+    pass
+```
+
+**Validation Commands:**
+```bash
+# Check if method exists
+grep -n "_should_use_interactive_mode" src/orchestrators/planning/planning_orchestrator.py
+grep -n "_should_use_interactive_mode" src/orchestrators/ado/ado_orchestrator.py
+
+# Check if method is CALLED in execute()
+grep -A 3 "_should_use_interactive_mode" src/orchestrators/planning/planning_orchestrator.py
+```
+
+**Expected:** Method exists AND is called before generation phase.
+
+---
+
+#### Component 2: Agent Registration ✅
+
+**File:** `src/cortex_agents/agent_registry.py`
+
+**Required Registration:**
+```python
+AGENT_REGISTRY = {
+    "planning": PlanningAgent,
+    "review": ReviewAgent,
+    "interactive_planning": InteractivePlanner,  # ← Must exist
+    "interactive_ado": InteractiveADOPlanner,    # ← Must exist
+}
+```
+
+**Validation Commands:**
+```bash
+# Check agent registry
+grep "interactive_planning" src/cortex_agents/agent_registry.py
+grep "interactive_ado" src/cortex_agents/agent_registry.py
+
+# Check agent imports
+grep "from.*interactive_planner import" src/cortex_agents/agent_registry.py
+```
+
+**Expected:** All interactive agents registered and importable.
+
+---
+
+#### Component 3: Execution Flow Routing ✅
+
+**File:** `src/orchestrators/{name}/{name}_orchestrator.py`
+
+**Required Pattern in `execute()` method:**
+```python
+def execute(self, **kwargs) -> OrchestratorResult:
+    # Phase 1: Analyze request
+    request_analysis = self._analyze_request(kwargs)
+    
+    # Phase 2: Mode selection
+    if self._should_use_interactive_mode(kwargs):
+        return self._execute_interactive_mode(request_analysis, kwargs)
+    else:
+        return self._execute_autonomous_mode(request_analysis, kwargs)
+```
+
+**Validation Commands:**
+```bash
+# Check for mode routing
+grep -A 10 "def execute" src/orchestrators/planning/planning_orchestrator.py | grep "interactive"
+
+# Check for both execution paths
+grep "_execute_interactive_mode" src/orchestrators/planning/planning_orchestrator.py
+grep "_execute_autonomous_mode" src/orchestrators/planning/planning_orchestrator.py
+```
+
+**Expected:** Conditional routing to interactive OR autonomous mode.
+
+---
+
+#### Component 4: Interactive Execution Method ✅
+
+**File:** `src/orchestrators/{name}/{name}_orchestrator.py`
+
+**Required Method:**
+```python
+def _execute_interactive_mode(
+    self, 
+    analysis: RequestAnalysis, 
+    kwargs: Dict
+) -> OrchestratorResult:
+    """Execute in interactive mode with user collaboration."""
+    
+    # 1. Create session
+    session = self.interactive_creation(
+        name=kwargs["name"],
+        user_context=kwargs.get("user_context", {})
+    )
+    
+    # 2. Get agent
+    agent = InteractivePlanner(config=self.config)
+    
+    # 3. Collaborate
+    result_data = await agent.collaborate(session)
+    
+    # 4. Return result
+    return self._create_success_result(result_data)
+```
+
+**Validation Commands:**
+```bash
+# Check if method exists
+grep -n "_execute_interactive_mode" src/orchestrators/planning/planning_orchestrator.py
+
+# Check for agent instantiation
+grep "InteractivePlanner" src/orchestrators/planning/planning_orchestrator.py
+
+# Check for session creation
+grep "interactive_creation\|interactive_plan_creation" src/orchestrators/planning/planning_orchestrator.py
+```
+
+**Expected:** Method exists, instantiates agent, creates session, returns result.
+
+---
+
+#### Component 5: User Interface Bridge ✅
+
+**File:** `src/orchestrators/{name}/user_interface.py` (NEW)
+
+**Required Classes:**
+```python
+class QuestionFormatter:
+    """Format questions for user display."""
+    
+    def format_multiple_choice(self, question: Question) -> str:
+        pass
+    
+    def format_yes_no(self, question: Question) -> str:
+        pass
+    
+    def format_free_text(self, question: Question) -> str:
+        pass
+
+class ResponseParser:
+    """Parse user responses."""
+    
+    def parse_answer(self, question: Question, user_input: str) -> Answer:
+        pass
+
+class ConversationManager:
+    """Manage interactive conversation flow."""
+    
+    def ask_question(self, question: Question) -> Answer:
+        pass
+    
+    def present_draft(self, draft_data: Dict) -> bool:
+        pass
+    
+    def collect_feedback(self) -> List[str]:
+        pass
+```
+
+**Validation Commands:**
+```bash
+# Check if UI bridge exists
+test -f src/orchestrators/planning/user_interface.py || echo "MISSING: UI bridge"
+test -f src/orchestrators/ado/user_interface.py || echo "MISSING: UI bridge"
+
+# Check for required classes
+grep "class QuestionFormatter" src/orchestrators/planning/user_interface.py
+grep "class ResponseParser" src/orchestrators/planning/user_interface.py
+grep "class ConversationManager" src/orchestrators/planning/user_interface.py
+```
+
+**Expected:** UI bridge file exists with all 3 classes.
+
+---
+
+#### Component 6: Integration Tests ✅
+
+**File:** `tests/orchestrators/{name}/test_interactive_workflow.py`
+
+**Required Tests:**
+```python
+def test_decision_logic_explicit_request():
+    """Test interactive mode triggered by explicit request."""
+    pass
+
+def test_decision_logic_complexity_tier4():
+    """Test interactive mode triggered by complexity."""
+    pass
+
+def test_decision_logic_low_confidence():
+    """Test interactive mode triggered by ambiguity."""
+    pass
+
+def test_mode_routing_to_interactive():
+    """Test execution routes to interactive mode."""
+    pass
+
+def test_mode_routing_to_autonomous():
+    """Test execution routes to autonomous mode."""
+    pass
+
+def test_agent_instantiation():
+    """Test interactive agent can be instantiated."""
+    pass
+
+def test_session_creation():
+    """Test session creation succeeds."""
+    pass
+
+def test_end_to_end_interactive_workflow():
+    """Test full interactive workflow from request to finalization."""
+    pass
+```
+
+**Validation Commands:**
+```bash
+# Check if test file exists
+test -f tests/orchestrators/planning/test_interactive_workflow.py || echo "MISSING: Integration tests"
+
+# Run interactive tests
+python3 -m pytest tests/orchestrators/planning/test_interactive_workflow.py -v
+
+# Check test count
+python3 -m pytest tests/orchestrators/planning/test_interactive_workflow.py --collect-only | grep "test session"
+```
+
+**Expected:** ≥8 tests, all passing.
+
+---
+
+### 1.5c. Wiring Status Report
+
+Generate status report for all orchestrators:
+
+```bash
+# Create wiring report
+cat > cortex-brain/health-reports/interactive-wiring-status.md << 'EOF'
+# Interactive Workflow Wiring Status Report
+
+**Date:** $(date +%Y-%m-%d)
+
+## Planning Orchestrator
+
+| Component | Status | Notes |
+|-----------|--------|-------|
+| Decision Logic | ❌ | Method exists but not called in execute() |
+| Agent Registration | ❌ | InteractivePlanner not in registry |
+| Execution Routing | ❌ | No conditional routing in execute() |
+| Interactive Method | ⚠️ | interactive_plan_creation exists but not used |
+| UI Bridge | ❌ | user_interface.py missing |
+| Integration Tests | ⚠️ | 29 mock tests exist, no real integration |
+
+**Overall:** 🔴 0/6 components fully wired
+
+## ADO Orchestrator
+
+| Component | Status | Notes |
+|-----------|--------|-------|
+| Decision Logic | ❌ | Not implemented |
+| Agent Registration | ❌ | InteractiveADOPlanner doesn't exist |
+| Execution Routing | ❌ | Direct generation only |
+| Interactive Method | ❌ | Not implemented |
+| UI Bridge | ❌ | Not implemented |
+| Integration Tests | ❌ | Not implemented |
+
+**Overall:** 🔴 0/6 components implemented
+
+EOF
+
+cat cortex-brain/health-reports/interactive-wiring-status.md
+```
+
+### 1.5d. Automated Wiring Validation Script
+
+```bash
+# Create validation script
+cat > scripts/validate_interactive_wiring.sh << 'EOF'
+#!/bin/bash
+# Interactive Workflow Wiring Validation Script
+
+echo "🔍 Validating Interactive Workflow Wiring..."
+echo ""
+
+ORCHESTRATORS=("planning" "ado")
+PASS=0
+FAIL=0
+
+for orch in "${ORCHESTRATORS[@]}"; do
+  echo "📋 Checking $orch orchestrator..."
+  
+  # Check 1: Decision logic
+  if grep -q "_should_use_interactive_mode" "src/orchestrators/$orch/${orch}_orchestrator.py" 2>/dev/null; then
+    echo "  ✅ Decision logic exists"
+    ((PASS++))
+  else
+    echo "  ❌ Decision logic MISSING"
+    ((FAIL++))
+  fi
+  
+  # Check 2: Agent registration
+  if grep -q "interactive_$orch" "src/cortex_agents/agent_registry.py" 2>/dev/null; then
+    echo "  ✅ Agent registered"
+    ((PASS++))
+  else
+    echo "  ❌ Agent NOT registered"
+    ((FAIL++))
+  fi
+  
+  # Check 3: Execution routing
+  if grep -A 5 "def execute" "src/orchestrators/$orch/${orch}_orchestrator.py" 2>/dev/null | grep -q "interactive"; then
+    echo "  ✅ Execution routing present"
+    ((PASS++))
+  else
+    echo "  ❌ Execution routing MISSING"
+    ((FAIL++))
+  fi
+  
+  # Check 4: Interactive method
+  if grep -q "_execute_interactive_mode" "src/orchestrators/$orch/${orch}_orchestrator.py" 2>/dev/null; then
+    echo "  ✅ Interactive method exists"
+    ((PASS++))
+  else
+    echo "  ❌ Interactive method MISSING"
+    ((FAIL++))
+  fi
+  
+  # Check 5: UI bridge
+  if [ -f "src/orchestrators/$orch/user_interface.py" ]; then
+    echo "  ✅ UI bridge exists"
+    ((PASS++))
+  else
+    echo "  ❌ UI bridge MISSING"
+    ((FAIL++))
+  fi
+  
+  # Check 6: Integration tests
+  if [ -f "tests/orchestrators/$orch/test_interactive_workflow.py" ]; then
+    echo "  ✅ Integration tests exist"
+    ((PASS++))
+  else
+    echo "  ❌ Integration tests MISSING"
+    ((FAIL++))
+  fi
+  
+  echo ""
+done
+
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "Results: $PASS passed, $FAIL failed"
+TOTAL=$((PASS + FAIL))
+PERCENT=$((PASS * 100 / TOTAL))
+echo "Wiring Coverage: $PERCENT%"
+
+if [ $PERCENT -eq 100 ]; then
+  echo "✅ All interactive workflows fully wired!"
+  exit 0
+else
+  echo "❌ Wiring incomplete. See: cortex-brain/documents/analysis/interactive-workflow-wiring-gap-analysis.md"
+  exit 1
+fi
+EOF
+
+chmod +x scripts/validate_interactive_wiring.sh
+./scripts/validate_interactive_wiring.sh
+```
+
+### 1.5e. Enforcement Rules
+
+**⚠️ MANDATORY:** Before releasing ANY orchestrator with interactive components:
+
+1. **All 6 components must be wired** (100% wiring coverage)
+2. **Integration tests must pass** (end-to-end workflow verified)
+3. **Wiring validation script must pass** (automated check)
+4. **Documentation must be complete** (README updated with interactive mode)
+
+**Prevention:** Add pre-commit hook to prevent merging unwired interactive code:
+
+```bash
+# .git/hooks/pre-commit
+#!/bin/bash
+
+# Check for new interactive components without wiring
+if git diff --cached --name-only | grep -q "interactive.*\.py"; then
+  echo "⚠️  Interactive component detected in commit."
+  echo "Running wiring validation..."
+  ./scripts/validate_interactive_wiring.sh
+  if [ $? -ne 0 ]; then
+    echo "❌ Commit rejected: Interactive component not fully wired."
+    echo "Complete wiring before committing. See:"
+    echo "cortex-brain/documents/analysis/interactive-workflow-wiring-gap-analysis.md"
+    exit 1
+  fi
+fi
+```
+
+---
+
+## Phase 2-4: Health & Diagnosticsp CORTEX 4.0 at peak performance through health checks, intent router validation, and automated prompt regeneration.
 
 **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
 
 ---
 
-## 🎯 9-Phase Maintenance Pipeline
+## 🎯 10-Phase Maintenance Pipeline
 
 | Phase | Action | Success Criteria |
 |-------|--------|------------------|
 | **1** | Toolkit + Interactive + Vision Validation | Scaffold generators + session workflow + auto-engagement working |
+| **1.5** | Interactive Workflow Wiring 🆕 | Decision logic, agent registration, execution flow all wired |
 | **2** | Quick Health Check | Health score ≥90 |
 | **3** | Full Diagnostic | All components wired |
 | **4** | Wiring Integrity | 100% wiring coverage |
@@ -188,7 +629,16 @@ python3 scripts/check_wiring_integrity.py
 
 ---
 
-## Phase 4.5: Test Suite Health 🧪 NEW
+## Phase 4.5: Test Suite Health 🧪 - ZERO TOLERANCE POLICY
+
+### ⚠️ CRITICAL ENFORCEMENT RULE
+
+**NO TEST FAILURES ALLOWED.** Period.
+
+If tests fail during maintenance:
+1. **Identify root cause** - Is functionality broken OR is test obsolete?
+2. **Fix or DELETE** - Either fix the code OR delete the obsolete test
+3. **Never settle** - "99% pass rate" = FAILURE. Target is 100%.
 
 ### When to Run Tests
 
@@ -202,50 +652,236 @@ Run the full test suite during maintenance when:
 
 ### Test Suite Execution
 
+**⚠️ CRITICAL: Always run tests SEQUENTIALLY (never in parallel) to avoid race conditions and flaky test results.**
+
 ```bash
-# Run full planning orchestrator test suite (recommended during maintenance)
-python3 -m pytest tests/orchestrators/planning/ --tb=no -q
+# Run full planning orchestrator test suite SEQUENTIALLY (MUST be 100% passing)
+python3 -m pytest tests/orchestrators/planning/ --tb=short -v -n0
 
-# Expected: 396+ passing, <5 failing
-# Target: 99%+ pass rate
+# REQUIRED: 100% pass rate (no failures, no errors, no skips without justification)
+# -n0 flag ensures sequential execution (no parallel workers)
 
-# Run core functionality tests only (faster, 29 tests)
+# Run core functionality tests only (faster validation) - SEQUENTIAL
 python3 -m pytest tests/orchestrators/planning/test_interactive_planning_session.py \
-                 tests/orchestrators/planning/test_toolkit_integration.py -v
+                 tests/orchestrators/planning/test_toolkit_integration.py \
+                 tests/orchestrators/planning/test_interactive_workflow_integration.py -v -n0
 
-# Expected: 29/29 passing (100%)
+# REQUIRED: 100% passing (currently 42/48 total core tests)
 
-# Use test runner script for specific categories
-./test_planning.sh interactive   # 18 tests - Interactive session workflow
-./test_planning.sh toolkit        # 11 tests - Toolkit integration
-./test_planning.sh quick          # 29 tests - Core functionality only
-./test_planning.sh all            # 397 tests - Full suite
+# Alternative: Use Python test runner script for sequential execution
+python3 run_tests_sequential.py tests/orchestrators/planning/
+
+# Use test runner script for specific categories (all run sequentially)
+./test_planning.sh interactive   # Interactive session workflow
+./test_planning.sh toolkit        # Toolkit integration
+./test_planning.sh wiring         # Interactive wiring validation
+./test_planning.sh quick          # Core functionality only
+./test_planning.sh all            # Full suite
 ```
 
-### Test Health Metrics
+### Test Health Metrics - ZERO TOLERANCE
 
-| Metric | Target | Action if Below |
-|--------|--------|-----------------|
-| **Core Tests Pass Rate** | 100% | CRITICAL - Fix immediately |
-| **Full Suite Pass Rate** | ≥99% | Review failures, assess if obsolete |
-| **Error Count** | 0 | CRITICAL - All errors must be fixed |
+| Metric | REQUIRED | Action if NOT Met |
+|--------|----------|-------------------|
+| **Core Tests Pass Rate** | **100%** | **STOP MAINTENANCE - Fix immediately or delete obsolete tests** |
+| **Full Suite Pass Rate** | **100%** | **DELETE obsolete tests or refactor to match current functionality** |
+| **Error Count** | **0** | **CRITICAL - Fix all errors before continuing** |
+| **Failure Count** | **0** | **CRITICAL - No failures allowed** |
 | **Test Execution Time** | <30s | Acceptable, monitor for regression |
 
-### Common Test Failures
+### Obsolete Test Detection & Deletion Protocol
 
-**Issue:** `ModuleNotFoundError: No module named 'core'`
-- **Fix:** Fixture missing `sys.path.insert(0, cortex-toolkit/)` and toolkit structure
+**When functionality changes (e.g., Planning orchestrator refactored), tests MUST be updated or deleted.**
 
-**Issue:** `RuntimeError: Planning root not found`
-- **Fix:** Fixture missing `(tmp_path / "cortex-brain" / "documents" / "planning" / "active").mkdir(parents=True)`
+#### Step 1: Identify Obsolete Tests
 
-**Issue:** Tests passing but functionality broken
-- **Fix:** Check if test is obsolete (testing old API that was refactored)
+```bash
+# Run tests and capture failures
+python3 -m pytest tests/orchestrators/planning/ -v --tb=line 2>&1 | tee test_results.txt
+
+# Look for these patterns indicating obsolete tests:
+grep -E "(AttributeError|ImportError|ModuleNotFoundError)" test_results.txt
+grep -E "test.*old.*api" test_results.txt
+grep -E "DEPRECATED|LEGACY|OLD" tests/orchestrators/planning/*.py
+```
+
+**Red Flags for Obsolete Tests:**
+- ❌ Tests for methods/classes that no longer exist
+- ❌ Tests importing deprecated modules
+- ❌ Tests with `@pytest.mark.skip` without clear justification
+- ❌ Tests passing but not exercising actual code paths (mocks everything)
+- ❌ Tests for APIs that were refactored but tests weren't updated
+
+#### Step 2: Classify Failures
+
+For EACH failing test, determine:
+
+**A. Obsolete Test (DELETE)**
+- Tests code that was intentionally removed/refactored
+- Tests deprecated APIs with no replacement
+- Tests mock-heavy scenarios that don't validate real behavior
+- Tests marked "TODO" or "WIP" for >30 days
+
+**B. Misaligned Test (REFACTOR)**
+- Tests valid functionality but uses old API
+- Tests correct behavior but with wrong assertions
+- Tests proper code path but with outdated fixtures
+
+**C. Real Bug (FIX CODE)**
+- Tests valid, current functionality that's actually broken
+- Tests core behavior that should work but doesn't
+
+#### Step 3: Execute Cleanup
+
+```bash
+# Create cleanup manifest
+cat > /tmp/test_cleanup_plan.md << 'EOF'
+# Test Cleanup Plan - $(date +%Y-%m-%d)
+
+## Tests to DELETE (Obsolete)
+- [ ] tests/orchestrators/planning/test_old_planning_api.py - Uses deprecated PlanningOrchestrator v3 API
+- [ ] tests/orchestrators/planning/test_legacy_validation.py - Tests removed ValidationEngine
+
+## Tests to REFACTOR (Misaligned)
+- [ ] tests/orchestrators/planning/test_execute_workflow.py - Update to use new execute() signature
+- [ ] tests/orchestrators/planning/test_plan_generation.py - Update fixtures for new folder structure
+
+## Tests to FIX (Real Bugs)
+- [ ] tests/orchestrators/planning/test_error_handling.py - Core error handling broken, fix orchestrator
+
+## Justification
+- Functionality changed: Planning orchestrator refactored in CORTEX 4.0.1 with interactive wiring
+- Old tests validate APIs that no longer exist
+- New tests created: test_interactive_workflow_integration.py (19 tests)
+EOF
+
+# Review and approve cleanup plan
+cat /tmp/test_cleanup_plan.md
+
+# DELETE obsolete tests (after approval)
+git rm tests/orchestrators/planning/test_old_*.py
+git rm tests/orchestrators/planning/test_legacy_*.py
+
+# Commit cleanup
+git add -A
+git commit -m "test: delete obsolete planning tests after orchestrator refactor
+
+- Removed tests for deprecated v3 API
+- Removed tests for removed ValidationEngine
+- Kept: 42 core tests (100% passing)
+- Added: test_interactive_workflow_integration.py (19 tests)
+
+Justification: Planning orchestrator refactored with interactive wiring.
+Old tests validate non-existent APIs. New tests cover current functionality."
+```
+
+#### Step 4: Validate 100% Pass Rate
+
+```bash
+# Run tests again - MUST be 100% passing
+python3 -m pytest tests/orchestrators/planning/ -v
+
+# If ANY test fails:
+# - Go back to Step 1
+# - Do NOT proceed with maintenance until 100% passing
+
+# Generate cleanup report
+python3 scripts/generate_test_cleanup_report.py \
+  --before test_results.txt \
+  --after test_results_clean.txt \
+  --output cortex-brain/documents/reports/test-suite-cleanup-$(date +%Y%m%d).md
+```
+
+### Common Test Failure Patterns & Solutions
+
+| Failure Pattern | Root Cause | Solution |
+|----------------|------------|----------|
+| `AttributeError: 'Orchestrator' object has no attribute 'old_method'` | Method removed during refactor | **DELETE** test (obsolete) |
+| `ModuleNotFoundError: No module named 'old_module'` | Module renamed/removed | **DELETE** test (obsolete) |
+| `AssertionError: Expected 'old_value' but got 'new_value'` | Behavior changed intentionally | **REFACTOR** test assertions |
+| `RuntimeError: Config missing required key` | New config requirements | **REFACTOR** fixtures |
+| `TypeError: execute() missing 1 required positional argument` | Signature changed | **REFACTOR** test calls |
+| Tests pass but coverage shows code not executed | Over-mocked, not testing real code | **REFACTOR** to use real implementations |
+
+### Test Refactoring Guidelines
+
+When refactoring tests to match new functionality:
+
+**1. Update Fixtures**
+```python
+# OLD (obsolete)
+@pytest.fixture
+def orchestrator():
+    return PlanningOrchestrator()  # Old API, no config
+
+# NEW (current)
+@pytest.fixture
+def orchestrator():
+    config = {
+        "cortex_root": "/path/to/CORTEX",
+        "brain_dir": "cortex-brain",
+    }
+    return PlanningOrchestrator(config=config)  # New API
+```
+
+**2. Update Method Calls**
+```python
+# OLD (obsolete)
+result = orchestrator.generate_plan(name="test")
+
+# NEW (current)
+result = orchestrator.execute(feature_name="test", interactive=False)
+```
+
+**3. Update Assertions**
+```python
+# OLD (obsolete)
+assert result.status == "success"
+
+# NEW (current)
+assert result.status == OrchestratorStatus.SUCCESS
+assert result.data["mode"] == "autonomous"
+```
+
+**4. Reduce Mocking**
+```python
+# OLD (over-mocked, doesn't test real behavior)
+@patch('orchestrator.generate')
+@patch('orchestrator.validate')
+@patch('orchestrator.render')
+def test_execute(mock_render, mock_validate, mock_generate):
+    # Test passes but doesn't validate actual orchestrator behavior
+    pass
+
+# NEW (tests real integration)
+def test_execute_autonomous_mode(orchestrator, tmp_path):
+    # Use real orchestrator with real filesystem
+    result = orchestrator.execute(feature_name="test", output_dir=tmp_path)
+    assert result.status == OrchestratorStatus.SUCCESS
+    # Validates real file creation, not mocked behavior
+```
+
+### Maintenance Enforcement
+
+**❌ BLOCKING CONDITION:** If test pass rate < 100%, maintenance CANNOT proceed.
+
+**Required Actions:**
+1. ✅ Identify ALL failing tests
+2. ✅ Classify each as Obsolete / Misaligned / Real Bug
+3. ✅ DELETE obsolete tests immediately
+4. ✅ REFACTOR misaligned tests to match current API
+5. ✅ FIX real bugs in code
+6. ✅ Re-run tests - MUST achieve 100% pass rate
+7. ✅ Commit cleanup with detailed justification
+8. ✅ Generate test cleanup report
+
+**Only then** can maintenance continue to next phase.
 
 ### Test Report Location
 
-After running tests, check:
-- `cortex-brain/documents/reports/test-suite-cleanup-report-{DATE}.md` for latest health report
+After running tests and cleanup, check:
+- `cortex-brain/documents/reports/test-suite-cleanup-{DATE}.md` for cleanup report
+- Report MUST show: Before → After with 100% pass rate achieved
 
 ---
 
@@ -519,6 +1155,7 @@ Version | Author | Status
 |-------|----------------|
 | Health Score | ≥ 90/100 |
 | Wiring Coverage | 100% |
+| **Interactive Wiring** 🆕 | All 6 components for Planning & ADO orchestrators |
 | Knowledge Library | All 9 categories present, README current |
 | Knowledge Guidelines | 30+ files with valid metadata |
 | Knowledge Integration | Orchestrators reference knowledge library |
@@ -527,9 +1164,9 @@ Version | Author | Status
 | CORTEX.prompt.md | <200 lines, all manifests wired |
 | copilot-instructions.md | <150 lines, defers to CORTEX.prompt.md |
 | Output Structures | Planning System has folder spec |
-| **Interactive Planning** 🆕 | Session workflow tests 29/29 passing |
+| **Interactive Planning** 🆕 | Session workflow tests 100% passing |
 | **Vision Auto-Engagement** 🆕 | Image detection and analysis wired |
-| **Test Suite Health** 🆕 | Core tests 100%, full suite ≥99% |
+| **Test Suite Health** 🆕 | **100% pass rate (ZERO failures, ZERO errors, ZERO obsolete tests)** |
 
 ---
 
@@ -547,6 +1184,18 @@ Run during every maintenance cycle:
 - [ ] copilot-instructions.md is <150 lines
 - [ ] copilot-instructions.md defers to CORTEX.prompt.md (no duplication)
 - [ ] Reports folder cleaned (see Phase 9)
+
+### Interactive Wiring 🆕
+- [ ] Decision logic exists in Planning & ADO orchestrators
+- [ ] Decision logic is CALLED in execute() method
+- [ ] Interactive agents registered in agent_registry.py
+- [ ] Execution flow has conditional routing (interactive vs autonomous)
+- [ ] Interactive execution method implemented and functional
+- [ ] UI bridge exists (user_interface.py) for question/answer handling
+- [ ] Integration tests cover end-to-end interactive workflow
+- [ ] Wiring validation script passes: `./scripts/validate_interactive_wiring.sh`
+- [ ] Interactive wiring coverage: 100% for active orchestrators
+- [ ] Pre-commit hook prevents unwired interactive code
 
 ### Knowledge Library
 - [ ] Knowledge library has all 9 categories present
@@ -581,13 +1230,16 @@ Run during every maintenance cycle:
 - [ ] Context injection into planning/debugging workflows verified
 
 ### Test Suite Health 🆕
-- [ ] Core tests (interactive + toolkit): 29/29 passing (100%)
-- [ ] Full planning test suite: ≥396 passing (≥99% pass rate)
-- [ ] Error count: 0 (no collection or import errors)
+- [ ] Core tests (interactive + toolkit + wiring): **100% passing (ZERO failures)**
+- [ ] Full planning test suite: **100% passing (ZERO failures)**
+- [ ] Error count: **0 (MANDATORY)**
+- [ ] Failure count: **0 (MANDATORY)**
 - [ ] Test execution time: <30 seconds
-- [ ] Test report generated in `cortex-brain/documents/reports/`
-- [ ] Known issues documented (if any failures remain)
-- [ ] Obsolete tests deleted (tests for removed/refactored APIs)
+- [ ] Obsolete tests **DELETED** (tests for removed/refactored APIs)
+- [ ] Misaligned tests **REFACTORED** (tests updated to match current functionality)
+- [ ] Test cleanup report generated in `cortex-brain/documents/reports/`
+- [ ] Cleanup report shows Before → After with 100% achievement
+- [ ] Git commit includes detailed justification for deleted tests
 
 ---
 

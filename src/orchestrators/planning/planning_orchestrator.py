@@ -471,9 +471,54 @@ class PlanningOrchestrator(BaseOrchestrator):
             warnings=warnings
         )
     
+    def _should_use_interactive_mode(self, **kwargs) -> bool:
+        """
+        Detect if interactive mode should be used based on flags/context.
+        
+        Interactive mode criteria:
+        - Explicit 'interactive' flag is True
+        - 'mode' parameter is 'interactive'
+        - Context has 'interactive_mode' enabled
+        - Environment variable CORTEX_INTERACTIVE is set
+        
+        Args:
+            **kwargs: Execution parameters that may contain interactive flags
+        
+        Returns:
+            True if interactive mode should be used, False for autonomous mode
+        """
+        # Check explicit flag
+        if kwargs.get('interactive', False):
+            self.logger.info("🎯 Interactive mode: explicit 'interactive' flag")
+            return True
+        
+        # Check mode parameter
+        if kwargs.get('mode') == 'interactive':
+            self.logger.info("🎯 Interactive mode: 'mode' parameter set to 'interactive'")
+            return True
+        
+        # Check context (if available)
+        if hasattr(self, '_context') and self._context and self._context.get('interactive_mode', False):
+            self.logger.info("🎯 Interactive mode: context 'interactive_mode' enabled")
+            return True
+        
+        # Check environment variable
+        import os
+        if os.environ.get('CORTEX_INTERACTIVE', '').lower() in ('true', '1', 'yes'):
+            self.logger.info("🎯 Interactive mode: CORTEX_INTERACTIVE environment variable")
+            return True
+        
+        # Default to autonomous mode
+        self.logger.debug("🤖 Autonomous mode: no interactive flags detected")
+        return False
+    
     def execute(self, **kwargs) -> OrchestratorResult:
         """
         Execute planning orchestrator workflow.
+        
+        Supports two modes:
+        - INTERACTIVE: Collaborative planning with user approval loops
+        - AUTONOMOUS: Fully automated plan generation and execution
         
         Workflow (Week 8 MVP):
         1. DISCOVERY: Gather context (placeholder for Week 11 advanced features)
@@ -490,6 +535,8 @@ class PlanningOrchestrator(BaseOrchestrator):
                 complexity: Plan complexity (PlanComplexity enum or int)
                 output_dir: Custom output directory (Path or str)
                 auto_execute: Execute plan after generation (bool, default: False - Day 3)
+                interactive: Enable interactive mode (bool, default: False)
+                mode: Execution mode 'interactive' or 'autonomous' (str)
         
         Returns:
             OrchestratorResult with execution status and planning result
@@ -497,6 +544,81 @@ class PlanningOrchestrator(BaseOrchestrator):
         self.status = OrchestratorStatus.RUNNING
         self.start_time = datetime.now()
         
+        # DECISION POINT: Route to interactive or autonomous execution
+        if self._should_use_interactive_mode(**kwargs):
+            return self._execute_interactive_mode(**kwargs)
+        
+        # Continue with autonomous execution
+        return self._execute_autonomous_mode(**kwargs)
+    
+    def _execute_interactive_mode(self, **kwargs) -> OrchestratorResult:
+        """
+        Execute planning in interactive mode with user collaboration.
+        
+        Interactive workflow:
+        1. Discovery questions (DoR validation)
+        2. Context gathering (code analysis, brain search)
+        3. Plan generation with user review
+        4. Iterative refinement based on feedback
+        5. Final approval and execution
+        6. Cleanup phase
+        
+        Args:
+            **kwargs: Same as execute() method
+        
+        Returns:
+            OrchestratorResult from interactive session
+        """
+        try:
+            feature_name = kwargs.get("feature_name")
+            if not feature_name:
+                return self._create_error_result(
+                    "Interactive mode requires 'feature_name' parameter",
+                    validation_result=None
+                )
+            
+            self.logger.info(f"🎯 Starting INTERACTIVE planning session for: {feature_name}")
+            
+            # Start interactive session
+            session = self.interactive_plan_creation(
+                plan_name=feature_name,
+                user_context=kwargs.get("user_context", {})
+            )
+            
+            # For now, return session info in result
+            return OrchestratorResult(
+                status=OrchestratorStatus.COMPLETED,
+                success=True,
+                message=f"Interactive session started. Session ID: {session.session_id}",
+                data={
+                    "mode": "interactive",
+                    "session_id": session.session_id,
+                    "plan_name": feature_name,
+                    "state": str(session.state),
+                    "phase": "INTERACTIVE_SESSION_STARTED",
+                    "interactive": True
+                },
+                execution_time_seconds=(datetime.now() - self.start_time).total_seconds()
+            )
+        except Exception as e:
+            self.logger.error(f"Interactive mode failed: {str(e)}", exc_info=True)
+            return self._create_error_result(
+                f"Interactive planning failed: {str(e)}",
+                validation_result=None
+            )
+    
+    def _execute_autonomous_mode(self, **kwargs) -> OrchestratorResult:
+        """
+        Execute planning in autonomous mode (original behavior).
+        
+        This is the standard autonomous workflow without user interaction.
+        
+        Args:
+            **kwargs: Same as execute() method
+        
+        Returns:
+            OrchestratorResult from autonomous execution
+        """
         try:
             # Phase 1: DISCOVERY (placeholder - Week 11 will add architectural review)
             self.current_phase = PlanningPhase.DISCOVERY
