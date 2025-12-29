@@ -3,1127 +3,430 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Domain-Driven Design | CORTEX Knowledge Library</title>
+    <meta name="description" content="Domain-Driven Design - Bounded contexts, aggregates, strategic and tactical patterns">
+    <meta name="keywords" content="ddd, domain-driven design, bounded context, aggregate, ubiquitous language">
+    <meta name="author" content="Asif Hussain">
+    <title>Domain-Driven Design | CORTEX Knowledge</title>
     <link rel="stylesheet" href="../assets/css/main.css">
-    <link rel="stylesheet" href="../assets/css/knowledge.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
-    <nav class="doc-nav">
-        <div class="nav-container">
-            <a href="../index.html" class="nav-logo">
-                <img src="../assets/images/cortex-logo.svg" alt="CORTEX" class="logo-image">
-            </a>
-            <ul class="nav-links">
-                <li><a href="../index.html">Home</a></li>
-                <li><a href="index.html" class="active">Knowledge Library</a></li>
-                <li><a href="../sts/index.html">STS Portal</a></li>
-            </ul>
-        </div>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">→</span>
+        <a href="index.html">Knowledge Library</a>
+        <span class="breadcrumb-separator">→</span>
+        <span class="breadcrumb-current">Domain-Driven Design</span>
     </nav>
 
-    <main class="doc-main">
-        <div class="doc-container">
-            <header class="doc-header">
-                <div class="breadcrumb">
-                    <a href="../index.html">Home</a>
-                    <span class="separator">/</span>
-                    <a href="index.html">Knowledge Library</a>
-                    <span class="separator">/</span>
-                    <span>Domain-Driven Design</span>
-                </div>
-                <h1 class="doc-title">Domain-Driven Design (DDD)</h1>
-                <p class="doc-subtitle">Strategic & tactical patterns for modeling complex business domains</p>
-            </header>
+    <section class="hero" id="main-content">
+        <h1 class="hero-title">🎯 Domain-Driven Design</h1>
+        <p class="hero-subtitle">Bounded Contexts, Aggregates, and Strategic Patterns</p>
+        <div class="file-metadata">
+            <span class="metadata-item">📐 Architecture</span>
+            <span class="metadata-item">🏗️ Patterns</span>
+            <span class="metadata-item">📅 Updated: Dec 2025</span>
+        </div>
+    </section>
 
-            <div class="tab-container">
-                <div class="tab-buttons">
-                    <button class="tab-button active" data-tab="overview">Overview</button>
-                    <button class="tab-button" data-tab="knowledge">Knowledge Files</button>
-                    <button class="tab-button" data-tab="resources">Learning Resources</button>
-                    <button class="tab-button" data-tab="cortex">CORTEX Usage</button>
-                </div>
+    <section class="section file-content">
+        <div class="container">
+            <div id="overview" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">📋 Overview</h2>
+                    <p>Domain-Driven Design (DDD) is an approach to software development that centers the design on the business domain and domain logic. Through collaboration between technical and domain experts, DDD creates a shared understanding expressed in code through strategic and tactical patterns.</p>
+                    
+                    <div class="info-box info-box-primary">
+                        <strong>Core Concepts:</strong>
+                        <ul class="feature-list">
+                            <li><strong>Ubiquitous Language:</strong> Shared vocabulary between developers and domain experts</li>
+                            <li><strong>Bounded Context:</strong> Explicit boundaries around domain models</li>
+                            <li><strong>Strategic Design:</strong> High-level patterns for system architecture</li>
+                            <li><strong>Tactical Design:</strong> Building blocks for domain models</li>
+                        </ul>
+                    </div>
 
-                <!-- Overview Tab -->
-                <div class="tab-content active" id="overview">
-                    <section class="doc-section">
-                        <h2 class="section-header">🎯 Category Overview</h2>
-                        <div class="content-block">
-                            <p><strong>Domain-Driven Design (DDD)</strong> is an approach to software development that emphasizes collaboration between technical and domain experts to create software that reflects complex business realities. Introduced by Eric Evans in his seminal 2003 book, DDD provides both strategic patterns for system architecture and tactical patterns for domain modeling.</p>
-                            
-                            <h3 class="subsection-header">Key Concepts</h3>
-                            <ul class="feature-list">
-                                <li><strong>Ubiquitous Language:</strong> Shared vocabulary between developers and domain experts used consistently in code and conversation</li>
-                                <li><strong>Bounded Contexts:</strong> Explicit boundaries within which a domain model is defined and applicable</li>
-                                <li><strong>Aggregates:</strong> Clusters of domain objects treated as a unit for data consistency</li>
-                                <li><strong>Entities:</strong> Objects with unique identity that persists over time</li>
-                                <li><strong>Value Objects:</strong> Immutable objects defined by their attributes, not identity</li>
-                                <li><strong>Domain Events:</strong> Records of significant occurrences in the domain</li>
-                                <li><strong>Context Mapping:</strong> Patterns for integrating multiple bounded contexts</li>
-                            </ul>
-                        </div>
-
-                        <div class="visual-diagram">
-                            <h3 class="subsection-header">DDD Strategic & Tactical Design</h3>
-                            <div class="mermaid">
+                    <h3>DDD Layers</h3>
+                    <div class="mermaid">
 graph TB
-    subgraph Strategic["Strategic Design"]
-        BC["Bounded Contexts"]
-        UL["Ubiquitous Language"]
-        CM["Context Mapping"]
-        SubD["Subdomains"]
-    end
-
-    subgraph Tactical["Tactical Design"]
-        Agg["Aggregates"]
-        Ent["Entities"]
-        VO["Value Objects"]
-        DE["Domain Events"]
-        Repo["Repositories"]
-        Serv["Domain Services"]
-    end
-
-    subgraph Patterns["Context Map Patterns"]
-        Partner["Partnership"]
-        SharedKernel["Shared Kernel"]
-        ACL["Anti-Corruption Layer"]
-        OHS["Open Host Service"]
-    end
-
-    Strategic --> Tactical
-    BC --> Agg
-    BC --> DE
-    CM --> Patterns
-
-    style Strategic fill:#667eea
-    style Tactical fill:#48bb78
-    style Patterns fill:#ed8936
-                            </div>
-                        </div>
-
-                        <div class="content-block">
-                            <h3 class="subsection-header">Strategic vs Tactical DDD</h3>
-                            
-                            <h4>Strategic Design (Architecture)</h4>
-                            <p>Focuses on the big picture - how to organize large systems:</p>
-                            <ul class="feature-list">
-                                <li><strong>Bounded Contexts:</strong> Define clear model boundaries (often microservices)</li>
-                                <li><strong>Context Mapping:</strong> Relationships between contexts (upstream/downstream, partnerships)</li>
-                                <li><strong>Subdomains:</strong> Core (competitive advantage), Supporting (necessary), Generic (commodity)</li>
-                                <li><strong>Team Organization:</strong> Align teams with bounded contexts</li>
-                            </ul>
-
-                            <h4>Tactical Design (Implementation)</h4>
-                            <p>Focuses on the details - how to model the domain:</p>
-                            <ul class="feature-list">
-                                <li><strong>Aggregates:</strong> Transaction and consistency boundaries</li>
-                                <li><strong>Entities vs Value Objects:</strong> When identity matters vs when it doesn't</li>
-                                <li><strong>Domain Events:</strong> Capture business occurrences for eventual consistency</li>
-                                <li><strong>Repositories:</strong> Abstract persistence concerns</li>
-                                <li><strong>Domain Services:</strong> Operations that don't belong to entities</li>
-                            </ul>
-                        </div>
-
-                        <div class="content-block">
-                            <h3 class="subsection-header">When to Use DDD</h3>
-                            <p>DDD is most valuable for:</p>
-                            <ul class="feature-list">
-                                <li><strong>Complex Business Logic:</strong> Rich domain rules, workflows, and invariants</li>
-                                <li><strong>Long-Lived Systems:</strong> Software that will evolve over years</li>
-                                <li><strong>Collaborative Teams:</strong> Domain experts and developers working together</li>
-                                <li><strong>Microservices Architecture:</strong> Bounded contexts map naturally to services</li>
-                            </ul>
-
-                            <p><strong>Not recommended for:</strong></p>
-                            <ul class="feature-list">
-                                <li>Simple CRUD applications with minimal business logic</li>
-                                <li>Short-lived prototypes or MVPs</li>
-                                <li>Data-centric systems without complex domain rules</li>
-                            </ul>
-                        </div>
-
-                        <div class="content-block">
-                            <h3 class="subsection-header">CORTEX Knowledge Sources</h3>
-                            <ul class="feature-list">
-                                <li><strong>Domain-Driven Design:</strong> Eric Evans (2003) - The original "Blue Book"</li>
-                                <li><strong>Implementing Domain-Driven Design:</strong> Vaughn Vernon (2013) - The "Red Book"</li>
-                                <li><strong>Domain-Driven Design Distilled:</strong> Vaughn Vernon (2016) - Concise overview</li>
-                                <li><strong>Patterns, Principles, and Practices of DDD:</strong> Scott Millett & Nick Tune (2015)</li>
-                            </ul>
-                        </div>
-                    </section>
-                </div>
-
-                <!-- Knowledge Files Tab -->
-                <div class="tab-content" id="knowledge">
-                    <section class="doc-section">
-                        <h2 class="section-header">📚 Knowledge Files</h2>
-                        <p class="content-intro">Comprehensive DDD patterns from Eric Evans and Vaughn Vernon's authoritative works.</p>
-
-                        <!-- Bounded Contexts Accordion -->
-                        <div class="accordion-container">
-                            <div class="accordion-item">
-                                <button class="accordion-header">
-                                    <span class="accordion-title">🎯 Bounded Contexts & Context Mapping</span>
-                                    <span class="accordion-meta">Strategic DDD • Source: Eric Evans (2003)</span>
-                                    <span class="accordion-icon">▼</span>
-                                </button>
-                                <div class="accordion-content">
-                                    <div class="content-block">
-                                        <p><strong>Bounded Context</strong> is the central strategic pattern in DDD. It defines explicit boundaries within which a domain model is defined and applicable, preventing model pollution and enabling autonomous teams.</p>
-                                        
-                                        <h4 class="principle-header">What is a Bounded Context?</h4>
-                                        <p><em>"A Bounded Context delimits the applicability of a particular model so that team members have a clear and shared understanding of what has to be consistent and what can develop independently." - Eric Evans</em></p>
-                                        
-                                        <div class="info-callout">
-                                            <strong>Key Insight:</strong> The same term can mean different things in different contexts. "Customer" in Sales means "potential buyer," in Support means "service recipient," in Billing means "payment source."
-                                        </div>
-
-                                        <h4 class="principle-header">Context Mapping Patterns</h4>
-                                        
-                                        <h5>1. Partnership</h5>
-                                        <p>Two contexts in mutual dependence with coordinated development.</p>
-                                        <div class="code-example">
-                                            <pre><code class="language-python"># Order Management ↔ Inventory Management (Partnership)
-# Both contexts must evolve together
-
-class OrderService:
-    def __init__(self, inventory_service):
-        self.inventory = inventory_service
+    UI[User Interface Layer<br/>Controllers, Views]
+    APP[Application Layer<br/>Use Cases, Orchestration]
+    DOM[Domain Layer<br/>Business Logic, Entities]
+    INFRA[Infrastructure Layer<br/>Database, External Services]
     
-    def place_order(self, customer_id, items):
-        # Check inventory in real-time (tight integration)
-        if not self.inventory.check_availability(items):
-            raise InsufficientInventoryError()
-        
-        # Reserve inventory immediately
-        self.inventory.reserve_items(items)
-        
-        order = Order(customer_id, items)
-        order.status = OrderStatus.CONFIRMED
-        return order</code></pre>
-                                        </div>
-
-                                        <h5>2. Customer-Supplier</h5>
-                                        <p>Upstream context provides services to downstream context.</p>
-                                        <div class="code-example">
-                                            <pre><code class="language-csharp">// Payment Processing (upstream) → Order Management (downstream)
-// Upstream defines API, downstream consumes
-
-// Upstream Payment Context
-public interface IPaymentService
-{
-    PaymentResult ProcessPayment(string orderId, decimal amount);
-}
-
-// Downstream Order Context
-public class OrderCheckoutService
-{
-    private readonly IPaymentService _paymentService;
+    UI --> APP
+    APP --> DOM
+    DOM --> INFRA
     
-    public OrderCheckoutService(IPaymentService paymentService)
-    {
-        _paymentService = paymentService;
-    }
-    
-    public void Checkout(Order order)
-    {
-        var result = _paymentService.ProcessPayment(
-            order.Id.ToString(), 
-            order.Total
-        );
-        
-        if (result.IsSuccess)
-            order.MarkAsPaid();
-    }
-}</code></pre>
-                                        </div>
-
-                                        <h5>3. Anti-Corruption Layer (ACL)</h5>
-                                        <p>Protect domain model from external systems with translation layer.</p>
-                                        <div class="code-example">
-                                            <pre><code class="language-javascript">// Modern E-commerce (our context) ← Legacy ERP System
-// ACL translates between models
-
-class LegacyERPAdapter {
-    constructor(legacyClient) {
-        this.legacyClient = legacyClient;
-    }
-    
-    // Translate from our domain model to legacy format
-    async syncOrder(order) {
-        const legacyFormat = {
-            ORDERNO: order.id,
-            CUSTID: order.customerId,
-            TOTAMT: order.total,
-            ITEMS: order.items.map(item => ({
-                PARTNO: item.sku,
-                QTY: item.quantity,
-                PRICE: item.unitPrice
-            }))
-        };
-        
-        await this.legacyClient.createOrder(legacyFormat);
-    }
-    
-    // Translate from legacy format to our domain model
-    async getOrder(orderId) {
-        const legacyOrder = await this.legacyClient.getOrder(orderId);
-        
-        return new Order({
-            id: legacyOrder.ORDERNO,
-            customerId: legacyOrder.CUSTID,
-            total: legacyOrder.TOTAMT,
-            items: legacyOrder.ITEMS.map(item => new OrderItem({
-                sku: item.PARTNO,
-                quantity: item.QTY,
-                unitPrice: item.PRICE
-            }))
-        });
-    }
-}</code></pre>
-                                        </div>
-
-                                        <div class="visual-diagram">
-                                            <h5>Context Map Example: E-Commerce System</h5>
-                                            <div class="mermaid">
-graph LR
-    Sales["Sales Context<br/>(Core)"]
-    Catalog["Catalog Context<br/>(Core)"]
-    Billing["Billing Context<br/>(Supporting)"]
-    Shipping["Shipping Context<br/>(Supporting)"]
-    Analytics["Analytics Context<br/>(Generic)"]
-    
-    Sales -->|Customer-Supplier| Billing
-    Sales -->|Published Language| Shipping
-    Catalog -->|Shared Kernel| Sales
-    Billing -->|Conformist| Analytics
-    Shipping -.->|ACL| LegacySystem["Legacy ERP<br/>(External)"]
-    
-    style Sales fill:#48bb78
-    style Catalog fill:#48bb78
-    style Billing fill:#ed8936
-    style Shipping fill:#ed8936
-    style Analytics fill:#9f7aea
-    style LegacySystem fill:#e53e3e
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Aggregates & Entities Accordion -->
-                            <div class="accordion-item">
-                                <button class="accordion-header">
-                                    <span class="accordion-title">🔷 Aggregates, Entities & Value Objects</span>
-                                    <span class="accordion-meta">Tactical DDD • Source: Vaughn Vernon (2013)</span>
-                                    <span class="accordion-icon">▼</span>
-                                </button>
-                                <div class="accordion-content">
-                                    <div class="content-block">
-                                        <p><strong>Tactical DDD</strong> provides building blocks for implementing domain models within bounded contexts.</p>
-                                        
-                                        <h4 class="principle-header">Entities</h4>
-                                        <p><em>Objects with unique identity that persists over time.</em></p>
-                                        
-                                        <div class="code-example">
-                                            <h5>✅ Rich Entity with Behavior</h5>
-                                            <pre><code class="language-python">from dataclasses import dataclass, field
-from uuid import UUID, uuid4
-from typing import List
-
-@dataclass
-class Order:
-    """Order entity with identity and business logic"""
-    id: UUID = field(default_factory=uuid4)
-    customer_id: UUID = field(default=None)
-    _items: List['OrderItem'] = field(default_factory=list, repr=False)
-    status: str = 'DRAFT'
-    
-    @property
-    def items(self) -> List['OrderItem']:
-        """Read-only access to items"""
-        return self._items.copy()
-    
-    @property
-    def total(self) -> float:
-        """Calculated property"""
-        return sum(item.subtotal for item in self._items)
-    
-    def add_item(self, product_id: UUID, quantity: int, price: float):
-        """Encapsulated business logic"""
-        if quantity <= 0:
-            raise ValueError("Quantity must be positive")
-        
-        # Check if product already in order
-        existing = next(
-            (item for item in self._items if item.product_id == product_id),
-            None
-        )
-        
-        if existing:
-            existing.increase_quantity(quantity)
-        else:
-            self._items.append(OrderItem(product_id, quantity, price))
-    
-    def submit(self):
-        """State transition with validation"""
-        if not self._items:
-            raise ValueError("Cannot submit empty order")
-        if self.status != 'DRAFT':
-            raise ValueError("Only draft orders can be submitted")
-        
-        self.status = 'SUBMITTED'
-    
-    def __eq__(self, other):
-        """Equality based on ID"""
-        if not isinstance(other, Order):
-            return False
-        return self.id == other.id
-    
-    def __hash__(self):
-        return hash(self.id)</code></pre>
-                                        </div>
-
-                                        <h4 class="principle-header">Value Objects</h4>
-                                        <p><em>Immutable objects defined by their attributes, not identity.</em></p>
-                                        
-                                        <div class="code-example">
-                                            <h5>✅ Value Object Examples</h5>
-                                            <pre><code class="language-csharp">// Money Value Object
-public class Money : ValueObject
-{
-    public decimal Amount { get; }
-    public string Currency { get; }
-    
-    public Money(decimal amount, string currency)
-    {
-        if (amount < 0)
-            throw new ArgumentException("Amount cannot be negative");
-        if (string.IsNullOrEmpty(currency))
-            throw new ArgumentException("Currency required");
-        
-        Amount = amount;
-        Currency = currency;
-    }
-    
-    // Value objects should have business operations
-    public Money Add(Money other)
-    {
-        if (Currency != other.Currency)
-            throw new InvalidOperationException("Cannot add different currencies");
-        
-        return new Money(Amount + other.Amount, Currency);
-    }
-    
-    protected override IEnumerable<object> GetEqualityComponents()
-    {
-        yield return Amount;
-        yield return Currency;
-    }
-}
-
-// Address Value Object
-public class Address : ValueObject
-{
-    public string Street { get; }
-    public string City { get; }
-    public string PostalCode { get; }
-    public string Country { get; }
-    
-    public Address(string street, string city, string postalCode, string country)
-    {
-        Street = street ?? throw new ArgumentNullException(nameof(street));
-        City = city ?? throw new ArgumentNullException(nameof(city));
-        PostalCode = postalCode ?? throw new ArgumentNullException(nameof(postalCode));
-        Country = country ?? throw new ArgumentNullException(nameof(country));
-    }
-    
-    protected override IEnumerable<object> GetEqualityComponents()
-    {
-        yield return Street;
-        yield return City;
-        yield return PostalCode;
-        yield return Country;
-    }
-}</code></pre>
-                                        </div>
-
-                                        <h4 class="principle-header">Aggregates</h4>
-                                        <p><em>Cluster of objects treated as a unit for data consistency.</em></p>
-                                        
-                                        <div class="info-callout">
-                                            <strong>Aggregate Rules:</strong>
-                                            <ul>
-                                                <li>Reference other aggregates by ID only (not direct reference)</li>
-                                                <li>One aggregate per transaction</li>
-                                                <li>Aggregate root enforces invariants</li>
-                                                <li>External access only through aggregate root</li>
-                                            </ul>
-                                        </div>
-
-                                        <div class="code-example">
-                                            <h5>✅ Aggregate Design</h5>
-                                            <pre><code class="language-javascript">// Order Aggregate (Order is the root)
-class Order {
-    constructor(customerId) {
-        this.id = generateId();
-        this.customerId = customerId;  // Reference by ID, not Customer object
-        this.items = [];
-        this.status = 'DRAFT';
-    }
-    
-    // Aggregate root enforces invariants
-    addItem(productId, quantity, price) {
-        if (this.status !== 'DRAFT') {
-            throw new Error('Cannot modify submitted order');
-        }
-        
-        // Total items constraint (business rule)
-        if (this.items.length >= 50) {
-            throw new Error('Order cannot have more than 50 items');
-        }
-        
-        this.items.push(new OrderItem(productId, quantity, price));
-    }
-    
-    submit() {
-        if (this.items.length === 0) {
-            throw new Error('Cannot submit empty order');
-        }
-        
-        // Minimum order value (business rule)
-        if (this.calculateTotal() < 10) {
-            throw new Error('Minimum order value is $10');
-        }
-        
-        this.status = 'SUBMITTED';
-    }
-    
-    calculateTotal() {
-        return this.items.reduce((sum, item) => 
-            sum + item.quantity * item.price, 0
-        );
-    }
-}
-
-// OrderItem - Internal entity (not aggregate root)
-class OrderItem {
-    constructor(productId, quantity, price) {
-        this.id = generateId();
-        this.productId = productId;  // Reference by ID
-        this.quantity = quantity;
-        this.price = price;
-    }
-    
-    get subtotal() {
-        return this.quantity * this.price;
-    }
-}</code></pre>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Domain Events Accordion -->
-                            <div class="accordion-item">
-                                <button class="accordion-header">
-                                    <span class="accordion-title">📡 Domain Events</span>
-                                    <span class="accordion-meta">Event-driven architecture • Source: Vaughn Vernon (2013)</span>
-                                    <span class="accordion-icon">▼</span>
-                                </button>
-                                <div class="accordion-content">
-                                    <div class="content-block">
-                                        <p><strong>Domain Events</strong> represent something significant that happened in the domain. They enable loose coupling between bounded contexts and eventual consistency.</p>
-                                        
-                                        <h4 class="principle-header">What are Domain Events?</h4>
-                                        <p><em>"Use domain events to capture an occurrence of something that happened in the domain." - Vaughn Vernon</em></p>
-                                        
-                                        <ul class="feature-list">
-                                            <li><strong>Past Tense:</strong> Named with past tense verbs (OrderPlaced, PaymentProcessed)</li>
-                                            <li><strong>Immutable:</strong> Once created, cannot be changed</li>
-                                            <li><strong>Contains Data:</strong> Sufficient information for handlers to react</li>
-                                            <li><strong>Timestamp:</strong> When the event occurred</li>
-                                        </ul>
-
-                                        <div class="code-example">
-                                            <h5>✅ Domain Event Implementation</h5>
-                                            <pre><code class="language-python">from dataclasses import dataclass
-from datetime import datetime
-from uuid import UUID
-
-@dataclass(frozen=True)  # Immutable
-class OrderPlaced:
-    """Domain event - something happened in the past"""
-    order_id: UUID
-    customer_id: UUID
-    total_amount: float
-    occurred_at: datetime
-    
-    @classmethod
-    def create(cls, order_id: UUID, customer_id: UUID, total: float):
-        return cls(
-            order_id=order_id,
-            customer_id=customer_id,
-            total_amount=total,
-            occurred_at=datetime.utcnow()
-        )
-
-# Aggregate publishes events
-class Order:
-    def __init__(self, customer_id: UUID):
-        self.id = uuid4()
-        self.customer_id = customer_id
-        self._events: List[object] = []
-    
-    def submit(self):
-        self.status = 'SUBMITTED'
-        
-        # Raise domain event
-        event = OrderPlaced.create(
-            self.id, 
-            self.customer_id, 
-            self.calculate_total()
-        )
-        self._events.append(event)
-    
-    def get_uncommitted_events(self):
-        return self._events.copy()
-    
-    def clear_events(self):
-        self._events.clear()
-
-# Event handlers in other contexts
-class InventoryEventHandler:
-    """Inventory context reacts to OrderPlaced"""
-    def handle(self, event: OrderPlaced):
-        # Reserve inventory when order placed
-        self.inventory_service.reserve_for_order(event.order_id)
-
-class NotificationEventHandler:
-    """Notification context reacts to OrderPlaced"""
-    def handle(self, event: OrderPlaced):
-        # Send confirmation email
-        self.email_service.send_order_confirmation(
-            event.customer_id, 
-            event.order_id
-        )</code></pre>
-                                        </div>
-
-                                        <h4 class="principle-header">Event Sourcing</h4>
-                                        <p>Store domain events as the source of truth instead of current state.</p>
-                                        
-                                        <div class="code-example">
-                                            <h5>✅ Event Sourcing Pattern</h5>
-                                            <pre><code class="language-csharp">// Events define what happened
-public class OrderCreated : DomainEvent
-{
-    public Guid OrderId { get; }
-    public Guid CustomerId { get; }
-    
-    public OrderCreated(Guid orderId, Guid customerId)
-    {
-        OrderId = orderId;
-        CustomerId = customerId;
-    }
-}
-
-public class ItemAddedToOrder : DomainEvent
-{
-    public Guid OrderId { get; }
-    public Guid ProductId { get; }
-    public int Quantity { get; }
-    
-    public ItemAddedToOrder(Guid orderId, Guid productId, int quantity)
-    {
-        OrderId = orderId;
-        ProductId = productId;
-        Quantity = quantity;
-    }
-}
-
-// Aggregate reconstituted from events
-public class Order
-{
-    public Guid Id { get; private set; }
-    public Guid CustomerId { get; private set; }
-    private List<OrderItem> _items = new();
-    
-    // Replay events to rebuild state
-    public void LoadFromHistory(IEnumerable<DomainEvent> events)
-    {
-        foreach (var @event in events)
-        {
-            Apply(@event);
-        }
-    }
-    
-    private void Apply(DomainEvent @event)
-    {
-        switch (@event)
-        {
-            case OrderCreated e:
-                Id = e.OrderId;
-                CustomerId = e.CustomerId;
-                break;
-                
-            case ItemAddedToOrder e:
-                _items.Add(new OrderItem(e.ProductId, e.Quantity));
-                break;
-        }
-    }
-}</code></pre>
-                                        </div>
-
-                                        <div class="info-callout">
-                                            <strong>💡 Domain Events Benefits:</strong>
-                                            <ul>
-                                                <li><strong>Loose Coupling:</strong> Contexts don't need to know about each other</li>
-                                                <li><strong>Audit Trail:</strong> Complete history of what happened</li>
-                                                <li><strong>Eventual Consistency:</strong> Contexts sync asynchronously</li>
-                                                <li><strong>Temporal Queries:</strong> Can replay events to any point in time</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                </div>
-
-                <!-- Learning Resources Tab -->
-                <div class="tab-content" id="resources">
-                    <section class="doc-section">
-                        <h2 class="section-header">📚 Learning Resources</h2>
-                        <p class="content-intro">Curated resources for mastering Domain-Driven Design.</p>
-
-                        <div class="resource-category">
-                            <h3 class="subsection-header">📖 Essential Books</h3>
-                            <ul class="resource-list">
-                                <li>
-                                    <strong>Domain-Driven Design: Tackling Complexity in the Heart of Software</strong> by Eric Evans (2003)
-                                    <p>The original "Blue Book" that defined DDD. Comprehensive coverage of strategic and tactical patterns.</p>
-                                </li>
-                                <li>
-                                    <strong>Implementing Domain-Driven Design</strong> by Vaughn Vernon (2013)
-                                    <p>The "Red Book" - practical implementation guide with modern examples and event sourcing patterns.</p>
-                                </li>
-                                <li>
-                                    <strong>Domain-Driven Design Distilled</strong> by Vaughn Vernon (2016)
-                                    <p>Concise overview perfect for executives and developers new to DDD. Quick read covering core concepts.</p>
-                                </li>
-                                <li>
-                                    <strong>Patterns, Principles, and Practices of Domain-Driven Design</strong> by Scott Millett & Nick Tune (2015)
-                                    <p>Comprehensive guide blending theory with practical C# examples and microservices architecture.</p>
-                                </li>
-                                <li>
-                                    <strong>Learning Domain-Driven Design</strong> by Vlad Khononov (2021)
-                                    <p>Modern take on DDD with focus on business strategy, microservices, and event-driven architecture.</p>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <div class="resource-category">
-                            <h3 class="subsection-header">🎓 Online Courses</h3>
-                            <ul class="resource-list">
-                                <li>
-                                    <strong>Domain-Driven Design Fundamentals</strong> - Pluralsight by Steve Smith & Julie Lerman
-                                    <p>Comprehensive course covering bounded contexts, aggregates, repositories, and practical implementation.</p>
-                                </li>
-                                <li>
-                                    <strong>DDD & Microservices</strong> - Vaughn Vernon's workshops
-                                    <p>Hands-on workshops teaching strategic DDD for microservices architecture and event storming.</p>
-                                </li>
-                                <li>
-                                    <strong>Event Sourcing & CQRS</strong> - Greg Young
-                                    <p>Deep dive into event sourcing patterns, CQRS architecture, and eventual consistency.</p>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <div class="resource-category">
-                            <h3 class="subsection-header">🎥 Video Resources</h3>
-                            <ul class="resource-list">
-                                <li>
-                                    <strong>Eric Evans - DDD: Strategic Design</strong>
-                                    <p>Foundational talks by the creator of DDD on bounded contexts and ubiquitous language.</p>
-                                </li>
-                                <li>
-                                    <strong>Jimmy Bogard - Domain-Driven Refactoring</strong>
-                                    <p>Practical demonstrations of refactoring anemic models into rich domain models.</p>
-                                </li>
-                                <li>
-                                    <strong>CodeOpinion YouTube Channel</strong> - <a href="https://www.youtube.com/@CodeOpinion" target="_blank">@CodeOpinion</a>
-                                    <p>Excellent videos on DDD, event-driven architecture, and microservices patterns.</p>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <div class="resource-category">
-                            <h3 class="subsection-header">🌐 Interactive Learning</h3>
-                            <ul class="resource-list">
-                                <li>
-                                    <strong>EventStorming.com</strong> - <a href="https://www.eventstorming.com/" target="_blank">eventstorming.com</a>
-                                    <p>Official site for event storming workshop methodology. Templates and facilitation guides.</p>
-                                </li>
-                                <li>
-                                    <strong>DDD Community</strong> - <a href="https://github.com/ddd-crew" target="_blank">github.com/ddd-crew</a>
-                                    <p>Open-source DDD resources: context mapping canvas, aggregate design canvas, bounded context canvas.</p>
-                                </li>
-                                <li>
-                                    <strong>Virtual DDD Meetups</strong>
-                                    <p>Regular online meetups with talks, discussions, and hands-on sessions from the global DDD community.</p>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <div class="resource-category">
-                            <h3 class="subsection-header">📝 Articles & Blogs</h3>
-                            <ul class="resource-list">
-                                <li>
-                                    <strong>Martin Fowler's DDD Articles</strong> - <a href="https://martinfowler.com/tags/domain%20driven%20design.html" target="_blank">martinfowler.com</a>
-                                    <p>Authoritative articles on bounded contexts, event sourcing, and CQRS patterns.</p>
-                                </li>
-                                <li>
-                                    <strong>Vaughn Vernon's Blog</strong>
-                                    <p>Insights on strategic DDD, tactical patterns, and event-driven microservices.</p>
-                                </li>
-                                <li>
-                                    <strong>DDD Weekly Newsletter</strong>
-                                    <p>Curated DDD articles, talks, and resources delivered weekly.</p>
-                                </li>
-                            </ul>
-                        </div>
-                    </section>
-                </div>
-
-                <!-- CORTEX Usage Tab -->
-                <div class="tab-content" id="cortex">
-                    <section class="doc-section">
-                        <h2 class="section-header">🤖 CORTEX Usage</h2>
-                        <p class="content-intro">How CORTEX leverages DDD knowledge for intelligent domain modeling and architecture guidance.</p>
-
-                        <div class="usage-category">
-                            <h3 class="subsection-header">🏗️ Architecture Agent</h3>
-                            <div class="content-block">
-                                <p>CORTEX's Architecture Agent uses DDD principles for system design:</p>
-                                <ul class="feature-list">
-                                    <li><strong>Bounded Context Discovery:</strong> Analyzes requirements to identify context boundaries using linguistic analysis, team structure, and business capabilities</li>
-                                    <li><strong>Context Mapping:</strong> Recommends integration patterns (Partnership, Customer-Supplier, ACL) based on relationship characteristics</li>
-                                    <li><strong>Subdomain Classification:</strong> Identifies Core (competitive advantage), Supporting (necessary), and Generic (commodity) domains</li>
-                                    <li><strong>Team Topology:</strong> Suggests team organization aligned with bounded contexts</li>
-                                </ul>
-                                
-                                <div class="code-example">
-                                    <h4>Example: CORTEX Context Discovery</h4>
-                                    <pre><code class="language-bash">$ cortex analyze architecture --project ecommerce
-
-🔍 Bounded Context Analysis
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Discovered Contexts: 5
-
-1. 🎯 Sales Context (CORE DOMAIN)
-   ├─ Entities: Order, Cart, Checkout
-   ├─ Language: "Order" = purchase request
-   ├─ Team: Sales & Customer Experience
-   └─ Priority: HIGH (competitive advantage)
-
-2. 📦 Fulfillment Context (SUPPORTING)
-   ├─ Entities: Shipment, Package, Tracking
-   ├─ Language: "Order" = shipment instruction
-   ├─ Team: Logistics & Operations
-   └─ Integration: ← Sales (Customer-Supplier)
-
-3. 💳 Billing Context (SUPPORTING)
-   ├─ Entities: Invoice, Payment, Credit
-   ├─ Language: "Order" = billable transaction
-   ├─ Team: Finance & Accounting
-   └─ Integration: ← Sales (Customer-Supplier)
-
-Context Map Generated:
-Sales (upstream) → Fulfillment (downstream) [Published Language]
-Sales (upstream) → Billing (downstream) [Customer-Supplier]
-Fulfillment → Legacy ERP [Anti-Corruption Layer]
-
-💡 Recommendations:
-✓ Implement ACL for Legacy ERP integration
-✓ Use domain events for Sales → Fulfillment communication
-✓ Consider shared kernel for Sales ↔ Catalog</code></pre>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="usage-category">
-                            <h3 class="subsection-header">🔷 Domain Modeling Agent</h3>
-                            <div class="content-block">
-                                <p>CORTEX generates DDD-compliant domain models:</p>
-                                <ul class="feature-list">
-                                    <li><strong>Aggregate Design:</strong> Identifies aggregate boundaries, roots, and consistency rules</li>
-                                    <li><strong>Entity vs Value Object:</strong> Determines when identity matters (Entity) vs when it doesn't (Value Object)</li>
-                                    <li><strong>Invariant Enforcement:</strong> Generates validation logic in aggregate roots</li>
-                                    <li><strong>Repository Patterns:</strong> Creates aggregate-oriented repository interfaces</li>
-                                </ul>
-                                
-                                <div class="code-example">
-                                    <h4>Example: Generate Aggregate</h4>
-                                    <pre><code class="language-bash">$ cortex generate aggregate Order --language csharp
-
-✅ Generated Order Aggregate (DDD Pattern)
-
-📁 Files Created:
-├─ Domain/Aggregates/Order.cs (Aggregate Root)
-├─ Domain/Entities/OrderItem.cs (Internal Entity)
-├─ Domain/ValueObjects/Money.cs
-├─ Domain/ValueObjects/Address.cs
-├─ Domain/Events/OrderPlaced.cs
-├─ Domain/Events/OrderCancelled.cs
-├─ Infrastructure/Repositories/IOrderRepository.cs
-└─ Tests/Domain/OrderTests.cs
-
-✓ Aggregate enforces invariants
-✓ Rich domain model (not anemic)
-✓ Domain events for state changes
-✓ Repository pattern implemented
-✓ Unit tests included</code></pre>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="usage-category">
-                            <h3 class="subsection-header">📡 Event Modeling Agent</h3>
-                            <div class="content-block">
-                                <p>CORTEX designs event-driven architectures:</p>
-                                <ul class="feature-list">
-                                    <li><strong>Event Discovery:</strong> Identifies significant domain events from requirements</li>
-                                    <li><strong>Event Sourcing:</strong> Generates event-sourced aggregates with replay logic</li>
-                                    <li><strong>CQRS Patterns:</strong> Separates command and query models</li>
-                                    <li><strong>Saga Orchestration:</strong> Designs long-running processes across contexts</li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div class="usage-category">
-                            <h3 class="subsection-header">📊 Knowledge Integration</h3>
-                            <div class="content-block">
-                                <p>CORTEX uses these DDD knowledge files:</p>
-                                <ul class="feature-list">
-                                    <li><code>cortex-brain/knowledge/ddd/bounded-contexts.yaml</code> - 931 lines of strategic DDD patterns</li>
-                                    <li><code>cortex-brain/knowledge/ddd/aggregates-entities.yaml</code> - 996 lines of tactical patterns</li>
-                                    <li><code>cortex-brain/knowledge/ddd/domain-events.yaml</code> - Event-driven architecture patterns</li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div class="info-callout">
-                            <strong>💡 CORTEX DDD Intelligence:</strong>
-                            <p>All CORTEX agents (Architecture, Domain Modeling, Event Modeling) are trained on Eric Evans' "Domain-Driven Design" and Vaughn Vernon's "Implementing Domain-Driven Design," ensuring recommendations align with established DDD principles and modern microservices best practices.</p>
-                        </div>
-                    </section>
+    style UI fill:#3b82f6,color:#fff
+    style APP fill:#10b981,color:#fff
+    style DOM fill:#7b61ff,color:#fff
+    style INFRA fill:#f59e0b,color:#fff
+                    </div>
                 </div>
             </div>
-        </div>
-    </main>
 
-    <footer class="doc-footer">
-        <div class="footer-container">
-            <p>&copy; 2025 CORTEX Knowledge Library. All rights reserved.</p>
-            <p>Built with ❤️ by <a href="https://github.com/asifhussain60" target="_blank">Asif Hussain</a></p>
-        </div>
-    </footer>
+            <div id="strategic" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🗺️ Strategic Design</h2>
+                    
+                    <h3>Core Concepts</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔲</span>
+                            <h3>Bounded Context</h3>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Explicit boundaries around models</li>
+                                <li>Isolate domain logic</li>
+                                <li>Clear ownership</li>
+                                <li>Independent evolution</li>
+                            </ul>
+                            <h4>Guidelines</h4>
+                            <ul>
+                                <li>One team per context</li>
+                                <li>Align with business capabilities</li>
+                                <li>Minimize dependencies</li>
+                            </ul>
+                        </div>
 
-    <script>
-        // Tab switching functionality
-        document.querySelectorAll('.tab-button').forEach(button => {
-            button.addEventListener('click', () => {
-                const tabName = button.dataset.tab;
-                
-                // Update button states
-                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-                
-                // Update content visibility
-                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-                document.getElementById(tabName).classList.add('active');
-            });
-        });
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">💬</span>
+                            <h3>Ubiquitous Language</h3>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Shared vocabulary</li>
+                                <li>Domain expert terminology</li>
+                                <li>Used in code and conversation</li>
+                                <li>Evolves with understanding</li>
+                            </ul>
+                            <h4>Benefits</h4>
+                            <ul>
+                                <li>Reduces miscommunication</li>
+                                <li>Code matches business</li>
+                                <li>Easier onboarding</li>
+                            </ul>
+                        </div>
 
-        // Accordion functionality
-        document.querySelectorAll('.accordion-header').forEach(header => {
-            header.addEventListener('click', () => {
-                const item = header.parentElement;
-                const icon = header.querySelector('.accordion-icon');
-                
-                // Toggle active state
-                item.classList.toggle('active');
-                
-                // Toggle icon
-                icon.textContent = item.classList.contains('active') ? '▲' : '▼';
-            });
-        });
-
-        // Initialize Mermaid
-        mermaid.initialize({ 
-            startOnLoad: true,
-            theme: 'dark',
-            themeVariables: {
-                primaryColor: '#667eea',
-                primaryTextColor: '#fff',
-                primaryBorderColor: '#7c3aed',
-                lineColor: '#a78bfa',
-                secondaryColor: '#48bb78',
-                tertiaryColor: '#ed8936'
-            }
-        });
-    </script>
-</body>
-</html>
-                    <div class="glass-card">
-                        <h2>Overview</h2>
-                        <p>Domain-Driven Design patterns for modeling complex business domains with bounded contexts, aggregates, and ubiquitous language.</p>
-                        <h3>Category Statistics</h3>
-                        <div class="stats-grid">
-                            <div class="stat-item"><div class="stat-value">4</div><div class="stat-label">Knowledge Files</div></div>
-                            <div class="stat-item"><div class="stat-value">65+</div><div class="stat-label">Patterns</div></div>
-                            <div class="stat-item"><div class="stat-value">3</div><div class="stat-label">Core Layers</div></div>
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🗺️</span>
+                            <h3>Context Mapping</h3>
+                            <h4>Relationship Patterns</h4>
+                            <ul>
+                                <li><strong>Shared Kernel:</strong> Share subset of model</li>
+                                <li><strong>Customer/Supplier:</strong> Upstream/downstream</li>
+                                <li><strong>Conformist:</strong> Conform to upstream</li>
+                                <li><strong>Anti-Corruption Layer:</strong> Translation layer</li>
+                            </ul>
                         </div>
                     </div>
-                    <div class="glass-card">
-                        <h2>Concept Map</h2>
-                        <div class="mermaid">
-graph TD
-    A[Domain-Driven Design] --> B[Strategic Design]
-    A --> C[Tactical Design]
-    B --> D[Bounded Contexts]
-    B --> E[Context Mapping]
-    B --> F[Ubiquitous Language]
-    C --> G[Entities]
-    C --> H[Value Objects]
-    C --> I[Aggregates]
-    C --> J[Domain Events]
-    C --> K[Repositories]
-    style A fill:#00d4ff,stroke:#7b61ff,stroke-width:2px
-    style B fill:#4ecdc4,stroke:#fff,stroke-width:2px
-    style C fill:#ff6b6b,stroke:#fff,stroke-width:2px
+
+                    <h3>Context Map Example</h3>
+                    <div class="mermaid">
+graph LR
+    subgraph "E-Commerce System"
+        ORDER[Order Context]
+        PAYMENT[Payment Context]
+        SHIPPING[Shipping Context]
+        INVENTORY[Inventory Context]
+    end
+    
+    ORDER -->|Customer/Supplier| PAYMENT
+    ORDER -->|Customer/Supplier| SHIPPING
+    ORDER -->|Anti-Corruption Layer| INVENTORY
+    SHIPPING -->|Conformist| INVENTORY
+    
+    style ORDER fill:#7b61ff,color:#fff
+    style PAYMENT fill:#10b981,color:#fff
+    style SHIPPING fill:#3b82f6,color:#fff
+    style INVENTORY fill:#f59e0b,color:#fff
+                    </div>
+                </div>
+            </div>
+
+            <div id="tactical" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🏗️ Tactical Patterns</h2>
+                    
+                    <h3>Building Blocks</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🎯</span>
+                            <h3>Entity</h3>
+                            <h4>Characteristics</h4>
+                            <ul>
+                                <li>Has unique identity</li>
+                                <li>Identity persists over time</li>
+                                <li>Mutable state</li>
+                                <li>Equality by ID</li>
+                            </ul>
+                            <h4>Examples</h4>
+                            <ul>
+                                <li>User (by ID)</li>
+                                <li>Order (by order number)</li>
+                                <li>Account (by account ID)</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">💎</span>
+                            <h3>Value Object</h3>
+                            <h4>Characteristics</h4>
+                            <ul>
+                                <li>No identity</li>
+                                <li>Immutable</li>
+                                <li>Equality by value</li>
+                                <li>Can be shared</li>
+                            </ul>
+                            <h4>Examples</h4>
+                            <ul>
+                                <li>Money (amount + currency)</li>
+                                <li>Address</li>
+                                <li>Date range</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📦</span>
+                            <h3>Aggregate</h3>
+                            <h4>Characteristics</h4>
+                            <ul>
+                                <li>Cluster of entities/value objects</li>
+                                <li>Consistency boundary</li>
+                                <li>One aggregate root</li>
+                                <li>External access via root</li>
+                            </ul>
+                            <h4>Guidelines</h4>
+                            <ul>
+                                <li>Keep aggregates small</li>
+                                <li>Reference by ID</li>
+                                <li>Transactional boundary</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>Aggregate Example</h3>
+                    <div class="mermaid">
+graph TB
+    subgraph "Order Aggregate"
+        OR[Order<br/>Aggregate Root]
+        OI1[Order Item]
+        OI2[Order Item]
+        ADDR[Shipping Address<br/>Value Object]
+        PRICE[Total Price<br/>Value Object]
+        
+        OR --> OI1
+        OR --> OI2
+        OR --> ADDR
+        OR --> PRICE
+    end
+    
+    EXT[External Context] -.->|References by ID| OR
+    
+    style OR fill:#7b61ff,color:#fff
+    style ADDR fill:#10b981,color:#fff
+    style PRICE fill:#10b981,color:#fff
+                    </div>
+
+                    <h3>Additional Patterns</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🗄️</span>
+                            <h3>Repository</h3>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Abstract data access</li>
+                                <li>Collection-like interface</li>
+                                <li>One per aggregate root</li>
+                                <li>Persistence ignorance</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">⚙️</span>
+                            <h3>Domain Service</h3>
+                            <h4>When to Use</h4>
+                            <ul>
+                                <li>Operation doesn't fit in entity</li>
+                                <li>Involves multiple aggregates</li>
+                                <li>Stateless operation</li>
+                                <li>Domain logic, not infrastructure</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🏭</span>
+                            <h3>Factory</h3>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Complex object creation</li>
+                                <li>Encapsulate construction logic</li>
+                                <li>Ensure valid state</li>
+                                <li>Reconstitute from storage</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
-                <div class="tab-content" id="files-tab" role="tabpanel" aria-labelledby="files-btn" hidden>
-                    <div class="glass-card">
-                        <h2>Knowledge Files</h2>
-                        <p>Explore domain-driven design patterns:</p>
-                    </div>
-                    <div class="knowledge-files-accordion">
-                        <div class="accordion-item">
-                            <button class="accordion-header" aria-expanded="false" aria-controls="bounded-contexts-content">
-                                <span class="accordion-icon">🗺️</span>
-                                <div class="accordion-title-group">
-                                    <h3 class="accordion-title">Bounded Contexts</h3>
-                                    <p class="accordion-subtitle">Context boundaries, strategic design</p>
-                                </div>
-                                <span class="badge">18 rules</span>
-                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                            </button>
-                            <div id="bounded-contexts-content" class="accordion-content" hidden>
-                                <p>Bounded context identification and mapping.</p>
-                                <p><em>📝 Knowledge file coming soon</em></p>
-                            </div>
+            </div>
+
+            <div id="events" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">📨 Domain Events</h2>
+                    
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">✨</span>
+                            <h3>Domain Events</h3>
+                            <h4>Characteristics</h4>
+                            <ul>
+                                <li>Something that happened in domain</li>
+                                <li>Past tense naming</li>
+                                <li>Immutable</li>
+                                <li>Timestamp included</li>
+                            </ul>
+                            <h4>Examples</h4>
+                            <ul>
+                                <li>OrderPlaced</li>
+                                <li>PaymentProcessed</li>
+                                <li>InventoryUpdated</li>
+                            </ul>
                         </div>
-                        <div class="accordion-item">
-                            <button class="accordion-header" aria-expanded="false" aria-controls="aggregates-content">
-                                <span class="accordion-icon">🔗</span>
-                                <div class="accordion-title-group">
-                                    <h3 class="accordion-title">Aggregates</h3>
-                                    <p class="accordion-subtitle">Aggregate roots, consistency boundaries</p>
-                                </div>
-                                <span class="badge">16 rules</span>
-                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                            </button>
-                            <div id="aggregates-content" class="accordion-content" hidden>
-                                <p>Aggregate design and transactional consistency.</p>
-                                <p><em>📝 Knowledge file coming soon</em></p>
-                            </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔄</span>
+                            <h3>Event Sourcing</h3>
+                            <h4>Pattern</h4>
+                            <ul>
+                                <li>Store events, not state</li>
+                                <li>Rebuild state by replaying</li>
+                                <li>Complete audit trail</li>
+                                <li>Time travel debugging</li>
+                            </ul>
                         </div>
-                        <div class="accordion-item">
-                            <button class="accordion-header" aria-expanded="false" aria-controls="domain-events-content">
-                                <span class="accordion-icon">📢</span>
-                                <div class="accordion-title-group">
-                                    <h3 class="accordion-title">Domain Events</h3>
-                                    <p class="accordion-subtitle">Event modeling, event sourcing</p>
-                                </div>
-                                <span class="badge">15 rules</span>
-                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                            </button>
-                            <div id="domain-events-content" class="accordion-content" hidden>
-                                <p>Domain events and event-driven architecture.</p>
-                                <p><em>📝 Knowledge file coming soon</em></p>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <button class="accordion-header" aria-expanded="false" aria-controls="repositories-content">
-                                <span class="accordion-icon">💾</span>
-                                <div class="accordion-title-group">
-                                    <h3 class="accordion-title">Repositories</h3>
-                                    <p class="accordion-subtitle">Data access abstraction</p>
-                                </div>
-                                <span class="badge">14 rules</span>
-                                <svg class="accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                            </button>
-                            <div id="repositories-content" class="accordion-content" hidden>
-                                <p>Repository pattern for aggregate persistence.</p>
-                                <p><em>📝 Knowledge file coming soon</em></p>
-                            </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📊</span>
+                            <h3>CQRS</h3>
+                            <h4>Pattern</h4>
+                            <ul>
+                                <li>Separate read and write models</li>
+                                <li>Commands modify state</li>
+                                <li>Queries retrieve data</li>
+                                <li>Eventual consistency</li>
+                            </ul>
                         </div>
                     </div>
-                </div>
-                <div class="tab-content" id="resources-tab" role="tabpanel" aria-labelledby="resources-btn" hidden>
-                    <div class="glass-card">
-                        <h2>Learning Resources</h2>
-                        <ul class="resource-list">
-                            <li><div class="resource-link">
-                                <span class="resource-icon">📚</span>
-                                <div><strong>Domain-Driven Design</strong><p>By Eric Evans - The blue book</p></div>
-                            </div></li>
-                            <li><div class="resource-link">
-                                <span class="resource-icon">📚</span>
-                                <div><strong>Implementing DDD</strong><p>By Vaughn Vernon - Practical guide</p></div>
-                            </div></li>
-                        </ul>
+
+                    <h3>Event Flow</h3>
+                    <div class="mermaid">
+sequenceDiagram
+    participant C as Command
+    participant A as Aggregate
+    participant E as Event Store
+    participant R as Read Model
+    
+    C->>A: PlaceOrder(items)
+    A->>A: Validate business rules
+    A->>E: Publish: OrderPlaced
+    E->>E: Store event
+    E->>R: Project to read model
+    R->>R: Update query DB
+    
+    Note over A,E: Write side
+    Note over R: Read side
                     </div>
                 </div>
-                <div class="tab-content" id="usage-tab" role="tabpanel" aria-labelledby="usage-btn" hidden>
-                    <div class="glass-card">
-                        <h2>How CORTEX Uses DDD Knowledge</h2>
-                        <h3>🗺️ Strategic Design</h3>
+            </div>
+
+            <div id="best-practices" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">💡 Best Practices</h2>
+                    
+                    <div class="info-box info-box-success">
+                        <strong>DDD Guidelines:</strong>
                         <ul class="feature-list">
-                            <li><strong>Context Discovery:</strong> Identifies bounded contexts</li>
-                            <li><strong>Language:</strong> Extracts ubiquitous language</li>
-                            <li><strong>Mapping:</strong> Creates context maps</li>
+                            <li><strong>Start with Exploration:</strong> Event storming sessions with domain experts</li>
+                            <li><strong>Small Aggregates:</strong> Keep aggregates focused and small</li>
+                            <li><strong>Consistency Boundaries:</strong> One transaction per aggregate</li>
+                            <li><strong>Reference by ID:</strong> Don't hold references to other aggregates</li>
+                            <li><strong>Eventual Consistency:</strong> Use domain events between aggregates</li>
+                            <li><strong>Protect Invariants:</strong> Enforce business rules in domain model</li>
                         </ul>
-                        <h3>🎯 Tactical Design</h3>
+                    </div>
+
+                    <div class="info-box info-box-warning">
+                        <strong>Common Pitfalls:</strong>
                         <ul class="feature-list">
-                            <li><strong>Entities:</strong> Generates entity classes</li>
-                            <li><strong>Aggregates:</strong> Implements aggregate roots</li>
-                            <li><strong>Events:</strong> Creates domain event classes</li>
+                            <li><strong>Anemic Domain Model:</strong> Domain objects with no behavior</li>
+                            <li><strong>Large Aggregates:</strong> Performance and complexity issues</li>
+                            <li><strong>Over-Engineering:</strong> DDD not needed for simple CRUD</li>
+                            <li><strong>Ignoring Business:</strong> Technical solutions without domain input</li>
                         </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="resources" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">📚 Resources & Learning</h2>
+                    
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📖</span>
+                            <h3>Essential Books</h3>
+                            <ul>
+                                <li><strong>Domain-Driven Design</strong> - Eric Evans (Blue Book)</li>
+                                <li><strong>Implementing DDD</strong> - Vaughn Vernon (Red Book)</li>
+                                <li><strong>Domain Modeling Made Functional</strong> - Scott Wlaschin</li>
+                                <li><strong>Learning DDD</strong> - Vlad Khononov</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🛠️</span>
+                            <h3>Tools</h3>
+                            <ul>
+                                <li><a href="https://www.eventstorming.com/" target="_blank" rel="noopener">Event Storming</a></li>
+                                <li><a href="https://contextmapper.org/" target="_blank" rel="noopener">Context Mapper</a></li>
+                                <li><a href="https://www.axoniq.io/" target="_blank" rel="noopener">AxonIQ</a> - Event sourcing</li>
+                                <li><a href="https://miro.com/" target="_blank" rel="noopener">Miro</a> - Collaboration</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🌐</span>
+                            <h3>Online Resources</h3>
+                            <ul>
+                                <li><a href="https://www.domainlanguage.com/" target="_blank" rel="noopener">Domain Language</a></li>
+                                <li><a href="https://www.dddcommunity.org/" target="_blank" rel="noopener">DDD Community</a></li>
+                                <li><a href="https://github.com/ddd-crew" target="_blank" rel="noopener">DDD Crew</a></li>
+                                <li><a href="https://www.youtube.com/@DDD_eu" target="_blank" rel="noopener">DDD Europe</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <nav class="bottom-nav" aria-label="Category navigation">
-        <a href="engineering.html" class="bottom-nav-link"><span class="bottom-nav-icon">🏗️</span><span class="bottom-nav-label">Engineering</span></a>
-        <a href="ddd.html" class="bottom-nav-link active"><span class="bottom-nav-icon">🎯</span><span class="bottom-nav-label">DDD</span></a>
-        <a href="security.html" class="bottom-nav-link"><span class="bottom-nav-icon">🔒</span><span class="bottom-nav-label">Security</span></a>
-        <a href="testing.html" class="bottom-nav-link"><span class="bottom-nav-icon">🧪</span><span class="bottom-nav-label">Testing</span></a>
-        <a href="rag-domains.html" class="bottom-nav-link"><span class="bottom-nav-icon">🤖</span><span class="bottom-nav-label">RAG</span></a>
-    </nav>
-    <script src="../assets/js/category-page.js"></script>
-    <script>mermaid.initialize({startOnLoad:true,theme:'dark',themeVariables:{primaryColor:'#00d4ff',primaryTextColor:'#fff',primaryBorderColor:'#7b61ff',lineColor:'#00d4ff',secondaryColor:'#7b61ff',tertiaryColor:'#1a1f3a'}});</script>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 CORTEX Knowledge Base. Created by Asif Hussain.</p>
+            <p>
+                <a href="../index.html">Home</a> |
+                <a href="index.html">Knowledge Library</a> |
+                <a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener">GitHub</a>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark'
+        });
+    </script>
 </body>
 </html>

@@ -3,1095 +3,490 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Testing & Quality Assurance | CORTEX Knowledge Library</title>
+    <meta name="description" content="Software Testing - Test pyramid, TDD, BDD, unit testing, integration testing, test automation">
+    <meta name="keywords" content="testing, tdd, bdd, unit tests, integration tests, test automation">
+    <meta name="author" content="Asif Hussain">
+    <title>Software Testing | CORTEX Knowledge</title>
     <link rel="stylesheet" href="../assets/css/main.css">
-    <link rel="stylesheet" href="../assets/css/knowledge.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
-    <nav class="doc-nav">
-        <div class="nav-container">
-            <a href="../index.html" class="nav-logo">
-                <img src="../assets/images/cortex-logo.svg" alt="CORTEX" class="logo-image">
-            </a>
-            <ul class="nav-links">
-                <li><a href="../index.html">Home</a></li>
-                <li><a href="index.html" class="active">Knowledge Library</a></li>
-                <li><a href="../sts/index.html">STS Portal</a></li>
-            </ul>
-        </div>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">→</span>
+        <a href="index.html">Knowledge Library</a>
+        <span class="breadcrumb-separator">→</span>
+        <span class="breadcrumb-current">Software Testing</span>
     </nav>
 
-    <main class="doc-main">
-        <div class="doc-container">
-            <header class="doc-header">
-                <div class="breadcrumb">
-                    <a href="../index.html">Home</a>
-                    <span class="separator">/</span>
-                    <a href="index.html">Knowledge Library</a>
-                    <span class="separator">/</span>
-                    <span>Testing</span>
-                </div>
-                <h1 class="doc-title">Testing & Quality Assurance</h1>
-                <p class="doc-subtitle">TDD, testing pyramid, unit/integration/E2E testing, test doubles, and test automation strategies</p>
-            </header>
+    <section class="hero" id="main-content">
+        <h1 class="hero-title">🧪 Software Testing</h1>
+        <p class="hero-subtitle">Test Pyramid, TDD, and Test Automation Strategies</p>
+        <div class="file-metadata">
+            <span class="metadata-item">✅ Quality</span>
+            <span class="metadata-item">🔄 TDD</span>
+            <span class="metadata-item">📅 Updated: Dec 2025</span>
+        </div>
+    </section>
 
-            <div class="tab-container">
-                <div class="tab-buttons">
-                    <button class="tab-button active" data-tab="overview">Overview</button>
-                    <button class="tab-button" data-tab="knowledge">Knowledge Files</button>
-                    <button class="tab-button" data-tab="resources">Learning Resources</button>
-                    <button class="tab-button" data-tab="cortex">CORTEX Usage</button>
-                </div>
+    <section class="section file-content">
+        <div class="container">
+            <div id="overview" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">📋 Overview</h2>
+                    <p>Software testing validates that applications work as expected and meet requirements. From unit tests to end-to-end testing, a comprehensive testing strategy ensures code quality, prevents regressions, and builds confidence in deployments.</p>
+                    
+                    <div class="info-box info-box-primary">
+                        <strong>Testing Benefits:</strong>
+                        <ul class="feature-list">
+                            <li><strong>Quality Assurance:</strong> Catch bugs before production</li>
+                            <li><strong>Regression Prevention:</strong> Ensure changes don't break existing features</li>
+                            <li><strong>Documentation:</strong> Tests describe expected behavior</li>
+                            <li><strong>Refactoring Confidence:</strong> Safe code improvements</li>
+                            <li><strong>Design Feedback:</strong> Tests reveal design issues</li>
+                        </ul>
+                    </div>
 
-                <!-- Overview Tab -->
-                <div class="tab-content active" id="overview">
-                    <section class="doc-section">
-                        <h2 class="section-header">🎯 Category Overview</h2>
-                        <div class="content-block">
-                            <p>Testing & Quality Assurance covers test-driven development (TDD), the testing pyramid strategy, unit/integration/E2E testing, test doubles (mocks, stubs, fakes), and automated testing best practices. This category ensures high-quality, maintainable, and reliable software.</p>
-                            
-                            <h3 class="subsection-header">Key Concepts</h3>
-                            <ul class="feature-list">
-                                <li><strong>Test-Driven Development (TDD):</strong> RED-GREEN-REFACTOR cycle, writing tests before code</li>
-                                <li><strong>Testing Pyramid:</strong> Unit tests (70%), integration tests (20%), E2E tests (10%)</li>
-                                <li><strong>Unit Testing:</strong> Testing individual functions/classes in isolation</li>
-                                <li><strong>Integration Testing:</strong> Testing component interactions and database operations</li>
-                                <li><strong>End-to-End Testing:</strong> Testing complete user workflows through the UI</li>
-                                <li><strong>Test Doubles:</strong> Mocks, stubs, spies, fakes, and dummies for test isolation</li>
-                            </ul>
-                        </div>
-
-                        <div class="visual-diagram">
-                            <h3 class="subsection-header">Testing Pyramid</h3>
-                            <div class="mermaid">
+                    <h3>The Test Pyramid</h3>
+                    <div class="mermaid">
 graph TB
-    subgraph Pyramid["Testing Pyramid (Ideal Distribution)"]
-        E2E["🌐 E2E Tests<br/>10%<br/>Slow, Brittle, Expensive"]
-        Integration["🔗 Integration Tests<br/>20%<br/>Medium Speed, DB/API"]
-        Unit["⚡ Unit Tests<br/>70%<br/>Fast, Isolated, Cheap"]
+    subgraph "Test Pyramid"
+        E2E["E2E Tests<br/>Few, Slow, Expensive<br/>Full user journeys"]
+        INT["Integration Tests<br/>More, Moderate Speed<br/>Component interactions"]
+        UNIT["Unit Tests<br/>Many, Fast, Cheap<br/>Individual functions"]
     end
-
-    subgraph AntiPattern["❌ Ice Cream Cone (Anti-Pattern)"]
-        ManualE2E["🌐 Many E2E Tests<br/>Slow Feedback"]
-        FewInt["🔗 Few Integration Tests"]
-        FewUnit["⚡ Few Unit Tests<br/>Poor Coverage"]
-    end
-
-    E2E --> Integration
-    Integration --> Unit
-
-    ManualE2E --> FewInt
-    FewInt --> FewUnit
-
-    style Unit fill:#48bb78
-    style Integration fill:#ed8936
-    style E2E fill:#667eea
-    style FewUnit fill:#e53e3e
-    style FewInt fill:#e53e3e
-    style ManualE2E fill:#e53e3e
-                            </div>
-                        </div>
-
-                        <div class="content-block">
-                            <h3 class="subsection-header">Test-Driven Development (TDD)</h3>
-                            <p>TDD is a methodology where tests are written BEFORE implementation. Follow the RED-GREEN-REFACTOR cycle.</p>
-                            
-                            <div class="visual-diagram">
-                                <h4>RED-GREEN-REFACTOR Cycle</h4>
-                                <div class="mermaid">
-graph LR
-    RED["🔴 RED<br/>Write Failing Test"] --> GREEN["🟢 GREEN<br/>Write Minimal Code"]
-    GREEN --> REFACTOR["♻️ REFACTOR<br/>Improve Design"]
-    REFACTOR --> RED
-
-    style RED fill:#e53e3e
-    style GREEN fill:#48bb78
-    style REFACTOR fill:#667eea
-                                </div>
-                            </div>
-
-                            <div class="comparison-table">
-                                <h4>Three Laws of TDD (Uncle Bob)</h4>
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Law</th>
-                                            <th>Description</th>
-                                            <th>Rationale</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td><strong>Law 1</strong></td>
-                                            <td>You may not write production code until you have written a failing unit test</td>
-                                            <td>Ensures test actually tests something</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Law 2</strong></td>
-                                            <td>You may not write more of a unit test than is sufficient to fail</td>
-                                            <td>Keep tests small and focused</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Law 3</strong></td>
-                                            <td>You may not write more production code than is sufficient to pass the test</td>
-                                            <td>Avoid speculative code (YAGNI)</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <div class="code-example">
-                                <h4>TDD Example: Calculator</h4>
-                                <pre><code class="language-python"># STEP 1: RED - Write failing test
-def test_add_positive_numbers():
-    calculator = Calculator()
-    assert calculator.add(2, 3) == 5  # FAILS - Calculator doesn't exist
-
-# STEP 2: GREEN - Write minimal code to pass
-class Calculator:
-    def add(self, a, b):
-        return a + b  # Simplest implementation
-
-# STEP 3: REFACTOR - Improve (if needed)
-# Code is already clean, move to next test
-
-# STEP 1: RED - Write test for edge case
-def test_add_with_zero():
-    calculator = Calculator()
-    assert calculator.add(0, 5) == 5  # Passes! No changes needed
-
-# STEP 1: RED - Test negative numbers
-def test_add_negative_numbers():
-    calculator = Calculator()
-    assert calculator.add(-2, -3) == -5  # Passes! Implementation is general enough</code></pre>
-                            </div>
-                        </div>
-
-                        <div class="content-block">
-                            <h3 class="subsection-header">Unit Testing</h3>
-                            <p>Unit tests verify individual units (functions, classes, methods) in isolation. They are fast, deterministic, and form the foundation (70%) of your test suite.</p>
-                            
-                            <div class="code-example">
-                                <h4>Python Unit Test (pytest)</h4>
-                                <pre><code class="language-python">import pytest
-from shopping_cart import ShoppingCart, Item
-
-# AAA Pattern: Arrange, Act, Assert
-
-def test_add_item_increments_count():
-    # Arrange
-    cart = ShoppingCart()
-    item = Item("Laptop", 1000)
     
-    # Act
-    cart.add_item(item)
+    E2E --> INT
+    INT --> UNIT
     
-    # Assert
-    assert cart.item_count() == 1
-
-def test_calculate_total_sums_item_prices():
-    # Arrange
-    cart = ShoppingCart()
-    cart.add_item(Item("Laptop", 1000))
-    cart.add_item(Item("Mouse", 25))
-    
-    # Act
-    total = cart.total()
-    
-    # Assert
-    assert total == 1025
-
-def test_apply_discount_reduces_total():
-    # Arrange
-    cart = ShoppingCart()
-    cart.add_item(Item("Laptop", 1000))
-    
-    # Act
-    cart.apply_discount(0.1)  # 10% discount
-    
-    # Assert
-    assert cart.total() == 900
-
-def test_remove_item_when_empty_raises_exception():
-    # Arrange
-    cart = ShoppingCart()
-    
-    # Act & Assert
-    with pytest.raises(ValueError, match="Cart is empty"):
-        cart.remove_item("Laptop")</code></pre>
-                            </div>
-
-                            <div class="code-example">
-                                <h4>C# Unit Test (xUnit)</h4>
-                                <pre><code class="language-csharp">using Xunit;
-
-public class OrderValidatorTests
-{
-    [Fact]
-    public void Validate_WithPositiveQuantity_ReturnsTrue()
-    {
-        // Arrange
-        var validator = new OrderValidator();
-        var order = new Order { Quantity = 5, Price = 100 };
-        
-        // Act
-        var result = validator.Validate(order);
-        
-        // Assert
-        Assert.True(result);
-    }
-
-    [Fact]
-    public void Validate_WithNegativeQuantity_ReturnsFalse()
-    {
-        // Arrange
-        var validator = new OrderValidator();
-        var order = new Order { Quantity = -1, Price = 100 };
-        
-        // Act
-        var result = validator.Validate(order);
-        
-        // Assert
-        Assert.False(result);
-    }
-
-    [Theory]
-    [InlineData(0)]
-    [InlineData(-1)]
-    [InlineData(-100)]
-    public void Validate_WithNonPositiveQuantity_ReturnsFalse(int quantity)
-    {
-        // Arrange
-        var validator = new OrderValidator();
-        var order = new Order { Quantity = quantity, Price = 100 };
-        
-        // Act
-        var result = validator.Validate(order);
-        
-        // Assert
-        Assert.False(result);
-    }
-}</code></pre>
-                            </div>
-
-                            <div class="code-example">
-                                <h4>JavaScript Unit Test (Jest)</h4>
-                                <pre><code class="language-javascript">const { UserService } = require('./user-service');
-
-describe('UserService', () => {
-  test('register creates user with hashed password', () => {
-    // Arrange
-    const service = new UserService();
-    
-    // Act
-    const user = service.register('alice@example.com', 'password123');
-    
-    // Assert
-    expect(user.email).toBe('alice@example.com');
-    expect(user.password).not.toBe('password123'); // Should be hashed
-    expect(user.password.length).toBeGreaterThan(20); // Hash is longer
-  });
-
-  test('register with duplicate email throws error', () => {
-    // Arrange
-    const service = new UserService();
-    service.register('alice@example.com', 'password123');
-    
-    // Act & Assert
-    expect(() => {
-      service.register('alice@example.com', 'password456');
-    }).toThrow('Email already registered');
-  });
-
-  test('authenticate with valid credentials returns true', () => {
-    // Arrange
-    const service = new UserService();
-    service.register('alice@example.com', 'password123');
-    
-    // Act
-    const result = service.authenticate('alice@example.com', 'password123');
-    
-    // Assert
-    expect(result).toBe(true);
-  });
-
-  test('authenticate with invalid password returns false', () => {
-    // Arrange
-    const service = new UserService();
-    service.register('alice@example.com', 'password123');
-    
-    // Act
-    const result = service.authenticate('alice@example.com', 'wrong');
-    
-    // Assert
-    expect(result).toBe(false);
-  });
-});</code></pre>
-                            </div>
-                        </div>
-
-                        <div class="content-block">
-                            <h3 class="subsection-header">Integration Testing</h3>
-                            <p>Integration tests verify multiple components work together correctly. They test database operations, API endpoints, and service interactions. Make up 20% of test suite.</p>
-                            
-                            <div class="code-example">
-                                <h4>Python Integration Test (pytest + TestContainers)</h4>
-                                <pre><code class="language-python">import pytest
-from testcontainers.postgres import PostgresContainer
-
-@pytest.fixture(scope="module")
-def postgres_container():
-    with PostgresContainer("postgres:15") as postgres:
-        yield postgres
-
-def test_user_repository_saves_and_retrieves(postgres_container):
-    # Arrange
-    connection_string = postgres_container.get_connection_url()
-    repo = UserRepository(connection_string)
-    user = User(name="Alice", email="alice@example.com")
-    
-    # Act
-    user_id = repo.save(user)
-    retrieved = repo.get_by_id(user_id)
-    
-    # Assert
-    assert retrieved.name == "Alice"
-    assert retrieved.email == "alice@example.com"
-
-def test_user_repository_prevents_duplicate_emails(postgres_container):
-    # Arrange
-    connection_string = postgres_container.get_connection_url()
-    repo = UserRepository(connection_string)
-    
-    # Act
-    repo.save(User(name="Alice", email="alice@example.com"))
-    
-    # Assert
-    with pytest.raises(IntegrityError):
-        repo.save(User(name="Bob", email="alice@example.com"))  # Duplicate email</code></pre>
-                            </div>
-
-                            <div class="code-example">
-                                <h4>C# Integration Test (xUnit + WebApplicationFactory)</h4>
-                                <pre><code class="language-csharp">public class OrdersApiTests : IClassFixture<WebApplicationFactory<Program>>
-{
-    private readonly WebApplicationFactory<Program> _factory;
-
-    public OrdersApiTests(WebApplicationFactory<Program> factory)
-    {
-        _factory = factory;
-    }
-
-    [Fact]
-    public async Task GetOrders_ReturnsOkWithOrders()
-    {
-        // Arrange
-        var client = _factory.CreateClient();
-        
-        // Act
-        var response = await client.GetAsync("/api/orders");
-        
-        // Assert
-        response.EnsureSuccessStatusCode();
-        var orders = await response.Content.ReadFromJsonAsync<List<Order>>();
-        Assert.NotNull(orders);
-    }
-
-    [Fact]
-    public async Task CreateOrder_WithValidData_ReturnsCreated()
-    {
-        // Arrange
-        var client = _factory.CreateClient();
-        var newOrder = new { customerId = 1, total = 100.00 };
-        
-        // Act
-        var response = await client.PostAsJsonAsync("/api/orders", newOrder);
-        
-        // Assert
-        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-        var order = await response.Content.ReadFromJsonAsync<Order>();
-        Assert.Equal(100.00, order.Total);
-    }
-}</code></pre>
-                            </div>
-                        </div>
-
-                        <div class="content-block">
-                            <h3 class="subsection-header">End-to-End (E2E) Testing</h3>
-                            <p>E2E tests verify complete user workflows through the UI. They are slow and brittle but catch integration issues. Should be only 10% of test suite.</p>
-                            
-                            <div class="code-example">
-                                <h4>Playwright E2E Test</h4>
-                                <pre><code class="language-javascript">const { test, expect } = require('@playwright/test');
-
-test('user can complete checkout flow', async ({ page }) => {
-  // Navigate to shop
-  await page.goto('https://example.com/shop');
-  
-  // Add item to cart
-  await page.click('button[data-product-id="1"]');
-  await expect(page.locator('.cart-count')).toHaveText('1');
-  
-  // Go to cart
-  await page.click('a[href="/cart"]');
-  await expect(page.locator('.cart-total')).toContainText('$99.99');
-  
-  // Proceed to checkout
-  await page.click('button:has-text("Checkout")');
-  
-  // Fill shipping information
-  await page.fill('input[name="name"]', 'Alice Smith');
-  await page.fill('input[name="address"]', '123 Main St');
-  await page.fill('input[name="city"]', 'New York');
-  await page.selectOption('select[name="state"]', 'NY');
-  await page.fill('input[name="zip"]', '10001');
-  
-  // Fill payment information
-  await page.fill('input[name="card_number"]', '4111111111111111');
-  await page.fill('input[name="expiry"]', '12/25');
-  await page.fill('input[name="cvv"]', '123');
-  
-  // Submit order
-  await page.click('button[type="submit"]');
-  
-  // Verify success
-  await expect(page).toHaveURL(/.*order-confirmation/);
-  await expect(page.locator('h1')).toContainText('Order Confirmed');
-  await expect(page.locator('.order-number')).toBeVisible();
-});
-
-test('user can login with valid credentials', async ({ page }) => {
-  // Navigate to login
-  await page.goto('https://example.com/login');
-  
-  // Fill credentials
-  await page.fill('input[name="email"]', 'user@example.com');
-  await page.fill('input[name="password"]', 'password123');
-  
-  // Submit
-  await page.click('button[type="submit"]');
-  
-  // Verify redirect to dashboard
-  await expect(page).toHaveURL(/.*dashboard/);
-  await expect(page.locator('.welcome-message')).toContainText('Welcome back');
-});</code></pre>
-                            </div>
-                        </div>
-
-                        <div class="content-block">
-                            <h3 class="subsection-header">Test Doubles</h3>
-                            <p>Test doubles replace real dependencies in tests for isolation, speed, and determinism.</p>
-                            
-                            <div class="comparison-table">
-                                <h4>Types of Test Doubles</h4>
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Type</th>
-                                            <th>Purpose</th>
-                                            <th>Verification</th>
-                                            <th>Complexity</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td><strong>Dummy</strong></td>
-                                            <td>Passed but never used</td>
-                                            <td>None</td>
-                                            <td>Simple (null)</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Stub</strong></td>
-                                            <td>Returns canned responses</td>
-                                            <td>State verification</td>
-                                            <td>Simple</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Spy</strong></td>
-                                            <td>Records interactions</td>
-                                            <td>Behavior (after execution)</td>
-                                            <td>Medium</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Mock</strong></td>
-                                            <td>Pre-programmed expectations</td>
-                                            <td>Behavior (strict)</td>
-                                            <td>Medium</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Fake</strong></td>
-                                            <td>Working implementation</td>
-                                            <td>State verification</td>
-                                            <td>Complex</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <div class="code-example">
-                                <h4>Stub Example</h4>
-                                <pre><code class="language-python"># Stub returns fixed responses
-class StubPaymentGateway:
-    def process_payment(self, amount):
-        return {"success": True, "transaction_id": "STUB123"}
-
-def test_checkout_with_successful_payment():
-    # Arrange
-    stub_gateway = StubPaymentGateway()
-    service = CheckoutService(stub_gateway)
-    
-    # Act
-    order = service.checkout(cart_total=100)
-    
-    # Assert
-    assert order.status == "COMPLETED"</code></pre>
-                            </div>
-
-                            <div class="code-example">
-                                <h4>Mock Example</h4>
-                                <pre><code class="language-python">from unittest.mock import Mock
-
-def test_order_service_sends_confirmation_email():
-    # Mock with expectation
-    mock_email = Mock()
-    service = OrderService(mock_email)
-    
-    # Act
-    service.place_order(order_id=123, email="alice@example.com")
-    
-    # Assert - Verify interaction (behavior verification)
-    mock_email.send.assert_called_once_with(
-        to="alice@example.com",
-        subject="Order Confirmation",
-        body="Your order 123 has been placed"
-    )</code></pre>
-                            </div>
-
-                            <div class="code-example">
-                                <h4>Fake Example</h4>
-                                <pre><code class="language-python"># Fake has working implementation
-class FakeUserRepository:
-    def __init__(self):
-        self._users = {}  # In-memory storage
-        self._next_id = 1
-    
-    def save(self, user):
-        user.id = self._next_id
-        self._users[user.id] = user
-        self._next_id += 1
-        return user.id
-    
-    def get_by_id(self, user_id):
-        return self._users.get(user_id)
-
-def test_user_service_prevents_duplicate_emails():
-    # Arrange
-    fake_repo = FakeUserRepository()
-    service = UserService(fake_repo)
-    
-    # Act
-    service.register("alice@example.com", "pass123")
-    
-    # Assert
-    with pytest.raises(DuplicateEmailError):
-        service.register("alice@example.com", "pass456")</code></pre>
-                            </div>
-                        </div>
-
-                        <div class="content-block">
-                            <h3 class="subsection-header">Testing Best Practices</h3>
-                            <ul class="feature-list">
-                                <li><strong>Follow AAA Pattern:</strong> Arrange (setup), Act (execute), Assert (verify)</li>
-                                <li><strong>One Assertion Per Test:</strong> Makes failures easier to diagnose</li>
-                                <li><strong>Descriptive Test Names:</strong> test_methodName_scenario_expectedBehavior()</li>
-                                <li><strong>Keep Tests Independent:</strong> No test order dependencies</li>
-                                <li><strong>Fast Tests:</strong> Unit tests < 100ms, integration tests < 10s</li>
-                                <li><strong>Test Behavior, Not Implementation:</strong> Tests should survive refactoring</li>
-                                <li><strong>Aim for 80%+ Coverage:</strong> But don't sacrifice quality for quantity</li>
-                                <li><strong>Test Edge Cases:</strong> Null, empty, negative, boundary values</li>
-                                <li><strong>Use Test Fixtures:</strong> Reusable setup for common scenarios</li>
-                                <li><strong>Clean Up After Tests:</strong> Transactions, temp files, containers</li>
-                            </ul>
-                        </div>
-                    </section>
+    style E2E fill:#f59e0b,color:#fff
+    style INT fill:#10b981,color:#fff
+    style UNIT fill:#7b61ff,color:#fff
+                    </div>
                 </div>
+            </div>
 
-                <!-- Knowledge Files Tab -->
-                <div class="tab-content" id="knowledge">
-                    <section class="doc-section">
-                        <h2 class="section-header">📚 Knowledge Files</h2>
-                        <p class="section-intro">Detailed knowledge files covering testing methodologies and strategies.</p>
-
-                        <div class="accordion">
-                            <div class="accordion-item">
-                                <button class="accordion-header">
-                                    <span class="accordion-title">tdd-best-practices.yaml</span>
-                                    <span class="accordion-icon">▼</span>
-                                </button>
-                                <div class="accordion-content">
-                                    <p><strong>Category:</strong> Testing Methodology</p>
-                                    <p><strong>Focus:</strong> Authoritative TDD methodology for CORTEX test-first development</p>
-                                    
-                                    <h4>Key Topics:</h4>
-                                    <ul>
-                                        <li><strong>Three Laws of TDD (Uncle Bob):</strong> Write failing test first, minimal test code, minimal production code</li>
-                                        <li><strong>RED-GREEN-REFACTOR Cycle:</strong> Write failing test (30-60s), write minimal code (1-3min), improve design (1-5min)</li>
-                                        <li><strong>TDD Strategies:</strong> Fake It ('Til You Make It), Obvious Implementation, Triangulation</li>
-                                        <li><strong>Test Design:</strong> Behavior-focused tests, descriptive names, AAA pattern, test independence</li>
-                                        <li><strong>Workflow:</strong> Baby steps (< 5min cycles), frequent test runs, commit after refactor</li>
-                                        <li><strong>Benefits:</strong> Modular design, high coverage (90%+), fewer production bugs, faster debugging</li>
-                                        <li><strong>Refactoring:</strong> Extract Method, Remove Duplication, constant extraction, parameter objects</li>
-                                    </ul>
-                                    
-                                    <h4>Core Principles:</h4>
-                                    <ul>
-                                        <li>Test First: Clarifies requirements before implementation</li>
-                                        <li>Baby Steps: Smallest possible increments reduce complexity</li>
-                                        <li>Refactor Relentlessly: Continuous improvement with test safety net</li>
-                                    </ul>
-                                    
-                                    <div class="file-meta">
-                                        <span class="meta-item"><strong>Version:</strong> 1.0</span>
-                                        <span class="meta-item"><strong>Lines:</strong> 639</span>
-                                        <span class="meta-item"><strong>Authors:</strong> Kent Beck, Robert C. Martin</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="accordion-item">
-                                <button class="accordion-header">
-                                    <span class="accordion-title">testing-pyramid.yaml</span>
-                                    <span class="accordion-icon">▼</span>
-                                </button>
-                                <div class="accordion-content">
-                                    <p><strong>Category:</strong> Testing Strategy</p>
-                                    <p><strong>Focus:</strong> Authoritative testing strategy for optimal test distribution</p>
-                                    
-                                    <h4>Pyramid Layers:</h4>
-                                    <ul>
-                                        <li><strong>Unit Tests (70%):</strong> Fast (< 100ms), isolated, no external dependencies, test business logic</li>
-                                        <li><strong>Integration Tests (20%):</strong> Medium speed (1-10s), test component interactions, database operations</li>
-                                        <li><strong>E2E Tests (10%):</strong> Slow (10-60s), brittle, test critical user journeys through UI</li>
-                                    </ul>
-                                    
-                                    <h4>Key Principles:</h4>
-                                    <ul>
-                                        <li>Test at the Lowest Level Possible: Lower-level tests are faster and more stable</li>
-                                        <li>Optimize Test Distribution: More unit tests, fewer integration/E2E tests</li>
-                                        <li>Fail Fast: Unit tests catch bugs in seconds vs minutes/hours for UI tests</li>
-                                        <li>Test Isolation: Each layer tests different concerns independently</li>
-                                    </ul>
-                                    
-                                    <h4>Anti-Patterns:</h4>
-                                    <ul>
-                                        <li><strong>Ice Cream Cone:</strong> Inverted pyramid with many UI tests, few unit tests (slow, brittle)</li>
-                                        <li><strong>Manual Testing Trap:</strong> Over-reliance on manual testing instead of automation</li>
-                                    </ul>
-                                    
-                                    <h4>Tools by Layer:</h4>
-                                    <ul>
-                                        <li><strong>Unit:</strong> pytest, unittest, JUnit, xUnit, NUnit, Jest</li>
-                                        <li><strong>Integration:</strong> TestContainers, WebApplicationFactory, pytest-docker, Supertest</li>
-                                        <li><strong>E2E:</strong> Playwright, Cypress, Selenium WebDriver, Puppeteer</li>
-                                    </ul>
-                                    
-                                    <div class="file-meta">
-                                        <span class="meta-item"><strong>Version:</strong> 1.0</span>
-                                        <span class="meta-item"><strong>Lines:</strong> 567</span>
-                                        <span class="meta-item"><strong>Authors:</strong> Mike Cohn, Martin Fowler</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="accordion-item">
-                                <button class="accordion-header">
-                                    <span class="accordion-title">test-doubles.yaml</span>
-                                    <span class="accordion-icon">▼</span>
-                                </button>
-                                <div class="accordion-content">
-                                    <p><strong>Category:</strong> Testing Techniques</p>
-                                    <p><strong>Focus:</strong> Authoritative guide to test doubles for test isolation</p>
-                                    
-                                    <h4>Test Double Types:</h4>
-                                    <ul>
-                                        <li><strong>Dummy:</strong> Passed but never used (simplest, often null)</li>
-                                        <li><strong>Stub:</strong> Returns canned responses (state verification, no call checking)</li>
-                                        <li><strong>Spy:</strong> Records interactions for later verification (flexible, verifies after execution)</li>
-                                        <li><strong>Mock:</strong> Pre-programmed expectations (behavior verification, strict)</li>
-                                        <li><strong>Fake:</strong> Working implementation with shortcuts (in-memory DB, reusable)</li>
-                                    </ul>
-                                    
-                                    <h4>When to Use Each:</h4>
-                                    <ul>
-                                        <li><strong>Dummy:</strong> Method requires parameter but test doesn't exercise that path</li>
-                                        <li><strong>Stub:</strong> Control data returned by dependency, simulate slow/unavailable service</li>
-                                        <li><strong>Spy:</strong> Verify method was called, inspect arguments, check call order</li>
-                                        <li><strong>Mock:</strong> Test object collaboration, verify side effects, command pattern</li>
-                                        <li><strong>Fake:</strong> Dependency is complex, need realistic behavior without overhead</li>
-                                    </ul>
-                                    
-                                    <h4>Testing Styles:</h4>
-                                    <ul>
-                                        <li><strong>Mockist (London School):</strong> Focus on object interactions, use mocks, test behavior</li>
-                                        <li><strong>Classicist (Detroit School):</strong> Focus on final state, fewer mocks, test state</li>
-                                    </ul>
-                                    
-                                    <div class="file-meta">
-                                        <span class="meta-item"><strong>Version:</strong> 1.0</span>
-                                        <span class="meta-item"><strong>Lines:</strong> 805</span>
-                                        <span class="meta-item"><strong>Authors:</strong> Gerard Meszaros, Martin Fowler</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="accordion-item">
-                                <button class="accordion-header">
-                                    <span class="accordion-title">selenium-to-playwright-migration.yaml</span>
-                                    <span class="accordion-icon">▼</span>
-                                </button>
-                                <div class="accordion-content">
-                                    <p><strong>Category:</strong> Testing Tools</p>
-                                    <p><strong>Focus:</strong> Migration guide from Selenium to Playwright for E2E testing</p>
-                                    
-                                    <h4>Why Migrate:</h4>
-                                    <ul>
-                                        <li>Playwright is faster (auto-waits, network interception)</li>
-                                        <li>Better debugging (traces, screenshots, video recording)</li>
-                                        <li>Multi-browser support (Chromium, Firefox, WebKit)</li>
-                                        <li>Built-in test runner with parallelization</li>
-                                        <li>Modern API design (async/await native)</li>
-                                    </ul>
-                                    
-                                    <h4>Key Differences:</h4>
-                                    <ul>
-                                        <li><strong>Locators:</strong> Playwright auto-waits, Selenium requires explicit waits</li>
-                                        <li><strong>API:</strong> Playwright uses async/await, cleaner syntax</li>
-                                        <li><strong>Performance:</strong> Playwright faster due to DevTools Protocol</li>
-                                        <li><strong>Reliability:</strong> Playwright more stable (fewer flaky tests)</li>
-                                    </ul>
-                                    
-                                    <div class="file-meta">
-                                        <span class="meta-item"><strong>Version:</strong> 1.0</span>
-                                        <span class="meta-item"><strong>Applicable:</strong> Playwright, Selenium WebDriver</span>
-                                    </div>
-                                </div>
-                            </div>
+            <div id="test-types" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🔬 Test Types</h2>
+                    
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🧩</span>
+                            <h3>Unit Tests</h3>
+                            <h4>Characteristics</h4>
+                            <ul>
+                                <li>Test single units (functions, methods)</li>
+                                <li>Fast execution (milliseconds)</li>
+                                <li>No external dependencies</li>
+                                <li>High isolation</li>
+                            </ul>
+                            <h4>Best Practices</h4>
+                            <ul>
+                                <li>One assertion per test</li>
+                                <li>Test edge cases</li>
+                                <li>Use mocks/stubs</li>
+                                <li>AAA pattern (Arrange-Act-Assert)</li>
+                            </ul>
                         </div>
-                    </section>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔗</span>
+                            <h3>Integration Tests</h3>
+                            <h4>Characteristics</h4>
+                            <ul>
+                                <li>Test component interactions</li>
+                                <li>Moderate speed (seconds)</li>
+                                <li>Real dependencies (DB, APIs)</li>
+                                <li>Test contracts</li>
+                            </ul>
+                            <h4>Best Practices</h4>
+                            <ul>
+                                <li>Test database layer</li>
+                                <li>Test API endpoints</li>
+                                <li>Use test containers</li>
+                                <li>Verify data flow</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🌐</span>
+                            <h3>End-to-End (E2E)</h3>
+                            <h4>Characteristics</h4>
+                            <ul>
+                                <li>Test complete user flows</li>
+                                <li>Slow execution (minutes)</li>
+                                <li>Full stack testing</li>
+                                <li>Browser automation</li>
+                            </ul>
+                            <h4>Best Practices</h4>
+                            <ul>
+                                <li>Critical paths only</li>
+                                <li>Stable selectors</li>
+                                <li>Independent tests</li>
+                                <li>Retry on flaky tests</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>Additional Test Types</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📸</span>
+                            <h3>Snapshot Tests</h3>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Detect UI regressions</li>
+                                <li>Component output comparison</li>
+                                <li>Quick to write</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🎭</span>
+                            <h3>Contract Tests</h3>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>API contract verification</li>
+                                <li>Producer-consumer agreements</li>
+                                <li>Prevent breaking changes</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">⚡</span>
+                            <h3>Performance Tests</h3>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Load testing</li>
+                                <li>Stress testing</li>
+                                <li>Benchmark execution time</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
+            </div>
 
-                <!-- Learning Resources Tab -->
-                <div class="tab-content" id="resources">
-                    <section class="doc-section">
-                        <h2 class="section-header">🎓 Learning Resources</h2>
-                        
-                        <div class="resources-grid">
-                            <div class="resource-card">
-                                <h3>📖 TDD Fundamentals</h3>
-                                <ul>
-                                    <li><strong>Test-Driven Development: By Example</strong> by Kent Beck - The TDD bible</li>
-                                    <li><strong>Growing Object-Oriented Software, Guided by Tests</strong> by Steve Freeman - TDD in practice</li>
-                                    <li><a href="https://martinfowler.com/bliki/TestDrivenDevelopment.html" target="_blank">Martin Fowler on TDD</a></li>
-                                    <li><strong>Clean Code</strong> by Robert C. Martin (Uncle Bob) - Chapter on tests</li>
-                                </ul>
-                            </div>
+            <div id="tdd" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🔴🟢♻️ Test-Driven Development (TDD)</h2>
+                    
+                    <div class="info-box info-box-primary">
+                        <strong>TDD Cycle: Red → Green → Refactor</strong>
+                    </div>
 
-                            <div class="resource-card">
-                                <h3>🧪 Testing Strategies</h3>
-                                <ul>
-                                    <li><strong>xUnit Test Patterns</strong> by Gerard Meszaros - Comprehensive testing encyclopedia</li>
-                                    <li><a href="https://martinfowler.com/articles/practical-test-pyramid.html" target="_blank">The Practical Test Pyramid</a> - Martin Fowler</li>
-                                    <li><a href="https://martinfowler.com/articles/mocksArentStubs.html" target="_blank">Mocks Aren't Stubs</a> - Martin Fowler</li>
-                                    <li><strong>The Art of Unit Testing</strong> by Roy Osherove</li>
-                                </ul>
-                            </div>
-
-                            <div class="resource-card">
-                                <h3>🐍 Python Testing</h3>
-                                <ul>
-                                    <li><a href="https://docs.pytest.org/" target="_blank">pytest Documentation</a> - Most popular Python test framework</li>
-                                    <li><a href="https://docs.python.org/3/library/unittest.html" target="_blank">unittest</a> - Built-in Python testing</li>
-                                    <li><a href="https://docs.python.org/3/library/unittest.mock.html" target="_blank">unittest.mock</a> - Mocking library</li>
-                                    <li><a href="https://testcontainers-python.readthedocs.io/" target="_blank">TestContainers Python</a> - Docker containers for tests</li>
-                                </ul>
-                            </div>
-
-                            <div class="resource-card">
-                                <h3>⚙️ C# Testing</h3>
-                                <ul>
-                                    <li><a href="https://xunit.net/" target="_blank">xUnit</a> - Modern .NET testing framework</li>
-                                    <li><a href="https://nunit.org/" target="_blank">NUnit</a> - Popular .NET testing framework</li>
-                                    <li><a href="https://github.com/moq/moq4" target="_blank">Moq</a> - Mocking library for .NET</li>
-                                    <li><a href="https://fluentassertions.com/" target="_blank">FluentAssertions</a> - Readable assertions</li>
-                                </ul>
-                            </div>
-
-                            <div class="resource-card">
-                                <h3>🌐 JavaScript Testing</h3>
-                                <ul>
-                                    <li><a href="https://jestjs.io/" target="_blank">Jest</a> - JavaScript testing framework</li>
-                                    <li><a href="https://vitest.dev/" target="_blank">Vitest</a> - Fast Vite-native test framework</li>
-                                    <li><a href="https://mochajs.org/" target="_blank">Mocha</a> - Flexible JS test framework</li>
-                                    <li><a href="https://www.chaijs.com/" target="_blank">Chai</a> - Assertion library</li>
-                                </ul>
-                            </div>
-
-                            <div class="resource-card">
-                                <h3>🎭 E2E Testing</h3>
-                                <ul>
-                                    <li><a href="https://playwright.dev/" target="_blank">Playwright</a> - Modern E2E testing (recommended)</li>
-                                    <li><a href="https://www.cypress.io/" target="_blank">Cypress</a> - Developer-friendly E2E testing</li>
-                                    <li><a href="https://www.selenium.dev/" target="_blank">Selenium WebDriver</a> - Mature E2E framework</li>
-                                    <li><a href="https://pptr.dev/" target="_blank">Puppeteer</a> - Chrome DevTools Protocol</li>
-                                </ul>
-                            </div>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔴</span>
+                            <h3>1. Red Phase</h3>
+                            <h4>Write Failing Test</h4>
+                            <ul>
+                                <li>Write test for new feature</li>
+                                <li>Test must fail initially</li>
+                                <li>Verify test failure message</li>
+                                <li>Define expected behavior</li>
+                            </ul>
                         </div>
-                    </section>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🟢</span>
+                            <h3>2. Green Phase</h3>
+                            <h4>Make Test Pass</h4>
+                            <ul>
+                                <li>Write minimal code to pass</li>
+                                <li>Don't optimize yet</li>
+                                <li>Focus on functionality</li>
+                                <li>Test passes</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">♻️</span>
+                            <h3>3. Refactor Phase</h3>
+                            <h4>Improve Code</h4>
+                            <ul>
+                                <li>Clean up implementation</li>
+                                <li>Remove duplication</li>
+                                <li>Improve design</li>
+                                <li>Tests still pass</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>TDD Workflow</h3>
+                    <div class="mermaid">
+stateDiagram-v2
+    [*] --> WriteTest: Start
+    WriteTest --> RunTest: Execute
+    RunTest --> TestFails: ❌ Red
+    TestFails --> WriteCode: Implement
+    WriteCode --> RunTest2: Execute
+    RunTest2 --> TestPasses: ✅ Green
+    TestPasses --> Refactor: Clean up
+    Refactor --> RunTest3: Verify
+    RunTest3 --> WriteTest: Next feature
+    RunTest3 --> [*]: Complete
+    
+    note right of WriteTest
+        Write failing test
+        for new feature
+    end note
+    
+    note right of TestPasses
+        Minimal code
+        to pass test
+    end note
+    
+    note right of Refactor
+        Improve design
+        without breaking tests
+    end note
+                    </div>
+
+                    <div class="info-box info-box-success">
+                        <strong>TDD Benefits:</strong>
+                        <ul class="feature-list">
+                            <li><strong>Design First:</strong> Forces thinking about API design</li>
+                            <li><strong>100% Coverage:</strong> Tests written for all code</li>
+                            <li><strong>Living Documentation:</strong> Tests describe behavior</li>
+                            <li><strong>Regression Safety:</strong> Changes immediately tested</li>
+                        </ul>
+                    </div>
                 </div>
+            </div>
 
-                <!-- CORTEX Usage Tab -->
-                <div class="tab-content" id="cortex">
-                    <section class="doc-section">
-                        <h2 class="section-header">🧠 CORTEX Usage</h2>
-                        <p class="section-intro">How CORTEX could implement testing best practices for its orchestrators and agents.</p>
-
-                        <div class="content-block">
-                            <h3 class="subsection-header">CORTEX Testing Architecture</h3>
-                            <p>CORTEX should follow the testing pyramid with comprehensive test coverage:</p>
+            <div id="bdd" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">📝 Behavior-Driven Development (BDD)</h2>
+                    
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🎯</span>
+                            <h3>BDD Concept</h3>
+                            <h4>Principles</h4>
                             <ul>
-                                <li><strong>Unit Tests (70%):</strong> Test orchestrator logic, agent behaviors, utility functions</li>
-                                <li><strong>Integration Tests (20%):</strong> Test database operations, knowledge file parsing, orchestrator workflows</li>
-                                <li><strong>E2E Tests (10%):</strong> Test complete orchestration flows (TDD orchestrator RED-GREEN-REFACTOR cycles)</li>
+                                <li>Focus on behavior, not implementation</li>
+                                <li>Business-readable scenarios</li>
+                                <li>Collaboration between teams</li>
+                                <li>Executable specifications</li>
                             </ul>
                         </div>
 
-                        <div class="content-block">
-                            <h3 class="subsection-header">TDD for CORTEX Development</h3>
-                            <p>Apply TDD principles to CORTEX orchestrators and agents:</p>
-                            
-                            <div class="code-example">
-                                <h4>Example: TDD Orchestrator Unit Test</h4>
-                                <pre><code class="language-python">import pytest
-from cortex_orchestrators.tdd_orchestrator import TDDOrchestrator
-
-def test_tdd_orchestrator_generates_failing_test_first():
-    # Arrange
-    orchestrator = TDDOrchestrator()
-    user_story = "As a user, I want to calculate 10% discount"
-    
-    # Act
-    result = orchestrator.run_red_phase(user_story)
-    
-    # Assert
-    assert result.phase == "RED"
-    assert result.test_code is not None
-    assert "def test_calculate_discount" in result.test_code
-    assert result.test_status == "FAILING"
-
-def test_tdd_orchestrator_generates_minimal_implementation():
-    # Arrange
-    orchestrator = TDDOrchestrator()
-    failing_test = "def test_add(): assert add(2, 3) == 5"
-    
-    # Act
-    result = orchestrator.run_green_phase(failing_test)
-    
-    # Assert
-    assert result.phase == "GREEN"
-    assert result.implementation is not None
-    assert "def add" in result.implementation
-    assert result.test_status == "PASSING"
-
-def test_tdd_orchestrator_suggests_refactorings():
-    # Arrange
-    orchestrator = TDDOrchestrator()
-    working_code = """
-    def calculate_order_total(items):
-        total = 0
-        for item in items:
-            total = total + item.price
-        return total
-    """
-    
-    # Act
-    result = orchestrator.run_refactor_phase(working_code)
-    
-    # Assert
-    assert result.phase == "REFACTOR"
-    assert len(result.suggestions) > 0
-    assert any("sum()" in s for s in result.suggestions)</code></pre>
-                            </div>
-                        </div>
-
-                        <div class="content-block">
-                            <h3 class="subsection-header">Integration Testing for Knowledge Files</h3>
-                            
-                            <div class="code-example">
-                                <pre><code class="language-python">def test_knowledge_file_parser_loads_yaml():
-    # Arrange
-    parser = KnowledgeFileParser()
-    file_path = "cortex-brain/knowledge/testing/tdd-best-practices.yaml"
-    
-    # Act
-    knowledge = parser.parse(file_path)
-    
-    # Assert
-    assert knowledge.title == "Test-Driven Development (TDD) Best Practices"
-    assert "tdd" in knowledge.tags
-    assert len(knowledge.sections) > 0
-
-def test_orchestrator_registry_loads_all_orchestrators():
-    # Integration test with file system
-    registry = OrchestratorRegistry()
-    
-    # Act
-    orchestrators = registry.load_all()
-    
-    # Assert
-    assert len(orchestrators) == 8  # 8 orchestrators defined
-    assert "TDDOrchestrator" in [o.__class__.__name__ for o in orchestrators]</code></pre>
-                            </div>
-                        </div>
-
-                        <div class="content-block">
-                            <h3 class="subsection-header">Test Doubles for CORTEX</h3>
-                            
-                            <div class="code-example">
-                                <h4>Using Mocks for External Dependencies</h4>
-                                <pre><code class="language-python">from unittest.mock import Mock
-
-def test_documentation_orchestrator_generates_docs():
-    # Mock the file system
-    mock_file_writer = Mock()
-    orchestrator = DocumentationOrchestrator(file_writer=mock_file_writer)
-    
-    # Act
-    orchestrator.generate_docs(
-        source="tdd-best-practices.yaml",
-        format="markdown"
-    )
-    
-    # Assert - Verify file was written
-    mock_file_writer.write.assert_called_once()
-    call_args = mock_file_writer.write.call_args[0]
-    assert call_args[0].endswith(".md")
-    assert "TDD" in call_args[1]  # Content contains TDD</code></pre>
-                            </div>
-
-                            <div class="code-example">
-                                <h4>Using Fakes for Knowledge Base</h4>
-                                <pre><code class="language-python">class FakeKnowledgeBase:
-    """Fake knowledge base for testing without real files"""
-    def __init__(self):
-        self._knowledge = {
-            "tdd-best-practices": {
-                "title": "TDD Best Practices",
-                "content": "..."
-            }
-        }
-    
-    def get(self, file_id):
-        return self._knowledge.get(file_id)
-
-def test_orchestrator_retrieves_knowledge():
-    # Arrange
-    fake_kb = FakeKnowledgeBase()
-    orchestrator = BaseOrchestrator(knowledge_base=fake_kb)
-    
-    # Act
-    knowledge = orchestrator.get_knowledge("tdd-best-practices")
-    
-    # Assert
-    assert knowledge["title"] == "TDD Best Practices"</code></pre>
-                            </div>
-                        </div>
-
-                        <div class="content-block">
-                            <h3 class="subsection-header">Test Coverage for CORTEX</h3>
-                            <p>Target coverage metrics:</p>
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🥒</span>
+                            <h3>Gherkin Syntax</h3>
+                            <h4>Structure</h4>
                             <ul>
-                                <li><strong>Orchestrators:</strong> 90%+ coverage (critical business logic)</li>
-                                <li><strong>Agents:</strong> 85%+ coverage (specialist behaviors)</li>
-                                <li><strong>Utilities:</strong> 80%+ coverage (helper functions)</li>
-                                <li><strong>Overall:</strong> 85%+ coverage across entire codebase</li>
-                            </ul>
-                            
-                            <div class="code-example">
-                                <pre><code class="language-bash"># Run pytest with coverage
-pytest --cov=src/cortex_orchestrators --cov=src/cortex_agents \
-       --cov-report=html --cov-report=term-missing \
-       --cov-fail-under=85</code></pre>
-                            </div>
-                        </div>
-
-                        <div class="content-block">
-                            <h3 class="subsection-header">Related CORTEX Knowledge</h3>
-                            <ul>
-                                <li><code>engineering/clean-code.yaml</code> - Clean code principles for testable code</li>
-                                <li><code>engineering/solid-principles.yaml</code> - SOLID design for test isolation</li>
-                                <li><code>devops/ci-cd.yaml</code> - Automated test execution in pipelines</li>
-                                <li><code>engineering/code-review.yaml</code> - Test coverage review checklist</li>
+                                <li><strong>Feature:</strong> High-level description</li>
+                                <li><strong>Scenario:</strong> Specific example</li>
+                                <li><strong>Given:</strong> Initial context</li>
+                                <li><strong>When:</strong> Action/event</li>
+                                <li><strong>Then:</strong> Expected outcome</li>
                             </ul>
                         </div>
-                    </section>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🛠️</span>
+                            <h3>BDD Tools</h3>
+                            <h4>Popular Frameworks</h4>
+                            <ul>
+                                <li><strong>Cucumber:</strong> Ruby, Java, JS</li>
+                                <li><strong>SpecFlow:</strong> .NET</li>
+                                <li><strong>Behave:</strong> Python</li>
+                                <li><strong>Jest:</strong> JS with describe/it</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="info-box info-box-primary">
+                        <strong>Example Gherkin Scenario:</strong>
+                        <pre style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; margin-top: 0.5rem;">
+Feature: User Login
+  As a registered user
+  I want to log in to the system
+  So that I can access my account
+
+  Scenario: Successful login with valid credentials
+    Given I am on the login page
+    And I have a registered account with email "user@example.com"
+    When I enter email "user@example.com"
+    And I enter password "SecurePass123"
+    And I click the "Login" button
+    Then I should see the dashboard
+    And I should see "Welcome back, User"
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tools" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🛠️ Testing Tools</h2>
+                    
+                    <h3>Unit Testing Frameworks</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">⚛️</span>
+                            <h3>JavaScript/TypeScript</h3>
+                            <ul>
+                                <li><strong>Jest:</strong> All-in-one framework</li>
+                                <li><strong>Vitest:</strong> Fast, Vite-based</li>
+                                <li><strong>Mocha + Chai:</strong> Flexible, composable</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🐍</span>
+                            <h3>Python</h3>
+                            <ul>
+                                <li><strong>pytest:</strong> Feature-rich</li>
+                                <li><strong>unittest:</strong> Built-in</li>
+                                <li><strong>nose2:</strong> Extended unittest</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">☕</span>
+                            <h3>Java/.NET</h3>
+                            <ul>
+                                <li><strong>JUnit:</strong> Java standard</li>
+                                <li><strong>xUnit:</strong> .NET family</li>
+                                <li><strong>NUnit:</strong> .NET testing</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>E2E Testing Tools</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🌲</span>
+                            <h3>Cypress</h3>
+                            <h4>Features</h4>
+                            <ul>
+                                <li>Real browser testing</li>
+                                <li>Time travel debugging</li>
+                                <li>Automatic waiting</li>
+                                <li>Great developer experience</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🎭</span>
+                            <h3>Playwright</h3>
+                            <h4>Features</h4>
+                            <ul>
+                                <li>Multi-browser support</li>
+                                <li>Auto-waiting</li>
+                                <li>Network interception</li>
+                                <li>Parallel execution</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔧</span>
+                            <h3>Selenium</h3>
+                            <h4>Features</h4>
+                            <ul>
+                                <li>Cross-browser testing</li>
+                                <li>Multiple languages</li>
+                                <li>Large community</li>
+                                <li>Grid for parallel tests</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="best-practices" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">💡 Testing Best Practices</h2>
+                    
+                    <div class="info-box info-box-success">
+                        <strong>Testing Guidelines:</strong>
+                        <ul class="feature-list">
+                            <li><strong>F.I.R.S.T. Principles:</strong> Fast, Independent, Repeatable, Self-validating, Timely</li>
+                            <li><strong>Test Naming:</strong> Descriptive names that explain what's being tested</li>
+                            <li><strong>One Concept Per Test:</strong> Each test should verify one thing</li>
+                            <li><strong>Avoid Test Interdependence:</strong> Tests shouldn't rely on each other</li>
+                            <li><strong>Use Test Doubles:</strong> Mocks, stubs, spies for isolation</li>
+                            <li><strong>Test Edge Cases:</strong> Null, empty, boundary values</li>
+                            <li><strong>Coverage Metrics:</strong> Aim for 80%+ but prioritize critical paths</li>
+                            <li><strong>Maintain Tests:</strong> Refactor tests alongside production code</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box info-box-warning">
+                        <strong>Testing Anti-Patterns:</strong>
+                        <ul class="feature-list">
+                            <li><strong>Testing Implementation Details:</strong> Test behavior, not internals</li>
+                            <li><strong>Flaky Tests:</strong> Tests that randomly fail reduce confidence</li>
+                            <li><strong>Slow Test Suites:</strong> Optimize for fast feedback</li>
+                            <li><strong>100% Coverage Goal:</strong> Quality over quantity</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="resources" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">📚 Resources & Learning</h2>
+                    
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📖</span>
+                            <h3>Essential Books</h3>
+                            <ul>
+                                <li><strong>Test-Driven Development</strong> - Kent Beck</li>
+                                <li><strong>Growing Object-Oriented Software</strong> - Freeman & Pryce</li>
+                                <li><strong>The Art of Unit Testing</strong> - Roy Osherove</li>
+                                <li><strong>xUnit Test Patterns</strong> - Gerard Meszaros</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🛠️</span>
+                            <h3>Testing Tools</h3>
+                            <ul>
+                                <li><a href="https://jestjs.io/" target="_blank" rel="noopener">Jest</a> - JavaScript testing</li>
+                                <li><a href="https://www.cypress.io/" target="_blank" rel="noopener">Cypress</a> - E2E testing</li>
+                                <li><a href="https://playwright.dev/" target="_blank" rel="noopener">Playwright</a> - Browser automation</li>
+                                <li><a href="https://docs.pytest.org/" target="_blank" rel="noopener">pytest</a> - Python testing</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🌐</span>
+                            <h3>Online Resources</h3>
+                            <ul>
+                                <li><a href="https://testingjavascript.com/" target="_blank" rel="noopener">Testing JavaScript</a> - Kent C. Dodds</li>
+                                <li><a href="https://martinfowler.com/testing/" target="_blank" rel="noopener">Martin Fowler: Testing</a></li>
+                                <li><a href="https://cucumber.io/docs/bdd/" target="_blank" rel="noopener">Cucumber BDD</a></li>
+                                <li><a href="https://testautomationu.applitools.com/" target="_blank" rel="noopener">Test Automation University</a></li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </main>
+    </section>
 
-    <footer class="doc-footer">
-        <div class="footer-content">
-            <p>&copy; 2025 CORTEX Knowledge Library. Licensed under MIT License.</p>
-            <p>Author: Asif Hussain | Version: 4.0.0</p>
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 CORTEX Knowledge Base. Created by Asif Hussain.</p>
+            <p>
+                <a href="../index.html">Home</a> |
+                <a href="index.html">Knowledge Library</a> |
+                <a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener">GitHub</a>
+            </p>
         </div>
     </footer>
 
     <script>
-        // Tab switching
-        document.querySelectorAll('.tab-button').forEach(button => {
-            button.addEventListener('click', () => {
-                const tabName = button.dataset.tab;
-                
-                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-                
-                button.classList.add('active');
-                document.getElementById(tabName).classList.add('active');
-            });
-        });
-
-        // Accordion functionality
-        document.querySelectorAll('.accordion-header').forEach(header => {
-            header.addEventListener('click', () => {
-                const item = header.parentElement;
-                const wasActive = item.classList.contains('active');
-                
-                document.querySelectorAll('.accordion-item').forEach(i => i.classList.remove('active'));
-                
-                if (!wasActive) {
-                    item.classList.add('active');
-                }
-            });
-        });
-
-        // Initialize Mermaid
         mermaid.initialize({ 
             startOnLoad: true,
-            theme: 'base',
-            themeVariables: {
-                primaryColor: '#667eea',
-                primaryTextColor: '#fff',
-                primaryBorderColor: '#5a67d8',
-                lineColor: '#cbd5e0',
-                secondaryColor: '#48bb78',
-                tertiaryColor: '#ed8936'
-            }
+            theme: 'dark'
         });
     </script>
 </body>

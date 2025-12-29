@@ -554,6 +554,8 @@ class ShapeFactory:
 | Relationships | Entity diagram | Mermaid ERD |
 | State Management | State machine | Mermaid state |
 | API Interactions | Sequence diagram | Mermaid sequence |
+| Technology Landscape | Hierarchical graph | Mermaid graph TB |
+| Circuit Breaker States | State diagram | Mermaid stateDiagram-v2 |
 
 **Example: Mermaid Diagram Integration**
 ```html
@@ -1462,6 +1464,268 @@ background: linear-gradient(135deg, #fff 0%, #00d4ff 50%, #7b61ff 100%);
 -webkit-text-fill-color: transparent;
 background-clip: text;
 ```
+
+---
+
+## 🎯 Framework/Technology Panel Pattern
+
+### 3-Column Framework Panels
+
+**Usage:** Display framework comparisons (React, Vue, Angular), technology overviews, or feature sets in a visually balanced grid.
+
+**CSS (add to `main.css`):**
+```css
+.framework-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+@media (max-width: 1024px) {
+    .framework-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+}
+
+.framework-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    transition: all var(--transition-base);
+}
+
+.framework-panel:hover {
+    transform: translateY(-4px);
+    border-color: rgba(0, 212, 255, 0.3);
+    box-shadow: 0 12px 40px rgba(0, 212, 255, 0.2);
+}
+
+.framework-panel-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.framework-panel h3 {
+    color: var(--accent-primary);
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.framework-panel .framework-subtitle {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    margin-bottom: 1.5rem;
+    font-style: italic;
+}
+
+.framework-panel h4 {
+    color: var(--text-primary);
+    font-size: 1rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+}
+
+.framework-panel ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.framework-panel li {
+    color: var(--text-secondary);
+    padding: 0.5rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.framework-panel li::before {
+    content: "▸";
+    color: var(--accent-primary);
+    position: absolute;
+    left: 0;
+    font-weight: bold;
+}
+```
+
+**HTML Implementation:**
+```html
+<div class="framework-grid">
+    <!-- React Panel -->
+    <div class="framework-panel">
+        <span class="framework-panel-icon">⚛️</span>
+        <h3>React</h3>
+        <p class="framework-subtitle">Meta's Component-Based Library</p>
+        
+        <h4>Core Features</h4>
+        <ul>
+            <li><strong>Virtual DOM:</strong> Efficient UI updates</li>
+            <li><strong>Hooks:</strong> State management</li>
+            <li><strong>JSX:</strong> Declarative syntax</li>
+        </ul>
+        
+        <h4>Best Practices</h4>
+        <ul>
+            <li>Use functional components</li>
+            <li>Implement proper key props</li>
+            <li>Memoize expensive computations</li>
+        </ul>
+        
+        <h4>Ecosystem</h4>
+        <ul>
+            <li><strong>Next.js:</strong> Full-stack framework</li>
+            <li><strong>React Query:</strong> Server state</li>
+            <li><strong>Redux Toolkit:</strong> State container</li>
+        </ul>
+    </div>
+    
+    <!-- Vue Panel -->
+    <div class="framework-panel">
+        <span class="framework-panel-icon">🟢</span>
+        <h3>Vue.js</h3>
+        <p class="framework-subtitle">Progressive JavaScript Framework</p>
+        
+        <h4>Core Features</h4>
+        <ul>
+            <li><strong>Reactive System:</strong> Auto dependency tracking</li>
+            <li><strong>SFC:</strong> Single file components</li>
+            <li><strong>Composition API:</strong> Flexible logic</li>
+        </ul>
+        
+        <h4>Best Practices</h4>
+        <ul>
+            <li>Use Composition API</li>
+            <li>Keep components focused</li>
+            <li>Leverage computed properties</li>
+        </ul>
+        
+        <h4>Ecosystem</h4>
+        <ul>
+            <li><strong>Nuxt.js:</strong> Meta-framework</li>
+            <li><strong>Pinia:</strong> State management</li>
+            <li><strong>Vuetify:</strong> Component library</li>
+        </ul>
+    </div>
+    
+    <!-- Angular Panel -->
+    <div class="framework-panel">
+        <span class="framework-panel-icon">🅰️</span>
+        <h3>Angular</h3>
+        <p class="framework-subtitle">Enterprise-Grade Framework</p>
+        
+        <h4>Core Features</h4>
+        <ul>
+            <li><strong>TypeScript First:</strong> Built-in</li>
+            <li><strong>DI System:</strong> Powerful injection</li>
+            <li><strong>RxJS:</strong> Reactive programming</li>
+        </ul>
+        
+        <h4>Best Practices</h4>
+        <ul>
+            <li>Use OnPush change detection</li>
+            <li>Lazy load modules</li>
+            <li>Follow style guide</li>
+        </ul>
+        
+        <h4>Ecosystem</h4>
+        <ul>
+            <li><strong>Angular CLI:</strong> Code generation</li>
+            <li><strong>NgRx:</strong> State management</li>
+            <li><strong>Material:</strong> UI components</li>
+        </ul>
+    </div>
+</div>
+```
+
+**Design Rationale:**
+- **3-column grid:** Visual balance for framework comparisons
+- **Icons:** Large emoji icons (2.5rem) for quick identification
+- **Subtitle:** Italicized brief description under title
+- **Sections:** h4 headers for Core Features, Best Practices, Ecosystem
+- **Hover effects:** Lift and glow on hover for interactivity
+- **Responsive:** Stacks to single column on tablet/mobile (<1024px)
+
+**When to Use:**
+- Framework comparisons (React vs Vue vs Angular)
+- Technology stack overviews
+- Feature set comparisons
+- Service/tool comparisons
+
+**Multi-Row Handling:**
+
+When displaying MORE THAN 3 items:
+- ✅ **CORRECT:** Use multiple `.framework-grid` containers (one per row of 3)
+- ❌ **WRONG:** Extend single grid beyond 3 columns or use `grid-4col`, `grid-5col`, etc.
+
+**Example: 6 Items (2 rows of 3):**
+```html
+<!-- First Row: Items 1-3 -->
+<div class="framework-grid">
+    <div class="framework-panel"><!-- Item 1 --></div>
+    <div class="framework-panel"><!-- Item 2 --></div>
+    <div class="framework-panel"><!-- Item 3 --></div>
+</div>
+
+<!-- Second Row: Items 4-6 -->
+<div class="framework-grid">
+    <div class="framework-panel"><!-- Item 4 --></div>
+    <div class="framework-panel"><!-- Item 5 --></div>
+    <div class="framework-panel"><!-- Item 6 --></div>
+</div>
+```
+
+**Example: 4 Items (1 full row + 1 partial row):**
+```html
+<!-- First Row: Items 1-3 -->
+<div class="framework-grid">
+    <div class="framework-panel"><!-- Item 1 --></div>
+    <div class="framework-panel"><!-- Item 2 --></div>
+    <div class="framework-panel"><!-- Item 3 --></div>
+</div>
+
+<!-- Second Row: Item 4 (centered by grid) -->
+<div class="framework-grid">
+    <div class="framework-panel"><!-- Item 4 --></div>
+</div>
+```
+
+**Rationale:**
+- **Visual consistency:** Maintains 3-column rhythm across all pages
+- **Responsive behavior:** Each row independently collapses on mobile
+- **Grid balance:** CSS grid automatically centers partial rows
+- **Readability:** Prevents overcrowding and maintains breathing room
+
+**When NOT to Use Framework Panels:**
+
+❌ **Simple Lists:** Use standard `<ul>` with `.feature-list` class
+❌ **Code Examples:** Use `.code-snippet` or pseudocode blocks
+❌ **Tables:** Use `.glass-table-bordered` for comparison data
+❌ **Single Info Boxes:** Use `.info-box` variants for standalone callouts
+❌ **Navigation Elements:** Use breadcrumb or site-header patterns
+❌ **Mermaid Diagrams:** Standalone diagram containers
+
+✅ **Use Framework Panels For:**
+- Framework/technology comparisons (React vs Vue vs Angular)
+- Feature breakdowns with 2-4+ items
+- Architecture layer explanations
+- Concept explanations with icons and lists
+- Resource sections with multiple categories
+- Pattern libraries and best practices
+
+**Legacy Class Migration:**
+
+All legacy grid classes have been removed:
+- ❌ `.grid-2col` → ✅ `.framework-grid` (2 panels)
+- ❌ `.grid-3col` → ✅ `.framework-grid` (3 panels)
+- ❌ `.info-box-primary`, `.info-box-secondary` → ✅ `.framework-panel`
+
+**Migration Complete:** All `docs/knowledge/*.html` files now use `framework-grid` and `framework-panel` exclusively.
 
 ---
 

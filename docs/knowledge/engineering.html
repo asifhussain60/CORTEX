@@ -3,1189 +3,415 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Software Engineering Excellence | CORTEX Knowledge Library</title>
+    <meta name="description" content="Software Engineering - Best practices, design patterns, SOLID principles, clean code">
+    <meta name="keywords" content="software engineering, design patterns, solid, clean code, refactoring">
+    <meta name="author" content="Asif Hussain">
+    <title>Software Engineering | CORTEX Knowledge</title>
     <link rel="stylesheet" href="../assets/css/main.css">
-    <link rel="stylesheet" href="../assets/css/knowledge.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
-    <nav class="doc-nav">
-        <div class="nav-container">
-            <a href="../index.html" class="nav-logo">
-                <img src="../assets/images/cortex-logo.svg" alt="CORTEX" class="logo-image">
-            </a>
-            <ul class="nav-links">
-                <li><a href="../index.html">Home</a></li>
-                <li><a href="index.html" class="active">Knowledge Library</a></li>
-                <li><a href="../sts/index.html">STS Portal</a></li>
-            </ul>
-        </div>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">→</span>
+        <a href="index.html">Knowledge Library</a>
+        <span class="breadcrumb-separator">→</span>
+        <span class="breadcrumb-current">Software Engineering</span>
     </nav>
 
-    <main class="doc-main">
-        <div class="doc-container">
-            <header class="doc-header">
-                <div class="breadcrumb">
-                    <a href="../index.html">Home</a>
-                    <span class="separator">/</span>
-                    <a href="index.html">Knowledge Library</a>
-                    <span class="separator">/</span>
-                    <span>Software Engineering</span>
+    <section class="hero" id="main-content">
+        <h1 class="hero-title">💻 Software Engineering</h1>
+        <p class="hero-subtitle">Best Practices, Design Patterns, and Clean Code</p>
+        <div class="file-metadata">
+            <span class="metadata-item">🏗️ Architecture</span>
+            <span class="metadata-item">📐 Patterns</span>
+            <span class="metadata-item">📅 Updated: Dec 2025</span>
+        </div>
+    </section>
+
+    <section class="section file-content">
+        <div class="container">
+            <div id="overview" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">📋 Overview</h2>
+                    <p>Software engineering applies engineering principles to software development, emphasizing systematic design, implementation, testing, and maintenance. Master design patterns, SOLID principles, and clean code practices to build maintainable, scalable systems.</p>
+                    
+                    <div class="info-box info-box-primary">
+                        <strong>Core Principles:</strong>
+                        <ul class="feature-list">
+                            <li><strong>Maintainability:</strong> Easy to understand and modify</li>
+                            <li><strong>Scalability:</strong> Grows with requirements</li>
+                            <li><strong>Reliability:</strong> Works correctly under all conditions</li>
+                            <li><strong>Testability:</strong> Easy to verify behavior</li>
+                        </ul>
+                    </div>
                 </div>
-                <h1 class="doc-title">Software Engineering Excellence</h1>
-                <p class="doc-subtitle">SOLID principles, design patterns, clean code practices, and code review standards</p>
-            </header>
+            </div>
 
-            <div class="tab-container">
-                <div class="tab-buttons">
-                    <button class="tab-button active" data-tab="overview">Overview</button>
-                    <button class="tab-button" data-tab="knowledge">Knowledge Files</button>
-                    <button class="tab-button" data-tab="resources">Learning Resources</button>
-                    <button class="tab-button" data-tab="cortex">CORTEX Usage</button>
+            <div id="solid" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🔷 SOLID Principles</h2>
+                    
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">S</span>
+                            <h3>Single Responsibility</h3>
+                            <h4>Principle</h4>
+                            <ul>
+                                <li>A class should have one reason to change</li>
+                                <li>One responsibility per class</li>
+                                <li>High cohesion</li>
+                            </ul>
+                            <h4>Benefits</h4>
+                            <ul>
+                                <li>Easier to understand</li>
+                                <li>Simpler testing</li>
+                                <li>Reduced coupling</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">O</span>
+                            <h3>Open/Closed</h3>
+                            <h4>Principle</h4>
+                            <ul>
+                                <li>Open for extension</li>
+                                <li>Closed for modification</li>
+                                <li>Use abstraction</li>
+                            </ul>
+                            <h4>Benefits</h4>
+                            <ul>
+                                <li>Add features without breaking existing code</li>
+                                <li>Plugin architectures</li>
+                                <li>Strategy pattern</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">L</span>
+                            <h3>Liskov Substitution</h3>
+                            <h4>Principle</h4>
+                            <ul>
+                                <li>Subtypes must be substitutable</li>
+                                <li>Preserve expected behavior</li>
+                                <li>Contract compliance</li>
+                            </ul>
+                            <h4>Benefits</h4>
+                            <ul>
+                                <li>Reliable polymorphism</li>
+                                <li>Predictable behavior</li>
+                                <li>Proper inheritance</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">I</span>
+                            <h3>Interface Segregation</h3>
+                            <h4>Principle</h4>
+                            <ul>
+                                <li>Many specific interfaces better than one general</li>
+                                <li>Clients shouldn't depend on unused methods</li>
+                                <li>Role interfaces</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">D</span>
+                            <h3>Dependency Inversion</h3>
+                            <h4>Principle</h4>
+                            <ul>
+                                <li>Depend on abstractions, not concretions</li>
+                                <li>High-level modules independent</li>
+                                <li>Dependency injection</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
+            </div>
 
-                <!-- Overview Tab -->
-                <div class="tab-content active" id="overview">
-                    <section class="doc-section">
-                        <h2 class="section-header">🎯 Category Overview</h2>
-                        <div class="content-block">
-                            <p>Software Engineering Excellence encompasses the foundational principles, patterns, and practices that define quality software craftsmanship. This category covers SOLID principles for object-oriented design, proven design patterns for common problems, clean code practices for readability and maintainability, and effective code review techniques.</p>
-                            
-                            <h3 class="subsection-header">Key Concepts</h3>
-                            <ul class="feature-list">
-                                <li><strong>SOLID Principles:</strong> Five fundamental principles of object-oriented design (Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion)</li>
-                                <li><strong>Design Patterns:</strong> Gang of Four (GoF) patterns and modern enterprise patterns for solving recurring design problems</li>
-                                <li><strong>Clean Code:</strong> Robert C. Martin's principles for writing readable, maintainable, and expressive code</li>
-                                <li><strong>Code Review:</strong> Best practices for effective peer review, constructive feedback, and team collaboration</li>
-                                <li><strong>Refactoring:</strong> Systematic approaches to improving code structure without changing behavior</li>
-                                <li><strong>Anti-Patterns:</strong> Common mistakes and how to avoid them</li>
+            <div id="patterns" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🎨 Design Patterns</h2>
+                    
+                    <h3>Creational Patterns</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🏭</span>
+                            <h3>Factory</h3>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Create objects without specifying exact class</li>
+                                <li>Encapsulate object creation</li>
+                            </ul>
+                            <h4>Use Cases</h4>
+                            <ul>
+                                <li>Framework libraries</li>
+                                <li>Plugin systems</li>
+                                <li>Product families</li>
                             </ul>
                         </div>
 
-                        <div class="visual-diagram">
-                            <h3 class="subsection-header">Software Engineering Pillars</h3>
-                            <div class="mermaid">
-graph TB
-    subgraph Engineering["Software Engineering Excellence"]
-        SOLID["SOLID Principles"]
-        Patterns["Design Patterns"]
-        Clean["Clean Code"]
-        Review["Code Review"]
-    end
-
-    subgraph SOLIDPrinciples["SOLID (5 Principles)"]
-        SRP["Single Responsibility"]
-        OCP["Open/Closed"]
-        LSP["Liskov Substitution"]
-        ISP["Interface Segregation"]
-        DIP["Dependency Inversion"]
-    end
-
-    subgraph DesignPatterns["Design Patterns"]
-        Creational["Creational (5)"]
-        Structural["Structural (7)"]
-        Behavioral["Behavioral (11)"]
-        Modern["Modern/Enterprise"]
-    end
-
-    subgraph CleanCodePrinciples["Clean Code"]
-        Naming["Meaningful Names"]
-        Functions["Small Functions"]
-        Comments["Good Comments"]
-        Formatting["Consistent Format"]
-        Testing["Unit Tests"]
-    end
-
-    subgraph CodeReviewProcess["Code Review"]
-        Preparation["Preparation"]
-        Inspection["Inspection"]
-        Feedback["Constructive Feedback"]
-        FollowUp["Follow-up"]
-    end
-
-    SOLID --> SOLIDPrinciples
-    Patterns --> DesignPatterns
-    Clean --> CleanCodePrinciples
-    Review --> CodeReviewProcess
-
-    style Engineering fill:#667eea
-    style SOLID fill:#48bb78
-    style Patterns fill:#ed8936
-    style Clean fill:#38b2ac
-    style Review fill:#9f7aea
-                            </div>
-                        </div>
-
-                        <div class="content-block">
-                            <h3 class="subsection-header">Why Software Engineering Excellence Matters</h3>
-                            <p>Quality software engineering practices are essential for building systems that are:</p>
-                            <ul class="feature-list">
-                                <li><strong>Maintainable:</strong> Easy to understand, modify, and extend over time</li>
-                                <li><strong>Reliable:</strong> Fewer bugs, predictable behavior, robust error handling</li>
-                                <li><strong>Scalable:</strong> Can handle growth in users, data, and features</li>
-                                <li><strong>Testable:</strong> Design enables comprehensive automated testing</li>
-                                <li><strong>Collaborative:</strong> Team members can work together effectively</li>
-                                <li><strong>Cost-Effective:</strong> Reduces technical debt and long-term maintenance costs</li>
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">👤</span>
+                            <h3>Singleton</h3>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Ensure single instance</li>
+                                <li>Global access point</li>
+                            </ul>
+                            <h4>Use Cases</h4>
+                            <ul>
+                                <li>Configuration manager</li>
+                                <li>Logger</li>
+                                <li>Connection pool</li>
                             </ul>
                         </div>
 
-                        <div class="content-block">
-                            <h3 class="subsection-header">CORTEX Knowledge Sources</h3>
-                            <p>This category synthesizes knowledge from authoritative sources:</p>
-                            <ul class="feature-list">
-                                <li><strong>SOLID Principles:</strong> Robert C. Martin (Uncle Bob) - "Agile Software Development, Principles, Patterns, and Practices"</li>
-                                <li><strong>Design Patterns:</strong> Gang of Four (GoF) - "Design Patterns: Elements of Reusable Object-Oriented Software" (1994)</li>
-                                <li><strong>Clean Code:</strong> Robert C. Martin - "Clean Code: A Handbook of Agile Software Craftsmanship" (2008)</li>
-                                <li><strong>Refactoring:</strong> Martin Fowler - "Refactoring: Improving the Design of Existing Code"</li>
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🏗️</span>
+                            <h3>Builder</h3>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Construct complex objects step-by-step</li>
+                                <li>Separate construction from representation</li>
+                            </ul>
+                            <h4>Use Cases</h4>
+                            <ul>
+                                <li>Complex configurations</li>
+                                <li>Fluent interfaces</li>
+                                <li>Immutable objects</li>
                             </ul>
                         </div>
-                    </section>
+                    </div>
+
+                    <h3>Structural Patterns</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔌</span>
+                            <h3>Adapter</h3>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Convert interface to another</li>
+                                <li>Make incompatible interfaces work together</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🎨</span>
+                            <h3>Decorator</h3>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Add responsibilities dynamically</li>
+                                <li>Flexible alternative to subclassing</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🚪</span>
+                            <h3>Facade</h3>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Simplified interface to complex subsystem</li>
+                                <li>Hide complexity</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>Behavioral Patterns</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">👁️</span>
+                            <h3>Observer</h3>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Define one-to-many dependency</li>
+                                <li>Notify dependents of state changes</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🎯</span>
+                            <h3>Strategy</h3>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Define family of algorithms</li>
+                                <li>Make them interchangeable</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">⚙️</span>
+                            <h3>Command</h3>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Encapsulate request as object</li>
+                                <li>Support undo/redo</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-
-                <!-- Knowledge Files Tab -->
-                <div class="tab-content" id="knowledge">
-                    <section class="doc-section">
-                        <h2 class="section-header">📚 Knowledge Files</h2>
-                        <p class="content-intro">Comprehensive engineering principles and practices from authoritative sources.</p>
-
-                        <!-- SOLID Principles Accordion -->
-                        <div class="accordion-container">
-                            <div class="accordion-item">
-                                <button class="accordion-header">
-                                    <span class="accordion-title">🏗️ SOLID Principles</span>
-                                    <span class="accordion-meta">5 principles • Source: Robert C. Martin (Uncle Bob)</span>
-                                    <span class="accordion-icon">▼</span>
-                                </button>
-                                <div class="accordion-content">
-                                    <div class="content-block">
-                                        <p><strong>SOLID</strong> represents five fundamental principles of object-oriented design that make software more maintainable, flexible, and scalable.</p>
-                                        
-                                        <h4 class="principle-header">S - Single Responsibility Principle (SRP)</h4>
-                                        <p><em>"A class should have one, and only one, reason to change."</em></p>
-                                        <p>Every class should have a single responsibility, entirely encapsulated by the class. When a class has multiple responsibilities, changes to one responsibility may affect others, increasing coupling and making the system fragile.</p>
-                                        
-                                        <div class="code-example">
-                                            <h5>❌ Violation: Multiple Responsibilities</h5>
-                                            <pre><code class="language-python"># ❌ User class doing too many things
-class User:
-    def __init__(self, name, email):
-                self.name = name
-        self.email = email
-    
-    # Responsibility 1: Data management
-    def update_profile(self, name, email):
-        self.name = name
-        self.email = email
-    
-    # Responsibility 2: Persistence
-    def save_to_database(self):
-        db.execute("INSERT INTO users...")
-    
-    # Responsibility 3: Email
-    def send_welcome_email(self):
-        smtp.send(self.email, "Welcome!")
-    
-    # Responsibility 4: Validation
-    def validate_email(self):
-        return '@' in self.email</code></pre>
-                                        </div>
-
-                                        <div class="code-example">
-                                            <h5>✅ Compliant: Separated Responsibilities</h5>
-                                            <pre><code class="language-python"># ✅ Each class has ONE responsibility
-class User:
-    """Single responsibility: represent user data"""
-    def __init__(self, name, email):
-        self.name = name
-        self.email = email
-
-class UserRepository:
-    """Single responsibility: persist users"""
-    def save(self, user: User):
-        db.execute("INSERT INTO users VALUES (?, ?)", 
-                  user.name, user.email)
-
-class EmailService:
-    """Single responsibility: send emails"""
-    def send_welcome_email(self, user: User):
-        smtp.send(user.email, "Welcome!")
-
-class EmailValidator:
-    """Single responsibility: validate emails"""
-    def is_valid(self, email: str) -> bool:
-        return '@' in email and '.' in email</code></pre>
-                                        </div>
-
-                                        <h4 class="principle-header">O - Open/Closed Principle (OCP)</h4>
-                                        <p><em>"Software entities should be open for extension, but closed for modification."</em></p>
-                                        <p>You should be able to add new functionality without changing existing code. Use abstraction and polymorphism to achieve this.</p>
-
-                                        <div class="code-example">
-                                            <h5>✅ Strategy Pattern for OCP</h5>
-                                            <pre><code class="language-csharp">// ✅ Open for extension, closed for modification
-public interface IPaymentProcessor
-{
-    void ProcessPayment(decimal amount);
-}
-
-public class CreditCardProcessor : IPaymentProcessor
-{
-    public void ProcessPayment(decimal amount)
-    {
-        // Credit card logic
-    }
-}
-
-public class PayPalProcessor : IPaymentProcessor
-{
-    public void ProcessPayment(decimal amount)
-    {
-        // PayPal logic
-    }
-}
-
-// Can add new processors without modifying existing code
-public class BitcoinProcessor : IPaymentProcessor
-{
-    public void ProcessPayment(decimal amount)
-    {
-        // Bitcoin logic
-    }
-}</code></pre>
-                                        </div>
-
-                                        <h4 class="principle-header">L - Liskov Substitution Principle (LSP)</h4>
-                                        <p><em>"Subtypes must be substitutable for their base types."</em></p>
-                                        <p>Objects of a derived class should be able to replace objects of the base class without breaking the application. This ensures proper inheritance hierarchies.</p>
-
-                                        <div class="code-example">
-                                            <h5>✅ Proper Substitution</h5>
-                                            <pre><code class="language-javascript">// ✅ Square and Rectangle honor LSP
-class Shape {
-    area() {
-        throw new Error("Must implement area()");
-    }
-}
-
-class Rectangle extends Shape {
-    constructor(width, height) {
-        super();
-        this.width = width;
-        this.height = height;
-    }
-    
-    area() {
-        return this.width * this.height;
-    }
-}
-
-class Square extends Shape {
-    constructor(side) {
-        super();
-        this.side = side;
-    }
-    
-    area() {
-        return this.side * this.side;
-    }
-}
-
-// Both can be used interchangeably as Shape
-function calculateArea(shape) {
-    return shape.area();
-}</code></pre>
-                                        </div>
-
-                                        <h4 class="principle-header">I - Interface Segregation Principle (ISP)</h4>
-                                        <p><em>"Clients should not be forced to depend on interfaces they don't use."</em></p>
-                                        <p>Many small, specific interfaces are better than one large, general-purpose interface. This reduces coupling and makes systems more maintainable.</p>
-
-                                        <div class="code-example">
-                                            <h5>✅ Segregated Interfaces</h5>
-                                            <pre><code class="language-python"># ✅ Small, focused interfaces
-from abc import ABC, abstractmethod
-
-class Readable(ABC):
-    @abstractmethod
-    def read(self) -> str:
-        pass
-
-class Writable(ABC):
-    @abstractmethod
-    def write(self, data: str) -> None:
-        pass
-
-class Closeable(ABC):
-    @abstractmethod
-    def close(self) -> None:
-        pass
-
-# Classes implement only what they need
-class ReadOnlyFile(Readable, Closeable):
-    def read(self) -> str:
-        return "data"
-    
-    def close(self) -> None:
-        pass
-
-class ReadWriteFile(Readable, Writable, Closeable):
-    def read(self) -> str:
-        return "data"
-    
-    def write(self, data: str) -> None:
-        pass
-    
-    def close(self) -> None:
-        pass</code></pre>
-                                        </div>
-
-                                        <h4 class="principle-header">D - Dependency Inversion Principle (DIP)</h4>
-                                        <p><em>"Depend on abstractions, not on concretions."</em></p>
-                                        <p>High-level modules should not depend on low-level modules. Both should depend on abstractions. This allows flexibility and easier testing.</p>
-
-                                        <div class="code-example">
-                                            <h5>✅ Dependency Injection</h5>
-                                            <pre><code class="language-csharp">// ✅ Depend on abstraction (ILogger), not concrete class
-public interface ILogger
-{
-    void Log(string message);
-}
-
-public class FileLogger : ILogger
-{
-    public void Log(string message)
-    {
-        File.AppendAllText("log.txt", message);
-    }
-}
-
-public class ConsoleLogger : ILogger
-{
-    public void Log(string message)
-    {
-        Console.WriteLine(message);
-    }
-}
-
-public class UserService
-{
-    private readonly ILogger _logger;
-    
-    // Dependency injected via constructor
-    public UserService(ILogger logger)
-    {
-        _logger = logger;
-    }
-    
-    public void CreateUser(string name)
-    {
-        // Business logic
-        _logger.Log($"User {name} created");
-    }
-}</code></pre>
-                                        </div>
-
-                                        <div class="info-callout">
-                                            <strong>💡 SOLID Benefits:</strong>
-                                            <ul>
-                                                <li>Easier to maintain and modify</li>
-                                                <li>More testable code</li>
-                                                <li>Better code reuse</li>
-                                                <li>Reduced coupling, increased cohesion</li>
-                                                <li>Flexible for change</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Design Patterns Accordion -->
-                            <div class="accordion-item">
-                                <button class="accordion-header">
-                                    <span class="accordion-title">🎨 Design Patterns</span>
-                                    <span class="accordion-meta">23 GoF patterns + Modern patterns • Source: Gang of Four (1994)</span>
-                                    <span class="accordion-icon">▼</span>
-                                </button>
-                                <div class="accordion-content">
-                                    <div class="content-block">
-                                        <p><strong>Design Patterns</strong> are proven solutions to recurring design problems in software development. The Gang of Four (GoF) cataloged 23 classic patterns in 1994, which remain fundamental today.</p>
-                                        
-                                        <h4 class="pattern-category">Creational Patterns (5)</h4>
-                                        <p>Deal with object creation mechanisms, making systems independent of how objects are created, composed, and represented.</p>
-                                        
-                                        <div class="pattern-showcase">
-                                            <h5>Factory Method Pattern</h5>
-                                            <p><em>"Define an interface for creating an object, but let subclasses decide which class to instantiate."</em></p>
-                                            
-                                            <div class="code-example">
-                                                <h6>✅ Factory Method Implementation</h6>
-                                                <pre><code class="language-python">from abc import ABC, abstractmethod
-
-class Document(ABC):
-    @abstractmethod
-    def open(self):
-        pass
-
-class PDFDocument(Document):
-    def open(self):
-        return "Opening PDF document"
-
-class WordDocument(Document):
-    def open(self):
-        return "Opening Word document"
-
-class Application(ABC):
-    @abstractmethod
-    def create_document(self) -> Document:
-        """Factory method - subclasses override to create specific documents"""
-        pass
-    
-    def open_document(self):
-        doc = self.create_document()
-        return doc.open()
-
-class PDFApplication(Application):
-    def create_document(self) -> Document:
-        return PDFDocument()
-
-class WordApplication(Application):
-    def create_document(self) -> Document:
-        return WordDocument()
-
-# Usage
-pdf_app = PDFApplication()
-print(pdf_app.open_document())  # "Opening PDF document"
-
-word_app = WordApplication()
-print(word_app.open_document())  # "Opening Word document"</code></pre>
-                                            </div>
-                                        </div>
-
-                                        <h4 class="pattern-category">Structural Patterns (7)</h4>
-                                        <p>Deal with object composition, forming larger structures from individual objects and classes.</p>
-                                        
-                                        <div class="pattern-showcase">
-                                            <h5>Decorator Pattern</h5>
-                                            <p><em>"Attach additional responsibilities to an object dynamically."</em></p>
-                                            
-                                            <div class="code-example">
-                                                <h6>✅ Decorator for Coffee Shop</h6>
-                                                <pre><code class="language-javascript">// Component interface
-class Coffee {
-    cost() {
-        return 0;
-    }
-    
-    description() {
-        return "Unknown coffee";
-    }
-}
-
-// Concrete component
-class SimpleCoffee extends Coffee {
-    cost() {
-        return 5;
-    }
-    
-    description() {
-        return "Simple coffee";
-    }
-}
-
-// Decorator base
-class CoffeeDecorator extends Coffee {
-    constructor(coffee) {
-        super();
-        this._coffee = coffee;
-    }
-    
-    cost() {
-        return this._coffee.cost();
-    }
-    
-    description() {
-        return this._coffee.description();
-    }
-}
-
-// Concrete decorators
-class MilkDecorator extends CoffeeDecorator {
-    cost() {
-        return this._coffee.cost() + 2;
-    }
-    
-    description() {
-        return this._coffee.description() + ", milk";
-    }
-}
-
-class SugarDecorator extends CoffeeDecorator {
-    cost() {
-        return this._coffee.cost() + 1;
-    }
-    
-    description() {
-        return this._coffee.description() + ", sugar";
-    }
-}
-
-// Usage - dynamically add functionality
-let coffee = new SimpleCoffee();
-console.log(`${coffee.description()}: $${coffee.cost()}`);
-// "Simple coffee: $5"
-
-coffee = new MilkDecorator(coffee);
-coffee = new SugarDecorator(coffee);
-console.log(`${coffee.description()}: $${coffee.cost()}`);
-// "Simple coffee, milk, sugar: $8"</code></pre>
-                                            </div>
-                                        </div>
-
-                                        <h4 class="pattern-category">Behavioral Patterns (11)</h4>
-                                        <p>Deal with algorithms and assignment of responsibilities between objects, describing patterns of communication.</p>
-                                        
-                                        <div class="pattern-showcase">
-                                            <h5>Strategy Pattern</h5>
-                                            <p><em>"Define a family of algorithms, encapsulate each one, and make them interchangeable."</em></p>
-                                            
-                                            <div class="code-example">
-                                                <h6>✅ Payment Strategy</h6>
-                                                <pre><code class="language-csharp">// Strategy interface
-public interface IPaymentStrategy
-{
-    void Pay(decimal amount);
-}
-
-// Concrete strategies
-public class CreditCardStrategy : IPaymentStrategy
-{
-    private string _cardNumber;
-    
-    public CreditCardStrategy(string cardNumber)
-    {
-        _cardNumber = cardNumber;
-    }
-    
-    public void Pay(decimal amount)
-    {
-        Console.WriteLine($"Paid ${amount} with credit card {_cardNumber}");
-    }
-}
-
-public class PayPalStrategy : IPaymentStrategy
-{
-    private string _email;
-    
-    public PayPalStrategy(string email)
-    {
-        _email = email;
-    }
-    
-    public void Pay(decimal amount)
-    {
-        Console.WriteLine($"Paid ${amount} via PayPal ({_email})");
-    }
-}
-
-public class BitcoinStrategy : IPaymentStrategy
-{
-    private string _walletAddress;
-    
-    public BitcoinStrategy(string walletAddress)
-    {
-        _walletAddress = walletAddress;
-    }
-    
-    public void Pay(decimal amount)
-    {
-        Console.WriteLine($"Paid ${amount} with Bitcoin to {_walletAddress}");
-    }
-}
-
-// Context
-public class ShoppingCart
-{
-    private IPaymentStrategy _paymentStrategy;
-    
-    public void SetPaymentStrategy(IPaymentStrategy strategy)
-    {
-        _paymentStrategy = strategy;
-    }
-    
-    public void Checkout(decimal amount)
-    {
-        _paymentStrategy.Pay(amount);
-    }
-}
-
-// Usage - swap strategies at runtime
-var cart = new ShoppingCart();
-
-cart.SetPaymentStrategy(new CreditCardStrategy("1234-5678"));
-cart.Checkout(100m); // Credit card payment
-
-cart.SetPaymentStrategy(new PayPalStrategy("user@example.com"));
-cart.Checkout(50m); // PayPal payment
-
-cart.SetPaymentStrategy(new BitcoinStrategy("1A2b3C4d"));
-cart.Checkout(75m); // Bitcoin payment</code></pre>
-                                            </div>
-                                        </div>
-
-                                        <div class="visual-diagram">
-                                            <h4>Design Pattern Categories</h4>
-                                            <div class="mermaid">
-graph TB
-    subgraph Creational["Creational (5)"]
-        Singleton["Singleton"]
-        Factory["Factory Method"]
-        AbstractFactory["Abstract Factory"]
-        Builder["Builder"]
-        Prototype["Prototype"]
-    end
-    
-    subgraph Structural["Structural (7)"]
-        Adapter["Adapter"]
-        Bridge["Bridge"]
-        Composite["Composite"]
-        Decorator["Decorator"]
-        Facade["Facade"]
-        Flyweight["Flyweight"]
-        Proxy["Proxy"]
-    end
-    
-    subgraph Behavioral["Behavioral (11)"]
-        ChainOfResp["Chain of Responsibility"]
-        Command["Command"]
-        Iterator["Iterator"]
-        Mediator["Mediator"]
-        Observer["Observer"]
-        State["State"]
-        Strategy["Strategy"]
-        TemplateMethod["Template Method"]
-    end
-    
-    style Creational fill:#48bb78
-    style Structural fill:#ed8936
-    style Behavioral fill:#38b2ac
-                                            </div>
-                                        </div>
-
-                                        <div class="info-callout">
-                                            <strong>💡 When to Use Design Patterns:</strong>
-                                            <ul>
-                                                <li><strong>Singleton:</strong> Need exactly one instance (config, logger)</li>
-                                                <li><strong>Factory Method:</strong> Don't know exact types to create</li>
-                                                <li><strong>Decorator:</strong> Add responsibilities dynamically</li>
-                                                <li><strong>Strategy:</strong> Multiple algorithms, choose at runtime</li>
-                                                <li><strong>Observer:</strong> One-to-many dependency (event handling)</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Clean Code Accordion -->
-                            <div class="accordion-item">
-                                <button class="accordion-header">
-                                    <span class="accordion-title">✨ Clean Code Principles</span>
-                                    <span class="accordion-meta">Best practices • Source: Robert C. Martin "Clean Code" (2008)</span>
-                                    <span class="accordion-icon">▼</span>
-                                </button>
-                                <div class="accordion-content">
-                                    <div class="content-block">
-                                        <p><strong>Clean Code</strong> is code that is easy to read, understand, and maintain. Robert C. Martin's seminal book "Clean Code" (2008) established principles that have become industry standards for software craftsmanship.</p>
-                                        
-                                        <h4 class="principle-header">1. Meaningful Names</h4>
-                                        <p><em>"Names should reveal intent without requiring comments."</em></p>
-                                        
-                                        <div class="code-example">
-                                            <h5>✅ Intention-Revealing Names</h5>
-                                            <pre><code class="language-python"># ✅ GOOD: Names explain what they represent
-elapsed_time_in_days = 365
-days_since_creation = 100
-days_since_modification = 50
-
-class Customer:
-    def __init__(self, email, full_name):
-        self.email = email
-        self.full_name = full_name
-
-# ❌ BAD: Requires mental mapping
-d = 365  # What is 'd'?
-elap = 100  # What does 'elap' mean?
-
-class Cust:  # Abbreviated, unclear
-    def __init__(self, e, n):  # Single letters
-        self.e = e
-        self.n = n</code></pre>
-                                        </div>
-
-                                        <h4 class="principle-header">2. Small Functions</h4>
-                                        <p><em>"Functions should do one thing, do it well, and do it only."</em></p>
-                                        
-                                        <div class="code-example">
-                                            <h5>✅ Single Responsibility Functions</h5>
-                                            <pre><code class="language-javascript">// ✅ GOOD: Each function does ONE thing
-function calculateTotalPrice(items) {
-    return items.reduce((sum, item) => sum + item.price, 0);
-}
-
-function applyDiscount(price, discountRate) {
-    return price * (1 - discountRate);
-}
-
-function formatCurrency(amount) {
-    return `$${amount.toFixed(2)}`;
-}
-
-function processOrder(items, discountRate) {
-    const total = calculateTotalPrice(items);
-    const discounted = applyDiscount(total, discountRate);
-    return formatCurrency(discounted);
-}
-
-// ❌ BAD: One function does EVERYTHING
-function processOrderBad(items, discountRate) {
-    // Calculate
-    let total = 0;
-    for (let item of items) {
-        total += item.price;
-    }
-    // Apply discount
-    total = total * (1 - discountRate);
-    // Format
-    const formatted = `$${total.toFixed(2)}`;
-    // Save to database
-    database.saveOrder(formatted);
-    // Send email
-    emailService.send("Order processed");
-    // Log
-    console.log("Order complete");
-    return formatted;
-}</code></pre>
-                                        </div>
-
-                                        <h4 class="principle-header">3. Function Arguments</h4>
-                                        <p><em>"Ideal: 0-2 arguments. Maximum: 3 arguments."</em></p>
-                                        
-                                        <div class="code-example">
-                                            <h5>✅ Minimize Arguments</h5>
-                                            <pre><code class="language-csharp">// ✅ GOOD: Use objects for multiple parameters
-public class OrderRequest
-{
-    public List<Item> Items { get; set; }
-    public decimal DiscountRate { get; set; }
-    public string CustomerEmail { get; set; }
-    public Address ShippingAddress { get; set; }
-}
-
-public class OrderService
-{
-    public Order ProcessOrder(OrderRequest request)
-    {
-        // Single parameter, easy to extend
-        return CreateOrder(request);
-    }
-}
-
-// ❌ BAD: Too many parameters
-public class OrderServiceBad
-{
-    public Order ProcessOrder(
-        List<Item> items,
-        decimal discountRate,
-        string customerEmail,
-        string shippingStreet,
-        string shippingCity,
-        string shippingZip,
-        bool expressShipping,
-        string couponCode)
-    {
-        // Hard to remember parameter order
-        // Hard to add new parameters
-    }
-}</code></pre>
-                                        </div>
-
-                                        <h4 class="principle-header">4. Don't Repeat Yourself (DRY)</h4>
-                                        <p><em>"Every piece of knowledge should have a single representation in the system."</em></p>
-                                        
-                                        <div class="code-example">
-                                            <h5>✅ Extract Common Logic</h5>
-                                            <pre><code class="language-python"># ✅ GOOD: Single source of truth
-def validate_email(email: str) -> bool:
-    """Centralized email validation"""
-    return '@' in email and '.' in email.split('@')[1]
-
-def create_user(email: str, name: str):
-    if not validate_email(email):
-        raise ValueError("Invalid email")
-    # Create user
-
-def update_user_email(user_id: int, new_email: str):
-    if not validate_email(new_email):
-        raise ValueError("Invalid email")
-    # Update email
-
-# ❌ BAD: Duplicated validation logic
-def create_user_bad(email: str, name: str):
-    if '@' not in email or '.' not in email.split('@')[1]:
-        raise ValueError("Invalid email")
-    # Create user
-
-def update_user_email_bad(user_id: int, new_email: str):
-    if '@' not in new_email or '.' not in new_email.split('@')[1]:
-        raise ValueError("Invalid email")
-    # Update email (duplicated validation)</code></pre>
-                                        </div>
-
-                                        <h4 class="principle-header">5. Comments: Explain WHY, Not WHAT</h4>
-                                        <p><em>"Good code is self-documenting. Comments should explain intent, not mechanics."</em></p>
-                                        
-                                        <div class="code-example">
-                                            <h5>✅ Good vs Bad Comments</h5>
-                                            <pre><code class="language-javascript">// ✅ GOOD: Explains WHY
-function calculatePriority(order) {
-    // Apply 2x multiplier for VIP customers to ensure faster processing
-    // as per business requirement from Q3 2024 stakeholder meeting
-    const multiplier = order.customer.isVIP ? 2 : 1;
-    return order.urgency * multiplier;
-}
-
-// ❌ BAD: Explains WHAT (code already shows this)
-function calculatePriorityBad(order) {
-    // Check if customer is VIP
-    const multiplier = order.customer.isVIP ? 2 : 1;
-    // Multiply urgency by multiplier
-    return order.urgency * multiplier;
-}
-
-// ❌ WORSE: Redundant comment
-function getUserName(user) {
-    // Return the user's name
-    return user.name;
-}</code></pre>
-                                        </div>
-
-                                        <div class="info-callout">
-                                            <strong>💡 Clean Code Checklist:</strong>
-                                            <ul>
-                                                <li>✅ Meaningful variable/function names (no abbreviations)</li>
-                                                <li>✅ Functions are small (5-20 lines ideally)</li>
-                                                <li>✅ Functions do ONE thing</li>
-                                                <li>✅ Max 2-3 function parameters</li>
-                                                <li>✅ No code duplication (DRY principle)</li>
-                                                <li>✅ Comments explain WHY, not WHAT</li>
-                                                <li>✅ Consistent formatting and style</li>
-                                                <li>✅ Proper error handling</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+            </div>
+
+            <div id="clean-code" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">✨ Clean Code Practices</h2>
+                    
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📝</span>
+                            <h3>Naming</h3>
+                            <h4>Guidelines</h4>
+                            <ul>
+                                <li>Intention-revealing names</li>
+                                <li>Avoid mental mapping</li>
+                                <li>Use searchable names</li>
+                                <li>Class names: nouns</li>
+                                <li>Method names: verbs</li>
+                            </ul>
                         </div>
-                    </section>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔧</span>
+                            <h3>Functions</h3>
+                            <h4>Guidelines</h4>
+                            <ul>
+                                <li>Small (≤20 lines)</li>
+                                <li>Do one thing well</li>
+                                <li>Few parameters (≤3)</li>
+                                <li>No side effects</li>
+                                <li>Command-query separation</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">💬</span>
+                            <h3>Comments</h3>
+                            <h4>Guidelines</h4>
+                            <ul>
+                                <li>Explain WHY, not WHAT</li>
+                                <li>Avoid redundant comments</li>
+                                <li>Update with code changes</li>
+                                <li>Use for warnings/TODOs</li>
+                                <li>Prefer self-documenting code</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="info-box info-box-success">
+                        <strong>Code Quality Metrics:</strong>
+                        <ul class="feature-list">
+                            <li><strong>Cyclomatic Complexity:</strong> Keep ≤10 per method</li>
+                            <li><strong>Code Coverage:</strong> Aim for ≥80% test coverage</li>
+                            <li><strong>Technical Debt:</strong> Refactor regularly</li>
+                            <li><strong>Code Duplication:</strong> DRY principle - Don't Repeat Yourself</li>
+                        </ul>
+                    </div>
                 </div>
+            </div>
 
-                <!-- Learning Resources Tab -->
-                <div class="tab-content" id="resources">
-                    <section class="doc-section">
-                        <h2 class="section-header">📚 Learning Resources</h2>
-                        <p class="content-intro">Curated resources for mastering software engineering excellence.</p>
-
-                        <div class="resource-category">
-                            <h3 class="subsection-header">📖 Essential Books</h3>
-                            <ul class="resource-list">
-                                <li>
-                                    <strong>Clean Code: A Handbook of Agile Software Craftsmanship</strong> by Robert C. Martin (2008)
-                                    <p>The definitive guide to writing clean, maintainable code. Covers naming, functions, comments, formatting, and more.</p>
-                                </li>
-                                <li>
-                                    <strong>Design Patterns: Elements of Reusable Object-Oriented Software</strong> by Gang of Four (1994)
-                                    <p>The classic catalog of 23 design patterns that remain fundamental to software design today.</p>
-                                </li>
-                                <li>
-                                    <strong>Agile Software Development, Principles, Patterns, and Practices</strong> by Robert C. Martin (2002)
-                                    <p>Comprehensive coverage of SOLID principles, design patterns, and agile methodologies.</p>
-                                </li>
-                                <li>
-                                    <strong>Refactoring: Improving the Design of Existing Code</strong> by Martin Fowler (2018)
-                                    <p>Systematic approach to improving code structure without changing behavior. Essential for maintaining clean code.</p>
-                                </li>
-                                <li>
-                                    <strong>Head First Design Patterns</strong> by Freeman & Robson (2004)
-                                    <p>Visual, engaging introduction to design patterns with memorable examples and exercises.</p>
-                                </li>
+            <div id="refactoring" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">♻️ Refactoring</h2>
+                    
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔍</span>
+                            <h3>Extract Method</h3>
+                            <h4>When to Use</h4>
+                            <ul>
+                                <li>Long methods</li>
+                                <li>Code needs comment to explain</li>
+                                <li>Duplicate logic</li>
                             </ul>
                         </div>
 
-                        <div class="resource-category">
-                            <h3 class="subsection-header">🎓 Online Courses</h3>
-                            <ul class="resource-list">
-                                <li>
-                                    <strong>Refactoring.Guru</strong> - <a href="https://refactoring.guru/" target="_blank">refactoring.guru</a>
-                                    <p>Interactive tutorials on design patterns and refactoring techniques with examples in multiple languages.</p>
-                                </li>
-                                <li>
-                                    <strong>Clean Coders</strong> - <a href="https://cleancoders.com/" target="_blank">cleancoders.com</a>
-                                    <p>Video series by Uncle Bob covering clean code principles, SOLID, TDD, and software craftsmanship.</p>
-                                </li>
-                                <li>
-                                    <strong>Pluralsight: SOLID Principles</strong>
-                                    <p>Comprehensive courses on each SOLID principle with practical examples and real-world scenarios.</p>
-                                </li>
-                                <li>
-                                    <strong>Coursera: Software Design and Architecture Specialization</strong>
-                                    <p>University of Alberta's specialization covering design patterns, architecture, and service-oriented design.</p>
-                                </li>
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📦</span>
+                            <h3>Extract Class</h3>
+                            <h4>When to Use</h4>
+                            <ul>
+                                <li>Class doing too much</li>
+                                <li>Subset of data used together</li>
+                                <li>Improve cohesion</li>
                             </ul>
                         </div>
 
-                        <div class="resource-category">
-                            <h3 class="subsection-header">🎥 Video Resources</h3>
-                            <ul class="resource-list">
-                                <li>
-                                    <strong>Uncle Bob Martin's Talks</strong>
-                                    <p>Legendary talks on clean code, SOLID principles, and software professionalism available on YouTube.</p>
-                                </li>
-                                <li>
-                                    <strong>Design Patterns in Object Oriented Programming</strong> by Christopher Okhravi
-                                    <p>YouTube series explaining each GoF pattern with clear examples and animations.</p>
-                                </li>
-                                <li>
-                                    <strong>ArjanCodes</strong> - <a href="https://www.youtube.com/@ArjanCodes" target="_blank">YouTube Channel</a>
-                                    <p>Modern Python design patterns, SOLID principles, and clean code practices.</p>
-                                </li>
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔄</span>
+                            <h3>Replace Conditional</h3>
+                            <h4>When to Use</h4>
+                            <ul>
+                                <li>Complex conditionals</li>
+                                <li>Type checking</li>
+                                <li>Use polymorphism instead</li>
                             </ul>
                         </div>
-
-                        <div class="resource-category">
-                            <h3 class="subsection-header">🌐 Interactive Learning</h3>
-                            <ul class="resource-list">
-                                <li>
-                                    <strong>Refactoring.Guru Pattern Catalog</strong>
-                                    <p>Interactive catalog with examples in Java, C#, C++, PHP, Python, Ruby, Swift, and TypeScript.</p>
-                                </li>
-                                <li>
-                                    <strong>SourceMaking</strong> - <a href="https://sourcemaking.com/" target="_blank">sourcemaking.com</a>
-                                    <p>Design patterns, anti-patterns, refactoring techniques, and UML diagrams.</p>
-                                </li>
-                                <li>
-                                    <strong>Design Patterns Game</strong>
-                                    <p>Interactive scenarios to practice recognizing when to apply specific patterns.</p>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <div class="resource-category">
-                            <h3 class="subsection-header">📝 Articles & Blogs</h3>
-                            <ul class="resource-list">
-                                <li>
-                                    <strong>Martin Fowler's Blog</strong> - <a href="https://martinfowler.com/" target="_blank">martinfowler.com</a>
-                                    <p>Authoritative articles on software design, refactoring, architecture, and patterns.</p>
-                                </li>
-                                <li>
-                                    <strong>The Clean Code Blog</strong>
-                                    <p>Uncle Bob's blog with insights on software craftsmanship and professional practices.</p>
-                                </li>
-                                <li>
-                                    <strong>DZone Design Patterns Zone</strong>
-                                    <p>Community-contributed articles, tutorials, and real-world pattern implementations.</p>
-                                </li>
-                            </ul>
-                        </div>
-                    </section>
+                    </div>
                 </div>
+            </div>
 
-                <!-- CORTEX Usage Tab -->
-                <div class="tab-content" id="cortex">
-                    <section class="doc-section">
-                        <h2 class="section-header">🤖 CORTEX Usage</h2>
-                        <p class="content-intro">How CORTEX leverages software engineering knowledge for intelligent code analysis and generation.</p>
-
-                        <div class="usage-category">
-                            <h3 class="subsection-header">🔍 Code Review Agent</h3>
-                            <div class="content-block">
-                                <p>CORTEX's Code Review Agent uses engineering principles to validate code quality:</p>
-                                <ul class="feature-list">
-                                    <li><strong>SOLID Compliance:</strong> Detects Single Responsibility violations, checks for Open/Closed adherence, validates Liskov Substitution</li>
-                                    <li><strong>Pattern Recognition:</strong> Identifies where design patterns would improve code structure</li>
-                                    <li><strong>Clean Code Analysis:</strong> Flags long functions, poor naming, excessive complexity, code duplication</li>
-                                    <li><strong>Scoring System:</strong> Provides 0-100 compliance score for each principle with actionable recommendations</li>
-                                </ul>
-                                
-                                <div class="code-example">
-                                    <h4>Example: CORTEX Review Output</h4>
-                                    <pre><code class="language-bash"># CORTEX analyzes your code against engineering principles
-$ cortex review src/services/user_service.py
-
-🔍 Code Review Report
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-File: src/services/user_service.py
-Overall Score: 62/100 (Moderate)
-
-SOLID Principles:
-├─ [45/100] Single Responsibility - NEEDS IMPROVEMENT
-│  └─ UserService class has 4 responsibilities:
-│     • User CRUD operations
-│     • Email notifications
-│     • Data validation
-│     • Database persistence
-│  💡 Recommendation: Extract EmailService, ValidationService, UserRepository
-│
-├─ [80/100] Open/Closed - GOOD
-│  └─ Uses strategy pattern for payment processing
-│
-└─ [70/100] Dependency Inversion - ACCEPTABLE
-   └─ Depends on IEmailService interface (good)
-   ⚠️  Direct instantiation of UserRepository (should inject)
-
-Clean Code:
-├─ [40/100] Function Size - NEEDS IMPROVEMENT
-│  └─ create_user() is 45 lines (recommend max 20)
-│
-└─ [85/100] Naming - GOOD
-   └─ Clear, intention-revealing names throughout
-
-Design Patterns:
-└─ 💡 Suggestion: Repository pattern for data access
-   └─ Extract database logic into UserRepository class</code></pre>
-                                </div>
-                            </div>
+            <div id="resources" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">📚 Resources & Learning</h2>
+                    
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📖</span>
+                            <h3>Essential Books</h3>
+                            <ul>
+                                <li><strong>Clean Code</strong> - Robert C. Martin</li>
+                                <li><strong>Design Patterns</strong> - Gang of Four</li>
+                                <li><strong>Refactoring</strong> - Martin Fowler</li>
+                                <li><strong>The Pragmatic Programmer</strong> - Hunt & Thomas</li>
+                            </ul>
                         </div>
 
-                        <div class="usage-category">
-                            <h3 class="subsection-header">✨ Code Generation Agent</h3>
-                            <div class="content-block">
-                                <p>CORTEX generates SOLID-compliant, pattern-based code:</p>
-                                <ul class="feature-list">
-                                    <li><strong>Pattern Templates:</strong> Generates boilerplate for Factory, Strategy, Repository, Observer, etc.</li>
-                                    <li><strong>SOLID by Default:</strong> All generated code follows Single Responsibility and Dependency Inversion</li>
-                                    <li><strong>Clean Code Standards:</strong> Small functions, meaningful names, proper abstractions</li>
-                                    <li><strong>Multi-Language:</strong> Supports Python, C#, JavaScript/TypeScript, Java</li>
-                                </ul>
-                                
-                                <div class="code-example">
-                                    <h4>Example: Generate Strategy Pattern</h4>
-                                    <pre><code class="language-bash">$ cortex generate strategy PaymentProcessor --languages python,csharp
-
-✅ Generated Strategy Pattern: PaymentProcessor
-
-📁 Files Created:
-├─ payment_processor.py (Python)
-│  ├─ IPaymentStrategy (interface)
-│  ├─ CreditCardStrategy
-│  ├─ PayPalStrategy
-│  └─ PaymentContext
-│
-└─ PaymentProcessor.cs (C#)
-   ├─ IPaymentStrategy (interface)
-   ├─ CreditCardStrategy
-   ├─ PayPalStrategy
-   └─ PaymentContext
-
-✓ SOLID compliant
-✓ Unit tests included
-✓ Documentation generated</code></pre>
-                                </div>
-                            </div>
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🛠️</span>
+                            <h3>Tools</h3>
+                            <ul>
+                                <li><a href="https://www.sonarsource.com/" target="_blank" rel="noopener">SonarQube</a> - Code quality</li>
+                                <li><a href="https://eslint.org/" target="_blank" rel="noopener">ESLint</a> - JavaScript linting</li>
+                                <li><a href="https://prettier.io/" target="_blank" rel="noopener">Prettier</a> - Code formatting</li>
+                                <li><a href="https://marketplace.visualstudio.com/" target="_blank" rel="noopener">VS Code Extensions</a></li>
+                            </ul>
                         </div>
 
-                        <div class="usage-category">
-                            <h3 class="subsection-header">🔄 Refactoring Agent</h3>
-                            <div class="content-block">
-                                <p>CORTEX identifies code smells and suggests pattern-based refactorings:</p>
-                                <ul class="feature-list">
-                                    <li><strong>God Object Detection:</strong> Identifies classes with too many responsibilities</li>
-                                    <li><strong>Pattern Opportunities:</strong> Suggests where patterns would improve design</li>
-                                    <li><strong>Automated Refactoring:</strong> Applies Extract Class, Move Method, Introduce Strategy</li>
-                                    <li><strong>Test Preservation:</strong> Ensures existing tests still pass after refactoring</li>
-                                </ul>
-                            </div>
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🌐</span>
+                            <h3>Online Resources</h3>
+                            <ul>
+                                <li><a href="https://refactoring.guru/" target="_blank" rel="noopener">Refactoring Guru</a></li>
+                                <li><a href="https://sourcemaking.com/" target="_blank" rel="noopener">SourceMaking</a></li>
+                                <li><a href="https://martinfowler.com/" target="_blank" rel="noopener">Martin Fowler's Blog</a></li>
+                                <li><a href="https://clean-code-developer.com/" target="_blank" rel="noopener">Clean Code Developer</a></li>
+                            </ul>
                         </div>
-
-                        <div class="usage-category">
-                            <h3 class="subsection-header">📊 Knowledge Integration</h3>
-                            <div class="content-block">
-                                <p>CORTEX uses these knowledge files in its decision-making:</p>
-                                <ul class="feature-list">
-                                    <li><code>cortex-brain/knowledge/engineering/solid-principles.yaml</code> - 1,216 lines of SOLID compliance rules</li>
-                                    <li><code>cortex-brain/knowledge/engineering/design-patterns.yaml</code> - 1,768 lines covering 23 GoF patterns + modern patterns</li>
-                                    <li><code>cortex-brain/knowledge/engineering/clean-code.yaml</code> - 970 lines of clean code principles</li>
-                                    <li><code>cortex-brain/knowledge/engineering/code-review.yaml</code> - Best practices for effective code reviews</li>
-                                    <li><code>cortex-brain/knowledge/engineering/refactoring.yaml</code> - Systematic refactoring techniques</li>
-                                    <li><code>cortex-brain/knowledge/engineering/anti-patterns.yaml</code> - Common mistakes to avoid</li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div class="info-callout">
-                            <strong>💡 CORTEX Engineering Intelligence:</strong>
-                            <p>All CORTEX agents (Code Review, Generation, Refactoring) are trained on authoritative sources including Robert C. Martin's "Clean Code," Gang of Four's "Design Patterns," and Martin Fowler's "Refactoring." This ensures consistent, industry-standard recommendations across all operations.</p>
-                        </div>
-                    </section>
+                    </div>
                 </div>
             </div>
         </div>
-    </main>
+    </section>
 
-    <footer class="doc-footer">
-        <div class="footer-container">
-            <p>&copy; 2025 CORTEX Knowledge Library. All rights reserved.</p>
-            <p>Built with ❤️ by <a href="https://github.com/asifhussain60" target="_blank">Asif Hussain</a></p>
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 CORTEX Knowledge Base. Created by Asif Hussain.</p>
+            <p>
+                <a href="../index.html">Home</a> |
+                <a href="index.html">Knowledge Library</a> |
+                <a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener">GitHub</a>
+            </p>
         </div>
     </footer>
 
     <script>
-        // Tab switching functionality
-        document.querySelectorAll('.tab-button').forEach(button => {
-            button.addEventListener('click', () => {
-                const tabName = button.dataset.tab;
-                
-                // Update button states
-                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-                
-                // Update content visibility
-                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-                document.getElementById(tabName).classList.add('active');
-            });
-        });
-
-        // Accordion functionality
-        document.querySelectorAll('.accordion-header').forEach(header => {
-            header.addEventListener('click', () => {
-                const item = header.parentElement;
-                const content = header.nextElementSibling;
-                const icon = header.querySelector('.accordion-icon');
-                
-                // Toggle active state
-                item.classList.toggle('active');
-                
-                // Toggle icon
-                icon.textContent = item.classList.contains('active') ? '▲' : '▼';
-            });
-        });
-
-        // Initialize Mermaid
         mermaid.initialize({ 
             startOnLoad: true,
-            theme: 'dark',
-            themeVariables: {
-                primaryColor: '#667eea',
-                primaryTextColor: '#fff',
-                primaryBorderColor: '#7c3aed',
-                lineColor: '#a78bfa',
-                secondaryColor: '#48bb78',
-                tertiaryColor: '#ed8936'
-            }
+            theme: 'dark'
         });
     </script>
 </body>
