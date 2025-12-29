@@ -1,0 +1,139 @@
+{
+  "name": "cortex",
+  "displayName": "CORTEX - AI Development Intelligence",
+  "description": "Transform GitHub Copilot into a strategic development partner with long-term memory, TDD mastery, and autonomous orchestration",
+  "version": "4.0.0",
+  "publisher": "asifhussain60",
+  "author": {
+    "name": "Asif Hussain",
+    "url": "https://github.com/asifhussain60"
+  },
+  "license": "SEE LICENSE IN LICENSE",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/asifhussain60/CORTEX"
+  },
+  "bugs": {
+    "url": "https://github.com/asifhussain60/CORTEX/issues"
+  },
+  "homepage": "https://asifhussain60.github.io/CORTEX/",
+  "icon": "media/icon.png",
+  "galleryBanner": {
+    "color": "#0a0e27",
+    "theme": "dark"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "AI",
+    "Programming Languages",
+    "Testing",
+    "Other"
+  ],
+  "keywords": [
+    "copilot",
+    "ai",
+    "tdd",
+    "planning",
+    "testing",
+    "orchestration",
+    "development",
+    "productivity"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "cortex.help",
+        "title": "CORTEX: Show Help",
+        "category": "CORTEX"
+      },
+      {
+        "command": "cortex.plan",
+        "title": "CORTEX: Create Planning Folder",
+        "category": "CORTEX"
+      },
+      {
+        "command": "cortex.startTdd",
+        "title": "CORTEX: Start TDD Workflow",
+        "category": "CORTEX"
+      },
+      {
+        "command": "cortex.systemMaintenance",
+        "title": "CORTEX: Run System Maintenance",
+        "category": "CORTEX"
+      },
+      {
+        "command": "cortex.sanitize",
+        "title": "CORTEX: Sanitize Code",
+        "category": "CORTEX"
+      },
+      {
+        "command": "cortex.refine",
+        "title": "CORTEX: Run Refinement",
+        "category": "CORTEX"
+      },
+      {
+        "command": "cortex.onboard",
+        "title": "CORTEX: Interactive Onboarding",
+        "category": "CORTEX"
+      },
+      {
+        "command": "cortex.adoPlanning",
+        "title": "CORTEX: ADO Planning",
+        "category": "CORTEX"
+      },
+      {
+        "command": "cortex.showDashboard",
+        "title": "CORTEX: Show Dashboard",
+        "category": "CORTEX"
+      }
+    ],
+    "configuration": {
+      "title": "CORTEX",
+      "properties": {
+        "cortex.pythonPath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to Python executable (leave empty for auto-detection)"
+        },
+        "cortex.cortexPath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to CORTEX installation (leave empty for auto-detection)"
+        },
+        "cortex.enableCopilotIntegration": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable GitHub Copilot Chat integration"
+        },
+        "cortex.autoRefreshDashboard": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically refresh dashboard when brain data changes"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile",
+    "test": "node ./out/test/runTest.js",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/node": "^20.x",
+    "@types/vscode": "^1.85.0",
+    "@vscode/test-electron": "^2.3.8",
+    "typescript": "^5.3.3",
+    "vscode-test": "^1.6.1"
+  },
+  "dependencies": {}
+}
