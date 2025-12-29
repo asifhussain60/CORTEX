@@ -1,0 +1,58 @@
+<UserControl x:Class="CortexVSExtension.ToolWindows.CortexDashboardControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800"
+             Background="{DynamicResource VsBrush.Window}">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,20">
+            <TextBlock Text="🧠 CORTEX Dashboard" 
+                       FontSize="20" 
+                       FontWeight="Bold" 
+                       Foreground="{DynamicResource VsBrush.WindowText}"/>
+            <TextBlock Text="AI Assistant with long-term memory and context awareness" 
+                       FontSize="12" 
+                       Foreground="{DynamicResource VsBrush.GrayText}"
+                       Margin="0,5,0,0"/>
+        </StackPanel>
+
+        <!-- Content -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <!-- Placeholder content -->
+                <TextBlock Text="Dashboard functionality will be implemented in Task 12.2.3" 
+                           FontSize="14" 
+                           Foreground="{DynamicResource VsBrush.WindowText}"
+                           TextWrapping="Wrap"
+                           Margin="0,0,0,10"/>
+                
+                <TextBlock Text="Planned Features:" 
+                           FontSize="14" 
+                           FontWeight="Bold"
+                           Foreground="{DynamicResource VsBrush.WindowText}"
+                           Margin="0,10,0,5"/>
+                
+                <TextBlock Text="• System status and health metrics" 
+                           Foreground="{DynamicResource VsBrush.WindowText}"
+                           Margin="20,2,0,2"/>
+                <TextBlock Text="• Quick action buttons" 
+                           Foreground="{DynamicResource VsBrush.WindowText}"
+                           Margin="20,2,0,2"/>
+                <TextBlock Text="• Recent plans and activities" 
+                           Foreground="{DynamicResource VsBrush.WindowText}"
+                           Margin="20,2,0,2"/>
+                <TextBlock Text="• Workspace context display" 
+                           Foreground="{DynamicResource VsBrush.WindowText}"
+                           Margin="20,2,0,2"/>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>
