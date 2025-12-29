@@ -43,7 +43,7 @@
         <div class="glass-card">
             <h2 class="section-title">🗺️ Interactive Knowledge Map</h2>
             <p style="text-align: center; color: var(--text-secondary); margin-bottom: 2rem;">
-                Click domains to expand • Drag nodes to explore • Double-click topics to view details
+                Click domains to expand • Drag nodes to explore • Click topics to view details
             </p>
             
             <div class="viz-controls" style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center;">
@@ -817,6 +817,26 @@
     let links = [];
     let simulation;
 
+    // Helper function to lighten colors for child nodes
+    function lightenColor(color, amount) {
+        // Convert hex to RGB
+        const hex = color.replace('#', '');
+        const r = parseInt(hex.substr(0, 2), 16);
+        const g = parseInt(hex.substr(2, 2), 16);
+        const b = parseInt(hex.substr(4, 2), 16);
+        
+        // Lighten by blending with white
+        const newR = Math.round(r + (255 - r) * amount);
+        const newG = Math.round(g + (255 - g) * amount);
+        const newB = Math.round(b + (255 - b) * amount);
+        
+        // Convert back to hex
+        return '#' + [newR, newG, newB].map(x => {
+            const hex = x.toString(16);
+            return hex.length === 1 ? '0' + hex : hex;
+        }).join('');
+    }
+
     // Initialize with domains view
     function initDomains() {
         nodes = knowledgeData.domains.map((d, i) => ({
@@ -849,7 +869,8 @@
                     ...topic,
                     type: 'topic',
                     domainId: domain.id,
-                    color: domain.color,
+                    color: lightenColor(domain.color, 0.3), // Lighter shade of parent
+                    parentColor: domain.color,
                     x: domainNode.x + Math.cos(angle) * distance,
                     y: domainNode.y + Math.sin(angle) * distance,
                     radius: 30
@@ -884,7 +905,8 @@
                     ...topic,
                     type: 'topic',
                     domainId: domain.id,
-                    color: domain.color,
+                    color: lightenColor(domain.color, 0.3), // Lighter shade of parent
+                    parentColor: domain.color,
                     radius: 28
                 });
                 links.push({
@@ -956,6 +978,9 @@
                 event.stopPropagation();
                 if (d.type === 'domain') {
                     expandDomain(d);
+                } else if (d.type === 'topic' && d.url) {
+                    // Single click also navigates for topics
+                    window.location.href = d.url;
                 }
             })
             .on('dblclick', function(event, d) {
@@ -974,7 +999,7 @@
                     tooltipContent += `<p>Click to ${expandedDomains.has(d.id) ? 'collapse' : 'expand'}</p>`;
                     tooltipContent += `<p><span class="badge" style="background: ${d.color};">${d.topics.length} topics</span></p>`;
                 } else {
-                    tooltipContent += `<p>Double-click to view</p>`;
+                    tooltipContent += `<p>Click to view</p>`;
                 }
 
                 tooltip.html(tooltipContent)

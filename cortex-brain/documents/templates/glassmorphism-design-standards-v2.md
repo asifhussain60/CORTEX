@@ -1306,6 +1306,82 @@ input:focus {
 - Tooltips use dark background with cyan accents
 - Filter buttons use brand gradient for "All" category
 
+### Hierarchical Node Coloring (Knowledge Maps)
+
+**Purpose:** Child nodes in expandable visualizations should be visually distinct from parent nodes while maintaining color relationships.
+
+**Implementation Pattern:**
+```javascript
+// Helper function to lighten colors for child nodes
+function lightenColor(color, amount) {
+    // Convert hex to RGB
+    const hex = color.replace('#', '');
+    const r = parseInt(hex.substr(0, 2), 16);
+    const g = parseInt(hex.substr(2, 2), 16);
+    const b = parseInt(hex.substr(4, 2), 16);
+    
+    // Lighten by blending with white
+    const newR = Math.round(r + (255 - r) * amount);
+    const newG = Math.round(g + (255 - g) * amount);
+    const newB = Math.round(b + (255 - b) * amount);
+    
+    // Convert back to hex
+    return '#' + [newR, newG, newB].map(x => {
+        const hex = x.toString(16);
+        return hex.length === 1 ? '0' + hex : hex;
+    }).join('');
+}
+
+// Apply to child nodes
+const childColor = lightenColor(parentColor, 0.3); // 30% lighter
+```
+
+**Color Hierarchy Rules:**
+- **Parent nodes (domains):** Use full saturation brand colors
+- **Child nodes (topics):** Use 30% lightened version of parent color
+- **Lightening amount:** `0.3` (30% blend with white) for optimal contrast
+- **Maintain relationships:** Child colors must visually relate to parent
+
+**Visual Examples:**
+
+| Parent Color | Child Color (30% lighter) | Usage |
+|--------------|---------------------------|-------|
+| `#2196F3` (Blue) | `#6AB8F7` | Frontend & UI domain/topics |
+| `#4CAF50` (Green) | `#7BC97F` | Backend & APIs domain/topics |
+| `#FF9800` (Orange) | `#FFB84D` | Data & Storage domain/topics |
+| `#9C27B0` (Purple) | `#B85FCC` | Cloud & Infrastructure |
+| `#F44336` (Red) | `#F77B72` | Software Craft & Quality |
+
+**Accessibility Note:** Ensure child colors maintain WCAG 2.1 AA contrast ratios (3:1 minimum for UI components) against dark backgrounds.
+
+### Interactive Node Behavior
+
+**Click vs. Double-Click Pattern:**
+
+**❌ OLD PATTERN (Inconsistent):**
+- Single click: Expand domains only
+- Double-click: Navigate to topic pages
+
+**✅ NEW PATTERN (Consistent):**
+- **Domain nodes:** Single click to expand/collapse
+- **Topic nodes:** Single click to navigate to page
+- **All nodes:** Draggable for repositioning
+
+**Rationale:**
+- Single-click for all primary actions improves mobile usability
+- Eliminates confusion about click vs. double-click
+- Consistent with modern UI expectations
+- Better touch-screen compatibility
+
+**Tooltip Instructions:**
+```javascript
+if (d.type === 'domain') {
+    tooltipContent += `<p>Click to ${expandedDomains.has(d.id) ? 'collapse' : 'expand'}</p>`;
+} else {
+    tooltipContent += `<p>Click to view</p>`; // NOT "Double-click"
+}
+```
+
 ---
 
 ## 📝 Typography Standards
