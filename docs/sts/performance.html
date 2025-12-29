@@ -24,11 +24,11 @@
 
     <main class="sts-main">
         <section class="sts-hero">
-            <h1>⚡ Performance Optimization</h1>
+            <h1><i class="fas fa-tachometer-alt"></i> Performance Optimization</h1>
             <p class="hero-subtitle">Eliminate bottlenecks and boost application speed</p>
             <div class="sts-metrics">
-                <div class="metric-card"><div class="metric-value">4</div><div class="metric-label">Bottlenecks</div></div>
-                <div class="metric-card accent"><div class="metric-value">10x</div><div class="metric-label">Faster</div></div>
+                <div class="metric-card"><div class="metric-value">8</div><div class="metric-label">Optimizations</div></div>
+                <div class="metric-card accent"><div class="metric-value">100x</div><div class="metric-label">Faster</div></div>
                 <div class="metric-card"><div class="metric-value">-80%</div><div class="metric-label">Memory</div></div>
             </div>
         </section>
@@ -235,12 +235,309 @@ ORDER BY CreatedAt DESC;
                 </div>
             </div>
         </section>
+
+        <!-- Cache-Aside Pattern - C# -->
+        <section class="comparison-section">
+            <div class="section-header">
+                <h3><i class="fas fa-database"></i> Cache-Aside Pattern (Lazy Loading)</h3>
+                <span class="language-badge csharp">C#</span>
+            </div>
+            <div class="refactor-explanation">
+                <h4><i class="fas fa-lightbulb"></i> How This Was Refactored</h4>
+                <ul>
+                    <li><strong>Problem:</strong> Every request hits database (3 network round trips per call)</li>
+                    <li><strong>Fix:</strong> Implement cache-aside with TTL and miss handling</li>
+                    <li><strong>Result:</strong> 66% latency reduction (200ms → 68ms)</li>
+                </ul>
+            </div>
+            <div class="comparison-container">
+                <div class="panel before-panel">
+                    <div class="panel-header"><i class="fas fa-times-circle"></i> Before: No Caching (3 Calls)</div>
+                    <pre><code class="language-csharp">public async Task&lt;User&gt; GetUserAsync(int userId)
+{
+    // Always hits database
+    var user = await _db.Users
+        .Include(u =&gt; u.Profile)
+        .Include(u =&gt; u.Preferences)
+        .FirstOrDefaultAsync(u =&gt; u.Id == userId);
+    
+    return user;
+}
+
+// Every call = 3 network round trips:
+// 1. Query database
+// 2. Load Profile (JOIN)
+// 3. Load Preferences (JOIN)
+// Total latency: ~200ms per request</code></pre>
+                </div>
+                <div class="panel after-panel">
+                    <div class="panel-header"><i class="fas fa-check-circle"></i> After: Cache-Aside Pattern</div>
+                    <pre><code class="language-csharp">public async Task&lt;User&gt; GetUserAsync(int userId)
+{
+    string cacheKey = $"user:{userId}";
+    
+    // Check cache first
+    var cachedUser = await _cache.GetAsync&lt;User&gt;(cacheKey);
+    if (cachedUser != null)
+    {
+        return cachedUser; // Cache hit: ~2ms
+    }
+    
+    // Cache miss: Load from database
+    var user = await _db.Users
+        .Include(u =&gt; u.Profile)
+        .Include(u =&gt; u.Preferences)
+        .AsNoTracking() // Read-only optimization
+        .FirstOrDefaultAsync(u =&gt; u.Id == userId);
+    
+    // Populate cache with 5-minute TTL
+    await _cache.SetAsync(cacheKey, user, TimeSpan.FromMinutes(5));
+    
+    return user;
+}
+// Cache hit: 2ms (98% of requests)
+// Cache miss: 200ms (2% of requests)
+// Average latency: 68ms (66% improvement)</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Object Pooling - C# -->
+        <section class="comparison-section">
+            <div class="section-header">
+                <h3><i class="fas fa-recycle"></i> Object Pooling Pattern</h3>
+                <span class="language-badge csharp">C#</span>
+            </div>
+            <div class="refactor-explanation">
+                <h4><i class="fas fa-lightbulb"></i> How This Was Refactored</h4>
+                <ul>
+                    <li><strong>Problem:</strong> Creating 10,000 objects per second (high GC pressure)</li>
+                    <li><strong>Fix:</strong> Reuse objects from pre-allocated pool</li>
+                    <li><strong>Result:</strong> 80% reduction in allocations, 50% faster throughput</li>
+                </ul>
+            </div>
+            <div class="comparison-container">
+                <div class="panel before-panel">
+                    <div class="panel-header"><i class="fas fa-times-circle"></i> Before: Create/Destroy Objects</div>
+                    <pre><code class="language-csharp">public class MessageProcessor
+{
+    public async Task ProcessMessagesAsync(IEnumerable&lt;byte[]&gt; messages)
+    {
+        foreach (var data in messages)
+        {
+            // Create new buffer for each message
+            var buffer = new byte[8192];
+            Array.Copy(data, buffer, data.Length);
+            
+            // Process message
+            await ProcessAsync(buffer);
+            
+            // Buffer eligible for GC
+        }
+    }
+}
+
+// Metrics:
+// - 10,000 allocations/sec (81,920 KB/sec)
+// - GC Gen0: Every 2 seconds
+// - GC Gen1: Every 10 seconds
+// - Throughput: 5,000 msg/sec</code></pre>
+                </div>
+                <div class="panel after-panel">
+                    <div class="panel-header"><i class="fas fa-check-circle"></i> After: Object Pool</div>
+                    <pre><code class="language-csharp">public class MessageProcessor
+{
+    private readonly ArrayPool&lt;byte&gt; _bufferPool;
+    
+    public MessageProcessor()
+    {
+        _bufferPool = ArrayPool&lt;byte&gt;.Shared;
+    }
+    
+    public async Task ProcessMessagesAsync(IEnumerable&lt;byte[]&gt; messages)
+    {
+        foreach (var data in messages)
+        {
+            // Rent buffer from pool (reuse)
+            byte[] buffer = _bufferPool.Rent(8192);
+            
+            try
+            {
+                Array.Copy(data, buffer, data.Length);
+                await ProcessAsync(buffer);
+            }
+            finally
+            {
+                // Return buffer to pool (don't destroy)
+                _bufferPool.Return(buffer, clearArray: true);
+            }
+        }
+    }
+}
+
+// Metrics:
+// - ~100 allocations/sec (pool misses only)
+// - GC Gen0: Every 30 seconds (15x reduction)
+// - GC Gen1: Every 2 minutes (12x reduction)
+// - Throughput: 7,500 msg/sec (50% faster)</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Big-O Optimization - TypeScript -->
+        <section class="comparison-section">
+            <div class="section-header">
+                <h3><i class="fas fa-chart-line"></i> Algorithm Complexity Optimization</h3>
+                <span class="language-badge typescript">TypeScript</span>
+            </div>
+            <div class="refactor-explanation">
+                <h4><i class="fas fa-lightbulb"></i> How This Was Refactored</h4>
+                <ul>
+                    <li><strong>Problem:</strong> O(n²) nested loops for finding pairs</li>
+                    <li><strong>Fix:</strong> O(n) hash table lookup with complement tracking</li>
+                    <li><strong>Result:</strong> 100x faster for 1,000 items (500ms → 5ms)</li>
+                </ul>
+            </div>
+            <div class="comparison-container">
+                <div class="panel before-panel">
+                    <div class="panel-header"><i class="fas fa-times-circle"></i> Before: O(n²) Nested Loops</div>
+                    <pre><code class="language-typescript">function findPairsWithSum(numbers: number[], target: number): number[][] {
+    const pairs: number[][] = [];
+    
+    // Outer loop: O(n)
+    for (let i = 0; i &lt; numbers.length; i++) {
+        // Inner loop: O(n) for each outer iteration
+        for (let j = i + 1; j &lt; numbers.length; j++) {
+            if (numbers[i] + numbers[j] === target) {
+                pairs.push([numbers[i], numbers[j]]);
+            }
+        }
+    }
+    
+    return pairs;
+}
+
+// Time Complexity: O(n²)
+// Space Complexity: O(1)
+// 
+// Performance:
+// n = 100:    2ms
+// n = 1,000:  500ms
+// n = 10,000: 50 seconds (unusable!)</code></pre>
+                </div>
+                <div class="panel after-panel">
+                    <div class="panel-header"><i class="fas fa-check-circle"></i> After: O(n) Hash Table</div>
+                    <pre><code class="language-typescript">function findPairsWithSum(numbers: number[], target: number): number[][] {
+    const pairs: number[][] = [];
+    const seen = new Set&lt;number&gt;();
+    
+    // Single pass: O(n)
+    for (const num of numbers) {
+        const complement = target - num;
+        
+        // Hash table lookup: O(1)
+        if (seen.has(complement)) {
+            pairs.push([complement, num]);
+        }
+        
+        seen.add(num);
+    }
+    
+    return pairs;
+}
+
+// Time Complexity: O(n)
+// Space Complexity: O(n)
+// 
+// Performance:
+// n = 100:    &lt;1ms (2x faster)
+// n = 1,000:  5ms (100x faster)
+// n = 10,000: 45ms (1,100x faster)</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- LRU Cache - Python -->
+        <section class="comparison-section">
+            <div class="section-header">
+                <h3><i class="fas fa-memory"></i> LRU Cache Eviction Strategy</h3>
+                <span class="language-badge python">Python</span>
+            </div>
+            <div class="refactor-explanation">
+                <h4><i class="fas fa-lightbulb"></i> How This Was Refactored</h4>
+                <ul>
+                    <li><strong>Problem:</strong> Unbounded cache grows infinitely (memory leak)</li>
+                    <li><strong>Fix:</strong> LRU eviction with OrderedDict and max size limit</li>
+                    <li><strong>Result:</strong> Predictable memory usage, 95%+ hit rate maintained</li>
+                </ul>
+            </div>
+            <div class="comparison-container">
+                <div class="panel before-panel">
+                    <div class="panel-header"><i class="fas fa-times-circle"></i> Before: Unbounded Cache</div>
+                    <pre><code class="language-python">class Cache:
+    def __init__(self):
+        self._cache = {}  # No size limit!
+    
+    def get(self, key):
+        return self._cache.get(key)
+    
+    def set(self, key, value):
+        self._cache[key] = value  # Grows forever
+
+# Usage over time:
+# Hour 1: 1,000 entries (8 MB)
+# Hour 6: 10,000 entries (80 MB)
+# Day 1:  50,000 entries (400 MB)
+# Week 1: 500,000 entries (4 GB)  ← Memory leak!
+# 
+# Eventually causes OutOfMemoryError</code></pre>
+                </div>
+                <div class="panel after-panel">
+                    <div class="panel-header"><i class="fas fa-check-circle"></i> After: LRU Cache</div>
+                    <pre><code class="language-python">from collections import OrderedDict
+
+class LRUCache:
+    def __init__(self, capacity: int = 1000):
+        self._cache = OrderedDict()
+        self._capacity = capacity
+    
+    def get(self, key):
+        if key not in self._cache:
+            return None
+        
+        # Move to end (mark as recently used)
+        self._cache.move_to_end(key)
+        return self._cache[key]
+    
+    def set(self, key, value):
+        if key in self._cache:
+            # Update existing, move to end
+            self._cache.move_to_end(key)
+        
+        self._cache[key] = value
+        
+        # Evict least recently used if over capacity
+        if len(self._cache) &gt; self._capacity:
+            self._cache.popitem(last=False)  # Remove oldest
+
+# Steady state:
+# Max size: 1,000 entries (8 MB) - CONSTANT
+# Hit rate: 95%+ (hot data stays cached)
+# Memory: Predictable and bounded
+# Evictions: Only affects cold data</code></pre>
+                </div>
+            </div>
+        </section>
     </main>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/csharp.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/typescript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/python.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/sql.min.js"></script>
     <script>hljs.highlightAll();</script>
+    
+    <!-- Adaptive Code Panel Height Algorithm v2.2.0 -->
+    <script src="../assets/js/adaptive-panels.js"></script>
 </body>
 </html>

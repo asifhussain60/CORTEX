@@ -1,6 +1,6 @@
-# CORTEX Glassmorphism Design Standards v2.1
+# CORTEX Glassmorphism Design Standards v2.2
 
-**Version:** 2.1.0  
+**Version:** 2.2.0  
 **Created:** December 28, 2025  
 **Updated:** December 29, 2025  
 **Author:** Asif Hussain  
@@ -13,6 +13,7 @@
 
 | Version | Date | Changes |
 |---------|------|---------|
+| **2.2.0** | Dec 29, 2025 | Added Adaptive Code Panel Height Algorithm with auto-height vs fixed-height logic, mobile-responsive thresholds, JavaScript implementation |
 | **2.1.0** | Dec 29, 2025 | Added D3.js Layout Pattern Selection Guide, Hub-Spoke implementation patterns, Anti-patterns section for tree diagrams with many leaf nodes |
 | **2.0.0** | Dec 28, 2025 | Initial glassmorphism v2 standards, Mermaid diagram guidelines, FontAwesome requirements |
 
@@ -100,6 +101,425 @@ This document establishes the definitive glassmorphism design standard for CORTE
 | **Error** | ❌ | `fa-times-circle` | <i class="fas fa-times-circle"></i> |
 | **Warning** | ⚠️ | `fa-exclamation-triangle` | <i class="fas fa-exclamation-triangle"></i> |
 | **Info** | ℹ️ | `fa-info-circle` | <i class="fas fa-info-circle"></i> |
+
+---
+
+## 🎨 STS Code Panel Height Algorithm
+
+### Purpose
+Automatically determine whether to use auto-height or fixed-height with scrollbar for code comparison panels based on content size. This improves UX by avoiding unnecessary scrollbars for short snippets while maintaining readability for long code blocks.
+
+### Design Principles
+
+1. **User Experience First:** Short code should be fully visible without scrolling
+2. **Consistency:** Both panels (before/after) MUST have identical height
+3. **Readability:** Prevent excessively tall panels that hurt scannability
+4. **Mobile-Friendly:** Thresholds account for smaller viewport heights
+
+---
+
+### Algorithm Specification
+
+**Input Variables:**
+- `beforeLineCount` - Number of lines in "Before" code panel
+- `afterLineCount` - Number of lines in "After" code panel
+- `lineHeight` - CSS line height (default: 1.5rem = ~24px)
+- `viewportHeight` - Browser viewport height in pixels
+
+**Constants:**
+```javascript
+const LINE_HEIGHT_PX = 24;          // 1.5rem in pixels
+const MIN_PANEL_HEIGHT = 200;       // Minimum panel height (px)
+const MAX_AUTO_HEIGHT = 600;        // Maximum before scrollbar (px)
+const VIEWPORT_THRESHOLD = 0.5;     // Max 50% of viewport height
+const MOBILE_BREAKPOINT = 768;      // Mobile viewport width (px)
+const MOBILE_MAX_AUTO = 400;        // Reduced max height on mobile (px)
+```
+
+**Decision Tree:**
+```
+START: Calculate required height for both panels
+    |
+    ├─→ maxLines = max(beforeLineCount, afterLineCount)
+    ├─→ requiredHeight = (maxLines * LINE_HEIGHT_PX) + PADDING
+    ├─→ effectiveMaxHeight = (viewportWidth <= MOBILE_BREAKPOINT) 
+    |                        ? MOBILE_MAX_AUTO 
+    |                        : min(MAX_AUTO_HEIGHT, viewportHeight * VIEWPORT_THRESHOLD)
+    |
+    ├─→ CONDITION 1: requiredHeight <= MIN_PANEL_HEIGHT
+    |   └─→ USE: Auto-height with min-height: 200px
+    |       └─→ Rationale: Very short snippets (< 8 lines)
+    |
+    ├─→ CONDITION 2: requiredHeight <= effectiveMaxHeight
+    |   └─→ USE: Auto-height (no scrollbar)
+    |       └─→ Rationale: Fits comfortably in viewport
+    |
+    └─→ CONDITION 3: requiredHeight > effectiveMaxHeight
+        └─→ USE: Fixed height = effectiveMaxHeight + vertical scrollbar
+            └─→ Rationale: Prevents excessive panel height
+```
+
+---
+
+### Implementation
+
+#### CSS Classes
+
+```css
+/* Base panel styling (both before/after) */
+.panel {
+    background: var(--glass-bg);
+    border-radius: 12px;
+    padding: 1.5rem;
+    backdrop-filter: blur(10px);
+    overflow: hidden; /* Default: no scroll */
+}
+
+/* Auto-height panels (short code) */
+.panel.auto-height {
+    min-height: 200px;
+    max-height: none;
+    overflow: visible;
+}
+
+.panel.auto-height pre {
+    overflow: visible;
+    max-height: none;
+}
+
+/* Fixed-height panels (long code) */
+.panel.fixed-height {
+    height: var(--panel-height); /* Set via inline style or JS */
+    overflow: hidden;
+}
+
+.panel.fixed-height pre {
+    height: 100%;
+    overflow-y: auto; /* Vertical scroll only */
+    overflow-x: auto; /* Horizontal scroll if needed */
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .panel.auto-height {
+        max-height: 400px; /* Reduced for mobile */
+    }
+}
+```
+
+#### JavaScript Implementation
+
+```javascript
+/**
+ * Calculate optimal panel height for STS code comparison
+ * @param {number} beforeLines - Line count in "Before" panel
+ * @param {number} afterLines - Line count in "After" panel
+ * @returns {Object} { mode: 'auto'|'fixed', height: number|null, maxLines: number }
+ */
+function calculatePanelHeight(beforeLines, afterLines) {
+    const LINE_HEIGHT_PX = 24;
+    const MIN_PANEL_HEIGHT = 200;
+    const MAX_AUTO_HEIGHT = 600;
+    const MOBILE_BREAKPOINT = 768;
+    const MOBILE_MAX_AUTO = 400;
+    const VIEWPORT_THRESHOLD = 0.5;
+    const PADDING = 48; // Top + bottom padding (1.5rem * 2)
+    
+    // Use the larger line count (both panels match height)
+    const maxLines = Math.max(beforeLines, afterLines);
+    const requiredHeight = (maxLines * LINE_HEIGHT_PX) + PADDING;
+    
+    // Determine effective max height based on viewport
+    const isMobile = window.innerWidth <= MOBILE_BREAKPOINT;
+    const viewportMaxHeight = window.innerHeight * VIEWPORT_THRESHOLD;
+    const effectiveMaxHeight = isMobile 
+        ? MOBILE_MAX_AUTO 
+        : Math.min(MAX_AUTO_HEIGHT, viewportMaxHeight);
+    
+    // Decision logic
+    if (requiredHeight <= MIN_PANEL_HEIGHT) {
+        return { 
+            mode: 'auto', 
+            height: null, // Use min-height: 200px from CSS
+            maxLines: maxLines,
+            reason: 'Short snippet (< 8 lines)'
+        };
+    }
+    
+    if (requiredHeight <= effectiveMaxHeight) {
+        return { 
+            mode: 'auto', 
+            height: null, // Auto-expand to fit content
+            maxLines: maxLines,
+            reason: `Fits in viewport (${requiredHeight}px <= ${effectiveMaxHeight}px)`
+        };
+    }
+    
+    return { 
+        mode: 'fixed', 
+        height: effectiveMaxHeight,
+        maxLines: maxLines,
+        reason: `Exceeds threshold (${requiredHeight}px > ${effectiveMaxHeight}px) - scroll required`
+    };
+}
+
+/**
+ * Apply calculated height to comparison panels
+ * @param {HTMLElement} beforePanel - "Before" code panel element
+ * @param {HTMLElement} afterPanel - "After" code panel element
+ */
+function applyPanelHeight(beforePanel, afterPanel) {
+    // Count lines in each panel
+    const beforeLines = beforePanel.querySelector('pre code').textContent.split('\n').length;
+    const afterLines = afterPanel.querySelector('pre code').textContent.split('\n').length;
+    
+    // Calculate optimal height
+    const result = calculatePanelHeight(beforeLines, afterLines);
+    
+    // Apply to both panels (must match)
+    [beforePanel, afterPanel].forEach(panel => {
+        panel.classList.remove('auto-height', 'fixed-height');
+        
+        if (result.mode === 'auto') {
+            panel.classList.add('auto-height');
+            panel.style.removeProperty('height');
+        } else {
+            panel.classList.add('fixed-height');
+            panel.style.setProperty('--panel-height', `${result.height}px`);
+        }
+    });
+    
+    console.log(`Panel height: ${result.mode} (${result.reason})`);
+}
+
+// Usage: Apply to all comparison sections on page load
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.comparison-section').forEach(section => {
+        const beforePanel = section.querySelector('.before-panel');
+        const afterPanel = section.querySelector('.after-panel');
+        
+        if (beforePanel && afterPanel) {
+            applyPanelHeight(beforePanel, afterPanel);
+        }
+    });
+    
+    // Recalculate on window resize (debounced)
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            document.querySelectorAll('.comparison-section').forEach(section => {
+                const beforePanel = section.querySelector('.before-panel');
+                const afterPanel = section.querySelector('.after-panel');
+                if (beforePanel && afterPanel) {
+                    applyPanelHeight(beforePanel, afterPanel);
+                }
+            });
+        }, 250);
+    });
+});
+```
+
+---
+
+### Line Count Thresholds
+
+**Reference Table:**
+
+| Line Count | Required Height | Desktop Behavior | Mobile Behavior |
+|------------|-----------------|------------------|-----------------|
+| 1-8 lines | ≤200px | Auto-height (min-height: 200px) | Auto-height (min-height: 200px) |
+| 9-25 lines | 200px-600px | Auto-height (no scroll) | Auto-height if ≤400px, else scroll |
+| 26-50 lines | 600px-1200px | Fixed 600px + scroll | Fixed 400px + scroll |
+| 51+ lines | 1200px+ | Fixed 600px + scroll | Fixed 400px + scroll |
+
+**Viewport-Based Adjustments:**
+- **Desktop (>768px):** Max auto-height = min(600px, 50% of viewport height)
+- **Mobile (≤768px):** Max auto-height = 400px (prevents tall panels on phones)
+- **Both panels always match height** (use max line count from either panel)
+
+---
+
+### Example Scenarios
+
+#### Scenario 1: Short Snippet (5 lines)
+```javascript
+// Input
+beforeLines = 5
+afterLines = 5
+requiredHeight = (5 * 24) + 48 = 168px
+
+// Decision
+168px <= 200px → Use min-height: 200px (auto-height)
+✅ No scrollbar, panels expand to 200px
+```
+
+#### Scenario 2: Medium Snippet (15 lines)
+```javascript
+// Input
+beforeLines = 15
+afterLines = 12
+maxLines = 15
+requiredHeight = (15 * 24) + 48 = 408px
+
+// Decision (Desktop)
+408px <= 600px → Auto-height (no scroll)
+✅ Panels expand to 408px, fully visible
+
+// Decision (Mobile)
+408px > 400px → Fixed 400px + scroll
+⚠️ Panels limited to 400px with scrollbar
+```
+
+#### Scenario 3: Long Code (40 lines)
+```javascript
+// Input
+beforeLines = 40
+afterLines = 35
+maxLines = 40
+requiredHeight = (40 * 24) + 48 = 1008px
+
+// Decision (Desktop)
+1008px > 600px → Fixed 600px + scroll
+✅ Panels capped at 600px with scrollbar
+
+// Decision (Mobile)
+1008px > 400px → Fixed 400px + scroll
+✅ Panels capped at 400px with scrollbar
+```
+
+#### Scenario 4: Asymmetric Panels
+```javascript
+// Input
+beforeLines = 10 (240px required)
+afterLines = 30 (720px required)
+maxLines = 30 (use larger)
+requiredHeight = 768px
+
+// Decision
+768px > 600px → Fixed 600px + scroll
+✅ BOTH panels set to 600px
+✅ Before panel has extra space, after panel scrolls
+✅ Visual consistency maintained
+```
+
+---
+
+### Benefits
+
+1. **✅ Improved Scannability:** Short code visible without scrolling
+2. **✅ Reduced Friction:** No unnecessary scrollbars for 1-25 line snippets
+3. **✅ Visual Consistency:** Both panels always match height
+4. **✅ Mobile Optimized:** Smaller thresholds prevent tall panels on phones
+5. **✅ Viewport Aware:** Adapts to available screen space
+6. **✅ Accessibility:** Users can scroll when needed, not forced to
+
+---
+
+### Testing Checklist
+
+Before deploying to production, verify:
+
+- [ ] **Auto-height works:** 5-line snippet expands to min-height (200px)
+- [ ] **Auto-height threshold:** 25-line snippet shows no scrollbar (≤600px)
+- [ ] **Scroll activates:** 30-line snippet shows scrollbar (>600px)
+- [ ] **Height matching:** Asymmetric panels (10 vs 30 lines) have same height
+- [ ] **Mobile limits:** 20-line snippet scrolls on mobile (>400px)
+- [ ] **Viewport scaling:** Max height adjusts on window resize
+- [ ] **No horizontal scroll:** Long lines wrap or scroll horizontally only
+- [ ] **Pre tag styling:** Code blocks respect panel overflow settings
+
+---
+
+### Integration with STS.css
+
+**Add to `docs/assets/css/sts.css`:**
+
+```css
+/* ==========================================================================
+   Adaptive Code Panel Heights (Auto-Height Algorithm)
+   ========================================================================== */
+
+.comparison-container .panel {
+    transition: height 0.3s ease; /* Smooth height changes on resize */
+}
+
+/* Auto-height panels (short code) */
+.comparison-container .panel.auto-height {
+    min-height: 200px;
+    max-height: none;
+}
+
+.comparison-container .panel.auto-height pre {
+    overflow: visible;
+    max-height: none;
+}
+
+/* Fixed-height panels (long code with scrollbar) */
+.comparison-container .panel.fixed-height {
+    height: var(--panel-height);
+    overflow: hidden;
+}
+
+.comparison-container .panel.fixed-height pre {
+    height: calc(100% - 3rem); /* Account for panel-header */
+    overflow-y: auto;
+    overflow-x: auto;
+    padding-right: 0.5rem; /* Scrollbar spacing */
+}
+
+/* Scrollbar styling (glassmorphism theme) */
+.panel.fixed-height pre::-webkit-scrollbar {
+    width: 8px;
+}
+
+.panel.fixed-height pre::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
+.panel.fixed-height pre::-webkit-scrollbar-thumb {
+    background: var(--accent-primary);
+    border-radius: 4px;
+}
+
+.panel.fixed-height pre::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-secondary);
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+    .comparison-container .panel.auto-height {
+        max-height: 400px; /* Mobile limit */
+    }
+}
+```
+
+---
+
+### Migration Path
+
+**For existing STS pages:**
+
+1. **Add JavaScript:** Include adaptive height script in `<head>` or before `</body>`
+2. **Update CSS:** Add new classes to `sts.css` (above)
+3. **Remove inline heights:** Remove any `style="height: XXXpx"` from panels
+4. **Test all pages:** Run through 7 STS HTML files (security, solid, performance, etc.)
+5. **Validate mobile:** Test on 320px, 375px, 768px viewports
+6. **Document changes:** Update STS phase completion report
+
+---
+
+## 🎯 Success Criteria
+
+- [x] Algorithm specification documented
+- [x] JavaScript implementation provided
+- [x] CSS classes defined
+- [x] Line count thresholds calculated
+- [x] Mobile responsiveness addressed
+- [x] Testing checklist created
+- [x] Integration path documented
+- [x] Glassmorphism standards updated
 
 ### Icon Styling Standards
 

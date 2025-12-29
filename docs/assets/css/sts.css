@@ -520,7 +520,7 @@
 }
 
 .panel {
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.9); /* Darker black background for code panels */
     border-radius: 12px;
     overflow: hidden;
     display: flex;
@@ -592,18 +592,39 @@
     }
 }
 
-/* Code blocks within panels - scrollable with fixed height */
+/* Code blocks within panels - adaptive height system */
 .panel pre {
     margin: 0;
     padding: 1rem;
     flex: 1;
     overflow-x: auto;
-    overflow-y: auto;
-    max-height: 350px; /* ~15 lines of code */
     font-size: 0.8125rem;
     line-height: 1.5;
+    background: #000000; /* Pure black background for code */
 }
 
+/* Auto-height mode: No vertical scrollbar (short/medium code) */
+.panel pre.auto-height {
+    overflow-y: visible;
+    height: auto;
+    min-height: 200px;
+}
+
+/* Fixed-height mode: Vertical scrollbar (long code) */
+.panel pre.fixed-height {
+    overflow-y: auto;
+    height: 600px; /* Desktop default - overridden by JS */
+    min-height: 200px;
+}
+
+/* Mobile responsive: Shorter max height */
+@media (max-width: 768px) {
+    .panel pre.fixed-height {
+        height: 400px; /* Mobile default - overridden by JS */
+    }
+}
+
+/* Scrollbar styling */
 .panel pre::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -625,6 +646,14 @@
 
 .panel code {
     font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+    line-height: 24px; /* Explicit for adaptive algorithm */
+}
+
+/* Force black background - override Highlight.js theme */
+.panel pre,
+.panel pre code,
+.panel code.hljs {
+    background: #000000 !important; /* Pure black - override all themes */
 }
 
 /* ==========================================================================
