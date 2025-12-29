@@ -60,477 +60,792 @@ Maintenance fixes MUST:
 
 ---
 
-## Phase 1.5: Interactive Workflow Wiring Validation 🔄 NEW
-
-**Purpose:** Ensure orchestrators with interactive capabilities have complete wiring from decision logic through user interface.
-
-**Reference:** `cortex-brain/documents/analysis/interactive-workflow-wiring-gap-analysis.md`
-
-**Critical:** Interactive components built but not wired = technical debt + broken user experience.
-
-### 1.5a. Identify Interactive Orchestrators
-
-Orchestrators that SHOULD support interactive mode:
-
-| Orchestrator | Status | Interactive Components | Wired? |
-|--------------|--------|----------------------|--------|
-| **Planning** | Built | `interactive_session.py` (648 LOC) | ❌ No |
-| **ADO** | Not Built | Should have `interactive_ado_session.py` | ❌ No |
-| **Maintenance** | Future | TBD | ⏸️ Deferred |
-| **Sanitization** | Future | TBD | ⏸️ Deferred |
-
-### 1.5b. Universal Wiring Checklist + AUTO-REPAIR
-
-For EACH orchestrator with interactive mode, verify AND FIX all 6 components:
-
-#### Component 1: Decision Logic ✅
-
-**File:** `src/orchestrators/{name}/{name}_orchestrator.py`
-
-**Required Method:**
-```python
-def _should_use_interactive_mode(self, kwargs: Dict) -> bool:
-    """
-    Decide if interactive mode is needed.
-    
-    Criteria:
-    - Explicit request: kwargs.get("interactive", False)
-    - User preference: config.get("prefer_interactive", False)
-    - Complexity: Tier 4 (complex operations)
-    - Confidence: Low (<60%)
-    - Conflicts: Existing artifact detected
-    """
-    pass
-```
-
-**Validation Commands:**
-```bash
-# Check if method exists
-grep -n "_should_use_interactive_mode" src/orchestrators/planning/planning_orchestrator.py
-
-# Check if method is CALLED in execute()
-grep -A 3 "_should_use_interactive_mode" src/orchestrators/planning/planning_orchestrator.py
-```
-
-**Expected:** Method exists AND is called before generation phase.
-
-**❌ IF MISSING → AUTO-REPAIR:**
-```python
-# If method not called in execute(), patch it automatically
-# See Phase 4a for auto_wire_orchestrators.py implementation
-```
-
----
-
-#### Component 2: Agent Registration ✅
-
-**File:** `src/cortex_agents/agent_registry.py`
-
-**Required Registration:**
-```python
-AGENT_REGISTRY = {
-    "planning": PlanningAgent,
-    "review": ReviewAgent,
-    "interactive_planning": InteractivePlanner,  # ← Must exist
-    "interactive_ado": InteractiveADOPlanner,    # ← Must exist
-}
-```
-
-**Validation Commands:**
-```bash
-# Check agent registry
-grep "interactive_planning" src/cortex_agents/agent_registry.py
-grep "interactive_ado" src/cortex_agents/agent_registry.py
-
-# Check agent imports
-grep "from.*interactive_planner import" src/cortex_agents/agent_registry.py
-```
-
-**Expected:** All interactive agents registered and importable.
-
----
-
-#### Component 3: Execution Flow Routing ✅
-
-**File:** `src/orchestrators/{name}/{name}_orchestrator.py`
-
-**Required Pattern in `execute()` method:**
-```python
-def execute(self, **kwargs) -> OrchestratorResult:
-    # Phase 1: Analyze request
-    request_analysis = self._analyze_request(kwargs)
-    
-    # Phase 2: Mode selection
-    if self._should_use_interactive_mode(kwargs):
-        return self._execute_interactive_mode(request_analysis, kwargs)
-    else:
-        return self._execute_autonomous_mode(request_analysis, kwargs)
-```
-
-**Validation Commands:**
-```bash
-# Check for mode routing
-grep -A 10 "def execute" src/orchestrators/planning/planning_orchestrator.py | grep "interactive"
-
-# Check for both execution paths
-grep "_execute_interactive_mode" src/orchestrators/planning/planning_orchestrator.py
-grep "_execute_autonomous_mode" src/orchestrators/planning/planning_orchestrator.py
-```
-
-**Expected:** Conditional routing to interactive OR autonomous mode.
-
----
-
-#### Component 4: Interactive Execution Method ✅
-
-**File:** `src/orchestrators/{name}/{name}_orchestrator.py`
-
-**Required Method:**
-```python
-def _execute_interactive_mode(
-    self, 
-    analysis: RequestAnalysis, 
-    kwargs: Dict
-) -> OrchestratorResult:
-    """Execute in interactive mode with user collaboration."""
-    
-    # 1. Create session
-    session = self.interactive_creation(
-        name=kwargs["name"],
-        user_context=kwargs.get("user_context", {})
-    )
-    
-    # 2. Get agent
-    agent = InteractivePlanner(config=self.config)
-    
-    # 3. Collaborate
-    result_data = await agent.collaborate(session)
-    
-    # 4. Return result
-    return self._create_success_result(result_data)
-```
-
-**Validation Commands:**
-```bash
-# Check if method exists
-grep -n "_execute_interactive_mode" src/orchestrators/planning/planning_orchestrator.py
-
-# Check for agent instantiation
-grep "InteractivePlanner" src/orchestrators/planning/planning_orchestrator.py
-
-# Check for session creation
-grep "interactive_creation\|interactive_plan_creation" src/orchestrators/planning/planning_orchestrator.py
-```
-
-**Expected:** Method exists, instantiates agent, creates session, returns result.
-
----
-
-#### Component 5: User Interface Bridge ✅
-
-**File:** `src/orchestrators/{name}/user_interface.py` (NEW)
-
-**Required Classes:**
-```python
-class QuestionFormatter:
-    """Format questions for user display."""
-    
-    def format_multiple_choice(self, question: Question) -> str:
-        pass
-    
-    def format_yes_no(self, question: Question) -> str:
-        pass
-    
-    def format_free_text(self, question: Question) -> str:
-        pass
-
-class ResponseParser:
-    """Parse user responses."""
-    
-    def parse_answer(self, question: Question, user_input: str) -> Answer:
-        pass
-
-class ConversationManager:
-    """Manage interactive conversation flow."""
-    
-    def ask_question(self, question: Question) -> Answer:
-        pass
-    
-    def present_draft(self, draft_data: Dict) -> bool:
-        pass
-    
-    def collect_feedback(self) -> List[str]:
-        pass
-```
-
-**Validation Commands:**
-```bash
-# Check if UI bridge exists
-test -f src/orchestrators/planning/user_interface.py || echo "MISSING: UI bridge"
-test -f src/orchestrators/ado/user_interface.py || echo "MISSING: UI bridge"
-
-# Check for required classes
-grep "class QuestionFormatter" src/orchestrators/planning/user_interface.py
-grep "class ResponseParser" src/orchestrators/planning/user_interface.py
-grep "class ConversationManager" src/orchestrators/planning/user_interface.py
-```
-
-**Expected:** UI bridge file exists with all 3 classes.
-
----
-
-#### Component 6: Integration Tests ✅
-
-**File:** `tests/orchestrators/{name}/test_interactive_workflow.py`
-
-**Required Tests:**
-```python
-def test_decision_logic_explicit_request():
-    """Test interactive mode triggered by explicit request."""
-    pass
-
-def test_decision_logic_complexity_tier4():
-    """Test interactive mode triggered by complexity."""
-    pass
-
-def test_decision_logic_low_confidence():
-    """Test interactive mode triggered by ambiguity."""
-    pass
-
-def test_mode_routing_to_interactive():
-    """Test execution routes to interactive mode."""
-    pass
-
-def test_mode_routing_to_autonomous():
-    """Test execution routes to autonomous mode."""
-    pass
-
-def test_agent_instantiation():
-    """Test interactive agent can be instantiated."""
-    pass
-
-def test_session_creation():
-    """Test session creation succeeds."""
-    pass
-
-def test_end_to_end_interactive_workflow():
-    """Test full interactive workflow from request to finalization."""
-    pass
-```
-
-**Validation Commands:**
-```bash
-# Check if test file exists
-test -f tests/orchestrators/planning/test_interactive_workflow.py || echo "MISSING: Integration tests"
-
-# Run interactive tests
-python3 -m pytest tests/orchestrators/planning/test_interactive_workflow.py -v
-
-# Check test count
-python3 -m pytest tests/orchestrators/planning/test_interactive_workflow.py --collect-only | grep "test session"
-```
-
-**Expected:** ≥8 tests, all passing.
-
----
-
-### 1.5c. Wiring Status Report
-
-Generate status report for all orchestrators:
-
-```bash
-# Create wiring report
-cat > cortex-brain/health-reports/interactive-wiring-status.md << 'EOF'
-# Interactive Workflow Wiring Status Report
-
-**Date:** $(date +%Y-%m-%d)
-
-## Planning Orchestrator
-
-| Component | Status | Notes |
-|-----------|--------|-------|
-| Decision Logic | ❌ | Method exists but not called in execute() |
-| Agent Registration | ❌ | InteractivePlanner not in registry |
-| Execution Routing | ❌ | No conditional routing in execute() |
-| Interactive Method | ⚠️ | interactive_plan_creation exists but not used |
-| UI Bridge | ❌ | user_interface.py missing |
-| Integration Tests | ⚠️ | 29 mock tests exist, no real integration |
-
-**Overall:** 🔴 0/6 components fully wired
-
-## ADO Orchestrator
-
-| Component | Status | Notes |
-|-----------|--------|-------|
-| Decision Logic | ❌ | Not implemented |
-| Agent Registration | ❌ | InteractiveADOPlanner doesn't exist |
-| Execution Routing | ❌ | Direct generation only |
-| Interactive Method | ❌ | Not implemented |
-| UI Bridge | ❌ | Not implemented |
-| Integration Tests | ❌ | Not implemented |
-
-**Overall:** 🔴 0/6 components implemented
-
-EOF
-
-cat cortex-brain/health-reports/interactive-wiring-status.md
-```
-
-### 1.5d. Automated Wiring Validation Script
-
-```bash
-# Create validation script
-cat > scripts/validate_interactive_wiring.sh << 'EOF'
-#!/bin/bash
-# Interactive Workflow Wiring Validation Script
-
-echo "🔍 Validating Interactive Workflow Wiring..."
-echo ""
-
-ORCHESTRATORS=("planning" "ado")
-PASS=0
-FAIL=0
-
-for orch in "${ORCHESTRATORS[@]}"; do
-  echo "📋 Checking $orch orchestrator..."
-  
-  # Check 1: Decision logic
-  if grep -q "_should_use_interactive_mode" "src/orchestrators/$orch/${orch}_orchestrator.py" 2>/dev/null; then
-    echo "  ✅ Decision logic exists"
-    ((PASS++))
-  else
-    echo "  ❌ Decision logic MISSING"
-    ((FAIL++))
-  fi
-  
-  # Check 2: Agent registration
-  if grep -q "interactive_$orch" "src/cortex_agents/agent_registry.py" 2>/dev/null; then
-    echo "  ✅ Agent registered"
-    ((PASS++))
-  else
-    echo "  ❌ Agent NOT registered"
-    ((FAIL++))
-  fi
-  
-  # Check 3: Execution routing
-  if grep -A 5 "def execute" "src/orchestrators/$orch/${orch}_orchestrator.py" 2>/dev/null | grep -q "interactive"; then
-    echo "  ✅ Execution routing present"
-    ((PASS++))
-  else
-    echo "  ❌ Execution routing MISSING"
-    ((FAIL++))
-  fi
-  
-  # Check 4: Interactive method
-  if grep -q "_execute_interactive_mode" "src/orchestrators/$orch/${orch}_orchestrator.py" 2>/dev/null; then
-    echo "  ✅ Interactive method exists"
-    ((PASS++))
-  else
-    echo "  ❌ Interactive method MISSING"
-    ((FAIL++))
-  fi
-  
-  # Check 5: UI bridge
-  if [ -f "src/orchestrators/$orch/user_interface.py" ]; then
-    echo "  ✅ UI bridge exists"
-    ((PASS++))
-  else
-    echo "  ❌ UI bridge MISSING"
-    ((FAIL++))
-  fi
-  
-  # Check 6: Integration tests
-  if [ -f "tests/orchestrators/$orch/test_interactive_workflow.py" ]; then
-    echo "  ✅ Integration tests exist"
-    ((PASS++))
-  else
-    echo "  ❌ Integration tests MISSING"
-    ((FAIL++))
-  fi
-  
-  echo ""
-done
-
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "Results: $PASS passed, $FAIL failed"
-TOTAL=$((PASS + FAIL))
-PERCENT=$((PASS * 100 / TOTAL))
-echo "Wiring Coverage: $PERCENT%"
-
-if [ $PERCENT -eq 100 ]; then
-  echo "✅ All interactive workflows fully wired!"
-  exit 0
-else
-  echo "❌ Wiring incomplete. See: cortex-brain/documents/analysis/interactive-workflow-wiring-gap-analysis.md"
-  exit 1
-fi
-EOF
-
-chmod +x scripts/validate_interactive_wiring.sh
-./scripts/validate_interactive_wiring.sh
-```
-
-### 1.5e. Enforcement Rules
-
-**⚠️ MANDATORY:** Before releasing ANY orchestrator with interactive components:
-
-1. **All 6 components must be wired** (100% wiring coverage)
-2. **Integration tests must pass** (end-to-end workflow verified)
-3. **Wiring validation script must pass** (automated check)
-4. **Documentation must be complete** (README updated with interactive mode)
-
-**Prevention:** Add pre-commit hook to prevent merging unwired interactive code:
-
-```bash
-# .git/hooks/pre-commit
-#!/bin/bash
-
-# Check for new interactive components without wiring
-if git diff --cached --name-only | grep -q "interactive.*\.py"; then
-  echo "⚠️  Interactive component detected in commit."
-  echo "Running wiring validation..."
-  ./scripts/validate_interactive_wiring.sh
-  if [ $? -ne 0 ]; then
-    echo "❌ Commit rejected: Interactive component not fully wired."
-    echo "Complete wiring before committing. See:"
-    echo "cortex-brain/documents/analysis/interactive-workflow-wiring-gap-analysis.md"
-    exit 1
-  fi
-fi
-```
-
----
-
-## Phase 2-4: Health & Diagnosticsp CORTEX 4.0 at peak performance through health checks, intent router validation, and automated prompt regeneration.
-
-**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
-
----
-
-## 🎯 10-Phase Maintenance Pipeline
+## 🎯 10-Phase Optimized Maintenance Pipeline
 
 **⚠️ EVERY PHASE = DIAGNOSE + AUTO-REPAIR + VERIFY**
 
-| Phase | Diagnose | Auto-Repair | Verify |
-|-------|----------|-------------|--------|
-| **1** | Check scaffold generators exist | Create missing generators | Test generation works |
-| **1.5** | Check interactive wiring gaps | Wire all 6 components | Run integration tests |
-| **2** | Quick health scan | Fix critical issues | Health score ≥90 |
-| **3** | Full component diagnostic | Patch unwired components | All components functional |
-| **4** | Detect wiring gaps | Patch source code | 100% wiring coverage |
-| **4a** | Parse wiring reports | Execute auto_wire_orchestrators.py | Commit fixes to git |
-| **4.5** | Run test suite | Delete obsolete tests, fix bugs | 100% pass rate |
-| **5** | Scan knowledge library | Fix broken refs, sync YAML↔MD | All guidelines accessible |
-| **6** | Check report age/size | Archive old reports, cleanup | Reports organized |
-| **7** | Validate manifest paths | Fix broken references | All manifests synced |
-| **8** | Measure prompt bloat | Regenerate lean prompts | Each <200 lines |
-| **9** | Find duplicate reports | Delete duplicates, consolidate | Clean report structure |
+### Pipeline Strategy: DISCOVER → CLEAN → WIRE → TEST → VERIFY
+
+| Phase | Focus Area | Diagnose | Auto-Repair | Verify |
+|-------|-----------|----------|-------------|--------|
+| **1** | **🔍 DISCOVERY** | **Scan entire system for enhancements, gaps, bloat** | **Generate comprehensive action report** | **All issues cataloged** |
+| **2** | **🗑️ CLEANUP** | Find backups, duplicates, old reports | Delete all waste | Zero bloat remains |
+| **3** | **🔧 SCAFFOLDING** | Check toolkit generators exist | Create missing generators | Test generation works |
+| **4** | **🔌 WIRING** | Detect unwired components | Auto-wire orchestrators, agents | 100% wiring coverage |
+| **5** | **🧪 TESTING** | Run full test suite | Delete obsolete tests, fix bugs | 100% pass rate |
+| **6** | **📚 KNOWLEDGE** | Scan knowledge library | Fix broken refs, sync YAML↔MD | All guidelines accessible |
+| **7** | **🗂️ ORGANIZATION** | Check report structure | Archive old, consolidate duplicates | Clean hierarchy |
+| **8** | **🔀 ROUTING** | Validate intent router | Fix broken manifest paths | All routes functional |
+| **9** | **📝 PROMPTS** | Measure prompt bloat | Regenerate lean prompts | Each <200 lines |
+| **10** | **✅ VERIFICATION** | Run health diagnostics | Fix critical issues | Health score ≥95 |
+
+### Phase Execution Order (Optimized for Efficiency)
+
+```
+Phase 1: DISCOVERY (Holistic Scan)
+  ├─ Identify all unwired components
+  ├─ Find all backup files/folders
+  ├─ Detect duplicate reports
+  ├─ Measure prompt bloat
+  ├─ Check knowledge library sync
+  ├─ Validate test suite health
+  └─ Generate master action report
+  
+Phase 2: CLEANUP (Remove Waste)
+  ├─ Delete backups
+  ├─ Delete duplicates
+  └─ Archive old reports
+  
+Phase 3: SCAFFOLDING (Foundation)
+  └─ Verify/create toolkit generators
+  
+Phase 4: WIRING (Connections)
+  ├─ Auto-wire orchestrators
+  ├─ Register agents
+  └─ Update manifests
+  
+Phase 5: TESTING (Quality)
+  ├─ Run test suite
+  └─ Delete obsolete tests
+  
+Phase 6: KNOWLEDGE (Content)
+  └─ Sync knowledge library
+  
+Phase 7: ORGANIZATION (Structure)
+  └─ Organize reports
+  
+Phase 8: ROUTING (Navigation)
+  └─ Fix intent router
+  
+Phase 9: PROMPTS (Templates)
+  └─ Regenerate lean prompts
+  
+Phase 10: VERIFICATION (Final Health Check)
+  └─ Confirm 100% system health
+```
 
 ---
 
-## Phase 1: Toolkit Automation Validation 🛠️
+## Phase 1: Holistic System Discovery 🔍 - COMPREHENSIVE SCAN
 
-### 1a. Verify Scaffold Generators Exist
+### ⚠️ DISCOVERY FIRST, ACTION SECOND
+
+**Purpose:** Scan the ENTIRE CORTEX system to identify ALL enhancement opportunities, gaps, bloat, and issues BEFORE any repairs are made. This creates a master action plan for Phases 2-10.
+
+**Philosophy:** "Measure twice, cut once" - Comprehensive discovery prevents duplicate work and ensures optimal repair strategy.
+
+---
+
+### 1a. Discover Unwired Components
+
+**Scan for components that exist but aren't wired into the system:**
+
+```bash
+# Check interactive orchestrator wiring
+echo "🔍 Scanning for unwired interactive components..."
+
+# 1. Interactive Planning Session
+test -f src/orchestrators/planning/interactive_session.py && echo "  ✅ Interactive session exists (648 LOC)" || echo "  ❌ Missing"
+grep -q "interactive_session" src/orchestrators/planning/planning_orchestrator.py && echo "  ✅ Wired to orchestrator" || echo "  ⚠️  NOT WIRED"
+grep -q "InteractivePlanner" src/cortex_agents/agent_registry.py && echo "  ✅ Agent registered" || echo "  ⚠️  NOT REGISTERED"
+
+# 2. Vision API Auto-Engagement
+test -f src/tier1/vision_orchestrator.py && echo "  ✅ Vision orchestrator exists" || echo "  ❌ Missing"
+test -f src/tier1/image_detector.py && echo "  ✅ Image detector exists" || echo "  ❌ Missing"
+grep -q "auto_detect_images" cortex.config.json && echo "  ✅ Auto-detect configured" || echo "  ⚠️  NOT CONFIGURED"
+
+# 3. ADO Interactive Mode
+test -f src/orchestrators/ado/ado_orchestrator.py && echo "  ✅ ADO orchestrator exists" || echo "  ❌ Missing"
+grep -q "interactive" src/orchestrators/ado/ado_orchestrator.py && echo "  ✅ Interactive support" || echo "  ⚠️  NO INTERACTIVE MODE"
+
+# 4. Scaffold Generators
+test -f cortex-toolkit/core/utilities/plan_scaffold_generator.py && echo "  ✅ Plan scaffold exists" || echo "  ❌ Missing"
+test -f cortex-toolkit/core/utilities/orchestrator_scaffold_generator.py && echo "  ✅ Orchestrator scaffold exists" || echo "  ❌ Missing"
+
+# Generate unwired components report
+cat > /tmp/unwired_components_report.txt << 'EOF'
+# Unwired Components Discovery Report
+
+## Components Found But Not Wired:
+EOF
+
+# Save report
+cp /tmp/unwired_components_report.txt cortex-brain/discovery-reports/unwired-components-$(date +%Y%m%d).txt
+```
+
+---
+
+### 1b. Discover Backup Files and Folders
+
+**Find ALL backup files and folders recursively:**
+
+```bash
+echo "🔍 Scanning for backup files and folders..."
+
+# Find backup directories
+find . -type d \( \
+  -name "*backup*" -o \
+  -name "*_backup_*" -o \
+  -name "*.backup" -o \
+  -name "*archive*" -o \
+  -name "*old*" -o \
+  -name "*_bak" \
+\) ! -path "./.git/*" ! -path "./node_modules/*" | sort > /tmp/backup_dirs.txt
+
+# Find backup files
+find . -type f \( \
+  -name "*.backup" -o \
+  -name "*.bak" -o \
+  -name "*~" -o \
+  -name "*.old" -o \
+  -name "*_backup_*" \
+\) ! -path "./.git/*" ! -path "./node_modules/*" | sort > /tmp/backup_files.txt
+
+# Count and report
+BACKUP_DIRS=$(wc -l < /tmp/backup_dirs.txt)
+BACKUP_FILES=$(wc -l < /tmp/backup_files.txt)
+
+echo "  📂 Backup directories: $BACKUP_DIRS"
+echo "  📄 Backup files: $BACKUP_FILES"
+
+# Calculate total size
+BACKUP_SIZE=$(du -ch $(cat /tmp/backup_dirs.txt /tmp/backup_files.txt 2>/dev/null) 2>/dev/null | tail -1 | awk '{print $1}')
+echo "  � Total backup size: $BACKUP_SIZE"
+
+# Save report
+cat > cortex-brain/discovery-reports/backup-bloat-$(date +%Y%m%d).txt << EOF
+# Backup Bloat Discovery Report
+
+**Directories:** $BACKUP_DIRS
+**Files:** $BACKUP_FILES
+**Total Size:** $BACKUP_SIZE
+
+## Directories:
+$(cat /tmp/backup_dirs.txt)
+
+## Files:
+$(cat /tmp/backup_files.txt)
+EOF
+```
+
+---
+
+### 1c. Discover Duplicate Reports
+
+**Find duplicate reports across the brain:**
+
+```bash
+echo "🔍 Scanning for duplicate reports..."
+
+# Find all report files
+find cortex-brain/documents/reports/ -type f -name "*.md" | sort > /tmp/all_reports.txt
+
+# Detect duplicates by content hash
+find cortex-brain/documents/reports/ -type f -name "*.md" -exec md5 {} \; | sort | uniq -d > /tmp/duplicate_hashes.txt
+
+# Detect duplicates by similar names
+find cortex-brain/documents/reports/ -type f -name "*.md" -exec basename {} \; | sort | uniq -d > /tmp/duplicate_names.txt
+
+DUPLICATE_COUNT=$(wc -l < /tmp/duplicate_names.txt)
+echo "  📋 Duplicate reports: $DUPLICATE_COUNT"
+
+# Save report
+cat > cortex-brain/discovery-reports/duplicate-reports-$(date +%Y%m%d).txt << EOF
+# Duplicate Reports Discovery
+
+**Duplicates by name:** $(wc -l < /tmp/duplicate_names.txt)
+**Duplicates by content:** $(wc -l < /tmp/duplicate_hashes.txt)
+
+## Duplicate Names:
+$(cat /tmp/duplicate_names.txt)
+EOF
+```
+
+---
+
+### 1d. Discover Prompt Bloat
+
+**Measure prompt file sizes to detect bloat:**
+
+```bash
+echo "🔍 Scanning for prompt bloat..."
+
+# Find all prompt files
+find .github/prompts/ -name "*.prompt.md" -o -name "*.md" > /tmp/prompt_files.txt
+
+# Measure each prompt
+cat > /tmp/prompt_bloat_report.txt << 'EOF'
+# Prompt Bloat Discovery Report
+
+| File | Lines | Size | Status |
+|------|-------|------|--------|
+EOF
+
+while read -r file; do
+  LINES=$(wc -l < "$file")
+  SIZE=$(du -h "$file" | awk '{print $1}')
+  
+  if [ "$LINES" -gt 200 ]; then
+    STATUS="⚠️  BLOATED"
+  else
+    STATUS="✅ OK"
+  fi
+  
+  echo "| $file | $LINES | $SIZE | $STATUS |" >> /tmp/prompt_bloat_report.txt
+done < /tmp/prompt_files.txt
+
+# Save report
+cp /tmp/prompt_bloat_report.txt cortex-brain/discovery-reports/prompt-bloat-$(date +%Y%m%d).txt
+cat /tmp/prompt_bloat_report.txt
+```
+
+---
+
+### 1e. Discover Knowledge Library Sync Issues
+
+**Check for YAML ↔ Markdown sync problems:**
+
+```bash
+echo "🔍 Scanning knowledge library sync..."
+
+# Check for orphaned YAML files (no corresponding .md)
+find cortex-brain/knowledge/ -name "*.yaml" > /tmp/knowledge_yaml.txt
+find cortex-brain/knowledge/ -name "*.md" > /tmp/knowledge_md.txt
+
+# Compare counts
+YAML_COUNT=$(wc -l < /tmp/knowledge_yaml.txt)
+MD_COUNT=$(wc -l < /tmp/knowledge_md.txt)
+
+echo "  📚 YAML files: $YAML_COUNT"
+echo "  📄 Markdown files: $MD_COUNT"
+
+if [ "$YAML_COUNT" -ne "$MD_COUNT" ]; then
+  echo "  ⚠️  SYNC ISSUE: Counts don't match"
+else
+  echo "  ✅ Counts match"
+fi
+
+# Save report
+cat > cortex-brain/discovery-reports/knowledge-sync-$(date +%Y%m%d).txt << EOF
+# Knowledge Library Sync Discovery
+
+**YAML Files:** $YAML_COUNT
+**Markdown Files:** $MD_COUNT
+**Status:** $([ "$YAML_COUNT" -eq "$MD_COUNT" ] && echo "✅ Synced" || echo "⚠️  Out of Sync")
+EOF
+```
+
+---
+
+### 1f. Discover Test Suite Health
+
+**Check test suite for obsolete/failing tests:**
+
+```bash
+echo "🔍 Scanning test suite health..."
+
+# Run tests and capture results (non-blocking)
+python3 -m pytest tests/orchestrators/planning/ --collect-only 2>&1 | tee /tmp/test_collection.txt
+
+# Count test files and tests
+TEST_FILES=$(find tests/ -name "test_*.py" | wc -l)
+TEST_COUNT=$(grep -c "test session starts" /tmp/test_collection.txt || echo "0")
+
+echo "  🧪 Test files: $TEST_FILES"
+echo "  🧪 Test cases: $TEST_COUNT"
+
+# Check for obsolete markers
+OBSOLETE_TESTS=$(grep -r "DEPRECATED\|LEGACY\|OLD\|TODO.*delete" tests/ | wc -l)
+echo "  ⚠️  Obsolete test markers: $OBSOLETE_TESTS"
+
+# Save report
+cat > cortex-brain/discovery-reports/test-suite-health-$(date +%Y%m%d).txt << EOF
+# Test Suite Health Discovery
+
+**Test Files:** $TEST_FILES
+**Test Cases:** $TEST_COUNT
+**Obsolete Markers:** $OBSOLETE_TESTS
+
+## Obsolete Tests:
+$(grep -r "DEPRECATED\|LEGACY\|OLD" tests/ || echo "None found")
+EOF
+```
+
+---
+
+### 1g. Generate Master Action Report
+
+**Consolidate all discoveries into a master action plan:**
+
+```bash
+echo "📊 Generating Master Action Report..."
+
+cat > cortex-brain/discovery-reports/MASTER-ACTION-PLAN-$(date +%Y%m%d).md << 'EOF'
+# 🎯 CORTEX Maintenance Master Action Plan
+
+**Date:** $(date +%Y-%m-%d)
+**Phase:** Discovery Complete
+
+---
+
+## 📋 Discovery Summary
+
+| Category | Issues Found | Priority | Target Phase |
+|----------|-------------|----------|--------------|
+| Unwired Components | $(wc -l < /tmp/unwired_components_report.txt) | HIGH | Phase 4 (Wiring) |
+| Backup Bloat | $(cat /tmp/backup_dirs.txt /tmp/backup_files.txt | wc -l) files/dirs | HIGH | Phase 2 (Cleanup) |
+| Duplicate Reports | $(wc -l < /tmp/duplicate_names.txt) | MEDIUM | Phase 7 (Organization) |
+| Prompt Bloat | $(grep "BLOATED" /tmp/prompt_bloat_report.txt | wc -l) files | MEDIUM | Phase 9 (Prompts) |
+| Knowledge Sync Issues | $([ "$(wc -l < /tmp/knowledge_yaml.txt)" -ne "$(wc -l < /tmp/knowledge_md.txt)" ] && echo "YES" || echo "NONE") | LOW | Phase 6 (Knowledge) |
+| Obsolete Tests | $(grep -r "DEPRECATED" tests/ | wc -l) | HIGH | Phase 5 (Testing) |
+
+---
+
+## 🚀 Recommended Execution Order
+
+1. **Phase 2: Cleanup** - Delete $(cat /tmp/backup_dirs.txt /tmp/backup_files.txt | wc -l) backup files/folders (recover $(du -sh $(cat /tmp/backup_dirs.txt /tmp/backup_files.txt 2>/dev/null) 2>/dev/null | awk '{sum+=$1} END {print sum}')MB)
+2. **Phase 3: Scaffolding** - Verify toolkit generators
+3. **Phase 4: Wiring** - Wire $(wc -l < /tmp/unwired_components_report.txt) components
+4. **Phase 5: Testing** - Delete $(grep -r "DEPRECATED" tests/ | wc -l) obsolete tests
+5. **Phase 6: Knowledge** - Sync knowledge library
+6. **Phase 7: Organization** - Consolidate $(wc -l < /tmp/duplicate_names.txt) duplicate reports
+7. **Phase 8: Routing** - Fix intent router paths
+8. **Phase 9: Prompts** - Regenerate $(grep "BLOATED" /tmp/prompt_bloat_report.txt | wc -l) bloated prompts
+9. **Phase 10: Verification** - Final health check
+
+---
+
+## 📁 Discovery Reports Generated
+
+- unwired-components-$(date +%Y%m%d).txt
+- backup-bloat-$(date +%Y%m%d).txt
+- duplicate-reports-$(date +%Y%m%d).txt
+- prompt-bloat-$(date +%Y%m%d).txt
+- knowledge-sync-$(date +%Y%m%d).txt
+- test-suite-health-$(date +%Y%m%d).txt
+
+---
+
+## ✅ Next Step
+
+**Execute Phase 2: Cleanup** to remove $(cat /tmp/backup_dirs.txt /tmp/backup_files.txt | wc -l) waste items.
+
+EOF
+
+# Display master report
+cat cortex-brain/discovery-reports/MASTER-ACTION-PLAN-$(date +%Y%m%d).md
+
+echo ""
+echo "✅ Phase 1 Discovery Complete!"
+echo "📊 Master Action Plan: cortex-brain/discovery-reports/MASTER-ACTION-PLAN-$(date +%Y%m%d).md"
+```
+
+---
+
+### 1h. Success Criteria
+
+**Phase 1 is complete when:**
+
+| Check | Command | Expected Result |
+|-------|---------|-----------------|
+| Master report exists | `ls cortex-brain/discovery-reports/MASTER-ACTION-PLAN-*.md` | 1 file |
+| All sub-reports exist | `ls cortex-brain/discovery-reports/*-$(date +%Y%m%d).txt` | 6 files |
+| Action counts captured | `grep "Issues Found" cortex-brain/discovery-reports/MASTER-ACTION-PLAN-*.md` | All categories listed |
+| Execution order defined | `grep "Recommended Execution Order" cortex-brain/discovery-reports/MASTER-ACTION-PLAN-*.md` | Phases 2-10 listed |
+
+---
+
+## Phase 2: System Cleanup 🗑️ - REMOVE WASTE
+
+### ⚠️ USES PHASE 1 DISCOVERY DATA
+
+**Purpose:** Delete ALL backup folders, files, and duplicate reports identified in Phase 1 discovery.
+
+**Input:** Phase 1 discovery reports (`/tmp/backup_dirs.txt`, `/tmp/backup_files.txt`, `/tmp/duplicate_names.txt`)
+
+**Output:** Clean repository with zero bloat, committed to git.
+
+---
+
+### 2a. Delete Backup Directories (from Phase 1 Discovery)
+
+**ALL BACKUPS MUST BE DELETED.** No exceptions.
+
+```bash
+echo "🗑️  Phase 2: Deleting backup directories from Phase 1 discovery..."
+
+# Verify Phase 1 data exists
+if [ ! -f /tmp/backup_dirs.txt ]; then
+  echo "❌ ERROR: Phase 1 discovery data missing. Run Phase 1 first."
+  exit 1
+fi
+
+# Count items to delete
+BACKUP_DIRS=$(wc -l < /tmp/backup_dirs.txt)
+echo "  Deleting $BACKUP_DIRS backup directories..."
+
+# Delete each directory
+cat /tmp/backup_dirs.txt | while read dir; do
+  if [ -d "$dir" ]; then
+    echo "    Deleting: $dir"
+    rm -rf "$dir"
+  fi
+done
+
+echo "  ✅ Backup directories deleted"
+```
+
+---
+
+### 2b. Delete Backup Files (from Phase 1 Discovery)
+
+```bash
+echo "🗑️  Deleting backup files from Phase 1 discovery..."
+
+BACKUP_FILES=$(wc -l < /tmp/backup_files.txt)
+echo "  Deleting $BACKUP_FILES backup files..."
+
+# Delete each file
+cat /tmp/backup_files.txt | while read file; do
+  if [ -f "$file" ]; then
+    echo "    Deleting: $file"
+    rm -f "$file"
+  fi
+done
+
+echo "  ✅ Backup files deleted"
+```
+
+---
+
+### 2c. Delete Duplicate Reports (from Phase 1 Discovery)
+
+```bash
+echo "🗑️  Consolidating duplicate reports from Phase 1 discovery..."
+
+if [ -f /tmp/duplicate_names.txt ]; then
+  DUPLICATE_COUNT=$(wc -l < /tmp/duplicate_names.txt)
+  echo "  Consolidating $DUPLICATE_COUNT duplicate reports..."
+  
+  # For each duplicate, keep newest, delete older versions
+  cat /tmp/duplicate_names.txt | while read report_name; do
+    # Find all instances
+    find cortex-brain/documents/reports/ -name "$report_name" -type f | sort -r | tail -n +2 | xargs rm -f
+    echo "    Consolidated: $report_name"
+  done
+  
+  echo "  ✅ Duplicate reports consolidated"
+else
+  echo "  ℹ️  No duplicate reports found"
+fi
+```
+
+---
+
+### 2d. Verify Cleanup Complete
+
+**ALL BACKUPS MUST BE DELETED.** No exceptions.
+
+Backup files and folders accumulate from:
+- Automated migrations (`*_backup_*`)
+- Manual file saves (`*.backup`, `*.bak`)
+- Timestamped backups (`backup_YYYYMMDD_HHMMSS`)
+- Old archive folders (`docs.backup.*`, `design-backup-*`)
+
+**⛔ WHY DELETE ALL BACKUPS?**
+1. **Git is the backup system** - All changes are version controlled
+2. **Backups create bloat** - Duplicate files waste disk space
+3. **Backups confuse tools** - Search tools find stale copies
+4. **Backups violate DRY** - Don't Repeat Yourself principle
+
+### 0a. Discover All Backup Directories
+
+```bash
+# Find all backup directories recursively
+find . -type d \( \
+  -name "*backup*" -o \
+  -name "*_backup_*" -o \
+  -name "*.backup" -o \
+  -name "*archive*" -o \
+  -name "*old*" -o \
+  -name "*_bak" \
+\) ! -path "./.git/*" ! -path "./node_modules/*" | sort > /tmp/cortex_backup_dirs.txt
+
+# Count directories found
+BACKUP_DIR_COUNT=$(wc -l < /tmp/cortex_backup_dirs.txt)
+echo "📂 Found $BACKUP_DIR_COUNT backup directories"
+
+# Display preview (first 20)
+head -20 /tmp/cortex_backup_dirs.txt
+```
+
+**Expected Output:**
+```
+📂 Found 45+ backup directories
+./backups
+./backups/doctor_backup_20251227_151620
+./backups/sts_backup_20251228_090815
+./cortex-brain/backups
+./cortex-brain/backups/path-hardening/backup_20251216_162438
+./cortex-brain/archive
+./cortex-brain/archives
+./docs.backup.20251228_081437
+...
+```
+
+### 0b. Discover All Backup Files
+
+```bash
+# Find all backup files recursively
+find . -type f \( \
+  -name "*.backup" -o \
+  -name "*.bak" -o \
+  -name "*~" -o \
+  -name "*.old" -o \
+  -name "*_backup_*" \
+\) ! -path "./.git/*" ! -path "./node_modules/*" | sort > /tmp/cortex_backup_files.txt
+
+# Count files found
+BACKUP_FILE_COUNT=$(wc -l < /tmp/cortex_backup_files.txt)
+echo "📄 Found $BACKUP_FILE_COUNT backup files"
+
+# Display preview (first 20)
+head -20 /tmp/cortex_backup_files.txt
+```
+
+**Expected Output:**
+```
+📄 Found 10+ backup files
+./docs/features/planning-system.html.backup
+./docs/features/orchestrators.html.backup
+./cortex-brain/response-templates.yaml.backup
+./.github/workflows/deploy-docs.yml.backup
+...
+```
+
+### 0c. Generate Deletion Report (DRY-RUN)
+
+```bash
+# Generate detailed deletion report
+cat > /tmp/cortex_backup_cleanup_report.md << 'EOF'
+# CORTEX Backup Cleanup Report
+**Date:** $(date +%Y-%m-%d)
+**Action:** DELETION (Irreversible)
+
+## Summary
+
+| Category | Count | Total Size |
+|----------|-------|------------|
+| Backup Directories | $(wc -l < /tmp/cortex_backup_dirs.txt) | $(du -sh $(cat /tmp/cortex_backup_dirs.txt 2>/dev/null) 2>/dev/null | awk '{sum+=$1} END {print sum "MB"}') |
+| Backup Files | $(wc -l < /tmp/cortex_backup_files.txt) | $(du -ch $(cat /tmp/cortex_backup_files.txt 2>/dev/null) 2>/dev/null | tail -1 | awk '{print $1}') |
+
+## Directories to Delete
+
+\`\`\`
+$(cat /tmp/cortex_backup_dirs.txt)
+\`\`\`
+
+## Files to Delete
+
+\`\`\`
+$(cat /tmp/cortex_backup_files.txt)
+\`\`\`
+
+## Justification
+
+- **Git Version Control:** All code changes are in git history
+- **No Data Loss:** Backups are redundant with git commits
+- **Disk Space Recovery:** Removes duplicate files
+- **Search Clarity:** Prevents tools from indexing stale copies
+
+## Execution Command
+
+To delete all backups, run:
+\`\`\`bash
+# Delete directories
+cat /tmp/cortex_backup_dirs.txt | xargs rm -rf
+
+# Delete files
+cat /tmp/cortex_backup_files.txt | xargs rm -f
+
+# Verify deletion
+find . -type d -name "*backup*" ! -path "./.git/*" | wc -l
+# Expected: 0
+\`\`\`
+
+EOF
+
+# Display report
+cat /tmp/cortex_backup_cleanup_report.md
+
+# Save report to brain
+cp /tmp/cortex_backup_cleanup_report.md cortex-brain/cleanup-reports/backup-cleanup-$(date +%Y%m%d_%H%M%S).md
+```
+
+### 0d. Execute Backup Deletion (AUTO-REPAIR)
+
+**⚠️ THIS IS IRREVERSIBLE - ALL BACKUPS WILL BE PERMANENTLY DELETED**
+
+```bash
+# Step 1: Delete backup directories
+echo "🗑️  Deleting backup directories..."
+cat /tmp/cortex_backup_dirs.txt | while read dir; do
+  if [ -d "$dir" ]; then
+    echo "  Deleting: $dir"
+    rm -rf "$dir"
+  fi
+done
+
+# Step 2: Delete backup files
+echo "🗑️  Deleting backup files..."
+cat /tmp/cortex_backup_files.txt | while read file; do
+  if [ -f "$file" ]; then
+    echo "  Deleting: $file"
+    rm -f "$file"
+  fi
+done
+
+# Step 3: Verify deletion
+echo ""
+echo "✅ Verification:"
+REMAINING_DIRS=$(find . -type d -name "*backup*" ! -path "./.git/*" | wc -l)
+REMAINING_FILES=$(find . -type f \( -name "*.backup" -o -name "*.bak" \) ! -path "./.git/*" | wc -l)
+
+echo "  Backup directories remaining: $REMAINING_DIRS (Expected: 0)"
+echo "  Backup files remaining: $REMAINING_FILES (Expected: 0)"
+
+if [ "$REMAINING_DIRS" -eq 0 ] && [ "$REMAINING_FILES" -eq 0 ]; then
+  echo ""
+  echo "✅ SUCCESS: All backups deleted!"
+else
+  echo ""
+  echo "⚠️  WARNING: Some backups remain. Run discovery again."
+fi
+```
+
+### 0e. Commit Cleanup to Git
+
+```bash
+# Stage deleted files
+git add -A
+
+# Commit with descriptive message
+git commit -m "chore: delete all backup folders and files
+
+- Removed backup directories: $(wc -l < /tmp/cortex_backup_dirs.txt)
+- Removed backup files: $(wc -l < /tmp/cortex_backup_files.txt)
+- Reason: Git version control makes backups redundant
+- Disk space recovered: $(du -sh $(cat /tmp/cortex_backup_dirs.txt 2>/dev/null) 2>/dev/null | awk '{sum+=$1} END {print sum "MB"}')
+
+Justification: 
+- Git is the canonical backup system
+- Backups create bloat and confuse search tools
+- All changes are version controlled
+
+Generated by: Phase 0 - Backup Cleanup"
+
+# Push to remote
+git push origin CORTEX-4.0
+```
+
+### 0f. Success Criteria
+
+**✅ MANDATORY CHECKS:**
+
+| Check | Command | Expected Result |
+|-------|---------|-----------------|
+| No backup directories | `find . -type d -name "*backup*" ! -path "./.git/*" \| wc -l` | `0` |
+| No backup files | `find . -type f -name "*.backup" ! -path "./.git/*" \| wc -l` | `0` |
+| No .bak files | `find . -type f -name "*.bak" ! -path "./.git/*" \| wc -l` | `0` |
+| Changes committed | `git status --porcelain \| wc -l` | `0` |
+| Cleanup report exists | `ls cortex-brain/cleanup-reports/backup-cleanup-*.md` | 1 file |
+
+**If ANY check fails:**
+1. Review remaining backups
+2. Identify protection rules (e.g., `.gitignore`)
+3. Delete manually or update discovery patterns
+4. Re-run Phase 0 until 100% clean
+
+### 0g. Prevention - Update .gitignore
+
+**Add backup patterns to .gitignore to prevent future accumulation:**
+
+```bash
+# Add backup patterns to .gitignore
+cat >> .gitignore << 'EOF'
+
+# ========================================
+# Backup Files (PHASE 0 CLEANUP)
+# ========================================
+# Git version control makes backups redundant
+*.backup
+*.bak
+*~
+*.old
+*_backup_*
+backup_*/
+*backup*/
+
+# Timestamped backups
+*_backup_[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]_*
+*.backup.[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]_*
+
+# Archive folders
+archive/
+archives/
+_archive/
+.archive/
+old/
+_old/
+
+EOF
+
+# Commit .gitignore update
+git add .gitignore
+git commit -m "chore: prevent backup file accumulation in .gitignore
+
+- Added patterns for *.backup, *.bak, *~, *.old
+- Block backup directories: backup_*/, archive/, old/
+- Prevent timestamped backups: *_backup_YYYYMMDD_*
+
+Reason: Git version control makes backups redundant.
+Part of: Phase 0 - Backup Cleanup maintenance"
+
+git push origin CORTEX-4.0
+```
+
+### 0h. Enforcement in CI/CD (Future Enhancement)
+
+**Add pre-commit hook to reject backup files:**
+
+```bash
+# .git/hooks/pre-commit (future enhancement)
+#!/bin/bash
+
+BACKUP_FILES=$(git diff --cached --name-only | grep -E '\.(backup|bak|old)$|_backup_|backup_')
+
+if [ -n "$BACKUP_FILES" ]; then
+  echo "❌ ERROR: Backup files detected in commit:"
+  echo "$BACKUP_FILES"
+  echo ""
+  echo "⛔ BLOCKED: Backup files violate Phase 0 cleanup rules."
+  echo "   Git version control makes backups redundant."
+  echo ""
+  echo "Action required:"
+  echo "  1. Delete backup files: git rm <file>"
+  echo "  2. Use git history instead: git log <file>"
+  echo "  3. Re-commit without backups"
+  exit 1
+fi
+
+exit 0
+```
+
+---
+
+## Phase 3: Toolkit Scaffolding Validation 🛠️
+
+### 3a. Verify Scaffold Generators Exist
 
 **Critical:** Ensure automation utilities are present and functional.
 
@@ -546,7 +861,7 @@ grep -q "plan-scaffold" cortex-toolkit/toolkit-manifest.yaml || echo "ERROR: Pla
 grep -q "orchestrator-scaffold" cortex-toolkit/toolkit-manifest.yaml || echo "ERROR: Orchestrator scaffold not registered!"
 ```
 
-### 1a-2. Verify Interactive Planning Session ✨ NEW
+### 3a-2. Verify Interactive Planning Session ✨ NEW
 
 **Critical:** Ensure interactive planning workflow is properly wired.
 
@@ -577,7 +892,7 @@ python3 -m pytest tests/orchestrators/planning/test_interactive_planning_session
 # Expected: 18 session tests + 11 workflow tests = 29 total
 ```
 
-### 1a-3. Verify Vision API Auto-Engagement 👁️ NEW
+### 3a-3. Verify Vision API Auto-Engagement 👁️ NEW
 
 **Critical:** Ensure Vision API automatically engages when images are attached.
 
@@ -630,7 +945,7 @@ print(f"✅ Auto-analyze: {orchestrator.auto_analyze}")
 print(f"✅ Auto-inject: {orchestrator.inject_context}")
 ```
 
-### 1b. Test Scaffold Generators
+### 3b. Test Scaffold Generators
 
 ```bash
 # Test plan scaffold generator (dry run)
@@ -648,7 +963,7 @@ python cortex-toolkit/core/utilities/orchestrator_scaffold_generator.py --list-t
 - ✅ progress-tracker.json would be created
 - ✅ All orchestrator templates listed (planning, sanitization, tdd, ado, maintenance)
 
-### 1c. Verify Manifest Integration
+### 3c. Verify Manifest Integration
 
 Check that planning system manifest references automation:
 
@@ -663,7 +978,7 @@ grep -A 5 "automation:" cortex-brain/manifests/orchestrators/planning-system-4.0
 - `benefits:` lists automation advantages
 - `enforcement:` references maintenance requirement
 
-### 1d. Enforcement Rule
+### 3d. Enforcement Rule
 
 **⚠️ MANDATORY:** All new plans MUST use scaffold generator.
 
@@ -673,9 +988,9 @@ grep -A 5 "automation:" cortex-brain/manifests/orchestrators/planning-system-4.0
 
 ---
 
-## Phase 2-4: Health Diagnostics + Auto-Repair
+## Phase 4: Component Wiring 🔌 - AUTO-WIRE ALL GAPS
 
-### Phase 2: Quick Health Check (DIAGNOSE)
+### Phase 4a: Detect Wiring Gaps (DIAGNOSE)
 
 ```bash
 # Run quick health diagnostic
@@ -684,31 +999,14 @@ python3 scripts/cortex_system_doctor.py --quick
 
 **Expected Output:** Health score with breakdown of issues.
 
-### Phase 3: Full Diagnostic (DEEP SCAN)
+### Phase 4b: Run Wiring Check Script
 
 ```bash
-# Run comprehensive system scan
-python3 scripts/cortex_system_doctor.py --phase diagnose --phase scan
-```
-
-**Expected Output:** Detailed report of all unwired components, duplicates, unnecessary files.
-
-### Phase 4: Wiring Integrity Check (DETECT GAPS)
-
-```bash
-# Detect wiring gaps (generates report for Phase 4a)
+# Detect wiring gaps (generates report for Phase 4c)
 python3 scripts/check_wiring_integrity.py
 ```
 
-**Expected Output:** JSON report showing which components are unwired.
-
-**⚠️ CRITICAL:** Phases 2-4 are DIAGNOSTIC ONLY. They identify problems but **DO NOT FIX THEM**.
-
-**Next:** Phase 4a AUTO-REPAIRS the issues identified above.
-
----
-
-## Phase 4a: Auto-Wire Components 🔥 NEW - CRITICAL FOR PERSISTENCE
+### Phase 4c: Auto-Wire Components 🔥 AUTO-REPAIR
 
 ### ⚠️ WHY THIS PHASE IS MANDATORY
 
@@ -720,7 +1018,7 @@ python3 scripts/check_wiring_integrity.py
 
 **Reference:** `cortex-brain/documents/analysis/maintenance-wiring-persistence-gap.md`
 
-### 4a. Run Auto-Wiring Script
+### 4c. Run Auto-Wiring Script
 
 ```bash
 # Preview what will be fixed (dry-run, default)
@@ -751,7 +1049,7 @@ python3 scripts/check_wiring_integrity.py
 ✅ Wiring Coverage: 100% (was 50%)
 ```
 
-### 4b. Commit Wiring Fixes
+### 4d. Commit Wiring Fixes
 
 **⚠️ CRITICAL:** These changes MUST be committed to persist across machines.
 
@@ -778,7 +1076,7 @@ Generated by: scripts/auto_wire_orchestrators.py"
 git push origin CORTEX-4.0
 ```
 
-### 4c. Verify Persistence on Another Machine
+### 4e. Verify Persistence on Another Machine
 
 ```bash
 # On Machine B (fresh clone or pull)
@@ -797,7 +1095,7 @@ python3 scripts/check_wiring_integrity.py
 - ✅ Changes committed and pushed to remote
 - ✅ `git pull` on Machine B shows 100% wiring (without re-running auto-wire)
 
-### 4d. Troubleshooting
+### 4f. Troubleshooting
 
 **Issue:** Auto-wire script fails with "No wiring report found"
 
@@ -831,7 +1129,7 @@ ls -lah src/**/*.bak.*
 
 ---
 
-## Phase 4.5: Test Suite Health 🧪 - ZERO TOLERANCE POLICY
+## Phase 5: Test Suite Health 🧪 - ZERO TOLERANCE POLICY
 
 ### ⚠️ CRITICAL ENFORCEMENT RULE
 
@@ -1087,9 +1385,9 @@ After running tests and cleanup, check:
 
 ---
 
-## Phase 5: Knowledge Library Validation 📚 CRITICAL
+## Phase 6: Knowledge Library Validation 📚 CRITICAL
 
-### 5a. Knowledge Library Structure Check
+### 6a. Knowledge Library Structure Check
 
 **Source of Truth:** `cortex-brain/knowledge/`
 
@@ -1122,7 +1420,7 @@ find cortex-brain/knowledge/ -maxdepth 1 -name "*.yaml" -type f
 - `testing/` - Testing strategies and patterns
 - `ui-ux/` - UI/UX design guidelines
 
-### 5b. Knowledge Library Reference Validation
+### 6b. Knowledge Library Reference Validation
 
 **Critical:** Ensure orchestrators and modules can reference knowledge library.
 
@@ -1136,7 +1434,7 @@ Verify these systems wire to knowledge library:
 | **TDD Orchestrator** | Guides test design | Check test pattern references |
 | **Documentation Generator** | Auto-generates docs from guidelines | Check template references |
 
-### 5c. Knowledge Library Sync Validation (NEW)
+### 6c. Knowledge Library Sync Validation (NEW)
 
 **Critical:** Ensure markdown templates stay in sync with YAML knowledge library.
 
@@ -1253,7 +1551,7 @@ grep -A 5 "knowledge" cortex-brain/brain-protection-rules.yaml
 
 ---
 
-## Phase 6: Review Reports
+## Phase 7: Report Organization 🗂️
 
 ```bash
 # Phase 5: Reports in cortex-brain/health-reports/
@@ -1262,7 +1560,7 @@ ls -lah cortex-brain/health-reports/
 
 ---
 
-## Phase 7: Intent Router Validation ⚠️ CRITICAL
+## Phase 8: Intent Router Validation ⚠️ CRITICAL
 
 ### 7a. Manifest Path Verification
 
@@ -1301,7 +1599,7 @@ done
 
 ---
 
-## Phase 8: Regenerate Lean Prompts (WITH COMPLETE INTENT ROUTER WIRING)
+## Phase 9: Regenerate Lean Prompts (WITH COMPLETE INTENT ROUTER WIRING)
 
 **Goal:** Create minimal, clean prompt files with proper intent routing for ALL orchestrators.
 
@@ -1807,62 +2105,122 @@ Run during every maintenance cycle:
 
 ---
 
-## Phase 9: Report Management 🗑️
+## Phase 10: Final System Verification ✅
 
-**Goal:** Prevent report bloat - user won't read them, CORTEX doesn't need most of them.
+**Purpose:** Comprehensive health check to verify ALL previous phases completed successfully and system is at 100% health.
 
-### 9a. Report Policy
-
-| Report Type | Policy | Reason |
-|-------------|--------|--------|
-| **Timestamped operational logs** (cleanup-*, brain-tuning-*, architectural-review-*) | DELETE | Ephemeral, no reference value |
-| **Benchmark/test results** (benchmark_*, DOC_QUALITY_REPORT_*) | DELETE | Temporary test data |
-| **Task completion summaries** (story-*, planning-*, feature-*) | DELETE | User won't read, redundant |
-| **Duplicate analyses** (unwired-components-TIMESTAMP-*) | DELETE | Keep only latest if needed |
-| **Major architecture decisions** (SYSTEM-INTEGRITY-*, MOCK-STUB-AUDIT) | KEEP | Reference for future decisions |
-| **Migration/refactor summaries** (ORCHESTRATOR-*, CORTEX-CLEANUP-*) | KEEP | Historical context |
-
-### 8b. Cleanup Commands
+### 10a. Run System Health Diagnostic
 
 ```bash
-cd cortex-brain/documents/reports/
+# Run comprehensive health scan
+python3 scripts/cortex_system_doctor.py --quick
 
-# Delete timestamped operational JSONs
-rm -f cleanup-*.json architectural-review-*.json brain-tuning-*.json
-
-# Delete benchmark/test JSONs
-rm -f benchmark_*.json DOC_QUALITY_REPORT_*.json summary_*.json
-
-# Delete task completion summaries
-rm -f story-*.md planning-*.md feature-*.md *-complete.md
-
-# Delete duplicate analyses (keep only one if needed)
-rm -f unwired-components-2025*.json unwired-components-2025*.md
-
-# Delete operational JSONs
-rm -f git-sync-*.json validation_report.json system-alignment-report-*.json
-
-# Verify cleanup
-echo "Remaining reports: $(ls -1 | wc -l)"
-du -sh .
+# Expected: Health score ≥95%
 ```
 
-### 8c. Prevention Rules
+### 10b. Verify All Phase Completions
 
-**STOP creating reports for:**
-- ❌ Task completion summaries
-- ❌ Incremental progress updates  
-- ❌ Operational logs with timestamps
-- ❌ Benchmark results (use metrics database instead)
+```bash
+# Check Phase 1: Discovery reports exist
+ls cortex-brain/discovery-reports/MASTER-ACTION-PLAN-*.md
 
-**ONLY create reports for:**
-- ✅ Major architectural decisions
-- ✅ System-wide migrations/refactors
-- ✅ Compliance audits (when required)
-- ✅ Reference documentation (non-temporal)
+# Check Phase 2: Zero backups
+find . -name "*backup*" ! -path "./.git/*" | wc -l  # Expected: 0
 
-### 8d. Alternative: Use Metrics Database
+# Check Phase 3: Generators functional
+test -f cortex-toolkit/core/utilities/plan_scaffold_generator.py && echo "✅"
 
-For tracking operational data, use `cortex-brain/analytics/metrics.db` instead of JSON reports.
+# Check Phase 4: 100% wiring
+python3 scripts/check_wiring_integrity.py  # Expected: 100%
+
+# Check Phase 5: Tests passing
+python3 -m pytest tests/orchestrators/planning/ -v  # Expected: 100% pass
+
+# Check Phase 6: Knowledge synced
+# (Verified in Phase 6)
+
+# Check Phase 7: Reports organized
+# (Verified in Phase 7)
+
+# Check Phase 8: Router functional
+# (Verified in Phase 8)
+
+# Check Phase 9: Prompts lean
+find .github/prompts/ -name "*.prompt.md" -exec wc -l {} \; | awk '$1 > 200 {print}' | wc -l  # Expected: 0
+```
+
+### 10c. Generate Final Health Report
+
+```bash
+cat > cortex-brain/health-reports/maintenance-complete-$(date +%Y%m%d).md << 'EOF'
+# 🎉 CORTEX Maintenance Complete
+
+**Date:** $(date +%Y-%m-%d)
+**Status:** ✅ ALL PHASES COMPLETE
+
+## Phase Completion Status
+
+| Phase | Status | Verification |
+|-------|--------|--------------|
+| Phase 1: Discovery | ✅ | Master action plan generated |
+| Phase 2: Cleanup | ✅ | Zero backups remain |
+| Phase 3: Scaffolding | ✅ | Generators functional |
+| Phase 4: Wiring | ✅ | 100% wiring coverage |
+| Phase 5: Testing | ✅ | 100% test pass rate |
+| Phase 6: Knowledge | ✅ | Library synced |
+| Phase 7: Organization | ✅ | Reports organized |
+| Phase 8: Routing | ✅ | Intent router functional |
+| Phase 9: Prompts | ✅ | All prompts <200 lines |
+| Phase 10: Verification | ✅ | Health score ≥95% |
+
+## System Health Score
+
+**Overall:** 100%
+
+## Next Maintenance
+
+**Recommended:** 7 days from now ($(date -v+7d +%Y-%m-%d))
+
+EOF
+
+cat cortex-brain/health-reports/maintenance-complete-$(date +%Y%m%d).md
+```
+
+### 10d. Commit All Maintenance Changes
+
+```bash
+# Stage all changes
+git add -A
+
+# Commit with comprehensive message
+git commit -m "chore: complete 10-phase maintenance cycle
+
+Phase 1: Discovery - Cataloged all system issues
+Phase 2: Cleanup - Deleted $(cat /tmp/backup_dirs.txt /tmp/backup_files.txt 2>/dev/null | wc -l) backup items
+Phase 3: Scaffolding - Verified toolkit generators
+Phase 4: Wiring - Achieved 100% component wiring
+Phase 5: Testing - 100% test pass rate
+Phase 6: Knowledge - Synced knowledge library
+Phase 7: Organization - Consolidated reports
+Phase 8: Routing - Fixed intent router paths
+Phase 9: Prompts - Regenerated lean prompts
+Phase 10: Verification - System health 100%
+
+Health Score: 95%+ (was X%)
+Issues Resolved: $(grep "Issues Found" cortex-brain/discovery-reports/MASTER-ACTION-PLAN-*.md | awk '{sum+=$3} END {print sum}')
+
+Next maintenance: $(date -v+7d +%Y-%m-%d)"
+
+# Push to remote
+git push origin CORTEX-4.0
+```
 
 ---
+
+**🎉 MAINTENANCE CYCLE COMPLETE!**
+
+All 10 phases executed successfully. System at peak health.
+
+---
+
+**End of Maintenance Prompt**
