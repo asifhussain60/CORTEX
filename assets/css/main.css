@@ -307,7 +307,7 @@ body {
 
 .hero-logo {
     width: 500px;
-    height: auto;
+    height: 500px;
     margin: 0 auto 2rem;
     display: block;
     animation: fadeInScale 1s ease-out;
@@ -318,12 +318,14 @@ body {
 @media (max-width: 1024px) {
     .hero-logo {
         width: 350px;
+        height: 350px;
     }
 }
 
 @media (max-width: 768px) {
     .hero-logo {
         width: 250px;
+        height: 250px;
         filter: drop-shadow(0 0 25px rgba(0, 212, 255, 0.5));
     }
 }
@@ -331,6 +333,7 @@ body {
 @media (max-width: 480px) {
     .hero-logo {
         width: 200px;
+        height: 200px;
         filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.4));
     }
 }
@@ -1602,7 +1605,7 @@ footer,
 
 .page-logo {
     width: 300px;
-    height: auto;
+    height: 300px;
     filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.5));
     transition: filter var(--transition-base);
 }
@@ -1737,6 +1740,7 @@ footer,
     
     .page-logo {
         width: 200px;
+        height: 200px;
     }
 }
 
@@ -3399,8 +3403,8 @@ footer,
 }
 
 .sts-showcase .page-logo {
-    width: 100px;
-    height: 100px;
+    width: 300px;
+    height: 300px;
 }
 
 /* Flaw Header with Badges */
