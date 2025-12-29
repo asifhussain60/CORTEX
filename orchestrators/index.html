@@ -7,6 +7,7 @@
     <title>Orchestrators - CORTEX</title>
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
@@ -40,6 +41,9 @@
                 <button class="viz-btn viz-system" data-category="system">System (4)</button>
                 <button class="viz-btn viz-analysis" data-category="analysis">Analysis (3)</button>
                 <button class="viz-btn viz-debug" data-category="debug">Debug (2)</button>
+                <button class="viz-btn" id="resetVizBtn" style="background: linear-gradient(135deg, #7b61ff 0%, #00d4ff 100%); color: white; margin-left: 10px;">
+                    <i class="fas fa-redo-alt"></i> Reset View
+                </button>
             </div>
             
             <div id="orchestratorMapMain"></div>
@@ -487,6 +491,9 @@
     // Category filtering
     document.querySelectorAll('.viz-btn').forEach(btn => {
         btn.addEventListener('click', function() {
+            // Skip reset button
+            if (this.id === 'resetVizBtn') return;
+            
             document.querySelectorAll('.viz-btn').forEach(b => b.classList.remove('active'));
             this.classList.add('active');
             const category = this.dataset.category;
@@ -496,6 +503,30 @@
                 return (l.source.category === category && l.target.category === category) ? 0.3 : 0.05;
             });
         });
+    });
+
+    // Reset view button
+    document.getElementById('resetVizBtn').addEventListener('click', function() {
+        // Release all fixed positions
+        orchestrators.forEach(d => {
+            d.fx = null;
+            d.fy = null;
+        });
+        
+        // Reset zoom
+        svg.transition().duration(750).call(
+            zoom.transform,
+            d3.zoomIdentity
+        );
+        
+        // Restart simulation to recenter
+        simulation.alpha(1).restart();
+        
+        // Reset filter to "All"
+        document.querySelectorAll('.viz-btn').forEach(b => b.classList.remove('active'));
+        document.querySelector('[data-category="all"]').classList.add('active');
+        node.transition().duration(300).style('opacity', 1);
+        link.transition().duration(300).style('opacity', 0.3);
     });
     </script>
 </body>
