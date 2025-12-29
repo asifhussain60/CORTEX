@@ -1,0 +1,48 @@
+{
+  "timestamp": "2025-12-08T05:36:16.976492",
+  "duration_seconds": 147.800613,
+  "phases_completed": 5,
+  "phases_total": 5,
+  "summary": {
+    "improvements": 3,
+    "warnings": 1,
+    "errors": 0
+  },
+  "phases": {
+    "pre_healthcheck": {
+      "status": "unhealthy",
+      "score": 0,
+      "issues": 0
+    },
+    "alignment": {
+      "status": "success",
+      "fixes_applied": [],
+      "issues_found": 0
+    },
+    "cleanup": {
+      "status": "success",
+      "files_moved": 0,
+      "files_removed": 0,
+      "space_freed_mb": 0.0
+    },
+    "optimization": {
+      "status": "failed",
+      "optimizations_applied": 0,
+      "performance_gain": "0%"
+    },
+    "post_healthcheck": {
+      "status": "unhealthy",
+      "score": 0,
+      "issues": 0
+    }
+  },
+  "improvements": [
+    "Pre-healthcheck completed successfully",
+    "Alignment applied [] fixes",
+    "Cleanup organized 0 files and removed 0 obsolete files"
+  ],
+  "warnings": [
+    "Optimization had issues: \u274c SKULL tests FAILED after optimization - 5/176 tests failed. Brain protection compromised!"
+  ],
+  "errors": []
+}

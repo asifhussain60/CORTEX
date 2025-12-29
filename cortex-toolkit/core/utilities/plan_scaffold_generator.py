@@ -45,9 +45,8 @@ class PlanScaffoldGenerator:
         self.cortex_root = Path(cortex_root)
         self.planning_root = self.cortex_root / "cortex-brain" / "documents" / "planning" / "active"
         
-        # Validate planning root exists
-        if not self.planning_root.exists():
-            raise RuntimeError(f"Planning root not found: {self.planning_root}")
+        # Validate planning root exists (create if missing for clean slate)
+        self.planning_root.mkdir(parents=True, exist_ok=True)
     
     def sanitize_name(self, name: str) -> str:
         """

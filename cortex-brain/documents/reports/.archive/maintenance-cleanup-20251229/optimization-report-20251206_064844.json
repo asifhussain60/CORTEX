@@ -1,0 +1,18 @@
+{
+  "timestamp": "2025-12-06T06:48:44.780501",
+  "summary": {
+    "total_optimizations": 5,
+    "space_saved_mb": 0.0,
+    "files_moved": 1,
+    "files_removed": 3,
+    "directories_cleaned": 0,
+    "dry_run": false
+  },
+  "optimizations": [
+    "Moved 1 script files from root \u2192 scripts/",
+    "Removed 0 duplicate CORTEX logo files (0.00 MB)",
+    "Duplicate removed: cortex-brain\\documents\\planning\\features\\.archive\\.archive\\.archive\\.archive\\.archive\\ADO-ENTRY-POINT-ENHANCEMENT-PROPOSAL_20251201_20251201_20251202_20251202_20251202.md",
+    "Duplicate removed: cortex-brain\\documents\\reports\\system-alignment-v2-20251203_080009.md",
+    "Duplicate removed: cortex-brain\\documents\\reports\\system-alignment-v2-20251203_080034.md"
+  ]
+}

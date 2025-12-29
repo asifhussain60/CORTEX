@@ -1,0 +1,47 @@
+{
+  "timestamp": "2025-12-09T04:31:12.598845",
+  "duration_seconds": 85.181902,
+  "phases_completed": 5,
+  "phases_total": 7,
+  "summary": {
+    "improvements": 2,
+    "warnings": 3,
+    "errors": 0
+  },
+  "phases": {
+    "pre_healthcheck": {
+      "status": "unhealthy",
+      "score": 0,
+      "issues": 0
+    },
+    "alignment": {
+      "status": "failed",
+      "fixes_applied": [],
+      "issues_found": 0
+    },
+    "cleanup": {
+      "status": "success",
+      "files_moved": 0,
+      "files_removed": 0,
+      "space_freed_mb": 0.0
+    },
+    "optimization": {
+      "status": "skipped"
+    },
+    "post_healthcheck": {
+      "status": "unhealthy",
+      "score": 0,
+      "issues": 0
+    }
+  },
+  "improvements": [
+    "Pre-healthcheck completed successfully",
+    "Cleanup organized 0 files and removed 0 obsolete files"
+  ],
+  "warnings": [
+    "Alignment had issues: Unknown",
+    "Optimization skipped due to alignment issues",
+    "Prompt refresh had issues: Traceback (most recent call last):\n  File \"D:\\PROJECTS\\CORTEX\\scripts\\regenerate_cortex_prompts.py\", line 760, in main\n    results = regenerator.execute()\n  File \"D:\\PROJECTS\\CORTEX\\scripts\\regenerate"
+  ],
+  "errors": []
+}

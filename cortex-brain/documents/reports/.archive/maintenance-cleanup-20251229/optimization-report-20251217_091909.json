@@ -1,0 +1,26 @@
+{
+  "timestamp": "2025-12-17T09:19:09.533383",
+  "summary": {
+    "total_optimizations": 13,
+    "space_saved_mb": 171.36711883544922,
+    "files_moved": 0,
+    "files_removed": 3029,
+    "directories_cleaned": 0,
+    "dry_run": false
+  },
+  "optimizations": [
+    "Removed dist/ directory (5.65 MB, 2 files)",
+    "Removed publish/ directory (165.64 MB, 3020 files)",
+    "Removed 0 duplicate CORTEX logo files (0.00 MB)",
+    "Duplicate removed: cortex-brain\\documents\\implementation-guides\\architecture-patterns.md",
+    "Duplicate removed: cortex-brain\\documents\\implementation-guides\\clean-architecture-layers.md",
+    "Duplicate removed: cortex-brain\\documents\\planning\\temp-plans\\legacy-api-spec-20251216\\00-master-plan.md",
+    "Duplicate removed: cortex-brain\\documents\\implementation-guides\\tooling-index.md",
+    "Duplicate removed: cortex-brain\\documents\\implementation-guides\\visual-diagram-standards.md",
+    "Duplicate removed: cortex-brain\\documents\\reports\\STRICT-FOLDER-ORGANIZATION-IMPLEMENTATION-SUMMARY.md",
+    "Duplicate removed: cortex-brain\\documents\\planning\\active\\cortex-rearchitecture-v1\\artifacts\\copilot-chat.md",
+    "[ACTION NEEDED] CORTEX.prompt.md needs manual optimization: 355 lines \u2192 target <300",
+    "  Recommendation: Remove verbose feature descriptions, consolidate redundant sections",
+    "  Manual fix applied already reduced to 187 lines \u2713"
+  ]
+}

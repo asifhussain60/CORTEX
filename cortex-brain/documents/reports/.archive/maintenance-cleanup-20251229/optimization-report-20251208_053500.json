@@ -1,0 +1,19 @@
+{
+  "timestamp": "2025-12-08T05:35:00.407515",
+  "summary": {
+    "total_optimizations": 6,
+    "space_saved_mb": 0.0,
+    "files_moved": 0,
+    "files_removed": 4,
+    "directories_cleaned": 0,
+    "dry_run": false
+  },
+  "optimizations": [
+    "Removed 0 duplicate CORTEX logo files (0.00 MB)",
+    "Duplicate removed: cortex-brain\\documents\\reports\\.archive\\.archive\\.archive\\.archive\\.archive\\.archive\\system-alignment-v2-20251203_080009_20251206_20251206_20251206_20251206_20251206_20251208.md",
+    "Duplicate removed: cortex-brain\\documents\\reports\\.archive\\.archive\\.archive\\.archive\\.archive\\.archive\\system-alignment-v2-20251203_080034_20251206_20251206_20251206_20251206_20251206_20251208.md",
+    "Duplicate removed: cortex-brain\\documents\\implementation-guides\\.archive\\intelligent-learning-library-integration_20251208.md",
+    "Duplicate removed: cortex-brain\\documents\\reports\\.archive\\reconciliation-engine-phase2-complete_20251208.md",
+    "[SKIP] CORTEX.prompt.md already optimized (271 lines < 300)"
+  ]
+}

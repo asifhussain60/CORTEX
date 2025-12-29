@@ -246,7 +246,7 @@ class PlanFolderManager:
 **Manifest:** `cortex-brain/manifests/orchestrators/planning-system-4.0-manifest.yaml`
 """
         
-        readme_path.write_text(readme_content)
+        readme_path.write_text(readme_content, encoding='utf-8')
         logger.debug(f"  📄 Generated: {self.README_NAME}")
     
     def _cleanup_folder(self, plan_folder: Path) -> None:

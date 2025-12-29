@@ -1,0 +1,48 @@
+{
+  "timestamp": "2025-12-07T15:32:38.970895",
+  "duration_seconds": 28.376711,
+  "phases_completed": 5,
+  "phases_total": 5,
+  "summary": {
+    "improvements": 2,
+    "warnings": 2,
+    "errors": 0
+  },
+  "phases": {
+    "pre_healthcheck": {
+      "status": "unhealthy",
+      "score": 0,
+      "issues": 0
+    },
+    "alignment": {
+      "status": "failed",
+      "fixes_applied": [
+        "Cleaned up 0 obsolete files (0.0 MB freed)"
+      ],
+      "issues_found": 0
+    },
+    "cleanup": {
+      "status": "success",
+      "files_moved": 0,
+      "files_removed": 0,
+      "space_freed_mb": 0.0
+    },
+    "optimization": {
+      "status": "skipped"
+    },
+    "post_healthcheck": {
+      "status": "unhealthy",
+      "score": 0,
+      "issues": 0
+    }
+  },
+  "improvements": [
+    "Pre-healthcheck completed successfully",
+    "Cleanup organized 0 files and removed 0 obsolete files"
+  ],
+  "warnings": [
+    "Alignment had issues: Unknown",
+    "Optimization skipped due to alignment issues"
+  ],
+  "errors": []
+}

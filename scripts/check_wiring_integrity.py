@@ -156,7 +156,8 @@ class WiringIntegrityChecker:
         templates = self._load_response_templates()
         
         # From operations yaml
-        for op_name, op_data in operations.get('operations', {}).items():
+        operations_dict = operations if isinstance(operations, dict) else {}
+        for op_name, op_data in operations_dict.get('operations', {}).items():
             wired.add(op_name)
             if isinstance(op_data, dict):
                 # Add handler/orchestrator names
@@ -168,7 +169,8 @@ class WiringIntegrityChecker:
                     wired.add(orchestrator)
         
         # From response templates
-        for template_name, template_data in templates.get('templates', {}).items():
+        templates_dict = templates if isinstance(templates, dict) else {}
+        for template_name, template_data in templates_dict.get('templates', {}).items():
             wired.add(template_name)
         
         return wired
