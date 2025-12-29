@@ -29,6 +29,8 @@
     "AI",
     "Programming Languages",
     "Testing",
+    "Machine Learning",
+    "Snippets",
     "Other"
   ],
   "keywords": [
@@ -39,7 +41,16 @@
     "testing",
     "orchestration",
     "development",
-    "productivity"
+    "productivity",
+    "automation",
+    "refactoring",
+    "code-quality",
+    "brain",
+    "memory",
+    "azure-devops",
+    "maintenance",
+    "sanitization",
+    "onboarding"
   ],
   "activationEvents": [
     "onStartupFinished"
