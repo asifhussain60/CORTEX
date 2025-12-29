@@ -3803,6 +3803,186 @@ footer,
 }
 
 /* ============================================
+   D3.JS VISUALIZATION COMPONENTS
+   ============================================ */
+
+/* Orchestrator Visualization Section */
+.orchestrator-viz-section {
+    margin-bottom: var(--spacing-2xl);
+}
+
+.orchestrator-viz-section .glass-card {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Visualization Controls */
+.viz-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.viz-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    font-size: 0.875rem;
+    min-height: 44px; /* Touch target */
+}
+
+.viz-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.viz-btn.active {
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5);
+}
+
+.viz-all {
+    background: linear-gradient(135deg, #00d4ff 0%, #7b61ff 100%);
+    color: white;
+}
+
+.viz-planning {
+    background: #2196F3;
+    color: white;
+}
+
+.viz-execution {
+    background: #4CAF50;
+    color: white;
+}
+
+.viz-system {
+    background: #FF9800;
+    color: white;
+}
+
+.viz-analysis {
+    background: #9C27B0;
+    color: white;
+}
+
+.viz-debug {
+    background: #F44336;
+    color: white;
+}
+
+/* D3.js SVG Container */
+#orchestratorMapMain {
+    width: 100%;
+    height: 600px;
+    position: relative;
+    background: rgba(10, 14, 39, 0.3);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+/* D3.js Node Styles */
+#orchestratorMapMain .node circle {
+    cursor: pointer;
+    stroke: #fff;
+    stroke-width: 3px;
+    transition: all 0.3s ease;
+}
+
+#orchestratorMapMain .node:hover circle {
+    stroke-width: 5px;
+    filter: brightness(1.2);
+}
+
+#orchestratorMapMain .node text {
+    font-size: 11px;
+    font-weight: 600;
+    text-anchor: middle;
+    pointer-events: none;
+    fill: #ffffff;
+}
+
+/* D3.js Link Styles */
+#orchestratorMapMain .link {
+    fill: none;
+    stroke: #999;
+    stroke-opacity: 0.3;
+    stroke-width: 2px;
+}
+
+/* Visualization Tooltip */
+.viz-tooltip {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    max-width: 300px;
+    font-size: 13px;
+    z-index: 1000;
+    border: 1px solid var(--accent-primary);
+    backdrop-filter: blur(10px);
+}
+
+.viz-tooltip h3 {
+    margin: 0 0 8px 0;
+    font-size: 15px;
+    border-bottom: 2px solid #00d4ff;
+    padding-bottom: 5px;
+    color: var(--accent-primary);
+}
+
+.viz-tooltip .badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    margin-right: 5px;
+    margin-top: 5px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+/* Mobile Optimization for Visualization */
+@media (max-width: 768px) {
+    #orchestratorMapMain {
+        height: 400px;
+    }
+    
+    .viz-controls {
+        gap: 0.5rem;
+    }
+    
+    .viz-btn {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.75rem;
+    }
+    
+    #orchestratorMapMain .node text {
+        font-size: 9px;
+    }
+}
+
+@media (max-width: 480px) {
+    #orchestratorMapMain {
+        height: 300px;
+    }
+    
+    .viz-tooltip {
+        max-width: 200px;
+        font-size: 11px;
+        padding: 10px;
+    }
+}
+
+/* ============================================
    PRINT STYLES
    ============================================ */
 @media print {
