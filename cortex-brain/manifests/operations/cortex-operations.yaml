@@ -1108,14 +1108,73 @@ operations:
     natural_language:
     - planned
     category: general
+  onboarding:
+    name: CORTEX Onboarding
+    description: Interactive 6-phase onboarding guide - Welcome to CORTEX! Learn installation, core concepts, planning, TDD workflow, documentation, and common operations in 60 minutes
+    deployment_tier: user
+    execution_method: cli_wrapper
+    cli_script: cortex-toolkit/core/utilities/onboarding_interactive.py
+    natural_language:
+    - onboard
+    - onboard me
+    - start onboarding
+    - cortex onboarding
+    - getting started
+    - cortex tutorial
+    - learn cortex
+    - onboarding guide
+    - new user setup
+    - help me get started
+    category: onboarding
+    modules:
+    - onboarding_orchestrator
+    profiles:
+      full:
+        description: "Complete 6-phase onboarding (Quick Start → Core Concepts → Planning → TDD → Documentation → Common Operations)"
+        phases:
+        - Quick Start (5 min)
+        - Core Concepts (10 min)
+        - First Planning (15 min)
+        - TDD Workflow (20 min)
+        - Documentation (5 min)
+        - Common Operations (10 min)
+      quick:
+        description: "Quick start only - get CORTEX running in 5 minutes"
+        phases:
+        - Quick Start
+      concepts:
+        description: "Core concepts only - understand 4-tier brain and SKULL"
+        phases:
+        - Core Concepts
+      tdd:
+        description: "TDD workshop - master RED→GREEN→REFACTOR cycle"
+        phases:
+        - TDD Workflow
+    implementation_status:
+      status: ready
+      modules_implemented: 2
+      modules_total: 2
+      completion_percentage: 100
+      notes: Interactive CLI-based onboarding with 6 phases, progress persistence, real-time feedback, and certificate generation. Includes architecture diagram and TDD workflow guide artifacts.
+    examples:
+    - onboard me
+    - start onboarding
+    - getting started
+    - learn cortex
+    artifacts:
+    - architecture-diagram.md
+    - tdd-workflow-guide.md
+    - onboarding-certificate.md
   onboarding_orchestrator:
-    name: Onboarding Orchestrator
-    description: Onboarding Orchestrator
+    name: Onboarding Orchestrator (Legacy)
+    description: Legacy onboarding orchestrator - superseded by interactive onboarding
     deployment_tier: dual_context
     execution_method: internal
     natural_language:
     - operation name
     category: setup
+    deprecated: true
+    superseded_by: onboarding
   operation_factory:
     name: Operation Factory
     description: Operation Factory - Load and Create Operations from YAML

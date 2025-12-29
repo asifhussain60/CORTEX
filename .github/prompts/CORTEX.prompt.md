@@ -21,6 +21,7 @@ Remove meta-directives before intent classification:
 |---------|--------------|----------|--------|
 | `plan [x]`, `create a plan`, `make a plan` | Planning System | `planning-system-4.0-manifest.yaml` | `planning/active/{NAME}/` + 4 subfolders |
 | `start tdd`, `run tests`, `tdd [x]` | TDD Mastery | `tdd-orchestrator-v4-manifest.yaml` | Tests in `tests/` |
+| `onboard`, `getting started`, `learn cortex` | Onboarding | Via `onboarding_interactive.py` | Interactive 6-phase guide |
 | `plan ado`, `ado story`, `ado feature` | ADO Operations | `ado-planning-manifest.yaml` | ADO work items |
 | `sanitize`, `make generic`, `anonymize` | Sanitization | `code-sanitization-manifest.yaml` | Sanitized codebase |
 | `refine`, `improve cortex` | Refinement | `refinement-orchestrator-manifest.yaml` | 7-phase improvement |
