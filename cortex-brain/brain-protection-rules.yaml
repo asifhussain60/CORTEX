@@ -27,6 +27,7 @@ critical_paths:
 - cortex-brain/migrations/
 tier0_instincts:
 - INCREMENTAL_PLAN_GENERATION
+- PLANNING_ISOLATION
 - TDD_ENFORCEMENT
 - RED_PHASE_VALIDATION
 - GREEN_PHASE_VALIDATION
@@ -120,6 +121,47 @@ protection_layers:
     - Each step writes to file, NOT to chat response (avoid length limit)
     evidence_template: '#file:documents/evidence-templates/planning/INCREMENTAL_PLAN_GENERATION.md'
     rationale: '#file:documents/rationales/INCREMENTAL_PLAN_GENERATION.md'
+  - rule_id: PLANNING_ISOLATION
+    name: Planning Command Isolation (No Implementation)
+    severity: blocked
+    description: When planning commands are detected (/CORTEX Plan, create a plan, etc.), CORTEX MUST create plan structure ONLY and NEVER execute implementation. This prevents accidental execution when user wants planning.
+    detection:
+      combined_keywords:
+        planning_command_patterns:
+        - "/CORTEX Plan"
+        - "/CORTEX plan"
+        - "create a plan"
+        - "make a plan"
+        - "plan:"
+        - "planning"
+      exclusion_patterns:
+        - "implement"
+        - "build"
+        - "create" (without "plan")
+      scope:
+      - user_request
+      - intent
+      logic: AND
+    alternatives:
+    - 'STEP 1: Detect planning command patterns in user request'
+    - 'STEP 2: If planning pattern detected → CREATE plan structure in cortex-brain/documents/planning/active/{NAME}/'
+    - 'STEP 3: Create 4 subfolders: context/, reports/, artifacts/, tracking/'
+    - 'STEP 4: Create 00-master-plan.md with plan details'
+    - 'STEP 5: STOP - DO NOT IMPLEMENT - Report plan creation complete'
+    - 'STEP 6: If implementation pattern detected → Execute code directly (no plan creation)'
+    evidence_template: |-
+      Planning command detected but implementation started instead of plan creation.
+      
+      **Detection Examples:**
+      - "/CORTEX Plan user-auth" → Must create plan structure, NOT implement
+      - "create a plan for API" → Must create plan structure, NOT implement
+      - "implement user-auth" → Execute directly, NO plan creation
+      
+      **Mandatory Checkpoint:**
+      Before ANY file creation or code changes, verify:
+      1. Is this a planning command? → Create plan ONLY
+      2. Is this an implementation command? → Execute ONLY
+    rationale: Users explicitly requesting planning want CORTEX to organize work into phases, NOT immediately execute. Mixing planning and implementation leads to unintended code changes and poor planning quality.
   - rule_id: TDD_ENFORCEMENT
     name: Test-Driven Development Enforcement
     severity: blocked

@@ -1,6 +1,6 @@
 # 🎯 CORTEX Universal Entry Point
 
-**Version:** 4.0.0 | **Status:** ✅ PRODUCTION  
+**Version:** 4.0.1 | **Status:** ✅ PRODUCTION  
 **Author:** Asif Hussain | **Website:** https://asifhussain60.github.io/CORTEX/  
 **Copyright © 2025 Asif Hussain. All rights reserved.**
 
@@ -15,21 +15,67 @@ Remove meta-directives before intent classification:
 
 ---
 
+## 🚨 PLANNING DETECTION (HIGHEST PRIORITY)
+
+**⛔ STOP! Check this FIRST before ANY work:**
+
+### Planning Command Patterns (MUST create plan, NOT implement):
+- `/CORTEX Plan [feature]`
+- `/CORTEX plan [feature]`
+- `create a plan for [feature]`
+- `make a plan for [feature]`
+- `plan: [feature]`
+- `planning [feature]`
+
+### Implementation Patterns (Execute without planning):
+- `implement [feature]`
+- `build [feature]`
+- `create [feature]` (without "plan")
+- `add [feature]`
+- `fix [issue]`
+
+### ⛔ MANDATORY RULE:
+**If ANY planning pattern detected → STOP → Create plan structure → DO NOT IMPLEMENT**
+
+### Example Detection:
+```
+User: "/CORTEX Plan user authentication"
+✅ CORRECT: Create planning/active/user-authentication/ + 4 subfolders → STOP
+❌ WRONG: Start implementing auth code
+
+User: "implement user authentication"  
+✅ CORRECT: Begin implementation directly
+❌ WRONG: Create a plan first
+```
+
+---
+
 ## 🔀 Intent Router
 
 | Command | Orchestrator | Manifest | Output |
 |---------|--------------|----------|--------|
-| `plan [x]`, `create a plan`, `make a plan` | Planning System | `planning-system-4.0-manifest.yaml` | `planning/active/{NAME}/` + 4 subfolders |
+| `/CORTEX Plan [x]`, `create a plan`, `make a plan`, `plan: [x]` | **Planning System** | `planning-system-4.0-manifest.yaml` | `planning/active/{NAME}/` + 4 subfolders **→ STOPS HERE** |
 | `start tdd`, `run tests`, `tdd [x]` | TDD Mastery | `tdd-orchestrator-v4-manifest.yaml` | Tests in `tests/` |
+| `debug [issue]`, `fix bug`, `troubleshoot` | Debug Orchestrator | `debug-orchestrator-manifest.yaml` | Bug report + fix |
+| `open lens`, `show dashboard`, `analytics` | CORTEX Lens | `cortex-lens-v3-manifest.yaml` | Dashboard visualization |
 | `onboard`, `getting started`, `learn cortex` | Onboarding | Via `onboarding_interactive.py` | Interactive 6-phase guide |
 | `plan ado`, `ado story`, `ado feature` | ADO Operations | `ado-planning-manifest.yaml` | ADO work items |
 | `sanitize`, `make generic`, `anonymize` | Sanitization | `code-sanitization-manifest.yaml` | Sanitized codebase |
-| `refine`, `improve cortex` | Refinement | `refinement-orchestrator-manifest.yaml` | 7-phase improvement |
-| `system maintenance` | Maintenance | Via `cortex-maintenance.prompt.md` | Health reports |
-| `align`, `optimize`, `cleanup`, `healthcheck` | System Ops | CLI wrappers in `scripts/` | Operation output |
-| `help` | Help | Template-based | Command list |
+| `refine`, `improve cortex`, `optimize code` | Refinement | `refinement-orchestrator-manifest.yaml` | 7-phase improvement |
+| `system maintenance`, `health check` | Maintenance | Via `cortex-maintenance.prompt.md` | Health reports |
+| `help`, `show commands` | Help | Template-based | Command list |
 
 **Manifest Path:** `cortex-brain/manifests/orchestrators/{manifest-file}`
+
+### ⚠️ Planning vs. Implementation
+
+**Planning Commands = Create folder structure ONLY (NO CODE):**
+- `/CORTEX Plan user-auth` → Creates `planning/active/user-auth/` + subfolders → **STOPS**
+- `create a plan for API` → Creates `planning/active/api/` + subfolders → **STOPS**
+
+**Implementation Commands = Execute code directly:**
+- `implement user-auth` → Writes code immediately (no plan creation)
+- `build API endpoint` → Creates files immediately (no plan creation)
 
 ### Planning System Output Structure
 
@@ -82,6 +128,7 @@ cortex-brain/documents/planning/active/{PLAN_NAME}/
 | **HOLISTIC_DISCOVERY** | Search before create (prevent duplication) |
 | **REFACTOR_CLEANUP** | Remove orphaned/duplicate code |
 | **GIT_ISOLATION** | CORTEX code never in user repos |
+| **PLANNING_ISOLATION** | Planning commands create plans ONLY, never implement |
 
 **Full rules:** `cortex-brain/brain-protection-rules.yaml`
 
@@ -114,12 +161,13 @@ cortex-brain/                    src/
 
 | Command | Description |
 |---------|-------------|
-| `plan [feature]` | Create planning folder with TDD |
+| `/CORTEX Plan [feature]` | Create planning folder (NO implementation) |
 | `start tdd` | RED→GREEN→REFACTOR workflow |
+| `debug [issue]` | Investigate and fix bug |
+| `open lens` | Show analytics dashboard |
 | `system maintenance` | 6-phase health pipeline |
 | `sanitize [dir]` | Remove company data |
 | `refine` | 7-phase system improvement |
-| `align` / `optimize` | System operations |
 | `help` | Show all commands |
 
 ---

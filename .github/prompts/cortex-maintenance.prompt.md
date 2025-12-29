@@ -1301,53 +1301,394 @@ done
 
 ---
 
-## Phase 8: Regenerate Lean Prompts
+## Phase 8: Regenerate Lean Prompts (WITH COMPLETE INTENT ROUTER WIRING)
 
-**Goal:** Create minimal, clean prompt files with proper intent routing.
+**Goal:** Create minimal, clean prompt files with proper intent routing for ALL orchestrators.
 
-### 7a. CORTEX.prompt.md Structure (Target: <200 lines)
+**Reference:** `cortex-brain/documents/analysis/orchestrator-inventory-2025-12-29.md`
+
+### 8a. Pre-Regeneration: Orchestrator Discovery
+
+**BEFORE regenerating prompts, scan ALL orchestrator manifests:**
+
+```bash
+# List all orchestrator manifests
+find cortex-brain/manifests/orchestrators/ -name "*-manifest.yaml" -o -name "*-orchestrator*.yaml"
+
+# Extract orchestrator names and capabilities
+grep -h "orchestrator_name:" cortex-brain/manifests/orchestrators/*.yaml
+```
+
+**Required Orchestrators for Intent Router (Minimum 8):**
+
+1. **Planning System** - `planning-system-4.0-manifest.yaml`
+2. **TDD Mastery** - `tdd-orchestrator-v4-manifest.yaml`
+3. **Debug Orchestrator** - `debug-orchestrator-manifest.yaml`
+4. **CORTEX Lens** - `cortex-lens-v3-manifest.yaml`
+5. **ADO Planning** - `ado-planning-manifest.yaml`
+6. **Code Sanitization** - `code-sanitization-manifest.yaml`
+7. **Refinement** - `refinement-orchestrator-manifest.yaml`
+8. **System Maintenance** - `cortex-maintenance.prompt.md`
+
+**Optional but Recommended:**
+- Onboarding (via `onboarding_interactive.py`)
+- Technical Documentation (`technical-documentation-orchestrator-manifest.yaml`)
+
+### 8b. CORTEX.prompt.md COMPLETE Structure (Target: <200 lines)
+
+**Template with ALL orchestrators wired:**
 
 ```markdown
 # 🎯 CORTEX Universal Entry Point
-Version | Author | Status
 
-## Intent Router
-[Table: Command → Orchestrator → Manifest Path → Output Spec]
+**Version:** 4.0.1 | **Status:** ✅ PRODUCTION  
+**Author:** Asif Hussain | **Website:** https://asifhussain60.github.io/CORTEX/  
+**Copyright © 2025 Asif Hussain. All rights reserved.**
 
-## Response Format (v4.0)
-[4 tiers: INSTANT/FOCUSED/STRUCTURED/COMPREHENSIVE]
+---
 
-## Brain Protection (SKULL)
-[4 rules: TDD, Discovery, Cleanup, Git Isolation]
+## ⚠️ Parse User Request FIRST
 
-## Quick Reference
-[Command table with descriptions]
+Remove meta-directives before intent classification:
+- `Follow instructions in...` → REMOVE
+- `Use *.prompt.md...` → REMOVE  
+- `Reference file:///...` → REMOVE
+
+---
+
+## 🚨 PLANNING DETECTION (HIGHEST PRIORITY)
+
+**⛔ STOP! Check this FIRST before ANY work:**
+
+### Planning Command Patterns (MUST create plan, NOT implement):
+- `/CORTEX Plan [feature]`
+- `/CORTEX plan [feature]`
+- `create a plan for [feature]`
+- `make a plan for [feature]`
+- `plan: [feature]`
+- `planning [feature]`
+
+### Implementation Patterns (Execute without planning):
+- `implement [feature]`
+- `build [feature]`
+- `create [feature]` (without "plan")
+- `add [feature]`
+- `fix [issue]`
+
+### ⛔ MANDATORY RULE:
+**If ANY planning pattern detected → STOP → Create plan structure → DO NOT IMPLEMENT**
+
+### Example Detection:
+```
+User: "/CORTEX Plan user authentication"
+✅ CORRECT: Create planning/active/user-authentication/ + 4 subfolders → STOP
+❌ WRONG: Start implementing auth code
+
+User: "implement user authentication"  
+✅ CORRECT: Begin implementation directly
+❌ WRONG: Create a plan first
 ```
 
-### 7b. copilot-instructions.md Structure (Target: <150 lines)
+---
+
+## 🔀 Intent Router
+
+| Command | Orchestrator | Manifest | Output |
+|---------|--------------|----------|--------|
+| `/CORTEX Plan [x]`, `create a plan`, `make a plan`, `plan: [x]` | **Planning System** | `planning-system-4.0-manifest.yaml` | `planning/active/{NAME}/` + 4 subfolders **→ STOPS HERE** |
+| `start tdd`, `run tests`, `tdd [x]` | TDD Mastery | `tdd-orchestrator-v4-manifest.yaml` | Tests in `tests/` |
+| `debug [issue]`, `fix bug`, `troubleshoot` | Debug Orchestrator | `debug-orchestrator-manifest.yaml` | Bug report + fix |
+| `open lens`, `show dashboard`, `analytics` | CORTEX Lens | `cortex-lens-v3-manifest.yaml` | Dashboard visualization |
+| `onboard`, `getting started`, `learn cortex` | Onboarding | Via `onboarding_interactive.py` | Interactive 6-phase guide |
+| `plan ado`, `ado story`, `ado feature` | ADO Operations | `ado-planning-manifest.yaml` | ADO work items |
+| `sanitize`, `make generic`, `anonymize` | Sanitization | `code-sanitization-manifest.yaml` | Sanitized codebase |
+| `refine`, `improve cortex`, `optimize code` | Refinement | `refinement-orchestrator-manifest.yaml` | 7-phase improvement |
+| `system maintenance`, `health check` | Maintenance | Via `cortex-maintenance.prompt.md` | Health reports |
+| `help`, `show commands` | Help | Template-based | Command list |
+
+**Manifest Path:** `cortex-brain/manifests/orchestrators/{manifest-file}`
+
+### ⚠️ Planning vs. Implementation
+
+**Planning Commands = Create folder structure ONLY (NO CODE):**
+- `/CORTEX Plan user-auth` → Creates `planning/active/user-auth/` + subfolders → **STOPS**
+- `create a plan for API` → Creates `planning/active/api/` + subfolders → **STOPS**
+
+**Implementation Commands = Execute code directly:**
+- `implement user-auth` → Writes code immediately (no plan creation)
+- `build API endpoint` → Creates files immediately (no plan creation)
+
+### Planning System Output Structure
+
+All plans MUST create:
+```
+cortex-brain/documents/planning/active/{PLAN_NAME}/
+├── 00-master-plan.md    # Main plan
+├── context/             # Context artifacts
+├── reports/             # Progress reports
+├── artifacts/           # Supporting files
+└── tracking/            # progress-tracker.json
+```
+
+---
+
+## 📋 Response Format (v4.0)
+
+**Header (ALWAYS):**
+```markdown
+## 🧠 CORTEX {Title}
+**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+```
+
+**Body (Adaptive):**
+
+| Tier | Tokens | Structure |
+|------|--------|-----------|
+| INSTANT | <50 | `{answer}` |
+| FOCUSED | 50-200 | `{explanation}` + `**Next:**` |
+| STRUCTURED | 200-600 | `**Context:**` + `**Changes:**` + `**Next:**` |
+| COMPREHENSIVE | 600+ | Multiple `### {Sections}` |
+
+**Next Steps:** EXACTLY ONE action OR `✅ All work complete!`
+
+**Completion (when ALL work done):**
+```markdown
+# 🎉 CONGRATULATIONS
+## 🧠 CORTEX {Operation}
+...
+✅ **All work complete!** No further action required.
+```
+
+---
+
+## 🛡️ Brain Protection (SKULL)
+
+| Rule | Enforcement |
+|------|-------------|
+| **TDD_ENFORCEMENT** | RED→GREEN→REFACTOR mandatory |
+| **HOLISTIC_DISCOVERY** | Search before create (prevent duplication) |
+| **REFACTOR_CLEANUP** | Remove orphaned/duplicate code |
+| **GIT_ISOLATION** | CORTEX code never in user repos |
+| **PLANNING_ISOLATION** | Planning commands create plans ONLY, never implement |
+
+**Full rules:** `cortex-brain/brain-protection-rules.yaml`
+
+---
+
+## 📁 Document Organization
+
+**⛔ FORBIDDEN:** Root-level docs (`CORTEX/summary.md`)
+
+**✅ REQUIRED:** `cortex-brain/documents/{category}/`
+
+Categories: `reports/`, `analysis/`, `summaries/`, `investigations/`, `planning/`, `implementation-guides/`
+
+---
+
+## 🏗️ Architecture
+
+```
+cortex-brain/                    src/
+├── tier0/ (Governance)          ├── tier0-3/ (Brain tiers)
+├── tier1/ (Working memory)      ├── cortex_agents/ (2 agents)
+├── tier2/ (Knowledge graph)     ├── orchestrators/ (8 workflows)
+├── tier3/ (Dev context)         └── response_templates/
+└── manifests/orchestrators/
+```
+
+---
+
+## 📋 Quick Reference
+
+| Command | Description |
+|---------|-------------|
+| `/CORTEX Plan [feature]` | Create planning folder (NO implementation) |
+| `start tdd` | RED→GREEN→REFACTOR workflow |
+| `debug [issue]` | Investigate and fix bug |
+| `open lens` | Show analytics dashboard |
+| `system maintenance` | 6-phase health pipeline |
+| `sanitize [dir]` | Remove company data |
+| `refine` | 7-phase system improvement |
+| `help` | Show all commands |
+
+---
+
+## 📚 Resources
+
+- **Learning:** `cortex-brain/documents/learning-paths/`
+- **Templates:** `cortex-brain/response-templates-v4.yaml`
+- **SKULL Rules:** `cortex-brain/brain-protection-rules.yaml`
+- **Maintenance:** `.github/prompts/cortex-maintenance.prompt.md`
+
+---
+
+**Quick Start:** Say `help` to see all operations.
+
+**Anti-Bloat:** This file MUST stay under 200 lines.
+```
+
+### 8c. copilot-instructions.md COMPLETE Structure (Target: <150 lines)
+
+**Template with ALL operations referenced:**
 
 ```markdown
 # GitHub Copilot Instructions for CORTEX
-## Entry Point
-→ Load CORTEX.prompt.md
 
-## Response Format
-→ Defer to CORTEX.prompt.md
+**Purpose:** AI Assistant with long-term memory, context awareness, and strategic planning  
+**Version:** 4.0.1 | **Author:** Asif Hussain
 
-## Key Workflows
-[Brief list with manifest references]
+---
 
-## Document Organization
-[Category list]
+## 🎯 Entry Point
+
+**Primary:** Load `.github/prompts/CORTEX.prompt.md` for all intent routing.
+
+**Context Detection:**
+- **CORTEX repo** (has `cortex-brain/admin/`): Admin operations enabled
+- **User repos**: User operations only
+
+---
+
+## 🔀 Intent Routing
+
+All command routing is defined in `CORTEX.prompt.md`. Key orchestrators:
+
+| Intent Pattern | Route To |
+|----------------|----------|
+| `plan`, `create a plan`, `make a plan` | Planning System → folder with 4 subfolders **→ NO IMPLEMENTATION** |
+| `tdd`, `start tdd`, `run tests` | TDD Orchestrator → RED→GREEN→REFACTOR |
+| `debug`, `fix bug`, `troubleshoot` | Debug Orchestrator → investigation + fix |
+| `lens`, `dashboard`, `analytics` | CORTEX Lens → visualization |
+| `ado`, `ado story`, `ado feature` | ADO Operations → work items |
+| `sanitize`, `make generic` | Sanitization → 5-phase cleanup |
+| `maintenance`, `health check` | Maintenance → 6-phase pipeline |
+| `refine`, `improve` | Refinement → 7-phase improvement |
+
+**Manifest Location:** `cortex-brain/manifests/orchestrators/`
+
+---
+
+## 📋 Response Format
+
+Defer to `CORTEX.prompt.md` for full spec. Summary:
+
+- **Header:** Always include `## 🧠 CORTEX {Title}` + author line
+- **Body:** Scales with complexity (INSTANT → COMPREHENSIVE)
+- **Next Steps:** EXACTLY ONE action OR completion message
+- **Completion:** Use `# 🎉 CONGRATULATIONS` when all work done
+
+---
+
+## 🛡️ Brain Protection (SKULL)
+
+| Rule | Action |
+|------|--------|
+| TDD_ENFORCEMENT | Tests must fail before implementation |
+| HOLISTIC_DISCOVERY | Search before create (prevent duplication) |
+| GIT_ISOLATION | CORTEX code never commits to user repos |
+| PLANNING_ISOLATION | Planning commands create plans ONLY, never implement |
+
+**Full rules:** `cortex-brain/brain-protection-rules.yaml`
+
+---
+
+## 📁 Document Organization
+
+**⛔ FORBIDDEN:** Root-level docs  
+**✅ REQUIRED:** `cortex-brain/documents/{category}/`
+
+Categories: `reports/`, `analysis/`, `summaries/`, `investigations/`, `planning/`, `implementation-guides/`
+
+---
+
+## 🏗️ Architecture
+
+```
+cortex-brain/           # Long-term memory (4-tier brain)
+├── tier0/ (Governance) 
+├── tier1/ (Working memory)
+├── tier2/ (Knowledge graph)
+├── tier3/ (Dev context)
+└── manifests/orchestrators/
+
+src/                    # Implementation
+├── cortex_agents/      # 2 specialist agents
+├── orchestrators/      # 8 workflow orchestrators
+└── response_templates/ # Template rendering
 ```
 
-### 7c. Wiring Rules
+---
+
+## 📚 Key Files
+
+| File | Purpose |
+|------|---------|
+| `.github/prompts/CORTEX.prompt.md` | Intent router (source of truth) |
+| `.github/prompts/cortex-maintenance.prompt.md` | 6-phase maintenance |
+| `cortex-brain/brain-protection-rules.yaml` | SKULL rules |
+| `cortex-brain/response-templates-v4.yaml` | Response templates |
+| `cortex-brain/manifests/orchestrators/` | All orchestrator manifests |
+
+---
+
+## 🚀 Quick Start
+
+Say `help` in Copilot Chat to see all operations.
+
+**For maintenance:** Use `system maintenance` to run 6-phase health pipeline.
+
+---
+
+**Anti-Bloat:** This file MUST stay under 150 lines. All details defer to CORTEX.prompt.md.
+```
+
+### 8d. Wiring Rules
 
 1. **Single Source of Truth:** `CORTEX.prompt.md` is the intent router
 2. **copilot-instructions.md:** Points TO CORTEX.prompt.md, doesn't duplicate
-3. **Manifests:** All orchestrators reference their manifest file
-4. **Output Specs:** Planning operations include folder structure requirement
-5. **Knowledge Library:** All orchestrators must reference `cortex-brain/knowledge/` for guidelines
+3. **ALL Manifests:** Every orchestrator in `cortex-brain/manifests/orchestrators/` MUST be in Intent Router
+4. **Minimum 3 Triggers:** Each orchestrator needs ≥3 command patterns
+5. **Output Specs:** All operations include clear output specification
+6. **Planning Isolation:** Planning commands include "→ STOPS HERE" or "→ NO IMPLEMENTATION"
+7. **SKULL Integration:** PLANNING_ISOLATION rule referenced in both files
+8. **Knowledge Library:** All orchestrators reference `cortex-brain/knowledge/` for guidelines
+
+### 8e. Auto-Repair Actions
+
+When regenerating prompts, AUTOMATICALLY:
+
+1. **Scan** `cortex-brain/manifests/orchestrators/` for all `.yaml` files
+2. **Extract** orchestrator names and capabilities
+3. **Populate** Intent Router table with ALL orchestrators (minimum 8)
+4. **Add** 3+ trigger patterns per orchestrator
+5. **Specify** output location/format for each orchestrator
+6. **Verify** all manifest paths resolve to existing files
+7. **Enforce** line limits: CORTEX.prompt.md <200, copilot-instructions.md <150
+8. **Validate** no duplicate entries between files
+9. **Ensure** PLANNING_ISOLATION rule in SKULL section
+10. **Backup** existing files before overwriting
+
+### 8f. Validation Commands
+
+```bash
+# Check all orchestrators are wired
+for manifest in cortex-brain/manifests/orchestrators/*-manifest.yaml; do
+  orchestrator=$(basename "$manifest" | sed 's/-manifest.yaml//')
+  grep -q "$orchestrator" .github/prompts/CORTEX.prompt.md || echo "MISSING: $orchestrator"
+done
+
+# Verify no broken paths
+grep -r "orchestrator-manifests" .github/prompts/  # Should return NOTHING
+
+# Verify all manifest references exist
+for f in $(grep -oh "cortex-brain/manifests/orchestrators/[^\"']*" .github/prompts/*.md); do
+  [ -f "$f" ] || echo "MISSING: $f"
+done
+
+# Check line counts
+wc -l .github/prompts/CORTEX.prompt.md  # Should be <200
+wc -l .github/copilot-instructions.md   # Should be <150
+```
 
 ---
 
@@ -1357,15 +1698,17 @@ Version | Author | Status
 |-------|----------------|
 | Health Score | ≥ 90/100 |
 | Wiring Coverage | 100% |
+| **Intent Router Completeness** 🆕 | **Minimum 8 orchestrators with 3+ triggers each** |
 | **Interactive Wiring** 🆕 | All 6 components for Planning & ADO orchestrators |
 | Knowledge Library | All 9 categories present, README current |
 | Knowledge Guidelines | 30+ files with valid metadata |
 | Knowledge Integration | Orchestrators reference knowledge library |
 | Manifest Paths | All resolve to existing files |
 | Intent Triggers | Each orchestrator has ≥3 triggers |
-| CORTEX.prompt.md | <200 lines, all manifests wired |
+| CORTEX.prompt.md | <200 lines, **ALL orchestrators wired** |
 | copilot-instructions.md | <150 lines, defers to CORTEX.prompt.md |
 | Output Structures | Planning System has folder spec |
+| **PLANNING_ISOLATION** 🆕 | **Rule enforced in both prompt files** |
 | **Interactive Planning** 🆕 | Session workflow tests 100% passing |
 | **Vision Auto-Engagement** 🆕 | Image detection and analysis wired |
 | **Test Suite Health** 🆕 | **100% pass rate (ZERO failures, ZERO errors, ZERO obsolete tests)** |
@@ -1386,6 +1729,25 @@ Run during every maintenance cycle:
 - [ ] copilot-instructions.md is <150 lines
 - [ ] copilot-instructions.md defers to CORTEX.prompt.md (no duplication)
 - [ ] Reports folder cleaned (see Phase 9)
+
+### Intent Router Completeness 🆕
+- [ ] Planning System orchestrator in Intent Router
+- [ ] TDD Mastery orchestrator in Intent Router
+- [ ] Debug Orchestrator in Intent Router
+- [ ] CORTEX Lens orchestrator in Intent Router
+- [ ] ADO Planning orchestrator in Intent Router
+- [ ] Code Sanitization orchestrator in Intent Router
+- [ ] Refinement orchestrator in Intent Router
+- [ ] System Maintenance orchestrator in Intent Router
+- [ ] Onboarding/Help orchestrator in Intent Router
+- [ ] Minimum 8 orchestrators total in Intent Router
+- [ ] All orchestrators have 3+ trigger patterns
+- [ ] All orchestrators have output specifications
+- [ ] Planning commands include "→ STOPS HERE" or "→ NO IMPLEMENTATION" indicator
+- [ ] PLANNING_ISOLATION rule in SKULL section of CORTEX.prompt.md
+- [ ] PLANNING_ISOLATION rule in SKULL section of copilot-instructions.md
+- [ ] copilot-instructions.md mirrors ALL primary operations from CORTEX.prompt.md
+- [ ] No orchestrator manifests exist without Intent Router entry
 
 ### Interactive Wiring 🆕
 - [ ] Decision logic exists in Planning & ADO orchestrators
