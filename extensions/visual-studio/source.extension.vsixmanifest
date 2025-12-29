@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
+  <Metadata>
+    <Identity Id="CortexVSExtension.8a3f6a6c-1234-5678-9abc-def012345678" Version="4.0.0" Language="en-US" Publisher="Asif Hussain" />
+    <DisplayName>CORTEX AI Assistant</DisplayName>
+    <Description xml:space="preserve">CORTEX AI Assistant with long-term memory, context awareness, and strategic planning capabilities. Features include planning system, TDD workflows, system maintenance, ADO integration, and more.</Description>
+    <MoreInfo>https://asifhussain60.github.io/CORTEX/</MoreInfo>
+    <License>LICENSE.txt</License>
+    <GettingStartedGuide>https://asifhussain60.github.io/CORTEX/docs/getting-started</GettingStartedGuide>
+    <Icon>Resources\cortex-icon.png</Icon>
+    <PreviewImage>Resources\cortex-icon.png</PreviewImage>
+    <Tags>AI, Assistant, Planning, TDD, Python, Azure DevOps, GitHub Copilot, Memory, Context</Tags>
+  </Metadata>
+  <Installation>
+    <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[17.0, 18.0)">
+      <ProductArchitecture>amd64</ProductArchitecture>
+    </InstallationTarget>
+    <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[17.0, 18.0)">
+      <ProductArchitecture>amd64</ProductArchitecture>
+    </InstallationTarget>
+    <InstallationTarget Id="Microsoft.VisualStudio.Enterprise" Version="[17.0, 18.0)">
+      <ProductArchitecture>amd64</ProductArchitecture>
+    </InstallationTarget>
+  </Installation>
+  <Dependencies>
+    <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.8,)" />
+  </Dependencies>
+  <Prerequisites>
+    <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[17.0,18.0)" DisplayName="Visual Studio core editor" />
+  </Prerequisites>
+  <Assets>
+    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
+    <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%|" />
+  </Assets>
+</PackageManifest>

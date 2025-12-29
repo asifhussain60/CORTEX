@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <!--  This is the file that defines the actual layout and type of the commands.
+        It is divided in different sections (e.g. command definition, command
+        placement, ...), with each defining a specific set of properties.
+        See the comment before each section for more details about how to
+        use it. -->
+
+  <!--  The VSCT compiler (the tool that translates this file into the binary
+        format that VisualStudio will consume) has the ability to run a preprocessor
+        on the vsct file; this preprocessor is (usually) the C++ preprocessor, so
+        it is possible to define includes and macros with the same syntax used
+        in C++ files. Using this ability of the compiler here, we include some files
+        defining some of the constants that we will use inside the file. -->
+
+  <!--This is the file that defines the IDs for all the commands exposed by VisualStudio. -->
+  <Extern href="stdidcmd.h"/>
+
+  <!--This header contains the command ids for the menus provided by the shell. -->
+  <Extern href="vsshlids.h"/>
+
+  <!--The Commands section is where commands, menus, and menu groups are defined.
+      This section uses a Guid to identify the package that provides the command defined inside it. -->
+  <Commands package="guidCortexVSExtensionPackage">
+    <!-- Inside this section we have different sub-sections: one for the menus, another
+    for the menu groups, one for the buttons (the actual commands), one for the combos
+    and the last one for the bitmaps used. Each element is identified by a command id that
+    is a unique pair of guid and numeric identifier; the guid part of the identifier is usually
+    called "command set" and is used to group different command inside a logically related
+    group; your package should define its own command set in order to avoid collisions
+    with command ids defined by other packages. -->
+
+    <Menus>
+      <Menu guid="guidCortexVSExtensionPackageCmdSet" id="CortexTopMenu" priority="0x0100" type="Menu">
+        <Parent guid="guidSHLMainMenu" id="IDG_VS_MM_TOOLSADDINS" />
+        <Strings>
+          <ButtonText>CORTEX</ButtonText>
+          <CommandName>CORTEX</CommandName>
+        </Strings>
+      </Menu>
+    </Menus>
+
+    <Groups>
+      <Group guid="guidCortexVSExtensionPackageCmdSet" id="CortexMenuGroup" priority="0x0600">
+        <Parent guid="guidCortexVSExtensionPackageCmdSet" id="CortexTopMenu"/>
+      </Group>
+      <Group guid="guidCortexVSExtensionPackageCmdSet" id="CortexToolWindowGroup" priority="0x0700">
+        <Parent guid="guidCortexVSExtensionPackageCmdSet" id="CortexTopMenu"/>
+      </Group>
+    </Groups>
+
+    <!--Buttons section. -->
+    <Buttons>
+      <!-- Planning Commands -->
+      <Button guid="guidCortexVSExtensionPackageCmdSet" id="CreatePlanCommandId" priority="0x0100" type="Button">
+        <Parent guid="guidCortexVSExtensionPackageCmdSet" id="CortexMenuGroup" />
+        <Strings>
+          <ButtonText>Create Plan</ButtonText>
+        </Strings>
+      </Button>
+
+      <!-- TDD Commands -->
+      <Button guid="guidCortexVSExtensionPackageCmdSet" id="StartTddCommandId" priority="0x0200" type="Button">
+        <Parent guid="guidCortexVSExtensionPackageCmdSet" id="CortexMenuGroup" />
+        <Strings>
+          <ButtonText>Start TDD Workflow</ButtonText>
+        </Strings>
+      </Button>
+
+      <!-- Maintenance Commands -->
+      <Button guid="guidCortexVSExtensionPackageCmdSet" id="SystemMaintenanceCommandId" priority="0x0300" type="Button">
+        <Parent guid="guidCortexVSExtensionPackageCmdSet" id="CortexMenuGroup" />
+        <Strings>
+          <ButtonText>System Maintenance</ButtonText>
+        </Strings>
+      </Button>
+
+      <!-- ADO Commands -->
+      <Button guid="guidCortexVSExtensionPackageCmdSet" id="CreateAdoStoryCommandId" priority="0x0400" type="Button">
+        <Parent guid="guidCortexVSExtensionPackageCmdSet" id="CortexMenuGroup" />
+        <Strings>
+          <ButtonText>Create ADO Story</ButtonText>
+        </Strings>
+      </Button>
+
+      <!-- Sanitization Commands -->
+      <Button guid="guidCortexVSExtensionPackageCmdSet" id="SanitizeCodeCommandId" priority="0x0500" type="Button">
+        <Parent guid="guidCortexVSExtensionPackageCmdSet" id="CortexMenuGroup" />
+        <Strings>
+          <ButtonText>Sanitize Code</ButtonText>
+        </Strings>
+      </Button>
+
+      <!-- Refinement Commands -->
+      <Button guid="guidCortexVSExtensionPackageCmdSet" id="RefineSystemCommandId" priority="0x0600" type="Button">
+        <Parent guid="guidCortexVSExtensionPackageCmdSet" id="CortexMenuGroup" />
+        <Strings>
+          <ButtonText>Refine System</ButtonText>
+        </Strings>
+      </Button>
+
+      <!-- Help Command -->
+      <Button guid="guidCortexVSExtensionPackageCmdSet" id="HelpCommandId" priority="0x0700" type="Button">
+        <Parent guid="guidCortexVSExtensionPackageCmdSet" id="CortexMenuGroup" />
+        <Strings>
+          <ButtonText>CORTEX Help</ButtonText>
+        </Strings>
+      </Button>
+
+      <!-- Tool Window Commands -->
+      <Button guid="guidCortexVSExtensionPackageCmdSet" id="CortexDashboardCommandId" priority="0x0100" type="Button">
+        <Parent guid="guidCortexVSExtensionPackageCmdSet" id="CortexToolWindowGroup" />
+        <Strings>
+          <ButtonText>CORTEX Dashboard</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidCortexVSExtensionPackageCmdSet" id="PlanningViewerCommandId" priority="0x0200" type="Button">
+        <Parent guid="guidCortexVSExtensionPackageCmdSet" id="CortexToolWindowGroup" />
+        <Strings>
+          <ButtonText>Planning Viewer</ButtonText>
+        </Strings>
+      </Button>
+    </Buttons>
+  </Commands>
+
+  <Symbols>
+    <!-- This is the package guid. -->
+    <GuidSymbol name="guidCortexVSExtensionPackage" value="{8a3f6a6c-1234-5678-9abc-def012345678}" />
+
+    <!-- This is the guid used to group the menu commands together -->
+    <GuidSymbol name="guidCortexVSExtensionPackageCmdSet" value="{8b4f7b7d-2345-6789-abcd-ef0123456789}">
+      <IDSymbol name="CortexTopMenu" value="0x1000" />
+      <IDSymbol name="CortexMenuGroup" value="0x1020" />
+      <IDSymbol name="CortexToolWindowGroup" value="0x1030" />
+      <IDSymbol name="CreatePlanCommandId" value="0x0100" />
+      <IDSymbol name="StartTddCommandId" value="0x0200" />
+      <IDSymbol name="SystemMaintenanceCommandId" value="0x0300" />
+      <IDSymbol name="CreateAdoStoryCommandId" value="0x0400" />
+      <IDSymbol name="SanitizeCodeCommandId" value="0x0500" />
+      <IDSymbol name="RefineSystemCommandId" value="0x0600" />
+      <IDSymbol name="HelpCommandId" value="0x0700" />
+      <IDSymbol name="CortexDashboardCommandId" value="0x0800" />
+      <IDSymbol name="PlanningViewerCommandId" value="0x0900" />
+    </GuidSymbol>
+  </Symbols>
+</CommandTable>
