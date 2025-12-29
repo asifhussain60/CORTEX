@@ -28,7 +28,7 @@ My eye twitched. The left one. It always does that when my ADHD brain recognizes
 
 "I'd be happy to help with authentication! Could you share your current implementation?"
 
-<img src="../illustrations/images/valuable/cortex-awakening-ch01-02.jpeg" alt="Copilot Amnesia" style="float: right; margin: 0 0 1em 1em; max-width: 45%; height: auto;">
+<img src="../illustrations/images/valuable/cortex-awakening-ch01-02.jpeg" alt="Copilot Amnesia" class="story-image-right">
 
 The cursor blinked at me. Cheerful. Oblivious. Like a golden retriever who'd forgotten we'd just gone on a three-hour walk.
 
@@ -52,7 +52,7 @@ I pulled up my git history, hoping for salvation. What I found was evidence of m
 - `no really this is the auth fix` (6:18 PM)
 - `why does git hate me` (6:19 PM)
 
-<img src="../illustrations/images/essentials/cortex-awakening-ch01-03.jpeg" alt="Git Commit Madness" style="float: left; margin: 0 1em 1em 0; max-width: 45%; height: auto;">
+<img src="../illustrations/images/essentials/cortex-awakening-ch01-03.jpeg" alt="Git Commit Madness" class="story-image-left">
 
 Seven commits. Seven separate conversations with Copilot. Seven brilliant, insightful exchanges that had evaporated the moment they ended.
 
@@ -72,7 +72,7 @@ How hard could it be?
 
 I pushed back from my desk. The basement laboratory felt different at midnight—less "cognitive architecture breakthrough" and more "crime scene from a documentary about engineers who went too far."
 
-<img src="../illustrations/images/essentials/cortex-awakening-ch01-01.jpeg" alt="Coffee Mug Timeline" style="float: left; margin: 0 1em 1em 0; max-width: 45%; height: auto;">
+<img src="../illustrations/images/essentials/cortex-awakening-ch01-01.jpeg" alt="Coffee Mug Timeline" class="story-image-left">
 
 Coffee mugs occupied every horizontal surface. Seventeen of them. Mug seventeen sat on papers titled "Conversation Context Persistence Strategies." Mug sixteen had formed a ring stain on my entity relationship diagram. The others were scattered like geological strata, each marking a different failed approach.
 

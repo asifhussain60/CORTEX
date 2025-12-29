@@ -24,7 +24,7 @@ I froze mid-keystroke. "Which one?"
 
 "Asif Codenstein." She used my full name. Never a good sign. "What have you done to that basement?"
 
-<img src="../illustrations/images/essentials/cortex-awakening-prologue-01.jpeg" alt="The Basement Laboratory" style="float: right; margin: 0 0 1em 1em; max-width: 45%; height: auto;">
+<img src="../illustrations/images/essentials/cortex-awakening-prologue-01.jpeg" alt="The Basement Laboratory" class="story-image-right">
 
 "Technically, I've *improved* it."
 
@@ -68,7 +68,7 @@ I took a deep breath. This was the part that mattered.
 
 "And?"
 
-<img src="../illustrations/images/essentials/cortex-awakening-prologue-02.jpeg" alt="Miss G Appears" style="float: left; margin: 0 1em 1em 0; max-width: 45%; height: auto;">
+<img src="../illustrations/images/essentials/cortex-awakening-prologue-02.jpeg" alt="Miss G Appears" class="story-image-left">
 
 "And this morning, I asked it to add a logout button." I let the implications hang in the air.
 

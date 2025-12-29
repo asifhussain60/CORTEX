@@ -2,26 +2,57 @@
 
 **Purpose:** Visual differentiation of character dialog throughout "The Awakening of CORTEX" story
 
-**Implementation:** Context-aware color detection in story-viewer.js
+**Implementation:** Context-aware CSS classes in story-viewer.js + story-characters.css
 
-**Status:** ✅ VERIFIED - 99% Attribution Rate (1,238/1,250 dialogues)  
-**Last Verified:** December 27, 2025
+**Status:** ✅ ENHANCED - Two-Color System (CSS-Based)  
+**Last Updated:** December 29, 2025
 
 ---
 
-## 🎨 Character Color Palette
+## 🎨 Character Color Palette - TWO COLOR SYSTEM
 
-All colors designed to complement the glassmorphism theme with proper contrast and readability.
+**Simplified for clarity:** Asif (Cyan) vs Miss G (Orchid)
 
-| Character | Color | Hex Code | Role | Usage |
-|-----------|-------|----------|------|-------|
-| **Asif** | Cyan | `#00d4ff` | Protagonist, mad scientist, creator of CORTEX | 1,213 dialogues (97.0%) |
-| **Miss G** | Medium Orchid | `#ba55d3` | Supportive inner voice, imaginary girlfriend construct | 6 dialogues (0.5%) |
-| **Copilot** | Purple | `#7b61ff` | AI assistant, GitHub Copilot enhanced with CORTEX | Reserved (0 dialogues) |
-| **CORTEX** | Coral Red | `#ff6b6b` | System voice, the AI brain itself | 13 dialogues (1.0%) |
-| **Client** | Orange | `#ffb347` | External characters (business clients, users) | 6 dialogues (0.5%) |
-| **Mom** | Hot Pink | `#ff69b4` | Family members | Reserved (0 dialogues) |
-| **Default** | Light Blue | `#c8c8ff` | Unattributed or neutral dialog | 12 occurrences (1.0%) |
+All colors now defined in `story-characters.css` for easy maintenance.
+
+| Character | Color | CSS Class | Hex Code | Role |
+|-----------|-------|-----------|----------|------|
+| **Asif** | Cyan | `dialogue-asif` | `#00d4ff` | Protagonist, mad scientist, narrator (first-person) |
+| **Miss G** | Medium Orchid | `dialogue-miss-g` | `#ba55d3` | Imaginary girlfriend, supportive inner voice |
+| **Copilot** | Purple | `dialogue-copilot` | `#7b61ff` | AI assistant, GitHub Copilot |
+| **CORTEX** | Coral Red | `dialogue-cortex` | `#ff6b6b` | System voice, the AI brain itself |
+| **Client** | Orange | `dialogue-client` | `#ffb347` | External characters (business clients, users) |
+| **Default** | Cyan | `dialogue-default` | `#00d4ff` | Unattributed → defaults to Asif |
+
+---
+
+## 🔄 What Changed (December 29, 2025)
+
+### Before (Inline Styles)
+- ❌ Colors hardcoded in JavaScript
+- ❌ Inline `style=` attributes in generated HTML
+- ❌ Difficult to maintain consistency
+- ❌ Multiple shades causing confusion
+
+### After (CSS Classes)
+- ✅ Colors defined in `story-characters.css`
+- ✅ Semantic CSS classes (`.dialogue-asif`, `.dialogue-miss-g`)
+- ✅ Easy to maintain and update
+- ✅ Two distinct colors for clear differentiation
+- ✅ Consistent across all chapters
+- ✅ Supports accessibility features (high contrast, print)
+
+---
+
+## 💡 Why Two Colors?
+
+**Problem:** Users reported Miss G's dialogues being "split" in colors, causing confusion.
+
+**Solution:** Simplified to **two primary colors**:
+1. **Asif (Cyan)** - The narrator, protagonist, all first-person voice
+2. **Miss G (Orchid)** - The imaginary girlfriend, inner voice
+
+This creates **clear visual distinction** while maintaining readability.
 
 ---
 

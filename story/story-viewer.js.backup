@@ -4,9 +4,6 @@
  * Copyright © 2025 Asif Hussain. All rights reserved.
  */
 
-// Track last speaker for conversation flow (dialogue coloring)
-let lastSpeaker = null;
-
 // Chapter Configuration with Images
 const CHAPTERS = {
     'prologue': {
@@ -322,13 +319,28 @@ function showTitleCover() {
     
     // Display centered title cover with fade-in animation
     container.innerHTML = `
-        <div class="title-cover-container">
+        <div class="title-cover-container" style="
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+            padding: 2rem;
+            animation: fadeIn 0.6s ease-in;
+        ">
             <img 
                 src="illustrations/images/TitleCover.png" 
                 alt="The Awakening of CORTEX - Title Cover" 
-                class="title-cover-image"
+                style="
+                    max-width: 100%;
+                    max-height: 85vh;
+                    width: auto;
+                    height: auto;
+                    border-radius: var(--radius-lg);
+                    box-shadow: 0 20px 60px rgba(0, 212, 255, 0.3);
+                    transition: transform 0.3s ease;
+                "
                 onload="this.style.opacity='1'"
-                onerror="this.src=''; this.alt='Title cover image not found'; this.style.border='2px dashed var(--glass-border)'; this.style.padding='4rem'; this.style.color='var(--text-secondary);'"
+                onerror="this.src=''; this.alt='Title cover image not found'; this.style.border='2px dashed var(--glass-border)'; this.style.padding='4rem'; this.style.color='var(--text-secondary)';"
             />
         </div>
         <style>
@@ -498,8 +510,6 @@ function parseChapterContent(text, images) {
             
             sectionIndex++;
             paragraphsInSection = 0;
-            // Reset speaker tracking at section boundaries
-            lastSpeaker = null;
             html += `<h2>${line.slice(3)}</h2>`;
             continue;
         }
@@ -511,8 +521,6 @@ function parseChapterContent(text, images) {
                 paragraphBuffer = '';
                 inParagraph = false;
             }
-            // Reset speaker tracking at subsection boundaries
-            lastSpeaker = null;
             html += `<h3>${line.slice(4)}</h3>`;
             continue;
         }
@@ -524,7 +532,7 @@ function parseChapterContent(text, images) {
                 paragraphBuffer = '';
                 inParagraph = false;
             }
-            html += '<hr class="story-hr">';
+            html += '<hr style="border: none; border-top: 1px solid var(--glass-border); margin: 2rem 0;">';
             continue;
         }
         
@@ -557,7 +565,7 @@ function parseChapterContent(text, images) {
                 // Fix relative paths
                 src = src.replace(/^\.\.\/illustrations\//, 'illustrations/');
                 src = src.replace(/^images\//, 'illustrations/images/');
-                html += `<div class="chapter-image"><img src="${src}" alt="${alt}" class="chapter-image" /></div>`;
+                html += `<div class="chapter-image"><img src="${src}" alt="${alt}" style="max-width: 100%; border-radius: var(--radius-md); border: 1px solid var(--glass-border); box-shadow: var(--shadow);" /></div>`;
             }
             continue;
         }
@@ -595,27 +603,23 @@ function parseChapterContent(text, images) {
 }
 
 /**
- * Process character dialog with consistent color coding using CSS classes
- * Detects character names and applies appropriate CSS class
- * SIMPLIFIED: Two-color system for clear distinction
+ * Process character dialog with consistent color coding
+ * Detects character names and applies glassmorphism-compatible colors
+ * IMPORTANT: Only changes color, NOT font-size (maintains 1.3em from Comic Sans)
  */
 function processCharacterDialog(text) {
-    // Character to CSS class mapping
-    const characterClasses = {
-        'Asif': 'dialogue-asif',
-        'Miss G': 'dialogue-miss-g',
-        'Copilot': 'dialogue-copilot',
-        'CORTEX': 'dialogue-cortex',
-        'client': 'dialogue-client',
-        'Mom': 'dialogue-miss-g',    // Group with Miss G
-        'he': 'dialogue-asif',       // Asif (pronoun)
-        'He': 'dialogue-asif',
-        'his': 'dialogue-asif',
-        'His': 'dialogue-asif',
-        'she': 'dialogue-miss-g',    // Miss G (pronoun)
-        'She': 'dialogue-miss-g',
-        'her': 'dialogue-miss-g',
-        'Her': 'dialogue-miss-g'
+    // Character color palette (glassmorphism theme)
+    const characterColors = {
+        'Asif': '#00d4ff',           // Cyan - protagonist
+        'Miss G': '#ba55d3',         // Medium orchid - supportive inner voice
+        'Copilot': '#7b61ff',        // Purple - AI assistant
+        'CORTEX': '#ff6b6b',         // Coral red - system voice
+        'client': '#ffb347',         // Orange - external characters
+        'Mom': '#ff69b4',            // Hot pink - family
+        'he': '#00d4ff',             // Asif (pronoun)
+        'He': '#00d4ff',             // Asif (pronoun)
+        'she': '#ba55d3',            // Miss G (pronoun)
+        'She': '#ba55d3'             // Miss G (pronoun)
     };
     
     // Process quoted dialog with character detection
@@ -627,58 +631,14 @@ function processCharacterDialog(text) {
             return match; // Return uncolored
         }
         
-        // Get context before the quote (up to 300 chars for better detection)
-        const contextBefore = text.substring(Math.max(0, offset - 300), offset);
+        // Get context before the quote (up to 200 chars for better detection)
+        const contextBefore = text.substring(Math.max(0, offset - 200), offset);
         
-        // Get context after the quote (up to 150 chars for "said" attribution)
-        const contextAfter = text.substring(offset + match.length, Math.min(text.length, offset + match.length + 150));
-        
-        // First-person narrator detection (Asif is the narrator)
-        // Check BEFORE the quote
-        const firstPersonPatternsBefore = [
-            /\bI\s+(?:said|asked|responded|replied|muttered|whispered|thought|wondered|froze|looked|turned|spun|gestured|pointed|ran|spun back|tried|managed|let|continued|stopped|started)/i,
-            /\bMy\s+(?:voice|thoughts|mind|hand|hands|eyes|face|head)/i,
-            /\bI\s+(?:could|would|should|had to|needed to|wanted to)/i
-        ];
-        
-        for (const pattern of firstPersonPatternsBefore) {
-            if (pattern.test(contextBefore)) {
-                lastSpeaker = 'Asif';
-                return `<span class="dialogue-asif">"${dialog}"</span>`;
-            }
-        }
-        
-        // Check AFTER the quote for trailing attribution (e.g., "text," I said)
-        const firstPersonPatternsAfter = [
-            /^[,.]?\s*I\s+(?:said|asked|responded|replied|muttered|whispered|thought|wondered|froze|looked|turned|spun|gestured|pointed|ran|spun back|tried|managed|let|continued|stopped|started|typed|opened|pulled|set|took|added|explained|told|announced|declared)/i,
-            /^[,.]?\s*My\s+(?:voice|thoughts|mind|hand|hands|eyes|face|head)/i
-        ];
-        
-        for (const pattern of firstPersonPatternsAfter) {
-            if (pattern.test(contextAfter)) {
-                lastSpeaker = 'Asif';
-                return `<span class="dialogue-asif">"${dialog}"</span>`;
-            }
-        }
+        // Get context after the quote (up to 100 chars for "said" attribution)
+        const contextAfter = text.substring(offset + match.length, Math.min(text.length, offset + match.length + 100));
         
             // Check which character is speaking based on context
-        for (const [character, cssClass] of Object.entries(characterClasses)) {
-            // Special handling for Miss G (imaginary girlfriend, inner voice)
-            if (character === 'Miss G') {
-                const missGPatterns = [
-                    /Miss G'?s?\s+voice/i,
-                    /(?:she|She)\s+used my full name/i,
-                    /imaginary girlfriend/i,
-                    /in my (?:thoughts|mind|consciousness|head)/i,
-                    /(?:Mrs\.|Miss)\s*G'?s?\s*voice/i
-                ];
-                
-                if (missGPatterns.some(p => p.test(contextBefore) || p.test(contextAfter))) {
-                    lastSpeaker = 'Miss G';
-                    return `<span class="${cssClass}">"${dialog}"</span>`;
-                }
-            }
-            
+        for (const [character, color] of Object.entries(characterColors)) {
             // Comprehensive pattern list to catch 70%+ unattributed dialogues
             const patterns = [
                 // === DIRECT ATTRIBUTION ===
@@ -770,29 +730,13 @@ function processCharacterDialog(text) {
             
             if (patterns.some(pattern => pattern && pattern.test(contextBefore)) || 
                 patternsAfter.some(pattern => pattern.test(contextAfter))) {
-                // Apply CSS class and track speaker
-                lastSpeaker = character;
-                return `<span class="${cssClass}">"${dialog}"</span>`;
+                // Apply color with 10% reduction in font-size (1.17em = 90% of 1.3em)
+                return `<span style="color: ${color}; font-weight: 500; text-shadow: 0 0 20px ${color}40; font-size: 0.9em;">"${dialog}"</span>`;
             }
         }
         
-        // Conversation flow: alternate speakers for short consecutive dialogues
-        if (lastSpeaker && dialog.length < 50) {
-            const alternativeSpeaker = lastSpeaker === 'Asif' ? 'Miss G' : 'Asif';
-            const cssClass = characterClasses[alternativeSpeaker];
-            
-            // Verify no conflicting attribution in context
-            const combinedContext = contextBefore + ' ' + contextAfter;
-            const hasConflictingAttribution = /\b(Asif|Miss G|Copilot|CORTEX|client|Mom)\s+(?:asked|said|replied)/i.test(combinedContext);
-            
-            if (!hasConflictingAttribution) {
-                lastSpeaker = alternativeSpeaker;
-                return `<span class="${cssClass}">"${dialog}"</span>`;
-            }
-        }
-        
-        // Default dialog style (Asif's color for consistency)
-        return `<span class="dialogue-default">"${dialog}"</span>`;
+        // Default dialog style (neutral with slight glow) - 10% reduction
+        return `<span style="color: #c8c8ff; font-weight: 500; font-size: 0.9em;">"${dialog}"</span>`;
     });
     
     return text;
@@ -839,13 +783,13 @@ function calculateImagePlacement(totalSections, imageCount) {
  */
 function createInlineImage(image) {
     const position = image.position || 'right';
-    const floatClass = position === 'right' ? 'float-right' : 'float-left';
+    const floatStyle = position === 'right' ? 'float: right; margin: 0 0 1.5rem 2rem;' : 'float: left; margin: 0 2rem 1.5rem 0;';
     
     return `
-        <div class="inline-image-wrapper ${floatClass}">
+        <div style="${floatStyle} max-width: 52%; min-width: 345px;">
             <img src="${image.src}" 
                  alt="Story illustration" 
-                 class="inline-image" />
+                 style="width: 100%; border-radius: var(--radius-md); border: 1px solid var(--glass-border); box-shadow: var(--shadow);" />
         </div>
     `;
 }
@@ -861,7 +805,7 @@ function processInlineFormatting(text) {
     text = text.replace(/\*(.+?)\*/g, '<em>$1</em>');
     
     // Code (`code`)
-    text = text.replace(/`(.+?)`/g, '<code class="inline-code">$1</code>');
+    text = text.replace(/`(.+?)`/g, '<code style="background: rgba(0,212,255,0.1); padding: 0.2rem 0.4rem; border-radius: 4px; font-family: var(--font-mono); font-size: 0.9em;">$1</code>');
     
     return text;
 }
@@ -896,7 +840,7 @@ function renderNextButton(chapter) {
     const nextChapter = CHAPTERS[chapter.next];
     return `
         <a href="#${chapter.next}" class="nav-button" data-nav="next">
-            <div class="nav-next-content">
+            <div style="text-align: right;">
                 <span class="nav-label">Next →</span>
                 <div class="nav-title">${nextChapter.title}</div>
             </div>
@@ -954,10 +898,10 @@ function showError(message) {
     const container = document.getElementById('chapterContent');
     container.innerHTML = `
         <div class="chapter-container">
-            <div class="error-container">
-                <h2 class="error-title">⚠️ Error</h2>
-                <p class="error-message">${message}</p>
-                <a href="#prologue" class="error-link">Return to Prologue</a>
+            <div style="text-align: center; padding: 4rem 2rem;">
+                <h2 style="color: var(--danger); margin-bottom: 1rem;">⚠️ Error</h2>
+                <p style="color: var(--text-secondary);">${message}</p>
+                <a href="#prologue" style="display: inline-block; margin-top: 2rem; padding: 1rem 2rem; background: var(--accent-primary); color: white; text-decoration: none; border-radius: var(--radius-md);">Return to Prologue</a>
             </div>
         </div>
     `;
