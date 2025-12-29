@@ -4,55 +4,94 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800"
-             Background="{DynamicResource VsBrush.Window}">
+             d:DesignHeight="600" d:DesignWidth="400"
+             Background="{DynamicResource VsBrush.Window}"
+             Loaded="UserControl_Loaded">
     <Grid Margin="10">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <!-- Header -->
-        <StackPanel Grid.Row="0" Margin="0,0,0,20">
+        <StackPanel Grid.Row="0" Margin="0,0,0,15">
             <TextBlock Text="🧠 CORTEX Dashboard" 
                        FontSize="20" 
                        FontWeight="Bold" 
                        Foreground="{DynamicResource VsBrush.WindowText}"/>
             <TextBlock Text="AI Assistant with long-term memory and context awareness" 
-                       FontSize="12" 
+                       FontSize="11" 
                        Foreground="{DynamicResource VsBrush.GrayText}"
                        Margin="0,5,0,0"/>
         </StackPanel>
 
-        <!-- Content -->
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-            <StackPanel>
-                <!-- Placeholder content -->
-                <TextBlock Text="Dashboard functionality will be implemented in Task 12.2.3" 
-                           FontSize="14" 
-                           Foreground="{DynamicResource VsBrush.WindowText}"
-                           TextWrapping="Wrap"
-                           Margin="0,0,0,10"/>
-                
-                <TextBlock Text="Planned Features:" 
-                           FontSize="14" 
-                           FontWeight="Bold"
-                           Foreground="{DynamicResource VsBrush.WindowText}"
-                           Margin="0,10,0,5"/>
-                
-                <TextBlock Text="• System status and health metrics" 
-                           Foreground="{DynamicResource VsBrush.WindowText}"
-                           Margin="20,2,0,2"/>
-                <TextBlock Text="• Quick action buttons" 
-                           Foreground="{DynamicResource VsBrush.WindowText}"
-                           Margin="20,2,0,2"/>
-                <TextBlock Text="• Recent plans and activities" 
-                           Foreground="{DynamicResource VsBrush.WindowText}"
-                           Margin="20,2,0,2"/>
-                <TextBlock Text="• Workspace context display" 
-                           Foreground="{DynamicResource VsBrush.WindowText}"
-                           Margin="20,2,0,2"/>
+        <!-- Workspace Info -->
+        <GroupBox Grid.Row="1" Header="Workspace" 
+                  Margin="0,0,0,10"
+                  Foreground="{DynamicResource VsBrush.WindowText}"
+                  BorderBrush="{DynamicResource VsBrush.ToolWindowBorder}">
+            <StackPanel Margin="5">
+                <StackPanel Orientation="Horizontal" Margin="0,2">
+                    <TextBlock Text="Context: " FontWeight="Bold" Width="100" 
+                               Foreground="{DynamicResource VsBrush.WindowText}"/>
+                    <TextBlock x:Name="ContextText" Text="Loading..." 
+                               Foreground="{DynamicResource VsBrush.WindowText}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,2">
+                    <TextBlock Text="CORTEX Path: " FontWeight="Bold" Width="100" 
+                               Foreground="{DynamicResource VsBrush.WindowText}"/>
+                    <TextBlock x:Name="CortexPathText" Text="Loading..." 
+                               TextWrapping="Wrap"
+                               Foreground="{DynamicResource VsBrush.WindowText}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,2">
+                    <TextBlock Text="Workspace: " FontWeight="Bold" Width="100" 
+                               Foreground="{DynamicResource VsBrush.WindowText}"/>
+                    <TextBlock x:Name="WorkspacePathText" Text="Loading..." 
+                               TextWrapping="Wrap"
+                               Foreground="{DynamicResource VsBrush.WindowText}"/>
+                </StackPanel>
             </StackPanel>
-        </ScrollViewer>
+        </GroupBox>
+
+        <!-- Quick Actions -->
+        <GroupBox Grid.Row="2" Header="Quick Actions" 
+                  Margin="0,0,0,10"
+                  Foreground="{DynamicResource VsBrush.WindowText}"
+                  BorderBrush="{DynamicResource VsBrush.ToolWindowBorder}">
+            <StackPanel Margin="5">
+                <Button x:Name="CreatePlanButton" Content="📋 Create Plan" 
+                        Margin="0,2" Padding="5" Click="CreatePlanButton_Click"
+                        Background="{DynamicResource VsBrush.ButtonFace}"
+                        Foreground="{DynamicResource VsBrush.ButtonText}"/>
+                <Button x:Name="StartTddButton" Content="🧪 Start TDD" 
+                        Margin="0,2" Padding="5" Click="StartTddButton_Click"
+                        Background="{DynamicResource VsBrush.ButtonFace}"
+                        Foreground="{DynamicResource VsBrush.ButtonText}"/>
+                <Button x:Name="MaintenanceButton" Content="🔧 System Maintenance" 
+                        Margin="0,2" Padding="5" Click="MaintenanceButton_Click"
+                        Background="{DynamicResource VsBrush.ButtonFace}"
+                        Foreground="{DynamicResource VsBrush.ButtonText}"/>
+                <Button x:Name="RefreshButton" Content="🔄 Refresh Dashboard" 
+                        Margin="0,2" Padding="5" Click="RefreshButton_Click"
+                        Background="{DynamicResource VsBrush.ButtonFace}"
+                        Foreground="{DynamicResource VsBrush.ButtonText}"/>
+            </StackPanel>
+        </GroupBox>
+
+        <!-- Recent Activity -->
+        <GroupBox Grid.Row="3" Header="Recent Activity" 
+                  Foreground="{DynamicResource VsBrush.WindowText}"
+                  BorderBrush="{DynamicResource VsBrush.ToolWindowBorder}">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel x:Name="ActivityPanel" Margin="5">
+                    <TextBlock Text="No recent activity" 
+                               Foreground="{DynamicResource VsBrush.GrayText}"
+                               FontStyle="Italic"/>
+                </StackPanel>
+            </ScrollViewer>
+        </GroupBox>
     </Grid>
 </UserControl>

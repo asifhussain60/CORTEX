@@ -4,58 +4,62 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800"
-             Background="{DynamicResource VsBrush.Window}">
+             d:DesignHeight="600" d:DesignWidth="400"
+             Background="{DynamicResource VsBrush.Window}"
+             Loaded="UserControl_Loaded">
     <Grid Margin="10">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <!-- Header -->
-        <StackPanel Grid.Row="0" Margin="0,0,0,20">
+        <StackPanel Grid.Row="0" Margin="0,0,0,15">
             <TextBlock Text="📋 CORTEX Planning Viewer" 
                        FontSize="20" 
                        FontWeight="Bold" 
                        Foreground="{DynamicResource VsBrush.WindowText}"/>
             <TextBlock Text="Interactive plan visualization and progress tracking" 
-                       FontSize="12" 
+                       FontSize="11" 
                        Foreground="{DynamicResource VsBrush.GrayText}"
                        Margin="0,5,0,0"/>
         </StackPanel>
 
-        <!-- Content -->
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-            <StackPanel>
-                <!-- Placeholder content -->
-                <TextBlock Text="Planning Viewer functionality will be implemented in Task 12.2.3" 
-                           FontSize="14" 
-                           Foreground="{DynamicResource VsBrush.WindowText}"
-                           TextWrapping="Wrap"
-                           Margin="0,0,0,10"/>
-                
-                <TextBlock Text="Planned Features:" 
-                           FontSize="14" 
-                           FontWeight="Bold"
-                           Foreground="{DynamicResource VsBrush.WindowText}"
-                           Margin="0,10,0,5"/>
-                
-                <TextBlock Text="• Plan hierarchy tree view" 
-                           Foreground="{DynamicResource VsBrush.WindowText}"
-                           Margin="20,2,0,2"/>
-                <TextBlock Text="• Task progress tracking" 
-                           Foreground="{DynamicResource VsBrush.WindowText}"
-                           Margin="20,2,0,2"/>
-                <TextBlock Text="• DoR/DoD checklist visualization" 
-                           Foreground="{DynamicResource VsBrush.WindowText}"
-                           Margin="20,2,0,2"/>
-                <TextBlock Text="• Real-time plan updates" 
-                           Foreground="{DynamicResource VsBrush.WindowText}"
-                           Margin="20,2,0,2"/>
-                <TextBlock Text="• Quick navigation to plan files" 
-                           Foreground="{DynamicResource VsBrush.WindowText}"
-                           Margin="20,2,0,2"/>
-            </StackPanel>
-        </ScrollViewer>
+        <!-- Toolbar -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
+            <Button x:Name="RefreshPlansButton" Content="🔄 Refresh" 
+                    Padding="8,4" Margin="0,0,5,0" Click="RefreshPlansButton_Click"
+                    Background="{DynamicResource VsBrush.ButtonFace}"
+                    Foreground="{DynamicResource VsBrush.ButtonText}"/>
+            <Button x:Name="CreateNewPlanButton" Content="➕ New Plan" 
+                    Padding="8,4" Margin="0,0,5,0" Click="CreateNewPlanButton_Click"
+                    Background="{DynamicResource VsBrush.ButtonFace}"
+                    Foreground="{DynamicResource VsBrush.ButtonText}"/>
+            <TextBlock Text="|" Margin="5,0" VerticalAlignment="Center"
+                       Foreground="{DynamicResource VsBrush.GrayText}"/>
+            <TextBlock x:Name="PlanCountText" Text="0 plans" VerticalAlignment="Center" Margin="5,0"
+                       Foreground="{DynamicResource VsBrush.WindowText}"/>
+        </StackPanel>
+
+        <!-- Plans Tree View -->
+        <Border Grid.Row="2" 
+                BorderBrush="{DynamicResource VsBrush.ToolWindowBorder}"
+                BorderThickness="1">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <TreeView x:Name="PlansTreeView" 
+                          Background="{DynamicResource VsBrush.Window}"
+                          Foreground="{DynamicResource VsBrush.WindowText}"
+                          BorderThickness="0"
+                          SelectedItemChanged="PlansTreeView_SelectedItemChanged">
+                    <TreeView.ItemContainerStyle>
+                        <Style TargetType="TreeViewItem">
+                            <Setter Property="Foreground" Value="{DynamicResource VsBrush.WindowText}"/>
+                            <Setter Property="IsExpanded" Value="True"/>
+                        </Style>
+                    </TreeView.ItemContainerStyle>
+                </TreeView>
+            </ScrollViewer>
+        </Border>
     </Grid>
 </UserControl>
