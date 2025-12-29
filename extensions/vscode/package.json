@@ -91,6 +91,11 @@
         "command": "cortex.showDashboard",
         "title": "CORTEX: Show Dashboard",
         "category": "CORTEX"
+      },
+      {
+        "command": "cortex.executeNaturalLanguage",
+        "title": "CORTEX: Execute Natural Language Command",
+        "category": "CORTEX"
       }
     ],
     "configuration": {

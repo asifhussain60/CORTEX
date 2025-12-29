@@ -39,6 +39,7 @@ const outputChannel_1 = require("../utils/outputChannel");
 const pythonExecutor_1 = require("../utils/pythonExecutor");
 const workspaceDetector_1 = require("../utils/workspaceDetector");
 const dashboardProvider_1 = require("../utils/dashboardProvider");
+const copilotIntegration_1 = require("../utils/copilotIntegration");
 /**
  * Register all CORTEX commands
  */
@@ -46,6 +47,7 @@ function registerCommands(context) {
     const outputChannel = outputChannel_1.OutputChannelManager.getInstance();
     const pythonExecutor = pythonExecutor_1.PythonExecutor.getInstance();
     const workspaceDetector = workspaceDetector_1.WorkspaceDetector.getInstance();
+    const copilotIntegration = copilotIntegration_1.CopilotIntegration.getInstance();
     // CORTEX: Show Help
     context.subscriptions.push(vscode.commands.registerCommand('cortex.help', async () => {
         outputChannel.log('Executing command: cortex.help');
@@ -323,6 +325,25 @@ Use @cortex in GitHub Copilot Chat for natural language interaction.
         const dashboard = dashboardProvider_1.DashboardProvider.getInstance(context);
         dashboard.show();
     }));
-    outputChannel.log('Registered 9 commands');
+    // CORTEX: Execute Natural Language Command (for Copilot integration)
+    context.subscriptions.push(vscode.commands.registerCommand('cortex.executeNaturalLanguage', async (input) => {
+        outputChannel.log('Executing command: cortex.executeNaturalLanguage');
+        // Get input from user if not provided
+        if (!input) {
+            input = await vscode.window.showInputBox({
+                prompt: 'Enter CORTEX command in natural language',
+                placeHolder: 'e.g., "create a plan for user authentication"',
+            });
+            if (!input) {
+                return; // User cancelled
+            }
+        }
+        // Parse and execute
+        const success = await copilotIntegration.executeFromNaturalLanguage(input);
+        if (!success) {
+            vscode.window.showWarningMessage(`Could not understand command: "${input}". Try "CORTEX: Show Help" for available commands.`);
+        }
+    }));
+    outputChannel.log('Registered 10 commands');
 }
 //# sourceMappingURL=index.js.map

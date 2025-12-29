@@ -38,6 +38,7 @@ exports.deactivate = deactivate;
 const vscode = __importStar(require("vscode"));
 const commands_1 = require("./commands");
 const outputChannel_1 = require("./utils/outputChannel");
+const copilotIntegration_1 = require("./utils/copilotIntegration");
 function activate(context) {
     console.log('CORTEX extension is now active');
     // Initialize output channel
@@ -46,13 +47,20 @@ function activate(context) {
     outputChannel.log('Extension activated successfully');
     // Register all commands
     (0, commands_1.registerCommands)(context);
+    // Initialize Copilot integration
+    const copilotIntegration = copilotIntegration_1.CopilotIntegration.getInstance();
+    copilotIntegration.registerContextProvider(context);
+    outputChannel.log('Copilot integration initialized');
     // Show welcome message on first activation
     const config = vscode.workspace.getConfiguration('cortex');
     const hasShownWelcome = context.globalState.get('hasShownWelcome', false);
     if (!hasShownWelcome) {
-        vscode.window.showInformationMessage('Welcome to CORTEX! Use "CORTEX: Show Help" or @cortex in Copilot Chat to get started.', 'Show Help').then(selection => {
+        vscode.window.showInformationMessage('Welcome to CORTEX! Use "CORTEX: Show Help" or @github in Copilot Chat with CORTEX commands to get started.', 'Show Help', 'Show Dashboard').then(selection => {
             if (selection === 'Show Help') {
                 vscode.commands.executeCommand('cortex.help');
+            }
+            else if (selection === 'Show Dashboard') {
+                vscode.commands.executeCommand('cortex.showDashboard');
             }
         });
         context.globalState.update('hasShownWelcome', true);

@@ -3,6 +3,7 @@ import { OutputChannelManager } from '../utils/outputChannel';
 import { PythonExecutor } from '../utils/pythonExecutor';
 import { WorkspaceDetector } from '../utils/workspaceDetector';
 import { DashboardProvider } from '../utils/dashboardProvider';
+import { CopilotIntegration } from '../utils/copilotIntegration';
 
 /**
  * Register all CORTEX commands
@@ -11,6 +12,7 @@ export function registerCommands(context: vscode.ExtensionContext): void {
     const outputChannel = OutputChannelManager.getInstance();
     const pythonExecutor = PythonExecutor.getInstance();
     const workspaceDetector = WorkspaceDetector.getInstance();
+    const copilotIntegration = CopilotIntegration.getInstance();
 
     // CORTEX: Show Help
     context.subscriptions.push(
@@ -409,6 +411,34 @@ Use @cortex in GitHub Copilot Chat for natural language interaction.
         })
     );
 
-    outputChannel.log('Registered 9 commands');
+    // CORTEX: Execute Natural Language Command (for Copilot integration)
+    context.subscriptions.push(
+        vscode.commands.registerCommand('cortex.executeNaturalLanguage', async (input?: string) => {
+            outputChannel.log('Executing command: cortex.executeNaturalLanguage');
+            
+            // Get input from user if not provided
+            if (!input) {
+                input = await vscode.window.showInputBox({
+                    prompt: 'Enter CORTEX command in natural language',
+                    placeHolder: 'e.g., "create a plan for user authentication"',
+                });
+
+                if (!input) {
+                    return; // User cancelled
+                }
+            }
+
+            // Parse and execute
+            const success = await copilotIntegration.executeFromNaturalLanguage(input);
+            
+            if (!success) {
+                vscode.window.showWarningMessage(
+                    `Could not understand command: "${input}". Try "CORTEX: Show Help" for available commands.`
+                );
+            }
+        })
+    );
+
+    outputChannel.log('Registered 10 commands');
 }
 
