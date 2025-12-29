@@ -8,64 +8,6 @@
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="../assets/css/main.css">
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    <style>
-        .orchestrator-viz-section { margin-bottom: var(--spacing-2xl); }
-        .orchestrator-viz-section .glass-card { max-width: 1400px; margin: 0 auto; }
-        .viz-btn {
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: var(--radius-sm);
-            font-weight: 600;
-            cursor: pointer;
-            transition: all var(--transition-base);
-            font-size: 0.875rem;
-        }
-        .viz-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-        .viz-btn.active { box-shadow: 0 0 0 3px rgba(255,255,255,0.5); }
-        .viz-all { background: linear-gradient(135deg, #00d4ff 0%, #7b61ff 100%); color: white; }
-        .viz-planning { background: #2196F3; color: white; }
-        .viz-execution { background: #4CAF50; color: white; }
-        .viz-system { background: #FF9800; color: white; }
-        .viz-analysis { background: #9C27B0; color: white; }
-        .viz-debug { background: #F44336; color: white; }
-        #orchestratorMapMain .node circle {
-            cursor: pointer;
-            stroke: #fff;
-            stroke-width: 3px;
-            transition: all 0.3s ease;
-        }
-        #orchestratorMapMain .node:hover circle {
-            stroke-width: 5px;
-            filter: brightness(1.2);
-        }
-        #orchestratorMapMain .node text {
-            font-size: 11px;
-            font-weight: 600;
-            text-anchor: middle;
-            pointer-events: none;
-            fill: #ffffff;
-        }
-        #orchestratorMapMain .link {
-            fill: none;
-            stroke: #999;
-            stroke-opacity: 0.3;
-            stroke-width: 2px;
-        }
-        .viz-tooltip h3 {
-            margin: 0 0 8px 0;
-            font-size: 15px;
-            border-bottom: 2px solid #00d4ff;
-            padding-bottom: 5px;
-        }
-        .viz-tooltip .badge {
-            display: inline-block;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 10px;
-            margin-right: 5px;
-            margin-top: 5px;
-        }
-    </style>
 </head>
 <body>
     <!-- Skip Link -->
@@ -88,20 +30,20 @@
     <!-- Interactive Orchestrator Map -->
     <section class="orchestrator-viz-section">
         <div class="glass-card">
-            <h2 style="text-align: center; color: var(--accent-primary); margin-bottom: 1rem;">🎭 Interactive Orchestrator Map</h2>
+            <h2 class="section-title">🎭 Interactive Orchestrator Map</h2>
             <p style="text-align: center; color: var(--text-secondary); margin-bottom: 2rem;">Click and drag nodes • Filter by category • Click for details</p>
             
             <div class="viz-controls" style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center;">
                 <button class="viz-btn viz-all active" data-category="all">All</button>
                 <button class="viz-btn viz-planning" data-category="planning">Planning (4)</button>
                 <button class="viz-btn viz-execution" data-category="execution">Execution (2)</button>
-                <button class="viz-btn viz-system" data-category="system">System (5)</button>
+                <button class="viz-btn viz-system" data-category="system">System (4)</button>
                 <button class="viz-btn viz-analysis" data-category="analysis">Analysis (3)</button>
                 <button class="viz-btn viz-debug" data-category="debug">Debug (2)</button>
             </div>
             
-            <div id="orchestratorMapMain" style="width: 100%; height: 600px; position: relative;"></div>
-            <div class="viz-tooltip" style="position: absolute; background: rgba(0,0,0,0.9); color: white; padding: 15px; border-radius: 8px; pointer-events: none; opacity: 0; transition: opacity 0.3s ease; max-width: 300px; font-size: 13px; z-index: 1000;"></div>
+            <div id="orchestratorMapMain"></div>
+            <div class="viz-tooltip"></div>
         </div>
     </section>
     
@@ -123,7 +65,7 @@
             </p>
             
             <!-- How Orchestrators Work -->
-            <h2><span>🏗️</span> How Orchestrators Work</h2>
+            <h2 class="section-title">🏗️ How Orchestrators Work</h2>
             <p>
                 Every CORTEX orchestrator follows a consistent pattern for reliability and predictability:
             </p>
@@ -165,7 +107,7 @@
         <!-- Primary Orchestrators -->
         <section class="section-overview">
             <div class="glass-card">
-                <h2><span>🎯</span> Primary Orchestrators</h2>
+                <h2 class="section-title">🎯 Primary Orchestrators</h2>
                 <p class="text-secondary">Core workflow automation for everyday development</p>
                 
                 <!-- Orchestrators Grid -->
@@ -290,7 +232,7 @@
         <!-- System Orchestrators -->
         <section class="section-system">
             <div class="glass-card">
-                <h2><span>🛠️</span> System Orchestrators</h2>
+                <h2 class="section-title">🛠️ System Orchestrators</h2>
                 <p class="text-secondary">Internal maintenance and validation workflows</p>
                 
                 <div class="feature-grid feature-grid-3">
@@ -378,7 +320,7 @@
         <!-- Analysis Orchestrators -->
         <section class="section-analysis">
             <div class="glass-card">
-                <h2><span>🔍</span> Analysis Orchestrators</h2>
+                <h2 class="section-title">🔍 Analysis Orchestrators</h2>
                 <p class="text-secondary">Codebase analysis and quality assessment</p>
                 
                 <div class="feature-grid feature-grid-3">
@@ -483,9 +425,6 @@
         { source: 'pre-flight', target: 'planning-system' },
         { source: 'autonomous', target: 'git-checkpoint' },
         { source: 'sanitization', target: 'integrity' },
-        { source: 'maintenance', target: 'integrity' },
-        { source: 'maintenance', target: 'cleanup' },
-        { source: 'maintenance', target: 'refinement' },
         { source: 'refinement', target: 'integrity' },
         { source: 'integrity', target: 'git-checkpoint' },
         { source: 'architectural', target: 'refinement' },
