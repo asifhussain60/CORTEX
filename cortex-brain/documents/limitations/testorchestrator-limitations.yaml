@@ -1,7 +1,0 @@
-orchestrator_name: TestOrchestrator
-version: 1.0.0
-limitations:
-- type: blocker
-  title: Test blocker
-  description: ''
-  impact: high

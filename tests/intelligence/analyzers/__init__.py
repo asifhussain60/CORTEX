@@ -1,1 +1,0 @@
-"""ColdFusion analyzer test package"""

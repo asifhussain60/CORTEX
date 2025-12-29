@@ -1,8 +1,0 @@
-{
-  "timestamp": "20251216_162808",
-  "files_backed_up": 2,
-  "files": [
-    "src\\epmo\\documentation\\cli.py",
-    "src\\epmo\\documentation\\image_prompt_bridge.py"
-  ]
-}
