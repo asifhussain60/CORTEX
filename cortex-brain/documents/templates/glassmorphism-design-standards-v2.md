@@ -1,10 +1,20 @@
-# CORTEX Glassmorphism Design Standards v2.0
+# CORTEX Glassmorphism Design Standards v2.1
 
-**Version:** 2.0.0  
+**Version:** 2.1.0  
 **Created:** December 28, 2025  
+**Updated:** December 29, 2025  
 **Author:** Asif Hussain  
 **Purpose:** Unified glassmorphism design system for all CORTEX documentation views  
 **Supersedes:** `documentation-styling-standards.md` v1.1.0
+
+---
+
+### 📋 Changelog
+
+| Version | Date | Changes |
+|---------|------|---------|
+| **2.1.0** | Dec 29, 2025 | Added D3.js Layout Pattern Selection Guide, Hub-Spoke implementation patterns, Anti-patterns section for tree diagrams with many leaf nodes |
+| **2.0.0** | Dec 28, 2025 | Initial glassmorphism v2 standards, Mermaid diagram guidelines, FontAwesome requirements |
 
 ---
 
@@ -14,6 +24,7 @@ This document establishes the definitive glassmorphism design standard for CORTE
 - ✅ **STS Showcase** (`/sts/index.html`, `/sts/security.html`) - Category navigation, code comparison
 - ✅ **Orchestrator Index** (`/orchestrators/index.html`) - Interactive D3.js visualizations, breadcrumb navigation
 - ✅ **Planning System** (`/orchestrators/planning-system.html`) - Feature documentation
+- ✅ **Microservices Knowledge** (`/knowledge/microservices.html`) - Hub-spoke D3.js radial diagram
 
 **Key Precedence:** This document takes precedence over `documentation-styling-standards.md` for layout patterns, breadcrumb styling, and navigation standards.
 
@@ -26,6 +37,7 @@ This document establishes the definitive glassmorphism design standard for CORTE
 5. **Glassmorphism:** Consistent blur and transparency effects
 6. **Accessibility:** WCAG 2.1 AA compliant color contrast and navigation
 7. **Icons:** Use FontAwesome icons instead of emojis for better browser compatibility
+8. **Viewport-First Diagrams:** D3.js layouts must fit viewport without horizontal scroll
 
 ---
 
@@ -926,6 +938,180 @@ Use `<small>` tag for tertiary details (timestamps, counts, hints).
 
 ---
 
+#### 🎯 D3.js Layout Pattern Selection Guide
+
+**Critical Decision:** Choose the right D3.js layout based on data structure and UX goals.
+
+| Layout Type | Best For | Node Count | Viewport Fit | Example Use Case |
+|-------------|----------|------------|--------------|------------------|
+| **Hub-Spoke Radial** | Central concept with categories | 4-8 pillars | ✅ Excellent | Knowledge maps, feature overviews |
+| **Force-Directed** | Networks with relationships | 10-50 nodes | ⚠️ Needs constraints | Dependency graphs, org charts |
+| **Tree (Vertical)** | Hierarchies | ≤6 leaf nodes | ✅ Good | Simple taxonomies |
+| **Tree (Horizontal)** | Deep hierarchies | 7-12 leaf nodes | ⚠️ May overflow | Detailed breakdowns |
+| **Sunburst/Radial Tree** | Multi-level hierarchies | 13+ nodes | ✅ Compact | Complex taxonomies |
+
+---
+
+#### ⚠️ D3.js Anti-Patterns (Lessons Learned)
+
+**❌ AVOID: Vertical Tree with Many Leaf Nodes**
+
+| Problem | Symptom | Root Cause |
+|---------|---------|------------|
+| **Node Overlap** | Bottom-level nodes collide | Tree width exceeds viewport |
+| **Horizontal Scroll** | User must scroll to see full diagram | Fixed minimum width calculation |
+| **Truncated Labels** | Text cut off with "..." | Node boxes too small for content |
+| **Poor Mobile UX** | Diagram unusable on phones | Layout doesn't scale responsively |
+
+**Example of problematic tree:**
+```
+                    [Root]
+           /    /      \     \
+       [A]   [B]      [C]    [D]
+      / | \  / | \   / | \  / | \
+    [12 overlapping leaf nodes - BAD!]
+```
+
+**✅ PREFER: Hub-Spoke Radial Layout**
+
+When you have 4-6 main categories with sub-topics, use a radial hub design:
+
+```
+              [Topic 1]
+                  |
+    [Topic 4] — [HUB] — [Topic 2]
+                  |
+              [Topic 3]
+```
+
+**Benefits:**
+- Fits viewport without scrolling
+- Central focus point for user attention
+- Sub-topics orbit around each pillar (no collision)
+- Scales gracefully on mobile
+- Click targets are large and accessible
+
+---
+
+#### 📐 D3.js Hub-Spoke Implementation Pattern
+
+**Recommended Structure:**
+```javascript
+// Data structure for hub-spoke
+const hubData = [
+    {
+        id: 'topic1',
+        name: 'Topic Name',
+        icon: '⚡',  // Or FontAwesome class
+        color: '#10b981',
+        link: 'path/to/detail.html',
+        angle: 0,    // Position: 0=top, 90=right, 180=bottom, 270=left
+        topics: ['Subtopic 1', 'Subtopic 2', 'Subtopic 3', 'Subtopic 4']
+    },
+    // ... more pillars at 90, 180, 270 degrees
+];
+```
+
+**Key Calculations:**
+```javascript
+// Responsive sizing
+const width = container.clientWidth;
+const height = 560;  // Fixed height for consistency
+const centerX = width / 2;
+const centerY = height / 2;
+const hubRadius = 70;  // Central hub size
+const spokeDistance = Math.min(width, height) * 0.32;  // Pillar distance from center
+
+// Position pillar at angle
+const angleRad = (pillar.angle - 90) * Math.PI / 180;  // -90 to start from top
+const x = centerX + Math.cos(angleRad) * spokeDistance;
+const y = centerY + Math.sin(angleRad) * spokeDistance;
+```
+
+**Sub-topic Positioning (Orbit Pattern):**
+```javascript
+// Position topics around each pillar in an arc
+const topicRadius = 85;  // Distance from pillar center
+const topicSpread = 50;  // Degrees of arc spread
+const startAngle = pillar.angle - topicSpread;
+const angleStep = (topicSpread * 2) / (topicCount - 1);
+
+topics.forEach((topic, i) => {
+    const topicAngle = (startAngle + (i * angleStep) - 90) * Math.PI / 180;
+    const tx = Math.cos(topicAngle) * topicRadius;
+    const ty = Math.sin(topicAngle) * topicRadius;
+    // Render topic pill at (pillarX + tx, pillarY + ty)
+});
+```
+
+---
+
+#### 🎨 D3.js Visual Enhancement Patterns
+
+**Glow Filter (Reusable):**
+```javascript
+const defs = svg.append('defs');
+const filter = defs.append('filter')
+    .attr('id', 'glow')
+    .attr('x', '-50%')
+    .attr('y', '-50%')
+    .attr('width', '200%')
+    .attr('height', '200%');
+filter.append('feGaussianBlur')
+    .attr('stdDeviation', '4')
+    .attr('result', 'coloredBlur');
+const feMerge = filter.append('feMerge');
+feMerge.append('feMergeNode').attr('in', 'coloredBlur');
+feMerge.append('feMergeNode').attr('in', 'SourceGraphic');
+
+// Apply: .attr('filter', 'url(#glow)')
+```
+
+**Radial Gradient for Hub:**
+```javascript
+const hubGradient = defs.append('radialGradient')
+    .attr('id', 'hubGradient');
+hubGradient.append('stop').attr('offset', '0%').attr('stop-color', '#9b7dff');
+hubGradient.append('stop').attr('offset', '100%').attr('stop-color', '#6b4ed8');
+
+// Apply: .attr('fill', 'url(#hubGradient)')
+```
+
+**Orbit Rings (Decorative):**
+```javascript
+[spokeDistance * 0.5, spokeDistance].forEach((r, i) => {
+    svg.append('circle')
+        .attr('cx', centerX)
+        .attr('cy', centerY)
+        .attr('r', r)
+        .attr('fill', 'none')
+        .attr('stroke', 'rgba(0, 212, 255, 0.15)')
+        .attr('stroke-width', 1)
+        .attr('stroke-dasharray', i === 0 ? '5,5' : 'none');
+});
+```
+
+---
+
+#### ✅ D3.js Implementation Checklist
+
+Before committing any D3.js diagram to production, verify:
+
+- [ ] **Layout Selection**: Chose appropriate layout for node count (hub-spoke for 4-8 categories)
+- [ ] **Viewport Fit**: Diagram fits container without horizontal scroll
+- [ ] **Responsive Width**: Uses `container.clientWidth` not fixed pixels
+- [ ] **Fixed Height**: Consistent height (e.g., 560px) for predictable layout
+- [ ] **Center Calculation**: Hub/root positioned at `width/2, height/2`
+- [ ] **Glow Filter**: Applied to primary nodes for glassmorphism effect
+- [ ] **Click Handlers**: All clickable nodes have `cursor: pointer` and navigation
+- [ ] **Hover States**: Visual feedback on interactive elements
+- [ ] **Color Coding**: Categories use distinct colors from palette
+- [ ] **Label Legibility**: Font sizes appropriate (11-13px for labels, 9-10px for sub-labels)
+- [ ] **Mobile Testing**: Verified on 320px-768px viewports
+- [ ] **Resize Handler**: Debounced re-render on window resize
+
+---
+
 #### 📱 Mobile Responsiveness for Diagrams
 
 **Container Responsive Wrapper:**
@@ -968,15 +1154,25 @@ Use `<small>` tag for tertiary details (timestamps, counts, hints).
 
 Before committing any diagram to production, verify:
 
-- [ ] **Orientation**: Chosen based on node count matrix (≤6 TB, 7-12 LR, 13+ D3.js)
+**For ALL Diagrams:**
+- [ ] **Orientation**: Chosen based on node count matrix (≤6 TB, 7-12 LR, 13+ D3.js/radial)
 - [ ] **Container**: Dark backdrop with padding (`rgba(0, 0, 0, 0.3)`, `2rem`)
 - [ ] **Alignment**: Diagram centered with `text-align: center` on container
-- [ ] **Styling**: Primary nodes have stroke emphasis (`stroke-width: 3px`)
-- [ ] **Labels**: Multi-line with icons, max 3 lines per node
 - [ ] **Colors**: Follow purpose-based palette (primary purple, categories RGB)
-- [ ] **Mobile**: Horizontal scroll enabled (`overflow-x: auto`)
+- [ ] **Mobile**: Horizontal scroll enabled (`overflow-x: auto`) OR responsive layout
 - [ ] **Spacing**: 1.5rem vertical margin from surrounding content
 - [ ] **Accessibility**: SVG rendered (Mermaid default) or ARIA labels (D3.js)
+
+**For Mermaid Diagrams:**
+- [ ] **Styling**: Primary nodes have stroke emphasis (`stroke-width: 3px`)
+- [ ] **Labels**: Multi-line with icons, max 3 lines per node
+
+**For D3.js Diagrams:**
+- [ ] **Layout Type**: Hub-spoke for 4-8 categories, force-directed for networks
+- [ ] **Viewport Fit**: No horizontal scroll required (responsive width calculation)
+- [ ] **Glow Effects**: Applied to primary/hub nodes
+- [ ] **Click Handlers**: Navigation links work on all clickable elements
+- [ ] **Resize Handler**: Debounced re-render on window resize
 
 ---
 

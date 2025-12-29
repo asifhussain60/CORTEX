@@ -31,15 +31,23 @@ class YAMLKnowledgeLoader:
         """
         self.connection_manager = connection_manager
         
+        # Determine root path
+        root = Path(__file__).parent.parent.parent.parent.parent
+        
         if knowledge_base_path is None:
             # Default: cortex-brain/knowledge/
-            root = Path(__file__).parent.parent.parent.parent.parent
             knowledge_base_path = root / "cortex-brain" / "knowledge"
         
         self.knowledge_base_path = Path(knowledge_base_path)
+        
+        # Additional knowledge library path for user-added content
+        self.knowledge_library_path = root / "cortex-brain" / "knowledge-library"
+        
         self.loaded_files: Set[str] = set()
         
         logger.info(f"📚 YAML Knowledge Loader initialized: {self.knowledge_base_path}")
+        if self.knowledge_library_path.exists():
+            logger.info(f"📚 Knowledge Library also available: {self.knowledge_library_path}")
     
     def load_all_knowledge_files(self, force_reload: bool = False) -> Dict[str, int]:
         """
@@ -58,6 +66,7 @@ class YAMLKnowledgeLoader:
         stats = {}
         categories = ['engineering', 'testing', 'security', 'devops', 'domains', 'performance', 'ddd']
         
+        # Load from primary knowledge base
         for category in categories:
             category_path = self.knowledge_base_path / category
             if not category_path.exists():
@@ -85,6 +94,10 @@ class YAMLKnowledgeLoader:
             if patterns_loaded > 0:
                 stats[category] = patterns_loaded
                 logger.info(f"✅ Loaded {category}: {patterns_loaded} patterns")
+        
+        # Load from knowledge-library (user-added content)
+        library_stats = self._load_knowledge_library(force_reload)
+        stats.update(library_stats)
         
         return stats
     
@@ -585,6 +598,485 @@ class YAMLKnowledgeLoader:
         
         return patterns
     
+    # ==================== Knowledge Library Support ====================
+    
+    def _load_knowledge_library(self, force_reload: bool = False) -> Dict[str, int]:
+        """
+        Load YAML files from cortex-brain/knowledge-library/ directory.
+        
+        This directory contains user-added knowledge files organized by category.
+        Supports categories: architecture, design-patterns, security
+        
+        Args:
+            force_reload: If True, reload even if files already loaded
+        
+        Returns:
+            Dictionary with load statistics per category
+        """
+        if not self.knowledge_library_path.exists():
+            logger.debug(f"Knowledge library not found: {self.knowledge_library_path}")
+            return {}
+        
+        stats = {}
+        library_categories = ['architecture', 'design-patterns', 'security']
+        
+        for category in library_categories:
+            category_path = self.knowledge_library_path / category
+            if not category_path.exists():
+                continue
+            
+            yaml_files = list(category_path.glob("*.yaml"))
+            patterns_loaded = 0
+            
+            for yaml_file in yaml_files:
+                file_key = f"library:{yaml_file.relative_to(self.knowledge_library_path)}"
+                
+                # Skip if already loaded (unless force_reload)
+                if not force_reload and file_key in self.loaded_files:
+                    continue
+                
+                # Check if file has been modified since last load
+                if not force_reload and self._is_file_loaded(yaml_file):
+                    logger.debug(f"⏭️  Skipping {yaml_file.name} (already loaded, no changes)")
+                    continue
+                
+                count = self._load_library_yaml_file(yaml_file, category)
+                patterns_loaded += count
+                self.loaded_files.add(file_key)
+            
+            if patterns_loaded > 0:
+                stats[f"library-{category}"] = patterns_loaded
+                logger.info(f"✅ Loaded knowledge-library/{category}: {patterns_loaded} patterns")
+        
+        return stats
+    
+    def _load_library_yaml_file(self, file_path: Path, category: str) -> int:
+        """
+        Load patterns from a knowledge-library YAML file.
+        
+        Args:
+            file_path: Path to YAML file
+            category: Category name (architecture, design-patterns, security)
+        
+        Returns:
+            Number of patterns inserted/updated
+        """
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                data = yaml.safe_load(f)
+            
+            if not isinstance(data, dict):
+                logger.warning(f"Invalid YAML structure in {file_path.name}")
+                return 0
+            
+            # Extract patterns using knowledge-library extraction strategies
+            patterns = self._extract_library_patterns(data, file_path, category)
+            
+            # Store patterns in database
+            patterns_loaded = 0
+            with self.connection_manager.transaction() as conn:
+                cursor = conn.cursor()
+                
+                for pattern in patterns:
+                    # Check if pattern exists
+                    cursor.execute(
+                        "SELECT id FROM patterns WHERE pattern_id = ?",
+                        (pattern['pattern_id'],)
+                    )
+                    existing = cursor.fetchone()
+                    
+                    if existing:
+                        # Update existing pattern
+                        cursor.execute("""
+                            UPDATE patterns 
+                            SET content = ?, confidence = ?, metadata = ?, 
+                                last_accessed = ?
+                            WHERE pattern_id = ?
+                        """, (
+                            pattern['content'],
+                            pattern['confidence'],
+                            pattern['metadata'],
+                            datetime.now().isoformat(),
+                            pattern['pattern_id']
+                        ))
+                    else:
+                        # Insert new pattern
+                        cursor.execute("""
+                            INSERT INTO patterns (
+                                pattern_id, title, content, pattern_type, confidence,
+                                created_at, last_accessed, access_count, source,
+                                metadata, is_pinned, scope, namespaces
+                            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        """, (
+                            pattern['pattern_id'],
+                            pattern['title'],
+                            pattern['content'],
+                            pattern['pattern_type'],
+                            pattern['confidence'],
+                            pattern['created_at'],
+                            pattern['last_accessed'],
+                            pattern['access_count'],
+                            pattern['source'],
+                            pattern['metadata'],
+                            pattern['is_pinned'],
+                            pattern['scope'],
+                            pattern['namespaces']
+                        ))
+                    
+                    patterns_loaded += 1
+                
+                # Store file load metadata
+                self._record_file_load(cursor, file_path)
+            
+            return patterns_loaded
+        
+        except Exception as e:
+            logger.error(f"Failed to load {file_path.name}: {e}")
+            return 0
+    
+    def _extract_library_patterns(
+        self, 
+        data: Dict[str, Any], 
+        file_path: Path,
+        category: str
+    ) -> List[Dict[str, Any]]:
+        """
+        Extract patterns from knowledge-library YAML files.
+        
+        Handles the specific YAML structure used in knowledge-library:
+        - csharp-patterns.yaml: creational_patterns, structural_patterns, behavioral_patterns
+        - reactive-systems.yaml: architectural_patterns, kafka_integration, etc.
+        - microservices-security.yaml: authentication_patterns, api_gateway_security, etc.
+        - microservices-transition.yaml: strangler_application_pattern, database_decomposition, etc.
+        
+        Args:
+            data: Parsed YAML data
+            file_path: Source file path
+            category: Category name
+        
+        Returns:
+            List of pattern dictionaries
+        """
+        patterns = []
+        metadata = data.get('metadata', {})
+        file_stem = file_path.stem
+        source_path = f"knowledge-library/{category}/{file_stem}.yaml"
+        
+        # Strategy 1: C# Design Patterns (creational/structural/behavioral)
+        if 'creational_patterns' in data or 'structural_patterns' in data or 'behavioral_patterns' in data:
+            patterns.extend(self._extract_csharp_patterns(data, file_stem, category, metadata, source_path))
+        
+        # Strategy 2: Architecture Patterns (reactive systems, microservices)
+        architecture_keys = [
+            'architectural_patterns', 'resiliency_principles', 'kafka_integration',
+            'payout_flow_architecture', 'database_integration', 'idempotency_patterns'
+        ]
+        if any(key in data for key in architecture_keys):
+            patterns.extend(self._extract_architecture_patterns(data, file_stem, category, metadata, source_path))
+        
+        # Strategy 3: Security Patterns (microservices security)
+        security_keys = [
+            'service_to_service_security', 'authentication_patterns', 'api_gateway_security',
+            'rate_limiting', 'service_mesh_security', 'threat_modeling'
+        ]
+        if any(key in data for key in security_keys):
+            patterns.extend(self._extract_microservices_security(data, file_stem, category, metadata, source_path))
+        
+        # Strategy 4: Migration Patterns (strangler, database decomposition)
+        migration_keys = [
+            'strangler_application_pattern', 'capability_identification', 'database_decomposition',
+            'feature_toggles', 'routing_strategies', 'migration_anti_patterns'
+        ]
+        if any(key in data for key in migration_keys):
+            patterns.extend(self._extract_migration_patterns(data, file_stem, category, metadata, source_path))
+        
+        # Strategy 5: Pattern Selection Guide (from knowledge-library design patterns)
+        if 'pattern_selection_guide' in data:
+            patterns.extend(self._extract_library_pattern_guide(data, file_stem, category, metadata, source_path))
+        
+        # Fallback: Generic extraction for any remaining top-level keys
+        if not patterns:
+            patterns.extend(self._extract_library_generic(data, file_stem, category, metadata, source_path))
+        
+        return patterns
+    
+    def _extract_csharp_patterns(
+        self,
+        data: Dict[str, Any],
+        file_stem: str,
+        category: str,
+        metadata: Dict[str, Any],
+        source_path: str
+    ) -> List[Dict[str, Any]]:
+        """Extract C# design patterns (creational/structural/behavioral categories)."""
+        patterns = []
+        
+        pattern_categories = {
+            'creational_patterns': 'creational',
+            'structural_patterns': 'structural', 
+            'behavioral_patterns': 'behavioral'
+        }
+        
+        for yaml_key, pattern_type in pattern_categories.items():
+            if yaml_key not in data:
+                continue
+            
+            category_data = data[yaml_key]
+            if not isinstance(category_data, dict):
+                continue
+            
+            for pattern_name, pattern_data in category_data.items():
+                if not isinstance(pattern_data, dict):
+                    continue
+                
+                pattern_id = self._generate_pattern_id(f"csharp_{file_stem}", pattern_name)
+                
+                # Build rich content from pattern data
+                content = {
+                    'intent': pattern_data.get('intent', ''),
+                    'category': pattern_data.get('category', pattern_type),
+                    'when_to_use': pattern_data.get('when_to_use', []),
+                    'participants': pattern_data.get('participants', []),
+                    'csharp_implementation': pattern_data.get('csharp_implementation', {}),
+                    'csharp_notes': pattern_data.get('csharp_notes', []),
+                    'considerations': pattern_data.get('considerations', []),
+                    'vs_other_patterns': pattern_data.get(f'vs_{pattern_name.lower()}', 
+                                         pattern_data.get('comparison_with_factory_method', {}))
+                }
+                
+                patterns.append({
+                    'pattern_id': pattern_id,
+                    'title': f"{pattern_name.replace('_', ' ').title()} Pattern (C#)",
+                    'content': json.dumps(content),
+                    'pattern_type': 'design_pattern',
+                    'confidence': 1.0,
+                    'created_at': datetime.now().isoformat(),
+                    'last_accessed': datetime.now().isoformat(),
+                    'access_count': 0,
+                    'source': source_path,
+                    'metadata': json.dumps(metadata),
+                    'is_pinned': 1,
+                    'scope': 'cortex',
+                    'namespaces': json.dumps([category, "csharp", "design-patterns", pattern_type])
+                })
+        
+        return patterns
+    
+    def _extract_architecture_patterns(
+        self,
+        data: Dict[str, Any],
+        file_stem: str,
+        category: str,
+        metadata: Dict[str, Any],
+        source_path: str
+    ) -> List[Dict[str, Any]]:
+        """Extract architecture patterns (reactive systems, microservices)."""
+        patterns = []
+        
+        # Extract each top-level architecture section
+        architecture_sections = [
+            ('resiliency_principles', 'resiliency'),
+            ('architectural_patterns', 'architecture'),
+            ('kafka_integration', 'messaging'),
+            ('payout_flow_architecture', 'workflow'),
+            ('database_integration', 'data'),
+            ('idempotency_patterns', 'resilience'),
+            ('webclient_integration', 'integration'),
+            ('dto_best_practices', 'patterns'),
+            ('spring_boot_setup', 'framework')
+        ]
+        
+        for section_key, pattern_subtype in architecture_sections:
+            if section_key not in data:
+                continue
+            
+            section_data = data[section_key]
+            pattern_id = self._generate_pattern_id(f"arch_{file_stem}", section_key)
+            
+            patterns.append({
+                'pattern_id': pattern_id,
+                'title': section_key.replace('_', ' ').title(),
+                'content': json.dumps(section_data),
+                'pattern_type': 'architecture_pattern',
+                'confidence': 1.0,
+                'created_at': datetime.now().isoformat(),
+                'last_accessed': datetime.now().isoformat(),
+                'access_count': 0,
+                'source': source_path,
+                'metadata': json.dumps(metadata),
+                'is_pinned': 1,
+                'scope': 'cortex',
+                'namespaces': json.dumps([category, "architecture", pattern_subtype, "microservices"])
+            })
+        
+        return patterns
+    
+    def _extract_microservices_security(
+        self,
+        data: Dict[str, Any],
+        file_stem: str,
+        category: str,
+        metadata: Dict[str, Any],
+        source_path: str
+    ) -> List[Dict[str, Any]]:
+        """Extract microservices security patterns."""
+        patterns = []
+        
+        security_sections = [
+            ('service_to_service_security', 'transport'),
+            ('authentication_patterns', 'authentication'),
+            ('api_gateway_security', 'gateway'),
+            ('rate_limiting', 'protection'),
+            ('logging_and_monitoring', 'observability'),
+            ('service_mesh_security', 'mesh'),
+            ('security_testing', 'testing'),
+            ('threat_modeling', 'analysis')
+        ]
+        
+        for section_key, security_type in security_sections:
+            if section_key not in data:
+                continue
+            
+            section_data = data[section_key]
+            pattern_id = self._generate_pattern_id(f"sec_{file_stem}", section_key)
+            
+            patterns.append({
+                'pattern_id': pattern_id,
+                'title': section_key.replace('_', ' ').title(),
+                'content': json.dumps(section_data),
+                'pattern_type': 'security_pattern',
+                'confidence': 1.0,
+                'created_at': datetime.now().isoformat(),
+                'last_accessed': datetime.now().isoformat(),
+                'access_count': 0,
+                'source': source_path,
+                'metadata': json.dumps(metadata),
+                'is_pinned': 1,
+                'scope': 'cortex',
+                'namespaces': json.dumps([category, "security", security_type, "microservices"])
+            })
+        
+        return patterns
+    
+    def _extract_migration_patterns(
+        self,
+        data: Dict[str, Any],
+        file_stem: str,
+        category: str,
+        metadata: Dict[str, Any],
+        source_path: str
+    ) -> List[Dict[str, Any]]:
+        """Extract microservices migration/transition patterns."""
+        patterns = []
+        
+        migration_sections = [
+            ('strangler_application_pattern', 'strangler'),
+            ('capability_identification', 'analysis'),
+            ('database_decomposition', 'database'),
+            ('feature_toggles', 'deployment'),
+            ('routing_strategies', 'routing'),
+            ('api_versioning', 'api'),
+            ('testing_strategies', 'testing'),
+            ('migration_anti_patterns', 'anti-patterns'),
+            ('organizational_considerations', 'organization')
+        ]
+        
+        for section_key, migration_type in migration_sections:
+            if section_key not in data:
+                continue
+            
+            section_data = data[section_key]
+            pattern_id = self._generate_pattern_id(f"mig_{file_stem}", section_key)
+            
+            patterns.append({
+                'pattern_id': pattern_id,
+                'title': section_key.replace('_', ' ').title(),
+                'content': json.dumps(section_data),
+                'pattern_type': 'migration_pattern',
+                'confidence': 1.0,
+                'created_at': datetime.now().isoformat(),
+                'last_accessed': datetime.now().isoformat(),
+                'access_count': 0,
+                'source': source_path,
+                'metadata': json.dumps(metadata),
+                'is_pinned': 1,
+                'scope': 'cortex',
+                'namespaces': json.dumps([category, "migration", migration_type, "microservices"])
+            })
+        
+        return patterns
+    
+    def _extract_library_pattern_guide(
+        self,
+        data: Dict[str, Any],
+        file_stem: str,
+        category: str,
+        metadata: Dict[str, Any],
+        source_path: str
+    ) -> List[Dict[str, Any]]:
+        """Extract pattern selection guide from knowledge-library."""
+        patterns = []
+        guide = data.get('pattern_selection_guide', {})
+        
+        for guide_type, guide_content in guide.items():
+            pattern_id = self._generate_pattern_id(f"guide_{file_stem}", guide_type)
+            
+            patterns.append({
+                'pattern_id': pattern_id,
+                'title': f"Pattern Guide: {guide_type.replace('_', ' ').title()}",
+                'content': json.dumps({guide_type: guide_content}),
+                'pattern_type': 'pattern_guide',
+                'confidence': 1.0,
+                'created_at': datetime.now().isoformat(),
+                'last_accessed': datetime.now().isoformat(),
+                'access_count': 0,
+                'source': source_path,
+                'metadata': json.dumps(metadata),
+                'is_pinned': 1,
+                'scope': 'cortex',
+                'namespaces': json.dumps([category, "pattern-guide"])
+            })
+        
+        return patterns
+    
+    def _extract_library_generic(
+        self,
+        data: Dict[str, Any],
+        file_stem: str,
+        category: str,
+        metadata: Dict[str, Any],
+        source_path: str
+    ) -> List[Dict[str, Any]]:
+        """Generic extraction for knowledge-library YAML files."""
+        patterns = []
+        
+        for key, value in data.items():
+            if key == 'metadata':
+                continue
+            
+            if not isinstance(value, (dict, list)):
+                continue
+            
+            pattern_id = self._generate_pattern_id(f"lib_{file_stem}", key)
+            
+            patterns.append({
+                'pattern_id': pattern_id,
+                'title': key.replace('_', ' ').title(),
+                'content': json.dumps(value),
+                'pattern_type': category,
+                'confidence': 0.9,
+                'created_at': datetime.now().isoformat(),
+                'last_accessed': datetime.now().isoformat(),
+                'access_count': 0,
+                'source': source_path,
+                'metadata': json.dumps(metadata),
+                'is_pinned': 1,
+                'scope': 'cortex',
+                'namespaces': json.dumps([category, "knowledge-library"])
+            })
+        
+        return patterns
+    
     def _generate_pattern_id(self, file_stem: str, pattern_name: str) -> str:
         """Generate unique pattern ID from file and pattern name."""
         # Use hash to keep IDs consistent across reloads
@@ -677,6 +1169,7 @@ class YAMLKnowledgeLoader:
                 return {
                     'files_loaded': 0,
                     'patterns_from_knowledge': 0,
+                    'patterns_from_library': 0,
                     'last_load': None
                 }
             
@@ -690,6 +1183,12 @@ class YAMLKnowledgeLoader:
             patterns_count = cursor.fetchone()[0]
             
             cursor.execute("""
+                SELECT COUNT(*) FROM patterns 
+                WHERE source LIKE 'knowledge-library/%'
+            """)
+            library_patterns_count = cursor.fetchone()[0]
+            
+            cursor.execute("""
                 SELECT MAX(load_timestamp) FROM file_loads
             """)
             last_load = cursor.fetchone()[0]
@@ -697,5 +1196,6 @@ class YAMLKnowledgeLoader:
             return {
                 'files_loaded': files_loaded,
                 'patterns_from_knowledge': patterns_count,
+                'patterns_from_library': library_patterns_count,
                 'last_load': last_load
             }

@@ -3,594 +3,1114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Microservices Architecture - Patterns, resilience, and distributed system design">
-    <meta name="keywords" content="microservices, distributed systems, architecture, resilience, patterns, event-driven">
+    <meta name="description" content="Microservices Architecture - Patterns, resilience, security, and distributed system design">
+    <meta name="keywords" content="microservices, distributed systems, architecture, resilience, patterns, event-driven, reactive systems">
     <meta name="author" content="Asif Hussain">
     <title>Microservices Architecture | CORTEX Knowledge</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="../assets/css/main.css">
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        /* Interactive Knowledge Map Styles */
+        .knowledge-map-container {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            min-height: 580px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .knowledge-map-container svg {
+            width: 100%;
+            height: 560px;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .hub-node {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .hub-node:hover {
+            filter: brightness(1.2);
+        }
+        
+        .spoke-line {
+            stroke: rgba(0, 212, 255, 0.3);
+            stroke-width: 2;
+            transition: stroke 0.3s ease;
+        }
+        
+        .hub-node:hover ~ .spoke-line {
+            stroke: rgba(0, 212, 255, 0.6);
+        }
+        
+        .node-group {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .node-group:hover {
+            transform: scale(1.05);
+        }
+        
+        .node-circle {
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+        }
+        
+        .node-group:hover .node-circle {
+            filter: drop-shadow(0 8px 16px rgba(0, 212, 255, 0.4));
+        }
+        
+        .node-label {
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            fill: #fff;
+            text-anchor: middle;
+            pointer-events: none;
+        }
+        
+        .node-sublabel {
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 10px;
+            fill: #a0a6c0;
+            text-anchor: middle;
+            pointer-events: none;
+        }
+        
+        .link {
+            fill: none;
+            stroke: rgba(0, 212, 255, 0.3);
+            stroke-width: 2;
+            transition: stroke 0.3s ease;
+        }
+        
+        .link:hover {
+            stroke: rgba(0, 212, 255, 0.6);
+        }
+        
+        /* Topic Cards Grid */
+        .topic-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .topic-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .topic-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .topic-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-primary);
+            box-shadow: 0 12px 40px rgba(0, 212, 255, 0.2);
+        }
+        
+        .topic-card:hover::before {
+            opacity: 1;
+        }
+        
+        .topic-card-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+        
+        .topic-card-icon.reactive { background: linear-gradient(135deg, #10b981, #059669); }
+        .topic-card-icon.resilience { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+        .topic-card-icon.security { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .topic-card-icon.transition { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        
+        .topic-card h3 {
+            color: var(--text-primary);
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .topic-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        
+        .topic-card-meta {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+        
+        .topic-card-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.75rem;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: var(--accent-primary);
+        }
+        
+        /* Architecture Overview Section */
+        .architecture-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .arch-pillar {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .arch-pillar:hover {
+            border-color: var(--accent-primary);
+            transform: translateY(-2px);
+        }
+        
+        .arch-pillar-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 1rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            color: #fff;
+        }
+        
+        .arch-pillar-icon.design { background: linear-gradient(135deg, #7b61ff, #5b45d9); }
+        .arch-pillar-icon.communication { background: linear-gradient(135deg, #00d4ff, #0095b8); }
+        .arch-pillar-icon.data { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .arch-pillar-icon.resilience { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        
+        .arch-pillar h4 {
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .arch-pillar p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+        
+        /* D3 Legend */
+        .map-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        /* Architecture Diagram Container */
+        #architecture-diagram {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 1.5rem auto;
+            max-width: 450px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        #architecture-diagram svg {
+            display: block;
+            margin: 0 auto;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .knowledge-map-container svg {
+                height: 400px;
+            }
+            
+            .topic-cards-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .architecture-overview {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .architecture-overview {
+                grid-template-columns: 1fr;
+            }
+            
+            .topic-card-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
     <!-- Breadcrumb Navigation -->
     <nav class="breadcrumb" aria-label="Breadcrumb">
-        <a href="../index.html">Home</a>
+        <a href="../index.html"><i class="fas fa-home" aria-hidden="true"></i> Home</a>
         <span class="breadcrumb-separator">→</span>
         <a href="index.html">Knowledge Library</a>
         <span class="breadcrumb-separator">→</span>
         <span class="breadcrumb-current">Microservices</span>
     </nav>
 
-    <section class="hero" id="main-content">
-        <h1 class="hero-title">🏗️ Microservices Architecture</h1>
-        <p class="hero-subtitle">Distributed Systems, Resilience Patterns, and Service Design</p>
-        <div class="file-metadata">
-            <span class="metadata-item">🔧 Architecture</span>
-            <span class="metadata-item">🌐 Distributed Systems</span>
-            <span class="metadata-item">📅 Updated: Dec 2025</span>
-        </div>
-    </section>
+    <!-- Logo Header (First Level Page) -->
+    <div class="logo-header">
+        <a href="../index.html">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
+        </a>
+    </div>
 
-    <section class="section file-content">
-        <div class="container">
-            <!-- Overview -->
-            <div id="overview" class="content-section">
-                <div class="glass-card">
-                    <h2 class="section-title">📋 Overview</h2>
-                    <p>Microservices architecture structures applications as collections of loosely coupled, independently deployable services. Each service owns its domain logic and data, communicating through well-defined APIs. This architecture enables scalability, fault isolation, and technology diversity.</p>
+    <main class="container" id="main-content">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1 class="hero-title"><i class="fas fa-cubes" aria-hidden="true"></i> Microservices Architecture</h1>
+            <p class="hero-subtitle">Distributed Systems, Resilience Patterns, Security Strategies &amp; Transition Techniques</p>
+            <div class="file-metadata">
+                <span class="metadata-item"><i class="fas fa-layer-group" aria-hidden="true"></i> 4 Deep-Dive Topics</span>
+                <span class="metadata-item"><i class="fas fa-network-wired" aria-hidden="true"></i> Distributed Systems</span>
+                <span class="metadata-item"><i class="fas fa-calendar-alt" aria-hidden="true"></i> Updated: Dec 2025</span>
+            </div>
+        </section>
+
+        <!-- Microservices Architecture Landscape -->
+        <section class="section">
+            <div class="glass-card">
+                <h2 class="section-title"><i class="fas fa-project-diagram" aria-hidden="true"></i> Microservices Architecture Landscape</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                    Click on any topic node to explore detailed content. The tree shows the hierarchical structure of microservices concepts.
+                </p>
+                
+                <div class="knowledge-map-container" id="knowledge-map">
+                    <!-- D3.js will render here -->
+                </div>
+                
+                <div class="map-legend">
+                    <div class="legend-item">
+                        <span class="legend-dot" style="background: #7b61ff;"></span>
+                        <span>Core Hub</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot" style="background: #10b981;"></span>
+                        <span>Reactive Systems</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot" style="background: #3b82f6;"></span>
+                        <span>Resilience Patterns</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot" style="background: #ef4444;"></span>
+                        <span>Security Strategies</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot" style="background: #f59e0b;"></span>
+                        <span>Transition Strategies</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Core Pillars -->
+        <section class="section">
+            <div class="glass-card">
+                <h2 class="section-title"><i class="fas fa-columns" aria-hidden="true"></i> Core Architecture Pillars</h2>
+                
+                <div class="architecture-overview">
+                    <div class="arch-pillar">
+                        <div class="arch-pillar-icon design">
+                            <i class="fas fa-drafting-compass" aria-hidden="true"></i>
+                        </div>
+                        <h4>Service Design</h4>
+                        <p>Domain-Driven Design, Bounded Contexts, Service Boundaries</p>
+                    </div>
+                    <div class="arch-pillar">
+                        <div class="arch-pillar-icon communication">
+                            <i class="fas fa-exchange-alt" aria-hidden="true"></i>
+                        </div>
+                        <h4>Communication</h4>
+                        <p>REST, gRPC, Event-Driven, Message Queues, Service Mesh</p>
+                    </div>
+                    <div class="arch-pillar">
+                        <div class="arch-pillar-icon data">
+                            <i class="fas fa-database" aria-hidden="true"></i>
+                        </div>
+                        <h4>Data Management</h4>
+                        <p>Database per Service, CQRS, Event Sourcing, Saga Pattern</p>
+                    </div>
+                    <div class="arch-pillar">
+                        <div class="arch-pillar-icon resilience">
+                            <i class="fas fa-shield-alt" aria-hidden="true"></i>
+                        </div>
+                        <h4>Resilience</h4>
+                        <p>Circuit Breaker, Retry, Timeout, Bulkhead, Fallback</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Topic Cards -->
+        <section class="section">
+            <div class="glass-card">
+                <h2 class="section-title"><i class="fas fa-book-open" aria-hidden="true"></i> Deep-Dive Topics</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                    Explore comprehensive guides on specialized microservices topics.
+                </p>
+                
+                <div class="topic-cards-grid">
+                    <!-- Developing Reactive Systems -->
+                    <a href="microservices/developing-reactive-systems.md" class="topic-card">
+                        <div class="topic-card-icon reactive">
+                            <i class="fas fa-bolt" aria-hidden="true"></i>
+                        </div>
+                        <h3>Developing Reactive Systems</h3>
+                        <p>Build scalable, fault-tolerant microservices using event-driven architecture, Kafka, webhooks, and reactive programming with Spring WebFlux.</p>
+                        <div class="topic-card-meta">
+                            <span class="topic-card-badge"><i class="fas fa-stream" aria-hidden="true"></i> Event-Driven</span>
+                            <span class="topic-card-badge"><i class="fas fa-sync" aria-hidden="true"></i> Async</span>
+                            <span class="topic-card-badge"><i class="fas fa-database" aria-hidden="true"></i> Event Sourcing</span>
+                        </div>
+                    </a>
                     
-                    <div class="info-box info-box-primary">
-                        <strong>Key Principles:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Single Responsibility:</strong> Each service handles one business capability</li>
-                            <li><strong>Independence:</strong> Deploy, scale, and fail independently</li>
-                            <li><strong>Decentralization:</strong> Distributed data management and governance</li>
-                            <li><strong>Resilience:</strong> Design for failure with circuit breakers and retries</li>
+                    <!-- Resilience Patterns -->
+                    <a href="microservices/resilience-patterns.html" class="topic-card">
+                        <div class="topic-card-icon resilience">
+                            <i class="fas fa-heartbeat" aria-hidden="true"></i>
+                        </div>
+                        <h3>Resilience Patterns</h3>
+                        <p>Master Circuit Breaker, Retry with Exponential Backoff, Timeout, Bulkhead, and Fallback patterns for building robust distributed systems.</p>
+                        <div class="topic-card-meta">
+                            <span class="topic-card-badge"><i class="fas fa-plug" aria-hidden="true"></i> Circuit Breaker</span>
+                            <span class="topic-card-badge"><i class="fas fa-redo" aria-hidden="true"></i> Retry</span>
+                            <span class="topic-card-badge"><i class="fas fa-ship" aria-hidden="true"></i> Bulkhead</span>
+                        </div>
+                    </a>
+                    
+                    <!-- Security Strategies -->
+                    <a href="microservices/security-strategies.md" class="topic-card">
+                        <div class="topic-card-icon security">
+                            <i class="fas fa-lock" aria-hidden="true"></i>
+                        </div>
+                        <h3>Security Strategies</h3>
+                        <p>Implement comprehensive security with mTLS, OAuth2, OpenID Connect, API Gateway patterns, and zero-trust architecture for microservices.</p>
+                        <div class="topic-card-meta">
+                            <span class="topic-card-badge"><i class="fas fa-key" aria-hidden="true"></i> mTLS</span>
+                            <span class="topic-card-badge"><i class="fas fa-user-shield" aria-hidden="true"></i> OAuth2</span>
+                            <span class="topic-card-badge"><i class="fas fa-network-wired" aria-hidden="true"></i> Service Mesh</span>
+                        </div>
+                    </a>
+                    
+                    <!-- Transition Strategies -->
+                    <a href="microservices/transition-strategies-techniques.md" class="topic-card">
+                        <div class="topic-card-icon transition">
+                            <i class="fas fa-random" aria-hidden="true"></i>
+                        </div>
+                        <h3>Transition Strategies &amp; Techniques</h3>
+                        <p>Learn the Strangler Fig Pattern, Branch by Abstraction, Feature Toggles, and database decomposition for migrating from monolith to microservices.</p>
+                        <div class="topic-card-meta">
+                            <span class="topic-card-badge"><i class="fas fa-code-branch" aria-hidden="true"></i> Strangler Pattern</span>
+                            <span class="topic-card-badge"><i class="fas fa-toggle-on" aria-hidden="true"></i> Feature Toggles</span>
+                            <span class="topic-card-badge"><i class="fas fa-sitemap" aria-hidden="true"></i> Decomposition</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Key Principles Section -->
+        <section class="section">
+            <div class="glass-card">
+                <h2 class="section-title"><i class="fas fa-lightbulb" aria-hidden="true"></i> Key Principles</h2>
+                
+                <div class="info-box info-box-primary">
+                    <strong><i class="fas fa-star" aria-hidden="true"></i> Microservices Fundamentals:</strong>
+                    <ul class="feature-list">
+                        <li><strong>Single Responsibility:</strong> Each service handles one business capability</li>
+                        <li><strong>Independence:</strong> Deploy, scale, and fail independently</li>
+                        <li><strong>Decentralization:</strong> Distributed data management and governance</li>
+                        <li><strong>Resilience:</strong> Design for failure with circuit breakers and retries</li>
+                        <li><strong>Observability:</strong> Metrics, logs, and distributed tracing</li>
+                        <li><strong>Automation:</strong> CI/CD pipelines and infrastructure as code</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Service Architecture Pattern Section -->
+        <section class="section">
+            <div class="glass-card">
+                <h2 class="section-title"><i class="fas fa-sitemap" aria-hidden="true"></i> Service Architecture Pattern</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                    Visual representation of a typical microservice internal architecture with layered design and event integration.
+                </p>
+                
+                <div id="architecture-diagram">
+                    <!-- D3.js Architecture Diagram will render here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Communication Patterns -->
+        <section class="section">
+            <div class="glass-card">
+                <h2 class="section-title"><i class="fas fa-comments" aria-hidden="true"></i> Communication Patterns</h2>
+                
+                <div class="framework-grid">
+                    <div class="framework-panel">
+                        <span class="framework-panel-icon"><i class="fas fa-globe" aria-hidden="true"></i></span>
+                        <h3>Synchronous</h3>
+                        <h4>REST APIs</h4>
+                        <ul>
+                            <li>Request-response pattern</li>
+                            <li>HTTP/HTTPS protocols</li>
+                            <li>JSON data format</li>
+                            <li>OpenAPI specification</li>
+                        </ul>
+                        <h4>gRPC</h4>
+                        <ul>
+                            <li>HTTP/2 based</li>
+                            <li>Protocol Buffers</li>
+                            <li>Bidirectional streaming</li>
+                            <li>High performance</li>
                         </ul>
                     </div>
-
-                    <h3>Microservices Architecture Landscape</h3>
-                    <div class="mermaid">
-graph TB
-    A[Microservices Architecture]
-    A --> B[Service Design]
-    A --> C[Communication]
-    A --> D[Data Management]
-    A --> E[Resilience]
-    
-    B --> B1[Domain-Driven Design]
-    B --> B2[Bounded Contexts]
-    B --> B3[Service Boundaries]
-    
-    C --> C1[Sync: REST/gRPC]
-    C --> C2[Async: Events/Messages]
-    C --> C3[Service Mesh]
-    
-    D --> D1[Database per Service]
-    D --> D2[CQRS]
-    D --> D3[Event Sourcing]
-    
-    E --> E1[Circuit Breaker]
-    E --> E2[Retry/Timeout]
-    E --> E3[Bulkhead Pattern]
-    
-    style A fill:#7b61ff,color:#fff
-    style B fill:#10b981,color:#fff
-    style C fill:#3b82f6,color:#fff
-    style D fill:#f59e0b,color:#fff
-    style E fill:#ef4444,color:#fff
-                    </div>
-                </div>
-            </div>
-
-            <!-- Service Design -->
-            <div id="service-design" class="content-section">
-                <div class="glass-card">
-                    <h2 class="section-title">🎯 Service Design Principles</h2>
                     
-                    <h3>Core Concepts</h3>
-                    <div class="framework-grid">
-                        <div class="framework-panel">
-                            <span class="framework-panel-icon">📐</span>
-                            <h3>Domain-Driven Design</h3>
-                            <h4>Strategic Design</h4>
-                            <ul>
-                                <li><strong>Bounded Contexts:</strong> Explicit boundaries around models</li>
-                                <li><strong>Ubiquitous Language:</strong> Shared team vocabulary</li>
-                                <li><strong>Context Mapping:</strong> Define relationships between contexts</li>
-                                <li><strong>Aggregates:</strong> Consistency boundaries within domain</li>
-                            </ul>
-                        </div>
-
-                        <div class="framework-panel">
-                            <span class="framework-panel-icon">🔲</span>
-                            <h3>Service Boundaries</h3>
-                            <h4>Decomposition Strategies</h4>
-                            <ul>
-                                <li><strong>Business Capability:</strong> Service per capability</li>
-                                <li><strong>Subdomain:</strong> DDD subdomain alignment</li>
-                                <li><strong>Team Ownership:</strong> Conway's Law consideration</li>
-                                <li><strong>Data Cohesion:</strong> High cohesion within service</li>
-                            </ul>
-                        </div>
-
-                        <div class="framework-panel">
-                            <span class="framework-panel-icon">📦</span>
-                            <h3>Service Size</h3>
-                            <h4>Right-Sizing Guidelines</h4>
-                            <ul>
-                                <li><strong>Not Too Small:</strong> Avoid nano-services</li>
-                                <li><strong>Not Too Large:</strong> Avoid distributed monoliths</li>
-                                <li><strong>Team Ownership:</strong> 2-pizza team can maintain</li>
-                                <li><strong>Deployment Unit:</strong> Independent release cycle</li>
-                            </ul>
-                        </div>
+                    <div class="framework-panel">
+                        <span class="framework-panel-icon"><i class="fas fa-envelope" aria-hidden="true"></i></span>
+                        <h3>Asynchronous</h3>
+                        <h4>Event-Driven</h4>
+                        <ul>
+                            <li>Publish-Subscribe pattern</li>
+                            <li>Apache Kafka</li>
+                            <li>Event sourcing</li>
+                            <li>Loose coupling</li>
+                        </ul>
+                        <h4>Message Queues</h4>
+                        <ul>
+                            <li>Point-to-Point</li>
+                            <li>RabbitMQ, AWS SQS</li>
+                            <li>Guaranteed delivery</li>
+                            <li>Dead letter queues</li>
+                        </ul>
                     </div>
-
-                    <h3>Service Architecture Pattern</h3>
-                    <div class="mermaid">
-graph TB
-    subgraph "Service Boundary"
-        API[API Layer<br/>REST/gRPC]
-        BL[Business Logic Layer<br/>Domain Models]
-        DA[Data Access Layer<br/>Repository Pattern]
-        DB[(Service Database)]
-        
-        API --> BL
-        BL --> DA
-        DA --> DB
-    end
-    
-    EXT[External Clients] --> API
-    MSG[Message Bus] -.->|Events| API
-    API -.->|Events| MSG
-    
-    style API fill:#3b82f6,color:#fff
-    style BL fill:#10b981,color:#fff
-    style DA fill:#f59e0b,color:#fff
-    style DB fill:#ef4444,color:#fff
-                    </div>
-                </div>
-            </div>
-
-            <!-- Communication Patterns -->
-            <div id="communication" class="content-section">
-                <div class="glass-card">
-                    <h2 class="section-title">🔄 Communication Patterns</h2>
                     
-                    <h3>Synchronous Communication</h3>
-                    <div class="framework-grid">
-                        <div class="framework-panel">
-                            <span class="framework-panel-icon">🌐</span>
-                            <h3>REST APIs</h3>
-                            <p class="framework-subtitle">HTTP-based Communication</p>
-                            <h4>Characteristics</h4>
-                            <ul>
-                                <li>Request-response pattern</li>
-                                <li>Simple and widely adopted</li>
-                                <li>Text-based (JSON)</li>
-                                <li>HTTP status codes</li>
-                            </ul>
-                            <h4>Best For</h4>
-                            <ul>
-                                <li>CRUD operations</li>
-                                <li>Public APIs</li>
-                                <li>Browser clients</li>
-                            </ul>
-                        </div>
-
-                        <div class="framework-panel">
-                            <span class="framework-panel-icon">⚡</span>
-                            <h3>gRPC</h3>
-                            <p class="framework-subtitle">High-Performance RPC</p>
-                            <h4>Characteristics</h4>
-                            <ul>
-                                <li>HTTP/2 based</li>
-                                <li>Binary protocol (Protobuf)</li>
-                                <li>Bidirectional streaming</li>
-                                <li>Code generation</li>
-                            </ul>
-                            <h4>Best For</h4>
-                            <ul>
-                                <li>Internal service-to-service</li>
-                                <li>High throughput</li>
-                                <li>Polyglot environments</li>
-                            </ul>
-                        </div>
-
-                        <div class="framework-panel">
-                            <span class="framework-panel-icon">🔗</span>
-                            <h3>Service Mesh</h3>
-                            <p class="framework-subtitle">Infrastructure Layer</p>
-                            <h4>Capabilities</h4>
-                            <ul>
-                                <li>Load balancing</li>
-                                <li>Service discovery</li>
-                                <li>Mutual TLS</li>
-                                <li>Traffic management</li>
-                            </ul>
-                            <h4>Popular Options</h4>
-                            <ul>
-                                <li>Istio</li>
-                                <li>Linkerd</li>
-                                <li>Consul Connect</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <h3>Asynchronous Communication</h3>
-                    <div class="framework-grid">
-                        <div class="framework-panel">
-                            <span class="framework-panel-icon">📨</span>
-                            <h3>Event-Driven</h3>
-                            <p class="framework-subtitle">Publish-Subscribe Pattern</p>
-                            <h4>Implementation</h4>
-                            <ul>
-                                <li>Event producers publish to topics</li>
-                                <li>Multiple consumers subscribe</li>
-                                <li>Decoupled services</li>
-                                <li>Eventual consistency</li>
-                            </ul>
-                        </div>
-
-                        <div class="framework-panel">
-                            <span class="framework-panel-icon">📬</span>
-                            <h3>Message Queues</h3>
-                            <p class="framework-subtitle">Point-to-Point Pattern</p>
-                            <h4>Implementation</h4>
-                            <ul>
-                                <li>Single consumer per message</li>
-                                <li>Work distribution</li>
-                                <li>Guaranteed delivery</li>
-                                <li>Dead letter queues</li>
-                            </ul>
-                        </div>
-
-                        <div class="framework-panel">
-                            <span class="framework-panel-icon">🎭</span>
-                            <h3>Saga Pattern</h3>
-                            <p class="framework-subtitle">Distributed Transactions</p>
-                            <h4>Approaches</h4>
-                            <ul>
-                                <li><strong>Choreography:</strong> Event-based coordination</li>
-                                <li><strong>Orchestration:</strong> Central coordinator</li>
-                                <li>Compensating transactions</li>
-                                <li>Eventual consistency</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Data Management -->
-            <div id="data-management" class="content-section">
-                <div class="glass-card">
-                    <h2 class="section-title">💾 Data Management</h2>
-                    
-                    <h3>Database Patterns</h3>
-                    <div class="framework-grid">
-                        <div class="framework-panel">
-                            <span class="framework-panel-icon">🗄️</span>
-                            <h3>Database per Service</h3>
-                            <h4>Benefits</h4>
-                            <ul>
-                                <li><strong>Independence:</strong> Deploy and scale separately</li>
-                                <li><strong>Technology Choice:</strong> Right DB for the job</li>
-                                <li><strong>Fault Isolation:</strong> Database failures contained</li>
-                                <li><strong>Clear Ownership:</strong> Service owns its data</li>
-                            </ul>
-                            <h4>Challenges</h4>
-                            <ul>
-                                <li>Distributed queries</li>
-                                <li>Data consistency</li>
-                                <li>Transaction management</li>
-                            </ul>
-                        </div>
-
-                        <div class="framework-panel">
-                            <span class="framework-panel-icon">🔄</span>
-                            <h3>CQRS</h3>
-                            <p class="framework-subtitle">Command Query Responsibility Segregation</p>
-                            <h4>Pattern</h4>
-                            <ul>
-                                <li><strong>Write Model:</strong> Commands for updates</li>
-                                <li><strong>Read Model:</strong> Optimized queries</li>
-                                <li><strong>Separation:</strong> Different models for reads/writes</li>
-                                <li><strong>Scalability:</strong> Scale reads independently</li>
-                            </ul>
-                        </div>
-
-                        <div class="framework-panel">
-                            <span class="framework-panel-icon">📜</span>
-                            <h3>Event Sourcing</h3>
-                            <p class="framework-subtitle">Immutable Event Log</p>
-                            <h4>Pattern</h4>
-                            <ul>
-                                <li><strong>Events:</strong> Store state changes as events</li>
-                                <li><strong>Replay:</strong> Rebuild state from events</li>
-                                <li><strong>Audit Trail:</strong> Complete history</li>
-                                <li><strong>Time Travel:</strong> Query past states</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <h3>Data Consistency Patterns</h3>
-                    <table class="glass-table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Pattern</th>
-                                <th>Consistency Level</th>
-                                <th>Use Case</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Transactional Outbox</td>
-                                <td>Eventual Consistency</td>
-                                <td>Reliable event publishing with local transactions</td>
-                            </tr>
-                            <tr>
-                                <td>Saga Pattern</td>
-                                <td>Eventual Consistency</td>
-                                <td>Multi-service business transactions</td>
-                            </tr>
-                            <tr>
-                                <td>Change Data Capture</td>
-                                <td>Eventual Consistency</td>
-                                <td>Database change propagation</td>
-                            </tr>
-                            <tr>
-                                <td>API Composition</td>
-                                <td>Strong Consistency</td>
-                                <td>Querying data from multiple services</td>
-                            </tr>
-                            <tr>
-                                <td>Materialized Views</td>
-                                <td>Eventual Consistency</td>
-                                <td>Pre-computed query results</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Resilience Patterns -->
-            <div id="resilience" class="content-section">
-                <div class="glass-card">
-                    <h2 class="section-title">🛡️ Resilience Patterns</h2>
-                    
-                    <h3>Failure Handling</h3>
-                    <div class="framework-grid">
-                        <div class="framework-panel">
-                            <span class="framework-panel-icon">⚡</span>
-                            <h3>Circuit Breaker</h3>
-                            <p class="framework-subtitle">Prevent Cascading Failures</p>
-                            <h4>States</h4>
-                            <ul>
-                                <li><strong>Closed:</strong> Normal operation, requests pass through</li>
-                                <li><strong>Open:</strong> Failures exceeded threshold, fail fast</li>
-                                <li><strong>Half-Open:</strong> Test if service recovered</li>
-                            </ul>
-                            <h4>Configuration</h4>
-                            <ul>
-                                <li>Failure threshold (e.g., 50% errors)</li>
-                                <li>Timeout duration (e.g., 30s)</li>
-                                <li>Half-open retry count</li>
-                            </ul>
-                        </div>
-
-                        <div class="framework-panel">
-                            <span class="framework-panel-icon">🔄</span>
-                            <h3>Retry Pattern</h3>
-                            <p class="framework-subtitle">Handle Transient Failures</p>
-                            <h4>Strategies</h4>
-                            <ul>
-                                <li><strong>Exponential Backoff:</strong> Increase delay between retries</li>
-                                <li><strong>Jitter:</strong> Random delay to prevent thundering herd</li>
-                                <li><strong>Max Attempts:</strong> Limit retry count (e.g., 3)</li>
-                                <li><strong>Idempotency:</strong> Safe to retry operations</li>
-                            </ul>
-                        </div>
-
-                        <div class="framework-panel">
-                            <span class="framework-panel-icon">⏱️</span>
-                            <h3>Timeout Pattern</h3>
-                            <p class="framework-subtitle">Prevent Resource Blocking</p>
-                            <h4>Best Practices</h4>
-                            <ul>
-                                <li><strong>Set Deadlines:</strong> Every external call</li>
-                                <li><strong>Context Propagation:</strong> Pass deadlines downstream</li>
-                                <li><strong>Aggressive Timeouts:</strong> Fail fast, retry quickly</li>
-                                <li><strong>Monitoring:</strong> Track timeout occurrences</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <h3>Circuit Breaker State Machine</h3>
-                    <div class="mermaid">
-stateDiagram-v2
-    [*] --> Closed
-    Closed --> Open: Failure threshold exceeded
-    Open --> HalfOpen: Timeout expires
-    HalfOpen --> Closed: Success
-    HalfOpen --> Open: Failure
-    Closed --> Closed: Success
-    
-    note right of Closed
-        Normal operation
-        Count failures
-    end note
-    
-    note right of Open
-        Fast fail requests
-        Wait for timeout
-    end note
-    
-    note right of HalfOpen
-        Test with limited requests
-        Check if recovered
-    end note
-                    </div>
-
-                    <h3>Additional Resilience Patterns</h3>
-                    <div class="framework-grid">
-                        <div class="framework-panel">
-                            <span class="framework-panel-icon">🚢</span>
-                            <h3>Bulkhead Pattern</h3>
-                            <h4>Resource Isolation</h4>
-                            <ul>
-                                <li>Separate thread pools per service</li>
-                                <li>Connection pool limits</li>
-                                <li>Prevent resource exhaustion</li>
-                                <li>Failure isolation</li>
-                            </ul>
-                        </div>
-
-                        <div class="framework-panel">
-                            <span class="framework-panel-icon">🔙</span>
-                            <h3>Fallback Pattern</h3>
-                            <h4>Graceful Degradation</h4>
-                            <ul>
-                                <li>Return cached data</li>
-                                <li>Default values</li>
-                                <li>Alternative service</li>
-                                <li>Partial response</li>
-                            </ul>
-                        </div>
-
-                        <div class="framework-panel">
-                            <span class="framework-panel-icon">📊</span>
-                            <h3>Health Checks</h3>
-                            <h4>Service Monitoring</h4>
-                            <ul>
-                                <li>Liveness probes</li>
-                                <li>Readiness probes</li>
-                                <li>Dependency checks</li>
-                                <li>Graceful shutdown</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="info-box info-box-warning">
-                        <strong>Resilience Best Practices:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Design for Failure:</strong> Assume every call can fail</li>
-                            <li><strong>Fail Fast:</strong> Use timeouts and circuit breakers</li>
-                            <li><strong>Isolate Failures:</strong> Bulkheads prevent cascade</li>
-                            <li><strong>Monitor Everything:</strong> Metrics, logs, traces</li>
-                            <li><strong>Test Chaos:</strong> Inject failures in production</li>
-                            <li><strong>Gradual Rollout:</strong> Canary and blue-green deployments</li>
+                    <div class="framework-panel">
+                        <span class="framework-panel-icon"><i class="fas fa-link" aria-hidden="true"></i></span>
+                        <h3>Service Mesh</h3>
+                        <h4>Capabilities</h4>
+                        <ul>
+                            <li>Traffic management</li>
+                            <li>Service discovery</li>
+                            <li>Load balancing</li>
+                            <li>Mutual TLS</li>
+                        </ul>
+                        <h4>Popular Options</h4>
+                        <ul>
+                            <li>Istio</li>
+                            <li>Linkerd</li>
+                            <li>Consul Connect</li>
+                            <li>AWS App Mesh</li>
                         </ul>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <!-- Observability -->
-            <div id="observability" class="content-section">
-                <div class="glass-card">
-                    <h2 class="section-title">👁️ Observability</h2>
+        <!-- Observability Section -->
+        <section class="section">
+            <div class="glass-card">
+                <h2 class="section-title"><i class="fas fa-eye" aria-hidden="true"></i> Observability Pillars</h2>
+                
+                <div class="framework-grid">
+                    <div class="framework-panel">
+                        <span class="framework-panel-icon"><i class="fas fa-chart-bar" aria-hidden="true"></i></span>
+                        <h3>Metrics</h3>
+                        <ul>
+                            <li><strong>RED Method:</strong> Rate, Errors, Duration</li>
+                            <li><strong>USE Method:</strong> Utilization, Saturation, Errors</li>
+                            <li><strong>Tools:</strong> Prometheus, Grafana</li>
+                        </ul>
+                    </div>
                     
-                    <h3>Three Pillars</h3>
-                    <div class="framework-grid">
-                        <div class="framework-panel">
-                            <span class="framework-panel-icon">📊</span>
-                            <h3>Metrics</h3>
-                            <h4>Key Metrics</h4>
-                            <ul>
-                                <li><strong>RED Method:</strong> Rate, Errors, Duration</li>
-                                <li><strong>USE Method:</strong> Utilization, Saturation, Errors</li>
-                                <li><strong>Business Metrics:</strong> Orders, revenue, signups</li>
-                                <li><strong>Tools:</strong> Prometheus, Grafana</li>
-                            </ul>
-                        </div>
-
-                        <div class="framework-panel">
-                            <span class="framework-panel-icon">📝</span>
-                            <h3>Logs</h3>
-                            <h4>Structured Logging</h4>
-                            <ul>
-                                <li><strong>JSON Format:</strong> Machine-readable</li>
-                                <li><strong>Correlation IDs:</strong> Trace across services</li>
-                                <li><strong>Log Levels:</strong> ERROR, WARN, INFO, DEBUG</li>
-                                <li><strong>Tools:</strong> ELK Stack, Loki</li>
-                            </ul>
-                        </div>
-
-                        <div class="framework-panel">
-                            <span class="framework-panel-icon">🔍</span>
-                            <h3>Distributed Tracing</h3>
-                            <h4>Request Flow</h4>
-                            <ul>
-                                <li><strong>Trace ID:</strong> Unique per request</li>
-                                <li><strong>Span ID:</strong> Per operation</li>
-                                <li><strong>Context Propagation:</strong> Headers across services</li>
-                                <li><strong>Tools:</strong> Jaeger, Zipkin, OpenTelemetry</li>
-                            </ul>
-                        </div>
+                    <div class="framework-panel">
+                        <span class="framework-panel-icon"><i class="fas fa-file-alt" aria-hidden="true"></i></span>
+                        <h3>Logs</h3>
+                        <ul>
+                            <li><strong>Structured Logging:</strong> JSON format</li>
+                            <li><strong>Correlation IDs:</strong> Request tracing</li>
+                            <li><strong>Tools:</strong> ELK Stack, Loki</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="framework-panel">
+                        <span class="framework-panel-icon"><i class="fas fa-route" aria-hidden="true"></i></span>
+                        <h3>Distributed Tracing</h3>
+                        <ul>
+                            <li><strong>Trace ID:</strong> End-to-end tracking</li>
+                            <li><strong>Span ID:</strong> Per-operation</li>
+                            <li><strong>Tools:</strong> Jaeger, Zipkin, OpenTelemetry</li>
+                        </ul>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <!-- Resources -->
-            <div id="resources" class="content-section">
-                <div class="glass-card">
-                    <h2 class="section-title">📚 Resources & Learning</h2>
+        <!-- Resources Section -->
+        <section class="section">
+            <div class="glass-card">
+                <h2 class="section-title"><i class="fas fa-graduation-cap" aria-hidden="true"></i> Learning Resources</h2>
+                
+                <div class="framework-grid">
+                    <div class="framework-panel">
+                        <span class="framework-panel-icon"><i class="fas fa-book" aria-hidden="true"></i></span>
+                        <h3>Essential Books</h3>
+                        <ul>
+                            <li><strong>Building Microservices</strong> - Sam Newman</li>
+                            <li><strong>Microservices Patterns</strong> - Chris Richardson</li>
+                            <li><strong>Domain-Driven Design</strong> - Eric Evans</li>
+                            <li><strong>Release It!</strong> - Michael Nygard</li>
+                        </ul>
+                    </div>
                     
-                    <div class="framework-grid">
-                        <div class="framework-panel">
-                            <span class="framework-panel-icon">📖</span>
-                            <h3>Essential Books</h3>
-                            <ul>
-                                <li><strong>Building Microservices</strong> - Sam Newman</li>
-                                <li><strong>Microservices Patterns</strong> - Chris Richardson</li>
-                                <li><strong>Domain-Driven Design</strong> - Eric Evans</li>
-                                <li><strong>Release It!</strong> - Michael Nygard</li>
-                            </ul>
-                        </div>
-
-                        <div class="framework-panel">
-                            <span class="framework-panel-icon">🛠️</span>
-                            <h3>Tools & Frameworks</h3>
-                            <ul>
-                                <li><a href="https://kubernetes.io/" target="_blank" rel="noopener">Kubernetes</a> - Container orchestration</li>
-                                <li><a href="https://istio.io/" target="_blank" rel="noopener">Istio</a> - Service mesh</li>
-                                <li><a href="https://www.jaegertracing.io/" target="_blank" rel="noopener">Jaeger</a> - Distributed tracing</li>
-                                <li><a href="https://prometheus.io/" target="_blank" rel="noopener">Prometheus</a> - Monitoring</li>
-                            </ul>
-                        </div>
-
-                        <div class="framework-panel">
-                            <span class="framework-panel-icon">🌐</span>
-                            <h3>Online Resources</h3>
-                            <ul>
-                                <li><a href="https://microservices.io/patterns/" target="_blank" rel="noopener">Microservices.io Patterns</a></li>
-                                <li><a href="https://12factor.net/" target="_blank" rel="noopener">The Twelve-Factor App</a></li>
-                                <li><a href="https://martinfowler.com/microservices/" target="_blank" rel="noopener">Martin Fowler on Microservices</a></li>
-                                <li><a href="https://cloud.google.com/architecture/microservices-architecture-introduction" target="_blank" rel="noopener">Google Cloud Microservices</a></li>
-                            </ul>
-                        </div>
+                    <div class="framework-panel">
+                        <span class="framework-panel-icon"><i class="fas fa-tools" aria-hidden="true"></i></span>
+                        <h3>Tools &amp; Frameworks</h3>
+                        <ul>
+                            <li><a href="https://kubernetes.io/" target="_blank" rel="noopener">Kubernetes</a> - Container orchestration</li>
+                            <li><a href="https://istio.io/" target="_blank" rel="noopener">Istio</a> - Service mesh</li>
+                            <li><a href="https://kafka.apache.org/" target="_blank" rel="noopener">Apache Kafka</a> - Event streaming</li>
+                            <li><a href="https://prometheus.io/" target="_blank" rel="noopener">Prometheus</a> - Monitoring</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="framework-panel">
+                        <span class="framework-panel-icon"><i class="fas fa-globe" aria-hidden="true"></i></span>
+                        <h3>Online Resources</h3>
+                        <ul>
+                            <li><a href="https://microservices.io/patterns/" target="_blank" rel="noopener">Microservices.io Patterns</a></li>
+                            <li><a href="https://12factor.net/" target="_blank" rel="noopener">The Twelve-Factor App</a></li>
+                            <li><a href="https://martinfowler.com/microservices/" target="_blank" rel="noopener">Martin Fowler on Microservices</a></li>
+                        </ul>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
     <footer>
         <div class="container">
             <p>&copy; 2025 CORTEX Knowledge Base. Created by Asif Hussain.</p>
             <p>
-                <a href="../index.html">Home</a> |
-                <a href="index.html">Knowledge Library</a> |
-                <a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener">GitHub</a>
+                <a href="../index.html"><i class="fas fa-home" aria-hidden="true"></i> Home</a> |
+                <a href="index.html"><i class="fas fa-book" aria-hidden="true"></i> Knowledge Library</a> |
+                <a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i> GitHub</a>
             </p>
         </div>
     </footer>
 
     <script>
-        mermaid.initialize({ 
-            startOnLoad: true,
-            theme: 'dark'
+        // ============================================
+        // D3.js Hub-Spoke Knowledge Map
+        // ============================================
+        
+        // Hub-spoke data - 4 main pillars with their topics
+        const knowledgeData = [
+            {
+                id: 'reactive',
+                name: 'Reactive Systems',
+                icon: '⚡',
+                color: '#10b981',
+                link: 'microservices/developing-reactive-systems.md',
+                angle: 0, // Top
+                topics: ['Event-Driven', 'Kafka', 'WebFlux', 'Event Sourcing']
+            },
+            {
+                id: 'resilience',
+                name: 'Resilience Patterns',
+                icon: '🛡️',
+                color: '#3b82f6',
+                link: 'microservices/resilience-patterns.html',
+                angle: 90, // Right
+                topics: ['Circuit Breaker', 'Retry', 'Timeout', 'Bulkhead']
+            },
+            {
+                id: 'security',
+                name: 'Security Strategies',
+                icon: '🔐',
+                color: '#ef4444',
+                link: 'microservices/security-strategies.md',
+                angle: 180, // Bottom
+                topics: ['mTLS', 'OAuth2', 'API Gateway', 'Service Mesh']
+            },
+            {
+                id: 'transition',
+                name: 'Transition Strategies',
+                icon: '🔄',
+                color: '#f59e0b',
+                link: 'microservices/transition-strategies-techniques.md',
+                angle: 270, // Left
+                topics: ['Strangler Fig', 'Feature Toggles', 'Database Split', 'Abstraction']
+            }
+        ];
+        
+        function renderKnowledgeMap() {
+            const container = document.getElementById('knowledge-map');
+            const width = container.clientWidth;
+            const height = 560;
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const hubRadius = 70;
+            const spokeDistance = Math.min(width, height) * 0.32;
+            
+            container.innerHTML = '';
+            
+            const svg = d3.select('#knowledge-map')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height)
+                .attr('viewBox', `0 0 ${width} ${height}`);
+            
+            // Glow filter
+            const defs = svg.append('defs');
+            const filter = defs.append('filter')
+                .attr('id', 'glow')
+                .attr('x', '-50%')
+                .attr('y', '-50%')
+                .attr('width', '200%')
+                .attr('height', '200%');
+            filter.append('feGaussianBlur').attr('stdDeviation', '4').attr('result', 'coloredBlur');
+            const feMerge = filter.append('feMerge');
+            feMerge.append('feMergeNode').attr('in', 'coloredBlur');
+            feMerge.append('feMergeNode').attr('in', 'SourceGraphic');
+            
+            // Draw connecting lines first (behind nodes)
+            knowledgeData.forEach(pillar => {
+                const angleRad = (pillar.angle - 90) * Math.PI / 180;
+                const endX = centerX + Math.cos(angleRad) * spokeDistance;
+                const endY = centerY + Math.sin(angleRad) * spokeDistance;
+                
+                svg.append('line')
+                    .attr('x1', centerX)
+                    .attr('y1', centerY)
+                    .attr('x2', endX)
+                    .attr('y2', endY)
+                    .attr('stroke', pillar.color)
+                    .attr('stroke-width', 3)
+                    .attr('stroke-opacity', 0.4);
+            });
+            
+            // Draw decorative orbit rings
+            [spokeDistance * 0.5, spokeDistance].forEach((r, i) => {
+                svg.append('circle')
+                    .attr('cx', centerX)
+                    .attr('cy', centerY)
+                    .attr('r', r)
+                    .attr('fill', 'none')
+                    .attr('stroke', 'rgba(0, 212, 255, 0.15)')
+                    .attr('stroke-width', 1)
+                    .attr('stroke-dasharray', i === 0 ? '5,5' : 'none');
+            });
+            
+            // Central hub
+            const hubGroup = svg.append('g')
+                .attr('transform', `translate(${centerX}, ${centerY})`);
+            
+            // Hub glow circle
+            hubGroup.append('circle')
+                .attr('r', hubRadius + 10)
+                .attr('fill', 'rgba(123, 97, 255, 0.2)')
+                .attr('filter', 'url(#glow)');
+            
+            // Hub main circle
+            hubGroup.append('circle')
+                .attr('r', hubRadius)
+                .attr('fill', 'url(#hubGradient)')
+                .attr('stroke', 'rgba(123, 97, 255, 0.6)')
+                .attr('stroke-width', 2);
+            
+            // Hub gradient
+            const hubGradient = defs.append('radialGradient')
+                .attr('id', 'hubGradient');
+            hubGradient.append('stop').attr('offset', '0%').attr('stop-color', '#9b7dff');
+            hubGradient.append('stop').attr('offset', '100%').attr('stop-color', '#6b4ed8');
+            
+            // Hub icon
+            hubGroup.append('text')
+                .attr('text-anchor', 'middle')
+                .attr('dy', -8)
+                .attr('font-size', '28px')
+                .text('🏗️');
+            
+            // Hub label
+            hubGroup.append('text')
+                .attr('text-anchor', 'middle')
+                .attr('dy', 22)
+                .attr('fill', '#fff')
+                .attr('font-size', '11px')
+                .attr('font-weight', '700')
+                .text('Microservices');
+            
+            hubGroup.append('text')
+                .attr('text-anchor', 'middle')
+                .attr('dy', 38)
+                .attr('fill', 'rgba(255,255,255,0.8)')
+                .attr('font-size', '10px')
+                .text('Architecture');
+            
+            // Draw pillar nodes
+            knowledgeData.forEach(pillar => {
+                const angleRad = (pillar.angle - 90) * Math.PI / 180;
+                const x = centerX + Math.cos(angleRad) * spokeDistance;
+                const y = centerY + Math.sin(angleRad) * spokeDistance;
+                
+                const nodeGroup = svg.append('g')
+                    .attr('class', 'hub-node')
+                    .attr('transform', `translate(${x}, ${y})`)
+                    .style('cursor', 'pointer')
+                    .on('click', () => window.location.href = pillar.link);
+                
+                // Node background glow
+                nodeGroup.append('circle')
+                    .attr('r', 58)
+                    .attr('fill', pillar.color)
+                    .attr('opacity', 0.15)
+                    .attr('filter', 'url(#glow)');
+                
+                // Node main circle
+                nodeGroup.append('circle')
+                    .attr('r', 50)
+                    .attr('fill', pillar.color)
+                    .attr('stroke', 'rgba(255,255,255,0.3)')
+                    .attr('stroke-width', 2);
+                
+                // Node icon
+                nodeGroup.append('text')
+                    .attr('text-anchor', 'middle')
+                    .attr('dy', -5)
+                    .attr('font-size', '22px')
+                    .text(pillar.icon);
+                
+                // Node label (split into lines)
+                const nameParts = pillar.name.split(' ');
+                nameParts.forEach((part, i) => {
+                    nodeGroup.append('text')
+                        .attr('text-anchor', 'middle')
+                        .attr('dy', 15 + (i * 13))
+                        .attr('fill', '#fff')
+                        .attr('font-size', '10px')
+                        .attr('font-weight', '600')
+                        .text(part);
+                });
+                
+                // Topic pills around each pillar
+                const topicRadius = 85;
+                const topicSpread = 50; // degrees spread
+                pillar.topics.forEach((topic, i) => {
+                    const topicCount = pillar.topics.length;
+                    const startAngle = pillar.angle - topicSpread;
+                    const angleStep = (topicSpread * 2) / (topicCount - 1);
+                    const topicAngle = (startAngle + (i * angleStep) - 90) * Math.PI / 180;
+                    
+                    const tx = Math.cos(topicAngle) * topicRadius;
+                    const ty = Math.sin(topicAngle) * topicRadius;
+                    
+                    // Topic pill
+                    const pillGroup = nodeGroup.append('g')
+                        .attr('transform', `translate(${tx}, ${ty})`)
+                        .style('cursor', 'pointer')
+                        .on('click', (e) => {
+                            e.stopPropagation();
+                            window.location.href = pillar.link;
+                        });
+                    
+                    const textWidth = topic.length * 6 + 16;
+                    
+                    pillGroup.append('rect')
+                        .attr('x', -textWidth/2)
+                        .attr('y', -10)
+                        .attr('width', textWidth)
+                        .attr('height', 20)
+                        .attr('rx', 10)
+                        .attr('fill', 'rgba(0,0,0,0.5)')
+                        .attr('stroke', pillar.color)
+                        .attr('stroke-width', 1);
+                    
+                    pillGroup.append('text')
+                        .attr('text-anchor', 'middle')
+                        .attr('dy', 4)
+                        .attr('fill', '#fff')
+                        .attr('font-size', '9px')
+                        .text(topic);
+                });
+            });
+        }
+        
+        // ============================================
+        // D3.js Architecture Flow Diagram
+        // ============================================
+        
+        function renderArchitectureDiagram() {
+            const container = document.getElementById('architecture-diagram');
+            const containerWidth = container.clientWidth;
+            const width = Math.min(containerWidth - 40, 400);
+            const height = 520;
+            
+            // Clear existing
+            container.innerHTML = '';
+            
+            const svg = d3.select('#architecture-diagram')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height)
+                .attr('viewBox', `0 0 ${width} ${height}`);
+            
+            const centerX = width / 2;
+            
+            // Vertical architecture components - centered
+            const components = [
+                { id: 'client', label: 'External Clients', x: centerX, y: 45, color: '#3b82f6', width: 120, height: 36 },
+                { id: 'boundary', label: 'Service Boundary', x: centerX, y: 100, isGroup: true, width: 200, height: 360 },
+                { id: 'api', label: 'API Layer', sublabel: 'REST/gRPC', x: centerX, y: 140, color: '#3b82f6', width: 100, height: 50 },
+                { id: 'business', label: 'Business Logic Layer', sublabel: 'Domain Models', x: centerX, y: 250, color: '#10b981', width: 130, height: 50 },
+                { id: 'data', label: 'Data Access Layer', sublabel: 'Repository Pattern', x: centerX, y: 350, color: '#f59e0b', width: 130, height: 50 },
+                { id: 'database', label: 'Service Database', x: centerX, y: 450, color: '#ef4444', width: 110, height: 40, isDatabase: true },
+                { id: 'messagebus', label: 'Message Bus', x: centerX + 120, y: 250, color: '#6b7280', width: 90, height: 36 }
+            ];
+            
+            // Arrow marker
+            const defs = svg.append('defs');
+            defs.append('marker')
+                .attr('id', 'arrow-down')
+                .attr('viewBox', '0 -5 10 10')
+                .attr('refX', 5)
+                .attr('refY', 0)
+                .attr('markerWidth', 6)
+                .attr('markerHeight', 6)
+                .attr('orient', 'auto')
+                .append('path')
+                .attr('d', 'M0,-5L10,0L0,5')
+                .attr('fill', 'rgba(0, 212, 255, 0.7)');
+            
+            // Draw service boundary box
+            const boundary = components.find(c => c.id === 'boundary');
+            svg.append('rect')
+                .attr('x', boundary.x - boundary.width/2)
+                .attr('y', boundary.y)
+                .attr('width', boundary.width)
+                .attr('height', boundary.height)
+                .attr('rx', 8)
+                .attr('fill', 'rgba(107, 114, 128, 0.2)')
+                .attr('stroke', 'rgba(107, 114, 128, 0.5)')
+                .attr('stroke-width', 1);
+            
+            // Boundary label
+            svg.append('text')
+                .attr('x', boundary.x)
+                .attr('y', boundary.y + 20)
+                .attr('text-anchor', 'middle')
+                .attr('fill', 'var(--text-secondary)')
+                .attr('font-size', '11px')
+                .text('Service Boundary');
+            
+            // Draw vertical connections
+            const verticalConnections = [
+                { from: 'client', to: 'api' },
+                { from: 'api', to: 'business', labelLeft: 'Events', labelRight: 'Events' },
+                { from: 'business', to: 'data' },
+                { from: 'data', to: 'database' }
+            ];
+            
+            verticalConnections.forEach(conn => {
+                const from = components.find(c => c.id === conn.from);
+                const to = components.find(c => c.id === conn.to);
+                
+                svg.append('line')
+                    .attr('x1', from.x)
+                    .attr('y1', from.y + (from.height || 36)/2)
+                    .attr('x2', to.x)
+                    .attr('y2', to.y - (to.height || 36)/2)
+                    .attr('stroke', 'rgba(0, 212, 255, 0.5)')
+                    .attr('stroke-width', 2)
+                    .attr('marker-end', 'url(#arrow-down)');
+            });
+            
+            // Draw connection to message bus (dashed, bidirectional)
+            const api = components.find(c => c.id === 'api');
+            const bus = components.find(c => c.id === 'messagebus');
+            const business = components.find(c => c.id === 'business');
+            
+            // API to Message Bus
+            svg.append('line')
+                .attr('x1', api.x + api.width/2 - 10)
+                .attr('y1', api.y + 15)
+                .attr('x2', bus.x - bus.width/2)
+                .attr('y2', bus.y - 10)
+                .attr('stroke', 'rgba(160, 166, 192, 0.4)')
+                .attr('stroke-width', 1.5)
+                .attr('stroke-dasharray', '4,4');
+            
+            // Message Bus to Business
+            svg.append('line')
+                .attr('x1', bus.x - bus.width/2)
+                .attr('y1', bus.y)
+                .attr('x2', business.x + business.width/2 - 10)
+                .attr('y2', business.y)
+                .attr('stroke', 'rgba(160, 166, 192, 0.4)')
+                .attr('stroke-width', 1.5)
+                .attr('stroke-dasharray', '4,4');
+            
+            // Event labels
+            svg.append('text')
+                .attr('x', api.x + 65)
+                .attr('y', api.y + 30)
+                .attr('fill', 'rgba(160, 166, 192, 0.7)')
+                .attr('font-size', '9px')
+                .text('Events');
+            
+            svg.append('text')
+                .attr('x', api.x + 65)
+                .attr('y', business.y - 5)
+                .attr('fill', 'rgba(160, 166, 192, 0.7)')
+                .attr('font-size', '9px')
+                .text('Events');
+            
+            // Draw component boxes
+            components.filter(c => !c.isGroup).forEach(comp => {
+                const g = svg.append('g')
+                    .attr('transform', `translate(${comp.x}, ${comp.y})`);
+                
+                if (comp.isDatabase) {
+                    // Database cylinder shape
+                    g.append('ellipse')
+                        .attr('cx', 0)
+                        .attr('cy', -comp.height/2 + 8)
+                        .attr('rx', comp.width/2)
+                        .attr('ry', 8)
+                        .attr('fill', comp.color);
+                    
+                    g.append('rect')
+                        .attr('x', -comp.width/2)
+                        .attr('y', -comp.height/2 + 8)
+                        .attr('width', comp.width)
+                        .attr('height', comp.height - 8)
+                        .attr('fill', comp.color);
+                    
+                    g.append('ellipse')
+                        .attr('cx', 0)
+                        .attr('cy', comp.height/2)
+                        .attr('rx', comp.width/2)
+                        .attr('ry', 8)
+                        .attr('fill', comp.color)
+                        .attr('opacity', 0.8);
+                } else {
+                    // Regular rounded rectangle
+                    g.append('rect')
+                        .attr('x', -comp.width/2)
+                        .attr('y', -comp.height/2)
+                        .attr('width', comp.width)
+                        .attr('height', comp.height)
+                        .attr('rx', 6)
+                        .attr('fill', comp.color)
+                        .style('filter', 'drop-shadow(0 3px 6px rgba(0, 0, 0, 0.3))');
+                }
+                
+                // Main label
+                g.append('text')
+                    .attr('text-anchor', 'middle')
+                    .attr('dy', comp.sublabel ? -3 : 5)
+                    .attr('fill', '#fff')
+                    .attr('font-size', '11px')
+                    .attr('font-weight', '600')
+                    .text(comp.label);
+                
+                // Sublabel if exists
+                if (comp.sublabel) {
+                    g.append('text')
+                        .attr('text-anchor', 'middle')
+                        .attr('dy', 12)
+                        .attr('fill', 'rgba(255, 255, 255, 0.8)')
+                        .attr('font-size', '9px')
+                        .text(comp.sublabel);
+                }
+            });
+        }
+        
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            renderKnowledgeMap();
+            renderArchitectureDiagram();
+        });
+        
+        // Re-render on resize (debounced)
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                renderKnowledgeMap();
+                renderArchitectureDiagram();
+            }, 250);
         });
     </script>
 </body>
