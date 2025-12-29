@@ -50,6 +50,98 @@ docs/
 - ❌ **FORBIDDEN:** Alternate CSS files in subdirectories
 - ❌ **FORBIDDEN:** Fixed pixel widths that break mobile layout
 
+### CSS Class Verification (MANDATORY)
+
+**Critical Rule:** Before adding any CSS class to HTML, CORTEX MUST verify the class exists in the corresponding CSS file.
+
+**Decision Tree Workflow:**
+
+```
+START: Need to add CSS class to HTML
+    |
+    ├─→ Is it a standard class? (glass-card, section, container)
+    |    └─→ ✅ YES: Use directly (pre-verified in main.css)
+    |
+    ├─→ Is it a grid class? (metrics-grid-*, feature-grid-*)
+    |    └─→ Go to GRID VERIFICATION flowchart (see Grid System section)
+    |
+    └─→ Is it a custom/specific class?
+         |
+         ├─→ STEP 1: Identify target CSS file
+         |    • Standard pages → docs/assets/css/main.css
+         |    • STS pages → Check BOTH main.css AND sts.css
+         |
+         ├─→ STEP 2: Execute verification
+         |    • Use grep_search with pattern: `.{class-name}`
+         |    • Example: grep_search('.metrics-grid-2', 'docs/assets/css/main.css')
+         |
+         ├─→ STEP 3: Evaluate results
+         |    |
+         |    ├─→ CLASS FOUND with complete definition?
+         |    |    └─→ ✅ Proceed with implementation
+         |    |
+         |    └─→ CLASS NOT FOUND?
+         |         |
+         |         ├─→ OPTION A: Add to CSS (preferred)
+         |         |    • Add complete definition with properties
+         |         |    • Include responsive breakpoints
+         |         |    • Document in response to user
+         |         |
+         |         ├─→ OPTION B: Use existing alternative
+         |         |    • Find similar class in CSS
+         |         |    • Verify it meets requirements
+         |         |    • Document substitution
+         |         |
+         |         └─→ OPTION C: Refactor approach
+         |              • Reconsider if class is needed
+         |              • Use inline positioning sparingly
+         |              • Document rationale
+         |
+         └─→ STEP 4: Document action
+              • Note in response what was verified/added/changed
+              • Explain why specific class was chosen
+```
+
+**Pre-Verified Standard Classes (Safe to Use):**
+
+| Category | Classes | Verification Status |
+|----------|---------|--------------------|
+| **Containers** | `.glass-card`, `.container`, `.section` | ✅ Verified in main.css |
+| **Navigation** | `.breadcrumb`, `.logo-header`, `.nav-container` | ✅ Verified in main.css |
+| **Cards** | `.metric-card`, `.feature-card`, `.concept-card` | ✅ Verified in main.css |
+| **Typography** | `.section-title`, `.hero-subtitle` | ✅ Verified in main.css |
+| **STS Specific** | `.sts-main`, `.comparison-section` | ✅ Verified in sts.css |
+
+**Common Classes Requiring Verification:**
+
+| Class Pattern | Where to Check | Common Issue |
+|---------------|----------------|-------------|
+| `metrics-grid-*` | main.css line ~2088 | Wrong number (2 vs 3) |
+| `feature-grid-*` | main.css line ~2155 | Gap size mismatch |
+| `.viz-btn-*` | main.css + D3.js section | Category-specific styles |
+| Custom modifiers | Grep entire file | May not exist |
+
+**Verification Command Examples:**
+```bash
+# Example 1: Check grid class
+grep_search('.metrics-grid-2', 'docs/assets/css/main.css')
+
+# Example 2: Check all grid variants
+grep_search('metrics-grid-', 'docs/assets/css/main.css')
+
+# Example 3: Check STS-specific class
+grep_search('.comparison-section', 'docs/assets/css/sts.css')
+```
+
+**Consequences of Skipping Verification:**
+
+| Issue | Symptom | Impact |
+|-------|---------|--------|
+| **Layout breaks** | Elements stack instead of grid | Poor visual hierarchy |
+| **Missing styles** | No hover effects, wrong colors | Unprofessional appearance |
+| **Inconsistent behavior** | Works on one page, breaks on another | User confusion |
+| **Mobile failure** | Horizontal scroll, overlapping elements | Unusable on mobile |
+
 ---
 
 ## 🎨 Core Color Palette
@@ -605,13 +697,37 @@ graph RL    → Right-to-Left (rare, RTL languages)
 </div>
 ```
 
-**Rationale:**
-- `rgba(0, 0, 0, 0.3)` → Dark backdrop separates diagram from page background
-- `padding: 2rem` → Breathing room around diagram (minimum 32px)
-- `border-radius: 12px` → Matches glassmorphism radius standards
-- `overflow-x: auto` → Enables horizontal scroll on mobile if needed
-- `margin: 1.5rem 0` → Vertical spacing from surrounding content
-- **`text-align: center`** → **CRITICAL: Centers Mermaid diagram within container (not left-justified)**
+**Styling Property Breakdown:**
+
+| Property | Value | Purpose | Visual Impact |
+|----------|-------|---------|---------------|
+| `background` | `rgba(0, 0, 0, 0.3)` | Dark backdrop | Separates diagram from page, improves contrast |
+| `padding` | `2rem` (32px) | Breathing room | Prevents diagram from touching edges |
+| `border-radius` | `12px` | Rounded corners | Matches glassmorphism aesthetic |
+| `margin` | `1.5rem 0` (24px vertical) | Vertical spacing | Separates from surrounding content |
+| `overflow-x` | `auto` | Horizontal scroll | Allows wide diagrams to scroll on mobile |
+| **`text-align`** | **`center`** | **Diagram alignment** | **CRITICAL: Centers SVG (Mermaid renders inline)** |
+
+**Centering Behavior Explained:**
+
+```
+WITHOUT text-align: center          WITH text-align: center
+┌────────────────────────────┐      ┌────────────────────────────┐
+│ ┌─────────────┐            │      │       ┌─────────────┐      │
+│ │  Diagram    │            │      │       │  Diagram    │      │
+│ │   (Left)    │            │      │       │ (Centered)  │      │
+│ └─────────────┘            │      │       └─────────────┘      │
+└────────────────────────────┘      └────────────────────────────┘
+     ❌ Left-justified                    ✅ Centered
+  (Poor visual hierarchy)          (Professional appearance)
+```
+
+**Why Centering Matters:**
+1. **Mermaid renders inline:** SVG output respects `text-align` property
+2. **Visual balance:** Centered diagrams feel intentional, not accidental
+3. **Scannability:** Eyes naturally center-focus on diagrams
+4. **Consistency:** All CORTEX diagrams use centered alignment
+5. **Mobile UX:** Centered diagrams scroll evenly on small screens
 
 **Diagram Alignment Rules:**
 - ✅ **ALWAYS center diagrams** using `text-align: center` on container
@@ -1447,6 +1563,232 @@ input:focus {
     <!-- Code comparison here -->
 </section>
 ```
+
+### Feature Grid Layout (Standard Pattern)
+
+**Usage:** The PRIMARY pattern for displaying features, operations, or capabilities across the site.
+
+**When to Use:**
+- ✅ Displaying 2-4 features/items of equal importance
+- ✅ Each item is independently navigable (clickable card)
+- ✅ Consistent with other feature sections on the page
+- ✅ Need individual hover states and interactions
+- ✅ **DEFAULT pattern for features pages**
+
+**Grid System Reference (from `main.css` lines 2088-2190):**
+
+| Grid Class | Columns | Gap | Responsive Behavior | Use Case |
+|------------|---------|-----|---------------------|----------|
+| `metrics-grid-2` | 2 | 0.75rem | 768px: 2 cols → 480px: 1 col | Feature pairs, comparisons |
+| `metrics-grid-3` | 3 | 0.75rem | 768px: 2 cols → 480px: 1 col | Feature trios, balanced layouts |
+| `metrics-grid-4` | 4 | 1.5rem | 768px: 2 cols → 480px: 1 col | Metrics, stats dashboards |
+| `metrics-grid-6` | 6 | 1.5rem | 1200px: 3 cols → 768px: 2 cols → 480px: 1 col | Dense data displays |
+| `feature-grid-2` | 2 | 2rem | 768px: 1 col | Large feature cards |
+| `feature-grid-3` | 3 | 2rem | 1024px: 2 cols → 768px: 1 col | Standard feature grids |
+| `feature-grid-4` | 4 | 2rem | 1024px: 2 cols → 768px: 1 col | Compact feature displays |
+
+**Grid Selection Decision Tree:**
+
+```
+Need to display multiple items in a grid?
+    |
+    ├─→ Are items navigable features/operations?
+    |    |
+    |    ├─→ 2 items: Use metrics-grid-2 (tight spacing)
+    |    ├─→ 3 items: Use metrics-grid-3 (balanced)
+    |    └─→ 4 items: Use metrics-grid-4 (wider spacing)
+    |
+    ├─→ Are items large feature cards with extensive content?
+    |    |
+    |    ├─→ 2 items: Use feature-grid-2 (2rem gap)
+    |    ├─→ 3 items: Use feature-grid-3 (2rem gap)
+    |    └─→ 4 items: Use feature-grid-4 (2rem gap)
+    |
+    └─→ Are items metrics/stats (non-clickable)?
+         |
+         ├─→ 4-6 items: Use metrics-grid-4 or metrics-grid-6
+         └─→ Wrap in single glass-card for dashboard effect
+```
+
+**Gap Size Rationale:**
+- **0.75rem (12px):** Tight spacing for 2-3 column feature grids (visual cohesion)
+- **1.5rem (24px):** Wider spacing for 4-6 column grids (prevent crowding)
+- **2rem (32px):** Generous spacing for large feature cards (breathing room)
+- **Mobile:** All grids collapse to 1 column at 480px (gap becomes vertical margin)
+
+**VERIFICATION REQUIRED:** Before using any grid class, run:
+```bash
+grep_search('.metrics-grid-2|.metrics-grid-3|.feature-grid-3', 'docs/assets/css/main.css')
+```
+
+**Standard Feature Card Pattern:**
+
+**HTML Structure (2-Column Example):**
+```html
+<!-- Standard Pattern: Individual Feature Cards -->
+<section class="section">
+    <!-- Section heading OUTSIDE cards -->
+    <h2 style="font-size: 2rem; margin-bottom: 2rem; text-align: center;">
+        <span style="color: var(--accent-primary);">🛠️</span> System Operations
+    </h2>
+    
+    <!-- Grid of individual glass cards -->
+    <div class="metrics-grid-2">
+        <!-- Feature Card 1 (Entire card is clickable) -->
+        <a href="../orchestrators/sanitization-engine.html" class="glass-card feature-card" style="text-decoration: none; color: inherit; display: block; transition: all 0.3s ease;">
+            <div style="font-size: 3rem; text-align: center; margin-bottom: 1rem;">🧹</div>
+            <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--accent-primary);">Sanitization Engine</h3>
+            <p style="font-size: 0.875rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;">Code Privacy & Security</p>
+            <p style="font-size: 1rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 1.5rem;">
+                5-phase automated sanitization that removes sensitive data, PII, and proprietary information 
+                while maintaining code functionality and architectural integrity.
+            </p>
+            <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.9375rem;">
+                <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border);">✓ PII detection & removal</li>
+                <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border);">✓ Secret redaction</li>
+                <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border);">✓ Generic naming</li>
+                <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border);">✓ Compliance validation</li>
+            </ul>
+        </a>
+
+        <!-- Feature Card 2 (Entire card is clickable) -->
+        <a href="git-operations.html" class="glass-card feature-card" style="text-decoration: none; color: inherit; display: block; transition: all 0.3s ease;">
+            <div style="font-size: 3rem; text-align: center; margin-bottom: 1rem;">🔄</div>
+            <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--accent-primary);">Git Operations</h3>
+            <p style="font-size: 0.875rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;">Intelligent Version Control</p>
+            <p style="font-size: 1rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 1.5rem;">
+                Smart Git workflow automation with checkpoint creation, branch management, and commit 
+                message generation following conventional commit standards.
+            </p>
+            <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.9375rem;">
+                <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border);">✓ Auto checkpoints</li>
+                <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border);">✓ Branch strategies</li>
+                <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border);">✓ Commit templates</li>
+                <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border);">✓ Rollback safety</li>
+            </ul>
+        </a>
+    </div>
+</section>
+```
+
+**Visual Design:**
+- **Section heading outside cards** (h2 with icon, centered)
+- **Each card is a clickable link** (entire card is `<a>` tag)
+- **Individual glass-card** per feature with hover effects
+- **Icon size: 3rem** (48px) for consistency across all features
+- **Content flow:** Icon → Title → Subtitle → Description → Feature list
+- **Border lists** with top borders create visual structure
+- **Mobile responsive** via `metrics-grid-2/3/4` classes (auto-stacks)
+
+**Feature Card Component Anatomy:**
+
+```html
+<a href="{url}" class="glass-card feature-card">
+    <i class="{icon-class}" style="font-size: 3rem; color: var(--accent-primary);"></i>
+    <h3 style="font-size: 1.5rem; margin: 1rem 0 0.5rem;">{Title}</h3>
+    <p style="font-size: 0.875rem; color: var(--accent-secondary); margin-bottom: 1rem;">{Subtitle}</p>
+    <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 1.5rem;">{Description}</p>
+    <ul style="list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--glass-border); padding-top: 1rem;">
+        <li>✅ {Feature 1}</li>
+        <li>✅ {Feature 2}</li>
+        <li>✅ {Feature 3}</li>
+    </ul>
+</a>
+```
+
+**Component Specifications Table:**
+
+| Element | CSS Class | Inline Style | Responsive Behavior |
+|---------|-----------|--------------|--------------------|
+| **Container** | `glass-card feature-card` | None | Full-width on mobile |
+| **Icon** | FontAwesome class | `font-size: 3rem; color: var(--accent-primary)` | Scales to 2.5rem on mobile |
+| **Title (H3)** | None | `font-size: 1.5rem; margin: 1rem 0 0.5rem` | Scales to 1.25rem on mobile |
+| **Subtitle** | None | `font-size: 0.875rem; color: var(--accent-secondary)` | Remains 0.875rem |
+| **Description** | None | `color: var(--text-secondary); line-height: 1.6` | Line-height increases to 1.7 |
+| **Feature List** | None | `border-top: 1px solid var(--glass-border)` | Padding adjusts to 0.75rem |
+
+**Key Design Principles:**
+
+| Element | Specification | Rationale |
+|---------|--------------|----------|
+| **Heading Placement** | Outside cards, above grid | Section context, not per-card |
+| **Card Interactivity** | Entire card is `<a>` tag | Larger click target, better UX |
+| **Icon Size** | 3rem (48px) | Consistent across all feature sections |
+| **Hover Effect** | `translateY(-4px)` + glow | Visual feedback on interaction |
+| **Grid Class** | `metrics-grid-2/3/4` | Responsive, auto-stacking |
+| **Grid Gap** | `0.75rem` (2-col), `1.5rem` (3-4 col) | Tighter spacing for 2 columns |
+| **Spacing** | Section margins handle gaps | Consistent vertical rhythm |
+
+**Real-World Examples from Features Page:**
+
+```html
+<!-- ✅ CORRECT: System Operations (2 features) -->
+<section class="section">
+    <h2 style="font-size: 2rem; margin-bottom: 2rem; text-align: center;">
+        <span style="color: var(--accent-primary);">🛠️</span> System Operations
+    </h2>
+    <div class="metrics-grid-2">
+        <a href="sanitization-engine.html" class="glass-card feature-card">...</a>
+        <a href="git-operations.html" class="glass-card feature-card">...</a>
+    </div>
+</section>
+
+<!-- ✅ CORRECT: Core Features (3 features) -->
+<section class="section">
+    <h2 style="font-size: 2rem; margin-bottom: 2rem; text-align: center;">
+        <span style="color: var(--accent-primary);">🚀</span> Core Features
+    </h2>
+    <div class="metrics-grid-3">
+        <a href="planning-system.html" class="glass-card feature-card">...</a>
+        <a href="tdd-orchestrator.html" class="glass-card feature-card">...</a>
+        <a href="dashboard-system.html" class="glass-card feature-card">...</a>
+    </div>
+</section>
+
+<!-- ✅ CORRECT: Intelligence & Automation (3 features) -->
+<section class="section">
+    <h2 style="font-size: 2rem; margin-bottom: 2rem; text-align: center;">
+        <span style="color: var(--accent-primary);">🧠</span> Intelligence & Automation
+    </h2>
+    <div class="metrics-grid-3">
+        <a href="holistic-discovery.html" class="glass-card feature-card">...</a>
+        <a href="response-templates.html" class="glass-card feature-card">...</a>
+        <a href="token-optimization.html" class="glass-card feature-card">...</a>
+    </div>
+</section>
+```
+
+### Unified Container Pattern (Special Cases Only)
+
+**Usage:** ONLY for content that should NOT be individually clickable and benefits from visual grouping.
+
+**When to Use:**
+- ✅ Integration Ecosystem (metric cards showing stats, not navigation)
+- ✅ Benefits/Why sections (2-column text content comparison)
+- ✅ Aggregate statistics or dashboard metrics
+- ❌ **NEVER for navigable features/operations** (use individual cards)
+
+**Example: Integration Ecosystem (Correct Use Case):**
+```html
+<section class="section">
+    <div class="glass-card">
+        <h2 style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 2rem; justify-content: center;">
+            <span style="font-size: 2rem;">🔗</span>
+            Integration Ecosystem
+        </h2>
+        <div class="metrics-grid-4">
+            <!-- Non-clickable metric cards -->
+            <div class="metric-card">
+                <div class="metric-value">Azure DevOps</div>
+                <div class="metric-label">Work Items</div>
+            </div>
+            <!-- More metric cards... -->
+        </div>
+    </div>
+</section>
+```
+
+**Why This Works:** Metric cards are informational displays, not navigation targets. The unified container creates a cohesive "dashboard" feel.
 
 ---
 
@@ -2896,6 +3238,62 @@ public class UserController : Controller
 ---
 
 ## 🎓 Quick Reference
+
+### Design Decision Matrix
+
+**Use this table to quickly determine the correct pattern for common scenarios:**
+
+| Scenario | Pattern | Grid Class | Container |
+|----------|---------|------------|----------|
+| **2 navigable features** | Individual cards | `metrics-grid-2` | None (section only) |
+| **3 navigable features** | Individual cards | `metrics-grid-3` | None (section only) |
+| **4+ stats/metrics** | Unified container | `metrics-grid-4` | Single `glass-card` |
+| **Large feature cards** | Individual cards | `feature-grid-3` | None (section only) |
+| **Technical diagram** | Centered Mermaid | N/A | Dark backdrop div |
+| **Interactive D3.js** | Custom viz | N/A | `glass-card` |
+| **Code comparison** | Side-by-side | N/A | `comparison-section` (STS) |
+| **Concept explanation** | Concept card | N/A | `.concept-card` |
+| **Text-heavy content** | Knowledge panel | N/A | `glass-card` + max-width: 900px |
+
+### Navigation Pattern Decision Tree
+
+```
+What level is this page?
+    |
+    ├─→ HOME PAGE
+    |    • Hero section with logo
+    |    • No breadcrumb
+    |    • Pattern: Hero + feature grids
+    |
+    ├─→ FIRST LEVEL (e.g., /orchestrators/index.html)
+    |    • Breadcrumb: Home → Section
+    |    • Logo: YES (below breadcrumb)
+    |    • Pattern: Breadcrumb + Logo + Content
+    |
+    ├─→ SECOND LEVEL (e.g., /orchestrators/planning-system.html)
+    |    • Breadcrumb: Home → Section → Page
+    |    • Logo: NO
+    |    • Pattern: Breadcrumb + Content
+    |
+    └─→ STS SHOWCASE PAGE
+         • Site header (branded navigation)
+         • No breadcrumb
+         • Pattern: Site-header + Hero + Comparisons
+```
+
+### CSS File Selection Guide
+
+```
+Which CSS file should I link?
+    |
+    ├─→ Is this an STS page?
+    |    • Link: main.css + sts.css
+    |    • Body class: sts-showcase
+    |
+    └─→ Is this a standard page?
+         • Link: main.css only
+         • No special body class
+```
 
 ### Common Patterns
 
