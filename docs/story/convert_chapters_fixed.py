@@ -202,6 +202,7 @@ def create_html_document(title, body_html):
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{title} - The Awakening of CORTEX</title>
+<link rel="stylesheet" href="../story-styles.css">
 </head>
 <body>
 

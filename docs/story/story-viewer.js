@@ -382,8 +382,20 @@ async function loadChapter(chapterId) {
 function renderChapter(chapter, content) {
     const container = document.getElementById('chapterContent');
     
-    // Parse content with embedded images
-    const html = parseChapterContent(content, chapter.images || []);
+    // Detect if content is already HTML (starts with <!DOCTYPE or <html>)
+    let html;
+    if (content.trim().startsWith('<!DOCTYPE') || content.trim().startsWith('<html')) {
+        // Extract body content from HTML file
+        const bodyMatch = content.match(/<body[^>]*>([\s\S]*)<\/body>/i);
+        if (bodyMatch) {
+            html = bodyMatch[1];
+        } else {
+            html = content;
+        }
+    } else {
+        // Parse markdown content with embedded images
+        html = parseChapterContent(content, chapter.images || []);
+    }
     
     // Build chapter HTML
     const chapterHTML = `

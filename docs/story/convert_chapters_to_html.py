@@ -129,6 +129,7 @@ def create_html_chapter(chapter_name, md_file, output_file):
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{chapter_name} - The Awakening of CORTEX</title>
+<link rel="stylesheet" href="../story-styles.css">
 </head>
 <body>
 
