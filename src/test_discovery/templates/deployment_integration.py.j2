@@ -1,0 +1,130 @@
+"""
+Integration tests for {{ component_name }}.
+
+Category: Deployment Integration
+Generated: {{ timestamp }}
+"""
+
+import pytest
+from pathlib import Path
+from {{ component_path.replace('/', '.').replace('.py', '') }} import {{ component_name }}
+{% if integration_points %}
+# Integration point imports
+{% for ip in integration_points %}
+from {{ ip.path|default('src.deployment') }} import {{ ip.name }}
+{% endfor %}
+{% endif %}
+
+
+@pytest.fixture
+def {{ component_name_lower }}(temp_project):
+    """Create {{ component_name }} instance for testing."""
+    return {{ component_name }}(project_root=temp_project)
+
+
+@pytest.fixture
+def deployment_context(temp_project):
+    """Create deployment context."""
+    return {
+        "branch": "CORTEX-3.0",
+        "version": "3.8.1",
+        "target": "publish",
+        "project_root": str(temp_project)
+    }
+
+
+def test_{{ component_name_lower }}_initialization({{ component_name_lower }}):
+    """Test {{ component_name }} initializes correctly."""
+    assert {{ component_name_lower }} is not None
+
+
+def test_{{ component_name_lower }}_pre_deployment_validation({{ component_name_lower }}, deployment_context):
+    """Test {{ component_name }} validates pre-deployment requirements."""
+    result = {{ component_name_lower }}.validate_pre_deployment(deployment_context)
+    
+    assert result is not None
+    assert isinstance(result, dict)
+    {% if 'gate' in component_name_lower or 'validator' in component_name_lower %}
+    assert "passed" in result or "valid" in result
+    {% endif %}
+
+
+def test_{{ component_name_lower }}_deployment_execution({{ component_name_lower }}, deployment_context):
+    """Test {{ component_name }} executes deployment correctly."""
+    result = {{ component_name_lower }}.deploy(deployment_context)
+    
+    assert result is not None
+    assert result.get("success") is True or result.get("error") is not None
+
+
+{% if integration_points %}
+def test_{{ component_name_lower }}_integration_with_gates({{ component_name_lower }}, deployment_context):
+    """Test {{ component_name }} integrates with deployment gates."""
+    {% for ip in integration_points if 'gate' in ip.name_lower or 'validator' in ip.name_lower %}
+    # Test integration with {{ ip.name }}
+    gate_result = {{ component_name_lower }}.execute_{{ ip.name_lower }}(deployment_context)
+    assert gate_result is not None
+    {% endfor %}
+{% endif %}
+
+
+def test_{{ component_name_lower }}_rollback_capability({{ component_name_lower }}, deployment_context):
+    """Test {{ component_name }} supports rollback."""
+    # Execute deployment
+    deploy_result = {{ component_name_lower }}.deploy(deployment_context)
+    
+    if deploy_result.get("success"):
+        # Test rollback
+        rollback_result = {{ component_name_lower }}.rollback(deployment_context)
+        assert rollback_result is not None
+
+
+def test_{{ component_name_lower }}_deployment_verification({{ component_name_lower }}, deployment_context):
+    """Test {{ component_name }} verifies deployment success."""
+    # Execute deployment
+    {{ component_name_lower }}.deploy(deployment_context)
+    
+    # Verify deployment
+    verification = {{ component_name_lower }}.verify_deployment(deployment_context)
+    
+    assert verification is not None
+    {% if 'health' in component_name_lower %}
+    assert verification.get("healthy") is not None
+    {% endif %}
+
+
+def test_{{ component_name_lower }}_error_handling({{ component_name_lower }}):
+    """Test {{ component_name }} handles deployment errors."""
+    invalid_context = {"invalid": "context"}
+    
+    result = {{ component_name_lower }}.deploy(invalid_context)
+    
+    # Should handle error gracefully
+    assert result is not None
+    assert result.get("error") is not None
+
+
+def test_{{ component_name_lower }}_gate_sequence({{ component_name_lower }}, deployment_context):
+    """Test {{ component_name }} executes gates in correct sequence."""
+    gates_executed = []
+    
+    def track_gate(gate_name):
+        gates_executed.append(gate_name)
+    
+    # Execute deployment with tracking
+    {{ component_name_lower }}.deploy(deployment_context, gate_callback=track_gate)
+    
+    # Verify gates were executed
+    assert len(gates_executed) > 0
+
+
+{% if 'cross_platform' in component_name_lower or 'platform' in component_name_lower %}
+def test_{{ component_name_lower }}_cross_platform_compatibility({{ component_name_lower }}, deployment_context):
+    """Test {{ component_name }} handles cross-platform deployment."""
+    platforms = ["Windows", "macOS", "Linux"]
+    
+    for platform in platforms:
+        context = {**deployment_context, "platform": platform}
+        result = {{ component_name_lower }}.validate_platform(context)
+        assert result is not None
+{% endif %}

@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORTEX System Alignment Report - CORTEX Admin Dashboard</title>
+    
+    <!-- Required Libraries -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <!-- Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://d3js.org https://cdnjs.cloudflare.com; script-src 'self' 'unsafe-inline' https://d3js.org https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self';">
+    
+    <style>
+        :root {
+            /* Primary Colors */
+            --cortex-primary: #2c3e50;
+            --cortex-secondary: #3498db;
+            --cortex-accent: #e74c3c;
+            
+            /* Status Colors */
+            --status-success: #27ae60;
+            --status-warning: #f39c12;
+            --status-error: #e74c3c;
+            
+            /* Neutral Colors */
+            --bg-primary: #ffffff;
+            --bg-secondary: #ecf0f1;
+            --text-primary: #2c3e50;
+            --text-secondary: #7f8c8d;
+            --border-color: #bdc3c7;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, 
+                         "Helvetica Neue", Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg-secondary);
+        }
+        
+        h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem; }
+        h2 { font-size: 2rem; font-weight: 600; margin-bottom: 0.75rem; }
+        h3 { font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem; }
+        
+        .header {
+            background: var(--cortex-primary);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .header h1 {
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+        
+        .metadata {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .metadata a {
+            color: var(--cortex-secondary);
+            text-decoration: none;
+        }
+        
+        .metadata a:hover {
+            text-decoration: underline;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+        
+        .status-badge.success {
+            background: var(--status-success);
+            color: white;
+        }
+        
+        .status-badge.warning {
+            background: var(--status-warning);
+            color: white;
+        }
+        
+        .status-badge.error {
+            background: var(--status-error);
+            color: white;
+        }
+        
+        .tab-navigation {
+            display: flex;
+            background: var(--bg-primary);
+            border-bottom: 2px solid var(--border-color);
+            padding: 0 2rem;
+            overflow-x: auto;
+        }
+        
+        .tab-button {
+            padding: 1rem 2rem;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            white-space: nowrap;
+            color: var(--text-secondary);
+        }
+        
+        .tab-button:hover {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+        
+        .tab-button.active {
+            border-bottom-color: var(--cortex-secondary);
+            color: var(--cortex-secondary);
+            font-weight: 600;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 2rem;
+            background: var(--bg-primary);
+            margin: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .key-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .metric {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .metric .label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .metric .value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--cortex-secondary);
+            display: block;
+        }
+        
+        button {
+            background: var(--cortex-secondary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            background: var(--cortex-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .export-options {
+            display: flex;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .export-options button {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        svg {
+            display: block;
+            margin: 2rem auto;
+        }
+        
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            pointer-events: none;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .tooltip.show {
+            opacity: 1;
+        }
+        
+        /* Accessibility */
+        *:focus {
+            outline: 2px solid var(--cortex-secondary);
+            outline-offset: 2px;
+        }
+        
+        @media (max-width: 768px) {
+            .tab-navigation {
+                padding: 0;
+            }
+            
+            .tab-button {
+                padding: 0.75rem 1rem;
+                font-size: 0.9rem;
+            }
+            
+            .tab-content {
+                margin: 1rem;
+                padding: 1rem;
+            }
+            
+            .key-metrics {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <h1>CORTEX System Alignment Report</h1>
+    <div class="metadata">
+        <span>Generated: 2025-11-28T06:45:54.217231</span> | 
+        <span>Author: Asif Hussain</span> | 
+        <a href="https://github.com/asifhussain60/CORTEX" target="_blank">GitHub: github.com/asifhussain60/CORTEX</a>
+    </div>
+    <div class="status-badge critical">Γ£à Success</div>
+</div>
+<div class="tab-navigation">
+        <button class="tab-button active" data-target="layer-executive">Executive Summary</button>
+    <button class="tab-button" data-target="layer-analysis">Feature Analysis</button>
+    <button class="tab-button" data-target="layer-issues">Issues &amp; Conflicts</button>
+    <button class="tab-button" data-target="layer-trends">Historical Trends</button>
+    <button class="tab-button" data-target="layer-actions">Actions &amp; Export</button>
+</div>
+<div id="layer-executive" class="tab-content active">
+    <h2>Executive Summary</h2>
+    <div class="key-metrics">
+    <div class="metric">
+        <span class="label">Overall Health</span>
+        <span class="value">0%</span>
+    </div>
+<div class="metric">
+        <span class="label">Total Features</span>
+        <span class="value">33</span>
+    </div>
+<div class="metric">
+        <span class="label">Critical Issues</span>
+        <span class="value">261</span>
+    </div>
+<div class="metric">
+        <span class="label">Warnings</span>
+        <span class="value">116</span>
+    </div>
+<div class="metric">
+        <span class="label">Healthy Features</span>
+        <span class="value">10/33</span>
+    </div>
+</div>
+    <svg id="health-gauge" width="400" height="300"></svg>
+    <p>System Status: **Critical**
+
+The CORTEX system alignment shows an overall health score of **0%**. 
+The system requires immediate attention due to critical integration issues.
+
+**Feature Breakdown:**
+- 10 features are healthy (ΓëÑ90% integration)
+- 14 features have warnings (70-89% integration)
+- 9 features are critical (&lt;70% integration)
+
+ΓÜá∩╕Å **261 critical issues detected** requiring immediate resolution.
+
+≡ƒôª **37 new features** discovered since last alignment review.</p>
+</div>
+<div id="layer-analysis" class="tab-content">
+    <h2>Feature Analysis</h2>
+    <svg id="feature-tree" width="960" height="600"></svg>
+    <p>
+**Feature Integration Analysis**
+
+This layer provides detailed analysis of all discovered CORTEX features and their integration depth.
+
+
+&lt;table style=&quot;width: 100%; border-collapse: collapse; margin: 20px 0;&quot;&gt;
+    &lt;thead&gt;
+        &lt;tr style=&quot;background: #2c3e50; color: white;&quot;&gt;
+            &lt;th style=&quot;padding: 10px; text-align: left;&quot;&gt;Feature&lt;/th&gt;
+            &lt;th style=&quot;padding: 10px; text-align: center;&quot;&gt;Type&lt;/th&gt;
+            &lt;th style=&quot;padding: 10px; text-align: center;&quot;&gt;Score&lt;/th&gt;
+            &lt;th style=&quot;padding: 10px; text-align: left;&quot;&gt;Issues&lt;/th&gt;
+        &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+        
+                &lt;tr&gt;
+                    &lt;td&gt;Γ¥î ADOAgent&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;agent&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;60%&lt;/strong&gt;&lt;/td&gt;
+                    &lt;td&gt;Missing documentation, No test coverage, Not wired to entry point, Performance not validated&lt;/td&gt;
+                &lt;/tr&gt;
+            
+                &lt;tr&gt;
+                    &lt;td&gt;Γ¥î ADOWorkItemOrchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;orchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;60%&lt;/strong&gt;&lt;/td&gt;
+                    &lt;td&gt;Missing documentation, No test coverage, Not wired to entry point, Performance not validated&lt;/td&gt;
+                &lt;/tr&gt;
+            
+                &lt;tr&gt;
+                    &lt;td&gt;ΓÜá∩╕Å ArchitectAgent&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;agent&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;80%&lt;/strong&gt;&lt;/td&gt;
+                    &lt;td&gt;No test coverage, Performance not validated&lt;/td&gt;
+                &lt;/tr&gt;
+            
+                &lt;tr&gt;
+                    &lt;td&gt;Γ£à BrainIngestionAdapterAgent&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;agent&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;90%&lt;/strong&gt;&lt;/td&gt;
+                    &lt;td&gt;Performance not validated&lt;/td&gt;
+                &lt;/tr&gt;
+            
+                &lt;tr&gt;
+                    &lt;td&gt;Γ£à BrainIngestionAgent&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;agent&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;90%&lt;/strong&gt;&lt;/td&gt;
+                    &lt;td&gt;Performance not validated&lt;/td&gt;
+                &lt;/tr&gt;
+            
+                &lt;tr&gt;
+                    &lt;td&gt;ΓÜá∩╕Å CleanupOrchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;orchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;70%&lt;/strong&gt;&lt;/td&gt;
+                    &lt;td&gt;Missing documentation, No test coverage, Performance not validated&lt;/td&gt;
+                &lt;/tr&gt;
+            
+                &lt;tr&gt;
+                    &lt;td&gt;ΓÜá∩╕Å CodeReviewOrchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;orchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;70%&lt;/strong&gt;&lt;/td&gt;
+                    &lt;td&gt;Missing documentation, Not wired to entry point, Performance not validated&lt;/td&gt;
+                &lt;/tr&gt;
+            
+                &lt;tr&gt;
+                    &lt;td&gt;Γ¥î CommitOrchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;orchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;60%&lt;/strong&gt;&lt;/td&gt;
+                    &lt;td&gt;Missing documentation, No test coverage, Not wired to entry point, Performance not validated&lt;/td&gt;
+                &lt;/tr&gt;
+            
+                &lt;tr&gt;
+                    &lt;td&gt;Γ¥î DemoOrchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;orchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;60%&lt;/strong&gt;&lt;/td&gt;
+                    &lt;td&gt;Missing documentation, No test coverage, Not wired to entry point, Performance not validated&lt;/td&gt;
+                &lt;/tr&gt;
+            
+                &lt;tr&gt;
+                    &lt;td&gt;ΓÜá∩╕Å DesignSyncOrchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;orchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;70%&lt;/strong&gt;&lt;/td&gt;
+                    &lt;td&gt;Missing documentation, No test coverage, Performance not validated&lt;/td&gt;
+                &lt;/tr&gt;
+            
+                &lt;tr&gt;
+                    &lt;td&gt;Γ£à FeedbackAgent&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;agent&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;100%&lt;/strong&gt;&lt;/td&gt;
+                    &lt;td&gt;None&lt;/td&gt;
+                &lt;/tr&gt;
+            
+                &lt;tr&gt;
+                    &lt;td&gt;Γ£à GitCheckpointOrchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;orchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;100%&lt;/strong&gt;&lt;/td&gt;
+                    &lt;td&gt;None&lt;/td&gt;
+                &lt;/tr&gt;
+            
+                &lt;tr&gt;
+                    &lt;td&gt;ΓÜá∩╕Å HandsOnTutorialOrchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;orchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;80%&lt;/strong&gt;&lt;/td&gt;
+                    &lt;td&gt;No test coverage, Performance not validated&lt;/td&gt;
+                &lt;/tr&gt;
+            
+                &lt;tr&gt;
+                    &lt;td&gt;Γ¥î HolisticCleanupOrchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;orchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;60%&lt;/strong&gt;&lt;/td&gt;
+                    &lt;td&gt;Missing documentation, No test coverage, Not wired to entry point, Performance not validated&lt;/td&gt;
+                &lt;/tr&gt;
+            
+                &lt;tr&gt;
+                    &lt;td&gt;ΓÜá∩╕Å InteractivePlannerAgent&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;agent&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;80%&lt;/strong&gt;&lt;/td&gt;
+                    &lt;td&gt;No test coverage, Performance not validated&lt;/td&gt;
+                &lt;/tr&gt;
+            
+                &lt;tr&gt;
+                    &lt;td&gt;ΓÜá∩╕Å LearningCaptureAgent&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;agent&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;70%&lt;/strong&gt;&lt;/td&gt;
+                    &lt;td&gt;Missing documentation, No test coverage, Performance not validated&lt;/td&gt;
+                &lt;/tr&gt;
+            
+                &lt;tr&gt;
+                    &lt;td&gt;Γ£à LintValidationOrchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;orchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;90%&lt;/strong&gt;&lt;/td&gt;
+                    &lt;td&gt;No test coverage&lt;/td&gt;
+                &lt;/tr&gt;
+            
+                &lt;tr&gt;
+                    &lt;td&gt;ΓÜá∩╕Å MasterSetupOrchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;orchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;70%&lt;/strong&gt;&lt;/td&gt;
+                    &lt;td&gt;Missing documentation, No test coverage, Performance not validated&lt;/td&gt;
+                &lt;/tr&gt;
+            
+                &lt;tr&gt;
+                    &lt;td&gt;Γ¥î OnboardingOrchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;orchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;60%&lt;/strong&gt;&lt;/td&gt;
+                    &lt;td&gt;Missing documentation, No test coverage, Not wired to entry point, Performance not validated&lt;/td&gt;
+                &lt;/tr&gt;
+            
+                &lt;tr&gt;
+                    &lt;td&gt;ΓÜá∩╕Å OptimizeCortexOrchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;orchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;70%&lt;/strong&gt;&lt;/td&gt;
+                    &lt;td&gt;Missing documentation, No test coverage, Performance not validated&lt;/td&gt;
+                &lt;/tr&gt;
+            
+                &lt;tr&gt;
+                    &lt;td&gt;ΓÜá∩╕Å OptimizeSystemOrchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;orchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;80%&lt;/strong&gt;&lt;/td&gt;
+                    &lt;td&gt;No test coverage, Performance not validated&lt;/td&gt;
+                &lt;/tr&gt;
+            
+                &lt;tr&gt;
+                    &lt;td&gt;Γ£à PlanningOrchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;orchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;90%&lt;/strong&gt;&lt;/td&gt;
+                    &lt;td&gt;No test coverage&lt;/td&gt;
+                &lt;/tr&gt;
+            
+                &lt;tr&gt;
+                    &lt;td&gt;ΓÜá∩╕Å PublishBranchOrchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;orchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;70%&lt;/strong&gt;&lt;/td&gt;
+                    &lt;td&gt;No test coverage, Not wired to entry point, Performance not validated&lt;/td&gt;
+                &lt;/tr&gt;
+            
+                &lt;tr&gt;
+                    &lt;td&gt;ΓÜá∩╕Å RealignmentOrchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;orchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;70%&lt;/strong&gt;&lt;/td&gt;
+                    &lt;td&gt;Missing documentation, No test coverage, Performance not validated&lt;/td&gt;
+                &lt;/tr&gt;
+            
+                &lt;tr&gt;
+                    &lt;td&gt;Γ£à SessionCompletionOrchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;orchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;90%&lt;/strong&gt;&lt;/td&gt;
+                    &lt;td&gt;No test coverage&lt;/td&gt;
+                &lt;/tr&gt;
+            
+                &lt;tr&gt;
+                    &lt;td&gt;Γ¥î SetupEPMOrchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;orchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;60%&lt;/strong&gt;&lt;/td&gt;
+                    &lt;td&gt;Missing documentation, No test coverage, Not wired to entry point, Performance not validated&lt;/td&gt;
+                &lt;/tr&gt;
+            
+                &lt;tr&gt;
+                    &lt;td&gt;ΓÜá∩╕Å SystemAlignmentOrchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;orchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;70%&lt;/strong&gt;&lt;/td&gt;
+                    &lt;td&gt;Missing documentation, No test coverage, Performance not validated&lt;/td&gt;
+                &lt;/tr&gt;
+            
+                &lt;tr&gt;
+                    &lt;td&gt;Γ£à TDDWorkflowOrchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;orchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;90%&lt;/strong&gt;&lt;/td&gt;
+                    &lt;td&gt;No test coverage&lt;/td&gt;
+                &lt;/tr&gt;
+            
+                &lt;tr&gt;
+                    &lt;td&gt;Γ¥î UXEnhancementOrchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;orchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;60%&lt;/strong&gt;&lt;/td&gt;
+                    &lt;td&gt;Missing documentation, No test coverage, Not wired to entry point, Performance not validated&lt;/td&gt;
+                &lt;/tr&gt;
+            
+                &lt;tr&gt;
+                    &lt;td&gt;Γ¥î UnifiedEntryPointOrchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;orchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;60%&lt;/strong&gt;&lt;/td&gt;
+                    &lt;td&gt;Missing documentation, No test coverage, Not wired to entry point, Performance not validated&lt;/td&gt;
+                &lt;/tr&gt;
+            
+                &lt;tr&gt;
+                    &lt;td&gt;Γ£à UpgradeOrchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;orchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;90%&lt;/strong&gt;&lt;/td&gt;
+                    &lt;td&gt;No test coverage&lt;/td&gt;
+                &lt;/tr&gt;
+            
+                &lt;tr&gt;
+                    &lt;td&gt;Γ£à ViewDiscoveryAgent&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;agent&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;100%&lt;/strong&gt;&lt;/td&gt;
+                    &lt;td&gt;None&lt;/td&gt;
+                &lt;/tr&gt;
+            
+                &lt;tr&gt;
+                    &lt;td&gt;ΓÜá∩╕Å WorkflowOrchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;orchestrator&lt;/td&gt;
+                    &lt;td style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;70%&lt;/strong&gt;&lt;/td&gt;
+                    &lt;td&gt;Missing documentation, No test coverage, Performance not validated&lt;/td&gt;
+                &lt;/tr&gt;
+            
+    &lt;/tbody&gt;
+&lt;/table&gt;
+
+
+**Integration Scoring:**
+- **Discovered (20%):** Feature file exists in correct location
+- **Imported (40%):** Can be imported without errors
+- **Instantiated (60%):** Class can be instantiated successfully
+- **Documented (70%):** Has documentation in prompts/modules/
+- **Tested (80%):** Has test coverage ΓëÑ70%
+- **Wired (90%):** Entry point trigger exists in response-templates.yaml
+- **Optimized (100%):** Performance benchmarks pass
+</p>
+</div>
+<div id="layer-issues" class="tab-content">
+    <h2>Issues &amp; Conflicts</h2>
+    <svg id="priority-matrix" width="600" height="600"></svg>
+    <p>
+**Issues &amp; Conflicts Report**
+
+
+&lt;div style=&quot;background: #fee; padding: 15px; border-left: 4px solid #c33; margin: 10px 0;&quot;&gt;
+    &lt;h4 style=&quot;margin: 0 0 10px 0;&quot;&gt;Γ¥î Critical Issues: 261&lt;/h4&gt;
+    &lt;p&gt;These issues require immediate attention and may prevent system functionality.&lt;/p&gt;
+&lt;/div&gt;
+
+
+&lt;div style=&quot;background: #ffeaa7; padding: 15px; border-left: 4px solid #f39c12; margin: 10px 0;&quot;&gt;
+    &lt;h4 style=&quot;margin: 0 0 10px 0;&quot;&gt;ΓÜá∩╕Å Warnings: 116&lt;/h4&gt;
+    &lt;p&gt;These issues should be addressed to maintain system health.&lt;/p&gt;
+&lt;/div&gt;
+
+
+&lt;div style=&quot;background: #dfe6e9; padding: 15px; border-left: 4px solid #636e72; margin: 10px 0;&quot;&gt;
+    &lt;h4 style=&quot;margin: 0 0 10px 0;&quot;&gt;≡ƒöä Detected Conflicts: 285&lt;/h4&gt;
+    &lt;ul&gt;&lt;li&gt;&lt;strong&gt;orphaned_wiring:&lt;/strong&gt; Response template defines trigger &#x27;onboard application&#x27; but no corresponding orchestrator/agent found&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;orphaned_wiring:&lt;/strong&gt; Response template defines trigger &#x27;unified interface&#x27; but no corresponding orchestrator/agent found&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;orphaned_wiring:&lt;/strong&gt; Response template defines trigger &#x27;ado_created&#x27; but no corresponding orchestrator/agent found&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;orphaned_wiring:&lt;/strong&gt; Response template defines trigger &#x27;brain ingest&#x27; but no corresponding orchestrator/agent found&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;orphaned_wiring:&lt;/strong&gt; Response template defines trigger &#x27;begin tdd&#x27; but no corresponding orchestrator/agent found&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;orphaned_wiring:&lt;/strong&gt; Response template defines trigger &#x27;suggest improvements&#x27; but no corresponding orchestrator/agent found&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;orphaned_wiring:&lt;/strong&gt; Response template defines trigger &#x27;plan a feature&#x27; but no corresponding orchestrator/agent found&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;orphaned_wiring:&lt;/strong&gt; Response template defines trigger &#x27;good morning&#x27; but no corresponding orchestrator/agent found&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;orphaned_wiring:&lt;/strong&gt; Response template defines trigger &#x27;publish to branch&#x27; but no corresponding orchestrator/agent found&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;orphaned_wiring:&lt;/strong&gt; Response template defines trigger &#x27;question_documentation_issues&#x27; but no corresponding orchestrator/agent found&lt;/li&gt;&lt;/ul&gt;
+    &lt;p&gt;&lt;em&gt;...and 275 more&lt;/em&gt;&lt;/p&gt;
+&lt;/div&gt;
+
+
+**Priority Matrix Legend:**
+- **High Priority / High Impact:** Immediate action required
+- **High Priority / Low Impact:** Schedule for next sprint
+- **Low Priority / High Impact:** Monitor closely
+- **Low Priority / Low Impact:** Address during maintenance
+</p>
+</div>
+<div id="layer-trends" class="tab-content">
+    <h2>Historical Trends</h2>
+    <svg id="trends-timeline" width="960" height="300"></svg>
+    <p>**Historical Performance Trends**
+
+Current overall health: **0%**
+
+**New Features Discovered:** 37 features added since last alignment
+
+**Trend Analysis:**
+- Health score trajectory over time shown in timeline below
+- Feature count evolution tracks system growth
+- Issue trends help identify improvement or degradation patterns
+
+*Historical data tracked in `cortex-brain/metrics-history/alignment_history.jsonl`*</p>
+</div>
+<div id="layer-actions" class="tab-content">
+    <h2>Actions &amp; Export</h2>
+    <svg id="export-preview" width="300" height="200"></svg>
+    <p>**Recommended Actions**
+
+**Fix Templates Generated:** 285 automated fixes available
+
+**Priority Action Items:**
+
+1. ≡ƒö┤ **URGENT:** Resolve 261 critical issues
+2. ≡ƒƒí **Important:** Address 116 warnings
+3. ≡ƒöä **Review:** Investigate 285 detected conflicts
+4. ≡ƒôª **Catalog:** Review 37 newly discovered features
+
+**Export Options:**
+- **PDF:** Full report with embedded visualizations
+- **PNG:** High-resolution image for presentations
+- **PowerPoint:** Editable slides for stakeholder meetings
+
+**Next Steps:**
+1. Review detailed analysis in layers above
+2. Prioritize remediation based on impact
+3. Export report for team review
+4. Track progress in next alignment cycle</p>
+    <div class="export-options">
+        <button id="export-pdf-btn">Export to PDF</button>
+    <button id="export-png-btn">Export to PNG</button>
+    <button id="export-pptx-btn">Export to PowerPoint</button>
+    <button id="create-workitem-btn">Create Work Item</button>
+</div>
+</div>
+<script>
+
+    // Tab Navigation
+    document.querySelectorAll('.tab-button').forEach(button => {
+        button.addEventListener('click', function() {
+            const targetId = this.getAttribute('data-target');
+            
+            // Update buttons
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            this.classList.add('active');
+            
+            // Update content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(targetId).classList.add('active');
+        });
+    });
+
+    
+    // Gauge Chart: health-gauge
+    (function() {
+        const data = {
+    "value": 0,
+    "label": "System Health",
+    "thresholds": [
+        70,
+        90
+    ],
+    "status": "Critical"
+};
+        const width = 400;
+        const height = 300;
+        const radius = Math.min(width, height) / 2;
+        
+        const svg = d3.select('#health-gauge');
+        const g = svg.append('g')
+            .attr('transform', `translate(${width/2},${height/2})`);
+        
+        const arc = d3.arc()
+            .innerRadius(radius * 0.6)
+            .outerRadius(radius * 0.9)
+            .startAngle(-Math.PI / 2);
+        
+        // Background arc
+        g.append('path')
+            .datum({endAngle: Math.PI / 2})
+            .style('fill', '#ecf0f1')
+            .attr('d', arc);
+        
+        // Value arc
+        const valueArc = g.append('path')
+            .datum({endAngle: -Math.PI / 2})
+            .style('fill', data.value > 85 ? '#27ae60' : data.value > 70 ? '#f39c12' : '#e74c3c')
+            .attr('d', arc);
+        
+        // Animate
+        valueArc.transition()
+            .duration(1000)
+            .attrTween('d', function(d) {
+                const interpolate = d3.interpolate(d.endAngle, -Math.PI / 2 + (data.value / 100) * Math.PI);
+                return function(t) {
+                    d.endAngle = interpolate(t);
+                    return arc(d);
+                };
+            });
+        
+        // Center text
+        g.append('text')
+            .attr('text-anchor', 'middle')
+            .attr('dy', '0.35em')
+            .style('font-size', '48px')
+            .style('font-weight', 'bold')
+            .style('fill', data.value > 85 ? '#27ae60' : data.value > 70 ? '#f39c12' : '#e74c3c')
+            .text(data.value + '%');
+        
+        // ARIA label
+        svg.append('title').text(`Health Score: ${data.value}%`);
+    })();
+
+    
+    // Tree Visualization: feature-tree
+    // (Implementation placeholder - requires hierarchical data structure)
+
+    
+    // Matrix Visualization: priority-matrix
+    // (Implementation placeholder - requires matrix data structure)
+
+    
+    // Timeline Visualization: trends-timeline
+    // (Implementation placeholder - requires temporal data structure)
+
+    // Visualization: thumbnail for export-preview
+
+    
+    // Export Functions
+    async function exportPDF() {
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        
+        const layers = document.querySelectorAll('.tab-content');
+        for (let i = 0; i < layers.length; i++) {
+            if (i > 0) pdf.addPage();
+            
+            const canvas = await html2canvas(layers[i]);
+            const imgData = canvas.toDataURL('image/png');
+            
+            const imgWidth = 190;
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+            pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+        }
+        
+        pdf.save(`cortex-dashboard-${Date.now()}.pdf`);
+    }
+    
+    async function exportPNG(layerId) {
+        const layer = layerId ? document.getElementById(layerId) : document.querySelector('.tab-content.active');
+        const canvas = await html2canvas(layer, {
+            backgroundColor: '#ffffff',
+            scale: 2
+        });
+        
+        const link = document.createElement('a');
+        link.download = `cortex-${layerId || 'dashboard'}-${Date.now()}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+    }
+    
+    async function exportPPTX() {
+        alert('PPTX export requires PptxGenJS library. Feature coming soon!');
+    }
+</script>
+</body>
+</html>

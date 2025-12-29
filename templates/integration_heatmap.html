@@ -1,0 +1,24 @@
+<div class="chart-container">
+    <div class="chart-title">Integration Heatmap</div>
+    <svg id="integration-heatmap" width="800" height="400"></svg>
+</div>
+<script>
+// Integration heatmap
+const heatmapData = [/* Data injected by dashboard_utility.py */];
+const cellSize = 40;
+const svg = d3.select("#integration-heatmap").append("g");
+
+// Color scale
+const colorScale = d3.scaleSequential(d3.interpolateRdYlGn).domain([0, 100]);
+
+// Draw heatmap cells
+svg.selectAll("rect")
+    .data(heatmapData)
+    .enter()
+    .append("rect")
+    .attr("x", (d, i) => (i % 10) * cellSize)
+    .attr("y", (d, i) => Math.floor(i / 10) * cellSize)
+    .attr("width", cellSize - 2)
+    .attr("height", cellSize - 2)
+    .attr("fill", d => colorScale(d.value));
+</script>

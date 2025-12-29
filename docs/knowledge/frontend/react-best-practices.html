@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="React Best Practices - Components, hooks, state management, performance">
+    <meta name="author" content="Asif Hussain">
+    <title>React Best Practices - CORTEX Knowledge</title>
+    <link rel="icon" type="image/png" href="../../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Breadcrumb Navigation (Top) -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../../index.html">Home</a>
+        <span class="breadcrumb-separator">→</span>
+        <a href="../index.html">Knowledge Library</a>
+        <span class="breadcrumb-separator">→</span>
+        <a href="../frontend.html">Frontend</a>
+        <span class="breadcrumb-separator">→</span>
+        <span class="breadcrumb-current">React Best Practices</span>
+    </nav>
+    
+    <!-- Logo Header (Below Breadcrumb) -->
+    <div class="logo-header">
+        <a href="../../index.html">
+            <img src="../../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
+        </a>
+    </div>
+
+    <section class="hero" id="main-content">
+        <h1 class="hero-title">⚛️ React Best Practices</h1>
+        <p class="hero-subtitle">Modern React patterns for components, hooks, and performance</p>
+        <div class="file-metadata">
+            <span class="metadata-item">📦 25 Rules</span>
+            <span class="metadata-item">🏷️ Frontend</span>
+            <span class="metadata-item">📅 Updated: Dec 2025</span>
+        </div>
+    </section>
+
+    <aside class="toc-sidebar" aria-label="Table of contents">
+        <h3>On This Page</h3>
+        <nav class="toc-nav">
+            <a href="#overview" class="toc-link">Overview</a>
+            <a href="#components" class="toc-link">Components</a>
+            <a href="#hooks" class="toc-link">Hooks</a>
+            <a href="#state" class="toc-link">State Management</a>
+            <a href="#effects" class="toc-link">Side Effects</a>
+            <a href="#performance" class="toc-link">Performance</a>
+            <a href="#related" class="toc-link">Related Files</a>
+        </nav>
+    </aside>
+
+    <section class="section file-content">
+        <div class="container">
+            <!-- Overview -->
+            <div id="overview" class="content-section">
+                <div class="glass-card">
+                    <h2>Overview</h2>
+                    <p>This guide covers modern React development patterns including function components, hooks, state management, and performance optimization techniques.</p>
+                    
+                    <div class="info-box info-box-primary">
+                        <strong>Key Principles:</strong>
+                        <ul>
+                            <li>Use function components with hooks over class components</li>
+                            <li>Keep components small and focused (Single Responsibility)</li>
+                            <li>Optimize renders with React.memo, useMemo, and useCallback</li>
+                            <li>Always specify effect dependencies correctly</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Components Section -->
+            <div id="components" class="content-section">
+                <div class="glass-card">
+                    <h2>Components</h2>
+
+                    <!-- Rule 1 -->
+                    <div class="rule-detail">
+                        <div class="rule-header-detail">
+                            <h3>Use Function Components with Hooks</h3>
+                            <span class="severity-badge severity-high">HIGH</span>
+                        </div>
+                        <p class="rule-description">
+                            Modern React uses function components with hooks instead of class components. 
+                            This provides better code reuse, cleaner syntax, and easier testing.
+                        </p>
+                        
+                        <div class="code-comparison-grid">
+                            <div class="code-example code-good">
+                                <h4>✅ Good - Function Component</h4>
+                                <pre><code class="language-jsx">import React, { useState, useEffect } from 'react';
+
+function UserProfile({ userId }) {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchUser(userId)
+      .then(data => {
+        setUser(data);
+        setLoading(false);
+      });
+  }, [userId]);
+
+  if (loading) return &lt;Spinner /&gt;;
+  
+  return (
+    &lt;div className="profile"&gt;
+      &lt;h2&gt;{user.name}&lt;/h2&gt;
+      &lt;p&gt;{user.email}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+                            </div>
+
+                            <div class="code-example code-bad">
+                                <h4>❌ Bad - Class Component</h4>
+                                <pre><code class="language-jsx">import React from 'react';
+
+class UserProfile extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      user: null,
+      loading: true
+    };
+  }
+
+  componentDidMount() {
+    fetchUser(this.props.userId)
+      .then(data => {
+        this.setState({ 
+          user: data, 
+          loading: false 
+        });
+      });
+  }
+
+  render() {
+    if (this.state.loading) return &lt;Spinner /&gt;;
+    
+    return (
+      &lt;div className="profile"&gt;
+        &lt;h2&gt;{this.state.user.name}&lt;/h2&gt;
+        &lt;p&gt;{this.state.user.email}&lt;/p&gt;
+      &lt;/div&gt;
+    );
+  }
+}</code></pre>
+                            </div>
+                        </div>
+
+                        <div class="info-box info-box-info">
+                            <strong>Why?</strong> Function components with hooks are more concise, easier to test, and enable better code reuse through custom hooks.
+                        </div>
+                    </div>
+
+                    <!-- Rule 2 -->
+                    <div class="rule-detail">
+                        <div class="rule-header-detail">
+                            <h3>Single Responsibility Principle</h3>
+                            <span class="severity-badge severity-high">HIGH</span>
+                        </div>
+                        <p class="rule-description">
+                            Each component should have one clear responsibility. Break down large components into smaller, focused ones.
+                        </p>
+
+                        <div class="code-comparison-grid">
+                            <div class="code-example code-good">
+                                <h4>✅ Good - Separated Concerns</h4>
+                                <pre><code class="language-jsx">// UserList.jsx
+function UserList() {
+  const [users, setUsers] = useState([]);
+
+  return (
+    &lt;div className="user-list"&gt;
+      {users.map(user => (
+        &lt;UserCard key={user.id} user={user} /&gt;
+      ))}
+    &lt;/div&gt;
+  );
+}
+
+// UserCard.jsx
+function UserCard({ user }) {
+  return (
+    &lt;div className="user-card"&gt;
+      &lt;Avatar src={user.avatar} /&gt;
+      &lt;UserInfo name={user.name} email={user.email} /&gt;
+      &lt;UserActions userId={user.id} /&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+                            </div>
+
+                            <div class="code-example code-bad">
+                                <h4>❌ Bad - God Component</h4>
+                                <pre><code class="language-jsx">function UserList() {
+  const [users, setUsers] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  return (
+    &lt;div&gt;
+      &lt;input onChange={e => setSearchTerm(e.target.value)} /&gt;
+      {users.filter(u => u.name.includes(searchTerm)).map(user => (
+        &lt;div key={user.id}&gt;
+          &lt;img src={user.avatar} /&gt;
+          &lt;span&gt;{user.name}&lt;/span&gt;
+          &lt;button onClick={() => setSelectedUser(user)}&gt;View&lt;/button&gt;
+          &lt;button onClick={() => setIsEditing(true)}&gt;Edit&lt;/button&gt;
+          {/* More inline logic... */}
+        &lt;/div&gt;
+      ))}
+      {selectedUser && &lt;UserModal user={selectedUser} /&gt;}
+      {isEditing && &lt;EditForm /&gt;}
+    &lt;/div&gt;
+  );
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Rule 3 -->
+                    <div class="rule-detail">
+                        <div class="rule-header-detail">
+                            <h3>Props Destructuring</h3>
+                            <span class="severity-badge severity-medium">MEDIUM</span>
+                        </div>
+                        <p class="rule-description">
+                            Destructure props in the function signature for better readability and to make required props explicit.
+                        </p>
+
+                        <div class="code-example code-good">
+                            <h4>✅ Good - Destructured Props</h4>
+                            <pre><code class="language-jsx">function Button({ 
+  label, 
+  onClick, 
+  variant = 'primary',
+  disabled = false 
+}) {
+  return (
+    &lt;button 
+      onClick={onClick}
+      disabled={disabled}
+      className={`btn btn-${variant}`}
+    &gt;
+      {label}
+    &lt;/button&gt;
+  );
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hooks Section -->
+            <div id="hooks" class="content-section">
+                <div class="glass-card">
+                    <h2>Hooks</h2>
+
+                    <div class="rule-detail">
+                        <div class="rule-header-detail">
+                            <h3>Always Specify Effect Dependencies</h3>
+                            <span class="severity-badge severity-high">HIGH</span>
+                        </div>
+                        <p class="rule-description">
+                            Always include all dependencies in the useEffect dependency array to avoid stale closures and bugs.
+                        </p>
+
+                        <div class="code-comparison-grid">
+                            <div class="code-example code-good">
+                                <h4>✅ Good - Complete Dependencies</h4>
+                                <pre><code class="language-jsx">function UserData({ userId }) {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    
+    fetchUser(userId).then(data => {
+      if (!cancelled) {
+        setUser(data);
+      }
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [userId]); // ✅ userId is included
+
+  return &lt;div&gt;{user?.name}&lt;/div&gt;;
+}</code></pre>
+                            </div>
+
+                            <div class="code-example code-bad">
+                                <h4>❌ Bad - Missing Dependencies</h4>
+                                <pre><code class="language-jsx">function UserData({ userId }) {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    fetchUser(userId).then(setUser);
+  }, []); // ❌ Missing userId dependency
+
+  return &lt;div&gt;{user?.name}&lt;/div&gt;;
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="rule-detail">
+                        <div class="rule-header-detail">
+                            <h3>Extract Custom Hooks for Reusability</h3>
+                            <span class="severity-badge severity-medium">MEDIUM</span>
+                        </div>
+                        <p class="rule-description">
+                            Extract reusable logic into custom hooks following the "use" naming convention.
+                        </p>
+
+                        <div class="code-example code-good">
+                            <h4>✅ Good - Custom Hook</h4>
+                            <pre><code class="language-jsx">// useUser.js
+function useUser(userId) {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    setLoading(true);
+    fetchUser(userId)
+      .then(setUser)
+      .catch(setError)
+      .finally(() => setLoading(false));
+  }, [userId]);
+
+  return { user, loading, error };
+}
+
+// Component using the hook
+function UserProfile({ userId }) {
+  const { user, loading, error } = useUser(userId);
+
+  if (loading) return &lt;Spinner /&gt;;
+  if (error) return &lt;Error message={error.message} /&gt;;
+  return &lt;div&gt;{user.name}&lt;/div&gt;;
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance Section -->
+            <div id="performance" class="content-section">
+                <div class="glass-card">
+                    <h2>Performance</h2>
+
+                    <div class="rule-detail">
+                        <div class="rule-header-detail">
+                            <h3>Use React.memo for Pure Components</h3>
+                            <span class="severity-badge severity-medium">MEDIUM</span>
+                        </div>
+                        <p class="rule-description">
+                            Wrap pure components with React.memo to prevent unnecessary re-renders when props haven't changed.
+                        </p>
+
+                        <div class="code-example code-good">
+                            <h4>✅ Good - Memoized Component</h4>
+                            <pre><code class="language-jsx">const UserCard = React.memo(function UserCard({ user }) {
+  console.log('UserCard rendered');
+  
+  return (
+    &lt;div className="user-card"&gt;
+      &lt;h3&gt;{user.name}&lt;/h3&gt;
+      &lt;p&gt;{user.email}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+});
+
+// Custom comparison function (optional)
+const UserCard = React.memo(
+  UserCard, 
+  (prevProps, nextProps) => {
+    return prevProps.user.id === nextProps.user.id;
+  }
+);</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="rule-detail">
+                        <div class="rule-header-detail">
+                            <h3>Optimize with useMemo and useCallback</h3>
+                            <span class="severity-badge severity-medium">MEDIUM</span>
+                        </div>
+                        <p class="rule-description">
+                            Use useMemo for expensive computations and useCallback to memoize functions passed as props.
+                        </p>
+
+                        <div class="code-example code-good">
+                            <h4>✅ Good - Optimized Rendering</h4>
+                            <pre><code class="language-jsx">function UserList({ users, onUserClick }) {
+  // Memoize expensive computation
+  const sortedUsers = useMemo(() => {
+    return users.sort((a, b) => 
+      a.name.localeCompare(b.name)
+    );
+  }, [users]);
+
+  // Memoize callback to prevent child re-renders
+  const handleClick = useCallback((userId) => {
+    onUserClick(userId);
+  }, [onUserClick]);
+
+  return (
+    &lt;div&gt;
+      {sortedUsers.map(user => (
+        &lt;UserCard 
+          key={user.id} 
+          user={user}
+          onClick={() => handleClick(user.id)}
+        /&gt;
+      ))}
+    &lt;/div&gt;
+  );
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Related Files -->
+            <div id="related" class="content-section">
+                <div class="glass-card">
+                    <h2>Related Knowledge Files</h2>
+                    <div class="related-files-grid">
+                        <a href="typescript-frontend.html" class="related-file-card">
+                            <span class="file-icon">🔷</span>
+                            <div>
+                                <h4>TypeScript Frontend</h4>
+                                <p>Type safety for React components</p>
+                            </div>
+                        </a>
+                        <a href="state-management.html" class="related-file-card">
+                            <span class="file-icon">🔄</span>
+                            <div>
+                                <h4>State Management</h4>
+                                <p>Redux, Context API patterns</p>
+                            </div>
+                        </a>
+                        <a href="component-architecture.html" class="related-file-card">
+                            <span class="file-icon">🧩</span>
+                            <div>
+                                <h4>Component Architecture</h4>
+                                <p>Design patterns for components</p>
+                            </div>
+                        </a>
+                        <a href="../testing/unit-testing.html" class="related-file-card">
+                            <span class="file-icon">🧪</span>
+                            <div>
+                                <h4>Unit Testing</h4>
+                                <p>Testing React components</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-jsx.min.js"></script>
+    <script src="../../assets/js/file-detail.js"></script>
+</body>
+</html>

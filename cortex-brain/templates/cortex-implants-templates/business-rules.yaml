@@ -1,0 +1,125 @@
+version: '1.0'
+
+domain_validations:
+  - rule_id: "EMAIL_VALIDATION"
+    description: "Email addresses must match company domain"
+    severity: "HIGH"
+    validation_regex: "^[a-zA-Z0-9._%+-]+@company\\.com$"
+    error_message: "Only @company.com emails allowed"
+    applies_to: ["User", "Employee", "Customer"]
+  
+  - rule_id: "CURRENCY_PRECISION"
+    description: "All currency fields must use Decimal with 2 decimal places"
+    severity: "CRITICAL"
+    validation: "Check for float/double in currency fields"
+    required_type: "Decimal"
+    applies_to: ["Order", "Invoice", "Payment"]
+  
+  - rule_id: "PASSWORD_STRENGTH"
+    description: "Passwords must be 12+ chars with uppercase, lowercase, number, symbol"
+    severity: "CRITICAL"
+    validation_regex: "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{12,}$"
+    error_message: "Password does not meet complexity requirements"
+
+workflow_rules:
+  - rule_id: "APPROVAL_WORKFLOW"
+    description: "Orders >$10,000 require manager approval"
+    severity: "CRITICAL"
+    validation: "Check approval logic in order processing"
+    threshold: 10000
+    approver_role: "manager"
+  
+  - rule_id: "AUDIT_LOGGING"
+    description: "All state-changing operations must be audited"
+    severity: "HIGH"
+    validation: "Check for audit calls after mutations"
+    applies_to: ["create", "update", "delete"]
+  
+  - rule_id: "TWO_FACTOR_AUTH"
+    description: "Financial transactions require 2FA"
+    severity: "CRITICAL"
+    validation: "Check 2FA verification before transaction"
+    applies_to: ["transfer", "withdrawal", "payment"]
+
+state_transitions:
+  - entity: "Order"
+    valid_transitions:
+      PENDING: ["CONFIRMED", "CANCELLED"]
+      CONFIRMED: ["PROCESSING", "CANCELLED"]
+      PROCESSING: ["SHIPPED", "CANCELLED"]
+      SHIPPED: ["DELIVERED", "RETURNED"]
+      DELIVERED: ["COMPLETED"]
+      CANCELLED: []
+      COMPLETED: []
+    enforcement: "STRICT"
+  
+  - entity: "User"
+    valid_transitions:
+      INACTIVE: ["ACTIVE"]
+      ACTIVE: ["SUSPENDED", "INACTIVE"]
+      SUSPENDED: ["ACTIVE", "INACTIVE"]
+    enforcement: "STRICT"
+
+compliance:
+  - regulation: "GDPR"
+    description: "General Data Protection Regulation"
+    requirements:
+      - "User consent before data collection"
+      - "Right to be forgotten implementation"
+      - "Data export functionality"
+      - "Privacy policy acceptance"
+      - "Data breach notification within 72 hours"
+    validation: "Check for consent checks, delete endpoints, export APIs"
+    severity: "CRITICAL"
+  
+  - regulation: "SOX"
+    description: "Sarbanes-Oxley Act"
+    requirements:
+      - "Audit trail for financial transactions"
+      - "Segregation of duties"
+      - "Access control and authentication"
+      - "Data retention policies"
+    validation: "Check audit logs, role-based access, retention rules"
+    severity: "CRITICAL"
+  
+  - regulation: "PCI-DSS"
+    description: "Payment Card Industry Data Security Standard"
+    requirements:
+      - "No storage of CVV/CVC"
+      - "Encrypted card data at rest"
+      - "Tokenization of card numbers"
+      - "Secure transmission over TLS 1.2+"
+    validation: "Check encryption, tokenization, TLS version"
+    severity: "CRITICAL"
+
+data_integrity:
+  - rule_id: "REFERENTIAL_INTEGRITY"
+    description: "Foreign keys must reference valid records"
+    enforcement: "STRICT"
+    cascade_delete: false
+  
+  - rule_id: "UNIQUE_CONSTRAINTS"
+    description: "Email, username must be unique"
+    fields: ["email", "username"]
+    enforcement: "STRICT"
+  
+  - rule_id: "NOT_NULL_CONSTRAINTS"
+    description: "Required fields cannot be null"
+    applies_to: ["id", "created_at", "updated_at"]
+    enforcement: "STRICT"
+
+business_logic:
+  - rule_id: "DISCOUNT_LIMITS"
+    description: "Discounts cannot exceed 50%"
+    max_discount_percent: 50
+    severity: "HIGH"
+  
+  - rule_id: "INVENTORY_CHECK"
+    description: "Cannot sell items with insufficient stock"
+    enforcement: "STRICT"
+    allow_backorder: false
+  
+  - rule_id: "CREDIT_LIMIT"
+    description: "Customer credit cannot exceed approved limit"
+    enforcement: "STRICT"
+    check_before_order: true

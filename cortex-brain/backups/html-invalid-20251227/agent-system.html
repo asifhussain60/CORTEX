@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Agent System - CORTEX 4.0 Architecture</title>
+<link href="../assets/images/CORTEX-logo.png" rel="icon" type="image/png">
+<link href="../assets/css/main.css" rel="stylesheet">
+</head>
+<body>
+<!-- Breadcrumb -->
+<nav class="breadcrumb">
+<a href="../index.html">Home</a>
+<span class="breadcrumb-separator">›</span>
+<a href="index.html">Architecture</a>
+<span class="breadcrumb-separator">›</span>
+<span class="breadcrumb-current">Agent System</span>
+</nav>
+<!-- Evolution Banner -->
+<section class="section">
+<div class="container">
+<div class="evolution-banner">
+<div>
+<strong>Architecture Evolution in Progress</strong>
+<p>CORTEX is consolidating from 15+ orchestrators to a unified 10-orchestrator system. 
+                       This page reflects current (3.0) architecture. See 
+                       <a href="../future/technical-evolution.html">Technical Evolution</a> for CORTEX 4.0 plans.</p>
+</div>
+<!-- Header -->
+<section class="section">
+<div class="container">
+<h1 class="section-title">🤖 Intelligent Agent System</h1>
+<p class="text-center">
+                Distributed specialist network with Intent Router processing 10,000+ requests/sec across domain-expert agents
+
+    <!-- Executive Summary -->
+<section class="section">
+<div class="container">
+<div class="glass-card">
+<h2 class="mb-3">Executive Summary</h2>
+<p>
+                    CORTEX's agent system is a distributed specialist network where each agent cluster handles specific domain expertise. 
+                    At the network core, the <strong>Intent Router</strong> analyzes incoming requests and intelligently routes to specialized 
+                    agents: Planner for strategy, TDD Master for quality, Executor for implementation. With 20+ specialized agents organized 
+                    into strategic, tactical, and operational tiers, this architecture achieves 8.7ms average latency with zero packet loss 
+                    and 100% reliability.
+                </p>
+<div>
+<div>
+<div>20+</div>
+<div>Specialized Agents</div>
+<div>Domain experts</div>
+</div>
+<div>
+<div>10,000+</div>
+<div>Requests/sec</div>
+<div>Intent Router throughput</div>
+</div>
+<div>
+<div>8.7ms</div>
+<div>Avg Latency</div>
+<div>End-to-end response</div>
+</div>
+<div>
+<div>0</div>
+<div>Packet Loss</div>
+<div>100% delivery rate</div>
+</div>
+<!-- Intent Router (Core) -->
+<section class="section">
+<div class="container">
+<div class="glass-card">
+<h2 class="mb-3">🎯 Intent Router (Network Core)</h2>
+<p>
+                    The central intelligence that analyzes every incoming request, classifies intent, and routes to appropriate specialist agents. 
+                    This is the golden hub connecting all agents in the network—every request passes through here first.
+                </p>
+<div>
+<div>
+<div>
+<div>10,000+</div>
+<div>Requests/sec Processed</div>
+</div>
+<div>
+<div>100%</div>
+<div>Routing Accuracy</div>
+</div>
+<div>
+<div><2ms</div>
+<div>Routing Decision Time</div>
+</div>
+<div>
+<div>Redundant</div>
+<div>Stateless Multi-Node</div>
+</div>
+<div>
+<strong>Routing Logic:</strong>
+<ul>
+<li>Analyzes user query intent (plan feature, run tests, review code, etc.)</li>
+<li>Classifies request type using NLP and pattern matching</li>
+<li>Routes to specialist agent with domain expertise</li>
+<li>Handles load balancing across agent clusters</li>
+<li>Falls back to Investigation Router for unknown intents</li>
+</ul>
+<!-- Strategic Agents -->
+<section class="section">
+<div class="container">
+<h2 class="mb-3">🎯 Strategic Planning Agents</h2>
+<p>
+                High-level thinking, analysis, and long-term planning—"figure it out" operations
+
+            <!-- ADO Agent -->
+</p>
+<div class="glass-card">
+<div onclick="toggleSection('ado-content')">
+<h3>📋 ADO Planning Agent</h3>
+<span id="ado-content-icon">▼</span>
+</div>
+<div id="ado-content">
+<p>
+                        Generates Azure DevOps work items (stories, features, epics) from CORTEX plans. Formats output in ADO-compatible 
+                        structure with acceptance criteria, technical requirements, and estimation. Integrates Planning System 2.0 with 
+                        enterprise project management.
+                    </p>
+<div>
+<div>
+<div>
+<div>Stories Generated</div>
+<div>200+</div>
+</div>
+<div>
+<div>Format Compliance</div>
+<div>100%</div>
+</div>
+<div>
+<div>Export Formats</div>
+<div>3</div>
+</div>
+<div>
+<strong>Capabilities:</strong> User story generation, feature breakdown, epic planning, acceptance criteria, technical specs, JSON/Markdown/CSV export
+
+            <!-- Work Planner Agent -->
+<div class="glass-card">
+<div onclick="toggleSection('planner-content')">
+<h3>📐 Work Planner Agent</h3>
+<span id="planner-content-icon">▼</span>
+</div>
+<div id="planner-content">
+<p>
+                        Creates multi-phase implementation plans with DoR/DoD compliance. Auto-detects complexity (HIGH/MEDIUM/LOW), 
+                        includes TDD in all plans, generates phase-by-phase roadmaps with 6 quality gates. The strategic brain behind 
+                        feature delivery.
+                    </p>
+<div>
+<div>
+<div>
+<div>Active Plans</div>
+<div>47</div>
+</div>
+<div>
+<div>DoR/DoD Compliance</div>
+<div>100%</div>
+</div>
+<div>
+<div>Plan Types</div>
+<div>3</div>
+</div>
+<div>
+<strong>Plan Types:</strong> Incremental (HIGH complexity), Conditional (MEDIUM), Skeleton (LOW)
+
+            <!-- RCA Agent -->
+<div class="glass-card">
+<div onclick="toggleSection('rca-content')">
+<h3>🔍 Root Cause Analysis Agent</h3>
+<span id="rca-content-icon">▼</span>
+</div>
+<div id="rca-content">
+<p>
+                        Investigates failures and errors with "5 Whys" methodology. Traces error chains back to root causes, generates 
+                        actionable recommendations, and documents lessons learned. Integrates with Tier 2 knowledge graph for pattern recognition.
+                    </p>
+<div>
+<div>
+<div>
+<div>Investigations</div>
+<div>150+</div>
+</div>
+<div>
+<div>Root Causes Found</div>
+<div>92%</div>
+</div>
+<div>
+<div>Avg Depth</div>
+<div>4.2</div>
+</div>
+<div>
+<strong>Methodology:</strong> 5 Whys analysis, error chain tracing, pattern recognition, lesson capture, recommendation generation
+
+            <!-- Profile Agent -->
+<div class="glass-card">
+<div onclick="toggleSection('profile-content')">
+<h3>👤 Profile Agent</h3>
+<span id="profile-content-icon">▼</span>
+</div>
+<div id="profile-content">
+<p>
+                        Manages user profiles, preferences, and interaction history. Tracks expertise levels, preferred workflows, 
+                        and customization settings. Enables personalized CORTEX experiences based on user behavior patterns.
+                    </p>
+<div>
+<div>
+<div>
+<div>Profiles</div>
+<div>50+</div>
+</div>
+<div>
+<div>Interaction Modes</div>
+<div>3</div>
+</div>
+<div>
+<div>Personalization</div>
+<div>Active</div>
+</div>
+<div>
+<strong>Modes:</strong> Autonomous (concise), Guided (balanced), Detailed (comprehensive learning)
+
+    <!-- Tactical Execution Agents -->
+<section class="section">
+<div class="container">
+<h2 class="mb-3">⚡ Tactical Execution Agents</h2>
+<p>
+                Immediate action, implementation, testing, and deployment—"do it now" operations
+
+            <!-- Code Executor -->
+</p>
+<div class="glass-card">
+<div onclick="toggleSection('executor-content')">
+<h3>🚀 Code Executor Agent</h3>
+<span id="executor-content-icon">▼</span>
+</div>
+<div id="executor-content">
+<p>
+                        Executes multi-phase implementation plans. Coordinates file creation, code generation, testing, and git commits 
+                        in sequential phases with checkpoint validation. Transforms approved plans into running code.
+                    </p>
+<div>
+<div>
+<div>
+<div>Tasks Executed</div>
+<div>147</div>
+</div>
+<div>
+<div>Success Rate</div>
+<div>98.7%</div>
+</div>
+<div>
+<div>Avg Duration</div>
+<div>8min</div>
+</div>
+<div>
+<strong>Features:</strong> Phase checkpoints, rollback on failure, git integration, TDD enforcement, execution tracking
+
+            <!-- Test Generator -->
+<div class="glass-card">
+<div onclick="toggleSection('test-gen-content')">
+<h3>🧪 Test Generator Agent</h3>
+<span id="test-gen-content-icon">▼</span>
+</div>
+<div id="test-gen-content">
+<p>
+                        Generates comprehensive test suites following TDD principles. Creates unit tests, integration tests, and test fixtures. 
+                        Ensures RED phase compliance (tests fail before implementation) and maintains 4-layer coverage standards.
+                    </p>
+<div>
+<div>
+<div>
+<div>Tests Generated</div>
+<div>10,000+</div>
+</div>
+<div>
+<div>Coverage Target</div>
+<div>81%</div>
+</div>
+<div>
+<div>RED Compliance</div>
+<div>100%</div>
+</div>
+<div>
+<strong>Test Types:</strong> Unit tests, integration tests, fixtures, mocks, 4-layer coverage (Tier 0-3)
+
+            <!-- Commit Handler -->
+<div class="glass-card">
+<div onclick="toggleSection('commit-content')">
+<h3>📦 Commit Handler Agent</h3>
+<span id="commit-content-icon">▼</span>
+</div>
+<div id="commit-content">
+<p>
+                        Manages git commits with intelligent message generation using Conventional Commits format. Enforces CORTEX/user 
+                        isolation, prevents dirty state work, and creates descriptive commit messages automatically.
+                    </p>
+<div>
+<div>
+<div>
+<div>Commits Created</div>
+<div>520+</div>
+</div>
+<div>
+<div>Isolation Rate</div>
+<div>100%</div>
+</div>
+<div>
+<div>Message Quality</div>
+<div>High</div>
+</div>
+<div>
+<strong>Format:</strong> Conventional Commits (feat/fix/docs/refactor/test/chore)
+
+            <!-- Error Corrector -->
+<div class="glass-card">
+<div onclick="toggleSection('error-content')">
+<h3>🔧 Error Corrector Agent</h3>
+<span id="error-content-icon">▼</span>
+</div>
+<div id="error-content">
+<p>
+                        Automatically detects and corrects common errors in real-time. Analyzes stack traces, suggests fixes, and can 
+                        apply corrections with user approval. Learns from past corrections to improve accuracy over time.
+                    </p>
+<div>
+<div>
+<div>
+<div>Errors Corrected</div>
+<div>800+</div>
+</div>
+<div>
+<div>Auto-Fix Rate</div>
+<div>76%</div>
+</div>
+<div>
+<div>Accuracy</div>
+<div>94%</div>
+</div>
+<div>
+<strong>Error Types:</strong> Syntax errors, import errors, type mismatches, undefined variables, logic errors
+
+    <!-- Operational Support Agents -->
+<section class="section">
+<div class="container">
+<h2 class="mb-3">🔧 Operational Support Agents</h2>
+<p>
+                System health, learning, compliance, and continuous improvement
+
+            </p>
+<div>
+<!-- Application Health Agent -->
+<div class="glass-card">
+<h3>🏥 Application Health Agent</h3>
+<p>
+                        Monitors system health across all tiers. Checks database integrity, file system health, git status, test coverage, 
+                        and orchestrator availability. Triggers maintenance when needed.
+                    </p>
+<div>
+<strong>Health Checks:</strong> 1,000+ | <strong>System Health:</strong> 98% | <strong>Auto-Repair:</strong> Active
+
+                <!-- Learning Capture Agent -->
+<div class="glass-card">
+<h3>📚 Learning Capture Agent</h3>
+<p>
+                        Captures lessons learned from conversations, errors, and user interactions. Feeds Tier 2 knowledge graph 
+                        with structured insights for pattern recognition and Hebbian learning.
+                    </p>
+<div>
+<strong>Lessons:</strong> 500+ | <strong>Patterns:</strong> 24,817 connections | <strong>Learning:</strong> Continuous
+
+                <!-- Learning Librarian Agent -->
+<div class="glass-card">
+<h3>📖 Learning Librarian Agent</h3>
+<p>
+                        Organizes and retrieves lessons learned. Provides context-aware search across knowledge base, surfacing 
+                        relevant past experiences when similar situations arise.
+                    </p>
+<div>
+<strong>Queries:</strong> 5,000+ | <strong>Recall Rate:</strong> 96% | <strong>Avg Time:</strong> <100ms
+
+                <!-- Compliance Dashboard Agent -->
+<div class="glass-card">
+<h3>✅ Compliance Dashboard Agent</h3>
+<p>
+                        Tracks SKULL rule compliance, TDD adherence, and quality metrics. Generates compliance reports and identifies 
+                        areas needing improvement. Real-time monitoring dashboard.
+                    </p>
+<div>
+<strong>Rules Tracked:</strong> 22 | <strong>Compliance:</strong> 100% | <strong>Reports:</strong> Daily
+
+                <!-- Change Governor -->
+<div class="glass-card">
+<h3>🛡️ Change Governor Agent</h3>
+<p>
+                        Reviews proposed changes for governance compliance before execution. Acts as pre-commit gate, validating 
+                        against SKULL rules and preventing violations before they occur.
+                    </p>
+<div>
+<strong>Reviews:</strong> 2,000+ | <strong>Blocks:</strong> 156 violations | <strong>Pass Rate:</strong> 92%
+
+                <!-- Session Resumer -->
+<div class="glass-card">
+<h3>🔄 Session Resumer Agent</h3>
+<p>
+                        Restores context from previous sessions. Analyzes Tier 1 conversation history and Tier 3 dev context to 
+                        resume work seamlessly without manual context rebuilding.
+                    </p>
+<div>
+<strong>Resumes:</strong> 300+ | <strong>Context Restored:</strong> 95% | <strong>Time Saved:</strong> ~5min avg
+
+                <!-- Screenshot Analyzer -->
+<div class="glass-card">
+<h3>📸 Screenshot Analyzer Agent</h3>
+<p>
+                        Analyzes screenshots to extract code, error messages, UI layouts, and design elements. Enables visual 
+                        troubleshooting and UI implementation from mockups.
+                    </p>
+<div>
+<strong>Analyzed:</strong> 80+ | <strong>Code Extraction:</strong> 89% accuracy | <strong>OCR:</strong> Active
+
+                <!-- Welcome Banner Agent -->
+<div class="glass-card">
+<h3>👋 Welcome Banner Agent</h3>
+<p>
+                        Displays context-aware welcome messages with system status, recent activity summary, and suggested next actions. 
+                        Personalized based on user profile and current project state.
+                    </p>
+<div>
+<strong>Sessions:</strong> 1,200+ | <strong>Suggestions:</strong> Context-aware | <strong>Mode:</strong> Personalized
+
+    <!-- Agent Communication Architecture -->
+<section class="section">
+<div class="container">
+<div class="glass-card">
+<h2 class="mb-3 text-center">📡 Agent Communication Architecture</h2>
+<p>
+                    Message-based loose coupling enables independent evolution and horizontal scaling
+                
+                </p>
+<div>
+<div>
+<h3>🎯 Hub-Spoke Pattern</h3>
+<ul>
+<li>Intent Router at network core connects to all agents</li>
+<li>Agents also communicate peer-to-peer for complex workflows</li>
+<li>Planner → Executor → Test Generator → Commit Handler (critical path)</li>
+<li>Load balancing automatically reroutes around congestion</li>
+</ul>
+<div>
+<h3>💬 Message Contracts</h3>
+<ul>
+<li>Well-defined message formats (JSON schemas)</li>
+<li>Agents subscribe to message types they care about</li>
+<li>No direct dependencies between agents (loose coupling)</li>
+<li>Adding new agents doesn't break existing ones</li>
+</ul>
+<div>
+<div>
+<div>10,000+</div>
+<div>Requests/sec</div>
+</div>
+<div>
+<div>8.7ms</div>
+<div>Avg Latency</div>
+</div>
+<div>
+<div>0</div>
+<div>Packet Loss</div>
+</div>
+<div>
+<div>100%</div>
+<div>Delivery Rate</div>
+</div>
+<!-- Key Benefits -->
+<section class="section">
+<div class="container">
+<div class="glass-card">
+<h2 class="mb-3 text-center">✨ Why Specialized Agents?</h2>
+<div>
+<div>
+<h3>🎯 Domain Expertise</h3>
+<p>
+                            Each agent has deep knowledge of its domain. TDD Master understands test-first patterns, Review Oracle 
+                            knows SOLID principles. Specialization enables coaching, not just execution.
+                    
+                    </p>
+<div>
+<h3>🔗 Loose Coupling</h3>
+<p>
+                            Message-based communication means agents don't call each other directly. Adding, upgrading, or replacing 
+                            one agent doesn't break others. Evolution without cascading changes.
+                    
+                    </p>
+<div>
+<h3>📈 Horizontal Scaling</h3>
+<p>
+                            Each agent can scale independently. If Executor becomes bottleneck, add more Executor instances. 
+                            Load balancing distributes work automatically without code changes.
+                    
+                    </p>
+<div>
+<h3>🔍 Observable System</h3>
+<p>
+                            Message flows provide natural audit trails. Debugging becomes tracing message sequences rather than 
+                            stepping through complex call stacks. Full visibility into agent interactions.
+                    
+                    </p>
+<div>
+<h3>🚀 Faster Development</h3>
+<p>
+                            Focused agents have simpler logic. No complex conditionals ("if planning... if testing..."). 
+                            Each agent does one thing well, making code clearer and faster to modify.
+                    
+                    </p>
+<div>
+<h3>🛡️ Fault Isolation</h3>
+<p>
+                            If one agent fails, others continue operating. Failures are contained to single agents rather than 
+                            cascading through monolithic systems. Graceful degradation built-in.
+
+    <!-- Lateral Navigation -->
+<section class="section">
+<div class="container">
+<div class="glass-card">
+<h3 class="text-center mb-3">Explore Other Architecture Components</h3>
+<div>
+<a class="btn btn-secondary" href="four-tier-brain.html">🧠 4-Tier Brain</a>
+<a class="btn btn-secondary" href="skull-protection.html">🛡️ SKULL Protection</a>
+<a class="btn btn-secondary" href="orchestrator-ecosystem.html">🎭 Orchestrator Ecosystem</a>
+<a class="btn btn-secondary" href="index.html">← Architecture Overview</a>
+</div>
+<section class="section">
+<div class="container text-center">
+<a class="btn btn-primary" href="index.html">← Back to Architecture</a>
+</div>
+<footer>
+<div class="container">
+<div class="footer-bottom">
+<p>© 2024-2025 Asif Hussain. All rights reserved. | <strong>CORTEX 4.0</strong></p>
+</div>
+<script src="../assets/js/main.js"></script>
+<script></script>
+</div></footer></section>
+</div>
+</div></section></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div></section>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div></section>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div></section>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div></section>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div></section>
+</div>
+</div>
+</div>
+</div>
+</div></section>
+</div>
+</div>
+</div></section></p>
+</div></section>
+</div>
+</div></section>
+</body>
+</html>

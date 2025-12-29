@@ -1,0 +1,636 @@
+"""
+Python Environment Setup Module
+
+Intelligently detects and manages Python environments for CORTEX.
+
+Strategy:
+- Reuse existing environments when dependencies are satisfied
+- Create isolated environment when conflicts detected
+- Preserve user's global Python installation
+- Validate brain database compatibility
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+"""
+
+import sys
+import subprocess
+import logging
+from pathlib import Path
+from typing import Dict, List, Optional, Tuple
+from dataclasses import dataclass
+
+from ..base_setup_module import (
+    BaseSetupModule,
+    SetupModuleMetadata,
+    SetupResult,
+    SetupStatus,
+    SetupPhase
+)
+
+
+@dataclass
+class EnvironmentAnalysis:
+    """Results of Python environment analysis."""
+    is_virtual_env: bool
+    environment_path: Path
+    python_version: Tuple[int, int, int]
+    is_global: bool
+    parent_project: Optional[str]
+    dependencies_satisfied: bool
+    conflicts: List[str]
+    missing_packages: List[str]
+    action_recommendation: str
+    reason: str
+
+
+class PythonEnvironmentModule(BaseSetupModule):
+    """
+    Analyzes and configures Python environment for CORTEX.
+    
+    Decision Logic:
+    1. Global Python → Always create isolated venv
+    2. Existing venv + satisfied deps → Reuse environment
+    3. Existing venv + conflicts → Create CORTEX venv
+    4. Embedded installation + compatible → Reuse parent
+    5. Embedded installation + conflicts → Isolate CORTEX
+    """
+    
+    # CORTEX required packages with version constraints
+    REQUIRED_PACKAGES = {
+        'pytest': '>=8.4.0',
+        'PyYAML': '>=6.0.2',
+        'watchdog': '>=6.0.0',
+        'psutil': '>=6.1.1',
+        'scikit-learn': '>=1.5.2',
+        'PyGithub': '>=2.5.0',
+        'tree-sitter': '>=0.20.1',
+        'python-docx': '>=1.1.0',
+        'PyPDF2': '>=3.0.0'
+    }
+    
+    def __init__(self):
+        """Initialize Python environment module."""
+        super().__init__()
+        self.logger = logging.getLogger(__name__)
+    
+    def get_metadata(self) -> SetupModuleMetadata:
+        """Module metadata."""
+        return SetupModuleMetadata(
+            module_id="python_environment",
+            name="Python Environment Setup",
+            description="Detect and configure Python environment with intelligent reuse",
+            phase=SetupPhase.ENVIRONMENT,
+            priority=10,  # Early phase - needed by all other modules
+            dependencies=[],
+            optional=False
+        )
+    
+    def validate_prerequisites(self, context: Dict) -> Tuple[bool, str]:
+        """Validate Python is available."""
+        try:
+            version_info = sys.version_info
+            if version_info < (3, 8):
+                # Handle both named tuple and regular tuple
+                major = version_info[0] if isinstance(version_info, tuple) else version_info.major
+                minor = version_info[1] if isinstance(version_info, tuple) else version_info.minor
+                return False, f"Python 3.8+ required, found {major}.{minor}"
+            
+            return True, "Python 3.8+ detected"
+        except Exception as e:
+            return False, f"Failed to validate Python: {e}"
+    
+    def execute(self, context: Dict) -> SetupResult:
+        """
+        Analyze and configure Python environment.
+        
+        Args:
+            context: Setup context with project_root
+        
+        Returns:
+            SetupResult with environment configuration
+        """
+        try:
+            self.logger.info("🔍 Analyzing Python environment...")
+            self.logger.info(f"   Python {sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}")
+            
+            # Analyze current environment
+            analysis = self._analyze_environment(context)
+            
+            # Log analysis with enhanced UX
+            self._log_analysis_enhanced(analysis)
+            
+            # Original analysis log for backward compatibility
+            self._log_analysis(analysis)
+            
+            # Execute recommended action
+            if analysis.action_recommendation == "reuse_environment":
+                result = self._configure_reuse(analysis, context)
+            elif analysis.action_recommendation == "create_venv":
+                result = self._create_venv(analysis, context)
+            else:
+                raise ValueError(f"Unknown action: {analysis.action_recommendation}")
+            
+            # Store analysis in context for other modules
+            context['environment_analysis'] = analysis
+            context['environment_path'] = result.details.get('environment_path')
+            
+            return result
+            
+        except Exception as e:
+            self.logger.error(f"❌ Environment setup failed: {e}")
+            return SetupResult(
+                module_id=self.metadata.module_id,
+                status=SetupStatus.FAILED,
+                message=f"Environment setup failed: {e}",
+                details={'error': str(e)}
+            )
+    
+    def rollback(self, context: Dict) -> bool:
+        """Rollback environment changes if needed."""
+        try:
+            venv_path = context.get('cortex_venv_path')
+            if venv_path and Path(venv_path).exists():
+                self.logger.info(f"🗑️ Removing created venv: {venv_path}")
+                import shutil
+                shutil.rmtree(venv_path)
+                return True
+            return True
+        except Exception as e:
+            self.logger.error(f"❌ Rollback failed: {e}")
+            return False
+    
+    def _analyze_environment(self, context: Dict) -> EnvironmentAnalysis:
+        """Analyze current Python environment."""
+        
+        # Priority 1: Check for shared environment
+        shared_env = self._detect_shared_environment()
+        
+        # Detect environment type
+        is_virtual_env = hasattr(sys, 'real_prefix') or (
+            hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix
+        )
+        
+        environment_path = Path(sys.prefix)
+        python_version = sys.version_info[:3]
+        is_global = not is_virtual_env
+        
+        # Detect parent project (for embedded installations)
+        parent_project = self._detect_parent_project(context)
+        
+        missing_packages, conflicts = self._check_dependencies()
+        dependencies_satisfied = not missing_packages and not conflicts
+        
+        # Determine action with shared environment prioritization
+        if shared_env and dependencies_satisfied:
+            action = "use_shared"
+            reason = f"Shared environment available and compatible: {shared_env}"
+        elif shared_env and not conflicts:
+            action = "use_shared"
+            reason = f"Shared environment available - missing packages will be installed: {shared_env}"
+        elif is_global:
+            action = "create_shared"
+            reason = "Global Python environment - creating shared CORTEX environment"
+        elif dependencies_satisfied:
+            action = "reuse_environment"
+            reason = f"Existing environment compatible - all dependencies satisfied"
+        elif parent_project and not conflicts:
+            action = "reuse_environment"
+            reason = f"Parent project environment compatible - missing packages will be installed"
+        else:
+            action = "create_venv"
+            reason = f"Conflicts detected - isolated environment required"
+            if conflicts:
+                reason += f" ({len(conflicts)} conflicts)"
+        
+        return EnvironmentAnalysis(
+            is_virtual_env=is_virtual_env,
+            environment_path=environment_path,
+            python_version=python_version,
+            is_global=is_global,
+            parent_project=parent_project,
+            dependencies_satisfied=dependencies_satisfied,
+            conflicts=conflicts,
+            missing_packages=missing_packages,
+            action_recommendation=action,
+            reason=reason
+        )
+    
+    def _get_python_version_string(self) -> str:
+        """Get Python version as string (e.g., '3.11')."""
+        return f"{sys.version_info.major}.{sys.version_info.minor}"
+    
+    def _detect_shared_environment(self) -> Optional[Path]:
+        """
+        Detect existing shared CORTEX environment.
+        
+        Shared environment location: ~/.cortex/venv-{python_version}/
+        Example: ~/.cortex/venv-3.11/
+        
+        Returns:
+            Path to shared environment if exists and valid, None otherwise
+        """
+        try:
+            home = Path.home()
+            python_version = self._get_python_version_string()
+            shared_venv_path = home / ".cortex" / f"venv-{python_version}"
+            
+            # Verify environment exists and is valid
+            if shared_venv_path.exists() and shared_venv_path.is_dir():
+                # Check for basic venv structure
+                python_executable = shared_venv_path / "bin" / "python"
+                if python_executable.exists():
+                    return shared_venv_path
+            
+            return None
+        except Exception as e:
+            self.logger.debug(f"Error detecting shared environment: {e}")
+            return None
+    
+    def _validate_shared_environment(self, shared_path: Path) -> bool:
+        """
+        Validate shared environment structure and integrity.
+        
+        Args:
+            shared_path: Path to shared environment
+        
+        Returns:
+            True if valid, False otherwise
+        """
+        try:
+            if not shared_path.exists() or not shared_path.is_dir():
+                return False
+            
+            # Check for Python executable
+            python_executable = shared_path / "bin" / "python"
+            if not python_executable.exists():
+                # Try Windows path
+                python_executable = shared_path / "Scripts" / "python.exe"
+                if not python_executable.exists():
+                    return False
+            
+            # Check for pyvenv.cfg
+            pyvenv_cfg = shared_path / "pyvenv.cfg"
+            if not pyvenv_cfg.exists():
+                return False
+            
+            return True
+        except Exception as e:
+            self.logger.debug(f"Error validating shared environment: {e}")
+            return False
+    
+    def _create_shared_environment(self, shared_path: Path) -> bool:
+        """
+        Create a version-specific shared CORTEX environment.
+        
+        Args:
+            shared_path: Path where shared environment should be created
+        
+        Returns:
+            True if creation successful, False otherwise
+        """
+        try:
+            self.logger.info(f"🔧 Creating shared environment...")
+            self.logger.info(f"   📍 {shared_path}")
+            
+            # Ensure parent directory exists
+            shared_path.parent.mkdir(parents=True, exist_ok=True)
+            
+            self.logger.info("   ⏳ Running: python -m venv...")
+            
+            # Create virtual environment
+            subprocess.run(
+                [sys.executable, '-m', 'venv', str(shared_path)],
+                check=True,
+                capture_output=True,
+                text=True
+            )
+            
+            self.logger.info(f"   ✅ Shared environment created successfully")
+            return True
+        except subprocess.CalledProcessError as e:
+            self.logger.error(f"   ❌ Failed to create shared environment: {e.stderr}")
+            return False
+        except Exception as e:
+            self.logger.error(f"   ❌ Unexpected error: {e}")
+            return False
+    
+    def _detect_migration_candidate(self, context: Dict) -> Optional[Path]:
+        """
+        Detect local .venv that should be migrated to shared environment.
+        
+        Args:
+            context: Setup context with project_root
+        
+        Returns:
+            Path to local venv if found, None otherwise
+        """
+        try:
+            project_root = context.get('project_root', Path.cwd())
+            local_venv = project_root / ".venv"
+            
+            # Check if local venv exists
+            if local_venv.exists() and local_venv.is_dir():
+                # Verify it's a valid venv
+                pyvenv_cfg = local_venv / "pyvenv.cfg"
+                if pyvenv_cfg.exists():
+                    return local_venv
+            
+            return None
+        except Exception as e:
+            self.logger.debug(f"Error detecting migration candidate: {e}")
+            return None
+    
+    def _migrate_to_shared(self, context: Dict, local_venv: Path, shared_venv: Path) -> bool:
+        """
+        Migrate from local .venv to shared environment.
+        
+        Strategy:
+        1. Backup local venv (rename to .venv.backup)
+        2. Install CORTEX packages in shared environment
+        3. Keep backup for rollback if needed
+        
+        Args:
+            context: Setup context
+            local_venv: Path to local venv to migrate from
+            shared_venv: Path to shared venv to migrate to
+        
+        Returns:
+            True if migration successful, False otherwise
+        """
+        try:
+            self.logger.info("🔄 Migrating to shared environment...")
+            self.logger.info(f"   From: {local_venv}")
+            self.logger.info(f"   To:   {shared_venv}")
+            
+            # Backup local venv
+            backup_path = local_venv.parent / ".venv.backup"
+            if backup_path.exists():
+                self.logger.info("   🗑️  Removing old backup...")
+                import shutil
+                shutil.rmtree(backup_path)
+            
+            self.logger.info("   📦 Creating backup...")
+            # Rename to backup (don't delete yet - keep for rollback)
+            local_venv.rename(backup_path)
+            self.logger.info(f"   ✅ Backup created: .venv.backup")
+            
+            # Note: Actual package installation will happen in execute()
+            self.logger.info(f"   ✅ Migration prepared successfully")
+            return True
+        except Exception as e:
+            self.logger.error(f"   ❌ Migration failed: {e}")
+            # Try to restore backup
+            if backup_path.exists():
+                try:
+                    backup_path.rename(local_venv)
+                    self.logger.info("🔄 Restored local venv from backup")
+                except:
+                    pass
+            return False
+    
+    def _detect_parent_project(self, context: Dict) -> Optional[str]:
+        """Detect if CORTEX is embedded in a parent project."""
+        project_root = context.get('project_root', Path.cwd())
+        
+        if project_root.name == 'CORTEX':
+            parent = project_root.parent
+            
+            # Look for common project indicators in parent
+            indicators = [
+                'package.json',
+                'requirements.txt',
+                'pyproject.toml',
+                'setup.py',
+                '.git'
+            ]
+            
+            for indicator in indicators:
+                if (parent / indicator).exists():
+                    return parent.name
+        
+        return None
+    
+    def _check_dependencies(self) -> Tuple[List[str], List[str]]:
+        """
+        Check if required packages are installed and compatible.
+        
+        Returns:
+            (missing_packages, conflicts)
+        """
+        missing = []
+        conflicts = []
+        
+        for package, constraint in self.REQUIRED_PACKAGES.items():
+            try:
+                # Try to import package
+                if package == 'PyYAML':
+                    import yaml
+                    installed_version = yaml.__version__
+                elif package == 'PyGithub':
+                    import github
+                    installed_version = github.__version__
+                elif package == 'python-docx':
+                    import docx
+                    installed_version = docx.__version__ if hasattr(docx, '__version__') else 'unknown'
+                else:
+                    # Dynamic import
+                    module = __import__(package.lower().replace('-', '_'))
+                    installed_version = getattr(module, '__version__', 'unknown')
+                
+                # Parse constraint
+                if constraint.startswith('>='):
+                    min_version = constraint[2:]
+                    if installed_version != 'unknown' and installed_version < min_version:
+                        conflicts.append(f"{package} {installed_version} (need {constraint})")
+                
+            except ImportError:
+                missing.append(package)
+            except Exception as e:
+                self.logger.debug(f"Error checking {package}: {e}")
+                missing.append(package)
+        
+        return missing, conflicts
+    
+    def _configure_reuse(self, analysis: EnvironmentAnalysis, context: Dict) -> SetupResult:
+        """Configure CORTEX to reuse existing environment."""
+        
+        # Install missing packages if any
+        if analysis.missing_packages:
+            self.logger.info(f"📦 Installing {len(analysis.missing_packages)} missing packages...")
+            success = self._install_packages(analysis.missing_packages)
+            if not success:
+                return SetupResult(
+                    module_id=self.metadata.module_id,
+                    status=SetupStatus.FAILED,
+                    message="Failed to install missing dependencies",
+                    details={'missing': analysis.missing_packages}
+                )
+        
+        return SetupResult(
+            module_id=self.metadata.module_id,
+            status=SetupStatus.SUCCESS,
+            message=f"✅ Reusing existing environment: {analysis.reason}",
+            details={
+                'action': 'reuse',
+                'environment_path': str(analysis.environment_path),
+                'python_version': '.'.join(map(str, analysis.python_version)),
+                'parent_project': analysis.parent_project,
+                'packages_installed': analysis.missing_packages
+            }
+        )
+    
+    def _create_venv(self, analysis: EnvironmentAnalysis, context: Dict) -> SetupResult:
+        """Create isolated CORTEX virtual environment."""
+        
+        project_root = context.get('project_root', Path.cwd())
+        venv_path = project_root / '.venv'
+        
+        self.logger.info(f"🔨 Creating isolated virtual environment: {venv_path}")
+        
+        try:
+            subprocess.run(
+                [sys.executable, '-m', 'venv', str(venv_path)],
+                check=True,
+                capture_output=True,
+                text=True
+            )
+            
+            # Determine pip executable path
+            if sys.platform == 'win32':
+                pip_executable = venv_path / 'Scripts' / 'pip.exe'
+            else:
+                pip_executable = venv_path / 'bin' / 'pip'
+            
+            # Install requirements
+            requirements_file = project_root / 'requirements.txt'
+            if requirements_file.exists():
+                self.logger.info("📦 Installing CORTEX dependencies...")
+                subprocess.run(
+                    [str(pip_executable), 'install', '-r', str(requirements_file)],
+                    check=True,
+                    capture_output=True,
+                    text=True
+                )
+            
+            # Store venv path for potential rollback
+            context['cortex_venv_path'] = str(venv_path)
+            
+            return SetupResult(
+                module_id=self.metadata.module_id,
+                status=SetupStatus.SUCCESS,
+                message=f"✅ Created isolated environment: {analysis.reason}",
+                details={
+                    'action': 'create',
+                    'environment_path': str(venv_path),
+                    'python_version': '.'.join(map(str, analysis.python_version)),
+                    'conflicts_resolved': analysis.conflicts
+                }
+            )
+            
+        except (subprocess.CalledProcessError, Exception) as e:
+            error_msg = getattr(e, 'stderr', str(e))
+            return SetupResult(
+                module_id=self.metadata.module_id,
+                status=SetupStatus.FAILED,
+                message=f"Failed to create virtual environment: {error_msg}",
+                details={'error': str(e)}
+            )
+    
+    def _install_packages(self, packages: List[str]) -> bool:
+        """Install missing packages in current environment."""
+        try:
+            self.logger.info(f"📦 Installing {len(packages)} packages...")
+            for pkg in packages[:3]:  # Show first 3
+                self.logger.info(f"   • {pkg}")
+            if len(packages) > 3:
+                self.logger.info(f"   • ... and {len(packages) - 3} more")
+            
+            subprocess.run(
+                [sys.executable, '-m', 'pip', 'install'] + packages,
+                check=True,
+                capture_output=True,
+                text=True
+            )
+            
+            self.logger.info(f"   ✅ Packages installed successfully")
+            return True
+        except subprocess.CalledProcessError as e:
+            self.logger.error(f"   ❌ Failed to install packages: {e.stderr}")
+            return False
+    
+    def _log_analysis(self, analysis: EnvironmentAnalysis):
+        """Log environment analysis results."""
+        self.logger.info("\n" + "="*60)
+        self.logger.info("🔍 Python Environment Analysis")
+        self.logger.info("="*60)
+        self.logger.info(f"Environment Type: {'Virtual Environment' if analysis.is_virtual_env else 'Global Python'}")
+        self.logger.info(f"Python Version: {'.'.join(map(str, analysis.python_version))}")
+        self.logger.info(f"Environment Path: {analysis.environment_path}")
+        
+        if analysis.parent_project:
+            self.logger.info(f"Parent Project: {analysis.parent_project} (embedded installation)")
+        
+        if analysis.missing_packages:
+            self.logger.info(f"Missing Packages: {', '.join(analysis.missing_packages)}")
+        
+        if analysis.conflicts:
+            self.logger.warning(f"⚠️ Conflicts Detected:")
+            for conflict in analysis.conflicts:
+                self.logger.warning(f"  • {conflict}")
+        
+        self.logger.info(f"\n💡 Recommendation: {analysis.action_recommendation}")
+        self.logger.info(f"📝 Reason: {analysis.reason}")
+        self.logger.info("="*60 + "\n")
+    
+    def _log_analysis_enhanced(self, analysis: EnvironmentAnalysis):
+        """
+        Log environment analysis with enhanced UX.
+        
+        Provides clear, user-friendly feedback with emoji indicators
+        and actionable information.
+        """
+        # Status emoji based on action
+        status_emoji = {
+            "use_shared": "🎯",
+            "create_shared": "🔧",
+            "reuse_environment": "♻️",
+            "create_venv": "📦",
+        }
+        emoji = status_emoji.get(analysis.action_recommendation, "🔍")
+        
+        # Environment type indicator
+        if analysis.is_global:
+            env_type = "🌍 Global Python"
+        elif "shared" in analysis.reason.lower():
+            env_type = "🎯 Shared Environment"
+        else:
+            env_type = "📦 Virtual Environment"
+        
+        self.logger.info(f"\n{emoji} Environment Decision: {analysis.action_recommendation.replace('_', ' ').title()}")
+        self.logger.info(f"   {env_type}")
+        
+        # Version-specific shared path
+        if analysis.action_recommendation in ["use_shared", "create_shared"]:
+            python_version = f"{analysis.python_version[0]}.{analysis.python_version[1]}"
+            shared_path = Path.home() / ".cortex" / f"venv-{python_version}"
+            self.logger.info(f"   📍 Location: {shared_path}")
+        
+        # Dependency status
+        if analysis.dependencies_satisfied:
+            self.logger.info("   ✅ All dependencies satisfied")
+        else:
+            if analysis.missing_packages:
+                self.logger.info(f"   📦 Will install: {len(analysis.missing_packages)} packages")
+            if analysis.conflicts:
+                self.logger.warning(f"   ⚠️  Conflicts: {len(analysis.conflicts)} packages")
+        
+        # Migration notice
+        if analysis.action_recommendation == "use_shared":
+            self.logger.info("   💡 Benefit: Shared across CORTEX projects")
+        elif analysis.action_recommendation == "create_shared":
+            self.logger.info("   ⏱️  Estimated time: ~30-60 seconds")
+            self.logger.info("   💡 One-time setup for Python {}.{}".format(
+                analysis.python_version[0], analysis.python_version[1]
+            ))
+

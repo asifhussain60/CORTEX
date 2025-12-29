@@ -1,0 +1,349 @@
+/**
+ * Card Component Styles
+ * 
+ * Glassmorphism card system consolidated from multiple files
+ * Base cards, flat cards, hover effects, and responsive layouts
+ * 
+ * Author: Asif Hussain
+ * Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+ * Date: December 9, 2025
+ */
+
+/* ============================================
+   BASE GLASS CARD
+   ============================================ */
+
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow);
+    transition: all var(--transition-base);
+}
+
+.glass-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* ============================================
+   FLAT CARD (No Hover Effects)
+   ============================================ */
+
+.glass-card-flat {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-lg);
+}
+
+/* ============================================
+   CARD VARIANTS
+   ============================================ */
+
+/* Solid Card - No transparency */
+.card-solid {
+    background: var(--bg-secondary);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow);
+}
+
+/* Bordered Card - Emphasis on border */
+.card-bordered {
+    background: transparent;
+    border: 2px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-lg);
+}
+
+.card-bordered:hover {
+    border-color: var(--accent-primary);
+    background: rgba(255, 255, 255, 0.02);
+}
+
+/* Gradient Card - Colorful accent */
+.card-gradient {
+    background: linear-gradient(135deg, 
+        rgba(0, 212, 255, 0.1), 
+        rgba(123, 97, 255, 0.1)
+    );
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-lg);
+}
+
+/* ============================================
+   CARD HEADER & FOOTER
+   ============================================ */
+
+.card-header {
+    padding-bottom: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.card-title {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.card-subtitle {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    margin-top: var(--spacing-xs);
+}
+
+.card-body {
+    flex: 1;
+}
+
+.card-footer {
+    padding-top: var(--spacing-md);
+    margin-top: var(--spacing-md);
+    border-top: 1px solid var(--glass-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* ============================================
+   CARD SIZES
+   ============================================ */
+
+.card-sm {
+    padding: var(--spacing-sm);
+}
+
+.card-md {
+    padding: var(--spacing-lg);
+}
+
+.card-lg {
+    padding: var(--spacing-xl);
+}
+
+/* ============================================
+   CARD LAYOUTS
+   ============================================ */
+
+/* Horizontal Card */
+.card-horizontal {
+    display: flex;
+    flex-direction: row;
+    gap: var(--spacing-lg);
+}
+
+.card-horizontal .card-image {
+    width: 200px;
+    flex-shrink: 0;
+}
+
+.card-horizontal .card-content {
+    flex: 1;
+}
+
+/* Stat Card - For metrics display */
+.stat-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-lg);
+    text-align: center;
+}
+
+.stat-card .stat-value {
+    font-size: 2.5rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--accent-primary);
+    line-height: 1;
+}
+
+.stat-card .stat-label {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    margin-top: var(--spacing-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.stat-card .stat-change {
+    font-size: var(--font-size-sm);
+    margin-top: var(--spacing-xs);
+}
+
+.stat-card .stat-change.positive {
+    color: var(--success);
+}
+
+.stat-card .stat-change.negative {
+    color: var(--danger);
+}
+
+/* ============================================
+   CARD GRID LAYOUTS
+   ============================================ */
+
+.card-grid {
+    display: grid;
+    gap: var(--spacing-lg);
+}
+
+.card-grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.card-grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.card-grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+/* ============================================
+   CARD INTERACTIVE STATES
+   ============================================ */
+
+.card-clickable {
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.card-clickable:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--accent-primary);
+}
+
+.card-clickable:active {
+    transform: translateY(-2px);
+}
+
+/* ============================================
+   CARD WITH IMAGE
+   ============================================ */
+
+.card-image {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--spacing-md);
+}
+
+.card-image-top {
+    border-top-left-radius: var(--radius-md);
+    border-top-right-radius: var(--radius-md);
+    margin-bottom: 0;
+}
+
+/* ============================================
+   CARD LOADING STATE
+   ============================================ */
+
+.card-loading {
+    position: relative;
+    overflow: hidden;
+}
+
+.card-loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.05),
+        transparent
+    );
+    animation: card-shimmer 1.5s infinite;
+}
+
+@keyframes card-shimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+/* ============================================
+   RESPONSIVE CARDS
+   ============================================ */
+
+@media (max-width: 1024px) {
+    .card-grid-4 {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .card-horizontal {
+        flex-direction: column;
+    }
+    
+    .card-horizontal .card-image {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .glass-card,
+    .glass-card-flat,
+    .card-solid {
+        padding: var(--spacing-md);
+    }
+    
+    .card-grid-3,
+    .card-grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .stat-card .stat-value {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .card-grid-2,
+    .card-grid-3,
+    .card-grid-4 {
+        grid-template-columns: 1fr;
+    }
+    
+    .glass-card,
+    .glass-card-flat {
+        padding: var(--spacing-sm);
+    }
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+
+@media print {
+    .glass-card,
+    .glass-card-flat,
+    .card-solid {
+        background: white;
+        border: 1px solid #ccc;
+        box-shadow: none;
+        page-break-inside: avoid;
+    }
+    
+    .card-clickable:hover {
+        transform: none;
+    }
+}

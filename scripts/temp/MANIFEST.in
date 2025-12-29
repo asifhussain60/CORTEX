@@ -1,0 +1,62 @@
+# CORTEX Package Data Manifest
+# Specifies non-Python files to include in distribution
+
+# Configuration files
+include cortex.config.json
+include cortex.config.template.json
+include cortex-operations.yaml
+include deployment-manifest.yaml
+include README.md
+include LICENSE
+include CHANGELOG.md
+
+# Python requirements
+include requirements.txt
+include requirements-core.txt
+include requirements-dev.txt
+include requirements-optional.txt
+include requirements-production.txt
+
+# Pytest configuration
+include pytest.ini
+include pytest.smoke.ini
+
+# Brain directory (all files)
+recursive-include cortex-brain *.yaml
+recursive-include cortex-brain *.yml
+recursive-include cortex-brain *.json
+recursive-include cortex-brain *.jsonl
+recursive-include cortex-brain *.md
+recursive-include cortex-brain *.txt
+recursive-include cortex-brain *.sql
+recursive-include cortex-brain *.db
+recursive-include cortex-brain *.prompt.md
+
+# Source YAML/JSON/Markdown files
+recursive-include src *.yaml
+recursive-include src *.yml
+recursive-include src *.json
+recursive-include src *.md
+recursive-include src *.txt
+recursive-include src *.sql
+
+# Prompts directory
+recursive-include .github/prompts *.md
+recursive-include .github/prompts *.prompt.md
+
+# Documentation
+recursive-include docs *.md
+recursive-include docs *.yaml
+
+# Exclude test files, caches, and development artifacts
+global-exclude *.py[cod]
+global-exclude __pycache__
+global-exclude *.so
+global-exclude .DS_Store
+global-exclude *.swp
+global-exclude *~
+recursive-exclude tests *
+recursive-exclude .git *
+recursive-exclude .vscode *
+recursive-exclude archive *
+recursive-exclude scripts/temp *

@@ -1,0 +1,458 @@
+# Response Routing Rules
+# Version: 3.0
+# Purpose: Intent detection and template selection logic
+# Part of: Response Template System Refactor (Phase 5)
+
+schema_version: '3.0'
+last_updated: '2025-12-10'
+refactor_phase: 'modular_architecture'
+
+# ============================================================================
+# INTENT DETECTION - Map user input to template
+# ============================================================================
+
+intent_detection:
+  # -------------------------------------------------------------------------
+  # HIGH PRIORITY - Exact matches (admin, help, onboarding, introductions)
+  # -------------------------------------------------------------------------
+  priority_1_exact_match:
+    - intent: "introduction_professional"
+      keywords:
+        - "introduce yourself"
+        - "introduce cortex"
+        - "what is cortex"
+        - "tell me about cortex"
+        - "present cortex"
+      audience_detection:
+        explicit:
+          leadership: ["to leadership", "for leadership", "to executives"]
+          product: ["to product", "for product", "to product owners"]
+          engineering: ["to engineers", "for engineers", "to developers", "to engineering"]
+        implicit:
+          leadership: ["ROI", "cost", "velocity", "metrics", "business value"]
+          product: ["features", "delivery", "sprint", "backlog", "roadmap"]
+          engineering: ["architecture", "code", "implementation", "technical"]
+        default: "introduction_professional"
+      template: "introduction_professional"  # Default, overridden by audience detection
+      orchestrator: null
+      note: "Audience detection: explicit phrase > implicit keywords > default"
+    
+    - intent: "introduction_leadership"
+      keywords:
+        - "introduce yourself to leadership"
+        - "introduce cortex to leadership"
+        - "present cortex to leadership"
+        - "cortex for leadership"
+      template: "introduction_leadership"
+      orchestrator: null
+    
+    - intent: "introduction_product"
+      keywords:
+        - "introduce yourself to product"
+        - "introduce cortex to product"
+        - "present cortex to product owners"
+        - "cortex for product"
+      template: "introduction_product"
+      orchestrator: null
+    
+    - intent: "introduction_engineering"
+      keywords:
+        - "introduce yourself to engineers"
+        - "introduce cortex to engineering"
+        - "present cortex to developers"
+        - "cortex for engineers"
+      template: "introduction_engineering"
+      orchestrator: null
+    
+    - intent: "business_value"
+      keywords:
+        - "how can cortex help the business"
+        - "business value"
+        - "what can cortex do"
+        - "cortex capabilities"
+        - "cortex features"
+      template: "business_value"
+      orchestrator: null
+    
+    - intent: "security_posture"
+      keywords:
+        - "security concerns"
+        - "how does cortex address security"
+        - "cortex security"
+        - "is cortex secure"
+        - "security posture"
+      template: "security_posture"
+      orchestrator: null
+    
+    - intent: "onboarding"
+      keywords:
+        - "onboard"
+        - "onboarding"
+        - "setup profile"
+        - "first time"
+        - "new user"
+      parameters:
+        required: ["--app-name"]
+      template: "template_onboarding"
+      orchestrator: "OnboardingOrchestrator"
+    
+    - intent: "help_table"
+      keywords:
+        - "help"
+        - "commands"
+        - "what can you do"
+        - "operations"
+      template: "template_help_table"
+      orchestrator: null
+    
+    - intent: "help_detailed"
+      keywords:
+        - "help detailed"
+        - "full help"
+        - "all commands"
+      template: "template_help_detailed"
+      orchestrator: null
+
+  # -------------------------------------------------------------------------
+  # PRIORITY 2 - Planning workflows
+  # -------------------------------------------------------------------------
+  priority_2_planning:
+    - intent: "autonomous_execution"
+      keywords:
+        - "execute autonomously"
+        - "run all phases autonomously"
+        - "execute all phases"
+        - "complete all autonomously"
+        - "run autonomously"
+        - "continue automatically"
+        - "proceed without stopping"
+        - "execute all without confirmation"
+        - "autonomous mode"
+      template: "autonomous_phase_execution"
+      orchestrator: "PlanningOrchestrator"
+      execution_mode: "autonomous"
+      note: "HIGH PRIORITY - Override interactive templates when autonomous keywords detected"
+    
+    - intent: "planning_start"
+      keywords:
+        - "plan"
+        - "create plan"
+        - "create a plan"
+        - "make a plan"
+        - "planning"
+        - "comprehensive plan"
+        - "detailed plan"
+        - "full plan"
+        - "plan for"
+      template: "template_planning_dor_incomplete"
+      orchestrator: "PlanningOrchestrator"
+      validation: "check_dor"
+    
+    - intent: "planning_approve"
+      keywords:
+        - "approve plan"
+        - "dor complete"
+        - "definition of ready"
+      template: "template_planning_dor_complete"
+      orchestrator: "PlanningOrchestrator"
+    
+    - intent: "security_review"
+      keywords:
+        - "security review"
+        - "threat model"
+        - "owasp"
+        - "security threats"
+      template: "template_planning_security_review"
+      orchestrator: "ThreatModelingOrchestrator"
+    
+    - intent: "ado_create"
+      keywords:
+        - "plan ado"
+        - "create ado"
+        - "ado work item"
+      template: "template_ado_created"
+      orchestrator: "ADOOrchestrator"
+    
+    - intent: "ado_resume"
+      keywords:
+        - "resume plan"
+        - "continue ado"
+        - "resume ado"
+      template: "template_ado_resumed"
+      orchestrator: "ADOOrchestrator"
+
+  # -------------------------------------------------------------------------
+  # PRIORITY 3 - TDD workflows
+  # -------------------------------------------------------------------------
+  priority_3_tdd:
+    - intent: "tdd_red"
+      keywords:
+        - "red phase"
+        - "write test"
+        - "tdd start"
+        - "failing test"
+      template: "template_tdd_red_phase"
+      orchestrator: "TDDOrchestrator"
+    
+    - intent: "tdd_green"
+      keywords:
+        - "green phase"
+        - "make it pass"
+        - "implement"
+      template: "template_tdd_green_phase"
+      orchestrator: "TDDOrchestrator"
+    
+    - intent: "tdd_refactor"
+      keywords:
+        - "refactor phase"
+        - "clean code"
+        - "refactor"
+      template: "template_tdd_refactor_phase"
+      orchestrator: "TDDOrchestrator"
+
+  # -------------------------------------------------------------------------
+  # PRIORITY 4 - Operations (cache, diagrams, feedback)
+  # -------------------------------------------------------------------------
+  priority_4_operations:
+    - intent: "cache_management"
+      keywords:
+        - "clear cache"
+        - "refresh cache"
+        - "cache status"
+      template: "template_cache_management"
+      orchestrator: "CacheOrchestrator"
+    
+    - intent: "diagram_regeneration"
+      keywords:
+        - "regenerate diagram"
+        - "refresh diagram"
+        - "update diagram"
+        - "rebuild diagram"
+      template: "template_diagram_regeneration"
+      orchestrator: "DiagramRegenerationOrchestrator"
+    
+    - intent: "feedback"
+      keywords:
+        - "feedback"
+        - "report issue"
+        - "suggest feature"
+        - "bug report"
+      template: "template_feedback_received"
+      orchestrator: "FeedbackOrchestrator"
+    
+    - intent: "status_check"
+      keywords:
+        - "status"
+        - "health"
+        - "system check"
+        - "brain health"
+      template: "template_status_check"
+      orchestrator: null
+
+  # -------------------------------------------------------------------------
+  # PRIORITY 5 - Tech implementations (best practice + company-aligned)
+  # -------------------------------------------------------------------------
+  priority_5_tech_aware:
+    - intent: "tech_implementation"
+      keywords:
+        - "implement"
+        - "add"
+        - "create"
+        - "build"
+        - "develop"
+      context_required: "has_tech_stack"  # Only use if user has tech stack
+      template: "template_tech_implementation"
+      orchestrator: null
+
+  # -------------------------------------------------------------------------
+  # PRIORITY 6 - General responses
+  # -------------------------------------------------------------------------
+  priority_6_general:
+    - intent: "success"
+      keywords:
+        - "success"
+        - "completed"
+        - "done"
+      template: "template_success_general"
+      orchestrator: null
+    
+    - intent: "error"
+      keywords:
+        - "error"
+        - "failed"
+        - "exception"
+      template: "template_error_general"
+      orchestrator: null
+
+  # -------------------------------------------------------------------------
+  # FALLBACK - No match found
+  # -------------------------------------------------------------------------
+  fallback:
+    intent: "fallback"
+    template: "template_fallback"
+    orchestrator: null
+
+# ============================================================================
+# SELECTION LOGIC - How to pick the right template
+# ============================================================================
+
+selection_logic:
+  # Step 1: Extract keywords from user input
+  keyword_extraction:
+    method: "token_matching"
+    preprocessing:
+      - "lowercase"
+      - "remove_punctuation"
+      - "tokenize"
+    
+  # Step 2: Match against priority groups (highest first)
+  priority_matching:
+    strategy: "first_match_wins"
+    priorities:
+      - priority_1_exact_match
+      - priority_2_planning
+      - priority_3_tdd
+      - priority_4_operations
+      - priority_5_tech_aware
+      - priority_6_general
+      - fallback
+  
+  # Step 3: Validate context requirements
+  context_validation:
+    has_tech_stack:
+      check: "user_profile.tech_stack is not null"
+      fallback_if_missing: "template_fallback"
+    
+    dor_complete:
+      check: "planning_state.dor_checklist.all_complete"
+      fallback_if_missing: "template_planning_dor_incomplete"
+  
+  # Step 4: Load user profile for variant selection
+  profile_loading:
+    fields:
+      - "interaction_mode"
+      - "experience_level"
+      - "response_detail"
+      - "tech_stack"
+  
+  # Step 5: Select format variant
+  format_selection:
+    rules:
+      - if: "response_detail == 'concise'"
+        format: "compact"
+      
+      - if: "response_detail == 'verbose' and interaction_mode == 'educational'"
+        format: "educational"
+      
+      - if: "template.format == 'tech_aware' and user_profile.tech_stack"
+        format: "tech_aware"
+      
+      - default: "standard_5_part"
+
+# ============================================================================
+# TEMPLATE OVERRIDE RULES - Special cases
+# ============================================================================
+
+override_rules:
+  # Admin context: Always use standard format
+  admin_context:
+    condition: "context.is_admin_repo == true"
+    override:
+      format: "standard_5_part"
+      detail_level: "balanced"
+  
+  # Error scenarios: Always include full context
+  error_context:
+    condition: "intent == 'error'"
+    override:
+      format: "standard_5_part"
+      detail_level: "verbose"
+      required_sections:
+        - section_understanding
+        - section_challenge
+        - section_response
+        - section_next_steps
+  
+  # First-time users: Educational mode override
+  first_time_user:
+    condition: "user_profile.conversation_count < 3"
+    override:
+      interaction_mode: "educational"
+      detail_level: "verbose"
+
+# ============================================================================
+# CACHING STRATEGY - Performance optimization
+# ============================================================================
+
+caching:
+  # Cache composed templates for 24 hours
+  template_cache:
+    enabled: true
+    ttl: 86400  # 24 hours in seconds
+    cache_key_format: "template:{template_id}:{interaction_mode}:{detail_level}"
+  
+  # Cache user profiles for 1 hour
+  profile_cache:
+    enabled: true
+    ttl: 3600  # 1 hour in seconds
+    cache_key_format: "profile:{user_id}"
+  
+  # Invalidation triggers
+  invalidation:
+    - "user_profile_update"
+    - "template_file_change"
+    - "manual_cache_clear"
+
+# ============================================================================
+# PERFORMANCE TARGETS - SLA for template selection
+# ============================================================================
+
+performance_targets:
+  intent_detection: 
+    max_time_ms: 10
+    method: "keyword_matching"
+  
+  template_selection:
+    max_time_ms: 5
+    method: "priority_matching"
+  
+  template_composition:
+    max_time_ms: 50
+    method: "component_assembly"
+    cache_hit_target: 0.9  # 90% cache hit rate
+  
+  total_response_time:
+    max_time_ms: 100
+    includes:
+      - "intent_detection"
+      - "template_selection"
+      - "profile_loading"
+      - "template_composition"
+      - "rendering"
+
+# ============================================================================
+# MONITORING & TELEMETRY - Track selection quality
+# ============================================================================
+
+monitoring:
+  # Track which templates are selected
+  template_usage:
+    enabled: true
+    metrics:
+      - "selection_count"
+      - "cache_hit_rate"
+      - "composition_time"
+  
+  # Track user satisfaction
+  user_satisfaction:
+    enabled: true
+    metrics:
+      - "thumbs_up_down"
+      - "response_edited"  # Did user edit CORTEX response?
+      - "follow_up_clarification"  # Did user ask for clarification?
+  
+  # Track fallback usage (indicates missing templates)
+  fallback_tracking:
+    enabled: true
+    alert_threshold: 0.1  # Alert if >10% of requests use fallback
+    log_user_input: true  # Log input that triggered fallback

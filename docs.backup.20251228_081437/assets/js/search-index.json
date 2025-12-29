@@ -1,0 +1,138 @@
+{
+  "documents": [
+    {
+      "id": "index",
+      "title": "CORTEX 4.0: Multi-Agent Orchestration System",
+      "path": "index.html",
+      "category": "home",
+      "keywords": ["cortex", "multi-agent", "orchestration", "rag", "4-tier brain", "skull", "tdd", "planning system"],
+      "description": "CORTEX is a multi-agent orchestration system with RAG-enhanced knowledge retrieval, enabling autonomous software development operations through specialized agents, tool integration, and collaborative workflows."
+    },
+    {
+      "id": "getting-started-index",
+      "title": "Getting Started with CORTEX",
+      "path": "getting-started/index.html",
+      "category": "getting-started",
+      "keywords": ["quick start", "installation", "setup", "deployment", "first commands"],
+      "description": "5-minute quick start guide for CORTEX installation and first commands. Install, configure, and run your first operation in under 5 minutes."
+    },
+    {
+      "id": "getting-started-deployment",
+      "title": "CORTEX Deployment Guide",
+      "path": "getting-started/deployment.html",
+      "category": "getting-started",
+      "keywords": ["deployment", "local", "shared network", "hybrid", "team setup"],
+      "description": "Deployment guide with 3 models: local (single-user), shared network (team-wide brain), and hybrid (Tier 0-2 shared, Tier 3 isolated)."
+    },
+    {
+      "id": "getting-started-multi-repo",
+      "title": "Multi-Repo Setup",
+      "path": "getting-started/multi-repo-setup.html",
+      "category": "getting-started",
+      "keywords": ["multi-repo", "1:∞", "workspace", "context switching", "tier isolation"],
+      "description": "Configure CORTEX's 1:∞ multi-repo architecture with automatic workspace detection and tier isolation."
+    },
+    {
+      "id": "getting-started-first-commands",
+      "title": "First Commands",
+      "path": "getting-started/first-commands.html",
+      "category": "getting-started",
+      "keywords": ["commands", "planning", "tdd", "sanitization", "utilities"],
+      "description": "Essential CORTEX commands: plan, start tdd, sanitize, system maintenance. Natural language conversational interface."
+    },
+    {
+      "id": "getting-started-tutorial",
+      "title": "Interactive Tutorial",
+      "path": "getting-started/tutorial.html",
+      "category": "getting-started",
+      "keywords": ["tutorial", "learn by doing", "user profile api", "red-green-refactor", "autonomous execution"],
+      "description": "20-minute hands-on tutorial building a User Profile API with CORTEX. Learn Planning System, TDD, and autonomous execution."
+    },
+    {
+      "id": "validation-index",
+      "title": "Phase 13B System Test Suite (STS)",
+      "path": "technical/validation/index.html",
+      "category": "validation",
+      "keywords": ["sts", "system test suite", "phase 13b", "capabilities", "validation", "efficiency"],
+      "description": "Comprehensive validation of 9 CORTEX capabilities: Deployment, Multi-Workspace, Upgrade, E2E, Brain Persistence, Agent Collaboration, Performance, Regression, Vision API. 72% average efficiency gains."
+    },
+    {
+      "id": "validation-capabilities",
+      "title": "Phase 13B Capabilities",
+      "path": "technical/validation/capabilities.html",
+      "category": "validation",
+      "keywords": ["capabilities", "deployment", "multi-workspace", "upgrade", "e2e", "brain persistence"],
+      "description": "Detailed capability descriptions with test coverage, DoR/DoD compliance, and time savings analysis for all 9 Phase 13B capabilities."
+    },
+    {
+      "id": "toolkit-index",
+      "title": "CORTEX Toolkit: Python Tools Ecosystem",
+      "path": "technical/toolkit/index.html",
+      "category": "toolkit",
+      "keywords": ["toolkit", "python tools", "validation", "testing", "generation", "analysis"],
+      "description": "55+ battle-tested Python tools for validation, testing, generation, and analysis. Automated QA for CORTEX workflows."
+    },
+    {
+      "id": "toolkit-validation-tools",
+      "title": "Validation Tools",
+      "path": "technical/toolkit/validation-tools.html",
+      "category": "toolkit",
+      "keywords": ["sts validator", "doc validator", "sanitization validator", "skull compliance", "manifest validator"],
+      "description": "Code quality and compliance validators: 770-LOC STS validator, doc validator, code sanitization validator, SKULL compliance checker, manifest validator."
+    },
+    {
+      "id": "skull-rulebook",
+      "title": "SKULL Rulebook: Brain Protection Rules",
+      "path": "governance/skull-rulebook.html",
+      "category": "governance",
+      "keywords": ["skull", "brain protection", "tier 0", "tdd enforcement", "code discovery", "git isolation"],
+      "description": "22 Tier 0 governance rules: TDD enforcement, holistic code discovery, refactor/cleanup, Git isolation, knowledge integrity. 100% enforced."
+    },
+    {
+      "id": "four-tier-brain",
+      "title": "4-Tier Brain Architecture",
+      "path": "architecture/four-tier-brain.html",
+      "category": "architecture",
+      "keywords": ["4-tier brain", "tier 0", "tier 1", "tier 2", "tier 3", "knowledge graph"],
+      "description": "Hierarchical memory system: Tier 0 (governance), Tier 1 (working memory 70-conv FIFO), Tier 2 (knowledge graph 8,429 nodes), Tier 3 (dev context)."
+    },
+    {
+      "id": "tdd-mastery",
+      "title": "TDD Mastery",
+      "path": "features/tdd-mastery.html",
+      "category": "features",
+      "keywords": ["tdd", "test-driven development", "red-green-refactor", "test coverage", "test-first"],
+      "description": "Automated test-driven development with RED-GREEN-REFACTOR enforcement. 94% test-first success rates, 4-layer coverage validation."
+    },
+    {
+      "id": "planning-system",
+      "title": "Planning System 2.0",
+      "path": "features/planning-system.html",
+      "category": "features",
+      "keywords": ["planning", "dor", "dod", "autonomous", "multi-phase", "complexity detection"],
+      "description": "Autonomous multi-phase feature planning with DoR/DoD compliance, automatic complexity detection, and incremental execution."
+    },
+    {
+      "id": "code-sanitization",
+      "title": "Code Sanitization",
+      "path": "features/code-sanitization.html",
+      "category": "features",
+      "keywords": ["sanitization", "anonymization", "company-specific", "api keys", "proprietary data"],
+      "description": "5-phase workflow for removing company-specific data: analyze, mapping, transform, validate, report. Preserves functionality while anonymizing code."
+    },
+    {
+      "id": "ado-operations",
+      "title": "ADO Operations",
+      "path": "features/ado-operations.html",
+      "category": "features",
+      "keywords": ["azure devops", "ado", "work items", "stories", "features", "epics"],
+      "description": "Azure DevOps integration with Planning System. Generate ADO-formatted stories, features, and epics with acceptance criteria and test cases."
+    }
+  ],
+  "metadata": {
+    "version": "1.0.0",
+    "lastUpdated": "2025-12-27",
+    "totalDocuments": 16,
+    "categories": ["home", "getting-started", "validation", "toolkit", "governance", "architecture", "features"]
+  }
+}

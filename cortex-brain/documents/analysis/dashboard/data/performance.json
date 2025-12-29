@@ -1,0 +1,9 @@
+{
+  "averageLatency": 0,
+  "bottleneckCount": 0,
+  "metrics": [],
+  "trends": {
+    "direction": "stable",
+    "changePercent": 0
+  }
+}

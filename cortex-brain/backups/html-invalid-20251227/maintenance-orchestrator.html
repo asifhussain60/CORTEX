@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Maintenance Orchestrator | CORTEX Technical Documentation</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root { --primary: #FF9800; --success: #10B981; --warning: #F59E0B; --error: #DC2626; }
+        body { font-family: 'Inter', -apple-system, sans-serif; margin: 0; padding: 0; background: #0f172a; color: #e2e8f0; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+        header { text-align: center; padding: 3rem 0; border-bottom: 2px solid var(--primary); }
+        header h1 { font-size: 3rem; font-weight: 700; color: var(--primary); margin: 0; }
+        header .subtitle { font-size: 1.2rem; color: #94a3b8; margin-top: 0.5rem; }
+        .metadata { display: flex; justify-content: center; gap: 2rem; margin-top: 1rem; flex-wrap: wrap; }
+        .metadata-item { background: rgba(255, 152, 0, 0.1); padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.9rem; }
+        .section { margin: 3rem 0; }
+        .section-title { font-size: 2rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; border-left: 4px solid var(--primary); padding-left: 1rem; }
+        .intro-text { font-size: 1.1rem; line-height: 1.8; color: #cbd5e1; margin-bottom: 2rem; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+        .feature-card { background: #1e293b; border-radius: 12px; padding: 1.5rem; border-left: 4px solid var(--primary); transition: transform 0.2s; }
+        .feature-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(255, 152, 0, 0.3); }
+        .viz-container { background: #1e293b; border-radius: 12px; padding: 2rem; margin: 2rem 0; }
+        .mermaid { background: #0f172a; border-radius: 8px; padding: 2rem; }
+        .breadcrumb { background: rgba(30, 41, 59, 0.8); padding: 1rem 2rem; border-bottom: 1px solid rgba(255, 152, 0, 0.3); }
+        .breadcrumb a { color: var(--primary); text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .breadcrumb-separator { color: #64748b; margin: 0 0.5rem; }
+        .breadcrumb-current { color: #e2e8f0; }
+        footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid #334155; margin-top: 4rem; color: #64748b; }
+    </style>
+</head>
+<body>
+    <nav class="breadcrumb">
+        <a href="../../index.html">Home</a>
+        <span class="breadcrumb-separator">›</span>
+        <a href="index.html">Orchestrators</a>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-current">System Maintenance</span>
+    </nav>
+    
+    <div class="container">
+        <header>
+            <h1>🔧 System Maintenance Orchestrator</h1>
+            <p class="subtitle">7-Phase Comprehensive System Health & Optimization</p>
+            <div class="metadata">
+                <div class="metadata-item"><span>Complexity:</span> <span>HIGH</span></div>
+                <div class="metadata-item"><span>Phases:</span> <span>7</span></div>
+                <div class="metadata-item"><span>File:</span> <span>maintenance_orchestrator.py</span></div>
+            </div>
+        </header>
+        
+        <section class="section">
+            <div class="intro-text">
+                The System Maintenance Orchestrator provides comprehensive system health management through a 7-phase workflow: 
+                Pre-healthcheck → Align (auto-fix) → Cleanup → Optimize → Vacuum → Refresh prompts → Post-healthcheck. 
+                Features tiered routing (quick/standard/comprehensive), AST-powered cleanup, checkpoint strategies, and rollback capabilities. 
+                Tracks health delta metrics (baseline vs final) to validate improvements.
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title">✨ Key Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div>🏥</div>
+                    <div>Health Monitoring</div>
+                    <div>Pre and post-healthcheck with delta tracking for validation</div>
+                </div>
+                <div class="feature-card">
+                    <div>🎯</div>
+                    <div>Tiered Routing</div>
+                    <div>Quick (5min), Standard (15min), Comprehensive (30min+) modes</div>
+                </div>
+                <div class="feature-card">
+                    <div>🔄</div>
+                    <div>Auto-Fix Alignment</div>
+                    <div>Automatic system alignment with intelligent error recovery</div>
+                </div>
+                <div class="feature-card">
+                    <div>🧹</div>
+                    <div>AST-Powered Cleanup</div>
+                    <div>Safe file organization with reference tracking and validation</div>
+                </div>
+                <div class="feature-card">
+                    <div>⚡</div>
+                    <div>Performance Optimization</div>
+                    <div>Database vacuuming, cache optimization, version management</div>
+                </div>
+                <div class="feature-card">
+                    <div>🔒</div>
+                    <div>Rollback Safety</div>
+                    <div>Git checkpoints at phase boundaries for safe recovery</div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title">🔄 7-Phase Maintenance Workflow</h2>
+            <div class="viz-container">
+                <div class="mermaid">
+sequenceDiagram
+    participant User
+    participant Maintenance
+    participant Health
+    participant Align
+    participant Cleanup
+    participant Optimize
+    
+    User->>Maintenance: system maintenance
+    Maintenance->>Health: Phase 1: Pre-Healthcheck
+    Health-->>Maintenance: Baseline Metrics
+    
+    Maintenance->>Align: Phase 2: Auto-Align
+    Align->>Align: Fix Issues
+    Align-->>Maintenance: ✅ System Aligned
+    
+    Maintenance->>Cleanup: Phase 3: Cleanup
+    Cleanup->>Cleanup: AST Analysis
+    Cleanup->>Cleanup: Move Files
+    Cleanup-->>Maintenance: ✅ Organized
+    
+    Maintenance->>Optimize: Phase 4: Optimize
+    Optimize->>Optimize: Vacuum DBs
+    Optimize-->>Maintenance: ✅ Optimized
+    
+    Maintenance->>Optimize: Phase 5: Vacuum
+    Optimize-->>Maintenance: ✅ Compacted
+    
+    Maintenance->>Maintenance: Phase 6: Refresh
+    
+    Maintenance->>Health: Phase 7: Post-Healthcheck
+    Health-->>Maintenance: Final Metrics
+    Maintenance->>User: 🎉 Complete + Delta Report
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title">🎯 Tiered Routing Decision</h2>
+            <div class="viz-container">
+                <div class="mermaid">
+graph TD
+    A[Maintenance Request] --> B{Analyze Scope}
+    B -->|Minor Issues<br />0-5 problems| C[QUICK Mode]
+    B -->|Standard Health<br />6-15 problems| D[STANDARD Mode]
+    B -->|Major Issues<br />16+ problems| E[COMPREHENSIVE Mode]
+    
+    C --> C1[Pre-check only]
+    C --> C2[Quick align]
+    C --> C3[Post-check]
+    C1 & C2 & C3 --> CT[⏱️ ~5 min]
+    
+    D --> D1[Full alignment]
+    D --> D2[Basic cleanup]
+    D --> D3[Optimize]
+    D --> D4[Validation]
+    D1 & D2 & D3 & D4 --> DT[⏱️ ~15 min]
+    
+    E --> E1[Deep healthcheck]
+    E --> E2[Comprehensive align]
+    E --> E3[AST cleanup]
+    E --> E4[DB vacuum]
+    E --> E5[Refresh prompts]
+    E --> E6[Full validation]
+    E1 & E2 & E3 & E4 & E5 & E6 --> ET[⏱️ ~30+ min]
+    
+    style A fill:#FF9800,stroke:#F57C00,color:#fff
+    style C fill:#4CAF50,stroke:#388E3C,color:#fff
+    style D fill:#2196F3,stroke:#1976D2,color:#fff
+    style E fill:#F44336,stroke:#D32F2F,color:#fff
+                </div>
+            </div>
+        </section>
+        
+        <footer>
+            <p>© 2025 Asif Hussain | CORTEX 4.0</p>
+            <p>System Maintenance Orchestrator - Automated Health & Optimization</p>
+        </footer>
+    </div>
+    
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#FF9800',
+                primaryTextColor: '#fff',
+                lineColor: '#64748b',
+                secondaryColor: '#1e293b'
+            }
+        });
+    </script>
+</body>
+</html>

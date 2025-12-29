@@ -1,0 +1,364 @@
+# Execution Base Manifest (Tier 2B)
+# Foundation for ALL execution-category orchestrators
+#
+# Purpose: Eliminate execution pattern redundancy (phases, rollback, git checkpoints)
+# Usage: Execution orchestrators inherit from this
+# Inheritance Chain: base-orchestrator → execution-base → specific orchestrator
+#
+# Version: 1.0.0
+# Author: Asif Hussain
+# Created: 2025-12-22 (Week 15 Day 2)
+# Status: ACTIVE
+# Used By: Code Sanitization, Debug, Refinement
+
+inherits_from: "base-orchestrator-manifest.yaml"
+
+# ========================================
+# Execution-Specific Metadata
+# ========================================
+
+metadata:
+  category: "execution"
+  deployment_tier: "user"
+  
+  execution_capabilities:
+    supports_phase_execution: true
+    supports_rollback: true
+    supports_git_checkpoints: true
+    supports_incremental_execution: true
+    supports_dry_run: true
+
+# ========================================
+# Phase Execution Framework
+# ========================================
+
+phase_execution:
+  enabled: true
+  
+  execution_order: "sequential"  # sequential|parallel|conditional
+  allow_phase_skip: false
+  require_user_approval_per_phase: false
+  
+  phase_template:
+    required_fields:
+      - "id"           # Unique phase identifier
+      - "name"         # Human-readable name
+      - "description"  # Purpose of this phase
+    
+    optional_fields:
+      - "blocking"              # true|false (blocks on failure)
+      - "timeout_minutes"       # Max duration
+      - "requires_confirmation" # User approval before execution
+      - "git_checkpoint"        # Create checkpoint after phase
+      - "outputs"               # Expected outputs
+      - "validation"            # Success criteria
+      - "rollback"              # Rollback instructions
+    
+    example: |
+      phases:
+        - id: "phase_1_discovery"
+          name: "Discovery & Analysis"
+          description: "Scan and analyze target system"
+          blocking: true
+          timeout_minutes: 10
+          requires_confirmation: false
+          git_checkpoint: true
+          outputs:
+            - "analysis-report.md"
+          validation:
+            required_inputs: ["source_directory"]
+            success_criteria:
+              - "All files scanned successfully"
+              - "Report generated"
+          rollback:
+            enabled: false
+            reason: "Discovery phase is read-only"
+
+# ========================================
+# Rollback Framework
+# ========================================
+
+rollback:
+  enabled: true
+  
+  strategy: "checkpoint_based"  # checkpoint_based|transaction_based|manual
+  automatic_rollback: false      # Require user confirmation
+  preserve_logs: true
+  create_rollback_script: true
+  
+  checkpoint:
+    frequency: "per_phase"  # per_phase|per_task|manual
+    retention_days: 30
+    compression_enabled: true
+    include_metadata: true
+  
+  triggers:
+    - trigger: "phase_failure"
+      action: "rollback_to_last_checkpoint"
+      automatic: false
+    
+    - trigger: "user_abort"
+      action: "rollback_to_start"
+      automatic: false
+    
+    - trigger: "validation_failure"
+      action: "rollback_to_before_failed_validation"
+      automatic: false
+  
+  rollback_script_template: |
+    #!/usr/bin/env python3
+    """
+    Auto-generated rollback script for {orchestrator_name}
+    Created: {timestamp}
+    Checkpoint: {checkpoint_id}
+    """
+    
+    def rollback():
+        # Restore files from checkpoint
+        # Revert git commits
+        # Cleanup temporary artifacts
+        pass
+    
+    if __name__ == "__main__":
+        rollback()
+
+# ========================================
+# Git Integration
+# ========================================
+
+git_integration:
+  enabled: true
+  
+  checkpoint_orchestrator:
+    enabled: true
+    commit_message_format: "[{orchestrator_name}] Phase {phase_id}: {phase_name}"
+    tag_format: "{orchestrator_name}-{phase_id}-{timestamp}"
+    create_branch: false  # Create separate branch for execution
+  
+  validation:
+    require_clean_working_directory: true
+    allow_untracked_files: false
+    require_valid_branch: true
+  
+  operations:
+    auto_commit: false  # Commit after each phase
+    auto_push: false    # Push commits to remote
+    create_pr: false    # Create PR after completion
+
+# ========================================
+# Incremental Execution
+# ========================================
+
+incremental_execution:
+  enabled: true
+  
+  resume_from_checkpoint: true
+  skip_completed_phases: true
+  
+  checkpoint_metadata:
+    - "phase_id"
+    - "phase_status"  # completed|failed|skipped
+    - "timestamp"
+    - "duration_seconds"
+    - "outputs_generated"
+    - "validation_passed"
+  
+  recovery:
+    on_failure:
+      - "log_error"
+      - "create_checkpoint"
+      - "prompt_user_action"
+    
+    recovery_options:
+      - "retry_from_last_checkpoint"
+      - "skip_failed_phase"
+      - "abort_execution"
+      - "manual_intervention"
+
+# ========================================
+# Dry Run Support
+# ========================================
+
+dry_run:
+  enabled: true
+  default: true  # Run in dry-run mode by default
+  
+  capabilities:
+    - "simulate_phase_execution"
+    - "validate_prerequisites"
+    - "estimate_duration"
+    - "identify_potential_issues"
+    - "generate_preview_report"
+  
+  output_format: "markdown"
+  include_risk_assessment: true
+  include_resource_estimates: true
+
+# ========================================
+# Progress Monitoring
+# ========================================
+
+progress_monitoring:
+  enabled: true
+  
+  real_time_updates: true
+  update_frequency_seconds: 5
+  
+  tracked_metrics:
+    - metric: "phase_progress"
+      format: "percentage"
+    
+    - metric: "phase_duration"
+      format: "seconds"
+      human_readable: true
+    
+    - metric: "phase_status"
+      values: ["not_started", "in_progress", "completed", "failed", "skipped"]
+    
+    - metric: "outputs_generated"
+      format: "count"
+    
+    - metric: "errors_encountered"
+      format: "count"
+  
+  visualization:
+    format: "progress_bar"  # progress_bar|table|timeline
+    include_icons: true
+    colors_enabled: true
+
+# ========================================
+# Error Handling (Execution-Specific)
+# ========================================
+
+error_handling:
+  strategy: "fail_fast"  # fail_fast|continue_on_error|retry
+  
+  on_error:
+    actions:
+      - "log_error_details"
+      - "create_checkpoint"
+      - "generate_error_report"
+      - "attempt_rollback"
+      - "notify_user"
+  
+  error_classification:
+    - category: "fatal"
+      examples: ["file_not_found", "permission_denied", "out_of_memory"]
+      action: "abort_and_rollback"
+    
+    - category: "recoverable"
+      examples: ["network_timeout", "temporary_lock", "rate_limit"]
+      action: "retry_with_backoff"
+    
+    - category: "warning"
+      examples: ["deprecated_api", "performance_degraded", "resource_constraint"]
+      action: "log_and_continue"
+  
+  retry_policy:
+    enabled: true
+    max_retries: 3
+    backoff_strategy: "exponential"
+    retry_delay_seconds: 5
+    retry_on_errors: ["network_timeout", "rate_limit", "temporary_lock"]
+
+# ========================================
+# Validation Framework
+# ========================================
+
+validation:
+  enabled: true
+  
+  validation_types:
+    - type: "prerequisite_validation"
+      timing: "before_phase_start"
+      blocking: true
+    
+    - type: "success_criteria_validation"
+      timing: "after_phase_complete"
+      blocking: true
+    
+    - type: "output_validation"
+      timing: "after_phase_complete"
+      blocking: false
+    
+    - type: "integrity_validation"
+      timing: "after_all_phases"
+      blocking: true
+  
+  validation_report:
+    format: "markdown"
+    include_pass_fail_summary: true
+    include_detailed_results: true
+    save_to_file: true
+    file_path: "cortex-brain/documents/reports/validation-{orchestrator_name}-{timestamp}.md"
+
+# ========================================
+# Artifact Management
+# ========================================
+
+artifact_management:
+  enabled: true
+  
+  artifacts:
+    - type: "output_files"
+      location: "cortex-brain/documents/{category}/"
+      retention_days: 90
+      compression: true
+    
+    - type: "logs"
+      location: "logs/"
+      retention_days: 30
+      compression: true
+    
+    - type: "checkpoints"
+      location: "cortex-brain/backups/"
+      retention_days: 30
+      compression: true
+    
+    - type: "rollback_scripts"
+      location: "scripts/"
+      retention_days: 30
+      compression: false
+  
+  cleanup:
+    enabled: true
+    automatic: false
+    triggers:
+      - "execution_complete"
+      - "retention_period_expired"
+      - "manual_cleanup_requested"
+
+# ========================================
+# Integrations (Execution-Specific)
+# ========================================
+
+integrations:
+  git_checkpoint_orchestrator:
+    enabled: true
+    trigger: "after_each_phase"
+    integration_type: "required"
+  
+  progress_monitor:
+    enabled: true
+    trigger: "real_time"
+    integration_type: "optional"
+  
+  environment_diagnostics:
+    enabled: true
+    trigger: "before_execution_starts"
+    integration_type: "required"
+
+# ========================================
+# Changelog
+# ========================================
+
+changelog:
+  - version: "1.0.0"
+    date: "2025-12-22"
+    changes:
+      - "Initial execution base manifest"
+      - "Phase execution framework defined"
+      - "Rollback and checkpoint mechanisms"
+      - "Git integration patterns"
+      - "Incremental execution support"
+      - "Dry run capabilities"

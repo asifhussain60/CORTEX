@@ -1,0 +1,107 @@
+# CORTEX Lens Dependencies
+# Version: 1.0.0 - Phase 0 Foundation
+# Modern, pure-Python dependencies with no deprecated libraries
+
+# ============================================================================
+# CORE DEPENDENCIES (Always Required)
+# ============================================================================
+
+# Multi-Engine AST Parsing
+parso>=0.8.5              # Error-recovery Python parser (587k+ users, Jedi project)
+                          # Handles syntax errors, incomplete code, Python 2.6-3.14+
+                          # Pure Python, no compilation required
+
+# SQL Analysis
+sqlparse>=0.5.0           # SQL parsing (15+ years, multi-dialect support)
+                          # Pure Python, actively maintained
+
+# PDF Extraction (Modern Replacement for PyPDF2)
+pypdf>=6.4.1              # PDF extraction (successor to PyPDF2, 102k dependents)
+                          # Drop-in replacement with same API
+                          # Actively maintained (2024 updates)
+
+# TOML Parsing (Python 3.8-3.10 compatibility)
+tomli>=2.0.0; python_version < '3.11'  # TOML backport (stdlib tomllib in 3.11+)
+                                        # Pure Python, zero dependencies
+
+# Testing Framework
+pytest>=8.4.0             # Modern testing framework
+pytest-cov>=6.0.0         # Coverage plugin
+playwright>=1.48.0        # Modern browser automation for dashboard testing
+
+# Data Processing
+pyyaml>=6.0.2             # YAML parsing for export formats
+Jinja2>=3.1.4             # Template engine for dashboard generation
+
+
+# ============================================================================
+# OPTIONAL DEPENDENCIES (Enhanced Features)
+# ============================================================================
+
+# Advanced Python Analysis
+# libcst>=1.4.0           # Whitespace-preserving parser (Meta/Instagram)
+                          # Code transformation, metadata analysis
+                          # Uncomment for advanced refactoring features
+
+# Fast Linting & Security
+# ruff>=0.8.0             # Rust-based linter (44.4k ⭐, 10-100x faster)
+                          # 800+ rules, security checks
+                          # Uncomment for security collector
+
+# C# Analysis (Roslyn Integration)
+# pythonnet>=3.0.0        # .NET integration for C# parsing
+                          # Requires .NET runtime
+                          # Uncomment for high-accuracy C# analysis
+
+# Advanced PDF Features
+# pymupdf>=1.26.7         # MuPDF binding (5-10x faster, OCR support)
+                          # Binary wheels available
+                          # Uncomment for advanced PDF analysis
+
+
+# ============================================================================
+# MULTI-LANGUAGE AST PARSING (CORTEX 3.10) ✅ RESTORED
+# ============================================================================
+tree-sitter>=0.22.0           # Core parser (pre-built binaries, zero compilation)
+tree-sitter-python>=0.25.0    # Python AST
+tree-sitter-javascript>=0.25.0  # JavaScript/JSX
+tree-sitter-typescript>=0.23.2  # TypeScript/TSX (React)
+tree-sitter-c-sharp>=0.23.1   # C# (14,459 files in Platform.Classic + luum)
+tree-sitter-sql>=0.3.11       # SQL (7,284 files in Platform.Classic + luum)
+tree-sitter-html>=0.23.2      # HTML
+tree-sitter-css>=0.25.0       # CSS/SCSS
+tree-sitter-json>=0.24.8      # JSON
+tree-sitter-yaml>=0.7.2       # YAML
+tree-sitter-markdown>=0.5.1   # Markdown
+tree-sitter-java>=0.23.5      # Java (Android support)
+tree-sitter-kotlin>=1.1.0     # Kotlin (Android support)
+
+# ============================================================================
+# REMOVED DEPENDENCIES (Deprecated/Problematic)
+# ============================================================================
+# ❌ PyPDF2>=3.0.0        - Deprecated since 2022 → pypdf>=6.4.1
+# ❌ toml>=0.10.2         - Deprecated → tomli (backport) or tomllib (3.11+)
+# ❌ esprima>=4.0.1       - Limited maintenance → tree-sitter-javascript
+
+
+# ============================================================================
+# INSTALLATION NOTES
+# ============================================================================
+# 
+# Quick Start:
+#   pip install -r requirements.txt
+#
+# With Optional Features:
+#   pip install -r requirements.txt libcst ruff
+#
+# With All Features:
+#   pip install -r requirements.txt libcst ruff pythonnet pymupdf
+#
+# Platform-Specific:
+#   - pythonnet requires .NET runtime (Windows/Linux/macOS)
+#   - All other dependencies are pure Python (cross-platform)
+#
+# Version Compatibility:
+#   - Python 3.8-3.14+ supported
+#   - tomli only needed for Python <3.11 (stdlib tomllib in 3.11+)
+#   - All dependencies actively maintained (2024 updates)

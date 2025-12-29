@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Tutorial - CORTEX 4.0</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+    <!-- Logo Header -->
+    <div class="logo-header">
+        <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo" />
+    </div>
+    
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="separator">→</span>
+        <a href="./index.html">Getting Started</a>
+        <span class="separator">→</span>
+        <span class="current">Tutorial</span>
+    </nav>
+    
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Feature Benefit Panel -->
+        <div class="feature-benefit-panel">
+            <span class="icon">📖</span>
+            <p class="description">
+                Learn by doing. This 20-minute tutorial walks you through building a complete feature—from vague idea 
+                to tested, production-ready code. You'll experience CORTEX's Planning System generating a multi-phase 
+                plan, TDD Mastery enforcing test-first development, and autonomous execution delivering working code. 
+                By the end, you'll understand how CORTEX transforms "build a user profile API" into a fully-tested, 
+                DoR/DoD-compliant implementation without memorizing frameworks or best practices.
+            </p>
+        </div>
+        
+        <!-- Main Content Card -->
+        <div class="glass-card">
+            <h1>Interactive Tutorial: Build a User Profile API</h1>
+            
+            <!-- Tutorial Overview -->
+            <section class="section-overview">
+                <h2>🎯 What You'll Build</h2>
+                
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value">20 min</div>
+                        <div class="metric-label">Tutorial Duration</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">5</div>
+                        <div class="metric-label">Phases</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">15+</div>
+                        <div class="metric-label">Tests Generated</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">100%</div>
+                        <div class="metric-label">TDD Coverage</div>
+                    </div>
+                </div>
+                
+                <div class="tutorial-overview">
+                    <h3>Feature: RESTful User Profile API</h3>
+                    <ul>
+                        <li><strong>Endpoints:</strong> GET, POST, PUT, DELETE /api/users/{id}</li>
+                        <li><strong>Validation:</strong> Email format, required fields, unique usernames</li>
+                        <li><strong>Storage:</strong> In-memory dictionary (simple demo)</li>
+                        <li><strong>Testing:</strong> Unit, integration, and E2E tests</li>
+                        <li><strong>Complexity:</strong> MEDIUM (incremental 5-phase plan)</li>
+                    </ul>
+                </div>
+            </section>
+            
+            <!-- Tutorial Steps -->
+            <section class="section-tutorial-steps">
+                <h2>📚 Step-by-Step Walkthrough</h2>
+                
+                <div class="tutorial-step">
+                    <div class="step-header">
+                        <span class="step-number">1</span>
+                        <h3>Create Feature Request</h3>
+                        <span class="badge badge-info">Planning Phase</span>
+                    </div>
+                    <div class="step-content">
+                        <p><strong>In GitHub Copilot Chat, type:</strong></p>
+                        <pre><code>"plan: Build a RESTful User Profile API with CRUD operations, input validation, and error handling"</code></pre>
+                        
+                        <div class="expected-output">
+                            <h4>Expected Output:</h4>
+                            <div class="glass-card output-card">
+                                <h5>🎯 CORTEX Planning System 2.0</h5>
+                                <p><strong>Feature:</strong> RESTful User Profile API</p>
+                                <p><strong>Complexity:</strong> MEDIUM (incremental approach)</p>
+                                <p><strong>Definition of Ready (DoR) Validation:</strong></p>
+                                <ul>
+                                    <li>✅ Acceptance criteria clear (CRUD endpoints, validation rules)</li>
+                                    <li>✅ Technical approach defined (REST API, in-memory storage)</li>
+                                    <li>✅ Dependencies identified (Flask/FastAPI framework)</li>
+                                    <li>✅ Test strategy proposed (unit, integration, E2E)</li>
+                                </ul>
+                                
+                                <h5>📋 5-Phase Plan:</h5>
+                                <ol>
+                                    <li><strong>Phase 1:</strong> Data model and validation logic (TDD)</li>
+                                    <li><strong>Phase 2:</strong> GET and POST endpoints (TDD)</li>
+                                    <li><strong>Phase 3:</strong> PUT and DELETE endpoints (TDD)</li>
+                                    <li><strong>Phase 4:</strong> Error handling and edge cases (TDD)</li>
+                                    <li><strong>Phase 5:</strong> Integration and E2E tests</li>
+                                </ol>
+                            </div>
+                        </div>
+                        
+                        <div class="step-notes">
+                            <p><strong>💡 What Happened:</strong> CORTEX analyzed your request, detected MEDIUM complexity 
+                            (requires incremental approach), validated DoR completeness, and generated a 5-phase plan with 
+                            TDD integration at every phase.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tutorial-step">
+                    <div class="step-header">
+                        <span class="step-number">2</span>
+                        <h3>Execute Phase 1 (Data Model)</h3>
+                        <span class="badge badge-success">RED-GREEN-REFACTOR</span>
+                    </div>
+                    <div class="step-content">
+                        <p><strong>In Copilot Chat:</strong></p>
+                        <pre><code>"execute phase 1"</code></pre>
+                        
+                        <div class="expected-output">
+                            <h4>Expected Output:</h4>
+                            <div class="glass-card output-card">
+                                <h5>🎯 Phase 1: Data Model & Validation</h5>
+                                
+                                <h6>RED Phase (Tests First):</h6>
+                                <pre><code># tests/test_user_model.py
+def test_user_creation_valid():
+    user = User(id=1, username="john_doe", email="john@example.com")
+    assert user.id == 1
+    assert user.username == "john_doe"
+
+def test_user_email_validation_invalid():
+    with pytest.raises(ValidationError):
+        User(id=1, username="john", email="invalid-email")
+
+def test_username_required():
+    with pytest.raises(ValidationError):
+        User(id=1, email="john@example.com")
+
+# Run tests → ALL FAIL ❌ (expected)</code></pre>
+                                
+                                <h6>GREEN Phase (Implementation):</h6>
+                                <pre><code># src/models/user.py
+from pydantic import BaseModel, EmailStr, validator
+
+class User(BaseModel):
+    id: int
+    username: str
+    email: EmailStr
+    
+    @validator('username')
+    def username_must_not_be_empty(cls, v):
+        if not v or v.strip() == '':
+            raise ValueError('Username cannot be empty')
+        return v
+
+# Run tests → ALL PASS ✅</code></pre>
+                                
+                                <h6>REFACTOR Phase:</h6>
+                                <p>✅ Extract validation logic to separate validator module</p>
+                                <p>✅ Add docstrings</p>
+                                <p>✅ Tests still pass ✅</p>
+                            </div>
+                        </div>
+                        
+                        <div class="step-notes">
+                            <p><strong>💡 TDD Enforcement:</strong> Notice CORTEX forced tests to fail first (RED), 
+                            then implemented minimal code to pass (GREEN), then cleaned up (REFACTOR). This is the 
+                            core of TDD Mastery—you can't skip steps.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tutorial-step">
+                    <div class="step-header">
+                        <span class="step-number">3</span>
+                        <h3>Execute Phase 2 (GET/POST Endpoints)</h3>
+                        <span class="badge badge-success">API Implementation</span>
+                    </div>
+                    <div class="step-content">
+                        <p><strong>In Copilot Chat:</strong></p>
+                        <pre><code>"execute phase 2"</code></pre>
+                        
+                        <div class="expected-output">
+                            <h4>Expected Output:</h4>
+                            <div class="glass-card output-card">
+                                <h5>🎯 Phase 2: GET & POST Endpoints</h5>
+                                
+                                <h6>RED Phase (API Tests):</h6>
+                                <pre><code># tests/test_api.py
+def test_get_user_by_id(client):
+    response = client.get('/api/users/1')
+    assert response.status_code == 200
+    assert response.json['username'] == 'john_doe'
+
+def test_create_user(client):
+    response = client.post('/api/users', json={
+        'id': 2,
+        'username': 'jane_doe',
+        'email': 'jane@example.com'
+    })
+    assert response.status_code == 201
+
+# Tests FAIL ❌ (endpoints don't exist yet)</code></pre>
+                                
+                                <h6>GREEN Phase (Flask Routes):</h6>
+                                <pre><code># src/api/routes.py
+from flask import Blueprint, request, jsonify
+from src.models.user import User
+
+api = Blueprint('api', __name__)
+users_db = {}  # In-memory storage
+
+@api.route('/api/users/<int:user_id>', methods=['GET'])
+def get_user(user_id):
+    user = users_db.get(user_id)
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+    return jsonify(user.dict()), 200
+
+@api.route('/api/users', methods=['POST'])
+def create_user():
+    data = request.json
+    user = User(**data)
+    users_db[user.id] = user
+    return jsonify(user.dict()), 201
+
+# Tests PASS ✅</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tutorial-step">
+                    <div class="step-header">
+                        <span class="step-number">4</span>
+                        <h3>Execute Remaining Phases Autonomously</h3>
+                        <span class="badge badge-warning">Autonomous Mode</span>
+                    </div>
+                    <div class="step-content">
+                        <p><strong>In Copilot Chat:</strong></p>
+                        <pre><code>"execute all remaining phases autonomously"</code></pre>
+                        
+                        <div class="expected-output">
+                            <h4>Expected Output:</h4>
+                            <div class="glass-card output-card">
+                                <h5>🤖 Autonomous Execution Engaged</h5>
+                                <ul>
+                                    <li>✅ Phase 3: PUT & DELETE endpoints (3 min) - 8 tests passing</li>
+                                    <li>✅ Phase 4: Error handling (2 min) - 12 tests passing</li>
+                                    <li>✅ Phase 5: Integration tests (3 min) - 15 tests passing</li>
+                                </ul>
+                                
+                                <h5>📊 Completion Summary:</h5>
+                                <ul>
+                                    <li><strong>Duration:</strong> 8 minutes</li>
+                                    <li><strong>Tests:</strong> 15/15 passing (100%)</li>
+                                    <li><strong>Coverage:</strong> 98% (unit, integration, E2E)</li>
+                                    <li><strong>DoD Compliance:</strong> ✅ All acceptance criteria met</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="step-notes">
+                            <p><strong>💡 Self-Healing:</strong> If any phase fails, CORTEX retries with adjusted 
+                            strategy (different approach, simplified scope, or human intervention request).</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tutorial-step">
+                    <div class="step-header">
+                        <span class="step-number">5</span>
+                        <h3>Validate & Review</h3>
+                        <span class="badge badge-info">Quality Assurance</span>
+                    </div>
+                    <div class="step-content">
+                        <p><strong>In Copilot Chat:</strong></p>
+                        <pre><code>"show test results and coverage report"</code></pre>
+                        
+                        <div class="expected-output">
+                            <h4>Expected Output:</h4>
+                            <div class="glass-card output-card">
+                                <h5>📊 Test Results Summary</h5>
+                                <div class="metrics-grid">
+                                    <div class="metric-card">
+                                        <div class="metric-value">15/15</div>
+                                        <div class="metric-label">Tests Passing</div>
+                                    </div>
+                                    <div class="metric-card">
+                                        <div class="metric-value">98%</div>
+                                        <div class="metric-label">Code Coverage</div>
+                                    </div>
+                                    <div class="metric-card">
+                                        <div class="metric-value">8 min</div>
+                                        <div class="metric-label">Implementation Time</div>
+                                    </div>
+                                    <div class="metric-card">
+                                        <div class="metric-value">100%</div>
+                                        <div class="metric-label">DoD Compliance</div>
+                                    </div>
+                                </div>
+                                
+                                <h5>✅ Definition of Done (DoD) Checklist:</h5>
+                                <ul>
+                                    <li>✅ All acceptance criteria met</li>
+                                    <li>✅ Unit tests passing (8/8)</li>
+                                    <li>✅ Integration tests passing (4/4)</li>
+                                    <li>✅ E2E tests passing (3/3)</li>
+                                    <li>✅ Code coverage >95%</li>
+                                    <li>✅ No linting errors</li>
+                                    <li>✅ API documentation generated</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Key Takeaways -->
+            <section class="section-takeaways">
+                <h2>🎓 Key Takeaways</h2>
+                
+                <div class="takeaways-grid">
+                    <div class="glass-card takeaway-card">
+                        <span class="icon">📋</span>
+                        <h3>Planning System</h3>
+                        <ul>
+                            <li>Vague request → Crystal-clear 5-phase plan</li>
+                            <li>DoR validation ensures completeness</li>
+                            <li>Complexity detection (HIGH/MEDIUM/LOW)</li>
+                            <li>TDD integrated from the start</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="glass-card takeaway-card">
+                        <span class="icon">✅</span>
+                        <h3>TDD Mastery</h3>
+                        <ul>
+                            <li>RED-GREEN-REFACTOR enforced automatically</li>
+                            <li>Tests fail first (validates test quality)</li>
+                            <li>Minimal implementation (GREEN phase)</li>
+                            <li>Refactoring without breaking tests</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="glass-card takeaway-card">
+                        <span class="icon">🤖</span>
+                        <h3>Autonomous Execution</h3>
+                        <ul>
+                            <li>End-to-end implementation without supervision</li>
+                            <li>Self-healing on errors</li>
+                            <li>Phase-by-phase validation</li>
+                            <li>DoD compliance verification</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="glass-card takeaway-card">
+                        <span class="icon">🛡️</span>
+                        <h3>SKULL Enforcement</h3>
+                        <ul>
+                            <li>TDD mandatory (can't skip RED phase)</li>
+                            <li>No code duplication (holistic discovery)</li>
+                            <li>Git isolation (tests in CORTEX repo)</li>
+                            <li>Knowledge persistence (Tier 2 learns)</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- What's Next -->
+            <section class="section-next-steps">
+                <h2>🚀 What's Next?</h2>
+                
+                <div class="links-grid">
+                    <a href="../features/planning-system.html" class="glass-card link-card">
+                        <span class="icon">📋</span>
+                        <h3>Planning System Deep-Dive</h3>
+                        <p>Learn about DoR/DoD gates, complexity detection, and incremental planning</p>
+                    </a>
+                    
+                    <a href="../features/tdd-mastery.html" class="glass-card link-card">
+                        <span class="icon">✅</span>
+                        <h3>TDD Mastery Details</h3>
+                        <p>Understand 4-layer coverage validation and test-first enforcement</p>
+                    </a>
+                    
+                    <a href="../governance/skull-rulebook.html" class="glass-card link-card">
+                        <span class="icon">🛡️</span>
+                        <h3>SKULL Rulebook</h3>
+                        <p>22 governance rules that make CORTEX production-ready</p>
+                    </a>
+                    
+                    <a href="../architecture/four-tier-brain.html" class="glass-card link-card">
+                        <span class="icon">🧠</span>
+                        <h3>4-Tier Brain Architecture</h3>
+                        <p>Explore how CORTEX learns and persists knowledge</p>
+                    </a>
+                </div>
+            </section>
+        </div>
+    </main>
+    
+    <!-- Mermaid Library -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#1a1f3a',
+                primaryTextColor: '#ffffff',
+                primaryBorderColor: '#00d4ff',
+                lineColor: '#7b61ff',
+                secondaryColor: '#0a0e27',
+                tertiaryColor: '#2a2f4a'
+            }
+        });
+    </script>
+</body>
+</html>

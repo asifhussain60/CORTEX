@@ -1,0 +1,222 @@
+{
+  "application": {
+    "name": "{{PROJECT_NAME:CORTEX}}",
+    "framework": "Browser-Native (SQL.js + TypeScript) + PowerShell",
+    "language": "TypeScript/Python/PowerShell",
+    "rootPath": "{{PROJECT_ROOT}}",
+    "buildCommand": "npm run build",
+    "runCommand": "npm run dev"
+  },
+  "testing": {
+    "framework": "None",
+    "configPath": "",
+    "orchestrationPattern": "none",
+    "orchestrationScript": "",
+    "healthCheckUrl": "",
+    "healthCheckTimeout": 30,
+    "testCommand": "",
+    "headlessDefault": false
+  },
+  "database": {
+    "provider": "None",
+    "connectionStringKey": "",
+    "testSessionId": null,
+    "testHostToken": ""
+  },
+  "governance": {
+    "autoChainTasks": true,
+    "autoChainPhases": false,
+    "requireBuildValidation": false,
+    "requireGitValidation": true,
+    "testQualityThreshold": 70
+  },
+  "planning": {
+    "yaml_modularization_threshold_bytes": 20480,
+    "comment": "Phase 10: Automatic YAML modularization - splits plans >20KB into modular structure for 80%+ faster loads and 85%+ token reduction"
+  },
+  "token_optimization": {
+    "enabled": true,
+    "soft_limit": 40000,
+    "hard_limit": 50000,
+    "target_reduction": 0.6,
+    "quality_threshold": 0.9,
+    "cache_check_frequency": 5,
+    "comment": "Phase 1.5: Token Optimization System - Reduces API costs by 50-70% while maintaining >0.9 quality score"
+  },
+  "vision_api": {
+    "enabled": false,
+    "auto_detect_images": true,
+    "auto_analyze_on_detect": true,
+    "auto_inject_context": true,
+    "max_images_per_request": 5,
+    "supported_formats": ["png", "jpg", "jpeg", "webp", "gif", "bmp"],
+    "max_tokens_per_image": 500,
+    "max_image_size_bytes": 2000000,
+    "downscale_threshold": 1920,
+    "jpeg_quality": 85,
+    "cache_analysis_results": true,
+    "cache_ttl_hours": 24,
+    "warn_threshold_tokens": 400,
+    "comment": "Phase 1.6: Vision API Integration - Enables screenshot analysis with token budgets (<2% token increase). Auto-detection analyzes images automatically when attached."
+  },
+  "smart_hints": {
+    "enabled": true,
+    "hint_threshold": "GOOD",
+    "vault_path": "cortex-brain/conversation-vault",
+    "comment": "CORTEX 3.0: Smart Hint System - Automatically detects valuable conversations and suggests capture"
+  },
+  "tech_stack": {
+    "comment": "CORTEX 4.0: Universal Adapter System - Configure your tech stack once and CORTEX adapts automatically",
+    "language": "python",
+    "test_framework": "pytest",
+    "test_framework_config": {
+      "pytest_args": ["-v", "--tb=short"],
+      "coverage_enabled": true,
+      "coverage_threshold": 80,
+      "timeout": 600
+    },
+    "build_tool": "pip",
+    "build_tool_config": {
+      "requirements_file": "requirements.txt",
+      "virtual_env": ".venv"
+    },
+    "logging_framework": "structured_json",
+    "logging_framework_config": {
+      "log_format": "json",
+      "log_level": "INFO",
+      "pii_sanitization": true
+    },
+    "feature_flag_provider": "envvar",
+    "feature_flag_config": {
+      "prefix": "CORTEX_FLAG_",
+      "default_value": false
+    },
+    "examples": {
+      "csharp_dotnet": {
+        "language": "csharp",
+        "test_framework": "xunit",
+        "test_framework_config": {
+          "dotnet_test_args": ["--logger:trx", "--collect:\"XPlat Code Coverage\""],
+          "timeout": 600
+        },
+        "build_tool": "dotnet",
+        "build_tool_config": {
+          "configuration": "Release",
+          "framework": "net8.0"
+        },
+        "logging_framework": "nlog",
+        "logging_framework_config": {
+          "config_file": "nlog.config",
+          "log_format": "json"
+        },
+        "feature_flag_provider": "launchdarkly",
+        "feature_flag_config": {
+          "sdk_key": "${LAUNCHDARKLY_SDK_KEY}",
+          "timeout": 5000
+        }
+      },
+      "java_spring": {
+        "language": "java",
+        "test_framework": "junit",
+        "test_framework_config": {
+          "maven_test_args": ["test", "-Dmaven.test.failure.ignore=false"],
+          "timeout": 600
+        },
+        "build_tool": "maven",
+        "build_tool_config": {
+          "goals": ["clean", "package"],
+          "profiles": ["prod"]
+        },
+        "logging_framework": "log4j",
+        "logging_framework_config": {
+          "config_file": "log4j2.xml",
+          "log_format": "json"
+        },
+        "feature_flag_provider": "unleash",
+        "feature_flag_config": {
+          "api_url": "https://unleash.example.com/api",
+          "api_token": "${UNLEASH_API_TOKEN}"
+        }
+      },
+      "javascript_node": {
+        "language": "javascript",
+        "test_framework": "jest",
+        "test_framework_config": {
+          "config_file": "jest.config.js",
+          "coverage_enabled": true,
+          "timeout": 300
+        },
+        "build_tool": "npm",
+        "build_tool_config": {
+          "scripts": {
+            "build": "npm run build",
+            "test": "npm test"
+          }
+        },
+        "logging_framework": "winston",
+        "logging_framework_config": {
+          "log_level": "info",
+          "log_format": "json"
+        },
+        "feature_flag_provider": "configcat",
+        "feature_flag_config": {
+          "sdk_key": "${CONFIGCAT_SDK_KEY}",
+          "polling_mode": "auto"
+        }
+      },
+      "go_microservice": {
+        "language": "go",
+        "test_framework": "gotest",
+        "test_framework_config": {
+          "test_args": ["-v", "-race", "-coverprofile=coverage.out"],
+          "timeout": 600
+        },
+        "build_tool": "go",
+        "build_tool_config": {
+          "build_flags": ["-ldflags=\"-s -w\""],
+          "output": "bin/app"
+        },
+        "logging_framework": "zap",
+        "logging_framework_config": {
+          "encoding": "json",
+          "level": "info"
+        },
+        "feature_flag_provider": "envvar",
+        "feature_flag_config": {
+          "prefix": "FEATURE_",
+          "default_value": false
+        }
+      },
+      "ruby_rails": {
+        "language": "ruby",
+        "test_framework": "rspec",
+        "test_framework_config": {
+          "rspec_args": ["--format documentation", "--format json", "--out rspec_results.json"],
+          "timeout": 600
+        },
+        "build_tool": "bundler",
+        "build_tool_config": {
+          "gemfile": "Gemfile",
+          "deployment": true
+        },
+        "logging_framework": "structured_json",
+        "logging_framework_config": {
+          "log_format": "json",
+          "log_level": "info"
+        },
+        "feature_flag_provider": "flagsmith",
+        "feature_flag_config": {
+          "api_url": "https://flagsmith.example.com/api",
+          "environment_key": "${FLAGSMITH_ENV_KEY}"
+        }
+      }
+    }
+  },
+  "portability": {
+    "version": "5.0.0",
+    "lastUpdated": "{{TIMESTAMP:YYYY-MM-DD}}",
+    "configSchema": "cortex-config-v5.0",
+    "setupCompleted": false,
+    "kdsRoot": "{{KDS_ROOT:}}"
+  }
+}

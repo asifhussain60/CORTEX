@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Quick publish alias - run from anywhere in CORTEX repo
+# Usage: Just type 'publish' from terminal
+
+# Find CORTEX root
+CURRENT_DIR="$(pwd)"
+while [[ "$CURRENT_DIR" != "/" ]]; do
+    if [[ -f "$CURRENT_DIR/cortex.config.json" ]]; then
+        CORTEX_ROOT="$CURRENT_DIR"
+        break
+    fi
+    CURRENT_DIR="$(dirname "$CURRENT_DIR")"
+done
+
+if [[ -z "$CORTEX_ROOT" ]]; then
+    echo "❌ Error: Not in CORTEX repository"
+    exit 1
+fi
+
+cd "$CORTEX_ROOT"
+exec ./scripts/publish

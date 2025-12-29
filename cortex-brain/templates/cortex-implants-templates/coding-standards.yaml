@@ -1,0 +1,88 @@
+version: '1.0'
+
+naming_conventions:
+  components:
+    pattern: "PascalCase"
+    prefix: ""
+    suffix: ""
+    example: "UserProfile"
+  
+  hooks:
+    pattern: "camelCase"
+    prefix: "use"
+    example: "useAuthentication"
+  
+  functions:
+    pattern: "camelCase"
+    max_length: 30
+    verb_required: true
+    example: "getUserById"
+  
+  constants:
+    pattern: "SCREAMING_SNAKE_CASE"
+    example: "API_BASE_URL"
+  
+  variables:
+    pattern: "camelCase"
+    example: "userId"
+  
+  classes:
+    pattern: "PascalCase"
+    example: "UserService"
+  
+  interfaces:
+    pattern: "PascalCase"
+    prefix: "I"
+    example: "IUserRepository"
+
+file_organization:
+  components:
+    location: "src/components/"
+    structure: "feature-based"  # Options: feature-based, type-based
+    max_file_lines: 300
+  
+  services:
+    location: "src/services/"
+    naming: "*.service.ts"
+  
+  models:
+    location: "src/models/"
+    naming: "*.model.ts"
+  
+  tests:
+    location: "src/__tests__/"
+    naming: "*.test.ts"
+    colocate_with_source: false
+
+code_style:
+  max_function_length: 50
+  max_params: 4
+  max_nesting_depth: 3
+  max_lines_per_file: 500
+  prefer_arrow_functions: true
+  require_explicit_return_types: true
+  prefer_const_over_let: true
+  no_var: true
+
+imports:
+  organize_by: "source"  # Options: source, alphabetical
+  max_import_statements: 15
+  prefer_absolute_imports: true
+  path_alias: "@"
+  group_external_imports: true
+
+documentation:
+  require_jsdoc: true
+  require_inline_comments: true
+  max_lines_without_comment: 20
+  require_file_header: true
+  require_function_docs: true
+  require_class_docs: true
+
+formatting:
+  indent_size: 2
+  use_semicolons: true
+  quote_style: "single"  # Options: single, double
+  trailing_comma: "all"  # Options: all, es5, none
+  bracket_spacing: true
+  arrow_parens: "always"  # Options: always, avoid

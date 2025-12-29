@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ repository_name }} - CORTEX Lens Analysis</title>
+    <link rel="stylesheet" href="cortex-unified.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="cortex-unified.js" defer></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="cortex-header">
+        <div class="header-content">
+            <div class="header-left">
+                <h1 class="header-title">
+                    <span class="cortex-icon">🧠</span>
+                    CORTEX Lens
+                </h1>
+                <div class="header-subtitle">
+                    Intelligent Repository Analysis
+                </div>
+            </div>
+            <div class="header-right">
+                <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+                    <span class="theme-icon">🌙</span>
+                </button>
+                <div class="repo-badge">
+                    <span class="repo-name">{{ repository_name }}</span>
+                    <span class="repo-type">{{ repo_type }}</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="cortex-tabs">
+        <button class="tab-button active" data-tab="overview">Overview</button>
+        <button class="tab-button" data-tab="executive">Executive Brief</button>
+        <button class="tab-button" data-tab="architecture">Architecture</button>
+        <button class="tab-button" data-tab="security">Security</button>
+        <button class="tab-button" data-tab="quality">Code Quality</button>
+        <button class="tab-button" data-tab="dependencies">Dependencies</button>
+        <button class="tab-button" data-tab="tests">Test Coverage</button>
+        <button class="tab-button" data-tab="tech-stack">Tech Stack</button>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="cortex-main">
+        <!-- Overview Tab -->
+        <section id="overview" class="tab-content active">
+            <div class="content-grid">
+                <!-- KPI Cards -->
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-icon">📁</div>
+                        <div class="kpi-value">{{ total_files }}</div>
+                        <div class="kpi-label">Total Files</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon">📝</div>
+                        <div class="kpi-value">{{ total_lines | format_number }}</div>
+                        <div class="kpi-label">Lines of Code</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon">⚠️</div>
+                        <div class="kpi-value">{{ security_issues }}</div>
+                        <div class="kpi-label">Security Issues</div>
+                        <div class="kpi-trend {{ security_trend_class }}">{{ security_trend }}</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon">✅</div>
+                        <div class="kpi-value">{{ test_coverage }}%</div>
+                        <div class="kpi-label">Test Coverage</div>
+                        <div class="kpi-trend {{ coverage_trend_class }}">{{ coverage_trend }}</div>
+                    </div>
+                </div>
+
+                <!-- Repository Summary -->
+                <div class="glass-card">
+                    <h2 class="card-title">Repository Summary</h2>
+                    <div class="summary-content">
+                        <div class="summary-row">
+                            <span class="summary-label">Repository Type:</span>
+                            <span class="summary-value">{{ repo_type_display }}</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Primary Language:</span>
+                            <span class="summary-value">{{ primary_language }}</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Health Score:</span>
+                            <span class="summary-value">
+                                <span class="health-score score-{{ health_score_class }}">
+                                    {{ health_score }}/100
+                                </span>
+                            </span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Analysis Date:</span>
+                            <span class="summary-value">{{ analysis_date }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Language Distribution Chart -->
+                <div class="glass-card">
+                    <h2 class="card-title">Language Distribution</h2>
+                    <canvas id="languageChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Executive Brief Tab (Business Intelligence Narratives) -->
+        <section id="executive" class="tab-content">
+            <div class="content-grid">
+                <!-- Problem Domain -->
+                <div class="glass-card full-width">
+                    <h2 class="card-title">🎯 What Problem Does This Solve?</h2>
+                    <div class="narrative-content">
+                        <div class="narrative-section">
+                            <h3 class="narrative-subtitle">Problem Domain</h3>
+                            <p class="narrative-text" id="problem-domain-summary"></p>
+                        </div>
+                        <div class="narrative-section">
+                            <h3 class="narrative-subtitle">Key Entities</h3>
+                            <div class="entity-badges" id="problem-domain-entities"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Use Cases -->
+                <div class="glass-card full-width">
+                    <h2 class="card-title">💼 Primary Use Cases</h2>
+                    <div class="use-cases-list" id="use-cases-container"></div>
+                </div>
+
+                <!-- Competitive Position -->
+                <div class="glass-card">
+                    <h2 class="card-title">🏆 Competitive Advantages</h2>
+                    <div class="competitive-list" id="competitive-advantages"></div>
+                </div>
+
+                <!-- Risks -->
+                <div class="glass-card">
+                    <h2 class="card-title">⚠️ Business Risks</h2>
+                    <div class="risks-list" id="business-risks"></div>
+                </div>
+
+                <!-- Stakeholders -->
+                <div class="glass-card">
+                    <h2 class="card-title">👥 Stakeholder Roles</h2>
+                    <div class="stakeholders-list" id="stakeholders-roles"></div>
+                </div>
+
+                <!-- Evolution -->
+                <div class="glass-card">
+                    <h2 class="card-title">📈 System Evolution</h2>
+                    <div class="evolution-summary" id="evolution-story"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Architecture Tab -->
+        <section id="architecture" class="tab-content">
+            <div class="content-grid">
+                <div class="glass-card full-width">
+                    <h2 class="card-title">Architecture Patterns</h2>
+                    <div class="architecture-badges">
+                        {% for pattern in architecture_patterns %}
+                        <span class="badge badge-{{ pattern.confidence }}">{{ pattern.name }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <h2 class="card-title">Layers Detected</h2>
+                    <div class="layer-list">
+                        {% for layer in layers %}
+                        <div class="layer-item">
+                            <div class="layer-name">{{ layer.name }}</div>
+                            <div class="layer-files">{{ layer.file_count }} files</div>
+                            <div class="layer-bar">
+                                <div class="layer-bar-fill" style="width: {{ layer.percentage }}%"></div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <h2 class="card-title">API Endpoints</h2>
+                    <div class="endpoint-list">
+                        {% for endpoint in api_endpoints %}
+                        <div class="endpoint-item">
+                            <span class="endpoint-method method-{{ endpoint.method }}">{{ endpoint.method }}</span>
+                            <span class="endpoint-path">{{ endpoint.path }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Security Tab -->
+        <section id="security" class="tab-content">
+            <div class="content-grid">
+                <div class="glass-card full-width">
+                    <h2 class="card-title">Security Overview</h2>
+                    <canvas id="securityChart"></canvas>
+                </div>
+
+                <div class="glass-card full-width">
+                    <h2 class="card-title">Vulnerability Findings</h2>
+                    <div class="findings-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Severity</th>
+                                    <th>Type</th>
+                                    <th>File</th>
+                                    <th>Line</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for finding in security_findings %}
+                                <tr>
+                                    <td><span class="severity-badge severity-{{ finding.severity }}">{{ finding.severity }}</span></td>
+                                    <td>{{ finding.type }}</td>
+                                    <td><code>{{ finding.file }}</code></td>
+                                    <td>{{ finding.line }}</td>
+                                    <td>{{ finding.description }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Code Quality Tab -->
+        <section id="quality" class="tab-content">
+            <div class="content-grid">
+                <div class="glass-card">
+                    <h2 class="card-title">Complexity Metrics</h2>
+                    <div class="metrics-list">
+                        <div class="metric-item">
+                            <span class="metric-label">Avg Cyclomatic Complexity:</span>
+                            <span class="metric-value">{{ avg_cyclomatic }}</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Avg Cognitive Complexity:</span>
+                            <span class="metric-value">{{ avg_cognitive }}</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Maintainability Index:</span>
+                            <span class="metric-value">{{ maintainability_index }}/100</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card full-width">
+                    <h2 class="card-title">Complexity Hotspots</h2>
+                    <div class="hotspots-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Function</th>
+                                    <th>File</th>
+                                    <th>Cyclomatic</th>
+                                    <th>Cognitive</th>
+                                    <th>Rating</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for hotspot in complexity_hotspots %}
+                                <tr>
+                                    <td><code>{{ hotspot.name }}</code></td>
+                                    <td>{{ hotspot.file }}</td>
+                                    <td>{{ hotspot.cyclomatic }}</td>
+                                    <td>{{ hotspot.cognitive }}</td>
+                                    <td><span class="complexity-badge complexity-{{ hotspot.rating }}">{{ hotspot.rating }}</span></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dependencies Tab -->
+        <section id="dependencies" class="tab-content">
+            <div class="content-grid">
+                <div class="glass-card">
+                    <h2 class="card-title">Dependency Summary</h2>
+                    <div class="metrics-list">
+                        <div class="metric-item">
+                            <span class="metric-label">Total Dependencies:</span>
+                            <span class="metric-value">{{ total_dependencies }}</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Direct Dependencies:</span>
+                            <span class="metric-value">{{ direct_dependencies }}</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Transitive:</span>
+                            <span class="metric-value">{{ transitive_dependencies }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card full-width">
+                    <h2 class="card-title">Package List</h2>
+                    <div class="dependencies-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Package</th>
+                                    <th>Version</th>
+                                    <th>Type</th>
+                                    <th>Source</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for dep in dependencies %}
+                                <tr>
+                                    <td><code>{{ dep.name }}</code></td>
+                                    <td>{{ dep.version }}</td>
+                                    <td><span class="dep-type-badge">{{ dep.type }}</span></td>
+                                    <td>{{ dep.source }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Test Coverage Tab -->
+        <section id="tests" class="tab-content">
+            <div class="content-grid">
+                <div class="glass-card">
+                    <h2 class="card-title">Coverage by Layer</h2>
+                    <canvas id="coverageChart"></canvas>
+                </div>
+
+                <div class="glass-card">
+                    <h2 class="card-title">Test Quality Metrics</h2>
+                    <div class="metrics-list">
+                        <div class="metric-item">
+                            <span class="metric-label">Total Tests:</span>
+                            <span class="metric-value">{{ total_tests }}</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Avg Assertions/Test:</span>
+                            <span class="metric-value">{{ avg_assertions }}</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Unit Tests:</span>
+                            <span class="metric-value">{{ unit_tests }}</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Integration Tests:</span>
+                            <span class="metric-value">{{ integration_tests }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tech Stack Tab -->
+        <section id="tech-stack" class="tab-content">
+            <div class="content-grid">
+                <div class="glass-card">
+                    <h2 class="card-title">Languages</h2>
+                    <div class="tech-list">
+                        {% for lang in languages %}
+                        <div class="tech-item">
+                            <span class="tech-name">{{ lang.name }}</span>
+                            <span class="tech-version">{{ lang.version }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <h2 class="card-title">Frameworks</h2>
+                    <div class="tech-list">
+                        {% for framework in frameworks %}
+                        <div class="tech-item">
+                            <span class="tech-name">{{ framework.name }}</span>
+                            <span class="tech-version">{{ framework.version }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <h2 class="card-title">Databases</h2>
+                    <div class="tech-list">
+                        {% for db in databases %}
+                        <div class="tech-item">
+                            <span class="tech-name">{{ db.name }}</span>
+                            <span class="tech-version">{{ db.version }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <h2 class="card-title">Build Tools</h2>
+                    <div class="tech-list">
+                        {% for tool in build_tools %}
+                        <div class="tech-item">
+                            <span class="tech-name">{{ tool.name }}</span>
+                            <span class="tech-version">{{ tool.version }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="cortex-footer">
+        <div class="footer-content">
+            <div class="footer-left">
+                <p>Generated by <strong>CORTEX Lens</strong> v1.0.0</p>
+                <p class="footer-subtitle">Intelligent Repository Analysis</p>
+            </div>
+            <div class="footer-right">
+                <p>© 2025 Asif Hussain. All rights reserved.</p>
+                <p class="footer-links">
+                    <a href="https://github.com/asifhussain60/CORTEX" target="_blank">GitHub</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Data Injection -->
+    <script id="analysisData" type="application/json">
+        {{ analysis_data_json }}
+    </script>
+</body>
+</html>

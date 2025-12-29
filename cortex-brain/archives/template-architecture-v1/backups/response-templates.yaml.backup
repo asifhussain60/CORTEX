@@ -1,0 +1,2277 @@
+schema_version: '3.2'
+last_updated: '2025-11-26'
+optimization:
+  type: aggressive_minimal
+  original_templates: 107
+  minimal_templates: 18
+  reduction_strategy: Core essentials only + fallback pattern
+shared:
+  standard_header: '# 🧠 CORTEX {title}
+
+    **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+
+    ---
+
+    '
+templates:
+  help_table:
+    name: Help Table
+    triggers:
+    - help
+    - /help
+    - what can cortex do
+    - help_table
+    response_type: table
+    content: '# 🧠 CORTEX Help
+
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+
+      ---
+
+
+      ## 🎯 My Understanding Of Your Request
+
+      [State understanding]
+
+
+      ## ⚠️ Challenge
+
+
+      [State specific challenge or "No Challenge"]
+
+
+      ## 💬 Response
+
+      [Natural language explanation]
+
+
+      [CONTEXT_SUMMARY]
+
+
+      ## 📝 Your Request
+
+      [Echo refined request]
+
+
+      ## 🔍 Next Steps
+
+      [Context-appropriate format]
+
+      '
+    context_summary_template: "\n<details>\n<summary>\U0001F9E0 <b>Context Memory\
+      \ ({conversation_count} conversations loaded, Quality: {quality_score}/10 {quality_emoji})</b></summary>\n\
+      \n**Freshness:** {freshness_label} ({hours_since_last}h ago)  \n**Entity Coverage:**\
+      \ {entity_coverage}%  \n**Relevance Score:** {avg_relevance_score}/1.0 ({relevance_label})\
+      \  \n**Memory Health:** {memory_health}\n\n**Performance Metrics:**\n- Average\
+      \ query time: {avg_query_time}ms\n- Token usage: {token_usage}/{token_budget}\
+      \ ({token_percentage}%)\n- Storage health: {storage_health}\n\n*Use `show context`\
+      \ for detailed view*\n</details>\n"
+  help_detailed:
+    name: Help Detailed
+    triggers:
+    - help_detailed
+    response_type: detailed
+    content: '# 🧠 CORTEX Help (Detailed)
+
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+
+      ---
+
+
+      ## 🎯 My Understanding Of Your Request
+
+      [State understanding]
+
+
+      ## ⚠️ Challenge
+
+
+      [State specific challenge or "No Challenge"]
+
+
+      ## 💬 Response
+
+      [Natural language explanation]
+
+
+      ## 📝 Your Request
+
+      [Echo refined request]
+
+
+      ## 🔍 Next Steps
+
+      [Context-appropriate format]
+
+      '
+  quick_start:
+    name: Quick Start
+    triggers:
+    - quick start
+    - get started
+    - quick_start
+    response_type: narrative
+    content: '# 🧠 CORTEX Quick Start
+
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+
+      ---
+
+
+      ## 🎯 My Understanding Of Your Request
+
+      [State understanding]
+
+
+      ## ⚠️ Challenge
+
+
+      [State specific challenge or "No Challenge"]
+
+
+      ## 💬 Response
+
+      [Natural language explanation]
+
+
+      ## 📝 Your Request
+
+      [Echo refined request]
+
+
+      ## 🔍 Next Steps
+
+      [Context-appropriate format]
+
+      '
+  hands_on_tutorial:
+    name: Hands-On Tutorial
+    triggers:
+    - tutorial
+    - start tutorial
+    - hands on tutorial
+    - interactive tutorial
+    - learn cortex
+    - teach me cortex
+    - cortex tutorial
+    response_type: interactive
+    content: "# \U0001F9E0 CORTEX Hands On Tutorial\n**Author:** Asif Hussain | **GitHub:**\
+      \ github.com/asifhussain60/CORTEX\n\n---\n\n\U0001F393 **CORTEX Hands-On Tutorial**\n\
+      \n## \U0001F3AF My Understanding Of Your Request\n   You want an interactive\
+      \ hands-on tutorial that teaches CORTEX through practical exercises.\n\n## Challenge\
+      \ No Challenge - Tutorial program guides you through planning, development,\
+      \ and testing with real exercises.\n\n## \U0001F4AC Response\n   **Tutorial\
+      \ Profiles Available:**\n   \n   1. **Quick (15 min)** - Essential commands\
+      \ only\n      • CORTEX basics (help, context, healthcheck)\n      • Simple planning\
+      \ workflow\n      • Basic TDD cycle\n   \n   2. **Standard (25 min)** - Recommended\
+      \ for most users\n      • CORTEX core capabilities\n      • Complete planning\
+      \ workflow (DoR/DoD)\n      • Full TDD cycle (RED→GREEN→REFACTOR)\n      • Testing\
+      \ & validation\n   \n   3. **Comprehensive (30 min)** - Deep dive\n      • Advanced\
+      \ planning with security review\n      • TDD with performance optimization\n\
+      \      • Production-ready testing\n   \n   **What You'll Build:**\n   \U0001F510\
+      \ User authentication feature with:\n   • Login form with validation\n   • Real\
+      \ tests using discovered element IDs\n   • Performance-optimized code\n   •\
+      \ Complete session report\n\n## Your Request Start interactive hands-on tutorial\n\
+      \n## \U0001F50D Next Steps\n   Choose a tutorial profile:\n   1. Say \"tutorial\
+      \ quick\" for 15-minute essentials\n   2. Say \"tutorial standard\" for 25-minute\
+      \ walkthrough (recommended)\n   3. Say \"tutorial comprehensive\" for 30-minute\
+      \ deep dive\n   \n   Or say \"tutorial [profile] now\" to start immediately.\n\
+      \   \n   **First Module:** CORTEX Basics\n   - Exercise 1.1: Explore capabilities\
+      \ (type 'help')\n   - Exercise 1.2: Check brain memory (type 'show context')\n\
+      \   - Exercise 1.3: System health (type 'healthcheck')"
+  status_check:
+    name: Status Check
+    triggers:
+    - status
+    - where are we
+    - status_check
+    response_type: table
+    content: "# \U0001F9E0 CORTEX Status Check\n**Author:** Asif Hussain | **GitHub:**\
+      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
+      \ Your Request\n   [State understanding]\n\n## ⚠️ Challenge\n\n[State specific\
+      \ challenge or \"No Challenge\"]\n\n## \U0001F4AC Response\n   [Natural language\
+      \ explanation]\n   \n   **Progress Overview:**\n   ```\n   Overall Status: [████████░░]\
+      \ 85%\n   ✅ Completed: [██████████] 100%\n   ⏳ In Progress: [██████░░░░] 60%\n\
+      \   ⏸️  Not Started: [░░░░░░░░░░] 0%\n   ```\n\n## Your Request [Echo refined\
+      \ request]\n\n## \U0001F50D Next Steps\n   [Context-appropriate format]"
+  success_general:
+    name: Success General
+    triggers:
+    - success_general
+    response_type: narrative
+    content: "# \U0001F9E0 CORTEX Success General\n**Author:** Asif Hussain | **GitHub:**\
+      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
+      \ Your Request\n   [State understanding]\n\n## ⚠️ Challenge\n\n[State specific\
+      \ challenge or \"No Challenge\"]\n\n## \U0001F4AC Response\n   [Natural language\
+      \ explanation]\n\n## Your Request [Echo refined request]\n\n## \U0001F50D Next\
+      \ Steps\n   [Context-appropriate format]"
+  error_general:
+    name: Error General
+    triggers:
+    - error_general
+    response_type: narrative
+    content: "# \U0001F9E0 CORTEX Error General\n**Author:** Asif Hussain | **GitHub:**\
+      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
+      \ Your Request\n   [State understanding]\n\n## ⚠️ Challenge\n\n[State specific\
+      \ challenge or \"No Challenge\"]\n\n## \U0001F4AC Response\n   [Natural language\
+      \ explanation]\n\n## Your Request [Echo refined request]\n\n## \U0001F50D Next\
+      \ Steps\n   [Context-appropriate format]"
+  introduction_discovery:
+    name: CORTEX Discovery & Introduction
+    triggers:
+    - discover cortex
+    - explore cortex
+    - cortex demo
+    - show me what cortex can do
+    - cortex tour
+    - guided tour
+    - what can you do
+    - cortex capabilities
+    - cortex features
+    - show capabilities
+    response_type: interactive
+    content: '# 🧠 CORTEX Discovery & Introduction
+
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+
+      ---
+
+
+      ## 🎯 My Understanding Of Your Request
+
+
+      You want to explore CORTEX capabilities and discover what it can do for your
+      development workflow.
+
+
+      ## ⚠️ Challenge
+
+
+      No Challenge - Discovery mode helps you understand CORTEX''s full potential
+      and find the features that best match your needs.
+
+
+      ## 💬 Response
+
+
+      CORTEX is an AI-enhanced development assistant with **long-term memory**, **strategic
+      planning**, and **automated workflows**.
+
+
+      **Core Philosophy:**
+
+      - 🧠 **Brain Architecture** - 4-tier memory system (Tier 0: Governance, Tier
+      1: Working Memory, Tier 2: Knowledge Graph, Tier 3: Dev Context)
+
+      - 🎯 **Zero Ambiguity** - Planning with Definition of Ready (DoR) and Definition
+      of Done (DoD) enforcement
+
+      - 🔴🟢🔵 **TDD Mastery** - RED→GREEN→REFACTOR automation with performance-based
+      refactoring
+
+      - 📊 **Pattern Learning** - Learns from your coding patterns and improves accuracy
+      over time
+
+      - 🛡️ **Brain Protection** - SKULL rules prevent degradation and enforce best
+      practices
+
+
+      **Key Differentiators:**
+
+      - **97.2% token reduction** (74,047 → 2,078 avg) through intelligent memory
+      management
+
+      - **Universal upgrade system** works across all installation types with zero
+      data loss
+
+      - **Vision API integration** extracts requirements from screenshots (UI mockups,
+      errors, ADO items)
+
+      - **Convention-based feature validation** ensures complete integration (7-layer
+      scoring)
+
+
+      ## 📝 Your Request
+
+
+      Discover CORTEX capabilities and learn how to use them effectively
+
+
+      ## 🔍 Next Steps - Interactive Discovery
+
+
+      **Choose your exploration path:**
+
+
+      ### 🚀 Quick Demos (5-10 min each)
+
+      1. **`demo planning`** - See Planning System 2.0 with DoR/DoD enforcement and
+      Vision API
+
+      2. **`demo tdd`** - Watch RED→GREEN→REFACTOR cycle with auto-debug and performance
+      refactoring
+
+      3. **`demo view discovery`** - Auto-extract UI elements for testing (60+ min
+      → <5 min, 92% time savings)
+
+      4. **`demo feedback`** - Structured issue reporting with privacy protection
+      and GitHub Gist upload
+
+      5. **`demo upgrade`** - Universal upgrade system with brain preservation and
+      auto-detection
+
+
+      ### 🎓 Deep Dives (15-30 min each)
+
+      6. **`tutorial`** - Hands-on interactive tutorial (build real authentication
+      feature with tests)
+
+      7. **`show brain architecture`** - Understand 4-tier memory system and SKULL
+      protection rules
+
+      8. **`explain upgrade system`** - Universal upgrade with brain preservation
+      and path validation
+
+      9. **`system alignment demo`** - Convention-based feature validation (admin
+      only - CORTEX repo)
+
+      10. **`show context`** - See what CORTEX remembers about your project and conversations
+
+
+      ### 📖 Documentation (Read at your pace)
+
+      11. **Planning Guide** - [View on GitHub Pages](https://asifhussain60.github.io/CORTEX/planning/)
+      (Coming Soon)
+
+      12. **TDD Mastery** - [View on GitHub Pages](https://asifhussain60.github.io/CORTEX/tdd/)
+      (Coming Soon)
+
+      13. **Response Format** - [View on GitHub Pages](https://asifhussain60.github.io/CORTEX/format/)
+      (Coming Soon)
+
+      14. **Brain Architecture** - [View on GitHub Pages](https://asifhussain60.github.io/CORTEX/architecture/)
+      (Coming Soon)
+
+      15. **Full Documentation** - [View on GitHub Pages](https://asifhussain60.github.io/CORTEX/)
+      (Coming Soon)
+
+
+      ### 🎓 Learning Paths
+
+      16. **`beginner path`** - New to CORTEX? → Start here: `help` → `tutorial` →
+      `demo planning`
+
+      17. **`advanced path`** - Experienced user? → Explore: `system alignment` →
+      `show context` → `admin help` (CORTEX repo only)
+
+      18. **`developer path`** - Building features? → Learn: `demo tdd` → `demo view
+      discovery` → `git checkpoint`
+
+
+      ---
+
+
+      **Pro Tips:**
+
+      - Say **`help`** anytime to see all available commands
+
+      - Use **`show context`** to see what CORTEX remembers about your project
+
+      - Try **`healthcheck`** to validate your CORTEX installation
+
+      - Use **`feedback`** to report issues or suggest improvements
+
+
+      **Quick Start Recommendations:**
+
+      - 🆕 **First time?** → Try `tutorial` for hands-on learning
+
+      - 📋 **Need to plan?** → Use `demo planning` to see planning in action
+
+      - 🧪 **Writing tests?** → Start with `demo tdd` for TDD workflow
+
+      - 🔍 **Need help?** → Say `help` for command reference'
+  not_implemented:
+    name: Not Implemented
+    triggers:
+    - not_implemented
+    response_type: narrative
+    content: "# \U0001F9E0 CORTEX Not Implemented\n**Author:** Asif Hussain | **GitHub:**\
+      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
+      \ Your Request\n   [State understanding]\n\n## ⚠️ Challenge\n\n[State specific\
+      \ challenge or \"No Challenge\"]\n\n## \U0001F4AC Response\n   [Natural language\
+      \ explanation]\n\n## Your Request [Echo refined request]\n\n## \U0001F50D Next\
+      \ Steps\n   [Context-appropriate format]"
+  executor_success:
+    name: Executor Success
+    triggers:
+    - executor_success
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX Executor Success\n**Author:** Asif Hussain | **GitHub:**\
+      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
+      \ Your Request\n   [State understanding]\n\n## ⚠️ Challenge\n\n[State specific\
+      \ challenge or \"No Challenge\"]\n\n## \U0001F4AC Response\n   [Natural language\
+      \ explanation]\n\n## Your Request [Echo refined request]\n\n## \U0001F50D Next\
+      \ Steps\n   [Context-appropriate format]"
+  executor_error:
+    name: Executor Error
+    triggers:
+    - executor_error
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX Executor Error\n**Author:** Asif Hussain | **GitHub:**\
+      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
+      \ Your Request\n   [State understanding]\n\n## ⚠️ Challenge\n\n[State specific\
+      \ challenge or \"No Challenge\"]\n\n## \U0001F4AC Response\n   [Natural language\
+      \ explanation]\n\n## Your Request [Echo refined request]\n\n## \U0001F50D Next\
+      \ Steps\n   [Context-appropriate format]"
+  tester_success:
+    name: Tester Success
+    triggers:
+    - tester_success
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX Tester Success\n**Author:** Asif Hussain | **GitHub:**\
+      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
+      \ Your Request\n   [State understanding]\n\n## ⚠️ Challenge\n\n[State specific\
+      \ challenge or \"No Challenge\"]\n\n## \U0001F4AC Response\n   [Natural language\
+      \ explanation]\n\n## Your Request [Echo refined request]\n\n## \U0001F50D Next\
+      \ Steps\n   [Context-appropriate format]"
+  operation_started:
+    name: Operation Started
+    triggers:
+    - operation_started
+    response_type: narrative
+    content: "# \U0001F9E0 CORTEX Operation Started\n**Author:** Asif Hussain | **GitHub:**\
+      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
+      \ Your Request\n   [State understanding]\n\n## ⚠️ Challenge\n\n[State specific\
+      \ challenge or \"No Challenge\"]\n\n## \U0001F4AC Response\n   [Natural language\
+      \ explanation]\n\n## Your Request [Echo refined request]\n\n## \U0001F50D Next\
+      \ Steps\n   [Context-appropriate format]"
+  operation_progress:
+    name: Operation Progress
+    triggers:
+    - operation_progress
+    response_type: narrative
+    content: "# \U0001F9E0 CORTEX Operation Progress\n**Author:** Asif Hussain | **GitHub:**\
+      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
+      \ Your Request\n   [State understanding]\n\n## ⚠️ Challenge\n\n[State specific\
+      \ challenge or \"No Challenge\"]\n\n## \U0001F4AC Response\n   [Natural language\
+      \ explanation]\n   \n   **Operation Progress:**\n   ```\n   Phase 1: [██████████]\
+      \ 100% ✅ Complete\n   Phase 2: [████████░░] 75% ⏳ In Progress\n   Phase 3: [░░░░░░░░░░]\
+      \ 0% ⏸️  Not Started\n   ```\n\n## Your Request [Echo refined request]\n\n##\
+      \ \U0001F50D Next Steps\n   [Context-appropriate format]"
+  operation_complete:
+    name: Operation Complete
+    triggers:
+    - operation_complete
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX Operation Complete\n**Author:** Asif Hussain | **GitHub:**\
+      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
+      \ Your Request\n   [State understanding]\n\n## ⚠️ Challenge\n\n[State specific\
+      \ challenge or \"No Challenge\"]\n\n## \U0001F4AC Response\n   [Natural language\
+      \ explanation]\n   \n   **Completion Metrics:**\n   ```\n   Overall: [██████████]\
+      \ 100% ✅\n   Quality: [█████████░] 95%\n   Coverage: [████████░░] 85%\n   Performance:\
+      \ [█████████░] 90%\n   ```\n\n## Your Request [Echo refined request]\n\n## \U0001F50D\
+      \ Next Steps\n   [Context-appropriate format]"
+  question_documentation_issues:
+    name: Question Documentation Issues
+    triggers:
+    - question_documentation_issues
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX Question Documentation Issues\n**Author:** Asif\
+      \ Hussain | **GitHub:** github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF\
+      \ My Understanding Of Your Request\n   [State understanding]\n\n## ⚠️ Challenge\n\
+      \n[State specific challenge or \"No Challenge\"]\n\n## \U0001F4AC Response\n\
+      \   [Natural language explanation]\n\n## Your Request [Echo refined request]\n\
+      \n## \U0001F50D Next Steps\n   [Context-appropriate format]"
+  work_planner_success:
+    name: Work Planner Success
+    triggers:
+    - plan
+    - let's plan
+    - plan a feature
+    - plan this
+    - help me plan
+    - planning
+    - feature planning
+    - i want to plan
+    - work_planner_success
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX Work Planner Success\n**Author:** Asif Hussain |\
+      \ **GitHub:** github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding\
+      \ Of Your Request\n   You want to plan [feature name] with structured approach\
+      \ and zero ambiguity.\n\n## ⚠️ Challenge ⚡ **DoR Validation Required**\n   I\
+      \ need to ensure Definition of Ready (DoR) is met with zero ambiguity before\
+      \ proceeding. I will not move forward until all clarifying questions are answered.\n\
+      \n## \U0001F4AC Response\n   Created planning file: `cortex-brain/documents/planning/features/PLAN-[date]-[feature].md`\n\
+      \   \n   Starting interactive planning session with DoR enforcement...\n\n##\
+      \ \U0001F4DD Your Request Plan [feature name] with zero ambiguity\n\n## \U0001F50D\
+      \ Next Steps - DoR Validation (Interactive Session)\n   \n   ## Definition of\
+      \ Ready Checklist:**\n   ☐ Requirements documented (zero ambiguity)\n   ☐ Dependencies\
+      \ identified & validated\n   ☐ Technical design approach agreed\n   ☐ Test strategy\
+      \ defined\n   ☐ Acceptance criteria measurable\n   ☐ Security review complete\n\
+      \   ☐ User approval on scope\n   \n   \U0001F4AC **Clarifying Questions (Must\
+      \ answer ALL):**\n   \n   1. **Feature Scope** - What EXACTLY does this feature\
+      \ do? (Be specific, not vague)\n   2. **Users** - Who are the SPECIFIC users?\
+      \ (Roles, not \"people\")\n   3. **Integration Points** - What EXACT systems/APIs/databases?\
+      \ (Names, not \"services\")\n   4. **Constraints** - What are the MEASURABLE\
+      \ limits? (Numbers, not \"fast\")\n   5. **Success Metrics** - How do we MEASURE\
+      \ success? (KPIs, not \"better\")\n   6. **Dependencies** - What files/services\
+      \ MUST exist? (I will verify)\n   7. **Security Considerations** - What security\
+      \ risks exist? (I will run OWASP checklist)\n   \n   \U0001F4DD **Self-Audit\
+      \ Questions (Review before answering):**\n   \n   **Edge Cases:**\n   - What\
+      \ happens if the input is empty?\n   - What happens if the user is not authenticated?\n\
+      \   - What happens if the database is unavailable?\n   - What happens if a third-party\
+      \ API times out?\n   \n   **Access Control:**\n   - Who can access this feature?\n\
+      \   - What permissions are required?\n   - What happens if an unauthorized user\
+      \ tries to access?\n   \n   **Data Risk:**\n   - What data is at risk if this\
+      \ feature is compromised?\n   - Is sensitive data (PII, passwords, tokens) involved?\n\
+      \   - How is data validated before storage?\n   \n   **Testing:**\n   - How\
+      \ do we test this feature?\n   - What are the happy path test cases?\n   - What\
+      \ are the error/edge case test cases?\n   \n   **Dependencies:**\n   - What\
+      \ other systems/services does this depend on?\n   - What happens if a dependency\
+      \ is unavailable?\n   - Are there third-party APIs involved?\n   \n   ⚠️ **I\
+      \ will not proceed until DoR is met with zero ambiguity.**\n   \n   Please answer\
+      \ these questions, and I'll validate dependencies and run security review before\
+      \ generating the plan."
+  planning_dor_incomplete:
+    name: Planning DoR Incomplete
+    triggers:
+    - planning_dor_incomplete
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX Planning DoR Incomplete\n**Author:** Asif Hussain\
+      \ | **GitHub:** github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding\
+      \ Of Your Request\n   You want to proceed with planning, but Definition of Ready\
+      \ (DoR) is not yet met.\n\n## Challenge ⚡ **Cannot Proceed - DoR Incomplete**\n\
+      \   I cannot move forward with analysis or implementation until DoR is satisfied\
+      \ with zero ambiguity.\n\n## \U0001F4AC Response\n   ## DoR Status INCOMPLETE**\n\
+      \   \n   **Missing Requirements:**\n   [List specific missing items from DoR\
+      \ checklist]\n   \n   **Ambiguities Detected (Line-Level Feedback):**\n   \n\
+      \   Line 3: \"improve performance\"\n   ❌ VAGUE TERM: \"improve\"\n   Challenge:\
+      \ Improve by how much? What specific metric?\n   Suggestion: Define target metric\
+      \ (e.g., page load <1s, query time <100ms)\n   \n   Line 7: \"the system will\
+      \ handle user requests\"\n   ❌ UNDEFINED: \"the system\"\n   Challenge: Which\
+      \ system specifically? Which component/service?\n   Suggestion: Be explicit\
+      \ (e.g., \"The authentication service (AuthService.cs)\")\n   \n   Line 12:\
+      \ \"optimize database queries\"\n   ❌ VAGUE TERM: \"optimize\"\n   Challenge:\
+      \ Optimize what specifically? What's the target?\n   Suggestion: Define measurable\
+      \ goal (e.g., \"Reduce query time from 500ms to <100ms\")\n   \n   **Unvalidated\
+      \ Dependencies:**\n   [List files/services referenced but not verified]\n\n\
+      ## Your Request Proceed with planning\n\n## \U0001F50D Next Steps\n   \n   1.\
+      \ **Answer Clarifying Questions** - Provide specific, measurable answers\n \
+      \  2. **Resolve Ambiguities** - Replace vague terms with exact specifications\
+      \ (see line-level feedback above)\n   3. **Validate Dependencies** - Confirm\
+      \ all referenced resources exist\n   4. **Review DoR Checklist** - Ensure all\
+      \ items checked\n   5. **Resubmit for Approval** - Once DoR is complete\n  \
+      \ \n   ⚠️ I will not approve this plan until DoR is met."
+  planning_dor_complete:
+    name: Planning DoR Complete
+    triggers:
+    - planning_dor_complete
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX Planning DoR Complete\n**Author:** Asif Hussain\
+      \ | **GitHub:** github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding\
+      \ Of Your Request\n   All clarifying questions answered, DoR validation complete.\n\
+      \n## ⚠️ Challenge\n   **DoR Met** - All requirements validated\n   All requirements\
+      \ documented with zero ambiguity. Dependencies validated. Security review complete.\
+      \ Ready to generate detailed plan.\n\n## \U0001F4AC Response\n   ## DoR Status\
+      \ COMPLETE**\n   \n   ✓ Requirements documented (zero ambiguity)\n   ✓ Dependencies\
+      \ identified & validated\n   ✓ Technical design approach agreed\n   ✓ Test strategy\
+      \ defined\n   ✓ Acceptance criteria measurable\n   ✓ Security review passed\
+      \ (OWASP checklist complete)\n   ✓ User approval on scope\n   \n   Generating\
+      \ detailed plan with:\n   • Phase breakdown (Foundation → Core → Validation)\n\
+      \   • Risk analysis\n   • Security hardening tasks\n   • Task generation\n \
+      \  • Acceptance criteria\n\n## \U0001F4DD Your Request Generate plan with DoR\
+      \ validated\n\n## \U0001F50D Next Steps - Milestone-Based Implementation\n \
+      \  \n   ☐ Milestone 1: Planning & Security Baseline (Complete)\n      ✓ DoR\
+      \ validated\n      ✓ Security review passed\n      ✓ Plan generated\n      ⏳\
+      \ User review pending\n   \n   ☐ Milestone 2: Foundation & Discovery\n     \
+      \ ⏳ Awaiting plan approval\n      • Crawler will scan codebase\n      • Knowledge\
+      \ graph will be built\n      • Architecture analysis will be generated\n   \
+      \   • Security baseline tests created\n   \n   ☐ Milestone 3: Core Implementation\
+      \ (TDD)\n      ⏳ Awaiting foundation complete\n      • Write failing tests (RED)\n\
+      \      • Implement features (GREEN)\n      • Refactor for quality (REFACTOR)\n\
+      \      • Security hardening integrated\n   \n   ☐ Milestone 4: Validation &\
+      \ Security Audit\n      ⏳ Awaiting implementation complete\n      • Full test\
+      \ suite execution\n      • Security penetration testing\n      • Performance\
+      \ validation\n      • DoD enforcement\n   \n   **Review the planning document\
+      \ and say \"approve plan\" when ready.**"
+  planning_security_review:
+    name: Planning Security Review
+    triggers:
+    - planning_security_review
+    - security review
+    - owasp review
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX Planning Security Review\n**Author:** Asif Hussain\
+      \ | **GitHub:** github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding\
+      \ Of Your Request\n   You want a security review for [feature name] mapped to\
+      \ OWASP Top 10 categories.\n\n## ⚠️ Challenge No Challenge - Security validation\
+      \ is mandatory before development. I'll identify relevant OWASP categories based\
+      \ on your feature type.\n\n## \U0001F4AC Response\n   \U0001F512 **Auto-Detected\
+      \ Feature Type:** [authentication/api/data_storage/file_upload/payment]\n  \
+      \ \n   **Relevant OWASP Top 10 Categories:**\n   \n   Based on your feature,\
+      \ these categories apply:\n   \n   ✅ **A01 - Broken Access Control**\n   - [\
+      \ ] Authentication required for protected resources?\n   - [ ] Authorization\
+      \ checks present for all actions?\n   - [ ] Role-based access control (RBAC)\
+      \ implemented?\n   - [ ] Horizontal privilege escalation prevented?\n   \n \
+      \  ✅ **A02 - Cryptographic Failures**\n   - [ ] Sensitive data encrypted at\
+      \ rest?\n   - [ ] HTTPS enforced for all data in transit?\n   - [ ] No hardcoded\
+      \ secrets, API keys, or passwords?\n   - [ ] Strong encryption algorithms used\
+      \ (AES-256, RSA-2048+)?\n   \n   ✅ **A03 - Injection**\n   - [ ] Parameterized\
+      \ queries used (no string concatenation)?\n   - [ ] Input validation on ALL\
+      \ user inputs?\n   - [ ] Output encoding to prevent XSS?\n   - [ ] Command injection\
+      \ prevention (no shell execution of user input)?\n   \n   ✅ **A07 - Identification\
+      \ & Authentication Failures**\n   - [ ] Multi-factor authentication available?\n\
+      \   - [ ] Account lockout after failed login attempts?\n   - [ ] Session timeout\
+      \ configured (e.g., 30 minutes)?\n   - [ ] Password complexity requirements\
+      \ enforced?\n   \n   ✅ **A09 - Security Logging & Monitoring**\n   - [ ] Security\
+      \ events logged (login attempts, access denials)?\n   - [ ] Logs monitored for\
+      \ anomalies?\n   - [ ] Incident response plan defined?\n   - [ ] Sensitive data\
+      \ NOT logged (passwords, tokens)?\n\n## \U0001F4DD Your Request Security review\
+      \ for [feature name]\n\n## \U0001F50D Next Steps - Security Validation\n   \n\
+      \   1. **Review Checklist Above** - Check all applicable items\n   2. **Identify\
+      \ HIGH/CRITICAL Risks** - Flag any unchecked items that are critical\n   3.\
+      \ **Mitigation Plan** - Define how to address each risk\n   4. **Automated Scanning**\
+      \ - Run detect-secrets, Bandit, pip-audit before development\n   5. **Security\
+      \ Approval** - Once all HIGH/CRITICAL items addressed, proceed with DoR\n  \
+      \ \n   ⚠️ **Security Gate:** Any HIGH/CRITICAL vulnerabilities must be addressed\
+      \ before development begins.\n   \n   Say \"security approved\" once checklist\
+      \ complete, or \"security concerns: [describe]\" to discuss risks."
+  ado_created:
+    name: ADO Created
+    triggers:
+    - ado_created
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX ADO Planning\n**Author:** Asif Hussain | **GitHub:**\
+      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
+      \ Your Request\n   You want to create a new ADO work item with planning template\n\
+      \n## Challenge No Challenge - This uses the ADO Planning System 2.0 with database\
+      \ storage and template-based workflow.\n\n## \U0001F4AC Response\n   Created\
+      \ ADO work item with complete planning template. File opened in VS Code for\
+      \ review and customization.\n\n## Your Request Create new ADO work item\n\n\
+      ## \U0001F50D Next Steps\n   1. Review and customize the planning template\n\
+      \   2. Fill in Definition of Ready (DoR) checkboxes\n   3. Define acceptance\
+      \ criteria\n   4. Approve plan when ready: 'approve ado [number]'\n   5. Start\
+      \ implementation: 'resume ado [number]'"
+  ado_resumed:
+    name: ADO Resumed
+    triggers:
+    - ado_resumed
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX ADO Resume\n**Author:** Asif Hussain | **GitHub:**\
+      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
+      \ Your Request\n   You want to resume work on an existing ADO item\n\n## Challenge\
+      \ No Challenge - Context restored from database with recent activity, files,\
+      \ and smart suggestions.\n\n## \U0001F4AC Response\n   Restored ADO context\
+      \ with activity history and related files. All planning documents opened in\
+      \ VS Code.\n\n## Your Request Resume ADO work item\n\n## \U0001F50D Next Steps\n\
+      \   1. Review activity log and recent changes\n   2. Check DoR/DoD completion\
+      \ status\n   3. Continue implementation\n   4. Update status when milestones\
+      \ reached\n   5. Mark complete when DoD satisfied"
+  ado_search_results:
+    name: ADO Search Results
+    triggers:
+    - ado_search_results
+    response_type: table
+    content: "# \U0001F9E0 CORTEX ADO Search\n**Author:** Asif Hussain | **GitHub:**\
+      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
+      \ Your Request\n   You want to search for ADO work items\n\n## Challenge No\
+      \ Challenge - Using FTS5 full-text search across all ADO fields (title, description,\
+      \ technical notes).\n\n## \U0001F4AC Response\n   [Display search results in\
+      \ table format]\n\n## Your Request Search ADO work items\n\n## \U0001F50D Next\
+      \ Steps\n   1. Review search results\n   2. Open specific ADO: 'resume ado [number]'\n\
+      \   3. Refine search if needed\n   4. Filter by status: 'show ados planning'\
+      \ or 'show ados in-progress'"
+  ado_story_planning:
+    name: ADO User Story Planning
+    triggers:
+    - plan ado story
+    - create ado story
+    - new ado story
+    - plan user story
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX ADO User Story Planning\n**Author:** Asif Hussain\
+      \ | **GitHub:** github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding\
+      \ Of Your Request\n   You want to create an ADO User Story with structured planning.\n\
+      \n## ⚠️ Challenge\n   No Challenge - User Story template tracks implementation\
+      \ and generates copy-paste ready summaries for ADO.\n\n## \U0001F4AC Response\n\
+      \   Creating User Story with:\n   • Title and user story format capture\n  \
+      \ • Acceptance criteria tracking\n   • Implementation progress logging\n   •\
+      \ Technical decisions documentation\n   • Natural language summary generation\
+      \ for ADO paste\n   \n   Story file created in `cortex-brain/documents/planning/ado/active/`\n\
+      \   \n   **What the final copy-paste output looks like:**\n   \n   ```\n   User\
+      \ Authentication - Login with Email and Password\n   \n   Implemented user login\
+      \ functionality with email and password authentication. \n   Users can now securely\
+      \ log in to their accounts with automatic session \n   management and \"Remember\
+      \ Me\" capability.\n   \n   Key Technical Changes:\n   • Added JWT-based authentication\
+      \ with 30-minute token expiration\n   • Implemented bcrypt password hashing\
+      \ (10 salt rounds) for security\n   • Created LoginController with POST /api/auth/login\
+      \ endpoint\n   • Added session persistence using HTTP-only secure cookies\n\
+      \   \n   Files Changed:\n   • Created: src/controllers/AuthController.cs (145\
+      \ lines)\n   • Created: src/services/AuthenticationService.cs (89 lines)\n \
+      \  • Modified: src/routes/AppRoutes.tsx (added /login route)\n   • Created:\
+      \ tests/auth/LoginComponent.test.tsx (12 tests, 100% pass)\n   \n   Acceptance\
+      \ Criteria Met:\n   ✅ Login form accepts email and password input\n   ✅ Invalid\
+      \ credentials display error message\n   ✅ Successful login redirects to /dashboard\
+      \ with 200ms response\n   ✅ Session persists for 30 minutes with automatic\
+      \ renewal\n   ✅ \"Remember Me\" extends session to 30 days\n   \n   Technical\
+      \ Decisions:\n   • Chose JWT over session tokens for scalability\n   • Added\
+      \ MemoryCache for user lookups (67% fewer database queries)\n   • Implemented\
+      \ rate limiting (5 attempts = 15 min lockout)\n   \n   Test Coverage: 87% overall,\
+      \ 100% for authentication flow\n   Performance: Average login time 145ms →\
+      \ 48ms after optimization\n   ```\n\n## \U0001F4DD Your Request\n   Create ADO\
+      \ User Story with planning template\n\n## \U0001F50D Next Steps\n   \n   Please\
+      \ provide:\n   1. **Story Title** - Brief description of user need\n   2. **Story\
+      \ Description** - \"As a [user], I want [feature], so that [benefit]\"\n   3.\
+      \ **Acceptance Criteria** - Testable conditions (optional, add during work)\n\
+      \   4. **Priority** - High (1), Medium (2), Low (3), or Very Low (4)\n   \n\
+      \   Example:\n   ```\n   Title: User login with email and password\n   Description:\
+      \ As a registered user, I want to log in with my \n                email and\
+      \ password, so that I can access my account securely.\n   Criteria:\n   - Login\
+      \ form accepts email and password\n   - Invalid credentials show error message\n\
+      \   - Successful login redirects to dashboard\n   - Session persists for 30\
+      \ minutes\n   Priority: High\n   ```\n   \n   Provide details now or say \"\
+      create story\" with information above."
+  ado_feature_planning:
+    name: ADO Feature Planning
+    triggers:
+    - plan ado feature
+    - create ado feature
+    - new ado feature
+    - plan feature
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX ADO Feature Planning\n**Author:** Asif Hussain |\
+      \ **GitHub:** github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding\
+      \ Of Your Request\n   You want to create an ADO Feature with comprehensive planning.\n\
+      \n## ⚠️ Challenge\n   No Challenge - Feature template tracks multiple stories\
+      \ and generates executive-level summaries for ADO.\n\n## \U0001F4AC Response\n\
+      \   Creating Feature with:\n   • High-level business value description\n   •\
+      \ Related user stories linking\n   • Technical architecture documentation\n\
+      \   • Implementation phases tracking\n   • Performance metrics capture\n   •\
+      \ Natural language summary for ADO paste\n   \n   Feature file created in `cortex-brain/documents/planning/ado/active/`\n\
+      \   \n   **What the final copy-paste output looks like:**\n   \n   ```\n   User\
+      \ Authentication System - Complete Implementation\n   \n   Delivered complete\
+      \ authentication system including login, registration, \n   password reset,\
+      \ and session management. The system supports ~10,000 \n   concurrent users\
+      \ with <100ms average authentication time.\n   \n   Business Value:\n   Users\
+      \ can now securely access their accounts with industry-standard \n   authentication\
+      \ practices. The system prevents unauthorized access while \n   providing seamless\
+      \ user experience with automatic session management.\n   \n   Technical Architecture:\n\
+      \   • JWT-based stateless authentication for horizontal scaling\n   • bcrypt\
+      \ password hashing with configurable salt rounds\n   • Redis session store for\
+      \ distributed session management\n   • Rate limiting middleware prevents brute\
+      \ force attacks\n   \n   Components Delivered:\n   • AuthController - Login,\
+      \ logout, token refresh endpoints\n   • AuthenticationService - Credential validation,\
+      \ token generation\n   • SessionManager - Distributed session handling via Redis\n\
+      \   • PasswordHasher - Secure password hashing and verification\n   • UserRepository\
+      \ - Database access layer with Entity Framework\n   \n   Related User Stories\
+      \ Completed:\n   ✅ UserStory-12345: User login with email/password\n   ✅ UserStory-12346:\
+      \ User registration with email verification\n   ✅ UserStory-12347: Password\
+      \ reset via email\n   ✅ UserStory-12348: Remember me functionality\n   \n \
+      \  Files Modified (15 total):\n   Created: src/controllers/AuthController.cs,\
+      \ src/services/*.cs\n   Modified: src/Startup.cs (auth middleware), src/appsettings.json\n\
+      \   Tests: tests/auth/*.test.tsx (47 tests, 94% pass rate)\n   \n   Performance\
+      \ Metrics:\n   • Login: 145ms → 48ms average (67% improvement with caching)\n\
+      \   • Token validation: 12ms average (Redis lookup)\n   • Concurrent users tested:\
+      \ 10,000 (no degradation observed)\n   \n   Known Limitations:\n   • Redis dependency\
+      \ required for session management\n   • Email service requires SendGrid API\
+      \ key configuration\n   • MFA currently supports TOTP only (SMS planned Phase\
+      \ 2)\n   \n   Deployment Notes:\n   • Requires Redis 6.0+ (connection string\
+      \ in appsettings.json)\n   • Database migration: Apply 20251126_AddAuthTables\
+      \ before deployment\n   • No breaking changes to existing API endpoints\n  \
+      \ ```\n\n## \U0001F4DD Your Request\n   Create ADO Feature with planning template\n\
+      \n## \U0001F50D Next Steps\n   \n   Please provide:\n   1. **Feature Title**\
+      \ - High-level capability description\n   2. **Feature Description** - Business\
+      \ value and scope\n   3. **Related Stories** - List of user stories (optional,\
+      \ link during work)\n   4. **Priority** - High (1), Medium (2), Low (3), or\
+      \ Very Low (4)\n   5. **Estimated Duration** - Rough timeline (optional)\n \
+      \  \n   Example:\n   ```\n   Title: User Authentication System\n   Description:\
+      \ Complete authentication system with login, \n                registration,\
+      \ password reset, and session management.\n   Related Stories:\n   - User login\
+      \ with email/password\n   - User registration with email verification\n   -\
+      \ Password reset via email\n   - Remember me functionality\n   Priority: High\n\
+      \   Duration: 2 weeks\n   ```\n   \n   Provide details now or say \"create feature\"\
+      \ with information above."
+  ado_summary_generation:
+    name: ADO Work Summary Generation
+    triggers:
+    - generate ado summary
+    - create work summary
+    - ado work summary
+    - complete ado work
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX ADO Work Summary\n**Author:** Asif Hussain | **GitHub:**\
+      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
+      \ Your Request\n   You want to generate a work summary for an ADO work item\
+      \ to copy-paste directly into Azure DevOps.\n\n## ⚠️ Challenge\n   No Challenge\
+      \ - Summary generator creates natural language summaries with key technical\
+      \ highlights, ready for direct paste into ADO Description or Comments.\n\n##\
+      \ \U0001F4AC Response\n   Generating work summary in natural language format\
+      \ with:\n   • Plain English description of what was accomplished\n   • Key technical\
+      \ changes highlighted inline (not verbose markdown)\n   • Files changed with\
+      \ context (created/modified/tested)\n   • Acceptance criteria validation\n \
+      \  • Technical decisions explained in business terms\n   • Performance metrics\
+      \ and test results\n   \n   Summary saved in `cortex-brain/documents/summaries/ado/`\
+      \ and opened in VS Code.\n   \n   **Output Format:**\n   Natural language paragraphs\
+      \ with bullet points for technical details, designed \n   to be read by both\
+      \ technical and non-technical stakeholders in ADO. \n   \n   Example for User\
+      \ Story:\n   ```\n   Implemented user login functionality with email and password\
+      \ authentication. \n   Users can now securely log in to their accounts with\
+      \ automatic session \n   management and \"Remember Me\" capability.\n   \n \
+      \  Key Technical Changes:\n   • Added JWT-based authentication with 30-minute\
+      \ token expiration\n   • Implemented bcrypt password hashing (10 salt rounds)\
+      \ for security\n   • Created LoginController with POST /api/auth/login endpoint\n\
+      \   \n   Files Changed:\n   • Created: src/controllers/AuthController.cs (145\
+      \ lines)\n   • Modified: src/routes/AppRoutes.tsx (added /login route)\n   •\
+      \ Created: tests/auth/LoginComponent.test.tsx (12 tests, 100% pass)\n   \n\
+      \   Acceptance Criteria Met:\n   ✅ Login form accepts email and password input\n\
+      \   ✅ Invalid credentials display error message\n   ✅ Successful login redirects\
+      \ to /dashboard\n   ```\n   \n   Example for Feature:\n   ```\n   Delivered\
+      \ complete authentication system including login, registration, \n   password\
+      \ reset, and session management. The system supports ~10,000 \n   concurrent\
+      \ users with <100ms average authentication time.\n   \n   Business Value:\n\
+      \   Users can now securely access their accounts with industry-standard \n \
+      \  authentication practices while maintaining seamless user experience.\n   \n\
+      \   Technical Architecture:\n   • JWT-based stateless authentication for horizontal\
+      \ scaling\n   • Redis session store for distributed session management\n   •\
+      \ Rate limiting middleware prevents brute force attacks\n   \n   Related User\
+      \ Stories Completed:\n   ✅ UserStory-12345: User login with email/password\n\
+      \   ✅ UserStory-12346: User registration with email verification\n   ```\n\n\
+      ## \U0001F4DD Your Request\n   Generate ADO work summary for copy-paste\n\n\
+      ## \U0001F50D Next Steps\n   \n   1. **Provide Work Item ID** - Story/Feature/Bug\
+      \ identifier\n      Example: \"UserStory-20251126123456\" or \"Feature-20251126123456\"\
+      \n   \n   2. **CORTEX Generates Summary** - Creates natural language summary\
+      \ and opens in VS Code\n   \n   3. **Copy Content** - Select all content from\
+      \ the summary file\n      (It's already formatted for direct paste - no markdown\
+      \ cleanup needed)\n   \n   4. **Paste to ADO** - Open your ADO work item\n\
+      \      • For in-progress work: Add to Comments section\n      • For completed\
+      \ work: Update Description with final summary\n   \n   5. **Update Work Item**\
+      \ - Mark status as Done/Resolved in ADO\n   \n   Say \"generate summary for\
+      \ [work-item-id]\" or provide work item ID now."
+  greeting:
+    name: Greeting Response
+    triggers:
+    - hello
+    - hi
+    - hey
+    - greetings
+    - good morning
+    - good afternoon
+    - good evening
+    - hello cortex
+    - hi cortex
+    - hey cortex
+    response_type: interactive
+    content: '# 🧠 CORTEX Initialization
+
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+
+      ---
+
+
+      ## 🎯 My Understanding Of Your Request
+
+
+      You want to start working with CORTEX.
+
+
+      ## 💬 Response
+
+
+      Hello! I''m CORTEX, your AI assistant enhancement system with long-term memory,
+      context awareness, and strategic planning capabilities.
+
+
+      **Available Operations (choose by letter or describe what you need):**
+
+
+      A. **Planning System 2.0** - Vision API, DoR/DoD validation, file-based plans
+
+
+      B. **TDD Mastery** - RED→GREEN→REFACTOR workflow with auto-debug
+
+
+      C. **Hands-On Tutorial** - Interactive 15-30 min learning program
+
+
+      D. **View Discovery** - Auto-extract element IDs from UI files
+
+
+      E. **Feedback System** - Structured bug/feature reporting
+
+
+      F. **Upgrade System** - Safe CORTEX upgrades with brain preservation
+
+
+      G. **Admin Operations** (detected: CORTEX dev repo) - Deploy, generate docs,
+      system alignment
+
+
+      **I''m operating with:**
+
+      - ✅ 4-tier brain architecture (Tier 0-3 databases)
+
+      - ✅ 10 specialist agents (tactical + strategic)
+
+      - ✅ Dual-hemisphere processing
+
+      - ✅ Brain protection (SKULL rules)
+
+      - ✅ Response template system
+
+
+      ## 📝 Your Request
+
+
+      Initial greeting
+
+
+      ## 🔍 Next Steps
+
+
+      **Quick Selection:**
+
+      - Say the **letter** (e.g., "C" for tutorial, "B" for TDD)
+
+      - Say the **name** (e.g., "start tutorial", "plan feature")
+
+      - **Ask anything** - "How do I...?", "Show me...", "Help with..."
+
+
+      **Popular Choices:**
+
+      - 🆕 **First time?** → Try **C** (tutorial) for hands-on learning
+
+      - 📋 **Need to plan?** → Try **A** (planning) for feature planning
+
+      - 🧪 **Writing tests?** → Try **B** (TDD) for test-driven development
+
+      - ❓ **Not sure?** → Say **"help"** for full command reference
+
+
+      What would you like to accomplish today?'
+  code_review_planning:
+    name: Code Review Planning
+    triggers:
+    - code review
+    - review pr
+    - pr review
+    - review pull request
+    - pull request review
+    - ado pr review
+    - review code
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX Code Review Planning\n**Author:** Asif Hussain |\
+      \ **GitHub:** github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding\
+      \ Of Your Request\n   You want to perform a code review on a Pull Request from\
+      \ Azure DevOps.\n\n## ⚠️ Challenge\n\n   No Challenge - Code review workflow\
+      \ will guide you through PR analysis with dependency-driven context building\
+      \ and tiered analysis depth.\n\n## \U0001F4AC Response\n   \n   Starting Code\
+      \ Review workflow...\n   \n   **What I Need From You:**\n   \n   1. **PR Information**\n\
+      \      • ADO PR link or work item ID\n      • Or paste PR diff/description directly\n\
+      \   \n   2. **Review Depth** (choose one)\n      • **Quick Review** (30s) -\
+      \ Critical issues only (breaking changes, critical smells)\n      • **Standard\
+      \ Review** (2 min) - + Best practices + edge cases\n      • **Deep Review**\
+      \ (5 min) - + TDD patterns + security scan + performance analysis\n   \n   3.\
+      \ **Focus Areas** (optional - select any)\n      • \U0001F512 Security vulnerabilities\n\
+      \      • \U0001F680 Performance optimization\n      • \U0001F9F9 Code maintainability\n\
+      \      • \U0001F9EA Test coverage\n      • \U0001F4D0 Architecture patterns\n\
+      \      • ✅ All areas (comprehensive)\n   \n   **What CORTEX Will Do:**\n   \n\
+      \   **Phase 1: Context Building** (dependency-driven)\n   • Scan changed files\
+      \ in PR\n   • Crawl direct imports/references\n   • Locate related test files\n\
+      \   • Build dependency graph (typically 5-15 files)\n   \n   **Phase 2: Analysis**\
+      \ (based on depth)\n   • Run selected analysis tier\n   • Check code smells\
+      \ and patterns\n   • Validate against best practices\n   • Assess risk score\
+      \ (0-100)\n   \n   **Phase 3: Reporting with Developer Disclaimer**\n   • Executive\
+      \ summary (3 sentences)\n   • Risk score with explanation\n   • Priority matrix:\
+      \ Critical → Warnings → Suggestions\n   • Copy-paste ready fix templates\n \
+      \  • **⚠️ DEVELOPER DISCLAIMER** (see below)\n   \n   **Two-Tier Response:**\n\
+      \   \n   **Tier 1 - Findings Report** (you always get this):\n   • Analysis\
+      \ results with confidence scores\n   • Issue categorization by severity\n  \
+      \ • Manual fix suggestions with code examples\n   • TDD violation analysis (if\
+      \ applicable)\n   \n   **Tier 2 - Auto-Fix Orchestration** (optional, you choose):\n\
+      \   After reviewing the findings, I'll ask:\n   \"Would you like me to:\n  \
+      \ • A) Generate fix plan for ALL issues (Planning System 2.0)\n   • B) Generate\
+      \ fix plan for CRITICAL issues only\n   • C) Exit (you'll fix manually)\"\n\
+      \   \n   If you choose A or B:\n   • I'll create formal plan with DoR/DoD validation\n\
+      \   • Show TDD workflow (RED → GREEN → REFACTOR)\n   • Get your approval before\
+      \ executing\n   • Apply fixes with test-first approach\n   \n   **⚠️ DEVELOPER\
+      \ DISCLAIMER:**\n   \n   ```\n   This code review is AI-generated guidance based\
+      \ on pattern analysis.\n   \n   CORTEX findings may include:\n   • False positives\
+      \ (~15-20% industry standard)\n   • Missed issues (no tool is perfect)\n   •\
+      \ Context-unaware suggestions\n   • Confidence scores (shown per issue)\n  \
+      \ \n   YOU MUST:\n   ✓ Verify all findings before acting on them\n   ✓ Test\
+      \ all suggested fixes in isolation\n   ✓ Consult your team for architectural\
+      \ changes\n   ✓ Use your engineering judgment as final decision\n   ✓ Review\
+      \ TDD violations in context of your workflow\n   \n   CORTEX assists and accelerates,\
+      \ YOU decide and validate.\n   \n   Average confidence: Shown in report (typically\
+      \ 70-90%)\n   High confidence (>85%): Strong recommendation\n   Low confidence\
+      \ (<70%): Investigate carefully\n   ```\n   \n   **Token Budget:** 5-10K tokens\
+      \ (efficient analysis)\n   **Estimated Time:** 30s - 5 min depending on depth\n\
+      \n## \U0001F4DD Your Request\n\n   Perform code review on ADO Pull Request with\
+      \ guided analysis workflow and optional auto-fix orchestration\n\n## \U0001F50D\
+      \ Next Steps\n   \n   Please provide:\n   \n   1. **PR Information** - ADO link,\
+      \ work item ID, or paste PR details\n   2. **Choose Review Depth** - Quick /\
+      \ Standard / Deep\n   3. **Select Focus Areas** (optional) - Security / Performance\
+      \ / Maintainability / Tests / Architecture / All\n   \n   Example:\n   ```\n\
+      \   PR: https://dev.azure.com/org/project/_git/repo/pullrequest/1234\n   Depth:\
+      \ Standard\n   Focus: Security + Performance\n   ```\n   \n   Or simply say:\n\
+      \   - \"Review PR 1234 with standard depth\"\n   - \"Deep review focusing on\
+      \ security\"\n   - \"Quick review of this PR: [paste diff]\"\n   \n   Once I\
+      \ have this information, I'll begin the analysis and show you the findings report\
+      \ first (Tier 1), then offer the auto-fix option (Tier 2)."
+  ux_enhancement_explanation:
+    name: UX Enhancement Workflow Explanation
+    triggers:
+    - enhance
+    - reimagine
+    - redesign
+    - improve ux
+    - modernize
+    - suggest improvements
+    - refactor architecture
+    - optimize codebase
+    response_type: guided
+    content: "# 🎯 Enhancement Request Detected\n\nI understand you want to enhance your codebase. Here's what will happen:\n\n## 📊 Analysis Phase ({estimated_time} minutes)\n\nI'll analyze **{codebase_name}** for:\n\n✓ **Code Quality Metrics**\n  • 11 code smell types (long methods, god classes, duplicated code, etc.)\n  • Maintainability, reliability, and technical debt estimates\n  • Industry benchmark comparisons\n\n✓ **Architecture Components**\n  • Component mapping (authentication, database, APIs, UI, etc.)\n  • Relationship strengths and coupling analysis\n  • Architectural issues and enhancement opportunities\n\n✓ **Performance Metrics**\n  • API endpoint latencies (average, P95, P99)\n  • Bottleneck identification (CPU, I/O, network, database)\n  • Optimization recommendations with impact estimates\n\n✓ **Security Analysis**\n  • OWASP Top 10 vulnerability scan\n  • Compliance coverage (SOC 2, GDPR, PCI-DSS, HIPAA)\n  • Critical issue prioritization\n\n## 📈 Dashboard Generation\n\nResults displayed in **interactive dashboard** with:\n\n• **6 Exploration Tabs** - Executive Summary, Architecture, Quality, Roadmap, Journey, Security\n• **Context-Aware Suggestions** - Smart recommendations based on your findings\n• **\"What If\" Scenarios** - Compare enhancement options side-by-side\n• **Guided Discovery Paths** - Personalized exploration journeys\n\n## 🔒 Privacy & Security\n\n✓ All analysis happens **locally** (nothing uploaded)\n✓ Results stored in **cortex-brain/documents/analysis/**\n✓ Dashboard opens in **your browser** (file:// protocol)\n✓ No external API calls or data transmission\n\n## ⏱️ Estimated Impact\n\n**Codebase:** ~{file_count} files, ~{line_count} lines\n**Analysis Time:** {estimated_time} minutes\n**Dashboard Size:** ~2-3 MB\n**Expected Value:** Actionable insights with priority rankings\n\n## 🎯 Ready to Proceed?\n\nSay **\"yes\"** or **\"proceed\"** to start analysis\nSay **\"no\"** or **\"cancel\"** to skip for now\nSay **\"always enhance\"** to auto-approve future requests\n\n---\n\n**What happens next?**\nI'll show real-time progress updates as each analysis phase completes."
+  fallback:
+    name: Fallback Response
+    triggers:
+    - '*'
+    response_type: structured
+    content: "# \U0001F9E0 CORTEX Fallback\n**Author:** Asif Hussain | **GitHub:**\
+      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
+      \ Your Request\n   [State what you understand they want to achieve]\n\n## Challenge\
+      \ [Validate assumptions, then Accept OR Challenge]\n\n## \U0001F4AC Response\n\
+      \   [Provide helpful response]\n\n## Your Request [Echo user request]\n\n##\
+      \ \U0001F50D Next Steps\n   1. [First recommendation]\n   2. [Second recommendation]\n\
+      \   3. [Third recommendation]"
+  enhance_existing:
+    name: Enhancement Workflow
+    triggers:
+    - enhance
+    - improve
+    - extend
+    - enhance existing
+    - improve existing
+    - extend existing
+    - modify existing
+    - update existing
+    - optimize
+    - refactor
+    - upgrade
+    - enhance the
+    - improve the
+    - extend the
+    - enhance_existing
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX Enhance Existing\n**Author:** Asif Hussain | **GitHub:**\
+      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
+      \ Your Request\n   You want to enhance/improve/extend an existing feature in\
+      \ your application.\n\n## Challenge No Challenge - Enhancement requires understanding\
+      \ current implementation before planning changes. I'll discover existing code\
+      \ first.\n\n## \U0001F4AC Response\n   Starting enhancement workflow:\n   ✅\
+      \ Phase 1: Discovery (crawl existing UI, API, database)\n   ⏳ Phase 2: Context\
+      \ Building (understand current implementation)\n   ⏳ Phase 3: Enhancement Planning\
+      \ (plan improvements)\n   ⏳ Phase 4: Implementation (apply changes with tests)\n\
+      \n## Your Request Enhance existing application feature\n\n## \U0001F50D Next\
+      \ Steps\n   ☑ Phase 1: Discovery & Analysis\n      • Crawl codebase for [feature]\
+      \ patterns\n      • Extract UI components, API endpoints, database schema\n\
+      \      • Identify dependencies and relationships\n   \n   ☐ Phase 2: Context\
+      \ Building\n      • Analyze current architecture\n      • Identify enhancement\
+      \ opportunities\n      • Review existing tests and coverage\n   \n   ☐ Phase\
+      \ 3: Enhancement Planning & Implementation\n      • Define improvement scope\n\
+      \      • Create DoR/DoD/Acceptance Criteria\n      • Approve plan and begin\
+      \ TDD implementation\n   \n   Ready to crawl existing implementation?"
+  brain_export_guide:
+    name: Brain Implants - Export Guide
+    triggers:
+    - export brain
+    - brain export
+    - share brain
+    - export knowledge
+    - export patterns
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX Brain Export Guide\n**Author:** Asif Hussain | **GitHub:**\
+      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
+      \ Your Request\n   You want to export CORTEX brain patterns to share knowledge\
+      \ with other developers or backup learned patterns.\n\n## ⚠️ Challenge No Challenge\
+      \ - Brain export is CORTEX's knowledge sharing mechanism. It extracts learned\
+      \ patterns from Tier 2 (Knowledge Graph) into a portable YAML format that other\
+      \ developers can import into their CORTEX instances.\n\n## \U0001F4AC Response\n\
+      \   Brain export creates a timestamped YAML file containing:\n   • Learned patterns\
+      \ (workflows, tech stacks, problem solutions)\n   • Pattern confidence scores\
+      \ (0.0-1.0)\n   • Metadata (source machine, CORTEX version, namespaces)\n  \
+      \ • Integrity signature for validation\n   \n   **What Gets Exported:**\n  \
+      \ - Workflow templates from successful implementations\n   - Technology stack\
+      \ patterns\n   - Problem-solution pairs\n   - Architecture decisions\n   - Integration\
+      \ patterns\n   \n   **What Stays Local:**\n   - Conversation history (Tier 1\
+      \ - private)\n   - Machine-specific configurations\n   - Database connections\
+      \ and credentials\n\n## \U0001F4DD Your Request Export CORTEX brain patterns\
+      \ for sharing\n\n## \U0001F50D Next Steps - Export Workflow\n   \n   **Step\
+      \ 1: Choose Export Scope**\n   • Workspace scope (current project only): `export\
+      \ brain --scope=workspace`\n   • All patterns (include CORTEX patterns): `export\
+      \ brain --scope=all`\n   • Specific namespace: `export brain --namespace=workspace.myproject`\n\
+      \   \n   **Step 2: Run Export Command**\n   ```bash\n   python3 scripts/brain_transfer_cli.py\
+      \ export brain --scope=all\n   ```\n   \n   **Step 3: Review Export File**\n\
+      \   • Location: `cortex-brain/exports/brain-export-YYYYMMDD_HHMMSS.yaml`\n \
+      \  • Size: Typically 5-50 KB depending on patterns learned\n   • Format: Human-readable\
+      \ YAML with comments\n   \n   **Step 4: Share with Team (Optional)**\n   • Git\
+      \ commit: Export auto-commits to local git\n   • Git push: `git push origin\
+      \ CORTEX-3.0` (share via repository)\n   • Direct share: Copy YAML file to shared\
+      \ drive/email/Slack\n   \n   **Step 5: Documentation**\n   • Add export notes:\
+      \ What patterns are included, use cases, version compatibility\n   • Create\
+      \ README: `cortex-brain/exports/README.md` with import instructions\n   \n \
+      \  **Troubleshooting:**\n   \n   **Empty Export (0 patterns):**\n   • Check\
+      \ scope filter matches your pattern namespaces\n   • Verify patterns exist:\
+      \ `sqlite3 cortex-brain/tier2/knowledge-graph.db \"SELECT COUNT(*) FROM patterns;\"\
+      `\n   • Try --scope=all to see if namespace filter is too restrictive\n   \n\
+      \   **Git Push Fails:**\n   • Run `git pull origin CORTEX-3.0` first if remote\
+      \ has diverged\n   • Resolve merge conflicts if any\n   • Retry push after successful\
+      \ merge\n   \n   **Permission Errors:**\n   • Ensure write access to cortex-brain/exports/\n\
+      \   • Windows: Check folder properties → Security tab\n   • Linux/Mac: `chmod\
+      \ -R 755 cortex-brain/exports/`\n   \n   **Export File Too Large:**\n   • Use\
+      \ namespace filtering to export specific patterns only\n   • Consider splitting\
+      \ large exports by workspace\n   • Typical export size: 5-50 KB (>100 KB indicates\
+      \ many patterns)\n   \n   **Example Export Commands:**\n   ```bash\n   # Export\
+      \ all patterns (recommended for team sharing)\n   python3 scripts/brain_transfer_cli.py\
+      \ export brain --scope=all\n   \n   # Export only current workspace patterns\n\
+      \   python3 scripts/brain_transfer_cli.py export brain --scope=workspace\n \
+      \  \n   # Export specific namespace (e.g., authentication patterns)\n   python3\
+      \ scripts/brain_transfer_cli.py export brain --namespace=workspace.myapp.auth\n\
+      \   ```\n   \n   Ready to export? Choose a scope and I'll execute the export\
+      \ for you."
+  brain_import_guide:
+    name: Brain Implants - Import Guide
+    triggers:
+    - import brain
+    - brain import
+    - load brain
+    - import knowledge
+    - import patterns
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX Brain Import Guide\n**Author:** Asif Hussain | **GitHub:**\
+      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
+      \ Your Request\n   You want to import shared brain patterns from another developer's\
+      \ export to benefit from their learned knowledge.\n\n## ⚠️ Challenge No Challenge\
+      \ - Brain import is how CORTEX enables knowledge transfer between team members.\
+      \ It intelligently merges imported patterns with your existing patterns using\
+      \ confidence-weighted strategies.\n\n## \U0001F4AC Response\n   Brain import\
+      \ reads an exported YAML file and:\n   • Validates integrity signature\n   •\
+      \ Checks version compatibility\n   • Merges patterns using intelligent conflict\
+      \ resolution\n   • Preserves your local patterns when appropriate\n   • Updates\
+      \ confidence scores based on merge strategy\n   \n   **Merge Strategies:**\n\
+      \   \n   1. **Auto (Recommended)** - Intelligent merge:\n      • Keeps higher\
+      \ confidence pattern (local vs imported)\n      • Averages confidence if similar\n\
+      \      • Best for team knowledge sharing\n   \n   2. **Replace** - Import wins:\n\
+      \      • Overwrites local patterns with imported versions\n      • Use when\
+      \ importing from senior developer/expert\n      • Creates backup of replaced\
+      \ patterns\n   \n   3. **Keep Local** - Local wins:\n      • Keeps your patterns,\
+      \ skips conflicts\n      • Only imports new patterns not in your brain\n   \
+      \   • Use when testing untrusted exports\n\n## \U0001F4DD Your Request Import\
+      \ shared brain patterns from export file\n\n## \U0001F50D Next Steps - Import\
+      \ Workflow\n   \n   **Step 1: Obtain Export File**\n   • Git pull: `git pull\
+      \ origin CORTEX-3.0` (if shared via repo)\n   • Direct copy: Place YAML file\
+      \ in `cortex-brain/exports/`\n   • Verify file: Check it's named `brain-export-*.yaml`\n\
+      \   \n   **Step 2: Preview Import (Dry Run)**\n   ```bash\n   python3 scripts/brain_transfer_cli.py\
+      \ import brain \\\n     --file=cortex-brain/exports/brain-export-20251118_040727.yaml\
+      \ \\\n     --dry-run\n   ```\n   \n   **Dry Run Shows:**\n   • Number of patterns\
+      \ in export\n   • Conflicts with your existing patterns\n   • New patterns you'll\
+      \ gain\n   • Recommended merge strategy\n   • No changes made to your brain\n\
+      \   \n   **Step 3: Choose Merge Strategy**\n   \n   Based on dry run results:\n\
+      \   • **Trust the source?** Use `replace` strategy\n   • **Collaborative team?**\
+      \ Use `auto` strategy (default)\n   • **Testing/cautious?** Use `keep_local`\
+      \ strategy\n   \n   **Step 4: Execute Import**\n   \n   ```bash\n   # Auto merge\
+      \ (recommended for teams)\n   python3 scripts/brain_transfer_cli.py import brain\
+      \ \\\n     --file=cortex-brain/exports/brain-export-20251118_040727.yaml \\\n\
+      \     --strategy=auto\n   \n   # Replace (import wins)\n   python3 scripts/brain_transfer_cli.py\
+      \ import brain \\\n     --file=cortex-brain/exports/brain-export-20251118_040727.yaml\
+      \ \\\n     --strategy=replace\n   \n   # Keep local (your patterns win)\n  \
+      \ python3 scripts/brain_transfer_cli.py import brain \\\n     --file=cortex-brain/exports/brain-export-20251118_040727.yaml\
+      \ \\\n     --strategy=keep_local\n   ```\n   \n   **Step 5: Verify Import**\n\
+      \   \n   Check imported patterns in database:\n   ```bash\n   sqlite3 cortex-brain/tier2-knowledge-graph.db\
+      \ \\\n     \"SELECT pattern_id, title, confidence, source FROM patterns ORDER\
+      \ BY created_at DESC LIMIT 10;\"\n   ```\n   \n   **Step 6: Test Imported Knowledge**\n\
+      \   \n   • Ask CORTEX about imported topics\n   • Verify pattern suggestions\
+      \ include imported knowledge\n   • Check confidence scores are reasonable\n\
+      \   \n   **Troubleshooting:**\n   \n   • **Version mismatch**: Export from newer\
+      \ CORTEX version may be incompatible\n   • **Signature invalid**: File may be\
+      \ corrupted, re-download from source\n   • **No patterns imported**: Check merge\
+      \ strategy (keep_local skips all conflicts)\n   • **Confidence scores too low**:\
+      \ Imported patterns may need manual confidence boost\n   \n   **Best Practices:**\n\
+      \   \n   1. **Always dry-run first** - Preview before making changes\n   2.\
+      \ **Backup your brain** - Export your patterns before importing\n   3. **Use\
+      \ auto strategy** - Best for team collaboration\n   4. **Review conflicts**\
+      \ - Understand what gets replaced\n   5. **Test after import** - Verify CORTEX\
+      \ still works as expected\n   \n   **Example Import Commands:**\n   \n   ```bash\n\
+      \   # Preview import (no changes)\n   python3 scripts/brain_transfer_cli.py\
+      \ import brain \\\n     --file=cortex-brain/exports/brain-export-20251118_040727.yaml\
+      \ \\\n     --dry-run\n   \n   # Import with auto-merge (recommended)\n   python3\
+      \ scripts/brain_transfer_cli.py import brain \\\n     --file=cortex-brain/exports/brain-export-20251118_040727.yaml\
+      \ \\\n     --strategy=auto\n   \n   # Import from senior developer (replace\
+      \ local)\n   python3 scripts/brain_transfer_cli.py import brain \\\n     --file=cortex-brain/exports/brain-export-20251118_040727.yaml\
+      \ \\\n     --strategy=replace\n   ```\n   \n   Ready to import? I can run the\
+      \ dry-run preview first to show you what will change."
+  generate_documentation_intro:
+    name: Generate Documentation - Introduction
+    triggers:
+    - generate_documentation_intro
+    - doc_generation_intro
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX Generate Documentation Intro\n**Author:** Asif Hussain\
+      \ | **GitHub:** github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding\
+      \ Of Your Request\n   You want to generate comprehensive documentation for your\
+      \ CORTEX workspace.\\n\\n## Challenge No Challenge \\n   Documentation generation\
+      \ provides comprehensive project overview. This is a read-only operation that\
+      \ analyzes your codebase.\n\n## \U0001F4AC Response\n   I'll generate the following\
+      \ documentation using the Enterprise Documentation Generator:\n\n   \U0001F4DA\
+      \ **Documents to be Generated:**\n   \n   1. **Mermaid Diagrams**\n      • Architecture\
+      \ diagrams from YAML definitions\n      • Workflow visualizations\n      • Component\
+      \ relationship diagrams\n      • System flow diagrams\n   \n   2. **Executive\
+      \ Summary**\n      • High-level project overview\n      • Mission and capabilities\
+      \ summary\n      • Implementation status metrics\n      • Recent milestones\
+      \ and achievements\n   \n   3. **Feature Documentation**\n      • Complete feature\
+      \ list extraction\n      • Module and operation references\n      • Capability\
+      \ documentation\n   \n   4. **MkDocs Site**\n      • Static documentation website\n\
+      \      • Navigation structure\n      • Searchable content\n      • Cross-referenced\
+      \ pages\n   \n   5. **GitHub Pages Deployment** (Optional)\n      • Build and\
+      \ validate site\n      • Deploy to gh-pages branch\n      • Make documentation\
+      \ publicly accessible\n\n   ⏱️ **Estimated Time:** 2-5 minutes depending on\
+      \ workspace size\n   \n   \U0001F4BE **Output Location:** `docs/` directory\
+      \ in your workspace\n\n## Your Request Generate comprehensive documentation\n\
+      \n## \U0001F50D Next Steps\n   1. Review generated documentation in docs/ directory\n\
+      \   2. Verify all modules documented correctly\n   3. Check cross-references\
+      \ and navigation\n   4. Optionally publish to GitHub Pages"
+  feedback_received:
+    name: Feedback Received
+    triggers:
+    - feedback
+    - report issue
+    - report bug
+    - report problem
+    - suggest improvement
+    - cortex feedback
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX Feedback Received\n**Author:** Asif Hussain | **GitHub:**\
+      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
+      \ Your Request\n   You want to provide feedback about CORTEX (bug report, feature\
+      \ request, or improvement suggestion).\n\n## Challenge No Challenge - Feedback\
+      \ collection helps improve CORTEX. I'll gather context automatically and create\
+      \ a structured report.\n\n## \U0001F4AC Response\n   Starting feedback collection\
+      \ process...\n   \n   **Feedback Types:**\n   • Bug Report - Something isn't\
+      \ working correctly\n   • Feature Request - New capability you'd like to see\n\
+      \   • Improvement - Enhancement to existing features\n   • Question - Unclear\
+      \ documentation or behavior\n   \n   **What I'll Collect:**\n   • Your description\
+      \ of the issue/suggestion\n   • Automatic context (conversation, files, workflow)\n\
+      \   • Environment information\n   • Steps to reproduce (for bugs)\n   \n   All\
+      \ feedback is saved locally and helps prioritize development.\n\n## Your Request\
+      \ Provide feedback about CORTEX\n\n## \U0001F50D Next Steps\n   1. **Describe\
+      \ the feedback** - What happened or what you'd like to see\n   2. **Provide\
+      \ details** - Steps to reproduce (bugs) or use case (features)\n   3. **Review\
+      \ report** - I'll generate a structured feedback report\n   4. **Report saved**\
+      \ - Stored in cortex-brain/documents/reports/ for review\n   \n   Please describe\
+      \ your feedback and I'll create the report."
+  architect_analysis:
+    name: Architect Analysis
+    triggers:
+    - analyze architecture
+    - architecture analysis
+    - understand architecture
+    - analyze shell
+    - analyze routing
+    - architect
+    - crawl shell
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX Architect Analysis\n**Author:** Asif Hussain | **GitHub:**\
+      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
+      \ Your Request\n   You want to analyze the architectural structure of your codebase\
+      \ (shell, routing, components, interactions).\n\n## Challenge No Challenge -\
+      \ Architectural analysis helps understand system design before making changes.\
+      \ Results are automatically saved to Tier 2 Knowledge Graph for cross-session\
+      \ memory.\n\n## \U0001F4AC Response\n   Starting architectural analysis...\n\
+      \   \n   **What I'll Analyze:**\n   • Shell structure (layout, navigation, content\
+      \ areas)\n   • Routing system (routes, guards, lazy loading)\n   • View injection\
+      \ patterns (modals, portals, teleports)\n   • Component interactions (data flow,\
+      \ event buses)\n   • Feature directory structure\n   \n   **Auto-Brain Saving:**\n\
+      \   • Namespace auto-detected from workspace name\n   • Structured analysis\
+      \ saved to Tier 2 Knowledge Graph\n   • Cross-session memory for planning/TDD\
+      \ workflows\n   • Use `show context [namespace]_architecture` to view later\n\
+      \   \n   Analysis will be thorough and results persist across sessions.\n\n\
+      ## Your Request Analyze architectural structure\n\n## \U0001F50D Next Steps\n\
+      \   1. **Scanning workspace** - Looking for shell files, routing configs\n \
+      \  2. **Mapping structure** - Building component tree and interaction graph\n\
+      \   3. **Documenting patterns** - Identifying design patterns and conventions\n\
+      \   4. **Saving to brain** - Persisting analysis to Knowledge Graph\n   \n \
+      \  Starting analysis now..."
+  brain_ingestion:
+    name: Brain Ingestion
+    triggers:
+    - ingest to brain
+    - save to brain
+    - brain ingest
+    - add to knowledge graph
+    - learn this
+    - remember this
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX Brain Ingestion\n**Author:** Asif Hussain | **GitHub:**\
+      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
+      \ Your Request\n   You want to manually ingest content into CORTEX's Tier 2\
+      \ Knowledge Graph for persistent cross-session memory.\n\n## Challenge No Challenge\
+      \ - Manual brain ingestion allows you to save important facts, patterns, or\
+      \ decisions that CORTEX should remember across all sessions.\n\n## \U0001F4AC\
+      \ Response\n   Starting brain ingestion process...\n   \n   **What Can Be Ingested:**\n\
+      \   • Key architectural decisions\n   • Important business rules\n   • Custom\
+      \ conventions/patterns\n   • Problem-solution pairs\n   • Project-specific context\n\
+      \   • Technical constraints\n   \n   **Storage Tiers:**\n   • Tier 2 Knowledge\
+      \ Graph - Long-term structured memory\n   • Searchable by namespace\n   • Cross-session\
+      \ persistence\n   • Integrates with planning/TDD workflows\n   \n   All ingested\
+      \ content is indexed for intelligent retrieval.\n\n## Your Request Ingest content\
+      \ to brain\n\n## \U0001F50D Next Steps\n   1. **Provide content** - Describe\
+      \ what you want CORTEX to remember\n   2. **Specify namespace** - Optional category\
+      \ (e.g., 'architecture', 'business_rules')\n   3. **Validate ingestion** - I'll\
+      \ structure and save to Knowledge Graph\n   4. **Confirmation** - You'll see\
+      \ saved namespace for future retrieval\n   \n   What would you like me to remember?"
+  brain_ingestion_adapter:
+    name: Brain Ingestion Adapter
+    triggers:
+    - brain ingestion adapter
+    - start brain ingestion adapter
+    - run ingestion adapter
+    - adapter brain ingestion
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX Brain Ingestion Adapter\n**Author:** Asif Hussain\
+      \ | **GitHub:** github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding\
+      \ Of Your Request\n   You're working with the BrainIngestionAdapterAgent - the\
+      \ adapter pattern implementation that bridges interface differences between\
+      \ abstract and concrete brain ingestion implementations.\n\n## Challenge No\
+      \ Challenge - The Brain Ingestion Adapter is an architectural component that\
+      \ enables interface compatibility. It's used internally by Feature Completion\
+      \ Orchestrator but rarely invoked directly by users.\n\n## \U0001F4AC Response\n\
+      \   **BrainIngestionAdapterAgent Overview:**\n   \n   **Purpose:**\n   • Adapter\
+      \ pattern implementation (Gang of Four design pattern)\n   • Bridges abstract\
+      \ BrainIngestionAgent interface with concrete BrainIngestionAgentImpl\n   •\
+      \ Pure delegation - no business logic or feature processing\n   • Zero-overhead\
+      \ interface compatibility layer\n   \n   **Architecture:**\n   ```\n   Abstract\
+      \ Interface (BrainIngestionAgent)\n       ↓ implements\n   Adapter (BrainIngestionAdapterAgent)\n\
+      \       ↓ delegates to\n   Concrete Implementation (BrainIngestionAgentImpl)\n\
+      \   ```\n   \n   **Key Characteristics:**\n   • Stateless component (no internal\
+      \ state)\n   • Async-compatible wrapper (maintains async contract)\n   • Used\
+      \ by Feature Completion Orchestrator for sub-agent initialization\n   • Memory\
+      \ overhead: ~256 bytes per instance (negligible)\n   • CPU overhead: ~0.01ms\
+      \ per call (pure delegation)\n   \n   **Usage Context:**\n   - Initialized by\
+      \ ConcreteFeatureCompletionOrchestrator\n   - Delegates all feature ingestion\
+      \ calls to BrainIngestionAgentImpl\n   - Enables loose coupling between orchestrator\
+      \ and concrete implementation\n\n## Your Request Work with Brain Ingestion Adapter\n\
+      \n## \U0001F50D Next Steps\n   \n   **Option 1: View Documentation** (Recommended\
+      \ for understanding)\n   - Read: `.github/prompts/modules/brain-ingestion-adapter-agent-guide.md`\n\
+      \   - Covers: Architecture, implementation, usage, testing, patterns\n   - 468\
+      \ lines of comprehensive documentation\n   \n   **Option 2: View Implementation**\n\
+      \   - File: `src/agents/feature_completion_orchestrator_concrete.py`\n   - Class:\
+      \ `BrainIngestionAdapterAgent` (lines 39-46)\n   - Simple adapter: __init__()\
+      \ and ingest_feature() methods only\n   \n   **Option 3: Run Tests**\n   - Tests:\
+      \ `tests/agents/test_brain_ingestion_agent.py`\n   - 24 comprehensive tests\
+      \ covering delegation and integration\n   - Run: `pytest tests/agents/test_brain_ingestion_agent.py\
+      \ -v`\n   \n   **Option 4: Use In Orchestrator**\n   - Example: Feature Completion\
+      \ Orchestrator initialization\n   - Adapter created automatically during sub-agent\
+      \ setup\n   - No direct user interaction needed\n   \n   Which option interests\
+      \ you?"
+  cleanup_validation_failed:
+    name: Cleanup Validation Failed
+    triggers:
+    - cleanup_validation_failed
+    - validation_failed
+    - cleanup_blocked
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX Cleanup Validation Failed\n**Author:** Asif Hussain\
+      \ | **GitHub:** github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding\
+      \ Of Your Request\n   You attempted to run cleanup, but pre-execution validation\
+      \ detected issues that would break CORTEX functionality.\n\n## ⚠️ Challenge\n\
+      \n   **Challenge:** Proposed cleanup would delete critical files or break import\
+      \ dependencies\n\n## \U0001F4AC Response\n   ❌ **Cleanup Blocked for Safety**\n\
+      \   \n   Pre-execution validation detected {error_count} critical issues:\n\
+      \   \n   {error_details}\n   \n   **Why Blocked:**\n   These issues would cause\
+      \ CORTEX to become non-functional after cleanup. The validation system prevented\
+      \ execution to protect your system.\n   \n   **Validation Report:** {validation_report_path}\n\
+      \   \n   **What Validation Checks:**\n   1. **Import Dependencies** - Ensures\
+      \ no production imports broken\n   2. **Critical Files** - Protects tier databases,\
+      \ configs, core modules\n   3. **Test Coverage** - Validates test file integrity\n\
+      \   4. **Documentation** - Checks critical docs not removed\n   \n   All checks\
+      \ must pass before cleanup executes.\n\n## Your Request Run cleanup operation\n\
+      \n## \U0001F50D Next Steps\n   1. **Review validation report** - See {validation_report_path}\
+      \ for details\n   2. **Fix critical issues** - Address each blocker (remove\
+      \ from cleanup manifest)\n   3. **Re-run cleanup** - Validation will re-check\
+      \ automatically\n   4. **Alternative:** Use `cleanup --skip-validation` (NOT\
+      \ RECOMMENDED)\n   \n   Would you like to review the validation report?"
+  holistic_cleanup:
+    name: Holistic Cleanup
+    expected_orchestrator: HolisticCleanupOrchestrator
+    triggers:
+    - cleanup
+    - clean up
+    - cleanup cortex
+    - clean cortex
+    - holistic cleanup
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX Holistic Cleanup\n**Author:** Asif Hussain | **GitHub:**\
+      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
+      \ Your Request\n   You want to perform a comprehensive repository cleanup with\
+      \ recursive scanning, production validation, and detailed reporting.\n\n## ⚠️\
+      \ Challenge\n\n   No Challenge - Holistic cleanup performs safe, validated cleanup\
+      \ with backup and rollback capabilities.\n\n## \U0001F4AC Response\n   Starting\
+      \ holistic cleanup workflow...\n   \n   **What Holistic Cleanup Does:**\n \
+      \  1. **Recursive Scan** - Scans entire repository structure\n   2. **File Categorization**\
+      \ - Identifies production/non-production/redundant files\n   3. **Production\
+      \ Validation** - Detects non-production naming patterns\n   4. **Manifest Generation**\
+      \ - Creates detailed JSON + Markdown report\n   5. **Safe Execution** - Dry-run\
+      \ preview, user approval, git backup, rollback\n   \n   **Non-Production Patterns\
+      \ Detected:**\n   • temp_, _v1, _v2, -YYYYMMDD suffixes\n   • clean/modified/updated\
+      \ prefixes\n   • backup/old/copy in paths\n   • SUMMARY/REPORT caps files\n\
+      \   \n   **Protected Paths:**\n   • src/, tests/, cortex-brain/tier*\n   •\
+      \ .git/, package.json, requirements.txt\n   • Configuration files\n   \n   **Expected\
+      \ Results:**\n   • Space savings: 50-200 MB typical\n   • File reduction: 20-40%\
+      \ non-production files removed\n   • Production naming: Suggestions for all\
+      \ violations\n\n## Your Request Run holistic repository cleanup\n\n## \U0001F50D\
+      \ Next Steps\n   1. **Scanning** - Recursive directory scan in progress\n  \
+      \ 2. **Analysis** - Categorizing files and detecting patterns\n   3. **Manifest**\
+      \ - Generating detailed report\n   4. **Review** - You'll approve before any\
+      \ deletions\n   5. **Execute** - Safe cleanup with git backup\n   \n   Cleanup\
+      \ process starting now..."
+  setup_epm:
+    name: Setup Entry Point Module
+    expected_orchestrator: SetupEPMOrchestrator
+    triggers:
+    - setup copilot instructions
+    - setup instructions
+    - generate copilot instructions
+    - create copilot instructions
+    - setup epm
+    - copilot instructions
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX Setup Entry Point Module\n**Author:** Asif Hussain\
+      \ | **GitHub:** github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding\
+      \ Of Your Request\n   You want to generate .github/copilot-instructions.md\
+      \ for this repository with auto-detected project structure.\n\n## ⚠️ Challenge\n\
+      \n   No Challenge - Fast detection via file system scan (<5 seconds), brain-assisted\
+      \ learning improves accuracy over time.\n\n## \U0001F4AC Response\n   Starting\
+      \ Setup EPM workflow...\n   \n   **What Gets Generated:**\n   • Entry point\
+      \ guidance (how to use CORTEX)\n   • Architecture overview (detected language/framework)\n\
+      \   • Build/test commands (from package.json/Makefile)\n   • Project conventions\
+      \ (learned over time)\n   • Critical files reference\n   • Brain status indicator\n\
+      \   \n   **Detection Capabilities:**\n   • 7 languages (Python, C#, TypeScript,\
+      \ JavaScript, Go, Rust, Java)\n   • 6 frameworks (React, Angular, Vue, Blazor,\
+      \ ASP.NET, Express)\n   • 6 build systems (npm, yarn, pnpm, dotnet, cargo,\
+      \ maven)\n   • 4 test frameworks (pytest, jest, xunit, mocha)\n   \n   **GitIgnore\
+      \ Configuration:**\n   ✅ Automatically adds CORTEX/ to .gitignore\n   ✅ Validates\
+      \ exclusion works with git check-ignore\n   ✅ Commits changes with descriptive\
+      \ message\n   ✅ Confirms no CORTEX files staged\n   \n   **Brain Learning:**\n\
+      \   • Observes coding patterns during normal usage\n   • Stores in Tier 3 (workspace-specific)\n\
+      \   • Auto-updates weekly or on-demand\n   • 65% initial → 90% accuracy after\
+      \ learning\n\n## Your Request Generate copilot instructions for this repository\n\
+      \n## \U0001F50D Next Steps\n   1. **Detecting structure** - File system scan\
+      \ in progress\n   2. **Generating template** - Building instructions from detection\n\
+      \   3. **Configuring gitignore** - Adding CORTEX/ exclusion\n   4. **Writing\
+      \ file** - Creating .github/copilot-instructions.md\n   5. **Confirmation**\
+      \ - Success with 5 validation checkmarks\n   \n   Setup process starting now..."
+  ado_work_item:
+    name: ADO Work Item Planning
+    expected_orchestrator: ADOWorkItemOrchestrator
+    triggers:
+    - plan ado
+    - create work item
+    - ado work item
+    - create story
+    - create feature
+    - create bug
+    - ado planning
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX ADO Work Item Planning\n**Author:** Asif Hussain\
+      \ | **GitHub:** github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding\
+      \ Of Your Request\n   You want to create an Azure DevOps work item with structured\
+      \ planning and ADO-formatted output.\n\n## ⚠️ Challenge\n\n   No Challenge -\
+      \ Unified planning core provides ADO-specific templates and formatting.\n\n\
+      ## \U0001F4AC Response\n   Starting ADO work item planning...\n   \n   **Available\
+      \ Work Item Types:**\n   • User Story (default)\n   • Feature\n   • Bug\n  \
+      \ • Task\n   • Epic\n   \n   **Form Template Includes:**\n   • Title and description\n\
+      \   • Priority (1=High, 2=Medium, 3=Low, 4=Very Low)\n   • Assigned to (optional)\n\
+      \   • Iteration and area path\n   • Tags\n   • Acceptance criteria (checklist)\n\
+      \   • Related work items\n   \n   **Output Formats:**\n   • ADO-formatted markdown\
+      \ (copy-paste ready)\n   • Planning file (.md) in cortex-brain/documents/planning/ado/\n\
+      \   • DoR/DoD validation\n   • OWASP security review (if applicable)\n   \n\
+      \   **File Organization:**\n   ```\n   cortex-brain/documents/planning/ado/\n\
+      \   ├── active/\n   ├── completed/\n   └── blocked/\n   ```\n\n## Your Request\
+      \ Create ADO work item\n\n## \U0001F50D Next Steps\n   1. **Choose work item\
+      \ type** - Story, Feature, Bug, Task, or Epic?\n   2. **Fill form template**\
+      \ - I'll provide structured template\n   3. **Generate plan** - DoR validation\
+      \ + ADO formatting\n   4. **Output files** - Planning .md + ADO copy-paste\
+      \ summary\n   \n   Which work item type would you like to create?"
+  demo_system:
+    name: Demo System
+    expected_orchestrator: DemoOrchestrator
+    triggers:
+    - demo
+    - cortex demo
+    - show demo
+    - run demo
+    - demo cortex
+    - live demo
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX Demo System\n**Author:** Asif Hussain | **GitHub:**\
+      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
+      \ Your Request\n   You want to see a live demonstration of CORTEX capabilities\
+      \ with interactive examples.\n\n## ⚠️ Challenge\n\n   No Challenge - Demo system\
+      \ provides guided tour of planning, TDD, testing, and brain features.\n\n##\
+      \ \U0001F4AC Response\n   Starting CORTEX demo system...\n   \n   **Demo Modules\
+      \ Available:**\n   \n   **1. Planning Demo** (5 min)\n   • Feature planning\
+      \ workflow\n   • DoR/DoD validation\n   • Incremental planning with checkpoints\n\
+      \   • Vision API (screenshot → requirements)\n   \n   **2. TDD Demo** (7 min)\n\
+      \   • RED→GREEN→REFACTOR automation\n   • Auto-debug on test failures\n   •\
+      \ Performance-based refactoring\n   • Test location isolation\n   \n   **3.\
+      \ Brain Demo** (5 min)\n   • Conversation capture\n   • Context injection\n\
+      \   • Pattern learning\n   • Knowledge graph\n   \n   **4. Integration Demo**\
+      \ (8 min)\n   • View discovery\n   • Code review\n   • ADO work items\n   •\
+      \ Complete workflow\n   \n   **5. Full Tour** (25 min)\n   • All modules in\
+      \ sequence\n   • Hands-on exercises\n   • Q&A after each module\n\n## Your\
+      \ Request Show CORTEX demo\n\n## \U0001F50D Next Steps\n   Choose a demo module:\n\
+      \   1. Planning Demo\n   2. TDD Demo\n   3. Brain Demo\n   4. Integration Demo\n\
+      \   5. Full Tour (recommended)\n   \n   Say the number or module name to start."
+  unified_entry_point:
+    name: Unified Entry Point
+    expected_orchestrator: UnifiedEntryPointOrchestrator
+    triggers:
+    - unified entry
+    - entry point
+    - cortex entry
+    - unified interface
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX Unified Entry Point\n**Author:** Asif Hussain |\
+      \ **GitHub:** github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding\
+      \ Of Your Request\n   You're asking about the unified entry point system that\
+      \ routes all CORTEX operations.\n\n## ⚠️ Challenge\n\n   No Challenge - Unified\
+      \ entry point provides single interface for all CORTEX capabilities.\n\n## \U0001F4AC\
+      \ Response\n   **Unified Entry Point Overview:**\n   \n   **Purpose:**\n   •\
+      \ Single command interface for ALL CORTEX operations\n   • Automatic intent\
+      \ detection and routing\n   • Consistent response format\n   • Integrated with\
+      \ response templates\n   \n   **Routing Capabilities:**\n   • Planning operations\
+      \ (feature, ADO, vision)\n   • TDD workflows (start, test, refactor)\n   • Brain\
+      \ operations (capture, import, context)\n   • Admin operations (align, cleanup,\
+      \ optimize)\n   • Discovery operations (views, demo, tutorial)\n   \n   **How\
+      \ It Works:**\n   1. You say what you want in natural language\n   2. Intent\
+      \ detection identifies operation\n   3. Routes to specialist orchestrator\n\
+      \   4. Returns formatted response\n   5. Tracks context for next interaction\n\
+      \   \n   **Integration:**\n   • Response templates for 30+ operations\n   •\
+      \ Brain memory for context\n   • Tier system for data persistence\n   • Agent\
+      \ framework for execution\n\n## Your Request Information about unified entry\
+      \ point\n\n## \U0001F50D Next Steps\n   **Available Options:**\n   \n   1.\
+      \ **View Documentation**\n      • See routing logic and intent detection\n \
+      \     • File: src/orchestrators/unified_entry_point_orchestrator.py\n   \n \
+      \  2. **See Available Commands**\n      • Type 'help' for command reference\n\
+      \      • 30+ operations with triggers\n   \n   3. **Try Natural Language**\n\
+      \      • Just describe what you want\n      • No commands needed\n      • Example:\
+      \ \"plan a login feature\"\n   \n   4. **Learn System**\n      • Type 'tutorial'\
+      \ for hands-on learning\n      • 15-30 minute interactive program\n   \n   What\
+      \ would you like to explore?"
+  brain_export:
+      \   - **Test files**: Keep test files or update test discovery configuration\n\
+      \   - **Entry points**: Never delete main.py, cortex_entry.py, or their dependencies"
+  admin_help:
+    name: Admin Help
+    triggers:
+    - admin help
+    - help admin
+    - /admin help
+    - cortex admin help
+    - admin docs
+    - docs admin
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX Admin Operations Help\n**Author:** Asif Hussain\
+      \ | **GitHub:** github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding\
+      \ Of Your Request\n   You want administrative-level help for CORTEX development\
+      \ and deployment operations.\n\n## Challenge No Challenge - Admin operations\
+      \ manage CORTEX itself - deployment, documentation, and internal tools. These\
+      \ are only available in CORTEX development repository.\n\n## \U0001F4AC Response\n\
+      \   **CORTEX Admin Operations** (Development Repository Only)\n\n   **\U0001F680\
+      \ Deployment Operations**\n   | Trigger | Purpose | Notes |\n   |---------|---------|-----|\n\
+      \   | deploy cortex | Build clean production package | Creates downloadable\
+      \ CORTEX release |\n   | deploy production | Same as deploy cortex | Publishes\
+      \ to cortex-publish branch |\n   | create production build | Preview/dry-run\
+      \ deployment | Use for validation before release |\n\n   **\U0001F4DA Documentation\
+      \ Operations**\n   | Trigger | Purpose | Notes |\n   |---------|---------|-----|\n\
+      \   | generate docs | Build MkDocs documentation | Runs Enterprise Documentation\
+      \ Orchestrator |\n   | build documentation | Same as generate docs | Creates\
+      \ diagrams, guides, API refs |\n   | generate mkdocs | Generate MkDocs site\
+      \ | Full documentation pipeline |\n   | refresh documentation | Regenerate all\
+      \ docs | Safe regeneration with validation |\n\n   **\U0001F527 Development\
+      \ Operations**\n   | Trigger | Purpose | Notes |\n   |---------|---------|-----|\n\
+      \   | regenerate diagrams | Rebuild architecture diagrams | Uses centralized\
+      \ YAML configs |\n   | design sync | Sync design documentation | Maintains design\
+      \ consistency |\n   | cleanup | Clean development artifacts | Safe cleanup with\
+      \ validation |\n   | align | System alignment validation | Convention-based\
+      \ feature discovery |\n   | align report | Detailed alignment with remediation\
+      \ | Auto-generates wiring/test/doc templates |\n\n   **\U0001F4CA All User Operations**\
+      \ (also available to admins)\n   - Feature Planning (`plan feature`)\n   - TDD\
+      \ Workflow (`discover views`, test generation)\n   - View Discovery (`discover\
+      \ views in project`)\n   - Feedback System (`feedback`, `report issue`)\n  \
+      \ - System Optimization (`optimize cortex`)\n   - Health Check (`healthcheck`,\
+      \ `system status`)\n   - Conversation Management (`resume conversation`)\n \
+      \  - Upgrade System (`upgrade cortex`)\n\n   **Access Control:** Admin operations\
+      \ only route in CORTEX development repository (detects cortex-brain/admin/).\
+      \ User operations work in all repositories.\n\n## Your Request Show all admin\
+      \ operations for CORTEX development\n\n## \U0001F50D Next Steps\n   1. Use deployment\
+      \ operations to create production releases\n   2. Use documentation operations\
+      \ to rebuild docs/diagrams\n   3. Run validation tests after major changes\n\
+      \   4. Check SKULL tests pass before deployment"
+  generate_documentation_completion:
+    name: Generate Documentation - Completion
+    triggers:
+    - generate_documentation_completion
+    - doc_generation_completion
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX Generate Documentation Completion\n**Author:** Asif\
+      \ Hussain | **GitHub:** github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF\
+      \ My Understanding Of Your Request\n   Documentation generation has completed.\n\
+      \n## Challenge No Challenge - Documentation successfully generated. All artifacts\
+      \ created and validated.\n\n## \U0001F4AC Response\n   Successfully generated\
+      \ comprehensive documentation for your CORTEX workspace.\n\n   ✅ **Generated\
+      \ Documents:**\n\n   | Document Type | Location | Files Generated |\n   | API\
+      \ Reference | `docs/api/` | {api_files} |\n   | Architecture Diagrams | `docs/architecture/`\
+      \ | {arch_files} |\n   | Operations Guide | `docs/operations/` | {ops_files}\
+      \ |\n   | User Guides | `docs/guides/` | {guide_files} |\n   | Cross-References\
+      \ | `docs/` (embedded) | {xref_count} links |\n   \n   \U0001F4CA **Summary:**\n\
+      \   • Total documents: {total_files}\n   • Total pages: {total_pages}\n   •\
+      \ Documentation coverage: {coverage}%\n   • Generation time: {duration}\n\n\
+      ## Your Request Generate comprehensive documentation\n\n## \U0001F50D Next Steps\n\
+      \   1. **Preview Documentation Locally**\n      • Run: `mkdocs serve`\n    \
+      \  • Open: http://localhost:8000\n   \n   2. **Generate MkDocs Site**\n    \
+      \  • Command: \"generate mkdocs\"\n      • Builds static site in `site/` directory\n\
+      \      • Ready for deployment\n   \n   3. **Publish to GitHub Pages**\n    \
+      \  • Command: \"publish mkdocs to git pages\"\n      • Deploys to GitHub Pages\
+      \ automatically\n      • Makes docs publicly accessible\n   \n   4. **Build\
+      \ Documentation Package**\n      • Command: \"build docs package\"\n      •\
+      \ Creates portable documentation bundle\n      • Can be shared offline\n   \n\
+      \   5. **Update Documentation**\n      • Command: \"refresh docs\" or \"update\
+      \ documentation\"\n      • Regenerates docs with latest changes\n      • Maintains\
+      \ existing structure\n\n   \U0001F4A1 **Tip:** Documentation is automatically\
+      \ validated and cross-referenced. Check the validation report at `docs/validation-report.md`"
+  confidence_high:
+    name: Confidence Display - High
+    trigger:
+    - confidence_high
+    response_type: confidence_indicator
+    content: '# 🧠 CORTEX Confidence High
+
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+
+      ---
+
+
+      ## Pattern Match Confidence {confidence_display}
+
+
+      I''m applying learned patterns from {pattern_count} similar conversations.
+
+      {detailed_explanation}'
+    placeholders:
+    - confidence_display
+    - pattern_count
+    - detailed_explanation
+  confidence_medium:
+    name: Confidence Display - Medium
+    trigger:
+    - confidence_medium
+    response_type: confidence_indicator
+    content: '# 🧠 CORTEX Confidence Medium
+
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+
+      ---
+
+
+      🟡 **Pattern Match Confidence:** {confidence_display}
+
+
+      I found {pattern_count} related patterns, applying with moderate confidence.
+
+      {detailed_explanation}'
+    placeholders:
+    - confidence_display
+    - pattern_count
+    - detailed_explanation
+  confidence_low:
+    name: Confidence Display - Low
+    trigger:
+    - confidence_low
+    response_type: confidence_indicator
+    content: '# 🧠 CORTEX Confidence Low
+
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+
+      ---
+
+
+      🟠 **Pattern Match Confidence:** {confidence_display}
+
+
+      Limited pattern history available. Response based on {pattern_count} patterns.
+
+      {detailed_explanation}'
+    placeholders:
+    - confidence_display
+    - pattern_count
+    - detailed_explanation
+  confidence_none:
+    name: Confidence Display - None
+    trigger:
+    - confidence_none
+    response_type: confidence_indicator
+    content: '# 🧠 CORTEX Confidence None
+
+      **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+
+      ---
+
+
+      ℹ️ **New Territory:** No learned patterns available for this request.
+
+
+      Generating fresh response using CORTEX capabilities.'
+    placeholders: []
+  system_alignment_report:
+    name: System Alignment Report
+    triggers:
+    - align
+    - align report
+    - system alignment
+    - validate alignment
+    - run system alignment
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX System Alignment Report\n**Author:** Asif Hussain\
+      \ | **GitHub:** github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding\
+      \ Of Your Request\n   You want to run system alignment validation to auto-discover\
+      \ and validate all CORTEX features.\n\n## Challenge No Challenge - System alignment\
+      \ is an admin-only feature that validates integration depth of all CORTEX features.\
+      \ Convention-based discovery.\n\n## \U0001F4AC Response\n   [Alignment results\
+      \ with overall health, critical issues, warnings, and remediation suggestions]\n\
+      \n## Your Request Run system alignment validation\n\n## \U0001F50D Next Steps\n\
+      \   1. Review alignment report\n   2. Address critical issues (<70% integration)\n\
+      \   3. Address warnings (70-89% integration)\n   4. Re-run validation after\
+      \ fixes\n   5. Target: >80% overall health for deployment"
+  cleanup_operation:
+    name: Holistic Cleanup Operation
+    triggers:
+    - cleanup
+    - clean up
+    - cleanup cortex
+    - clean cortex
+    - holistic cleanup
+    - repository cleanup
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX Holistic Cleanup\n**Author:** Asif Hussain | **GitHub:**\
+      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
+      \ Your Request\n   You want to perform a holistic cleanup of the CORTEX repository,\
+      \ identifying and removing:\n   • Non-production files (temporary naming patterns)\n\
+      \   • Redundant/backup files\n   • Deprecated/obsolete content\n   • Orphaned\
+      \ files with no references\n\n## ⚠️ Challenge\n\nNo Challenge - Holistic cleanup\
+      \ will scan entire repository recursively, categorize all files, validate production\
+      \ readiness, and generate detailed manifest for review before execution.\n\n\
+      ## \U0001F4AC Response\n   Starting holistic repository cleanup...\n   \n  \
+      \ **Phase 1: Repository Scan** (30-60s)\n   • Recursively scan all directories\n\
+      \   • Categorize files by type and purpose\n   • Detect naming pattern violations\n\
+      \   • Identify redundancies and orphaned files\n   \n   **Phase 2: Production\
+      \ Validation** (10-20s)\n   • Check file naming standards\n   • Detect temporary/versioned\
+      \ patterns\n   • Suggest production-ready names\n   • Flag files requiring attention\n\
+      \   \n   **Phase 3: Report Generation** (5s)\n   • Comprehensive cleanup manifest\n\
+      \   • Categorized file listings\n   • Recommended actions\n   • Space savings\
+      \ projection\n   \n   **Phase 4: Safe Execution** (with approval)\n   • DRY\
+      \ RUN: Preview all changes\n   • USER APPROVAL: Review manifest\n   • BACKUP:\
+      \ Create git backup point\n   • EXECUTE: Perform cleanup\n   • COMMIT: Document\
+      \ changes\n   • ROLLBACK: Available if needed\n\n## \U0001F4DD Your Request\n\
+      \   Perform holistic cleanup with production-ready validation\n\n## \U0001F50D\
+      \ Next Steps\n   \n   1. **Review Manifest** - Cleanup manifest will be generated\
+      \ and saved to:\n      `cortex-brain/documents/reports/cleanup-manifest-[timestamp].json`\n\
+      \      `cortex-brain/documents/reports/cleanup-report-[timestamp].md`\n   \n\
+      \   2. **Open Report** - Markdown report opens automatically in VS Code\n  \
+      \ \n   3. **Approve Changes** - After reviewing:\n      • Say \"approve cleanup\"\
+      \ to execute\n      • Say \"cancel cleanup\" to abort\n   \n   4. **Monitor\
+      \ Progress** - Real-time progress shown during execution\n   \n   5. **Review\
+      \ Results** - Cleanup summary with:\n      • Files deleted/renamed\n      •\
+      \ Space freed\n      • Git commit created\n      • Rollback instructions if\
+      \ needed\n   \n   **Safety Features:**\n   ✅ Dry-run preview before execution\n\
+      \   ✅ Git backup before changes\n   ✅ Rollback capability if issues\n   ✅\
+      \ Protected paths never touched\n   ✅ Detailed action logging"
+  design_sync_operation:
+    name: Design Sync Operation
+    triggers:
+    - design sync
+    - sync design
+    - synchronize design
+    - align design
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX Design Sync Operation\n**Author:** Asif Hussain\
+      \ | **GitHub:** github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding\
+      \ Of Your Request\n   You want to synchronize design documentation with implementation.\n\
+      \n## Challenge No Challenge - Design sync ensures architecture diagrams and\
+      \ documentation match current implementation.\n\n## \U0001F4AC Response\n  \
+      \ [Sync results with changes detected and files updated]\n\n## Your Request\
+      \ Synchronize design documentation\n\n## \U0001F50D Next Steps\n   1. Review\
+      \ sync report\n   2. Validate documentation accuracy\n   3. Commit updated documentation"
+  setup_epm:
+    name: Setup Entry Point Module
+    triggers:
+    - setup copilot instructions
+    - setup instructions
+    - generate copilot instructions
+    - create copilot instructions
+    - setup epm
+    - copilot instructions
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX Setup Entry Point Module\n**Author:** Asif Hussain\
+      \ | **GitHub:** github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding\
+      \ Of Your Request\n   You want to generate .github/copilot-instructions.md for\
+      \ your repository using CORTEX brain-assisted learning.\n\n## Challenge No Challenge\
+      \ - CORTEX will analyze your codebase and generate AI instructions that improve\
+      \ over time through pattern learning.\n\n## \U0001F4AC Response\n   Starting\
+      \ Setup Entry Point Module...\n   \n   **What CORTEX will do:**\n   1. ⚡ Fast\
+      \ Detection (<10 seconds)\n      • Scan file system for language, framework,\
+      \ build system\n      • Detect test framework and project structure\n      •\
+      \ No deep code analysis (keeps token usage low)\n   \n   2. \U0001F4DD Generate\
+      \ Template\n      • Create minimal but functional instructions\n      • Include\
+      \ detected metadata (language, framework, commands)\n      • Add learning placeholders\
+      \ for future improvements\n   \n   3. \U0001F9E0 Enable Brain Learning\n   \
+      \   • Store initial patterns in Tier 3 (namespace isolated)\n      • Observe\
+      \ your coding patterns during normal CORTEX usage\n      • Auto-update instructions\
+      \ weekly (or on-demand)\n   \n   4. ✅ Write File\n      • Location: .github/copilot-instructions.md\n\
+      \      • Immediately usable by GitHub Copilot\n      • Improves automatically\
+      \ as you work\n   \n   **If file already exists:**\n   I'll offer merge options\
+      \ to preserve your existing content.\n\n## Your Request Generate copilot-instructions.md\
+      \ for my repository\n\n## \U0001F50D Next Steps\n   1. **Detection Phase** -\
+      \ Scanning your project structure...\n   2. **Template Generation** - Creating\
+      \ instructions based on detected patterns\n   3. **File Creation** - Writing\
+      \ to .github/copilot-instructions.md\n   4. **Brain Learning** - Enabling pattern\
+      \ observation\n   \n   Executing now..."
+  tdd_workflow_start:
+    name: TDD Workflow Start
+    triggers:
+    - start tdd
+    - tdd workflow
+    - begin tdd
+    - start tdd workflow
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX TDD Workflow Start\n**Author:** Asif Hussain | **GitHub:**\
+      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
+      \ Your Request\n   You want to start a Test-Driven Development workflow with\
+      \ RED→GREEN→REFACTOR cycle automation.\n\n## Challenge No Challenge - TDD Mastery\
+      \ provides complete workflow automation with terminal integration, workspace\
+      \ discovery, and brain memory.\n\n## \U0001F4AC Response\n   [Workspace discovered,\
+      \ test framework detected, TDD session initialized]\n\n## Your Request Start\
+      \ TDD workflow\n\n## \U0001F50D Next Steps\n   1. Write failing test (RED state)\n\
+      \   2. Run tests with 'run tests' command\n   3. Implement code to pass tests\
+      \ (GREEN state)\n   4. Request refactoring suggestions\n   5. Validate improvements"
+  optimize_system:
+    name: Optimize System
+    triggers:
+    - optimize
+    - optimize cortex
+    - optimize system
+    - clean and optimize
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX Optimize System\n**Author:** Asif Hussain | **GitHub:**\
+      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
+      \ Your Request\n   You want to optimize CORTEX performance by cleaning brain\
+      \ data and vacuuming databases.\n\n## Challenge No Challenge - System optimization\
+      \ removes old files, vacuums databases, and improves performance.\n\n## \U0001F4AC\
+      \ Response\n   [Optimization results with space saved, performance improvement,\
+      \ database size reduction]\n\n## Your Request Optimize CORTEX system\n\n## \U0001F50D\
+      \ Next Steps\n   1. Review optimization results\n   2. Run healthcheck to validate\
+      \ improvements\n   3. Monitor performance metrics"
+  workflow_execution:
+    name: Workflow Execution
+    triggers:
+    - workflow
+    - execute workflow
+    - run workflow
+    - start workflow
+    response_type: detailed
+    content: "# \U0001F9E0 CORTEX Workflow Execution\n**Author:** Asif Hussain | **GitHub:**\
+      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
+      \ Your Request\n   You want to execute a CORTEX workflow operation.\n\n## Challenge\
+      \ No Challenge - Workflow orchestrator coordinates multi-step operations with\
+      \ validation and checkpoints.\n\n## \U0001F4AC Response\n   [Workflow execution\
+      \ results with steps completed and validation status]\n\n## Your Request Execute\
+      \ workflow\n\n## \U0001F50D Next Steps\n   1. Review workflow results\n   2.\
+      \ Validate all steps completed\n   3. Check for any warnings or errors"
+  git_checkpoint:
+    name: Git Checkpoint
+    triggers:
+    - git checkpoint
+    - create checkpoint
+    - save checkpoint
+    response_type: detailed
+    handler: src.orchestrators.git_checkpoint_orchestrator.GitCheckpointOrchestrator
+    content: "# \U0001F9E0 CORTEX Git Checkpoint\n**Author:** Asif Hussain | **GitHub:**\
+      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
+      \ Your Request\n   Create git checkpoint to preserve current work state.\n\n\
+      ## Challenge No Challenge - Git checkpoint will save current state with SKULL\
+      \ Rule #8 compliance.\n\n## \U0001F4AC Response\n   [Checkpoint creation results\
+      \ with commit SHA and timestamp]\n\n## Your Request Create git checkpoint\n\n\
+      ## \U0001F50D Next Steps\n   1. Review checkpoint commit message\n   2. Continue\
+      \ with implementation\n   3. Create additional checkpoints as needed"
+  lint_validation:
+    name: Lint Validation
+    triggers:
+    - validate lint
+    - check code quality
+    - run linter
+    - lint validation
+    response_type: detailed
+    handler: src.orchestrators.lint_validation_orchestrator.LintValidationOrchestrator
+    content: "# \U0001F9E0 CORTEX Lint Validation\n**Author:** Asif Hussain | **GitHub:**\
+      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
+      \ Your Request\n   Run code quality validation before continuing TDD workflow.\n\
+      \n## Challenge No Challenge - Lint validation will check for critical violations\
+      \ that block phase progression.\n\n## \U0001F4AC Response\n   [Validation results\
+      \ with violation count and severity breakdown]\n\n## Your Request Validate code\
+      \ quality\n\n## \U0001F50D Next Steps\n   1. Review violations (if any)\n  \
+      \ 2. Fix critical violations before continuing\n   3. Proceed to next TDD phase\
+      \ if clean"
+  session_completion:
+    name: Session Completion
+    triggers:
+    - complete session
+    - finish session
+    - session report
+    - end session
+    response_type: detailed
+    handler: src.orchestrators.session_completion_orchestrator.SessionCompletionOrchestrator
+    content: "# \U0001F9E0 CORTEX Session Completion\n**Author:** Asif Hussain | **GitHub:**\
+      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
+      \ Your Request\n   Generate session completion report with before/after metrics.\n\
+      \n## Challenge No Challenge - Session report will include timestamps, test results,\
+      \ and code changes.\n\n## \U0001F4AC Response\n   [Session report with duration,\
+      \ test pass rate, and accomplishments]\n\n## Your Request Complete TDD session\n\
+      \n## \U0001F50D Next Steps\n   1. Review session metrics\n   2. Commit final\
+      \ changes\n   3. Push to remote repository"
+  upgrade_cortex:
+    name: Upgrade CORTEX
+    triggers:
+    - upgrade
+    - upgrade cortex
+    - cortex version
+    - check version
+    response_type: detailed
+    handler: src.orchestrators.upgrade_orchestrator.UpgradeOrchestrator
+    content: "# \U0001F9E0 CORTEX Upgrade Cortex\n**Author:** Asif Hussain | **GitHub:**\
+      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
+      \ Your Request\n   Check for CORTEX updates and upgrade to latest version.\n\
+      \n## Challenge No Challenge - Upgrade will backup brain data and pull latest\
+      \ from origin/main.\n\n## \U0001F4AC Response\n   [Version check results and\
+      \ upgrade status]\n\n## Your Request Upgrade CORTEX\n\n## \U0001F50D Next Steps\n\
+      \   1. Review upgrade results\n   2. Check changelog for new features\n   3.\
+      \ Restart workflow if needed"
+  tdd_workflow:
+    name: TDD Workflow
+    triggers:
+    - start tdd
+    - tdd workflow
+    - begin tdd
+    - tdd session
+    response_type: detailed
+    handler: src.workflows.tdd_workflow_orchestrator.TDDWorkflowOrchestrator
+    content: "# \U0001F9E0 CORTEX TDD Workflow\n**Author:** Asif Hussain | **GitHub:**\
+      \ github.com/asifhussain60/CORTEX\n\n---\n\n## \U0001F3AF My Understanding Of\
+      \ Your Request\n   Start TDD workflow with RED→GREEN→REFACTOR automation.\n\n\
+      ## Challenge No Challenge - TDD orchestrator will guide you through test-driven\
+      \ development cycle.\n\n## \U0001F4AC Response\n   [TDD workflow started with\
+      \ phase tracking and automation]\n\n## Your Request Start TDD workflow\n\n##\
+      \ \U0001F50D Next Steps\n   1. Write failing test (RED phase)\n   2. Implement\
+      \ feature to pass test (GREEN phase)\n   3. Refactor code with quality checks\
+      \ (REFACTOR phase)"
+routing:
+  default: fallback
+  greeting_triggers:
+  - hello
+  - hi
+  - hey
+  - greetings
+  - good morning
+  - good afternoon
+  - good evening
+  - hello cortex
+  - hi cortex
+  - hey cortex
+  help_triggers:
+  - help
+  - /help
+  - what can cortex do
+  status_triggers:
+  - status
+  - where are we
+  quick_start_triggers:
+  - quick start
+  - get started
+  hands_on_tutorial_triggers:
+  - tutorial
+  - start tutorial
+  - hands on tutorial
+  - interactive tutorial
+  - learn cortex
+  - teach me cortex
+  - cortex tutorial
+  git_checkpoint_triggers:
+  - git checkpoint
+  - create checkpoint
+  - save checkpoint
+  lint_validation_triggers:
+  - validate lint
+  - check code quality
+  - run linter
+  - lint validation
+  session_completion_triggers:
+  - complete session
+  - finish session
+  - session report
+  - end session
+  upgrade_cortex_triggers:
+  - upgrade
+  - upgrade cortex
+  - cortex version
+  - check version
+  tdd_workflow_start_triggers:
+  - start tdd
+  - tdd workflow
+  - begin tdd
+  - tdd session
+  tdd_workflow_triggers:
+  - implement
+  - add
+  - create
+  - build
+  - develop
+  - write
+  - implement feature
+  - add feature
+  - create feature
+  test_generation_triggers:
+  - test
+  - write tests
+  - generate tests
+  - add tests
+  - create tests
+  refactor_triggers:
+  - refactor
+  - improve code
+  - clean up
+  - restructure
+  - optimize code
+  planning_triggers:
+  - plan
+  - let's plan
+  - plan a feature
+  - plan this
+  - help me plan
+  - planning
+  - feature planning
+  - i want to plan
+  enhancement_triggers:
+  - enhance
+  - improve
+  - extend
+  - enhance existing
+  - improve existing
+  - extend existing
+  - modify existing
+  - update existing
+  - optimize
+  - refactor
+  - upgrade
+  - enhance the
+  - improve the
+  - extend the
+  ado_planning_triggers:
+  - plan ado
+  - create ado
+  - new ado
+  - ado planning
+  - plan work item
+  ado_story_triggers:
+  - plan ado story
+  - create ado story
+  - new ado story
+  - plan user story
+  ado_feature_triggers:
+  - plan ado feature
+  - create ado feature
+  - new ado feature
+  ado_summary_triggers:
+  - generate ado summary
+  - create work summary
+  - ado work summary
+  - complete ado work
+  ado_resume_triggers:
+  - resume ado
+  - continue ado
+  - open ado
+  - show ado
+  ado_search_triggers:
+  - find ado
+  - search ado
+  - list ado
+  - show ados
+  ado_status_triggers:
+  - ado status
+  - planning status
+  - show plans
+  - active ados
+  brain_export_triggers:
+  - export brain
+  - brain export
+  - share brain
+  - export knowledge
+  - export patterns
+  brain_import_triggers:
+  - import brain
+  - brain import
+  - load brain
+  - import knowledge
+  - import patterns
+  generate_documentation_triggers:
+  - generate documentation
+  - generate docs
+  - create documentation
+  - doc generation
+  - generate cortex docs
+  feedback_triggers:
+  - feedback
+  - report issue
+  - report bug
+  - cortex issue
+  - cortex bug
+  - cortex improvement
+  - report problem
+  - generate feedback report
+  - share performance metrics
+  - cortex feedback
+  admin_feedback_review_triggers:
+  - review feedback
+  - feedback review
+  - analyze feedback
+  - process feedback
+  - sync feedback
+  - import feedback
+  - review user feedback
+  - process user reports
+  view_discovery_triggers:
+  - discover views
+  - crawl views
+  - find element ids
+  - map elements
+  - scan razor files
+  system_alignment_triggers:
+  - align
+  - align report
+  - system alignment
+  - validate alignment
+  - run system alignment
+  cleanup_triggers:
+  - cleanup
+  - clean up
+  - cleanup cortex
+  - clean cortex
+  - holistic cleanup
+  cleanup_validation_failed_triggers:
+  - cleanup_validation_failed
+  - validation_failed
+  - cleanup_blocked
+  design_sync_triggers:
+  - design sync
+  - sync design
+  - synchronize design
+  - align design
+  setup_epm_triggers:
+  - setup copilot instructions
+  - setup instructions
+  - generate copilot instructions
+  - create copilot instructions
+  - setup epm
+  - copilot instructions
+  ado_work_item_triggers:
+  - plan ado
+  - create work item
+  - ado work item
+  - create story
+  - create feature
+  - create bug
+  - ado planning
+  demo_triggers:
+  - demo
+  - cortex demo
+  - show demo
+  - run demo
+  - demo cortex
+  - live demo
+  unified_entry_point_triggers:
+  - unified entry
+  - entry point
+  - cortex entry
+  - unified interface
+  discovery_triggers:
+  - discover cortex
+  - explore cortex
+  - cortex demo
+  - show me what cortex can do
+  - cortex tour
+  - guided tour
+  - what can you do
+  - cortex capabilities
+  - cortex features
+  - show capabilities
+  capture_conversation_triggers:
+  - capture conversation
+  - capture chat
+  - save conversation
+  - capture this conversation
+  - save this chat
+  - capture copilot chat
+  import_conversation_triggers:
+  - import conversation
+  - import capture
+  - process capture
+  - load conversation
+  - proceed
+  list_captures_triggers:
+  - list captures
+  - show captures
+  - active captures
+  - capture files
+  code_review_triggers:
+  - code review
+  - review pr
+  - pr review
+  - review pull request
+  - pull request review
+  - ado pr review
+  - review code
+  ux_enhancement_triggers:
+  - enhance
+  - reimagine
+  - redesign
+  - improve ux
+  - modernize
+  - suggest improvements
+  - refactor architecture
+  - optimize codebase
+formatting:
+  mandatory_sections:
+  - understanding
+  - challenge
+  - response
+  - request_echo
+  - next_steps

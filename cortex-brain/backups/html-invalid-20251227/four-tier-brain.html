@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4-Tier Brain - CORTEX 4.0 Architecture</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="icon" href="../assets/images/CORTEX-logo.png" type="image/png">
+</head>
+<body>
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">›</span>
+        <a href="index.html">Architecture</a>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-current">4-Tier Brain</span>
+    </nav>
+
+    <!-- Hero -->
+    <section class="section">
+        <div class="container">
+            <div class="glass-card">
+                <div>
+                    <div class="icon">🧠</div>
+                    <div>
+                        <h1>4-Tier Brain Architecture</h1>
+                        <p>
+                            Hierarchical Memory System Powering CORTEX Intelligence
+                        </p>
+                    </div>
+                </div>
+
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value">4</div>
+                        <div class="metric-label">Memory Tiers</div>
+                        <div class="metric-sublabel">Specialized Layers</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">8,429</div>
+                        <div class="metric-label">Knowledge Nodes</div>
+                        <div class="metric-sublabel">Tier 2 Graph</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value"><100ms</div>
+                        <div class="metric-label">Query Speed</div>
+                        <div class="metric-sublabel">Tier 1 FIFO</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">70</div>
+                        <div class="metric-label">Working Memory</div>
+                        <div class="metric-sublabel">Conversations</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview -->
+    <section class="section">
+        <div class="container">
+            <h2>What is the 4-Tier Brain?</h2>
+            <div class="glass-card">
+                <p>
+                    The <strong>4-Tier Brain</strong> is CORTEX's hierarchical memory architecture that provides 
+                    strategic planning, long-term learning, and context awareness. Unlike traditional AI assistants with no memory, 
+                    CORTEX remembers patterns, learns from mistakes, and builds institutional knowledge across development sessions.
+                </p>
+                <p>
+                    Each tier serves a specialized purpose—from immutable governance rules (Tier 0) to real-time development context (Tier 3)—creating 
+                    a complete cognitive framework that evolves with your team.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- The 4 Tiers -->
+    <section class="section">
+        <div class="container">
+            <h2>The 4 Memory Tiers</h2>
+
+            <!-- Tier 0 -->
+            <div class="glass-card">
+                <div>
+                    <div>🛡️</div>
+                    <div>
+                        <h3>Tier 0: Governance (SKULL Rules)</h3>
+                        <p>Immutable protection rules</p>
+                    </div>
+                </div>
+                <p>
+                    <strong>Purpose:</strong> Core governance layer with 22 immutable SKULL rules enforced by the Brain Protector.
+                </p>
+                <div>
+                    <div>
+                        <strong>Key Features:</strong>
+                        <ul>
+                            <li>TDD enforcement</li>
+                            <li>Duplication prevention</li>
+                            <li>Git isolation</li>
+                            <li>Knowledge integrity</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong>Storage:</strong>
+                        <ul>
+                            <li><code>brain-protection-rules.yaml</code></li>
+                            <li>Never modified</li>
+                            <li>100% enforcement</li>
+                        </ul>
+                    </div>
+                </div>
+                <a href="../governance/skull-rulebook.html" class="btn btn-primary">
+                    View SKULL Rules →
+                </a>
+            </div>
+
+            <!-- Tier 1 -->
+            <div class="glass-card">
+                <div>
+                    <div>⚡</div>
+                    <div>
+                        <h3>Tier 1: Working Memory (FIFO Queue)</h3>
+                        <p>Fast, short-term context</p>
+                    </div>
+                </div>
+                <p>
+                    <strong>Purpose:</strong> High-speed working memory storing recent 70 conversations with <100ms query time.
+                </p>
+                <div>
+                    <div>
+                        <strong>Key Features:</strong>
+                        <ul>
+                            <li>FIFO eviction policy</li>
+                            <li>70-conversation window</li>
+                            <li>Session context</li>
+                            <li>Real-time queries</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong>Storage:</strong>
+                        <ul>
+                            <li><code>conversation-history.db</code></li>
+                            <li>SQLite with FTS5</li>
+                            <li>Auto-pruning</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tier 2 -->
+            <div class="glass-card">
+                <div>
+                    <div>🕸️</div>
+                    <div>
+                        <h3>Tier 2: Knowledge Graph (Long-Term Learning)</h3>
+                        <p>Pattern storage & retrieval</p>
+                    </div>
+                </div>
+                <p>
+                    <strong>Purpose:</strong> Persistent knowledge graph with 8,429 nodes storing patterns, solutions, and learnings.
+                </p>
+                <div>
+                    <div>
+                        <strong>Key Features:</strong>
+                        <ul>
+                            <li>Pattern recognition</li>
+                            <li>Solution templates</li>
+                            <li>Best practices</li>
+                            <li>Anti-pattern detection</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong>Storage:</strong>
+                        <ul>
+                            <li><code>knowledge-graph.yaml</code></li>
+                            <li>Semantic relationships</li>
+                            <li>Confidence scoring</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tier 3 -->
+            <div class="glass-card">
+                <div>
+                    <div>📊</div>
+                    <div>
+                        <h3>Tier 3: Development Context (Metrics & Hotspots)</h3>
+                        <p>Real-time codebase intelligence</p>
+                    </div>
+                </div>
+                <p>
+                    <strong>Purpose:</strong> Real-time development context tracking metrics, complexity, and code hotspots.
+                </p>
+                <div>
+                    <div>
+                        <strong>Key Features:</strong>
+                        <ul>
+                            <li>Complexity analysis</li>
+                            <li>Hotspot detection</li>
+                            <li>Test coverage tracking</li>
+                            <li>Refactoring priorities</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong>Storage:</strong>
+                        <ul>
+                            <li><code>development-context.yaml</code></li>
+                            <li>AST-powered analysis</li>
+                            <li>Git integration</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="section">
+        <div class="container">
+            <h2>How the Tiers Work Together</h2>
+            <div class="glass-card">
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div>1️⃣</div>
+                        <h3>Query Arrives</h3>
+                        <p>User request enters CORTEX through Copilot Chat interface.</p>
+                    </div>
+                    <div class="metric-card">
+                        <div>2️⃣</div>
+                        <h3>Tier 0 Validation</h3>
+                        <p>Brain Protector checks request against SKULL rules.</p>
+                    </div>
+                    <div class="metric-card">
+                        <div>3️⃣</div>
+                        <h3>Context Retrieval</h3>
+                        <p>Tier 1 provides recent conversations, Tier 2 supplies learned patterns.</p>
+                    </div>
+                    <div class="metric-card">
+                        <div>4️⃣</div>
+                        <h3>Real-Time Analysis</h3>
+                        <p>Tier 3 analyzes current codebase state and complexity.</p>
+                    </div>
+                    <div class="metric-card">
+                        <div>5️⃣</div>
+                        <h3>Response Generation</h3>
+                        <p>CORTEX synthesizes all tiers to generate informed response.</p>
+                    </div>
+                    <div class="metric-card">
+                        <div>6️⃣</div>
+                        <h3>Knowledge Update</h3>
+                        <p>Learnings stored in Tier 2 for future operations.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits -->
+    <section class="section">
+        <div class="container">
+            <h2>Why 4-Tier Architecture?</h2>
+            <div>
+                <div class="glass-card">
+                    <h3>🚀 Performance</h3>
+                    <p>
+                        Tier separation ensures fast queries (<100ms) while maintaining deep knowledge storage. Hot data in Tier 1, patterns in Tier 2.
+                    </p>
+                </div>
+                <div class="glass-card">
+                    <h3>🧠 Intelligence</h3>
+                    <p>
+                        Long-term learning through Tier 2 knowledge graph builds institutional memory that improves over time.
+                    </p>
+                </div>
+                <div class="glass-card">
+                    <h3>🛡️ Safety</h3>
+                    <p>
+                        Tier 0 SKULL rules provide immutable guardrails preventing common development anti-patterns.
+                    </p>
+                </div>
+                <div class="glass-card">
+                    <h3>📊 Context</h3>
+                    <p>
+                        Tier 3 provides real-time codebase awareness—complexity, hotspots, and refactoring priorities.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="section">
+        <div class="container">
+            <a href="../index.html" class="btn btn-secondary">← Back to Home</a>
+            <p>
+                Part of the CORTEX 4.0 Documentation Suite<br>
+                Author: Asif Hussain | <a href="https://github.com/asifhussain60/CORTEX">github.com/asifhussain60/CORTEX</a>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>

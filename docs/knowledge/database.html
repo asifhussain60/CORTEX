@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Database Design - SQL, NoSQL, data modeling, and optimization strategies">
+    <meta name="keywords" content="database, sql, nosql, postgresql, mongodb, data modeling, indexing">
+    <meta name="author" content="Asif Hussain">
+    <title>Database Design | CORTEX Knowledge</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">→</span>
+        <a href="index.html">Knowledge Library</a>
+        <span class="breadcrumb-separator">→</span>
+        <span class="breadcrumb-current">Database Design</span>
+    </nav>
+
+    <section class="hero" id="main-content">
+        <h1 class="hero-title">💾 Database Design</h1>
+        <p class="hero-subtitle">SQL, NoSQL, Data Modeling, and Optimization</p>
+        <div class="file-metadata">
+            <span class="metadata-item">🗄️ Data Storage</span>
+            <span class="metadata-item">⚡ Performance</span>
+            <span class="metadata-item">📅 Updated: Dec 2025</span>
+        </div>
+    </section>
+
+    <section class="section file-content">
+        <div class="container">
+            <!-- Overview -->
+            <div id="overview" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">📋 Overview</h2>
+                    <p>Database design encompasses data modeling, schema design, query optimization, and choosing the right database technology for your application. Understanding relational and non-relational paradigms enables building scalable, performant data storage solutions.</p>
+                    
+                    <div class="info-box info-box-primary">
+                        <strong>Key Concepts:</strong>
+                        <ul class="feature-list">
+                            <li><strong>Normalization:</strong> Organize data to reduce redundancy</li>
+                            <li><strong>Indexing:</strong> Accelerate query performance</li>
+                            <li><strong>Transactions:</strong> ACID guarantees for data integrity</li>
+                            <li><strong>Sharding:</strong> Horizontal scaling for large datasets</li>
+                        </ul>
+                    </div>
+
+                    <h3>Database Technology Landscape</h3>
+                    <div class="mermaid">
+graph TB
+    A[Database Systems]
+    A --> B[Relational/SQL]
+    A --> C[NoSQL]
+    A --> D[NewSQL]
+    
+    B --> B1[PostgreSQL]
+    B --> B2[MySQL]
+    B --> B3[SQL Server]
+    
+    C --> C1[Document: MongoDB]
+    C --> C2[Key-Value: Redis]
+    C --> C3[Column: Cassandra]
+    C --> C4[Graph: Neo4j]
+    
+    D --> D1[CockroachDB]
+    D --> D2[Google Spanner]
+    
+    style A fill:#7b61ff,color:#fff
+    style B fill:#10b981,color:#fff
+    style C fill:#3b82f6,color:#fff
+    style D fill:#f59e0b,color:#fff
+                    </div>
+                </div>
+            </div>
+
+            <!-- SQL Databases -->
+            <div id="sql" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🗄️ Relational Databases (SQL)</h2>
+                    
+                    <h3>Core Principles</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📐</span>
+                            <h3>Normalization</h3>
+                            <h4>Forms</h4>
+                            <ul>
+                                <li><strong>1NF:</strong> Atomic values, no repeating groups</li>
+                                <li><strong>2NF:</strong> No partial dependencies</li>
+                                <li><strong>3NF:</strong> No transitive dependencies</li>
+                                <li><strong>BCNF:</strong> Every determinant is a key</li>
+                            </ul>
+                            <h4>Benefits</h4>
+                            <ul>
+                                <li>Eliminates data redundancy</li>
+                                <li>Prevents update anomalies</li>
+                                <li>Maintains data integrity</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔗</span>
+                            <h3>Relationships</h3>
+                            <h4>Types</h4>
+                            <ul>
+                                <li><strong>One-to-One:</strong> User ↔ Profile</li>
+                                <li><strong>One-to-Many:</strong> Customer → Orders</li>
+                                <li><strong>Many-to-Many:</strong> Students ↔ Courses</li>
+                            </ul>
+                            <h4>Implementation</h4>
+                            <ul>
+                                <li>Foreign keys enforce integrity</li>
+                                <li>Junction tables for M:N</li>
+                                <li>Cascade operations</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">✅</span>
+                            <h3>ACID Properties</h3>
+                            <h4>Guarantees</h4>
+                            <ul>
+                                <li><strong>Atomicity:</strong> All-or-nothing transactions</li>
+                                <li><strong>Consistency:</strong> Valid state transitions</li>
+                                <li><strong>Isolation:</strong> Concurrent transaction safety</li>
+                                <li><strong>Durability:</strong> Committed data persists</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>Data Modeling Example</h3>
+                    <div class="mermaid">
+erDiagram
+    CUSTOMER ||--o{ ORDER : places
+    ORDER ||--|{ ORDER_ITEM : contains
+    PRODUCT ||--o{ ORDER_ITEM : "ordered in"
+    CATEGORY ||--o{ PRODUCT : has
+    
+    CUSTOMER {
+        int id PK
+        string email UK
+        string name
+        datetime created_at
+    }
+    
+    ORDER {
+        int id PK
+        int customer_id FK
+        decimal total
+        string status
+        datetime order_date
+    }
+    
+    PRODUCT {
+        int id PK
+        int category_id FK
+        string name
+        decimal price
+        int stock_quantity
+    }
+    
+    ORDER_ITEM {
+        int order_id FK
+        int product_id FK
+        int quantity
+        decimal unit_price
+    }
+    
+    CATEGORY {
+        int id PK
+        string name
+        string description
+    }
+                    </div>
+
+                    <h3>Indexing Strategies</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">⚡</span>
+                            <h3>B-Tree Index</h3>
+                            <p class="framework-subtitle">Default for Most RDBMS</p>
+                            <h4>Best For</h4>
+                            <ul>
+                                <li>Equality searches (WHERE id = 5)</li>
+                                <li>Range queries (WHERE price BETWEEN 10 AND 50)</li>
+                                <li>ORDER BY operations</li>
+                                <li>Primary keys, unique constraints</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔍</span>
+                            <h3>Full-Text Index</h3>
+                            <p class="framework-subtitle">Text Search Optimization</p>
+                            <h4>Best For</h4>
+                            <ul>
+                                <li>Natural language search</li>
+                                <li>Keyword matching</li>
+                                <li>Relevance ranking</li>
+                                <li>PostgreSQL: GIN/GiST</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🗺️</span>
+                            <h3>Spatial Index</h3>
+                            <p class="framework-subtitle">Geospatial Queries</p>
+                            <h4>Best For</h4>
+                            <ul>
+                                <li>Location-based queries</li>
+                                <li>Distance calculations</li>
+                                <li>Bounding box searches</li>
+                                <li>PostGIS for PostgreSQL</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="info-box info-box-success">
+                        <strong>Index Best Practices:</strong>
+                        <ul class="feature-list">
+                            <li><strong>Selective Columns:</strong> Index columns with high cardinality</li>
+                            <li><strong>Composite Indexes:</strong> Order matters (most selective first)</li>
+                            <li><strong>Covering Indexes:</strong> Include all query columns</li>
+                            <li><strong>Avoid Over-Indexing:</strong> Each index slows writes</li>
+                            <li><strong>Monitor Usage:</strong> Remove unused indexes</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NoSQL Databases -->
+            <div id="nosql" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🌐 NoSQL Databases</h2>
+                    
+                    <h3>Database Types</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📄</span>
+                            <h3>Document Stores</h3>
+                            <p class="framework-subtitle">MongoDB, Couchbase</p>
+                            <h4>Characteristics</h4>
+                            <ul>
+                                <li>JSON/BSON documents</li>
+                                <li>Flexible schemas</li>
+                                <li>Embedded relationships</li>
+                                <li>Rich query language</li>
+                            </ul>
+                            <h4>Use Cases</h4>
+                            <ul>
+                                <li>Content management</li>
+                                <li>User profiles</li>
+                                <li>Product catalogs</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔑</span>
+                            <h3>Key-Value Stores</h3>
+                            <p class="framework-subtitle">Redis, DynamoDB</p>
+                            <h4>Characteristics</h4>
+                            <ul>
+                                <li>Simple key → value mapping</li>
+                                <li>In-memory performance</li>
+                                <li>Horizontal scalability</li>
+                                <li>TTL support</li>
+                            </ul>
+                            <h4>Use Cases</h4>
+                            <ul>
+                                <li>Caching layers</li>
+                                <li>Session storage</li>
+                                <li>Real-time analytics</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🗂️</span>
+                            <h3>Column-Family</h3>
+                            <p class="framework-subtitle">Cassandra, HBase</p>
+                            <h4>Characteristics</h4>
+                            <ul>
+                                <li>Wide-column storage</li>
+                                <li>Time-series optimized</li>
+                                <li>Massive scalability</li>
+                                <li>Tunable consistency</li>
+                            </ul>
+                            <h4>Use Cases</h4>
+                            <ul>
+                                <li>IoT sensor data</li>
+                                <li>Time-series metrics</li>
+                                <li>Event logging</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>MongoDB Deep Dive</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📐</span>
+                            <h3>Schema Design</h3>
+                            <h4>Patterns</h4>
+                            <ul>
+                                <li><strong>Embedding:</strong> Related data in same document</li>
+                                <li><strong>Referencing:</strong> Links between documents</li>
+                                <li><strong>Hybrid:</strong> Mix of both approaches</li>
+                            </ul>
+                            <h4>Guidelines</h4>
+                            <ul>
+                                <li>Embed for 1:1 or 1:few</li>
+                                <li>Reference for 1:many or many:many</li>
+                                <li>Consider query patterns</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">⚡</span>
+                            <h3>Indexing</h3>
+                            <h4>Index Types</h4>
+                            <ul>
+                                <li><strong>Single Field:</strong> One field index</li>
+                                <li><strong>Compound:</strong> Multiple fields</li>
+                                <li><strong>Text:</strong> Full-text search</li>
+                                <li><strong>Geospatial:</strong> Location queries</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔄</span>
+                            <h3>Aggregation</h3>
+                            <h4>Pipeline Stages</h4>
+                            <ul>
+                                <li><strong>$match:</strong> Filter documents</li>
+                                <li><strong>$group:</strong> Aggregate by key</li>
+                                <li><strong>$sort:</strong> Order results</li>
+                                <li><strong>$project:</strong> Shape output</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>Graph Database (Neo4j)</h3>
+                    <div class="mermaid">
+graph LR
+    U1[User: Alice]
+    U2[User: Bob]
+    U3[User: Carol]
+    P1[Post: Tech Article]
+    P2[Post: Photo]
+    
+    U1 -->|FOLLOWS| U2
+    U1 -->|FOLLOWS| U3
+    U2 -->|FOLLOWS| U3
+    U1 -->|CREATED| P1
+    U2 -->|CREATED| P2
+    U3 -->|LIKED| P1
+    U3 -->|LIKED| P2
+    U1 -->|COMMENTED_ON| P2
+    
+    style U1 fill:#10b981,color:#fff
+    style U2 fill:#10b981,color:#fff
+    style U3 fill:#10b981,color:#fff
+    style P1 fill:#3b82f6,color:#fff
+    style P2 fill:#3b82f6,color:#fff
+                    </div>
+
+                    <div class="info-box info-box-info">
+                        <strong>Graph Database Use Cases:</strong>
+                        <ul class="feature-list">
+                            <li><strong>Social Networks:</strong> Friend connections, followers</li>
+                            <li><strong>Recommendation Engines:</strong> "Users who bought X also bought Y"</li>
+                            <li><strong>Fraud Detection:</strong> Transaction pattern analysis</li>
+                            <li><strong>Knowledge Graphs:</strong> Entity relationships</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Query Optimization -->
+            <div id="optimization" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">⚡ Query Optimization</h2>
+                    
+                    <h3>Performance Techniques</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔍</span>
+                            <h3>EXPLAIN Plans</h3>
+                            <h4>Analysis</h4>
+                            <ul>
+                                <li>Sequential scans (slow)</li>
+                                <li>Index scans (fast)</li>
+                                <li>Join algorithms</li>
+                                <li>Cost estimates</li>
+                            </ul>
+                            <h4>Red Flags</h4>
+                            <ul>
+                                <li>Full table scans on large tables</li>
+                                <li>Nested loop joins with no indexes</li>
+                                <li>High estimated row counts</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🎯</span>
+                            <h3>Query Patterns</h3>
+                            <h4>Optimization</h4>
+                            <ul>
+                                <li><strong>SELECT specific:</strong> Avoid SELECT *</li>
+                                <li><strong>WHERE clauses:</strong> Filter early</li>
+                                <li><strong>JOIN optimization:</strong> Index foreign keys</li>
+                                <li><strong>Subquery alternatives:</strong> Use JOINs when possible</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">💾</span>
+                            <h3>Caching Strategies</h3>
+                            <h4>Layers</h4>
+                            <ul>
+                                <li><strong>Query Result Cache:</strong> Redis, Memcached</li>
+                                <li><strong>Connection Pooling:</strong> Reuse connections</li>
+                                <li><strong>Materialized Views:</strong> Pre-computed results</li>
+                                <li><strong>CDN:</strong> Edge caching for static data</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>N+1 Query Problem</h3>
+                    <div class="mermaid">
+sequenceDiagram
+    participant App
+    participant DB
+    
+    Note over App,DB: ❌ Bad: N+1 Queries
+    App->>DB: SELECT * FROM posts
+    DB-->>App: 100 posts
+    loop For each post
+        App->>DB: SELECT * FROM users WHERE id = post.author_id
+        DB-->>App: User data
+    end
+    Note over App,DB: Total: 101 queries!
+    
+    Note over App,DB: ✅ Good: Eager Loading
+    App->>DB: SELECT posts.*, users.* FROM posts JOIN users ON posts.author_id = users.id
+    DB-->>App: Posts with user data
+    Note over App,DB: Total: 1 query!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scaling Strategies -->
+            <div id="scaling" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">📈 Scaling Strategies</h2>
+                    
+                    <h3>Horizontal vs Vertical</h3>
+                    <table class="glass-table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Aspect</th>
+                                <th>Vertical Scaling (Scale Up)</th>
+                                <th>Horizontal Scaling (Scale Out)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Approach</strong></td>
+                                <td>Add more CPU/RAM/Disk to single server</td>
+                                <td>Add more servers to cluster</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Complexity</strong></td>
+                                <td><span class="badge-low">Simple</span></td>
+                                <td><span class="badge-high">Complex</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Cost</strong></td>
+                                <td>Expensive at high end</td>
+                                <td>Cost-effective with commodity hardware</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Limits</strong></td>
+                                <td>Hardware ceiling</td>
+                                <td>Nearly unlimited</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Availability</strong></td>
+                                <td>Single point of failure</td>
+                                <td>High availability built-in</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Best For</strong></td>
+                                <td>Traditional SQL, small-medium apps</td>
+                                <td>NoSQL, large-scale distributed apps</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Sharding Patterns</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔢</span>
+                            <h3>Range-Based</h3>
+                            <h4>Strategy</h4>
+                            <ul>
+                                <li>Partition by value ranges</li>
+                                <li>Example: A-M, N-Z</li>
+                                <li>Time-based: 2024, 2025</li>
+                            </ul>
+                            <h4>Pros/Cons</h4>
+                            <ul>
+                                <li>✅ Simple range queries</li>
+                                <li>❌ Risk of hot spots</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔑</span>
+                            <h3>Hash-Based</h3>
+                            <h4>Strategy</h4>
+                            <ul>
+                                <li>Hash function on shard key</li>
+                                <li>Consistent hashing</li>
+                                <li>Even distribution</li>
+                            </ul>
+                            <h4>Pros/Cons</h4>
+                            <ul>
+                                <li>✅ Balanced load</li>
+                                <li>❌ Range queries harder</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🗺️</span>
+                            <h3>Geographic</h3>
+                            <h4>Strategy</h4>
+                            <ul>
+                                <li>Partition by location</li>
+                                <li>US-East, EU, Asia</li>
+                                <li>Data locality</li>
+                            </ul>
+                            <h4>Pros/Cons</h4>
+                            <ul>
+                                <li>✅ Low latency</li>
+                                <li>❌ Cross-shard joins complex</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>Replication Strategies</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">👑</span>
+                            <h3>Leader-Follower</h3>
+                            <p class="framework-subtitle">Master-Slave Replication</p>
+                            <h4>Pattern</h4>
+                            <ul>
+                                <li>Writes to leader only</li>
+                                <li>Reads from followers</li>
+                                <li>Async or sync replication</li>
+                                <li>Failover to follower</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🤝</span>
+                            <h3>Multi-Leader</h3>
+                            <p class="framework-subtitle">Multi-Master</p>
+                            <h4>Pattern</h4>
+                            <ul>
+                                <li>Multiple write nodes</li>
+                                <li>Conflict resolution needed</li>
+                                <li>Geographic distribution</li>
+                                <li>Better write availability</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🌐</span>
+                            <h3>Leaderless</h3>
+                            <p class="framework-subtitle">Peer-to-Peer</p>
+                            <h4>Pattern</h4>
+                            <ul>
+                                <li>Write to multiple nodes</li>
+                                <li>Quorum-based consistency</li>
+                                <li>Cassandra, DynamoDB</li>
+                                <li>High availability</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resources -->
+            <div id="resources" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">📚 Resources & Learning</h2>
+                    
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📖</span>
+                            <h3>Essential Books</h3>
+                            <ul>
+                                <li><strong>Designing Data-Intensive Applications</strong> - Martin Kleppmann</li>
+                                <li><strong>Database Internals</strong> - Alex Petrov</li>
+                                <li><strong>SQL Performance Explained</strong> - Markus Winand</li>
+                                <li><strong>MongoDB: The Definitive Guide</strong> - Shannon Bradshaw</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🛠️</span>
+                            <h3>Tools & Platforms</h3>
+                            <ul>
+                                <li><a href="https://www.postgresql.org/" target="_blank" rel="noopener">PostgreSQL</a> - Advanced SQL database</li>
+                                <li><a href="https://www.mongodb.com/" target="_blank" rel="noopener">MongoDB</a> - Document database</li>
+                                <li><a href="https://redis.io/" target="_blank" rel="noopener">Redis</a> - In-memory data store</li>
+                                <li><a href="https://neo4j.com/" target="_blank" rel="noopener">Neo4j</a> - Graph database</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🌐</span>
+                            <h3>Online Resources</h3>
+                            <ul>
+                                <li><a href="https://use-the-index-luke.com/" target="_blank" rel="noopener">Use The Index, Luke!</a></li>
+                                <li><a href="https://www.db-engines.com/" target="_blank" rel="noopener">DB-Engines Ranking</a></li>
+                                <li><a href="https://dbdiagram.io/" target="_blank" rel="noopener">dbdiagram.io</a> - ER diagrams</li>
+                                <li><a href="https://www.postgresql.org/docs/" target="_blank" rel="noopener">PostgreSQL Documentation</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 CORTEX Knowledge Base. Created by Asif Hussain.</p>
+            <p>
+                <a href="../index.html">Home</a> |
+                <a href="index.html">Knowledge Library</a> |
+                <a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener">GitHub</a>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark'
+        });
+    </script>
+</body>
+</html>

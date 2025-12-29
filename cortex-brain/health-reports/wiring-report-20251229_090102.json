@@ -1,0 +1,1869 @@
+{
+  "timestamp": "2025-12-29T09:01:00.245983",
+  "total": 310,
+  "wired": 45,
+  "unwired": 265,
+  "coverage": 14.516129032258066,
+  "components": [
+    {
+      "name": "AlignmentOrchestrator",
+      "type": "orchestrator",
+      "file": "src\\orchestrators\\alignment_orchestrator.py",
+      "wired": true
+    },
+    {
+      "name": "ApplicationHealthOrchestrator",
+      "type": "orchestrator",
+      "file": "src\\orchestrators\\application_health_orchestrator.py",
+      "wired": false
+    },
+    {
+      "name": "GitCheckpointOrchestrator",
+      "type": "orchestrator",
+      "file": "src\\orchestrators\\git_checkpoint_orchestrator.py",
+      "wired": false
+    },
+    {
+      "name": "MasterSetupOrchestrator",
+      "type": "orchestrator",
+      "file": "src\\orchestrators\\master_setup_orchestrator.py",
+      "wired": false
+    },
+    {
+      "name": "OnboardingAcknowledgmentOrchestrator",
+      "type": "orchestrator",
+      "file": "src\\orchestrators\\onboarding_acknowledgment_orchestrator.py",
+      "wired": false
+    },
+    {
+      "name": "PlanningOrchestrator",
+      "type": "orchestrator",
+      "file": "src\\orchestrators\\planning_orchestrator.py",
+      "wired": true
+    },
+    {
+      "name": "RollbackOrchestrator",
+      "type": "orchestrator",
+      "file": "src\\orchestrators\\rollback_orchestrator.py",
+      "wired": true
+    },
+    {
+      "name": "SetupEPMOrchestrator",
+      "type": "orchestrator",
+      "file": "src\\orchestrators\\setup_epm_orchestrator.py",
+      "wired": false
+    },
+    {
+      "name": "UpgradeOrchestrator",
+      "type": "orchestrator",
+      "file": "src\\orchestrators\\upgrade_orchestrator_v1.py",
+      "wired": true
+    },
+    {
+      "name": "UpgradeOrchestratorV2",
+      "type": "orchestrator",
+      "file": "src\\orchestrators\\upgrade_orchestrator_v2.py",
+      "wired": true
+    },
+    {
+      "name": "ADOOrchestrator",
+      "type": "orchestrator",
+      "file": "src\\orchestrators\\ado\\ado_orchestrator.py",
+      "wired": true
+    },
+    {
+      "name": "OrchestratorStatus",
+      "type": "orchestrator",
+      "file": "src\\orchestrators\\base\\base_orchestrator.py",
+      "wired": false
+    },
+    {
+      "name": "PlanningOrchestrator",
+      "type": "orchestrator",
+      "file": "src\\orchestrators\\planning\\planning_orchestrator.py",
+      "wired": true
+    },
+    {
+      "name": "PreFlightOrchestrator",
+      "type": "orchestrator",
+      "file": "src\\orchestrators\\planning\\pre_flight_orchestrator.py",
+      "wired": false
+    },
+    {
+      "name": "SanitizationOrchestrator",
+      "type": "orchestrator",
+      "file": "src\\orchestrators\\sanitization\\sanitization_orchestrator.py",
+      "wired": false
+    },
+    {
+      "name": "StoryEnhancementOrchestrator",
+      "type": "orchestrator",
+      "file": "src\\orchestrators\\story_enhancement\\story_enhancement_orchestrator.py",
+      "wired": false
+    },
+    {
+      "name": "SystemIntegrityOrchestrator",
+      "type": "orchestrator",
+      "file": "src\\orchestrators\\system\\system_integrity_orchestrator.py",
+      "wired": false
+    },
+    {
+      "name": "TDDOrchestrator",
+      "type": "orchestrator",
+      "file": "src\\orchestrators\\tdd\\tdd_orchestrator.py",
+      "wired": true
+    },
+    {
+      "name": "TDDOrchestrator",
+      "type": "orchestrator",
+      "file": "src\\orchestrators\\tdd\\tdd_orchestrator_v4_migrated.py",
+      "wired": true
+    },
+    {
+      "name": "IntelligenceOrchestrator",
+      "type": "orchestrator",
+      "file": "src\\orchestrators\\planning\\intelligence\\intelligence_orchestrator.py",
+      "wired": true
+    },
+    {
+      "name": "ADOValidationOrchestrator",
+      "type": "orchestrator",
+      "file": "src\\operations\\modules\\orchestration\\ado_validation_orchestrator.py",
+      "wired": false
+    },
+    {
+      "name": "ArchitecturalReviewOrchestrator",
+      "type": "orchestrator",
+      "file": "src\\operations\\modules\\orchestration\\architectural_review_orchestrator.py",
+      "wired": false
+    },
+    {
+      "name": "CleanupOrchestrator",
+      "type": "orchestrator",
+      "file": "src\\operations\\modules\\orchestration\\cleanup_orchestrator.py",
+      "wired": true
+    },
+    {
+      "name": "HolisticDiscoveryOrchestrator",
+      "type": "orchestrator",
+      "file": "src\\operations\\modules\\orchestration\\holistic_discovery_orchestrator.py",
+      "wired": false
+    },
+    {
+      "name": "MaintenanceOrchestrator",
+      "type": "orchestrator",
+      "file": "src\\operations\\modules\\orchestration\\maintenance_orchestrator.py",
+      "wired": true
+    },
+    {
+      "name": "RefinementOrchestrator",
+      "type": "orchestrator",
+      "file": "src\\operations\\modules\\orchestration\\refinement_orchestrator.py",
+      "wired": false
+    },
+    {
+      "name": "VisionAPIValidationOrchestrator",
+      "type": "orchestrator",
+      "file": "src\\operations\\modules\\orchestration\\vision_api_validation_orchestrator.py",
+      "wired": false
+    },
+    {
+      "name": "ADOAgent",
+      "type": "agent",
+      "file": "src\\cortex_agents\\ado_agent.py",
+      "wired": false
+    },
+    {
+      "name": "AgentType",
+      "type": "agent",
+      "file": "src\\cortex_agents\\agent_types.py",
+      "wired": false
+    },
+    {
+      "name": "ApplicationHealthAgent",
+      "type": "agent",
+      "file": "src\\cortex_agents\\application_health_agent.py",
+      "wired": false
+    },
+    {
+      "name": "AgentRequest",
+      "type": "agent",
+      "file": "src\\cortex_agents\\base_agent.py",
+      "wired": false
+    },
+    {
+      "name": "AgentResponse",
+      "type": "agent",
+      "file": "src\\cortex_agents\\base_agent.py",
+      "wired": false
+    },
+    {
+      "name": "AgentMessage",
+      "type": "agent",
+      "file": "src\\cortex_agents\\base_agent.py",
+      "wired": false
+    },
+    {
+      "name": "ComplianceDashboardAgent",
+      "type": "agent",
+      "file": "src\\cortex_agents\\compliance_dashboard_agent.py",
+      "wired": false
+    },
+    {
+      "name": "LearningCaptureAgent",
+      "type": "agent",
+      "file": "src\\cortex_agents\\learning_capture_agent.py",
+      "wired": false
+    },
+    {
+      "name": "LearningLibrarianAgent",
+      "type": "agent",
+      "file": "src\\cortex_agents\\learning_librarian_agent.py",
+      "wired": false
+    },
+    {
+      "name": "ProfileAgent",
+      "type": "agent",
+      "file": "src\\cortex_agents\\profile_agent.py",
+      "wired": false
+    },
+    {
+      "name": "RCAAgent",
+      "type": "agent",
+      "file": "src\\cortex_agents\\rca_agent.py",
+      "wired": false
+    },
+    {
+      "name": "WelcomeBannerAgent",
+      "type": "agent",
+      "file": "src\\cortex_agents\\welcome_banner_agent.py",
+      "wired": false
+    },
+    {
+      "name": "RouterAgent",
+      "type": "agent",
+      "file": "src\\cortex_agents\\operational\\router_agent.py",
+      "wired": false
+    },
+    {
+      "name": "ArchitectureIntelligenceAgent",
+      "type": "agent",
+      "file": "src\\cortex_agents\\strategic\\architecture_intelligence_agent.py",
+      "wired": false
+    },
+    {
+      "name": "admin_dashboard_launcher_module",
+      "type": "module",
+      "file": "src\\operations\\modules\\admin_dashboard_launcher_module.py",
+      "wired": false
+    },
+    {
+      "name": "application_onboarding_steps",
+      "type": "module",
+      "file": "src\\operations\\modules\\application_onboarding_steps.py",
+      "wired": false
+    },
+    {
+      "name": "apply_narrator_voice_module",
+      "type": "module",
+      "file": "src\\operations\\modules\\apply_narrator_voice_module.py",
+      "wired": false
+    },
+    {
+      "name": "brain_initialization_module",
+      "type": "module",
+      "file": "src\\operations\\modules\\brain_initialization_module.py",
+      "wired": false
+    },
+    {
+      "name": "brain_tests_module",
+      "type": "module",
+      "file": "src\\operations\\modules\\brain_tests_module.py",
+      "wired": false
+    },
+    {
+      "name": "build_story_preview_module",
+      "type": "module",
+      "file": "src\\operations\\modules\\build_story_preview_module.py",
+      "wired": false
+    },
+    {
+      "name": "clear_python_cache_module",
+      "type": "module",
+      "file": "src\\operations\\modules\\clear_python_cache_module.py",
+      "wired": false
+    },
+    {
+      "name": "context_control_module",
+      "type": "module",
+      "file": "src\\operations\\modules\\context_control_module.py",
+      "wired": false
+    },
+    {
+      "name": "context_display_module",
+      "type": "module",
+      "file": "src\\operations\\modules\\context_display_module.py",
+      "wired": false
+    },
+    {
+      "name": "conversation_capture_module",
+      "type": "module",
+      "file": "src\\operations\\modules\\conversation_capture_module.py",
+      "wired": false
+    },
+    {
+      "name": "conversation_tracking_module",
+      "type": "module",
+      "file": "src\\operations\\modules\\conversation_tracking_module.py",
+      "wired": false
+    },
+    {
+      "name": "dashboard_launcher_module",
+      "type": "module",
+      "file": "src\\operations\\modules\\dashboard_launcher_module.py",
+      "wired": false
+    },
+    {
+      "name": "deploy_docs_preview_module",
+      "type": "module",
+      "file": "src\\operations\\modules\\deploy_docs_preview_module.py",
+      "wired": false
+    },
+    {
+      "name": "evaluate_cortex_architecture_module",
+      "type": "module",
+      "file": "src\\operations\\modules\\evaluate_cortex_architecture_module.py",
+      "wired": false
+    },
+    {
+      "name": "generate_cleanup_report_module",
+      "type": "module",
+      "file": "src\\operations\\modules\\generate_cleanup_report_module.py",
+      "wired": false
+    },
+    {
+      "name": "generate_image_prompts_module",
+      "type": "module",
+      "file": "src\\operations\\modules\\generate_image_prompts_module.py",
+      "wired": false
+    },
+    {
+      "name": "generate_story_chapters_module",
+      "type": "module",
+      "file": "src\\operations\\modules\\generate_story_chapters_module.py",
+      "wired": false
+    },
+    {
+      "name": "git_checkpoint_module",
+      "type": "module",
+      "file": "src\\operations\\modules\\git_checkpoint_module.py",
+      "wired": false
+    },
+    {
+      "name": "git_sync_module",
+      "type": "module",
+      "file": "src\\operations\\modules\\git_sync_module.py",
+      "wired": false
+    },
+    {
+      "name": "hands_on_tutorial_orchestrator",
+      "type": "module",
+      "file": "src\\operations\\modules\\hands_on_tutorial_orchestrator.py",
+      "wired": false
+    },
+    {
+      "name": "implants_commands",
+      "type": "module",
+      "file": "src\\operations\\modules\\implants_commands.py",
+      "wired": false
+    },
+    {
+      "name": "load_protection_rules_module",
+      "type": "module",
+      "file": "src\\operations\\modules\\load_protection_rules_module.py",
+      "wired": false
+    },
+    {
+      "name": "load_story_template_module",
+      "type": "module",
+      "file": "src\\operations\\modules\\load_story_template_module.py",
+      "wired": false
+    },
+    {
+      "name": "platform_detection_module",
+      "type": "module",
+      "file": "src\\operations\\modules\\platform_detection_module.py",
+      "wired": false
+    },
+    {
+      "name": "project_validation_module",
+      "type": "module",
+      "file": "src\\operations\\modules\\project_validation_module.py",
+      "wired": false
+    },
+    {
+      "name": "python_dependencies_module",
+      "type": "module",
+      "file": "src\\operations\\modules\\python_dependencies_module.py",
+      "wired": false
+    },
+    {
+      "name": "refresh_design_docs_module",
+      "type": "module",
+      "file": "src\\operations\\modules\\refresh_design_docs_module.py",
+      "wired": false
+    },
+    {
+      "name": "relocate_story_files_module",
+      "type": "module",
+      "file": "src\\operations\\modules\\relocate_story_files_module.py",
+      "wired": false
+    },
+    {
+      "name": "remove_old_logs_module",
+      "type": "module",
+      "file": "src\\operations\\modules\\remove_old_logs_module.py",
+      "wired": false
+    },
+    {
+      "name": "remove_orphaned_files_module",
+      "type": "module",
+      "file": "src\\operations\\modules\\remove_orphaned_files_module.py",
+      "wired": false
+    },
+    {
+      "name": "save_story_markdown_module",
+      "type": "module",
+      "file": "src\\operations\\modules\\save_story_markdown_module.py",
+      "wired": false
+    },
+    {
+      "name": "scan_docstrings_module",
+      "type": "module",
+      "file": "src\\operations\\modules\\scan_docstrings_module.py",
+      "wired": false
+    },
+    {
+      "name": "scan_temporary_files_module",
+      "type": "module",
+      "file": "src\\operations\\modules\\scan_temporary_files_module.py",
+      "wired": false
+    },
+    {
+      "name": "setup_completion_module",
+      "type": "module",
+      "file": "src\\operations\\modules\\setup_completion_module.py",
+      "wired": false
+    },
+    {
+      "name": "tooling_detection_module",
+      "type": "module",
+      "file": "src\\operations\\modules\\tooling_detection_module.py",
+      "wired": false
+    },
+    {
+      "name": "tooling_installer_module",
+      "type": "module",
+      "file": "src\\operations\\modules\\tooling_installer_module.py",
+      "wired": false
+    },
+    {
+      "name": "tooling_verification_module",
+      "type": "module",
+      "file": "src\\operations\\modules\\tooling_verification_module.py",
+      "wired": false
+    },
+    {
+      "name": "tutorial_validator",
+      "type": "module",
+      "file": "src\\operations\\modules\\tutorial_validator.py",
+      "wired": false
+    },
+    {
+      "name": "user_onboarding_steps",
+      "type": "module",
+      "file": "src\\operations\\modules\\user_onboarding_steps.py",
+      "wired": false
+    },
+    {
+      "name": "vacuum_sqlite_databases_module",
+      "type": "module",
+      "file": "src\\operations\\modules\\vacuum_sqlite_databases_module.py",
+      "wired": false
+    },
+    {
+      "name": "validate_story_structure_module",
+      "type": "module",
+      "file": "src\\operations\\modules\\validate_story_structure_module.py",
+      "wired": false
+    },
+    {
+      "name": "virtual_environment_module",
+      "type": "module",
+      "file": "src\\operations\\modules\\virtual_environment_module.py",
+      "wired": false
+    },
+    {
+      "name": "vision_api_module",
+      "type": "module",
+      "file": "src\\operations\\modules\\vision_api_module.py",
+      "wired": false
+    },
+    {
+      "name": "alignment_models",
+      "type": "module",
+      "file": "src\\operations\\modules\\admin\\alignment_models.py",
+      "wired": false
+    },
+    {
+      "name": "alignment_state",
+      "type": "module",
+      "file": "src\\operations\\modules\\admin\\alignment_state.py",
+      "wired": false
+    },
+    {
+      "name": "alignment_validators",
+      "type": "module",
+      "file": "src\\operations\\modules\\admin\\alignment_validators.py",
+      "wired": false
+    },
+    {
+      "name": "align_utility",
+      "type": "module",
+      "file": "src\\operations\\modules\\admin\\align_utility.py",
+      "wired": true
+    },
+    {
+      "name": "documentation_governance_validator",
+      "type": "module",
+      "file": "src\\operations\\modules\\admin\\documentation_governance_validator.py",
+      "wired": false
+    },
+    {
+      "name": "gap_remediation_validator",
+      "type": "module",
+      "file": "src\\operations\\modules\\admin\\gap_remediation_validator.py",
+      "wired": false
+    },
+    {
+      "name": "governance_tokens",
+      "type": "module",
+      "file": "src\\operations\\modules\\admin\\governance_tokens.py",
+      "wired": false
+    },
+    {
+      "name": "healthcheck_utility",
+      "type": "module",
+      "file": "src\\operations\\modules\\admin\\healthcheck_utility.py",
+      "wired": true
+    },
+    {
+      "name": "ado_utility",
+      "type": "module",
+      "file": "src\\operations\\modules\\ado\\ado_utility.py",
+      "wired": true
+    },
+    {
+      "name": "analysis_utility",
+      "type": "module",
+      "file": "src\\operations\\modules\\analysis\\analysis_utility.py",
+      "wired": true
+    },
+    {
+      "name": "architecture_debt_analyzer",
+      "type": "module",
+      "file": "src\\operations\\modules\\analysis\\architecture_debt_analyzer.py",
+      "wired": false
+    },
+    {
+      "name": "ast_engine",
+      "type": "module",
+      "file": "src\\operations\\modules\\analysis\\ast_engine.py",
+      "wired": false
+    },
+    {
+      "name": "code_smell_analyzer",
+      "type": "module",
+      "file": "src\\operations\\modules\\analysis\\code_smell_analyzer.py",
+      "wired": false
+    },
+    {
+      "name": "deduplication_analyzer",
+      "type": "module",
+      "file": "src\\operations\\modules\\analysis\\deduplication_analyzer.py",
+      "wired": false
+    },
+    {
+      "name": "review_orchestrator",
+      "type": "module",
+      "file": "src\\operations\\modules\\architectural\\review_orchestrator.py",
+      "wired": false
+    },
+    {
+      "name": "brain_performance_integration",
+      "type": "module",
+      "file": "src\\operations\\modules\\brain\\brain_performance_integration.py",
+      "wired": false
+    },
+    {
+      "name": "brain_tuning_orchestrator",
+      "type": "module",
+      "file": "src\\operations\\modules\\brain\\brain_tuning_orchestrator.py",
+      "wired": false
+    },
+    {
+      "name": "memory_manager",
+      "type": "module",
+      "file": "src\\operations\\modules\\brain\\memory_manager.py",
+      "wired": false
+    },
+    {
+      "name": "optimization_engine",
+      "type": "module",
+      "file": "src\\operations\\modules\\brain\\optimization_engine.py",
+      "wired": false
+    },
+    {
+      "name": "query_cache",
+      "type": "module",
+      "file": "src\\operations\\modules\\brain\\query_cache.py",
+      "wired": false
+    },
+    {
+      "name": "checkpoint_utility",
+      "type": "module",
+      "file": "src\\operations\\modules\\checkpoints\\checkpoint_utility.py",
+      "wired": true
+    },
+    {
+      "name": "backup_archiver",
+      "type": "module",
+      "file": "src\\operations\\modules\\cleanup\\backup_archiver.py",
+      "wired": false
+    },
+    {
+      "name": "cleanup_models",
+      "type": "module",
+      "file": "src\\operations\\modules\\cleanup\\cleanup_models.py",
+      "wired": false
+    },
+    {
+      "name": "cleanup_orchestrator",
+      "type": "module",
+      "file": "src\\operations\\modules\\cleanup\\cleanup_orchestrator.py",
+      "wired": false
+    },
+    {
+      "name": "cleanup_utility",
+      "type": "module",
+      "file": "src\\operations\\modules\\cleanup\\cleanup_utility.py",
+      "wired": true
+    },
+    {
+      "name": "cleanup_validator",
+      "type": "module",
+      "file": "src\\operations\\modules\\cleanup\\cleanup_validator.py",
+      "wired": true
+    },
+    {
+      "name": "cleanup_verifier",
+      "type": "module",
+      "file": "src\\operations\\modules\\cleanup\\cleanup_verifier.py",
+      "wired": false
+    },
+    {
+      "name": "critical_file_detector",
+      "type": "module",
+      "file": "src\\operations\\modules\\cleanup\\critical_file_detector.py",
+      "wired": false
+    },
+    {
+      "name": "doc_archive_cleaner",
+      "type": "module",
+      "file": "src\\operations\\modules\\cleanup\\doc_archive_cleaner.py",
+      "wired": false
+    },
+    {
+      "name": "file_reorganization_engine",
+      "type": "module",
+      "file": "src\\operations\\modules\\cleanup\\file_reorganization_engine.py",
+      "wired": false
+    },
+    {
+      "name": "file_scanner",
+      "type": "module",
+      "file": "src\\operations\\modules\\cleanup\\file_scanner.py",
+      "wired": false
+    },
+    {
+      "name": "git_recovery_manifest",
+      "type": "module",
+      "file": "src\\operations\\modules\\cleanup\\git_recovery_manifest.py",
+      "wired": false
+    },
+    {
+      "name": "holistic_cleanup_orchestrator",
+      "type": "module",
+      "file": "src\\operations\\modules\\cleanup\\holistic_cleanup_orchestrator.py",
+      "wired": false
+    },
+    {
+      "name": "legacy_kds_cleaner",
+      "type": "module",
+      "file": "src\\operations\\modules\\cleanup\\legacy_kds_cleaner.py",
+      "wired": false
+    },
+    {
+      "name": "markdown_consolidation_engine",
+      "type": "module",
+      "file": "src\\operations\\modules\\cleanup\\markdown_consolidation_engine.py",
+      "wired": false
+    },
+    {
+      "name": "reference_checker",
+      "type": "module",
+      "file": "src\\operations\\modules\\cleanup\\reference_checker.py",
+      "wired": false
+    },
+    {
+      "name": "reference_tracker",
+      "type": "module",
+      "file": "src\\operations\\modules\\cleanup\\reference_tracker.py",
+      "wired": false
+    },
+    {
+      "name": "remove_obsolete_tests_module",
+      "type": "module",
+      "file": "src\\operations\\modules\\cleanup\\remove_obsolete_tests_module.py",
+      "wired": false
+    },
+    {
+      "name": "report_consolidation_engine",
+      "type": "module",
+      "file": "src\\operations\\modules\\cleanup\\report_consolidation_engine.py",
+      "wired": false
+    },
+    {
+      "name": "smart_deletion_engine",
+      "type": "module",
+      "file": "src\\operations\\modules\\cleanup\\smart_deletion_engine.py",
+      "wired": false
+    },
+    {
+      "name": "user_cleanup_orchestrator",
+      "type": "module",
+      "file": "src\\operations\\modules\\cleanup\\user_cleanup_orchestrator.py",
+      "wired": false
+    },
+    {
+      "name": "execution_mode_detector",
+      "type": "module",
+      "file": "src\\operations\\modules\\context\\execution_mode_detector.py",
+      "wired": false
+    },
+    {
+      "name": "direct_import",
+      "type": "module",
+      "file": "src\\operations\\modules\\conversations\\direct_import.py",
+      "wired": false
+    },
+    {
+      "name": "import_handler",
+      "type": "module",
+      "file": "src\\operations\\modules\\conversations\\import_handler.py",
+      "wired": false
+    },
+    {
+      "name": "quality_monitor",
+      "type": "module",
+      "file": "src\\operations\\modules\\conversations\\quality_monitor.py",
+      "wired": false
+    },
+    {
+      "name": "smart_auto_detection",
+      "type": "module",
+      "file": "src\\operations\\modules\\conversations\\smart_auto_detection.py",
+      "wired": false
+    },
+    {
+      "name": "smart_hint_generator",
+      "type": "module",
+      "file": "src\\operations\\modules\\conversations\\smart_hint_generator.py",
+      "wired": false
+    },
+    {
+      "name": "tier2_learning",
+      "type": "module",
+      "file": "src\\operations\\modules\\conversations\\tier2_learning.py",
+      "wired": false
+    },
+    {
+      "name": "learning_dashboard_launcher",
+      "type": "module",
+      "file": "src\\operations\\modules\\dashboard\\learning_dashboard_launcher.py",
+      "wired": false
+    },
+    {
+      "name": "repository_discovery_service",
+      "type": "module",
+      "file": "src\\operations\\modules\\dashboard\\repository_discovery_service.py",
+      "wired": false
+    },
+    {
+      "name": "sqlite_optimizer",
+      "type": "module",
+      "file": "src\\operations\\modules\\database\\sqlite_optimizer.py",
+      "wired": false
+    },
+    {
+      "name": "brain_health_monitor",
+      "type": "module",
+      "file": "src\\operations\\modules\\data_integration\\brain_health_monitor.py",
+      "wired": false
+    },
+    {
+      "name": "data_collection_integration",
+      "type": "module",
+      "file": "src\\operations\\modules\\data_integration\\data_collection_integration.py",
+      "wired": false
+    },
+    {
+      "name": "real_time_metrics_dashboard",
+      "type": "module",
+      "file": "src\\operations\\modules\\data_integration\\real_time_metrics_dashboard.py",
+      "wired": false
+    },
+    {
+      "name": "ado_planning_demo",
+      "type": "module",
+      "file": "src\\operations\\modules\\demo\\ado_planning_demo.py",
+      "wired": false
+    },
+    {
+      "name": "demo_orchestrator",
+      "type": "module",
+      "file": "src\\operations\\modules\\demo\\demo_orchestrator.py",
+      "wired": false
+    },
+    {
+      "name": "deploy_gate_validator",
+      "type": "module",
+      "file": "src\\operations\\modules\\deploy\\deploy_gate_validator.py",
+      "wired": false
+    },
+    {
+      "name": "deploy_utility",
+      "type": "module",
+      "file": "src\\operations\\modules\\deploy\\deploy_utility.py",
+      "wired": true
+    },
+    {
+      "name": "design_sync_helpers",
+      "type": "module",
+      "file": "src\\operations\\modules\\design_sync\\design_sync_helpers.py",
+      "wired": false
+    },
+    {
+      "name": "design_sync_models",
+      "type": "module",
+      "file": "src\\operations\\modules\\design_sync\\design_sync_models.py",
+      "wired": false
+    },
+    {
+      "name": "design_sync_orchestrator",
+      "type": "module",
+      "file": "src\\operations\\modules\\design_sync\\design_sync_orchestrator.py",
+      "wired": false
+    },
+    {
+      "name": "implementation_discovery",
+      "type": "module",
+      "file": "src\\operations\\modules\\design_sync\\implementation_discovery.py",
+      "wired": false
+    },
+    {
+      "name": "progress_helpers",
+      "type": "module",
+      "file": "src\\operations\\modules\\design_sync\\progress_helpers.py",
+      "wired": false
+    },
+    {
+      "name": "status_file_consolidator",
+      "type": "module",
+      "file": "src\\operations\\modules\\design_sync\\status_file_consolidator.py",
+      "wired": false
+    },
+    {
+      "name": "track_config",
+      "type": "module",
+      "file": "src\\operations\\modules\\design_sync\\track_config.py",
+      "wired": false
+    },
+    {
+      "name": "track_templates",
+      "type": "module",
+      "file": "src\\operations\\modules\\design_sync\\track_templates.py",
+      "wired": false
+    },
+    {
+      "name": "diagram_regeneration_orchestrator",
+      "type": "module",
+      "file": "src\\operations\\modules\\diagrams\\diagram_regeneration_orchestrator.py",
+      "wired": false
+    },
+    {
+      "name": "ast_parser",
+      "type": "module",
+      "file": "src\\operations\\modules\\discovery\\ast_parser.py",
+      "wired": false
+    },
+    {
+      "name": "complexity_analyzer",
+      "type": "module",
+      "file": "src\\operations\\modules\\discovery\\complexity_analyzer.py",
+      "wired": false
+    },
+    {
+      "name": "csharp_ast_parser",
+      "type": "module",
+      "file": "src\\operations\\modules\\discovery\\csharp_ast_parser.py",
+      "wired": false
+    },
+    {
+      "name": "dependency_graph_builder",
+      "type": "module",
+      "file": "src\\operations\\modules\\discovery\\dependency_graph_builder.py",
+      "wired": false
+    },
+    {
+      "name": "exclusion_engine",
+      "type": "module",
+      "file": "src\\operations\\modules\\discovery\\exclusion_engine.py",
+      "wired": false
+    },
+    {
+      "name": "file_discovery_engine",
+      "type": "module",
+      "file": "src\\operations\\modules\\discovery\\file_discovery_engine.py",
+      "wired": false
+    },
+    {
+      "name": "javascript_ast_parser",
+      "type": "module",
+      "file": "src\\operations\\modules\\discovery\\javascript_ast_parser.py",
+      "wired": false
+    },
+    {
+      "name": "language_detector",
+      "type": "module",
+      "file": "src\\operations\\modules\\discovery\\language_detector.py",
+      "wired": false
+    },
+    {
+      "name": "models",
+      "type": "module",
+      "file": "src\\operations\\modules\\discovery\\models.py",
+      "wired": false
+    },
+    {
+      "name": "python_ast_parser",
+      "type": "module",
+      "file": "src\\operations\\modules\\discovery\\python_ast_parser.py",
+      "wired": false
+    },
+    {
+      "name": "scope_resolver",
+      "type": "module",
+      "file": "src\\operations\\modules\\discovery\\scope_resolver.py",
+      "wired": false
+    },
+    {
+      "name": "semantic_index_builder",
+      "type": "module",
+      "file": "src\\operations\\modules\\discovery\\semantic_index_builder.py",
+      "wired": false
+    },
+    {
+      "name": "semantic_search_engine",
+      "type": "module",
+      "file": "src\\operations\\modules\\discovery\\semantic_search_engine.py",
+      "wired": false
+    },
+    {
+      "name": "snippet_extractor",
+      "type": "module",
+      "file": "src\\operations\\modules\\discovery\\snippet_extractor.py",
+      "wired": false
+    },
+    {
+      "name": "auto_documentation_generator",
+      "type": "module",
+      "file": "src\\operations\\modules\\documentation\\auto_documentation_generator.py",
+      "wired": false
+    },
+    {
+      "name": "enterprise_documentation_orchestrator_module",
+      "type": "module",
+      "file": "src\\operations\\modules\\documentation\\enterprise_documentation_orchestrator_module.py",
+      "wired": false
+    },
+    {
+      "name": "auto_registration_orchestrator",
+      "type": "module",
+      "file": "src\\operations\\modules\\epm\\auto_registration_orchestrator.py",
+      "wired": false
+    },
+    {
+      "name": "setup_epm_utility",
+      "type": "module",
+      "file": "src\\operations\\modules\\epm\\setup_epm_utility.py",
+      "wired": true
+    },
+    {
+      "name": "documentation_cli",
+      "type": "module",
+      "file": "src\\operations\\modules\\epmo\\documentation_cli.py",
+      "wired": false
+    },
+    {
+      "name": "documentation_generator",
+      "type": "module",
+      "file": "src\\operations\\modules\\epmo\\documentation_generator.py",
+      "wired": false
+    },
+    {
+      "name": "template_engine",
+      "type": "module",
+      "file": "src\\operations\\modules\\epmo\\template_engine.py",
+      "wired": false
+    },
+    {
+      "name": "swagger_estimation_utility",
+      "type": "module",
+      "file": "src\\operations\\modules\\estimation\\swagger_estimation_utility.py",
+      "wired": true
+    },
+    {
+      "name": "enhanced_feedback_module",
+      "type": "module",
+      "file": "src\\operations\\modules\\feedback\\enhanced_feedback_module.py",
+      "wired": false
+    },
+    {
+      "name": "privacy",
+      "type": "module",
+      "file": "src\\operations\\modules\\feedback\\privacy.py",
+      "wired": false
+    },
+    {
+      "name": "legacy_spec_generator",
+      "type": "module",
+      "file": "src\\operations\\modules\\generators\\legacy_spec_generator.py",
+      "wired": false
+    },
+    {
+      "name": "commit_utility",
+      "type": "module",
+      "file": "src\\operations\\modules\\git\\commit_utility.py",
+      "wired": true
+    },
+    {
+      "name": "git_checkpoint_utility",
+      "type": "module",
+      "file": "src\\operations\\modules\\git\\git_checkpoint_utility.py",
+      "wired": true
+    },
+    {
+      "name": "rollback_utility",
+      "type": "module",
+      "file": "src\\operations\\modules\\git\\rollback_utility.py",
+      "wired": true
+    },
+    {
+      "name": "alignment_state_tracker",
+      "type": "module",
+      "file": "src\\operations\\modules\\git_protection\\alignment_state_tracker.py",
+      "wired": false
+    },
+    {
+      "name": "git_pull_protector",
+      "type": "module",
+      "file": "src\\operations\\modules\\git_protection\\git_pull_protector.py",
+      "wired": false
+    },
+    {
+      "name": "health_utility",
+      "type": "module",
+      "file": "src\\operations\\modules\\health\\health_utility.py",
+      "wired": true
+    },
+    {
+      "name": "context_linker",
+      "type": "module",
+      "file": "src\\operations\\modules\\ideas\\context_linker.py",
+      "wired": false
+    },
+    {
+      "name": "idea_organizer",
+      "type": "module",
+      "file": "src\\operations\\modules\\ideas\\idea_organizer.py",
+      "wired": false
+    },
+    {
+      "name": "idea_queue",
+      "type": "module",
+      "file": "src\\operations\\modules\\ideas\\idea_queue.py",
+      "wired": false
+    },
+    {
+      "name": "natural_language_interface",
+      "type": "module",
+      "file": "src\\operations\\modules\\ideas\\natural_language_interface.py",
+      "wired": false
+    },
+    {
+      "name": "base_incremental_utility",
+      "type": "module",
+      "file": "src\\operations\\modules\\incremental\\base_incremental_utility.py",
+      "wired": true
+    },
+    {
+      "name": "domain_classifier",
+      "type": "module",
+      "file": "src\\operations\\modules\\intelligence\\domain_classifier.py",
+      "wired": false
+    },
+    {
+      "name": "market_intelligence_engine",
+      "type": "module",
+      "file": "src\\operations\\modules\\intelligence\\market_intelligence_engine.py",
+      "wired": false
+    },
+    {
+      "name": "narrative_generator",
+      "type": "module",
+      "file": "src\\operations\\modules\\intelligence\\narrative_generator.py",
+      "wired": false
+    },
+    {
+      "name": "proactive_advisor",
+      "type": "module",
+      "file": "src\\operations\\modules\\intelligence\\proactive_advisor.py",
+      "wired": false
+    },
+    {
+      "name": "risk_assessor",
+      "type": "module",
+      "file": "src\\operations\\modules\\intelligence\\risk_assessor.py",
+      "wired": false
+    },
+    {
+      "name": "commit_filter",
+      "type": "module",
+      "file": "src\\operations\\modules\\learning\\commit_filter.py",
+      "wired": false
+    },
+    {
+      "name": "duplication_detector",
+      "type": "module",
+      "file": "src\\operations\\modules\\learning\\duplication_detector.py",
+      "wired": false
+    },
+    {
+      "name": "git_history_scanner",
+      "type": "module",
+      "file": "src\\operations\\modules\\learning\\git_history_scanner.py",
+      "wired": false
+    },
+    {
+      "name": "lesson_capture",
+      "type": "module",
+      "file": "src\\operations\\modules\\learning\\lesson_capture.py",
+      "wired": false
+    },
+    {
+      "name": "planning_learner",
+      "type": "module",
+      "file": "src\\operations\\modules\\learning\\planning_learner.py",
+      "wired": false
+    },
+    {
+      "name": "yaml_writer",
+      "type": "module",
+      "file": "src\\operations\\modules\\learning\\yaml_writer.py",
+      "wired": false
+    },
+    {
+      "name": "lint_utility",
+      "type": "module",
+      "file": "src\\operations\\modules\\lint\\lint_utility.py",
+      "wired": true
+    },
+    {
+      "name": "metrics_utility",
+      "type": "module",
+      "file": "src\\operations\\modules\\metrics\\metrics_utility.py",
+      "wired": true
+    },
+    {
+      "name": "onboarding_utility",
+      "type": "module",
+      "file": "src\\operations\\modules\\onboarding\\onboarding_utility.py",
+      "wired": true
+    },
+    {
+      "name": "code_quality_analyzer",
+      "type": "module",
+      "file": "src\\operations\\modules\\optimization\\code_quality_analyzer.py",
+      "wired": false
+    },
+    {
+      "name": "cortex_optimization_models",
+      "type": "module",
+      "file": "src\\operations\\modules\\optimization\\cortex_optimization_models.py",
+      "wired": false
+    },
+    {
+      "name": "doc_deduplicator",
+      "type": "module",
+      "file": "src\\operations\\modules\\optimization\\doc_deduplicator.py",
+      "wired": false
+    },
+    {
+      "name": "hardcoded_data_analyzer",
+      "type": "module",
+      "file": "src\\operations\\modules\\optimization\\hardcoded_data_analyzer.py",
+      "wired": false
+    },
+    {
+      "name": "hardcoded_data_cleaner_module",
+      "type": "module",
+      "file": "src\\operations\\modules\\optimization\\hardcoded_data_cleaner_module.py",
+      "wired": false
+    },
+    {
+      "name": "optimize_cortex_orchestrator",
+      "type": "module",
+      "file": "src\\operations\\modules\\optimization\\optimize_cortex_orchestrator.py",
+      "wired": false
+    },
+    {
+      "name": "adaptive_execution",
+      "type": "module",
+      "file": "src\\operations\\modules\\orchestration\\adaptive_execution.py",
+      "wired": false
+    },
+    {
+      "name": "ado_validation_orchestrator",
+      "type": "module",
+      "file": "src\\operations\\modules\\orchestration\\ado_validation_orchestrator.py",
+      "wired": false
+    },
+    {
+      "name": "architectural_review_orchestrator",
+      "type": "module",
+      "file": "src\\operations\\modules\\orchestration\\architectural_review_orchestrator.py",
+      "wired": false
+    },
+    {
+      "name": "audit_logger",
+      "type": "module",
+      "file": "src\\operations\\modules\\orchestration\\audit_logger.py",
+      "wired": false
+    },
+    {
+      "name": "cleanup_orchestrator",
+      "type": "module",
+      "file": "src\\operations\\modules\\orchestration\\cleanup_orchestrator.py",
+      "wired": false
+    },
+    {
+      "name": "holistic_discovery_orchestrator",
+      "type": "module",
+      "file": "src\\operations\\modules\\orchestration\\holistic_discovery_orchestrator.py",
+      "wired": false
+    },
+    {
+      "name": "maintenance_orchestrator",
+      "type": "module",
+      "file": "src\\operations\\modules\\orchestration\\maintenance_orchestrator.py",
+      "wired": false
+    },
+    {
+      "name": "refinement_orchestrator",
+      "type": "module",
+      "file": "src\\operations\\modules\\orchestration\\refinement_orchestrator.py",
+      "wired": false
+    },
+    {
+      "name": "session_context_manager",
+      "type": "module",
+      "file": "src\\operations\\modules\\orchestration\\session_context_manager.py",
+      "wired": false
+    },
+    {
+      "name": "temporary_plan_manager",
+      "type": "module",
+      "file": "src\\operations\\modules\\orchestration\\temporary_plan_manager.py",
+      "wired": false
+    },
+    {
+      "name": "vision_api_validation_orchestrator",
+      "type": "module",
+      "file": "src\\operations\\modules\\orchestration\\vision_api_validation_orchestrator.py",
+      "wired": false
+    },
+    {
+      "name": "phase8_utility",
+      "type": "module",
+      "file": "src\\operations\\modules\\phase8\\phase8_utility.py",
+      "wired": true
+    },
+    {
+      "name": "complexity_analyzer",
+      "type": "module",
+      "file": "src\\operations\\modules\\planning\\complexity_analyzer.py",
+      "wired": false
+    },
+    {
+      "name": "format_selector",
+      "type": "module",
+      "file": "src\\operations\\modules\\planning\\format_selector.py",
+      "wired": false
+    },
+    {
+      "name": "master_plan_template",
+      "type": "module",
+      "file": "src\\operations\\modules\\planning\\master_plan_template.py",
+      "wired": false
+    },
+    {
+      "name": "migration_utility",
+      "type": "module",
+      "file": "src\\operations\\modules\\planning\\migration_utility.py",
+      "wired": true
+    },
+    {
+      "name": "phase_lifecycle_manager",
+      "type": "module",
+      "file": "src\\operations\\modules\\planning\\phase_lifecycle_manager.py",
+      "wired": false
+    },
+    {
+      "name": "planning_utility",
+      "type": "module",
+      "file": "src\\operations\\modules\\planning\\planning_utility.py",
+      "wired": true
+    },
+    {
+      "name": "plan_manifest_tracker",
+      "type": "module",
+      "file": "src\\operations\\modules\\planning\\plan_manifest_tracker.py",
+      "wired": false
+    },
+    {
+      "name": "plan_sync_manager",
+      "type": "module",
+      "file": "src\\operations\\modules\\planning\\plan_sync_manager.py",
+      "wired": false
+    },
+    {
+      "name": "task_injector",
+      "type": "module",
+      "file": "src\\operations\\modules\\planning\\task_injector.py",
+      "wired": false
+    },
+    {
+      "name": "token_reduction_tracker",
+      "type": "module",
+      "file": "src\\operations\\modules\\planning\\token_reduction_tracker.py",
+      "wired": false
+    },
+    {
+      "name": "unified_plan_generator",
+      "type": "module",
+      "file": "src\\operations\\modules\\planning\\unified_plan_generator.py",
+      "wired": false
+    },
+    {
+      "name": "pr_context_utility",
+      "type": "module",
+      "file": "src\\operations\\modules\\pr\\pr_context_utility.py",
+      "wired": true
+    },
+    {
+      "name": "regenerate_prompts_utility",
+      "type": "module",
+      "file": "src\\operations\\modules\\prompt_generation\\regenerate_prompts_utility.py",
+      "wired": false
+    },
+    {
+      "name": "publish_branch_orchestrator",
+      "type": "module",
+      "file": "src\\operations\\modules\\publish\\publish_branch_orchestrator.py",
+      "wired": false
+    },
+    {
+      "name": "bloat_detector",
+      "type": "module",
+      "file": "src\\operations\\modules\\quality\\bloat_detector.py",
+      "wired": false
+    },
+    {
+      "name": "context_renderer",
+      "type": "module",
+      "file": "src\\operations\\modules\\questions\\context_renderer.py",
+      "wired": false
+    },
+    {
+      "name": "question_router",
+      "type": "module",
+      "file": "src\\operations\\modules\\questions\\question_router.py",
+      "wired": false
+    },
+    {
+      "name": "template_engine_integration",
+      "type": "module",
+      "file": "src\\operations\\modules\\questions\\template_engine_integration.py",
+      "wired": false
+    },
+    {
+      "name": "template_selector",
+      "type": "module",
+      "file": "src\\operations\\modules\\questions\\template_selector.py",
+      "wired": false
+    },
+    {
+      "name": "rca_utility",
+      "type": "module",
+      "file": "src\\operations\\modules\\rca\\rca_utility.py",
+      "wired": true
+    },
+    {
+      "name": "autonomous_execution_wiring_checker",
+      "type": "module",
+      "file": "src\\operations\\modules\\realignment\\autonomous_execution_wiring_checker.py",
+      "wired": false
+    },
+    {
+      "name": "component_discovery_scanner",
+      "type": "module",
+      "file": "src\\operations\\modules\\realignment\\component_discovery_scanner.py",
+      "wired": false
+    },
+    {
+      "name": "feature_auto_registrar",
+      "type": "module",
+      "file": "src\\operations\\modules\\realignment\\feature_auto_registrar.py",
+      "wired": false
+    },
+    {
+      "name": "feature_registration_validator",
+      "type": "module",
+      "file": "src\\operations\\modules\\realignment\\feature_registration_validator.py",
+      "wired": false
+    },
+    {
+      "name": "fix_template_structure",
+      "type": "module",
+      "file": "src\\operations\\modules\\realignment\\fix_template_structure.py",
+      "wired": false
+    },
+    {
+      "name": "intent_router_auto_fixer",
+      "type": "module",
+      "file": "src\\operations\\modules\\realignment\\intent_router_auto_fixer.py",
+      "wired": false
+    },
+    {
+      "name": "obsolete_code_auto_cleaner",
+      "type": "module",
+      "file": "src\\operations\\modules\\realignment\\obsolete_code_auto_cleaner.py",
+      "wired": false
+    },
+    {
+      "name": "obsolete_code_detector",
+      "type": "module",
+      "file": "src\\operations\\modules\\realignment\\obsolete_code_detector.py",
+      "wired": false
+    },
+    {
+      "name": "realignment_utility",
+      "type": "module",
+      "file": "src\\operations\\modules\\realignment\\realignment_utility.py",
+      "wired": true
+    },
+    {
+      "name": "response_template_auto_generator",
+      "type": "module",
+      "file": "src\\operations\\modules\\realignment\\response_template_auto_generator.py",
+      "wired": false
+    },
+    {
+      "name": "safe_cleanup_executor",
+      "type": "module",
+      "file": "src\\operations\\modules\\realignment\\safe_cleanup_executor.py",
+      "wired": false
+    },
+    {
+      "name": "specialist_router_wiring_checker",
+      "type": "module",
+      "file": "src\\operations\\modules\\realignment\\specialist_router_wiring_checker.py",
+      "wired": false
+    },
+    {
+      "name": "dashboard_utility",
+      "type": "module",
+      "file": "src\\operations\\modules\\reporting\\dashboard_utility.py",
+      "wired": true
+    },
+    {
+      "name": "review_utility",
+      "type": "module",
+      "file": "src\\operations\\modules\\review\\review_utility.py",
+      "wired": true
+    },
+    {
+      "name": "complexity_analyzer",
+      "type": "module",
+      "file": "src\\operations\\modules\\routing\\complexity_analyzer.py",
+      "wired": false
+    },
+    {
+      "name": "domain_classifier",
+      "type": "module",
+      "file": "src\\operations\\modules\\routing\\domain_classifier.py",
+      "wired": false
+    },
+    {
+      "name": "planning_intelligence_coordinator",
+      "type": "module",
+      "file": "src\\operations\\modules\\routing\\planning_intelligence_coordinator.py",
+      "wired": false
+    },
+    {
+      "name": "tiered_router",
+      "type": "module",
+      "file": "src\\operations\\modules\\routing\\tiered_router.py",
+      "wired": false
+    },
+    {
+      "name": "unified_entry_point_utility",
+      "type": "module",
+      "file": "src\\operations\\modules\\routing\\unified_entry_point_utility.py",
+      "wired": true
+    },
+    {
+      "name": "code_pattern_detector",
+      "type": "module",
+      "file": "src\\operations\\modules\\setup\\code_pattern_detector.py",
+      "wired": false
+    },
+    {
+      "name": "copilot_instructions_merger",
+      "type": "module",
+      "file": "src\\operations\\modules\\setup\\copilot_instructions_merger.py",
+      "wired": false
+    },
+    {
+      "name": "master_setup_utility",
+      "type": "module",
+      "file": "src\\operations\\modules\\setup\\master_setup_utility.py",
+      "wired": true
+    },
+    {
+      "name": "setup_utility",
+      "type": "module",
+      "file": "src\\operations\\modules\\setup\\setup_utility.py",
+      "wired": true
+    },
+    {
+      "name": "governance_drift_checker",
+      "type": "module",
+      "file": "src\\operations\\modules\\system\\governance_drift_checker.py",
+      "wired": false
+    },
+    {
+      "name": "optimization_models",
+      "type": "module",
+      "file": "src\\operations\\modules\\system\\optimization_models.py",
+      "wired": false
+    },
+    {
+      "name": "optimize_system_orchestrator",
+      "type": "module",
+      "file": "src\\operations\\modules\\system\\optimize_system_orchestrator.py",
+      "wired": false
+    },
+    {
+      "name": "tdd_utility",
+      "type": "module",
+      "file": "src\\operations\\modules\\tdd\\tdd_utility.py",
+      "wired": true
+    },
+    {
+      "name": "cortex_header",
+      "type": "module",
+      "file": "src\\operations\\modules\\templates\\cortex_header.py",
+      "wired": false
+    },
+    {
+      "name": "upgrade_utility",
+      "type": "module",
+      "file": "src\\operations\\modules\\upgrade\\upgrade_utility.py",
+      "wired": true
+    },
+    {
+      "name": "ux_enhancement_utility",
+      "type": "module",
+      "file": "src\\operations\\modules\\ux_enhancement\\ux_enhancement_utility.py",
+      "wired": true
+    },
+    {
+      "name": "vacuum_orchestrator",
+      "type": "module",
+      "file": "src\\operations\\modules\\vacuum\\vacuum_orchestrator.py",
+      "wired": false
+    },
+    {
+      "name": "planning_rules_validator",
+      "type": "module",
+      "file": "src\\operations\\modules\\validation\\planning_rules_validator.py",
+      "wired": false
+    },
+    {
+      "name": "session_utility",
+      "type": "module",
+      "file": "src\\operations\\modules\\validation\\session_utility.py",
+      "wired": true
+    },
+    {
+      "name": "ast_completeness_checker",
+      "type": "module",
+      "file": "src\\operations\\modules\\validators\\ast_completeness_checker.py",
+      "wired": false
+    },
+    {
+      "name": "data_flow_validator",
+      "type": "module",
+      "file": "src\\operations\\modules\\validators\\data_flow_validator.py",
+      "wired": false
+    },
+    {
+      "name": "domain_boundary_checker",
+      "type": "module",
+      "file": "src\\operations\\modules\\validators\\domain_boundary_checker.py",
+      "wired": false
+    },
+    {
+      "name": "mermaid_diagram_validator",
+      "type": "module",
+      "file": "src\\operations\\modules\\validators\\mermaid_diagram_validator.py",
+      "wired": false
+    },
+    {
+      "name": "project_reference_validator",
+      "type": "module",
+      "file": "src\\operations\\modules\\validators\\project_reference_validator.py",
+      "wired": false
+    },
+    {
+      "name": "traceability_calculator",
+      "type": "module",
+      "file": "src\\operations\\modules\\validators\\traceability_calculator.py",
+      "wired": false
+    },
+    {
+      "name": "validation_suite",
+      "type": "module",
+      "file": "src\\operations\\modules\\validators\\validation_suite.py",
+      "wired": false
+    },
+    {
+      "name": "version_manager",
+      "type": "module",
+      "file": "src\\operations\\modules\\version\\version_manager.py",
+      "wired": false
+    },
+    {
+      "name": "architecture_diagram_generator",
+      "type": "module",
+      "file": "src\\operations\\modules\\visualization\\architecture_diagram_generator.py",
+      "wired": false
+    },
+    {
+      "name": "dependency_graph_generator",
+      "type": "module",
+      "file": "src\\operations\\modules\\visualization\\dependency_graph_generator.py",
+      "wired": false
+    },
+    {
+      "name": "progress_visualizer",
+      "type": "module",
+      "file": "src\\operations\\modules\\visualization\\progress_visualizer.py",
+      "wired": false
+    },
+    {
+      "name": "application_metrics",
+      "type": "module",
+      "file": "src\\operations\\modules\\feedback\\collectors\\application_metrics.py",
+      "wired": false
+    },
+    {
+      "name": "commit_metrics",
+      "type": "module",
+      "file": "src\\operations\\modules\\feedback\\collectors\\commit_metrics.py",
+      "wired": false
+    },
+    {
+      "name": "cortex_performance",
+      "type": "module",
+      "file": "src\\operations\\modules\\feedback\\collectors\\cortex_performance.py",
+      "wired": false
+    },
+    {
+      "name": "crawler_performance",
+      "type": "module",
+      "file": "src\\operations\\modules\\feedback\\collectors\\crawler_performance.py",
+      "wired": false
+    },
+    {
+      "name": "development_hygiene",
+      "type": "module",
+      "file": "src\\operations\\modules\\feedback\\collectors\\development_hygiene.py",
+      "wired": false
+    },
+    {
+      "name": "knowledge_graph",
+      "type": "module",
+      "file": "src\\operations\\modules\\feedback\\collectors\\knowledge_graph.py",
+      "wired": false
+    },
+    {
+      "name": "tdd_mastery",
+      "type": "module",
+      "file": "src\\operations\\modules\\feedback\\collectors\\tdd_mastery.py",
+      "wired": false
+    },
+    {
+      "name": "velocity_metrics",
+      "type": "module",
+      "file": "src\\operations\\modules\\feedback\\collectors\\velocity_metrics.py",
+      "wired": false
+    },
+    {
+      "name": "PluginCategory",
+      "type": "plugin",
+      "file": "src\\plugins\\base_plugin.py",
+      "wired": false
+    },
+    {
+      "name": "PluginPriority",
+      "type": "plugin",
+      "file": "src\\plugins\\base_plugin.py",
+      "wired": false
+    },
+    {
+      "name": "PluginMetadata",
+      "type": "plugin",
+      "file": "src\\plugins\\base_plugin.py",
+      "wired": false
+    },
+    {
+      "name": "PluginManager",
+      "type": "plugin",
+      "file": "src\\plugins\\base_plugin.py",
+      "wired": false
+    },
+    {
+      "name": "Plugin",
+      "type": "plugin",
+      "file": "src\\plugins\\cleanup_plugin.py",
+      "wired": false
+    },
+    {
+      "name": "CodeReviewPlugin",
+      "type": "plugin",
+      "file": "src\\plugins\\code_review_plugin.py",
+      "wired": false
+    },
+    {
+      "name": "ConfigurationWizardPlugin",
+      "type": "plugin",
+      "file": "src\\plugins\\configuration_wizard_plugin.py",
+      "wired": false
+    },
+    {
+      "name": "ConversationImportPlugin",
+      "type": "plugin",
+      "file": "src\\plugins\\conversation_import_plugin.py",
+      "wired": false
+    },
+    {
+      "name": "DocRefreshPlugin",
+      "type": "plugin",
+      "file": "src\\plugins\\doc_refresh_plugin.py",
+      "wired": false
+    },
+    {
+      "name": "Plugin",
+      "type": "plugin",
+      "file": "src\\plugins\\extension_scaffold_plugin.py",
+      "wired": false
+    },
+    {
+      "name": "InvestigationHtmlIdMappingPlugin",
+      "type": "plugin",
+      "file": "src\\plugins\\investigation_html_id_mapping_plugin.py",
+      "wired": false
+    },
+    {
+      "name": "InvestigationRefactoringPlugin",
+      "type": "plugin",
+      "file": "src\\plugins\\investigation_refactoring_plugin.py",
+      "wired": false
+    },
+    {
+      "name": "InvestigationSecurityPlugin",
+      "type": "plugin",
+      "file": "src\\plugins\\investigation_security_plugin.py",
+      "wired": false
+    },
+    {
+      "name": "PhaseTrackerPlugin",
+      "type": "plugin",
+      "file": "src\\plugins\\phase_tracker_plugin.py",
+      "wired": false
+    },
+    {
+      "name": "PlatformSwitchPlugin",
+      "type": "plugin",
+      "file": "src\\plugins\\platform_switch_plugin.py",
+      "wired": false
+    },
+    {
+      "name": "PluginRegistry",
+      "type": "plugin",
+      "file": "src\\plugins\\plugin_registry.py",
+      "wired": false
+    },
+    {
+      "name": "SweeperPlugin",
+      "type": "plugin",
+      "file": "src\\plugins\\sweeper_plugin.py",
+      "wired": false
+    },
+    {
+      "name": "SystemRefactorPlugin",
+      "type": "plugin",
+      "file": "src\\plugins\\system_refactor_plugin.py",
+      "wired": false
+    },
+    {
+      "name": "Plugin",
+      "type": "plugin",
+      "file": "src\\plugins\\archives\\doc_refresh_plugin_original_20251116.py",
+      "wired": false
+    }
+  ]
+}

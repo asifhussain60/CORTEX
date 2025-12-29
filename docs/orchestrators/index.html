@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX Orchestrators - 6 Autonomous workflows for planning, TDD, execution, ADO, sanitization, and upgrade">
+    <title>Orchestrators - CORTEX</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <!-- Skip Link -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- Breadcrumb Navigation (Top) -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">→</span>
+        <span class="breadcrumb-current">Orchestrators</span>
+    </nav>
+    
+    <!-- Logo Header (Below Breadcrumb) -->
+    <div class="logo-header">
+        <a href="../index.html">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
+        </a>
+    </div>
+    
+    <!-- Interactive Orchestrator Map -->
+    <section class="orchestrator-viz-section">
+        <div class="glass-card">
+            <h2 class="section-title">🎭 Interactive Orchestrator Map</h2>
+            <p style="text-align: center; color: var(--text-secondary); margin-bottom: 2rem;">Click and drag nodes • Filter by category • Click for details</p>
+            
+            <div class="viz-controls" style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center;">
+                <button class="viz-btn viz-all active" data-category="all">All</button>
+                <button class="viz-btn viz-planning" data-category="planning">Planning (4)</button>
+                <button class="viz-btn viz-execution" data-category="execution">Execution (2)</button>
+                <button class="viz-btn viz-system" data-category="system">System (4)</button>
+                <button class="viz-btn viz-analysis" data-category="analysis">Analysis (3)</button>
+                <button class="viz-btn viz-debug" data-category="debug">Debug (2)</button>
+                <button class="viz-btn" id="resetVizBtn" style="background: linear-gradient(135deg, #7b61ff 0%, #00d4ff 100%); color: white; margin-left: 10px;">
+                    <i class="fas fa-redo-alt"></i> Reset View
+                </button>
+            </div>
+            
+            <div id="orchestratorMapMain"></div>
+            <div class="viz-tooltip"></div>
+        </div>
+    </section>
+    
+    <!-- Main Content -->
+    <main class="container" id="main-content">
+        <!-- Main Content Card -->
+        <div class="glass-card">
+            <h1>CORTEX Orchestrators</h1>
+            <p class="text-secondary">6 USER-facing autonomous workflow coordinators</p>
+            
+            <!-- Intro Description -->
+            <p>
+                CORTEX orchestrators are intelligent workflow coordinators that transform natural language 
+                commands into complete, multi-phase operations. Instead of manually managing each step of 
+                feature planning, TDD enforcement, or code sanitization, you simply describe what you want—
+                and the orchestrator handles the discovery, validation, execution, and verification automatically. 
+                Think of them as experienced team leads who know exactly how to break down complex tasks 
+                into manageable phases with quality gates at every step.
+            </p>
+            
+            <!-- How Orchestrators Work -->
+            <h2 class="section-title">🏗️ How Orchestrators Work</h2>
+            <p>
+                Every CORTEX orchestrator follows a consistent pattern for reliability and predictability:
+            </p>
+            
+            <div class="workflow-phases">
+                <div class="phase-card">
+                    <span class="phase-number">1</span>
+                    <span class="phase-icon">📋</span>
+                    <div class="phase-title">Intent Parsing</div>
+                    <p class="phase-description">Understand natural language command</p>
+                </div>
+                <div class="phase-card">
+                    <span class="phase-number">2</span>
+                    <span class="phase-icon">🔍</span>
+                    <div class="phase-title">Discovery</div>
+                    <p class="phase-description">Analyze codebase and context</p>
+                </div>
+                <div class="phase-card">
+                    <span class="phase-number">3</span>
+                    <span class="phase-icon">✅</span>
+                    <div class="phase-title">Validation</div>
+                    <p class="phase-description">Check prerequisites (DoR)</p>
+                </div>
+                <div class="phase-card">
+                    <span class="phase-number">4</span>
+                    <span class="phase-icon">⚡</span>
+                    <div class="phase-title">Execution</div>
+                    <p class="phase-description">Perform multi-phase work</p>
+                </div>
+                <div class="phase-card">
+                    <span class="phase-number">5</span>
+                    <span class="phase-icon">📊</span>
+                    <div class="phase-title">Verification</div>
+                    <p class="phase-description">Validate outcomes (DoD)</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Primary Orchestrators -->
+        <section class="section-overview">
+            <div class="glass-card">
+                <h2 class="section-title">🎯 Primary Orchestrators</h2>
+                <p class="text-secondary">Core workflow automation for everyday development</p>
+                
+                <!-- Orchestrators Grid -->
+            <div class="feature-grid feature-grid-3">
+                <!-- Planning System -->
+                <article class="glass-card">
+                    <span class="feature-icon">🎯</span>
+                    <h3 class="feature-title">Planning System</h3>
+                    <p class="feature-description">
+                        Autonomous feature planning with DoR/DoD compliance, complexity detection, 
+                        and TDD integration.
+                    </p>
+                    <ul class="feature-stats">
+                        <li><strong>5</strong> Phases</li>
+                        <li><strong>DoR/DoD</strong> Gates</li>
+                        <li><strong>AUTO</strong> Complexity</li>
+                    </ul>
+                    <div class="command-card">
+                        <code class="command-syntax">plan [feature name]</code>
+                    </div>
+                    <a href="planning-system.html" class="btn-secondary">View Details →</a>
+                </article>
+                
+                <!-- TDD Mastery -->
+                <article class="glass-card">
+                    <span class="feature-icon">✅</span>
+                    <h3 class="feature-title">TDD Mastery</h3>
+                    <p class="feature-description">
+                        Enforced RED-GREEN-REFACTOR cycle with per-layer coverage validation 
+                        and automatic test generation.
+                    </p>
+                    <ul class="feature-stats">
+                        <li><strong>RED</strong> Phase</li>
+                        <li><strong>GREEN</strong> Phase</li>
+                        <li><strong>REFACTOR</strong> Phase</li>
+                    </ul>
+                    <div class="command-card">
+                        <code class="command-syntax">start tdd</code>
+                    </div>
+                    <a href="tdd-orchestrator.html" class="btn-secondary">View Details →</a>
+                </article>
+                
+                <!-- Execution Orchestrator -->
+                <article class="glass-card">
+                    <span class="feature-icon">⚡</span>
+                    <h3 class="feature-title">Execution Orchestrator</h3>
+                    <p class="feature-description">
+                        Autonomous plan execution with phase-by-phase implementation, 
+                        validation gates, and rollback support.
+                    </p>
+                    <ul class="feature-stats">
+                        <li><strong>AUTO</strong> Execution</li>
+                        <li><strong>Phase</strong> Gates</li>
+                        <li><strong>Rollback</strong> Support</li>
+                    </ul>
+                    <div class="command-card">
+                        <code class="command-syntax">execute all phases autonomously</code>
+                    </div>
+                    <a href="execution-orchestrator.html" class="btn-secondary">View Details →</a>
+                </article>
+                
+                <!-- ADO Operations -->
+                <article class="glass-card">
+                    <span class="feature-icon">📋</span>
+                    <h3 class="feature-title">ADO Operations</h3>
+                    <p class="feature-description">
+                        Azure DevOps integration with automated story/feature generation, 
+                        DoR/DoD compliance, and formatted output.
+                    </p>
+                    <ul class="feature-stats">
+                        <li><strong>Stories</strong> Generation</li>
+                        <li><strong>Features</strong> Planning</li>
+                        <li><strong>ADO</strong> Format</li>
+                    </ul>
+                    <div class="command-card">
+                        <code class="command-syntax">plan ado [feature]</code>
+                    </div>
+                    <a href="ado-operations.html" class="btn-secondary">View Details →</a>
+                </article>
+                
+                <!-- Code Sanitization -->
+                <article class="glass-card">
+                    <span class="feature-icon">🔒</span>
+                    <h3 class="feature-title">Code Sanitization</h3>
+                    <p class="feature-description">
+                        5-phase workflow to scrub sensitive data from your codebase for safe 
+                        sharing while preserving functionality.
+                    </p>
+                    <ul class="feature-stats">
+                        <li><strong>5</strong> Phases</li>
+                        <li><strong>Mapping</strong> Rules</li>
+                        <li><strong>Validation</strong> Pass</li>
+                    </ul>
+                    <div class="command-card">
+                        <code class="command-syntax">sanitize [directory]</code>
+                    </div>
+                    <a href="sanitization.html" class="btn-secondary">View Details →</a>
+                </article>
+                
+                <!-- Upgrade Orchestrator -->
+                <article class="glass-card">
+                    <span class="feature-icon">🚀</span>
+                    <h3 class="feature-title">Upgrade Orchestrator</h3>
+                    <p class="feature-description">
+                        Automated CORTEX version upgrades with migration validation, 
+                        compatibility checks, and rollback support.
+                    </p>
+                    <ul class="feature-stats">
+                        <li><strong>3.0→4.0</strong> Migration</li>
+                        <li><strong>Compat</strong> Checks</li>
+                        <li><strong>Auto</strong> Backup</li>
+                    </ul>
+                    <div class="command-card">
+                        <code class="command-syntax">upgrade cortex</code>
+                    </div>
+                    <a href="upgrade.html" class="btn-secondary">View Details →</a>
+                </article>
+            </div>
+            </div>
+        </section>
+        
+        <!-- System Orchestrators -->
+        <section class="section-system">
+            <div class="glass-card">
+                <h2 class="section-title">🛠️ System Orchestrators</h2>
+                <p class="text-secondary">Internal maintenance and validation workflows</p>
+                
+                <div class="feature-grid feature-grid-3">
+                    <!-- System Maintenance -->
+                    <article class="glass-card">
+                        <span class="feature-icon">🔧</span>
+                        <h3 class="feature-title">System Maintenance</h3>
+                        <p class="feature-description">
+                            7-phase tiered maintenance with health checks, alignment validation, and auto-fixes.
+                        </p>
+                        <div class="command-card">
+                            <code class="command-syntax">system maintenance</code>
+                        </div>
+                        <a href="system-maintenance.html" class="btn-secondary">View Details →</a>
+                    </article>
+                    
+                    <!-- System Integrity -->
+                    <article class="glass-card">
+                        <span class="feature-icon">🛡️</span>
+                        <h3 class="feature-title">System Integrity</h3>
+                        <p class="feature-description">
+                            8-phase comprehensive validation and auto-fix for plan alignment, tests, docs, and structure.
+                        </p>
+                        <div class="command-card">
+                            <code class="command-syntax">system integrity</code>
+                        </div>
+                        <a href="system-integrity.html" class="btn-secondary">View Details →</a>
+                    </article>
+                    
+                    <!-- Git Checkpoint -->
+                    <article class="glass-card">
+                        <span class="feature-icon">📍</span>
+                        <h3 class="feature-title">Git Checkpoint</h3>
+                        <p class="feature-description">
+                            Automatic checkpoint creation with 30-day retention and instant rollback support.
+                        </p>
+                        <div class="command-card">
+                            <code class="command-syntax">checkpoint [name]</code>
+                        </div>
+                        <a href="git-checkpoint.html" class="btn-secondary">View Details →</a>
+                    </article>
+                    
+                    <!-- Rollback -->
+                    <article class="glass-card">
+                        <span class="feature-icon">🔙</span>
+                        <h3 class="feature-title">Rollback</h3>
+                        <p class="feature-description">
+                            Safe state restoration with validation, safety checks, and diff preview.
+                        </p>
+                        <div class="command-card">
+                            <code class="command-syntax">rollback [checkpoint-id]</code>
+                        </div>
+                        <a href="rollback-orchestrator.html" class="btn-secondary">View Details →</a>
+                    </article>
+                    
+                    <!-- Cleanup -->
+                    <article class="glass-card">
+                        <span class="feature-icon">🧹</span>
+                        <h3 class="feature-title">Cleanup</h3>
+                        <p class="feature-description">
+                            Holistic repository cleanup with production-readiness validation and safe execution.
+                        </p>
+                        <div class="command-card">
+                            <code class="command-syntax">cleanup [--dry-run]</code>
+                        </div>
+                        <a href="cleanup-orchestrator.html" class="btn-secondary">View Details →</a>
+                    </article>
+                    
+                    <!-- Pre-Flight -->
+                    <article class="glass-card">
+                        <span class="feature-icon">🛫</span>
+                        <h3 class="feature-title">Pre-Flight</h3>
+                        <p class="feature-description">
+                            Environment validation before plan execution with pattern detection and remediation.
+                        </p>
+                        <div class="command-card">
+                            <code class="command-syntax">pre-flight [--project path]</code>
+                        </div>
+                        <a href="pre-flight.html" class="btn-secondary">View Details →</a>
+                    </article>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Analysis Orchestrators -->
+        <section class="section-analysis">
+            <div class="glass-card">
+                <h2 class="section-title">🔍 Analysis Orchestrators</h2>
+                <p class="text-secondary">Codebase analysis and quality assessment</p>
+                
+                <div class="feature-grid feature-grid-3">
+                    <!-- CORTEX Lens -->
+                    <article class="glass-card">
+                        <span class="feature-icon">🔭</span>
+                        <h3 class="feature-title">CORTEX Lens</h3>
+                        <p class="feature-description">
+                            8-tab AST-powered codebase analysis with pattern detection and structure mapping.
+                        </p>
+                        <div class="command-card">
+                            <code class="command-syntax">lens [directory]</code>
+                        </div>
+                        <a href="cortex-lens.html" class="btn-secondary">View Details →</a>
+                    </article>
+                    
+                    <!-- Architectural Review -->
+                    <article class="glass-card">
+                        <span class="feature-icon">🏛️</span>
+                        <h3 class="feature-title">Architectural Review</h3>
+                        <p class="feature-description">
+                            6-phase architecture assessment with 0-100 scoring for SOLID compliance and testability.
+                        </p>
+                        <div class="command-card">
+                            <code class="command-syntax">review architecture</code>
+                        </div>
+                        <a href="architectural-review.html" class="btn-secondary">View Details →</a>
+                    </article>
+                    
+                    <!-- Refinement -->
+                    <article class="glass-card">
+                        <span class="feature-icon">✨</span>
+                        <h3 class="feature-title">Refinement</h3>
+                        <p class="feature-description">
+                            7-phase quality enhancement with risk categorization and complexity analysis.
+                        </p>
+                        <div class="command-card">
+                            <code class="command-syntax">refine [target]</code>
+                        </div>
+                        <a href="refinement-orchestrator.html" class="btn-secondary">View Details →</a>
+                    </article>
+                    
+                    <!-- Intelligent Dashboard -->
+                    <article class="glass-card">
+                        <span class="feature-icon">📊</span>
+                        <h3 class="feature-title">Intelligent Dashboard</h3>
+                        <p class="feature-description">
+                            AST-powered dashboard generation with collector architecture and use case inference.
+                        </p>
+                        <div class="command-card">
+                            <code class="command-syntax">dashboard [project]</code>
+                        </div>
+                        <a href="intelligent-dashboard.html" class="btn-secondary">View Details →</a>
+                    </article>
+                    
+                    <!-- Debug -->
+                    <article class="glass-card">
+                        <span class="feature-icon">🐛</span>
+                        <h3 class="feature-title">Debug</h3>
+                        <p class="feature-description">
+                            Template-based debugging with code injection, verification loops, and auto-cleanup.
+                        </p>
+                        <div class="command-card">
+                            <code class="command-syntax">debug [target]</code>
+                        </div>
+                        <a href="debug-orchestrator.html" class="btn-secondary">View Details →</a>
+                    </article>
+                </div>
+            </div>
+        </section>
+    </main>
+<!-- Scroll to Top -->
+    <button class="scroll-to-top" aria-label="Scroll to top">↑</button>
+    
+    <script src="../assets/js/main.js"></script>
+    <script>
+    // Orchestrator data
+    const orchestrators = [
+        { id: 'planning-system', name: 'Planning System', category: 'planning', phases: 13, color: '#2196F3', url: 'planning-system.html' },
+        { id: 'tdd', name: 'TDD', category: 'planning', phases: 11, color: '#1976D2', url: 'tdd-orchestrator.html' },
+        { id: 'ado', name: 'ADO Planning', category: 'planning', phases: 10, color: '#0D47A1', url: 'ado-operations.html' },
+        { id: 'pre-flight', name: 'Pre-Flight', category: 'planning', phases: 5, color: '#42A5F5', url: '#' },
+        { id: 'sanitization', name: 'Code Sanitization', category: 'execution', phases: 5, color: '#4CAF50', url: 'sanitization.html' },
+        { id: 'autonomous', name: 'Autonomous Execution', category: 'execution', phases: 8, color: '#388E3C', url: 'execution-orchestrator.html' },
+        { id: 'integrity', name: 'System Integrity', category: 'system', phases: 8, color: '#F57C00', url: 'system-integrity.html' },
+        { id: 'refinement', name: 'Refinement', category: 'system', phases: 7, color: '#E65100', url: 'refinement-orchestrator.html' },
+        { id: 'cleanup', name: 'Cleanup', category: 'system', phases: 4, color: '#FB8C00', url: 'cleanup-orchestrator.html' },
+        { id: 'git-checkpoint', name: 'Git Checkpoint', category: 'system', phases: 3, color: '#FFA726', url: 'git-checkpoint.html' },
+        { id: 'architectural', name: 'Architectural Review', category: 'analysis', phases: 6, color: '#9C27B0', url: 'architectural-review.html' },
+        { id: 'lens', name: 'CORTEX Lens', category: 'analysis', phases: 8, color: '#7B1FA2', url: 'cortex-lens.html' },
+        { id: 'dashboard', name: 'Intelligent Dashboard', category: 'analysis', phases: 4, color: '#4A148C', url: 'intelligent-dashboard.html' },
+        { id: 'debug', name: 'Debug', category: 'debug', phases: 5, color: '#F44336', url: 'debug-orchestrator.html' },
+        { id: 'rollback', name: 'Rollback', category: 'debug', phases: 3, color: '#D32F2F', url: 'rollback-orchestrator.html' }
+    ];
+
+    const links = [
+        { source: 'planning-system', target: 'tdd' },
+        { source: 'planning-system', target: 'ado' },
+        { source: 'planning-system', target: 'pre-flight' },
+        { source: 'planning-system', target: 'autonomous' },
+        { source: 'tdd', target: 'autonomous' },
+        { source: 'pre-flight', target: 'planning-system' },
+        { source: 'autonomous', target: 'git-checkpoint' },
+        { source: 'sanitization', target: 'integrity' },
+        { source: 'refinement', target: 'integrity' },
+        { source: 'integrity', target: 'git-checkpoint' },
+        { source: 'architectural', target: 'refinement' },
+        { source: 'lens', target: 'dashboard' },
+        { source: 'debug', target: 'rollback' },
+        { source: 'git-checkpoint', target: 'rollback' }
+    ];
+
+    // Setup SVG
+    const container = document.getElementById('orchestratorMapMain');
+    const width = container.offsetWidth;
+    const height = 600;
+
+    const svg = d3.select('#orchestratorMapMain').append('svg').attr('width', width).attr('height', height);
+    const g = svg.append('g');
+
+    // Zoom
+    const zoom = d3.zoom().scaleExtent([0.5, 2]).on('zoom', (event) => { g.attr('transform', event.transform); });
+    svg.call(zoom);
+
+    const tooltip = d3.select('.viz-tooltip');
+
+    // Force simulation
+    const simulation = d3.forceSimulation(orchestrators)
+        .force('link', d3.forceLink(links).id(d => d.id).distance(120))
+        .force('charge', d3.forceManyBody().strength(-400))
+        .force('center', d3.forceCenter(width / 2, height / 2))
+        .force('collision', d3.forceCollide().radius(50));
+
+    const link = g.append('g').selectAll('line').data(links).enter().append('line').attr('class', 'link');
+
+    const node = g.append('g').selectAll('g').data(orchestrators).enter().append('g').attr('class', 'node')
+        .call(d3.drag().on('start', dragstarted).on('drag', dragged).on('end', dragended));
+
+    node.append('circle').attr('r', d => 18 + (d.phases * 1.5)).attr('fill', d => d.color);
+    node.append('text').attr('dy', d => 20 + (d.phases * 1.5) + 12).text(d => d.name);
+
+    node.on('click', (e, d) => { if(d.url !== '#') window.location.href = d.url; });
+
+    node.on('mouseover', function(event, d) {
+        d3.select(this).select('circle').transition().duration(200).attr('r', (d.phases * 1.5) + 23);
+        tooltip.html(`<h3>${d.name}</h3><p><span class="badge" style="background: ${d.color};">${d.category.toUpperCase()}</span> <span class="badge" style="background: #666;">${d.phases} Phases</span></p>`)
+            .style('left', (event.pageX + 15) + 'px').style('top', (event.pageY - 15) + 'px').style('opacity', 1);
+    });
+
+    node.on('mouseout', function(event, d) {
+        d3.select(this).select('circle').transition().duration(200).attr('r', 18 + (d.phases * 1.5));
+        tooltip.style('opacity', 0);
+    });
+
+    simulation.on('tick', () => {
+        link.attr('x1', d => d.source.x).attr('y1', d => d.source.y).attr('x2', d => d.target.x).attr('y2', d => d.target.y);
+        node.attr('transform', d => `translate(${d.x},${d.y})`);
+    });
+
+    function dragstarted(event, d) { if (!event.active) simulation.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; }
+    function dragged(event, d) { d.fx = event.x; d.fy = event.y; }
+    function dragended(event, d) { if (!event.active) simulation.alphaTarget(0); d.fx = null; d.fy = null; }
+
+    // Category filtering
+    document.querySelectorAll('.viz-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            // Skip reset button
+            if (this.id === 'resetVizBtn') return;
+            
+            document.querySelectorAll('.viz-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            const category = this.dataset.category;
+            node.transition().duration(300).style('opacity', d => category === 'all' || d.category === category ? 1 : 0.2);
+            link.transition().duration(300).style('opacity', l => {
+                if (category === 'all') return 0.3;
+                return (l.source.category === category && l.target.category === category) ? 0.3 : 0.05;
+            });
+        });
+    });
+
+    // Reset view button
+    document.getElementById('resetVizBtn').addEventListener('click', function() {
+        // Release all fixed positions
+        orchestrators.forEach(d => {
+            d.fx = null;
+            d.fy = null;
+        });
+        
+        // Reset zoom
+        svg.transition().duration(750).call(
+            zoom.transform,
+            d3.zoomIdentity
+        );
+        
+        // Restart simulation to recenter
+        simulation.alpha(1).restart();
+        
+        // Reset filter to "All"
+        document.querySelectorAll('.viz-btn').forEach(b => b.classList.remove('active'));
+        document.querySelector('[data-category="all"]').classList.add('active');
+        node.transition().duration(300).style('opacity', 1);
+        link.transition().duration(300).style('opacity', 0.3);
+    });
+    </script>
+</body>
+</html>

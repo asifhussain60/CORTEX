@@ -1,0 +1,49 @@
+category: operations/help
+templates:
+  hands_on_tutorial:
+    inherits_from: core/base-templates/5-part-standard.yaml
+    name: Hands-On Interactive Tutorial
+    triggers:
+    - tutorial
+    - hands on tutorial
+    - start tutorial
+    - interactive tutorial
+    - learn cortex
+    - cortex tutorial
+    response_type: interactive
+    expected_orchestrator: hands_on_tutorial_orchestrator
+    operation_name: Tutorial
+    sections:
+      understanding_scope_content: You want to learn CORTEX through hands-on practice with
+        real feature implementation
+      approach_considerations_content: No significant challenges - Clear learning path with practical exercises
+      response_content: "## \U0001F393 CORTEX Hands-On Tutorial System\n\n**Interactive\
+        \ learning program:** Build real features while learning CORTEX capabilities\n\
+        \n**Tutorial Modes:**\n\n1. **Quick Tutorial (15 min)** - Core concepts only\n\
+        \   - Feature discovery and validation\n   - Response template system\n  \
+        \ - Basic alignment checks\n\n2. **Standard Tutorial (30 min)** - Production-ready\
+        \ workflow\n   - User authentication feature (complete implementation)\n \
+        \  - TDD workflow (RED → GREEN → REFACTOR)\n   - Git checkpoint automation\n\
+        \   - Test generation and execution\n\n3. **Comprehensive Tutorial (60 min)**\
+        \ - Full CORTEX mastery\n   - Everything in Standard +\n   - Planning System\
+        \ 2.0 with Vision API\n   - Dashboard analytics\n   - Team telemetry integration\n\
+        \   - Production deployment\n\n**Learning Outcomes:**\n- ✅ Understand 4-tier\
+        \ brain architecture\n- ✅ Master TDD Mastery workflow\n- ✅ Use Planning System\
+        \ 2.0 with DoR/DoD\n- ✅ Leverage dashboard for visual analytics\n- ✅ Deploy\
+        \ production-ready code\n\n**Tutorial Features:**\n- Real code (not mock examples)\n\
+        - Automated validation checks\n- Progress tracking\n- Rollback capability\n\
+        - Certificate of completion\n"
+      impact_changes_content: Start interactive hands-on tutorial to learn CORTEX
+      next_steps_content: '**Choose Tutorial Mode:**
+
+
+        1. Say "tutorial quick" for 15-min core concepts
+
+        2. Say "tutorial standard" for 30-min production workflow
+
+        3. Say "tutorial comprehensive" for 60-min full mastery
+
+
+        **Or:** Say "tutorial" to start with recommended standard mode
+
+        '

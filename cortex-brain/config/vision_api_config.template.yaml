@@ -1,0 +1,145 @@
+# Vision API Configuration Template for CORTEX
+# Copy to cortex-brain/config/vision_api_config.yaml and customize
+
+# Vision API settings
+vision_api:
+  # Enable/disable Vision API
+  enabled: true
+  
+  # Automatic detection and analysis
+  auto_detect_images: true
+  auto_analyze_on_detect: true
+  auto_inject_context: true
+  auto_engage_on_image: true  # Feature 13: Auto-engage without user request
+  
+  # Performance settings
+  max_engagement_time_ms: 500  # SLA for auto-engagement
+  
+  # API provider (future: support multiple providers)
+  provider: "openai"  # or "azure", "anthropic"
+  
+  # OpenAI Vision API settings (if provider: "openai")
+  openai:
+    api_key: "${OPENAI_API_KEY}"  # From environment variable
+    model: "gpt-4-vision-preview"
+    max_tokens: 1000
+    detail_level: "high"  # "low", "high", or "auto"
+  
+  # Azure Vision API settings (if provider: "azure")
+  azure:
+    endpoint: "${AZURE_VISION_ENDPOINT}"
+    api_key: "${AZURE_VISION_KEY}"
+    api_version: "2023-10-01"
+  
+  # Analysis context prompts
+  prompts:
+    generic: "Analyze this image and describe what you see. Extract any text, UI elements, colors, or important details."
+    planning: "Extract UI elements, buttons, inputs, labels, and layout structure. Identify components that would need to be implemented."
+    debugging: "Analyze this screenshot for errors, warnings, or issues. Extract error messages, stack traces, and relevant context."
+    ado: "Extract ADO work item details: ID number, title, description, acceptance criteria, status, and any other structured information."
+  
+  # Image processing
+  image_processing:
+    max_image_size_mb: 10
+    supported_formats:
+      - "png"
+      - "jpg"
+      - "jpeg"
+      - "gif"
+      - "bmp"
+      - "webp"
+    resize_large_images: true
+    max_dimension: 2048  # Resize if larger
+  
+  # Caching (optional - reduces API calls)
+  caching:
+    enabled: false
+    ttl_hours: 24
+    cache_dir: "cortex-brain/cache/vision_analysis"
+  
+  # Metrics and logging
+  metrics:
+    track_engagement: true
+    track_performance: true
+    log_analysis_results: false  # Set true for debugging
+
+# Image detection settings
+image_detection:
+  # Detection sources (priority order)
+  sources:
+    - "attachments"      # Explicit attachments from Copilot Chat
+    - "context"          # Context dictionary (image_base64, image_path, etc.)
+    - "message_reference"  # Message text references (lower confidence)
+  
+  # Keywords that indicate image reference in message
+  reference_keywords:
+    - "screenshot"
+    - "image"
+    - "picture"
+    - "photo"
+    - "see this"
+    - "look at this"
+    - "attached"
+    - "shown here"
+
+# Context inference settings
+context_inference:
+  # Keywords for automatic context detection
+  planning_keywords:
+    - "plan"
+    - "implement"
+    - "build"
+    - "create"
+    - "feature"
+    - "ui"
+    - "interface"
+    - "component"
+    - "design"
+  
+  debugging_keywords:
+    - "error"
+    - "bug"
+    - "issue"
+    - "problem"
+    - "fail"
+    - "crash"
+    - "exception"
+    - "stack trace"
+    - "warning"
+  
+  ado_keywords:
+    - "ado"
+    - "work item"
+    - "story"
+    - "task"
+    - "feature"
+    - "azure devops"
+    - "backlog"
+
+# Integration settings
+integration:
+  # Automatically inject into unified_entry_point
+  auto_inject_entry_point: true
+  
+  # Orchestrators that should use Vision API
+  enabled_orchestrators:
+    - "PlanningOrchestrator"
+    - "ADOPlanningOrchestrator"
+    - "TDDImplementationOrchestrator"
+    - "CodeReviewOrchestrator"
+  
+  # Intent router integration
+  intent_router:
+    enable_image_intent: true
+    image_intent_priority: "high"  # Route to screenshot analyzer when images detected
+
+# Feature flags
+features:
+  # Feature 13: Automatic Vision API engagement
+  auto_engagement: true
+  
+  # Future features
+  multi_image_analysis: true
+  image_comparison: false
+  ocr_extraction: true
+  ui_element_detection: true

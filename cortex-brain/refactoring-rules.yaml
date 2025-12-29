@@ -1,0 +1,134 @@
+# Multi-Language Refactoring Rules Catalog
+# 
+# Defines code smell detection rules and refactoring suggestions
+# for Python, JavaScript, TypeScript, and C#.
+#
+# Author: Asif Hussain
+# Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+# License: Source-Available (Use Allowed, No Contributions)
+
+version: "1.0"
+last_updated: "2025-11-26"
+
+# Rule categories
+categories:
+  performance:
+    description: "Performance-related code smells detected via timing data"
+    confidence_base: 0.95
+    
+  maintainability:
+    description: "Code structure and complexity issues"
+    confidence_base: 0.85
+    
+  readability:
+    description: "Code clarity and documentation issues"
+    confidence_base: 0.70
+
+# Performance rules (from TDD Mastery)
+performance_rules:
+  - id: PERF-001
+    name: "Slow Function"
+    trigger: "avg_execution_time > 100ms"
+    confidence: 0.95
+    suggestion: "Add caching layer for {function_name}"
+    languages: ["python", "javascript", "typescript", "csharp"]
+    
+  - id: PERF-002
+    name: "Hot Path"
+    trigger: "call_count > 10"
+    confidence: 0.95
+    suggestion: "Batch calls to {function_name}"
+    languages: ["python", "javascript", "typescript", "csharp"]
+    
+  - id: PERF-003
+    name: "Bottleneck"
+    trigger: "total_time > 500ms"
+    confidence: 0.95
+    suggestion: "Optimize {function_name} - potential bottleneck"
+    languages: ["python", "javascript", "typescript", "csharp"]
+
+# Maintainability rules (AST-based)
+maintainability_rules:
+  - id: MAINT-001
+    name: "Long Method"
+    trigger: "lines_of_code > 50"
+    confidence: 0.85
+    suggestion: "Split {function_name} into smaller functions (target: <50 lines)"
+    languages: ["python", "javascript", "typescript", "csharp"]
+    
+  - id: MAINT-002
+    name: "Complex Method"
+    trigger: "cyclomatic_complexity > 10"
+    confidence: 0.80
+    suggestion: "Reduce complexity in {function_name} (target: <10)"
+    languages: ["python", "javascript", "typescript", "csharp"]
+    
+  - id: MAINT-003
+    name: "Deep Nesting"
+    trigger: "nesting_depth > 4"
+    confidence: 0.85
+    suggestion: "Use early returns or extract nested logic in {function_name}"
+    languages: ["python", "javascript", "typescript", "csharp"]
+    
+  - id: MAINT-004
+    name: "Long Parameter List"
+    trigger: "parameter_count > 5"
+    confidence: 0.75
+    suggestion: "Use parameter object or builder pattern in {function_name}"
+    languages: ["python", "javascript", "typescript", "csharp"]
+
+# Readability rules
+readability_rules:
+  - id: READ-001
+    name: "Magic Number"
+    trigger: "numeric_literal not in [0, 1, -1, 2, 10, 100, 1000]"
+    confidence: 0.70
+    suggestion: "Extract magic number to named constant"
+    languages: ["python", "javascript", "typescript", "csharp"]
+    
+  - id: READ-002
+    name: "Duplicate Code"
+    trigger: "code_similarity > 0.80"
+    confidence: 0.75
+    suggestion: "Extract duplicate code to shared function"
+    languages: ["python", "javascript", "typescript", "csharp"]
+    
+  - id: READ-003
+    name: "Dead Code"
+    trigger: "never_executed"
+    confidence: 0.80
+    suggestion: "Remove unused code"
+    languages: ["python", "javascript", "typescript", "csharp"]
+
+# Language-specific confidence adjustments
+language_confidence:
+  python: 0.90  # Most mature AST support
+  javascript: 0.85  # Good esprima support
+  typescript: 0.85  # Good tree-sitter support
+  csharp: 0.80  # Moderate tree-sitter support
+
+# Thresholds by language
+thresholds:
+  python:
+    long_method_lines: 50
+    max_complexity: 10
+    max_nesting_depth: 4
+    max_parameters: 5
+    
+  javascript:
+    long_method_lines: 50
+    max_complexity: 10
+    max_nesting_depth: 4
+    max_parameters: 5
+    
+  typescript:
+    long_method_lines: 50
+    max_complexity: 10
+    max_nesting_depth: 4
+    max_parameters: 5
+    
+  csharp:
+    long_method_lines: 50
+    max_complexity: 10
+    max_nesting_depth: 4
+    max_parameters: 5

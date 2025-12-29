@@ -1,0 +1,56 @@
+category: operations/onboarding
+templates:
+  onboarding_acknowledgment:
+    inherits_from: core/base-templates/5-part-standard.yaml
+    name: Onboarding Acknowledgment
+    triggers:
+    - acknowledge onboarding
+    - onboarding complete
+    - finish onboarding
+    - onboarding done
+    response_type: operational
+    expected_orchestrator: onboarding_acknowledgment_orchestrator
+    operation_name: OnboardingAck
+    sections:
+      understanding_scope_content: You want to acknowledge completion of CORTEX onboarding
+      approach_considerations_content: No significant challenges - Simple acknowledgment with profile creation
+      response_content: "## \U0001F44B Onboarding Acknowledgment\n\n**Confirm onboarding\
+        \ completion** and create user profile\n\n**Onboarding Checklist:**\n\n✅ **System\
+        \ Setup**\n- CORTEX installed\n- Brain tiers initialized\n- Configuration\
+        \ validated\n\n✅ **Core Concepts**\n- 4-tier brain architecture understood\n\
+        - Response template system reviewed\n- TDD Mastery workflow introduced\n-\
+        \ Planning System overview\n\n✅ **First Operations**\n- Help command tested\n\
+        - System alignment run\n- Feature discovery verified\n\n**Profile Creation:**\n\
+        ```yaml\nuser_profile:\n  name: [Your Name]\n  role: [Developer/Tester/Manager/Product\
+        \ Owner]\n  team: [Team Name]\n  preferences:\n    response_style: standard\n\
+        \    auto_checkpoint: true\n    telemetry: enabled\n  onboarding_date: 2025-12-05\n\
+        \  onboarding_version: 3.7.1\n```\n\n**Profile Location:** `cortex-brain/user-profile.yaml`\n\
+        \n**Post-Onboarding:**\n- ✅ User profile saved\n- ✅ Personalized response\
+        \ templates active\n- ✅ Telemetry tracking enabled (opt-out available)\n-\
+        \ ✅ Dashboard customization available\n\n**Welcome Message:**\n\"Congratulations!\
+        \ You've completed CORTEX onboarding. Your personalized AI assistant is now\
+        \ fully configured and ready to accelerate your development workflow.\"\n"
+      impact_changes_content: Acknowledge completion of CORTEX onboarding
+      next_steps_content: '**Next Steps:**
+
+
+        1. Say "tutorial" to start hands-on learning
+
+        2. Say "plan [feature]" to create your first feature plan
+
+        3. Say "help" to see all available commands
+
+        4. Say "dashboard" to visualize your progress
+
+
+        **Customize Your Profile:**
+
+        - Edit `cortex-brain/user-profile.yaml`
+
+        - Set response_style: minimal/standard/detailed
+
+        - Configure auto_checkpoint: true/false
+
+        - Opt-out telemetry: telemetry: disabled
+
+        '

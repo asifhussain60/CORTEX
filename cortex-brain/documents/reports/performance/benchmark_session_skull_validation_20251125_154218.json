@@ -1,0 +1,17 @@
+{
+  "label": "session_skull_validation",
+  "metrics": {
+    "response_time_ms": 0.003800028935074806,
+    "memory_peak_mb": 0.00125885009765625,
+    "memory_current_mb": 0.00091552734375,
+    "cpu_percent": 0.0,
+    "timestamp": "2025-11-25T15:42:18.991487",
+    "passed": true,
+    "violations": []
+  },
+  "thresholds": {
+    "response_time_ms": 500.0,
+    "memory_mb": 100.0,
+    "cpu_percent": 50.0
+  }
+}

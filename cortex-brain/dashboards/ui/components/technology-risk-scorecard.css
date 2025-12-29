@@ -1,0 +1,372 @@
+/**
+ * Technology Risk Scorecard Styles
+ * Risk matrix scatter plot + sortable table styling
+ */
+
+.risk-scorecard {
+    padding: 1.5rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Header */
+.scorecard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.scorecard-header h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #2c3e50;
+}
+
+/* Filter Controls */
+.filter-controls {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    padding: 0.5rem 1rem;
+    border: 2px solid #dee2e6;
+    background: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.filter-btn:hover {
+    border-color: #3498db;
+    background: #f8f9fa;
+}
+
+.filter-btn.active {
+    background: #3498db;
+    border-color: #3498db;
+    color: white;
+}
+
+/* Risk Matrix */
+.risk-matrix-container {
+    margin-bottom: 2rem;
+}
+
+.risk-matrix-container h4 {
+    margin: 0 0 1rem 0;
+    font-size: 1.25rem;
+    color: #2c3e50;
+}
+
+#risk-matrix-svg {
+    display: block;
+    margin: 0 auto;
+}
+
+#risk-matrix-svg .bubble circle {
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+#risk-matrix-svg .bubble circle:hover {
+    opacity: 1 !important;
+    stroke-width: 3;
+}
+
+/* Tooltip */
+.risk-tooltip {
+    background: rgba(44, 62, 80, 0.95);
+    color: white;
+    padding: 0.75rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    pointer-events: none;
+    z-index: 1000;
+    line-height: 1.6;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Priority Queue */
+.priority-queue {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 6px;
+}
+
+.priority-queue h4 {
+    margin: 0 0 1rem 0;
+    font-size: 1.125rem;
+    color: #2c3e50;
+}
+
+.priority-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    background: white;
+    border-radius: 6px;
+    margin-bottom: 0.75rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.priority-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.priority-item:last-child {
+    margin-bottom: 0;
+}
+
+.priority-rank {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: #3498db;
+    color: white;
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 1.125rem;
+    flex-shrink: 0;
+}
+
+.priority-details {
+    flex: 1;
+}
+
+.priority-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.tech-name {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 1rem;
+}
+
+.priority-info {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.875rem;
+    color: #6c757d;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.priority-recommendation {
+    font-size: 0.875rem;
+    color: #495057;
+    font-style: italic;
+}
+
+/* Risk Badges */
+.risk-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.risk-badge.risk-low {
+    background: #d4edda;
+    color: #155724;
+}
+
+.risk-badge.risk-medium {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.risk-badge.risk-high {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* Scorecard Table */
+.scorecard-table-container {
+    margin-top: 2rem;
+}
+
+.scorecard-table-container h4 {
+    margin: 0 0 1rem 0;
+    font-size: 1.125rem;
+    color: #2c3e50;
+}
+
+.scorecard-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+
+.scorecard-table thead {
+    background: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.scorecard-table th {
+    padding: 0.75rem;
+    text-align: left;
+    font-weight: 600;
+    color: #2c3e50;
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.scorecard-table th:hover {
+    background: #e9ecef;
+}
+
+.scorecard-table tbody tr {
+    border-bottom: 1px solid #e9ecef;
+    transition: background-color 0.2s;
+}
+
+.scorecard-table tbody tr:hover {
+    background: #f8f9fa;
+}
+
+.scorecard-table tbody tr.risk-high {
+    border-left: 4px solid #dc3545;
+}
+
+.scorecard-table tbody tr.risk-medium {
+    border-left: 4px solid #ffc107;
+}
+
+.scorecard-table tbody tr.risk-low {
+    border-left: 4px solid #28a745;
+}
+
+.scorecard-table td {
+    padding: 0.75rem;
+    color: #495057;
+}
+
+.scorecard-table td.tech-name {
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.scorecard-table td.risk-score {
+    text-align: center;
+}
+
+.scorecard-table td.recommendation {
+    font-size: 0.8125rem;
+    font-style: italic;
+    color: #6c757d;
+}
+
+/* Empty States */
+.empty-message {
+    text-align: center;
+    padding: 3rem;
+    color: #6c757d;
+    font-style: italic;
+}
+
+.error-message {
+    text-align: center;
+    padding: 3rem;
+    color: #e74c3c;
+}
+
+.error-message p {
+    font-size: 1.125rem;
+    margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .scorecard-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .filter-controls {
+        width: 100%;
+    }
+    
+    .filter-btn {
+        flex: 1;
+        text-align: center;
+    }
+    
+    #risk-matrix-svg {
+        max-width: 100%;
+        height: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .risk-scorecard {
+        padding: 1rem;
+    }
+    
+    .priority-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .priority-rank {
+        align-self: flex-start;
+    }
+    
+    .scorecard-table {
+        font-size: 0.75rem;
+    }
+    
+    .scorecard-table th,
+    .scorecard-table td {
+        padding: 0.5rem;
+    }
+    
+    /* Hide less important columns on mobile */
+    .scorecard-table th:nth-child(4),
+    .scorecard-table td:nth-child(4),
+    .scorecard-table th:nth-child(6),
+    .scorecard-table td:nth-child(6) {
+        display: none;
+    }
+}
+
+/* Loading State */
+.risk-scorecard.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 600px;
+}
+
+.risk-scorecard.loading::before {
+    content: '⏳ Loading risk assessment...';
+    font-size: 1.5rem;
+    color: #6c757d;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}

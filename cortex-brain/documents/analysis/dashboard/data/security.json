@@ -1,0 +1,15 @@
+{
+  "totalVulnerabilities": 0,
+  "vulnerabilitiesBySeverity": {
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 0
+  },
+  "owaspCompliance": 100.0,
+  "vulnerabilities": [],
+  "trends": {
+    "direction": "stable",
+    "changePercent": 0
+  }
+}

@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="RAG Domains - Retrieval Augmented Generation, vector databases, embeddings, semantic search">
+    <meta name="keywords" content="rag, retrieval augmented generation, vector database, embeddings, semantic search">
+    <meta name="author" content="Asif Hussain">
+    <title>RAG Domains | CORTEX Knowledge</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">→</span>
+        <a href="index.html">Knowledge Library</a>
+        <span class="breadcrumb-separator">→</span>
+        <span class="breadcrumb-current">RAG Domains</span>
+    </nav>
+
+    <section class="hero" id="main-content">
+        <h1 class="hero-title">🧠 RAG Domains</h1>
+        <p class="hero-subtitle">Retrieval Augmented Generation and Vector Search</p>
+        <div class="file-metadata">
+            <span class="metadata-item">🤖 AI/ML</span>
+            <span class="metadata-item">🔍 Semantic Search</span>
+            <span class="metadata-item">📅 Updated: Dec 2025</span>
+        </div>
+    </section>
+
+    <section class="section file-content">
+        <div class="container">
+            <div id="overview" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">📋 Overview</h2>
+                    <p>Retrieval Augmented Generation (RAG) combines the power of large language models with external knowledge retrieval. By searching relevant documents and providing them as context, RAG systems deliver accurate, grounded responses while reducing hallucinations and enabling knowledge updates without retraining.</p>
+                    
+                    <div class="info-box info-box-primary">
+                        <strong>RAG Benefits:</strong>
+                        <ul class="feature-list">
+                            <li><strong>Accuracy:</strong> Grounded responses from verified sources</li>
+                            <li><strong>Up-to-date:</strong> Access current information without retraining</li>
+                            <li><strong>Transparency:</strong> Cite sources for verification</li>
+                            <li><strong>Cost-effective:</strong> No need for continuous model fine-tuning</li>
+                            <li><strong>Domain-specific:</strong> Inject specialized knowledge</li>
+                        </ul>
+                    </div>
+
+                    <h3>RAG Architecture</h3>
+                    <div class="mermaid">
+graph LR
+    Q[User Query] --> E1[Embedding Model]
+    E1 --> V[Vector Search]
+    D[Document Store] --> E2[Embedding Model]
+    E2 --> VDB[(Vector DB)]
+    VDB --> V
+    V --> R[Retrieved Chunks]
+    R --> C[Context Builder]
+    Q --> C
+    C --> LLM[Large Language Model]
+    LLM --> A[Answer with Citations]
+    
+    style Q fill:#7b61ff,color:#fff
+    style VDB fill:#10b981,color:#fff
+    style LLM fill:#3b82f6,color:#fff
+    style A fill:#f59e0b,color:#fff
+                    </div>
+                </div>
+            </div>
+
+            <div id="pipeline" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🔄 RAG Pipeline</h2>
+                    
+                    <h3>Indexing Phase</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📄</span>
+                            <h3>1. Document Loading</h3>
+                            <h4>Sources</h4>
+                            <ul>
+                                <li>PDFs, Word docs</li>
+                                <li>Markdown, HTML</li>
+                                <li>APIs, databases</li>
+                                <li>Web scraping</li>
+                            </ul>
+                            <h4>Tools</h4>
+                            <ul>
+                                <li>LangChain document loaders</li>
+                                <li>PyPDF2, pdfplumber</li>
+                                <li>Beautiful Soup</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">✂️</span>
+                            <h3>2. Text Chunking</h3>
+                            <h4>Strategies</h4>
+                            <ul>
+                                <li><strong>Fixed size:</strong> 512-1024 tokens</li>
+                                <li><strong>Semantic:</strong> By paragraphs/sections</li>
+                                <li><strong>Overlap:</strong> 20-50 token overlap</li>
+                                <li><strong>Recursive:</strong> Split by hierarchy</li>
+                            </ul>
+                            <h4>Considerations</h4>
+                            <ul>
+                                <li>Context window size</li>
+                                <li>Semantic coherence</li>
+                                <li>Metadata preservation</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🧬</span>
+                            <h3>3. Embedding</h3>
+                            <h4>Models</h4>
+                            <ul>
+                                <li><strong>OpenAI:</strong> text-embedding-ada-002 (1536d)</li>
+                                <li><strong>Cohere:</strong> embed-english-v3.0</li>
+                                <li><strong>Open Source:</strong> sentence-transformers</li>
+                            </ul>
+                            <h4>Properties</h4>
+                            <ul>
+                                <li>Vector dimensions</li>
+                                <li>Semantic similarity</li>
+                                <li>Cosine/dot product distance</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>Query Phase</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔍</span>
+                            <h3>4. Query Processing</h3>
+                            <h4>Steps</h4>
+                            <ul>
+                                <li>Embed user query</li>
+                                <li>Optional query expansion</li>
+                                <li>Metadata filtering</li>
+                                <li>Hybrid search (keyword + semantic)</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📊</span>
+                            <h3>5. Retrieval</h3>
+                            <h4>Techniques</h4>
+                            <ul>
+                                <li><strong>Top-k:</strong> Retrieve k most similar</li>
+                                <li><strong>MMR:</strong> Maximal Marginal Relevance (diversity)</li>
+                                <li><strong>Reranking:</strong> Cross-encoder scoring</li>
+                                <li><strong>Threshold:</strong> Minimum similarity score</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">💬</span>
+                            <h3>6. Generation</h3>
+                            <h4>Steps</h4>
+                            <ul>
+                                <li>Build context from chunks</li>
+                                <li>Construct prompt</li>
+                                <li>LLM generates answer</li>
+                                <li>Cite sources</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>RAG Query Flow</h3>
+                    <div class="mermaid">
+sequenceDiagram
+    participant U as User
+    participant E as Embedder
+    participant V as Vector DB
+    participant R as Reranker
+    participant L as LLM
+    
+    U->>E: "What is CORTEX?"
+    E->>E: Embed query → vector
+    E->>V: Search similar vectors (top 20)
+    V->>V: ANN search
+    V->>R: Return 20 chunks
+    R->>R: Rerank by relevance
+    R->>L: Top 5 chunks + query
+    L->>L: Generate answer with context
+    L->>U: "CORTEX is an AI assistant with long-term memory..."
+    
+    Note over V: Fast approximate search
+    Note over R: Precise reranking
+    Note over L: Grounded generation
+                    </div>
+                </div>
+            </div>
+
+            <div id="vector-dbs" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🗄️ Vector Databases</h2>
+                    
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📌</span>
+                            <h3>Pinecone</h3>
+                            <h4>Features</h4>
+                            <ul>
+                                <li>Managed cloud service</li>
+                                <li>Fast ANN search</li>
+                                <li>Metadata filtering</li>
+                                <li>Automatic scaling</li>
+                            </ul>
+                            <h4>Best For</h4>
+                            <ul>
+                                <li>Production RAG systems</li>
+                                <li>High-scale applications</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🌊</span>
+                            <h3>Weaviate</h3>
+                            <h4>Features</h4>
+                            <ul>
+                                <li>Open source</li>
+                                <li>GraphQL API</li>
+                                <li>Hybrid search (vector + keyword)</li>
+                                <li>Multi-tenancy</li>
+                            </ul>
+                            <h4>Best For</h4>
+                            <ul>
+                                <li>Self-hosted deployments</li>
+                                <li>Flexible schemas</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🎨</span>
+                            <h3>Chroma</h3>
+                            <h4>Features</h4>
+                            <ul>
+                                <li>Lightweight, embeddable</li>
+                                <li>Python-first API</li>
+                                <li>Easy integration</li>
+                                <li>Local development</li>
+                            </ul>
+                            <h4>Best For</h4>
+                            <ul>
+                                <li>Prototyping</li>
+                                <li>Small-scale apps</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>Additional Vector Stores</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔷</span>
+                            <h3>Qdrant</h3>
+                            <ul>
+                                <li>Rust-based, fast</li>
+                                <li>Rich filtering</li>
+                                <li>Cloud and self-hosted</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🐘</span>
+                            <h3>pgvector</h3>
+                            <ul>
+                                <li>PostgreSQL extension</li>
+                                <li>Leverage existing DB</li>
+                                <li>SQL queries with vectors</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🌲</span>
+                            <h3>FAISS</h3>
+                            <ul>
+                                <li>Facebook AI library</li>
+                                <li>In-memory, ultra-fast</li>
+                                <li>Not a full database</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>Vector Database Comparison</h3>
+                    <table style="width: 100%; margin-top: 1rem;">
+                        <thead>
+                            <tr>
+                                <th>Database</th>
+                                <th>Hosting</th>
+                                <th>Search Type</th>
+                                <th>Best Use Case</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Pinecone</strong></td>
+                                <td>Managed Cloud</td>
+                                <td>Vector only</td>
+                                <td>Production scale</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Weaviate</strong></td>
+                                <td>Cloud/Self-hosted</td>
+                                <td>Hybrid</td>
+                                <td>Flexible, open source</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Chroma</strong></td>
+                                <td>Self-hosted</td>
+                                <td>Vector</td>
+                                <td>Development, prototypes</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Qdrant</strong></td>
+                                <td>Cloud/Self-hosted</td>
+                                <td>Vector + filters</td>
+                                <td>High performance</td>
+                            </tr>
+                            <tr>
+                                <td><strong>pgvector</strong></td>
+                                <td>Self-hosted</td>
+                                <td>Vector in SQL</td>
+                                <td>Existing PostgreSQL</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="embeddings" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🧬 Embeddings</h2>
+                    
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🤖</span>
+                            <h3>OpenAI Embeddings</h3>
+                            <h4>Models</h4>
+                            <ul>
+                                <li><strong>text-embedding-ada-002:</strong> 1536 dimensions</li>
+                                <li><strong>text-embedding-3-small:</strong> 512-1536d</li>
+                                <li><strong>text-embedding-3-large:</strong> 3072d</li>
+                            </ul>
+                            <h4>Pricing</h4>
+                            <ul>
+                                <li>Pay per token</li>
+                                <li>Cost-effective at scale</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🌟</span>
+                            <h3>Cohere Embeddings</h3>
+                            <h4>Models</h4>
+                            <ul>
+                                <li><strong>embed-english-v3.0:</strong> 1024d</li>
+                                <li><strong>embed-multilingual-v3.0:</strong> 100+ languages</li>
+                            </ul>
+                            <h4>Features</h4>
+                            <ul>
+                                <li>Compression options</li>
+                                <li>Search/classification modes</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔓</span>
+                            <h3>Open Source</h3>
+                            <h4>Models</h4>
+                            <ul>
+                                <li><strong>sentence-transformers:</strong> all-MiniLM-L6-v2</li>
+                                <li><strong>BGE:</strong> BAAI embeddings</li>
+                                <li><strong>E5:</strong> Microsoft embeddings</li>
+                            </ul>
+                            <h4>Benefits</h4>
+                            <ul>
+                                <li>Self-hosted</li>
+                                <li>No API costs</li>
+                                <li>Privacy control</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="info-box info-box-primary">
+                        <strong>Embedding Best Practices:</strong>
+                        <ul class="feature-list">
+                            <li><strong>Consistent Model:</strong> Use same model for indexing and querying</li>
+                            <li><strong>Domain Adaptation:</strong> Fine-tune for specialized domains</li>
+                            <li><strong>Dimensionality:</strong> Higher dimensions = better accuracy, more storage</li>
+                            <li><strong>Batch Processing:</strong> Embed documents in batches for efficiency</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="advanced" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🚀 Advanced RAG Techniques</h2>
+                    
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔁</span>
+                            <h3>Hybrid Search</h3>
+                            <h4>Approach</h4>
+                            <ul>
+                                <li>Combine vector + keyword search</li>
+                                <li>BM25 for keyword matching</li>
+                                <li>Weighted fusion of results</li>
+                            </ul>
+                            <h4>Benefits</h4>
+                            <ul>
+                                <li>Better recall</li>
+                                <li>Handle exact matches</li>
+                                <li>Complementary strengths</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📈</span>
+                            <h3>Reranking</h3>
+                            <h4>Approach</h4>
+                            <ul>
+                                <li>Retrieve larger candidate set (20-50)</li>
+                                <li>Cross-encoder scoring</li>
+                                <li>Return top k (3-5)</li>
+                            </ul>
+                            <h4>Models</h4>
+                            <ul>
+                                <li>Cohere Rerank</li>
+                                <li>cross-encoder models</li>
+                                <li>Custom scoring</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🧩</span>
+                            <h3>Query Expansion</h3>
+                            <h4>Techniques</h4>
+                            <ul>
+                                <li>Multi-query generation</li>
+                                <li>HyDE (Hypothetical Document Embeddings)</li>
+                                <li>Step-back prompting</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🎯</span>
+                            <h3>Metadata Filtering</h3>
+                            <h4>Filters</h4>
+                            <ul>
+                                <li>Document type</li>
+                                <li>Date range</li>
+                                <li>Author/source</li>
+                                <li>Access permissions</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🧠</span>
+                            <h3>Agentic RAG</h3>
+                            <h4>Features</h4>
+                            <ul>
+                                <li>Multi-step reasoning</li>
+                                <li>Query decomposition</li>
+                                <li>Self-reflection</li>
+                                <li>Tool use</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📚</span>
+                            <h3>Contextual Compression</h3>
+                            <h4>Approach</h4>
+                            <ul>
+                                <li>Extract relevant sentences</li>
+                                <li>Reduce token usage</li>
+                                <li>Improve context quality</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="evaluation" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">📊 RAG Evaluation</h2>
+                    
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🎯</span>
+                            <h3>Retrieval Metrics</h3>
+                            <h4>Metrics</h4>
+                            <ul>
+                                <li><strong>Precision:</strong> Relevant docs retrieved / Total retrieved</li>
+                                <li><strong>Recall:</strong> Relevant docs retrieved / Total relevant</li>
+                                <li><strong>MRR:</strong> Mean Reciprocal Rank</li>
+                                <li><strong>NDCG:</strong> Normalized Discounted Cumulative Gain</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">💬</span>
+                            <h3>Generation Metrics</h3>
+                            <h4>Metrics</h4>
+                            <ul>
+                                <li><strong>Faithfulness:</strong> Answer grounded in context</li>
+                                <li><strong>Relevance:</strong> Answers the question</li>
+                                <li><strong>Coherence:</strong> Fluent and logical</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🛠️</span>
+                            <h3>Evaluation Tools</h3>
+                            <h4>Frameworks</h4>
+                            <ul>
+                                <li><strong>RAGAS:</strong> RAG Assessment</li>
+                                <li><strong>TruLens:</strong> Observability</li>
+                                <li><strong>LangSmith:</strong> Testing & monitoring</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="resources" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">📚 Resources & Learning</h2>
+                    
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🛠️</span>
+                            <h3>Frameworks</h3>
+                            <ul>
+                                <li><a href="https://python.langchain.com/" target="_blank" rel="noopener">LangChain</a> - RAG orchestration</li>
+                                <li><a href="https://docs.llamaindex.ai/" target="_blank" rel="noopener">LlamaIndex</a> - Data framework for LLMs</li>
+                                <li><a href="https://haystack.deepset.ai/" target="_blank" rel="noopener">Haystack</a> - NLP framework</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🗄️</span>
+                            <h3>Vector Databases</h3>
+                            <ul>
+                                <li><a href="https://www.pinecone.io/" target="_blank" rel="noopener">Pinecone</a></li>
+                                <li><a href="https://weaviate.io/" target="_blank" rel="noopener">Weaviate</a></li>
+                                <li><a href="https://www.trychroma.com/" target="_blank" rel="noopener">Chroma</a></li>
+                                <li><a href="https://qdrant.tech/" target="_blank" rel="noopener">Qdrant</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🌐</span>
+                            <h3>Learning Resources</h3>
+                            <ul>
+                                <li><a href="https://www.deeplearning.ai/short-courses/building-applications-vector-databases/" target="_blank" rel="noopener">DeepLearning.AI: Vector DBs</a></li>
+                                <li><a href="https://www.pinecone.io/learn/" target="_blank" rel="noopener">Pinecone Learning Center</a></li>
+                                <li><a href="https://arxiv.org/abs/2005.11401" target="_blank" rel="noopener">RAG Paper (Lewis et al.)</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 CORTEX Knowledge Base. Created by Asif Hussain.</p>
+            <p>
+                <a href="../index.html">Home</a> |
+                <a href="index.html">Knowledge Library</a> |
+                <a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener">GitHub</a>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark'
+        });
+    </script>
+</body>
+</html>

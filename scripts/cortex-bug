@@ -1,0 +1,258 @@
+#!/usr/bin/env python3
+"""
+CORTEX Bug Capture - Template-based bug capture
+
+Usage:
+    cortex-bug "Issue description"
+    cortex-bug --interactive
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+Phase: Phase 4 - Advanced CLI & Integration
+"""
+
+import sys
+import os
+from pathlib import Path
+from datetime import datetime
+from typing import Optional, Dict
+import argparse
+import subprocess
+
+# Add CORTEX root to path
+CORTEX_ROOT = Path(__file__).parent.parent
+sys.path.insert(0, str(CORTEX_ROOT))
+
+try:
+    from src.tier1.working_memory import WorkingMemory
+except ImportError as e:
+    print(f"[ERROR] Failed to import CORTEX modules: {e}")
+    sys.exit(1)
+
+
+class BugCapture:
+    """Template-based bug capture system"""
+    
+    BUG_TEMPLATE = {
+        "description": "",
+        "steps_to_reproduce": [],
+        "expected_behavior": "",
+        "actual_behavior": "",
+        "error_messages": [],
+        "files_affected": [],
+        "severity": "medium",
+        "status": "open"
+    }
+    
+    def __init__(self, repo_path: Optional[Path] = None):
+        """Initialize bug capture"""
+        self.repo_path = repo_path or Path.cwd()
+        self.brain_path = self.repo_path / "cortex-brain"
+        
+        if not self.brain_path.exists():
+            print(f"[ERROR] CORTEX brain not found at: {self.brain_path}")
+            sys.exit(1)
+        
+        self.tier1 = WorkingMemory(self.brain_path)
+    
+    def capture_bug(self, description: str, severity: str = "medium",
+                    files: Optional[list] = None, error: Optional[str] = None) -> bool:
+        """
+        Quick bug capture
+        
+        Args:
+            description: Bug description
+            severity: Bug severity (low, medium, high, critical)
+            files: List of affected files
+            error: Error message if available
+        
+        Returns:
+            bool: True if successful
+        """
+        try:
+            start_time = datetime.now()
+            
+            # Create bug report
+            bug_report = self.BUG_TEMPLATE.copy()
+            bug_report["description"] = description
+            bug_report["severity"] = severity
+            bug_report["files_affected"] = files or self._detect_changed_files()
+            bug_report["timestamp"] = datetime.now().isoformat()
+            
+            if error:
+                bug_report["error_messages"] = [error]
+            
+            # Store in Tier 1
+            conversation = {
+                "role": "user",
+                "content": f"BUG REPORT: {description}",
+                "metadata": {
+                    "type": "bug",
+                    "bug_report": bug_report,
+                    "source": "cortex-bug"
+                }
+            }
+            
+            bug_id = self.tier1.add_conversation(conversation)
+            
+            elapsed = (datetime.now() - start_time).total_seconds()
+            
+            print(f"🐛 Bug captured in {elapsed:.2f}s")
+            print(f"   ID: {bug_id}")
+            print(f"   Severity: {severity}")
+            if bug_report["files_affected"]:
+                print(f"   Files: {len(bug_report['files_affected'])} affected")
+            
+            return True
+            
+        except Exception as e:
+            print(f"❌ Failed to capture bug: {e}")
+            return False
+    
+    def interactive_capture(self) -> bool:
+        """Interactive bug capture with prompts"""
+        print("\n=== CORTEX Bug Capture ===\n")
+        
+        # Description
+        description = input("Bug description: ").strip()
+        if not description:
+            print("❌ Description required")
+            return False
+        
+        # Severity
+        print("\nSeverity:")
+        print("  1. Low (minor issue)")
+        print("  2. Medium (normal bug)")
+        print("  3. High (significant issue)")
+        print("  4. Critical (blocking)")
+        severity_choice = input("Choice [2]: ").strip() or "2"
+        
+        severity_map = {"1": "low", "2": "medium", "3": "high", "4": "critical"}
+        severity = severity_map.get(severity_choice, "medium")
+        
+        # Error message
+        has_error = input("\nHas error message? [y/N]: ").strip().lower()
+        error = None
+        if has_error == 'y':
+            print("Paste error message (Ctrl+D when done):")
+            try:
+                error_lines = []
+                while True:
+                    try:
+                        line = input()
+                        error_lines.append(line)
+                    except EOFError:
+                        break
+                error = "\n".join(error_lines)
+            except KeyboardInterrupt:
+                print("\n❌ Cancelled")
+                return False
+        
+        # Files
+        auto_detect = input("\nAuto-detect affected files? [Y/n]: ").strip().lower()
+        files = None
+        if auto_detect != 'n':
+            files = self._detect_changed_files()
+            if files:
+                print(f"   Detected {len(files)} changed files")
+        
+        # Confirm
+        print(f"\n📝 Capturing bug:")
+        print(f"   Description: {description}")
+        print(f"   Severity: {severity}")
+        if error:
+            print(f"   Has error message: Yes")
+        
+        confirm = input("\nContinue? [Y/n]: ").strip().lower()
+        if confirm and confirm != 'y':
+            print("❌ Cancelled")
+            return False
+        
+        return self.capture_bug(description, severity, files, error)
+    
+    def _detect_changed_files(self) -> list:
+        """Detect changed files using git"""
+        try:
+            result = subprocess.check_output(
+                ["git", "diff", "--name-only", "HEAD"],
+                cwd=self.repo_path,
+                stderr=subprocess.DEVNULL,
+                timeout=1
+            ).decode().strip()
+            return [f for f in result.split('\n') if f]
+        except:
+            return []
+
+
+def main():
+    """Main entry point"""
+    parser = argparse.ArgumentParser(
+        description="CORTEX Bug Capture - Template-based bug reporting",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  cortex-bug "Null pointer in parser.py"
+  cortex-bug "Login fails" --severity critical
+  cortex-bug --interactive
+        """
+    )
+    
+    parser.add_argument(
+        "description",
+        nargs="?",
+        help="Bug description"
+    )
+    
+    parser.add_argument(
+        "--severity",
+        choices=["low", "medium", "high", "critical"],
+        default="medium",
+        help="Bug severity (default: medium)"
+    )
+    
+    parser.add_argument(
+        "--error",
+        help="Error message"
+    )
+    
+    parser.add_argument(
+        "--files",
+        help="Comma-separated list of affected files"
+    )
+    
+    parser.add_argument(
+        "--interactive", "-i",
+        action="store_true",
+        help="Interactive mode"
+    )
+    
+    parser.add_argument(
+        "--repo",
+        type=Path,
+        help="Repository path (default: current directory)"
+    )
+    
+    args = parser.parse_args()
+    
+    # Initialize
+    try:
+        capture = BugCapture(repo_path=args.repo)
+    except Exception as e:
+        print(f"[ERROR] Failed to initialize: {e}")
+        sys.exit(1)
+    
+    # Execute
+    if args.interactive:
+        success = capture.interactive_capture()
+    elif args.description:
+        files = [f.strip() for f in args.files.split(",")] if args.files else None
+        success = capture.capture_bug(args.description, args.severity, files, args.error)
+    else:
+        parser.print_help()
+        sys.exit(1)
+    
+    sys.exit(0 if success else 1)
+
+
+if __name__ == "__main__":
+    main()

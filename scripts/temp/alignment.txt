@@ -1,0 +1,55 @@
+[DEBUG] Validating import for PlanningOrchestrator: module_path='src.orchestrators.planning_orchestrator'
+
+[DEBUG] SCORE for PlanningOrchestrator:
+   discovered=True (+20 if True)
+   imported=True (+20 if True)
+   instantiated=True (+20 if True)
+   documented=False (+10 if True)
+   tested=False (+10 if True) [coverage=50.0%]
+   wired=False (+10 if True)
+   optimized=False (+10 if True)
+   TOTAL SCORE: 60%
+[DEBUG] Validating import for BrainIngestionAdapterAgent: module_path='src.agents.brain_ingestion_adapter_agent'
+
+[DEBUG] SCORE for BrainIngestionAdapterAgent:
+   discovered=True (+20 if True)
+   imported=False (+20 if True)
+   instantiated=False (+20 if True)
+   documented=True (+10 if True)
+   tested=True (+10 if True) [coverage=100.0%]
+   wired=True (+10 if True)
+   optimized=False (+10 if True)
+   TOTAL SCORE: 50%
+[DEBUG] Validating import for BrainIngestionAgent: module_path='src.agents.brain_ingestion_agent'
+
+[DEBUG] SCORE for BrainIngestionAgent:
+   discovered=True (+20 if True)
+   imported=False (+20 if True)
+   instantiated=False (+20 if True)
+   documented=True (+10 if True)
+   tested=True (+10 if True) [coverage=87.06896551724138%]
+   wired=True (+10 if True)
+   optimized=False (+10 if True)
+   TOTAL SCORE: 50%
+
+[OK] Overall Health: 81%
+Critical Issues: 7
+Warnings: 67
+
+Features Validated: 21
+  [OK] Healthy (>=90%): 5
+  [WARN] Warning (70-89%): 13
+  [CRIT] Critical (<70%): 3
+
+Top Issues:
+  [CRIT] Critical BrainIngestionAdapterAgent: 50% - Performance not validated
+  [CRIT] Critical BrainIngestionAgent: 50% - Performance not validated
+  [CRIT] Critical PlanningOrchestrator: 60% - Missing documentation, No test coverage, Not wired to entry point, Performance not validated
+  [WARN] Warning SystemAlignmentOrchestrator: 70% - Missing documentation, No test coverage, Performance not validated
+  [WARN] Warning CleanupOrchestrator: 70% - Missing documentation, No test coverage, Performance not validated
+  ... and 11 more issues
+
+[INFO] 66 auto-remediation suggestions available
+
+[GATE] Deployment Gates: FAIL
+[PKG] Package Purity: PURE

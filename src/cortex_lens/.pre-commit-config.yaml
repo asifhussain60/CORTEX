@@ -1,0 +1,74 @@
+# CORTEX Lens Pre-Commit Configuration
+# Automated code quality gates for consistent standards
+# Run: pre-commit install (one-time setup)
+# Manual: pre-commit run --all-files
+
+repos:
+  # Black - Code Formatter
+  - repo: https://github.com/psf/black
+    rev: 24.10.0
+    hooks:
+      - id: black
+        language_version: python3.13
+        args: ['--line-length=100']
+        files: ^src/cortex_lens/
+
+  # Ruff - Fast Linter (replaces flake8, isort, pylint)
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.8.5
+    hooks:
+      - id: ruff
+        args: ['--fix', '--exit-non-zero-on-fix']
+        files: ^src/cortex_lens/
+      - id: ruff-format
+        files: ^src/cortex_lens/
+
+  # Pytest - Run Tests
+  - repo: local
+    hooks:
+      - id: pytest
+        name: pytest
+        entry: pytest
+        language: system
+        pass_filenames: false
+        args: ['tests/', '-v', '--tb=short']
+        always_run: true
+
+  # PyUpgrade - Modernize Python Syntax
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.19.0
+    hooks:
+      - id: pyupgrade
+        args: ['--py313-plus']
+        files: ^src/cortex_lens/
+
+  # Check for Merge Conflicts
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-merge-conflict
+      - id: check-yaml
+      - id: check-json
+      - id: check-toml
+      - id: end-of-file-fixer
+        files: ^src/cortex_lens/
+      - id: trailing-whitespace
+        files: ^src/cortex_lens/
+      - id: mixed-line-ending
+        files: ^src/cortex_lens/
+
+  # MyPy - Type Checking (Optional but Recommended)
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.13.0
+    hooks:
+      - id: mypy
+        files: ^src/cortex_lens/
+        args: ['--ignore-missing-imports', '--no-strict-optional']
+        additional_dependencies: ['types-PyYAML']
+
+# Global Configuration
+default_language_version:
+  python: python3.13
+
+# Skip specific hooks (if needed)
+# SKIP=pytest git commit -m "Skip tests for this commit"

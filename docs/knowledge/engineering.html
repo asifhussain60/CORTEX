@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Software Engineering - Best practices, design patterns, SOLID principles, clean code">
+    <meta name="keywords" content="software engineering, design patterns, solid, clean code, refactoring">
+    <meta name="author" content="Asif Hussain">
+    <title>Software Engineering | CORTEX Knowledge</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">→</span>
+        <a href="index.html">Knowledge Library</a>
+        <span class="breadcrumb-separator">→</span>
+        <span class="breadcrumb-current">Software Engineering</span>
+    </nav>
+
+    <section class="hero" id="main-content">
+        <h1 class="hero-title">💻 Software Engineering</h1>
+        <p class="hero-subtitle">Best Practices, Design Patterns, and Clean Code</p>
+        <div class="file-metadata">
+            <span class="metadata-item">🏗️ Architecture</span>
+            <span class="metadata-item">📐 Patterns</span>
+            <span class="metadata-item">📅 Updated: Dec 2025</span>
+        </div>
+    </section>
+
+    <section class="section file-content">
+        <div class="container">
+            <div id="overview" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">📋 Overview</h2>
+                    <p>Software engineering applies engineering principles to software development, emphasizing systematic design, implementation, testing, and maintenance. Master design patterns, SOLID principles, and clean code practices to build maintainable, scalable systems.</p>
+                    
+                    <div class="info-box info-box-primary">
+                        <strong>Core Principles:</strong>
+                        <ul class="feature-list">
+                            <li><strong>Maintainability:</strong> Easy to understand and modify</li>
+                            <li><strong>Scalability:</strong> Grows with requirements</li>
+                            <li><strong>Reliability:</strong> Works correctly under all conditions</li>
+                            <li><strong>Testability:</strong> Easy to verify behavior</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="solid" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🔷 SOLID Principles</h2>
+                    
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">S</span>
+                            <h3>Single Responsibility</h3>
+                            <h4>Principle</h4>
+                            <ul>
+                                <li>A class should have one reason to change</li>
+                                <li>One responsibility per class</li>
+                                <li>High cohesion</li>
+                            </ul>
+                            <h4>Benefits</h4>
+                            <ul>
+                                <li>Easier to understand</li>
+                                <li>Simpler testing</li>
+                                <li>Reduced coupling</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">O</span>
+                            <h3>Open/Closed</h3>
+                            <h4>Principle</h4>
+                            <ul>
+                                <li>Open for extension</li>
+                                <li>Closed for modification</li>
+                                <li>Use abstraction</li>
+                            </ul>
+                            <h4>Benefits</h4>
+                            <ul>
+                                <li>Add features without breaking existing code</li>
+                                <li>Plugin architectures</li>
+                                <li>Strategy pattern</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">L</span>
+                            <h3>Liskov Substitution</h3>
+                            <h4>Principle</h4>
+                            <ul>
+                                <li>Subtypes must be substitutable</li>
+                                <li>Preserve expected behavior</li>
+                                <li>Contract compliance</li>
+                            </ul>
+                            <h4>Benefits</h4>
+                            <ul>
+                                <li>Reliable polymorphism</li>
+                                <li>Predictable behavior</li>
+                                <li>Proper inheritance</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">I</span>
+                            <h3>Interface Segregation</h3>
+                            <h4>Principle</h4>
+                            <ul>
+                                <li>Many specific interfaces better than one general</li>
+                                <li>Clients shouldn't depend on unused methods</li>
+                                <li>Role interfaces</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">D</span>
+                            <h3>Dependency Inversion</h3>
+                            <h4>Principle</h4>
+                            <ul>
+                                <li>Depend on abstractions, not concretions</li>
+                                <li>High-level modules independent</li>
+                                <li>Dependency injection</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="patterns" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🎨 Design Patterns</h2>
+                    
+                    <h3>Creational Patterns</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🏭</span>
+                            <h3>Factory</h3>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Create objects without specifying exact class</li>
+                                <li>Encapsulate object creation</li>
+                            </ul>
+                            <h4>Use Cases</h4>
+                            <ul>
+                                <li>Framework libraries</li>
+                                <li>Plugin systems</li>
+                                <li>Product families</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">👤</span>
+                            <h3>Singleton</h3>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Ensure single instance</li>
+                                <li>Global access point</li>
+                            </ul>
+                            <h4>Use Cases</h4>
+                            <ul>
+                                <li>Configuration manager</li>
+                                <li>Logger</li>
+                                <li>Connection pool</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🏗️</span>
+                            <h3>Builder</h3>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Construct complex objects step-by-step</li>
+                                <li>Separate construction from representation</li>
+                            </ul>
+                            <h4>Use Cases</h4>
+                            <ul>
+                                <li>Complex configurations</li>
+                                <li>Fluent interfaces</li>
+                                <li>Immutable objects</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>Structural Patterns</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔌</span>
+                            <h3>Adapter</h3>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Convert interface to another</li>
+                                <li>Make incompatible interfaces work together</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🎨</span>
+                            <h3>Decorator</h3>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Add responsibilities dynamically</li>
+                                <li>Flexible alternative to subclassing</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🚪</span>
+                            <h3>Facade</h3>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Simplified interface to complex subsystem</li>
+                                <li>Hide complexity</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>Behavioral Patterns</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">👁️</span>
+                            <h3>Observer</h3>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Define one-to-many dependency</li>
+                                <li>Notify dependents of state changes</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🎯</span>
+                            <h3>Strategy</h3>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Define family of algorithms</li>
+                                <li>Make them interchangeable</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">⚙️</span>
+                            <h3>Command</h3>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Encapsulate request as object</li>
+                                <li>Support undo/redo</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="clean-code" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">✨ Clean Code Practices</h2>
+                    
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📝</span>
+                            <h3>Naming</h3>
+                            <h4>Guidelines</h4>
+                            <ul>
+                                <li>Intention-revealing names</li>
+                                <li>Avoid mental mapping</li>
+                                <li>Use searchable names</li>
+                                <li>Class names: nouns</li>
+                                <li>Method names: verbs</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔧</span>
+                            <h3>Functions</h3>
+                            <h4>Guidelines</h4>
+                            <ul>
+                                <li>Small (≤20 lines)</li>
+                                <li>Do one thing well</li>
+                                <li>Few parameters (≤3)</li>
+                                <li>No side effects</li>
+                                <li>Command-query separation</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">💬</span>
+                            <h3>Comments</h3>
+                            <h4>Guidelines</h4>
+                            <ul>
+                                <li>Explain WHY, not WHAT</li>
+                                <li>Avoid redundant comments</li>
+                                <li>Update with code changes</li>
+                                <li>Use for warnings/TODOs</li>
+                                <li>Prefer self-documenting code</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="info-box info-box-success">
+                        <strong>Code Quality Metrics:</strong>
+                        <ul class="feature-list">
+                            <li><strong>Cyclomatic Complexity:</strong> Keep ≤10 per method</li>
+                            <li><strong>Code Coverage:</strong> Aim for ≥80% test coverage</li>
+                            <li><strong>Technical Debt:</strong> Refactor regularly</li>
+                            <li><strong>Code Duplication:</strong> DRY principle - Don't Repeat Yourself</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="refactoring" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">♻️ Refactoring</h2>
+                    
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔍</span>
+                            <h3>Extract Method</h3>
+                            <h4>When to Use</h4>
+                            <ul>
+                                <li>Long methods</li>
+                                <li>Code needs comment to explain</li>
+                                <li>Duplicate logic</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📦</span>
+                            <h3>Extract Class</h3>
+                            <h4>When to Use</h4>
+                            <ul>
+                                <li>Class doing too much</li>
+                                <li>Subset of data used together</li>
+                                <li>Improve cohesion</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔄</span>
+                            <h3>Replace Conditional</h3>
+                            <h4>When to Use</h4>
+                            <ul>
+                                <li>Complex conditionals</li>
+                                <li>Type checking</li>
+                                <li>Use polymorphism instead</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="resources" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">📚 Resources & Learning</h2>
+                    
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📖</span>
+                            <h3>Essential Books</h3>
+                            <ul>
+                                <li><strong>Clean Code</strong> - Robert C. Martin</li>
+                                <li><strong>Design Patterns</strong> - Gang of Four</li>
+                                <li><strong>Refactoring</strong> - Martin Fowler</li>
+                                <li><strong>The Pragmatic Programmer</strong> - Hunt & Thomas</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🛠️</span>
+                            <h3>Tools</h3>
+                            <ul>
+                                <li><a href="https://www.sonarsource.com/" target="_blank" rel="noopener">SonarQube</a> - Code quality</li>
+                                <li><a href="https://eslint.org/" target="_blank" rel="noopener">ESLint</a> - JavaScript linting</li>
+                                <li><a href="https://prettier.io/" target="_blank" rel="noopener">Prettier</a> - Code formatting</li>
+                                <li><a href="https://marketplace.visualstudio.com/" target="_blank" rel="noopener">VS Code Extensions</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🌐</span>
+                            <h3>Online Resources</h3>
+                            <ul>
+                                <li><a href="https://refactoring.guru/" target="_blank" rel="noopener">Refactoring Guru</a></li>
+                                <li><a href="https://sourcemaking.com/" target="_blank" rel="noopener">SourceMaking</a></li>
+                                <li><a href="https://martinfowler.com/" target="_blank" rel="noopener">Martin Fowler's Blog</a></li>
+                                <li><a href="https://clean-code-developer.com/" target="_blank" rel="noopener">Clean Code Developer</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 CORTEX Knowledge Base. Created by Asif Hussain.</p>
+            <p>
+                <a href="../index.html">Home</a> |
+                <a href="index.html">Knowledge Library</a> |
+                <a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener">GitHub</a>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark'
+        });
+    </script>
+</body>
+</html>

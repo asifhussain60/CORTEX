@@ -1,0 +1,9 @@
+{
+  "timestamp": "20251216_162438",
+  "files_backed_up": 3,
+  "files": [
+    "src\\tier1\\conversation_memory.py",
+    "src\\tier1\\migrate_tier1.py",
+    "src\\tier1\\planning_doc_sync.py"
+  ]
+}

@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<!--
+  CORTEX Lens v4.0 - 8-Tab Navigation Component
+  
+  Features:
+  - 8 tabs: Overview, Architecture, Metrics, Files, Tests, Dependencies, Conversation, Settings
+  - Glassmorphism sidebar with blur(12px)
+  - Responsive mobile navigation with hamburger menu
+  - Active state tracking
+  - Icon integration (SVG)
+  
+  Usage:
+    Include in templates: {% include 'components/navigation.html' %}
+    Active tab: <script>setActiveTab('overview');</script>
+-->
+
+<!-- Navigation Sidebar -->
+<nav class="cortex-sidebar glass-sidebar" id="cortex-sidebar">
+  <div class="sidebar-header">
+    <div class="logo-container">
+      <svg class="logo-icon" width="40" height="40" viewBox="0 0 40 40">
+        <circle cx="20" cy="20" r="18" fill="none" stroke="var(--color-primary)" stroke-width="2"/>
+        <path d="M15,20 L20,15 L25,20 L20,25 Z" fill="var(--color-primary)"/>
+        <circle cx="20" cy="10" r="2" fill="var(--color-accent)"/>
+        <circle cx="30" cy="20" r="2" fill="var(--color-accent)"/>
+        <circle cx="20" cy="30" r="2" fill="var(--color-accent)"/>
+        <circle cx="10" cy="20" r="2" fill="var(--color-accent)"/>
+      </svg>
+      <h1 class="logo-text">CORTEX Lens</h1>
+    </div>
+    <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle sidebar">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="12" x2="21" y2="12"/>
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="sidebar-content">
+    <!-- Navigation Tabs -->
+    <ul class="nav-tabs" role="tablist">
+      <!-- Tab 1: Overview -->
+      <li class="nav-item">
+        <a href="#overview" class="nav-link" id="tab-overview" role="tab" aria-controls="overview" data-tab="overview">
+          <svg class="nav-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="14" height="14" rx="2"/>
+            <line x1="3" y1="9" x2="17" y2="9"/>
+            <line x1="9" y1="9" x2="9" y2="17"/>
+          </svg>
+          <span class="nav-text">Overview</span>
+        </a>
+      </li>
+
+      <!-- Tab 2: Architecture -->
+      <li class="nav-item">
+        <a href="#architecture" class="nav-link" id="tab-architecture" role="tab" aria-controls="architecture" data-tab="architecture">
+          <svg class="nav-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="2" width="6" height="6" rx="1"/>
+            <rect x="12" y="2" width="6" height="6" rx="1"/>
+            <rect x="2" y="12" width="6" height="6" rx="1"/>
+            <rect x="12" y="12" width="6" height="6" rx="1"/>
+            <line x1="8" y1="5" x2="12" y2="5"/>
+            <line x1="8" y1="15" x2="12" y2="15"/>
+            <line x1="5" y1="8" x2="5" y2="12"/>
+            <line x1="15" y1="8" x2="15" y2="12"/>
+          </svg>
+          <span class="nav-text">Architecture</span>
+        </a>
+      </li>
+
+      <!-- Tab 3: Metrics -->
+      <li class="nav-item">
+        <a href="#metrics" class="nav-link" id="tab-metrics" role="tab" aria-controls="metrics" data-tab="metrics">
+          <svg class="nav-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="17" x2="3" y2="10"/>
+            <line x1="7" y1="17" x2="7" y2="6"/>
+            <line x1="11" y1="17" x2="11" y2="13"/>
+            <line x1="15" y1="17" x2="15" y2="3"/>
+          </svg>
+          <span class="nav-text">Metrics</span>
+        </a>
+      </li>
+
+      <!-- Tab 4: Files -->
+      <li class="nav-item">
+        <a href="#files" class="nav-link" id="tab-files" role="tab" aria-controls="files" data-tab="files">
+          <svg class="nav-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 2 L4 18 L16 18 L16 6 L12 2 Z"/>
+            <path d="M12 2 L12 6 L16 6"/>
+          </svg>
+          <span class="nav-text">Files</span>
+        </a>
+      </li>
+
+      <!-- Tab 5: Tests -->
+      <li class="nav-item">
+        <a href="#tests" class="nav-link" id="tab-tests" role="tab" aria-controls="tests" data-tab="tests">
+          <svg class="nav-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="10" cy="10" r="7"/>
+            <path d="M7 10 L9 12 L13 8"/>
+          </svg>
+          <span class="nav-text">Tests</span>
+        </a>
+      </li>
+
+      <!-- Tab 6: Dependencies -->
+      <li class="nav-item">
+        <a href="#dependencies" class="nav-link" id="tab-dependencies" role="tab" aria-controls="dependencies" data-tab="dependencies">
+          <svg class="nav-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="5" cy="5" r="3"/>
+            <circle cx="15" cy="5" r="3"/>
+            <circle cx="5" cy="15" r="3"/>
+            <circle cx="15" cy="15" r="3"/>
+            <line x1="7" y1="6" x2="13" y2="6"/>
+            <line x1="6" y1="7" x2="6" y2="13"/>
+            <line x1="14" y1="7" x2="14" y2="13"/>
+            <line x1="7" y1="14" x2="13" y2="14"/>
+          </svg>
+          <span class="nav-text">Dependencies</span>
+        </a>
+      </li>
+
+      <!-- Tab 7: Conversation -->
+      <li class="nav-item">
+        <a href="#conversation" class="nav-link" id="tab-conversation" role="tab" aria-controls="conversation" data-tab="conversation">
+          <svg class="nav-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 3 L17 3 L17 13 L9 13 L5 17 L5 13 L3 13 Z"/>
+          </svg>
+          <span class="nav-text">Conversation</span>
+        </a>
+      </li>
+
+      <!-- Tab 8: Settings -->
+      <li class="nav-item">
+        <a href="#settings" class="nav-link" id="tab-settings" role="tab" aria-controls="settings" data-tab="settings">
+          <svg class="nav-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="10" cy="10" r="3"/>
+            <path d="M10 2 L10 4 M10 16 L10 18 M2 10 L4 10 M16 10 L18 10 M4.93 4.93 L6.34 6.34 M13.66 13.66 L15.07 15.07 M4.93 15.07 L6.34 13.66 M13.66 6.34 L15.07 4.93"/>
+          </svg>
+          <span class="nav-text">Settings</span>
+        </a>
+      </li>
+    </ul>
+
+    <!-- Sidebar Footer -->
+    <div class="sidebar-footer">
+      <div class="version-info">
+        <span class="version-label">Version</span>
+        <span class="version-number">v4.0</span>
+      </div>
+      <div class="status-indicator">
+        <span class="status-dot status-active"></span>
+        <span class="status-text">Active</span>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Overlay -->
+<div class="mobile-overlay" id="mobile-overlay"></div>
+
+<!-- Navigation Styles -->
+<style>
+/* ============================================
+   SIDEBAR NAVIGATION
+   ============================================ */
+
+.cortex-sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 280px;
+  z-index: var(--z-fixed);
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--duration-normal) var(--easing-smooth);
+}
+
+.cortex-sidebar.collapsed {
+  transform: translateX(-280px);
+}
+
+/* Sidebar Header */
+.sidebar-header {
+  padding: var(--spacing-6);
+  border-bottom: 1px solid var(--color-border-primary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+}
+
+.logo-icon {
+  flex-shrink: 0;
+}
+
+.logo-text {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.sidebar-toggle {
+  background: transparent;
+  border: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  padding: var(--spacing-2);
+  border-radius: var(--radius-sm);
+  transition: var(--transition-colors);
+  display: none; /* Show on mobile */
+}
+
+.sidebar-toggle:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--color-text-primary);
+}
+
+/* Sidebar Content */
+.sidebar-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: var(--spacing-4) 0;
+}
+
+/* Navigation Tabs */
+.nav-tabs {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex: 1;
+}
+
+.nav-item {
+  margin: 0;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-4) var(--spacing-6);
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  transition: var(--transition-all);
+  border-left: 3px solid transparent;
+  position: relative;
+}
+
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--color-text-primary);
+  border-left-color: var(--color-primary);
+}
+
+.nav-link.active {
+  background: rgba(59, 130, 246, 0.1);
+  color: var(--color-primary);
+  border-left-color: var(--color-primary);
+}
+
+.nav-link.active .nav-icon {
+  color: var(--color-primary);
+}
+
+.nav-icon {
+  flex-shrink: 0;
+  transition: var(--transition-colors);
+}
+
+.nav-text {
+  flex: 1;
+}
+
+/* Sidebar Footer */
+.sidebar-footer {
+  padding: var(--spacing-4) var(--spacing-6);
+  border-top: 1px solid var(--color-border-primary);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.version-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--font-size-sm);
+}
+
+.version-label {
+  color: var(--color-text-tertiary);
+}
+
+.version-number {
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  font-size: var(--font-size-sm);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-success);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.status-dot.status-active {
+  background: var(--color-success);
+}
+
+.status-dot.status-inactive {
+  background: var(--color-text-quaternary);
+  animation: none;
+}
+
+.status-text {
+  color: var(--color-text-tertiary);
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Mobile Overlay */
+.mobile-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: calc(var(--z-fixed) - 1);
+  opacity: 0;
+  transition: opacity var(--duration-normal) var(--easing-ease-in-out);
+}
+
+.mobile-overlay.active {
+  display: block;
+  opacity: 1;
+}
+
+/* ============================================
+   RESPONSIVE - MOBILE
+   ============================================ */
+
+@media (max-width: 768px) {
+  .cortex-sidebar {
+    transform: translateX(-280px);
+  }
+
+  .cortex-sidebar.open {
+    transform: translateX(0);
+  }
+
+  .sidebar-toggle {
+    display: block;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - TABLET
+   ============================================ */
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .cortex-sidebar {
+    width: 240px;
+  }
+
+  .cortex-sidebar.collapsed {
+    transform: translateX(-240px);
+  }
+}
+</style>
+
+<!-- Navigation JavaScript -->
+<script>
+(function() {
+  'use strict';
+
+  // Navigation state
+  const nav = {
+    activeTab: 'overview',
+    sidebarOpen: window.innerWidth >= 769,
+    tabs: ['overview', 'architecture', 'metrics', 'files', 'tests', 'dependencies', 'conversation', 'settings']
+  };
+
+  // DOM elements
+  const sidebar = document.getElementById('cortex-sidebar');
+  const sidebarToggle = document.getElementById('sidebar-toggle');
+  const mobileOverlay = document.getElementById('mobile-overlay');
+  const navLinks = document.querySelectorAll('.nav-link');
+
+  /**
+   * Set active tab
+   */
+  function setActiveTab(tabName) {
+    if (!nav.tabs.includes(tabName)) {
+      console.warn(`Invalid tab name: ${tabName}`);
+      return;
+    }
+
+    nav.activeTab = tabName;
+
+    // Update nav link states
+    navLinks.forEach(link => {
+      const linkTab = link.dataset.tab;
+      if (linkTab === tabName) {
+        link.classList.add('active');
+        link.setAttribute('aria-selected', 'true');
+      } else {
+        link.classList.remove('active');
+        link.setAttribute('aria-selected', 'false');
+      }
+    });
+
+    // Emit custom event
+    document.dispatchEvent(new CustomEvent('cortex:tab-change', {
+      detail: { tab: tabName }
+    }));
+
+    // Close sidebar on mobile after tab selection
+    if (window.innerWidth < 769) {
+      closeSidebar();
+    }
+  }
+
+  /**
+   * Toggle sidebar
+   */
+  function toggleSidebar() {
+    nav.sidebarOpen = !nav.sidebarOpen;
+    
+    if (nav.sidebarOpen) {
+      openSidebar();
+    } else {
+      closeSidebar();
+    }
+  }
+
+  /**
+   * Open sidebar
+   */
+  function openSidebar() {
+    sidebar.classList.add('open');
+    sidebar.classList.remove('collapsed');
+    mobileOverlay.classList.add('active');
+    nav.sidebarOpen = true;
+  }
+
+  /**
+   * Close sidebar
+   */
+  function closeSidebar() {
+    sidebar.classList.remove('open');
+    if (window.innerWidth < 769) {
+      sidebar.classList.add('collapsed');
+    }
+    mobileOverlay.classList.remove('active');
+    nav.sidebarOpen = false;
+  }
+
+  /**
+   * Handle nav link clicks
+   */
+  navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const tabName = link.dataset.tab;
+      setActiveTab(tabName);
+      
+      // Update URL hash
+      window.location.hash = tabName;
+    });
+  });
+
+  /**
+   * Handle sidebar toggle click
+   */
+  if (sidebarToggle) {
+    sidebarToggle.addEventListener('click', toggleSidebar);
+  }
+
+  /**
+   * Handle mobile overlay click
+   */
+  if (mobileOverlay) {
+    mobileOverlay.addEventListener('click', closeSidebar);
+  }
+
+  /**
+   * Handle window resize
+   */
+  window.addEventListener('resize', () => {
+    if (window.innerWidth >= 769) {
+      sidebar.classList.remove('collapsed', 'open');
+      mobileOverlay.classList.remove('active');
+      nav.sidebarOpen = true;
+    } else {
+      if (!nav.sidebarOpen) {
+        sidebar.classList.add('collapsed');
+      }
+    }
+  });
+
+  /**
+   * Initialize from URL hash
+   */
+  function initFromHash() {
+    const hash = window.location.hash.substring(1);
+    if (hash && nav.tabs.includes(hash)) {
+      setActiveTab(hash);
+    } else {
+      setActiveTab('overview');
+    }
+  }
+
+  /**
+   * Handle hash change
+   */
+  window.addEventListener('hashchange', initFromHash);
+
+  // Initialize
+  initFromHash();
+
+  // Expose API
+  window.CortexNav = {
+    setActiveTab,
+    toggleSidebar,
+    openSidebar,
+    closeSidebar,
+    getActiveTab: () => nav.activeTab,
+    isSidebarOpen: () => nav.sidebarOpen
+  };
+
+})();
+</script>

@@ -1,0 +1,352 @@
+/**
+ * Form Component Styles
+ * 
+ * Input fields, selects, textareas, labels, and form layouts
+ * Consistent styling with focus states and validation
+ * 
+ * Author: Asif Hussain
+ * Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+ * Date: December 9, 2025
+ */
+
+/* ============================================
+   BASE FORM STYLES
+   ============================================ */
+
+.form-group {
+    margin-bottom: var(--spacing-lg);
+}
+
+.form-label {
+    display: block;
+    margin-bottom: var(--spacing-sm);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.form-label.required::after {
+    content: ' *';
+    color: var(--danger);
+}
+
+/* ============================================
+   INPUT FIELDS
+   ============================================ */
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="tel"],
+input[type="url"],
+input[type="search"],
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+.form-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: var(--font-size-base);
+    font-family: var(--font-family);
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-base);
+    outline: none;
+}
+
+input:focus,
+.form-input:focus {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+}
+
+input:disabled,
+.form-input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+/* ============================================
+   TEXTAREA
+   ============================================ */
+
+textarea,
+.form-textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: var(--font-size-base);
+    font-family: var(--font-family);
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-base);
+    outline: none;
+    resize: vertical;
+    min-height: 100px;
+}
+
+textarea:focus,
+.form-textarea:focus {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+}
+
+/* ============================================
+   SELECT DROPDOWN
+   ============================================ */
+
+select,
+.form-select {
+    width: 100%;
+    padding: 0.75rem 2.5rem 0.75rem 1rem;
+    font-size: var(--font-size-base);
+    font-family: var(--font-family);
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.05);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2300d4ff' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 12px;
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-base);
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+}
+
+select:hover,
+.form-select:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: var(--accent-primary);
+}
+
+select:focus,
+.form-select:focus {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+}
+
+/* ============================================
+   CHECKBOX & RADIO
+   ============================================ */
+
+input[type="checkbox"],
+input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    margin-right: var(--spacing-sm);
+    accent-color: var(--accent-primary);
+    cursor: pointer;
+}
+
+.form-check {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--spacing-sm);
+}
+
+.form-check-label {
+    font-size: var(--font-size-base);
+    color: var(--text-primary);
+    cursor: pointer;
+    user-select: none;
+}
+
+/* ============================================
+   INPUT GROUPS
+   ============================================ */
+
+.input-group {
+    display: flex;
+    gap: 2px;
+}
+
+.input-group input {
+    flex: 1;
+    border-radius: 0;
+}
+
+.input-group input:first-child {
+    border-top-left-radius: var(--radius-sm);
+    border-bottom-left-radius: var(--radius-sm);
+}
+
+.input-group input:last-child {
+    border-top-right-radius: var(--radius-sm);
+    border-bottom-right-radius: var(--radius-sm);
+}
+
+.input-group-prepend,
+.input-group-append {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+
+.input-group-prepend {
+    border-top-left-radius: var(--radius-sm);
+    border-bottom-left-radius: var(--radius-sm);
+    border-right: none;
+}
+
+.input-group-append {
+    border-top-right-radius: var(--radius-sm);
+    border-bottom-right-radius: var(--radius-sm);
+    border-left: none;
+}
+
+/* ============================================
+   VALIDATION STATES
+   ============================================ */
+
+.form-input.is-valid,
+input.is-valid {
+    border-color: var(--success);
+}
+
+.form-input.is-valid:focus,
+input.is-valid:focus {
+    box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.1);
+}
+
+.form-input.is-invalid,
+input.is-invalid {
+    border-color: var(--danger);
+}
+
+.form-input.is-invalid:focus,
+input.is-invalid:focus {
+    box-shadow: 0 0 0 3px rgba(255, 68, 68, 0.1);
+}
+
+.form-feedback {
+    margin-top: var(--spacing-xs);
+    font-size: var(--font-size-sm);
+}
+
+.form-feedback.valid-feedback {
+    color: var(--success);
+}
+
+.form-feedback.invalid-feedback {
+    color: var(--danger);
+}
+
+/* ============================================
+   FORM LAYOUTS
+   ============================================ */
+
+.form-horizontal {
+    display: flex;
+    gap: var(--spacing-md);
+    align-items: flex-start;
+}
+
+.form-horizontal .form-label {
+    min-width: 150px;
+    margin-top: 0.75rem;
+}
+
+.form-horizontal .form-group {
+    flex: 1;
+}
+
+.form-inline {
+    display: flex;
+    gap: var(--spacing-md);
+    align-items: flex-end;
+}
+
+.form-inline .form-group {
+    margin-bottom: 0;
+}
+
+/* ============================================
+   INPUT SIZES
+   ============================================ */
+
+.form-input-sm,
+input.form-input-sm {
+    padding: 0.5rem 0.75rem;
+    font-size: var(--font-size-sm);
+}
+
+.form-input-lg,
+input.form-input-lg {
+    padding: 1rem 1.25rem;
+    font-size: var(--font-size-lg);
+}
+
+/* ============================================
+   SEARCH INPUT
+   ============================================ */
+
+.search-input {
+    position: relative;
+}
+
+.search-input input {
+    padding-left: 2.5rem;
+}
+
+.search-input::before {
+    content: '🔍';
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1rem;
+    pointer-events: none;
+}
+
+/* ============================================
+   RESPONSIVE STYLES
+   ============================================ */
+
+@media (max-width: 768px) {
+    .form-horizontal {
+        flex-direction: column;
+    }
+    
+    .form-horizontal .form-label {
+        min-width: auto;
+        margin-top: 0;
+    }
+    
+    .form-inline {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .form-inline .form-group {
+        margin-bottom: var(--spacing-md);
+    }
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+
+@media print {
+    input,
+    select,
+    textarea {
+        border: 1px solid #000;
+        background: white;
+    }
+}

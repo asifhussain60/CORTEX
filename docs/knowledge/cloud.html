@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Cloud Computing - AWS, Azure, GCP, serverless, and cloud-native architecture">
+    <meta name="keywords" content="cloud, aws, azure, gcp, serverless, iaas, paas, saas">
+    <meta name="author" content="Asif Hussain">
+    <title>Cloud Computing | CORTEX Knowledge</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">→</span>
+        <a href="index.html">Knowledge Library</span>
+        <span class="breadcrumb-separator">→</span>
+        <span class="breadcrumb-current">Cloud Computing</span>
+    </nav>
+
+    <section class="hero" id="main-content">
+        <h1 class="hero-title">☁️ Cloud Computing</h1>
+        <p class="hero-subtitle">AWS, Azure, GCP, Serverless, and Cloud-Native Architecture</p>
+        <div class="file-metadata">
+            <span class="metadata-item">🌐 Cloud Platforms</span>
+            <span class="metadata-item">🚀 Serverless</span>
+            <span class="metadata-item">📅 Updated: Dec 2025</span>
+        </div>
+    </section>
+
+    <section class="section file-content">
+        <div class="container">
+            <!-- Overview -->
+            <div id="overview" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">📋 Overview</h2>
+                    <p>Cloud computing provides on-demand access to computing resources over the internet with pay-as-you-go pricing. Understanding service models (IaaS, PaaS, SaaS), major cloud providers, and cloud-native patterns enables building scalable, resilient applications.</p>
+                    
+                    <div class="info-box info-box-primary">
+                        <strong>Cloud Benefits:</strong>
+                        <ul class="feature-list">
+                            <li><strong>Elasticity:</strong> Scale resources up or down dynamically</li>
+                            <li><strong>Cost Efficiency:</strong> Pay only for what you use</li>
+                            <li><strong>Global Reach:</strong> Deploy worldwide in minutes</li>
+                            <li><strong>Reliability:</strong> Built-in redundancy and failover</li>
+                        </ul>
+                    </div>
+
+                    <h3>Cloud Service Models</h3>
+                    <div class="mermaid">
+graph TB
+    A[Cloud Computing]
+    A --> B[IaaS]
+    A --> C[PaaS]
+    A --> D[SaaS]
+    A --> E[Serverless/FaaS]
+    
+    B --> B1[EC2, VMs]
+    B --> B2[Compute Engine]
+    B --> B3[Virtual Machines]
+    
+    C --> C1[App Engine]
+    C --> C2[Elastic Beanstalk]
+    C --> C3[Azure App Service]
+    
+    D --> D1[Gmail, Office 365]
+    D --> D2[Salesforce]
+    D --> D3[Slack]
+    
+    E --> E1[AWS Lambda]
+    E --> E2[Azure Functions]
+    E --> E3[Cloud Functions]
+    
+    style A fill:#7b61ff,color:#fff
+    style B fill:#10b981,color:#fff
+    style C fill:#3b82f6,color:#fff
+    style D fill:#f59e0b,color:#fff
+    style E fill:#ef4444,color:#fff
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cloud Providers -->
+            <div id="providers" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🌐 Major Cloud Providers</h2>
+                    
+                    <h3>Service Comparison</h3>
+                    <table class="glass-table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Service Category</th>
+                                <th>AWS</th>
+                                <th>Azure</th>
+                                <th>GCP</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Compute</strong></td>
+                                <td>EC2, Lambda, ECS</td>
+                                <td>VMs, Functions, AKS</td>
+                                <td>Compute Engine, Cloud Functions, GKE</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Storage</strong></td>
+                                <td>S3, EBS, EFS</td>
+                                <td>Blob Storage, Disks, Files</td>
+                                <td>Cloud Storage, Persistent Disks</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Database</strong></td>
+                                <td>RDS, DynamoDB, Aurora</td>
+                                <td>SQL Database, Cosmos DB</td>
+                                <td>Cloud SQL, Firestore, Spanner</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Networking</strong></td>
+                                <td>VPC, Route 53, CloudFront</td>
+                                <td>Virtual Network, DNS, CDN</td>
+                                <td>VPC, Cloud DNS, Cloud CDN</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Container Orchestration</strong></td>
+                                <td>EKS, ECS, Fargate</td>
+                                <td>AKS, Container Instances</td>
+                                <td>GKE, Cloud Run</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Messaging</strong></td>
+                                <td>SQS, SNS, EventBridge</td>
+                                <td>Service Bus, Event Grid</td>
+                                <td>Pub/Sub, Cloud Tasks</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>AWS Core Services</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">💻</span>
+                            <h3>EC2</h3>
+                            <p class="framework-subtitle">Elastic Compute Cloud</p>
+                            <h4>Features</h4>
+                            <ul>
+                                <li>Virtual servers in the cloud</li>
+                                <li>Multiple instance types</li>
+                                <li>Auto Scaling groups</li>
+                                <li>Spot instances for cost savings</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📦</span>
+                            <h3>S3</h3>
+                            <p class="framework-subtitle">Simple Storage Service</p>
+                            <h4>Features</h4>
+                            <ul>
+                                <li>Object storage with 99.999999999% durability</li>
+                                <li>Storage classes (Standard, IA, Glacier)</li>
+                                <li>Versioning and lifecycle policies</li>
+                                <li>Static website hosting</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">⚡</span>
+                            <h3>Lambda</h3>
+                            <p class="framework-subtitle">Serverless Compute</p>
+                            <h4>Features</h4>
+                            <ul>
+                                <li>Run code without servers</li>
+                                <li>Event-driven execution</li>
+                                <li>Automatic scaling</li>
+                                <li>Pay per invocation</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Serverless Architecture -->
+            <div id="serverless" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">⚡ Serverless Architecture</h2>
+                    
+                    <h3>Serverless Patterns</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔄</span>
+                            <h3>Event-Driven</h3>
+                            <h4>Triggers</h4>
+                            <ul>
+                                <li>HTTP requests (API Gateway)</li>
+                                <li>File uploads (S3 events)</li>
+                                <li>Database changes (DynamoDB Streams)</li>
+                                <li>Scheduled tasks (CloudWatch Events)</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🌐</span>
+                            <h3>API Backend</h3>
+                            <h4>Architecture</h4>
+                            <ul>
+                                <li>API Gateway + Lambda</li>
+                                <li>REST or GraphQL APIs</li>
+                                <li>JWT authentication</li>
+                                <li>DynamoDB for persistence</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔄</span>
+                            <h3>Stream Processing</h3>
+                            <h4>Use Cases</h4>
+                            <ul>
+                                <li>Real-time analytics</li>
+                                <li>Log processing</li>
+                                <li>IoT data ingestion</li>
+                                <li>ETL pipelines</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>Serverless Application Flow</h3>
+                    <div class="mermaid">
+sequenceDiagram
+    participant C as Client
+    participant AG as API Gateway
+    participant L as Lambda
+    participant DB as DynamoDB
+    participant S3 as S3 Bucket
+    
+    C->>AG: POST /api/upload
+    AG->>L: Invoke function
+    L->>DB: Save metadata
+    DB-->>L: Confirmation
+    L->>S3: Store file
+    S3-->>L: Success
+    L-->>AG: 200 OK
+    AG-->>C: Response
+    
+    Note over S3,L: S3 event triggers
+    S3->>L: Object created event
+    L->>L: Process file
+    L->>DB: Update status
+                    </div>
+
+                    <div class="info-box info-box-success">
+                        <strong>Serverless Benefits:</strong>
+                        <ul class="feature-list">
+                            <li><strong>No Server Management:</strong> Focus on code, not infrastructure</li>
+                            <li><strong>Auto Scaling:</strong> Handle traffic spikes automatically</li>
+                            <li><strong>Cost Efficient:</strong> Pay only for execution time</li>
+                            <li><strong>Faster Development:</strong> Reduced operational overhead</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box info-box-warning">
+                        <strong>Serverless Challenges:</strong>
+                        <ul class="feature-list">
+                            <li><strong>Cold Starts:</strong> Initial invocation latency</li>
+                            <li><strong>Execution Limits:</strong> Time and memory constraints</li>
+                            <li><strong>Vendor Lock-In:</strong> Platform-specific APIs</li>
+                            <li><strong>Debugging:</strong> Distributed tracing complexity</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cloud-Native Patterns -->
+            <div id="cloud-native" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🚀 Cloud-Native Patterns</h2>
+                    
+                    <h3>Core Principles</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📦</span>
+                            <h3>Containerization</h3>
+                            <h4>Benefits</h4>
+                            <ul>
+                                <li>Consistent environments</li>
+                                <li>Portable across clouds</li>
+                                <li>Efficient resource usage</li>
+                                <li>Fast deployments</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔄</span>
+                            <h3>Microservices</h3>
+                            <h4>Characteristics</h4>
+                            <ul>
+                                <li>Independent services</li>
+                                <li>API communication</li>
+                                <li>Separate databases</li>
+                                <li>Autonomous teams</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔁</span>
+                            <h3>CI/CD</h3>
+                            <h4>Pipeline Stages</h4>
+                            <ul>
+                                <li>Automated testing</li>
+                                <li>Container builds</li>
+                                <li>Progressive deployment</li>
+                                <li>Automated rollback</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>The 12-Factor App</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">1️⃣</span>
+                            <h3>Factors 1-4</h3>
+                            <ul>
+                                <li><strong>Codebase:</strong> One codebase, many deploys</li>
+                                <li><strong>Dependencies:</strong> Explicitly declare</li>
+                                <li><strong>Config:</strong> Store in environment</li>
+                                <li><strong>Backing Services:</strong> Treat as attached resources</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">2️⃣</span>
+                            <h3>Factors 5-8</h3>
+                            <ul>
+                                <li><strong>Build, Release, Run:</strong> Separate stages</li>
+                                <li><strong>Processes:</strong> Stateless execution</li>
+                                <li><strong>Port Binding:</strong> Export via port</li>
+                                <li><strong>Concurrency:</strong> Scale via process model</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">3️⃣</span>
+                            <h3>Factors 9-12</h3>
+                            <ul>
+                                <li><strong>Disposability:</strong> Fast startup/shutdown</li>
+                                <li><strong>Dev/Prod Parity:</strong> Keep similar</li>
+                                <li><strong>Logs:</strong> Treat as event streams</li>
+                                <li><strong>Admin Processes:</strong> Run as one-off</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cost Optimization -->
+            <div id="cost" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">💰 Cost Optimization</h2>
+                    
+                    <h3>Strategies</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">💻</span>
+                            <h3>Right-Sizing</h3>
+                            <h4>Actions</h4>
+                            <ul>
+                                <li>Monitor resource utilization</li>
+                                <li>Match instance to workload</li>
+                                <li>Use burstable instances</li>
+                                <li>Downsize over-provisioned resources</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📅</span>
+                            <h3>Reserved Capacity</h3>
+                            <h4>Commitment Options</h4>
+                            <ul>
+                                <li>1-year or 3-year terms</li>
+                                <li>Up to 75% savings</li>
+                                <li>Reserved Instances (AWS)</li>
+                                <li>Committed Use Discounts (GCP)</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">⏰</span>
+                            <h3>Spot Instances</h3>
+                            <h4>Best For</h4>
+                            <ul>
+                                <li>Batch processing</li>
+                                <li>CI/CD workers</li>
+                                <li>Big data analytics</li>
+                                <li>90% cost reduction</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>Additional Cost Strategies</h3>
+                    <table class="glass-table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Strategy</th>
+                                <th>Implementation</th>
+                                <th>Potential Savings</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Auto-Scaling</strong></td>
+                                <td>Scale down during off-peak hours</td>
+                                <td>30-50%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Storage Tiering</strong></td>
+                                <td>Move infrequent data to cheaper tiers</td>
+                                <td>50-90%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Data Transfer</strong></td>
+                                <td>Use CDN, minimize cross-region transfer</td>
+                                <td>20-40%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Resource Tagging</strong></td>
+                                <td>Track costs by project/team</td>
+                                <td>Better visibility</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Delete Unused Resources</strong></td>
+                                <td>Old snapshots, unattached volumes</td>
+                                <td>10-20%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Resources -->
+            <div id="resources" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">📚 Resources & Learning</h2>
+                    
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📖</span>
+                            <h3>Essential Books</h3>
+                            <ul>
+                                <li><strong>Cloud Native Patterns</strong> - Cornelia Davis</li>
+                                <li><strong>Architecting the Cloud</strong> - Michael J. Kavis</li>
+                                <li><strong>Serverless Architectures on AWS</strong> - Peter Sbarski</li>
+                                <li><strong>The Phoenix Project</strong> - Gene Kim</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🎓</span>
+                            <h3>Certifications</h3>
+                            <ul>
+                                <li><strong>AWS:</strong> Solutions Architect, Developer</li>
+                                <li><strong>Azure:</strong> Administrator, Developer</li>
+                                <li><strong>GCP:</strong> Cloud Engineer, Architect</li>
+                                <li><strong>Kubernetes:</strong> CKA, CKAD, CKS</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🌐</span>
+                            <h3>Online Resources</h3>
+                            <ul>
+                                <li><a href="https://aws.amazon.com/training/" target="_blank" rel="noopener">AWS Training</a></li>
+                                <li><a href="https://learn.microsoft.com/azure/" target="_blank" rel="noopener">Microsoft Learn</a></li>
+                                <li><a href="https://cloud.google.com/training" target="_blank" rel="noopener">Google Cloud Training</a></li>
+                                <li><a href="https://12factor.net/" target="_blank" rel="noopener">The Twelve-Factor App</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 CORTEX Knowledge Base. Created by Asif Hussain.</p>
+            <p>
+                <a href="../index.html">Home</a> |
+                <a href="index.html">Knowledge Library</a> |
+                <a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener">GitHub</a>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark'
+        });
+    </script>
+</body>
+</html>

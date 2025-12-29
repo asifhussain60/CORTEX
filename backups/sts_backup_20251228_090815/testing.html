@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX Testing Showcase - Before & After Code Transformations">
+    <meta name="author" content="Asif Hussain">
+    <title>Testing Showcase - CORTEX STS</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../assets/css/main.css?v=4.0.0">
+</head>
+<body class="sts-showcase">
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb-nav">
+        <div class="container">
+            <a href="../index.html">Home</a>
+            <span class="separator">→</span>
+            <a href="index.html">Sharpen The Saw</a>
+            <span class="separator">→</span>
+            <span class="current">Testing</span>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="logo-container">
+            <a href="../index.html">
+                <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo" width="200" height="200">
+            </a>
+        </div>
+        <h1 class="hero-title">🧪 Testing Showcase</h1>
+        <p class="hero-tagline">7 Testing Anti-Patterns → Reliable Test Suites</p>
+    </section>
+
+    <!-- Educational Section -->
+    <section class="section">
+        <div class="container">
+            <div class="glass-card concept-card">
+                <h2>🎓 Testing Concepts</h2>
+                
+                <div class="principle-explainer">
+                    <div class="principle-letter">T</div>
+                    <div class="principle-content">
+                        <h4>Test-Driven Development (TDD)</h4>
+                        <p><em>"Red → Green → Refactor: Write failing test first, then make it pass."</em></p>
+                        <p class="principle-analogy">🎯 <strong>Analogy:</strong> Writing the test questions before the textbook ensures you cover what matters.</p>
+                    </div>
+                </div>
+                
+                <div class="principle-explainer">
+                    <div class="principle-letter">A</div>
+                    <div class="principle-content">
+                        <h4>Arrange-Act-Assert (AAA)</h4>
+                        <p><em>"Set up, perform action, verify result."</em></p>
+                        <p class="principle-analogy">🧪 <strong>Structure:</strong> Given (setup) → When (action) → Then (assertion)</p>
+                    </div>
+                </div>
+                
+                <div class="principle-explainer">
+                    <div class="principle-letter">M</div>
+                    <div class="principle-content">
+                        <h4>Mocking & Test Doubles</h4>
+                        <p><em>"Isolate the unit under test by replacing dependencies."</em></p>
+                        <p class="principle-analogy">🎭 <strong>Analogy:</strong> A stunt double performs risky scenes so the actor doesn't have to.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview Stats -->
+    <section class="section section-alt">
+        <div class="container">
+            <div class="metrics-grid-4">
+                <div class="metric-card metric-before">
+                    <span class="metric-value">7</span>
+                    <span class="metric-label">Testing Issues</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-value">23%</span>
+                    <span class="metric-label">Initial Coverage</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-value">45s</span>
+                    <span class="metric-label">Test Suite Time</span>
+                </div>
+                <div class="metric-card metric-after">
+                    <span class="metric-value">85%+</span>
+                    <span class="metric-label">Coverage Now</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TEST-01: No Mocking - C# xUnit -->
+    <section class="section" id="test-01">
+        <div class="container">
+            <div class="flaw-header">
+                <span class="flaw-id">TEST-01</span>
+                <span class="severity-badge severity-high">HIGH</span>
+                <span class="tech-badge tech-csharp">C# xUnit</span>
+            </div>
+            <h2>Integration Test Masquerading as Unit Test</h2>
+            <p class="flaw-description">
+                <strong>Testing Anti-Pattern</strong> — This "unit test" actually hits a real database and sends real emails. 
+                It's slow, flaky, and tests too many things at once. Use mocks to isolate the unit under test.
+            </p>
+            
+            <div class="code-comparison">
+                <div class="code-before">
+                    <div class="code-header">
+                        <span class="code-label">❌ BEFORE</span>
+                        <span class="code-file">OrderServiceTests.cs</span>
+                    </div>
+<pre><code class="language-csharp">public class OrderServiceTests
+{
+    [Fact]
+    public async Task CreateOrder_ShouldWork()
+    {
+        // NO MOCKING: Using real dependencies!
+        var context = new AppDbContext(); // Real database
+        var emailService = new SmtpEmailService(); // Real SMTP
+        var service = new OrderService(context, emailService);
+        
+        var order = new Order { /* ... */ };
+        
+        // This test:
+        // - Hits real database (slow, needs setup)
+        // - Sends real emails (side effects!)
+        // - Fails if DB is down (flaky)
+        // - Can't run in parallel (shared state)
+        var result = await service.CreateOrderAsync(order);
+        
+        Assert.NotNull(result);
+    }
+}</code></pre>
+                </div>
+                
+                <div class="code-after">
+                    <div class="code-header">
+                        <span class="code-label">✅ AFTER</span>
+                        <span class="code-file">Proper Unit Test with Mocks</span>
+                    </div>
+<pre><code class="language-csharp">public class OrderServiceTests
+{
+    private readonly Mock&lt;IOrderRepository&gt; _repoMock;
+    private readonly Mock&lt;IEmailService&gt; _emailMock;
+    private readonly OrderService _sut; // System Under Test
+    
+    public OrderServiceTests()
+    {
+        _repoMock = new Mock&lt;IOrderRepository&gt;();
+        _emailMock = new Mock&lt;IEmailService&gt;();
+        _sut = new OrderService(_repoMock.Object, _emailMock.Object);
+    }
+    
+    [Fact]
+    public async Task CreateOrder_ValidOrder_SavesAndSendsEmail()
+    {
+        // Arrange
+        var order = new Order { Id = 1, CustomerEmail = "test@test.com" };
+        _repoMock.Setup(r =&gt; r.SaveAsync(order))
+                 .ReturnsAsync(order);
+        
+        // Act
+        var result = await _sut.CreateOrderAsync(order);
+        
+        // Assert
+        Assert.Equal(1, result.Id);
+        _repoMock.Verify(r =&gt; r.SaveAsync(order), Times.Once);
+        _emailMock.Verify(e =&gt; e.SendAsync(
+            "test@test.com", It.IsAny&lt;string&gt;(), It.IsAny&lt;string&gt;()), 
+            Times.Once);
+    }
+}</code></pre>
+                </div>
+            </div>
+            
+            <div class="capability-used">
+                <strong>CORTEX Capability:</strong> TDD Mastery → Test isolation
+            </div>
+        </div>
+    </section>
+
+    <!-- TEST-02: Flaky Tests - Jest -->
+    <section class="section section-alt" id="test-02">
+        <div class="container">
+            <div class="flaw-header">
+                <span class="flaw-id">TEST-02</span>
+                <span class="severity-badge severity-high">HIGH</span>
+                <span class="tech-badge tech-typescript">Jest</span>
+            </div>
+            <h2>Flaky Test: Timing-Dependent Assertions</h2>
+            <p class="flaw-description">
+                <strong>Flaky Test</strong> — Tests that depend on real time or arbitrary delays pass sometimes 
+                and fail others. Use fake timers and proper async handling.
+            </p>
+            
+            <div class="code-comparison">
+                <div class="code-before">
+                    <div class="code-header">
+                        <span class="code-label">❌ BEFORE</span>
+                        <span class="code-file">debounce.spec.ts</span>
+                    </div>
+<pre><code class="language-typescript">describe('debounce', () =&gt; {
+  it('should debounce calls', async () =&gt; {
+    const fn = jest.fn();
+    const debounced = debounce(fn, 100);
+    
+    debounced();
+    debounced();
+    debounced();
+    
+    // FLAKY: Real time delay - may fail on slow CI
+    await new Promise(r =&gt; setTimeout(r, 150));
+    
+    expect(fn).toHaveBeenCalledTimes(1);
+  });
+  
+  it('should handle async data', async () =&gt; {
+    const result = await fetchData();
+    
+    // FLAKY: No wait for actual async completion
+    // Sometimes data isn't ready yet
+    expect(result.items.length).toBe(10);
+  });
+});</code></pre>
+                </div>
+                
+                <div class="code-after">
+                    <div class="code-header">
+                        <span class="code-label">✅ AFTER</span>
+                        <span class="code-file">Deterministic Tests</span>
+                    </div>
+<pre><code class="language-typescript">describe('debounce', () =&gt; {
+  beforeEach(() =&gt; {
+    jest.useFakeTimers();
+  });
+  
+  afterEach(() =&gt; {
+    jest.useRealTimers();
+  });
+  
+  it('should debounce calls', () =&gt; {
+    const fn = jest.fn();
+    const debounced = debounce(fn, 100);
+    
+    debounced();
+    debounced();
+    debounced();
+    
+    // Deterministic: advance fake timers
+    jest.advanceTimersByTime(100);
+    
+    expect(fn).toHaveBeenCalledTimes(1);
+  });
+  
+  it('should handle async data', async () =&gt; {
+    // Use waitFor for async assertions
+    const { result } = renderHook(() =&gt; useFetchData());
+    
+    await waitFor(() =&gt; {
+      expect(result.current.items.length).toBe(10);
+    });
+  });
+});</code></pre>
+                </div>
+            </div>
+            
+            <div class="capability-used">
+                <strong>CORTEX Capability:</strong> TDD Mastery → Flaky test elimination
+            </div>
+        </div>
+    </section>
+
+    <!-- TEST-03: Angular Component Testing -->
+    <section class="section" id="test-03">
+        <div class="container">
+            <div class="flaw-header">
+                <span class="flaw-id">TEST-03</span>
+                <span class="severity-badge severity-medium">MEDIUM</span>
+                <span class="tech-badge tech-angular">Jasmine</span>
+            </div>
+            <h2>Testing Implementation Instead of Behavior</h2>
+            <p class="flaw-description">
+                <strong>Brittle Tests</strong> — Testing internal implementation details breaks tests when 
+                refactoring, even if behavior is unchanged. Test what users see, not how it works inside.
+            </p>
+            
+            <div class="code-comparison">
+                <div class="code-before">
+                    <div class="code-header">
+                        <span class="code-label">❌ BEFORE</span>
+                        <span class="code-file">login.component.spec.ts</span>
+                    </div>
+<pre><code class="language-typescript">describe('LoginComponent', () =&gt; {
+  it('should handle login', () =&gt; {
+    // Testing internal state - BRITTLE
+    expect(component.isLoading).toBeFalse();
+    expect(component.errorMessage).toBe('');
+    
+    component.email = 'test@test.com';
+    component.password = 'password';
+    
+    // Calling private method - BRITTLE
+    (component as any).validateForm();
+    
+    // Checking internal flag - BRITTLE
+    expect(component['formValid']).toBeTrue();
+    
+    // Rename internal variable? Test breaks!
+    // Refactor validation logic? Test breaks!
+  });
+});</code></pre>
+                </div>
+                
+                <div class="code-after">
+                    <div class="code-header">
+                        <span class="code-label">✅ AFTER</span>
+                        <span class="code-file">Behavior-Based Testing</span>
+                    </div>
+<pre><code class="language-typescript">describe('LoginComponent', () =&gt; {
+  it('should show error for invalid email', async () =&gt; {
+    // Test from USER's perspective
+    const emailInput = fixture.debugElement.query(
+      By.css('input[type="email"]'));
+    const submitBtn = fixture.debugElement.query(
+      By.css('button[type="submit"]'));
+    
+    // User types invalid email
+    emailInput.nativeElement.value = 'invalid';
+    emailInput.nativeElement.dispatchEvent(new Event('input'));
+    submitBtn.nativeElement.click();
+    fixture.detectChanges();
+    
+    // User sees error message
+    const errorEl = fixture.debugElement.query(By.css('.error'));
+    expect(errorEl.nativeElement.textContent)
+      .toContain('Invalid email');
+  });
+  
+  it('should navigate to dashboard on success', async () =&gt; {
+    // Mock successful login
+    authService.login.and.returnValue(of({ token: 'abc' }));
+    
+    // Fill form and submit
+    fillLoginForm('test@test.com', 'password');
+    clickSubmit();
+    
+    // Verify navigation (behavior, not implementation)
+    expect(router.navigate).toHaveBeenCalledWith(['/dashboard']);
+  });
+});</code></pre>
+                </div>
+            </div>
+            
+            <div class="capability-used">
+                <strong>CORTEX Capability:</strong> TDD Mastery → Behavior-driven tests
+            </div>
+        </div>
+    </section>
+
+    <!-- TEST-04: Missing Edge Cases - C# -->
+    <section class="section section-alt" id="test-04">
+        <div class="container">
+            <div class="flaw-header">
+                <span class="flaw-id">TEST-04</span>
+                <span class="severity-badge severity-medium">MEDIUM</span>
+                <span class="tech-badge tech-csharp">C# xUnit</span>
+            </div>
+            <h2>Happy Path Only: Missing Edge Cases</h2>
+            <p class="flaw-description">
+                <strong>Incomplete Tests</strong> — Only testing the happy path misses bugs in error handling, 
+                boundary conditions, and edge cases. Use parameterized tests to cover more scenarios.
+            </p>
+            
+            <div class="code-comparison">
+                <div class="code-before">
+                    <div class="code-header">
+                        <span class="code-label">❌ BEFORE</span>
+                        <span class="code-file">CalculatorTests.cs</span>
+                    </div>
+<pre><code class="language-csharp">public class CalculatorTests
+{
+    [Fact]
+    public void Divide_ShouldWork()
+    {
+        var calc = new Calculator();
+        
+        // Only happy path!
+        var result = calc.Divide(10, 2);
+        
+        Assert.Equal(5, result);
+        // What about:
+        // - Divide by zero?
+        // - Negative numbers?
+        // - Very large numbers?
+        // - Decimal precision?
+    }
+    
+    [Fact]
+    public void ValidateEmail_ShouldWork()
+    {
+        Assert.True(Validator.IsValidEmail("test@test.com"));
+        // What about empty? null? unicode? very long?
+    }
+}</code></pre>
+                </div>
+                
+                <div class="code-after">
+                    <div class="code-header">
+                        <span class="code-label">✅ AFTER</span>
+                        <span class="code-file">Comprehensive Coverage</span>
+                    </div>
+<pre><code class="language-csharp">public class CalculatorTests
+{
+    [Theory]
+    [InlineData(10, 2, 5)]
+    [InlineData(-10, 2, -5)]
+    [InlineData(10, -2, -5)]
+    [InlineData(0, 5, 0)]
+    [InlineData(1, 3, 0.333333)]
+    public void Divide_ValidInputs_ReturnsCorrectResult(
+        double a, double b, double expected)
+    {
+        var result = new Calculator().Divide(a, b);
+        Assert.Equal(expected, result, precision: 5);
+    }
+    
+    [Fact]
+    public void Divide_ByZero_ThrowsDivideByZeroException()
+    {
+        var calc = new Calculator();
+        Assert.Throws&lt;DivideByZeroException&gt;(() =&gt; calc.Divide(10, 0));
+    }
+    
+    [Theory]
+    [InlineData("test@test.com", true)]
+    [InlineData("user@domain.co.uk", true)]
+    [InlineData("", false)]
+    [InlineData(null, false)]
+    [InlineData("invalid", false)]
+    [InlineData("@no-local.com", false)]
+    [InlineData("no-domain@", false)]
+    public void IsValidEmail_VariousInputs(string email, bool expected)
+    {
+        Assert.Equal(expected, Validator.IsValidEmail(email));
+    }
+}</code></pre>
+                </div>
+            </div>
+            
+            <div class="capability-used">
+                <strong>CORTEX Capability:</strong> TDD Mastery → Edge case generation
+            </div>
+        </div>
+    </section>
+
+    <!-- Summary -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title text-center">Testing Transformation Summary</h2>
+            
+            <div class="glass-card">
+                <h3>Key Testing Patterns Applied</h3>
+                <div class="tech-summary">
+                    <div class="tech-group">
+                        <h4><span class="tech-badge tech-csharp">C#</span> xUnit + Moq</h4>
+                        <ul>
+                            <li>Mock dependencies with Moq</li>
+                            <li>Theory + InlineData for params</li>
+                            <li>Arrange-Act-Assert pattern</li>
+                            <li>Verify mock interactions</li>
+                        </ul>
+                    </div>
+                    <div class="tech-group">
+                        <h4><span class="tech-badge tech-typescript">TypeScript</span> Jest</h4>
+                        <ul>
+                            <li>jest.mock() for modules</li>
+                            <li>Fake timers for async</li>
+                            <li>waitFor() for async UI</li>
+                            <li>Snapshot testing</li>
+                        </ul>
+                    </div>
+                    <div class="tech-group">
+                        <h4><span class="tech-badge tech-angular">Angular</span> Jasmine</h4>
+                        <ul>
+                            <li>TestBed for components</li>
+                            <li>SpyObj for services</li>
+                            <li>Behavior-based testing</li>
+                            <li>fixture.detectChanges()</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Navigation -->
+    <section class="section section-alt">
+        <div class="container">
+            <h2 class="section-title text-center">Explore More Categories</h2>
+            <div class="nav-buttons">
+                <a href="performance.html" class="btn btn-secondary">← Performance</a>
+                <a href="index.html" class="btn btn-secondary">STS Home</a>
+                <a href="documentation.html" class="btn btn-primary">Documentation →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Back to Home -->
+    <div class="back-link-container">
+        <a href="../index.html" class="back-link">← Back to Home</a>
+    </div>
+</body>
+</html>

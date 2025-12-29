@@ -1,0 +1,1077 @@
+<!DOCTYPE html><!DOCTYPE html>
+
+<html lang="en"><html lang="en">
+
+<head><head>
+
+    <meta charset="UTF-8"><meta charset="utf-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>TDD Orchestrator v4.0 | CORTEX Technical Documentation</title><title>TDD Orchestrator v4.0 | CORTEX Technical Documentation</title>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script><!-- D3.js -->
+
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script><script src="https://d3js.org/d3.v7.min.js" type="text/javascript">
+
+    <style></script><!-- Mermaid -->
+
+        :root { --primary: #9C27B0; --success: #10B981; --warning: #F59E0B; --error: #DC2626; }<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js" type="text/javascript">
+
+        body { font-family: 'Inter', -apple-system, sans-serif; margin: 0; padding: 0; background: #0f172a; color: #e2e8f0; }</script>
+
+        .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }<style type="text/css">
+
+        header { text-align: center; padding: 3rem 0; border-bottom: 2px solid var(--primary); }      :root {
+
+        header h1 { font-size: 3rem; font-weight: 700; color: var(--primary); margin: 0; }            --tdd-primary: #9C27B0;
+
+        header .subtitle { font-size: 1.2rem; color: #94a3b8; margin-top: 0.5rem; }            --tdd-secondary: #7B1FA2;
+
+        .metadata { display: flex; justify-content: center; gap: 2rem; margin-top: 1rem; flex-wrap: wrap; }            --tdd-dark: #4A148C;
+
+        .metadata-item { background: rgba(156, 39, 176, 0.1); padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.9rem; }            --red-phase: #F44336;
+
+        .section { margin: 3rem 0; }            --green-phase: #4CAF50;
+
+        .section-title { font-size: 2rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.5rem; border-left: 4px solid var(--primary); padding-left: 1rem; }            --refactor-phase: #2196F3;
+
+        .intro-text { font-size: 1.1rem; line-height: 1.8; color: #cbd5e1; margin-bottom: 2rem; }            --success: #10B981;
+
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 2rem 0; }            --warning: #F59E0B;
+
+        .feature-card { background: #1e293b; border-radius: 12px; padding: 1.5rem; border-left: 4px solid var(--primary); transition: transform 0.2s; }            --error: #DC2626;
+
+        .feature-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(156, 39, 176, 0.3); }        }
+
+        .viz-container { background: #1e293b; border-radius: 12px; padding: 2rem; margin: 2rem 0; }        
+
+        .mermaid { background: #0f172a; border-radius: 8px; padding: 2rem; }        body {
+
+        .breadcrumb { background: rgba(30, 41, 59, 0.8); padding: 1rem 2rem; border-bottom: 1px solid rgba(156, 39, 176, 0.3); }            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+        .breadcrumb a { color: var(--primary); text-decoration: none; }            margin: 0;
+
+        .breadcrumb a:hover { text-decoration: underline; }            padding: 0;
+
+        .breadcrumb-separator { color: #64748b; margin: 0 0.5rem; }            background: #0f172a;
+
+        .breadcrumb-current { color: #e2e8f0; }            color: #e2e8f0;
+
+        footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid #334155; margin-top: 4rem; color: #64748b; }        }
+
+    </style>        
+
+</head>        .container {
+
+<body>            max-width: 1400px;
+
+    <nav class="breadcrumb">            margin: 0 auto;
+
+        <a href="../../index.html">Home</a>            padding: 2rem;
+
+        <span class="breadcrumb-separator">›</span>        }
+
+        <a href="index.html">Orchestrators</a>        
+
+        <span class="breadcrumb-separator">›</span>        header {
+
+        <span class="breadcrumb-current">TDD Orchestrator</span>            text-align: center;
+
+    </nav>            padding: 3rem 0;
+
+                border-bottom: 2px solid var(--tdd-primary);
+
+    <div class="container">        }
+
+        <header>        
+
+            <h1>🧪 TDD Orchestrator v4.0</h1>        header h1 {
+
+            <p class="subtitle">RED→GREEN→REFACTOR with 11+ Languages & Quality Scoring</p>            font-size: 3rem;
+
+            <div class="metadata">            font-weight: 700;
+
+                <div class="metadata-item"><span>Complexity:</span> <span>HIGH</span></div>            color: var(--tdd-primary);
+
+                <div class="metadata-item"><span>File:</span> <span>tdd_orchestrator.py</span></div>            margin: 0;
+
+                <div class="metadata-item"><span>Languages:</span> <span>11+</span></div>        }
+
+            </div>        
+
+        </header>        header .subtitle {
+
+                    font-size: 1.2rem;
+
+        <section class="section">            color: #94a3b8;
+
+            <div class="intro-text">            margin-top: 0.5rem;
+
+                The TDD Orchestrator enforces test-driven development with mandatory RED→GREEN→REFACTOR cycles.         }
+
+                Features adaptive technology discovery for 11+ languages, AI-driven test generation, clean code enforcement         
+
+                (SOLID/DRY/KISS/YAGNI), and per-phase rollback capabilities. Quality scoring (0-10) with violation detection         .metadata {
+
+                ensures high standards across unit, integration, and e2e tests.            display: flex;
+
+            </div>            justify-content: center;
+
+        </section>            gap: 2rem;
+
+                    margin-top: 1.5rem;
+
+        <section class="section">            font-size: 0.9rem;
+
+            <h2 class="section-title">✨ Key Features</h2>            color: #cbd5e1;
+
+            <div class="features-grid">        }
+
+                <div class="feature-card">        
+
+                    <div>🔴</div>        .metadata span {
+
+                    <div>RED Phase Validation</div>            display: flex;
+
+                    <div>Tests must fail first - enforces proper TDD workflow</div>            align-items: center;
+
+                </div>            gap: 0.5rem;
+
+                <div class="feature-card">        }
+
+                    <div>🟢</div>        
+
+                    <div>GREEN Implementation</div>        .section {
+
+                    <div>Minimal code to pass tests, no premature optimization</div>            margin: 4rem 0;
+
+                </div>        }
+
+                <div class="feature-card">        
+
+                    <div>🔵</div>        .section h2 {
+
+                    <div>REFACTOR Clean Code</div>            font-size: 2rem;
+
+                    <div>SOLID/DRY/KISS/YAGNI enforcement with quality scoring</div>            color: var(--tdd-primary);
+
+                </div>            margin-bottom: 1.5rem;
+
+                <div class="feature-card">            border-left: 4px solid var(--tdd-primary);
+
+                    <div>🌍</div>            padding-left: 1rem;
+
+                    <div>11+ Languages</div>        }
+
+                    <div>Python, JavaScript, TypeScript, Java, C#, Go, Rust, Ruby, PHP, Kotlin, Swift</div>        
+
+                </div>        .section p {
+
+            </div>            line-height: 1.8;
+
+        </section>            color: #cbd5e1;
+
+                    margin-bottom: 1rem;
+
+        <section class="section">        }
+
+            <h2 class="section-title">🔄 RED→GREEN→REFACTOR Cycle</h2>        
+
+            <div class="viz-container">        .diagram-container {
+
+                <div class="mermaid">            background: #1e293b;
+
+graph LR            border-radius: 12px;
+
+    A[🔴 RED: Write Failing Test] --> B{Test Fails?}            padding: 2rem;
+
+    B -->|No| ERROR[❌ Invalid TDD]            margin: 2rem 0;
+
+    B -->|Yes| C[🟢 GREEN: Minimal Implementation]            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+
+    C --> D{Tests Pass?}        }
+
+    D -->|No| C        
+
+    D -->|Yes| E[🔵 REFACTOR: Clean Code]        .diagram-title {
+
+    E --> F{Quality > 7/10?}            font-size: 1.3rem;
+
+    F -->|No| E            font-weight: 600;
+
+    F -->|Yes| G[✅ Complete]            color: var(--tdd-secondary);
+
+                margin-bottom: 1.5rem;
+
+    style A fill:#F44336,stroke:#D32F2F,color:#fff            display: flex;
+
+    style C fill:#4CAF50,stroke:#388E3C,color:#fff            align-items: center;
+
+    style E fill:#2196F3,stroke:#1976D2,color:#fff            gap: 0.5rem;
+
+    style G fill:#10B981,stroke:#059669,color:#fff        }
+
+    style ERROR fill:#DC2626,stroke:#B91C1C,color:#fff        
+
+                </div>        .mermaid {
+
+            </div>            background: #0f172a;
+
+        </section>            border-radius: 8px;
+
+                    padding: 1.5rem;
+
+        <footer>            min-height: 400px;
+
+            <p>© 2025 Asif Hussain | CORTEX 4.0</p>        }
+
+            <p>TDD Orchestrator - Test-Driven Development Mastery</p>        
+
+        </footer>        #test-coverage-viz,
+
+    </div>        #quality-scoring-viz,
+
+            #tech-detection-viz {
+
+    <script>            width: 100%;
+
+        mermaid.initialize({             min-height: 500px;
+
+            startOnLoad: true,            background: #0f172a;
+
+            theme: 'dark',            border-radius: 8px;
+
+            themeVariables: {        }
+
+                primaryColor: '#9C27B0',        
+
+                primaryTextColor: '#fff',        .feature-grid {
+
+                lineColor: '#64748b',            display: grid;
+
+                secondaryColor: '#1e293b'            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+
+            }            gap: 1.5rem;
+
+        });            margin: 2rem 0;
+
+    </script>        }
+
+</body>        
+
+</html>        .feature-card {
+
+            background: #1e293b;
+            border-radius: 8px;
+            padding: 1.5rem;
+            border-left: 4px solid var(--tdd-primary);
+        }
+        
+        .feature-card h3 {
+            color: var(--tdd-secondary);
+            margin-top: 0;
+        }
+        
+        .feature-card ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-card li {
+            padding: 0.5rem 0;
+            color: #cbd5e1;
+        }
+        
+        .feature-card li::before {
+            content: "✓ ";
+            color: var(--success);
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+        
+        .phase-badges {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .phase-badge {
+            padding: 1.5rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.2rem;
+            text-align: center;
+            min-width: 150px;
+        }
+        
+        .phase-badge.red {
+            background: linear-gradient(135deg, var(--red-phase), #D32F2F);
+            color: white;
+        }
+        
+        .phase-badge.green {
+            background: linear-gradient(135deg, var(--green-phase), #388E3C);
+            color: white;
+        }
+        
+        .phase-badge.refactor {
+            background: linear-gradient(135deg, var(--refactor-phase), #1976D2);
+            color: white;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, var(--tdd-primary), var(--tdd-dark));
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 0.5rem;
+        }
+        
+        .principles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .principle-card {
+            background: #1e293b;
+            border-radius: 8px;
+            padding: 1rem;
+            border: 2px solid var(--tdd-secondary);
+        }
+        
+        .principle-card h4 {
+            color: var(--tdd-primary);
+            margin: 0 0 0.5rem 0;
+        }
+        
+        .principle-card p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #94a3b8;
+        }
+        
+        .tooltip {
+            position: absolute;
+            background: #1e293b;
+            border: 1px solid var(--tdd-primary);
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            z-index: 1000;
+            max-width: 300px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            border-top: 2px solid var(--tdd-primary);
+            color: #94a3b8;
+            margin-top: 4rem;
+        }
+        
+        /* Breadcrumb Navigation */
+        .breadcrumb {
+            background: rgba(30, 41, 59, 0.8);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid rgba(156, 39, 176, 0.3);
+            margin-bottom: 2rem;
+        }
+        
+        .breadcrumb a {
+            color: var(--tdd-primary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        .breadcrumb a:hover {
+            color: var(--tdd-secondary);
+            text-decoration: underline;
+        }
+        
+        .breadcrumb-separator {
+            color: #64748b;
+            margin: 0 0.5rem;
+        }
+        
+        .breadcrumb-current {
+            color: #e2e8f0;
+        }
+        
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            .breadcrumb {
+                padding: 0.75rem 1rem;
+                font-size: 0.9rem;
+            }
+            
+            .metadata {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .phase-badges {
+                flex-direction: column;
+            }
+        }
+  <body>
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="../../index.html">Home<\/a>
+        <span class="breadcrumb-separator">›<\/span>
+        <a href="../../features/orchestrators.html">Orchestrators<\/a>
+        <span class="breadcrumb-separator">›<\/span>
+        <a href="index.html">Technical Documentation<\/a>
+        <span class="breadcrumb-separator">›<\/span>
+        <span class="breadcrumb-current">TDD Orchestrator<\/span>
+    <\/nav>
+    
+    <div class="container">
+        <header>
+            <h1>🧪 TDD Orchestrator v4.0<\/h1>
+            <p class="subtitle">Adaptive Test-Driven Development with AI-Powered Code Quality<\/p>
+            <div class="metadata">
+                <span>📄 <strong>Version:<\/strong> 4.0.0<\/span>
+                <span>📦 <strong>Category:<\/strong> TDD<\/span>
+                <span>⚡ <strong>Pattern:<\/strong> Strategy<\/span>
+                <span>📊 <strong>Status:<\/strong> ACTIVE<\/span>
+            <\/div>
+
+        <!-- Overview Section -->
+        <section class="section">
+            <h2>📋 Overview<\/h2>
+            <p>
+                The TDD Orchestrator v4.0 is a unified, adaptive system for Test-Driven Development that automatically
+                discovers technology stacks, generates comprehensive tests, implements minimal code, and refactors for
+                quality—all while learning patterns and enforcing clean code principles (SOLID, DRY, KISS, YAGNI).
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">11+<\/div>
+                    <div class="stat-label">Languages Supported<\/div>
+                <\/div>
+                <div class="stat-card">
+                    <div class="stat-value">0-10<\/div>
+                    <div class="stat-label">Quality Scoring<\/div>
+                <\/div>
+                <div class="stat-card">
+                    <div class="stat-value">3<\/div>
+                    <div class="stat-label">TDD Phases<\/div>
+                <\/div>
+                <div class="stat-card">
+                    <div class="stat-value">5<\/div>
+                    <div class="stat-label">Clean Code Principles<\/div>
+                <\/div>
+
+        <!-- TDD Cycle Badges -->
+        <section class="section">
+            <h2>🔄 The TDD Cycle<\/h2>
+            <div class="phase-badges">
+                <div class="phase-badge red">
+                    🔴 RED<br />
+                    <small>Write Failing Tests<\/small>
+                <\/div>
+                <div class="phase-badge green">
+                    🟢 GREEN<br />
+                    <small>Minimal Implementation<\/small>
+                <\/div>
+                <div class="phase-badge refactor">
+                    ♻️ REFACTOR<br />
+                    <small>Clean Code<\/small>
+                <\/div>
+
+        <!-- RED→GREEN→REFACTOR Workflow -->
+        <section class="section">
+            <h2>🔄 RED→GREEN→REFACTOR Workflow<\/h2>
+            <p>
+                The classic TDD cycle enforced with validation gates, checkpoints, and rollback safety at each phase transition.
+            
+            <div class="diagram-container">
+                <div class="diagram-title">📊 Complete TDD Workflow with Validation Gates<\/div>
+                <div class="mermaid">
+  sequenceDiagram
+    participant User
+    participant TDD as TDD Orchestrator
+    participant Tech as Tech Discovery
+    participant RED as RED Phase
+    participant GREEN as GREEN Phase
+    participant REFACTOR as REFACTOR Phase
+    participant Git
+    participant Quality
+    
+    User->>TDD: start tdd User Authentication
+    TDD->>Tech: Discover technology stack
+    Tech->>Tech: Detect language, frameworks<br />test tools, versions
+    Tech-->>TDD: Python, pytest, FastAPI
+    
+    Note over TDD,RED: 🔴 RED PHASE: Write Failing Tests
+    TDD->>RED: Execute RED phase
+    RED->>RED: Generate test cases<br />(happy path, edge cases)
+    RED->>RED: Validate DoR:<br />✓ Feature defined<br />✓ No existing tests<br />✓ Git clean
+    RED->>RED: Create test file
+    RED->>RED: Run tests
+    RED->>RED: Validate ALL FAIL ❌
+    RED->>Git: Create RED checkpoint
+    RED-->>TDD: RED complete (tests failing)
+    
+    Note over TDD,GREEN: 🟢 GREEN PHASE: Minimal Implementation
+    TDD->>GREEN: Execute GREEN phase
+    GREEN->>GREEN: Validate DoR:<br />✓ Tests failing<br />✓ No passing tests
+    GREEN->>GREEN: Implement minimal code<br />(no over-engineering)
+    GREEN->>GREEN: Run tests continuously
+    GREEN->>GREEN: Validate ≥90% passing ✅
+    GREEN->>GREEN: Check coverage ≥80%
+    GREEN->>Git: Create GREEN checkpoint
+    GREEN-->>TDD: GREEN complete (tests passing)
+    
+    Note over TDD,REFACTOR: ♻️ REFACTOR PHASE: Clean Code
+    TDD->>REFACTOR: Execute REFACTOR phase
+    REFACTOR->>Quality: Analyze code quality
+    Quality->>Quality: Check SOLID principles
+    Quality->>Quality: Detect code smells
+    Quality->>Quality: Measure complexity
+    Quality-->>REFACTOR: Quality score: 6.5/10
+    
+    alt Quality < 7.0
+        REFACTOR->>REFACTOR: Apply refactorings:<br />• Extract functions<br />• Remove duplicates<br />• Simplify logic
+        REFACTOR->>REFACTOR: Run tests (ensure still passing)
+        REFACTOR->>Quality: Re-score quality
+        Quality-->>REFACTOR: Quality score: 8.2/10 ✅
+    end
+    
+    REFACTOR->>Git: Create REFACTOR checkpoint
+    REFACTOR-->>TDD: REFACTOR complete
+    
+    TDD->>TDD: Store patterns in Tier 2<br />(knowledge graph)
+    TDD-->>User: TDD workflow complete!<br />Quality: 8.2/10 ✅
+
+        <!-- Key Features Section -->
+        <section class="section">
+            <h2>✨ Key Features<\/h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>🌍 Adaptive Learning<\/h3>
+                    <ul>
+                        <li>11+ language detection<\/li>
+                        <li>Framework auto-discovery<\/li>
+                        <li>Test tool identification<\/li>
+                        <li>Pattern learning (Tier 2)<\/li>
+                        <li>Best practice retrieval<\/li>
+                    <\/ul>
+                
+                <div class="feature-card">
+                    <h3>🤖 AI-Driven<\/h3>
+                    <ul>
+                        <li>LLM-powered test generation<\/li>
+                        <li>Edge case analysis<\/li>
+                        <li>Minimal implementation<\/li>
+                        <li>AI refactoring suggestions<\/li>
+                        <li>Code smell detection<\/li>
+                    <\/ul>
+                
+                <div class="feature-card">
+                    <h3>🔒 Rollback Safety<\/h3>
+                    <ul>
+                        <li>Per-phase git checkpoints<\/li>
+                        <li>Automatic rollback on failure<\/li>
+                        <li>State restoration<\/li>
+                        <li>Validation at each gate<\/li>
+                        <li>No partial commits<\/li>
+                    <\/ul>
+                
+                <div class="feature-card">
+                    <h3>📐 Strategy Pattern<\/h3>
+                    <ul>
+                        <li>Pluggable phase strategies<\/li>
+                        <li>REDPhaseStrategy<\/li>
+                        <li>GREENPhaseStrategy<\/li>
+                        <li>REFACTORPhaseStrategy<\/li>
+                        <li>Custom strategies supported<\/li>
+                    <\/ul>
+
+        <!-- Clean Code Principles -->
+        <section class="section">
+            <h2>🧹 Clean Code Enforcement<\/h2>
+            <p>
+                The TDD Orchestrator enforces clean code principles at every phase, with automated detection
+                and refactoring suggestions. Quality scoring (0-10) ensures consistent code excellence.
+            
+            <div class="principles-grid">
+                <div class="principle-card">
+                    <h4>S - Single Responsibility<\/h4>
+                    <p>Each class/function has one reason to change<\/p>
+                <\/div>
+                <div class="principle-card">
+                    <h4>O - Open/Closed<\/h4>
+                    <p>Open for extension, closed for modification<\/p>
+                <\/div>
+                <div class="principle-card">
+                    <h4>L - Liskov Substitution<\/h4>
+                    <p>Subtypes must be substitutable for base types<\/p>
+                <\/div>
+                <div class="principle-card">
+                    <h4>I - Interface Segregation<\/h4>
+                    <p>No client forced to depend on unused methods<\/p>
+                <\/div>
+                <div class="principle-card">
+                    <h4>D - Dependency Inversion<\/h4>
+                    <p>Depend on abstractions, not concretions<\/p>
+                <\/div>
+                <div class="principle-card">
+                    <h4>DRY - Don't Repeat Yourself<\/h4>
+                    <p>Every piece of knowledge must have a single representation<\/p>
+                <\/div>
+                <div class="principle-card">
+                    <h4>KISS - Keep It Simple<\/h4>
+                    <p>Simplicity should be a key goal in design<\/p>
+                <\/div>
+                <div class="principle-card">
+                    <h4>YAGNI - You Aren't Gonna Need It<\/h4>
+                    <p>Don't add functionality until necessary<\/p>
+                <\/div>
+
+        <!-- Test Coverage Visualization -->
+        <section class="section">
+            <h2>📊 Test Coverage Visualization<\/h2>
+            <p>
+                Interactive visualization showing test coverage across different layers (unit, integration, e2e)
+                with real-time progress tracking and quality metrics.
+            
+            <div class="diagram-container">
+                <div class="diagram-title">🎯 Multi-Layer Test Coverage (Interactive)<\/div>
+                <div id="test-coverage-viz"><\/div>
+            <\/div>
+
+        <!-- Quality Scoring Dashboard -->
+        <section class="section">
+            <h2>⭐ Quality Scoring (0-10 Scale)<\/h2>
+            <p>
+                Comprehensive quality analysis with actionable recommendations. Scores below 7.0 trigger
+                automatic refactoring suggestions. 8.0+ is production-ready code.
+            
+            <div class="diagram-container">
+                <div class="diagram-title">📈 Quality Score Breakdown<\/div>
+                <div id="quality-scoring-viz"><\/div>
+            <\/div>
+
+        <!-- Technology Detection -->
+        <section class="section">
+            <h2>🌐 Technology Detection (11+ Languages)<\/h2>
+            <p>
+                Automatic detection of programming languages, frameworks, test tools, and version information.
+                The orchestrator adapts test generation and validation strategies based on detected technology.
+            
+            <div class="diagram-container">
+                <div class="diagram-title">🔍 Technology Discovery Flowchart<\/div>
+                <div class="mermaid">
+  graph TD
+    A[Project Scan] --> B{Detect Language}
+    
+    B -->|Python| P[Python Detected]
+    B -->|JavaScript| J[JavaScript Detected]
+    B -->|TypeScript| T[TypeScript Detected]
+    B -->|Java| JV[Java Detected]
+    B -->|C#| CS[C# Detected]
+    B -->|Go| G[Go Detected]
+    B -->|Rust| R[Rust Detected]
+    B -->|Ruby| RB[Ruby Detected]
+    B -->|PHP| PH[PHP Detected]
+    B -->|Swift| S[Swift Detected]
+    B -->|Kotlin| K[Kotlin Detected]
+    
+    P --> P1{Detect Framework}
+    P1 -->|FastAPI| P2[FastAPI + pytest]
+    P1 -->|Django| P3[Django + pytest]
+    P1 -->|Flask| P4[Flask + pytest]
+    P1 -->|None| P5[pytest default]
+    
+    J --> J1{Detect Framework}
+    J1 -->|React| J2[React + Jest]
+    J1 -->|Vue| J3[Vue + Vitest]
+    J1 -->|Angular| J4[Angular + Jasmine]
+    J1 -->|Node.js| J5[Node + Mocha/Jest]
+    
+    T --> T1{Detect Framework}
+    T1 -->|React| T2[React + Jest]
+    T1 -->|Angular| T3[Angular + Jasmine]
+    T1 -->|Vue| T4[Vue + Vitest]
+    T1 -->|Node.js| T5[Node + Jest]
+    
+    P2 --> BP[Retrieve Best Practices]
+    P3 --> BP
+    P4 --> BP
+    P5 --> BP
+    J2 --> BP
+    J3 --> BP
+    J4 --> BP
+    J5 --> BP
+    T2 --> BP
+    T3 --> BP
+    T4 --> BP
+    T5 --> BP
+    
+    JV --> BP
+    CS --> BP
+    G --> BP
+    R --> BP
+    RB --> BP
+    PH --> BP
+    S --> BP
+    K --> BP
+    
+    BP --> C[Store Technology Profile]
+    C --> D[Generate Adapted Tests]
+    
+    style A fill:#9C27B0,stroke:#7B1FA2,stroke-width:3px,color:#fff
+    style BP fill:#4CAF50,stroke:#388E3C,stroke-width:2px,color:#fff
+    style D fill:#10B981,stroke:#059669,stroke-width:3px,color:#fff
+    style P fill:#2196F3,stroke:#1976D2,stroke-width:2px,color:#fff
+    style J fill:#FF9800,stroke:#F57C00,stroke-width:2px,color:#fff
+    style T fill:#F44336,stroke:#D32F2F,stroke-width:2px,color:#fff
+
+        <!-- Integration Points -->
+        <section class="section">
+            <h2>🔗 Integration Architecture<\/h2>
+            <p>
+                The TDD Orchestrator integrates with CORTEX's 4-tier brain, knowledge graph (Tier 2), and
+                Planning System for seamless TDD workflow management.
+            
+            <div class="diagram-container">
+                <div class="diagram-title">🏗️ Integration Points<\/div>
+                <div class="mermaid">
+  graph TB
+    TDD[TDD Orchestrator v4.0] --> PS[Planning System]
+    TDD --> T2[Tier 2: Knowledge Graph]
+    TDD --> MCP[MCP Gateway]
+    TDD --> Git[Git Checkpoints]
+    
+    PS --> |Includes TDD phases| PLAN[Feature Plans]
+    T2 --> |Stores patterns| LEARN[Pattern Learning]
+    T2 --> |Retrieves best practices| PRACTICES[Best Practices]
+    MCP --> |Vision API| VISION[UI Testing]
+    Git --> |Rollback safety| SAFETY[State Management]
+    
+    TDD --> STRATEGIES[Phase Strategies]
+    STRATEGIES --> RED_S[REDPhaseStrategy]
+    STRATEGIES --> GREEN_S[GREENPhaseStrategy]
+    STRATEGIES --> REFACTOR_S[REFACTORPhaseStrategy]
+    
+    TDD --> TECH[Technology Discovery]
+    TECH --> DETECT[Language/Framework Detection]
+    TECH --> ADAPT[Adaptive Test Generation]
+    
+    TDD --> CLEAN[Clean Code Enforcer]
+    CLEAN --> SOLID[SOLID Principles]
+    CLEAN --> QUALITY[Quality Scoring 0-10]
+    
+    style TDD fill:#9C27B0,stroke:#7B1FA2,stroke-width:3px,color:#fff
+    style PS fill:#2196F3,stroke:#1976D2,stroke-width:2px,color:#fff
+    style T2 fill:#FF9800,stroke:#F57C00,stroke-width:2px,color:#fff
+    style STRATEGIES fill:#4CAF50,stroke:#388E3C,stroke-width:2px,color:#fff
+    style CLEAN fill:#F44336,stroke:#D32F2F,stroke-width:2px,color:#fff
+
+        <footer>
+            <p><strong>Author:<\/strong> Asif Hussain | <strong>GitHub:<\/strong> github.com/asifhussain60/CORTEX<\/p>
+            <p>Copyright © 2025 Asif Hussain. All rights reserved.<\/p>
+        <\/footer>
+
+    <!-- D3.js Visualizations -->
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#9C27B0',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#7B1FA2',
+                lineColor: '#BA68C8',
+                secondaryColor: '#4CAF50',
+                tertiaryColor: '#2196F3'
+            }
+        });
+
+        // Test Coverage Visualization (Sunburst Chart)
+        const coverageData = {
+            name: "Test Coverage",
+            children: [
+                {
+                    name: "Unit Tests",
+                    coverage: 95,
+                    children: [
+                        { name: "Authentication", coverage: 100, tests: 25 },
+                        { name: "User Management", coverage: 98, tests: 32 },
+                        { name: "API Endpoints", coverage: 92, tests: 45 },
+                        { name: "Data Models", coverage: 90, tests: 28 }
+                    ]
+                },
+                {
+                    name: "Integration Tests",
+                    coverage: 85,
+                    children: [
+                        { name: "Database Integration", coverage: 90, tests: 18 },
+                        { name: "API Integration", coverage: 85, tests: 22 },
+                        { name: "Third-party Services", coverage: 80, tests: 15 }
+                    ]
+                },
+                {
+                    name: "E2E Tests",
+                    coverage: 75,
+                    children: [
+                        { name: "User Flows", coverage: 80, tests: 12 },
+                        { name: "Critical Paths", coverage: 85, tests: 8 },
+                        { name: "Edge Cases", coverage: 60, tests: 10 }
+                    ]
+                }
+            ]
+        };
+
+        const coverageWidth = 1200;
+        const coverageHeight = 500;
+        const coverageRadius = Math.min(coverageWidth, coverageHeight) / 2;
+
+        const coverageSvg = d3.select("#test-coverage-viz")
+            .append("svg")
+            .attr("width", coverageWidth)
+            .attr("height", coverageHeight)
+            .attr("viewBox", [0, 0, coverageWidth, coverageHeight])
+            .attr("style", "max-width: 100%; height: auto;");
+
+        const coverageG = coverageSvg.append("g")
+            .attr("transform", `translate(${coverageWidth / 2}, ${coverageHeight / 2})`);
+
+        const partition = d3.partition()
+            .size([2 * Math.PI, coverageRadius]);
+
+        const root = d3.hierarchy(coverageData)
+            .sum(d => d.coverage || 0);
+
+        partition(root);
+
+        const arc = d3.arc()
+            .startAngle(d => d.x0)
+            .endAngle(d => d.x1)
+            .padAngle(d => Math.min((d.x1 - d.x0) / 2, 0.005))
+            .padRadius(coverageRadius / 2)
+            .innerRadius(d => d.y0)
+            .outerRadius(d => d.y1 - 1);
+
+        const color = d3.scaleOrdinal()
+            .domain(["Unit Tests", "Integration Tests", "E2E Tests"])
+            .range(["#4CAF50", "#2196F3", "#FF9800"]);
+
+        coverageG.selectAll("path")
+            .data(root.descendants().filter(d => d.depth))
+            .join("path")
+            .attr("fill", d => {
+                while (d.depth > 1) d = d.parent;
+                return color(d.data.name);
+            })
+            .attr("d", arc)
+            .style("cursor", "pointer")
+            .style("opacity", 0.9)
+            .on("mouseover", function(event, d) {
+                d3.select(this)
+                    .style("opacity", 1)
+                    .style("stroke", "#fff")
+                    .style("stroke-width", 2);
+                
+                const tooltip = d3.select("body").append("div")
+                    .attr("class", "tooltip")
+                    .style("left", (event.pageX + 10) + "px")
+                    .style("top", (event.pageY - 10) + "px")
+                    .style("opacity", 1)
+                    .html(() => {
+                        let html = `<strong>${d.data.name}<\/strong><br/>`;
+                        if (d.data.coverage) html += `Coverage: ${d.data.coverage}%<br/>`;
+                        if (d.data.tests) html += `Tests: ${d.data.tests}`;
+                        return html;
+                    });
+            })
+            .on("mouseout", function() {
+                d3.select(this)
+                    .style("opacity", 0.9)
+                    .style("stroke", "none");
+                d3.selectAll(".tooltip").remove();
+            });
+
+        // Add labels
+        coverageG.selectAll("text")
+            .data(root.descendants().filter(d => d.depth === 1))
+            .join("text")
+            .attr("transform", d => {
+                const x = (d.x0 + d.x1) / 2 * 180 / Math.PI;
+                const y = (d.y0 + d.y1) / 2;
+                return `rotate(${x - 90}) translate(${y}, 0) rotate(${x < 180 ? 0 : 180})`;
+            })
+            .attr("dy", "0.35em")
+            .attr("text-anchor", "middle")
+            .text(d => d.data.name)
+            .attr("fill", "#fff")
+            .style("font-size", "14px")
+            .style("font-weight", "600");
+
+        // Quality Scoring Visualization (Radar Chart)
+        const qualityData = [
+            { metric: "Readability", score: 8.5, max: 10 },
+            { metric: "Maintainability", score: 8.0, max: 10 },
+            { metric: "Complexity", score: 7.5, max: 10 },
+            { metric: "Test Coverage", score: 9.0, max: 10 },
+            { metric: "SOLID Compliance", score: 8.2, max: 10 },
+            { metric: "DRY Compliance", score: 7.8, max: 10 }
+        ];
+
+        const qualityWidth = 1200;
+        const qualityHeight = 500;
+        const qualityRadius = Math.min(qualityWidth, qualityHeight) / 2 - 50;
+
+        const qualitySvg = d3.select("#quality-scoring-viz")
+            .append("svg")
+            .attr("width", qualityWidth)
+            .attr("height", qualityHeight)
+            .attr("viewBox", [0, 0, qualityWidth, qualityHeight])
+            .attr("style", "max-width: 100%; height: auto;");
+
+        const qualityG = qualitySvg.append("g")
+            .attr("transform", `translate(${qualityWidth / 2}, ${qualityHeight / 2})`);
+
+        const angleSlice = (Math.PI * 2) / qualityData.length;
+
+        // Draw background circles
+        const levels = 5;
+        for (let i = 1; i <= levels; i++) {
+            qualityG.append("circle")
+                .attr("r", qualityRadius * i / levels)
+                .attr("fill", "none")
+                .attr("stroke", "#475569")
+                .attr("stroke-width", 1)
+                .attr("opacity", 0.3);
+        }
+
+        // Draw axes
+        qualityData.forEach((d, i) => {
+            const angle = angleSlice * i - Math.PI / 2;
+            const lineX = Math.cos(angle) * qualityRadius;
+            const lineY = Math.sin(angle) * qualityRadius;
+            
+            qualityG.append("line")
+                .attr("x1", 0)
+                .attr("y1", 0)
+                .attr("x2", lineX)
+                .attr("y2", lineY)
+                .attr("stroke", "#64748b")
+                .attr("stroke-width", 1);
+            
+            // Labels
+            const labelX = Math.cos(angle) * (qualityRadius + 30);
+            const labelY = Math.sin(angle) * (qualityRadius + 30);
+            
+            qualityG.append("text")
+                .attr("x", labelX)
+                .attr("y", labelY)
+                .attr("text-anchor", "middle")
+                .attr("dy", "0.35em")
+                .text(d.metric)
+                .attr("fill", "#e2e8f0")
+                .style("font-size", "12px")
+                .style("font-weight", "600");
+        });
+
+        // Draw data polygon
+        const radarLine = d3.lineRadial()
+            .radius(d => (d.score / d.max) * qualityRadius)
+            .angle((d, i) => i * angleSlice)
+            .curve(d3.curveLinearClosed);
+
+        qualityG.append("path")
+            .datum(qualityData)
+            .attr("d", radarLine)
+            .attr("fill", "#9C27B0")
+            .attr("fill-opacity", 0.3)
+            .attr("stroke", "#9C27B0")
+            .attr("stroke-width", 2);
+
+        // Draw data points
+        qualityData.forEach((d, i) => {
+            const angle = angleSlice * i - Math.PI / 2;
+            const x = Math.cos(angle) * (d.score / d.max) * qualityRadius;
+            const y = Math.sin(angle) * (d.score / d.max) * qualityRadius;
+            
+            qualityG.append("circle")
+                .attr("cx", x)
+                .attr("cy", y)
+                .attr("r", 5)
+                .attr("fill", "#9C27B0")
+                .attr("stroke", "#fff")
+                .attr("stroke-width", 2)
+                .style("cursor", "pointer")
+                .on("mouseover", function(event) {
+                    d3.select(this)
+                        .transition()
+                        .duration(200)
+                        .attr("r", 8);
+                    
+                    const tooltip = d3.select("body").append("div")
+                        .attr("class", "tooltip")
+                        .style("left", (event.pageX + 10) + "px")
+                        .style("top", (event.pageY - 10) + "px")
+                        .style("opacity", 1)
+                        .html(`<strong>${d.metric}<\/strong><br/>Score: ${d.score}/10`);
+                })
+                .on("mouseout", function() {
+                    d3.select(this)
+                        .transition()
+                        .duration(200)
+                        .attr("r", 5);
+                    d3.selectAll(".tooltip").remove();
+                });
+        });
+
+        // Overall score display
+        const overallScore = (qualityData.reduce((sum, d) => sum + d.score, 0) / qualityData.length).toFixed(1);
+        
+        qualityG.append("text")
+            .attr("text-anchor", "middle")
+            .attr("y", -10)
+            .text("Overall Quality")
+            .attr("fill", "#cbd5e1")
+            .style("font-size", "14px");
+        
+        qualityG.append("text")
+            .attr("text-anchor", "middle")
+            .attr("y", 20)
+            .text(`${overallScore}/10`)
+            .attr("fill", "#9C27B0")
+            .style("font-size", "36px")
+            .style("font-weight", "700");
+    </script>
+</body>
+</html>

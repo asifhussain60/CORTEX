@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Software Testing - Test pyramid, TDD, BDD, unit testing, integration testing, test automation">
+    <meta name="keywords" content="testing, tdd, bdd, unit tests, integration tests, test automation">
+    <meta name="author" content="Asif Hussain">
+    <title>Software Testing | CORTEX Knowledge</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">→</span>
+        <a href="index.html">Knowledge Library</a>
+        <span class="breadcrumb-separator">→</span>
+        <span class="breadcrumb-current">Software Testing</span>
+    </nav>
+
+    <section class="hero" id="main-content">
+        <h1 class="hero-title">🧪 Software Testing</h1>
+        <p class="hero-subtitle">Test Pyramid, TDD, and Test Automation Strategies</p>
+        <div class="file-metadata">
+            <span class="metadata-item">✅ Quality</span>
+            <span class="metadata-item">🔄 TDD</span>
+            <span class="metadata-item">📅 Updated: Dec 2025</span>
+        </div>
+    </section>
+
+    <section class="section file-content">
+        <div class="container">
+            <div id="overview" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">📋 Overview</h2>
+                    <p>Software testing validates that applications work as expected and meet requirements. From unit tests to end-to-end testing, a comprehensive testing strategy ensures code quality, prevents regressions, and builds confidence in deployments.</p>
+                    
+                    <div class="info-box info-box-primary">
+                        <strong>Testing Benefits:</strong>
+                        <ul class="feature-list">
+                            <li><strong>Quality Assurance:</strong> Catch bugs before production</li>
+                            <li><strong>Regression Prevention:</strong> Ensure changes don't break existing features</li>
+                            <li><strong>Documentation:</strong> Tests describe expected behavior</li>
+                            <li><strong>Refactoring Confidence:</strong> Safe code improvements</li>
+                            <li><strong>Design Feedback:</strong> Tests reveal design issues</li>
+                        </ul>
+                    </div>
+
+                    <h3>The Test Pyramid</h3>
+                    <div class="mermaid">
+graph TB
+    subgraph "Test Pyramid"
+        E2E["E2E Tests<br/>Few, Slow, Expensive<br/>Full user journeys"]
+        INT["Integration Tests<br/>More, Moderate Speed<br/>Component interactions"]
+        UNIT["Unit Tests<br/>Many, Fast, Cheap<br/>Individual functions"]
+    end
+    
+    E2E --> INT
+    INT --> UNIT
+    
+    style E2E fill:#f59e0b,color:#fff
+    style INT fill:#10b981,color:#fff
+    style UNIT fill:#7b61ff,color:#fff
+                    </div>
+                </div>
+            </div>
+
+            <div id="test-types" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🔬 Test Types</h2>
+                    
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🧩</span>
+                            <h3>Unit Tests</h3>
+                            <h4>Characteristics</h4>
+                            <ul>
+                                <li>Test single units (functions, methods)</li>
+                                <li>Fast execution (milliseconds)</li>
+                                <li>No external dependencies</li>
+                                <li>High isolation</li>
+                            </ul>
+                            <h4>Best Practices</h4>
+                            <ul>
+                                <li>One assertion per test</li>
+                                <li>Test edge cases</li>
+                                <li>Use mocks/stubs</li>
+                                <li>AAA pattern (Arrange-Act-Assert)</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔗</span>
+                            <h3>Integration Tests</h3>
+                            <h4>Characteristics</h4>
+                            <ul>
+                                <li>Test component interactions</li>
+                                <li>Moderate speed (seconds)</li>
+                                <li>Real dependencies (DB, APIs)</li>
+                                <li>Test contracts</li>
+                            </ul>
+                            <h4>Best Practices</h4>
+                            <ul>
+                                <li>Test database layer</li>
+                                <li>Test API endpoints</li>
+                                <li>Use test containers</li>
+                                <li>Verify data flow</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🌐</span>
+                            <h3>End-to-End (E2E)</h3>
+                            <h4>Characteristics</h4>
+                            <ul>
+                                <li>Test complete user flows</li>
+                                <li>Slow execution (minutes)</li>
+                                <li>Full stack testing</li>
+                                <li>Browser automation</li>
+                            </ul>
+                            <h4>Best Practices</h4>
+                            <ul>
+                                <li>Critical paths only</li>
+                                <li>Stable selectors</li>
+                                <li>Independent tests</li>
+                                <li>Retry on flaky tests</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>Additional Test Types</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📸</span>
+                            <h3>Snapshot Tests</h3>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Detect UI regressions</li>
+                                <li>Component output comparison</li>
+                                <li>Quick to write</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🎭</span>
+                            <h3>Contract Tests</h3>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>API contract verification</li>
+                                <li>Producer-consumer agreements</li>
+                                <li>Prevent breaking changes</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">⚡</span>
+                            <h3>Performance Tests</h3>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Load testing</li>
+                                <li>Stress testing</li>
+                                <li>Benchmark execution time</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tdd" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🔴🟢♻️ Test-Driven Development (TDD)</h2>
+                    
+                    <div class="info-box info-box-primary">
+                        <strong>TDD Cycle: Red → Green → Refactor</strong>
+                    </div>
+
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔴</span>
+                            <h3>1. Red Phase</h3>
+                            <h4>Write Failing Test</h4>
+                            <ul>
+                                <li>Write test for new feature</li>
+                                <li>Test must fail initially</li>
+                                <li>Verify test failure message</li>
+                                <li>Define expected behavior</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🟢</span>
+                            <h3>2. Green Phase</h3>
+                            <h4>Make Test Pass</h4>
+                            <ul>
+                                <li>Write minimal code to pass</li>
+                                <li>Don't optimize yet</li>
+                                <li>Focus on functionality</li>
+                                <li>Test passes</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">♻️</span>
+                            <h3>3. Refactor Phase</h3>
+                            <h4>Improve Code</h4>
+                            <ul>
+                                <li>Clean up implementation</li>
+                                <li>Remove duplication</li>
+                                <li>Improve design</li>
+                                <li>Tests still pass</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>TDD Workflow</h3>
+                    <div class="mermaid">
+stateDiagram-v2
+    [*] --> WriteTest: Start
+    WriteTest --> RunTest: Execute
+    RunTest --> TestFails: ❌ Red
+    TestFails --> WriteCode: Implement
+    WriteCode --> RunTest2: Execute
+    RunTest2 --> TestPasses: ✅ Green
+    TestPasses --> Refactor: Clean up
+    Refactor --> RunTest3: Verify
+    RunTest3 --> WriteTest: Next feature
+    RunTest3 --> [*]: Complete
+    
+    note right of WriteTest
+        Write failing test
+        for new feature
+    end note
+    
+    note right of TestPasses
+        Minimal code
+        to pass test
+    end note
+    
+    note right of Refactor
+        Improve design
+        without breaking tests
+    end note
+                    </div>
+
+                    <div class="info-box info-box-success">
+                        <strong>TDD Benefits:</strong>
+                        <ul class="feature-list">
+                            <li><strong>Design First:</strong> Forces thinking about API design</li>
+                            <li><strong>100% Coverage:</strong> Tests written for all code</li>
+                            <li><strong>Living Documentation:</strong> Tests describe behavior</li>
+                            <li><strong>Regression Safety:</strong> Changes immediately tested</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="bdd" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">📝 Behavior-Driven Development (BDD)</h2>
+                    
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🎯</span>
+                            <h3>BDD Concept</h3>
+                            <h4>Principles</h4>
+                            <ul>
+                                <li>Focus on behavior, not implementation</li>
+                                <li>Business-readable scenarios</li>
+                                <li>Collaboration between teams</li>
+                                <li>Executable specifications</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🥒</span>
+                            <h3>Gherkin Syntax</h3>
+                            <h4>Structure</h4>
+                            <ul>
+                                <li><strong>Feature:</strong> High-level description</li>
+                                <li><strong>Scenario:</strong> Specific example</li>
+                                <li><strong>Given:</strong> Initial context</li>
+                                <li><strong>When:</strong> Action/event</li>
+                                <li><strong>Then:</strong> Expected outcome</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🛠️</span>
+                            <h3>BDD Tools</h3>
+                            <h4>Popular Frameworks</h4>
+                            <ul>
+                                <li><strong>Cucumber:</strong> Ruby, Java, JS</li>
+                                <li><strong>SpecFlow:</strong> .NET</li>
+                                <li><strong>Behave:</strong> Python</li>
+                                <li><strong>Jest:</strong> JS with describe/it</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="info-box info-box-primary">
+                        <strong>Example Gherkin Scenario:</strong>
+                        <pre style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; margin-top: 0.5rem;">
+Feature: User Login
+  As a registered user
+  I want to log in to the system
+  So that I can access my account
+
+  Scenario: Successful login with valid credentials
+    Given I am on the login page
+    And I have a registered account with email "user@example.com"
+    When I enter email "user@example.com"
+    And I enter password "SecurePass123"
+    And I click the "Login" button
+    Then I should see the dashboard
+    And I should see "Welcome back, User"
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tools" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🛠️ Testing Tools</h2>
+                    
+                    <h3>Unit Testing Frameworks</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">⚛️</span>
+                            <h3>JavaScript/TypeScript</h3>
+                            <ul>
+                                <li><strong>Jest:</strong> All-in-one framework</li>
+                                <li><strong>Vitest:</strong> Fast, Vite-based</li>
+                                <li><strong>Mocha + Chai:</strong> Flexible, composable</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🐍</span>
+                            <h3>Python</h3>
+                            <ul>
+                                <li><strong>pytest:</strong> Feature-rich</li>
+                                <li><strong>unittest:</strong> Built-in</li>
+                                <li><strong>nose2:</strong> Extended unittest</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">☕</span>
+                            <h3>Java/.NET</h3>
+                            <ul>
+                                <li><strong>JUnit:</strong> Java standard</li>
+                                <li><strong>xUnit:</strong> .NET family</li>
+                                <li><strong>NUnit:</strong> .NET testing</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>E2E Testing Tools</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🌲</span>
+                            <h3>Cypress</h3>
+                            <h4>Features</h4>
+                            <ul>
+                                <li>Real browser testing</li>
+                                <li>Time travel debugging</li>
+                                <li>Automatic waiting</li>
+                                <li>Great developer experience</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🎭</span>
+                            <h3>Playwright</h3>
+                            <h4>Features</h4>
+                            <ul>
+                                <li>Multi-browser support</li>
+                                <li>Auto-waiting</li>
+                                <li>Network interception</li>
+                                <li>Parallel execution</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔧</span>
+                            <h3>Selenium</h3>
+                            <h4>Features</h4>
+                            <ul>
+                                <li>Cross-browser testing</li>
+                                <li>Multiple languages</li>
+                                <li>Large community</li>
+                                <li>Grid for parallel tests</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="best-practices" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">💡 Testing Best Practices</h2>
+                    
+                    <div class="info-box info-box-success">
+                        <strong>Testing Guidelines:</strong>
+                        <ul class="feature-list">
+                            <li><strong>F.I.R.S.T. Principles:</strong> Fast, Independent, Repeatable, Self-validating, Timely</li>
+                            <li><strong>Test Naming:</strong> Descriptive names that explain what's being tested</li>
+                            <li><strong>One Concept Per Test:</strong> Each test should verify one thing</li>
+                            <li><strong>Avoid Test Interdependence:</strong> Tests shouldn't rely on each other</li>
+                            <li><strong>Use Test Doubles:</strong> Mocks, stubs, spies for isolation</li>
+                            <li><strong>Test Edge Cases:</strong> Null, empty, boundary values</li>
+                            <li><strong>Coverage Metrics:</strong> Aim for 80%+ but prioritize critical paths</li>
+                            <li><strong>Maintain Tests:</strong> Refactor tests alongside production code</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box info-box-warning">
+                        <strong>Testing Anti-Patterns:</strong>
+                        <ul class="feature-list">
+                            <li><strong>Testing Implementation Details:</strong> Test behavior, not internals</li>
+                            <li><strong>Flaky Tests:</strong> Tests that randomly fail reduce confidence</li>
+                            <li><strong>Slow Test Suites:</strong> Optimize for fast feedback</li>
+                            <li><strong>100% Coverage Goal:</strong> Quality over quantity</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="resources" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">📚 Resources & Learning</h2>
+                    
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📖</span>
+                            <h3>Essential Books</h3>
+                            <ul>
+                                <li><strong>Test-Driven Development</strong> - Kent Beck</li>
+                                <li><strong>Growing Object-Oriented Software</strong> - Freeman & Pryce</li>
+                                <li><strong>The Art of Unit Testing</strong> - Roy Osherove</li>
+                                <li><strong>xUnit Test Patterns</strong> - Gerard Meszaros</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🛠️</span>
+                            <h3>Testing Tools</h3>
+                            <ul>
+                                <li><a href="https://jestjs.io/" target="_blank" rel="noopener">Jest</a> - JavaScript testing</li>
+                                <li><a href="https://www.cypress.io/" target="_blank" rel="noopener">Cypress</a> - E2E testing</li>
+                                <li><a href="https://playwright.dev/" target="_blank" rel="noopener">Playwright</a> - Browser automation</li>
+                                <li><a href="https://docs.pytest.org/" target="_blank" rel="noopener">pytest</a> - Python testing</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🌐</span>
+                            <h3>Online Resources</h3>
+                            <ul>
+                                <li><a href="https://testingjavascript.com/" target="_blank" rel="noopener">Testing JavaScript</a> - Kent C. Dodds</li>
+                                <li><a href="https://martinfowler.com/testing/" target="_blank" rel="noopener">Martin Fowler: Testing</a></li>
+                                <li><a href="https://cucumber.io/docs/bdd/" target="_blank" rel="noopener">Cucumber BDD</a></li>
+                                <li><a href="https://testautomationu.applitools.com/" target="_blank" rel="noopener">Test Automation University</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 CORTEX Knowledge Base. Created by Asif Hussain.</p>
+            <p>
+                <a href="../index.html">Home</a> |
+                <a href="index.html">Knowledge Library</a> |
+                <a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener">GitHub</a>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark'
+        });
+    </script>
+</body>
+</html>

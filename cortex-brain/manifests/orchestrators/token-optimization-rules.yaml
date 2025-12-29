@@ -1,0 +1,281 @@
+version: '1.0'
+type: optimization
+name: Token Optimization Rules
+description: Efficiency patterns to minimize token consumption in CORTEX operations
+author: Asif Hussain
+created: 2025-12-02
+status: PRODUCTION
+
+# ============================================================================
+# OPTIMIZATION PRINCIPLES
+# ============================================================================
+
+principles:
+  - principle: BATCH_PARALLEL_READS
+    description: Read multiple file sections or files simultaneously instead of sequentially
+    target_reduction: 40-60% fewer tool calls
+    
+  - principle: LARGE_CONTEXT_WINDOWS
+    description: Read 300-500 lines per operation instead of 50-100 line chunks
+    target_reduction: 50-70% fewer read operations
+    
+  - principle: CONSOLIDATED_SEARCHES
+    description: One comprehensive regex search instead of multiple narrow searches
+    target_reduction: 60-80% fewer search operations
+    
+  - principle: ELIMINATE_REDUNDANT_SUMMARIES
+    description: Remove "Summarized conversation history" noise messages
+    target_reduction: 100% of summary spam
+    
+  - principle: PATH_CACHING
+    description: Store discovered file paths in agent context, don't re-search
+    target_reduction: 90% of repeated file searches
+
+# ============================================================================
+# FILE READ OPTIMIZATION PATTERNS
+# ============================================================================
+
+file_read_patterns:
+  
+  anti_pattern_sequential_chunks:
+    description: Reading same file in multiple small sequential chunks
+    example: |
+      Read lines 1-50
+      Read lines 50-100
+      Read lines 100-150
+      Read lines 150-200
+    token_waste: 4 tool calls, 4 context loads, fragmented understanding
+    
+  optimized_pattern_large_single_read:
+    description: Read complete relevant section in one operation
+    example: |
+      Read lines 1-200 (or entire file if <500 lines)
+    token_savings: 75% reduction in tool calls
+    when_to_use:
+      - Initial file exploration
+      - Reading guides/documentation
+      - Reviewing module implementations
+      
+  optimized_pattern_parallel_batch:
+    description: Read multiple sections or files simultaneously
+    example: |
+      Parallel read:
+        - file1.py lines 1-300
+        - file2.py lines 1-250
+        - file3.md lines 1-400
+    token_savings: 66% reduction vs sequential reads
+    when_to_use:
+      - Architecture analysis across modules
+      - Cross-file dependency review
+      - Multi-agent initialization
+      
+  guidelines:
+    - initial_read_size: 300-500 lines for Python files, entire file for YAML/MD <500 lines
+    - continuation_read_size: 200-300 lines per continuation
+    - parallel_batch_size: 3-5 files simultaneously
+    - avoid_fragmentation: Never read <50 lines unless targeting specific function
+    - use_grep_for_overview: Use grep_search to preview file structure before large reads
+
+# ============================================================================
+# SEARCH OPTIMIZATION PATTERNS
+# ============================================================================
+
+search_patterns:
+  
+  anti_pattern_multiple_narrow_searches:
+    description: Multiple searches for related patterns
+    example: |
+      Search for "commit orchestrator"
+      Search for "CommitOrchestrator"
+      Search for "push to remote"
+      Search for "TDDWorkflowOrchestrator"
+      Search for "tdd workflow"
+    token_waste: 5 search operations, overlapping results
+    
+  optimized_pattern_consolidated_regex:
+    description: Single comprehensive regex with alternation
+    example: |
+      Search for regex: (commit|push|remote).*orchestrator|TDD.*Workflow|tdd.*workflow
+    token_savings: 80% reduction in search operations
+    
+  guidelines:
+    - use_alternation: Pattern1|Pattern2|Pattern3 in single search
+    - case_insensitive: Leverage case-insensitive search when possible
+    - include_pattern: Use includePattern to narrow scope (e.g., "**/*.py")
+    - cache_results: Store search results in agent context for reuse
+    - semantic_search_first: For conceptual queries, use semantic_search before grep
+
+# ============================================================================
+# CONTEXT SUMMARIZATION OPTIMIZATION
+# ============================================================================
+
+summarization_patterns:
+  
+  anti_pattern_empty_summaries:
+    description: Repeated "Summarized conversation history" with no information
+    token_waste: 50-100 tokens per empty message
+    
+  optimized_pattern_eliminate_spam:
+    description: Only summarize when context actually changes
+    implementation:
+      - Remove automatic summarization triggers
+      - Summarize only at major milestones (phase completion, plan approval)
+      - Never summarize after single tool call
+      
+  guidelines:
+    - summarize_threshold: Only when 10+ new messages or major state change
+    - content_requirement: Summary must contain actionable insights
+    - milestone_summary: Phase completion, plan approval, deployment validation
+    - no_empty_summaries: Blocked by Tier 0 TOKEN_EFFICIENCY_ENFORCEMENT
+
+# ============================================================================
+# AGENT-SPECIFIC OPTIMIZATION RULES
+# ============================================================================
+
+agent_optimizations:
+  
+  FileAnalysisAgent:
+    current_behavior: Multiple sequential reads of same file
+    optimized_behavior:
+      - Read entire file if <500 lines
+      - Read 300-500 line chunks for larger files
+      - Use grep_search for file overview before detailed read
+      - Cache file structure in agent context
+    target_savings: 60% fewer read operations
+    
+  SearchAgent:
+    current_behavior: Multiple narrow searches for related patterns
+    optimized_behavior:
+      - Consolidated regex with alternation
+      - Single semantic_search for conceptual queries
+      - Cache search results for 5-minute window
+      - Use includePattern to scope searches
+    target_savings: 70% fewer search operations
+    
+  ArchitectureAnalysisAgent:
+    current_behavior: Sequential file reads across modules
+    optimized_behavior:
+      - Parallel batch reads (3-5 files simultaneously)
+      - Read 300-500 lines per file initially
+      - Use file_search to discover all files first, then batch read
+      - Cache module structure for session
+    target_savings: 50% fewer tool calls
+    
+  PlanningAgent:
+    current_behavior: Multiple reads of same guide sections
+    optimized_behavior:
+      - Read entire planning guide once (400 lines)
+      - Read entire TDD guide once (363 lines)
+      - Cache guide content for session
+      - Only re-read if guide version changes
+    target_savings: 80% fewer guide reads
+
+# ============================================================================
+# METRIC TARGETS
+# ============================================================================
+
+performance_targets:
+  
+  baseline_metrics:
+    architecture_analysis_task:
+      current_tokens: 24000
+      current_tool_calls: 35-40
+      current_read_operations: 20-25
+      current_search_operations: 8-10
+      
+  optimized_targets:
+    architecture_analysis_task:
+      target_tokens: 8000
+      target_reduction: 67%
+      target_tool_calls: 12-15
+      target_read_operations: 6-8
+      target_search_operations: 2-3
+      
+  validation_criteria:
+    - Same quality output (comprehensive analysis)
+    - Same accuracy (no missed gaps)
+    - Faster execution (40-50% time reduction)
+    - Better user experience (less waiting, clearer progress)
+
+# ============================================================================
+# IMPLEMENTATION CHECKLIST
+# ============================================================================
+
+implementation_steps:
+  
+  tier0_integration:
+    - Add TOKEN_EFFICIENCY_ENFORCEMENT instinct to brain-protection-rules.yaml
+    - Challenge empty summarizations
+    - Challenge <50 line reads unless targeted
+    - Challenge sequential reads when parallel possible
+    
+  agent_updates:
+    - Update FileAnalysisAgent with large read pattern
+    - Update SearchAgent with consolidated regex pattern
+    - Update base_agent.py to track tokens per operation
+    - Add token metrics to AgentResponse
+    
+  monitoring:
+    - Log tokens consumed per agent operation
+    - Track tool calls per task type
+    - Compare before/after metrics
+    - Report optimization wins in system health
+    
+  validation:
+    - Run architecture analysis task with new patterns
+    - Verify <8000 tokens consumed
+    - Verify output quality unchanged
+    - Update VERSION with optimization milestone
+
+# ============================================================================
+# ENFORCEMENT RULES
+# ============================================================================
+
+enforcement:
+  
+  blocked_patterns:
+    - pattern: Reading same file section multiple times within 5 minutes
+      severity: warning
+      action: Brain Protector suggests cached context
+      
+    - pattern: More than 3 searches for semantically similar patterns
+      severity: warning
+      action: Brain Protector suggests consolidated regex
+      
+    - pattern: Empty "Summarized conversation history" messages
+      severity: blocked
+      action: Remove summarization trigger
+      
+    - pattern: Reading <50 lines without specific function target
+      severity: info
+      action: Suggest larger context window
+      
+  allowed_exceptions:
+    - Targeted function reads (specific line ranges for small functions)
+    - Security-sensitive file reads (incremental validation)
+    - User-requested specific line ranges
+    - Debug operations requiring precise context
+
+# ============================================================================
+# SUCCESS METRICS
+# ============================================================================
+
+success_criteria:
+  
+  quantitative:
+    - 60%+ reduction in tokens per architecture analysis
+    - 50%+ reduction in tool calls per complex task
+    - 70%+ reduction in redundant reads/searches
+    - 100% elimination of empty summarization spam
+    
+  qualitative:
+    - No reduction in output quality
+    - No missed gaps in analysis
+    - Faster time to first response
+    - Clearer progress indication
+    
+  user_experience:
+    - Less waiting between responses
+    - More comprehensive first responses
+    - Fewer "reading..." interim messages
+    - Faster overall task completion

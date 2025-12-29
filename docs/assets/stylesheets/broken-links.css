@@ -1,0 +1,173 @@
+/* Story Enhancement Test Harness - Broken Link Styling
+ * Auto-applied when broken links detected in MkDocs nav
+ * 
+ * Author: Asif Hussain
+ * Copyright © 2025 Asif Hussain. All rights reserved.
+ */
+
+/* ============================================
+   BROKEN NAVIGATION LINKS
+   ============================================ */
+
+/* Visually disable broken links (grayed, strikethrough, no-click) */
+.md-nav__link[href*="story/CORTEX-STORY"],
+.md-nav__link[href*="governance/THE-RULEBOOK"],
+.md-nav__link[href*="architecture/overview"],
+.md-nav__link[href*="architecture-diagrams"],
+.md-nav__link[href*="integration-diagrams"],
+.md-nav__link[href*="operational-diagrams"],
+.md-nav__link[href*="planning-diagrams"],
+.md-nav__link[href*="architecture/tier-system"],
+.md-nav__link[href*="architecture/agents"],
+.md-nav__link[href*="architecture/brain-protection"],
+.md-nav__link[href*="EXECUTIVE-SUMMARY"],
+.md-nav__link[href*="CORTEX-CAPABILITIES"],
+.md-nav__link[href*="FEATURES.md"],
+.md-nav__link[href*="MODULES-REFERENCE"],
+.md-nav__link[href*="OPERATIONS-REFERENCE"],
+.md-nav__link[href*="TECHNICAL-DOCUMENTATION"],
+.md-nav__link[href*="CORTEX-VS-COPILOT"],
+.md-nav__link[href*="FAQ.md"],
+.md-nav__link[href*="operations/overview"],
+.md-nav__link[href*="operations/workflows"],
+.md-nav__link[href*="operations/entry-point-modules"],
+.md-nav__link[href*="operations/health-monitoring"],
+.md-nav__link[href*="orchestration/index"],
+.md-nav__link[href*="orchestration/tdd-implementation-orchestrator"],
+.md-nav__link[href*="orchestration/planning-orchestrator"],
+.md-nav__link[href*="orchestration/debug-workflow-orchestrator"],
+.md-nav__link[href*="orchestration/documentation-orchestrator"],
+.md-nav__link[href*="orchestration/dashboard-launcher"],
+.md-nav__link[href*="orchestration/git-checkpoint-orchestrator"],
+.md-nav__link[href*="orchestration/learning-observer"],
+.md-nav__link[href*="GETTING-STARTED"],
+.md-nav__link[href*="NAVIGATION-GUIDE"],
+.md-nav__link[href*="HELP-SYSTEM"],
+.md-nav__link[href*="response-template-user-guide"],
+.md-nav__link[href*="KNOWLEDGE-GRAPH-IMPORT-GUIDE"],
+.md-nav__link[href*="guides/developer-guide"],
+.md-nav__link[href*="guides/admin-guide"],
+.md-nav__link[href*="guides/admin-operations"],
+.md-nav__link[href*="guides/best-practices"],
+.md-nav__link[href*="guides/troubleshooting"],
+.md-nav__link[href*="reference/api"],
+.md-nav__link[href*="reference/configuration"],
+.md-nav__link[href*="reference/response-templates"],
+.md-nav__link[href*="reference/scripts/index"],
+.md-nav__link[href*="plugins/development"],
+.md-nav__link[href*="plugins/vscode-extension"],
+.md-nav__link[href*="performance/PERFORMANCE-BUDGETS"],
+.md-nav__link[href*="performance/CI-CD-INTEGRATION"],
+.md-nav__link[href*="telemetry/PERFORMANCE-TELEMETRY-GUIDE"],
+.md-nav__link[href*="case-studies/index"],
+.md-nav__link[href*="case-studies/cortex-optimization"],
+.md-nav__link[href*="case-studies/noor-canvas"] {
+    opacity: 0.35 !important;
+    cursor: not-allowed !important;
+    text-decoration: line-through !important;
+    pointer-events: none !important;
+    position: relative;
+    color: #757575 !important;
+}
+
+/* Add construction emoji to broken links */
+.md-nav__link[href*="story/CORTEX-STORY"]::after,
+.md-nav__link[href*="governance/THE-RULEBOOK"]::after,
+.md-nav__link[href*="orchestration/"]::after,
+.md-nav__link[href*="case-studies/"]::after {
+    content: " 🚧";
+    font-size: 0.75em;
+    opacity: 0.6;
+}
+
+/* Tooltip on hover (for enabled cursor areas) */
+.md-nav__item:hover .md-nav__link[href*="story/CORTEX-STORY"]::before,
+.md-nav__item:hover .md-nav__link[href*="governance/"]::before,
+.md-nav__item:hover .md-nav__link[href*="orchestration/"]::before {
+    content: "⚠️ Feature in development";
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 10px;
+    background: rgba(255, 152, 0, 0.95);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 11px;
+    white-space: nowrap;
+    z-index: 1000;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    letter-spacing: 0.3px;
+}
+
+/* Dark mode adjustments */
+[data-md-color-scheme="slate"] .md-nav__link[href*="story/CORTEX-STORY"],
+[data-md-color-scheme="slate"] .md-nav__link[href*="governance/"],
+[data-md-color-scheme="slate"] .md-nav__link[href*="orchestration/"] {
+    color: #616161 !important;
+}
+
+/* ============================================
+   BROKEN INTERNAL LINKS IN CONTENT
+   ============================================ */
+
+/* Mark broken links in markdown content */
+.md-content a[href*="cortex-brain/"],
+.md-content a[href*="../CORTEX.prompt.md"],
+.md-content a[href*="telemetry/PERFORMANCE"] {
+    opacity: 0.4;
+    text-decoration: line-through;
+    cursor: not-allowed;
+    pointer-events: none;
+    position: relative;
+}
+
+.md-content a[href*="cortex-brain/"]::after {
+    content: " (external path)";
+    font-size: 0.8em;
+    opacity: 0.6;
+    font-style: italic;
+}
+
+/* ============================================
+   STATUS INDICATOR
+   ============================================ */
+
+/* Add site-wide status banner for broken links */
+.md-header::after {
+    content: "⚠️ Some navigation links disabled (features in development)";
+    display: block;
+    background: linear-gradient(90deg, #ff9800 0%, #f57c00 100%);
+    color: white;
+    text-align: center;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Hide banner if all links working */
+body.all-links-working .md-header::after {
+    display: none;
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+
+/* Ensure disabled links don't receive focus */
+.md-nav__link[href*="story/CORTEX-STORY"]:focus,
+.md-nav__link[href*="governance/"]:focus,
+.md-nav__link[href*="orchestration/"]:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+/* Screen reader text */
+.md-nav__link[href*="story/CORTEX-STORY"] .sr-only::after,
+.md-nav__link[href*="governance/"] .sr-only::after {
+    content: " - This link is currently disabled as the feature is in development";
+}

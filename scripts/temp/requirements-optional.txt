@@ -1,0 +1,79 @@
+# CORTEX Optional Dependencies (Lazy-Loaded)
+# ⚠️ AUDIT COMPLETED: December 16, 2025
+# Status: 3 packages have actual code usage + 13 tree-sitter parsers added
+# Install on-demand when specific features are triggered
+
+# ML Token Optimization (200 MB, 3 minutes)
+# Triggers: "optimize tokens", "compress context", ml_context_optimizer usage
+# Code: src/tier1/ml_context_optimizer.py (has try/except fallback)
+# Fallback: Basic string matching (no ML)
+scikit-learn>=1.5.2        # TF-IDF vectorization
+numpy>=1.26.4,<2.0.0       # Required by scikit-learn
+
+# System Utilities (5 MB, 10 seconds)
+# Triggers: "cleanup" with recycle bin option, sweeper_plugin
+# Code: src/plugins/sweeper_plugin.py (optional plugin)
+# Fallback: Direct file deletion
+send2trash>=1.8.3          # OS-native Recycle Bin support
+
+# Multi-Language AST Parsing (CORTEX 3.10) - Tree-Sitter (~150 MB, 5 minutes)
+# Triggers: CORTEX Lens multi-language analysis, universal_parser usage
+# Code: src/cortex_lens/analyzers/universal_parser.py
+# Fallback: Uses parso (Python) and sqlparse (SQL) from core requirements
+# Coverage: 13 languages, 21,600 files across user projects (88% coverage)
+tree-sitter>=0.22.0  # Modern tree-sitter with pre-built binaries (NO compilation required)
+tree-sitter-python>=0.25.0  # Python AST parser
+tree-sitter-javascript>=0.25.0  # JavaScript/JSX parser
+tree-sitter-typescript>=0.23.2  # TypeScript/TSX parser
+tree-sitter-c-sharp>=0.23.1  # C# parser (14,459 files across projects)
+tree-sitter-sql>=0.3.11  # SQL parser (7,284 files across projects)
+tree-sitter-html>=0.23.2  # HTML parser
+tree-sitter-css>=0.25.0  # CSS/SCSS parser
+tree-sitter-json>=0.24.8  # JSON parser
+tree-sitter-yaml>=0.7.2  # YAML parser
+tree-sitter-markdown>=0.5.1  # Markdown parser
+tree-sitter-java>=0.23.5  # Java parser (future Android support)
+tree-sitter-kotlin>=1.1.0  # Kotlin parser (future Android support)
+
+# ============================================================================
+# ⚠️ PACKAGES BELOW HAVE NO CODE IN src/ - REMOVED FROM DEFAULT INSTALL
+# These were added for planned features that were never completed
+# Install manually ONLY if you're implementing these features:
+#
+# # Dashboard Visualization (165 MB, 5 minutes) - NO CODE EXISTS
+# # matplotlib>=3.5.0  # Chart generation
+# # Flask>=2.3.0  # Dashboard server
+# # networkx>=3.1  # Architecture graphs
+#
+# # Browser Automation (170 MB, 11 minutes) - NO CODE EXISTS
+# # playwright>=1.48.0  # Browser automation
+# # selenium>=4.15.0  # Alternative browser automation
+# # pytest-selenium>=4.0.0  # pytest integration
+#
+# # GitHub Integration (5 MB, 10 seconds) - NO CODE EXISTS
+# # PyGithub>=2.5.0  # GitHub Gist integration
+#
+# # Multi-Language Support (125 MB, 5 minutes) - NO CODE EXISTS
+# # tree-sitter-languages>=1.10.2  # Pre-built language grammars
+# # esprima>=4.0.1  # JavaScript AST parser
+# # sqlparse>=0.5.0  # SQL parsing
+# # tomli>=2.0.0  # TOML parsing
+# # python-docx>=1.1.0  # Word document parsing
+# # pypdf>=6.4.1  # PDF extraction
+#
+# Total Removed: 11 packages, 615 MB waste
+# See: cortex-brain/documents/analysis/dependency-audit-report.md
+# ============================================================================
+
+# Installation:
+# These packages are NOT installed by default.
+# CORTEX will detect when features are triggered and offer to install them.
+# Or install manually: pip install -r requirements-optional.txt (only 3 packages)
+
+# Lazy-Loading Pattern Example (already used in ml_context_optimizer.py):
+# try:
+#     import sklearn
+#     SKLEARN_AVAILABLE = True
+# except ImportError:
+#     SKLEARN_AVAILABLE = False
+#     # Fall back to basic functionality

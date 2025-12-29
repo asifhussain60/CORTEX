@@ -1,0 +1,62 @@
+# CORTEX Protection Layer: Knowledge Quality
+# Extracted from brain-protection-rules.yaml for token optimization
+# Version: 2.1
+# Part of: CORTEX 3.0 Track B (Token Optimization)
+
+version: "2.1"
+type: "protection_layer"
+layer_id: "knowledge_quality"
+parent_file: "brain-protection-rules.yaml"
+
+# Layer definition (normalized indentation)
+- layer_id: "knowledge_quality"
+  name: "Knowledge Quality"
+  description: "Pattern validation and confidence thresholds"
+  priority: 6
+
+  rules:
+    - rule_id: "MIN_OCCURRENCES"
+      name: "Minimum Occurrences for High Confidence"
+      severity: "warning"
+      description: "High confidence (>0.50) with single occurrence"
+
+      detection:
+        combined_keywords:
+          high_confidence:
+            - "confidence: 1.0"
+            - "confidence=1.0"
+            - "confidence: 0.95"
+          single_event:
+            - "first occurrence"
+            - "single event"
+            - "occurrences: 1"
+        scope: ["description"]
+        logic: "AND"  # Both conditions must be true
+
+      alternatives:
+        - "Start with confidence ≤0.50 for single event"
+        - "Wait for 3+ occurrences before high confidence"
+        - "Mark as provisional pattern"
+
+      evidence: "Require 3+ occurrences for confidence >0.50"
+
+    - rule_id: "PATTERN_VALIDATION"
+      name: "Pattern Validation"
+      severity: "warning"
+      description: "Pattern lacks validation evidence"
+
+      detection:
+        keywords:
+          - "add pattern without validation"
+          - "no evidence"
+          - "unverified pattern"
+        scope: ["description"]
+
+      alternatives:
+        - "Add validation test"
+        - "Link to source documentation"
+        - "Mark as hypothesis for validation"
+
+      evidence: "Patterns require empirical validation"
+
+# Layer 7: Commit Integrity

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>System Maintenance - CORTEX</title>
+<link href="../assets/css/main.css" rel="stylesheet">
+<link href="../assets/images/CORTEX-logo.png" rel="icon" type="image/png">
+</head>
+<body>
+<!-- Breadcrumb -->
+<nav class="breadcrumb">
+<a href="../index.html">Home</a>
+<span class="breadcrumb-separator">›</span>
+<a href="index.html">Features</a>
+<span class="breadcrumb-separator">›</span>
+<span class="breadcrumb-current">System Maintenance</span>
+</nav>
+<!-- Hero -->
+<section class="section">
+<div class="container">
+<div class="glass-card">
+<div>
+<div class="icon">🔧</div>
+<div>
+<h1>System Maintenance</h1>
+<p>
+                            Automated 6-Phase Maintenance with Auto-Fix and Validation
+                        <a class="btn btn-primary" href="../technical/orchestrators/maintenance-orchestrator.html">
+                            🎨 View Interactive Diagrams & Visualizations →
+                
+                <div class="metrics-grid">
+<div>
+<div class="metric-value">6</div>
+<div class="metric-label">Maintenance Phases</div>
+</div>
+<div>
+<div class="metric-value">100%</div>
+<div class="metric-label">Automated</div>
+</div>
+<div>
+<div class="metric-value">< 5min</div>
+<div class="metric-label">Avg Execution Time</div>
+</div>
+<!-- Executive Summary -->
+<section class="section">
+<div class="container">
+<h2>Executive Summary</h2>
+<div class="glass-card">
+<p>
+                    System Maintenance is CORTEX's comprehensive health and optimization orchestrator. In a single 
+                    command, it runs 6 sequential phases: pre-healthcheck (baseline), alignment (auto-fix issues), 
+                    cleanup (remove obsolete files), optimization (performance tuning), prompt refresh (regenerate 
+                    documentation), and post-healthcheck (validation). Each phase builds on the previous, with 
+                    conditional execution ensuring safe operation.
+
+    <!-- How It Works -->
+<section class="section">
+<div class="container">
+<h2>6-Phase Maintenance Workflow</h2>
+<!-- Phase 1 -->
+<div class="collapsible">
+<div class="collapsible-header glass-card">
+<h3>📊 Phase 1: Pre-Maintenance Healthcheck</h3>
+<span class="collapsible-icon">▼</span>
+</div>
+<div class="collapsible-content glass-card-flat">
+<p><strong>Purpose:</strong> Establish baseline system health before making changes</p>
+<p><strong>What happens:</strong></p>
+<ul>
+<li>
+<strong>15+ System Checks:</strong> File integrity, imports, YAML validation, brain health</li>
+<li>
+<strong>Metrics Collection:</strong> Operation counts, orchestrator inventory, test coverage</li>
+<li>
+<strong>Baseline Report:</strong> JSON report saved to cortex-brain/health-reports/</li>
+<li>
+<strong>Risk Assessment:</strong> Identifies critical vs warning issues</li>
+</ul>
+<p><strong>Sample output:</strong></p>
+<pre>✅ Pre-healthcheck: 13/15 checks passed (2 warnings)
+├── Operations: 302 registered
+├── Orchestrators: 8 active
+├── Test Coverage: 87%
+└── Brain Health: GOOD</pre>
+</div>
+<!-- Phase 2 -->
+<div class="collapsible">
+<div class="collapsible-header glass-card">
+<h3>🔄 Phase 2: System Alignment (Auto-Fix)</h3>
+<span class="collapsible-icon">▼</span>
+</div>
+<div class="collapsible-content glass-card-flat">
+<p><strong>Purpose:</strong> Automatically fix common issues and synchronize system state</p>
+<p><strong>What happens:</strong></p>
+<ul>
+<li>
+<strong>Auto-Fix Enabled:</strong> Applies fixes automatically (no manual intervention)</li>
+<li>
+<strong>Operation Registration:</strong> Scans src/ and registers missing operations</li>
+<li>
+<strong>YAML Validation:</strong> Checks cortex-operations.yaml for consistency</li>
+<li>
+<strong>Import Resolution:</strong> Fixes broken imports and missing modules</li>
+<li>
+<strong>Git Sync:</strong> Ensures CORTEX/user repo isolation</li>
+</ul>
+<p><strong>Sample fixes applied:</strong></p>
+<pre>✅ Alignment: 4 fixes applied
+├── Registered 3 new operations
+├── Fixed 1 broken import
+├── Updated YAML (consistency)
+└── Validated git isolation</pre>
+</div>
+<!-- Phase 3 -->
+<div class="collapsible">
+<div class="collapsible-header glass-card">
+<h3>🧹 Phase 3: Cleanup Orchestrator</h3>
+<span class="collapsible-icon">▼</span>
+</div>
+<div class="collapsible-content glass-card-flat">
+<p><strong>Purpose:</strong> Remove obsolete files, organize structure, free disk space</p>
+<p><strong>What happens:</strong></p>
+<ul>
+<li>
+<strong>Obsolete File Detection:</strong> Identifies unused/outdated files</li>
+<li>
+<strong>Safe Backup:</strong> Archives to cortex-brain/archives/ before deletion</li>
+<li>
+<strong>Reference Updates:</strong> Updates imports and links to moved files</li>
+<li>
+<strong>Space Optimization:</strong> Compresses logs, removes duplicates</li>
+<li>
+<strong>Structure Validation:</strong> Ensures cortex-brain/ organization</li>
+</ul>
+<p><strong>Safety features:</strong></p>
+<ul>
+<li>Dry-run mode available (preview changes without applying)</li>
+<li>Git checkpoint before any deletions</li>
+<li>Rollback capability (restore from archives)</li>
+</ul>
+<!-- Phase 4 -->
+<div class="collapsible">
+<div class="collapsible-header glass-card">
+<h3>⚡ Phase 4: CORTEX Optimization</h3>
+<span class="collapsible-icon">▼</span>
+</div>
+<div class="collapsible-content glass-card-flat">
+<p><strong>Purpose:</strong> Performance tuning and efficiency improvements</p>
+<p><strong>What happens:</strong></p>
+<ul>
+<li>
+<strong>Query Optimization:</strong> Indexes brain databases for faster queries</li>
+<li>
+<strong>Token Reduction:</strong> Compresses prompts, removes redundancy</li>
+<li>
+<strong>Cache Warming:</strong> Pre-loads frequently accessed data</li>
+<li>
+<strong>Memory Optimization:</strong> Trims Tier 1 working memory (FIFO enforcement)</li>
+<li>
+<strong>Benchmarking:</strong> Measures before/after performance</li>
+</ul>
+<p><strong>Conditional execution:</strong></p>
+<p>
+                        Only runs if Phase 2 (Alignment) succeeds. If alignment fails, optimization is skipped to 
+                        prevent optimizing a broken system.
+
+            <!-- Phase 5 -->
+</p>
+<div class="collapsible">
+<div class="collapsible-header glass-card">
+<h3>📝 Phase 5: Refresh Prompts</h3>
+<span class="collapsible-icon">▼</span>
+</div>
+<div class="collapsible-content glass-card-flat">
+<p><strong>Purpose:</strong> Regenerate documentation and prompt files with latest content</p>
+<p><strong>What happens:</strong></p>
+<ul>
+<li>
+<strong>Prompt Regeneration:</strong> Updates .github/prompts/ with latest operations</li>
+<li>
+<strong>Module Guides:</strong> Regenerates planning, TDD, response format guides</li>
+<li>
+<strong>Feature Catalogs:</strong> Updates capabilities.yaml with new features</li>
+<li>
+<strong>API Documentation:</strong> Refreshes docstring-based API docs</li>
+<li>
+<strong>Version Sync:</strong> Ensures version numbers consistent across files</li>
+</ul>
+<p><strong>Why this matters:</strong></p>
+<p>
+                        As CORTEX evolves, documentation can become stale. This phase ensures GitHub Copilot always 
+                        has the latest operation list, command syntax, and feature descriptions.
+
+            <!-- Phase 6 -->
+</p>
+<div class="collapsible">
+<div class="collapsible-header glass-card">
+<h3>✅ Phase 6: Post-Maintenance Healthcheck</h3>
+<span class="collapsible-icon">▼</span>
+</div>
+<div class="collapsible-content glass-card-flat">
+<p><strong>Purpose:</strong> Validate improvements and ensure system stability</p>
+<p><strong>What happens:</strong></p>
+<ul>
+<li>
+<strong>Re-run All Checks:</strong> Same 15+ checks as Phase 1</li>
+<li>
+<strong>Before/After Comparison:</strong> Shows improvements vs baseline</li>
+<li>
+<strong>Regression Detection:</strong> Alerts if any checks worsened</li>
+<li>
+<strong>Final Report:</strong> Comprehensive JSON with all 6 phases</li>
+</ul>
+<p><strong>Success criteria:</strong></p>
+<pre>✅ Post-healthcheck: 15/15 checks passed
+   Improvements: +2 checks (13→15)
+   Warnings: -2 (2→0)
+   System Health: EXCELLENT</pre>
+</div>
+<!-- Real-World Results -->
+<section class="section">
+<div class="container">
+<h2>Real-World Results</h2>
+<div class="glass-card">
+<div class="metrics-grid">
+<div>
+<div class="metric-value">100%</div>
+<div class="metric-label">Automated (no manual steps)</div>
+</div>
+<div>
+<div class="metric-value">6</div>
+<div class="metric-label">Sequential phases</div>
+</div>
+<div>
+<div class="metric-value">< 5min</div>
+<div class="metric-label">Average execution time</div>
+</div>
+<div>
+<div class="metric-value">+15%</div>
+<div class="metric-label">System health improvement (avg)</div>
+</div>
+<!-- SKULL Protection -->
+<section class="section">
+<div class="container">
+<h2>SKULL Protection Integration</h2>
+<div class="glass-card">
+<p>
+                    System Maintenance respects SKULL rules throughout execution:
+                
+                </p>
+<div>
+<div>
+<h4>GIT_ISOLATION_ENFORCEMENT</h4>
+<p>
+                            Phase 2 (Alignment) validates CORTEX code never touches user repos. Git checkpoints 
+                            before Phase 3 (Cleanup) ensure safe rollback.
+                    
+                    </p>
+<div>
+<h4>REFACTOR_CODE_CLEANUP_ENFORCEMENT</h4>
+<p>
+                            Phase 3 (Cleanup) enforces removal of orphaned code and obsolete files, satisfying 
+                            this SKULL rule automatically.
+                    
+                    </p>
+<div>
+<h4>HOLISTIC_CODE_DISCOVERY_ENFORCEMENT</h4>
+<p>
+                            Phase 2 (Alignment) searches entire codebase for duplicate operations before registration, 
+                            preventing code duplication.
+
+    <!-- Usage Examples -->
+<section class="section">
+<div class="container">
+<h2>How to Use</h2>
+<div class="glass-card">
+<p>
+<strong>Simple command in Copilot Chat:</strong>
+</p>
+<pre>system maintenance</pre>
+<p>
+<strong>Alternative commands:</strong>
+</p>
+<ul>
+<li><code>maintain system</code></li>
+<li><code>run maintenance</code></li>
+<li><code>full maintenance</code></li>
+<li><code>comprehensive maintenance</code></li>
+</ul>
+<p>
+                    All commands execute the same 6-phase workflow. No configuration needed.
+
+    <!-- Navigation -->
+<section class="section">
+<div class="container">
+<div>
+<a class="btn btn-secondary" href="index.html">← Back to Features</a>
+<a class="btn btn-secondary" href="ado-operations.html">Next: ADO Operations →</a>
+</div>
+</div></section></p>
+</div>
+</div></section></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div></section>
+</div>
+</div>
+</div></section>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div></section></p>
+</div>
+</div></section>
+</div></a></p>
+</div>
+</div>
+</div>
+</div></section>
+</body>
+</html>

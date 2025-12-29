@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Retrieval Pipeline - RAG architecture, chunking strategies, and hybrid search">
+    <meta name="author" content="Asif Hussain">
+    <title>Retrieval Pipeline - CORTEX Knowledge</title>
+    <link rel="icon" type="image/png" href="../../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <nav class="breadcrumb-container sticky-nav" aria-label="Breadcrumb">
+        <button class="back-button" onclick="history.back()" aria-label="Go back">← Back</button>
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge Library</a></li>
+            <li><a href="../rag-domains.html">RAG & AI Domains</a></li>
+            <li aria-current="page">Retrieval Pipeline</li>
+        </ol>
+    </nav>
+
+    <section class="hero" id="main-content">
+        <div class="logo-header">
+            <img src="../../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
+        </div>
+        <h1 class="hero-title">🔍 Retrieval Pipeline</h1>
+        <p class="hero-subtitle">Complete RAG architecture from query to generation</p>
+        <div class="file-metadata">
+            <span class="metadata-item">📦 25+ Techniques</span>
+            <span class="metadata-item">🏷️ RAG & AI Domains</span>
+            <span class="metadata-item">📅 Updated: Dec 2025</span>
+        </div>
+    </section>
+
+    <aside class="toc-sidebar" aria-label="Table of contents">
+        <h3>On This Page</h3>
+        <nav class="toc-nav">
+            <a href="#architecture" class="toc-link">Pipeline Architecture</a>
+            <a href="#query" class="toc-link">Query Processing</a>
+            <a href="#retrieval" class="toc-link">Retrieval Strategies</a>
+            <a href="#reranking" class="toc-link">Reranking</a>
+            <a href="#context" class="toc-link">Context Assembly</a>
+            <a href="#production" class="toc-link">Production Patterns</a>
+            <a href="#related" class="toc-link">Related Files</a>
+        </nav>
+    </aside>
+
+    <main class="file-content">
+        <section class="glass-card" id="architecture">
+            <h2>RAG Pipeline Architecture</h2>
+            <p>
+                A production RAG system consists of five stages: query processing, retrieval, 
+                reranking, context assembly, and generation.
+            </p>
+
+            <h3>5-Stage Pipeline</h3>
+            <div class="diagram-container">
+                <pre>
+┌─────────────────┐
+│ 1. Query        │  Query rewriting, expansion, entity extraction
+│    Processing   │
+└────────┬────────┘
+         ▼
+┌─────────────────┐
+│ 2. Retrieval    │  Vector search, hybrid search, metadata filtering
+│                 │
+└────────┬────────┘
+         ▼
+┌─────────────────┐
+│ 3. Reranking    │  Cross-encoder scoring, relevance ranking
+│                 │
+└────────┬────────┘
+         ▼
+┌─────────────────┐
+│ 4. Context      │  Deduplication, ordering, prompt construction
+│    Assembly     │
+└────────┬────────┘
+         ▼
+┌─────────────────┐
+│ 5. Generation   │  LLM inference, citation linking, validation
+│                 │
+└─────────────────┘
+                </pre>
+            </div>
+        </section>
+
+        <section class="glass-card" id="query">
+            <h2>Stage 1: Query Processing</h2>
+
+            <div class="rule-card">
+                <h3>HyDE (Hypothetical Document Embeddings)</h3>
+                <span class="badge badge-high">ADVANCED TECHNIQUE</span>
+                <p>Generate hypothetical answer, embed it, search with that embedding.</p>
+                
+                <div class="example-section">
+                    <h4>✅ HyDE Implementation</h4>
+                    <pre><code class="language-python">def hyde_retrieval(query: str, llm, vector_db, top_k=5):
+    """
+    HyDE: Generate hypothetical answer, use its embedding for search.
+    Effective when query is very different from document style.
+    """
+    # Step 1: Generate hypothetical answer
+    hyde_prompt = f"""Given this question: {query}
+    
+Write a detailed, accurate answer as it would appear in a technical document.
+Don't say "I don't know" - write a plausible answer."""
+
+    hypothetical_answer = llm.generate(hyde_prompt, max_tokens=200)
+    
+    # Step 2: Embed hypothetical answer (not the query!)
+    hyde_embedding = get_embedding(hypothetical_answer)
+    
+    # Step 3: Search with hypothetical answer embedding
+    results = vector_db.search(hyde_embedding, top_k=top_k)
+    
+    return results
+
+# Example
+query = "How do I configure Kubernetes ingress?"
+# Traditional: Embeds the query directly
+# HyDE: Generates hypothetical answer like "To configure Kubernetes ingress..."
+#       then embeds THAT for more relevant retrieval
+</code></pre>
+                </div>
+
+                <h4>When to Use</h4>
+                <ul class="feature-list">
+                    <li>✅ User query is short/vague</li>
+                    <li>✅ Documents are detailed/technical</li>
+                    <li>✅ Willing to pay for extra LLM call</li>
+                </ul>
+            </div>
+
+            <div class="rule-card">
+                <h3>Query Expansion</h3>
+                <span class="badge badge-medium">COMMON TECHNIQUE</span>
+                <p>Expand query with synonyms, related terms, or multiple queries.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Multi-Query Expansion</h4>
+                    <pre><code class="language-python">def multi_query_retrieval(query: str, llm, vector_db, num_queries=3, top_k_per_query=3):
+    """
+    Generate multiple query variations, retrieve for each, merge results.
+    """
+    # Step 1: Generate query variations
+    expansion_prompt = f"""Given this query: "{query}"
+    
+Generate {num_queries} different ways to ask this question.
+Output ONLY the questions, one per line."""
+
+    variations = llm.generate(expansion_prompt).strip().split('\n')
+    variations = [v.strip() for v in variations if v.strip()]
+    
+    # Step 2: Retrieve for each variation
+    all_results = []
+    for variant in variations:
+        embedding = get_embedding(variant)
+        results = vector_db.search(embedding, top_k=top_k_per_query)
+        all_results.extend(results)
+    
+    # Step 3: Deduplicate and merge
+    seen_ids = set()
+    unique_results = []
+    for result in all_results:
+        if result.id not in seen_ids:
+            seen_ids.add(result.id)
+            unique_results.append(result)
+    
+    # Sort by score and take top_k
+    unique_results.sort(key=lambda x: x.score, reverse=True)
+    return unique_results[:top_k_per_query * num_queries]
+
+# Example
+query = "Python decorators"
+# Variations might be:
+# - "What are Python decorators?"
+# - "How to use decorators in Python?"
+# - "Python @ decorator syntax explained"
+</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" id="retrieval">
+            <h2>Stage 2: Retrieval Strategies</h2>
+
+            <div class="rule-card">
+                <h3>Hybrid Search (Recommended)</h3>
+                <span class="badge badge-high">BEST PRACTICE</span>
+                <p>Combine vector search (semantic) with keyword search (lexical) for better accuracy.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Hybrid Search Implementation</h4>
+                    <pre><code class="language-python">def hybrid_search(query: str, vector_db, top_k=10, alpha=0.5):
+    """
+    Hybrid search: Combine vector (semantic) + keyword (BM25) results.
+    
+    Args:
+        alpha: Weight for vector search (0=pure keyword, 1=pure vector, 0.5=balanced)
+    """
+    # Vector search (semantic similarity)
+    query_embedding = get_embedding(query)
+    vector_results = vector_db.search(query_embedding, top_k=top_k * 2)
+    
+    # Keyword search (BM25 full-text search)
+    keyword_results = vector_db.keyword_search(query, top_k=top_k * 2)
+    
+    # Normalize scores to [0, 1]
+    def normalize_scores(results):
+        if not results:
+            return []
+        max_score = max(r.score for r in results)
+        min_score = min(r.score for r in results)
+        range_score = max_score - min_score or 1
+        for r in results:
+            r.normalized_score = (r.score - min_score) / range_score
+        return results
+    
+    vector_results = normalize_scores(vector_results)
+    keyword_results = normalize_scores(keyword_results)
+    
+    # Merge with weighted scores
+    merged = {}
+    for r in vector_results:
+        merged[r.id] = {"doc": r, "score": alpha * r.normalized_score}
+    
+    for r in keyword_results:
+        if r.id in merged:
+            merged[r.id]["score"] += (1 - alpha) * r.normalized_score
+        else:
+            merged[r.id] = {"doc": r, "score": (1 - alpha) * r.normalized_score}
+    
+    # Sort by combined score
+    final_results = sorted(merged.values(), key=lambda x: x["score"], reverse=True)
+    return [r["doc"] for r in final_results[:top_k]]
+
+# Usage
+# alpha=0.5: Balanced (recommended for most cases)
+# alpha=0.7: More semantic (vague queries)
+# alpha=0.3: More keyword (specific terms, code snippets)
+results = hybrid_search("Python decorator tutorial", vector_db, top_k=5, alpha=0.5)
+</code></pre>
+                </div>
+
+                <h4>When to Use</h4>
+                <ul class="feature-list">
+                    <li>✅ Users search with specific terms/names</li>
+                    <li>✅ Documents contain technical jargon</li>
+                    <li>✅ Want best of both semantic + keyword</li>
+                </ul>
+            </div>
+
+            <div class="rule-card">
+                <h3>Metadata Filtering</h3>
+                <span class="badge badge-high">HIGH PRIORITY</span>
+                <p>Filter results by metadata (date, author, category, etc.) for precision.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Filtered Retrieval</h4>
+                    <pre><code class="language-python">def filtered_retrieval(query: str, vector_db, filters: dict, top_k=5):
+    """Retrieve with metadata filters."""
+    query_embedding = get_embedding(query)
+    
+    results = vector_db.search(
+        vector=query_embedding,
+        top_k=top_k,
+        filter=filters
+    )
+    
+    return results
+
+# Example filters
+results = filtered_retrieval(
+    query="Kubernetes deployment",
+    vector_db=db,
+    filters={
+        "category": {"$eq": "devops"},
+        "year": {"$gte": 2023},
+        "author": {"$in": ["John", "Jane"]}
+    },
+    top_k=5
+)
+</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" id="reranking">
+            <h2>Stage 3: Reranking</h2>
+
+            <div class="rule-card">
+                <h3>Cross-Encoder Reranking</h3>
+                <span class="badge badge-high">ACCURACY BOOST</span>
+                <p>Use cross-encoder model to rerank top results for higher accuracy.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Cross-Encoder Implementation</h4>
+                    <pre><code class="language-python">from sentence_transformers import CrossEncoder
+
+def rerank_with_cross_encoder(query: str, documents: list, top_k=5):
+    """
+    Rerank documents with cross-encoder.
+    
+    Cost: ~50ms per document pair (query, doc)
+    Accuracy: Significantly better than vector similarity alone
+    """
+    # Load cross-encoder model (one-time)
+    model = CrossEncoder('cross-encoder/ms-marco-MiniLM-L-6-v2')
+    
+    # Create pairs: [(query, doc1), (query, doc2), ...]
+    pairs = [(query, doc.content) for doc in documents]
+    
+    # Get relevance scores
+    scores = model.predict(pairs)
+    
+    # Rerank by cross-encoder scores
+    ranked_docs = sorted(
+        zip(documents, scores),
+        key=lambda x: x[1],
+        reverse=True
+    )
+    
+    return [doc for doc, score in ranked_docs[:top_k]]
+
+# Complete pipeline
+def retrieve_and_rerank(query: str, vector_db, top_k=5, rerank_top_n=20):
+    """
+    1. Retrieve top_n candidates with vector search (fast)
+    2. Rerank top_n with cross-encoder (accurate)
+    3. Return top_k
+    """
+    # Step 1: Initial retrieval (over-fetch)
+    candidates = vector_db.search(query, top_k=rerank_top_n)
+    
+    # Step 2: Rerank with cross-encoder
+    reranked = rerank_with_cross_encoder(query, candidates, top_k=top_k)
+    
+    return reranked
+
+# Example: Retrieve 20, rerank, return top 5
+results = retrieve_and_rerank("Kubernetes ingress", vector_db, top_k=5, rerank_top_n=20)
+</code></pre>
+                </div>
+
+                <h4>Performance Impact</h4>
+                <ul class="feature-list">
+                    <li>✅ Accuracy improvement: 10-20%</li>
+                    <li>⚠️ Latency increase: +50-100ms</li>
+                    <li>💡 Strategy: Retrieve 20, rerank to 5</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="glass-card" id="context">
+            <h2>Stage 4: Context Assembly</h2>
+
+            <div class="rule-card">
+                <h3>Contextual Compression</h3>
+                <span class="badge badge-medium">TOKEN OPTIMIZATION</span>
+                <p>Extract only relevant parts of retrieved documents to fit more context.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Compression Implementation</h4>
+                    <pre><code class="language-python">def compress_context(query: str, documents: list, llm, max_tokens=2000):
+    """
+    Extract only relevant parts of documents using LLM.
+    """
+    compressed_docs = []
+    
+    for doc in documents:
+        compression_prompt = f"""Given this query: "{query}"
+
+Extract ONLY the parts of this document that are relevant to answering the query.
+Preserve the exact text, but remove irrelevant sections.
+
+Document:
+{doc.content}
+
+Relevant parts:"""
+
+        compressed = llm.generate(
+            compression_prompt,
+            max_tokens=max_tokens // len(documents)
+        )
+        
+        if compressed.strip():
+            compressed_docs.append({
+                "content": compressed,
+                "source": doc.metadata.get("source", "unknown")
+            })
+    
+    return compressed_docs
+
+# Usage
+documents = retrieve_and_rerank("Python decorators", vector_db, top_k=5)
+compressed = compress_context("Python decorators", documents, llm)
+# Compressed docs fit 2-3x more context in same token budget!
+</code></pre>
+                </div>
+            </div>
+
+            <div class="rule-card">
+                <h3>Context Ordering</h3>
+                <span class="badge badge-medium">ACCURACY BOOST</span>
+                <p>Order matters! Place most relevant content at start and end of context.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Optimal Ordering</h4>
+                    <pre><code class="language-python">def order_context(documents: list):
+    """
+    Order documents for optimal LLM performance.
+    
+    Research shows LLMs pay most attention to:
+    1. Start of context (primacy effect)
+    2. End of context (recency effect)
+    3. Middle is often ignored ("lost in the middle")
+    """
+    if len(documents) <= 2:
+        return documents  # No reordering needed
+    
+    # Put most relevant at start and end
+    ordered = []
+    ordered.append(documents[0])    # Most relevant (start)
+    
+    # Middle documents (less relevant)
+    for doc in documents[2:-1]:
+        ordered.append(doc)
+    
+    ordered.append(documents[1])    # Second most relevant (end)
+    
+    return ordered
+
+# Usage
+documents = retrieve_and_rerank("Python decorators", vector_db, top_k=5)
+ordered_docs = order_context(documents)
+# [most_relevant, middle docs..., second_most_relevant]
+</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" id="production">
+            <h2>Production Patterns</h2>
+
+            <div class="rule-card">
+                <h3>Caching Strategy</h3>
+                <span class="badge badge-high">PERFORMANCE</span>
+                <p>Cache at multiple levels for 10x+ speedup on repeated queries.</p>
+                
+                <div class="example-section">
+                    <h4>✅ Multi-Level Cache</h4>
+                    <pre><code class="language-python">import hashlib
+from functools import lru_cache
+
+class RAGCache:
+    """Three-level cache for RAG pipeline."""
+    
+    def __init__(self, redis_client):
+        self.redis = redis_client
+    
+    def cache_key(self, query: str, filters: dict = None) -> str:
+        """Generate cache key from query + filters."""
+        key_data = f"{query}:{str(filters)}"
+        return hashlib.md5(key_data.encode()).hexdigest()
+    
+    def get_retrieval_results(self, query: str, filters: dict = None):
+        """Cache retrieval results (TTL: 1 hour)."""
+        key = f"retrieval:{self.cache_key(query, filters)}"
+        cached = self.redis.get(key)
+        if cached:
+            return json.loads(cached)
+        return None
+    
+    def set_retrieval_results(self, query: str, results: list, filters: dict = None):
+        """Store retrieval results."""
+        key = f"retrieval:{self.cache_key(query, filters)}"
+        self.redis.setex(key, 3600, json.dumps(results))  # 1 hour TTL
+    
+    def get_llm_response(self, query: str, context: str):
+        """Cache LLM responses (TTL: 24 hours)."""
+        key = f"llm:{self.cache_key(query + context)}"
+        return self.redis.get(key)
+    
+    def set_llm_response(self, query: str, context: str, response: str):
+        """Store LLM response."""
+        key = f"llm:{self.cache_key(query + context)}"
+        self.redis.setex(key, 86400, response)  # 24 hours TTL
+
+# Usage
+cache = RAGCache(redis_client)
+
+def rag_pipeline_with_cache(query: str, vector_db, llm):
+    # Check cache
+    cached_results = cache.get_retrieval_results(query)
+    if cached_results:
+        print("Cache hit: retrieval")
+        documents = cached_results
+    else:
+        documents = retrieve_and_rerank(query, vector_db)
+        cache.set_retrieval_results(query, documents)
+    
+    context = assemble_context(documents)
+    
+    cached_response = cache.get_llm_response(query, context)
+    if cached_response:
+        print("Cache hit: LLM response")
+        return cached_response
+    
+    response = llm.generate(query, context)
+    cache.set_llm_response(query, context, response)
+    
+    return response
+</code></pre>
+                </div>
+            </div>
+
+            <div class="rule-card">
+                <h3>Monitoring & Metrics</h3>
+                <span class="badge badge-high">OBSERVABILITY</span>
+                <p>Track key metrics to optimize pipeline performance.</p>
+                
+                <h4>Essential Metrics</h4>
+                <ul class="feature-list">
+                    <li><strong>Retrieval Latency:</strong> p50, p95, p99 (target: < 100ms)</li>
+                    <li><strong>Reranking Latency:</strong> p50, p95 (target: < 200ms)</li>
+                    <li><strong>LLM Latency:</strong> p50, p95 (target: < 2s)</li>
+                    <li><strong>Total Pipeline Latency:</strong> End-to-end (target: < 3s)</li>
+                    <li><strong>Cache Hit Rate:</strong> Retrieval + LLM (target: > 60%)</li>
+                    <li><strong>Retrieval Relevance:</strong> Average similarity score</li>
+                    <li><strong>Error Rate:</strong> Per stage (target: < 0.1%)</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="glass-card" id="related">
+            <h2>Related Knowledge Files</h2>
+            <div class="related-grid">
+                <a href="embeddings-strategy.html" class="related-card">
+                    <span class="related-icon">🧠</span>
+                    <h3>Embeddings Strategy</h3>
+                    <p>Generate embeddings for retrieval</p>
+                </a>
+                <a href="vector-database-guide.html" class="related-card">
+                    <span class="related-icon">🗄️</span>
+                    <h3>Vector Database Guide</h3>
+                    <p>Store and search embeddings efficiently</p>
+                </a>
+                <a href="domain-rag-integration.html" class="related-card">
+                    <span class="related-icon">🧩</span>
+                    <h3>Domain RAG Integration</h3>
+                    <p>Integrate RAG with domain knowledge</p>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="../../assets/js/main.js"></script>
+</body>
+</html>

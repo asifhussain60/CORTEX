@@ -1,0 +1,93 @@
+# Coverage.py configuration for CORTEX 4.0
+# Ensures meaningful coverage metrics focused on production code
+
+[run]
+# Source directories to measure
+source = src/
+
+# Omit test files and generated code
+omit =
+    */tests/*
+    */test_*.py
+    */__pycache__/*
+    */conftest.py
+    */setup.py
+    */venv/*
+    */.venv/*
+    */env/*
+    */dist/*
+    */build/*
+    */migrations/*
+    */__init__.py
+    # Problematic files causing slow parsing (syntax/encoding issues)
+    */operations/modules/dashboard/learning_dashboard_launcher.py
+    */operations/modules/deploy/deploy_gate_validator.py
+    */operations/modules/implants_commands.py
+    */orchestrators/story_enhancement/modules/dalle_prompt_generator.py
+    */policy/policy_test_generator.py
+    */tier0/copilot_instructions_generator.py
+    */utils/doc_sync_hooks.py
+    */workflows/tdd_workflow_orchestrator.py
+
+# Branch coverage enabled
+branch = True
+
+# Parallel processing
+parallel = True
+
+[report]
+# Precision for coverage percentages
+precision = 2
+
+# Show missing lines in terminal report
+show_missing = True
+
+# Skip covered files in terminal report for brevity
+skip_covered = True
+
+# Skip empty files
+skip_empty = True
+
+# Sort by coverage percentage (ascending)
+sort = Cover
+
+# Exclude lines from coverage
+exclude_lines =
+    # Standard exclusions
+    pragma: no cover
+    def __repr__
+    def __str__
+    raise AssertionError
+    raise NotImplementedError
+    if __name__ == .__main__.:
+    if TYPE_CHECKING:
+    @abstractmethod
+    @abc.abstractmethod
+    # Debug code
+    def debug
+    if self\.debug
+    # Type checking only imports
+    if typing\.TYPE_CHECKING:
+    # Defensive programming
+    pass
+    \.\.\.
+
+[html]
+# Output directory for HTML report
+directory = htmlcov
+
+# Title for HTML report
+title = CORTEX 4.0 Coverage Report
+
+[json]
+# Output file for JSON report (for CI/CD)
+output = coverage.json
+
+# Pretty-print JSON
+pretty_print = True
+
+[paths]
+# Map source paths for parallel runs
+source =
+    src/
+    */cortex/src/

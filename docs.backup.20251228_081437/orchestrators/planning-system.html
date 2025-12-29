@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX Planning System - Autonomous feature planning with DoR/DoD compliance and TDD integration">
+    <title>Planning System - CORTEX</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+    <!-- Skip Link -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- Breadcrumb Navigation (Top) -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">→</span>
+        <a href="index.html">Orchestrators</a>
+        <span class="breadcrumb-separator">→</span>
+        <span class="breadcrumb-current">Planning System</span>
+    </nav>
+    
+    <!-- Logo Header (Below Breadcrumb) -->
+    <div class="logo-header">
+        <a href="../index.html">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
+        </a>
+    </div>
+    
+    <!-- Main Content -->
+    <main class="container" id="main-content">
+        <!-- Main Content Card -->
+        <div class="glass-card">
+            <h1>Planning System</h1>
+            
+            <!-- Intro Description -->
+            <p>
+                Imagine planning a complex feature in minutes instead of hours, with every acceptance 
+                criterion, test case, and implementation step automatically mapped out for you. The Planning 
+                System transforms vague feature requests into crystal-clear, executable plans—validating 
+                your requirements are complete before you write a single line of code, and automatically 
+                detecting whether your feature needs an incremental multi-phase approach or a quick skeleton 
+                implementation. It's like having an experienced architect review your plan before you commit 
+                to building.
+            </p>
+            
+            <!-- Key Metrics -->
+            <div class="metrics-grid metrics-grid-4">
+                <div class="metric-card glass-card">
+                    <div class="metric-value">5</div>
+                    <div class="metric-label">Phases</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">100%</div>
+                    <div class="metric-label">TDD Integration</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">AUTO</div>
+                    <div class="metric-label">Complexity Detection</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">40%</div>
+                    <div class="metric-label">Time Saved</div>
+                </div>
+            </div>
+            
+            <!-- Command -->
+            <div class="command-card">
+                <code class="command-syntax">plan [feature name]</code>
+                <p class="command-description">
+                    Generates a complete implementation plan with phases, acceptance criteria, and test cases.
+                </p>
+                <div class="command-example">
+                    plan user authentication with OAuth2
+                </div>
+            </div>
+        </div>
+        
+        <!-- 5 Phases -->
+        <section class="section-workflow">
+            <div class="glass-card">
+                <h2><span>📋</span> The 5-Phase Workflow</h2>
+                
+                <div class="workflow-phases">
+                    <div class="phase-card">
+                        <span class="phase-number">1</span>
+                        <span class="phase-icon">📋</span>
+                        <div class="phase-title">Requirements Analysis</div>
+                        <p class="phase-description">Parse feature request, identify stakeholders, extract acceptance criteria</p>
+                    </div>
+                    <div class="phase-card">
+                        <span class="phase-number">2</span>
+                        <span class="phase-icon">🔍</span>
+                        <div class="phase-title">Complexity Assessment</div>
+                        <p class="phase-description">AUTO: HIGH→incremental, MEDIUM→conditional, LOW→skeleton</p>
+                    </div>
+                    <div class="phase-card">
+                        <span class="phase-number">3</span>
+                        <span class="phase-icon">🏗️</span>
+                        <div class="phase-title">Architecture Design</div>
+                        <p class="phase-description">Component breakdown, dependencies, integration points</p>
+                    </div>
+                    <div class="phase-card">
+                        <span class="phase-number">4</span>
+                        <span class="phase-icon">✅</span>
+                        <div class="phase-title">TDD Test Planning</div>
+                        <p class="phase-description">Test cases per component, coverage targets, RED tests first</p>
+                    </div>
+                    <div class="phase-card">
+                        <span class="phase-number">5</span>
+                        <span class="phase-icon">📄</span>
+                        <div class="phase-title">Plan Generation</div>
+                        <p class="phase-description">YAML/Markdown output with all phases, DoR/DoD gates</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- DoR/DoD Gates -->
+        <section class="section-architecture">
+            <div class="glass-card">
+                <h2><span></span>✅</span> DoR/DoD Compliance</h2>
+                
+                <div class="card-grid-2">
+                    <div class="tier-card tier-1">
+                        <div class="tier-header">
+                            <span class="tier-icon">📥</span>
+                            <div>
+                                <div class="tier-title">Definition of Ready (DoR)</div>
+                                <div class="tier-subtitle">Before planning begins</div>
+                            </div>
+                        </div>
+                        <ul class="feature-list">
+                            <li>Feature description provided</li>
+                            <li>Stakeholders identified</li>
+                            <li>Acceptance criteria clear</li>
+                            <li>Dependencies documented</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tier-card tier-3">
+                        <div class="tier-header">
+                            <span class="tier-icon">📤</span>
+                            <div>
+                                <div class="tier-title">Definition of Done (DoD)</div>
+                                <div class="tier-subtitle">After plan completion</div>
+                            </div>
+                        </div>
+                        <ul class="feature-list">
+                            <li>All phases documented</li>
+                            <li>Test cases generated</li>
+                            <li>Architecture validated</li>
+                            <li>Plan exportable (YAML/MD)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Complexity Detection -->
+        <section class="section-configuration">
+            <div class="glass-card">
+                <h2><span>🎚️</span> Auto-Complexity Detection</h2>
+                <p>
+                    The Planning System automatically assesses feature complexity and adjusts the planning approach:
+                </p>
+                
+                <table class="glass-table">
+                    <thead>
+                        <tr>
+                            <th>Complexity</th>
+                            <th>Detection Criteria</th>
+                            <th>Planning Approach</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="badge badge-danger">HIGH</span></td>
+                            <td>Multiple components, external integrations, >5 acceptance criteria</td>
+                            <td>Incremental multi-phase with gates</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-warning">MEDIUM</span></td>
+                            <td>2-3 components, internal dependencies, 3-5 criteria</td>
+                            <td>Conditional phases, focused tests</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-success">LOW</span></td>
+                            <td>Single component, no dependencies, 1-2 criteria</td>
+                            <td>Skeleton implementation, basic tests</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        
+        <!-- Example Output -->
+        <section class="section-usage">
+            <div class="glass-card">
+                <h2><span>📊</span> Example Plan Output</h2>
+                
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-language">YAML</span>
+                        <button class="copy-btn">Copy</button>
+                    </div>
+                    <pre><code>feature:
+  name: "User Authentication with OAuth2"
+  complexity: HIGH
+  phases: 5
+
+phases:
+  - id: 1
+    name: "OAuth2 Provider Setup"
+    tests:
+      - "test_oauth_config_loads"
+      - "test_provider_url_validation"
+    acceptance:
+      - "Provider credentials configured"
+      - "Redirect URLs registered"
+      
+  - id: 2
+    name: "Token Exchange Flow"
+    tests:
+      - "test_authorization_code_exchange"
+      - "test_token_refresh"
+    acceptance:
+      - "Access token obtained"
+      - "Refresh token stored securely"
+
+dor_validated: true
+dod_criteria: 8
+tdd_coverage: 100%</code></pre>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Related -->
+        <section class="section-integration">
+            <div class="glass-card">
+                <h2><span>🔗</span> Related Features</h2>
+                <div class="feature-grid feature-grid-3">
+                    <a href="tdd-orchestrator.html" class="glass-card">
+                        <span class="feature-icon">✅</span>
+                        <h3 class="feature-title">TDD Mastery</h3>
+                        <p class="text-secondary">Executes the test-first workflow</p>
+                    </a>
+                    <a href="execution-orchestrator.html" class="glass-card">
+                        <span class="feature-icon">⚡</span>
+                        <h3 class="feature-title">Execution</h3>
+                        <p class="text-secondary">Runs plans autonomously</p>
+                    </a>
+                    <a href="ado-operations.html" class="glass-card">
+                        <span class="feature-icon">📋</span>
+                        <h3 class="feature-title">ADO Operations</h3>
+                        <p class="text-secondary">Azure DevOps formatted plans</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+<button class="scroll-to-top" aria-label="Scroll to top">↑</button>
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>

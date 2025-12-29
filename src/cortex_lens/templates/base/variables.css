@@ -1,0 +1,346 @@
+/**
+ * CORTEX Lens v4.0 - CSS Variables
+ * Typography Scale: 125% (Enhanced readability)
+ * 
+ * Generated from admin dashboard extraction
+ * Date: 2025-12-14
+ * Phase: 1 (Foundation)
+ */
+
+:root {
+  /* ========================================================================
+     TYPOGRAPHY - 125% Scale Factor
+     Base: 16px → Lens: 20px
+     ======================================================================== */
+  
+  --font-size-xs: 15px;      /* 12px × 1.25 */
+  --font-size-sm: 17.5px;    /* 14px × 1.25 */
+  --font-size-base: 20px;    /* 16px × 1.25 */
+  --font-size-md: 22.5px;    /* 18px × 1.25 */
+  --font-size-lg: 25px;      /* 20px × 1.25 */
+  --font-size-xl: 30px;      /* 24px × 1.25 */
+  --font-size-2xl: 37.5px;   /* 30px × 1.25 */
+  --font-size-3xl: 45px;     /* 36px × 1.25 */
+  --font-size-4xl: 60px;     /* 48px × 1.25 */
+  --font-size-5xl: 75px;     /* 60px × 1.25 */
+  
+  /* Font families */
+  --font-family-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-family-mono: "Fira Code", "Cascadia Code", Consolas, Monaco, "Courier New", monospace;
+  --font-family-display: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  
+  /* Font weights */
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-black: 900;
+  
+  /* Line heights - Scaled for 125% */
+  --line-height-tight: 1.25;
+  --line-height-snug: 1.375;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+  --line-height-loose: 2;
+  
+  /* Letter spacing */
+  --letter-spacing-tight: -0.025em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.025em;
+  --letter-spacing-wider: 0.05em;
+  --letter-spacing-widest: 0.1em;
+  
+  
+  /* ========================================================================
+     COLORS - Dark Theme with Glassmorphism
+     ======================================================================== */
+  
+  /* Primary colors */
+  --color-primary: #3b82f6;
+  --color-primary-light: #60a5fa;
+  --color-primary-dark: #2563eb;
+  --color-primary-darker: #1e40af;
+  
+  /* Secondary colors */
+  --color-secondary: #8b5cf6;
+  --color-secondary-light: #a78bfa;
+  --color-secondary-dark: #7c3aed;
+  
+  /* Accent colors */
+  --color-accent: #10b981;
+  --color-accent-light: #34d399;
+  --color-accent-dark: #059669;
+  
+  /* Semantic colors */
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: #3b82f6;
+  
+  /* Neutral colors - Dark theme base */
+  --color-bg-primary: #0a0e1a;
+  --color-bg-secondary: #111827;
+  --color-bg-tertiary: #1f2937;
+  --color-bg-quaternary: #374151;
+  
+  /* Text colors */
+  --color-text-primary: #f9fafb;
+  --color-text-secondary: #d1d5db;
+  --color-text-tertiary: #9ca3af;
+  --color-text-quaternary: #6b7280;
+  
+  /* Border colors */
+  --color-border-primary: rgba(255, 255, 255, 0.1);
+  --color-border-secondary: rgba(255, 255, 255, 0.05);
+  --color-border-accent: rgba(59, 130, 246, 0.3);
+  
+  
+  /* ========================================================================
+     GLASSMORPHISM - Backdrop blur and transparency
+     ======================================================================== */
+  
+  /* Backdrop filters */
+  --blur-none: blur(0);
+  --blur-light: blur(4px);
+  --blur-medium: blur(8px);
+  --blur-heavy: blur(12px);
+  --blur-extreme: blur(20px);
+  
+  /* Glass backgrounds */
+  --glass-bg-light: rgba(255, 255, 255, 0.05);
+  --glass-bg-medium: rgba(255, 255, 255, 0.1);
+  --glass-bg-heavy: rgba(255, 255, 255, 0.15);
+  
+  /* Glass borders */
+  --glass-border-light: rgba(255, 255, 255, 0.1);
+  --glass-border-medium: rgba(255, 255, 255, 0.18);
+  --glass-border-heavy: rgba(255, 255, 255, 0.3);
+  
+  /* Glass opacity levels */
+  --opacity-10: 0.1;
+  --opacity-20: 0.2;
+  --opacity-30: 0.3;
+  --opacity-40: 0.4;
+  --opacity-50: 0.5;
+  --opacity-60: 0.6;
+  --opacity-70: 0.7;
+  --opacity-80: 0.8;
+  --opacity-90: 0.9;
+  
+  
+  /* ========================================================================
+     SPACING - 8px base scale
+     ======================================================================== */
+  
+  --spacing-0: 0;
+  --spacing-1: 0.25rem;   /* 4px */
+  --spacing-2: 0.5rem;    /* 8px */
+  --spacing-3: 0.75rem;   /* 12px */
+  --spacing-4: 1rem;      /* 16px */
+  --spacing-5: 1.25rem;   /* 20px */
+  --spacing-6: 1.5rem;    /* 24px */
+  --spacing-8: 2rem;      /* 32px */
+  --spacing-10: 2.5rem;   /* 40px */
+  --spacing-12: 3rem;     /* 48px */
+  --spacing-16: 4rem;     /* 64px */
+  --spacing-20: 5rem;     /* 80px */
+  --spacing-24: 6rem;     /* 96px */
+  --spacing-32: 8rem;     /* 128px */
+  
+  
+  /* ========================================================================
+     SHADOWS - Layered depth
+     ======================================================================== */
+  
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+  
+  /* Glow effects */
+  --glow-primary: 0 0 20px rgba(59, 130, 246, 0.5);
+  --glow-secondary: 0 0 20px rgba(139, 92, 246, 0.5);
+  --glow-accent: 0 0 20px rgba(16, 185, 129, 0.5);
+  
+  
+  /* ========================================================================
+     BORDERS & RADIUS
+     ======================================================================== */
+  
+  --border-width-thin: 1px;
+  --border-width-medium: 2px;
+  --border-width-thick: 4px;
+  
+  --radius-none: 0;
+  --radius-xs: 0.125rem;   /* 2px */
+  --radius-sm: 0.25rem;    /* 4px */
+  --radius-md: 0.375rem;   /* 6px */
+  --radius-lg: 0.5rem;     /* 8px */
+  --radius-xl: 0.75rem;    /* 12px */
+  --radius-2xl: 1rem;      /* 16px */
+  --radius-3xl: 1.5rem;    /* 24px */
+  --radius-full: 9999px;
+  
+  
+  /* ========================================================================
+     Z-INDEX - Layering system
+     ======================================================================== */
+  
+  --z-base: 0;
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-tooltip: 1070;
+  --z-notification: 1080;
+  
+  
+  /* ========================================================================
+     TRANSITIONS & ANIMATIONS
+     ======================================================================== */
+  
+  /* Durations */
+  --duration-instant: 50ms;
+  --duration-fast: 100ms;
+  --duration-normal: 200ms;
+  --duration-slow: 300ms;
+  --duration-slower: 500ms;
+  --duration-slowest: 1000ms;
+  
+  /* Easing functions */
+  --easing-linear: linear;
+  --easing-ease: ease;
+  --easing-ease-in: ease-in;
+  --easing-ease-out: ease-out;
+  --easing-ease-in-out: ease-in-out;
+  --easing-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --easing-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Common transitions */
+  --transition-all: all var(--duration-normal) var(--easing-ease-in-out);
+  --transition-colors: color var(--duration-normal) var(--easing-ease-in-out),
+                       background-color var(--duration-normal) var(--easing-ease-in-out),
+                       border-color var(--duration-normal) var(--easing-ease-in-out);
+  --transition-transform: transform var(--duration-normal) var(--easing-smooth);
+  --transition-opacity: opacity var(--duration-normal) var(--easing-ease-in-out);
+  
+  
+  /* ========================================================================
+     BREAKPOINTS - Responsive design
+     ======================================================================== */
+  
+  --breakpoint-xs: 0;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+  
+  
+  /* ========================================================================
+     LAYOUT - Container widths
+     ======================================================================== */
+  
+  --container-xs: 20rem;    /* 320px */
+  --container-sm: 24rem;    /* 384px */
+  --container-md: 28rem;    /* 448px */
+  --container-lg: 32rem;    /* 512px */
+  --container-xl: 36rem;    /* 576px */
+  --container-2xl: 42rem;   /* 672px */
+  --container-3xl: 48rem;   /* 768px */
+  --container-4xl: 56rem;   /* 896px */
+  --container-5xl: 64rem;   /* 1024px */
+  --container-6xl: 72rem;   /* 1152px */
+  --container-7xl: 80rem;   /* 1280px */
+  --container-full: 100%;
+}
+
+
+/* ========================================================================
+   UTILITY CLASSES - Typography
+   ======================================================================== */
+
+.text-xs { font-size: var(--font-size-xs); }
+.text-sm { font-size: var(--font-size-sm); }
+.text-base { font-size: var(--font-size-base); }
+.text-md { font-size: var(--font-size-md); }
+.text-lg { font-size: var(--font-size-lg); }
+.text-xl { font-size: var(--font-size-xl); }
+.text-2xl { font-size: var(--font-size-2xl); }
+.text-3xl { font-size: var(--font-size-3xl); }
+.text-4xl { font-size: var(--font-size-4xl); }
+.text-5xl { font-size: var(--font-size-5xl); }
+
+.font-light { font-weight: var(--font-weight-light); }
+.font-normal { font-weight: var(--font-weight-normal); }
+.font-medium { font-weight: var(--font-weight-medium); }
+.font-semibold { font-weight: var(--font-weight-semibold); }
+.font-bold { font-weight: var(--font-weight-bold); }
+.font-black { font-weight: var(--font-weight-black); }
+
+.leading-tight { line-height: var(--line-height-tight); }
+.leading-snug { line-height: var(--line-height-snug); }
+.leading-normal { line-height: var(--line-height-normal); }
+.leading-relaxed { line-height: var(--line-height-relaxed); }
+.leading-loose { line-height: var(--line-height-loose); }
+
+
+/* ========================================================================
+   GLASSMORPHISM CLASSES
+   ======================================================================== */
+
+.glass-light {
+  background: var(--glass-bg-light);
+  backdrop-filter: var(--blur-light);
+  border: var(--border-width-thin) solid var(--glass-border-light);
+}
+
+.glass-medium {
+  background: var(--glass-bg-medium);
+  backdrop-filter: var(--blur-medium);
+  border: var(--border-width-thin) solid var(--glass-border-medium);
+}
+
+.glass-heavy {
+  background: var(--glass-bg-heavy);
+  backdrop-filter: var(--blur-heavy);
+  border: var(--border-width-thin) solid var(--glass-border-heavy);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.glass-sidebar {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-modal {
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(20px);
+}
+
+.glass-button {
+  background: rgba(59, 130, 246, 0.1);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  transition: var(--transition-all);
+}
+
+.glass-button:hover {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.5);
+  box-shadow: var(--glow-primary);
+}

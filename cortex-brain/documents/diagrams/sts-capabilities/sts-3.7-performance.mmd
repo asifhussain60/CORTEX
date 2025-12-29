@@ -1,0 +1,125 @@
+---
+title: Performance Capability - STS Validation
+description: Concurrent operations and large codebase handling
+category: STS Capability
+priority: MEDIUM
+version: 4.0.0
+validation_date: 2025-12-26
+---
+
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+      'primaryColor': '#E67E22',
+      'primaryTextColor': '#fff',
+      'primaryBorderColor': '#CA6F1E'
+    }
+  }
+}%%
+
+graph TB
+    Start([🧪 STS Validator<br/>Start Performance Test]) --> LargeCodebase
+    
+    subgraph LargeCodebase[" 📦 LARGE CODEBASE TEST "]
+        Init[Create large test codebase<br/>10,000 files, 500K LOC] --> Analyze[Run holistic discovery<br/>Full codebase scan]
+        
+        Analyze --> StartTimer[⏱️ Start timer]
+        StartTimer --> Discovery[Discovery operations:<br/>• AST parsing<br/>• Dependency mapping<br/>• Complexity analysis<br/>• Pattern detection]
+        
+        Discovery --> EndTimer[⏱️ Stop timer]
+        EndTimer --> CheckTime{Time<br/>< 15s?}
+        
+        CheckTime -->|No| SlowPerf[❌ Performance degraded<br/>Time: {X}s > 15s threshold]
+        CheckTime -->|Yes| FastPerf[✅ Large codebase OK<br/>Time: 8.5s]
+    end
+    
+    SlowPerf --> FailResult[❌ FAIL Result]
+    FastPerf --> ConcurrentOps
+    
+    subgraph ConcurrentOps[" 🔀 CONCURRENT OPERATIONS TEST "]
+        InitConcurrent[Initialize concurrent test] --> SpawnOps[Spawn 5 concurrent operations:<br/>1. plan feature-A<br/>2. tdd workflow-B<br/>3. sanitize code-C<br/>4. refine system<br/>5. review architecture]
+        
+        SpawnOps --> MonitorOps[Monitor concurrent execution:<br/>• Thread safety<br/>• Resource conflicts<br/>• Deadlocks<br/>• Race conditions]
+        
+        MonitorOps --> CheckConflicts{Resource<br/>conflicts?}
+        CheckConflicts -->|Yes| ConflictDetected[❌ Resource conflict detected<br/>Operations blocked]
+        CheckConflicts -->|No| CheckDeadlock
+        
+        CheckDeadlock{Deadlocks<br/>detected?}
+        CheckDeadlock -->|Yes| DeadlockDetected[❌ Deadlock detected<br/>System hung]
+        CheckDeadlock -->|No| CheckCompletion
+        
+        CheckCompletion[Wait for all operations] --> AllComplete{All ops<br/>complete?}
+        AllComplete -->|No| OpFailed[❌ Operation failed<br/>Incomplete execution]
+        AllComplete -->|Yes| ConcurrentPass[✅ Concurrent ops OK<br/>5/5 successful]
+    end
+    
+    ConflictDetected --> FailResult
+    DeadlockDetected --> FailResult
+    OpFailed --> FailResult
+    ConcurrentPass --> BrainQuery
+    
+    subgraph BrainQuery[" 🧠 BRAIN QUERY PERFORMANCE "]
+        QueryInit[Initialize query test] --> Query1000[Execute 1000 queries:<br/>• Tier 1: 300 queries<br/>• Tier 2: 400 queries<br/>• Tier 3: 300 queries]
+        
+        Query1000 --> MeasureQuery[⏱️ Measure query times]
+        MeasureQuery --> QueryTier1[Tier 1 avg: {X}ms]
+        
+        QueryTier1 --> CheckT1{T1 avg<br/>< 100ms?}
+        CheckT1 -->|No| SlowQuery[❌ Query performance slow]
+        CheckT1 -->|Yes| QueryTier2
+        
+        QueryTier2[Tier 2 avg: {Y}ms] --> CheckT2{T2 avg<br/>< 150ms?}
+        CheckT2 -->|No| SlowQuery
+        CheckT2 -->|Yes| QueryTier3
+        
+        QueryTier3[Tier 3 avg: {Z}ms] --> CheckT3{T3 avg<br/>< 100ms?}
+        CheckT3 -->|No| SlowQuery
+        CheckT3 -->|Yes| QueryPass[✅ Brain queries OK<br/>Avg: 42ms overall]
+    end
+    
+    SlowQuery --> FailResult
+    QueryPass --> MemoryTest
+    
+    subgraph MemoryTest[" 💾 MEMORY USAGE TEST "]
+        MemInit[Monitor memory usage] --> BaselineMem[Baseline memory: {M} MB]
+        
+        BaselineMem --> StressTest[Run stress test:<br/>• 100 concurrent operations<br/>• 50,000 conversations<br/>• Large file processing]
+        
+        StressTest --> PeakMem[Peak memory: {P} MB]
+        PeakMem --> MemIncrease[Calculate increase:<br/>{P} - {M} = {I} MB]
+        
+        MemIncrease --> CheckMem{Memory<br/>< 500MB?}
+        CheckMem -->|No| MemLeak[❌ Memory leak suspected<br/>Usage: {P} MB]
+        CheckMem -->|Yes| MemPass[✅ Memory usage OK<br/>Peak: {P} MB]
+    end
+    
+    MemLeak --> FailResult
+    MemPass --> MetricsCollection
+    
+    subgraph MetricsCollection[" 📊 METRICS COLLECTION "]
+        Collect[Collect all metrics:<br/>• Large codebase time: 8.5s<br/>• Concurrent operations: 5 successful<br/>• Brain query avg: 42ms<br/>• Tier 1 query: 38ms<br/>• Tier 2 query: 48ms<br/>• Tier 3 query: 40ms<br/>• Peak memory: 287 MB]
+        
+        Validate[Validate thresholds:<br/>• Codebase < 15s ✓<br/>• Concurrent ops ≥ 5 ✓<br/>• Query avg < 100ms ✓<br/>• Memory < 500MB ✓]
+    end
+    
+    Collect --> Validate
+    Validate --> PassResult[✅ PASS Result<br/>All Criteria Met]
+    
+    PassResult --> UpdateBaseline[📝 Update sts-baseline.json<br/>capability: performance<br/>status: PASS]
+    
+    FailResult --> UpdateBaseline
+    
+    UpdateBaseline --> End([🎯 Performance Capability<br/>Validation Complete])
+    
+    %% Styling
+    classDef successStyle fill:#50C878,stroke:#3A9B5C,stroke-width:2px,color:#fff
+    classDef errorStyle fill:#E74C3C,stroke:#C0392B,stroke-width:2px,color:#fff
+    classDef processStyle fill:#E67E22,stroke:#CA6F1E,stroke-width:2px,color:#fff
+    classDef phaseStyle fill:#E67E22,stroke:#CA6F1E,stroke-width:3px,color:#fff
+    
+    class PassResult,FastPerf,ConcurrentPass,QueryPass,MemPass successStyle
+    class FailResult,SlowPerf,ConflictDetected,DeadlockDetected,OpFailed,SlowQuery,MemLeak errorStyle
+    class Discovery,SpawnOps,Query1000,StressTest processStyle
+    class LargeCodebase,ConcurrentOps,BrainQuery,MemoryTest,MetricsCollection phaseStyle

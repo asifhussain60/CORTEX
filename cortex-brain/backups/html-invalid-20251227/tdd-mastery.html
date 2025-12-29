@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TDD Mastery - CORTEX 4.0 Features</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="icon" href="../assets/images/CORTEX-logo.png" type="image/png">
+</head>
+<body>
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">›</span>
+        <a href="index.html">Features</a>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-current">TDD Mastery</span>
+    </nav>
+
+    <!-- Feature Benefit Panel - User-Centric Value Proposition -->
+    <section class="section">
+        <div class="container">
+            <div class="feature-benefit-panel">
+                <span class="icon">✅</span>
+                <p class="description">
+                    Writing tests first sounds great in theory, but in practice it's easy to skip or do 
+                    incorrectly. TDD Mastery enforces the discipline for you—forcing tests to fail first (RED 
+                    phase), then guiding you to make them pass (GREEN phase), and finally ensuring you clean 
+                    up technical debt (REFACTOR phase). The result? Code that's 94% more reliable with 
+                    comprehensive test coverage, all without the mental overhead of remembering the RED-GREEN-REFACTOR 
+                    cycle yourself.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hero -->
+    <section class="section">
+        <div class="container">
+            <div class="glass-card">
+                <div>
+                    <div class="icon">✅</div>
+                    <div>
+                        <h1>TDD Mastery</h1>
+                        <p>
+                            Test-Driven Development with RED→GREEN→REFACTOR Enforcement
+                        </p>
+                    </div>
+                </div>
+
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value">94%</div>
+                        <div class="metric-label">Success Rate</div>
+                        <div class="metric-sublabel">TDD Workflows</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">4</div>
+                        <div class="metric-label">Coverage Layers</div>
+                        <div class="metric-sublabel">Unit to E2E</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">100%</div>
+                        <div class="metric-label">RED Phase</div>
+                        <div class="metric-sublabel">Enforcement</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value"><5min</div>
+                        <div class="metric-label">Cycle Time</div>
+                        <div class="metric-sublabel">RED→REFACTOR</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview -->
+    <section class="section">
+        <div class="container">
+            <h2>What is TDD Mastery?</h2>
+            <div class="glass-card">
+                <p>
+                    <strong>TDD Mastery</strong> is CORTEX's enforced Test-Driven Development workflow that ensures 
+                    every code change follows the <strong>RED→GREEN→REFACTOR</strong> cycle. Unlike traditional TDD that relies on developer discipline, 
+                    CORTEX automates verification at each phase—tests <em>must</em> fail before implementation, pass after implementation, 
+                    and maintain coverage during refactoring.
+                </p>
+                <p>
+                    This systematic approach prevents bugs, reduces technical debt, and creates living documentation through comprehensive test coverage.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- The TDD Cycle -->
+    <section class="section">
+        <div class="container">
+            <h2>The RED→GREEN→REFACTOR Cycle</h2>
+
+            <!-- RED Phase -->
+            <div class="glass-card">
+                <div>
+                    <div>🔴</div>
+                    <div>
+                        <h3>RED: Write Failing Test</h3>
+                        <p>Test must fail before implementation</p>
+                    </div>
+                </div>
+                <p>
+                    <strong>Purpose:</strong> Define expected behavior and prove the test can detect failures.
+                </p>
+                <div>
+                    <strong>SKULL Rule:</strong> Tests MUST fail first. If test passes without implementation, 
+                    the test is invalid and must be fixed.
+                </div>
+                <div>
+                    <div>
+                        <strong>Enforcement:</strong>
+                        <ul>
+                            <li>Run test with <code>pytest</code></li>
+                            <li>Verify failure message</li>
+                            <li>Confirm failure reason</li>
+                            <li>Block GREEN phase if passes</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong>Example:</strong>
+                        <code>def test_parse_feature():
+    # Test fails: parse_feature() 
+    # doesn't exist yet
+    assert parse_feature("x") == {...}</code>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GREEN Phase -->
+            <div class="glass-card">
+                <div>
+                    <div>🟢</div>
+                    <div>
+                        <h3>GREEN: Make Test Pass</h3>
+                        <p>Implement minimal code to pass test</p>
+                    </div>
+                </div>
+                <p>
+                    <strong>Purpose:</strong> Write simplest implementation to satisfy the test—no gold-plating.
+                </p>
+                <div>
+                    <strong>Best Practice:</strong> Focus on making the test pass. Optimization comes in REFACTOR phase.
+                </div>
+                <div>
+                    <div>
+                        <strong>Enforcement:</strong>
+                        <ul>
+                            <li>Implement feature code</li>
+                            <li>Run test with <code>pytest</code></li>
+                            <li>Verify test passes</li>
+                            <li>Confirm no other tests break</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong>Example:</strong>
+                        <code>def parse_feature(yaml_str):
+    # Minimal implementation
+    data = yaml.safe_load(yaml_str)
+    return data["feature"]</code>
+                    </div>
+                </div>
+            </div>
+
+            <!-- REFACTOR Phase -->
+            <div class="glass-card">
+                <div>
+                    <div>🔵</div>
+                    <div>
+                        <h3>REFACTOR: Improve Code Quality</h3>
+                        <p>Optimize without changing behavior</p>
+                    </div>
+                </div>
+                <p>
+                    <strong>Purpose:</strong> Clean up implementation—extract methods, remove duplication, improve readability.
+                </p>
+                <div>
+                    <strong>Safety Net:</strong> Tests must continue passing during refactoring. Any failure indicates behavioral change.
+                </div>
+                <div>
+                    <div>
+                        <strong>Enforcement:</strong>
+                        <ul>
+                            <li>Improve code structure</li>
+                            <li>Run full test suite</li>
+                            <li>Verify 100% pass rate</li>
+                            <li>Check coverage maintained</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong>Example:</strong>
+                        <code>def parse_feature(yaml_str):
+    data = _load_yaml(yaml_str)
+    return _extract_feature(data)
+    
+# Tests still pass ✅</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Coverage Layers -->
+    <section class="section">
+        <div class="container">
+            <h2>4-Layer Test Coverage</h2>
+            <div>
+                <div class="glass-card">
+                    <h3>🧪 Unit Tests</h3>
+                    <p>
+                        Test individual functions/methods in isolation. Fast execution (<100ms), high coverage (80%+ target).
+                    </p>
+                    <div>
+                        <strong>Location:</strong> <code>tests/unit/</code>
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <h3>🔗 Integration Tests</h3>
+                    <p>
+                        Test component interactions. Validates orchestrators, agents, and brain tiers working together.
+                    </p>
+                    <div>
+                        <strong>Location:</strong> <code>tests/integration/</code>
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <h3>🎯 Functional Tests</h3>
+                    <p>
+                        Test complete workflows end-to-end. Validates planning, execution, and maintenance operations.
+                    </p>
+                    <div>
+                        <strong>Location:</strong> <code>tests/functional/</code>
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <h3>🚀 E2E Tests</h3>
+                    <p>
+                        Test real-world scenarios with actual repositories. Validates CORTEX behavior in production conditions.
+                    </p>
+                    <div>
+                        <strong>Location:</strong> <code>tests/e2e/</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TDD Commands -->
+    <section class="section">
+        <div class="container">
+            <h2>TDD Workflow Commands</h2>
+            <div class="glass-card">
+                <div>
+                    <div>
+                        <h3>Starting TDD Cycle</h3>
+                        <code>
+# In Copilot Chat<br>
+start tdd for [feature]
+                        </code>
+                        <p>
+                            Initiates RED→GREEN→REFACTOR workflow with automated phase verification.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h3>Running Tests</h3>
+                        <code>
+# Run all tests<br>
+pytest tests/<br><br>
+# With coverage<br>
+pytest --cov=src tests/
+                        </code>
+                        <p>
+                            Executes test suite with coverage reporting and failure details.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h3>Verifying Phases</h3>
+                        <code>
+# In Copilot Chat<br>
+verify red phase<br>
+verify green phase<br>
+verify refactor phase
+                        </code>
+                        <p>
+                            CORTEX validates each phase completion before advancing to next.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits -->
+    <section class="section">
+        <div class="container">
+            <h2>Why TDD Mastery?</h2>
+            <div>
+                <div class="glass-card">
+                    <h3>🛡️ Bug Prevention</h3>
+                    <p>
+                        Catch bugs before they reach production. Tests define correct behavior, implementation follows.
+                    </p>
+                </div>
+
+                <div class="glass-card">
+                    <h3>📚 Living Documentation</h3>
+                    <p>
+                        Tests document expected behavior better than comments—they're always up-to-date and executable.
+                    </p>
+                </div>
+
+                <div class="glass-card">
+                    <h3>🔄 Fearless Refactoring</h3>
+                    <p>
+                        Comprehensive tests provide safety net for code improvements. Refactor confidently.
+                    </p>
+                </div>
+
+                <div class="glass-card">
+                    <h3>⚡ Faster Development</h3>
+                    <p>
+                        Catch issues immediately rather than hours debugging later. TDD saves time long-term.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="section">
+        <div class="container">
+            <a href="../index.html" class="btn btn-secondary">← Back to Home</a>
+            <p>
+                Part of the CORTEX 4.0 Documentation Suite<br>
+                Author: Asif Hussain | <a href="https://github.com/asifhussain60/CORTEX">github.com/asifhussain60/CORTEX</a>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>

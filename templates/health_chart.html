@@ -1,0 +1,25 @@
+<div class="chart-container">
+    <div class="chart-title">Health Trend Over Time</div>
+    <svg id="health-chart" width="800" height="400"></svg>
+</div>
+<script>
+// Health trend line chart
+const healthData = [/* Data injected by dashboard_utility.py */];
+const margin = {top: 20, right: 30, bottom: 40, left: 50};
+const width = 800 - margin.left - margin.right;
+const height = 400 - margin.top - margin.bottom;
+
+const svg = d3.select("#health-chart")
+    .append("g")
+    .attr("transform", `translate(${margin.left},${margin.top})`);
+
+// Scales and axis setup
+const x = d3.scaleTime().range([0, width]);
+const y = d3.scaleLinear().range([height, 0]);
+
+const line = d3.line()
+    .x(d => x(d.date))
+    .y(d => y(d.score));
+
+// Draw chart (data will be injected)
+</script>

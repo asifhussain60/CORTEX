@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Container Technology - Docker, Kubernetes, orchestration, and cloud-native deployment">
+    <meta name="keywords" content="docker, kubernetes, containers, orchestration, k8s, microservices">
+    <meta name="author" content="Asif Hussain">
+    <title>Container Technology | CORTEX Knowledge</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">→</span>
+        <a href="index.html">Knowledge Library</a>
+        <span class="breadcrumb-separator">→</span>
+        <span class="breadcrumb-current">Containers</span>
+    </nav>
+
+    <section class="hero" id="main-content">
+        <h1 class="hero-title">📦 Container Technology</h1>
+        <p class="hero-subtitle">Docker, Kubernetes, and Container Orchestration</p>
+        <div class="file-metadata">
+            <span class="metadata-item">🐳 Docker</span>
+            <span class="metadata-item">☸️ Kubernetes</span>
+            <span class="metadata-item">📅 Updated: Dec 2025</span>
+        </div>
+    </section>
+
+    <section class="section file-content">
+        <div class="container">
+            <!-- Overview -->
+            <div id="overview" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">📋 Overview</h2>
+                    <p>Containers package applications with their dependencies into isolated, portable units that run consistently across environments. Container orchestration platforms like Kubernetes automate deployment, scaling, and management of containerized applications at scale.</p>
+                    
+                    <div class="info-box info-box-primary">
+                        <strong>Container Benefits:</strong>
+                        <ul class="feature-list">
+                            <li><strong>Portability:</strong> Run anywhere - dev, test, production</li>
+                            <li><strong>Efficiency:</strong> Lightweight compared to VMs</li>
+                            <li><strong>Consistency:</strong> Eliminate "works on my machine" issues</li>
+                            <li><strong>Scalability:</strong> Quick startup and horizontal scaling</li>
+                        </ul>
+                    </div>
+
+                    <h3>Container vs VM Architecture</h3>
+                    <div class="mermaid">
+graph TB
+    subgraph "Virtual Machines"
+        H1[Host OS]
+        HV[Hypervisor]
+        G1[Guest OS 1]
+        G2[Guest OS 2]
+        A1[App 1]
+        A2[App 2]
+        
+        H1 --> HV
+        HV --> G1
+        HV --> G2
+        G1 --> A1
+        G2 --> A2
+    end
+    
+    subgraph "Containers"
+        H2[Host OS]
+        CE[Container Engine]
+        C1[Container 1<br/>App + Libs]
+        C2[Container 2<br/>App + Libs]
+        
+        H2 --> CE
+        CE --> C1
+        CE --> C2
+    end
+    
+    style G1 fill:#ef4444,color:#fff
+    style G2 fill:#ef4444,color:#fff
+    style C1 fill:#10b981,color:#fff
+    style C2 fill:#10b981,color:#fff
+                    </div>
+                </div>
+            </div>
+
+            <!-- Docker -->
+            <div id="docker" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🐳 Docker Fundamentals</h2>
+                    
+                    <h3>Core Concepts</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📄</span>
+                            <h3>Images</h3>
+                            <h4>Characteristics</h4>
+                            <ul>
+                                <li>Read-only templates</li>
+                                <li>Layered file system</li>
+                                <li>Built from Dockerfile</li>
+                                <li>Stored in registries</li>
+                            </ul>
+                            <h4>Best Practices</h4>
+                            <ul>
+                                <li>Use official base images</li>
+                                <li>Multi-stage builds</li>
+                                <li>Minimize layers</li>
+                                <li>Tag properly</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📦</span>
+                            <h3>Containers</h3>
+                            <h4>Characteristics</h4>
+                            <ul>
+                                <li>Running instance of image</li>
+                                <li>Isolated process</li>
+                                <li>Ephemeral by default</li>
+                                <li>Lightweight and fast</li>
+                            </ul>
+                            <h4>Lifecycle</h4>
+                            <ul>
+                                <li>Create, Start, Stop</li>
+                                <li>Restart, Pause, Unpause</li>
+                                <li>Remove</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🗂️</span>
+                            <h3>Volumes</h3>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Persistent data storage</li>
+                                <li>Share data between containers</li>
+                                <li>Decouple data from container</li>
+                                <li>Backup and migration</li>
+                            </ul>
+                            <h4>Types</h4>
+                            <ul>
+                                <li>Named volumes</li>
+                                <li>Bind mounts</li>
+                                <li>tmpfs mounts</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>Dockerfile Best Practices</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🏗️</span>
+                            <h3>Multi-Stage Builds</h3>
+                            <h4>Benefits</h4>
+                            <ul>
+                                <li>Smaller final images</li>
+                                <li>Separate build/runtime deps</li>
+                                <li>Better security</li>
+                                <li>Reduced attack surface</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">⚡</span>
+                            <h3>Layer Optimization</h3>
+                            <h4>Techniques</h4>
+                            <ul>
+                                <li>Order commands by change frequency</li>
+                                <li>Combine RUN commands</li>
+                                <li>Use .dockerignore</li>
+                                <li>Clean up in same layer</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔒</span>
+                            <h3>Security</h3>
+                            <h4>Practices</h4>
+                            <ul>
+                                <li>Run as non-root user</li>
+                                <li>Scan for vulnerabilities</li>
+                                <li>Use specific versions</li>
+                                <li>Minimal base images</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>Docker Networking</h3>
+                    <div class="mermaid">
+graph LR
+    subgraph "Bridge Network (default)"
+        C1[Container 1<br/>172.17.0.2]
+        C2[Container 2<br/>172.17.0.3]
+        B[Docker Bridge<br/>docker0]
+        
+        C1 <--> B
+        C2 <--> B
+    end
+    
+    B <--> H[Host Network<br/>eth0]
+    H <--> I[Internet]
+    
+    style C1 fill:#3b82f6,color:#fff
+    style C2 fill:#3b82f6,color:#fff
+    style B fill:#10b981,color:#fff
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kubernetes -->
+            <div id="kubernetes" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">☸️ Kubernetes Architecture</h2>
+                    
+                    <h3>Control Plane Components</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🎛️</span>
+                            <h3>API Server</h3>
+                            <h4>Role</h4>
+                            <ul>
+                                <li>Frontend for control plane</li>
+                                <li>RESTful API interface</li>
+                                <li>Validates and processes requests</li>
+                                <li>Gateway to cluster</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">💾</span>
+                            <h3>etcd</h3>
+                            <h4>Role</h4>
+                            <ul>
+                                <li>Distributed key-value store</li>
+                                <li>Cluster state storage</li>
+                                <li>Configuration data</li>
+                                <li>Strongly consistent</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📅</span>
+                            <h3>Scheduler</h3>
+                            <h4>Role</h4>
+                            <ul>
+                                <li>Assigns pods to nodes</li>
+                                <li>Resource requirements</li>
+                                <li>Affinity/anti-affinity</li>
+                                <li>Taints and tolerations</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>Kubernetes Architecture</h3>
+                    <div class="mermaid">
+graph TB
+    subgraph "Control Plane"
+        API[API Server]
+        ETCD[etcd]
+        SCHED[Scheduler]
+        CM[Controller Manager]
+    end
+    
+    subgraph "Node 1"
+        K1[Kubelet]
+        KP1[Kube-proxy]
+        P1[Pod 1]
+        P2[Pod 2]
+        
+        K1 --> P1
+        K1 --> P2
+    end
+    
+    subgraph "Node 2"
+        K2[Kubelet]
+        KP2[Kube-proxy]
+        P3[Pod 3]
+        P4[Pod 4]
+        
+        K2 --> P3
+        K2 --> P4
+    end
+    
+    API <--> ETCD
+    API <--> SCHED
+    API <--> CM
+    API <--> K1
+    API <--> K2
+    
+    style API fill:#7b61ff,color:#fff
+    style ETCD fill:#ef4444,color:#fff
+    style P1 fill:#10b981,color:#fff
+    style P2 fill:#10b981,color:#fff
+    style P3 fill:#10b981,color:#fff
+    style P4 fill:#10b981,color:#fff
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kubernetes Objects -->
+            <div id="k8s-objects" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🔧 Kubernetes Objects</h2>
+                    
+                    <h3>Workload Resources</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📦</span>
+                            <h3>Pods</h3>
+                            <h4>Characteristics</h4>
+                            <ul>
+                                <li>Smallest deployable unit</li>
+                                <li>One or more containers</li>
+                                <li>Shared network namespace</li>
+                                <li>Ephemeral by nature</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔄</span>
+                            <h3>Deployments</h3>
+                            <h4>Features</h4>
+                            <ul>
+                                <li>Declarative updates</li>
+                                <li>Rolling updates</li>
+                                <li>Rollback capability</li>
+                                <li>Replica management</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">⚙️</span>
+                            <h3>StatefulSets</h3>
+                            <h4>Use Cases</h4>
+                            <ul>
+                                <li>Stable network identities</li>
+                                <li>Ordered deployment/scaling</li>
+                                <li>Persistent storage</li>
+                                <li>Databases, queues</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>Service Discovery</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🌐</span>
+                            <h3>Services</h3>
+                            <p class="framework-subtitle">Stable Network Endpoints</p>
+                            <h4>Types</h4>
+                            <ul>
+                                <li><strong>ClusterIP:</strong> Internal only (default)</li>
+                                <li><strong>NodePort:</strong> Expose on node port</li>
+                                <li><strong>LoadBalancer:</strong> Cloud load balancer</li>
+                                <li><strong>ExternalName:</strong> DNS CNAME</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🚪</span>
+                            <h3>Ingress</h3>
+                            <p class="framework-subtitle">HTTP/HTTPS Routing</p>
+                            <h4>Features</h4>
+                            <ul>
+                                <li>Host-based routing</li>
+                                <li>Path-based routing</li>
+                                <li>TLS termination</li>
+                                <li>Load balancing</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📝</span>
+                            <h3>ConfigMaps & Secrets</h3>
+                            <p class="framework-subtitle">Configuration Management</p>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Decouple config from code</li>
+                                <li>Environment variables</li>
+                                <li>Volume mounts</li>
+                                <li>Secrets: base64 encoded</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>Deployment Strategy</h3>
+                    <div class="mermaid">
+sequenceDiagram
+    participant U as User
+    participant I as Ingress
+    participant SV1 as Service v1
+    participant SV2 as Service v2
+    participant P1 as Pods v1
+    participant P2 as Pods v2
+    
+    Note over P2: Deploy v2 pods
+    U->>I: Request
+    I->>SV1: Route (100%)
+    SV1->>P1: Forward
+    
+    Note over P2: v2 pods ready
+    U->>I: Request
+    I->>SV1: Route (75%)
+    I->>SV2: Route (25%)
+    SV1->>P1: Forward
+    SV2->>P2: Forward
+    
+    Note over P1: Scale down v1
+    U->>I: Request
+    I->>SV2: Route (100%)
+    SV2->>P2: Forward
+                    </div>
+                </div>
+            </div>
+
+            <!-- Container Orchestration -->
+            <div id="orchestration" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🎯 Orchestration Patterns</h2>
+                    
+                    <h3>Scaling Strategies</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📈</span>
+                            <h3>Horizontal Pod Autoscaler</h3>
+                            <h4>Metrics</h4>
+                            <ul>
+                                <li>CPU utilization</li>
+                                <li>Memory usage</li>
+                                <li>Custom metrics</li>
+                                <li>External metrics</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">⬆️</span>
+                            <h3>Vertical Pod Autoscaler</h3>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Adjust resource requests</li>
+                                <li>Right-size containers</li>
+                                <li>Optimize resource usage</li>
+                                <li>Reduce waste</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🖥️</span>
+                            <h3>Cluster Autoscaler</h3>
+                            <h4>Behavior</h4>
+                            <ul>
+                                <li>Add nodes when needed</li>
+                                <li>Remove underutilized nodes</li>
+                                <li>Cloud provider integration</li>
+                                <li>Cost optimization</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>Health Checks</h3>
+                    <table class="glass-table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Probe Type</th>
+                                <th>Purpose</th>
+                                <th>Action on Failure</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Liveness</strong></td>
+                                <td>Is container running?</td>
+                                <td>Restart container</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Readiness</strong></td>
+                                <td>Can container accept traffic?</td>
+                                <td>Remove from service endpoints</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Startup</strong></td>
+                                <td>Has application started?</td>
+                                <td>Delay liveness checks</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="info-box info-box-success">
+                        <strong>Kubernetes Best Practices:</strong>
+                        <ul class="feature-list">
+                            <li><strong>Resource Limits:</strong> Set CPU/memory requests and limits</li>
+                            <li><strong>Health Probes:</strong> Always define liveness and readiness</li>
+                            <li><strong>Labels:</strong> Use consistent labeling strategy</li>
+                            <li><strong>Namespaces:</strong> Organize resources logically</li>
+                            <li><strong>RBAC:</strong> Implement least privilege access</li>
+                            <li><strong>NetworkPolicies:</strong> Control pod-to-pod communication</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resources -->
+            <div id="resources" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">📚 Resources & Learning</h2>
+                    
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📖</span>
+                            <h3>Essential Books</h3>
+                            <ul>
+                                <li><strong>Kubernetes in Action</strong> - Marko Lukša</li>
+                                <li><strong>Docker Deep Dive</strong> - Nigel Poulton</li>
+                                <li><strong>Kubernetes Patterns</strong> - Bilgin Ibryam</li>
+                                <li><strong>Cloud Native DevOps with Kubernetes</strong> - Arundel & Domingus</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🎓</span>
+                            <h3>Certifications</h3>
+                            <ul>
+                                <li><strong>CKA:</strong> Certified Kubernetes Administrator</li>
+                                <li><strong>CKAD:</strong> Kubernetes Application Developer</li>
+                                <li><strong>CKS:</strong> Kubernetes Security Specialist</li>
+                                <li><strong>DCA:</strong> Docker Certified Associate</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🌐</span>
+                            <h3>Online Resources</h3>
+                            <ul>
+                                <li><a href="https://kubernetes.io/docs/" target="_blank" rel="noopener">Kubernetes Documentation</a></li>
+                                <li><a href="https://docs.docker.com/" target="_blank" rel="noopener">Docker Documentation</a></li>
+                                <li><a href="https://www.katacoda.com/" target="_blank" rel="noopener">Katacoda Interactive Labs</a></li>
+                                <li><a href="https://helm.sh/" target="_blank" rel="noopener">Helm Package Manager</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 CORTEX Knowledge Base. Created by Asif Hussain.</p>
+            <p>
+                <a href="../index.html">Home</a> |
+                <a href="index.html">Knowledge Library</a> |
+                <a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener">GitHub</a>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark'
+        });
+    </script>
+</body>
+</html>

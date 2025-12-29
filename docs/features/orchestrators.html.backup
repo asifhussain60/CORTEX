@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Orchestrators - CORTEX</title>
+<link href="../assets/css/main.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+      .orchestrator-category {
+            margin-bottom: 3rem;
+        }
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid rgba(124, 58, 237, 0.3);
+        }
+        .category-icon {
+            font-size: 2rem;
+        }
+        .category-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .category-description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+        .orchestrator-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+        .orchestrator-card {
+            position: relative;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .orchestrator-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(124, 58, 237, 0.4);
+        }
+        .complexity-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .complexity-high {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.4);
+        }
+        .complexity-medium {
+            background: rgba(251, 146, 60, 0.2);
+            color: #fb923c;
+            border: 1px solid rgba(251, 146, 60, 0.4);
+        }
+        .complexity-low {
+            background: rgba(34, 197, 94, 0.2);
+            color: #4ade80;
+            border: 1px solid rgba(34, 197, 94, 0.4);
+        }
+        .orchestrator-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .orchestrator-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+        .orchestrator-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+        .orchestrator-features {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 1rem;
+        }
+        .orchestrator-features li {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            padding: 0.25rem 0;
+            padding-left: 1.25rem;
+            position: relative;
+        }
+        .orchestrator-features li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--accent-primary);
+        }
+        .view-docs-btn {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .view-docs-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 16px rgba(124, 58, 237, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="../index.html">Home<\/a>
+        <span class="breadcrumb-separator">›<\/span>
+        <a href="index.html">Features<\/a>
+        <span class="breadcrumb-separator">›<\/span>
+        <span class="breadcrumb-current">Orchestrators<\/span>
+    <\/nav>
+
+    <!-- Logo Header -->
+    <section class="section">
+        <div class="container">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" />
+        <\/div>
+
+    <!-- Header -->
+    <section class="section">
+        <div class="container">
+            <h1 class="section-title">🎭 CORTEX Orchestrators<\/h1>
+            <p class="text-center">
+                16 intelligent orchestrators coordinate complex workflows with interactive visualizations, 
+                multi-phase execution, and autonomous decision-making.
+            <div class="text-center">
+                <a href="../technical/orchestrators/index.html" class="btn btn-primary">View Interactive Visualizations →<\/a>
+            <\/div>
+
+    <!-- Planning Orchestrators -->
+    <section class="section">
+        <div class="container">
+            <div class="orchestrator-category">
+                <div class="category-header">
+                    <span class="category-icon">🎯<\/span>
+                    <h2 class="category-title">Planning Orchestrators<\/h2>
+                <\/div>
+                <p class="category-description">
+                    Strategic planning, feature breakdown, and work item generation with DoR/DoD compliance
+                <div class="orchestrator-grid">
+                    <!-- Planning System -->
+                    <div class="glass-card orchestrator-card">
+                        <span class="complexity-badge complexity-high">High<\/span>
+                        <div class="orchestrator-icon">🗺️<\/div>
+                        <h3 class="orchestrator-name">Planning System<\/h3>
+                        <p class="orchestrator-description">
+                            Flagship orchestrator with 4-tier routing, 13+ phases, and automatic complexity detection
+                        <ul class="orchestrator-features">
+                            <li>4-tier routing (skeleton → granular)<\/li>
+                            <li>TDD auto-inclusion<\/li>
+                            <li>Phase 10 modularization<\/li>
+                            <li>DoR/DoD compliance<\/li>
+                        <\/ul>
+                        <a href="../technical/orchestrators/planning-system.html" class="view-docs-btn">View Documentation<\/a>
+                    <\/div>
+
+                    <!-- TDD Orchestrator -->
+                    <div class="glass-card orchestrator-card">
+                        <span class="complexity-badge complexity-high">High<\/span>
+                        <div class="orchestrator-icon">🧪<\/div>
+                        <h3 class="orchestrator-name">TDD Orchestrator<\/h3>
+                        <p class="orchestrator-description">
+                            RED→GREEN→REFACTOR enforcement with 11+ language support and quality scoring
+                        <ul class="orchestrator-features">
+                            <li>Adaptive tech discovery<\/li>
+                            <li>Clean code enforcement<\/li>
+                            <li>Per-phase rollback<\/li>
+                            <li>Quality scoring (0-10)<\/li>
+                        <\/ul>
+                        <a href="../orchestrators/tdd-orchestrator.html" class="view-docs-btn">View Documentation</a>
+                    <\/div>
+
+                    <!-- ADO Planning -->
+                    <div class="glass-card orchestrator-card">
+                        <span class="complexity-badge complexity-medium">Medium<\/span>
+                        <div class="orchestrator-icon">🔄<\/div>
+                        <h3 class="orchestrator-name">ADO Planning<\/h3>
+                        <p class="orchestrator-description">
+                            Azure DevOps integration with story/feature generation and manifest inheritance
+                        <ul class="orchestrator-features">
+                            <li>Story/Feature/Task creation<\/li>
+                            <li>Completion summaries<\/li>
+                            <li>Inherits Planning System<\/li>
+                            <li>ADO formatting pipeline<\/li>
+                        <\/ul>
+                        <a href="../technical/orchestrators/ado-planning.html" class="view-docs-btn">View Documentation<\/a>
+                    <\/div>
+
+                    <!-- Pre-Flight -->
+                    <div class="glass-card orchestrator-card">
+                        <span class="complexity-badge complexity-low">Low<\/span>
+                        <div class="orchestrator-icon">✈️<\/div>
+                        <h3 class="orchestrator-name">Pre-Flight<\/h3>
+                        <p class="orchestrator-description">
+                            Pre-planning validation, discovery, and complexity estimation
+                        <ul class="orchestrator-features">
+                            <li>Holistic code search<\/li>
+                            <li>Readiness checks<\/li>
+                            <li>Complexity estimation<\/li>
+                            <li>Discovery reports<\/li>
+                        <\/ul>
+                        <a href="../technical/orchestrators/pre-flight-orchestrator.html" class="view-docs-btn">View Documentation<\/a>
+                    <\/div>
+
+            <!-- Execution Orchestrators -->
+            <div class="orchestrator-category">
+                <div class="category-header">
+                    <span class="category-icon">⚙️<\/span>
+                    <h2 class="category-title">Execution Orchestrators<\/h2>
+                <\/div>
+                <p class="category-description">
+                    Code transformation, deployment automation, and migration workflows
+                <div class="orchestrator-grid">
+                    <!-- Code Sanitization -->
+                    <div class="glass-card orchestrator-card">
+                        <span class="complexity-badge complexity-high">High<\/span>
+                        <div class="orchestrator-icon">🧼<\/div>
+                        <h3 class="orchestrator-name">Code Sanitization<\/h3>
+                        <p class="orchestrator-description">
+                            5-phase workflow for removing company-specific data and transforming domain terminology
+                        <ul class="orchestrator-features">
+                            <li>5-phase workflow<\/li>
+                            <li>Domain transformation<\/li>
+                            <li>Build/test validation<\/li>
+                            <li>Audit trail<\/li>
+                        <\/ul>
+                        <a href="../technical/orchestrators/code-sanitization.html" class="view-docs-btn">View Documentation<\/a>
+                    <\/div>
+
+                    <!-- Autonomous Execution -->
+                    <div class="glass-card orchestrator-card">
+                        <span class="complexity-badge complexity-medium">Medium<\/span>
+                        <div class="orchestrator-icon">🤖<\/div>
+                        <h3 class="orchestrator-name">Autonomous Execution<\/h3>
+                        <p class="orchestrator-description">
+                            Phase-by-phase plan execution with error recovery and progress tracking
+                        <ul class="orchestrator-features">
+                            <li>Automated execution<\/li>
+                            <li>Error recovery<\/li>
+                            <li>Progress tracking<\/li>
+                            <li>Checkpoint management<\/li>
+                        <\/ul>
+                        <a href="../technical/orchestrators/autonomous-execution.html" class="view-docs-btn">View Documentation<\/a>
+                    <\/div>
+
+            <!-- System Orchestrators -->
+            <div class="orchestrator-category">
+                <div class="category-header">
+                    <span class="category-icon">🔧<\/span>
+                    <h2 class="category-title">System Orchestrators<\/h2>
+                <\/div>
+                <p class="category-description">
+                    Maintenance, integrity validation, optimization, and system health management
+                <div class="orchestrator-grid">
+                    <!-- System Maintenance -->
+                    <div class="glass-card orchestrator-card">
+                        <span class="complexity-badge complexity-high">High<\/span>
+                        <div class="orchestrator-icon">🔧<\/div>
+                        <h3 class="orchestrator-name">System Maintenance<\/h3>
+                        <p class="orchestrator-description">
+                            7-phase maintenance workflow with tiered routing and health delta tracking
+                        <ul class="orchestrator-features">
+                            <li>7-phase sequence<\/li>
+                            <li>Tiered routing<\/li>
+                            <li>Health delta tracking<\/li>
+                            <li>Checkpoint strategy<\/li>
+                        <\/ul>
+                        <a href="../technical/orchestrators/maintenance-orchestrator.html" class="view-docs-btn">View Documentation<\/a>
+                    <\/div>
+
+                    <!-- System Integrity -->
+                    <div class="glass-card orchestrator-card">
+                        <span class="complexity-badge complexity-high">High<\/span>
+                        <div class="orchestrator-icon">🛡️<\/div>
+                        <h3 class="orchestrator-name">System Integrity<\/h3>
+                        <p class="orchestrator-description">
+                            8-phase validation with auto-fix capabilities and manifest compliance
+                        <ul class="orchestrator-features">
+                            <li>8-phase validation<\/li>
+                            <li>Auto-fix capabilities<\/li>
+                            <li>Issue severity heatmap<\/li>
+                            <li>Manifest compliance<\/li>
+                        <\/ul>
+                        <a href="../technical/orchestrators/system-integrity.html" class="view-docs-btn">View Documentation<\/a>
+                    <\/div>
+
+                    <!-- Refinement -->
+                    <div class="glass-card orchestrator-card">
+                        <span class="complexity-badge complexity-high">High<\/span>
+                        <div class="orchestrator-icon">✨<\/div>
+                        <h3 class="orchestrator-name">Refinement<\/h3>
+                        <p class="orchestrator-description">
+                            7-phase holistic improvement with SKULL review and complexity analysis
+                        <ul class="orchestrator-features">
+                            <li>7-phase refinement<\/li>
+                            <li>SKULL test optimization<\/li>
+                            <li>AST-based complexity<\/li>
+                            <li>Rollback safety<\/li>
+                        <\/ul>
+                        <a href="../technical/orchestrators/refinement-orchestrator.html" class="view-docs-btn">View Documentation<\/a>
+                    <\/div>
+
+                    <!-- Cleanup -->
+                    <div class="glass-card orchestrator-card">
+                        <span class="complexity-badge complexity-medium">Medium<\/span>
+                        <div class="orchestrator-icon">🧹<\/div>
+                        <h3 class="orchestrator-name">Cleanup<\/h3>
+                        <p class="orchestrator-description">
+                            AST-powered file organization with protected directories and reference tracking
+                        <ul class="orchestrator-features">
+                            <li>AST-powered cleanup<\/li>
+                            <li>Protected directories<\/li>
+                            <li>Reference updates<\/li>
+                            <li>Impact assessment<\/li>
+                        <\/ul>
+                        <a href="../technical/orchestrators/cleanup-orchestrator.html" class="view-docs-btn">View Documentation<\/a>
+                    <\/div>
+
+                    <!-- Git Checkpoint -->
+                    <div class="glass-card orchestrator-card">
+                        <span class="complexity-badge complexity-medium">Medium<\/span>
+                        <div class="orchestrator-icon">📍<\/div>
+                        <h3 class="orchestrator-name">Git Checkpoint<\/h3>
+                        <p class="orchestrator-description">
+                            Checkpoint creation, rollback management, and branch protection
+                        <ul class="orchestrator-features">
+                            <li>Phase milestones<\/li>
+                            <li>Rollback points<\/li>
+                            <li>Branch protection<\/li>
+                            <li>Impact analysis<\/li>
+                        <\/ul>
+                        <a href="../technical/orchestrators/git-checkpoint.html" class="view-docs-btn">View Documentation<\/a>
+                    <\/div>
+
+            <!-- Analysis Orchestrators -->
+            <div class="orchestrator-category">
+                <div class="category-header">
+                    <span class="category-icon">📊<\/span>
+                    <h2 class="category-title">Analysis Orchestrators<\/h2>
+                <\/div>
+                <p class="category-description">
+                    Code review, metrics collection, narrative generation, and insight visualization
+                <div class="orchestrator-grid">
+                    <!-- Architectural Review -->
+                    <div class="glass-card orchestrator-card">
+                        <span class="complexity-badge complexity-medium">Medium<\/span>
+                        <div class="orchestrator-icon">🏗️<\/div>
+                        <h3 class="orchestrator-name">Architectural Review<\/h3>
+                        <p class="orchestrator-description">
+                            6-phase analysis with 0-100 scoring and git protection
+                        <ul class="orchestrator-features">
+                            <li>0-100 scoring<\/li>
+                            <li>Git protection<\/li>
+                            <li>Compliance analysis<\/li>
+                            <li>Critical issues<\/li>
+                        <\/ul>
+                        <a href="../technical/orchestrators/architectural-review.html" class="view-docs-btn">View Documentation<\/a>
+                    <\/div>
+
+                    <!-- CORTEX Lens v3 -->
+                    <div class="glass-card orchestrator-card">
+                        <span class="complexity-badge complexity-high">High<\/span>
+                        <div class="orchestrator-icon">🔍<\/div>
+                        <h3 class="orchestrator-name">CORTEX Lens v3<\/h3>
+                        <p class="orchestrator-description">
+                            Narrative generation with pattern detection and business value extraction
+                        <ul class="orchestrator-features">
+                            <li>Story weaving<\/li>
+                            <li>Pattern detection<\/li>
+                            <li>Insight visualization<\/li>
+                            <li>Learning integration<\/li>
+                        <\/ul>
+                        <a href="../orchestrators/cortex-lens.html" class="view-docs-btn">View Documentation</a>
+                    <\/div>
+
+                    <!-- Intelligent Dashboard -->
+                    <div class="glass-card orchestrator-card">
+                        <span class="complexity-badge complexity-medium">Medium<\/span>
+                        <div class="orchestrator-icon">📈<\/div>
+                        <h3 class="orchestrator-name">Intelligent Dashboard<\/h3>
+                        <p class="orchestrator-description">
+                            Metrics collection, live monitoring, and alert triggers
+                        <ul class="orchestrator-features">
+                            <li>Metrics collection<\/li>
+                            <li>Live monitoring<\/li>
+                            <li>Alert triggers<\/li>
+                            <li>Data aggregation<\/li>
+                        <\/ul>
+                        <a href="../technical/orchestrators/intelligent-dashboard.html" class="view-docs-btn">View Documentation<\/a>
+                    <\/div>
+
+            <!-- Debug & Recovery Orchestrators -->
+            <div class="orchestrator-category">
+                <div class="category-header">
+                    <span class="category-icon">🔍<\/span>
+                    <h2 class="category-title">Debug & Recovery Orchestrators<\/h2>
+                <\/div>
+                <p class="category-description">
+                    Debugging workflows, rollback management, and error recovery
+                <div class="orchestrator-grid">
+                    <!-- Debug -->
+                    <div class="glass-card orchestrator-card">
+                        <span class="complexity-badge complexity-medium">Medium<\/span>
+                        <div class="orchestrator-icon">🐛<\/div>
+                        <h3 class="orchestrator-name">Debug<\/h3>
+                        <p class="orchestrator-description">
+                            Symptom analysis, root cause detection, and fix strategy validation
+                        <ul class="orchestrator-features">
+                            <li>Context capture<\/li>
+                            <li>Root cause analysis<\/li>
+                            <li>Error trace visualization<\/li>
+                            <li>Learning integration<\/li>
+                        <\/ul>
+                        <a href="../technical/orchestrators/debug-orchestrator.html" class="view-docs-btn">View Documentation<\/a>
+                    <\/div>
+
+                    <!-- Rollback -->
+                    <div class="glass-card orchestrator-card">
+                        <span class="complexity-badge complexity-medium">Medium<\/span>
+                        <div class="orchestrator-icon">⏪<\/div>
+                        <h3 class="orchestrator-name">Rollback<\/h3>
+                        <p class="orchestrator-description">
+                            Safe rollback, state restoration, and validation gates
+                        <ul class="orchestrator-features">
+                            <li>Safe rollback<\/li>
+                            <li>State restoration<\/li>
+                            <li>Checkpoint selection<\/li>
+                            <li>State comparison<\/li>
+                        <\/ul>
+                        <a href="../technical/orchestrators/rollback-orchestrator.html" class="view-docs-btn">View Documentation<\/a>
+                    <\/div>
+
+    <!-- CTA Section -->
+    <section class="section">
+        <div class="container">
+            <div class="glass-card">
+                <h2>Explore Interactive Visualizations<\/h2>
+                <p>
+                    View Mermaid flowcharts, D3.js interactive diagrams, and detailed workflow documentation 
+                    for each orchestrator in our technical documentation system.
+                <a href="../technical/orchestrators/index.html" class="btn btn-primary">View Technical Documentation →<\/a>
+            <\/div></body>
+</html>

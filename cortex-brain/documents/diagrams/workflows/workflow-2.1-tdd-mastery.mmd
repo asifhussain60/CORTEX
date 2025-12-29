@@ -1,0 +1,148 @@
+---
+title: TDD Mastery Workflow (RED→GREEN→REFACTOR)
+description: Complete TDD cycle with phase transitions
+category: Workflow
+priority: CRITICAL
+version: 4.0.0
+---
+
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+      'actorTextColor': '#fff',
+      'actorBkg': '#4A90E2',
+      'actorBorder': '#2E5C8A',
+      'signalColor': '#2C3E50',
+      'signalTextColor': '#2C3E50',
+      'labelBoxBkgColor': '#E74C3C',
+      'labelTextColor': '#fff',
+      'loopTextColor': '#2C3E50',
+      'noteBkgColor': '#F39C12',
+      'noteTextColor': '#fff'
+    }
+  }
+}%%
+
+sequenceDiagram
+    participant User as 👤 User
+    participant TDD as 🎭 TDD Orchestrator
+    participant Test as 🧪 Test Runner
+    participant Code as 💻 Code Analyzer
+    participant Quality as 📊 Quality Scorer
+    participant Git as 🔗 Git Checkpoint
+    
+    %% Initialization
+    User->>TDD: start tdd [feature]
+    activate TDD
+    TDD->>TDD: Initialize phases<br/>(RED, GREEN, REFACTOR)
+    TDD->>Git: Create baseline checkpoint
+    Git-->>TDD: ✅ Checkpoint created
+    
+    %% RED PHASE
+    rect rgb(231, 76, 60)
+        Note over TDD: 🔴 RED PHASE: Write Failing Tests
+        TDD->>TDD: 🎭 Phase transition: INIT → RED
+        TDD->>Test: Generate test scaffolds
+        Test->>Test: Create test files<br/>(test_*.py)
+        Test-->>TDD: ✅ Test files created
+        
+        TDD->>User: 📝 Review generated tests
+        User->>User: Customize tests<br/>(edge cases, validations)
+        User->>TDD: Tests ready
+        
+        TDD->>Test: Run test suite
+        activate Test
+        Test->>Test: pytest tests/ -v
+        Test-->>TDD: ❌ ALL TESTS MUST FAIL
+        deactivate Test
+        
+        alt Tests Pass (INVALID)
+            Test-->>TDD: ❌ Tests passing (invalid RED phase)
+            TDD->>TDD: SKULL: RED_PHASE_VALIDATION
+            TDD->>User: ⚠️ RED phase violation:<br/>Tests must fail first!
+            TDD->>TDD: Rollback to checkpoint
+        else Tests Fail (VALID)
+            Test-->>TDD: ✅ Tests failing as expected
+            TDD->>Git: Create RED phase checkpoint
+            Git-->>TDD: ✅ RED checkpoint saved
+        end
+    end
+    
+    %% GREEN PHASE
+    rect rgb(80, 200, 120)
+        Note over TDD: 🟢 GREEN PHASE: Minimal Implementation
+        TDD->>TDD: 🎭 Phase transition: RED → GREEN
+        TDD->>User: 💻 Implement minimal code
+        User->>User: Write code to pass tests<br/>(minimal viable implementation)
+        User->>TDD: Implementation complete
+        
+        loop Until All Tests Pass
+            TDD->>Test: Run test suite
+            activate Test
+            Test->>Test: pytest tests/ -v
+            Test-->>TDD: Test results
+            deactivate Test
+            
+            alt Tests Still Failing
+                TDD->>User: ❌ {N} tests failing<br/>Fix implementation
+                User->>User: Debug and fix code
+                User->>TDD: Try again
+            else All Tests Passing
+                TDD->>TDD: ✅ GREEN phase complete
+                TDD->>Git: Create GREEN phase checkpoint
+                Git-->>TDD: ✅ GREEN checkpoint saved
+            end
+        end
+    end
+    
+    %% REFACTOR PHASE
+    rect rgb(123, 104, 238)
+        Note over TDD: 🔵 REFACTOR PHASE: Clean Code
+        TDD->>TDD: 🎭 Phase transition: GREEN → REFACTOR
+        TDD->>Code: Analyze code quality
+        activate Code
+        Code->>Code: Check SOLID principles
+        Code->>Code: Check DRY violations
+        Code->>Code: Check KISS/YAGNI
+        Code->>Code: Measure complexity (McCabe)
+        Code-->>TDD: Analysis complete
+        deactivate Code
+        
+        TDD->>Quality: Score code (0-10 scale)
+        activate Quality
+        Quality->>Quality: Evaluate:<br/>• Readability (0-10)<br/>• Maintainability (0-10)<br/>• Complexity (0-10)<br/>• Test Coverage (0-10)
+        Quality-->>TDD: Score: {X}/10
+        deactivate Quality
+        
+        alt Score < 7 (Needs Refactoring)
+            TDD->>User: ⚠️ Score: {X}/10<br/>Refactor recommended
+            TDD->>TDD: Generate refactoring suggestions:<br/>• Simplify complex functions<br/>• Extract methods<br/>• Remove duplication<br/>• Improve naming
+            TDD->>User: 📋 Apply suggestions?
+            User->>User: Refactor code
+            User->>TDD: Refactoring complete
+            
+            TDD->>Test: Verify tests still pass
+            activate Test
+            Test-->>TDD: ✅ All tests passing
+            deactivate Test
+            
+            TDD->>Code: Re-analyze quality
+            Code-->>TDD: New analysis
+            TDD->>Quality: Re-score
+            Quality-->>TDD: New score: {Y}/10
+        else Score >= 7 (Acceptable)
+            TDD->>TDD: ✅ Code quality acceptable
+        end
+        
+        TDD->>Git: Create REFACTOR checkpoint
+        Git-->>TDD: ✅ Final checkpoint saved
+    end
+    
+    %% Completion
+    TDD->>TDD: 🎭 Orchestrator completing:<br/>✅ ALL WORK COMPLETE
+    TDD->>User: 🎉 TDD Cycle Complete!<br/>• All tests passing ✅<br/>• Code quality: {Y}/10<br/>• Checkpoints: 4 created
+    deactivate TDD
+    
+    %% Alternative: Rollback
+    Note over TDD,Git: Rollback Available at Any Phase:<br/>tdd rollback [checkpoint_id]

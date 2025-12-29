@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX Upgrade Orchestrator - Automated version upgrades with migration validation">
+    <title>Upgrade Orchestrator - CORTEX</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- Breadcrumb Navigation (Top) -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">→</span>
+        <a href="index.html">Orchestrators</a>
+        <span class="breadcrumb-separator">→</span>
+        <span class="breadcrumb-current">Upgrade Orchestrator</span>
+    </nav>
+    
+    <!-- Logo Header (Below Breadcrumb) -->
+    <div class="logo-header">
+        <a href="../index.html">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
+        </a>
+    </div>
+    
+    <main class="container" id="main-content">
+        <div class="glass-card">
+            <h1>Upgrade Orchestrator</h1>
+            <span class="badge badge-info">Migration Support</span>
+            
+            <!-- Intro Description -->
+            <p>
+                Upgrading between CORTEX versions can be complex—configuration changes, deprecated features, 
+                new dependencies. The Upgrade Orchestrator handles the entire migration process automatically: 
+                backing up your current state, checking compatibility, applying migrations, validating the 
+                new installation, and providing rollback options if anything goes wrong. Upgrade with confidence.
+            </p>
+            
+            <div class="metrics-grid metrics-grid-4">
+                <div class="metric-card glass-card">
+                    <div class="metric-value">3.0→4.0</div>
+                    <div class="metric-label">Migration Path</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">AUTO</div>
+                    <div class="metric-label">Backup</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">100%</div>
+                    <div class="metric-label">Validation</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">YES</div>
+                    <div class="metric-label">Rollback</div>
+                </div>
+            </div>
+            
+            <div class="command-card">
+                <code class="command-syntax">upgrade cortex</code>
+                <p class="command-description">
+                    Initiates the upgrade workflow with automatic backup and validation.
+                </p>
+            </div>
+        </div>
+        
+        <section class="section-workflow">
+            <div class="glass-card">
+                <h2><span>🔄</span> Upgrade Workflow</h2>
+                
+                <div class="workflow-phases">
+                    <div class="phase-card">
+                        <span class="phase-number">1</span>
+                        <span class="phase-icon">💾</span>
+                        <div class="phase-title">Backup</div>
+                        <p class="phase-description">Save current state and configuration</p>
+                    </div>
+                    <div class="phase-card">
+                        <span class="phase-number">2</span>
+                        <span class="phase-icon">🔍</span>
+                        <div class="phase-title">Compatibility Check</div>
+                        <p class="phase-description">Verify system meets requirements</p>
+                    </div>
+                    <div class="phase-card">
+                        <span class="phase-number">3</span>
+                        <span class="phase-icon">🔄</span>
+                        <div class="phase-title">Migration</div>
+                        <p class="phase-description">Apply version-specific migrations</p>
+                    </div>
+                    <div class="phase-card">
+                        <span class="phase-number">4</span>
+                        <span class="phase-icon">✅</span>
+                        <div class="phase-title">Validation</div>
+                        <p class="phase-description">Run tests, verify functionality</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section-architecture">
+            <div class="glass-card">
+                <h2><span>📋</span> 3.0 → 4.0 Migration Guide</h2>
+                
+                <table class="glass-table">
+                    <thead>
+                        <tr>
+                            <th>Component</th>
+                            <th>3.0</th>
+                            <th>4.0</th>
+                            <th>Migration</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Brain Tiers</td>
+                            <td>3 Tiers</td>
+                            <td>4 Tiers</td>
+                            <td>Auto-migrated</td>
+                        </tr>
+                        <tr>
+                            <td>Orchestrators</td>
+                            <td>12</td>
+                            <td>16+</td>
+                            <td>Extended</td>
+                        </tr>
+                        <tr>
+                            <td>Config Format</td>
+                            <td>JSON</td>
+                            <td>YAML + JSON</td>
+                            <td>Auto-converted</td>
+                        </tr>
+                        <tr>
+                            <td>Multi-Repo</td>
+                            <td>Limited</td>
+                            <td>1:∞ scaling</td>
+                            <td>Configuration update</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        
+        <section class="section-configuration">
+            <div class="glass-card">
+                <h2><span>⚠️</span> Rollback Options</h2>
+                
+                <div class="alert alert-info">
+                    <span class="alert-icon">ℹ️</span>
+                    <div class="alert-content">
+                        <div class="alert-title">Automatic Rollback</div>
+                        <p>
+                            If validation fails after migration, CORTEX automatically offers rollback 
+                            to the previous version using the backup created in Phase 1.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="command-card">
+                    <code class="command-syntax">rollback cortex</code>
+                    <p class="command-description">
+                        Restores the previous CORTEX version from backup.
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section-integration">
+            <div class="glass-card">
+                <h2><span>🔗</span> Related Features</h2>
+                <div class="feature-grid feature-grid-3">
+                    <a href="../getting-started/deployment.html" class="glass-card">
+                        <span class="feature-icon">🚀</span>
+                        <h3 class="feature-title">Deployment</h3>
+                        <p class="text-secondary">Fresh installation guide</p>
+                    </a>
+                    <a href="../architecture/index.html" class="glass-card">
+                        <span class="feature-icon">🏗️</span>
+                        <h3 class="feature-title">Architecture</h3>
+                        <p class="text-secondary">4.0 system design</p>
+                    </a>
+                    <a href="../governance/skull-rulebook.html" class="glass-card">
+                        <span class="feature-icon">🛡️</span>
+                        <h3 class="feature-title">SKULL Rulebook</h3>
+                        <p class="text-secondary">Upgrade governance</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+<button class="scroll-to-top" aria-label="Scroll to top">↑</button>
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>

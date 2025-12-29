@@ -1,0 +1,266 @@
+{
+  "recommendations": [
+    {
+      "id": "rec001",
+      "title": "Implement Comprehensive Test Coverage for Dashboard Components",
+      "description": "Create missing tests for Dashboard v3 components to reach 80%+ coverage. Focus on orchestrator, collectors, and tab JavaScript components.",
+      "category": "health",
+      "priority": "p0",
+      "impact": "high",
+      "effort": "medium",
+      "roi_score": 8.5,
+      "affected_files": ["src/dashboard/**/*.py", "cortex-brain/dashboards/ui/components/*.js"],
+      "implementation_steps": [
+        "Add unit tests for use-cases-tab.js and recommendations-tab.js",
+        "Create integration tests for tab data loading",
+        "Add E2E tests for tab switching and rendering"
+      ],
+      "expected_outcome": "Increased confidence in dashboard stability, reduced regression bugs"
+    },
+    {
+      "id": "rec002",
+      "title": "Fix Business Capability Detector Interface",
+      "description": "BusinessCapabilityDetector has analyze() method but orchestrator expects collect(). Create adapter or refactor to match collector interface.",
+      "category": "technical_debt",
+      "priority": "p0",
+      "impact": "high",
+      "effort": "low",
+      "roi_score": 9.2,
+      "affected_files": ["src/dashboard/data/business_capability_detector.py", "src/dashboard/orchestrator.py"],
+      "implementation_steps": [
+        "Add collect() method to BusinessCapabilityDetector",
+        "Map analyze() results to collector output format",
+        "Update orchestrator tests to verify integration"
+      ],
+      "expected_outcome": "Orchestrator can successfully collect business capability data"
+    },
+    {
+      "id": "rec003",
+      "title": "Fix RecommendationCollector Security Data Type Mismatch",
+      "description": "generate_security_recommendations() expects vulnerabilities to be int but receives dict. Update type handling or collector interface.",
+      "category": "technical_debt",
+      "priority": "p1",
+      "impact": "medium",
+      "effort": "low",
+      "roi_score": 7.8,
+      "affected_files": ["src/dashboard/data/recommendation_collector.py"],
+      "implementation_steps": [
+        "Add type validation in generate_security_recommendations()",
+        "Extract vulnerability count from dict if needed",
+        "Add defensive programming for unexpected data types"
+      ],
+      "expected_outcome": "Recommendation collector handles security data correctly"
+    },
+    {
+      "id": "rec004",
+      "title": "Consolidate Dashboard Architecture Documentation",
+      "description": "Update docs to reflect single production dashboard approach. Remove references to deprecated Dashboard v3 templates.",
+      "category": "health",
+      "priority": "p2",
+      "impact": "medium",
+      "effort": "low",
+      "roi_score": 6.5,
+      "affected_files": ["README.md", "DASHBOARD-V3-PROGRESS.md", "docs/*.md"],
+      "implementation_steps": [
+        "Update README with production dashboard URL",
+        "Archive or delete DASHBOARD-V3-PROGRESS.md",
+        "Add documentation for tab JSON file structure"
+      ],
+      "expected_outcome": "Clear documentation of current dashboard architecture"
+    },
+    {
+      "id": "rec005",
+      "title": "Add Performance Monitoring to Dashboard Data Pipeline",
+      "description": "Track Phase 7→8→9 pipeline execution time, identify bottlenecks, optimize slow collectors.",
+      "category": "performance",
+      "priority": "p2",
+      "impact": "medium",
+      "effort": "medium",
+      "roi_score": 6.0,
+      "affected_files": ["src/dashboard/orchestrator.py", "src/dashboard/data/*.py"],
+      "implementation_steps": [
+        "Add timing decorators to collector methods",
+        "Log phase execution times",
+        "Create performance dashboard tab"
+      ],
+      "expected_outcome": "Visibility into pipeline performance, ability to optimize slow phases"
+    },
+    {
+      "id": "rec006",
+      "title": "Implement Caching for Dashboard Data Collection",
+      "description": "Cache collected data with TTL to avoid redundant scans. Particularly useful for large repositories.",
+      "category": "performance",
+      "priority": "p2",
+      "impact": "high",
+      "effort": "medium",
+      "roi_score": 7.2,
+      "affected_files": ["src/dashboard/orchestrator.py", "cortex-brain/cache/"],
+      "implementation_steps": [
+        "Add cache directory structure",
+        "Implement TTL-based cache invalidation",
+        "Add cache hit/miss metrics"
+      ],
+      "expected_outcome": "Faster dashboard refreshes, reduced repository scanning overhead"
+    },
+    {
+      "id": "rec007",
+      "title": "Add Export Functionality to All Dashboard Tabs",
+      "description": "Allow users to export tab data as JSON, CSV, or Markdown for external analysis and reporting.",
+      "category": "e2e_testing",
+      "priority": "p3",
+      "impact": "low",
+      "effort": "low",
+      "roi_score": 5.5,
+      "affected_files": ["cortex-brain/dashboards/ui/components/*.js"],
+      "implementation_steps": [
+        "Create export utility module",
+        "Add export buttons to each tab",
+        "Support JSON, CSV, and Markdown formats"
+      ],
+      "expected_outcome": "Users can export dashboard data for offline analysis"
+    },
+    {
+      "id": "rec008",
+      "title": "Implement Real-time Dashboard Updates",
+      "description": "Add WebSocket or polling mechanism to auto-refresh dashboard when repository changes detected.",
+      "category": "performance",
+      "priority": "p3",
+      "impact": "medium",
+      "effort": "high",
+      "roi_score": 4.8,
+      "affected_files": ["cortex-brain/dashboards/ui/app.js", "scripts/dashboard_server.py"],
+      "implementation_steps": [
+        "Add file watcher for repository changes",
+        "Implement WebSocket server",
+        "Add client-side auto-refresh logic"
+      ],
+      "expected_outcome": "Dashboard stays up-to-date without manual refresh"
+    },
+    {
+      "id": "rec009",
+      "title": "Create Dashboard Comparison View",
+      "description": "Allow side-by-side comparison of dashboard data across multiple repositories or time periods.",
+      "category": "e2e_testing",
+      "priority": "p3",
+      "impact": "medium",
+      "effort": "high",
+      "roi_score": 5.2,
+      "affected_files": ["cortex-brain/dashboards/ui/", "src/dashboard/orchestrator.py"],
+      "implementation_steps": [
+        "Add comparison tab to dashboard",
+        "Implement multi-repo data loading",
+        "Create diff visualization components"
+      ],
+      "expected_outcome": "Users can compare repositories or track changes over time"
+    },
+    {
+      "id": "rec010",
+      "title": "Add Security Vulnerability Scanner Integration",
+      "description": "Integrate with Snyk, npm audit, or pip-audit to detect and display security vulnerabilities in dashboard.",
+      "category": "security",
+      "priority": "p1",
+      "impact": "high",
+      "effort": "medium",
+      "roi_score": 8.0,
+      "affected_files": ["src/dashboard/data/security_collector.py", "cortex-brain/dashboards/ui/components/security-tab.js"],
+      "implementation_steps": [
+        "Add vulnerability scanner CLI integration",
+        "Parse scanner output into dashboard format",
+        "Display vulnerabilities by severity in Security tab"
+      ],
+      "expected_outcome": "Proactive security vulnerability detection and reporting"
+    }
+  ],
+  "top_recommendations": [
+    {
+      "id": "rec002",
+      "title": "Fix Business Capability Detector Interface",
+      "roi_score": 9.2,
+      "priority": "p0",
+      "effort": "low"
+    },
+    {
+      "id": "rec001",
+      "title": "Implement Comprehensive Test Coverage for Dashboard Components",
+      "roi_score": 8.5,
+      "priority": "p0",
+      "effort": "medium"
+    },
+    {
+      "id": "rec010",
+      "title": "Add Security Vulnerability Scanner Integration",
+      "roi_score": 8.0,
+      "priority": "p1",
+      "effort": "medium"
+    },
+    {
+      "id": "rec003",
+      "title": "Fix RecommendationCollector Security Data Type Mismatch",
+      "roi_score": 7.8,
+      "priority": "p1",
+      "effort": "low"
+    },
+    {
+      "id": "rec006",
+      "title": "Implement Caching for Dashboard Data Collection",
+      "roi_score": 7.2,
+      "priority": "p2",
+      "effort": "medium"
+    },
+    {
+      "id": "rec004",
+      "title": "Consolidate Dashboard Architecture Documentation",
+      "roi_score": 6.5,
+      "priority": "p2",
+      "effort": "low"
+    },
+    {
+      "id": "rec005",
+      "title": "Add Performance Monitoring to Dashboard Data Pipeline",
+      "roi_score": 6.0,
+      "priority": "p2",
+      "effort": "medium"
+    },
+    {
+      "id": "rec007",
+      "title": "Add Export Functionality to All Dashboard Tabs",
+      "roi_score": 5.5,
+      "priority": "p3",
+      "effort": "low"
+    },
+    {
+      "id": "rec009",
+      "title": "Create Dashboard Comparison View",
+      "roi_score": 5.2,
+      "priority": "p3",
+      "effort": "high"
+    },
+    {
+      "id": "rec008",
+      "title": "Implement Real-time Dashboard Updates",
+      "roi_score": 4.8,
+      "priority": "p3",
+      "effort": "high"
+    }
+  ],
+  "counts": {
+    "total": 10,
+    "by_priority": {
+      "p0": 2,
+      "p1": 2,
+      "p2": 3,
+      "p3": 3
+    },
+    "by_category": {
+      "health": 2,
+      "performance": 3,
+      "security": 1,
+      "technical_debt": 2,
+      "e2e_testing": 2
+    },
+    "critical_high_roi": 2,
+    "important_medium_roi": 2,
+    "optional_low_roi": 3,
+    "deferred": 3
+  }
+}

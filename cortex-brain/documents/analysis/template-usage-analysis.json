@@ -1,0 +1,540 @@
+{
+  "metadata": {
+    "file": "/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/response-templates.yaml",
+    "file_size_kb": 310.8,
+    "total_lines": 13223,
+    "schema_version": "3.2",
+    "last_updated": "2025-12-03",
+    "analysis_date": "2025-12-05T18:38:45.335221"
+  },
+  "counts": {
+    "templates": 27,
+    "base_templates": 3,
+    "shared_components": 3,
+    "total": 33
+  },
+  "templates": {
+    "hands_on_tutorial": {
+      "id": "hands_on_tutorial",
+      "line_count": 49,
+      "char_count": 2526,
+      "has_inherits": false,
+      "sections": [
+        "name",
+        "triggers",
+        "response_type",
+        "expected_orchestrator",
+        "operation_name",
+        "base_structure",
+        "understanding_content",
+        "challenge_content",
+        "response_content",
+        "request_echo_content",
+        "next_steps_content"
+      ]
+    },
+    "cleanup": {
+      "id": "cleanup",
+      "line_count": 48,
+      "char_count": 2369,
+      "has_inherits": false,
+      "sections": [
+        "name",
+        "triggers",
+        "response_type",
+        "expected_orchestrator",
+        "operation_name",
+        "base_structure",
+        "understanding_content",
+        "challenge_content",
+        "response_content",
+        "request_echo_content",
+        "next_steps_content"
+      ]
+    },
+    "publish_branch": {
+      "id": "publish_branch",
+      "line_count": 37,
+      "char_count": 2444,
+      "has_inherits": false,
+      "sections": [
+        "name",
+        "triggers",
+        "response_type",
+        "expected_orchestrator",
+        "operation_name",
+        "base_structure",
+        "understanding_content",
+        "challenge_content",
+        "response_content",
+        "request_echo_content",
+        "next_steps_content"
+      ]
+    },
+    "optimize_cortex": {
+      "id": "optimize_cortex",
+      "line_count": 49,
+      "char_count": 2505,
+      "has_inherits": false,
+      "sections": [
+        "name",
+        "triggers",
+        "response_type",
+        "expected_orchestrator",
+        "operation_name",
+        "base_structure",
+        "understanding_content",
+        "challenge_content",
+        "response_content",
+        "request_echo_content",
+        "next_steps_content"
+      ]
+    },
+    "design_sync": {
+      "id": "design_sync",
+      "line_count": 48,
+      "char_count": 2505,
+      "has_inherits": false,
+      "sections": [
+        "name",
+        "triggers",
+        "response_type",
+        "expected_orchestrator",
+        "operation_name",
+        "base_structure",
+        "understanding_content",
+        "challenge_content",
+        "response_content",
+        "request_echo_content",
+        "next_steps_content"
+      ]
+    },
+    "demo_generation": {
+      "id": "demo_generation",
+      "line_count": 41,
+      "char_count": 2042,
+      "has_inherits": false,
+      "sections": [
+        "name",
+        "triggers",
+        "response_type",
+        "expected_orchestrator",
+        "operation_name",
+        "base_structure",
+        "understanding_content",
+        "challenge_content",
+        "response_content",
+        "request_echo_content",
+        "next_steps_content"
+      ]
+    },
+    "diagram_regeneration": {
+      "id": "diagram_regeneration",
+      "line_count": 43,
+      "char_count": 2354,
+      "has_inherits": false,
+      "sections": [
+        "name",
+        "triggers",
+        "response_type",
+        "expected_orchestrator",
+        "operation_name",
+        "base_structure",
+        "understanding_content",
+        "challenge_content",
+        "response_content",
+        "request_echo_content",
+        "next_steps_content"
+      ]
+    },
+    "holistic_cleanup": {
+      "id": "holistic_cleanup",
+      "line_count": 36,
+      "char_count": 2279,
+      "has_inherits": false,
+      "sections": [
+        "name",
+        "triggers",
+        "response_type",
+        "expected_orchestrator",
+        "operation_name",
+        "base_structure",
+        "understanding_content",
+        "challenge_content",
+        "response_content",
+        "request_echo_content",
+        "next_steps_content"
+      ]
+    },
+    "user_cleanup": {
+      "id": "user_cleanup",
+      "line_count": 41,
+      "char_count": 2020,
+      "has_inherits": false,
+      "sections": [
+        "name",
+        "triggers",
+        "response_type",
+        "expected_orchestrator",
+        "operation_name",
+        "base_structure",
+        "understanding_content",
+        "challenge_content",
+        "response_content",
+        "request_echo_content",
+        "next_steps_content"
+      ]
+    },
+    "optimize_system": {
+      "id": "optimize_system",
+      "line_count": 41,
+      "char_count": 2190,
+      "has_inherits": false,
+      "sections": [
+        "name",
+        "triggers",
+        "response_type",
+        "expected_orchestrator",
+        "operation_name",
+        "base_structure",
+        "understanding_content",
+        "challenge_content",
+        "response_content",
+        "request_echo_content",
+        "next_steps_content"
+      ]
+    },
+    "planning": {
+      "id": "planning",
+      "line_count": 62,
+      "char_count": 3382,
+      "has_inherits": false,
+      "sections": [
+        "name",
+        "triggers",
+        "response_type",
+        "expected_orchestrator",
+        "operation_name",
+        "base_structure",
+        "understanding_content",
+        "challenge_content",
+        "response_content",
+        "request_echo_content",
+        "next_steps_content"
+      ]
+    },
+    "application_health": {
+      "id": "application_health",
+      "line_count": 48,
+      "char_count": 2621,
+      "has_inherits": false,
+      "sections": [
+        "name",
+        "triggers",
+        "response_type",
+        "expected_orchestrator",
+        "operation_name",
+        "base_structure",
+        "understanding_content",
+        "challenge_content",
+        "response_content",
+        "request_echo_content",
+        "next_steps_content"
+      ]
+    },
+    "git_checkpoint": {
+      "id": "git_checkpoint",
+      "line_count": 58,
+      "char_count": 2830,
+      "has_inherits": false,
+      "sections": [
+        "name",
+        "triggers",
+        "response_type",
+        "expected_orchestrator",
+        "operation_name",
+        "base_structure",
+        "understanding_content",
+        "challenge_content",
+        "response_content",
+        "request_echo_content",
+        "next_steps_content"
+      ]
+    },
+    "manager_report": {
+      "id": "manager_report",
+      "line_count": 49,
+      "char_count": 2663,
+      "has_inherits": false,
+      "sections": [
+        "name",
+        "triggers",
+        "response_type",
+        "expected_orchestrator",
+        "operation_name",
+        "base_structure",
+        "understanding_content",
+        "challenge_content",
+        "response_content",
+        "request_echo_content",
+        "next_steps_content"
+      ]
+    },
+    "onboarding_acknowledgment": {
+      "id": "onboarding_acknowledgment",
+      "line_count": 57,
+      "char_count": 2717,
+      "has_inherits": false,
+      "sections": [
+        "name",
+        "triggers",
+        "response_type",
+        "expected_orchestrator",
+        "operation_name",
+        "base_structure",
+        "understanding_content",
+        "challenge_content",
+        "response_content",
+        "request_echo_content",
+        "next_steps_content"
+      ]
+    },
+    "plan_execution": {
+      "id": "plan_execution",
+      "line_count": 57,
+      "char_count": 2747,
+      "has_inherits": false,
+      "sections": [
+        "name",
+        "triggers",
+        "response_type",
+        "expected_orchestrator",
+        "operation_name",
+        "base_structure",
+        "understanding_content",
+        "challenge_content",
+        "response_content",
+        "request_echo_content",
+        "next_steps_content"
+      ]
+    },
+    "ado_agent": {
+      "id": "ado_agent",
+      "line_count": 50,
+      "char_count": 2577,
+      "has_inherits": false,
+      "sections": [
+        "name",
+        "triggers",
+        "response_type",
+        "expected_orchestrator",
+        "operation_name",
+        "base_structure",
+        "understanding_content",
+        "challenge_content",
+        "response_content",
+        "request_echo_content",
+        "next_steps_content"
+      ]
+    },
+    "compliance_dashboard_agent": {
+      "id": "compliance_dashboard_agent",
+      "line_count": 48,
+      "char_count": 2664,
+      "has_inherits": false,
+      "sections": [
+        "name",
+        "triggers",
+        "response_type",
+        "expected_orchestrator",
+        "operation_name",
+        "base_structure",
+        "understanding_content",
+        "challenge_content",
+        "response_content",
+        "request_echo_content",
+        "next_steps_content"
+      ]
+    },
+    "learning_capture_agent": {
+      "id": "learning_capture_agent",
+      "line_count": 51,
+      "char_count": 2767,
+      "has_inherits": false,
+      "sections": [
+        "name",
+        "triggers",
+        "response_type",
+        "expected_orchestrator",
+        "operation_name",
+        "base_structure",
+        "understanding_content",
+        "challenge_content",
+        "response_content",
+        "request_echo_content",
+        "next_steps_content"
+      ]
+    },
+    "profile_agent": {
+      "id": "profile_agent",
+      "line_count": 50,
+      "char_count": 2725,
+      "has_inherits": false,
+      "sections": [
+        "name",
+        "triggers",
+        "response_type",
+        "expected_orchestrator",
+        "operation_name",
+        "base_structure",
+        "understanding_content",
+        "challenge_content",
+        "response_content",
+        "request_echo_content",
+        "next_steps_content"
+      ]
+    },
+    "rca_agent": {
+      "id": "rca_agent",
+      "line_count": 50,
+      "char_count": 2624,
+      "has_inherits": false,
+      "sections": [
+        "name",
+        "triggers",
+        "response_type",
+        "expected_orchestrator",
+        "operation_name",
+        "base_structure",
+        "understanding_content",
+        "challenge_content",
+        "response_content",
+        "request_echo_content",
+        "next_steps_content"
+      ]
+    },
+    "welcome_banner_agent": {
+      "id": "welcome_banner_agent",
+      "line_count": 44,
+      "char_count": 2391,
+      "has_inherits": false,
+      "sections": [
+        "name",
+        "triggers",
+        "response_type",
+        "expected_orchestrator",
+        "operation_name",
+        "base_structure",
+        "understanding_content",
+        "challenge_content",
+        "response_content",
+        "request_echo_content",
+        "next_steps_content"
+      ]
+    },
+    "architecture_intelligence_agent": {
+      "id": "architecture_intelligence_agent",
+      "line_count": 45,
+      "char_count": 2509,
+      "has_inherits": false,
+      "sections": [
+        "name",
+        "triggers",
+        "response_type",
+        "expected_orchestrator",
+        "operation_name",
+        "base_structure",
+        "understanding_content",
+        "challenge_content",
+        "response_content",
+        "request_echo_content",
+        "next_steps_content"
+      ]
+    },
+    "feedback_agent": {
+      "id": "feedback_agent",
+      "line_count": 53,
+      "char_count": 2749,
+      "has_inherits": false,
+      "sections": [
+        "name",
+        "triggers",
+        "response_type",
+        "expected_orchestrator",
+        "operation_name",
+        "base_structure",
+        "understanding_content",
+        "challenge_content",
+        "response_content",
+        "request_echo_content",
+        "next_steps_content"
+      ]
+    },
+    "view_discovery_agent": {
+      "id": "view_discovery_agent",
+      "line_count": 62,
+      "char_count": 3628,
+      "has_inherits": false,
+      "sections": [
+        "name",
+        "triggers",
+        "response_type",
+        "expected_orchestrator",
+        "operation_name",
+        "base_structure",
+        "understanding_content",
+        "challenge_content",
+        "response_content",
+        "request_echo_content",
+        "next_steps_content"
+      ]
+    },
+    "threat_modeler_agent": {
+      "id": "threat_modeler_agent",
+      "line_count": 65,
+      "char_count": 3967,
+      "has_inherits": false,
+      "sections": [
+        "name",
+        "triggers",
+        "response_type",
+        "expected_orchestrator",
+        "operation_name",
+        "base_structure",
+        "understanding_content",
+        "challenge_content",
+        "response_content",
+        "request_echo_content",
+        "next_steps_content"
+      ]
+    },
+    "leadership_showcase": {
+      "id": "leadership_showcase",
+      "line_count": 288,
+      "char_count": 22650,
+      "has_inherits": false,
+      "sections": [
+        "base_structure",
+        "name",
+        "triggers",
+        "response_type",
+        "operation_name",
+        "understanding_content",
+        "challenge_content",
+        "response_content",
+        "request_echo_content",
+        "next_steps_content"
+      ]
+    }
+  },
+  "base_templates": [
+    "standard_5_part",
+    "tech_aware_response",
+    "compact_format"
+  ],
+  "shared_components": [
+    "standard_header",
+    "progress_bar",
+    "plan_file_link"
+  ]
+}

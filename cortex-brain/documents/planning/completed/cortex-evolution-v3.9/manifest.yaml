@@ -1,0 +1,652 @@
+---
+# 🧠 CORTEX Evolution v3.9 - Planning System Manifest
+# Defines Definition of Ready (DoR), Definition of Done (DoD), and phase metadata
+# Author: Asif Hussain | Created: 2024-12-14
+
+metadata:
+  plan_id: "cortex-evolution-v3.9"
+  title: "CORTEX Evolution v3.9 - Planning System"
+  version: "3.9.0"
+  planning_system_version: "3.0"
+  created_date: "2024-12-14"
+  author: "Asif Hussain"
+  repository: "github.com/asifhussain60/CORTEX"
+  branch: "cortex-cleanup"
+  priority: "HIGH"
+  complexity: "TIER_4_COMPLEX"
+  estimated_duration: "52-70 hours (1.3-1.75 weeks)"
+  total_phases: 17
+
+definition_of_ready:
+  description: "Criteria that must be met before starting any phase"
+  
+  global_requirements:
+    - requirement: "Phase 00 (Governance) completed"
+      rationale: "Brain protection rules must be in place before development"
+      validation: "brain-protection-rules.yaml contains all 7 new rules"
+    
+    - requirement: "Version manager operational"
+      rationale: "Orchestrators require centralized version injection"
+      validation: "version_manager.py can read cortex.config.json"
+      applies_to_phases: [3, 4, 5, 6, 12]
+    
+    - requirement: "Development environment configured"
+      rationale: "Python 3.8+, dependencies installed, tests passing"
+      validation: "pytest runs successfully, all existing tests pass"
+    
+    - requirement: "Git checkpoint created"
+      rationale: "Rollback capability for each phase"
+      validation: "Git branch cortex-cleanup exists, clean working tree"
+    
+    - requirement: "CORTEX Lens available"
+      rationale: "AST integration phases require Lens v1.0.0"
+      validation: "src/cortex_lens/ exists, Lens CLI functional"
+      applies_to_phases: [8, 9, 10, 11]
+  
+  phase_specific_requirements:
+    phase_01:
+      - "Complexity analyzer design reviewed"
+      - "Multi-dimensional scoring criteria defined"
+      - "Router accuracy baseline established (70%)"
+    
+    phase_02:
+      - "Tiered routing system design approved"
+      - "LLM classifier prompt engineered"
+      - "Telemetry infrastructure available"
+    
+    phase_03:
+      - "Phase 01 (Router) completed"
+      - "Phase 02 (Analyzer) completed"
+      - "Phase 15 (Version Manager) completed"
+      - "Planning System manifests reviewed"
+    
+    phase_04:
+      - "Phase 03 (Planning Orchestrator 3.0) completed"
+      - "ADO formatting specifications documented"
+    
+    phase_05:
+      - "Phase 03 (Planning Orchestrator 3.0) completed"
+      - "TDD workflow manifests reviewed"
+      - "RED→GREEN→REFACTOR validation logic designed"
+    
+    phase_06:
+      - "Phase 03 (Planning Orchestrator 3.0) completed"
+      - "System maintenance workflow documented"
+    
+    phase_07:
+      - "Learning subsystem design approved"
+      - "Feedback loop architecture defined"
+    
+    phase_08:
+      - "CORTEX Lens API documentation reviewed"
+      - "Non-invasive wrapper pattern validated"
+      - "Integration contract defined"
+    
+    phase_09:
+      - "Phase 08 (AST Wrapper) completed"
+      - "Analyzer requirements defined"
+    
+    phase_10:
+      - "Phase 08 (AST Wrapper) completed"
+      - "Narrative generation examples reviewed"
+    
+    phase_11:
+      - "Phase 08 (AST Wrapper) completed"
+      - "Visualization requirements defined"
+    
+    phase_12:
+      - "Phase 08 (AST Wrapper) completed"
+      - "Vacuum cycle requirements documented"
+    
+    phase_13:
+      - "Refactor cycle requirements defined"
+      - "Code cleanup patterns documented"
+      - "Multi-threading strategy approved"
+    
+    phase_14:
+      - "Document hygiene requirements defined"
+      - "Filename optimization rules established"
+      - "Reference update strategy approved"
+    
+    phase_15:
+      - "Version management strategy approved"
+      - "cortex.config.json schema updated"
+    
+    phase_16:
+      - "All phases 00-15 completed"
+      - "Integration test scenarios defined"
+
+definition_of_done:
+  description: "Criteria that must be met before marking any phase complete"
+  
+  universal_criteria:
+    - criterion: "Code implemented and functional"
+      validation: "Module imports successfully, core functionality works"
+    
+    - criterion: "Unit tests written and passing"
+      validation: "pytest test_{module}.py passes, coverage ≥80%"
+    
+    - criterion: "Integration with existing system validated"
+      validation: "No regressions in existing functionality"
+    
+    - criterion: "Documentation complete"
+      validation: "Docstrings, README updates, API docs as needed"
+    
+    - criterion: "Code review completed"
+      validation: "Self-review using brain protection rules"
+    
+    - criterion: "Git checkpoint created"
+      validation: "Commit with descriptive message, phase tagged"
+    
+    - criterion: "Phase tracker updated"
+      validation: "cortex-3.9-master.md progress table updated"
+  
+  phase_specific_criteria:
+    phase_00:
+      - "7 new rules added to brain-protection-rules.yaml"
+      - "Rule examples documented"
+      - "Enforcement integration points identified"
+    
+    phase_01:
+      - "tiered_router.py passes all unit tests"
+      - "Routing accuracy measured on test dataset"
+      - "Telemetry captures routing decisions"
+    
+    phase_02:
+      - "complexity_analyzer.py passes all unit tests"
+      - "Multi-dimensional scoring validated"
+      - "Integration with router tested"
+    
+    phase_03:
+      - "planning_orchestrator.py v3.0 functional"
+      - "Tiered execution paths tested"
+      - "Automatic refactor cycle invocation working"
+      - "Automatic vacuum cycle invocation working"
+      - "Version synchronization validated"
+      - "Backward compatibility maintained"
+    
+    phase_04:
+      - "ado_planning_orchestrator.py v3.0 functional"
+      - "ADO formatting preserved"
+      - "DoR/DoD compliance maintained"
+      - "Version synchronization validated"
+    
+    phase_05:
+      - "tdd_orchestrator.py v3.0 functional"
+      - "RED→GREEN→REFACTOR validation enhanced"
+      - "AST test gap detection working"
+      - "Version synchronization validated"
+    
+    phase_06:
+      - "system_maintenance_orchestrator.py v3.0 functional"
+      - "Vacuum cycle integrated as automatic phase"
+      - "Healthcheck reporting enhanced"
+      - "Version synchronization validated"
+    
+    phase_07:
+      - "planning_learner.py passes all unit tests"
+      - "Feedback loop captures routing decisions"
+      - "Accuracy improvement measurable"
+    
+    phase_08:
+      - "ast_engine.py wrapper functional"
+      - "CORTEX Lens API calls successful"
+      - "Zero modifications to Lens code"
+      - "Contract tests passing"
+    
+    phase_09:
+      - "Enhanced analyzers functional"
+      - "Deduplication detection ≥90% accuracy"
+      - "Architectural debt reports generated"
+      - "Code smell identification working"
+    
+    phase_10:
+      - "Narrative intelligence functional"
+      - "Context-aware explanations generated"
+      - "Architecture storytelling working"
+      - "Change impact narratives accurate"
+    
+    phase_11:
+      - "Visual intelligence functional"
+      - "Dependency graphs generated"
+      - "Architecture diagrams accurate"
+      - "Progress visualization working"
+    
+    phase_12:
+      - "vacuum_orchestrator.py functional"
+      - "AST similarity detection working"
+      - "Orphaned code removal safe (dry-run validated)"
+      - "Version synchronization validated"
+    
+    phase_13:
+      - "refactor_cycle_orchestrator.py functional"
+      - "Code cleanup ≥95% effective"
+      - "Comment synchronization working"
+      - "Debug statement removal 100% accurate"
+      - "Multi-threaded utilities performant (<30s for typical phase)"
+      - "Planning Orchestrator integration tested"
+    
+    phase_14:
+      - "document_hygiene_orchestrator.py functional"
+      - "MD consolidation reduces file count by ≥30%"
+      - "Filename optimization respects 20-char limit"
+      - "Reference updates 100% accurate"
+      - "Multi-threaded utilities performant"
+      - "Planning Orchestrator integration tested"
+    
+    phase_15:
+      - "version_manager.py functional"
+      - "Version reading from cortex.config.json working"
+      - "Orchestrator version injection tested"
+      - "Version consistency validation passing"
+      - "API for version queries functional"
+    
+    phase_16:
+      - "End-to-end tests passing (all tiers)"
+      - "Performance benchmarks met (Tier 1 <2s, refactor <30s)"
+      - "CORTEX Lens compatibility validated"
+      - "Version consistency validated across all orchestrators"
+      - "All documentation updated"
+      - "Integration test coverage ≥90%"
+
+success_criteria:
+  performance:
+    - metric: "Tier 1 operation latency"
+      target: "<2 seconds"
+      measurement: "Average over 100 operations"
+    
+    - metric: "Tier 2 operation latency"
+      target: "<10 seconds"
+      measurement: "Average over 50 operations"
+    
+    - metric: "Routing accuracy"
+      target: "≥95%"
+      measurement: "Correct tier assignment over 100 operations"
+    
+    - metric: "Refactor cycle completion time"
+      target: "<30 seconds"
+      measurement: "Typical phase refactor (5-10 files)"
+    
+    - metric: "Document hygiene file reduction"
+      target: "≥30%"
+      measurement: "Before/after MD file count"
+    
+    - metric: "Vacuum cycle manual cleanup reduction"
+      target: "≥80%"
+      measurement: "Comparison to manual cleanup effort"
+  
+  quality:
+    - metric: "CORTEX Lens integration"
+      target: "Zero breaking changes"
+      measurement: "Lens tests still passing, independent operation verified"
+    
+    - metric: "Test coverage"
+      target: "≥80%"
+      measurement: "pytest --cov coverage report"
+    
+    - metric: "Brain protection rules enforcement"
+      target: "100%"
+      measurement: "All 7 new rules actively enforced"
+    
+    - metric: "Backward compatibility"
+      target: "All existing CLI wrappers functional"
+      measurement: "Integration tests for existing workflows"
+  
+  integration:
+    - metric: "AST engine CORTEX Lens wrapper"
+      target: "100% API coverage"
+      measurement: "All Lens orchestrator methods accessible"
+    
+    - metric: "Deduplication detection accuracy"
+      target: "≥90%"
+      measurement: "True positives / (true positives + false negatives)"
+    
+    - metric: "Learning subsystem improvement"
+      target: "+5% routing accuracy over 1000 operations"
+      measurement: "Before/after routing accuracy comparison"
+    
+    - metric: "Version consistency"
+      target: "100% across all orchestrators"
+      measurement: "All orchestrators report correct version from config"
+    
+    - metric: "Refactor cycle effectiveness"
+      target: "100% debug statement removal"
+      measurement: "No console.log, print, etc. in production code"
+    
+    - metric: "Document hygiene reference accuracy"
+      target: "100%"
+      measurement: "No broken file/path references after renames"
+
+dependencies:
+  external:
+    - name: "CORTEX Lens v1.0.0"
+      location: "src/cortex_lens/"
+      required_phases: [8, 9, 10, 11]
+      status: "available"
+      validation: "Lens CLI functional, independent operation verified"
+    
+    - name: "Python 3.8+"
+      required_phases: "all"
+      status: "available"
+      validation: "python --version ≥ 3.8"
+    
+    - name: "pytest framework"
+      required_phases: "all"
+      status: "available"
+      validation: "pytest --version"
+    
+    - name: "Brain Protection System (SKULL)"
+      location: "cortex-brain/brain-protection-rules.yaml"
+      required_phases: "all"
+      status: "available"
+      validation: "File exists, rules loadable"
+  
+  internal:
+    critical_path:
+      - phase: 0
+        name: "Governance Framework"
+        blocks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+        reason: "Brain protection rules must be enforced before development"
+      
+      - phase: 1
+        name: "Tiered Routing System"
+        blocks: [3, 4, 5, 6]
+        reason: "Router required for orchestrator redesigns"
+      
+      - phase: 2
+        name: "Complexity Analyzer"
+        blocks: [3, 4, 5, 6]
+        reason: "Analyzer required for tiered execution"
+      
+      - phase: 15
+        name: "Version Manager"
+        blocks: [3, 4, 5, 6, 12]
+        reason: "Version injection required before orchestrator updates"
+      
+      - phase: 8
+        name: "AST Engine Wrapper"
+        blocks: [9, 10, 11, 12]
+        reason: "Wrapper required for AST-powered features"
+      
+      - phase: 13
+        name: "Refactor Cycle Engine"
+        blocks: [16]
+        reason: "Refactor cycle must complete before integration testing"
+      
+      - phase: 14
+        name: "Document Hygiene Engine"
+        blocks: [16]
+        reason: "Document hygiene must complete before integration testing"
+
+risks:
+  technical:
+    - risk_id: "RISK-001"
+      description: "LLM routing latency exceeds Tier 1 target (<2s)"
+      probability: "MEDIUM"
+      severity: "MEDIUM"
+      mitigation: "Implement caching layer, fallback to regex for known patterns"
+      contingency: "Reduce LLM complexity, optimize prompt"
+    
+    - risk_id: "RISK-002"
+      description: "AST wrapper coupling with CORTEX Lens API changes"
+      probability: "LOW"
+      severity: "HIGH"
+      mitigation: "API versioning, comprehensive contract tests, pin Lens version"
+      contingency: "Wrapper update strategy, version compatibility matrix"
+    
+    - risk_id: "RISK-003"
+      description: "Vacuum cycle false positives (legitimate code removed)"
+      probability: "MEDIUM"
+      severity: "HIGH"
+      mitigation: "Dry-run mode, manual review gate, similarity threshold tuning"
+      contingency: "Git rollback, whitelist for protected code"
+    
+    - risk_id: "RISK-004"
+      description: "Refactor cycle breaks functional code"
+      probability: "LOW"
+      severity: "HIGH"
+      mitigation: "Comprehensive tests before refactor, AST-based safe refactoring"
+      contingency: "Git rollback, manual review for critical modules"
+    
+    - risk_id: "RISK-005"
+      description: "Document hygiene reference updates miss edge cases"
+      probability: "MEDIUM"
+      severity: "MEDIUM"
+      mitigation: "Multi-pass reference detection, validation step"
+      contingency: "Manual review tool, rollback capability"
+  
+  process:
+    - risk_id: "RISK-006"
+      description: "Incremental creation overhead slows progress"
+      probability: "LOW"
+      severity: "LOW"
+      mitigation: "Template automation, batch commits"
+      contingency: "Adjust creation pace, parallelize documentation"
+    
+    - risk_id: "RISK-007"
+      description: "Governance enforcement creates workflow friction"
+      probability: "MEDIUM"
+      severity: "LOW"
+      mitigation: "Clear documentation, override mechanisms for edge cases"
+      contingency: "Rule refinement based on feedback"
+
+deliverables:
+  code:
+    - module: "tiered_router.py"
+      location: "src/operations/modules/routing/"
+      phase: 1
+      lines_estimate: 250
+    
+    - module: "complexity_analyzer.py"
+      location: "src/operations/modules/routing/"
+      phase: 2
+      lines_estimate: 200
+    
+    - module: "planning_orchestrator.py"
+      location: "src/operations/modules/orchestration/"
+      phase: 3
+      lines_estimate: 450
+      modification: "v3.0 redesign"
+    
+    - module: "ado_planning_orchestrator.py"
+      location: "src/operations/modules/orchestration/"
+      phase: 4
+      lines_estimate: 350
+      modification: "v3.0 redesign"
+    
+    - module: "tdd_orchestrator.py"
+      location: "src/operations/modules/orchestration/"
+      phase: 5
+      lines_estimate: 400
+      modification: "v3.0 redesign"
+    
+    - module: "system_maintenance_orchestrator.py"
+      location: "src/operations/modules/orchestration/"
+      phase: 6
+      lines_estimate: 380
+      modification: "v3.0 redesign"
+    
+    - module: "planning_learner.py"
+      location: "src/operations/modules/learning/"
+      phase: 7
+      lines_estimate: 180
+    
+    - module: "ast_engine.py"
+      location: "src/operations/modules/analysis/"
+      phase: 8
+      lines_estimate: 300
+    
+    - module: "vacuum_orchestrator.py"
+      location: "src/operations/modules/orchestration/"
+      phase: 12
+      lines_estimate: 320
+    
+    - module: "refactor_cycle_orchestrator.py"
+      location: "src/operations/modules/orchestration/"
+      phase: 13
+      lines_estimate: 350
+    
+    - module: "document_hygiene_orchestrator.py"
+      location: "src/operations/modules/orchestration/"
+      phase: 14
+      lines_estimate: 400
+    
+    - module: "version_manager.py"
+      location: "src/operations/modules/version/"
+      phase: 15
+      lines_estimate: 150
+    
+    - module: "multithreaded_file_scanner.py"
+      location: "src/operations/utils/"
+      phase: 13
+      lines_estimate: 180
+    
+    - module: "reference_updater.py"
+      location: "src/operations/utils/"
+      phase: 14
+      lines_estimate: 200
+  
+  tests:
+    - test_suite: "test_tiered_router.py"
+      location: "tests/"
+      phase: 1
+      coverage_target: "≥85%"
+    
+    - test_suite: "test_complexity_analyzer.py"
+      location: "tests/"
+      phase: 2
+      coverage_target: "≥85%"
+    
+    - test_suite: "test_planning_learner.py"
+      location: "tests/"
+      phase: 7
+      coverage_target: "≥80%"
+    
+    - test_suite: "test_ast_engine.py"
+      location: "tests/"
+      phase: 8
+      coverage_target: "≥80%"
+    
+    - test_suite: "test_version_manager.py"
+      location: "tests/"
+      phase: 15
+      coverage_target: "≥85%"
+    
+    - test_suite: "test_refactor_cycle_orchestrator.py"
+      location: "tests/"
+      phase: 13
+      coverage_target: "≥80%"
+    
+    - test_suite: "test_document_hygiene_orchestrator.py"
+      location: "tests/"
+      phase: 14
+      coverage_target: "≥80%"
+    
+    - test_suite: "test_tiered_execution.py"
+      location: "tests/integration/"
+      phase: 16
+      coverage_target: "≥90%"
+    
+    - test_suite: "test_vacuum_cycle.py"
+      location: "tests/integration/"
+      phase: 16
+      coverage_target: "≥85%"
+    
+    - test_suite: "test_refactor_cycle.py"
+      location: "tests/integration/"
+      phase: 16
+      coverage_target: "≥85%"
+    
+    - test_suite: "test_version_consistency.py"
+      location: "tests/integration/"
+      phase: 16
+      coverage_target: "≥90%"
+  
+  documentation:
+    - document: "brain-protection-rules.yaml"
+      location: "cortex-brain/"
+      phase: 0
+      update: "Add 7 new rules with examples"
+    
+    - document: "cortex.config.json"
+      location: "./"
+      phase: 15
+      update: "Version 3.9.0, planningSystem.version: 3.0"
+    
+    - document: "README.md"
+      location: "./"
+      phase: 16
+      update: "Planning System features, tiered routing, automatic cycles"
+    
+    - document: "AST Engine API Documentation"
+      location: "docs/"
+      phase: 8
+      type: "new"
+    
+    - document: "CORTEX Lens Integration Guide"
+      location: "docs/"
+      phase: 8
+      type: "new"
+    
+    - document: "Refactor Cycle Usage Guide"
+      location: "docs/"
+      phase: 13
+      type: "new"
+    
+    - document: "Document Hygiene Best Practices"
+      location: "docs/"
+      phase: 14
+      type: "new"
+    
+    - document: "Version Management Specification"
+      location: "docs/"
+      phase: 15
+      type: "new"
+
+tdd_compliance:
+  red_phase:
+    requirements:
+      - "Write failing tests before implementation"
+      - "Tests must fail for the right reason"
+      - "Minimal test code to demonstrate requirement"
+    
+    validation:
+      - "pytest shows test failures"
+      - "Failure messages clear and actionable"
+  
+  green_phase:
+    requirements:
+      - "Implement minimal code to pass tests"
+      - "All tests must pass"
+      - "No skipped tests"
+    
+    validation:
+      - "pytest shows all tests passing"
+      - "Coverage report meets phase target"
+  
+  refactor_phase:
+    requirements:
+      - "Improve code quality without changing behavior"
+      - "Tests continue to pass"
+      - "Remove duplication, improve clarity"
+    
+    validation:
+      - "pytest still passing after refactor"
+      - "Code review identifies no code smells"
+      - "Refactor cycle orchestrator validates cleanup"
+
+version_history:
+  - version: "3.9.0"
+    date: "2024-12-14"
+    changes: "Initial manifest creation for Planning System"
+    author: "Asif Hussain"
+
+notes:
+  - "This manifest inherits from Planning System manifest structure"
+  - "DoR/DoD expanded for Planning System features (refactor/hygiene cycles)"
+  - "Version management added as critical dependency for orchestrator updates"
+  - "TDD compliance mandatory for all phases"
+  - "Multi-threaded utilities for performance-critical operations"
+  - "Git-based rollback for all risky operations"
+  - "Dry-run mode required for vacuum and hygiene operations"
+  - "CORTEX Lens integration non-invasive (zero breaking changes)"

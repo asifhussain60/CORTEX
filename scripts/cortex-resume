@@ -1,0 +1,242 @@
+#!/usr/bin/env python3
+"""
+CORTEX Resume - One-command conversation resume
+
+Usage:
+    cortex-resume
+    cortex-resume --last 3
+    cortex-resume --search "authentication"
+
+Author: Asif Hussain
+Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+Phase: Phase 4 - Advanced CLI & Integration
+"""
+
+import sys
+import os
+from pathlib import Path
+from datetime import datetime
+from typing import Optional, List, Dict
+import argparse
+
+# Add CORTEX root to path
+CORTEX_ROOT = Path(__file__).parent.parent
+sys.path.insert(0, str(CORTEX_ROOT))
+
+try:
+    from src.tier1.working_memory import WorkingMemory
+except ImportError as e:
+    print(f"[ERROR] Failed to import CORTEX modules: {e}")
+    sys.exit(1)
+
+
+class ConversationResume:
+    """One-command conversation resume"""
+    
+    def __init__(self, repo_path: Optional[Path] = None):
+        """Initialize resume system"""
+        self.repo_path = repo_path or Path.cwd()
+        self.brain_path = self.repo_path / "cortex-brain"
+        
+        if not self.brain_path.exists():
+            print(f"[ERROR] CORTEX brain not found at: {self.brain_path}")
+            sys.exit(1)
+        
+        self.tier1 = WorkingMemory(self.brain_path)
+    
+    def resume_last(self, count: int = 1) -> bool:
+        """
+        Resume last N conversations
+        
+        Args:
+            count: Number of conversations to show
+        
+        Returns:
+            bool: True if successful
+        """
+        try:
+            # Get last N conversations
+            conversations = self.tier1.get_recent_conversations(count)
+            
+            if not conversations:
+                print("📭 No recent conversations found")
+                return False
+            
+            print(f"\n=== Last {len(conversations)} Conversations ===\n")
+            
+            for i, conv in enumerate(conversations, 1):
+                self._print_conversation(i, conv)
+            
+            # Generate resume prompt
+            print("\n" + "=" * 60)
+            print("📋 Resume Prompt (copy to Copilot Chat):")
+            print("=" * 60)
+            print("\n#file:prompts/user/cortex.md\n")
+            print("Continue from last conversation:")
+            for conv in conversations:
+                timestamp = conv.get("timestamp", "")
+                content = conv.get("content", "")
+                print(f"- {timestamp}: {content[:100]}")
+            print("\n" + "=" * 60)
+            
+            return True
+            
+        except Exception as e:
+            print(f"❌ Failed to resume: {e}")
+            return False
+    
+    def search_conversations(self, query: str, limit: int = 5) -> bool:
+        """
+        Search conversations by keyword
+        
+        Args:
+            query: Search query
+            limit: Maximum results
+        
+        Returns:
+            bool: True if successful
+        """
+        try:
+            # Search in Tier 1
+            results = self.tier1.search_conversations(query, limit=limit)
+            
+            if not results:
+                print(f"🔍 No conversations found matching: {query}")
+                return False
+            
+            print(f"\n=== Found {len(results)} Conversations ===\n")
+            
+            for i, conv in enumerate(results, 1):
+                self._print_conversation(i, conv)
+            
+            return True
+            
+        except Exception as e:
+            print(f"❌ Search failed: {e}")
+            return False
+    
+    def _print_conversation(self, index: int, conv: Dict) -> None:
+        """Print conversation summary"""
+        timestamp = conv.get("timestamp", "Unknown")
+        content = conv.get("content", "")
+        conv_type = conv.get("metadata", {}).get("type", "general")
+        conv_id = conv.get("id", "unknown")
+        
+        # Format timestamp
+        try:
+            dt = datetime.fromisoformat(timestamp)
+            time_str = dt.strftime("%Y-%m-%d %H:%M:%S")
+        except:
+            time_str = timestamp
+        
+        # Print header
+        print(f"{index}. [{conv_type.upper()}] {time_str}")
+        print(f"   ID: {conv_id}")
+        
+        # Print content (truncated)
+        if len(content) > 150:
+            print(f"   {content[:150]}...")
+        else:
+            print(f"   {content}")
+        
+        # Print metadata if available
+        metadata = conv.get("metadata", {})
+        if "tags" in metadata and metadata["tags"]:
+            print(f"   Tags: {', '.join(metadata['tags'])}")
+        
+        print()
+    
+    def interactive_resume(self) -> bool:
+        """Interactive resume mode"""
+        print("\n=== CORTEX Resume ===\n")
+        print("1. Show last conversation")
+        print("2. Show last 3 conversations")
+        print("3. Show last 5 conversations")
+        print("4. Search conversations")
+        
+        choice = input("\nChoice [1]: ").strip() or "1"
+        
+        if choice == "1":
+            return self.resume_last(1)
+        elif choice == "2":
+            return self.resume_last(3)
+        elif choice == "3":
+            return self.resume_last(5)
+        elif choice == "4":
+            query = input("Search query: ").strip()
+            if not query:
+                print("❌ Query required")
+                return False
+            return self.search_conversations(query)
+        else:
+            print("❌ Invalid choice")
+            return False
+
+
+def main():
+    """Main entry point"""
+    parser = argparse.ArgumentParser(
+        description="CORTEX Resume - One-command conversation resume",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  cortex-resume                    # Show last conversation
+  cortex-resume --last 3           # Show last 3 conversations
+  cortex-resume --search "auth"    # Search for conversations
+  cortex-resume --interactive      # Interactive mode
+        """
+    )
+    
+    parser.add_argument(
+        "--last", "-l",
+        type=int,
+        default=1,
+        help="Number of last conversations to show (default: 1)"
+    )
+    
+    parser.add_argument(
+        "--search", "-s",
+        help="Search conversations by keyword"
+    )
+    
+    parser.add_argument(
+        "--limit",
+        type=int,
+        default=5,
+        help="Search result limit (default: 5)"
+    )
+    
+    parser.add_argument(
+        "--interactive", "-i",
+        action="store_true",
+        help="Interactive mode"
+    )
+    
+    parser.add_argument(
+        "--repo",
+        type=Path,
+        help="Repository path (default: current directory)"
+    )
+    
+    args = parser.parse_args()
+    
+    # Initialize
+    try:
+        resume = ConversationResume(repo_path=args.repo)
+    except Exception as e:
+        print(f"[ERROR] Failed to initialize: {e}")
+        sys.exit(1)
+    
+    # Execute
+    if args.interactive:
+        success = resume.interactive_resume()
+    elif args.search:
+        success = resume.search_conversations(args.search, args.limit)
+    else:
+        success = resume.resume_last(args.last)
+    
+    sys.exit(0 if success else 1)
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,19 @@
+{
+  "files.encoding": "utf8",
+  "files.autoGuessEncoding": false,
+  "[markdown]": {
+    "files.encoding": "utf8",
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true
+  },
+  "[html]": {
+    "files.encoding": "utf8"
+  },
+  "[python]": {
+    "files.encoding": "utf8"
+  },
+  // MkDocs-specific settings
+  "search.exclude": {
+    "**/site/**": true
+  }
+}

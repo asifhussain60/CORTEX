@@ -1,0 +1,916 @@
+schema_version: 2.1.0
+last_updated: '2025-11-16'
+optimization_note: Condensed for token efficiency - full examples in response-templates-docs/
+routing:
+  default: fallback
+  planning_triggers:
+  - plan
+  - let's plan
+  - plan a feature
+  - plan this
+  - help me plan
+  - planning
+  - feature planning
+  - i want to plan
+templates:
+  help_table:
+    response_type: table
+    content: "\n\U0001F4DD **Your Request:** {{user_request}}\n\n\U0001F3AF **Understanding:**\
+      \ You want to see all available CORTEX commands\n\n\U0001F4AC **Response:**\
+      \ Here's your command reference:\n\n\n\nLegend:\n\nUsage:\n  Natural language:\
+      \  \"setup environment\" or \"refresh story\" or \"sync design\"\n  Slash commands:\
+      \    /setup or /CORTEX, refresh cortex story\n\n\U0001F52E **Next Steps:**\n\
+      \  \u2022 Try: \"help detailed\" for more information\n  \u2022 Try: \"help\
+      \ <command>\" for specific command help\n  \u2022 Try: \"setup environment\"\
+      \ to get started\n\n"
+  help_detailed:
+    response_type: detailed
+    content: "\n\n\U0001F4DD **Your Request:** {{user_request}}\n\n\n\U0001F4AC **Response:**\
+      \ Here's the complete breakdown organized by category:\n\n\n   Examples: \"\
+      setup environment\", \"/setup\", \"configure\"\n   Modules: 4 (platform detection,\
+      \ deps, brain init, validation)\n\n   Examples: \"refresh story\", \"update\
+      \ story\"\n   Modules: 6 (load, transform, validate, save, nav, preview)\n\n\
+      \   Examples: \"sync design\", \"align design\", \"consolidate status\"\n  \
+      \ Modules: 1 orchestrator (6-phase workflow)\n   Profiles: quick (analysis),\
+      \ standard (safe updates), comprehensive (full sync)\n\n   Examples: \"generate\
+      \ docs\", \"build documentation\"\n   Status: Architecture ready, modules pending\n\
+      \n   Examples: \"cleanup\", \"clean workspace\"\n   Modules: 5/6 (logs, cache,\
+      \ SQLite vacuum, report)\n\n   Examples: \"check brain\", \"validate brain\"\
+      \n   Status: Architecture ready, modules pending\n\n   Examples: \"run tests\"\
+      , \"test this\"\n   Status: Architecture ready, modules pending\n\n   Examples:\
+      \ \"plan this feature\", \"help me plan\"\n   Status: Design phase\n\n\uFFFD\
+      \ **Next Steps:**\n  \u2022 Try any command: \"setup environment\", \"sync design\"\
+      , \"cleanup\"\n  \u2022 Get command-specific help: \"help setup\", \"help cleanup\"\
+      \n  \u2022 Start working: Just tell CORTEX what you need!\n\n"
+  quick_start:
+    response_type: narrative
+    content: "\n\n\nExamples:\n  \u2022 \"Add a purple button to the dashboard\"\n\
+      \  \u2022 \"Setup my environment\"\n  \u2022 \"Show me where I left off\"\n\
+      \  \u2022 \"Create tests for this feature\"\n\n**Optional shortcuts:**\n  \u2022\
+      \ `/setup` - Configure environment\n  \u2022 `/help` - Show available commands\n\
+      \  \u2022 `/resume` - Continue previous work\n\n**First time setup:**\n\n"
+  status_check:
+    response_type: table
+    content: "\n\n**\u2705 Production Ready:**\n  \u2022 Story Refresh (complete)\n\
+      \  \u2022 Environment Setup (core modules operational)\n\n**\U0001F504 Partial\
+      \ (Core Working):**\n  \u2022 Workspace Cleanup (core functionality ready)\n\
+      \n**\u23F8\uFE0F Pending (Architecture Complete):**\n  \u2022 Documentation\
+      \ Builder\n  \u2022 Brain Protection Validator\n  \u2022 Test Suite Runner\n\
+      \n**\U0001F3AF Planned (CORTEX 2.1):**\n  \u2022 Interactive Planning\n  \u2022\
+      \ Architecture Design Assistant\n  \u2022 Refactoring Helper\n\n**Architecture:**\
+      \ Universal Operations System \u2705\n**Token Optimization:** 97.2% reduction\
+      \ achieved \u2705\n**Version:** CORTEX 2.0\n"
+  help_setup:
+    response_type: detailed
+    content: "\n\n**Purpose:** Configure development environment for current platform\n\
+      \n**Usage:**\n  Natural: \"setup environment\", \"configure\"\n  Slash: /setup,\
+      \ /env, /configure\n\n**What it does:**\n\n**Profiles:**\n  \u2022 minimal -\
+      \ Quick setup, essentials only\n  \u2022 standard - Full setup (default)\n \
+      \ \u2022 full - Complete with validation\n\n**Example:**\n"
+  help_maintain:
+    response_type: detailed
+    content: "\n\n\n**Usage:**\n  Natural: \"maintain\", \"maintenance\", \"cleanup\"\
+      , \"optimize\"\n  Slash: /CORTEX, maintain\n\n**What it does:**\n\n**Profiles:**\n\
+      \  \u2022 quick - Basic cleanup and health check\n  \u2022 standard - Cleanup\
+      \ + optimization + validation (default)\n  \u2022 comprehensive - Full maintenance\
+      \ with auto-optimization\n\n**Example:**\n"
+  help_document:
+    response_type: detailed
+    content: "\n\n\n**Usage:**\n  Natural: \"document\", \"documentation\", \"refresh\
+      \ story\", \"update docs\"\n  Slash: /CORTEX, document\n\n**What it does:**\n\
+      \n**Profiles:**\n  \u2022 quick - Story refresh only\n  \u2022 standard - Story\
+      \ + core docs update (default)\n  \u2022 comprehensive - Complete documentation\
+      \ refresh with previews\n\n**Example:**\n\n**Example:**\n"
+  help_plan_feature:
+    response_type: detailed
+    content: "\n\n**Purpose:** Interactive collaborative planning with guided questions\n\
+      \n**Usage:**\n  Natural: \"plan a feature\", \"let's plan\", \"help me plan\
+      \ this\"\n\n**What it does:**\n\n**Confidence Modes:**\n  \u2022 High (>85%):\
+      \ Executes immediately, no questions\n  \u2022 Medium (60-85%): Quick confirmation\
+      \ before proceeding\n  \u2022 Low (<60%): Interactive questioning mode (up to\
+      \ 5 questions)\n\n**Status:** \u2705 Core system implemented, integration complete\n\
+      \n**Example:**\n"
+  help_design_sync:
+    response_type: detailed
+    content: "\n\n**Purpose:** Synchronize CORTEX design documents with actual implementation\n\
+      \n**Usage:**\n  Natural: \"sync design\", \"design sync\", \"align design with\
+      \ implementation\"\n\n**What it does:**\n\n**Profiles:**\n  \u2022 quick - Analysis\
+      \ only (no changes)\n  \u2022 standard - Consolidation + safe updates (default)\n\
+      \  \u2022 comprehensive - Full sync with YAML conversion\n\n**Status:** \u2705\
+      \ All capabilities implemented and tested\n\n**Example:**\n"
+  help_list:
+    response_type: list
+    content: "**CORTEX Commands:**\n\u2022 update story - Refresh CORTEX story documentation\n\
+      \u2022 setup - Setup/configure environment  \n\u2022 cleanup - Clean temporary\
+      \ files\n\u2022 build docs - Generate documentation (pending)\n\u2022 check\
+      \ brain - Validate brain protection (pending)\n\u2022 run tests - Execute test\
+      \ suite (pending)\n"
+  version_info:
+    response_type: narrative
+    content: "\nVersion: 5.2 (Response Template Architecture)\nArchitecture: Universal\
+      \ Operations + Template System\nStatus: \u2705 Production Ready\n\nToken Optimization:\
+      \ 97.2% reduction achieved\nTest Coverage: Comprehensive suite operational\n"
+  about:
+    response_type: narrative
+    content: "\nCORTEX is a cognitive framework that gives GitHub Copilot:\n\u2022\
+      \ \U0001F9E0 Long-term memory (last 20 conversations)\n\u2022 \U0001F4DA Accumulated\
+      \ knowledge (learned patterns)\n\u2022 \U0001F3AF Strategic planning (4-tier\
+      \ brain architecture)\n\u2022 \U0001F91D Specialist agents (10 coordinated agents)\n\
+      \n\nLearn more: Say \"tell me the CORTEX story\"\n"
+  commands_by_category:
+    response_type: detailed
+    content: "\n\U0001F4E6 Environment & Setup:\n  \u2022 setup - Configure development\
+      \ environment\n  \u2022 check brain - Validate brain integrity\n\n\U0001F4DA\
+      \ Documentation:\n  \u2022 update story - Refresh CORTEX story\n  \u2022 build\
+      \ docs - Generate documentation site\n\n\U0001F9F9 Maintenance:\n  \u2022 cleanup\
+      \ - Clean temporary files\n  \u2022 run tests - Execute test suite\n\n\U0001F3AF\
+      \ Planning (CORTEX 2.1):\n  \u2022 plan this - Interactive collaborative planning\n"
+  error_general:
+    response_type: narrative
+    content: '
+
+
+      Suggestion: {{suggestion}}
+
+      '
+  success_general:
+    response_type: narrative
+    content: '
+
+
+      Next: {{next_steps}}
+
+      '
+  not_implemented:
+    response_type: narrative
+    content: '
+
+
+      Current Status: {{status}}
+
+      Architecture: {{architecture_status}}
+
+      '
+  executor_success:
+    response_type: detailed
+    content: "\nFiles Modified: {{files_count}}\n\u2022 {{path}}\n\n[detailed]\nChanges:\n\
+      \u2022 {{file}}: {{description}}\n[/detailed]\n\nNext: {{next_action}}\n"
+  executor_error:
+    response_type: detailed
+    content: "\nError: {{error_message}}\n\nSuggestions:\n\u2022 {{text}}\n"
+  tester_success:
+    response_type: detailed
+    content: "\nCoverage: {{coverage_percent}}%\nTest Files: {{test_files_count}}\n\
+      \n\u2022 {{name}}: {{tests_count}} tests\n\nRun: pytest {{test_paths}}\n"
+  tester_error:
+    response_type: detailed
+    content: "\nError: {{error_message}}\n\nCommon issues:\n\u2022 Missing test dependencies\n\
+      \u2022 Invalid test file path\n\u2022 Syntax errors in source code\n"
+  validator_success:
+    response_type: detailed
+    content: "\nChecks Performed: {{checks_count}}\n\n[detailed]\n\u2022 {{name}}:\
+      \ {{status}}\n[/detailed]\n"
+  validator_error:
+    response_type: detailed
+    content: "\n\u2022 {{check}}: {{message}}\n\n"
+  work_planner_success:
+    response_type: detailed
+    content: '
+
+      Tasks: {{tasks_count}}
+
+      Estimated Time: {{estimated_hours}}h
+
+
+      '
+  work_planner_error:
+    response_type: narrative
+    content: '
+
+      Error: {{error_message}}
+
+
+      Needs: More context about the task
+
+      '
+  documenter_success:
+    response_type: detailed
+    content: "\nFiles Created: {{files_count}}\n\u2022 {{path}}\n"
+  documenter_error:
+    response_type: narrative
+    content: '
+
+      Error: {{error_message}}
+
+      '
+  intent_detector_success:
+    response_type: narrative
+    content: '
+
+      Type: {{intent_type}}
+
+      Confidence: {{confidence}}%
+
+      Routing to: {{target_agent}}
+
+      '
+  intent_detector_error:
+    response_type: narrative
+    content: '
+
+
+      Options: {{#options}}{{text}}, {{/options}}
+
+      '
+  architect_success:
+    response_type: detailed
+    content: "\nComponents: {{components_count}}\n\n\u2022 {{name}}: {{description}}\n\
+      \n[expert]\nTechnical Details:\n[/expert]\n"
+  architect_error:
+    response_type: narrative
+    content: '
+
+      Error: {{error_message}}
+
+      '
+  health_validator_success:
+    response_type: detailed
+    content: "\n\n\u2022 {{name}}: {{value}}\n"
+  health_validator_error:
+    response_type: detailed
+    content: "\n\u2022 {{component}}: {{problem}}\n"
+  pattern_matcher_success:
+    response_type: detailed
+    content: "\nMatches: {{matches_count}}\n\n\u2022 {{description}} ({{similarity}}%\
+      \ similar)\n"
+  pattern_matcher_error:
+    response_type: narrative
+    content: '
+
+      '
+  learner_success:
+    response_type: detailed
+    content: '
+
+      New patterns learned: {{patterns_count}}
+
+      '
+  learner_error:
+    response_type: narrative
+    content: '
+
+      Error: {{error_message}}
+
+      '
+  operation_started:
+    response_type: narrative
+    content: '
+
+      Profile: {{profile}}
+
+      Modules: {{modules_count}}
+
+      '
+  operation_progress:
+    response_type: narrative
+    content: "\n\u2705 Completed: {{completed_modules}}\n\U0001F504 Running: {{current_module}}\n\
+      \u23F8\uFE0F Pending: {{pending_modules}}\n"
+  operation_complete:
+    response_type: detailed
+    content: "\nDuration: {{duration_seconds}}s\nModules: {{succeeded}}/{{total}}\
+      \ succeeded\n\n\u274C {{module_name}}: {{error}}\n\nNext: {{recommendation}}\n"
+  operation_failed:
+    response_type: detailed
+    content: "\nError: {{error_message}}\nModule: {{failed_module}}\n\nTroubleshooting:\n\
+      \u2022 {{text}}\n"
+  setup_started:
+    response_type: narrative
+    content: '
+
+      Platform: {{platform}}
+
+      Profile: {{profile}}
+
+      '
+  setup_complete:
+    response_type: detailed
+    content: '
+
+      Platform: {{platform}}
+
+      Python: {{python_version}}
+
+      Dependencies: {{dependencies_installed}}
+
+
+      '
+  cleanup_started:
+    response_type: narrative
+    content: '
+
+      Profile: {{profile}}
+
+      '
+  cleanup_complete:
+    response_type: detailed
+    content: '
+
+      Files Removed: {{files_count}} ({{size_mb}}MB)
+
+      Logs Rotated: {{logs_count}}
+
+      DB Optimized: {{db_savings_mb}}MB
+
+
+      Total Space Freed: {{total_mb}}MB
+
+      '
+  story_refresh_started:
+    response_type: narrative
+    content: '
+
+      '
+  story_refresh_complete:
+    response_type: detailed
+    content: '
+
+      Files Updated: {{files_count}}
+
+      Transformations: {{transformations_count}}
+
+
+      Preview: {{preview_path}}
+
+      '
+  docs_build_started:
+    response_type: narrative
+    content: '
+
+      '
+  docs_build_complete:
+    response_type: detailed
+    content: '
+
+      Pages Generated: {{pages_count}}
+
+      Output: {{output_dir}}
+
+
+      View: {{url}}
+
+      '
+  brain_check_started:
+    response_type: narrative
+    content: '
+
+      '
+  brain_check_complete:
+    response_type: detailed
+    content: '
+
+      Tier 0: {{tier0_status}}
+
+      Tier 1: {{tier1_status}}
+
+      Tier 2: {{tier2_status}}
+
+      Tier 3: {{tier3_status}}
+
+
+      '
+  tests_started:
+    response_type: narrative
+    content: '
+
+      '
+  tests_complete:
+    response_type: detailed
+    content: "\nPassed: {{passed}}/{{total}}\nCoverage: {{coverage}}%\nDuration: {{duration}}s\n\
+      \n\u274C {{test_name}}: {{error}}\n"
+  design_sync_started:
+    response_type: narrative
+    content: '
+
+      Profile: {{profile}}
+
+      Version: CORTEX {{version}}
+
+      '
+  design_sync_discovery:
+    response_type: detailed
+    content: "\nImplementation:\n\u2022 Modules: {{total_modules}} ({{implemented_modules}}\
+      \ implemented)\n\u2022 Tests: {{total_tests}} tests\n\u2022 Plugins: {{plugins_count}}\
+      \ operational\n\u2022 Operations: {{operations_count}} defined\n\nDesign:\n\u2022\
+      \ Version: CORTEX {{design_version}}\n\u2022 Design files: {{design_files_count}}\n\
+      \u2022 Status files: {{status_files_count}}\n\u2022 YAML schemas: {{yaml_count}}\n"
+  design_sync_gaps:
+    response_type: detailed
+    content: "\n{{gaps_count}} issues found:\n\n\u2022 {{operation}}: Claimed {{claimed}}\
+      \ modules, actually {{actual}}\n\n\u2022 {{redundant_status}} redundant status\
+      \ files\n\n\u2022 {{verbose_md}} verbose MD documents (YAML candidates)\n"
+  design_sync_complete:
+    response_type: detailed
+    content: "\nProfile: {{profile}}\nDuration: {{duration_seconds}}s\n\nChanges Applied:\n\
+      \u2022 Status files consolidated: {{status_consolidated}}\n\u2022 MD to YAML\
+      \ converted: {{md_converted}}\n\u2022 Optimizations integrated: {{optimizations}}\n\
+      \u2022 Gaps resolved: {{gaps_resolved}}\n\nGit: {{git_commits}} commit(s)\n\n\
+      Next: {{text}}\n"
+  missing_dependency:
+    response_type: detailed
+    content: '
+
+      Package: {{package_name}}
+
+      Required by: {{required_by}}
+
+
+      Fix: pip install {{package_name}}
+
+      '
+  permission_denied:
+    response_type: narrative
+    content: '
+
+
+      Try: Run with appropriate permissions
+
+      '
+  validation_failed:
+    response_type: detailed
+    content: "\n\u2022 {{field}}: {{message}}\n\n"
+  file_not_found:
+    response_type: narrative
+    content: '
+
+      Path: {{file_path}}
+
+
+      '
+  network_error:
+    response_type: narrative
+    content: '
+
+
+      '
+  timeout_error:
+    response_type: narrative
+    content: '
+
+
+      '
+  configuration_error:
+    response_type: detailed
+    content: "\n\nCheck: {{config_file}}\n\n\u2022 {{text}}\n"
+  syntax_error:
+    response_type: detailed
+    content: '
+
+      File: {{file_path}}
+
+      Line: {{line_number}}
+
+
+      '
+  import_error:
+    response_type: detailed
+    content: '
+
+      Module: {{module_name}}
+
+
+
+      Fix: pip install {{required_package}}
+
+      '
+  runtime_error:
+    response_type: detailed
+    content: '
+
+
+      [detailed]
+
+      Stack trace:
+
+      [/detailed]
+
+      '
+  database_error:
+    response_type: detailed
+    content: '
+
+
+      Database: {{db_path}}
+
+
+      Try: Check database integrity and permissions
+
+      '
+  path_error:
+    response_type: narrative
+    content: '
+
+      Path: {{path}}
+
+
+      '
+  type_error:
+    response_type: narrative
+    content: '
+
+
+      Expected: {{expected_type}}
+
+      Got: {{actual_type}}
+
+      '
+  value_error:
+    response_type: narrative
+    content: '
+
+
+      Parameter: {{parameter}}
+
+      '
+  unknown_error:
+    response_type: detailed
+    content: '
+
+
+      [detailed]
+
+      [/detailed]
+
+
+      '
+  planning_activation:
+    response_type: narrative
+    content: "Author: Asif Hussain | \xA9 2024-2025 | github.com/asifhussain60/CORTEX\n\
+      \n\U0001F3AF **My Understanding Of Your Request:**\n\n\n\U0001F4AC **My Response:**\n\
+      \n\n\U0001F4DD **Your Request:** {{user_request}}\n\n\U0001F50D **Next Steps:**\n"
+  planning_started:
+    response_type: narrative
+    content: "Author: Asif Hussain | \xA9 2024-2025 | github.com/asifhussain60/CORTEX\n\
+      \n\nRequest: {{user_request}}\nConfidence: {{confidence}}%\nMode: {{mode}}\n"
+  planning_question:
+    response_type: narrative
+    content: "Author: Asif Hussain | \xA9 2024-2025 | github.com/asifhussain60/CORTEX\n\
+      \n\n\n\n[Default: {{default_value}}]\n\n\U0001F4A1 Commands: 'skip' (use default)\
+      \ | 'done' (finish early) | 'abort' (cancel)\n"
+  planning_plan_ready:
+    response_type: detailed
+    content: "Author: Asif Hussain | \xA9 2024-2025 | github.com/asifhussain60/CORTEX\n\
+      \n\nTitle: {{plan_title}}\nTotal Estimate: {{total_hours}} hours\nComplexity:\
+      \ {{complexity}}\n\n\n### Phase {{phase_num}}: {{phase_name}} ({{phase_hours}}h)\n\
+      \u2022 {{task_name}}\n\n\u2022 {{risk_text}}\n\n\u2022 {{decision_text}}\n\n\
+      \U0001F50D **Next:** Proceed with implementation? (yes/no/modify)\n"
+  planning_complete:
+    response_type: detailed
+    content: "Author: Asif Hussain | \xA9 2024-2025 | github.com/asifhussain60/CORTEX\n\
+      \n\nSession ID: {{session_id}}\n\n"
+  planning_aborted:
+    response_type: narrative
+    content: "Author: Asif Hussain | \xA9 2024-2025 | github.com/asifhussain60/CORTEX\n\
+      \n\n\nRestart anytime with: \"let's plan a feature\"\n"
+  plugin_registered:
+    response_type: narrative
+    content: '
+
+      Name: {{plugin_name}}
+
+      Version: {{version}}
+
+      Commands: {{commands_count}}
+
+      '
+  plugin_execution_started:
+    response_type: narrative
+    content: '
+
+      '
+  plugin_execution_complete:
+    response_type: detailed
+    content: "\n\n[detailed]\n\u2022 {{key}}: {{value}}\n[/detailed]\n"
+  plugin_execution_failed:
+    response_type: detailed
+    content: "\nError: {{error_message}}\n\n\u2022 {{text}}\n"
+  platform_switch_detected:
+    response_type: narrative
+    content: '
+
+      From: {{old_platform}}
+
+      To: {{new_platform}}
+
+
+      '
+  platform_switch_complete:
+    response_type: detailed
+    content: '
+
+      Platform: {{platform}}
+
+      Shell: {{shell}}
+
+      Paths configured: {{paths_count}}
+
+      '
+  cleanup_scan_complete:
+    response_type: detailed
+    content: '
+
+      Temp Files: {{temp_files}} ({{temp_size}}MB)
+
+      Old Logs: {{log_files}} ({{log_size}}MB)
+
+      Cache: {{cache_size}}MB
+
+
+      '
+  doc_refresh_analyzing:
+    response_type: narrative
+    content: '
+
+      Files: {{files_count}}
+
+      '
+  doc_refresh_complete:
+    response_type: detailed
+    content: '
+
+      Files Updated: {{updated_count}}
+
+      Links Fixed: {{links_fixed}}
+
+      TOC Regenerated: {{toc_updated}}
+
+      '
+  extension_scaffold_complete:
+    response_type: detailed
+    content: '
+
+      Name: {{extension_name}}
+
+      Files Created: {{files_count}}
+
+
+      Next Steps:
+
+      '
+  brain_performance_session:
+    response_type: detailed
+    content: "\n**Tier 1: Working Memory (Last 20 Conversations)**\n\u2022 Conversations\
+      \ stored: {{tier1_conversations_count}}/20\n\u2022 Messages tracked: {{tier1_messages_count}}\n\
+      \u2022 Session duration: {{session_duration_hours}}h\n\u2022 Active session:\
+      \ {{has_active_session}}\n\n**Tier 2: Knowledge Graph (Learned Patterns)**\n\
+      \u2022 Patterns learned: {{tier2_patterns_count}}\n\u2022 File relationships:\
+      \ {{tier2_relationships_count}}\n\u2022 Anti-patterns identified: {{tier2_antipatterns_count}}\n\
+      \u2022 Average confidence: {{tier2_avg_confidence}}%\n\u2022 Most used pattern:\
+      \ \"{{tier2_top_pattern}}\" ({{tier2_top_usage}}x)\n\n**Tier 3: Development\
+      \ Context**\n\u2022 Git commits analyzed: {{tier3_commits_count}}\n\u2022 Files\
+      \ tracked: {{tier3_files_count}}\n\u2022 Test coverage: {{tier3_test_coverage}}%\n\
+      \u2022 Velocity trend: {{tier3_velocity_trend}}\n\n\u2022 Patterns/hour: {{patterns_per_hour}}\n\
+      \u2022 Context retention: {{context_retention_percent}}%\n\u2022 Pattern reuse\
+      \ rate: {{pattern_reuse_rate}}%\n\n[detailed]\n**Recent Learning:**\n\u2022\
+      \ {{timestamp}}: {{pattern_title}} (confidence: {{confidence}}%)\n[/detailed]\n\
+      \n\U0001F4A1 **Insight:** {{brain_health_insight}}\n"
+  brain_performance_legacy:
+    response_type: narrative
+    content: "\n\n**What you can do:**\n2. Or use: \"brain health\" for basic diagnostics\n\
+      \n**Technical Details:**\n\u2022 Template schema: {{template_schema_version}}\n\
+      \u2022 Your CORTEX schema: {{collector_schema_version}}\n\u2022 Compatibility:\
+      \ {{compatibility_status}}\n"
+  token_optimization_session:
+    response_type: detailed
+    content: "\n**This Session:**\n\u2022 Total requests: {{session_requests}}\n\u2022\
+      \ Tokens with CORTEX: {{session_tokens_with_cortex}} tokens\n\u2022 Tokens without\
+      \ CORTEX: {{session_tokens_without_cortex}} tokens\n\u2022 You saved: {{session_tokens_saved}}\
+      \ tokens ({{session_savings_percent}}%)\n\u2022 Cost savings: ${{session_cost_saved}}\
+      \ (GPT-4 pricing)\n\n**How CORTEX Saves Tokens:**\n\n**Without CORTEX (Raw Copilot):**\n\
+      \u2022 No pattern reuse: +{{no_pattern_reuse_overhead}} tokens/request\n\u2022\
+      \ No conversation memory: +{{no_memory_overhead}} tokens/request\n\u2022 **Total\
+      \ overhead: {{raw_copilot_overhead}} tokens/request**\n\n**With CORTEX:**\n\u2022\
+      \ Smart context loading: ~{{avg_cortex_context_tokens}} tokens/request\n\u2022\
+      \ Pattern injection: +{{pattern_injection_tokens}} tokens/request\n\u2022 Memory\
+      \ overhead: +{{cortex_memory_overhead}} tokens/request\n\u2022 **Total overhead:\
+      \ {{cortex_overhead}} tokens/request**\n\n**Net Benefit:**\n\u2022 Per request:\
+      \ {{per_request_savings}} tokens saved\n\u2022 This session: {{session_total_savings}}\
+      \ tokens saved\n\u2022 Estimated monthly: {{monthly_savings}} tokens (~${{monthly_cost_saved}})\n\
+      \n[detailed]\n**Optimization Breakdown:**\n\u2022 {{technique}}: {{tokens_saved}}\
+      \ tokens ({{percent}}% of total)\n\n**Top Token Consumers:**\n\u2022 {{operation}}:\
+      \ {{tokens}} tokens ({{percent}}%)\n[/detailed]\n\n"
+  brain_health_check:
+    response_type: detailed
+    content: "\n\nUse: \"maintain cortex\" for comprehensive brain health diagnostics.\n\
+      \n**Quick Health Check:**\n\n**Tier 0: Protection Layer**\n\u2022 Status: {{tier0_status}}\n\
+      \u2022 Rules active: {{tier0_rules_count}}/7 SKULL rules\n\u2022 Last validation:\
+      \ {{tier0_last_check}}\n\n**Tier 1: Working Memory**\n\u2022 Status: {{tier1_status}}\n\
+      \u2022 Memory usage: {{tier1_memory_usage_mb}}MB / {{tier1_memory_limit_mb}}MB\n\
+      \n**Tier 2: Knowledge Graph**  \n\u2022 Status: {{tier2_status}}\n\u2022 Database\
+      \ size: {{tier2_db_size_mb}}MB\n\n\u2022 Metrics freshness: {{tier3_metrics_age}}\n\
+      \n**Overall Health: {{overall_health_score}}/100**\n\n\n"
+  question_about_cortex_general:
+    response_type: detailed
+    content: "\U0001F9E0 **CORTEX Framework Status**\n\n**Capabilities (Operations):**\n\
+      \u2022 {{operation_name}}: {{status}} ({{modules_ready}}/{{modules_total}} modules)\n\
+      \n**Plugins:** {{plugins_active}}/{{plugins_total}} active\n\n**Current Session:**\n\
+      \u2022 Conversations: {{tier1_conversations}}/20 ({{tier1_memory_usage}}%)\n\
+      \u2022 Patterns learned: {{tier2_patterns_count}} in {{current_namespace}}\n\
+      \u2022 Session duration: {{session_duration_hours}}h\n\n**Brain Health:** {{brain_health_score}}/100\n\
+      \n[detailed]\n**Tier Status:**\n\u2022 Tier 0 (Protection): {{tier0_status}}\n\
+      \u2022 Tier 1 (Memory): {{tier1_status}}\n\u2022 Tier 2 (Knowledge): {{tier2_status}}\n\
+      \u2022 Tier 3 (Context): {{tier3_status}}\n[/detailed]\n\n\U0001F4A1 **Recommendation:**\
+      \ {{cortex_recommendation}}\n"
+  question_about_workspace:
+    response_type: detailed
+    content: "\U0001F4CA **Your Workspace: {{workspace_name}}**\n\n**Code Quality:**\n\
+      \u2022 Test coverage: {{coverage_percent}}% ({{tests_passing}}/{{tests_total}})\n\
+      \u2022 Code health: {{code_health_score}}/100\n\u2022 Static analysis: {{lint_issues}}\
+      \ issues\n\n**Git Activity:**\n\u2022 Last commit: {{last_commit_time}}\n\u2022\
+      \ Commits today: {{commits_today}}\n\u2022 Active branch: {{current_branch}}\n\
+      \n**CORTEX Learning:**\n\u2022 Workspace patterns: {{workspace_patterns_count}}\n\
+      \u2022 File relationships: {{file_relationships_count}}\n\u2022 Active namespace:\
+      \ {{workspace_namespace}}\n\n[detailed]\n**Pattern Breakdown:**\n\u2022 {{pattern_name}}:\
+      \ used {{usage_count}}x (confidence: {{confidence}}%)\n[/detailed]\n\n\U0001F4A1\
+      \ **Recommendation:** {{workspace_recommendation}}\n\n\U0001F50D **Next Steps:**\n\
+      \   \u2610 Phase 1: Quick Wins (Fix critical issues)\n   \u2610 Phase 2: Improvements\
+      \ (Enhance code quality)\n   \u2610 Phase 3: Optimization (Performance & architecture)\n\
+      \n"
+  question_cortex_vs_application:
+    response_type: narrative
+    content: "\n**Current Context:** {{detected_namespace}}\n\n\n**Detection Reasoning:**\n\
+      \n**Keywords Found:**\n\u2022 {{keyword}} (CORTEX framework indicator)\n\u2022\
+      \ {{keyword}} (workspace indicator)\n"
+  question_what_cortex_learned:
+    response_type: detailed
+    content: "\U0001F9E0 **CORTEX Learning - Workspace Patterns**\n\n**Total Patterns\
+      \ Learned:** {{total_patterns}}\n**Namespace:** {{workspace_namespace}}\n\n\
+      **Pattern Categories:**\n\u2022 {{category_name}}: {{pattern_count}} patterns\n\
+      \n**Most Confident Patterns:**\n   \u2022 Confidence: {{confidence}}%\n   \u2022\
+      \ Used: {{usage_count}} times\n   \u2022 Last used: {{last_used}}\n   \u2022\
+      \ Category: {{category}}\n\n**Recent Learning (Last 7 Days):**\n\u2022 {{date}}:\
+      \ {{pattern_title}} ({{confidence}}%)\n\n[expert]\n**Pattern Decay Status:**\n\
+      \u2022 Active patterns: {{active_patterns}} (confidence > 70%)\n\u2022 Decaying\
+      \ patterns: {{decaying_patterns}} (confidence 40-70%)\n\u2022 Archived patterns:\
+      \ {{archived_patterns}} (confidence < 40%)\n[/expert]\n"
+  question_can_cortex_do:
+    response_type: narrative
+    content: "\U0001F50D **Capability Check: {{requested_capability}}**\n\n\n**How\
+      \ to use:**\n\n**Related operations:**\n\u2022 {{operation_name}}: {{description}}\n\
+      \n**Status:** {{implementation_status}}\n**Planned for:** {{planned_version}}\n\
+      \n**Alternatives:**\n\u2022 {{alternative_description}}\n"
+  question_cortex_differences:
+    response_type: detailed
+    content: "\n**GitHub Copilot (Standard):**\n\n**CORTEX Enhancement:**\n\n**Concrete\
+      \ Example:**\n\nWithout CORTEX:\nYou: \"Add a login button\"\nCopilot: Creates\
+      \ button \u2705\n\n[Next chat - Copilot forgets]\nYou: \"Make it purple\"\n\
+      Copilot: \"Make what purple?\" \u274C\n\nWith CORTEX:\nYou: \"Add a login button\"\
+      \nCORTEX: Creates button, stores context \u2705\n\n[Next chat - CORTEX remembers]\n\
+      You: \"Make it purple\"\nCORTEX: \"Making login button purple\" \u2705\n\n**Architecture:**\n\
+      \u2022 Tier 1: Working Memory (20 conversations)\n\u2022 Tier 2: Knowledge Graph\
+      \ (learned patterns)\n\u2022 Tier 3: Development Context (git, tests, metrics)\n\
+      \u2022 Tier 0: Protection Layer (governance rules)\n"
+  question_how_cortex_works:
+    response_type: narrative
+    content: "\n**The Problem:**\n\n**The Solution:**\n\n**4-Tier Brain Architecture:**\n\
+      \n**Tier 0: Instinct (Protection)**\n\u2022 Immutable governance rules\n\u2022\
+      \ SKULL protection (test validation)\n\u2022 Prevents untested changes\n\n**Tier\
+      \ 1: Working Memory**\n\u2022 Last 20 conversations stored\n\u2022 FIFO queue\
+      \ (oldest removed)\n\u2022 SQLite database\n\n**Tier 2: Knowledge Graph**\n\u2022\
+      \ Learned patterns from interactions\n\u2022 File relationships\n\u2022 Anti-patterns\
+      \ detected\n\u2022 Pattern decay (confidence decreases over time)\n\n**Tier\
+      \ 3: Development Context**\n\u2022 Git metrics (commits, velocity)\n\u2022 Test\
+      \ coverage\n\u2022 Project health\n\n**10 Specialist Agents:**\n\nLEFT BRAIN\
+      \ (Tactical):\n\u2022 Executor - Implements features\n\u2022 Tester - Creates\
+      \ tests\n\u2022 Validator - Quality checks\n\u2022 Work Planner - Task breakdown\n\
+      \u2022 Documenter - Auto-docs\n\nRIGHT BRAIN (Strategic):\n\u2022 Intent Detector\
+      \ - Routes requests\n\u2022 Architect - System design\n\u2022 Health Validator\
+      \ - Project diagnosis\n\u2022 Pattern Matcher - Finds solutions\n\u2022 Learner\
+      \ - Accumulates wisdom\n\n**Workflow:**\n"
+  question_cortex_cost_savings:
+    response_type: detailed
+    content: "\n**Your Savings (This Session):**\n\u2022 Requests: {{session_requests}}\n\
+      \u2022 Tokens saved: {{session_tokens_saved}} ({{session_savings_percent}}%)\n\
+      \u2022 Cost saved: ${{session_cost_saved}}\n\n**Optimization Techniques:**\n\
+      \u2705 Context caching: {{context_cache_savings}} tokens\n\u2705 Pattern reuse:\
+      \ {{pattern_reuse_savings}} tokens\n\u2705 Smart summarization: {{summary_savings}}\
+      \ tokens\n\u2705 ML optimization: {{ml_savings}} tokens\n\n**Architecture Comparison:**\n\
+      \nOld Monolithic (Pre-2.0):\n\u2022 74,047 tokens per request\n\u2022 $2.22\
+      \ per request (GPT-4)\n\u2022 2-3 seconds to parse\n\nCORTEX 2.0 Modular:\n\u2022\
+      \ 2,078 tokens per request (97.2% reduction)\n\u2022 $0.06 per request\n\u2022\
+      \ 80ms to parse\n\n**Annual Savings:**\n\u2022 1,000 requests/month: $25,920/year\n\
+      \u2022 Enterprise use (10k/month): $259,200/year\n\n**ROI Multiplier:** {{roi_multiplier}}x\n"
+  question_namespace_status:
+    response_type: narrative
+    content: "\n**Active Namespace:** {{current_namespace}}\n**Type:** {{namespace_type}}\n\
+      \n\U0001F9E0 **CORTEX Framework Namespace**\n\u2022 Protected: Read-only for\
+      \ users\n\u2022 Contains: Framework knowledge\n\u2022 Patterns: {{cortex_patterns_count}}\n\
+      \u2022 Project: {{workspace_name}}\n\u2022 Read/Write: Enabled\n\u2022 Patterns:\
+      \ {{workspace_patterns_count}}\n\n**All Namespaces:**\n\u2022 {{namespace_name}}:\
+      \ {{pattern_count}} patterns ({{status}})\n"
+  question_cortex_learning_rate:
+    response_type: detailed
+    content: "\n**Current Session:**\n\u2022 Duration: {{session_duration_hours}}h\n\
+      \u2022 Patterns learned: {{patterns_learned}}\n\u2022 Learning rate: {{patterns_per_hour}}/hour\n\
+      \n**Pattern Quality:**\n\u2022 High confidence (>80%): {{high_confidence_count}}\n\
+      \u2022 Medium confidence (60-80%): {{medium_confidence_count}}\n\u2022 Low confidence\
+      \ (<60%): {{low_confidence_count}}\n\n**Learning Trends:**\n\u2022 {{period}}:\
+      \ {{patterns_count}} patterns ({{trend_direction}})\n\n**Pattern Reuse Rate:**\
+      \ {{pattern_reuse_rate}}%\n\n**Context Retention:** {{context_retention_percent}}%\n\
+      \n[expert]\n**Learning Algorithm:**\n\u2022 Confidence decay: {{decay_rate}}/day\n\
+      \u2022 Reinforcement: +{{reinforcement_boost}}% per use\n\u2022 Pruning threshold:\
+      \ <{{pruning_threshold}}% confidence\n[/expert]\n"
+  question_documentation_issues:
+    response_type: detailed
+    content: "\n**Issues Identified:**\n\u2022 Configuration: {{config_issues_count}}\
+      \ issues\n\u2022 Broken links: {{broken_links_count}} links\n\u2022 Structure:\
+      \ {{structure_issues_count}} issues\n\u2022 Missing pages: {{missing_pages_count}}\
+      \ pages\n\n**Impact:**\n\u2022 Documentation build: {{build_status}}\n\u2022\
+      \ User experience: {{ux_impact}}\n\u2022 Search functionality: {{search_status}}\n\
+      \n\U0001F50D **Next Steps:**\n   Track A: Configuration & Build (Independent)\n\
+      \      \u2022 Fix Python/MkDocs configuration\n      \u2022 Resolve dependency\
+      \ conflicts\n      \u2022 Test build pipeline\n\n   Track B: Content Quality\
+      \ (Independent)\n      \u2022 Address broken links systematically\n      \u2022\
+      \ Update outdated content\n      \u2022 Fix formatting issues\n\n   Track C:\
+      \ Structure & Navigation (Independent)\n      \u2022 Reorganize documentation\
+      \ hierarchy\n      \u2022 Update table of contents\n      \u2022 Improve search\
+      \ indexing\n\n"
+  question_test_coverage:
+    response_type: detailed
+    content: "\n**Overall Coverage:** {{coverage_percent}}%\n\n**Test Breakdown:**\n\
+      \u2022 Total tests: {{tests_total}}\n\u2022 Passing: {{tests_passing}} ({{pass_rate}}%)\n\
+      \u2022 Failing: {{tests_failing}}\n\u2022 Skipped: {{tests_skipped}}\n\n**Coverage\
+      \ by Type:**\n\u2022 Unit tests: {{unit_coverage}}%\n\u2022 Integration tests:\
+      \ {{integration_coverage}}%\n\u2022 E2E tests: {{e2e_coverage}}%\n\n**Recent\
+      \ Test Activity:**\n\u2022 Last run: {{last_test_run}}\n\u2022 Duration: {{test_duration}}s\n\
+      \u2022 Status: {{test_status}}\n\n\u26A0\uFE0F **Files Needing Tests:**\n\u2022\
+      \ {{file_path}}: {{coverage}}% coverage\n\n\U0001F4A1 **Recommendation:** {{test_recommendation}}\n"
+  cortex_signature:
+    response_type: narrative
+    content: "\nAuthor:     Asif Hussain\nCopyright:  \xA9 2024-2025 Asif Hussain.\
+      \ All rights reserved.\nLicense:    Proprietary - See LICENSE file for terms\n\
+      Repository: https://github.com/asifhussain60/CORTEX\n\n\n"
+  orchestrator_header:
+    response_type: narrative
+    content: "\n\U0001F4DD **Your Request:** {{user_request}}\n\n\n\n\U0001F3AF **Understanding:**\
+      \ {{refined_intent}}\n\n\U0001F4AC **Response:**\n\n\u26A0\uFE0F **Considerations:**\n\
+      \n\u2728 **Recommendation:** {{recommendation}}\n\n\U0001F52E **Next Steps:**\n"
+  orchestrator_footer:
+    response_type: narrative
+    content: "\n\n\n{{#if warnings}}\u26A0\uFE0F  Warnings: {{warnings_count}}{{/if}}\n\
+      {{#if errors}}\u274C Errors: {{errors_count}}{{/if}}\n\n\U0001F4A1 Next Steps:\n\
+      \  \u2022 {{text}}\n\n"
+  token_efficiency_metrics:
+    response_type: table
+    content: "\n\nVersion: CORTEX 2.0 \u2502 Baseline: Nov 13, 2025 \u2502 All Targets\
+      \ Exceeded \u2705\n\n\n**Pricing Model:**\n\u2022 GitHub Copilot Pro+: $39/month\
+      \ ($390/year with 16.7% discount)\n\u2022 Included: 1,500 premium requests/month\n\
+      \u2022 Overage: $0.04 per additional request\n\u2022 Developer rate: $100/hour\
+      \ (industry mid-level average)\n\n**What We Measure:**\n\n1\uFE0F\u20E3  **Copilot\
+      \ Usage:**\n   \u2022 Vanilla: 1 request per task (always calls Copilot)\n \
+      \  \u2022 CORTEX: 0.033 requests per task (templates answer 96.7% without calling)\n\
+      \   \u2022 Result: Stay under 1,500 limit, avoid overage charges\n\n2\uFE0F\u20E3\
+      \  **Context Loss Time:**\n   \u2022 Vanilla: Forgets everything \u2192 Re-explain\
+      \ 10 times/day \xD7 2.5 min = 25 min/day\n   \u2022 CORTEX: Tier 1 memory \u2192\
+      \ Remembers last 20 conversations = 0 min lost\n   \u2022 Result: 25 min/day\
+      \ saved \xD7 $100/hr = $42/day = $1,000/month\n\n3\uFE0F\u20E3  **Pattern Reuse:**\n\
+      \   \u2022 Vanilla: Build from scratch every time\n   \u2022 CORTEX: Tier 2\
+      \ learns patterns \u2192 60-70% faster on repeat tasks\n   \u2022 Result: 20\
+      \ repeat tasks/month \xD7 2 hrs \xD7 60% = 24 hrs/month saved\n\n4\uFE0F\u20E3\
+      \  **Error Prevention:**\n   \u2022 Vanilla: 15-20% error rate \u2192 debug\
+      \ later\n   \u2022 CORTEX: SKULL rules block 95% of errors \u2192 test first\n\
+      \   \u2022 Result: 15 bugs/month \xD7 1.5 hrs = 22.5 hrs \u2192 CORTEX: 1 bug\
+      \ = 0.5 hrs\n\n5\uFE0F\u20E3  **Strategic Intelligence:**\n   \u2022 Vanilla:\
+      \ Reactive (fix after broken)\n   \u2022 CORTEX: Tier 3 warns before changes\
+      \ (40-50% prevention)\n   \u2022 Result: 15 warnings/month \xD7 1 hr saved =\
+      \ 15 hrs/month\n\n\n\n\u2502 ROI vs Setup Cost        \u2502 N/A           \
+      \  \u2502 168x ($7,040\xF742)\u2502 168:1 return \u2502\n\n\n\n\n\u2502 ROI\
+      \ vs Setup Cost        \u2502 N/A             \u2502 845x ($422k\xF7500)\u2502\
+      \ 845:1 return \u2502\n\n\n\n\n\n\n\n\n\n\n**All metrics tracked in Tier 3:**\n\
+      \u2022 Live tracking: `cortex-brain/tier3/token-efficiency-metrics.yaml`\n\u2022\
+      \ Detailed analysis: `cortex-brain/CORTEX-EFFICIENCY-METRICS.md`\n\u2022 Quick\
+      \ summary: `cortex-brain/CORTEX-EFFICIENCY-SUMMARY.md`\n\n**Performance Monitoring:**\n\
+      \u2022 Update frequency: Weekly (automated)\n\u2022 Next update: 2025-11-20\n\
+      \u2022 Alert thresholds: Active (degradation detection)\n\u2022 Historical baseline:\
+      \ Nov 13, 2025\n\n**Verified Data Sources:**\n\u2022 Copilot pricing: GitHub\
+      \ official pricing (Nov 2025)\n\u2022 Token reduction: Measured via modular\
+      \ documentation\n\u2022 Performance: Benchmarked Tier 1/2/3 query times\n\u2022\
+      \ Test coverage: pytest results (712 tests, 88.1% pass rate)\n\n\n**\U0001F50D\
+      \ Next Steps:**\n1. Review detailed breakdown: `#file:cortex-brain/CORTEX-EFFICIENCY-METRICS.md`\n\
+      \n**Questions? Ask:**\n\u2022 \"Show me the detailed metrics\"\n\u2022 \"How\
+      \ does pattern reuse work?\"\n\u2022 \"What are SKULL rules?\"\n\u2022 \"Show\
+      \ tier 3 tracking data\"\n\n"
+routing:
+  default: help_table
+  priority:
+  - help_table
+  - help_detailed
+  - quick_start
+  - status_check
+  - help_setup
+  - help_cleanup
+  - help_story
+formatting:
+  max_width: 70
+  use_emojis: true
+  use_unicode_icons: true
+  condensed_mode: true

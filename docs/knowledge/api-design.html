@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="API Design Excellence - REST, GraphQL, and API versioning strategies">
+    <meta name="keywords" content="api, rest, graphql, api design, versioning, http, backend">
+    <meta name="author" content="Asif Hussain">
+    <title>API Design Excellence | CORTEX Knowledge</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">→</span>
+        <a href="index.html">Knowledge Library</a>
+        <span class="breadcrumb-separator">→</span>
+        <span class="breadcrumb-current">API Design</span>
+    </nav>
+
+    <section class="hero" id="main-content">
+        <h1 class="hero-title">🌐 API Design Excellence</h1>
+        <p class="hero-subtitle">REST, GraphQL, and API Versioning Strategies</p>
+        <div class="file-metadata">
+            <span class="metadata-item">📡 Backend APIs</span>
+            <span class="metadata-item">🏷️ REST & GraphQL</span>
+            <span class="metadata-item">📅 Updated: Dec 2025</span>
+        </div>
+    </section>
+
+    <section class="section file-content">
+        <div class="container">
+            <!-- Overview -->
+            <div id="overview" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">📋 Overview</h2>
+                    <p>API Design Excellence encompasses the principles, patterns, and practices for designing robust, scalable, and maintainable APIs. Master REST architectural constraints, GraphQL schema design, and versioning strategies for backward-compatible API evolution.</p>
+                    
+                    <div class="info-box info-box-primary">
+                        <strong>Key Concepts:</strong>
+                        <ul class="feature-list">
+                            <li><strong>REST Architecture:</strong> Stateless, client-server, cacheable, uniform interface</li>
+                            <li><strong>GraphQL:</strong> Strongly-typed schemas with client-specified queries</li>
+                            <li><strong>API Versioning:</strong> Backward compatibility and safe evolution</li>
+                            <li><strong>Security:</strong> Authentication, authorization, rate limiting</li>
+                        </ul>
+                    </div>
+
+                    <h3>API Design Landscape</h3>
+                    <div style="background: rgba(0, 0, 0, 0.3); padding: 2rem; border-radius: 12px; margin: 1.5rem 0; overflow-x: auto;">
+                        <div class="mermaid">
+graph LR
+    A["🎯 API Design<br/>Core Architecture"]
+    
+    A --> B["🔷 REST APIs<br/>Resource-Based"]
+    A --> C["💎 GraphQL APIs<br/>Query Language"]
+    A --> D["🔄 API Versioning<br/>Evolution Strategy"]
+    
+    B --> B1["📦 Resource Naming"]
+    B --> B2["⚡ HTTP Methods"]
+    B --> B3["✅ Status Codes"]
+    B --> B4["📄 Pagination"]
+    
+    C --> C1["📐 Schema Design"]
+    C --> C2["🔍 Query Patterns"]
+    C --> C3["✏️ Mutation Patterns"]
+    C --> C4["🔄 DataLoader"]
+    
+    D --> D1["🔗 URI Versioning"]
+    D --> D2["📝 Header Versioning"]
+    D --> D3["⚠️ Deprecation"]
+    D --> D4["🚀 Migration"]
+    
+    style A fill:#7b61ff,stroke:#9f87ff,stroke-width:3px,color:#fff
+    style B fill:#10b981,stroke:#34d399,stroke-width:2px,color:#fff
+    style C fill:#3b82f6,stroke:#60a5fa,stroke-width:2px,color:#fff
+    style D fill:#f59e0b,stroke:#fbbf24,stroke-width:2px,color:#fff
+    
+    style B1 fill:#064e3b,color:#fff
+    style B2 fill:#064e3b,color:#fff
+    style B3 fill:#064e3b,color:#fff
+    style B4 fill:#064e3b,color:#fff
+    
+    style C1 fill:#1e3a8a,color:#fff
+    style C2 fill:#1e3a8a,color:#fff
+    style C3 fill:#1e3a8a,color:#fff
+    style C4 fill:#1e3a8a,color:#fff
+    
+    style D1 fill:#78350f,color:#fff
+    style D2 fill:#78350f,color:#fff
+    style D3 fill:#78350f,color:#fff
+    style D4 fill:#78350f,color:#fff
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- REST API Design -->
+            <div id="rest-api" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🔷 REST API Design</h2>
+                    
+                    <h3>Core Principles</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📦</span>
+                            <h3>Resource-Based</h3>
+                            <h4>Key Concepts</h4>
+                            <ul>
+                                <li><strong>Nouns not Verbs:</strong> /users not /getUsers</li>
+                                <li><strong>Plural Forms:</strong> /users /orders /products</li>
+                                <li><strong>Hierarchical:</strong> /users/123/orders</li>
+                                <li><strong>Lowercase:</strong> Use hyphens for multi-word</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">⚡</span>
+                            <h3>HTTP Methods</h3>
+                            <h4>Standard Operations</h4>
+                            <ul>
+                                <li><strong>GET:</strong> Retrieve (safe, idempotent)</li>
+                                <li><strong>POST:</strong> Create new resource</li>
+                                <li><strong>PUT:</strong> Replace entire resource</li>
+                                <li><strong>PATCH:</strong> Partial update</li>
+                                <li><strong>DELETE:</strong> Remove resource</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">✅</span>
+                            <h3>Status Codes</h3>
+                            <h4>HTTP Responses</h4>
+                            <ul>
+                                <li><strong>200 OK:</strong> Successful GET/PUT/PATCH</li>
+                                <li><strong>201 Created:</strong> Resource created (POST)</li>
+                                <li><strong>204 No Content:</strong> Successful DELETE</li>
+                                <li><strong>400 Bad Request:</strong> Invalid input</li>
+                                <li><strong>401 Unauthorized:</strong> Authentication required</li>
+                                <li><strong>404 Not Found:</strong> Resource doesn't exist</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>Pagination Strategies</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📄</span>
+                            <h3>Offset-Based</h3>
+                            <p class="framework-subtitle">Page and Limit Parameters</p>
+                            <h4>Implementation</h4>
+                            <ul>
+                                <li>Query: <code>?page=2&limit=20</code></li>
+                                <li>Simple to implement</li>
+                                <li>Good for small datasets</li>
+                                <li>Issues with data changes</li>
+                            </ul>
+                            <h4>Response Format</h4>
+                            <ul>
+                                <li>Total pages/items count</li>
+                                <li>Current page number</li>
+                                <li>Has next/previous flags</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔗</span>
+                            <h3>Cursor-Based</h3>
+                            <p class="framework-subtitle">Recommended for Large Datasets</p>
+                            <h4>Implementation</h4>
+                            <ul>
+                                <li>Query: <code>?cursor=abc123&limit=20</code></li>
+                                <li>Consistent results</li>
+                                <li>Handles real-time data</li>
+                                <li>Better performance</li>
+                            </ul>
+                            <h4>Response Format</h4>
+                            <ul>
+                                <li>Next/previous cursor tokens</li>
+                                <li>Has more indicator</li>
+                                <li>No total count (expensive)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>Best Practices</h3>
+                    <div class="info-box info-box-success">
+                        <strong>REST API Excellence:</strong>
+                        <ul class="feature-list">
+                            <li><strong>Versioning:</strong> Include API version in URL or headers</li>
+                            <li><strong>Filtering:</strong> Use query parameters (?status=active&role=admin)</li>
+                            <li><strong>Sorting:</strong> Support multi-field sorting (?sort=created_at,-price)</li>
+                            <li><strong>Field Selection:</strong> Let clients specify fields (?fields=id,name,email)</li>
+                            <li><strong>Error Format:</strong> Consistent JSON error structure with codes</li>
+                            <li><strong>HATEOAS:</strong> Include links to related resources</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GraphQL Design -->
+            <div id="graphql" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🔷 GraphQL Design</h2>
+                    
+                    <h3>Schema Design Principles</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📐</span>
+                            <h3>Type System</h3>
+                            <h4>Core Types</h4>
+                            <ul>
+                                <li><strong>Object Types:</strong> Main schema building blocks</li>
+                                <li><strong>Scalar Types:</strong> Int, Float, String, Boolean, ID</li>
+                                <li><strong>Enums:</strong> Fixed set of values</li>
+                                <li><strong>Interfaces:</strong> Abstract types with shared fields</li>
+                                <li><strong>Unions:</strong> Multiple possible types</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔤</span>
+                            <h3>Naming Conventions</h3>
+                            <h4>Best Practices</h4>
+                            <ul>
+                                <li><strong>Types:</strong> PascalCase (User, OrderItem)</li>
+                                <li><strong>Fields:</strong> camelCase (firstName, createdAt)</li>
+                                <li><strong>Enums:</strong> SCREAMING_SNAKE_CASE</li>
+                                <li><strong>Booleans:</strong> Prefix with is/has</li>
+                                <li><strong>Input Types:</strong> End with Input suffix</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">⚠️</span>
+                            <h3>Nullability</h3>
+                            <h4>Field Requirements</h4>
+                            <ul>
+                                <li><strong>! (Non-null):</strong> Use sparingly</li>
+                                <li><strong>Nullable Default:</strong> More flexible evolution</li>
+                                <li><strong>Lists:</strong> Consider [Type!]! patterns</li>
+                                <li><strong>Required Fields:</strong> Only guaranteed data</li>
+                                <li><strong>Evolution:</strong> Can't make non-null later</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>Query Optimization</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔄</span>
+                            <h3>DataLoader Pattern</h3>
+                            <p class="framework-subtitle">Solve N+1 Query Problem</p>
+                            <h4>Batching</h4>
+                            <ul>
+                                <li>Batch multiple requests</li>
+                                <li>Single database query</li>
+                                <li>Per-request caching</li>
+                                <li>Automatic deduplication</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🎯</span>
+                            <h3>Query Complexity</h3>
+                            <p class="framework-subtitle">Prevent Expensive Queries</p>
+                            <h4>Analysis</h4>
+                            <ul>
+                                <li>Calculate query cost</li>
+                                <li>Depth limiting (max 7 levels)</li>
+                                <li>Complexity scoring</li>
+                                <li>Rate limiting by cost</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📊</span>
+                            <h3>Pagination</h3>
+                            <p class="framework-subtitle">Relay-Style Connections</p>
+                            <h4>Pattern</h4>
+                            <ul>
+                                <li>Edges and nodes structure</li>
+                                <li>Cursor-based pagination</li>
+                                <li>PageInfo with indicators</li>
+                                <li>Total count optional</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>Mutation Best Practices</h3>
+                    <div class="info-box info-box-info">
+                        <strong>GraphQL Mutations:</strong>
+                        <ul class="feature-list">
+                            <li><strong>Naming:</strong> Verb + noun (createUser, updateProduct, deleteOrder)</li>
+                            <li><strong>Input Types:</strong> Single input argument with Input suffix</li>
+                            <li><strong>Payload Types:</strong> Include data, errors, clientMutationId</li>
+                            <li><strong>Error Handling:</strong> User errors in payload, system errors thrown</li>
+                            <li><strong>Side Effects:</strong> Document all side effects clearly</li>
+                            <li><strong>Idempotency:</strong> Use clientMutationId for deduplication</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- API Versioning -->
+            <div id="versioning" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🔄 API Versioning</h2>
+                    
+                    <h3>Versioning Strategies</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔗</span>
+                            <h3>URI Versioning</h3>
+                            <p class="framework-subtitle">Most Common Approach</p>
+                            <h4>Implementation</h4>
+                            <ul>
+                                <li>Pattern: <code>/v1/users</code></li>
+                                <li>Highly visible</li>
+                                <li>Easy to test</li>
+                                <li>Cache-friendly</li>
+                            </ul>
+                            <h4>Best For</h4>
+                            <ul>
+                                <li>Public APIs</li>
+                                <li>External clients</li>
+                                <li>Clear communication</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📝</span>
+                            <h3>Header Versioning</h3>
+                            <p class="framework-subtitle">Clean URLs</p>
+                            <h4>Implementation</h4>
+                            <ul>
+                                <li>Header: <code>X-API-Version: 2</code></li>
+                                <li>Clean URLs</li>
+                                <li>Per-resource versioning</li>
+                                <li>More RESTful</li>
+                            </ul>
+                            <h4>Best For</h4>
+                            <ul>
+                                <li>Internal APIs</li>
+                                <li>Microservices</li>
+                                <li>Gradual migration</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🎯</span>
+                            <h3>Content Negotiation</h3>
+                            <p class="framework-subtitle">Most RESTful</p>
+                            <h4>Implementation</h4>
+                            <ul>
+                                <li>Accept: <code>application/vnd.api.v2+json</code></li>
+                                <li>Standards-compliant</li>
+                                <li>Hypermedia support</li>
+                                <li>Complex setup</li>
+                            </ul>
+                            <h4>Best For</h4>
+                            <ul>
+                                <li>Mature REST APIs</li>
+                                <li>HATEOAS compliance</li>
+                                <li>Content types matter</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>Breaking Changes</h3>
+                    <table class="glass-table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Change Type</th>
+                                <th>Breaking?</th>
+                                <th>Safe Alternative</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Remove endpoint/field</td>
+                                <td><span class="badge-high">BREAKING</span></td>
+                                <td>Deprecate first, then remove</td>
+                            </tr>
+                            <tr>
+                                <td>Rename field/endpoint</td>
+                                <td><span class="badge-high">BREAKING</span></td>
+                                <td>Add new, deprecate old, support both</td>
+                            </tr>
+                            <tr>
+                                <td>Change data type</td>
+                                <td><span class="badge-high">BREAKING</span></td>
+                                <td>New field with different name</td>
+                            </tr>
+                            <tr>
+                                <td>Add required field</td>
+                                <td><span class="badge-high">BREAKING</span></td>
+                                <td>Make optional, then require later</td>
+                            </tr>
+                            <tr>
+                                <td>Add optional field</td>
+                                <td><span class="badge-low">SAFE</span></td>
+                                <td>Deploy directly</td>
+                            </tr>
+                            <tr>
+                                <td>Add new endpoint</td>
+                                <td><span class="badge-low">SAFE</span></td>
+                                <td>Deploy directly</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Deprecation Workflow</h3>
+                    <div style="background: rgba(0, 0, 0, 0.3); padding: 2rem; border-radius: 12px; margin: 1.5rem 0;">
+                        <div class="mermaid">
+graph LR
+    A["📢 Phase 1<br/>Announce Deprecation<br/><small>Public notification</small>"]
+    B["⏳ Phase 2<br/>Grace Period<br/><small>6-12 months support</small>"]
+    C["⚠️ Phase 3<br/>Sunset Warning<br/><small>Final 3 months</small>"]
+    D["🔚 Phase 4<br/>Removal<br/><small>Complete shutdown</small>"]
+    
+    A -->|"Start timeline"| B
+    B -->|"Monitor usage"| C
+    C -->|"Final migration"| D
+    
+    style A fill:#3b82f6,stroke:#60a5fa,stroke-width:3px,color:#fff
+    style B fill:#10b981,stroke:#34d399,stroke-width:3px,color:#fff
+    style C fill:#f59e0b,stroke:#fbbf24,stroke-width:3px,color:#fff
+    style D fill:#ef4444,stroke:#f87171,stroke-width:3px,color:#fff
+                        </div>
+                    </div>
+
+                    <div class="info-box info-box-warning">
+                        <strong>Deprecation Best Practices:</strong>
+                        <ul class="feature-list">
+                            <li><strong>Sunset Header:</strong> RFC 8594 standard deprecation header</li>
+                            <li><strong>Migration Guide:</strong> Clear documentation for transition</li>
+                            <li><strong>Support Period:</strong> Minimum 6-12 months for major changes</li>
+                            <li><strong>Monitoring:</strong> Track usage of deprecated endpoints</li>
+                            <li><strong>Communication:</strong> Email campaigns, changelog, release notes</li>
+                            <li><strong>Final Warning:</strong> 3-month notice before actual removal</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security -->
+            <div id="security" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🔒 Security & Performance</h2>
+                    
+                    <h3>Authentication & Authorization</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔑</span>
+                            <h3>JWT Tokens</h3>
+                            <p class="framework-subtitle">Stateless Authentication</p>
+                            <h4>Implementation</h4>
+                            <ul>
+                                <li>Bearer token in Authorization header</li>
+                                <li>Short expiration (15 minutes)</li>
+                                <li>Refresh token rotation</li>
+                                <li>Claims for permissions</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🛡️</span>
+                            <h3>Rate Limiting</h3>
+                            <p class="framework-subtitle">Prevent Abuse</p>
+                            <h4>Strategies</h4>
+                            <ul>
+                                <li>Per-user or per-IP limits</li>
+                                <li>Sliding window algorithm</li>
+                                <li>429 Too Many Requests response</li>
+                                <li>Retry-After header</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">✅</span>
+                            <h3>Input Validation</h3>
+                            <p class="framework-subtitle">Data Integrity</p>
+                            <h4>Best Practices</h4>
+                            <ul>
+                                <li>Schema validation (JSON Schema)</li>
+                                <li>Type checking</li>
+                                <li>Length/range validation</li>
+                                <li>Sanitize user input</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>Performance Optimization</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">⚡</span>
+                            <h3>HTTP Caching</h3>
+                            <h4>Cache Headers</h4>
+                            <ul>
+                                <li><strong>ETag:</strong> Response version identifier</li>
+                                <li><strong>Cache-Control:</strong> Caching directives</li>
+                                <li><strong>If-None-Match:</strong> Conditional request</li>
+                                <li><strong>304 Not Modified:</strong> Use cached version</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🗜️</span>
+                            <h3>Compression</h3>
+                            <h4>Response Optimization</h4>
+                            <ul>
+                                <li><strong>GZIP:</strong> Standard compression</li>
+                                <li><strong>Brotli:</strong> Better compression ratio</li>
+                                <li><strong>Accept-Encoding:</strong> Client support check</li>
+                                <li><strong>Content-Encoding:</strong> Applied compression</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resources -->
+            <div id="resources" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">📚 Resources & Learning</h2>
+                    
+                    <!-- First Row -->
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📖</span>
+                            <h3>REST Resources</h3>
+                            <ul>
+                                <li><a href="https://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm" target="_blank" rel="noopener">Roy Fielding's REST Dissertation</a></li>
+                                <li><a href="https://spec.openapis.org/oas/latest.html" target="_blank" rel="noopener">OpenAPI Specification</a></li>
+                                <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status" target="_blank" rel="noopener">HTTP Status Codes - MDN</a></li>
+                                <li><a href="https://tools.ietf.org/html/rfc6902" target="_blank" rel="noopener">JSON Patch (RFC 6902)</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔷</span>
+                            <h3>GraphQL Resources</h3>
+                            <ul>
+                                <li><a href="https://spec.graphql.org/" target="_blank" rel="noopener">GraphQL Specification</a></li>
+                                <li><a href="https://www.apollographql.com/docs/apollo-server/" target="_blank" rel="noopener">Apollo Server Docs</a></li>
+                                <li><a href="https://graphql.org/learn/best-practices/" target="_blank" rel="noopener">GraphQL Best Practices</a></li>
+                                <li><a href="https://github.com/graphql/dataloader" target="_blank" rel="noopener">DataLoader Library</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📚</span>
+                            <h3>Books & Tools</h3>
+                            <ul>
+                                <li><strong>RESTful Web APIs</strong> - Leonard Richardson</li>
+                                <li><strong>Production Ready GraphQL</strong> - Marc-André Giroux</li>
+                                <li><strong>API Design Patterns</strong> - JJ Geewax</li>
+                                <li><a href="https://www.postman.com/" target="_blank" rel="noopener">Postman</a> - API testing</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 CORTEX Knowledge Base. Created by Asif Hussain.</p>
+            <p>
+                <a href="../index.html">Home</a> |
+                <a href="index.html">Knowledge Library</a> |
+                <a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener">GitHub</a>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark'
+        });
+    </script>
+</body>
+</html>

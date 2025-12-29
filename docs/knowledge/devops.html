@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="DevOps Practices - CI/CD, GitOps, infrastructure as code, and automation">
+    <meta name="keywords" content="devops, cicd, gitops, automation, infrastructure as code, terraform">
+    <meta name="author" content="Asif Hussain">
+    <title>DevOps Practices | CORTEX Knowledge</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">→</span>
+        <a href="index.html">Knowledge Library</a>
+        <span class="breadcrumb-separator">→</span>
+        <span class="breadcrumb-current">DevOps</span>
+    </nav>
+
+    <section class="hero" id="main-content">
+        <h1 class="hero-title">🔄 DevOps Practices</h1>
+        <p class="hero-subtitle">CI/CD, GitOps, Infrastructure as Code, and Automation</p>
+        <div class="file-metadata">
+            <span class="metadata-item">🚀 Automation</span>
+            <span class="metadata-item">🔧 Tooling</span>
+            <span class="metadata-item">📅 Updated: Dec 2025</span>
+        </div>
+    </section>
+
+    <section class="section file-content">
+        <div class="container">
+            <div id="overview" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">📋 Overview</h2>
+                    <p>DevOps combines development and operations to shorten the system development lifecycle through automation, continuous integration, continuous delivery, and infrastructure as code. It emphasizes collaboration, monitoring, and rapid feedback loops.</p>
+                    
+                    <div class="info-box info-box-primary">
+                        <strong>DevOps Principles:</strong>
+                        <ul class="feature-list">
+                            <li><strong>Automation:</strong> Eliminate manual repetitive tasks</li>
+                            <li><strong>Continuous Integration:</strong> Merge code frequently</li>
+                            <li><strong>Continuous Delivery:</strong> Always production-ready</li>
+                            <li><strong>Monitoring:</strong> Observability and feedback</li>
+                        </ul>
+                    </div>
+
+                    <h3>DevOps Lifecycle</h3>
+                    <div class="mermaid">
+graph LR
+    P[Plan] --> C[Code]
+    C --> B[Build]
+    B --> T[Test]
+    T --> R[Release]
+    R --> D[Deploy]
+    D --> O[Operate]
+    O --> M[Monitor]
+    M --> P
+    
+    style P fill:#7b61ff,color:#fff
+    style C fill:#10b981,color:#fff
+    style B fill:#3b82f6,color:#fff
+    style T fill:#f59e0b,color:#fff
+    style R fill:#ef4444,color:#fff
+    style D fill:#10b981,color:#fff
+    style O fill:#3b82f6,color:#fff
+    style M fill:#7b61ff,color:#fff
+                    </div>
+                </div>
+            </div>
+
+            <div id="cicd" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🔄 CI/CD Pipelines</h2>
+                    
+                    <h3>Pipeline Stages</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔨</span>
+                            <h3>Continuous Integration</h3>
+                            <h4>Stages</h4>
+                            <ul>
+                                <li>Code commit triggers build</li>
+                                <li>Compile source code</li>
+                                <li>Run unit tests</li>
+                                <li>Code quality analysis</li>
+                                <li>Security scanning</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🚀</span>
+                            <h3>Continuous Delivery</h3>
+                            <h4>Stages</h4>
+                            <ul>
+                                <li>Integration tests</li>
+                                <li>Package artifacts</li>
+                                <li>Deploy to staging</li>
+                                <li>Acceptance tests</li>
+                                <li>Manual approval gate</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">⚡</span>
+                            <h3>Continuous Deployment</h3>
+                            <h4>Automation</h4>
+                            <ul>
+                                <li>Automated production deploy</li>
+                                <li>Blue-green deployment</li>
+                                <li>Canary releases</li>
+                                <li>Feature flags</li>
+                                <li>Automated rollback</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>CI/CD Pipeline Flow</h3>
+                    <div class="mermaid">
+flowchart LR
+    A[Git Push] --> B[Build]
+    B --> C{Tests Pass?}
+    C -->|Yes| D[Package]
+    C -->|No| E[Notify Team]
+    D --> F[Deploy Staging]
+    F --> G{Integration Tests?}
+    G -->|Pass| H[Deploy Prod]
+    G -->|Fail| E
+    H --> I[Monitor]
+    
+    style A fill:#10b981,color:#fff
+    style H fill:#10b981,color:#fff
+    style E fill:#ef4444,color:#fff
+                    </div>
+
+                    <h3>Popular CI/CD Tools</h3>
+                    <table class="glass-table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Tool</th>
+                                <th>Type</th>
+                                <th>Best For</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Jenkins</strong></td>
+                                <td>Self-hosted</td>
+                                <td>Enterprise, highly customizable</td>
+                            </tr>
+                            <tr>
+                                <td><strong>GitHub Actions</strong></td>
+                                <td>Cloud-based</td>
+                                <td>GitHub repos, YAML workflows</td>
+                            </tr>
+                            <tr>
+                                <td><strong>GitLab CI</strong></td>
+                                <td>Integrated</td>
+                                <td>All-in-one DevOps platform</td>
+                            </tr>
+                            <tr>
+                                <td><strong>CircleCI</strong></td>
+                                <td>Cloud-based</td>
+                                <td>Fast builds, Docker support</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Azure DevOps</strong></td>
+                                <td>Cloud-based</td>
+                                <td>Microsoft ecosystem</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="iac" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🏗️ Infrastructure as Code</h2>
+                    
+                    <h3>Core Tools</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔷</span>
+                            <h3>Terraform</h3>
+                            <p class="framework-subtitle">Multi-Cloud Provisioning</p>
+                            <h4>Features</h4>
+                            <ul>
+                                <li>Declarative configuration</li>
+                                <li>Provider ecosystem</li>
+                                <li>State management</li>
+                                <li>Plan before apply</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📜</span>
+                            <h3>Ansible</h3>
+                            <p class="framework-subtitle">Configuration Management</p>
+                            <h4>Features</h4>
+                            <ul>
+                                <li>Agentless architecture</li>
+                                <li>YAML playbooks</li>
+                                <li>Idempotent operations</li>
+                                <li>SSH-based</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">☁️</span>
+                            <h3>CloudFormation</h3>
+                            <p class="framework-subtitle">AWS Native</p>
+                            <h4>Features</h4>
+                            <ul>
+                                <li>JSON/YAML templates</li>
+                                <li>Stack management</li>
+                                <li>Drift detection</li>
+                                <li>Deep AWS integration</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="info-box info-box-success">
+                        <strong>IaC Benefits:</strong>
+                        <ul class="feature-list">
+                            <li><strong>Version Control:</strong> Infrastructure changes tracked in Git</li>
+                            <li><strong>Reproducibility:</strong> Identical environments every time</li>
+                            <li><strong>Documentation:</strong> Code serves as documentation</li>
+                            <li><strong>Automation:</strong> Eliminate manual provisioning errors</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="gitops" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">🔄 GitOps</h2>
+                    
+                    <h3>GitOps Principles</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📦</span>
+                            <h3>Git as Source of Truth</h3>
+                            <h4>Approach</h4>
+                            <ul>
+                                <li>All config in Git repositories</li>
+                                <li>Declarative desired state</li>
+                                <li>Immutable artifacts</li>
+                                <li>Version controlled</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔄</span>
+                            <h3>Automated Sync</h3>
+                            <h4>Process</h4>
+                            <ul>
+                                <li>Agents watch Git repos</li>
+                                <li>Auto-apply changes</li>
+                                <li>Reconciliation loops</li>
+                                <li>Self-healing systems</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">✅</span>
+                            <h3>Pull-Based Deployment</h3>
+                            <h4>Benefits</h4>
+                            <ul>
+                                <li>Better security</li>
+                                <li>No external access needed</li>
+                                <li>Audit trail</li>
+                                <li>Easy rollback</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>GitOps Tools</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🦑</span>
+                            <h3>ArgoCD</h3>
+                            <ul>
+                                <li>Kubernetes-native</li>
+                                <li>Web UI dashboard</li>
+                                <li>Multi-cluster support</li>
+                                <li>RBAC integration</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🌊</span>
+                            <h3>Flux</h3>
+                            <ul>
+                                <li>CNCF project</li>
+                                <li>GitOps toolkit</li>
+                                <li>Helm support</li>
+                                <li>Image automation</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="monitoring" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">📊 Monitoring & Observability</h2>
+                    
+                    <h3>Observability Pillars</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📈</span>
+                            <h3>Metrics</h3>
+                            <h4>Tools</h4>
+                            <ul>
+                                <li>Prometheus + Grafana</li>
+                                <li>DataDog, New Relic</li>
+                                <li>CloudWatch, Azure Monitor</li>
+                            </ul>
+                            <h4>Key Metrics</h4>
+                            <ul>
+                                <li>Request rate, errors, duration</li>
+                                <li>CPU, memory, disk</li>
+                                <li>Custom business metrics</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📝</span>
+                            <h3>Logs</h3>
+                            <h4>Tools</h4>
+                            <ul>
+                                <li>ELK Stack (Elasticsearch)</li>
+                                <li>Splunk, Loki</li>
+                                <li>CloudWatch Logs</li>
+                            </ul>
+                            <h4>Best Practices</h4>
+                            <ul>
+                                <li>Structured JSON logging</li>
+                                <li>Correlation IDs</li>
+                                <li>Log levels</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🔍</span>
+                            <h3>Traces</h3>
+                            <h4>Tools</h4>
+                            <ul>
+                                <li>Jaeger, Zipkin</li>
+                                <li>OpenTelemetry</li>
+                                <li>AWS X-Ray</li>
+                            </ul>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Request flow tracking</li>
+                                <li>Latency analysis</li>
+                                <li>Dependency mapping</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="resources" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title">📚 Resources & Learning</h2>
+                    
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">📖</span>
+                            <h3>Essential Books</h3>
+                            <ul>
+                                <li><strong>The DevOps Handbook</strong> - Kim, Humble, Debois, Willis</li>
+                                <li><strong>Continuous Delivery</strong> - Jez Humble</li>
+                                <li><strong>Site Reliability Engineering</strong> - Google</li>
+                                <li><strong>Terraform: Up & Running</strong> - Yevgeniy Brikman</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🛠️</span>
+                            <h3>Tools & Platforms</h3>
+                            <ul>
+                                <li><a href="https://www.jenkins.io/" target="_blank" rel="noopener">Jenkins</a></li>
+                                <li><a href="https://www.terraform.io/" target="_blank" rel="noopener">Terraform</a></li>
+                                <li><a href="https://argoproj.github.io/cd/" target="_blank" rel="noopener">ArgoCD</a></li>
+                                <li><a href="https://prometheus.io/" target="_blank" rel="noopener">Prometheus</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <span class="framework-panel-icon">🌐</span>
+                            <h3>Online Resources</h3>
+                            <ul>
+                                <li><a href="https://www.atlassian.com/devops" target="_blank" rel="noopener">Atlassian DevOps</a></li>
+                                <li><a href="https://www.opsgenie.com/learn/" target="_blank" rel="noopener">OpsGenie Learn</a></li>
+                                <li><a href="https://sre.google/" target="_blank" rel="noopener">Google SRE</a></li>
+                                <li><a href="https://www.gitops.tech/" target="_blank" rel="noopener">GitOps Working Group</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 CORTEX Knowledge Base. Created by Asif Hussain.</p>
+            <p>
+                <a href="../index.html">Home</a> |
+                <a href="index.html">Knowledge Library</a> |
+                <a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener">GitHub</a>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark'
+        });
+    </script>
+</body>
+</html>
