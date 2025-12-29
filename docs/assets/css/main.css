@@ -4005,3 +4005,67 @@ footer,
     }
 }
 
+/* ============================================
+   MERMAID DIAGRAM STYLING
+   ============================================ */
+
+/* Mermaid diagram container */
+.mermaid {
+    background: rgba(10, 14, 39, 0.3);
+    padding: 2rem;
+    border-radius: var(--radius-md);
+    margin: 2rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+    overflow-x: auto;
+}
+
+/* Force larger diagram rendering */
+.mermaid svg {
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 400px;
+}
+
+/* Increase font sizes for better readability */
+.mermaid .node rect,
+.mermaid .node circle,
+.mermaid .node ellipse,
+.mermaid .node polygon {
+    stroke-width: 2px !important;
+}
+
+.mermaid .node text {
+    font-size: 16px !important;
+    font-weight: 600 !important;
+}
+
+.mermaid .edgeLabel {
+    font-size: 14px !important;
+    background: rgba(26, 31, 58, 0.9) !important;
+    padding: 4px 8px !important;
+    border-radius: 4px !important;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .mermaid {
+        padding: 1rem;
+        min-height: 300px;
+    }
+    
+    .mermaid svg {
+        min-height: 300px;
+    }
+    
+    .mermaid .node text {
+        font-size: 14px !important;
+    }
+    
+    .mermaid .edgeLabel {
+        font-size: 12px !important;
+    }
+}
+

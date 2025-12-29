@@ -563,7 +563,19 @@ graph LR
     <script>
         mermaid.initialize({ 
             startOnLoad: true,
-            theme: 'dark'
+            theme: 'dark',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis',
+                padding: 20,
+                nodeSpacing: 100,
+                rankSpacing: 80
+            },
+            themeVariables: {
+                fontSize: '18px',
+                fontFamily: 'Inter, system-ui, -apple-system, sans-serif'
+            }
         });
     </script>
 </body>
