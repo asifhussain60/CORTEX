@@ -105,106 +105,159 @@ pattern_selection_guide:
 
 creational_patterns:
   - name: "Singleton"
+    category: "Creational"
     intent: "Ensure a class has only one instance and provide global access point"
+    also_known_as: []
+    
     problem: |
       Need to restrict class to single instance (e.g., database connection, logger, config)
       and provide controlled global access without using global variables.
+      Multiple instances could interfere with each other (e.g., logging to same file).
+    
     solution: |
-      Make constructor private, provide static method that returns same instance.
+      Make constructor private/protected, provide static Instance property that returns same instance.
+      Use Lazy<T> in C# for thread-safe lazy initialization.
+    
     structure: |
       Singleton
-      ├── static instance: Singleton
-      ├── private constructor()
-      └── static getInstance(): Singleton
+      ├── static _instance: Singleton (private)
+      ├── private/protected constructor()
+      ├── static Instance: Singleton (property)
+      └── SingletonOperation() (instance methods)
     
     participants:
       - name: "Singleton"
-        role: "Defines getInstance() method for accessing unique instance"
+        role: "Defines Instance property for accessing unique instance, may have singleton operations"
+        responsibilities:
+          - "Controls how and when clients access unique instance"
+          - "May be responsible for creating its own unique instance"
     
     collaborations:
-      - "Clients access singleton instance only through getInstance() method"
+      - "Clients access singleton instance only through static Instance property"
+      - "Singleton may lazily create its instance on first access"
+    
+    csharp_specifics:
+      key_features:
+        - "Use Lazy<T> for thread-safe lazy initialization"
+        - "Private constructor prevents external instantiation"
+        - "Protected constructor allows subclassing"
+        - "Static Instance property provides global access"
+        - "sealed keyword recommended to prevent inheritance"
+      
+      naive_implementation: |
+        // ❌ Not thread-safe - multiple threads could create multiple instances
+        public class Logger
+        {
+            private static Logger? _instance;
+            
+            protected Logger() { }
+            
+            public static Logger Instance
+            {
+                get
+                {
+                    if (_instance == null)
+                        _instance = new Logger();
+                    return _instance;
+                }
+            }
+            
+            public void Log(string message) 
+            {
+                Console.WriteLine($"[{DateTime.Now}] {message}");
+            }
+        }
+      
+      thread_safe_implementation: |
+        // ✅ Thread-safe using Lazy<T> - recommended approach
+        public sealed class Logger
+        {
+            private static readonly Lazy<Logger> _lazyLogger = 
+                new Lazy<Logger>(() => new Logger());
+            
+            public static Logger Instance => _lazyLogger.Value;
+            
+            private Logger() { }
+            
+            public void Log(string message)
+            {
+                Console.WriteLine($"[{DateTime.Now}] {message}");
+            }
+        }
+        
+        // Usage
+        Logger.Instance.Log("Application started");
+        var logger1 = Logger.Instance;
+        var logger2 = Logger.Instance;
+        // logger1 == logger2 (same instance, thread-safe)
+      
+      with_subclassing: |
+        // Protected constructor allows subclassing
+        public class Logger
+        {
+            private static Logger? _instance;
+            
+            protected Logger() { }
+            
+            public static Logger Instance
+            {
+                get
+                {
+                    if (_instance == null)
+                        _instance = new Logger();
+                    return _instance;
+                }
+            }
+            
+            public virtual void Log(string message) 
+            {
+                Console.WriteLine($"[{DateTime.Now}] {message}");
+            }
+        }
+        
+        public class FileLogger : Logger
+        {
+            public override void Log(string message)
+            {
+                // Write to file instead
+            }
+        }
     
     consequences:
       pros:
         - "Controlled access to sole instance"
-        - "Reduced name space pollution vs global variables"
-        - "Permits refinement of operations and representation"
-        - "Can be extended to allow controlled number of instances"
+        - "Reduced namespace pollution vs global variables"
+        - "Can allow controlled number of instances"
+        - "Can be subclassed (if using protected constructor)"
+        - "Instance creation can be deferred until first use (lazy loading)"
+        - "Lazy<T> provides thread-safe initialization in .NET"
       cons:
-        - "Difficult to test (hard to mock)"
-        - "Violates Single Responsibility Principle"
-        - "Can hide dependencies"
-        - "Thread safety concerns in multi-threaded environments"
+        - "Violates Single Responsibility Principle (manages lifecycle + business logic)"
+        - "Difficult to unit test (hard to mock, creates hidden dependencies)"
+        - "Can hide dependencies in code"
+        - "Global state can make debugging difficult"
+        - "Not suitable for IoC containers (prefer scoped/singleton lifetimes instead)"
     
-    implementation:
-      considerations:
-        - "Thread-safe initialization (double-checked locking, eager initialization)"
-        - "Serialization-safe (readResolve() in Java)"
-        - "Reflection-safe (throw exception in constructor)"
-        - "Consider using Dependency Injection instead"
+    use_cases:
+      good:
+        - "Logging service (single log file access)"
+        - "Configuration manager (single source of settings)"
+        - "Database connection pool manager"
+        - "Cache manager"
+        - "Thread pool manager"
+        - "Device driver access (hardware resources)"
       
-      languages:
-        python:
-          good: |
-            class Singleton:
-                _instance = None
-                _lock = threading.Lock()
-                
-                def __new__(cls):
-                    if cls._instance is None:
-                        with cls._lock:
-                            if cls._instance is None:
-                                cls._instance = super().__new__(cls)
-                    return cls._instance
-            
-            # Usage
-            s1 = Singleton()
-            s2 = Singleton()
-            assert s1 is s2  # Same instance
-          
-          bad: |
-            # ❌ Not thread-safe
-            class Singleton:
-                _instance = None
-                
-                def __new__(cls):
-                    if cls._instance is None:
-                        cls._instance = super().__new__(cls)
-                    return cls._instance
-        
-        csharp:
-          good: |
-            public sealed class Singleton
-            {
-                private static readonly Lazy<Singleton> lazy =
-                    new Lazy<Singleton>(() => new Singleton());
-                
-                public static Singleton Instance => lazy.Value;
-                
-                private Singleton() { }
-            }
-            
-            // Usage
-            var s1 = Singleton.Instance;
-            var s2 = Singleton.Instance;
-            // s1 == s2 (same instance)
-          
-          bad: |
-            // ❌ Not thread-safe
-            public class Singleton
-            {
-                private static Singleton instance;
-                
-                public static Singleton Instance
-                {
-                    get
-                    {
-                        if (instance == null)
-                            instance = new Singleton();
-                        return instance;
-                    }
-                }
-            }
+      avoid:
+        - "Modern applications with IoC containers (use DI instead)"
+        - "When you need multiple instances in tests"
+        - "When dependencies should be explicit"
+    
+    implementation_notes:
+      - "In modern C#, prefer using IoC container with singleton lifetime"
+      - "Lazy<T> is the preferred thread-safe approach in .NET"
+      - "sealed keyword prevents subclassing for better control"
+      - "Protected constructor allows subclassing if needed"
+      - "Consider implementing IDisposable if singleton manages resources"
         
         typescript:
           good: |
@@ -251,45 +304,204 @@ creational_patterns:
         container.register_singleton(DatabaseConnection)
 
   - name: "Factory Method"
+    category: "Creational"
     intent: "Define interface for creating object, but let subclasses decide which class to instantiate"
+    also_known_as: ["Virtual Constructor"]
+    
     problem: |
       Need to create objects without specifying exact class to instantiate.
-      Want to defer instantiation to subclasses.
+      Want to defer instantiation to subclasses. Client shouldn't know about concrete classes.
+      Tight coupling between client and concrete implementations makes system inflexible.
+    
     solution: |
-      Define abstract factory method in base class, override in subclasses to create specific types.
+      Define abstract factory method in base class (Creator), override in subclasses (ConcreteCreator) 
+      to create specific types (ConcreteProduct). Work on interfaces/abstractions, not implementations.
+    
     structure: |
-      Creator (abstract)
-      ├── factoryMethod(): Product (abstract)
+      Product (abstract/interface)
       └── operation()
       
-      ConcreteCreator
-      └── factoryMethod(): ConcreteProduct
+      ConcreteProduct1, ConcreteProduct2 : Product
       
-      Product (interface)
-      ConcreteProductA, ConcreteProductB
+      Creator (abstract)
+      ├── factoryMethod(): Product (abstract)
+      └── someOperation() // may call factoryMethod()
+      
+      ConcreteCreator1, ConcreteCreator2 : Creator
+      └── factoryMethod(): ConcreteProduct
     
     participants:
       - name: "Product"
-        role: "Defines interface of objects factory method creates"
+        role: "Abstract base class or interface for objects factory creates"
+        responsibilities:
+          - "Defines interface of objects factory method creates"
+      
       - name: "ConcreteProduct"
-        role: "Implements Product interface"
+        role: "Implements the Product interface/abstract class"
+        responsibilities:
+          - "Provides specific implementation of Product"
+      
       - name: "Creator"
-        role: "Declares factory method returning Product"
+        role: "Declares the factory method"
+        responsibilities:
+          - "Declares abstract/virtual factory method returning Product"
+          - "May call factory method to create Product objects"
+      
       - name: "ConcreteCreator"
         role: "Overrides factory method to return ConcreteProduct"
+        responsibilities:
+          - "Implements factory method to instantiate ConcreteProduct"
     
     collaborations:
       - "Creator relies on subclasses to define factory method"
       - "Factory method returns appropriate Product instance"
+      - "Client works with Creator and Product abstractions, not concrete types"
+    
+    csharp_specifics:
+      key_features:
+        - "Use abstract class or interface for Product"
+        - "Use abstract class with abstract method for Creator"
+        - "ConcreteCreator returns ConcreteProduct but typed as Product"
+        - "Eliminates 'new' operator coupling in client code"
+      
+      shopping_cart_example: |
+        // Product - can be interface or abstract class
+        public abstract class DiscountService
+        {
+            public abstract int DiscountPercentage { get; }
+            public override string ToString() => GetType().Name;
+        }
+        
+        // ConcreteProduct implementations
+        public class CountryDiscountService : DiscountService
+        {
+            private readonly string _countryId;
+            
+            public CountryDiscountService(string countryId)
+            {
+                _countryId = countryId;
+            }
+            
+            public override int DiscountPercentage => 
+                _countryId == "BE" ? 20 : 10;
+        }
+        
+        public class CodeDiscountService : DiscountService
+        {
+            private readonly Guid _code;
+            
+            public CodeDiscountService(Guid code)
+            {
+                _code = code;
+            }
+            
+            public override int DiscountPercentage => 15;
+        }
+        
+        // Creator (abstract factory)
+        public abstract class DiscountFactory
+        {
+            public abstract DiscountService CreateDiscountService();
+        }
+        
+        // ConcreteCreator implementations
+        public class CountryDiscountFactory : DiscountFactory
+        {
+            private readonly string _countryId;
+            
+            public CountryDiscountFactory(string countryId)
+            {
+                _countryId = countryId;
+            }
+            
+            public override DiscountService CreateDiscountService()
+            {
+                return new CountryDiscountService(_countryId);
+            }
+        }
+        
+        public class CodeDiscountFactory : DiscountFactory
+        {
+            private readonly Guid _code;
+            
+            public CodeDiscountFactory(Guid code)
+            {
+                _code = code;
+            }
+            
+            public override DiscountService CreateDiscountService()
+            {
+                return new CodeDiscountService(_code);
+            }
+        }
+        
+        // Client usage
+        var factories = new List<DiscountFactory>
+        {
+            new CountryDiscountFactory("BE"),
+            new CodeDiscountFactory(Guid.NewGuid())
+        };
+        
+        foreach (var factory in factories)
+        {
+            var service = factory.CreateDiscountService();
+            Console.WriteLine($"{service}: {service.DiscountPercentage}%");
+        }
+      
+      interface_alternative: |
+        // Can also use interface for Product
+        public interface IDiscountService
+        {
+            int DiscountPercentage { get; }
+        }
+        
+        // And interface for Creator
+        public interface IDiscountFactory
+        {
+            IDiscountService CreateDiscountService();
+        }
+        
+        // Implementations remain similar
+        public class CountryDiscountService : IDiscountService
+        {
+            public int DiscountPercentage { get; init; }
+        }
     
     consequences:
       pros:
-        - "Eliminates need to bind application-specific classes"
+        - "Eliminates binding to application-specific classes (loose coupling)"
+        - "Adheres to Open/Closed Principle (extend without modifying client)"
+        - "Adheres to Single Responsibility Principle (creation logic in one place)"
         - "Provides hooks for subclasses"
         - "Connects parallel class hierarchies"
+        - "Easy to add new product types without breaking client code"
+      
       cons:
         - "Can require creating subclass just to change product type"
         - "More complex than direct instantiation"
+        - "Code can become more complicated with many small classes"
+    
+    use_cases:
+      good:
+        - "Class can't anticipate class of objects it must create"
+        - "Class wants subclasses to specify objects it creates"
+        - "Classes delegate responsibility to helper subclasses"
+        - "Want to localize knowledge of which helper is the delegate"
+        - "Need to reuse existing objects instead of always creating new"
+      
+      examples:
+        - "Document editor creating different document types (PDF, Word)"
+        - "Shopping cart with different discount calculation strategies"
+        - "Data export services (CSV, JSON, XML)"
+        - "Payment processing with different payment methods"
+        - "Logging frameworks with different logger types"
+    
+    implementation_notes:
+      - "In C#, Product can be interface or abstract class (prefer interface when no base implementation needed)"
+      - "Creator can be abstract class (more common) or interface"
+      - "Factory method is called within Creator's methods, not just standalone"
+      - "Can parameterize factory method to create multiple product types"
+      - "Often used with Template Method pattern"
     
     implementation:
       considerations:
