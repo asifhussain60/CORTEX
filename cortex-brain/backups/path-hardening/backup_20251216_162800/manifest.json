@@ -1,8 +1,0 @@
-{
-  "timestamp": "20251216_162800",
-  "files_backed_up": 2,
-  "files": [
-    "src\\cortex_agents\\learning_capture_agent.py",
-    "src\\cortex_agents\\test_generator\\tier2_pattern_store.py"
-  ]
-}

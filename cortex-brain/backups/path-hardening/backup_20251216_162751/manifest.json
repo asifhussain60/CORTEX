@@ -1,8 +1,0 @@
-{
-  "timestamp": "20251216_162751",
-  "files_backed_up": 2,
-  "files": [
-    "src\\validation\\policy_validator.py",
-    "src\\validation\\post_deployment_validator.py"
-  ]
-}

@@ -1,9 +1,0 @@
-{
-  "timestamp": "20251216_162653",
-  "files_backed_up": 3,
-  "files": [
-    "src\\plugins\\cleanup_orchestrator.py",
-    "src\\plugins\\extension_scaffold_plugin.py",
-    "src\\plugins\\performance_telemetry_plugin.py"
-  ]
-}

@@ -1,7 +1,0 @@
-{
-  "timestamp": "20251216_163155",
-  "files_backed_up": 1,
-  "files": [
-    "src\\migrations\\run_all_migrations.py"
-  ]
-}
