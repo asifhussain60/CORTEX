@@ -20,7 +20,7 @@ I stared at my screen, watching error logs cascade like a digital waterfall. Aut
 
 I pulled up the deployment history. There it was: my "beautiful" authentication refactor from Tuesday. The one Copilot helped me write. The one so elegant, so clean, so *obviously correct* that I shipped it without tests.
 
-<img src="../illustrations/images/valuable/cortex-awakening-ch05-01.jpeg" alt="Production Bug Crisis" style="float: left; margin: 0 1em 1em 0; max-width: 45%; height: auto;">
+<img src="../illustrations/images/valuable/cortex-awakening-ch05-01.jpeg" alt="Production Bug Crisis" class="story-image-left">
 
 My phone buzzed. Miss G.
 

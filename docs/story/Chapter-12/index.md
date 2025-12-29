@@ -317,7 +317,7 @@ I laughed. "CORTEX teaching me how to sell CORTEX."
 
 ## The Epilogue
 
-<img src="../illustrations/images/essentials/cortex-awakening-epilogue-01.jpeg" alt="Where Are They Now" style="float: right; margin: 0 0 1em 1em; max-width: 45%; height: auto;">
+<img src="../illustrations/images/essentials/cortex-awakening-epilogue-01.jpeg" alt="Where Are They Now" class="story-image-right">
 
 December 23rd.
 

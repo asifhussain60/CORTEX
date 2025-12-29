@@ -18,7 +18,7 @@ I had a problem. A forty-seven-script-shaped problem.
 
 There I was, 2 AM on a Tuesday, staring at my file tree like a digital hoarder confronted by a reality TV camera crew. `align_system.py`. `cleanup_orphaned_code.py`. `validate_skull_rules.py`. `refresh_prompts.py`. `healthcheck_v2.py`. `optimize_database.py`. And forty-one more.
 
-<img src="../illustrations/images/valuable/cortex-awakening-ch06-01.jpeg" alt="Script Chaos" style="float: right; margin: 0 0 1em 1em; max-width: 45%; height: auto;">
+<img src="../illustrations/images/valuable/cortex-awakening-ch06-01.jpeg" alt="Script Chaos" class="story-image-right">
 
 "This is insane," I muttered.
 

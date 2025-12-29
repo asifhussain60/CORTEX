@@ -16,7 +16,7 @@ My finger hovered over the Enter key. One keystroke away from initializing my be
 
 *Everything.*
 
-<img src="../illustrations/images/essentials/cortex-awakening-ch02-01.jpeg" alt="The 2:17 AM Realization" style="float: right; margin: 0 0 1em 1em; max-width: 45%; height: auto;">
+<img src="../illustrations/images/essentials/cortex-awakening-ch02-01.jpeg" alt="The 2:17 AM Realization" class="story-image-right">
 
 My past projects flashed before my eyes like a highlight reel of disasters. The smart mirror that achieved sentience and promptly mocked my haircut. ("Bedhead isn't a style, Asif.") The automated garden that interpreted "water the plants" as "recreate the Everglades" (the foundation still hasn't fully dried). The meal planner that suggested kale smoothies with such aggressive confidence I assumed it was trying to kill me.
 
@@ -115,7 +115,7 @@ rules:
 
 "Your projects leave orphaned code like a cat leaves hairballs."
 
-<img src="../illustrations/images/essentials/cortex-awakening-ch02-02.jpeg" alt="SKULL Rules Being Written" style="float: left; margin: 0 1em 1em 0; max-width: 45%; height: auto;">
+<img src="../illustrations/images/essentials/cortex-awakening-ch02-02.jpeg" alt="SKULL Rules Being Written" class="story-image-left">
 
 I typed faster now, rules flowing from past disasters:
 

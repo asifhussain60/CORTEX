@@ -10,7 +10,7 @@ title: "Chapter 4: Tier 2 - The Learning Machine"
 
 # Chapter 4: Tier 2 - The Learning Machine
 
-<img src="../illustrations/images/essentials/cortex-awakening-ch04-01.jpeg" alt="The Learning Machine" style="float: right; margin: 0 0 1em 1em; max-width: 45%; height: auto;">
+<img src="../illustrations/images/essentials/cortex-awakening-ch04-01.jpeg" alt="The Learning Machine" class="story-image-right">
 
 The frustration hit on a Tuesday afternoon.
 

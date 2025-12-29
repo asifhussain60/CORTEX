@@ -28,7 +28,7 @@ Not because it didn't work—it worked BEAUTIFULLY. But because the codebase was
 
 Client names. Project names. Company-specific domain logic. That one embarrassing authentication module that still had `CorpXYZ_OAuth_Handler` hardcoded in it.
 
-<img src="../illustrations/images/essentials/cortex-awakening-ch09-01.jpeg" alt="Code Sanitization Challenge" style="float: left; margin: 0 1em 1em 0; max-width: 45%; height: auto;">
+<img src="../illustrations/images/essentials/cortex-awakening-ch09-01.jpeg" alt="Code Sanitization Challenge" class="story-image-left">
 
 "I... can't show you the code directly."
 
@@ -124,7 +124,7 @@ replacements:
 
 I ran the sanitizer.
 
-<img src="../illustrations/images/valuable/cortex-awakening-ch09-02.jpeg" alt="Sanitization Running" style="float: right; margin: 0 0 1em 1em; max-width: 45%; height: auto;">
+<img src="../illustrations/images/valuable/cortex-awakening-ch09-02.jpeg" alt="Sanitization Running" class="story-image-right">
 
 ```
 🧹 Code Sanitization Orchestrator Engaged
