@@ -41,25 +41,39 @@
     <!-- Interactive Knowledge Map -->
     <section class="orchestrator-viz-section" style="margin-top: 3rem;">
         <div class="glass-card">
-            <h2 class="section-title">🗺️ Interactive Knowledge Map</h2>
-            <p style="text-align: center; color: var(--text-secondary); margin-bottom: 2rem;">
-                Click domains to expand • Drag nodes to explore • Click topics to view details
+            <h2 class="section-title"><i class="fas fa-project-diagram" aria-hidden="true"></i> Interactive Knowledge Map</h2>
+            <p style="text-align: center; color: var(--text-secondary); margin-bottom: 1.5rem;">
+                Click any domain to navigate to detailed content. Topics orbit around each domain.
             </p>
             
-            <div class="viz-controls" style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center;">
-                <button class="viz-btn active" data-view="domains" style="background: linear-gradient(135deg, #00d4ff 0%, #7b61ff 100%); color: white;">
-                    <i class="fas fa-layer-group"></i> Domains
-                </button>
-                <button class="viz-btn" data-view="all" style="background: #2196F3; color: white;">
-                    <i class="fas fa-sitemap"></i> Full Map
-                </button>
-                <button class="viz-btn" id="resetKnowledgeBtn" style="background: linear-gradient(135deg, #7b61ff 0%, #00d4ff 100%); color: white; margin-left: 10px;">
-                    <i class="fas fa-redo-alt"></i> Reset View
-                </button>
-            </div>
+            <div id="knowledgeMapMain" style="min-height: 580px; position: relative; overflow: hidden;"></div>
             
-            <div id="knowledgeMapMain"></div>
-            <div class="viz-tooltip"></div>
+            <div class="map-legend" style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-top: 1rem; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 8px;">
+                <div class="legend-item" style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">
+                    <span style="width: 12px; height: 12px; border-radius: 50%; background: #7b61ff;"></span>
+                    <span>Central Hub</span>
+                </div>
+                <div class="legend-item" style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">
+                    <span style="width: 12px; height: 12px; border-radius: 50%; background: #2196F3;"></span>
+                    <span>Frontend & UI</span>
+                </div>
+                <div class="legend-item" style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">
+                    <span style="width: 12px; height: 12px; border-radius: 50%; background: #4CAF50;"></span>
+                    <span>Backend & APIs</span>
+                </div>
+                <div class="legend-item" style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">
+                    <span style="width: 12px; height: 12px; border-radius: 50%; background: #FF9800;"></span>
+                    <span>Data & Storage</span>
+                </div>
+                <div class="legend-item" style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">
+                    <span style="width: 12px; height: 12px; border-radius: 50%; background: #9C27B0;"></span>
+                    <span>Cloud & Infra</span>
+                </div>
+                <div class="legend-item" style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">
+                    <span style="width: 12px; height: 12px; border-radius: 50%; background: #F44336;"></span>
+                    <span>Software Craft</span>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -731,351 +745,337 @@
     </style>
 
     <script>
-    // Knowledge Map Data Structure
-    const knowledgeData = {
-        domains: [
-            { 
-                id: 'frontend-ui', 
-                name: 'Frontend & UI', 
-                icon: '🎨',
-                color: '#2196F3',
-                topics: [
-                    { id: 'frontend', name: 'Frontend', url: 'frontend.html', icon: '💻' },
-                    { id: 'ui-ux', name: 'UI/UX', url: 'ui-ux.html', icon: '🎨' },
-                    { id: 'mobile', name: 'Mobile', url: 'mobile.html', icon: '📱' }
-                ]
-            },
-            { 
-                id: 'backend-apis', 
-                name: 'Backend & APIs', 
-                icon: '🔌',
-                color: '#4CAF50',
-                topics: [
-                    { id: 'api-design', name: 'API Design', url: 'api-design.html', icon: '🔌' },
-                    { id: 'microservices', name: 'Microservices', url: 'microservices.html', icon: '⚙️' },
-                    { id: 'messaging', name: 'Messaging', url: 'messaging.html', icon: '📬' }
-                ]
-            },
-            { 
-                id: 'data-storage', 
-                name: 'Data & Storage', 
-                icon: '🗄️',
-                color: '#FF9800',
-                topics: [
-                    { id: 'database', name: 'Database', url: 'database.html', icon: '🗄️' },
-                    { id: 'performance', name: 'Performance', url: 'performance.html', icon: '⚡' }
-                ]
-            },
-            { 
-                id: 'cloud-infra', 
-                name: 'Cloud & Infrastructure', 
-                icon: '☁️',
-                color: '#9C27B0',
-                topics: [
-                    { id: 'cloud', name: 'Cloud', url: 'cloud.html', icon: '☁️' },
-                    { id: 'containers', name: 'Containers', url: 'containers.html', icon: '📦' },
-                    { id: 'devops', name: 'DevOps', url: 'devops.html', icon: '🔄' }
-                ]
-            },
-            { 
-                id: 'craft-quality', 
-                name: 'Software Craft & Quality', 
-                icon: '🎯',
-                color: '#F44336',
-                topics: [
-                    { id: 'engineering', name: 'Engineering', url: 'engineering.html', icon: '⚙️' },
-                    { id: 'ddd', name: 'DDD', url: 'ddd.html', icon: '🏗️' },
-                    { id: 'security', name: 'Security', url: 'security.html', icon: '🔒' },
-                    { id: 'testing', name: 'Testing', url: 'testing.html', icon: '✅' }
-                ]
-            }
-        ]
-    };
-
-    // Setup SVG
-    const container = document.getElementById('knowledgeMapMain');
-    const width = container.offsetWidth || 1200;
-    const height = 600;
-
-    const svg = d3.select('#knowledgeMapMain')
-        .append('svg')
-        .attr('width', width)
-        .attr('height', height)
-        .style('background', 'rgba(10, 14, 39, 0.3)')
-        .style('border-radius', '8px');
-
-    const g = svg.append('g');
-
-    // Zoom
-    const zoom = d3.zoom()
-        .scaleExtent([0.5, 2])
-        .on('zoom', (event) => { g.attr('transform', event.transform); });
-    svg.call(zoom);
-
-    const tooltip = d3.select('.viz-tooltip');
-
-    let currentView = 'domains';
-    let expandedDomains = new Set();
-    let nodes = [];
-    let links = [];
-    let simulation;
-
-    // Helper function to lighten colors for child nodes
-    function lightenColor(color, amount) {
-        // Convert hex to RGB
-        const hex = color.replace('#', '');
-        const r = parseInt(hex.substr(0, 2), 16);
-        const g = parseInt(hex.substr(2, 2), 16);
-        const b = parseInt(hex.substr(4, 2), 16);
-        
-        // Lighten by blending with white
-        const newR = Math.round(r + (255 - r) * amount);
-        const newG = Math.round(g + (255 - g) * amount);
-        const newB = Math.round(b + (255 - b) * amount);
-        
-        // Convert back to hex
-        return '#' + [newR, newG, newB].map(x => {
-            const hex = x.toString(16);
-            return hex.length === 1 ? '0' + hex : hex;
-        }).join('');
-    }
-
-    // Initialize with domains view
-    function initDomains() {
-        nodes = knowledgeData.domains.map((d, i) => ({
-            ...d,
-            type: 'domain',
-            x: width / 2 + (i - 2) * 150,
-            y: height / 2,
-            radius: 45
-        }));
-        links = [];
-        expandedDomains.clear();
-        updateVisualization();
-    }
-
-    function expandDomain(domain) {
-        if (expandedDomains.has(domain.id)) {
-            // Collapse
-            expandedDomains.delete(domain.id);
-            nodes = nodes.filter(n => !(n.domainId === domain.id && n.type === 'topic'));
-            links = links.filter(l => l.source.id !== domain.id);
-        } else {
-            // Expand
-            expandedDomains.add(domain.id);
-            const domainNode = nodes.find(n => n.id === domain.id);
-            
-            domain.topics.forEach((topic, i) => {
-                const angle = (i / domain.topics.length) * 2 * Math.PI;
-                const distance = 120;
-                nodes.push({
-                    ...topic,
-                    type: 'topic',
-                    domainId: domain.id,
-                    color: lightenColor(domain.color, 0.3), // Lighter shade of parent
-                    parentColor: domain.color,
-                    x: domainNode.x + Math.cos(angle) * distance,
-                    y: domainNode.y + Math.sin(angle) * distance,
-                    radius: 30
-                });
-                links.push({
-                    source: domain.id,
-                    target: topic.id
-                });
-            });
+    // ============================================
+    // D3.js Hub-Spoke Knowledge Map (Radial Layout)
+    // ============================================
+    
+    // Hub-spoke data - 5 main domains with their topics
+    const knowledgeData = [
+        {
+            id: 'frontend-ui',
+            name: 'Frontend & UI',
+            icon: '🎨',
+            color: '#2196F3',
+            angle: 0, // Top
+            topics: [
+                { name: 'Frontend', url: 'frontend.html' },
+                { name: 'UI/UX', url: 'ui-ux.html' },
+                { name: 'Mobile', url: 'mobile.html' }
+            ]
+        },
+        {
+            id: 'backend-apis',
+            name: 'Backend & APIs',
+            icon: '🔌',
+            color: '#4CAF50',
+            angle: 72, // 360/5 = 72 degrees apart
+            topics: [
+                { name: 'API Design', url: 'api-design.html' },
+                { name: 'Microservices', url: 'microservices.html' },
+                { name: 'Messaging', url: 'messaging.html' }
+            ]
+        },
+        {
+            id: 'data-storage',
+            name: 'Data & Storage',
+            icon: '🗄️',
+            color: '#FF9800',
+            angle: 144,
+            topics: [
+                { name: 'Database', url: 'database.html' },
+                { name: 'Performance', url: 'performance.html' }
+            ]
+        },
+        {
+            id: 'cloud-infra',
+            name: 'Cloud & Infrastructure',
+            icon: '☁️',
+            color: '#9C27B0',
+            angle: 216,
+            topics: [
+                { name: 'Cloud', url: 'cloud.html' },
+                { name: 'Containers', url: 'containers.html' },
+                { name: 'DevOps', url: 'devops.html' }
+            ]
+        },
+        {
+            id: 'craft-quality',
+            name: 'Software Craft',
+            icon: '🎯',
+            color: '#F44336',
+            angle: 288,
+            topics: [
+                { name: 'Engineering', url: 'engineering.html' },
+                { name: 'Design Patterns', url: 'design-patterns.html' },
+                { name: 'DDD', url: 'ddd.html' },
+                { name: 'Security', url: 'security.html' },
+                { name: 'Testing', url: 'testing.html' }
+            ]
         }
-        updateVisualization();
-    }
-
-    function showAllNodes() {
-        nodes = [];
-        links = [];
-        expandedDomains.clear();
-
-        // Add all domains
-        knowledgeData.domains.forEach((d, i) => {
-            nodes.push({
-                ...d,
-                type: 'domain',
-                radius: 40
-            });
+    ];
+    
+    function renderKnowledgeMap() {
+        const container = document.getElementById('knowledgeMapMain');
+        const width = container.clientWidth;
+        const height = 580;
+        const centerX = width / 2;
+        const centerY = height / 2;
+        const hubRadius = 75;
+        const spokeDistance = Math.min(width, height) * 0.30;
+        
+        container.innerHTML = '';
+        
+        const svg = d3.select('#knowledgeMapMain')
+            .append('svg')
+            .attr('width', width)
+            .attr('height', height)
+            .attr('viewBox', `0 0 ${width} ${height}`)
+            .style('background', 'rgba(0, 0, 0, 0.3)')
+            .style('border-radius', '12px');
+        
+        // Glow filter
+        const defs = svg.append('defs');
+        const filter = defs.append('filter')
+            .attr('id', 'glow')
+            .attr('x', '-50%')
+            .attr('y', '-50%')
+            .attr('width', '200%')
+            .attr('height', '200%');
+        filter.append('feGaussianBlur').attr('stdDeviation', '4').attr('result', 'coloredBlur');
+        const feMerge = filter.append('feMerge');
+        feMerge.append('feMergeNode').attr('in', 'coloredBlur');
+        feMerge.append('feMergeNode').attr('in', 'SourceGraphic');
+        
+        // Hub gradient
+        const hubGradient = defs.append('radialGradient')
+            .attr('id', 'hubGradient');
+        hubGradient.append('stop').attr('offset', '0%').attr('stop-color', '#9b7dff');
+        hubGradient.append('stop').attr('offset', '100%').attr('stop-color', '#6b4ed8');
+        
+        // Draw connecting lines first (behind nodes)
+        knowledgeData.forEach(domain => {
+            const angleRad = (domain.angle - 90) * Math.PI / 180;
+            const endX = centerX + Math.cos(angleRad) * spokeDistance;
+            const endY = centerY + Math.sin(angleRad) * spokeDistance;
+            
+            svg.append('line')
+                .attr('x1', centerX)
+                .attr('y1', centerY)
+                .attr('x2', endX)
+                .attr('y2', endY)
+                .attr('stroke', domain.color)
+                .attr('stroke-width', 3)
+                .attr('stroke-opacity', 0.4);
         });
-
-        // Add all topics
-        knowledgeData.domains.forEach(domain => {
-            domain.topics.forEach(topic => {
-                nodes.push({
-                    ...topic,
-                    type: 'topic',
-                    domainId: domain.id,
-                    color: lightenColor(domain.color, 0.3), // Lighter shade of parent
-                    parentColor: domain.color,
-                    radius: 28
-                });
-                links.push({
-                    source: domain.id,
-                    target: topic.id
-                });
-            });
+        
+        // Draw decorative orbit rings
+        [spokeDistance * 0.5, spokeDistance].forEach((r, i) => {
+            svg.append('circle')
+                .attr('cx', centerX)
+                .attr('cy', centerY)
+                .attr('r', r)
+                .attr('fill', 'none')
+                .attr('stroke', 'rgba(0, 212, 255, 0.15)')
+                .attr('stroke-width', 1)
+                .attr('stroke-dasharray', i === 0 ? '5,5' : 'none');
         });
-
-        updateVisualization();
-    }
-
-    function updateVisualization() {
-        // Update simulation
-        if (simulation) simulation.stop();
-
-        simulation = d3.forceSimulation(nodes)
-            .force('link', d3.forceLink(links).id(d => d.id).distance(100))
-            .force('charge', d3.forceManyBody().strength(-300))
-            .force('center', d3.forceCenter(width / 2, height / 2))
-            .force('collision', d3.forceCollide().radius(d => d.radius + 10));
-
-        // Update links
-        const link = g.selectAll('.link')
-            .data(links, d => `${d.source.id || d.source}-${d.target.id || d.target}`);
-
-        link.exit().remove();
-
-        link.enter()
-            .append('line')
-            .attr('class', 'link')
-            .style('stroke', '#999')
-            .style('stroke-opacity', 0.3)
-            .style('stroke-width', 2);
-
-        // Update nodes
-        const node = g.selectAll('.node')
-            .data(nodes, d => d.id);
-
-        node.exit().remove();
-
-        const nodeEnter = node.enter()
-            .append('g')
-            .attr('class', 'node')
-            .call(d3.drag()
-                .on('start', dragstarted)
-                .on('drag', dragged)
-                .on('end', dragended));
-
-        nodeEnter.append('circle')
-            .attr('r', d => d.radius)
-            .attr('fill', d => d.color || '#2196F3')
-            .style('stroke', '#fff')
-            .style('stroke-width', 3)
-            .style('cursor', 'pointer');
-
-        nodeEnter.append('text')
-            .attr('dy', d => d.radius + 18)
+        
+        // Central hub
+        const hubGroup = svg.append('g')
+            .attr('transform', `translate(${centerX}, ${centerY})`);
+        
+        // Hub glow circle
+        hubGroup.append('circle')
+            .attr('r', hubRadius + 10)
+            .attr('fill', 'rgba(123, 97, 255, 0.2)')
+            .attr('filter', 'url(#glow)');
+        
+        // Hub main circle
+        hubGroup.append('circle')
+            .attr('r', hubRadius)
+            .attr('fill', 'url(#hubGradient)')
+            .attr('stroke', 'rgba(123, 97, 255, 0.6)')
+            .attr('stroke-width', 2);
+        
+        // Hub icon
+        hubGroup.append('text')
             .attr('text-anchor', 'middle')
-            .style('font-size', '12px')
-            .style('font-weight', '600')
-            .style('fill', '#ffffff')
-            .style('pointer-events', 'none')
-            .text(d => d.icon + ' ' + d.name);
-
-        // Event handlers
-        g.selectAll('.node')
-            .on('click', function(event, d) {
-                event.stopPropagation();
-                if (d.type === 'domain') {
-                    expandDomain(d);
-                } else if (d.type === 'topic' && d.url) {
-                    // Single click also navigates for topics
-                    window.location.href = d.url;
+            .attr('dy', -10)
+            .attr('font-size', '32px')
+            .text('📚');
+        
+        // Hub label
+        hubGroup.append('text')
+            .attr('text-anchor', 'middle')
+            .attr('dy', 18)
+            .attr('fill', '#fff')
+            .attr('font-size', '12px')
+            .attr('font-weight', '700')
+            .text('Knowledge');
+        
+        hubGroup.append('text')
+            .attr('text-anchor', 'middle')
+            .attr('dy', 34)
+            .attr('fill', 'rgba(255,255,255,0.8)')
+            .attr('font-size', '11px')
+            .text('Library');
+        
+        // Draw domain nodes
+        knowledgeData.forEach(domain => {
+            const angleRad = (domain.angle - 90) * Math.PI / 180;
+            const x = centerX + Math.cos(angleRad) * spokeDistance;
+            const y = centerY + Math.sin(angleRad) * spokeDistance;
+            
+            const nodeGroup = svg.append('g')
+                .attr('class', 'hub-node')
+                .attr('transform', `translate(${x}, ${y})`)
+                .style('cursor', 'pointer');
+            
+            // Node background glow
+            nodeGroup.append('circle')
+                .attr('r', 55)
+                .attr('fill', domain.color)
+                .attr('opacity', 0.15)
+                .attr('filter', 'url(#glow)');
+            
+            // Node main circle
+            nodeGroup.append('circle')
+                .attr('r', 48)
+                .attr('fill', domain.color)
+                .attr('stroke', 'rgba(255,255,255,0.3)')
+                .attr('stroke-width', 2)
+                .attr('class', 'domain-circle');
+            
+            // Node icon
+            nodeGroup.append('text')
+                .attr('text-anchor', 'middle')
+                .attr('dy', -5)
+                .attr('font-size', '24px')
+                .text(domain.icon);
+            
+            // Node label (split into lines if needed)
+            const nameParts = domain.name.split(' ');
+            if (nameParts.length <= 2) {
+                nameParts.forEach((part, i) => {
+                    nodeGroup.append('text')
+                        .attr('text-anchor', 'middle')
+                        .attr('dy', 15 + (i * 12))
+                        .attr('fill', '#fff')
+                        .attr('font-size', '10px')
+                        .attr('font-weight', '600')
+                        .text(part);
+                });
+            } else {
+                // For longer names, combine first two words
+                nodeGroup.append('text')
+                    .attr('text-anchor', 'middle')
+                    .attr('dy', 15)
+                    .attr('fill', '#fff')
+                    .attr('font-size', '9px')
+                    .attr('font-weight', '600')
+                    .text(nameParts.slice(0, 2).join(' '));
+                if (nameParts.length > 2) {
+                    nodeGroup.append('text')
+                        .attr('text-anchor', 'middle')
+                        .attr('dy', 27)
+                        .attr('fill', '#fff')
+                        .attr('font-size', '9px')
+                        .attr('font-weight', '600')
+                        .text(nameParts.slice(2).join(' '));
                 }
-            })
-            .on('dblclick', function(event, d) {
-                event.stopPropagation();
-                if (d.type === 'topic' && d.url) {
-                    window.location.href = d.url;
-                }
-            })
-            .on('mouseover', function(event, d) {
-                d3.select(this).select('circle')
-                    .transition().duration(200)
-                    .attr('r', d.radius + 5);
-
-                let tooltipContent = `<h3>${d.icon} ${d.name}</h3>`;
-                if (d.type === 'domain') {
-                    tooltipContent += `<p>Click to ${expandedDomains.has(d.id) ? 'collapse' : 'expand'}</p>`;
-                    tooltipContent += `<p><span class="badge" style="background: ${d.color};">${d.topics.length} topics</span></p>`;
-                } else {
-                    tooltipContent += `<p>Click to view</p>`;
-                }
-
-                tooltip.html(tooltipContent)
-                    .style('left', (event.pageX + 15) + 'px')
-                    .style('top', (event.pageY - 15) + 'px')
-                    .style('opacity', 1);
-            })
-            .on('mouseout', function(event, d) {
-                d3.select(this).select('circle')
-                    .transition().duration(200)
-                    .attr('r', d.radius);
-                tooltip.style('opacity', 0);
-            });
-
-        simulation.on('tick', () => {
-            g.selectAll('.link')
-                .attr('x1', d => d.source.x)
-                .attr('y1', d => d.source.y)
-                .attr('x2', d => d.target.x)
-                .attr('y2', d => d.target.y);
-
-            g.selectAll('.node')
-                .attr('transform', d => `translate(${d.x},${d.y})`);
-        });
-    }
-
-    function dragstarted(event, d) {
-        if (!event.active) simulation.alphaTarget(0.3).restart();
-        d.fx = d.x;
-        d.fy = d.y;
-    }
-
-    function dragged(event, d) {
-        d.fx = event.x;
-        d.fy = event.y;
-    }
-
-    function dragended(event, d) {
-        if (!event.active) simulation.alphaTarget(0);
-        d.fx = null;
-        d.fy = null;
-    }
-
-    // View controls
-    document.querySelectorAll('[data-view]').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const view = this.dataset.view;
-            document.querySelectorAll('[data-view]').forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-
-            if (view === 'domains') {
-                currentView = 'domains';
-                initDomains();
-            } else if (view === 'all') {
-                currentView = 'all';
-                showAllNodes();
             }
+            
+            // Topic pills around each domain
+            const topicRadius = 82;
+            const topicSpread = 45; // degrees spread
+            domain.topics.forEach((topic, i) => {
+                const topicCount = domain.topics.length;
+                const startAngle = domain.angle - topicSpread;
+                const angleStep = topicCount > 1 ? (topicSpread * 2) / (topicCount - 1) : 0;
+                const topicAngle = topicCount > 1 
+                    ? (startAngle + (i * angleStep) - 90) * Math.PI / 180
+                    : (domain.angle - 90) * Math.PI / 180;
+                
+                const tx = Math.cos(topicAngle) * topicRadius;
+                const ty = Math.sin(topicAngle) * topicRadius;
+                
+                // Topic pill
+                const pillGroup = nodeGroup.append('g')
+                    .attr('transform', `translate(${tx}, ${ty})`)
+                    .style('cursor', 'pointer')
+                    .on('click', (e) => {
+                        e.stopPropagation();
+                        window.location.href = topic.url;
+                    })
+                    .on('mouseover', function() {
+                        d3.select(this).select('rect')
+                            .transition().duration(200)
+                            .attr('stroke-width', 2)
+                            .attr('stroke', '#fff');
+                    })
+                    .on('mouseout', function() {
+                        d3.select(this).select('rect')
+                            .transition().duration(200)
+                            .attr('stroke-width', 1)
+                            .attr('stroke', domain.color);
+                    });
+                
+                const textWidth = topic.name.length * 6.5 + 16;
+                
+                pillGroup.append('rect')
+                    .attr('x', -textWidth/2)
+                    .attr('y', -11)
+                    .attr('width', textWidth)
+                    .attr('height', 22)
+                    .attr('rx', 11)
+                    .attr('fill', 'rgba(0,0,0,0.6)')
+                    .attr('stroke', domain.color)
+                    .attr('stroke-width', 1);
+                
+                pillGroup.append('text')
+                    .attr('text-anchor', 'middle')
+                    .attr('dy', 4)
+                    .attr('fill', '#fff')
+                    .attr('font-size', '10px')
+                    .attr('font-weight', '500')
+                    .text(topic.name);
+            });
+            
+            // Click handler for domain node - navigate to first topic or show info
+            nodeGroup.on('click', function(e) {
+                // Navigate to the first topic as the main entry point
+                if (domain.topics.length > 0) {
+                    window.location.href = domain.topics[0].url;
+                }
+            })
+            .on('mouseover', function() {
+                d3.select(this).select('.domain-circle')
+                    .transition().duration(200)
+                    .attr('r', 52)
+                    .attr('stroke-width', 3);
+            })
+            .on('mouseout', function() {
+                d3.select(this).select('.domain-circle')
+                    .transition().duration(200)
+                    .attr('r', 48)
+                    .attr('stroke-width', 2);
+            });
         });
+    }
+    
+    // Initialize on load
+    document.addEventListener('DOMContentLoaded', () => {
+        renderKnowledgeMap();
     });
-
-    // Reset button
-    document.getElementById('resetKnowledgeBtn').addEventListener('click', function() {
-        nodes.forEach(d => {
-            d.fx = null;
-            d.fy = null;
-        });
-
-        svg.transition().duration(750).call(zoom.transform, d3.zoomIdentity);
-        simulation.alpha(1).restart();
+    
+    // Re-render on resize (debounced)
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            renderKnowledgeMap();
+        }, 250);
     });
-
-    // Initialize
-    initDomains();
     </script>
 </body>
 </html>
