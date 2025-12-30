@@ -162,19 +162,19 @@ categories:
         requires_admin: false
         execution_method: cli
         
-      - name: html-style-centralizer
-        command: cortex-html-clean
-        script: documentation/html-tools/html_style_centralizer.py
-        description: Centralize inline CSS styles to external stylesheets
+      - name: html-generator
+        command: cortex-html-gen
+        script: documentation/html-tools/generator.py
+        description: Pure Python HTML generation (zero dependencies)
         platforms: [windows, linux, macos]
         requires_admin: false
         execution_method: cli
-        user_friendly_name: "HTML Style Centralizer"
-        functionality: "Removes inline style attributes from HTML files and moves them to centralized CSS classes for better maintainability"
+        user_friendly_name: "HTML Generator"
+        functionality: "Type-safe HTML element creation with automatic attribute escaping"
         
       - name: html-validator
         command: cortex-html-validate
-        script: documentation/html-tools/html_validator.py
+        script: documentation/html-tools/validator.py
         description: Validate HTML syntax and structure
         platforms: [windows, linux, macos]
         requires_admin: false
@@ -247,10 +247,10 @@ categories:
         requires_admin: false
         execution_method: cli
         
-      - name: master-cleanup
-        command: cortex-master-cleanup
-        script: maintenance/master_cleanup.py
-        description: Master cleanup operation
+      - name: full-cleanup
+        command: cortex-full-cleanup
+        script: maintenance/full_cleanup.py
+        description: Comprehensive 5-phase cleanup orchestrator
         platforms: [windows, linux, macos]
         requires_admin: false
         execution_method: cli

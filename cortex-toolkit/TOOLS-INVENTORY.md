@@ -1,7 +1,7 @@
 # CORTEX Toolkit - Tools Inventory
 
-**Version:** 1.0.0  
-**Last Updated:** December 16, 2025  
+**Version:** 1.0.1  
+**Last Updated:** December 30, 2025  
 **Total Tools:** 27 production-ready tools  
 **Categories:** 9  
 
@@ -165,12 +165,12 @@ System maintenance and cleanup utilities.
 |---|------|---------|-----------|-------|-------------|
 | 23 | **cleanup-temp** | `cortex-cleanup-temp` | cli | No | Clean up temporary files |
 | 24 | **detect-duplicates** | `cortex-duplicates` | cli | No | Detect duplicate code |
-| 25 | **master-cleanup** | `cortex-master-cleanup` | cli | No | Master cleanup operation |
+| 25 | **full-cleanup** | `cortex-full-cleanup` | cli | No | Comprehensive 5-phase cleanup orchestrator |
 
 **Scripts:**
 - `maintenance/cleanup_temp_files.py`
 - `maintenance/detect_duplicates.py`
-- `maintenance/master_cleanup.py`
+- `maintenance/full_cleanup.py`
 
 ---
 
