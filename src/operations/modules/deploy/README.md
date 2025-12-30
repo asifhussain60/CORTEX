@@ -281,7 +281,7 @@ CORTEX/
 │   └── tier3/                    # Development context
 ├── cortex-brain/
 │   ├── brain-protection-rules.yaml
-│   ├── response-templates.yaml
+│   ├── response-templates-v4.yaml
 │   ├── tier1-working-memory.db
 │   ├── tier2-knowledge-graph.db (if exists)
 │   └── tier3-development-context.db (if exists)

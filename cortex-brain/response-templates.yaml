@@ -1,10 +1,9 @@
-schema_version: '3.2'
-last_updated: '2025-12-03'
+schema_version: '4.0'
+last_updated: '2025-12-30'
 optimization:
-  type: aggressive_minimal
+  type: adaptive_tier
   original_templates: 107
-  minimal_templates: 18
-  reduction_strategy: Core essentials only + fallback pattern
+  reduction_strategy: Tier-based adaptive responses (v4.0)
 shared:
   standard_header: '## 🧠 CORTEX {title}
 
@@ -15,27 +14,17 @@ shared:
 
     '
 base_templates:
-  standard_5_part: &standard_5_part_base
+  # v4.0: Adaptive tier-based response
+  adaptive_response: &adaptive_response_base
     base_structure: |
       ## 🧠 CORTEX {operation}
       **Author:** Asif Hussain | **GitHub:** https://asifhussain60.github.io/CORTEX/
       
       ---
       
-      ### 🎯 My Understanding Of Your Request
-      {understanding_content}
-      
-      ### ⚠️ Challenge
-      {challenge_content}
-      
-      ### 💬 Response
       {response_content}
       
-      ### 📝 Your Request
-      {request_echo_content}
-      
-      ### 🔍 Next Steps
-      {next_steps_content}
+      **Next:** {next_steps_content}
   
   tech_aware_response: &tech_aware_base
     base_structure: |
@@ -43,14 +32,6 @@ base_templates:
       **Author:** Asif Hussain | **GitHub:** https://asifhussain60.github.io/CORTEX/
       
       ---
-      
-      ### 🎯 My Understanding Of Your Request
-      {understanding_content}
-      
-      ### ⚠️ Challenge
-      {challenge_content}
-      
-      ### 💬 Response
       
       **🏆 Recommended Solution:**
       {recommended_solution}
@@ -67,30 +48,21 @@ base_templates:
       - **Monitoring:** {monitoring_platform}
       {{/if}}
       
-      ### 📝 Your Request
-      {request_echo_content}
-      
-      ### 🔍 Next Steps
-      {next_steps_content}
+      **Next:** {next_steps_content}
   
   compact_format: &compact_format_base
     base_structure: |
       ## 🧠 CORTEX {operation}
-      **{understanding_brief}** | *No Challenge*
-      
       **Author:** Asif Hussain | **GitHub:** https://asifhussain60.github.io/CORTEX/
       
       ---
       
-      💬 **Response:**
       {response_content}
       
-      📝 **Your Request:** {request_echo_content}
-      
-      🔍 Next Steps: {next_steps_content}
+      **Next:** {next_steps_content}
 templates:
   onboarding:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: User Onboarding
     triggers:
     - onboard
@@ -130,7 +102,7 @@ templates:
       You can update your profile anytime with `update profile`.
   
   diagram_regeneration:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Diagram Regeneration
     triggers:
     - regenerate diagram
@@ -251,7 +223,7 @@ templates:
       4. Load test to validate performance improvements
   
   cache_management:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Cache Management
     triggers:
     - cache status
@@ -302,7 +274,7 @@ templates:
       5. **Load test to measure performance improvement**
   
   help_table:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Help Table
     triggers:
     - help
@@ -325,7 +297,7 @@ templates:
       \ ({token_percentage}%)\n- Storage health: {storage_health}\n\n*Use `show context`\
       \ for detailed view*\n</details>\n"
   help_detailed:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Help Detailed
     triggers:
     - help_detailed
@@ -337,7 +309,7 @@ templates:
     request_echo_content: "[Echo refined request]"
     next_steps_content: "[Context-appropriate format]"
   quick_start:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Quick Start
     triggers:
     - quick start
@@ -351,7 +323,7 @@ templates:
     request_echo_content: "[Echo refined request]"
     next_steps_content: "[Context-appropriate format]"
   hands_on_tutorial:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Hands-On Tutorial
     triggers:
     - tutorial
@@ -369,7 +341,7 @@ templates:
     request_echo_content: "Start interactive hands-on tutorial"
     next_steps_content: "Choose a tutorial profile:\n   1. Say \"tutorial quick\" for 15-minute essentials\n   2. Say \"tutorial standard\" for 25-minute walkthrough (recommended)\n   3. Say \"tutorial comprehensive\" for 30-minute deep dive\n   \n   Or say \"tutorial [profile] now\" to start immediately.\n   \n   **First Module:** CORTEX Basics\n   - Exercise 1.1: Explore capabilities (type 'help')\n   - Exercise 1.2: Check brain memory (type 'show context')\n   - Exercise 1.3: System health (type 'healthcheck')"
   status_check:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Status Check
     triggers:
     - status
@@ -383,7 +355,7 @@ templates:
     request_echo_content: "[Echo refined request]"
     next_steps_content: "[Context-appropriate format]"
   success_general:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Success General
     triggers:
     - success_general
@@ -395,7 +367,7 @@ templates:
     request_echo_content: "[Echo refined request]"
     next_steps_content: "[Context-appropriate format]"
   error_general:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Error General
     triggers:
     - error_general
@@ -915,7 +887,7 @@ templates:
 
       - 🔍 **Need help?** → Say `help` for command reference'
   not_implemented:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Not Implemented
     triggers:
     - not_implemented
@@ -927,7 +899,7 @@ templates:
     request_echo_content: "[Echo refined request]"
     next_steps_content: "[Context-appropriate format]"
   executor_success:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Executor Success
     triggers:
     - executor_success
@@ -939,7 +911,7 @@ templates:
     request_echo_content: "[Echo refined request]"
     next_steps_content: "[Context-appropriate format]"
   executor_error:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Executor Error
     triggers:
     - executor_error
@@ -951,7 +923,7 @@ templates:
     request_echo_content: "[Echo refined request]"
     next_steps_content: "[Context-appropriate format]"
   tester_success:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Tester Success
     triggers:
     - tester_success
@@ -963,7 +935,7 @@ templates:
     request_echo_content: "[Echo refined request]"
     next_steps_content: "[Context-appropriate format]"
   operation_started:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Operation Started
     triggers:
     - operation_started
@@ -975,7 +947,7 @@ templates:
     request_echo_content: "[Echo refined request]"
     next_steps_content: "[Context-appropriate format]"
   operation_progress:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Operation Progress
     triggers:
     - operation_progress
@@ -987,7 +959,7 @@ templates:
     request_echo_content: "[Echo refined request]"
     next_steps_content: "[Context-appropriate format]"
   operation_complete:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Operation Complete
     triggers:
     - operation_complete
@@ -999,7 +971,7 @@ templates:
     request_echo_content: "[Echo refined request]"
     next_steps_content: "[Context-appropriate format]"
   question_documentation_issues:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Question Documentation Issues
     triggers:
     - question_documentation_issues
@@ -1011,7 +983,7 @@ templates:
     request_echo_content: "[Echo refined request]"
     next_steps_content: "[Context-appropriate format]"
   work_planner_success:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Work Planner Success
     triggers:
     - plan
@@ -1026,20 +998,20 @@ templates:
     response_type: detailed
 
   planning_dor_incomplete:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Planning DoR Incomplete
     triggers:
     - planning_dor_incomplete
     response_type: detailed
 
   planning_dor_complete:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Planning DoR Complete
     triggers:
     - planning_dor_complete
     response_type: detailed
   planning_security_review:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Planning Security Review
     triggers:
     - planning_security_review
@@ -1048,25 +1020,25 @@ templates:
     response_type: detailed
 
   ado_created:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: ADO Created
     triggers:
     - ado_created
     response_type: detailed
   ado_resumed:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: ADO Resumed
     triggers:
     - ado_resumed
     response_type: detailed
   ado_search_results:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: ADO Search Results
     triggers:
     - ado_search_results
     response_type: table
   ado_story_planning:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: ADO User Story Planning
     triggers:
     - plan ado story
@@ -1075,7 +1047,7 @@ templates:
     - plan user story
     response_type: detailed
   ado_feature_planning:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: ADO Feature Planning
     triggers:
     - plan ado feature
@@ -1084,7 +1056,7 @@ templates:
     - plan feature
     response_type: detailed
   ado_summary_generation:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: ADO Work Summary Generation
     triggers:
     - generate ado summary
@@ -1250,7 +1222,7 @@ templates:
 
       '
   policy_validation:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Policy Validation
     triggers:
     - validate policies
@@ -1435,7 +1407,7 @@ templates:
 
       What would you like to accomplish today?'
   code_review_planning:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Code Review Planning
     triggers:
     - code review
@@ -1448,7 +1420,7 @@ templates:
     response_type: detailed
 
   ux_enhancement_explanation:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: UX Enhancement Workflow Explanation
     triggers:
     - enhance
@@ -1462,7 +1434,7 @@ templates:
     response_type: guided
 
   cleanup_orchestrator:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Cleanup Orchestrator
     expected_orchestrator: CleanupOrchestrator
     triggers:
@@ -1472,7 +1444,7 @@ templates:
     response_type: detailed
 
   publish_branch:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Publish Branch
     expected_orchestrator: PublishBranchOrchestrator
     triggers:
@@ -1498,7 +1470,7 @@ templates:
       - User always means: run gates + deploy to main
 
   master_setup:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Master Setup
     expected_orchestrator: MasterSetupOrchestrator
     triggers:
@@ -1509,7 +1481,7 @@ templates:
     response_type: detailed
 
   realignment:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Realignment
     expected_orchestrator: RealignmentOrchestrator
     triggers:
@@ -1520,7 +1492,7 @@ templates:
     response_type: detailed
 
   threat_report_quick:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Threat Analysis Quick Report
     triggers:
     - threat report
@@ -1557,7 +1529,7 @@ templates:
       4. Update DoD with security criteria
 
   threat_report_detailed:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Threat Analysis Detailed Report
     triggers:
     - detailed threat report
@@ -1616,7 +1588,7 @@ templates:
       ☐ Phase 5: Security Review
 
   dod_threat_checklist:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Definition of Done - Security Checklist
     triggers:
     - security dod
@@ -1662,14 +1634,14 @@ templates:
       Complete all critical and high-risk checklist items before marking feature as done.
 
   fallback:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Fallback Response
     triggers:
     - '*'
     response_type: structured
 
   enhance_existing:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Enhancement Workflow
     triggers:
     - enhance
@@ -1690,7 +1662,7 @@ templates:
     response_type: detailed
 
   brain_export_guide:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Brain Implants - Export Guide
     triggers:
     - export brain
@@ -1701,7 +1673,7 @@ templates:
     response_type: detailed
 
   brain_import_guide:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Brain Implants - Import Guide
     triggers:
     - import brain
@@ -1712,7 +1684,7 @@ templates:
     response_type: detailed
 
   generate_documentation_intro:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Generate Documentation - Introduction
     triggers:
     - generate_documentation_intro
@@ -1720,7 +1692,7 @@ templates:
     response_type: detailed
 
   feedback_received:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Feedback Received
     triggers:
     - feedback
@@ -1732,7 +1704,7 @@ templates:
     response_type: detailed
 
   architect_analysis:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Architect Analysis
     triggers:
     - analyze architecture
@@ -1745,7 +1717,7 @@ templates:
     response_type: detailed
 
   brain_ingestion:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Brain Ingestion
     triggers:
     - ingest to brain
@@ -1757,7 +1729,7 @@ templates:
     response_type: detailed
 
   brain_ingestion_adapter:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Brain Ingestion Adapter
     triggers:
     - brain ingestion adapter
@@ -1767,7 +1739,7 @@ templates:
     response_type: detailed
 
   cleanup_validation_failed:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Cleanup Validation Failed
     triggers:
     - cleanup_validation_failed
@@ -1776,7 +1748,7 @@ templates:
     response_type: detailed
 
   holistic_cleanup:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Holistic Cleanup
     expected_orchestrator: HolisticCleanupOrchestrator
     triggers:
@@ -1788,7 +1760,7 @@ templates:
     response_type: detailed
 
   user_cleanup:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: User Repository Cleanup
     expected_orchestrator: UserCleanupOrchestrator
     triggers:
@@ -1801,7 +1773,7 @@ templates:
     response_type: detailed
 
   markdown_consolidation:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Markdown Consolidation
     expected_orchestrator: HolisticCleanupOrchestrator
     triggers:
@@ -1814,7 +1786,7 @@ templates:
     response_type: detailed
 
   cleanup_with_tests:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Cleanup with Test Validation
     expected_orchestrator: HolisticCleanupOrchestrator
     triggers:
@@ -1827,7 +1799,7 @@ templates:
     response_type: detailed
 
   setup_epm:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Setup Entry Point Module
     expected_orchestrator: SetupEPMOrchestrator
     triggers:
@@ -1851,9 +1823,9 @@ templates:
     - create bug
     - ado planning
     response_type: detailed
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
   demo_system:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Demo System
     expected_orchestrator: DemoOrchestrator
     triggers:
@@ -1866,7 +1838,7 @@ templates:
     response_type: detailed
 
   unified_entry_point:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Unified Entry Point
     expected_orchestrator: UnifiedEntryPointOrchestrator
     triggers:
@@ -1880,7 +1852,7 @@ templates:
       \   - **Test files**: Keep test files or update test discovery configuration\n\
       \   - **Entry points**: Never delete main.py, cortex_entry.py, or their dependencies"
   admin_help:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Admin Help
     triggers:
     - admin help
@@ -1910,7 +1882,7 @@ templates:
     # Format: Type (count) → Feature list with "NEW" badges for recent additions
 
   generate_documentation_completion:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Generate Documentation - Completion
     triggers:
     - generate_documentation_completion
@@ -2105,7 +2077,7 @@ templates:
     - request_echo
     - next_steps
   system_alignment_report:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: System Alignment Report
     triggers:
     - align
@@ -2117,7 +2089,7 @@ templates:
     handler: src.operations.align.run_align
 
   system_alignment_fix:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: System Alignment Interactive Fix
     triggers:
     - align fix
@@ -2128,7 +2100,7 @@ templates:
     response_type: detailed
 
   cleanup_operation:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Holistic Cleanup Operation
     triggers:
     - cleanup
@@ -2140,7 +2112,7 @@ templates:
     response_type: detailed
 
   design_sync_operation:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Design Sync Operation
     triggers:
     - design sync
@@ -2150,7 +2122,7 @@ templates:
     response_type: detailed
 
   tdd_workflow_start:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: TDD Workflow Start
     triggers:
     - start tdd
@@ -2160,7 +2132,7 @@ templates:
     response_type: detailed
 
   optimize_system:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Optimize System
     triggers:
     - optimize
@@ -2170,7 +2142,7 @@ templates:
     response_type: detailed
 
   workflow_execution:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Workflow Execution
     triggers:
     - workflow
@@ -2180,7 +2152,7 @@ templates:
     response_type: detailed
 
   git_checkpoint:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Git Checkpoint
     triggers:
     - git checkpoint
@@ -2190,7 +2162,7 @@ templates:
     handler: src.orchestrators.git_checkpoint_orchestrator.GitCheckpointOrchestrator
 
   commit_operation:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Commit and Sync
     triggers:
     - commit
@@ -2210,7 +2182,7 @@ templates:
     next_steps_content: "**Execution Options:**\n   \n   1. **Standard Sync** - Say \"commit\" to start with interactive prompts\n   2. **Auto-add Untracked** - Say \"commit --auto-add\" to automatically stage untracked files\n   3. **Rebase Strategy** - Say \"commit --rebase\" to use rebase instead of merge\n   4. **Custom Message** - Say \"commit --message 'your message'\" for custom commit message\n   \n   **Rollback Safety:**\n   If issues occur, say \"rollback to checkpoint\" to restore pre-sync state.\n   \n   Ready to sync? Say \"commit\" to begin."
 
   rollback_operation:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Rollback to Checkpoint
     triggers:
     - rollback
@@ -2228,7 +2200,7 @@ templates:
     next_steps_content: "**Execution Options:**\n   \n   1. **Safe Rollback** - Say \"rollback to <checkpoint-id>\" for full safety workflow\n   2. **Preview Only** - Say \"rollback to <checkpoint-id> --dry-run\" to see diff without executing\n   3. **Force Rollback** - Say \"rollback to <checkpoint-id> --force\" to bypass safety (⚠️ loses uncommitted changes)\n   \n   **Finding Checkpoints:**\n   • Say \"list checkpoints\" to see available checkpoint IDs\n   • Checkpoint IDs follow format: phase-YYYYMMDD-HHMMSS (e.g., tdd-green-20251129-140000)\n   \n   **Resolution Tips:**\n   • If uncommitted changes block rollback: commit or stash first\n   • If merge in progress: complete merge or abort with \"git merge --abort\"\n   \n   Ready to rollback? Provide checkpoint ID or say \"list checkpoints\" to see options."
 
   ado_planning:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: ADO Work Item Planning
     triggers:
     - plan ado
@@ -2246,7 +2218,7 @@ templates:
     next_steps_content: "Ready to start? Provide feature name or say \"plan ado [feature name]\" to begin."
 
   ux_enhancement:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: UX Enhancement Analysis
     triggers:
     - ux enhancement
@@ -2264,7 +2236,7 @@ templates:
     next_steps_content: "Ready to analyze? Say \"ux enhancement\" or \"analyze ux\" to begin."
 
   ado_operations:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: ADO Operations
     triggers:
     - ado summary
@@ -2280,7 +2252,7 @@ templates:
     next_steps_content: "What would you like to do? Say \"ado summary\" for work tracking or \"ado pr review #123\" for pull request analysis."
 
   architecture_intelligence:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Architecture Intelligence
     triggers:
     - review architecture
@@ -2298,7 +2270,7 @@ templates:
     next_steps_content: "Ready to review? Say \"review architecture\" for full analysis or \"forecast technical debt\" for 3/6-month projections."
 
   lint_validation:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Lint Validation
     triggers:
     - validate lint
@@ -2309,7 +2281,7 @@ templates:
     handler: src.orchestrators.lint_validation_orchestrator.LintValidationOrchestrator
 
   session_completion:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Session Completion
     triggers:
     - complete session
@@ -2320,7 +2292,7 @@ templates:
     handler: src.orchestrators.session_completion_orchestrator.SessionCompletionOrchestrator
 
   upgrade_cortex:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Upgrade CORTEX
     triggers:
     - upgrade
@@ -2331,7 +2303,7 @@ templates:
     handler: src.orchestrators.upgrade_orchestrator.UpgradeOrchestrator
 
   tdd_workflow:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: TDD Workflow
     triggers:
     - start tdd
@@ -2342,7 +2314,7 @@ templates:
     handler: src.workflows.tdd_workflow_orchestrator.TDDWorkflowOrchestrator
 
   timeframe_estimate:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Timeframe Estimation
     triggers:
     - estimate timeframe
@@ -2403,7 +2375,7 @@ templates:
       Say "estimate timeframe" with your feature description to begin.
 
   application_health:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Application Health Dashboard
     triggers:
     - show health dashboard
@@ -2466,7 +2438,7 @@ templates:
   # ============================================================================
 
   ado:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Azure DevOps Integration
     triggers:
     - ado
@@ -2475,7 +2447,7 @@ templates:
     response_type: detailed
 
   align:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: System Alignment
     triggers:
     - align
@@ -2483,7 +2455,7 @@ templates:
     response_type: detailed
 
   application_onboarding_operation:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Application Onboarding
     triggers:
     - onboard application
@@ -2491,7 +2463,7 @@ templates:
     response_type: detailed
 
   cache_commands:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Cache Management
     triggers:
     - cache
@@ -2499,14 +2471,14 @@ templates:
     response_type: detailed
 
   cache_dashboard:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Cache Dashboard
     triggers:
     - cache dashboard
     response_type: detailed
 
   cleanup:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Code Cleanup
     triggers:
     - cleanup
@@ -2514,7 +2486,7 @@ templates:
     response_type: detailed
 
   commit:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Git Commit
     triggers:
     - commit
@@ -2522,21 +2494,21 @@ templates:
     response_type: detailed
 
   commit_and_push:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Commit and Push
     triggers:
     - commit and push
     response_type: detailed
 
   dashboard_data_adapter:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Dashboard Data Adapter
     triggers:
     - dashboard data
     response_type: detailed
 
   deploy:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Deployment
     triggers:
     - deploy
@@ -2544,7 +2516,7 @@ templates:
     response_type: detailed
 
   dependency_installer:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Dependency Installer
     triggers:
     - install dependencies
@@ -2552,7 +2524,7 @@ templates:
     response_type: detailed
 
   documentation_component_registry:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Documentation Component Registry
     triggers:
     - doc registry
@@ -2560,7 +2532,7 @@ templates:
     response_type: detailed
 
   environment_setup:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Environment Setup
     triggers:
     - setup environment
@@ -2568,28 +2540,28 @@ templates:
     response_type: detailed
 
   environment_setup_module:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Environment Setup Module
     triggers:
     - setup env module
     response_type: detailed
 
   header_formatter:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Header Formatter
     triggers:
     - format header
     response_type: detailed
 
   header_utils:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Header Utilities
     triggers:
     - header utils
     response_type: detailed
 
   healthcheck:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Health Check
     triggers:
     - healthcheck
@@ -2597,14 +2569,14 @@ templates:
     response_type: detailed
 
   healthcheck_operation:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Health Check Operation
     triggers:
     - healthcheck operation
     response_type: detailed
 
   help_command:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Help Command
     triggers:
     - help
@@ -2612,35 +2584,35 @@ templates:
     response_type: detailed
 
   onboarding_orchestrator:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Onboarding Orchestrator
     triggers:
     - onboarding orchestrator
     response_type: detailed
 
   operation_factory:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Operation Factory
     triggers:
     - operation factory
     response_type: detailed
 
   operation_header_formatter:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Operation Header Formatter
     triggers:
     - operation header
     response_type: detailed
 
   operations_orchestrator:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Operations Orchestrator
     triggers:
     - operations orchestrator
     response_type: detailed
 
   optimize:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Optimization
     triggers:
     - optimize
@@ -2648,21 +2620,21 @@ templates:
     response_type: detailed
 
   optimize_operation:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Optimize Operation
     triggers:
     - optimize operation
     response_type: detailed
 
   optimize_tokens:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Token Optimization
     triggers:
     - optimize tokens
     response_type: detailed
 
   planning:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Feature Planning
     triggers:
     - plan
@@ -2670,42 +2642,42 @@ templates:
     response_type: detailed
 
   policy_scanner:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Policy Scanner
     triggers:
     - scan policies
     response_type: detailed
 
   realtime_dashboard_auth:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Realtime Dashboard Auth
     triggers:
     - dashboard auth
     response_type: detailed
 
   realtime_dashboard_server:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Realtime Dashboard Server
     triggers:
     - dashboard server
     response_type: detailed
 
   realtime_metrics_publisher:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Realtime Metrics Publisher
     triggers:
     - metrics publisher
     response_type: detailed
 
   response_formatter:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Response Formatter
     triggers:
     - format response
     response_type: detailed
 
   resume_conversation:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Resume Conversation
     triggers:
     - resume
@@ -2713,7 +2685,7 @@ templates:
     response_type: detailed
 
   review:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Code Review
     triggers:
     - review
@@ -2721,7 +2693,7 @@ templates:
     response_type: detailed
 
   rollback:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: Git Rollback
     triggers:
     - rollback
@@ -2729,7 +2701,7 @@ templates:
     response_type: detailed
 
   setup:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: System Setup
     triggers:
     - setup
@@ -2737,7 +2709,7 @@ templates:
     response_type: detailed
 
   tdd:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: TDD Workflow
     triggers:
     - tdd
@@ -2745,14 +2717,14 @@ templates:
     response_type: detailed
 
   user_consent_manager:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: User Consent Manager
     triggers:
     - user consent
     response_type: detailed
 
   user_onboarding_operation:
-    <<: *standard_5_part_base
+    <<: *adaptive_response_base
     name: User Onboarding Operation
     triggers:
     - user onboarding

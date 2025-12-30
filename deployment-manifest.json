@@ -43,7 +43,7 @@
     "cortex-brain/module-definitions.yaml",
     "cortex-brain/publish-config.yaml",
     "cortex-brain/token-optimization-rules.yaml",
-    "cortex-brain/response-routing-rules.yaml",
+    "cortex-brain/response-templates/response-routing-rules.yaml",
     "cortex-brain/cleanup-rules.yaml",
     "cortex-brain/obsolete-tests-manifest.json",
     "cortex-brain/README-ORGANIZATION.md",

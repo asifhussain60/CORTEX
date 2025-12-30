@@ -381,9 +381,9 @@ class PromptRegenerator:
 
 ---
 
-## 📋 MANDATORY RESPONSE FORMAT (v3.0)
+## 📋 ADAPTIVE RESPONSE FORMAT (v4.0)
 
-ALL responses MUST use this 5-part structure:
+Response complexity scales with task requirements:
 
 ```markdown
 ## 🧠 CORTEX {{Title}}
@@ -391,26 +391,20 @@ ALL responses MUST use this 5-part structure:
 
 ---
 
-### 🎯 Understanding & Scope
-{{what you understood + scope/boundaries}}
-
-### ⚡ Approach & Considerations
-{{actual challenge OR "No significant challenges"}}
-
-### 💬 Response
-{{your response - NO code unless requested}}
-
-### 📊 Impact & Changes
-{{what changed - files, metrics, outcomes}}
+{{Adaptive content based on tier:}}
+- INSTANT: Direct answer only (<50 tokens)
+- FOCUSED: Solution + context (50-200 tokens)
+- STANDARD: Analysis + implementation (200-500 tokens)  
+- COMPREHENSIVE: Full multi-phase guidance (500+ tokens)
 
 ### 🔍 Next Steps
-{{numbered list OR checkboxes for complex work}}
+{{EXACTLY ONE actionable next step OR completion message}}
 ```
 
 **Rules:**
-- ✅ H2 with 🧠, H3 with emojis
+- ✅ H2 with 🧠, adaptive content depth
 - ✅ Author line + one `---` separator
-- ✅ Approach: Real challenge OR "No significant challenges"
+- ✅ Response scales with task complexity
 - ❌ NO extra separators, NO code unless requested
 
 ---
@@ -541,7 +535,7 @@ python -m src.main
         
         content = f'''<!--
 GITHUB COPILOT LOADER DIRECTIVE:
-Load this ENTIRE file into context. Apply mandatory 5-part response format.
+Load this ENTIRE file into context. Apply adaptive tier-based response format.
 DO NOT provide generic introduction - respond to user's ACTUAL request.
 
 {manual_enhancements}
@@ -572,9 +566,9 @@ DO NOT provide generic introduction - respond to user's ACTUAL request.
 
 ---
 
-## 📋 MANDATORY RESPONSE FORMAT (v3.0)
+## 📋 ADAPTIVE RESPONSE FORMAT (v4.0)
 
-ALL responses MUST use this 5-part structure:
+Response complexity scales with task requirements:
 
 ```markdown
 ## 🧠 CORTEX {{Title}}
@@ -582,20 +576,14 @@ ALL responses MUST use this 5-part structure:
 
 ---
 
-### 🎯 Understanding & Scope
-{{what you understood + boundaries}}
-
-### ⚡ Approach & Considerations
-{{actual challenge OR "No significant challenges"}}
-
-### 💬 Response
-{{your response - NO code unless requested}}
-
-### 📊 Impact & Changes
-{{what changed - files, metrics, outcomes}}
+{{Adaptive content based on tier:}}
+- INSTANT: Direct answer only (<50 tokens)
+- FOCUSED: Solution + context (50-200 tokens)  
+- STANDARD: Analysis + implementation (200-500 tokens)
+- COMPREHENSIVE: Full multi-phase guidance (500+ tokens)
 
 ### 🔍 Next Steps
-{{numbered list OR checkboxes for complex work}}
+{{EXACTLY ONE actionable next step OR completion message}}
 ```
 
 **Rules:**

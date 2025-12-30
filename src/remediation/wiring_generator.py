@@ -2,7 +2,7 @@
 Wiring Generator - Auto-generate integration code for unwired features
 
 Generates:
-- response-templates.yaml entries
+- response-templates-v4.yaml entries
 - CORTEX.prompt.md command documentation
 - Example trigger mappings
 
@@ -21,7 +21,7 @@ class WiringGenerator:
     
     def __init__(self, project_root: Path):
         self.project_root = Path(project_root)
-        self.templates_file = self.project_root / "cortex-brain" / "response-templates.yaml"
+        self.templates_file = self.project_root / "cortex-brain" / "response-templates-v4.yaml"
         self.prompt_file = self.project_root / ".github" / "prompts" / "CORTEX.prompt.md"
     
     def generate_wiring_suggestion(self, feature_name: str, feature_path: str, 
@@ -121,7 +121,7 @@ class WiringGenerator:
                                 purpose: str, triggers: List[str]) -> str:
         """Generate YAML template entry"""
         yaml = f"""# Suggested wiring for {feature_name}
-# Add to cortex-brain/response-templates.yaml
+# Add to cortex-brain/response-templates-v4.yaml
 
 {template_name}:
   name: "{feature_name}"

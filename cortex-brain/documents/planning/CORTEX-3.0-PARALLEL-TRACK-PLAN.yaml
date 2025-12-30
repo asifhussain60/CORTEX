@@ -204,7 +204,7 @@ phases:
                 status: "PLANNED"
             
             template_integration:
-              - "response-templates.yaml enhancement"
+              - "response-templates-v4.yaml enhancement"
               - "Zero-execution template responses"
               - "Template validation system"
             

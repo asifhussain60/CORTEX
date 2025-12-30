@@ -1,7 +1,7 @@
 category: operations/help
 templates:
   hands_on_tutorial:
-    inherits_from: core/base-templates/5-part-standard.yaml
+    inherits_from: core/base-templates/adaptive-base.yaml
     name: Hands-On Interactive Tutorial
     triggers:
     - tutorial

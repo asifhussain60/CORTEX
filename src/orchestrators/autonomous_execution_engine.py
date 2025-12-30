@@ -30,8 +30,8 @@ from src.orchestrators.base.base_orchestrator import (
 
 class ExecutionMode(Enum):
     """Autonomous execution modes."""
-    SUPERVISED = "supervised"  # User approves each phase (default)
-    AUTONOMOUS = "autonomous"  # Full E2E with self-healing
+    AUTONOMOUS = "autonomous"  # Full E2E with self-healing (default)
+    SUPERVISED = "supervised"  # User approves each phase
     HUMAN_IN_LOOP = "human_in_loop"  # Pause after each step (Phase 2.5)
 
 
@@ -143,7 +143,7 @@ class AutonomousExecutionEngine(BaseOrchestrator):
             plan_path: Path to master plan file
         
         Optional:
-            mode: ExecutionMode (default: SUPERVISED)
+            mode: ExecutionMode (default: AUTONOMOUS)
             from_phase: Start phase number (default: 1)
             to_phase: End phase number (default: last phase)
         """
@@ -158,7 +158,7 @@ class AutonomousExecutionEngine(BaseOrchestrator):
             errors.append(f"Plan file not found: {plan_path}")
         
         # Validate mode
-        mode = kwargs.get("mode", ExecutionMode.SUPERVISED)
+        mode = kwargs.get("mode", ExecutionMode.AUTONOMOUS)
         if isinstance(mode, str):
             try:
                 ExecutionMode(mode)

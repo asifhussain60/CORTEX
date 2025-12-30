@@ -151,7 +151,7 @@ token_budget_optimization:
         examples:
           - "#file:cortex-operations.yaml:operations.cleanup"
           - "#file:CORTEX-UNIFIED-ARCHITECTURE.yaml:tier1"
-          - "#file:response-templates.yaml:templates.help"
+          - "#file:response-templates-v4.yaml:templates.help"
         benefits:
           - "90% token reduction for large file references"
           - "Faster load times"
@@ -288,7 +288,7 @@ token_budget_optimization:
         approach: "Use Copilot's prompt caching feature (if available)"
         cacheable_content:
           - "brain-protection-rules.yaml (rarely changes)"
-          - "response-templates.yaml (stable templates)"
+          - "response-templates-v4.yaml (stable templates)"
           - "module-definitions.yaml (API contracts)"
         cache_headers: "<!-- @cache-stable --> marker in prompts"
         benefits:

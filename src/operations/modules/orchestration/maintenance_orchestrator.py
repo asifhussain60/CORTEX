@@ -205,7 +205,13 @@ class MaintenanceOrchestrator(BaseOrchestrator):
             'success': True,
             'health_delta': health_delta,
             'baseline_health': self.baseline_health,
-            'final_health': self.final_health
+            'final_health': self.final_health,
+            'copilot_instructions': {
+                'response_template': 'maintenance_execution_progress',
+                'progress_updates': True,
+                'autonomous_execution': True,
+                'checkpoint_frequency': 'per_phase'
+            }
         }
     
     # ========================================================================

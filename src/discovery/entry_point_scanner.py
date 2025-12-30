@@ -1,7 +1,7 @@
 """
 Entry Point Scanner - Convention-Based Discovery
 
-Discovers all entry points from response-templates.yaml:
+Discovers all entry points from response-templates-v4.yaml:
 - Parses YAML for all template triggers
 - Maps triggers to orchestrators (naming convention)
 - Detects orphaned triggers (no orchestrator)
@@ -23,7 +23,7 @@ class EntryPointScanner:
     """
     Convention-based entry point discovery.
     
-    Parses response-templates.yaml to find all user-facing triggers
+    Parses response-templates-v4.yaml to find all user-facing triggers
     and validates they map to actual orchestrators.
     """
     
@@ -35,7 +35,7 @@ class EntryPointScanner:
             project_root: Root directory of CORTEX project
         """
         self.project_root = Path(project_root)
-        self.templates_path = self.project_root / "cortex-brain" / "response-templates.yaml"
+        self.templates_path = self.project_root / "cortex-brain" / "response-templates-v4.yaml"
     
     def discover(self) -> Dict[str, Dict[str, Any]]:
         """

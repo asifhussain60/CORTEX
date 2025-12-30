@@ -1,7 +1,7 @@
 category: operations/onboarding
 templates:
   onboarding_acknowledgment:
-    inherits_from: core/base-templates/5-part-standard.yaml
+    inherits_from: core/base-templates/adaptive-base.yaml
     name: Onboarding Acknowledgment
     triggers:
     - acknowledge onboarding

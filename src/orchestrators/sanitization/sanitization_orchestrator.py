@@ -109,6 +109,7 @@ class SanitizationResult:
     report_path: Path
     duration_seconds: float
     errors: List[str] = field(default_factory=list)
+    data: Dict[str, Any] = field(default_factory=dict)
 
 
 class SanitizationOrchestrator(BaseOrchestrator):
@@ -351,7 +352,15 @@ class SanitizationOrchestrator(BaseOrchestrator):
                 validation_passed=validation_passed,
                 report_path=report_path,
                 duration_seconds=duration,
-                errors=[]
+                errors=[],
+                data={
+                    "copilot_instructions": {
+                        "response_template": "sanitization_execution_progress",
+                        "progress_updates": True,
+                        "autonomous_execution": True,
+                        "checkpoint_frequency": "per_phase"
+                    }
+                }
             )
             
         except Exception as e:

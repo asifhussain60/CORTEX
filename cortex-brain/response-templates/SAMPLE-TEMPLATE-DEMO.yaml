@@ -15,23 +15,17 @@ base_template:
   description: "Foundation template inherited by all response templates"
   structure:
     header:
-      format: "🧠 **CORTEX {operation_type}**\nAuthor: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX"
+      format: "## 🧠 CORTEX {operation_type}\nAuthor: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX"
       required: true
       
-    understanding:
-      format: "🎯 **My Understanding Of Your Request:**\n   {user_intent_summary}"
-      required: true
+    context:
+      format: "**Context:** {context_summary}"
+      required: false  # Adaptive - include when complexity >= medium
       max_length: 150
-      
-    challenge:
-      format: "⚠️ **Challenge:** {accept_or_challenge}"
-      required: true
-      options:
-        accept: "✓ **Accept**\n   {rationale}"
-        challenge: "⚡ **Challenge**\n   {concern}\n   \n   **Alternatives:**\n   {alternatives}"
+      include_when: "complexity >= medium OR user_preference == verbose"
       
     response:
-      format: "💬 **Response:**\n   {natural_language_explanation}"
+      format: "{natural_language_explanation}"
       required: true
       guidelines:
         - "Explain in natural language"
@@ -39,14 +33,8 @@ base_template:
         - "Professional, measured tone"
         - "Focus on WHAT, not HOW"
         
-    request_echo:
-      format: "📝 **Your Request:** {refined_request}"
-      required: true
-      placement: "Between response and next_steps"
-      max_length: 80
-      
     next_steps:
-      format: "🔍 **Next Steps:**\n{context_specific_format}"
+      format: "**🔍 Next Steps:**\n{context_specific_format}"
       required: true
       formats:
         - numbered_list
@@ -197,17 +185,10 @@ feature_implementation_start:
     Ready to begin Phase 1?
     
   example_rendered_output: |
-    # 🧠 CORTEX Feature Implementation
-    **Author:** Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+    ## 🧠 CORTEX Feature Implementation
+    Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
     
-    ## 🎯 My Understanding Of Your Request
-    You want to implement user authentication with JWT tokens and session management
-    
-    ## ⚠️ Challenge: ✓ Accept
-    User authentication is well-defined and ready for implementation. Dependencies validated, test strategy defined.
-    
-    ## 💬 Response
-    I'll implement user authentication using TDD approach:
+    Implementing user authentication with JWT tokens and session management using TDD approach.
     
     ### Phase 1: Foundation
     - Create base structure
@@ -221,10 +202,9 @@ feature_implementation_start:
     - Connect to existing systems
     - End-to-end testing
     
-    ## 📝 Your Request
-    Implement user authentication with TDD approach
+    ---
     
-    ## 🔍 Next Steps
+    **🔍 Next Steps:**
     
     <details>
     <summary><strong>☐ Phase 1: Foundation & Setup</strong> (2 hours)</summary>
@@ -285,16 +265,9 @@ test_execution_results:
     4. Generate coverage report for PR review
     
   example_rendered_output: |
-    # 🧠 CORTEX Test Execution Results
-    **Author:** Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+    ## 🧠 CORTEX Test Execution Results
+    Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
     
-    ## 🎯 My Understanding Of Your Request
-    You want to see the test execution results and coverage metrics
-    
-    ## ⚠️ Challenge: ✓ Accept
-    Test suite execution complete. All quality gates evaluated.
-    
-    ## 💬 Response
     Executed full test suite across **897 tests** in **31.89s**. **100% pass rate** achieved, meeting quality threshold of 90%.
     
     ### 📊 Test Summary
@@ -334,11 +307,9 @@ test_execution_results:
     | E2E | 23 | 18 | 5 | 100% ✅ |
     | **Total** | **897** | **834** | **63** | **100%** ✅ |
     
-    ## 📝 Your Request
-    Show test execution results with coverage metrics
+    ---
     
-    ## 🔍 Next Steps
-    
+    **🔍 Next Steps:**
     1. **Review skipped tests** - Determine priority for implementing 63 skipped tests
     2. **Analyze coverage gaps** - Focus on Tier 3 modules (lowest coverage at 78%)
     3. **Run security scan** - Execute OWASP dependency check
@@ -374,16 +345,11 @@ planning_dor_validation:
     4. **Resubmit for Approval** - Once all items addressed
     
   example_rendered_output: |
-    # 🧠 CORTEX Planning - DoR Validation
-    **Author:** Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+    ## 🧠 CORTEX Planning - DoR Validation
+    Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
     
-    ## 🎯 My Understanding Of Your Request
-    You want to validate that Definition of Ready (DoR) is met before proceeding with implementation
+    ⚠️ DoR validation found **4 blocking issues** that must be addressed before development begins.
     
-    ## ⚠️ Challenge: ⚡ Challenge
-    DoR validation found **4 blocking issues** that must be addressed before development begins.
-    
-    ## 💬 Response
     I've validated your planning document against DoR checklist. Found **7/11 items complete**. **4 blocking issues** identified that require clarification.
     
     ### 📋 Definition of Ready Checklist

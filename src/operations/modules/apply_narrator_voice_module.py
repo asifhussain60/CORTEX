@@ -47,7 +47,7 @@ class ApplyNarratorVoiceModule(BaseOperationModule):
     
     Data Sources:
     - cortex-operations.yaml - Module definitions and operations
-    - response-templates.yaml - Template count and coverage
+    - response-templates-v4.yaml - Template count and coverage
     - knowledge-graph.yaml - Learned patterns
     - implementation status files - Actual progress metrics
     """
@@ -279,8 +279,8 @@ class ApplyNarratorVoiceModule(BaseOperationModule):
                         all_modules.update(modules)
                     state['modules_total'] = len(all_modules)
             
-            # Load response-templates.yaml
-            templates_file = project_root / "cortex-brain" / "response-templates.yaml"
+            # Load response-templates-v4.yaml
+            templates_file = project_root / "cortex-brain" / "response-templates-v4.yaml"
             if templates_file.exists():
                 with open(templates_file, 'r', encoding='utf-8') as f:
                     templates_data = yaml.safe_load(f)

@@ -544,9 +544,8 @@ templates:
       '
   planning_activation:
     response_type: narrative
-    content: "Author: Asif Hussain | \xA9 2024-2025 | github.com/asifhussain60/CORTEX\n\
-      \n\U0001F3AF **My Understanding Of Your Request:**\n\n\n\U0001F4AC **My Response:**\n\
-      \n\n\U0001F4DD **Your Request:** {{user_request}}\n\n\U0001F50D **Next Steps:**\n"
+    content: "## 🎯 CORTEX Interactive Planning\nAuthor: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX\n\
+      \n**Planning:** {{user_request}}\n\n**🔍 Next Steps:**\n"
   planning_started:
     response_type: narrative
     content: "Author: Asif Hussain | \xA9 2024-2025 | github.com/asifhussain60/CORTEX\n\

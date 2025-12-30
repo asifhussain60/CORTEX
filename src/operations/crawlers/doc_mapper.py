@@ -212,7 +212,7 @@ class DocMapperCrawler(BaseCrawler):
         Returns:
             Help system type or None
         """
-        templates_path = project_path / 'cortex-brain' / 'response-templates.yaml'
+        templates_path = project_path / 'cortex-brain' / 'response-templates-v4.yaml'
         if templates_path.exists():
             try:
                 with open(templates_path, 'r') as f:

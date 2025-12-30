@@ -4644,7 +4644,7 @@ challenge_template: |
           SAFE upgrade procedure:
           1. Backup brain data first
           2. Replace ONLY: src/, scripts/, .github/
-          3. Merge configs: response-templates.yaml, capabilities.yaml
+          3. Merge configs: response-templates-v4.yaml, capabilities.yaml
           4. Preserve brain: All .db files, documents/, user-dictionary.yaml
           5. Apply schema migrations if needed
           6. Validate brain integrity
@@ -4823,7 +4823,7 @@ challenge_template: |
           Merged Config (customizations + new features)
           ```
           
-          Example - response-templates.yaml:
+          Example - response-templates-v4.yaml:
           Base: triggers: ["help"]
           Local: triggers: ["help", "cortex help"] ← User added
           Upgrade: triggers: ["help"], new_template: admin_help

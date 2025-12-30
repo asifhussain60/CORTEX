@@ -66,7 +66,7 @@ class TemplateValidator:
         Validate all templates in a file or a specific template.
         
         Args:
-            template_file: Path to response-templates.yaml
+            template_file: Path to response-templates-v4.yaml
             template_name: Optional specific template to validate
             
         Returns:
@@ -77,7 +77,7 @@ class TemplateValidator:
             raise FileNotFoundError(f"Template file not found: {template_path}")
         
         try:
-            # Use universal YAML cache for response-templates.yaml
+            # Use universal YAML cache for response-templates-v4.yaml
             from src.utils.yaml_cache import load_yaml_cached
             data = load_yaml_cached(template_path)
         except ImportError:
@@ -126,11 +126,8 @@ class TemplateValidator:
         try:
             # Structural validation
             errors.extend(self._validate_required_fields(template_name, template_data))
-            # REMOVED: 5-part structure validation (CORTEX 4.0 uses adaptive format)
-            # errors.extend(self._validate_5_part_structure(template_name, template_data))
+            # v4.0: No longer enforce legacy format - adaptive tier-based format used
             errors.extend(self._validate_no_separator_lines(template_name, template_data))
-            # REMOVED: Request echo placement (not in adaptive format)
-            # errors.extend(self._validate_request_echo_placement(template_name, template_data))
             
             # Content validation
             warnings.extend(self._validate_no_hardcoded_counts(template_name, template_data))
@@ -168,32 +165,6 @@ class TemplateValidator:
                     "rule": "Required field missing",
                     "field": field,
                     "message": f"Template '{template_name}' missing required field: {field}",
-                    "severity": "ERROR"
-                })
-        
-        return errors
-    
-    def _validate_5_part_structure(self, template_name: str, template_data: Dict) -> List[Dict]:
-        """Validate 5-part mandatory format"""
-        errors = []
-        content = template_data.get('content', '')
-        
-        required_sections = [
-            (r'🧠.*CORTEX|\\U0001F9E0.*CORTEX', 'Header (🧠 CORTEX)'),
-            (r'Author:.*Asif Hussain', 'Author line'),
-            (r'🎯.*My Understanding|\\U0001F3AF.*My Understanding', 'Understanding section (🎯)'),
-            (r'⚠️.*Challenge|\\u26A0\\uFE0F.*Challenge', 'Challenge section (⚠️)'),
-            (r'💬.*Response|\\U0001F4AC.*Response', 'Response section (💬)'),
-            (r'📝.*Your Request|\\U0001F4DD.*Your Request', 'Request Echo section (📝)'),
-            (r'🔍.*Next Steps|\\U0001F50D.*Next Steps', 'Next Steps section (🔍)')
-        ]
-        
-        for pattern, section_name in required_sections:
-            if not re.search(pattern, content):
-                errors.append({
-                    "rule": "Mandatory 5-part format",
-                    "section": section_name,
-                    "message": f"Template '{template_name}' missing required section: {section_name}",
                     "severity": "ERROR"
                 })
         
@@ -423,8 +394,8 @@ def main():
     )
     parser.add_argument(
         '--file',
-        default='cortex-brain/templates/response-templates.yaml',
-        help='Path to templates file (default: cortex-brain/response-templates.yaml)'
+        default='cortex-brain/response-templates-v4.yaml',
+        help='Path to templates file (default: cortex-brain/response-templates-v4.yaml)'
     )
     parser.add_argument(
         '--template',

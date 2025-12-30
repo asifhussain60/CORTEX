@@ -18,16 +18,12 @@ conversation_capture_initiated:
   priority: "high"
   
   response_format: |
-    🧠 **CORTEX Conversation Capture**
+    ## 🧠 CORTEX Conversation Capture
     Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
     
-    🎯 **My Understanding Of Your Request:**
-       You want to save this conversation to CORTEX brain for future reference and pattern learning
+    Creating empty file for conversation paste...
     
-    ⚠️ **Challenge:** ✓ **Accept**
-       This is the first step of the two-step capture workflow. I'll create an empty file for you to paste the conversation into.
-    
-    💬 **Response:**
+    ---
     
     ## ✅ Empty Conversation File Created
     

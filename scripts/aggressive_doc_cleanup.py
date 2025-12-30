@@ -52,7 +52,7 @@ class AggressiveDocCleanup:
             'knowledge-graph.yaml',
             'brain-protection-rules.yaml',
             'cleanup-rules.yaml',
-            'response-templates.yaml',
+            'response-templates-v4.yaml',
             'development-context.yaml',
             'cortex.config.json',
             'cortex.config.template.json',

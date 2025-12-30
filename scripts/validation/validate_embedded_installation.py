@@ -199,11 +199,11 @@ class EmbeddedInstallationValidator:
             return True  # Non-critical
     
     def check_response_templates(self) -> bool:
-        """Check response-templates.yaml"""
-        templates_file = self.cortex_path / "cortex-brain" / "response-templates.yaml"
+        """Check response-templates-v4.yaml"""
+        templates_file = self.cortex_path / "cortex-brain" / "response-templates-v4.yaml"
         
         if not templates_file.exists():
-            self.issues.append("response-templates.yaml missing")
+            self.issues.append("response-templates-v4.yaml missing")
             return False
         
         try:
@@ -211,7 +211,7 @@ class EmbeddedInstallationValidator:
                 templates = yaml.safe_load(f)
             
             if not templates:
-                self.issues.append("response-templates.yaml is empty")
+                self.issues.append("response-templates-v4.yaml is empty")
                 return False
             
             # Check format (dict vs array)
@@ -227,11 +227,11 @@ class EmbeddedInstallationValidator:
                     self.warnings.append(f"Unexpected templates format: {type(templates_data)}")
                     return True
             else:
-                self.warnings.append("No 'templates' key in response-templates.yaml")
+                self.warnings.append("No 'templates' key in response-templates-v4.yaml")
                 return True
                 
         except Exception as e:
-            self.issues.append(f"Cannot read response-templates.yaml: {e}")
+            self.issues.append(f"Cannot read response-templates-v4.yaml: {e}")
             return False
     
     def check_dependencies(self) -> bool:

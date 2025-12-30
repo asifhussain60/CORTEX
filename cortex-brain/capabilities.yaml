@@ -350,7 +350,7 @@ capabilities:
       risk_awareness: "Built-in Conway's Law and integration buffers"
     documentation:
       user_guide: "cortex-brain/documents/implementation-guides/swagger-entry-point-guide.md"
-      response_template: "timeframe_estimate in response-templates.yaml"
+      response_template: "timeframe_estimate in response-templates-v4.yaml"
     recommendation: "ready_to_use"
     
   - id: "backend_testing"

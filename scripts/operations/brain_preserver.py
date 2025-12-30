@@ -41,7 +41,7 @@ class BrainPreserver:
     
     # Files that need intelligent merging (not simple overwrite)
     MERGE_REQUIRED = [
-        "cortex-brain/templates/response-templates.yaml",
+        "cortex-brain/templates/response-templates-v4.yaml",
         "cortex-brain/metadata/capabilities.yaml",
         "cortex-brain/operations/operations-config.yaml"
     ]
@@ -100,7 +100,7 @@ class BrainPreserver:
             "cortex.config.json",
             ".cortex-version",
             "cortex-brain/learning/user-dictionary.yaml",
-            "cortex-brain/templates/response-templates.yaml",
+            "cortex-brain/templates/response-templates-v4.yaml",
             "cortex-brain/metadata/capabilities.yaml"
         ]
         

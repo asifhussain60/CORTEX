@@ -507,11 +507,11 @@ class TestCopilotInstructionsE2E:
             "response_template": "custom",
             "progress_updates": True,
             "custom_format": """
-Use 5-part response format:
-1. Status header with emoji
-2. Progress table with ASCII bars
+Use adaptive tier response format:
+1. Status header with emoji (🧠 CORTEX)
+2. Progress table with visual progress bars
 3. Current task details
-4. TDD phase indicator
+4. TDD phase indicator (R/G/F)
 5. Next steps
 """,
             "tdd_enforcement": True,
@@ -521,7 +521,7 @@ Use 5-part response format:
         # When template is "custom", use custom_format
         if copilot_instructions["response_template"] == "custom":
             format_instructions = copilot_instructions.get("custom_format", "")
-            assert "5-part response format" in format_instructions
+            assert "adaptive tier response format" in format_instructions
             assert "Progress table" in format_instructions
 
 

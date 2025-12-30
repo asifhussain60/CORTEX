@@ -139,7 +139,7 @@ class TokenOptimizer:
         files_to_backup = [
             config.root_path / ".github" / "prompts" / "CORTEX.prompt.md",
             self.brain_path / "brain-protection-rules.yaml",
-            self.brain_path / "response-templates.yaml",
+            self.brain_path / "response-templates-v4.yaml",
             config.root_path / ".github" / "copilot-instructions.md",
         ]
         
@@ -219,7 +219,7 @@ class TokenOptimizer:
         
         Strategy:
             1. Extract 10 largest remaining templates from brain-protection-rules.yaml
-            2. Implement YAML anchors in response-templates.yaml
+            2. Implement YAML anchors in response-templates-v4.yaml
             3. Move 3 largest sections from CORTEX.prompt.md to guides
         
         Expected: ~35% total reduction, ~1 hour execution
@@ -248,10 +248,10 @@ class TokenOptimizer:
             safe_print("✅ Template extraction complete")
             
             # Step 2: YAML anchors in response-templates (20 min)
-            safe_print("\n📊 Step 2/3: Implementing YAML anchors in response-templates.yaml")
+            safe_print("\n📊 Step 2/3: Implementing YAML anchors in response-templates-v4.yaml")
             if not self.dry_run:
                 self._implement_yaml_anchors()
-                files_modified.append("response-templates.yaml")
+                files_modified.append("response-templates-v4.yaml")
             safe_print("✅ YAML anchors implemented")
             
             # Step 3: Move large sections from CORTEX.prompt.md (20 min)
@@ -319,7 +319,7 @@ class TokenOptimizer:
         Strategy:
             1. Extract ALL remaining templates from brain-protection-rules.yaml
             2. Implement comprehensive YAML anchors
-            3. Template inheritance for response-templates.yaml
+            3. Template inheritance for response-templates-v4.yaml
             4. Module-based architecture for CORTEX.prompt.md
         
         Expected: ~75% total reduction, ~3-4 hours execution
@@ -350,7 +350,7 @@ class TokenOptimizer:
             safe_print("\n📊 Step 2/4: Implementing comprehensive YAML anchors")
             if not self.dry_run:
                 self._implement_comprehensive_anchors()
-                files_modified.extend(["brain-protection-rules.yaml", "response-templates.yaml"])
+                files_modified.extend(["brain-protection-rules.yaml", "response-templates-v4.yaml"])
             safe_print("✅ YAML anchors implemented")
             
             # Step 3: Template inheritance (1 hour)
@@ -358,7 +358,7 @@ class TokenOptimizer:
             if not self.dry_run:
                 created = self._implement_template_inheritance()
                 files_created.extend(created)
-                files_modified.append("response-templates.yaml")
+                files_modified.append("response-templates-v4.yaml")
             safe_print("✅ Template inheritance implemented")
             
             # Step 4: Module-based prompt architecture (1 hour)
@@ -567,7 +567,7 @@ class TokenOptimizer:
         return []
     
     def _implement_template_inheritance(self) -> List[str]:
-        """Implement template inheritance for response-templates.yaml."""
+        """Implement template inheritance for response-templates-v4.yaml."""
         safe_print("⚠️  Template inheritance implementation pending")
         return []
     
@@ -580,7 +580,7 @@ class TokenOptimizer:
         """Validate all YAML files."""
         yaml_files = [
             self.brain_path / "brain-protection-rules.yaml",
-            self.brain_path / "response-templates.yaml",
+            self.brain_path / "response-templates-v4.yaml",
         ]
         
         for yaml_file in yaml_files:

@@ -6483,7 +6483,7 @@ metadata:
     - Added admin_feedback_review_module for aggregation and analytics
     - Added 2 new feedback operations (1 user-facing, 1 admin-only)
     - Added 2 new feedback modules (1 implemented, 1 pending)
-    - Enhanced feedback_triggers in response-templates.yaml
+    - Enhanced feedback_triggers in response-templates-v4.yaml
     - GitHub Gist integration with privacy sanitization
   - version: '2.1'
     date: '2025-11-10'

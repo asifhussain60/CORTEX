@@ -50,9 +50,9 @@ profiles:
     name: "Guided Mode"
     description: "Standard CORTEX experience with balanced detail and structure."
     verbosity: concise
-    format_style: standard_5_part
+    format_style: adaptive_tier
     characteristics:
-      - Full 5-part structure
+      - Adaptive tier-based structure (v4.0)
       - Clear explanations without over-detail
       - Standard context sections
       - Balanced next steps
@@ -60,22 +60,20 @@ profiles:
     example_use_case: "Default mode for most users"
     
     section_customization:
-      understanding_section:
-        prefix: "### 🎯 My Understanding Of Your Request"
-        max_lines: 3
-      challenge_section:
-        prefix: "### ⚠️ Challenge"
-        show: true
-      response_section:
-        style: standard
-        max_lines: 30
-      request_echo_section:
-        prefix: "### 📝 Your Request"
-        show: true
-      next_steps_section:
-        prefix: "### 🔍 Next Steps"
-        format: numbered
-        max_items: 7
+      response_format: adaptive_tier
+      sections:
+        header:
+          required: true
+          format: "## 🧠 CORTEX {title}\nAuthor: Asif Hussain"
+        context:
+          required: false
+          include_when: "complexity >= medium"
+        response:
+          style: standard
+          max_lines: 30
+        next_steps:
+          format: numbered
+          max_items: 7
   
   educational:
     name: "Educational Mode"
@@ -83,7 +81,7 @@ profiles:
     verbosity: detailed
     format_style: educational
     characteristics:
-      - "Detailed 5-part structure"
+      - "Adaptive tier-based structure with expanded context"
       - "Context sections expanded"
       - "Why explanations included"
       - "Learning resources referenced"
@@ -92,36 +90,32 @@ profiles:
     example_use_case: "Junior developers or learning new technologies"
     
     section_customization:
-      understanding_section:
-        prefix: "### 🎯 My Understanding Of Your Request"
-        max_lines: 5
-        include_context: true
-      challenge_section:
-        prefix: "### ⚠️ Challenge"
-        show: true
-        include_explanation: true
-      response_section:
-        style: detailed
-        include_analysis: true
-        include_recommendations: true
-        include_examples: true
-        max_lines: 50
-      request_echo_section:
-        prefix: "### 📝 Your Request"
-        show: true
-      next_steps_section:
-        prefix: "### 🔍 Next Steps"
-        format: checkboxes
-        include_learning_resources: true
-        max_items: 10
+      response_format: adaptive_tier
+      sections:
+        header:
+          required: true
+          format: "## 🧠 CORTEX {title}\nAuthor: Asif Hussain"
+        context:
+          required: true  # Always show for educational
+          include_explanation: true
+        response:
+          style: detailed
+          include_analysis: true
+          include_recommendations: true
+          include_examples: true
+          max_lines: 50
+        next_steps:
+          format: checkboxes
+          include_learning_resources: true
+          max_items: 10
   
   pair:
     name: "Pair Programming Mode"
     description: "Collaborative mode with options and discussion of trade-offs."
     verbosity: detailed
-    format_style: standard_5_part
+    format_style: adaptive_tier
     characteristics:
-      - "Full 5-part structure"
+      - "Adaptive tier-based structure (v4.0)"
       - "Multiple options presented"
       - "Trade-off discussions"
       - "Collaborative language"
@@ -130,19 +124,21 @@ profiles:
     example_use_case: "Active collaboration and decision-making sessions"
     
     section_customization:
-      understanding_section:
-        prefix: "### 🎯 My Understanding Of Your Request"
-        max_lines: 4
-        collaborative_tone: true
-      challenge_section:
-        prefix: "### ⚠️ Challenge"
-        show: true
-        present_options: true
-      response_section:
-        style: collaborative
-        include_options: true
-        include_tradeoffs: true
-        ask_preferences: true
+      response_format: adaptive_tier
+      sections:
+        header:
+          required: true
+          format: "## 🧠 CORTEX {title}\nAuthor: Asif Hussain"
+        context:
+          required: true  # Always show for pair programming
+          collaborative_tone: true
+        response:
+          style: collaborative
+          include_options: true
+          include_tradeoffs: true
+          ask_preferences: true
+        next_steps:
+          format: parallel
         max_lines: 40
       request_echo_section:
         prefix: "### 📝 Your Request"

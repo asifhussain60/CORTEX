@@ -483,7 +483,7 @@ class ADOOrchestrator(BaseOrchestrator):
             self.logger.info(completion_msg)
             logs.append(completion_msg)
             
-            # Return success result
+            # Return success result with copilot_instructions for visual progress
             return ADOResult(
                 status="success",
                 success=True,
@@ -493,7 +493,13 @@ class ADOOrchestrator(BaseOrchestrator):
                 warnings=warnings,
                 data={
                     "discovery": discovery_data,
-                    "dor": dor_data
+                    "dor": dor_data,
+                    "copilot_instructions": {
+                        "response_template": "ado_execution_progress",
+                        "progress_updates": True,
+                        "autonomous_execution": True,
+                        "checkpoint_frequency": "per_phase"
+                    }
                 }
             )
             

@@ -34,17 +34,18 @@ shared_components:
       
       ---
 
-  # Understanding section (what we interpreted from user's request)
-  section_understanding:
-    id: section_understanding
+  # Context section (optional - complexity-aware)
+  section_context:
+    id: section_context
     type: section
-    icon: "🎯"
-    title: "My Understanding Of Your Request"
-    content: "{{understanding_content}}"
+    icon: "📌"
+    title: "Context"
+    content: "{{context_content}}"
+    inclusion: "conditional"  # Only when complexity >= medium
     variants:
-      concise: "{{understanding_brief}}"
-      balanced: "{{understanding_content}}"
-      verbose: "{{understanding_content}}\n\n**Context:** {{context_details}}"
+      concise: ""  # Omit for simple requests
+      balanced: "**Context:** {{context_brief}}"
+      verbose: "{{context_content}}\n\n**Details:** {{context_details}}"
 
   # Challenge section (obstacles or "No Challenge")
   section_challenge:
@@ -198,20 +199,28 @@ shared_components:
       {{/if}}
 
 # ============================================================================
-# FORMAT VARIANTS - Different response structures
+# FORMAT VARIANTS - Different response structures (v4.0 Adaptive Tier)
 # ============================================================================
 
 format_variants:
-  # Standard 5-part format (most common)
-  standard_5_part:
-    id: format_standard_5_part
-    description: "Standard CORTEX 5-part response format"
+  # Adaptive tier format (default - v4.0)
+  adaptive_tier:
+    id: format_adaptive_tier
+    description: "Adaptive tier-based format - scales with complexity"
     sections:
       - header_standard
-      - section_understanding
-      - section_challenge
+      - section_context  # Conditional - based on complexity
       - section_response
-      - section_request_echo
+      - section_next_steps
+
+  # Standard format (backward compatibility)
+  standard:
+    id: format_standard
+    description: "Standard CORTEX response format"
+    sections:
+      - header_standard
+      - section_context
+      - section_response
       - section_next_steps
 
   # Tech-aware format (includes solution recommendations)
@@ -220,11 +229,9 @@ format_variants:
     description: "Tech-aware response with solution recommendations"
     sections:
       - header_standard
-      - section_understanding
-      - section_challenge
+      - section_context
       - section_tech_solution
       - section_response
-      - section_request_echo
       - section_next_steps
 
   # Compact format (for autonomous users)

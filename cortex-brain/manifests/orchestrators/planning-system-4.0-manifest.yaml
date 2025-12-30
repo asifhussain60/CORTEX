@@ -169,16 +169,17 @@ components:
     description: "E2E autonomous execution with self-healing and auto-validation"
     implementation_phase: "Phase 0.5 (Week 1)"
     source: "src/orchestrators/autonomous_execution_engine.py"
+    default_mode: "autonomous"
     modes:
       supervised:
-        description: "User approves each phase transition (default)"
+        description: "User approves each phase transition"
         auto_validate: true
         auto_commit: false
         auto_transition: false
         self_healing: false
         user_approval_required: true
       autonomous:
-        description: "Full E2E execution with self-healing"
+        description: "Full E2E execution with self-healing (default)"
         auto_validate: true
         auto_commit: true
         auto_transition: true

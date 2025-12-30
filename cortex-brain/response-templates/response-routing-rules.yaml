@@ -128,10 +128,10 @@ intent_detection:
         - "proceed without stopping"
         - "execute all without confirmation"
         - "autonomous mode"
-      template: "autonomous_phase_execution"
+      template: "autonomous_execution_progress"
       orchestrator: "PlanningOrchestrator"
       execution_mode: "autonomous"
-      note: "HIGH PRIORITY - Override interactive templates when autonomous keywords detected"
+      note: "HIGH PRIORITY - Override interactive templates when autonomous keywords detected. Uses visual progress bars."
     
     - intent: "planning_start"
       keywords:
@@ -170,16 +170,22 @@ intent_detection:
         - "plan ado"
         - "create ado"
         - "ado work item"
-      template: "template_ado_created"
+        - "ado feature"
+        - "ado story"
+      template: "ado_execution_progress"
       orchestrator: "ADOOrchestrator"
+      execution_mode: "autonomous"
+      note: "ADO-specific visual progress template with work item hierarchy and story point tracking"
     
     - intent: "ado_resume"
       keywords:
         - "resume plan"
         - "continue ado"
         - "resume ado"
-      template: "template_ado_resumed"
+      template: "ado_execution_progress"
       orchestrator: "ADOOrchestrator"
+      execution_mode: "autonomous"
+      note: "ADO-specific visual progress template for resumed workflows"
 
   # -------------------------------------------------------------------------
   # PRIORITY 3 - TDD workflows
@@ -211,9 +217,45 @@ intent_detection:
       orchestrator: "TDDOrchestrator"
 
   # -------------------------------------------------------------------------
-  # PRIORITY 4 - Operations (cache, diagrams, feedback)
+  # PRIORITY 4 - Operations (maintenance, sanitization, refinement, cache, diagrams, feedback)
   # -------------------------------------------------------------------------
   priority_4_operations:
+    - intent: "system_maintenance"
+      keywords:
+        - "system maintenance"
+        - "run maintenance"
+        - "health check"
+        - "maintenance check"
+        - "system health"
+      template: "maintenance_execution_progress"
+      orchestrator: "MaintenanceOrchestrator"
+      execution_mode: "autonomous"
+      note: "6-phase maintenance workflow with visual progress tracking"
+    
+    - intent: "code_sanitization"
+      keywords:
+        - "sanitize"
+        - "sanitization"
+        - "make generic"
+        - "anonymize"
+        - "remove company"
+      template: "sanitization_execution_progress"
+      orchestrator: "SanitizationOrchestrator"
+      execution_mode: "autonomous"
+      note: "5-phase sanitization workflow with visual progress tracking"
+    
+    - intent: "system_refinement"
+      keywords:
+        - "refine"
+        - "refinement"
+        - "improve cortex"
+        - "optimize code"
+        - "run refinement"
+      template: "refinement_execution_progress"
+      orchestrator: "RefinementOrchestrator"
+      execution_mode: "autonomous"
+      note: "7-phase refinement workflow with visual progress tracking"
+    
     - intent: "cache_management"
       keywords:
         - "clear cache"
@@ -347,31 +389,31 @@ selection_logic:
       - if: "template.format == 'tech_aware' and user_profile.tech_stack"
         format: "tech_aware"
       
-      - default: "standard_5_part"
+      - default: "adaptive_tier"  # v4.0: Adaptive tier-based format
 
 # ============================================================================
 # TEMPLATE OVERRIDE RULES - Special cases
 # ============================================================================
 
 override_rules:
-  # Admin context: Always use standard format
+  # Admin context: Use adaptive format with balanced detail
   admin_context:
     condition: "context.is_admin_repo == true"
     override:
-      format: "standard_5_part"
+      format: "adaptive_tier"  # v4.0: Adaptive
       detail_level: "balanced"
   
   # Error scenarios: Always include full context
   error_context:
     condition: "intent == 'error'"
     override:
-      format: "standard_5_part"
+      format: "structured"  # v4.0: Structured tier for errors
       detail_level: "verbose"
       required_sections:
-        - section_understanding
-        - section_challenge
-        - section_response
-        - section_next_steps
+        - context
+        - error_details
+        - solutions
+        - next_steps
   
   # First-time users: Educational mode override
   first_time_user:

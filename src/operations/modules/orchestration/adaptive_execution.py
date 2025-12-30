@@ -33,7 +33,7 @@ class ExecutionMode(Enum):
 @dataclass
 class AdaptiveExecutionConfig:
     """Configuration for adaptive execution."""
-    default_mode: ExecutionMode = ExecutionMode.SUPERVISED
+    default_mode: ExecutionMode = ExecutionMode.AUTONOMOUS
     enable_auto_rollback: bool = True
     validation_gates: bool = True
     safety_keywords: List[str] = field(default_factory=lambda: [

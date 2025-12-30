@@ -30,7 +30,7 @@ def main():
         
         with open(wiring_file, "w", encoding="utf-8") as f:
             f.write("# Auto-Generated Wiring Templates\n")
-            f.write("# Add these to cortex-brain/response-templates.yaml\n\n")
+            f.write("# Add these to cortex-brain/response-templates-v4.yaml\n\n")
             
             for suggestion in wiring_suggestions:
                 f.write(f"\n# === {suggestion.feature_name} ===\n")

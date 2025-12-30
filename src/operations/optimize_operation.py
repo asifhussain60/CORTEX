@@ -588,7 +588,7 @@ class OptimizeOperation(BaseOperationModule):
         
         # Remove duplicate response templates
         duplicate_templates = [
-            brain_path / "templates" / "response-templates.yaml",
+            brain_path / "templates" / "response-templates-v4.yaml",
             brain_path / "templates" / "response-templates-enhanced.yaml",
         ]
         

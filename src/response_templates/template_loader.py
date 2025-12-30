@@ -32,7 +32,7 @@ class TemplateLoader:
         """Initialize template loader.
         
         Args:
-            template_file: Path to response-templates.yaml
+            template_file: Path to response-templates-v4.yaml
         """
         self.template_file = template_file
         self._templates: Dict[str, Template] = {}

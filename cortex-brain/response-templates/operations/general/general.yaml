@@ -1,7 +1,7 @@
 category: operations/general
 templates:
   cleanup:
-    inherits_from: core/base-templates/5-part-standard.yaml
+    inherits_from: core/base-templates/adaptive-base.yaml
     name: System Cleanup
     triggers:
     - cleanup
@@ -48,7 +48,7 @@ templates:
 
         '
   optimize_cortex:
-    inherits_from: core/base-templates/5-part-standard.yaml
+    inherits_from: core/base-templates/adaptive-base.yaml
     name: CORTEX Performance Optimization
     triggers:
     - optimize cortex
@@ -95,7 +95,7 @@ templates:
 
         '
   design_sync:
-    inherits_from: core/base-templates/5-part-standard.yaml
+    inherits_from: core/base-templates/adaptive-base.yaml
     name: Design Documentation Synchronization
     triggers:
     - design sync
@@ -142,7 +142,7 @@ templates:
 
         '
   demo_generation:
-    inherits_from: core/base-templates/5-part-standard.yaml
+    inherits_from: core/base-templates/adaptive-base.yaml
     name: Demo Content Generation
     triggers:
     - generate demo
@@ -182,7 +182,7 @@ templates:
 
         '
   holistic_cleanup:
-    inherits_from: core/base-templates/5-part-standard.yaml
+    inherits_from: core/base-templates/adaptive-base.yaml
     name: Holistic System Cleanup
     triggers:
     - holistic cleanup
@@ -225,7 +225,7 @@ templates:
 
         '
   user_cleanup:
-    inherits_from: core/base-templates/5-part-standard.yaml
+    inherits_from: core/base-templates/adaptive-base.yaml
     name: User-Facing Cleanup
     triggers:
     - user cleanup
@@ -263,7 +263,7 @@ templates:
 
         '
   optimize_system:
-    inherits_from: core/base-templates/5-part-standard.yaml
+    inherits_from: core/base-templates/adaptive-base.yaml
     name: System-Wide Optimization
     triggers:
     - optimize system
@@ -364,7 +364,7 @@ templates:
 
         '
   application_health:
-    inherits_from: core/base-templates/5-part-standard.yaml
+    inherits_from: core/base-templates/adaptive-base.yaml
     name: Application Health Check
     triggers:
     - application health
@@ -479,7 +479,7 @@ templates:
 
         '
   manager_report:
-    inherits_from: core/base-templates/5-part-standard.yaml
+    inherits_from: core/base-templates/adaptive-base.yaml
     name: Manager Report Generation
     triggers:
     - manager report
@@ -619,7 +619,7 @@ templates:
 
         '
   plan_execution:
-    inherits_from: core/base-templates/5-part-standard.yaml
+    inherits_from: core/base-templates/adaptive-base.yaml
     name: Plan Execution
     triggers:
     - execute plan
@@ -742,7 +742,7 @@ templates:
 
         '
   learning_capture_agent:
-    inherits_from: core/base-templates/5-part-standard.yaml
+    inherits_from: core/base-templates/adaptive-base.yaml
     name: Learning Capture Agent
     triggers:
     - capture learning
@@ -792,7 +792,7 @@ templates:
 
         '
   profile_agent:
-    inherits_from: core/base-templates/5-part-standard.yaml
+    inherits_from: core/base-templates/adaptive-base.yaml
     name: User Profile Management
     triggers:
     - update profile
@@ -840,7 +840,7 @@ templates:
 
         '
   rca_agent:
-    inherits_from: core/base-templates/5-part-standard.yaml
+    inherits_from: core/base-templates/adaptive-base.yaml
     name: Root Cause Analysis (RCA)
     triggers:
     - rca
@@ -965,7 +965,7 @@ templates:
 
         '
   welcome_banner_agent:
-    inherits_from: core/base-templates/5-part-standard.yaml
+    inherits_from: core/base-templates/adaptive-base.yaml
     name: Welcome Banner
     triggers:
     - show welcome
@@ -1043,7 +1043,7 @@ templates:
 
         ✅ Brain Protection: 4-tier architecture preserved
 
-        ✅ Response Format: 5-part structure (mandatory)
+        ✅ Response Format: Adaptive tier-based structure (v4.0)
 
 
         💡 Say "help" to see available commands
@@ -1067,7 +1067,7 @@ templates:
 
         '
   architecture_intelligence_agent:
-    inherits_from: core/base-templates/5-part-standard.yaml
+    inherits_from: core/base-templates/adaptive-base.yaml
     name: Architecture Intelligence
     triggers:
     - review architecture
@@ -1181,7 +1181,7 @@ templates:
 
         '
   view_discovery_agent:
-    inherits_from: core/base-templates/5-part-standard.yaml
+    inherits_from: core/base-templates/adaptive-base.yaml
     name: View Discovery
     triggers:
     - discover views
@@ -1242,7 +1242,7 @@ templates:
 
         '
   leadership_showcase:
-    inherits_from: core/base-templates/5-part-standard.yaml
+    inherits_from: core/base-templates/adaptive-base.yaml
     name: Leadership & Stakeholder Showcase
     triggers:
     - show leadership
@@ -1471,8 +1471,8 @@ templates:
         \ with tests\n- Production-ready code output\n- Say `tutorial` to start\n\n\
         **Documentation (GitHub Pages - Coming Soon):**\n- Planning Guide: DoR/DoD\
         \ workflows, Vision API usage\n- TDD Mastery: RED→GREEN→REFACTOR automation\n\
-        - Brain Architecture: 4-tier memory system explained\n- Response Format: Mandatory\
-        \ 5-part structure guide\n\n**Support Channels:**\n- Feedback system: `feedback`\
+        - Brain Architecture: 4-tier memory system explained\n- Response Format: Adaptive\
+        \ tier-based structure guide\n\n**Support Channels:**\n- Feedback system: `feedback`\
         \ command for bug/feature reports\n- GitHub Issues: github.com/asifhussain60/CORTEX\n\
         - Documentation: `cortex-brain/documents/` (1000+ pages)\n\n---\n\n## \U0001F52C\
         \ Technical Validation\n\n**Code References (All Operational):**\n- Orchestrators:\

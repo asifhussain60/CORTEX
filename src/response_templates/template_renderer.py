@@ -598,3 +598,244 @@ Which track would you like to pursue first?"""
             return '\n'.join(result)
         
         return self.loop_pattern.sub(process_loop, content)
+
+    # ============================================================================
+    # PROGRESS BAR GENERATION HELPERS (Phase 1.2 - Planner 2.0 Enhancements)
+    # ============================================================================
+    
+    @staticmethod
+    def generate_progress_bar(percentage: float, width: int = 20, filled_char: str = '█', empty_char: str = '░') -> str:
+        """Generate a visual progress bar using Unicode block characters.
+        
+        Args:
+            percentage: Progress percentage (0-100)
+            width: Total width of the bar in characters
+            filled_char: Character for filled portion (default: █)
+            empty_char: Character for empty portion (default: ░)
+            
+        Returns:
+            Progress bar string like "████████░░░░░░░░░░░░"
+        """
+        percentage = max(0, min(100, percentage))  # Clamp to 0-100
+        filled_count = int(width * percentage / 100)
+        empty_count = width - filled_count
+        return f"{filled_char * filled_count}{empty_char * empty_count}"
+    
+    @staticmethod
+    def generate_tdd_status(red_done: bool = False, green_done: bool = False, refactor_done: bool = False) -> str:
+        """Generate TDD status indicator string.
+        
+        Args:
+            red_done: Whether RED phase (failing test) is complete
+            green_done: Whether GREEN phase (passing test) is complete
+            refactor_done: Whether REFACTOR phase is complete
+            
+        Returns:
+            TDD status string like "R✅ G✅ F⏸️"
+        """
+        r_status = '✅' if red_done else '⏸️'
+        g_status = '✅' if green_done else '⏸️'
+        f_status = '✅' if refactor_done else '⏸️'
+        return f"R{r_status} G{g_status} F{f_status}"
+    
+    @staticmethod
+    def format_elapsed_time(seconds: float) -> str:
+        """Format elapsed time in human-readable format.
+        
+        Args:
+            seconds: Elapsed time in seconds
+            
+        Returns:
+            Formatted time string like "2m 30s" or "1h 15m"
+        """
+        if seconds < 60:
+            return f"{int(seconds)}s"
+        elif seconds < 3600:
+            minutes = int(seconds // 60)
+            secs = int(seconds % 60)
+            return f"{minutes}m {secs}s" if secs > 0 else f"{minutes}m"
+        else:
+            hours = int(seconds // 3600)
+            minutes = int((seconds % 3600) // 60)
+            return f"{hours}h {minutes}m" if minutes > 0 else f"{hours}h"
+    
+    def generate_phase_rows(self, phases: list) -> str:
+        """Generate phase rows for the autonomous execution progress table.
+        
+        Args:
+            phases: List of phase dictionaries with keys:
+                - phase_num: Phase number
+                - phase_name: Name of the phase
+                - status: 'completed', 'in_progress', or 'not_started'
+                - percentage: Progress percentage (0-100)
+                - tdd_enabled: Whether TDD is enabled for this phase
+                - red_done, green_done, refactor_done: TDD phase status
+                - completed_tasks: Number of completed tasks
+                - total_tasks: Total number of tasks
+                - elapsed_time: Time spent on this phase in seconds
+                
+        Returns:
+            Formatted table rows string
+        """
+        rows = []
+        for phase in phases:
+            # Status emoji
+            status = phase.get('status', 'not_started')
+            if status == 'completed':
+                status_emoji = '✅'
+                status_text = 'Done'
+            elif status == 'in_progress':
+                status_emoji = '⏳'
+                status_text = 'Active'
+            else:
+                status_emoji = '⏸️'
+                status_text = 'Pending'
+            
+            # Progress bar
+            percentage = phase.get('percentage', 0)
+            phase_bar = self.generate_progress_bar(percentage, width=10)
+            
+            # TDD status
+            if phase.get('tdd_enabled', False):
+                tdd_status = self.generate_tdd_status(
+                    phase.get('red_done', False),
+                    phase.get('green_done', False),
+                    phase.get('refactor_done', False)
+                )
+            else:
+                tdd_status = 'N/A'
+            
+            # Task count
+            completed_tasks = phase.get('completed_tasks', 0)
+            total_tasks = phase.get('total_tasks', 0)
+            
+            # Time
+            elapsed = phase.get('elapsed_time', 0)
+            phase_time = self.format_elapsed_time(elapsed) if elapsed > 0 else '-'
+            
+            # Build row
+            row = f"| {phase.get('phase_num', '?')} | {status_emoji} **{phase.get('phase_name', 'Unknown')}** | {status_text} | [{phase_bar}] {percentage}% | {tdd_status} | {completed_tasks}/{total_tasks} | {phase_time} |"
+            rows.append(row)
+        
+        return '\n'.join(rows)
+    
+    def render_autonomous_progress(
+        self,
+        plan_name: str,
+        current_phase: int,
+        total_phases: int,
+        current_phase_name: str,
+        current_task: str,
+        overall_percentage: float,
+        phases: list,
+        elapsed_seconds: float = 0,
+        estimated_remaining_seconds: float = 0,
+        threat_analysis: dict = None,
+        dor_status: dict = None,
+        dod_status: dict = None,
+        next_action: str = "Continue execution..."
+    ) -> str:
+        """Render the autonomous execution progress template with full visual progress.
+        
+        Args:
+            plan_name: Name of the plan being executed
+            current_phase: Current phase number
+            total_phases: Total number of phases
+            current_phase_name: Name of the current phase
+            current_task: Description of the current task
+            overall_percentage: Overall progress percentage
+            phases: List of phase dictionaries (see generate_phase_rows)
+            elapsed_seconds: Total elapsed time in seconds
+            estimated_remaining_seconds: Estimated remaining time in seconds
+            threat_analysis: Optional threat analysis dict with keys:
+                - enabled, threat_count, critical_count, high_count, medium_count
+                - stride_categories, mitigations_done, mitigations_total
+            dor_status: Optional DoR dict with keys: passed, violations
+            dod_status: Optional DoD dict with keys: passed, remaining
+            next_action: Next action text
+            
+        Returns:
+            Formatted progress template string
+        """
+        # Generate overall progress bar
+        overall_bar = self.generate_progress_bar(overall_percentage)
+        
+        # Status emoji based on percentage
+        if overall_percentage >= 100:
+            status_emoji = '🎉'
+        elif overall_percentage >= 75:
+            status_emoji = '🚀'
+        elif overall_percentage >= 50:
+            status_emoji = '📈'
+        elif overall_percentage >= 25:
+            status_emoji = '🔄'
+        else:
+            status_emoji = '🏁'
+        
+        # Truncate plan name for display
+        plan_name_truncated = plan_name[:50] + '...' if len(plan_name) > 50 else plan_name
+        
+        # Format times
+        elapsed_time = self.format_elapsed_time(elapsed_seconds)
+        remaining_time = self.format_elapsed_time(estimated_remaining_seconds) if estimated_remaining_seconds > 0 else 'calculating...'
+        
+        # Generate phase rows
+        phase_rows = self.generate_phase_rows(phases)
+        
+        # Build template
+        output = f"""## 🧠 CORTEX Plan Execution
+**Author:** Asif Hussain | **Plan:** {plan_name}
+
+---
+
+### 📊 Execution Progress
+```
+╔══════════════════════════════════════════════════════════════════════════╗
+║  Plan: {plan_name_truncated:<50}                  ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║  Overall: [{overall_bar}] {overall_percentage:>3.0f}%  {status_emoji}                          ║
+║  Phase {current_phase}/{total_phases}: {current_phase_name:<40}          ║
+║  Task: {current_task[:55]:<55}                  ║
+║  Time: {elapsed_time} elapsed | ~{remaining_time} remaining                      ║
+╚══════════════════════════════════════════════════════════════════════════╝
+```
+
+### 📋 Phase Breakdown
+
+| # | Phase | Status | Progress | TDD Status | Tasks | Time |
+|---|-------|--------|----------|------------|-------|------|
+{phase_rows}
+"""
+        
+        # Add threat analysis section if enabled
+        if threat_analysis and threat_analysis.get('enabled'):
+            mitigation_bar = self.generate_progress_bar(
+                (threat_analysis.get('mitigations_done', 0) / max(1, threat_analysis.get('mitigations_total', 1))) * 100,
+                width=10
+            )
+            output += f"""
+### 🔒 Security Analysis
+
+| Metric | Value |
+|--------|-------|
+| **Threats** | {threat_analysis.get('threat_count', 0)} ({threat_analysis.get('critical_count', 0)} Critical, {threat_analysis.get('high_count', 0)} High, {threat_analysis.get('medium_count', 0)} Medium) |
+| **STRIDE** | {threat_analysis.get('stride_categories', 'N/A')} |
+| **Mitigations** | [{mitigation_bar}] {threat_analysis.get('mitigations_done', 0)}/{threat_analysis.get('mitigations_total', 0)} |
+"""
+        
+        # Add validation status
+        dor_text = '✅ Passed' if dor_status and dor_status.get('passed') else f"⚠️ {dor_status.get('violations', 0) if dor_status else 0} issue(s)"
+        dod_text = '✅ Passed' if dod_status and dod_status.get('passed') else f"⏳ {dod_status.get('remaining', 0) if dod_status else 0} remaining"
+        
+        output += f"""
+### ✅ Validation Status
+
+| Check | Status |
+|-------|--------|
+| **Definition of Ready** | {dor_text} |
+| **Definition of Done** | {dod_text} |
+
+**Next:** {next_action}
+"""
+        
+        return output

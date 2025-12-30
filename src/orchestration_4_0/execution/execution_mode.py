@@ -29,8 +29,8 @@ class ExecutionMode(Enum):
         """Get human-readable description of mode"""
         descriptions = {
             self.HUMAN_IN_LOOP: "Pause after each step (learning/debugging)",
-            self.SUPERVISED: "Auto-validate, manual approval (default)",
-            self.AUTONOMOUS: "Full E2E with self-healing"
+            self.SUPERVISED: "Auto-validate, manual approval",
+            self.AUTONOMOUS: "Full E2E with self-healing (default)"
         }
         return descriptions[self]
     

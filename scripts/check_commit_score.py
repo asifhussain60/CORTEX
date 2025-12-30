@@ -27,8 +27,8 @@ has_doc = guide_path.exists()
 # Check test coverage
 coverage_data = test_validator.get_test_coverage(feature_name, 'orchestrator')
 
-# Check wiring - need to load entry points from response-templates.yaml
-templates_path = Path('cortex-brain/response-templates.yaml')
+# Check wiring - need to load entry points from response-templates-v4.yaml
+templates_path = Path('cortex-brain/response-templates-v4.yaml')
 entry_points = {}
 if templates_path.exists():
     with open(templates_path, 'r', encoding='utf-8') as f:

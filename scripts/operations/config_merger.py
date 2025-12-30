@@ -75,7 +75,7 @@ class ConfigMerger:
         output_file: Path
     ) -> Dict[str, Any]:
         """
-        Merge response-templates.yaml with special handling for template arrays.
+        Merge response-templates-v4.yaml with special handling for template arrays.
         
         Args:
             local_file: User's current templates

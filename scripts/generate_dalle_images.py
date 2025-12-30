@@ -344,7 +344,7 @@ VISUAL EXCELLENCE:
 - No human figures, pure code intelligence visualization
 - Clean, precise, enterprise-grade""",
 
-    "9_response_format": """Create a sophisticated documentation template visualization showing a standardized 5-part response structure with precision and clarity. Color palette: section-specific colors on clean white/light gray background (#F8FAFC).
+    "9_response_format": """Create a sophisticated documentation template visualization showing a standardized adaptive tier-based response structure with precision and clarity. Color palette: section-specific colors on clean white/light gray background (#F8FAFC).
 
 CENTRAL DOCUMENT TEMPLATE (large, prominent):
 - Professional document layout with visible structure:

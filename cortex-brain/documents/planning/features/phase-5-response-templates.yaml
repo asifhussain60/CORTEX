@@ -9,7 +9,7 @@ metadata:
   name: "Response Template System Refactor"
   priority: 6
   status: "not-started"
-  description: "Refactor monolithic 2,669-line response-templates.yaml into modular profile-driven system"
+  description: "Refactor monolithic 2,669-line response-templates-v4.yaml into modular profile-driven system"
   rationale: "Monolithic templates hard to maintain; user profile integration missing"
   total_estimated_effort: "38 hours"
 
@@ -23,13 +23,13 @@ objectives:
 deliverables:
   - id: "5.1"
     name: "Modular YAML Structure"
-    description: "Split response-templates.yaml into 4 focused files"
+    description: "Split response-templates-v4.yaml into 4 focused files"
     files_affected:
       - "cortex-brain/response-templates/base-components.yaml (new)"
       - "cortex-brain/response-templates/template-definitions.yaml (new)"
       - "cortex-brain/response-templates/profile-variants.yaml (new)"
       - "cortex-brain/response-templates/routing-rules.yaml (new)"
-      - "cortex-brain/response-templates.yaml (legacy, deprecated)"
+      - "cortex-brain/response-templates-v4.yaml (legacy, deprecated)"
     acceptance_criteria:
       - "base-components.yaml: 200 lines (header, sections, footers)"
       - "template-definitions.yaml: 400 lines (18 templates with placeholders)"

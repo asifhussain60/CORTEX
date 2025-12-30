@@ -1,7 +1,7 @@
 category: orchestrators/git-checkpoint
 templates:
   git_checkpoint:
-    inherits_from: core/base-templates/5-part-standard.yaml
+    inherits_from: core/base-templates/adaptive-base.yaml
     name: Git Checkpoint
     triggers:
     - git checkpoint

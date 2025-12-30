@@ -148,7 +148,7 @@ protected_files:
   - knowledge-graph.yaml
   - brain-protection-rules.yaml
   - development-context.yaml
-  - response-templates.yaml
+  - response-templates-v4.yaml
   - interaction-design.yaml
   - capabilities.yaml
   - architectural-patterns.yaml

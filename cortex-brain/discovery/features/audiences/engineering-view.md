@@ -412,7 +412,7 @@ class MyOrchestrator(BaseOperationModule):
 
 3. **Template not found**
    - Run `cortex discover --check-templates`
-   - Update response-templates.yaml
+   - Update response-templates-v4.yaml
 
 ---
 

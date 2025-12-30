@@ -160,7 +160,7 @@ class PostDeploymentValidator:
                         break
                 
                 if not triggers_found:
-                    feature_issues.append(f"No triggers found in response-templates.yaml: {config['triggers']}")
+                    feature_issues.append(f"No triggers found in response-templates-v4.yaml: {config['triggers']}")
             
             if config.get("template"):
                 if not templates or config["template"] not in templates.get("templates", {}):
@@ -188,12 +188,12 @@ class PostDeploymentValidator:
         print("📋 Validating Response Templates...")
         print("-" * 80)
         
-        templates_file = self.brain_path / "response-templates.yaml"
+        templates_file = self.brain_path / "response-templates-v4.yaml"
         
         if not templates_file.exists():
-            self.issues.append("response-templates.yaml missing")
+            self.issues.append("response-templates-v4.yaml missing")
             self.results["templates"]["status"] = "FAIL"
-            print("  ❌ response-templates.yaml not found")
+            print("  ❌ response-templates-v4.yaml not found")
             print()
             return
         
@@ -226,7 +226,7 @@ class PostDeploymentValidator:
                 print(f"  ✅ All critical templates present ({len(templates.get('templates', {}))} total)")
         
         except Exception as e:
-            self.issues.append(f"response-templates.yaml validation failed: {str(e)}")
+            self.issues.append(f"response-templates-v4.yaml validation failed: {str(e)}")
             self.results["templates"]["status"] = "FAIL"
             print(f"  ❌ Validation error: {str(e)}")
         
@@ -373,7 +373,7 @@ class PostDeploymentValidator:
     
     def _load_response_templates(self) -> Optional[Dict]:
         """Load response templates YAML."""
-        templates_file = self.brain_path / "response-templates.yaml"
+        templates_file = self.brain_path / "response-templates-v4.yaml"
         
         if not templates_file.exists():
             return None

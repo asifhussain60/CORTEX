@@ -33,7 +33,7 @@ IMPORTANT_FILES = [
     "README.md",
     "cortex-brain/operations-config.yaml",
     "cortex-brain/brain-protection-rules.yaml",
-    "cortex-brain/response-templates.yaml",
+    "cortex-brain/response-templates-v4.yaml",
 ]
 
 

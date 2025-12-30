@@ -19,7 +19,7 @@ from typing import List, Tuple, Dict
 # Path mappings: old_path -> new_path
 PATH_MIGRATIONS = {
     'cortex-brain/protection/brain-protection-rules.yaml': 'cortex-brain/protection/brain-protection-rules.yaml',
-    'cortex-brain/templates/response-templates.yaml': 'cortex-brain/templates/response-templates.yaml',
+    'cortex-brain/templates/response-templates-v4.yaml': 'cortex-brain/templates/response-templates-v4.yaml',
     'cortex-brain/templates/response-templates-condensed.yaml': 'cortex-brain/templates/response-templates-condensed.yaml',
     'cortex-brain/templates/response-templates-enhanced.yaml': 'cortex-brain/templates/response-templates-enhanced.yaml',
     'cortex-brain/operations/cleanup-rules.yaml': 'cortex-brain/operations/cleanup-rules.yaml',

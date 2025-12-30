@@ -226,15 +226,15 @@ class FeatureDiscoveryModule:
                 ]
             ),
             Feature(
-                name="Response Templates v3.0",
+                name="Response Templates v4.0",
                 weight=FeatureWeight.MINOR,
-                description="5-part mandatory format with emoji hierarchy",
+                description="Adaptive tier-based format with emoji hierarchy",
                 target_location="Epilogue",
                 word_count=150,
                 rationale="Format evolution for consistency",
                 comedic_hook="CORTEX discovers structure (shocking development)",
                 technical_concepts=[
-                    "5-part response format",
+                    "Adaptive tier-based format",
                     "Emoji hierarchy (🧠 🎯 ⚡ 💬 📊 🔍)",
                     "Anti-bloat enforcement",
                     "Template-based rendering"

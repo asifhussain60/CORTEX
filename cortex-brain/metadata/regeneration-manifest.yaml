@@ -6,12 +6,12 @@ documents:
     generated_hash: 6c4a70ce86ee74a5d6332210364aef3c8463f5cdd1272ad1d84e89eca1abb55b
     last_regenerated: '2025-12-10T16:51:33.283078'
     dependencies:
-    - cortex-brain/response-templates.yaml
+    - cortex-brain/response-templates-v4.yaml
     - cortex-brain/brain-protection-rules.yaml
 images: null
 diagrams: null
 global_dependencies:
-- cortex-brain/response-templates.yaml
+- cortex-brain/response-templates-v4.yaml
 - cortex-brain/brain-protection-rules.yaml
 - cortex-operations.yaml
 - cortex.config.json

@@ -16,44 +16,45 @@ last_updated: '2025-12-02'
 
 components:
   # ============================================================================
-  # STANDARD 5-PART STRUCTURE COMPONENTS
-  # These form the mandatory CORTEX response format
+  # ADAPTIVE RESPONSE COMPONENTS (v4.0)
+  # These are OPTIONAL building blocks for complex responses only
+  # Simple responses use tier-based adaptive format instead
   # ============================================================================
   
   understanding_section:
     format: |
       ### 🎯 Understanding & Scope
       {{understanding_content}}
-    required: true
-    description: "Restates user intent and clarifies boundaries/scope"
+    required: false  # v4.0: Only for complex/discovery responses
+    description: "Optional section for complex responses requiring scope clarification"
   
   challenge_section:
     format: |
       ### ⚡ Approach & Considerations
       {{challenge_content}}
-    required: true
-    description: "Explains strategy, decisions, tradeoffs OR 'No significant challenges'"
+    required: false  # v4.0: Only when actual challenge exists
+    description: "Optional section when technical challenges or decisions need explanation"
   
   response_section:
     format: |
       ### 💬 Response
       {{response_content}}
-    required: true
-    description: "Main response content with detailed information"
+    required: false  # v4.0: For structured responses only
+    description: "Main response content for structured tier responses"
   
-  request_echo_section:
+  changes_section:
     format: |
-      ### 📊 Impact & Changes
-      {{request_echo_content}}
-    required: true
-    description: "States what changed - files, metrics, outcomes (not echo)"
+      ### 📊 Changes
+      {{changes_content}}
+    required: false  # v4.0: Only when files/metrics changed
+    description: "Optional section showing what changed - files, metrics, outcomes"
   
   next_steps_section:
     format: |
       ### 🔍 Next Steps
       {{next_steps_content}}
-    required: true
-    description: "Context-appropriate next steps (numbered list, checkboxes, or parallel tracks)"
+    required: false  # v4.0: Simplified to **Next:** for most responses
+    description: "Full section format for complex multi-phase work only"
   
   # ============================================================================
   # HEADER VARIANTS
@@ -154,14 +155,278 @@ components:
   
   progress_bar:
     format: |
-      **Progress Overview:**
+      **📊 Progress Overview:**
       ```
-      Overall Status: [{{progress_bar}}] {{progress_percentage}}%
-      ✅ Completed: [{{completed_bar}}] {{completed_percentage}}%
-      ⏳ In Progress: [{{in_progress_bar}}] {{in_progress_percentage}}%
-      ⏸️  Not Started: [{{not_started_bar}}] {{not_started_percentage}}%
+      ╔══════════════════════════════════════════════════════════════════════════╗
+      ║  Overall Status: [{{progress_bar}}] {{progress_percentage}}%             ║
+      ║  ✅ Completed:   [{{completed_bar}}] {{completed_percentage}}%           ║
+      ║  ⏳ In Progress: [{{in_progress_bar}}] {{in_progress_percentage}}%       ║
+      ║  ⏸️  Not Started: [{{not_started_bar}}] {{not_started_percentage}}%      ║
+      ╚══════════════════════════════════════════════════════════════════════════╝
       ```
-    description: "Visual progress bar for status checks"
+    description: "Visual progress bar for status checks with Unicode box drawing"
+  
+  # ============================================================================
+  # ADO (Azure DevOps) EXECUTION PROGRESS TEMPLATE
+  # Enhanced visual progress for ADO work item generation with story point tracking
+  # ============================================================================
+  
+  ado_execution_progress:
+    format: |
+      ## 🧠 CORTEX ADO Work Item Generation
+      **Author:** Asif Hussain | **Feature:** {{feature_name}}
+      
+      ---
+      
+      ### 📊 ADO Generation Progress
+      ```
+      ╔══════════════════════════════════════════════════════════════════════════╗
+      ║  Feature: {{feature_name_truncated}}                                     ║
+      ╠══════════════════════════════════════════════════════════════════════════╣
+      ║  Overall: [{{overall_bar}}] {{overall_percentage}}%  {{status_emoji}}    ║
+      ║  Phase {{current_phase}}/{{total_phases}}: {{current_phase_name}}        ║
+      ║  Work Items: {{items_created}}/{{items_planned}} created                 ║
+      ║  Story Points: {{story_points_total}} SP total                           ║
+      ╚══════════════════════════════════════════════════════════════════════════╝
+      ```
+      
+      ### 📋 ADO Workflow Phases
+      
+      | # | Phase | Status | Progress | Items | Time |
+      |---|-------|--------|----------|-------|------|
+      {{phase_rows}}
+      
+      ### 🎫 Work Item Summary
+      
+      | Type | Count | Story Points | Status |
+      |------|-------|--------------|--------|
+      | **Epic** | {{epic_count}} | - | {{epic_status}} |
+      | **Feature** | {{feature_count}} | {{feature_sp}} SP | {{feature_status}} |
+      | **User Story** | {{story_count}} | {{story_sp}} SP | {{story_status}} |
+      | **Task** | {{task_count}} | {{task_sp}} SP | {{task_status}} |
+      
+      {{#if acceptance_criteria_count}}
+      ### ✅ Acceptance Criteria
+      
+      | Metric | Value |
+      |--------|-------|
+      | **Total AC** | {{acceptance_criteria_count}} |
+      | **Given/When/Then** | {{gwt_count}} |
+      | **DoR Compliance** | {{#if dor_passed}}✅ Passed{{else}}⚠️ {{dor_violations}} issue(s){{/if}} |
+      {{/if}}
+      
+      {{#if ado_links}}
+      ### 🔗 Azure DevOps Links
+      
+      {{#each ado_links}}
+      - [{{type}}: {{title}}]({{url}})
+      {{/each}}
+      {{/if}}
+      
+      ### ✅ Validation Status
+      
+      | Check | Status |
+      |-------|--------|
+      | **Definition of Ready** | {{#if dor_passed}}✅ Passed{{else}}⚠️ {{dor_violations}} issue(s){{/if}} |
+      | **Definition of Done** | {{#if dod_passed}}✅ Passed{{else}}⏳ {{dod_remaining}} remaining{{/if}} |
+      | **ADO Authentication** | {{#if ado_auth_valid}}✅ Connected{{else}}❌ Not authenticated{{/if}} |
+      
+      **Next:** {{next_action}}
+    description: "Enhanced visual progress template for ADO work item generation with story points and work item hierarchy tracking"
+  
+  ado_phase_row_template:
+    format: "| {{phase_num}} | {{#if completed}}✅{{else if in_progress}}⏳{{else}}⏸️{{/if}} **{{phase_name}}** | {{status_text}} | [{{phase_bar}}] {{phase_percentage}}% | {{items_in_phase}} | {{phase_time}} |"
+    description: "Single phase row for ADO execution progress table"
+  
+  # ============================================================================
+  # AUTONOMOUS EXECUTION PROGRESS TEMPLATE
+  # Enhanced visual progress for plan execution (Phase 1.2 Planner 2.0)
+  # ============================================================================
+  
+  autonomous_execution_progress:
+    format: |
+      ## 🧠 CORTEX Plan Execution
+      **Author:** Asif Hussain | **Plan:** {{plan_name}}
+      
+      ---
+      
+      ### 📊 Execution Progress
+      ```
+      ╔══════════════════════════════════════════════════════════════════════════╗
+      ║  Plan: {{plan_name_truncated}}                                           ║
+      ╠══════════════════════════════════════════════════════════════════════════╣
+      ║  Overall: [{{overall_bar}}] {{overall_percentage}}%  {{status_emoji}}    ║
+      ║  Phase {{current_phase}}/{{total_phases}}: {{current_phase_name}}        ║
+      ║  Task: {{current_task}}                                                  ║
+      ║  Time: {{elapsed_time}} elapsed | ~{{remaining_time}} remaining          ║
+      ╚══════════════════════════════════════════════════════════════════════════╝
+      ```
+      
+      ### 📋 Phase Breakdown
+      
+      | # | Phase | Status | Progress | TDD Status | Tasks | Time |
+      |---|-------|--------|----------|------------|-------|------|
+      {{phase_rows}}
+      
+      {{#if threat_analysis_enabled}}
+      ### 🔒 Security Analysis
+      
+      | Metric | Value |
+      |--------|-------|
+      | **Threats** | {{threat_count}} ({{critical_count}} Critical, {{high_count}} High, {{medium_count}} Medium) |
+      | **STRIDE** | {{stride_categories}} |
+      | **Mitigations** | [{{mitigation_bar}}] {{mitigations_done}}/{{mitigations_total}} |
+      {{/if}}
+      
+      ### ✅ Validation Status
+      
+      | Check | Status |
+      |-------|--------|
+      | **Definition of Ready** | {{#if dor_passed}}✅ Passed{{else}}⚠️ {{dor_violations}} issue(s){{/if}} |
+      | **Definition of Done** | {{#if dod_passed}}✅ Passed{{else}}⏳ {{dod_remaining}} remaining{{/if}} |
+      
+      **Next:** {{next_action}}
+    description: "Enhanced visual progress template for autonomous plan execution with TDD and threat modeling status"
+  
+  phase_row_template:
+    format: "| {{phase_num}} | {{#if completed}}✅{{else if in_progress}}⏳{{else}}⏸️{{/if}} **{{phase_name}}** | {{status_text}} | [{{phase_bar}}] {{phase_percentage}}% | {{tdd_status}} | {{completed_tasks}}/{{total_tasks}} | {{phase_time}} |"
+    description: "Single phase row for autonomous execution progress table"
+  
+  # ============================================================================
+  # MAINTENANCE EXECUTION PROGRESS TEMPLATE
+  # Visual progress for 6-phase system maintenance workflow
+  # ============================================================================
+  
+  maintenance_execution_progress:
+    format: |
+      ## 🧠 CORTEX System Maintenance
+      **Author:** Asif Hussain | **Operation:** {{operation_name}}
+      
+      ---
+      
+      ### 📊 Maintenance Progress
+      ```
+      ╔══════════════════════════════════════════════════════════════════════════╗
+      ║  Operation: {{operation_name_truncated}}                                 ║
+      ╠══════════════════════════════════════════════════════════════════════════╣
+      ║  Overall: [{{overall_bar}}] {{overall_percentage}}%  {{status_emoji}}    ║
+      ║  Phase {{current_phase}}/{{total_phases}}: {{current_phase_name}}        ║
+      ║  Issues: {{issues_found}} found | {{issues_fixed}} fixed                 ║
+      ║  Time: {{elapsed_time}} elapsed | ~{{remaining_time}} remaining          ║
+      ╚══════════════════════════════════════════════════════════════════════════╝
+      ```
+      
+      ### 📋 Maintenance Phases
+      
+      | # | Phase | Status | Progress | Issues | Time |
+      |---|-------|--------|----------|--------|------|
+      {{phase_rows}}
+      
+      ### 📈 Health Metrics
+      
+      | Metric | Before | After | Change |
+      |--------|--------|-------|--------|
+      | **Brain Health** | {{health_before}}% | {{health_after}}% | {{health_change}} |
+      | **Cache Status** | {{cache_before}} | {{cache_after}} | {{cache_change}} |
+      | **Broken Links** | {{links_before}} | {{links_after}} | {{links_change}} |
+      
+      **Next:** {{next_action}}
+    description: "Visual progress template for 6-phase system maintenance workflow"
+  
+  maintenance_phase_row_template:
+    format: "| {{phase_num}} | {{#if completed}}✅{{else if in_progress}}⏳{{else}}⏸️{{/if}} **{{phase_name}}** | {{status_text}} | [{{phase_bar}}] {{phase_percentage}}% | {{issues_in_phase}} | {{phase_time}} |"
+    description: "Single phase row for maintenance execution progress table"
+  
+  # ============================================================================
+  # SANITIZATION EXECUTION PROGRESS TEMPLATE
+  # Visual progress for 5-phase code sanitization workflow
+  # ============================================================================
+  
+  sanitization_execution_progress:
+    format: |
+      ## 🧠 CORTEX Code Sanitization
+      **Author:** Asif Hussain | **Target:** {{target_path}}
+      
+      ---
+      
+      ### 📊 Sanitization Progress
+      ```
+      ╔══════════════════════════════════════════════════════════════════════════╗
+      ║  Target: {{target_path_truncated}}                                       ║
+      ╠══════════════════════════════════════════════════════════════════════════╣
+      ║  Overall: [{{overall_bar}}] {{overall_percentage}}%  {{status_emoji}}    ║
+      ║  Phase {{current_phase}}/{{total_phases}}: {{current_phase_name}}        ║
+      ║  Files: {{files_processed}}/{{files_total}} processed                    ║
+      ║  Patterns: {{patterns_replaced}} replaced                                ║
+      ╚══════════════════════════════════════════════════════════════════════════╝
+      ```
+      
+      ### 📋 Sanitization Phases
+      
+      | # | Phase | Status | Progress | Files | Time |
+      |---|-------|--------|----------|-------|------|
+      {{phase_rows}}
+      
+      ### 🔐 Sanitization Summary
+      
+      | Category | Found | Replaced | Status |
+      |----------|-------|----------|--------|
+      | **Company Names** | {{company_found}} | {{company_replaced}} | {{company_status}} |
+      | **Email Addresses** | {{email_found}} | {{email_replaced}} | {{email_status}} |
+      | **API Keys** | {{api_found}} | {{api_replaced}} | {{api_status}} |
+      | **URLs** | {{url_found}} | {{url_replaced}} | {{url_status}} |
+      
+      **Next:** {{next_action}}
+    description: "Visual progress template for 5-phase code sanitization workflow"
+  
+  sanitization_phase_row_template:
+    format: "| {{phase_num}} | {{#if completed}}✅{{else if in_progress}}⏳{{else}}⏸️{{/if}} **{{phase_name}}** | {{status_text}} | [{{phase_bar}}] {{phase_percentage}}% | {{files_in_phase}} | {{phase_time}} |"
+    description: "Single phase row for sanitization execution progress table"
+  
+  # ============================================================================
+  # REFINEMENT EXECUTION PROGRESS TEMPLATE
+  # Visual progress for 7-phase system refinement workflow
+  # ============================================================================
+  
+  refinement_execution_progress:
+    format: |
+      ## 🧠 CORTEX System Refinement
+      **Author:** Asif Hussain | **Scope:** {{refinement_scope}}
+      
+      ---
+      
+      ### 📊 Refinement Progress
+      ```
+      ╔══════════════════════════════════════════════════════════════════════════╗
+      ║  Scope: {{refinement_scope_truncated}}                                   ║
+      ╠══════════════════════════════════════════════════════════════════════════╣
+      ║  Overall: [{{overall_bar}}] {{overall_percentage}}%  {{status_emoji}}    ║
+      ║  Phase {{current_phase}}/{{total_phases}}: {{current_phase_name}}        ║
+      ║  Improvements: {{improvements_made}} applied                             ║
+      ║  Time: {{elapsed_time}} elapsed | ~{{remaining_time}} remaining          ║
+      ╚══════════════════════════════════════════════════════════════════════════╝
+      ```
+      
+      ### 📋 Refinement Phases
+      
+      | # | Phase | Status | Progress | Improvements | Time |
+      |---|-------|--------|----------|--------------|------|
+      {{phase_rows}}
+      
+      ### 📈 Refinement Impact
+      
+      | Area | Before | After | Impact |
+      |------|--------|-------|--------|
+      | **Code Quality** | {{quality_before}}% | {{quality_after}}% | {{quality_impact}} |
+      | **Test Coverage** | {{coverage_before}}% | {{coverage_after}}% | {{coverage_impact}} |
+      | **Documentation** | {{docs_before}}% | {{docs_after}}% | {{docs_impact}} |
+      
+      **Next:** {{next_action}}
+    description: "Visual progress template for 7-phase system refinement workflow"
+  
+  refinement_phase_row_template:
+    format: "| {{phase_num}} | {{#if completed}}✅{{else if in_progress}}⏳{{else}}⏸️{{/if}} **{{phase_name}}** | {{status_text}} | [{{phase_bar}}] {{phase_percentage}}% | {{improvements_in_phase}} | {{phase_time}} |"
+    description: "Single phase row for refinement execution progress table"
   
   banner_frame:
     format: |
@@ -216,42 +481,33 @@ components:
       {{/each}}
     description: "Parallel tracks format for concurrent work"
 
-# Composition rules
+# Composition rules (v4.0 - Adaptive, not mandatory)
 composition_rules:
-  standard_5_part:
+  # Default adaptive tier format
+  adaptive_tier:
     components:
       - standard_header
-      - understanding_section
-      - challenge_section
       - response_section
-      - request_echo_section
       - next_steps_section
-    description: "Standard 5-part CORTEX response structure"
+    description: "v4.0 Adaptive tier-based response (default)"
   
   compact_format:
     components:
       - compact_header
       - response_compact
-      - request_echo_section
       - next_steps_section
-    description: "Compact format for autonomous mode"
+    description: "Compact format for simple responses"
   
   tech_aware:
     components:
       - standard_header
-      - understanding_section
-      - challenge_section
       - response_tech_aware
-      - request_echo_section
       - next_steps_section
-    description: "Tech-aware format with best practice + company-aligned options"
+    description: "Tech-aware format with deployment options"
   
   educational:
     components:
       - standard_header
-      - understanding_section
-      - challenge_section
       - response_detailed
-      - request_echo_section
       - next_steps_section
     description: "Educational format with detailed explanations"

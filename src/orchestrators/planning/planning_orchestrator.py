@@ -329,7 +329,7 @@ class PlanningOrchestrator(BaseOrchestrator):
         # Execution engine (Week 8 Day 3)
         self.plan_executor = PlanExecutor(
             workspace_root=config.get("workspace_root", Path.cwd()),
-            execution_mode=ExecutionMode[config.get("execution_mode", "SUPERVISED").upper()],
+            execution_mode=ExecutionMode[config.get("execution_mode", "AUTONOMOUS").upper()],
             logger_instance=self.logger
         ) if config.get("enable_autonomous_execution", True) else None
         
@@ -546,7 +546,7 @@ class PlanningOrchestrator(BaseOrchestrator):
                 plan_type: Type of plan to generate (PlanType enum or str)
                 complexity: Plan complexity (PlanComplexity enum or int)
                 output_dir: Custom output directory (Path or str)
-                auto_execute: Execute plan after generation (bool, default: False - Day 3)
+                auto_execute: Execute plan after generation (bool, default: True)
                 interactive: Enable interactive mode (bool, default: False)
                 mode: Execution mode 'interactive' or 'autonomous' (str)
         
@@ -718,7 +718,7 @@ class PlanningOrchestrator(BaseOrchestrator):
             
             # Phase 5: EXECUTION (Week 8 Day 3 - autonomous execution)
             execution_summary = None
-            if kwargs.get("auto_execute", False):
+            if kwargs.get("auto_execute", True):
                 self.current_phase = PlanningPhase.EXECUTION
                 self.logger.info("🎭 Phase transition: RENDERING → EXECUTION")
                 

@@ -41,7 +41,7 @@ protected_files:
       requires_approval: false
   
   response_templates:
-    - path: "cortex-brain/response-templates.yaml"
+    - path: "cortex-brain/response-templates-v4.yaml"
       reason: "Response template database - 32 validated templates"
       protection_level: "critical"
       requires_approval: true
@@ -90,7 +90,7 @@ validation_rules:
   - rule_id: "ENHANCE-001"
     name: "Meta-Template Validation"
     description: "All response templates must pass meta-template validation"
-    check_command: "python src/validators/template_validator.py --file cortex-brain/response-templates.yaml"
+    check_command: "python src/validators/template_validator.py --file cortex-brain/response-templates-v4.yaml"
     expected_result: "All templates passed validation"
     severity: "critical"
     auto_fix: false
@@ -115,7 +115,7 @@ validation_rules:
     name: "Response Template Count"
     description: "Response templates file must contain at least 32 templates"
     check_type: "yaml_count"
-    file: "cortex-brain/response-templates.yaml"
+    file: "cortex-brain/response-templates-v4.yaml"
     path: "templates"
     min_count: 32
     severity: "high"
@@ -125,7 +125,7 @@ validation_rules:
     name: "Confidence Templates Presence"
     description: "Confidence display templates must exist (high/medium/low/none)"
     check_type: "yaml_keys_exist"
-    file: "cortex-brain/response-templates.yaml"
+    file: "cortex-brain/response-templates-v4.yaml"
     path: "templates"
     required_keys:
       - "confidence_high"
@@ -157,7 +157,7 @@ cleanup_exemptions:
 
 # Backup requirements (files that must be backed up before modification)
 backup_requirements:
-  - file: "cortex-brain/response-templates.yaml"
+  - file: "cortex-brain/response-templates-v4.yaml"
     backup_frequency: "on_modification"
     retention_days: 30
     reason: "Critical template database - 32 validated templates"
@@ -239,7 +239,7 @@ recovery_procedures:
   template_corruption:
     steps:
       - "Stop all template-dependent operations"
-      - "Restore response-templates.yaml from latest backup"
+      - "Restore response-templates-v4.yaml from latest backup"
       - "Run template validator to verify restoration"
       - "Restart affected services"
     automation: "semi_automatic"

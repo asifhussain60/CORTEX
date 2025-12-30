@@ -443,7 +443,7 @@ class Phase4Validator:
         critical_paths = [
             ("Tier 2 Database", Path("cortex-brain/tier2/knowledge_graph.db")),
             ("Capabilities", Path("cortex-brain/metadata/capabilities.yaml")),
-            ("Response Templates", Path("cortex-brain/templates/response-templates.yaml")),
+            ("Response Templates", Path("cortex-brain/templates/response-templates-v4.yaml")),
             ("Brain Protection Rules", Path("cortex-brain/protection/brain-protection-rules.yaml")),
             ("Development Context", Path("cortex-brain/metadata/development-context.yaml"))
         ]
@@ -646,7 +646,7 @@ class Phase4Validator:
         """Validate response templates are complete and loadable"""
         print(f"\n{Colors.BLUE}[8/10] Response Templates Validation{Colors.RESET}")
         
-        template_file = Path("cortex-brain/templates/response-templates.yaml")
+        template_file = Path("cortex-brain/templates/response-templates-v4.yaml")
         if not template_file.exists():
             self.result.add_fail(f"Response templates not found: {template_file}")
             return

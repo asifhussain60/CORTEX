@@ -751,7 +751,7 @@ phase_4:
       - action: "Test admin scripts directly"
         scripts_to_test:
           - "cortex-brain/admin/scripts/validation/verify_brain_health.py --quick"
-          - "cortex-brain/admin/scripts/optimization/token_counter.py cortex-brain/response-templates.yaml"
+          - "cortex-brain/admin/scripts/optimization/token_counter.py cortex-brain/response-templates-v4.yaml"
           - "cortex-brain/admin/scripts/publishing/verify_publish_package.py --dry-run"
         expected: "All scripts execute successfully"
         success_criteria: "Zero script failures"
@@ -828,7 +828,7 @@ phase_4:
       - action: "Verify critical files included"
         command: "python cortex-brain/admin/scripts/publishing/verify_publish_package.py --dry-run"
         expected: |
-          Included: response-templates.yaml, brain-protection-rules.yaml, cortex-operations.yaml
+          Included: response-templates-v4.yaml, brain-protection-rules.yaml, cortex-operations.yaml
           Excluded: admin/**, health-reports/**, cleanup-logs/**
         success_criteria: "Correct files in production package"
   

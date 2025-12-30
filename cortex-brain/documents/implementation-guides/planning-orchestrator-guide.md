@@ -156,7 +156,7 @@ copilot_instructions:
   response_template: "custom"
   progress_updates: true
   custom_format: |
-    Use 5-part response format with visual progress bars.
+    Use adaptive tier-based response format with visual progress bars.
     Update progress after each task completion.
     Include TDD phase indicators (RED/GREEN/REFACTOR).
     Show threat analysis summary for security tasks.

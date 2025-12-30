@@ -1,7 +1,7 @@
 category: specialized/threat-modeling
 templates:
   threat_modeler_agent:
-    inherits_from: core/base-templates/5-part-standard.yaml
+    inherits_from: core/base-templates/adaptive-base.yaml
     name: Threat Modeling
     triggers:
     - threat model

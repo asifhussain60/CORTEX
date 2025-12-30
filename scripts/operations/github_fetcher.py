@@ -288,7 +288,7 @@ class GitHubFetcher:
         required_files = [
             "VERSION",
             ".github/prompts/CORTEX.prompt.md",
-            "cortex-brain/templates/response-templates.yaml",
+            "cortex-brain/templates/response-templates-v4.yaml",
             "cortex-brain/metadata/capabilities.yaml",
             "scripts/cortex-upgrade.py"
         ]

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 CORTEX Response Templates Splitter
-Splits monolithic response-templates.yaml into category-specific files
+Splits monolithic response-templates-v4.yaml into category-specific files
 
 Purpose: Reduce token usage by loading only relevant template categories
 Author: Asif Hussain
@@ -45,10 +45,10 @@ CATEGORIES = {
 }
 
 def split_templates():
-    """Split response-templates.yaml into category-specific files"""
+    """Split response-templates-v4.yaml into category-specific files"""
     
     # Paths
-    source_file = Path(__file__).resolve().parent.parent / 'cortex-brain' / 'response-templates.yaml'
+    source_file = Path(__file__).resolve().parent.parent / 'cortex-brain' / 'response-templates-v4.yaml'
     output_dir = Path(__file__).resolve().parent.parent / 'cortex-brain' / 'response-templates'
     
     # Create output directory
@@ -109,7 +109,7 @@ def split_templates():
         with open(output_file, 'w', encoding='utf-8') as f:
             # Write header comment
             f.write(f"# CORTEX Response Templates - {category.upper()} Category\n")
-            f.write(f"# Auto-generated from response-templates.yaml\n")
+            f.write(f"# Auto-generated from response-templates-v4.yaml\n")
             f.write(f"# Template count: {len(category_templates)}\n\n")
             
             # Write YAML

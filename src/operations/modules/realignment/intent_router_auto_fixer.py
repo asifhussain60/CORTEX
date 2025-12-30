@@ -41,7 +41,7 @@ class IntentRouterAutoFixer:
         """
         self.cortex_root = cortex_root
         self.operations_yaml = cortex_root / "cortex-operations.yaml"
-        self.response_templates = cortex_root / "cortex-brain" / "response-templates.yaml"
+        self.response_templates = cortex_root / "cortex-brain" / "response-templates-v4.yaml"
     
     def extract_triggers_from_operation(self, operation_name: str) -> List[str]:
         """

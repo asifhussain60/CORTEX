@@ -88,11 +88,11 @@ feature_2_question_routing:
       hours: 10
       description: "Route to appropriate response templates based on namespace"
       deliverables:
-        - "Enhanced response-templates.yaml with routing rules"
+        - "Enhanced response-templates-v4.yaml with routing rules"
         - "Template routing logic in question_router.py"
         - "Integration tests for template selection"
       implementation_tasks:
-        - "Define routing rules in response-templates.yaml"
+        - "Define routing rules in response-templates-v4.yaml"
         - "Implement template selection algorithm"
         - "Add fallback mechanisms for ambiguous questions"
         - "Performance optimization for routing speed"

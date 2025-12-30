@@ -26,7 +26,7 @@ brain_sources:
   
   response_templates:
     type: yaml
-    path: cortex-brain/response-templates.yaml
+    path: cortex-brain/response-templates-v4.yaml
     description: "Response templates for consistent communication"
   
   lessons_learned:

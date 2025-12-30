@@ -207,7 +207,7 @@ class UpgradeSystemValidator:
         """Test config merger handles dictionary template format"""
         merger = ConfigMerger()
         
-        # Simulate new response-templates.yaml format (dict of dicts)
+        # Simulate new response-templates-v4.yaml format (dict of dicts)
         base = {
             "templates": {
                 "help_table": {"name": "Help", "triggers": ["help"]}

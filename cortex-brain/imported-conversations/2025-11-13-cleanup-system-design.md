@@ -18,11 +18,11 @@ Read [](file:///d%3A/PROJECTS/CORTEX/.github/prompts/CORTEX.prompt.md)
 
 Now I'll read the response template file to understand the current structure: 
 
-Read [](file:///d%3A/PROJECTS/CORTEX/cortex-brain/response-templates.yaml#1-1), lines 1 to 2000
+Read [](file:///d%3A/PROJECTS/CORTEX/cortex-brain/response-templates-v4.yaml#1-1), lines 1 to 2000
 
 Now let me read more to see example templates: 
 
-Read [](file:///d%3A/PROJECTS/CORTEX/cortex-brain/response-templates.yaml#2000-2000), lines 2000 to 2300
+Read [](file:///d%3A/PROJECTS/CORTEX/cortex-brain/response-templates-v4.yaml#2000-2000), lines 2000 to 2300
 
 Now I have enough context. Let me analyze the request and update the response template structure in CORTEX.prompt.md.
 
@@ -46,7 +46,7 @@ The implementation is straightforward (template text updates) with no accuracy c
 4. **"ALL or specific" prompts**: End with option to proceed with everything or focus on subset
 5. **Explicit examples** for each pattern
 
-The template already has the right guidance in response-templates.yaml lines 22-52, but CORTEX.prompt.md needs to match. I'll synchronize them. 
+The template already has the right guidance in response-templates-v4.yaml lines 22-52, but CORTEX.prompt.md needs to match. I'll synchronize them. 
 
 Using "Replace String in File"
 

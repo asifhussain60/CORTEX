@@ -58,7 +58,7 @@ performance_budgets:
     brain-protection-rules.yaml:
       limit: 150_000  # 150KB (was 10KB - too strict)
       rationale: "Contains comprehensive SKULL protection rules"
-    response-templates.yaml:
+    response-templates-v4.yaml:
       limit: 100_000  # 100KB
       rationale: "86+ templates with contextual guidance"
     cortex-operations.yaml:
@@ -73,7 +73,7 @@ performance_budgets:
   
   load_times:
     brain-protection-rules.yaml: 200  # ms
-    response-templates.yaml: 150      # ms
+    response-templates-v4.yaml: 150      # ms
     cortex-operations.yaml: 500       # ms (large file with modules)
     module-definitions.yaml: 100      # ms
     knowledge-graph.yaml: 150         # ms

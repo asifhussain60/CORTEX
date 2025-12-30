@@ -47,44 +47,38 @@
 <h2>Executive Summary</h2>
 <div class="glass-card">
 <p>
-                    CORTEX's Response Template System ensures consistent, high-quality AI responses across all operations. 
-                    Every response follows a mandatory 5-part structure: Understanding & Scope, Approach & Considerations, 
-                    Response, Impact & Changes, and Next Steps. With 29 specialized templates, 3 interaction modes 
+                    CORTEX's Response Template System v4.0 ensures consistent, high-quality AI responses across all operations. 
+                    Responses use an ADAPTIVE tier-based structure that scales with task complexity - from instant answers 
+                    to comprehensive multi-phase guidance. With 29 specialized templates, 3 interaction modes 
                     (autonomous, guided, detailed), and multilingual support, CORTEX adapts responses to user expertise 
                     and context while maintaining professional standards.
 
-    <!-- 5-Part Structure -->
+    <!-- Adaptive Structure -->
 <section class="section">
 <div class="container">
-<h2>Mandatory 5-Part Response Structure</h2>
+<h2>Adaptive Tier-Based Response Structure</h2>
 <div class="glass-card">
 <p>
-<strong>Every CORTEX response uses this format:</strong>
+<strong>CORTEX v4.0 response complexity scales with task requirements:</strong>
 </p>
 <pre>## 🧠 CORTEX {Title}
 **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
 
 ---
 
-### 🎯 Understanding & Scope
-{what you understood + boundaries}
-
-### ⚡ Approach & Considerations
-{actual challenge OR "No significant challenges"}
-
-### 💬 Response
-{your response - NO code unless requested}
-
-### 📊 Impact & Changes
-{what changed - files, metrics, outcomes}
+{Adaptive content based on tier}
+- INSTANT: Direct answer only (&lt;50 tokens)
+- FOCUSED: Solution + context (50-200 tokens)
+- STANDARD: Analysis + implementation (200-500 tokens)
+- COMPREHENSIVE: Full multi-phase guidance (500+ tokens)
 
 ### 🔍 Next Steps
-{numbered list OR checkboxes for complex work}</pre>
+{EXACTLY ONE actionable next step OR completion message}</pre>
 <p><strong>Rules:</strong></p>
 <ul>
-<li>✅ H2 with 🧠, H3 with emojis: 🎯 ⚡ 💬 📊 🔍</li>
+<li>✅ H2 with 🧠, adaptive content depth based on complexity</li>
 <li>✅ Author line + one <code>---</code> separator</li>
-<li>✅ Approach: Real challenge OR "No significant challenges"</li>
+<li>✅ Response scales: instant → comprehensive based on task</li>
 <li>❌ NO extra separators, NO code unless requested</li>
 </ul>
 <!-- Template Categories -->
@@ -270,7 +264,7 @@
 <div>
 <h4>4. Fallback Strategy</h4>
 <p>
-                            If no template matches, uses <code>fallback</code> template with standard 5-part structure. 
+                            If no template matches, uses <code>fallback</code> template with adaptive tier-based structure. 
                             Never fails to respond.
 
     <!-- Real-World Example -->

@@ -1,5 +1,5 @@
 """
-Generate CORTEX.prompt.md template selection section from response-templates.yaml
+Generate CORTEX.prompt.md template selection section from response-templates-v4.yaml
 
 This script bridges the gap between Python template system and GitHub Copilot AI.
 It reads structured templates from YAML and generates AI-readable instructions
@@ -32,8 +32,8 @@ from datetime import datetime
 
 
 def load_templates():
-    """Load templates from response-templates.yaml"""
-    template_file = Path("cortex-brain/templates/response-templates.yaml")
+    """Load templates from response-templates-v4.yaml"""
+    template_file = Path("cortex-brain/templates/response-templates-v4.yaml")
     
     if not template_file.exists():
         print(f"❌ Error: {template_file} not found")
@@ -68,7 +68,7 @@ def generate_template_section(templates_data):
     lines = [
         "# 🎯 CRITICAL: Template Trigger Detection & Selection",
         "",
-        "**AUTO-GENERATED FROM response-templates.yaml**",
+        "**AUTO-GENERATED FROM response-templates-v4.yaml**",
         f"**Last Updated:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
         "",
         "**BEFORE responding to ANY user request:**",
@@ -175,7 +175,7 @@ def generate_template_section(templates_data):
 def update_cortex_prompt():
     """Update CORTEX.prompt.md with generated template section"""
     
-    print("📖 Loading templates from response-templates.yaml...")
+    print("📖 Loading templates from response-templates-v4.yaml...")
     templates = load_templates()
     
     template_count = len([t for t in templates.get('templates', {}).keys() if t != 'fallback'])

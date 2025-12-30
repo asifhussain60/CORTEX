@@ -143,7 +143,7 @@ class PackagePurityChecker:
         """
         leaks = []
         
-        templates_path = self.package_root / "cortex-brain" / "response-templates.yaml"
+        templates_path = self.package_root / "cortex-brain" / "response-templates-v4.yaml"
         if not templates_path.exists():
             return leaks
         

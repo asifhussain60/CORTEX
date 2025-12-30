@@ -693,30 +693,22 @@ templates:
       - "cortex health"
       - "system status"
     content: |
-      🧠 **CORTEX 3.0 System Status**
+      ## 🧠 CORTEX 4.0 System Status
       Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
 
-      🎯 **My Understanding Of Your Request:**
-         You want to check the health and status of the CORTEX 3.0 framework
-
-      ⚠️ **Challenge:** ✓ **Accept**
-         Providing CORTEX system status with real-time 3.0 metrics and capabilities.
-
-      💬 **Response:**
+      **� Health Score: {{brain_health_score}}/100** ⚡
          
-         **🧠 CORTEX 3.0 Health Score: {{brain_health_score}}/100** ⚡
-         
-         **Core Architecture:**
-         - Unified Interface: ✅ Active (Mode: {{cortex_mode}})
-         - Enhanced Agents: ✅ {{active_agents}}/{{total_agents}} operational
-         - Dual-Channel Memory: ✅ {{memory_channels}} channels active
-         - Smart Context Intelligence: ✅ Learning rate {{learning_rate}}/hour
+      **Core Architecture:**
+      - Unified Interface: ✅ Active (Mode: {{cortex_mode}})
+      - Enhanced Agents: ✅ {{active_agents}}/{{total_agents}} operational
+      - Dual-Channel Memory: ✅ {{memory_channels}} channels active
+      - Smart Context Intelligence: ✅ Learning rate {{learning_rate}}/hour
 
-      📝 **Your Request:** Check CORTEX 3.0 framework status
+      ---
 
-      🔍 **Next Steps:**
-         1. All systems operational - excellent health
-         2. Continue monitoring performance metrics
+      **🔍 Next Steps:**
+      1. All systems operational - excellent health
+      2. Continue monitoring performance metrics
 
   workspace_intelligence_v3:
     name: "Workspace Intelligence Analysis (CORTEX 3.0)"

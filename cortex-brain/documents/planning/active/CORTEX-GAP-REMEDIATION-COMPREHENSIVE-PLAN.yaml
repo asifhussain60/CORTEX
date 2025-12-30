@@ -251,13 +251,13 @@ phase_4_deployment_orchestrator:
       
       backup_strategy:
         backup_location: "cortex-brain-backups/backup-{timestamp}/"
-        backup_contents: ["tier1/", "tier2/", "documents/", "response-templates.yaml"]
+        backup_contents: ["tier1/", "tier2/", "documents/", "response-templates-v4.yaml"]
         retention: "Keep last 5 backups"
       
       post_upgrade_migrations:
         - "Database schema updates (add_tdd_metrics.sql)"
         - "Config file updates (new settings in cortex.config.json)"
-        - "Template updates (response-templates.yaml)"
+        - "Template updates (response-templates-v4.yaml)"
       
       testing:
         - "Unit tests: UpgradeOrchestrator class"

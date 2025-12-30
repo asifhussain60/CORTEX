@@ -1,10 +1,10 @@
 # Auto-Generated Wiring Templates
-# Add these to cortex-brain/response-templates.yaml
+# Add these to cortex-brain/response-templates-v4.yaml
 
 
 # === HandsOnTutorialOrchestrator ===
 # Suggested wiring for HandsOnTutorialOrchestrator
-# Add to cortex-brain/response-templates.yaml
+# Add to cortex-brain/response-templates-v4.yaml
 
 hands_on_tutorial:
   name: "HandsOnTutorialOrchestrator"
@@ -61,7 +61,7 @@ hands_on_tutorial:
 
 # === PublishBranchOrchestrator ===
 # Suggested wiring for PublishBranchOrchestrator
-# Add to cortex-brain/response-templates.yaml
+# Add to cortex-brain/response-templates-v4.yaml
 
 publish_branch:
   name: "PublishBranchOrchestrator"
@@ -118,7 +118,7 @@ publish_branch:
 
 # === OptimizeSystemOrchestrator ===
 # Suggested wiring for OptimizeSystemOrchestrator
-# Add to cortex-brain/response-templates.yaml
+# Add to cortex-brain/response-templates-v4.yaml
 
 optimize_system:
   name: "OptimizeSystemOrchestrator"
@@ -175,7 +175,7 @@ optimize_system:
 
 # === PlanningOrchestrator ===
 # Suggested wiring for PlanningOrchestrator
-# Add to cortex-brain/response-templates.yaml
+# Add to cortex-brain/response-templates-v4.yaml
 
 planning:
   name: "PlanningOrchestrator"
@@ -226,7 +226,7 @@ planning:
 
 # === ViewDiscoveryAgent ===
 # Suggested wiring for ViewDiscoveryAgent
-# Add to cortex-brain/response-templates.yaml
+# Add to cortex-brain/response-templates-v4.yaml
 
 view_discovery:
   name: "ViewDiscoveryAgent"
@@ -283,7 +283,7 @@ view_discovery:
 
 # === LearningCaptureAgent ===
 # Suggested wiring for LearningCaptureAgent
-# Add to cortex-brain/response-templates.yaml
+# Add to cortex-brain/response-templates-v4.yaml
 
 learning_capture:
   name: "LearningCaptureAgent"

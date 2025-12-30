@@ -38,7 +38,7 @@ deliverables:
     CLI
   files_affected:
   - src/cortex_agents/intent_router.py
-  - cortex-brain/response-templates.yaml
+  - cortex-brain/response-templates-v4.yaml
   - cortex-brain/operations-config.yaml
   - tests/integration/test_cli_integration.py (new)
   acceptance_criteria:

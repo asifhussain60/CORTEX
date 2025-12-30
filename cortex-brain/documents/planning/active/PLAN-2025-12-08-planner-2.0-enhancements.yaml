@@ -90,7 +90,7 @@ phases:
       - task_id: "1.2"
         name: Enhance autonomous_execution_progress template
         description: |
-          Update cortex-brain/response-templates.yaml template to include
+          Update cortex-brain/response-templates-v4.yaml template to include
           more detailed phase breakdown and visual progress indicators
         estimated_hours: 1.0
         implementation_notes: |
@@ -116,7 +116,7 @@ phases:
           - Identify interactive planning touchpoints
           - Add template rendering in create_plan(), approve_plan()
           - Show plan creation progress (skeleton → DoR → phases → DoD)
-          - Use planning-workflow template from response-templates.yaml
+          - Use planning-workflow template from response-templates-v4.yaml
         acceptance_criteria:
           - Progress visible during interactive plan creation
           - Template used consistently across all planning modes
@@ -140,7 +140,7 @@ phases:
               response_template: autonomous_execution_progress
               progress_updates: true
               custom_format: |
-                Use 5-part response format with visual progress bars.
+                Use adaptive tier-based response format with visual progress bars.
                 Update progress after each task completion.
         acceptance_criteria:
           - Schema validates copilot_instructions section
@@ -385,7 +385,7 @@ notes: |
   
   Key Files to Modify:
   - src/orchestrators/planning_orchestrator.py (template integration)
-  - cortex-brain/response-templates.yaml (template enhancements)
+  - cortex-brain/response-templates-v4.yaml (template enhancements)
   - cortex-brain/config/plan-schema.yaml (schema extensions)
   - src/workflows/incremental_plan_generator.py (meta-instructions generation)
   - .github/prompts/modules/planning-orchestrator-guide.md (documentation)

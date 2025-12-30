@@ -26,7 +26,7 @@ out_of_scope:
   - Production code changes
 
 definition_of_ready:
-  - Progress templates added to response-templates.yaml
+  - Progress templates added to response-templates-v4.yaml
   - PlanningOrchestrator integration complete
   - Template manager initialized correctly
   - Git checkpoint orchestrator functional

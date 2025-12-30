@@ -82,7 +82,7 @@ def check_legacy_3_0_files() -> tuple[bool, list]:
         'src/cortex_3_0/',
         'src/orchestrators/execution/',
         'src/orchestrators/documentation/',
-        'cortex-brain/core/response-templates.yaml',
+        'cortex-brain/core/response-templates-v4.yaml',
         'cortex-brain/documents/scribe/',
     ]
     

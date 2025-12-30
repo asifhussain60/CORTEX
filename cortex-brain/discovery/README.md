@@ -138,7 +138,7 @@ cortex discover --deployment-check
 
 **Output:** `utilities/utility-catalog.json`
 
-### Templates (from `cortex-brain/response-templates.yaml`)
+### Templates (from `cortex-brain/response-templates-v4.yaml`)
 
 - Template names and intents
 - Operations → Templates mapping
@@ -309,7 +309,7 @@ Only human-readable Markdown files are committed.
 - **Discovery Orchestrator Plan:** `cortex-brain/documents/planning/temp-plans/discovery-orchestrator-v1/`
 - **Phase 7 Details:** `phases/phase-7-cortex-self-discovery.md`
 - **Operations YAML:** `cortex-operations.yaml`
-- **Response Templates:** `cortex-brain/response-templates.yaml`
+- **Response Templates:** `cortex-brain/response-templates-v4.yaml`
 - **Deployment Manifest:** `deployment-manifest.yaml`
 
 ---

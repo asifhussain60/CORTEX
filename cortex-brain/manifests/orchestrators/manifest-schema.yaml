@@ -90,7 +90,7 @@ manifest_structure:
     description: "Required response template features"
     structure:
       - template_id                # Unique ID (TPL-001)
-        template_name              # Template name in response-templates.yaml
+        template_name              # Template name in response-templates-v4.yaml
         required_sections          # List of required sections
         progress_visualization     # true|false (needs progress bars)
         interactive_elements       # List of interactive features needed

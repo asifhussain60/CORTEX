@@ -1,7 +1,7 @@
 category: operations/admin
 templates:
   publish_branch:
-    inherits_from: core/base-templates/5-part-standard.yaml
+    inherits_from: core/base-templates/adaptive-base.yaml
     name: Publish Branch Deployment
     triggers:
     - publish

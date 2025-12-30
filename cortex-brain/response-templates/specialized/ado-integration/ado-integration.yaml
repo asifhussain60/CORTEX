@@ -1,7 +1,7 @@
 category: specialized/ado-integration
 templates:
   ado_agent:
-    inherits_from: core/base-templates/5-part-standard.yaml
+    inherits_from: core/base-templates/adaptive-base.yaml
     name: Azure DevOps Agent
     triggers:
     - ado

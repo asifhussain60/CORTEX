@@ -42,7 +42,7 @@ CRITICAL_FILES = {
     '.github/copilot-instructions.md': 'Baseline context (verified)',
     
     # TDD Mastery Components
-    'cortex-brain/response-templates.yaml': 'Response templates (62 templates)',
+    'cortex-brain/response-templates-v4.yaml': 'Response templates (62 templates)',
     
     # Legal
     'README.md': 'User README',

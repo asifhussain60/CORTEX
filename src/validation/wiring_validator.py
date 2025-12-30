@@ -142,7 +142,6 @@ class {orchestrator_name}(BaseOperationModule):
         )
     
     def execute(self, context):
-        # TODO: Implement feature logic
         return OperationResult(
             success=True,
             status=OperationStatus.SUCCESS,
@@ -201,7 +200,7 @@ class {orchestrator_name}(BaseOperationModule):
         Validate that all documented commands have routing triggers.
         
         Scans CORTEX.prompt.md for documented commands (- `command` - description)
-        and verifies each has corresponding routing triggers in response-templates.yaml.
+        and verifies each has corresponding routing triggers in response-templates-v4.yaml.
         
         Returns:
             Validation results with documented_but_not_routed commands
@@ -218,7 +217,7 @@ class {orchestrator_name}(BaseOperationModule):
             documented_commands = self._extract_documented_commands()
             results["total_documented_commands"] = len(documented_commands)
             
-            # Get routing triggers from response-templates.yaml
+            # Get routing triggers from response-templates-v4.yaml
             routing_triggers = self._extract_routing_triggers()
             
             # Cross-reference
@@ -306,7 +305,7 @@ class {orchestrator_name}(BaseOperationModule):
     
     def _extract_routing_triggers(self) -> Dict[str, List[str]]:
         """
-        Extract routing triggers from response-templates.yaml.
+        Extract routing triggers from response-templates-v4.yaml.
         
         Returns:
             Dict mapping trigger group names to lists of trigger phrases
@@ -315,10 +314,10 @@ class {orchestrator_name}(BaseOperationModule):
             return self._routing_triggers_cache
         
         routing_triggers = {}
-        templates_file = self.project_root / "cortex-brain" / "response-templates.yaml"
+        templates_file = self.project_root / "cortex-brain" / "response-templates-v4.yaml"
         
         if not templates_file.exists():
-            logger.warning(f"response-templates.yaml not found at {templates_file}")
+            logger.warning(f"response-templates-v4.yaml not found at {templates_file}")
             self._routing_triggers_cache = routing_triggers
             return routing_triggers
         
@@ -334,7 +333,7 @@ class {orchestrator_name}(BaseOperationModule):
                     routing_triggers[key] = value
             
             self._routing_triggers_cache = routing_triggers
-            logger.info(f"Extracted {len(routing_triggers)} trigger groups from response-templates.yaml")
+            logger.info(f"Extracted {len(routing_triggers)} trigger groups from response-templates-v4.yaml")
             
         except Exception as e:
             logger.error(f"Failed to extract routing triggers: {e}")

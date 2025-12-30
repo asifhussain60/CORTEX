@@ -76,7 +76,7 @@ cp -r "${CORTEX_ROOT}/src" "${STAGING_CORTEX}/"
 echo "  🧠 Copying cortex-brain/..."
 mkdir -p "${STAGING_CORTEX}/cortex-brain"
 cp "${CORTEX_ROOT}/cortex-brain/brain-protection-rules.yaml" "${STAGING_CORTEX}/cortex-brain/" 2>/dev/null || true
-cp "${CORTEX_ROOT}/cortex-brain/response-templates.yaml" "${STAGING_CORTEX}/cortex-brain/" 2>/dev/null || true
+cp "${CORTEX_ROOT}/cortex-brain/response-templates-v4.yaml" "${STAGING_CORTEX}/cortex-brain/" 2>/dev/null || true
 cp "${CORTEX_ROOT}/cortex-brain/tier1-working-memory.db" "${STAGING_CORTEX}/cortex-brain/" 2>/dev/null || true
 cp -r "${CORTEX_ROOT}/cortex-brain/admin" "${STAGING_CORTEX}/cortex-brain/" 2>/dev/null || true
 cp -r "${CORTEX_ROOT}/cortex-brain/documents" "${STAGING_CORTEX}/cortex-brain/" 2>/dev/null || true

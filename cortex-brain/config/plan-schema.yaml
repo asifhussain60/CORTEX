@@ -200,7 +200,7 @@ schema:
         type: string
         description: "Custom response format instructions (used when response_template is 'custom')"
         example: |
-          Use 5-part response format with visual progress bars.
+          Use adaptive tier-based response format with visual progress bars.
           Update progress after each task completion.
           Include TDD phase indicators (RED/GREEN/REFACTOR).
       

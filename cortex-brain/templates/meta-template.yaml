@@ -7,7 +7,7 @@ description: 'Meta-template defining structure and validation rules for all CORT
 # Meta-Template Definition (Template About Templates)
 # ============================================================================
 # This file defines how to create well-formed response templates in CORTEX.
-# All templates in response-templates.yaml MUST conform to this structure.
+# All templates in response-templates-v4.yaml MUST conform to this structure.
 #
 # Author: Asif Hussain
 # Copyright: © 2024-2025 Asif Hussain. All rights reserved.
@@ -63,16 +63,15 @@ template_structure:
     
     - name: content
       type: string
-      description: Template body with 5-part mandatory structure
+      description: Template body with adaptive tier-based structure (v4.0)
       format: multiline_string
       required_sections:
-        - header: "🧠 **CORTEX [Operation Type]**"
+        - header: "## 🧠 CORTEX [Operation Type]"
         - author: "Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX"
-        - understanding: "🎯 **My Understanding Of Your Request:**"
-        - challenge: "⚠️ **Challenge:**"
-        - response: "💬 **Response:**"
-        - request_echo: "📝 **Your Request:**"
+        - response: "Main response content"
         - next_steps: "🔍 **Next Steps:**"
+      optional_sections:
+        - context: "**Context:** (included when complexity >= medium)"
       
       placeholder_syntax:
         pattern: "{{variable_name}}"
@@ -82,8 +81,9 @@ template_structure:
           - "{{feature_name}}"
       
       validation:
-        - All 7 sections must be present
-        - Section order must be preserved
+        - Header and response sections must be present
+        - Next steps should be present for actionable responses
+        - Context section is optional based on complexity
         - Placeholders must be declared in context_summary_template (if used)
         - No hardcoded counts (use placeholders or qualitative descriptions)
         - Decorative separators NOT allowed (breaks GitHub Copilot Chat rendering)
@@ -128,8 +128,8 @@ template_structure:
 
 validation_rules:
   structural:
-    - name: "Mandatory 5-part format"
-      rule: "All templates MUST include: Header, Understanding, Challenge, Response, Request Echo, Next Steps"
+    - name: "Adaptive tier format (v4.0)"
+      rule: "All templates MUST include: Header, Response, Next Steps. Context is optional."
       severity: ERROR
       auto_fix: false
     
@@ -197,10 +197,10 @@ validation_rules:
 
 automation:
   validation_script: "src/validators/template_validator.py"
-  validation_command: "python src/validators/template_validator.py --file=cortex-brain/response-templates.yaml"
+  validation_command: "python src/validators/template_validator.py --file=cortex-brain/response-templates-v4.yaml"
   
   auto_fix_script: "src/validators/template_auto_fixer.py"
-  auto_fix_command: "python src/validators/template_auto_fixer.py --file=cortex-brain/response-templates.yaml --fix"
+  auto_fix_command: "python src/validators/template_auto_fixer.py --file=cortex-brain/response-templates-v4.yaml --fix"
   
   validation_triggers:
     - "On commit (pre-commit hook)"
@@ -244,18 +244,17 @@ template_creation_workflow:
     output: "response_type field value"
   
   step_3_draft_content:
-    description: "Write template body following 5-part structure"
+    description: "Write template body following adaptive tier structure (v4.0)"
     substeps:
-      - "Write Understanding section (interpret user intent)"
-      - "Write Challenge section (validate assumptions or offer alternatives)"
-      - "Write Response section (explain solution in natural language)"
-      - "Write Request Echo section (refined summary of user's request)"
+      - "Write Header section (## 🧠 CORTEX {title})"
+      - "Write Context section (optional - only when complexity >= medium)"
+      - "Write Response section (main content in natural language)"
       - "Write Next Steps section (context-appropriate format)"
     placeholders:
       - "Identify dynamic values that change per request"
       - "Use {{placeholder}} syntax for variables"
       - "Document required placeholders"
-    output: "Complete content field with all sections"
+    output: "Complete content field with adaptive sections"
   
   step_4_define_triggers:
     description: "List natural language phrases that activate template"
@@ -269,8 +268,8 @@ template_creation_workflow:
   step_5_validate:
     description: "Run automated validation and fix errors"
     commands:
-      - "python src/validators/template_validator.py --file=cortex-brain/response-templates.yaml --template=new_template_name"
-      - "python src/validators/template_auto_fixer.py --file=cortex-brain/response-templates.yaml --fix --template=new_template_name"
+      - "python src/validators/template_validator.py --file=cortex-brain/response-templates-v4.yaml --template=new_template_name"
+      - "python src/validators/template_auto_fixer.py --file=cortex-brain/response-templates-v4.yaml --fix --template=new_template_name"
     success_criteria:
       - "0 ERROR-level violations"
       - "< 5 WARNING-level violations"
@@ -289,7 +288,7 @@ template_creation_workflow:
 
 examples:
   simple_template:
-    description: "Minimal template with required fields only"
+    description: "Minimal template with required fields only (v4.0 adaptive format)"
     yaml: |
       status_check:
         name: Status Check
@@ -299,27 +298,22 @@ examples:
           - implementation status
         response_type: table
         content: |
-          🧠 **CORTEX Implementation Status**
+          ## 🧠 CORTEX Implementation Status
           Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
           
-          🎯 **My Understanding Of Your Request:**
-             You want to see the current implementation status of CORTEX features.
+          Current implementation status of CORTEX features:
           
-          ⚠️ **Challenge:** ✓ **Accept**
-             Status information is readily available from the feature tracker.
+          [Status table with feature completion percentages]
           
-          💬 **Response:**
-             [Status table with feature completion percentages]
+          ---
           
-          📝 **Your Request:** Show CORTEX implementation status
-          
-          🔍 **Next Steps:**
-             1. Review feature completion status
-             2. Identify blockers or in-progress items
-             3. Ask about specific feature details if needed
+          **🔍 Next Steps:**
+          1. Review feature completion status
+          2. Identify blockers or in-progress items
+          3. Ask about specific feature details if needed
   
   complex_template:
-    description: "Advanced template with context summary and metadata"
+    description: "Advanced template with context summary and metadata (v4.0 adaptive format)"
     yaml: |
       work_planner_success:
         name: Work Planner Success
@@ -331,32 +325,29 @@ examples:
         metadata:
           category: planning
           tags: ["feature planning", "interactive", "DoR validation"]
-          version: "2.1.0"
+          version: "4.0.0"
           author: "Asif Hussain"
         content: |
-          🧠 **CORTEX Feature Planning**
+          ## 🧠 CORTEX Feature Planning
           Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
           
-          🎯 **My Understanding Of Your Request:**
-             You want to plan {{feature_name}} with structured approach and zero ambiguity.
+          Planning {{feature_name}} with structured approach and zero ambiguity.
           
-          ⚠️ **Challenge:** ⚡ **DoR Validation Required**
-             I need to ensure Definition of Ready (DoR) is met before proceeding.
+          **Context:** DoR validation required before proceeding.
           
-          💬 **Response:**
-             Created planning file: `{{planning_file_path}}`
-             Starting interactive planning session with DoR enforcement...
+          Created planning file: `{{planning_file_path}}`
+          Starting interactive planning session with DoR enforcement...
           
-          📝 **Your Request:** Plan {{feature_name}} with zero ambiguity
+          ---
           
-          🔍 **Next Steps - DoR Validation:**
-             ☐ Requirements documented (zero ambiguity)
-             ☐ Dependencies identified & validated
-             ☐ Technical design approach agreed
-             ☐ Test strategy defined
-             ☐ Acceptance criteria measurable
-             
-             Please answer clarifying questions to complete DoR.
+          **🔍 Next Steps - DoR Validation:**
+          ☐ Requirements documented (zero ambiguity)
+          ☐ Dependencies identified & validated
+          ☐ Technical design approach agreed
+          ☐ Test strategy defined
+          ☐ Acceptance criteria measurable
+          
+          Please answer clarifying questions to complete DoR.
 
 best_practices:
   - name: "Keep templates concise"
@@ -421,6 +412,6 @@ version_history:
     date: "2025-11-19"
     changes:
       - "Initial meta-template definition"
-      - "5-part mandatory format established"
+      - "Adaptive tier-based format established"
       - "Validation rules codified"
       - "Template creation workflow documented"

@@ -21,7 +21,7 @@ feature_overview:
     2. Business Value Templates - Organized capability presentations and security posture documentation
   
   problem_statement: |
-    The current 5-part format excels at operational transparency but fails at:
+    The current operational format excels at task transparency but fails at:
     - Professional stakeholder presentations
     - Business value articulation
     - Security posture documentation
@@ -64,7 +64,7 @@ definition_of_ready:
       - "Audience detection works for explicit ('to leadership') and implicit contexts"
       - "Business value template organizes capabilities by functional area"
       - "Security template provides unified narrative (CORTEX + app security)"
-      - "All templates use direct address format (NO 5-part operational format)"
+      - "All templates use direct address format (NO operational format)"
       - "Progressive disclosure: High-level → invitation to dive deeper"
       - "Governance/SKULL rules elegantly presented in 'Why built?' section"
       - "Token reduction metric (97.2%) included in leadership variant only"
@@ -157,7 +157,7 @@ definition_of_ready:
       conflict_resolution: "'introduce yourself' overrides 'hi/hello' greeting"
     
     format_exception:
-      rule: "Introduction/business/security templates BYPASS 5-part format"
+      rule: "Introduction/business/security templates BYPASS operational format"
       format: "Direct narrative format (audience-facing presentation)"
       documentation: "Must document in CORTEX.prompt.md"
     
@@ -184,7 +184,7 @@ definition_of_ready:
       
       format_validation_tests:
         - "Verify 5-section structure in introduction templates"
-        - "Verify direct address format (NO 5-part operational format)"
+        - "Verify direct address format (NO operational format)"
         - "Verify professional tone (NO enthusiasm markers)"
         - "Verify evidence-based claims (metrics present)"
       
@@ -210,7 +210,7 @@ definition_of_done:
   status: "PENDING"
   
   implementation_complete:
-    - task: "Create 4 introduction templates in response-templates.yaml"
+    - task: "Create 4 introduction templates in response-templates-v4.yaml"
       subtasks:
         - "introduction_professional (default, 15-20 lines)"
         - "introduction_leadership (ROI focus, 18-22 lines)"
@@ -276,7 +276,7 @@ definition_of_done:
       status: "PENDING"
   
   documentation_complete:
-    - task: "Template documentation in response-templates.yaml"
+    - task: "Template documentation in response-templates-v4.yaml"
       subtasks:
         - "Comments explaining audience variants"
         - "Extensibility notes for future audiences"
@@ -370,7 +370,7 @@ implementation_plan:
       - "Validate planning/ADO templates show correct pending state visuals"
       - "Document visual standards for future template creation"
     files:
-      - "cortex-brain/response-templates.yaml (visual audit)"
+      - "cortex-brain/response-templates-v4.yaml (visual audit)"
     validation:
       - "No hardcoded filled progress bars for 0% states"
       - "Checkboxes correctly show pending state"
@@ -387,7 +387,7 @@ implementation_plan:
       - "Create security_posture template with unified narrative"
       - "Add shared components for efficiency (common sections)"
     files:
-      - "cortex-brain/response-templates.yaml (~300 lines added)"
+      - "cortex-brain/response-templates-v4.yaml (~300 lines added)"
     validation:
       - "YAML syntax valid"
       - "All sections present"
@@ -471,11 +471,11 @@ implementation_plan:
       - "Standardize header font sizes across all templates"
       - "Ensure consistent emoji usage in headers"
       - "Optimize header vs content ratio (match planning template style)"
-      - "Update operational templates (5-part format) to use consistent header levels"
+      - "Update operational templates (adaptive format) to use consistent header levels"
       - "Update narrative templates (introduction, business, security) for consistency"
       - "Validate token efficiency after standardization"
     files:
-      - "cortex-brain/response-templates.yaml (68 templates updated)"
+      - "cortex-brain/response-templates-v4.yaml (68 templates updated)"
       - "cortex-brain/documents/planning/template-format-standard.md (new format guide)"
     validation:
       - "All 68 templates follow standard hierarchy"

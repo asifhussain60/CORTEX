@@ -1018,9 +1018,7 @@ This generates baseline coverage data required for ALL Phase 8 work.
 
 ---
 - Γ£à **Zero blockers:** System ready for Phase 7B and Phase 13 (STS)
-- ≡ƒôä **Artifacts generated:** 2 validation reports, 2 automation scripts, 1 completion report
-
-**Completion Report:** `cortex-brain/documents/reports/PHASE-14-TASKS-14.4-14.5-COMPLETION.md`
+- ≡ƒôä **Artifacts generated:** Validation reports and automation scripts
 
 ---
 

@@ -28,7 +28,7 @@ phase_1_discovery:
       estimated_tokens: 6800  # ~3.9 chars per token average
     
     response_templates:
-      file: "cortex-brain/response-templates.yaml"
+      file: "cortex-brain/response-templates-v4.yaml"
       lines: 3048
       estimated_tokens: 7900  # Large file, high token count
     
@@ -41,7 +41,7 @@ phase_1_discovery:
     file_references_in_entry:
       total_count: 15  # Unique #file: directives
       files:
-        - "response-templates.yaml"
+        - "response-templates-v4.yaml"
         - "story.md"
         - "setup-guide.md"
         - "help_plan_feature.md"
@@ -82,14 +82,14 @@ phase_1_discovery:
   findings:
     high_token_operations:
       - operation: "help"
-        reason: "Loads entire response-templates.yaml (7900 tokens)"
+        reason: "Loads entire response-templates-v4.yaml (7900 tokens)"
       - operation: "documentation reference"
         reason: "Loads full module files (5k-15k tokens each)"
       - operation: "multi-turn conversations"
         reason: "Context accumulation compounds"
     
     optimization_targets:
-      - target: "response-templates.yaml"
+      - target: "response-templates-v4.yaml"
         current: 7900
         potential: 1500  # 81% reduction with lazy loading
       - target: "entry point"
@@ -124,7 +124,7 @@ phase_2_lazy_loading:
       intent_based_loading:
         help_request:
           triggers: ["help", "what can cortex do"]
-          loads: ["response-templates.yaml (help section only)"]
+          loads: ["response-templates-v4.yaml (help section only)"]
         
         documentation_request:
           triggers: ["story", "setup", "technical"]
@@ -146,7 +146,7 @@ phase_2_lazy_loading:
       reduction: "70.6%"
   
   task_2_2_split_response_templates:
-    description: "Split response-templates.yaml into category files"
+    description: "Split response-templates-v4.yaml into category files"
     directory: "cortex-brain/response-templates/"
     design:
       files:
@@ -161,7 +161,7 @@ phase_2_lazy_loading:
       
       loading_strategy: |
         Instead of:
-          Load entire response-templates.yaml (7900 tokens)
+          Load entire response-templates-v4.yaml (7900 tokens)
         
         Use:
           Load category based on detected intent:
@@ -231,7 +231,7 @@ phase_3_context_compression:
     description: "Load YAML schema + relevant sections only"
     example:
       full_load: |
-        response-templates.yaml (3048 lines, 7900 tokens)
+        response-templates-v4.yaml (3048 lines, 7900 tokens)
       
       smart_load: |
         # Load structure + requested section
@@ -519,7 +519,7 @@ risks:
 next_actions:
   immediate:
     - "Create CORTEX-lite.prompt.md (Phase 2, Task 1)"
-    - "Split response-templates.yaml (Phase 2, Task 2)"
+    - "Split response-templates-v4.yaml (Phase 2, Task 2)"
     - "Test lite version with help command"
   
   follow_up:

@@ -91,15 +91,15 @@ features:
   - copilot_chat (interactive workflows)
   - internal (orchestrators)
   - Unified entry point routing
-- name: Response Templates v3.0
+- name: Response Templates v4.0
   weight: MINOR
-  description: 5-part mandatory format with emoji hierarchy
+  description: Adaptive tier-based format with emoji hierarchy
   target_location: Epilogue
   word_count: 150
   rationale: Format evolution for consistency
   comedic_hook: CORTEX discovers structure (shocking development)
   technical_concepts:
-  - 5-part response format
+  - Adaptive tier-based format
   - "Emoji hierarchy (\U0001F9E0 \U0001F3AF \u26A1 \U0001F4AC \U0001F4CA \U0001F50D\
     )"
   - Anti-bloat enforcement

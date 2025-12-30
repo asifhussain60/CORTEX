@@ -71,7 +71,7 @@ class SetupValidator:
     
     REQUIRED_BRAIN_FILES = [
         "brain-protection-rules.yaml",
-        "response-templates.yaml",
+        "response-templates-v4.yaml",
         "capabilities.yaml"
     ]
     

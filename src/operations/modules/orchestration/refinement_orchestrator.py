@@ -242,6 +242,14 @@ class RefinementOrchestrator:
             # Calculate health score
             results["health_score"] = self._calculate_health_score()
             
+            # Add copilot_instructions for visual progress template
+            results["copilot_instructions"] = {
+                "response_template": "refinement_execution_progress",
+                "progress_updates": True,
+                "autonomous_execution": True,
+                "checkpoint_frequency": "per_phase"
+            }
+            
             return results
             
         except Exception as e:

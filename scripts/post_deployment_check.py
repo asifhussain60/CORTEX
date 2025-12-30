@@ -165,7 +165,7 @@ class PostDeploymentValidator:
         """Validate response templates are complete and loadable."""
         result = ValidationResult("Response Templates")
         
-        templates_file = self.brain_path / "response-templates.yaml"
+        templates_file = self.brain_path / "response-templates-v4.yaml"
         
         if not templates_file.exists():
             result.failures.append(f"Templates file not found: {templates_file}")
@@ -210,7 +210,7 @@ class PostDeploymentValidator:
             result.failures.append(f"Error loading templates: {str(e)}")
         
         if result.failures:
-            result.recommendations.append("Validate YAML syntax: pyyaml-validator cortex-brain/response-templates.yaml")
+            result.recommendations.append("Validate YAML syntax: pyyaml-validator cortex-brain/response-templates-v4.yaml")
             result.recommendations.append("Check template format guide: .github/prompts/modules/template-guide.md")
         
         self.results.append(result)
@@ -321,8 +321,8 @@ class PostDeploymentValidator:
         else:
             result.passed.append("✓ Planning guide present")
         
-        # Check planning templates in response-templates.yaml
-        templates_file = self.brain_path / "response-templates.yaml"
+        # Check planning templates in response-templates-v4.yaml
+        templates_file = self.brain_path / "response-templates-v4.yaml"
         if templates_file.exists():
             try:
                 with open(templates_file, 'r', encoding='utf-8') as f:
@@ -362,7 +362,7 @@ class PostDeploymentValidator:
             result.passed.append("✓ ADO agent present")
         
         # Check ADO templates
-        templates_file = self.brain_path / "response-templates.yaml"
+        templates_file = self.brain_path / "response-templates-v4.yaml"
         if templates_file.exists():
             try:
                 with open(templates_file, 'r', encoding='utf-8') as f:

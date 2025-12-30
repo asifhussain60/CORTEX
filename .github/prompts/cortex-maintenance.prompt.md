@@ -709,7 +709,7 @@ head -20 /tmp/cortex_backup_files.txt
 📄 Found 10+ backup files
 ./docs/features/planning-system.html.backup
 ./docs/features/orchestrators.html.backup
-./cortex-brain/response-templates.yaml.backup
+./cortex-brain/response-templates-v4.yaml.backup
 ./.github/workflows/deploy-docs.yml.backup
 ...
 ```

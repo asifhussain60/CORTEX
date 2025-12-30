@@ -31,7 +31,7 @@ from typing import List, Dict, Any
 # Critical files that should NEVER be deleted
 CRITICAL_FILES = {
     'brain-protection-rules.yaml',
-    'response-templates.yaml',
+    'response-templates-v4.yaml',
     'capabilities.yaml',
     'operations-config.yaml'
 }

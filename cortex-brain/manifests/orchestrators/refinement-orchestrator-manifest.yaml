@@ -61,7 +61,7 @@ phases:
     targets:
       - ".github/prompts/CORTEX.prompt.md"
       - ".github/copilot-instructions.md"
-      - "cortex-brain/response-templates.yaml"
+      - "cortex-brain/response-templates-v4.yaml"
       - "cortex-brain/brain-protection-rules.yaml"
     activities:
       - "Remove bloat from CORTEX.prompt.md (<600 lines)"

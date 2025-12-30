@@ -46,7 +46,7 @@ git push origin CORTEX-4.0
 |---------|-------------|---------|
 | `*backup*` | Backup directories | `./backups/doctor_backup_20251227_151620` |
 | `*.backup` | Backup files | `planning-system.html.backup` |
-| `*.bak` | Legacy backups | `response-templates.yaml.bak` |
+| `*.bak` | Legacy backups | `response-templates-v4.yaml.bak` |
 | `*archive*` | Archive folders | `./cortex-brain/archive` |
 | `*old*` | Old versions | `./archive/old-plans` |
 

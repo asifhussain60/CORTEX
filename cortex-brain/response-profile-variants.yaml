@@ -58,7 +58,7 @@ interaction_modes:
     id: mode_guided
     description: "Users who want balanced guidance and context"
     characteristics:
-      - "Standard 5-part format"
+      - "Adaptive tier-based format"
       - "Clear explanations without excess"
       - "Professional tone"
       - "All sections included"
@@ -79,16 +79,12 @@ interaction_modes:
         style: "professional"
         max_length: 500
       
-      section_request_echo:
-        inclusion: required
-        max_length: 100
-      
       section_next_steps:
         inclusion: required
         style: "numbered_list"
         max_items: 5
     
-    format_preference: standard_5_part
+    format_preference: adaptive_tier
 
   # -------------------------------------------------------------------------
   # EDUCATIONAL MODE - Detailed explanations, teaching-focused
@@ -180,7 +176,7 @@ interaction_modes:
         max_items: 5
         include_decision_points: true
     
-    format_preference: standard_5_part
+    format_preference: adaptive_tier
 
 # ============================================================================
 # EXPERIENCE LEVELS - User's technical proficiency

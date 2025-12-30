@@ -282,46 +282,42 @@ special:
       {solutions}
 
 # ============================================================================
-# STANDARD RESPONSE STRUCTURE (5-PART MANDATE)
+# ADAPTIVE RESPONSE STRUCTURE (v4.0)
 # ============================================================================
 
-standard_structure:
+adaptive_structure:
   description: |
-    ALL non-TIER1 responses MUST use this 5-part structure.
-    Required for consistency and user expectations.
+    CORTEX v4.0 uses ADAPTIVE tier-based responses that scale with request complexity.
+    Response depth automatically adjusts based on task requirements.
   
-  parts:
-    - name: "Understanding & Scope"
-      emoji: "🎯"
-      required: true
-      content: "What you understood + scope/boundaries"
+  tiers:
+    INSTANT:
+      tokens: "<50"
+      structure: "Direct answer only"
+      example: "The file is at `src/main.py`"
     
-    - name: "Approach & Considerations"
-      emoji: "⚡"
-      required: true
-      content: "Actual challenge OR 'No significant challenges'"
+    FOCUSED:
+      tokens: "50-200"
+      structure: "{explanation} + **Next:**"
+      use_when: "Single concept, quick fix"
     
-    - name: "Response"
-      emoji: "💬"
-      required: true
-      content: "Your response - concise pseudo-code by default, full code ONLY if explicitly requested"
+    STRUCTURED:
+      tokens: "200-600"
+      structure: "**Context:** + **Changes:** + **Next:**"
+      use_when: "Multi-step work, moderate complexity"
     
-    - name: "Impact & Changes"
-      emoji: "📊"
-      required: true
-      content: "What changed - files, metrics, outcomes"
-    
-    - name: "Next Steps"
-      emoji: "🔍"
-      required: true
-      content: "Numbered list OR checkboxes for complex work"
+    COMPREHENSIVE:
+      tokens: "600+"
+      structure: "Multiple ### sections as needed"
+      use_when: "Complex analysis, multi-phase work"
   
   rules:
-    - "✅ H2 with 🧠, H3 with emojis"
+    - "✅ H2 with 🧠 for header"
     - "✅ Author line + one separator (---)"
-    - "✅ Approach: Real challenge OR 'No significant challenges'"
-    - "✅ Use concise pseudo-code by default (NOT full code snippets)"
-    - "❌ NO extra separators, NO full code unless explicitly requested"
+    - "✅ Scale response to match complexity"
+    - "✅ Use concise pseudo-code by default"
+    - "❌ NO rigid section requirements"
+    - "❌ NO full code unless explicitly requested"
 
 # ============================================================================
 # TIER SELECTION ALGORITHM
@@ -462,6 +458,152 @@ anti_bloat:
     - "Multiple separators"
 
 # Examples removed to meet <500 line target. See v3.0 for reference examples.
+
+# ============================================================================
+# NAMED TEMPLATES (Specialized Use Cases)
+# ============================================================================
+
+named_templates:
+  autonomous_execution_progress:
+    description: "Enhanced progress template for autonomous plan execution with visual Unicode progress bars"
+    tier: "TIER 3"
+    format: |
+      ## 🧠 CORTEX Plan Execution
+      **Author:** Asif Hussain | **Plan:** {{plan_name}}
+      
+      ---
+      
+      ### 📊 Execution Progress
+      ```
+      ╔══════════════════════════════════════════════════════════════════════════╗
+      ║  Plan: {{plan_name_truncated}}                                           ║
+      ╠══════════════════════════════════════════════════════════════════════════╣
+      ║  Overall: [{{overall_bar}}] {{overall_percentage}}%  {{status_emoji}}    ║
+      ║  Phase {{current_phase}}/{{total_phases}}: {{current_phase_name}}        ║
+      ║  Task: {{current_task}}                                                  ║
+      ║  Time: {{elapsed_time}} elapsed | ~{{remaining_time}} remaining          ║
+      ╚══════════════════════════════════════════════════════════════════════════╝
+      ```
+      
+      ### 📋 Phase Breakdown
+      
+      | # | Phase | Status | Progress | TDD Status | Tasks | Time |
+      |---|-------|--------|----------|------------|-------|------|
+      {{#each phases}}
+      | {{phase_num}} | {{#if completed}}✅{{else if in_progress}}⏳{{else}}⏸️{{/if}} **{{phase_name}}** | {{status_text}} | [{{phase_bar}}] {{percentage}}% | {{#if tdd_enabled}}R{{#if red_done}}✅{{else}}⏸️{{/if}} G{{#if green_done}}✅{{else}}⏸️{{/if}} F{{#if refactor_done}}✅{{else}}⏸️{{/if}}{{else}}N/A{{/if}} | {{completed_tasks}}/{{total_tasks}} | {{elapsed_time}} |
+      {{/each}}
+      
+      {{#if threat_analysis_enabled}}
+      ### 🔒 Security Analysis
+      
+      | Metric | Value |
+      |--------|-------|
+      | **Threats** | {{threat_count}} ({{critical_count}} Critical, {{high_count}} High, {{medium_count}} Medium) |
+      | **STRIDE** | {{stride_categories}} |
+      | **Mitigations** | [{{mitigation_bar}}] {{mitigations_done}}/{{mitigations_total}} |
+      {{/if}}
+      
+      ### ✅ Validation Status
+      
+      | Check | Status |
+      |-------|--------|
+      | **Definition of Ready** | {{#if dor_passed}}✅ Passed{{else}}⚠️ {{dor_violations}} issue(s){{/if}} |
+      | **Definition of Done** | {{#if dod_passed}}✅ Passed{{else}}⏳ {{dod_remaining}} remaining{{/if}} |
+      
+      **Next:** {{next_action}}
+    context_needed: true
+    metadata:
+      category: planning
+      operation: autonomous_execution
+    response_type: adaptive
+    progress_helpers:
+      description: "Use TemplateRenderer helper methods for progress bar generation"
+      methods:
+        - "generate_progress_bar(percentage, width=20, filled='█', empty='░')"
+        - "generate_tdd_status(red_done, green_done, refactor_done)"
+        - "format_elapsed_time(seconds)"
+        - "generate_phase_rows(phases)"
+        - "render_autonomous_progress(...) - Full convenience method"
+  
+  # Maintenance, Sanitization, Refinement templates reference base-components.yaml
+  # These orchestrators use visual progress templates defined in:
+  # cortex-brain/response-templates/base-components.yaml
+  #   - maintenance_execution_progress (6-phase)
+  #   - sanitization_execution_progress (5-phase)
+  #   - refinement_execution_progress (7-phase)
+  
+  ado_execution_progress:
+    description: "Enhanced ADO work item generation progress with story points and hierarchy tracking"
+    tier: "TIER 3"
+    format: |
+      ## 🧠 CORTEX ADO Work Item Generation
+      **Author:** Asif Hussain | **Feature:** {{feature_name}}
+      
+      ---
+      
+      ### 📊 ADO Generation Progress
+      ```
+      ╔══════════════════════════════════════════════════════════════════════════╗
+      ║  Feature: {{feature_name_truncated}}                                     ║
+      ╠══════════════════════════════════════════════════════════════════════════╣
+      ║  Overall: [{{overall_bar}}] {{overall_percentage}}%  {{status_emoji}}    ║
+      ║  Phase {{current_phase}}/{{total_phases}}: {{current_phase_name}}        ║
+      ║  Work Items: {{items_created}}/{{items_planned}} created                 ║
+      ║  Story Points: {{story_points_total}} SP total                           ║
+      ╚══════════════════════════════════════════════════════════════════════════╝
+      ```
+      
+      ### 📋 ADO Workflow Phases
+      
+      | # | Phase | Status | Progress | Items | Time |
+      |---|-------|--------|----------|-------|------|
+      {{phase_rows}}
+      
+      ### 🎫 Work Item Summary
+      
+      | Type | Count | Story Points | Status |
+      |------|-------|--------------|--------|
+      | **Epic** | {{epic_count}} | - | {{epic_status}} |
+      | **Feature** | {{feature_count}} | {{feature_sp}} SP | {{feature_status}} |
+      | **User Story** | {{story_count}} | {{story_sp}} SP | {{story_status}} |
+      | **Task** | {{task_count}} | {{task_sp}} SP | {{task_status}} |
+      
+      {{#if ado_links}}
+      ### 🔗 Azure DevOps Links
+      
+      {{#each ado_links}}
+      - [{{type}}: {{title}}]({{url}})
+      {{/each}}
+      {{/if}}
+      
+      ### ✅ Validation Status
+      
+      | Check | Status |
+      |-------|--------|
+      | **Definition of Ready** | {{#if dor_passed}}✅ Passed{{else}}⚠️ {{dor_violations}} issue(s){{/if}} |
+      | **Definition of Done** | {{#if dod_passed}}✅ Passed{{else}}⏳ {{dod_remaining}} remaining{{/if}} |
+      | **ADO Authentication** | {{#if ado_auth_valid}}✅ Connected{{else}}❌ Not authenticated{{/if}} |
+      
+      **Next:** {{next_action}}
+    context_needed: true
+    metadata:
+      category: ado
+      operation: ado_execution
+    response_type: adaptive
+    progress_helpers:
+      description: "Use TemplateRenderer helper methods for ADO progress rendering"
+      methods:
+        - "generate_progress_bar(percentage, width=20, filled='█', empty='░')"
+        - "generate_ado_phase_rows(phases)"
+        - "format_elapsed_time(seconds)"
+        - "render_ado_progress(...) - Full convenience method"
+  
+  progress_bar_simple:
+    description: "Simple inline progress bar for quick status updates"
+    tier: "TIER 2"
+    format: "[{{filled_bar}}{{empty_bar}}] {{percentage}}%"
+    example: "[████████████░░░░░░░░] 60%"
+    context_needed: true
 
 # ============================================================================
 # MIGRATION NOTES

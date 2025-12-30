@@ -41,7 +41,7 @@ deliverables:
   files_affected:
   - src/orchestrators/onboarding_orchestrator.py
   - src/utils/progress_decorator.py
-  - cortex-brain/response-templates.yaml
+  - cortex-brain/response-templates-v4.yaml
   acceptance_criteria:
   - 'Operations >5 min show initial notification: ''This will take 10-15 minutes.
     Good time for coffee.'''
@@ -55,7 +55,7 @@ deliverables:
   - src/orchestrators/onboarding_orchestrator.py
   - src/cortex_agents/intent_router.py
   - cortex-brain/tier1/working_memory.db (schema)
-  - cortex-brain/response-templates.yaml
+  - cortex-brain/response-templates-v4.yaml
   acceptance_criteria:
   - Onboarding requires --app-name parameter
   - Application name stored in Tier 1 working memory

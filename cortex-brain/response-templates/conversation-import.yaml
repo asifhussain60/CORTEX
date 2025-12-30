@@ -17,16 +17,12 @@ conversation_import_complete:
   priority: "high"
   
   response_format: |
-    🧠 **CORTEX Conversation Import**
+    ## 🧠 CORTEX Conversation Import
     Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
     
-    🎯 **My Understanding Of Your Request:**
-       You've pasted conversation content into the capture file and want to import it into CORTEX brain
+    Processing conversation import to CORTEX brain...
     
-    ⚠️ **Challenge:** ✓ **Accept**
-       This is the second step of the two-step capture workflow. I'll parse the conversation and import it to Tier 1.
-    
-    💬 **Response:**
+    ---
     
     ## ✅ Conversation Imported Successfully!
     

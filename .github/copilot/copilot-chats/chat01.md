@@ -423,7 +423,7 @@ Read [](file:///d%3A/PROJECTS/CORTEX/cortex-brain/response-templates-v4.yaml#150
 
 Read [](file:///d%3A/PROJECTS/CORTEX/cortex-brain/response-templates-v4.yaml#350-350), lines 350 to 488
 
-Read [](file:///d%3A/PROJECTS/CORTEX/cortex-brain/response-templates.yaml#350-350), lines 350 to 450
+Read [](file:///d%3A/PROJECTS/CORTEX/cortex-brain/response-templates-v4.yaml#350-350), lines 350 to 450
 
 Now let me search for visual tracker examples in other executive summaries or planning documents: 
 

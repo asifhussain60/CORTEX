@@ -50,7 +50,7 @@ overview:
       purpose: "Entry point with natural language triggers"
     
     - component: "Response Template"
-      path: "cortex-brain/response-templates.yaml"
+      path: "cortex-brain/response-templates-v4.yaml"
       purpose: "Formatted responses for learning operations"
 
 definition_of_ready:
@@ -1168,7 +1168,7 @@ phases:
           evidence: "Integration test passes"
         
         - check: "Response template added"
-          validation: "cortex-brain/response-templates.yaml has learning_library entry"
+          validation: "cortex-brain/response-templates-v4.yaml has learning_library entry"
           evidence: "YAML parse finds learning_library template"
         
         - check: "Help system updated"

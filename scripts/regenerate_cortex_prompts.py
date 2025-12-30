@@ -373,7 +373,7 @@ class PromptRegenerator:
 
 ## 🎯 Entry Point
 
-**Load:** `.github/prompts/CORTEX.prompt.md` + `cortex-brain/response-templates.yaml`
+**Load:** `.github/prompts/CORTEX.prompt.md` + `cortex-brain/response-templates-v4.yaml`
 
 **Context Detection:**
 - **CORTEX repo** (has `cortex-brain/admin/`): Admin operations enabled
@@ -446,7 +446,7 @@ cortex-brain/
 ├── tier1/  # Working memory (70-conv FIFO)
 ├── tier2/  # Knowledge graph
 ├── tier3/  # Dev context
-└── response-templates.yaml
+└── response-templates-v4.yaml
 ```
 
 **Code:**
@@ -491,7 +491,7 @@ python -m src.main
 |------|---------|
 | `.github/prompts/CORTEX.prompt.md` | Complete instructions |
 | `cortex-brain/brain-protection-rules.yaml` | SKULL rules |
-| `cortex-brain/response-templates.yaml` | {design_data['response_templates']} templates |
+| `cortex-brain/response-templates-v4.yaml` | {design_data['response_templates']} templates |
 | `cortex.config.json` | Machine settings |
 
 ---
@@ -688,7 +688,7 @@ cortex-brain/
 ├── tier1/  # Working memory (70-conv FIFO, <100ms)
 ├── tier2/  # Knowledge graph (pattern learning)
 ├── tier3/  # Dev context (metrics, hotspots)
-└── response-templates.yaml  # {design_data['response_templates']} templates
+└── response-templates-v4.yaml  # {design_data['response_templates']} templates
 ```
 
 **Code Structure:**
@@ -708,7 +708,7 @@ src/
 - **GIT_ISOLATION_ENFORCEMENT:** CORTEX code never in user repos
 - **TEST_LOCATION_SEPARATION:** App tests in user repo, CORTEX in `tests/`
 
-**Response Templates:** Auto-select by intent from `cortex-brain/response-templates.yaml`
+**Response Templates:** Auto-select by intent from `cortex-brain/response-templates-v4.yaml`
 
 ---
 
@@ -755,7 +755,7 @@ python -m src.main
 
 **Core Documentation:**
 - `cortex-brain/brain-protection-rules.yaml` - Complete SKULL rules
-- `cortex-brain/response-templates.yaml` - All response templates
+- `cortex-brain/response-templates-v4.yaml` - All response templates
 - `src/tier0/README.md` - Governance rules
 - `src/cortex_agents/README.md` - Agent framework
 

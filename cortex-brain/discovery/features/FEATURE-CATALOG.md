@@ -202,7 +202,7 @@ To generate the complete feature catalog:
 - **Discovery System README:** `../README.md`
 - **Phase 7 Plan:** `../../documents/planning/temp-plans/discovery-orchestrator-v1/phases/phase-7-cortex-self-discovery.md`
 - **Operations YAML:** `../../../cortex-operations.yaml`
-- **Response Templates:** `../../response-templates.yaml`
+- **Response Templates:** `../../response-templates-v4.yaml`
 - **Deployment Manifest:** `../../../deployment-manifest.yaml`
 
 ---

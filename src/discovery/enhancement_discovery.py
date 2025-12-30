@@ -279,7 +279,7 @@ class EnhancementDiscoveryEngine:
         yaml_files = [
             ('capabilities.yaml', 'capability'),
             ('operations-config.yaml', 'operation'),
-            ('response-templates.yaml', 'template')
+            ('response-templates-v4.yaml', 'template')
         ]
         
         for yaml_file, default_type in yaml_files:
@@ -328,8 +328,8 @@ class EnhancementDiscoveryEngine:
                                 )
                                 features.append(feature)
                 
-                # Parse response-templates.yaml
-                elif yaml_file == 'response-templates.yaml' and isinstance(data, dict):
+                # Parse response-templates-v4.yaml
+                elif yaml_file == 'response-templates-v4.yaml' and isinstance(data, dict):
                     for template_name, template_data in data.items():
                         if isinstance(template_data, dict) and 'content' in template_data:
                             feature = DiscoveredFeature(

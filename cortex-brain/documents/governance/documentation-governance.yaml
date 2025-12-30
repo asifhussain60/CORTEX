@@ -143,7 +143,7 @@ governance_rules:
     enabled: true
     index_files:
       - "CORTEX.prompt.md"  # Primary index
-      - "response-templates.yaml"  # Template index
+      - "response-templates-v4.yaml"  # Template index
       - "cortex-brain/documents/README.md"  # Category index
     
   # Rule 5: Consistency enforcement

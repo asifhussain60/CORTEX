@@ -55,8 +55,8 @@ def convert_old_to_new_format(content: str, title: str = "Operation") -> str:
     return content.strip()
 
 def update_templates_file():
-    """Update response-templates.yaml with new format."""
-    templates_path = Path(__file__).parent / 'cortex-brain' / 'response-templates.yaml'
+    """Update response-templates-v4.yaml with new format."""
+    templates_path = Path(__file__).parent / 'cortex-brain' / 'response-templates-v4.yaml'
     
     # Read current templates
     with open(templates_path, 'r', encoding='utf-8') as f:

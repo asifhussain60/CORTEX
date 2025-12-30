@@ -65,7 +65,7 @@ discovery_rules:
       - "Must be importable without side effects"
   
   entry_points:
-    source: "cortex-brain/response-templates.yaml"
+    source: "cortex-brain/response-templates-v4.yaml"
     validation:
       - "All triggers must map to orchestrator methods"
       - "No orphaned triggers (trigger exists but orchestrator missing)"
@@ -156,9 +156,9 @@ phases:
             dependencies: ["ViewDiscoveryAgent", "DebugAgent"]
       
       entry_point_scanner:
-        description: "Parse response-templates.yaml for all triggers"
+        description: "Parse response-templates-v4.yaml for all triggers"
         logic: |
-          1. Load response-templates.yaml
+          1. Load response-templates-v4.yaml
           2. Extract all template triggers
           3. Map triggers to orchestrators (naming convention)
           4. Detect orphaned triggers (no orchestrator) and ghost features
@@ -228,7 +228,7 @@ phases:
           
           entry_point_sanitization:
             - "Strip admin commands from CORTEX.prompt.md"
-            - "Remove admin triggers from response-templates.yaml"
+            - "Remove admin triggers from response-templates-v4.yaml"
             - "Validate no 'align' command in deployed package"
           
           binary_size_monitoring:
@@ -316,7 +316,7 @@ phases:
         example_output: |
           # Suggested wiring for PaymentOrchestrator
           
-          # 1. Add to response-templates.yaml:
+          # 1. Add to response-templates-v4.yaml:
           payment_processing:
             name: "Payment Processing"
             triggers:
@@ -510,7 +510,7 @@ documentation_updates:
       - User repositories (graceful decline)
       - Deployed packages (admin-only feature)
   
-  - file: "cortex-brain/response-templates.yaml"
+  - file: "cortex-brain/response-templates-v4.yaml"
     section: "templates"
     content: |
       align_success:

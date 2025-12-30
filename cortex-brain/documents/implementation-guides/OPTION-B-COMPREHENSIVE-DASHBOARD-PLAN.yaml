@@ -72,7 +72,7 @@ metadata:
           - "UXEnhancementOrchestrator"
           - "OnboardingOrchestrator"
         implementation:
-          location: "cortex-brain/response-templates.yaml"
+          location: "cortex-brain/response-templates-v4.yaml"
           template_definitions: "lines 2115-2177"
           routing_triggers: "lines 2566-2593"
           natural_language_activation:
@@ -154,7 +154,7 @@ metadata:
       
       Next Steps (Priority Order):
       1. Γ£à COMPLETE: Created 5 guide files for critical orchestrators
-      2. ΓÅ│ IN PROGRESS: Wire orchestrators to entry point routing (response-templates.yaml)
+      2. ΓÅ│ IN PROGRESS: Wire orchestrators to entry point routing (response-templates-v4.yaml)
       3. Continue addressing remaining 12 critical issues (target: 0 critical)
       4. Reduce warnings from 15 ΓåÆ <5 to reach 85%+ health threshold
       5. Complete Sprint 1 deliverables (rulebook visibility)
@@ -292,7 +292,7 @@ sprint_1:
   deliverables:
     welcome_banner:
       description: "Add rulebook link to CORTEX activation greeting"
-      file: "cortex-brain/response-templates.yaml"
+      file: "cortex-brain/response-templates-v4.yaml"
       acceptance_criteria:
         - "All activation responses include rulebook link"
         - "Link is prominent and action-oriented"
@@ -305,7 +305,7 @@ sprint_1:
     
     help_command_enhancement:
       description: "Add dedicated rulebook section to help responses"
-      file: "cortex-brain/response-templates.yaml"
+      file: "cortex-brain/response-templates-v4.yaml"
       acceptance_criteria:
         - "Help command shows governance section"
         - "Quick links to key rule categories"
@@ -581,7 +581,7 @@ sprint_3:
         - "User can type 'explain TDD rule' and get detailed explanation"
         - "Supports fuzzy matching (e.g., 'test' matches 'TDD_ENFORCEMENT')"
         - "Returns rule details: name, severity, rationale, examples"
-        - "Integrated into response-templates.yaml for conversational flow"
+        - "Integrated into response-templates-v4.yaml for conversational flow"
       
       implementation_details:
         search_index: "Load brain-protection-rules.yaml into in-memory index"
@@ -826,7 +826,7 @@ implementation_roadmap:
     daily_breakdown:
       day_1: "Backend - Add acknowledgment flow to user_profile_manager.py"
       day_2: "Backend - Store acknowledgment timestamp in Tier 3 DB"
-      day_3: "Frontend - Update response-templates.yaml with rulebook sections"
+      day_3: "Frontend - Update response-templates-v4.yaml with rulebook sections"
       day_4: "Testing - Write and run unit tests (target: 100% coverage)"
       day_5: "Testing - Integration tests + manual validation"
   

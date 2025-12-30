@@ -150,10 +150,10 @@ deliverables:
 
   - deliverable_id: "10.3"
     name: "Apply to Other Large YAMLs"
-    description: "Split response-templates.yaml, operations-config.yaml by logical groups"
+    description: "Split response-templates-v4.yaml, operations-config.yaml by logical groups"
     tasks:
       - task_id: "10.3.1"
-        name: "Split response-templates.yaml by response_type"
+        name: "Split response-templates-v4.yaml by response_type"
         description: "Group templates by response_type (interactive, detailed, compact, etc.)"
         estimated_hours: 1.0
         acceptance_criteria:
@@ -183,7 +183,7 @@ deliverables:
           - "No breaking changes"
     
     technical_approach: |
-      For response-templates.yaml:
+      For response-templates-v4.yaml:
       1. Group templates by response_type field
       2. Create templates/ subdirectory
       3. Write each group: templates/interactive.yaml, templates/detailed.yaml, etc.
@@ -230,7 +230,7 @@ deliverables:
 acceptance_criteria:
   - "PlanningOrchestrator automatically creates modular structure for plans >20KB"
   - "FileStructureOptimizer utility created and tested"
-  - "response-templates.yaml split by response_type (5 groups)"
+  - "response-templates-v4.yaml split by response_type (5 groups)"
   - "operations-config.yaml split by category"
   - "All loaders backward compatible (handle both formats)"
   - "Configuration option in cortex.config.json"

@@ -1023,7 +1023,7 @@ cat cortex-brain/documents/reports/post-deployment-validation-*.md
 
 # 2. Fix issues listed in the report (examples):
 #    - Missing agents: Check imports in orchestrators
-#    - Template issues: Validate response-templates.yaml syntax
+#    - Template issues: Validate response-templates-v4.yaml syntax
 #    - Database errors: Run migrations from cortex-brain/migrations/
 #    - Entry point issues: Check .github/prompts/CORTEX.prompt.md
 
@@ -1039,7 +1039,7 @@ python scripts/post_deployment_check.py
 | Issue | Cause | Fix |
 |-------|-------|-----|
 | Agent import fails | Missing dependencies | `pip install -r requirements.txt` |
-| Template not found | YAML syntax error | Validate `cortex-brain/response-templates.yaml` |
+| Template not found | YAML syntax error | Validate `cortex-brain/response-templates-v4.yaml` |
 | Database locked | Another process | Close VS Code, kill python processes |
 | Entry point missing | Module not documented | Add to `.github/prompts/CORTEX.prompt.md` |
 | TDD integration fail | Test framework missing | `pip install pytest` |
@@ -1058,7 +1058,7 @@ Stage 1: Bootstrap Verification
   ❌ Brain Structure
 
 🔧 Attempting auto-remediation...
-  ✅ Fixed: response-templates.yaml restored
+  ✅ Fixed: response-templates-v4.yaml restored
   ✅ Fixed: Brain directories recreated
 
 Re-validating after fixes...
@@ -1120,7 +1120,7 @@ CORTEX uses a **16-gate validation system** to ensure complete functional integr
 python -m src.orchestrators.setup_epm_orchestrator --validate --fix
 
 # Or manual fix
-cp cortex-brain/response-templates.yaml.bak cortex-brain/response-templates.yaml
+cp cortex-brain/response-templates-v4.yaml.bak cortex-brain/response-templates-v4.yaml
 ```
 
 **Issue: Incomplete Brain Structure**
@@ -1847,7 +1847,7 @@ def publish_to_branch(
                 
                 # Validate wiring - check critical features have entry points
                 logger.info("   Validating feature wiring...")
-                templates_path = project_root / "cortex-brain" / "response-templates.yaml"
+                templates_path = project_root / "cortex-brain" / "response-templates-v4.yaml"
                 if templates_path.exists():
                     import yaml
                     with open(templates_path, 'r', encoding='utf-8') as f:

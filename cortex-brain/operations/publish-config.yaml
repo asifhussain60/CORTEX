@@ -148,7 +148,7 @@ user_content_patterns:
   critical_files:
     # Brain Protection (Tier 0)
     - "cortex-brain/brain-protection-rules.yaml"
-    - "cortex-brain/response-templates.yaml"
+    - "cortex-brain/response-templates-v4.yaml"
     - "cortex-brain/knowledge-graph.yaml"
     - "cortex-brain/development-context.yaml"
     - "cortex-brain/capabilities.yaml"

@@ -275,7 +275,7 @@ phase_4_integration:
       name: "Response Template Updates"
       description: "Add TDD refactor guidance templates"
       files_modified:
-        - "cortex-brain/response-templates.yaml"
+        - "cortex-brain/response-templates-v4.yaml"
       acceptance_criteria:
         - "Template for RED phase guidance (test-first reminders)"
         - "Template for GREEN phase guidance (minimal implementation)"

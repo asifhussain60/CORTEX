@@ -420,7 +420,7 @@ class UpgradeOrchestrator:
         print(f"\n[6/8] Merging Configurations")
         try:
             config_files = [
-                ("response-templates.yaml", self.merger.merge_response_templates),
+                ("response-templates-v4.yaml", self.merger.merge_response_templates),
                 ("capabilities.yaml", self.merger.merge_capabilities)
             ]
             

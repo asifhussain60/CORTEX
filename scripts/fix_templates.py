@@ -78,9 +78,9 @@ def main():
     
     # Try common paths
     possible_paths = [
-        script_dir.parent / "cortex-brain" / "response-templates.yaml",
-        script_dir / "cortex-brain" / "response-templates.yaml",
-        Path(__file__).resolve().parent.parent / "cortex-brain" / "response-templates.yaml",
+        script_dir.parent / "cortex-brain" / "response-templates-v4.yaml",
+        script_dir / "cortex-brain" / "response-templates-v4.yaml",
+        Path(__file__).resolve().parent.parent / "cortex-brain" / "response-templates-v4.yaml",
     ]
     
     templates_path = None
@@ -90,7 +90,7 @@ def main():
             break
     
     if not templates_path:
-        print("❌ Error: Could not find response-templates.yaml")
+        print("❌ Error: Could not find response-templates-v4.yaml")
         print(f"Searched paths:")
         for path in possible_paths:
             print(f"  - {path}")

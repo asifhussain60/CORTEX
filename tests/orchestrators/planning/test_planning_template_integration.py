@@ -73,7 +73,7 @@ class TestCopilotInstructionsGeneration:
             copilot_instructions={
                 "response_template": "custom",
                 "progress_updates": True,
-                "custom_format": "Use 5-part format with visual progress",
+                "custom_format": "Use adaptive tier format with visual progress",
                 "tdd_enforcement": False,
                 "checkpoint_frequency": "per_task"
             }

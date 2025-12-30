@@ -44,14 +44,14 @@ migrations:
   response_templates:
     status: COMPLETE
     new_path: cortex-brain/response-templates-v4.yaml
-    old_path: cortex-brain/core/response-templates.yaml
+    old_path: cortex-brain/core/response-templates-v4.yaml
     activated_in:
       - .github/copilot-instructions.md
       - .github/prompts/CORTEX.prompt.md
     deleted:
       - status: COMPLETE
         paths:
-          - cortex-brain/core/response-templates.yaml
+          - cortex-brain/core/response-templates-v4.yaml
         deleted_date: '2025-12-19'
     notes: "v4.0 adaptive tiers activated, v3.0 15,851-line bloat deleted"
     completion_date: '2025-12-19'

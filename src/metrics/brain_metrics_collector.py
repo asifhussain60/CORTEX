@@ -3,7 +3,7 @@ Brain Metrics Collector
 
 Aggregates metrics from Tier 1, 2, 3 for user-facing brain performance reports.
 
-Schema Version: 2.1.0 (must match response-templates.yaml)
+Schema Version: 2.1.0 (must match response-templates-v4.yaml)
 Last Updated: 2025-11-13
 
 Author: Asif Hussain
@@ -34,7 +34,7 @@ class BrainMetricsCollector:
     - Token optimization: Savings, overhead, efficiency
     """
     
-    SCHEMA_VERSION = "2.1.0"  # Must match response-templates.yaml
+    SCHEMA_VERSION = "2.1.0"  # Must match response-templates-v4.yaml
     
     def __init__(self):
         """Initialize metrics collector."""
@@ -51,7 +51,7 @@ class BrainMetricsCollector:
             
         Schema Compatibility:
             - Includes 'schema_version' key for template validation
-            - All keys match template placeholders in response-templates.yaml
+            - All keys match template placeholders in response-templates-v4.yaml
             - Missing tiers return safe defaults (0, 'Unknown', etc.)
         """
         tier1_metrics = self._get_tier1_metrics()

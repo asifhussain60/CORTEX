@@ -152,17 +152,17 @@ base_template:
       # 🧠 CORTEX Feature Implementation
       **Author:** Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
   
-  # Understanding section - What we think user wants
+  # Understanding section - OPTIONAL, only for complex responses (v4.0 adaptive)
   understanding:
+    description: "v4.0: Optional section for complex/discovery responses only"
     format: |
-      ## 🎯 My Understanding Of Your Request
-      {user_intent_summary}
+      **Context:** {user_intent_summary}
     
     guidelines:
-      - "Use ## for major section headings"
+      - "v4.0: Only include for TIER3+ complex responses"
       - "Keep summary concise (1-2 sentences max)"
       - "State what they want to ACHIEVE, not what they said"
-      - "No indentation needed with markdown headings"
+      - "For simple responses, skip this entirely"
     
     placeholders:
       user_intent_summary: "Description of what user wants to achieve"
@@ -170,8 +170,7 @@ base_template:
     max_length: 150
     
     example: |
-      ## 🎯 My Understanding Of Your Request
-      You want to implement user authentication with JWT tokens and session management
+      **Context:** Implementing user authentication with JWT tokens
   
   # Challenge section - Intelligent validation (context-aware)
   challenge:
@@ -816,7 +815,7 @@ performance:
     professional_tone: "maintained throughout"
 
 # ============================================================================
-# INTELLIGENT ADAPTATION EXAMPLES
+# INTELLIGENT ADAPTATION EXAMPLES (v4.0 Adaptive Format)
 # ============================================================================
 
 adaptation_examples:
@@ -829,34 +828,21 @@ adaptation_examples:
       density: low
     
     template_selection:
-      understanding: "One sentence"
-      challenge: "none (skip section)"
-      response: "concise (2-3 sentences)"
-      code: "none"
-      next_steps: "simple_list (if any)"
+      tier: "TIER1_INSTANT or TIER2_FOCUSED"
+      response: "Direct answer, no sections needed"
     
     rendered_output: |
-      # 🧠 CORTEX Status Check
-      **Author:** Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+      ## 🧠 CORTEX Status
+      **Author:** Asif Hussain | github.com/asifhussain60/CORTEX
       
-      ## 🎯 My Understanding Of Your Request
-      You want the current implementation status of CORTEX 3.0.
+      ---
       
-      ## 💬 Response
       CORTEX 3.0 Phase 0 complete (100% test pass rate). Tier 0-1 operational. Tier 2-3 in development (Track A 60% complete).
       
-      *Ask about specific phases or tracks for details.*
-      
-      ## 📝 Your Request
-      Check CORTEX 3.0 status
-      
-      ## 🔍 Next Steps
-      1. **Review progress** - See `PHASE-0-COMPLETION-REPORT.md`
-      2. **Check roadmap** - View remaining Track A/B milestones
-      3. **Run health check** - Validate local installation
+      **Next:** Review `PHASE-0-COMPLETION-REPORT.md` for details
     
-    token_count: 247
-    notes: "Challenge section omitted - no validation needed for simple query"
+    token_count: 120
+    notes: "v4.0: Simple query uses FOCUSED tier - direct answer with Next step"
   
   example_2_completed_work:
     user_request: "Did the authentication implementation finish?"
@@ -866,20 +852,15 @@ adaptation_examples:
       density: medium
     
     template_selection:
-      understanding: "One sentence"
-      challenge: "none (skip section)"
-      response: "summarized (summary + collapsible details)"
-      code: "none"
-      next_steps: "simple_list"
+      tier: "TIER2_FOCUSED"
+      response: "Summary with optional collapsible details"
     
     rendered_output: |
-      # 🧠 CORTEX Implementation Status
-      **Author:** Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+      ## 🧠 CORTEX Auth Status
+      **Author:** Asif Hussain | github.com/asifhussain60/CORTEX
       
-      ## 🎯 My Understanding Of Your Request
-      You want confirmation that authentication implementation completed successfully.
+      ---
       
-      ## 💬 Response
       ✅ Authentication complete. Implemented JWT tokens, session management, and password hashing. All 47 tests passing, coverage at 94%.
       
       <details>
@@ -890,15 +871,9 @@ adaptation_examples:
       | JWT Service | ✅ Complete | 96% | 18/18 ✅ |
       | Session Manager | ✅ Complete | 92% | 15/15 ✅ |
       | Password Hashing | ✅ Complete | 98% | 14/14 ✅ |
-      
-      **Files Modified:**
-      - `src/auth/jwt_service.py` (new)
-      - `src/auth/session_manager.py` (new)
-      - `src/auth/password_hasher.py` (new)
-      - `tests/test_auth.py` (new, 47 tests)
       </details>
       
-      *Ask about deployment or integration steps.*
+      **Next:** Deploy to staging for integration testing
       
       ## 📝 Your Request
       Confirm authentication implementation status
@@ -919,49 +894,28 @@ adaptation_examples:
       density: low
     
     template_selection:
-      understanding: "One sentence"
-      challenge: "challenge_only (security concern)"
-      response: "concise"
-      code: "snippet (show better approach)"
-      next_steps: "simple_list"
+      tier: "TIER2_FOCUSED with challenge"
+      response: "Direct recommendation with code snippet"
     
     rendered_output: |
-      # 🧠 CORTEX Authentication Implementation
-      **Author:** Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+      ## 🧠 CORTEX Security Recommendation
+      **Author:** Asif Hussain | github.com/asifhussain60/CORTEX
       
-      ## 🎯 My Understanding Of Your Request
-      You want to use MD5 for password hashing.
+      ---
       
-      ## ⚡ Recommendation
-      MD5 is cryptographically broken and vulnerable to rainbow table attacks.
+      ⚠️ **MD5 is cryptographically broken** - vulnerable to rainbow table attacks.
       
-      ### 💡 Better Approach
-      **Use bcrypt** - Industry standard with adaptive cost factor, resistant to GPU attacks:
+      **Better approach:** Use bcrypt with cost factor 12 (OWASP recommended):
       
       ```python
       import bcrypt
-      
-      # Hash password
       hashed = bcrypt.hashpw(password.encode(), bcrypt.gensalt(12))
-      
-      # Verify password
-      if bcrypt.checkpw(password.encode(), hashed):
-          # Authentication successful
       ```
       
-      ## 💬 Response
-      I'll implement password hashing using bcrypt with cost factor 12 (OWASP recommended). This provides strong security with acceptable performance.
-      
-      ## 📝 Your Request
-      Implement password hashing
-      
-      ## 🔍 Next Steps
-      1. **Install bcrypt** - Run `pip install bcrypt`
-      2. **Implement hashing** - Add to `src/auth/password_hasher.py`
-      3. **Write tests** - Verify hash/verify functions
+      **Next:** Install bcrypt (`pip install bcrypt`) and implement in `src/auth/password_hasher.py`
     
-    token_count: 389
-    notes: "Challenge only (no accept). Code snippet shown for better approach."
+    token_count: 150
+    notes: "v4.0: FOCUSED tier with inline challenge - no separate sections needed"
   
   example_4_complex_implementation:
     user_request: "Implement user dashboard with charts and filters"
@@ -971,31 +925,25 @@ adaptation_examples:
       density: high
     
     template_selection:
-      understanding: "One sentence"
-      challenge: "accept_only (request is sound)"
-      response: "detailed (subsections + phases)"
-      code: "pseudocode (logic flow)"
-      next_steps: "phase_based (collapsible)"
+      tier: "TIER3_STRUCTURED or TIER4_COMPREHENSIVE"
+      response: "Multi-section with phases"
     
     rendered_output: |
-      # 🧠 CORTEX Feature Implementation
-      **Author:** Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+      ## 🧠 CORTEX Dashboard Implementation
+      **Author:** Asif Hussain | github.com/asifhussain60/CORTEX
       
-      ## 🎯 My Understanding Of Your Request
-      You want to implement a user dashboard with interactive charts and data filtering capabilities.
+      ---
       
-      ## ✓ Proceeding
-      Standard dashboard pattern with established libraries (Chart.js, React). All dependencies validated.
+      **Context:** User dashboard with interactive charts (Chart.js) and data filtering.
       
-      ## 💬 Response
-      I'll implement the dashboard using three phases: UI foundation, data integration, and interactivity.
+      ### Implementation Phases
       
-      ### Phase 1: UI Foundation
-      - ✅ Create dashboard layout with responsive grid
-      - ✅ Set up Chart.js for visualizations
-      - ⏳ Build filter panel component
+      **Phase 1: UI Foundation**
+      - Create dashboard layout with responsive grid
+      - Set up Chart.js for visualizations
+      - Build filter panel component
       
-      ### Phase 2: Data Integration
+      **Phase 2: Data Integration**
       - Fetch user data from API endpoints
       - Transform data for chart consumption
       - Implement caching strategy (Redis)
@@ -1072,24 +1020,18 @@ adaptation_examples:
       density: high
     
     template_selection:
-      understanding: "One sentence"
-      challenge: "none (skip section)"
-      response: "visual (tables, progress bars)"
-      code: "none"
-      next_steps: "simple_list"
+      tier: "TIER3_STRUCTURED"
+      response: "Visual format with tables"
     
     rendered_output: |
-      # 🧠 CORTEX Test Results
-      **Author:** Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+      ## 🧠 CORTEX Test Results
+      **Author:** Asif Hussain | github.com/asifhussain60/CORTEX
       
-      ## 🎯 My Understanding Of Your Request
-      You want the latest test execution results.
-      
-      ## 💬 Response
+      ---
       
       **Overall:** 834/834 passing ✅ | 63 skipped ⚠️ | 0 failures ❌
       
-      **Pass Rate:** ▓▓▓▓▓▓▓▓▓▓ 100% (of non-skipped)
+      **Pass Rate:** [██████████] 100% (of non-skipped)
       
       | Category | Tests | Passing | Coverage |
       |----------|-------|---------|----------|
@@ -1105,21 +1047,12 @@ adaptation_examples:
       | Session Management | 19 | Phase 2 |
       | CSS/UI Validation | 20 | 3.1+ |
       | Namespace Protection | 6 | Phase 3 |
-      | Integration Edge Cases | 18 | Phase 5 |
       </details>
       
-      *Ask about specific test categories for details.*
-      
-      ## 📝 Your Request
-      Show test results
-      
-      ## 🔍 Next Steps
-      1. **Review skipped tests** - See deferral reasons in `test-strategy.yaml`
-      2. **Check coverage gaps** - Integration tests at 78% (target: 85%)
-      3. **Run full suite** - Execute `pytest -v` for detailed output
+      **Next:** Review skipped tests in `test-strategy.yaml` or run `pytest -v` for details
     
-    token_count: 394
-    notes: "Visual format with tables and progress bars. Challenge section omitted."
+    token_count: 280
+    notes: "v4.0: STRUCTURED tier with visual tables, no mandatory sections"
 
 # ============================================================================
 # ADAPTATION DECISION TREE

@@ -103,7 +103,7 @@ def new_approach_help_command() -> Tuple[str, Dict[str, Any]]:
     start_time = time.perf_counter()
     
     # Load template from YAML
-    template_file = CORTEX_ROOT / "cortex-brain" / "response-templates.yaml"
+    template_file = CORTEX_ROOT / "cortex-brain" / "response-templates-v4.yaml"
     
     with open(template_file, 'r') as f:
         templates = yaml.safe_load(f)
@@ -149,7 +149,7 @@ def measure_token_context() -> Dict[str, Any]:
     # NEW: Just load YAML template
     new_context = """
     # Load pre-formatted template
-    with open('cortex-brain/templates/response-templates.yaml') as f:
+    with open('cortex-brain/templates/response-templates-v4.yaml') as f:
         templates = yaml.safe_load(f)
     
     # Return template directly
@@ -202,13 +202,13 @@ def calculate_ai_response_cost(old_output: str, new_output: str) -> Dict[str, An
     User asked: "help"
     
     Context needed:
-    - cortex-brain/response-templates.yaml (50 tokens for help template)
+    - cortex-brain/response-templates-v4.yaml (50 tokens for help template)
     
     Total context: ~50 tokens
     
     I need to:
     1. Understand they want help
-    2. Check response-templates.yaml
+    2. Check response-templates-v4.yaml
     3. Return pre-formatted template (no execution)
     
     Output: {new_output}

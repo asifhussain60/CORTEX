@@ -530,8 +530,8 @@ start tdd              # Begin TDD workflow
             result["checks_failed"] += 1
             logger.warning("  ❌ Brain structure incomplete")
         
-        # Check 3: response-templates.yaml exists and is valid
-        templates_file = brain_path / 'response-templates.yaml' if brain_path.exists() else None
+        # Check 3: response-templates-v4.yaml exists and is valid
+        templates_file = brain_path / 'response-templates-v4.yaml' if brain_path.exists() else None
         templates_ok = False
         
         if templates_file and templates_file.exists():
@@ -548,9 +548,9 @@ start tdd              # Begin TDD workflow
                     else:
                         result["issues"].append(f"Missing templates: {missing}")
             except Exception as e:
-                result["issues"].append(f"Invalid response-templates.yaml: {e}")
+                result["issues"].append(f"Invalid response-templates-v4.yaml: {e}")
         else:
-            result["issues"].append("response-templates.yaml not found")
+            result["issues"].append("response-templates-v4.yaml not found")
         
         result["checks"]["response_templates"] = templates_ok
         if templates_ok:
@@ -869,8 +869,8 @@ start tdd              # Begin TDD workflow
         if not results['bootstrap']['checks'].get('response_templates', True):
             try:
                 self._restore_default_templates()
-                fixes['applied'].append("Restored response-templates.yaml from defaults")
-                logger.info("  ✅ Fixed: response-templates.yaml restored")
+                fixes['applied'].append("Restored response-templates-v4.yaml from defaults")
+                logger.info("  ✅ Fixed: response-templates-v4.yaml restored")
             except Exception as e:
                 fixes['failed'].append(f"Template restore failed: {e}")
                 logger.warning(f"  ❌ Failed to restore templates: {e}")
@@ -1032,13 +1032,13 @@ start tdd              # Begin TDD workflow
         logger.info(f"📄 Validation report saved: {report_file.relative_to(self.repo_path)}")
     
     def _restore_default_templates(self):
-        """Restore response-templates.yaml from backup or defaults"""
+        """Restore response-templates-v4.yaml from backup or defaults"""
         brain_path = self._find_cortex_root() / 'cortex-brain'
-        templates_file = brain_path / 'response-templates.yaml'
+        templates_file = brain_path / 'response-templates-v4.yaml'
         
         # Try to find backup or template file
-        backup_file = brain_path / 'response-templates.yaml.bak'
-        template_file = brain_path / 'templates' / 'response-templates.yaml'
+        backup_file = brain_path / 'response-templates-v4.yaml.bak'
+        template_file = brain_path / 'templates' / 'response-templates-v4.yaml'
         
         if backup_file.exists():
             import shutil
@@ -1047,7 +1047,7 @@ start tdd              # Begin TDD workflow
             import shutil
             shutil.copy2(template_file, templates_file)
         else:
-            raise FileNotFoundError("No backup or template file found for response-templates.yaml")
+            raise FileNotFoundError("No backup or template file found for response-templates-v4.yaml")
     
     def _initialize_brain_structure(self):
         """Recreate missing brain directories"""

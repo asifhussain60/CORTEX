@@ -268,7 +268,7 @@ requirements:
       - fix_proposal.yaml
       - debug_complete.yaml
       - debug_failed.yaml
-      - All follow 5-part response format
+      - All follow adaptive tier-based response format
       - Visual progress indicators included
     estimated_effort_hours: 6
     pattern_reference: "Planning Orchestrator template integration"

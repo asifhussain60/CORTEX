@@ -611,7 +611,7 @@ lessons:
     total_minutes: 65
   related_files:
   - .github/prompts/CORTEX.prompt.md
-  - cortex-brain/response-templates.yaml
+  - cortex-brain/response-templates-v4.yaml
   tags:
   - response-format
   - quality-control
@@ -861,14 +861,14 @@ additional_lessons:
     described "autonomous intent router" but no such mechanism existed.'
   root_cause: GitHub Copilot reads prompts as context, not executable code. Without
     explicit "BEFORE responding, check triggers" instruction, LLM makes natural language
-    decisions without checking response-templates.yaml
+    decisions without checking response-templates-v4.yaml
   symptoms:
   - Planning template exists but never loads
   - User says "let's plan" but execution happens instead
   - Documentation describes auto-routing that doesn't occur
   - Templates are passive data, not executable logic
   - Missing trigger keywords in routing configuration
-  solution: 'Implemented 4-part fix: (1) Added planning_triggers to response-templates.yaml,
+  solution: 'Implemented 4-part fix: (1) Added planning_triggers to response-templates-v4.yaml,
     (2) Added explicit "BEFORE responding" instruction to CORTEX.prompt.md, (3) Added
     activation triggers section to help_plan_feature.md, (4) Updated condensed templates
     for consistency'
@@ -886,7 +886,7 @@ additional_lessons:
     # CRITICAL: Template Trigger Detection
     
     BEFORE responding to ANY user request:
-    1. Check for template triggers in response-templates.yaml
+    1. Check for template triggers in response-templates-v4.yaml
     2. If matched: Load corresponding template/module
     3. If no match: Proceed with natural language response
     
@@ -896,7 +896,7 @@ additional_lessons:
     - "add button" → NO MATCH → Natural language execution
   files_modified:
   - .github/prompts/CORTEX.prompt.md
-  - cortex-brain/response-templates.yaml
+  - cortex-brain/response-templates-v4.yaml
   - cortex-brain/response-templates-condensed.yaml
   - prompts/shared/help_plan_feature.md
   time_cost:
@@ -907,7 +907,7 @@ additional_lessons:
     total_minutes: 115
   related_files:
   - .github/prompts/CORTEX.prompt.md
-  - cortex-brain/response-templates.yaml
+  - cortex-brain/response-templates-v4.yaml
   - prompts/shared/help_plan_feature.md
   - cortex-brain/documents/investigations/PLANNING-TRIGGER-INVESTIGATION.md
   - cortex-brain/documents/reports/PLANNING-TRIGGER-IMPLEMENTATION-COMPLETE.md
@@ -967,7 +967,7 @@ additional_lessons:
     documentation_minutes: 15
     total_minutes: 40
   related_files:
-  - cortex-brain/response-templates.yaml
+  - cortex-brain/response-templates-v4.yaml
   - cortex-brain/documents/conversation-captures/2025-11-17-planning-trigger-implementation.md
   tags:
   - trigger-strategy

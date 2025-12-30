@@ -613,7 +613,7 @@ core_components:
     design_document: "cortex-brain/cortex-2.0-design/RESPONSE-TEMPLATE-ARCHITECTURE.md"
     
     architecture:
-      template_file: "cortex-brain/response-templates.yaml"
+      template_file: "cortex-brain/response-templates-v4.yaml"
       loader: "src/response_templates/template_loader.py"
       renderer: "src/response_templates/template_renderer.py"
       registry: "src/response_templates/template_registry.py"

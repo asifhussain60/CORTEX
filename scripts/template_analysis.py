@@ -14,7 +14,7 @@ from datetime import datetime
 
 
 class TemplateAnalyzer:
-    """Analyzes the monolithic response-templates.yaml file."""
+    """Analyzes the monolithic response-templates-v4.yaml file."""
     
     def __init__(self, template_file: Path, src_dir: Path):
         self.template_file = template_file
@@ -369,7 +369,7 @@ def main():
     """Main entry point."""
     # Paths
     cortex_root = Path(__file__).parent.parent
-    template_file = cortex_root / 'cortex-brain' / 'response-templates.yaml'
+    template_file = cortex_root / 'cortex-brain' / 'response-templates-v4.yaml'
     src_dir = cortex_root / 'src'
     output_dir = cortex_root / 'cortex-brain' / 'documents' / 'analysis'
     

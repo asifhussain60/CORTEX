@@ -59,7 +59,7 @@ Add **Phase 0: Backup Cleanup** to `cortex-maintenance.prompt.md` to automatical
 ```
 ./docs/features/planning-system.html.backup
 ./docs/features/orchestrators.html.backup
-./cortex-brain/response-templates.yaml.backup
+./cortex-brain/response-templates-v4.yaml.backup
 ./.github/workflows/deploy-docs.yml.backup
 ./extensions/vscode/CHANGELOG.md.backup
 ... (5+ more)

@@ -75,7 +75,7 @@ CORTEX_BRAIN_WHITELIST = {
     'operations-config.yaml',
     'publish-config.yaml',
     'response-templates-condensed.yaml',
-    'response-templates.yaml',
+    'response-templates-v4.yaml',
     'self-review-checklist.yaml',
     'TRUTH-SOURCES.yaml',
     'user-dictionary.yaml',

@@ -63,7 +63,7 @@ class ResponseFormatter:
         
         Args:
             default_verbosity: "concise" | "detailed" | "expert"
-            template_file: Path to response-templates.yaml (optional)
+            template_file: Path to response-templates-v4.yaml (optional)
         """
         self.default_verbosity = default_verbosity
         self.word_limits = {
@@ -75,7 +75,7 @@ class ResponseFormatter:
         if template_file is None:
             # Default location
             from src.config import config
-            template_file = Path(config.brain_path) / "response-templates.yaml"
+            template_file = Path(config.brain_path) / "response-templates-v4.yaml"
         
         self.template_loader = None
         self.template_renderer = None

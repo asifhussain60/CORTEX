@@ -19,7 +19,7 @@ This code review **MUST** be conducted **completely independently** of CORTEX AI
 ❌ Using CORTEX operations (align, optimize, healthcheck, review, etc.)  
 ❌ Referencing CORTEX prompts or templates  
 ❌ Invoking CORTEX orchestrators or agents  
-❌ Using CORTEX response formats (5-part structure)  
+❌ Using CORTEX response formats (adaptive tier-based structure)  
 ❌ Accessing CORTEX brain tiers or knowledge graph  
 ❌ Using CORTEX-specific terminology or patterns  
 ❌ Following CORTEX workflows (Planning System, TDD Mastery, etc.)  

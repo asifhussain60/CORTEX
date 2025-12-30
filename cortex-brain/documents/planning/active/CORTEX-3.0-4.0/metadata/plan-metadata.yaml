@@ -36,7 +36,7 @@ plan_info:
   updated: "2025-12-20"
   status: "APPROVED"
   branch_strategy: "CORTEX-3.0 → CORTEX-4.0"
-  default_execution_mode: "supervised"  # Can be overridden per phase/worker
+  default_execution_mode: "autonomous"  # Changed from supervised - autonomous is now default
   
   # Token optimization metrics
   original_size_lines: 7283

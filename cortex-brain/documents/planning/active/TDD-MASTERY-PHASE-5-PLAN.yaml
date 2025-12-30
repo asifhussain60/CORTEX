@@ -450,7 +450,7 @@ phases:
           - "cortex-brain/response-templates/orchestrators/debug/debug_complete.yaml"
           - "cortex-brain/response-templates/orchestrators/debug/debug_failed.yaml"
         acceptance_criteria:
-          - "All 5 templates follow 5-part response format"
+          - "All 5 templates follow adaptive tier-based response format"
           - "Templates render correctly via ResponseTemplateManager"
           - "Context variables documented"
           - "Visual progress indicators included"

@@ -136,7 +136,7 @@ yaml_optimization:
     benefit: "Realistic budgets, valuable content not artificially constrained"
     budgets:
       brain-protection-rules.yaml: 150_000  # Comprehensive SKULL rules
-      response-templates.yaml: 100_000      # 86+ templates
+      response-templates-v4.yaml: 100_000      # 86+ templates
       cortex-operations.yaml: 200_000       # Operations + modules
       module-definitions.yaml: 50_000       # Module contracts
       knowledge-graph.yaml: 75_000          # Learned patterns
@@ -148,7 +148,7 @@ yaml_optimization:
     benefit: "Performance targets matched to file characteristics"
     tiers:
       simple: 100   # ms (module-definitions.yaml)
-      moderate: 150  # ms (response-templates.yaml, knowledge-graph.yaml)
+      moderate: 150  # ms (response-templates-v4.yaml, knowledge-graph.yaml)
       complex: 200   # ms (brain-protection-rules.yaml)
       very_complex: 500  # ms (cortex-operations.yaml with modules)
     evidence: "YAML performance tests fixed with tiered approach"

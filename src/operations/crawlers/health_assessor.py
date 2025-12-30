@@ -371,7 +371,7 @@ class HealthAssessorCrawler(BaseCrawler):
             if confidence_scorer.exists():
                 score += 0.25
             
-            templates = project_root / 'cortex-brain' / 'response-templates.yaml'
+            templates = project_root / 'cortex-brain' / 'response-templates-v4.yaml'
             if templates.exists():
                 with open(templates, 'r', encoding='utf-8') as f:
                     data = yaml.safe_load(f)

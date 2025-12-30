@@ -1,7 +1,7 @@
 category: specialized/dashboard
 templates:
   compliance_dashboard_agent:
-    inherits_from: core/base-templates/5-part-standard.yaml
+    inherits_from: core/base-templates/adaptive-base.yaml
     name: Compliance Dashboard Agent
     triggers:
     - compliance

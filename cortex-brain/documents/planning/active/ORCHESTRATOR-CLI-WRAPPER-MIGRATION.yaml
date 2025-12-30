@@ -36,7 +36,7 @@ solution_design:
     components:
       - cli_wrapper: "Python script in scripts/ directory"
       - orchestrator: "Existing orchestrator class"
-      - response_template: "Template in cortex-brain/response-templates.yaml"
+      - response_template: "Template in cortex-brain/response-templates-v4.yaml"
       - operations_registry: "Entry in cortex-operations.yaml"
   
   execution_methods:

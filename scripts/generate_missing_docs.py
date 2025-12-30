@@ -319,21 +319,18 @@ CORTEX uses a template-based response system for consistent, high-quality respon
 
 ### Template Structure
 
-All templates follow the mandatory 5-part structure:
+All templates follow the adaptive tier-based structure:
 
 ```markdown
-🧠 **CORTEX [Operation Type]**
-Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+## 🧠 CORTEX [Operation Type]
+**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
 
-🎯 **My Understanding Of Your Request:** [State understanding]
+[Response content - scales with complexity]
 
-⚠️ **Challenge:** [✓ Accept OR ⚡ Challenge with alternatives]
+---
 
-💬 **Response:** [Natural language explanation]
-
-📝 **Your Request:** [Echo user's request]
-
-🔍 **Next Steps:** [Context-appropriate format]
+**🔍 Next Steps:**
+[Context-appropriate format]
 ```
 
 ### Template Categories
@@ -365,7 +362,7 @@ Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
 
 ### Template Configuration
 
-Templates are defined in `cortex-brain/response-templates.yaml`:
+Templates are defined in `cortex-brain/response-templates-v4.yaml`:
 
 ```yaml
 templates:

@@ -78,7 +78,7 @@ After installation, test in GitHub Copilot Chat:
 
 1. **Open new chat window**
 2. **Type:** `/CORTEX`
-3. **Expected:** Full CORTEX response with 5-part format
+3. **Expected:** Full CORTEX response with adaptive tier-based format
 4. **If generic response:** Type `Follow instructions in CORTEX.prompt.md`
 
 ---

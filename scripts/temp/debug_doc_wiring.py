@@ -24,7 +24,7 @@ critical = [
 ]
 
 # Get entry points from response templates
-response_templates_path = project_root / "cortex-brain" / "response-templates.yaml"
+response_templates_path = project_root / "cortex-brain" / "response-templates-v4.yaml"
 print(f"Response templates path: {response_templates_path}")
 print(f"Exists: {response_templates_path.exists()}\n")
 
@@ -96,7 +96,6 @@ for name in critical:
         is_wired = wiring_validator.check_orchestrator_wired(name, entry_points)
         print(f"  Is wired: {is_wired}")
         
-        # Debug: Show what the validator is looking for
         # Check entry_point_scanner.py
         scanner_path = project_root / "src" / "discovery" / "entry_point_scanner.py"
         if scanner_path.exists():
@@ -110,7 +109,7 @@ for name in critical:
                     if name in line:
                         print(f"    Line {i}: {line.strip()}")
     else:
-        print(f"  ❌ response-templates.yaml not found")
+        print(f"  ❌ response-templates-v4.yaml not found")
     
     # Combined documentation check
     print(f"\n✅ Documentation Layer Status:")

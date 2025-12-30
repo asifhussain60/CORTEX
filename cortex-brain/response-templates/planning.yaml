@@ -1,5 +1,5 @@
 # CORTEX Response Templates - PLANNING Category
-# Auto-generated from response-templates.yaml
+# Auto-generated from response-templates-v4.yaml
 # Template count: 11
 
 category: planning
@@ -72,10 +72,20 @@ templates:
     triggers: []
     verbosity: concise
   planning_activation:
-    content: "\U0001F3AF **CORTEX Interactive Planning**\nAuthor: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX\n\
-      \n\U0001F3AF **My Understanding Of Your Request:**\n   You want to plan {{feature_description}}\n\n⚠️ **My Challenge:**\
-      \ {{#if high_confidence}}✓ **Accept**{{else}}⚡ **Challenge**{{/if}}\n   {{challenge_rationale}}\n\n\U0001F4AC **My Response:**\n\
-      \   {{response_message}}\n\n\n\U0001F4DD **Your Request:** {{user_request}}\n\n\U0001F50D **Next Steps:**\n   {{next_steps}}\n"
+    content: |
+      ## 🎯 CORTEX Interactive Planning
+      Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+      
+      Planning feature: {{feature_description}}
+      
+      {{#if high_confidence}}✅ Ready to proceed{{else}}⚡ Need clarification: {{challenge_rationale}}{{/if}}
+      
+      {{response_message}}
+      
+      ---
+      
+      **🔍 Next Steps:**
+      {{next_steps}}
     context_needed: true
     metadata:
       category: planning

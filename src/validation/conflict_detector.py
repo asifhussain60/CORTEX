@@ -134,7 +134,7 @@ class ConflictDetector:
         logger.debug("Checking for orphaned wiring...")
         
         # Load response templates
-        templates_file = self.brain_path / "response-templates.yaml"
+        templates_file = self.brain_path / "response-templates-v4.yaml"
         if not templates_file.exists():
             return
         
