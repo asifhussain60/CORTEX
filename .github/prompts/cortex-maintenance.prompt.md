@@ -934,6 +934,62 @@ exit 0
 
 ---
 
+## Phase 2.5: Data Preservation Rules
+
+**Reference:** `cortex-brain/documents/implementation-guides/phase-2.5-data-preservation-rules.md`
+
+**Purpose:** Protect critical user data during file regeneration operations (Phase 2 cleanup, Phase 9 prompt regeneration).
+
+### Protected Fields in Plan Files
+
+When regenerating plan files (`*.yaml`, `00-master-plan.md`), MUST preserve:
+
+- **copilot_instructions** - GitHub Copilot runtime config (`response_template`, `progress_updates`, `tdd_enforcement`, `checkpoint_frequency`)
+- **metadata.notes** - User annotations and implementation notes
+- **metadata.tags** - User categorization
+- **threat_analysis** - ThreatModeler output (STRIDE categories, mitigations)
+- **session_metadata** - Execution history, checkpoints, rollback points
+
+### Protected Fields in Response Templates
+
+When regenerating `response-templates-v4.yaml`, MUST preserve:
+
+- **named_templates** - All user-defined templates
+- **named_templates.autonomous_execution_progress** - Planning orchestrator dependency
+- **named_templates.*.format** - User customizations, progress bar layouts
+
+### Preservation Process
+
+**Before regenerating ANY file:**
+
+1. **Extract protected fields** using `yq eval .copilot_instructions`, `.metadata.notes`, `.named_templates`
+2. **Perform regeneration** (template/structure changes)
+3. **Re-inject protected fields** using `yq eval-all` merge
+4. **Verify preservation** with mandatory checks
+5. **Commit with confirmation** including "Protected Fields Preserved" message
+
+**Verification Example:**
+
+```bash
+# Verify copilot_instructions preserved in regenerated plan
+COPILOT_CHECK=$(yq eval 'has("copilot_instructions")' plan.yaml)
+if [ "$COPILOT_CHECK" != "true" ]; then
+  echo "ERROR: copilot_instructions LOST during regeneration!"
+  exit 1
+fi
+```
+
+**Success Criteria:**
+
+- All regenerated plans have `copilot_instructions` section
+- `response-templates-v4.yaml` has `named_templates` section
+- Git commits include preservation confirmation
+- No user data loss after Phase 2 cleanup or Phase 9 regeneration
+
+**Full implementation:** See `cortex-brain/documents/implementation-guides/phase-2.5-data-preservation-rules.md`
+
+---
+
 ## Phase 3: Toolkit Scaffolding Validation 🛠️
 
 ### 3a. Verify Scaffold Generators Exist
