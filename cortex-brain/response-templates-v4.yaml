@@ -863,13 +863,14 @@ named_templates:
   autonomous_execution_progress:
     description: "Enhanced progress template for autonomous plan execution with visual Unicode progress bars integrated into phase table"
     tier: "TIER 3"
+    orchestrator_engaged: true
     display_moments:
       - "beginning": "Show complete phase table"
       - "phase_completion": "Show overall progress and next phase"
       - "overall_completion": "Show complete phase table"
     format: |
-      ## 🧠 CORTEX Plan Execution
-      **Author:** Asif Hussain | **Plan:** {{plan_name}}
+      ## 🛡️🧠 CORTEX Plan Execution
+      **Author:** Asif Hussain | **Plan:** {{plan_name}} | **Orchestrator:** Planning System 4.0 ✅
       
       ---
       
@@ -930,13 +931,14 @@ named_templates:
   ado_execution_progress:
     description: "Enhanced ADO work item generation progress with story points and hierarchy tracking integrated into phase table"
     tier: "TIER 3"
+    orchestrator_engaged: true
     display_moments:
       - "beginning": "Show complete phase table with work item summary"
       - "phase_completion": "Show overall progress and next phase"
       - "overall_completion": "Show complete phase table with work item summary"
     format: |
-      ## 🧠 CORTEX ADO Work Item Generation
-      **Author:** Asif Hussain | **Feature:** {{feature_name}}
+      ## 🛡️🧠 CORTEX ADO Work Item Generation
+      **Author:** Asif Hussain | **Feature:** {{feature_name}} | **Orchestrator:** ADO System ✅
       
       ---
       

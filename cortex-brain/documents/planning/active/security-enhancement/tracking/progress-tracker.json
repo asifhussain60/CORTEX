@@ -1,0 +1,318 @@
+{
+  "plan_id": "security-enhancement",
+  "created": "2025-12-30T00:00:00Z",
+  "last_updated": "2025-12-30T12:00:00Z",
+  "status": "in-progress",
+  "current_phase": "Phase 1",
+  "overall_progress": {
+    "total_deliverables": 17,
+    "completed": 4,
+    "in_progress": 0,
+    "not_started": 13,
+    "percentage": 23.5
+  },
+  "phases": {
+    "phase_1": {
+      "name": "Knowledge Library Enhancement",
+      "status": "in-progress",
+      "deliverables": [
+        {
+          "id": "P1-D00",
+          "name": "API Security Foundations",
+          "path": "cortex-brain/knowledge-library/security/api-security-foundations.md",
+          "status": "completed",
+          "priority": "high",
+          "dependencies": [],
+          "estimated_effort": "0 hours (migrated)",
+          "assigned_to": "Asif Hussain",
+          "completion_date": "2025-12-30",
+          "notes": "Migrated from docs/knowledge/security/api-security.md - Covers OWASP API Top 10, rate limiting, authentication"
+        },
+        {
+          "id": "P1-D01",
+          "name": "OWASP Top 10 Guide",
+          "path": "cortex-brain/knowledge-library/security/owasp-top-10-guide.md",
+          "status": "not-started",
+          "priority": "high",
+          "dependencies": ["P1-D00"],
+          "estimated_effort": "8 hours",
+          "assigned_to": "TBD",
+          "completion_date": null,
+          "notes": "Expand beyond API vulnerabilities to web application vulnerabilities"
+        },
+        {
+          "id": "P1-D02",
+          "name": "Threat Modeling Framework",
+          "path": "cortex-brain/knowledge-library/security/threat-modeling-framework.md",
+          "status": "not-started",
+          "priority": "medium",
+          "dependencies": [],
+          "estimated_effort": "6 hours",
+          "assigned_to": "TBD",
+          "completion_date": null
+        },
+        {
+          "id": "P1-D03",
+          "name": "Vulnerability Assessment Framework",
+          "path": "cortex-brain/knowledge-library/security/vulnerability-assessment-framework.md",
+          "status": "not-started",
+          "priority": "medium",
+          "dependencies": [],
+          "estimated_effort": "6 hours",
+          "assigned_to": "TBD",
+          "completion_date": null
+        },
+        {
+          "id": "P1-D04",
+          "name": "Penetration Testing Methodology",
+          "path": "cortex-brain/knowledge-library/security/penetration-testing-methodology.md",
+          "status": "not-started",
+          "priority": "standard",
+          "dependencies": ["P1-D03"],
+          "estimated_effort": "8 hours",
+          "assigned_to": "TBD",
+          "completion_date": null
+        },
+        {
+          "id": "P1-D05",
+          "name": "GDPR Compliance Checklist",
+          "path": "cortex-brain/knowledge-library/compliance/gdpr-compliance-checklist.md",
+          "status": "not-started",
+          "priority": "high",
+          "dependencies": [],
+          "estimated_effort": "10 hours",
+          "assigned_to": "TBD",
+          "completion_date": null
+        },
+        {
+          "id": "P1-D06",
+          "name": "HIPAA Compliance Checklist",
+          "path": "cortex-brain/knowledge-library/compliance/hipaa-compliance-checklist.md",
+          "status": "not-started",
+          "priority": "high",
+          "dependencies": [],
+          "estimated_effort": "10 hours",
+          "assigned_to": "TBD",
+          "completion_date": null
+        },
+        {
+          "id": "P1-D07",
+          "name": "PCI-DSS Compliance Checklist",
+          "path": "cortex-brain/knowledge-library/compliance/pci-dss-compliance-checklist.md",
+          "status": "not-started",
+          "priority": "high",
+          "dependencies": [],
+          "estimated_effort": "10 hours",
+          "assigned_to": "TBD",
+          "completion_date": null
+        },
+        {
+          "id": "P1-D08",
+          "name": "SOC2 Compliance Checklist",
+          "path": "cortex-brain/knowledge-library/compliance/soc2-compliance-checklist.md",
+          "status": "not-started",
+          "priority": "high",
+          "dependencies": [],
+          "estimated_effort": "8 hours",
+          "assigned_to": "TBD",
+          "completion_date": null
+        },
+        {
+          "id": "P1-D09",
+          "name": "Risk Assessment Methodology",
+          "path": "cortex-brain/knowledge-library/security/risk-assessment-methodology.md",
+          "status": "not-started",
+          "priority": "high",
+          "dependencies": [],
+          "estimated_effort": "6 hours",
+          "assigned_to": "TBD",
+          "completion_date": null
+        },
+        {
+          "id": "P1-D09A",
+          "name": "Database Security Guide",
+          "path": "cortex-brain/knowledge-library/security/database-security-guide.md",
+          "status": "completed",
+          "priority": "high",
+          "dependencies": [],
+          "estimated_effort": "0 hours (migrated)",
+          "assigned_to": "Asif Hussain",
+          "completion_date": "2025-12-30",
+          "notes": "Migrated from docs/knowledge/security/sql-server-security.md - Covers TDE, Always Encrypted, DDM, RLS, RBAC"
+        },
+        {
+          "id": "P1-D10",
+          "name": "Data Protection Framework",
+          "path": "cortex-brain/knowledge-library/security/data-protection-framework.md",
+          "status": "not-started",
+          "priority": "medium",
+          "dependencies": ["P1-D09A"],
+          "estimated_effort": "8 hours",
+          "assigned_to": "TBD",
+          "completion_date": null,
+          "notes": "Expand database security guide to cover all data types beyond databases"
+        },
+        {
+          "id": "P1-D11",
+          "name": "Access Control Patterns",
+          "path": "cortex-brain/knowledge-library/security/access-control-patterns.md",
+          "status": "not-started",
+          "priority": "standard",
+          "dependencies": ["P1-D09A"],
+          "estimated_effort": "6 hours",
+          "assigned_to": "TBD",
+          "completion_date": null,
+          "notes": "Expand database RBAC/RLS to application and system-level access control"
+        },
+        {
+          "id": "P1-D11A",
+          "name": "Security Awareness Training",
+          "path": "cortex-brain/knowledge-library/security/security-awareness-training.md",
+          "status": "completed",
+          "priority": "high",
+          "dependencies": [],
+          "estimated_effort": "0 hours (migrated)",
+          "assigned_to": "Asif Hussain",
+          "completion_date": "2025-12-30",
+          "notes": "Migrated from docs/knowledge/security/security-best-practices.md - Covers phishing, passwords, MFA, digital hygiene"
+        },
+        {
+          "id": "P1-D12",
+          "name": "Incident Response Playbook",
+          "path": "cortex-brain/knowledge-library/security/incident-response-playbook.md",
+          "status": "not-started",
+          "priority": "high",
+          "dependencies": ["P1-D11A"],
+          "estimated_effort": "8 hours",
+          "assigned_to": "TBD",
+          "completion_date": null,
+          "notes": "Build on Security Awareness Training (phishing response)"
+        },
+        {
+          "id": "P1-D13",
+          "name": "Audit Logging Standards",
+          "path": "cortex-brain/knowledge-library/security/audit-logging-standards.md",
+          "status": "not-started",
+          "priority": "medium",
+          "dependencies": ["P1-D00"],
+          "estimated_effort": "4 hours",
+          "assigned_to": "TBD",
+          "completion_date": null,
+          "notes": "Build on API Security Foundations (API monitoring)"
+        },
+        {
+          "id": "P1-D13A",
+          "name": "AI Security Operations",
+          "path": "cortex-brain/knowledge-library/security/ai-security-operations.md",
+          "status": "completed",
+          "priority": "standard",
+          "dependencies": [],
+          "estimated_effort": "0 hours (migrated)",
+          "assigned_to": "Asif Hussain",
+          "completion_date": "2025-12-30",
+          "notes": "BONUS DOCUMENT - Migrated from docs/knowledge/security/prompt-engineering-cyber-security.md - AI-driven security operations"
+        },
+        {
+          "id": "P1-D15",
+          "name": "Threat Intelligence Framework",
+          "path": "cortex-brain/knowledge-library/security/threat-intelligence-framework.md",
+          "status": "not-started",
+          "priority": "standard",
+          "dependencies": ["P1-D02"],
+          "estimated_effort": "6 hours",
+          "assigned_to": "TBD",
+          "completion_date": null
+        },
+        {
+          "id": "P1-D16",
+          "name": "Integration with Scanner Agent",
+          "path": "N/A (code integration)",
+          "status": "not-started",
+          "priority": "high",
+          "dependencies": ["P1-D01"],
+          "estimated_effort": "4 hours",
+          "assigned_to": "TBD",
+          "completion_date": null
+        }
+      ],
+      "total_estimated_effort": "118 hours"
+    },
+    "phase_2": {
+      "name": "TBD - Awaiting Definition",
+      "status": "pending",
+      "deliverables": []
+    }
+  },
+  "milestones": [
+    {
+      "id": "M1",
+      "name": "Planning Complete",
+      "date": "2025-12-30",
+      "status": "in-progress",
+      "deliverables": ["Plan structure", "Master plan", "Context artifacts", "Progress tracker"]
+    },
+    {
+      "id": "M2",
+      "name": "Phase 2 Defined",
+      "date": "TBD",
+      "status": "pending",
+      "deliverables": ["Phase 2 objectives", "Phase 2 deliverables"]
+    },
+    {
+      "id": "M3",
+      "name": "Phase 1 Implementation Started",
+      "date": "TBD",
+      "status": "pending",
+      "deliverables": ["Knowledge library structure", "First 3 documents"]
+    },
+    {
+      "id": "M4",
+      "name": "Compliance Documents Complete",
+      "date": "TBD",
+      "status": "pending",
+      "deliverables": ["GDPR", "HIPAA", "PCI-DSS", "SOC2"]
+    },
+    {
+      "id": "M5",
+      "name": "Phase 1 Complete",
+      "date": "TBD",
+      "status": "pending",
+      "deliverables": ["All 16 deliverables"]
+    }
+  ],
+  "risks": [
+    {
+      "id": "R1",
+      "description": "Compliance requirements may change during implementation",
+      "impact": "medium",
+      "mitigation": "Reference official regulatory sources, include update procedures"
+    },
+    {
+      "id": "R2",
+      "description": "Integration with scanner agent may require code changes",
+      "impact": "medium",
+      "mitigation": "Review scanner agent code early, plan integration carefully"
+    },
+    {
+      "id": "R3",
+      "description": "Document templates may need refinement during implementation",
+      "impact": "low",
+      "mitigation": "Templates created in artifacts/, can be updated as needed"
+    }
+  ],
+  "blockers": [
+    {
+      "id": "B1",
+      "description": "Phase 2 definition pending",
+      "status": "active",
+      "impact": "Cannot finalize timeline",
+      "resolution": "Awaiting user input"
+    }
+  ],
+  "notes": [
+    "This is a PLANNING document - no implementation until explicitly requested",
+    "All deliverables follow CORTEX knowledge library standards",
+    "Estimated effort based on comprehensive document creation with examples",
+    "Priority levels guide implementation order when authorized"
+  ]
+}

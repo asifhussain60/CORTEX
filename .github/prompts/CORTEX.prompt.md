@@ -52,14 +52,14 @@ User: "implement user authentication"
 
 ## 🔀 Intent Router
 
-| Command | Orchestrator | Manifest | Output |
-|---------|--------------|----------|--------|
-| `/CORTEX Plan [x]`, `create a plan`, `make a plan`, `plan: [x]` | **Planning System** | `planning-system-4.0-manifest.yaml` | `planning/active/{NAME}/` + 4 subfolders **→ STOPS HERE** |
+| Command | Orchestrator | Manifest | Behavior |
+|---------|--------------|----------|----------|
+| `/CORTEX Plan [x]`, `create a plan`, `make a plan`, `plan: [x]` | 🛡️ **Planning System** | `planning-system-4.0-manifest.yaml` | **HAND-OFF** → Use `autonomous_execution_progress` template |
+| `plan ado`, `ado story`, `ado feature` | 🛡️ **ADO Operations** | `ado-planning-manifest.yaml` | **HAND-OFF** → Use `ado_execution_progress` template |
 | `start tdd`, `run tests`, `tdd [x]` | TDD Mastery | `tdd-orchestrator-v4-manifest.yaml` | Tests in `tests/` |
 | `debug [issue]`, `fix bug`, `troubleshoot` | Debug Orchestrator | `debug-orchestrator-manifest.yaml` | Bug report + fix |
 | `open lens`, `show dashboard`, `analytics` | CORTEX Lens | `cortex-lens-v3-manifest.yaml` | Dashboard visualization |
 | `onboard`, `getting started`, `learn cortex` | Onboarding | Via `onboarding_interactive.py` | Interactive 6-phase guide |
-| `plan ado`, `ado story`, `ado feature` | ADO Operations | `ado-planning-manifest.yaml` | ADO work items |
 | `sanitize`, `make generic`, `anonymize` | Sanitization | `code-sanitization-manifest.yaml` | Sanitized codebase |
 | `refine`, `improve cortex`, `optimize code` | Refinement | `refinement-orchestrator-manifest.yaml` | 7-phase improvement |
 | `system maintenance`, `health check` | **Maintenance (11 phases)** | Via `cortex-maintenance.prompt.md` | Health reports + auto-repair |
@@ -68,15 +68,22 @@ User: "implement user authentication"
 
 **Manifest Path:** `cortex-brain/manifests/orchestrators/{manifest-file}`
 
-### ⚠️ Planning vs. Implementation
+### 🛡️ HAND-OFF Orchestrators (Shield Icon = Orchestrator Engaged)
 
-**Planning Commands = Create folder structure ONLY (NO CODE):**
-- `/CORTEX Plan user-auth` → Creates `planning/active/user-auth/` + subfolders → **STOPS**
-- `create a plan for API` → Creates `planning/active/api/` + subfolders → **STOPS**
+When you see 🛡️ in the Intent Router, these orchestrators **MUST take over completely**:
 
-**Implementation Commands = Execute code directly:**
-- `implement user-auth` → Writes code immediately (no plan creation)
-- `build API endpoint` → Creates files immediately (no plan creation)
+1. **Planning System** (`plan`, `create a plan`, `make a plan`)
+   - Load `planning-system-4.0-manifest.yaml`
+   - Response header: `## 🛡️🧠 CORTEX Plan Execution`
+   - Use template: `autonomous_execution_progress`
+   - Include ALL mandatory plan content (visual progress, template reminders, REFACTOR phase, copilot_instructions)
+
+2. **ADO Operations** (`ado story`, `ado feature`, `plan ado`)
+   - Load `ado-planning-manifest.yaml`
+   - Response header: `## 🛡️🧠 CORTEX ADO Work Item Generation`
+   - Use template: `ado_execution_progress`
+
+**Visual Confirmation:** When these orchestrators are engaged, user sees `🛡️` in response header.
 
 ### Planning System Output Structure
 
@@ -89,6 +96,17 @@ cortex-brain/documents/planning/active/{PLAN_NAME}/
 ├── artifacts/           # Supporting files
 └── tracking/            # progress-tracker.json
 ```
+
+### ⛔ MANDATORY Plan Content (00-master-plan.md)
+
+When Planning System is engaged (🛡️), `00-master-plan.md` MUST include:
+
+1. **Visual Progress Tracking** - Use `autonomous_execution_progress` template
+2. **Response Template Reminder** - Reference `response-templates-v4.yaml:863`
+3. **Final REFACTOR Phase** - SKULL rule enforcement (whole-file cleanup)
+4. **copilot_instructions Block** - `response_template`, `tdd_enforcement`, `final_refactor_required`
+
+**Reference:** `planning-system-4.0-manifest.yaml` lines 118-157, 639-677
 
 ---
 
@@ -162,28 +180,11 @@ cortex-brain/                    src/
 
 | Command | Description |
 |---------|-------------|
-| `/CORTEX Plan [feature]` | Create planning folder (NO implementation) |
-| `start tdd` | RED→GREEN→REFACTOR workflow |
-| `debug [issue]` | Investigate and fix bug |
-| `open lens` | Show analytics dashboard |
-| `system maintenance` | 11-phase health pipeline with auto-repair |
-| `cleanup cache` | Clear VS Code/Python caches (Phase 2a) |
-| `cleanup full` | Run full maintenance (all 11 phases) |
-| `sanitize [dir]` | Remove company data |
-| `refine` | 7-phase system improvement |
+| `/CORTEX Plan [feature]` | 🛡️ Create plan (uses Planning Orchestrator) |
+| `ado story [feature]` | 🛡️ Create ADO items (uses ADO Orchestrator) |
+| `system maintenance` | 11-phase health pipeline |
 | `help` | Show all commands |
 
----
-
-## 📚 Resources
-
-- **Learning:** `cortex-brain/documents/learning-paths/`
-- **Templates:** `cortex-brain/response-templates-v4.yaml`
-- **SKULL Rules:** `cortex-brain/brain-protection-rules.yaml`
-- **Maintenance:** `.github/prompts/cortex-maintenance.prompt.md`
-
----
-
-**Quick Start:** Say `help` to see all operations.
+**Resources:** `cortex-brain/response-templates-v4.yaml`, `brain-protection-rules.yaml`, `cortex-maintenance.prompt.md`
 
 **Anti-Bloat:** This file MUST stay under 200 lines.

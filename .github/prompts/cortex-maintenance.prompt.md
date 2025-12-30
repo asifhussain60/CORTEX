@@ -407,6 +407,179 @@ else:
 
 ---
 
+### Rule 9: Plan Content Validation (NEW - December 30, 2025)
+
+**ALL plans in `planning/active/*/00-master-plan.md` MUST contain mandatory sections.**
+
+**Problem:** Plans created manually bypass Planning Orchestrator, missing:
+- Visual progress tracking sections
+- Response template reminders
+- Final REFACTOR phase enforcement
+- copilot_instructions block
+
+**This has caused 12+ failures** where plans lacked required content.
+
+**✅ REQUIRED Validation Checks (Phase 7 - Knowledge):**
+
+```bash
+# Validate all master plans have mandatory content
+for plan in cortex-brain/documents/planning/active/*/00-master-plan.md; do
+  echo "Checking: $plan"
+  
+  # Check 1: Visual Progress Tracking
+  if ! grep -q "Progress.*\[█\|░\]" "$plan" 2>/dev/null; then
+    echo "  ❌ Missing: Visual progress tracking (progress bars)"
+    MISSING_CONTENT=true
+  fi
+  
+  # Check 2: Response Template Reference
+  if ! grep -q "autonomous_execution_progress\|response-templates-v4.yaml" "$plan" 2>/dev/null; then
+    echo "  ❌ Missing: Response template reference"
+    MISSING_CONTENT=true
+  fi
+  
+  # Check 3: Final REFACTOR Phase
+  if ! grep -qi "final.*refactor\|REFACTOR.*phase\|SKULL.*REFACTOR" "$plan" 2>/dev/null; then
+    echo "  ❌ Missing: Final REFACTOR phase (SKULL enforcement)"
+    MISSING_CONTENT=true
+  fi
+  
+  # Check 4: copilot_instructions block OR reminder
+  if ! grep -q "copilot_instructions\|tdd_enforcement\|final_refactor_required" "$plan" 2>/dev/null; then
+    echo "  ❌ Missing: copilot_instructions block"
+    MISSING_CONTENT=true
+  fi
+done
+```
+
+**🔧 Auto-Repair Actions:**
+
+When missing content detected, append to plan:
+```markdown
+---
+
+## ⚠️ MANDATORY Requirements (Auto-Added by Maintenance)
+
+### Visual Progress Tracking
+Use `autonomous_execution_progress` template from `response-templates-v4.yaml` (line 863)
+
+| # | Phase | Status | Progress | TDD Status |
+|---|-------|--------|----------|------------|
+| **Overall** | 🟡 | `[░░░░░░░░░░░░░░░░░░░░]` 0% | Phase 0/N | - |
+
+### Response Template Helpers
+- `generate_progress_bar(percentage, width=20, filled='█', empty='░')`
+- `generate_tdd_status(red_done, green_done, refactor_done)`
+- `render_autonomous_progress(...)` - Full convenience method
+
+### Final REFACTOR Phase (MANDATORY - SKULL Rule)
+Per `REFACTOR_CODE_CLEANUP_ENFORCEMENT`:
+- ✅ Whole-file cleanup (not just new code)
+- ✅ Complexity ≤30 for all functions
+- ✅ SOLID principles enforced
+- ✅ Zero dead code/unused imports
+- ✅ 100% test pass rate
+
+### copilot_instructions
+```yaml
+copilot_instructions:
+  response_template: "autonomous_execution_progress"
+  progress_updates: true
+  tdd_enforcement: true
+  final_refactor_required: true
+  checkpoint_frequency: "per_phase"
+```
+
+**Reference:** `planning-system-4.0-manifest.yaml` (lines 118-157, 639-677)
+```
+
+**❌ FORBIDDEN:**
+- Plans without visual progress bars
+- Plans without REFACTOR phase
+- Plans without template references
+- Skipping plan content validation in maintenance
+
+**Location in Pipeline:** Phase 7 (Knowledge) + Phase 11 (Final Verification)
+
+**Success Criteria:**
+- ✅ 100% of active plans have visual progress tracking
+- ✅ 100% of active plans reference response templates
+- ✅ 100% of active plans have Final REFACTOR phase
+- ✅ 100% of active plans have copilot_instructions or equivalent
+
+---
+
+### Rule 10: Orchestrator Hand-off Enforcement (NEW - December 30, 2025)
+
+**HAND-OFF Orchestrators (marked with 🛡️) MUST take over completely.**
+
+**Problem:** Intent Router was telling LLM to "create folder structure" instead of **handing off** to the orchestrator, causing:
+- ❌ Plans created without `copilot_instructions` block
+- ❌ No visual progress tracking hints
+- ❌ No response template usage
+- ❌ No REFACTOR phase enforcement
+
+**Solution:** When HAND-OFF orchestrators are detected, they MUST use their designated response templates.
+
+**✅ REQUIRED Hand-off Orchestrators:**
+
+| Orchestrator | Trigger Keywords | Response Template | Header |
+|--------------|------------------|-------------------|--------|
+| **Planning System** | `plan`, `create a plan`, `make a plan` | `autonomous_execution_progress` | `## 🛡️🧠 CORTEX Plan Execution` |
+| **ADO Operations** | `ado story`, `ado feature`, `plan ado` | `ado_execution_progress` | `## 🛡️🧠 CORTEX ADO Work Item Generation` |
+
+**Visual Confirmation:**
+- 🛡️ = Orchestrator engaged and using correct template
+- If response does NOT show 🛡️ header → Hand-off failed
+
+**✅ REQUIRED Validation Checks:**
+
+```bash
+# Check response templates have orchestrator_engaged flag
+grep -q "orchestrator_engaged: true" cortex-brain/response-templates-v4.yaml && echo "✅ Templates configured" || echo "❌ Missing orchestrator_engaged flag"
+
+# Check Intent Router has HAND-OFF entries
+grep -q "🛡️.*HAND-OFF" .github/prompts/CORTEX.prompt.md && echo "✅ Intent Router configured" || echo "❌ Missing HAND-OFF entries"
+
+# Check response template headers have shield icon
+grep -q "## 🛡️🧠 CORTEX" cortex-brain/response-templates-v4.yaml && echo "✅ Templates have shield icon" || echo "❌ Missing shield icon in templates"
+```
+
+**🔧 Auto-Repair Actions:**
+
+If HAND-OFF orchestrators missing from Intent Router:
+```markdown
+| `/CORTEX Plan [x]`, `create a plan`, `make a plan`, `plan: [x]` | 🛡️ **Planning System** | `planning-system-4.0-manifest.yaml` | **HAND-OFF** → Use `autonomous_execution_progress` template |
+| `plan ado`, `ado story`, `ado feature` | 🛡️ **ADO Operations** | `ado-planning-manifest.yaml` | **HAND-OFF** → Use `ado_execution_progress` template |
+```
+
+If response templates missing shield icon:
+- Update `autonomous_execution_progress` header to: `## 🛡️🧠 CORTEX Plan Execution`
+- Update `ado_execution_progress` header to: `## 🛡️🧠 CORTEX ADO Work Item Generation`
+
+**❌ FORBIDDEN:**
+- HAND-OFF orchestrators without 🛡️ marker in Intent Router
+- Response templates without `orchestrator_engaged: true` flag
+- Response headers without 🛡️ shield icon
+- Manual plan creation bypassing Planning Orchestrator
+
+**Extensibility:**
+To add new HAND-OFF orchestrators:
+1. Add 🛡️ marker to Intent Router table
+2. Add `orchestrator_engaged: true` to response template
+3. Add `## 🛡️🧠 CORTEX {Operation}` header to template
+4. Add to this rule's validation checks
+
+**Location in Pipeline:** Phase 2b (Template Validation) + Phase 11 (Final Verification)
+
+**Success Criteria:**
+- ✅ All HAND-OFF orchestrators have 🛡️ in Intent Router
+- ✅ All HAND-OFF templates have `orchestrator_engaged: true`
+- ✅ All HAND-OFF response headers show 🛡️ shield icon
+- ✅ User sees 🛡️ when orchestrator is correctly engaged
+
+---
+
 ## 🎯 11-Phase Optimized Maintenance Pipeline
 
 **⚠️ EVERY PHASE = DIAGNOSE + AUTO-REPAIR + VERIFY**
@@ -421,7 +594,7 @@ else:
 | **4** | **🔧 SCAFFOLDING** | Check toolkit generators exist | Create missing generators | Test generation works |
 | **5** | **🔌 WIRING** | Detect unwired components | Auto-wire orchestrators, agents | 100% wiring coverage |
 | **6** | **🧪 TESTING** | Run full test suite | Delete obsolete tests, fix bugs | 100% pass rate |
-| **7** | **📚 KNOWLEDGE** | Scan knowledge library | Fix broken refs, sync YAML↔MD | All guidelines accessible |
+| **7** | **📚 KNOWLEDGE** | Scan knowledge library, **validate plan content (Rule 9)** | Fix broken refs, sync YAML↔MD, **auto-repair plans** | All guidelines accessible, **plans conformant** |
 | **8** | **🗂️ ORGANIZATION** | Check report structure | Archive old, consolidate duplicates | Clean hierarchy |
 | **9** | **🔀 ROUTING** | Validate intent router | Fix broken manifest paths | All routes functional |
 | **10** | **📝 PROMPTS** | Measure prompt bloat | Regenerate lean prompts | Each <200 lines |
@@ -2387,6 +2560,130 @@ grep -A 5 "knowledge" cortex-brain/brain-protection-rules.yaml
 | Critical Rules | 77+ | 75+ | ✅ |
 | Files with Metadata | 30/30 | 100% | ✅ |
 | Files with Examples | 30/30 | 100% | ✅ |
+
+### 7h. Plan Content Validation (Rule 9 Enforcement) 🚨 NEW
+
+**Critical:** Validate ALL active plans have mandatory sections per Rule 9.
+
+**Validation Script:**
+
+```bash
+echo "🔍 Validating plan content (Rule 9)..."
+
+PLANS_CHECKED=0
+PLANS_FAILED=0
+
+for plan in cortex-brain/documents/planning/active/*/00-master-plan.md; do
+  if [ ! -f "$plan" ]; then continue; fi
+  
+  PLANS_CHECKED=$((PLANS_CHECKED + 1))
+  PLAN_NAME=$(basename $(dirname "$plan"))
+  ISSUES=""
+  
+  # Check 1: Visual Progress Tracking (progress bars)
+  if ! grep -qE "\[█|░\]|Progress.*%|\`█+░*\`" "$plan" 2>/dev/null; then
+    ISSUES="$ISSUES\n  ❌ Missing: Visual progress tracking"
+  fi
+  
+  # Check 2: Response Template Reference
+  if ! grep -qi "autonomous_execution_progress\|response-templates-v4\.yaml\|response_template" "$plan" 2>/dev/null; then
+    ISSUES="$ISSUES\n  ❌ Missing: Response template reference"
+  fi
+  
+  # Check 3: Final REFACTOR Phase
+  if ! grep -qiE "final.*refactor|refactor.*phase.*mandatory|SKULL.*REFACTOR|Phase.*6.*REFACTOR" "$plan" 2>/dev/null; then
+    ISSUES="$ISSUES\n  ❌ Missing: Final REFACTOR phase (SKULL enforcement)"
+  fi
+  
+  # Check 4: copilot_instructions or equivalent
+  if ! grep -qi "copilot_instructions\|tdd_enforcement.*true\|final_refactor_required" "$plan" 2>/dev/null; then
+    ISSUES="$ISSUES\n  ❌ Missing: copilot_instructions block"
+  fi
+  
+  if [ -n "$ISSUES" ]; then
+    echo "⚠️  Plan: $PLAN_NAME"
+    echo -e "$ISSUES"
+    PLANS_FAILED=$((PLANS_FAILED + 1))
+  else
+    echo "✅ Plan: $PLAN_NAME - All requirements met"
+  fi
+done
+
+echo ""
+echo "📊 Plan Content Validation Summary:"
+echo "   Plans checked: $PLANS_CHECKED"
+echo "   Plans passing: $((PLANS_CHECKED - PLANS_FAILED))"
+echo "   Plans failing: $PLANS_FAILED"
+
+if [ $PLANS_FAILED -gt 0 ]; then
+  echo ""
+  echo "🔧 AUTO-REPAIR: Run plan content fixer..."
+  # Auto-repair triggered in next step
+fi
+```
+
+**Auto-Repair Action:**
+
+When plan fails validation, append mandatory sections:
+
+```bash
+# For each failing plan, append missing sections
+for plan in cortex-brain/documents/planning/active/*/00-master-plan.md; do
+  # Check if already has all requirements
+  if grep -qi "MANDATORY Requirements.*Auto-Added" "$plan" 2>/dev/null; then
+    continue  # Already fixed
+  fi
+  
+  # Append mandatory section template
+  cat >> "$plan" << 'MANDATORY_SECTION'
+
+---
+
+## ⚠️ MANDATORY Requirements (Auto-Added by Maintenance)
+
+### Visual Progress Tracking
+Use `autonomous_execution_progress` template from `response-templates-v4.yaml` (line 863)
+
+| # | Phase | Status | Progress | TDD Status |
+|---|-------|--------|----------|------------|
+| **Overall** | 🟡 | `[░░░░░░░░░░░░░░░░░░░░]` 0% | Phase 0/N | - |
+
+### Response Template Helpers
+- `generate_progress_bar(percentage, width=20, filled='█', empty='░')`
+- `generate_tdd_status(red_done, green_done, refactor_done)`
+- `render_autonomous_progress(...)` - Full convenience method
+
+### Final REFACTOR Phase (MANDATORY - SKULL Rule)
+Per `REFACTOR_CODE_CLEANUP_ENFORCEMENT`:
+- ✅ Whole-file cleanup (not just new code)
+- ✅ Complexity ≤30 for all functions
+- ✅ SOLID principles enforced
+- ✅ Zero dead code/unused imports
+- ✅ 100% test pass rate
+
+### copilot_instructions
+```yaml
+copilot_instructions:
+  response_template: "autonomous_execution_progress"
+  progress_updates: true
+  tdd_enforcement: true
+  final_refactor_required: true
+  checkpoint_frequency: "per_phase"
+```
+
+**Reference:** `planning-system-4.0-manifest.yaml` (lines 118-157, 639-677)
+
+MANDATORY_SECTION
+
+  echo "✅ Auto-repaired: $plan"
+done
+```
+
+**Success Criteria:**
+- ✅ 100% of active plans have visual progress tracking
+- ✅ 100% of active plans reference response templates
+- ✅ 100% of active plans have Final REFACTOR phase
+- ✅ 100% of active plans have copilot_instructions or equivalent
 
 ---
 

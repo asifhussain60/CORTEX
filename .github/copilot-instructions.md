@@ -30,13 +30,34 @@ All command routing is defined in `CORTEX.prompt.md`. Key orchestrators:
 
 **Manifest Location:** `cortex-brain/manifests/orchestrators/`
 
+### 🛡️ HAND-OFF Orchestrators
+
+When you see 🛡️ in Intent Router, these orchestrators **MUST take over completely**:
+
+| Orchestrator | Trigger | Template | Header |
+|--------------|---------|----------|--------|
+| **Planning** | `plan`, `create a plan` | `autonomous_execution_progress` | `## 🛡️🧠 CORTEX Plan Execution` |
+| **ADO** | `ado story`, `ado feature` | `ado_execution_progress` | `## 🛡️🧠 CORTEX ADO Work Item Generation` |
+
+**Visual Confirmation:** 🛡️ in response header = Orchestrator correctly engaged
+
+### ⛔ MANDATORY Plan Content
+
+**Every plan MUST include:**
+1. **Visual Progress Tracking** - `autonomous_execution_progress` template with progress bars
+2. **Response Template Reminder** - Reference to `response-templates-v4.yaml:863`
+3. **Final REFACTOR Phase** - SKULL rule enforcement (whole-file cleanup)
+4. **copilot_instructions Block** - `response_template`, `tdd_enforcement`, `final_refactor_required`
+
+**Reference:** `planning-system-4.0-manifest.yaml` (lines 118-157, 639-677)
+
 ---
 
 ## 📋 Response Format
 
 Defer to `CORTEX.prompt.md` for full spec. Summary:
 
-- **Header:** Always include `## 🧠 CORTEX {Title}` + author line
+- **Header:** Always include `## 🧠 CORTEX {Title}` + author line (or `## 🛡️🧠` for HAND-OFF orchestrators)
 - **Body:** Scales with complexity (INSTANT → COMPREHENSIVE)
 - **Next Steps:** EXACTLY ONE action OR completion message
 - **Completion:** Use `# 🎉 CONGRATULATIONS` when all work done
