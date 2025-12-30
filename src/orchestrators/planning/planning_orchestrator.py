@@ -87,6 +87,15 @@ from src.orchestrators.planning.intelligence import (
 # Phase 10: YAML Modularization
 from src.orchestrators.planning.markdown_renderer import MarkdownRenderer
 
+# Phase 3.2: Threat Modeling Integration
+try:
+    from src.agents.security.threat_modeler_agent import ThreatModelerAgent
+    from src.cortex_agents.base_agent import AgentRequest
+    THREAT_MODELER_AVAILABLE = True
+except ImportError:
+    THREAT_MODELER_AVAILABLE = False
+    ThreatModelerAgent = None
+
 logger = logging.getLogger(__name__)
 
 # Enhancement 1: JSON Schema validation for manifests
@@ -163,6 +172,9 @@ class PlanData:
     tdd_requirements: Optional[Dict[str, List[str]]] = None
     git_checkpoint_strategy: Optional[Dict[str, Any]] = None
     session_metadata: Optional[Dict[str, Any]] = None
+    copilot_instructions: Optional[Dict[str, Any]] = None
+    threat_modeling: Optional[Dict[str, Any]] = None  # Phase 3.2: Input controls
+    threat_analysis: Optional[Dict[str, Any]] = None  # Phase 3.2: Analysis results
 
 
 @dataclass
@@ -873,23 +885,39 @@ class PlanningOrchestrator(BaseOrchestrator):
         self,
         feature_name: str,
         plan_type: str,
-        complexity: Optional[Any]
+        complexity: Optional[Any],
+        threat_modeling_config: Optional[Dict[str, Any]] = None
     ) -> PlanningResult:
         """
-        Generate new plan.
+        Generate new plan with optional threat modeling integration.
         
         Week 8 Day 1-2: Placeholder - will be delegated to PlanGenerator module.
+        Phase 3.2: Added threat modeling integration.
         
         Args:
             feature_name: Name of feature to plan
             plan_type: Type of plan to generate
             complexity: Plan complexity level
+            threat_modeling_config: Optional threat modeling configuration
         
         Returns:
             PlanningResult with generated plan
         """
         # Day 1-2: Basic plan generation
         self.logger.info(f"📝 Generating {plan_type} plan for: {feature_name}")
+        
+        # Phase 3.2: Default threat modeling config
+        if threat_modeling_config is None:
+            threat_modeling_config = {
+                "enabled": True,
+                "stride_categories": ["Spoofing", "Tampering", "Repudiation", "Information Disclosure", "Denial of Service", "Elevation of Privilege"],
+                "auto_mitigations": True
+            }
+        
+        # Phase 3.2: Run threat analysis if enabled
+        threat_analysis_result = None
+        if threat_modeling_config.get("enabled", True) and THREAT_MODELER_AVAILABLE:
+            threat_analysis_result = self._run_threat_analysis(feature_name, threat_modeling_config)
         
         # Create basic plan structure
         plan_data = PlanData(
@@ -925,8 +953,20 @@ class PlanningOrchestrator(BaseOrchestrator):
             tdd_requirements={
                 "dor": self._tdd_dor_requirements,
                 "dod": self._tdd_dod_requirements
-            }
+            },
+            copilot_instructions={
+                "response_template": "autonomous_execution_progress",
+                "progress_updates": True,
+                "tdd_enforcement": True,
+                "checkpoint_frequency": "per_phase"
+            },
+            threat_modeling=threat_modeling_config,
+            threat_analysis=threat_analysis_result
         )
+        
+        # Phase 3.4: Auto-inject security tasks if critical/high threats found
+        if threat_analysis_result and self._has_critical_threats(threat_analysis_result):
+            plan_data = self._inject_security_tasks(plan_data, threat_analysis_result)
         
         # Day 2: Will delegate to PlanGenerator module for sophisticated generation
         
@@ -937,6 +977,139 @@ class PlanningOrchestrator(BaseOrchestrator):
             markdown_path=None,  # Will be set during rendering
             validation_result=ValidationResult(valid=True)
         )
+    
+    # ========================================================================
+    # Phase 3.2: Threat Modeling Integration
+    # ========================================================================
+    
+    def _run_threat_analysis(
+        self,
+        feature_name: str,
+        threat_modeling_config: Dict[str, Any]
+    ) -> Optional[Dict[str, Any]]:
+        """
+        Run threat analysis using ThreatModelerAgent.
+        
+        Phase 3.2: Integrated threat modeling for security-sensitive features.
+        
+        Args:
+            feature_name: Feature to analyze
+            threat_modeling_config: Configuration for threat modeling
+        
+        Returns:
+            Threat analysis results or None if unavailable
+        """
+        if not THREAT_MODELER_AVAILABLE:
+            self.logger.warning("⚠️ ThreatModelerAgent not available - skipping threat analysis")
+            return None
+        
+        try:
+            self.logger.info(f"🔒 Running threat analysis for: {feature_name}")
+            
+            # Initialize threat modeler
+            threat_modeler = ThreatModelerAgent()
+            
+            # Build request
+            request = AgentRequest(
+                user_message=feature_name,
+                intent="analyze_threats",
+                context={
+                    "feature_description": feature_name,
+                    "feature_type": "general",
+                    "stride_categories": threat_modeling_config.get("stride_categories", []),
+                    "auto_mitigations": threat_modeling_config.get("auto_mitigations", True)
+                }
+            )
+            
+            # Execute analysis
+            response = threat_modeler.execute(request)
+            
+            if response.success:
+                self.logger.info(f"✅ Threat analysis complete: {response.result.get('risk_level', 'UNKNOWN')} risk")
+                return response.result
+            else:
+                self.logger.warning(f"⚠️ Threat analysis failed: {response.message}")
+                return None
+                
+        except Exception as e:
+            self.logger.error(f"❌ Threat analysis error: {e}")
+            return None
+    
+    def _has_critical_threats(self, threat_analysis: Dict[str, Any]) -> bool:
+        """
+        Check if threat analysis contains CRITICAL or HIGH risk threats.
+        
+        Phase 3.4: Determines if security tasks should be auto-injected.
+        
+        Args:
+            threat_analysis: Results from threat analysis
+        
+        Returns:
+            True if critical/high threats exist
+        """
+        if not threat_analysis:
+            return False
+        
+        risk_level = threat_analysis.get("risk_level", "LOW")
+        return risk_level in ["CRITICAL", "HIGH"]
+    
+    def _inject_security_tasks(
+        self,
+        plan_data: PlanData,
+        threat_analysis: Dict[str, Any]
+    ) -> PlanData:
+        """
+        Auto-inject security tasks for critical/high threats.
+        
+        Phase 3.4: Adds security review and mitigation tasks to plan phases.
+        
+        Args:
+            plan_data: Original plan data
+            threat_analysis: Threat analysis results
+        
+        Returns:
+            Modified plan data with security tasks
+        """
+        self.logger.info("🔒 Injecting security tasks for critical threats")
+        
+        # Create security review phase
+        security_tasks = []
+        
+        threats = threat_analysis.get("threats", [])
+        critical_threats = [t for t in threats if t.get("risk_rating") in ["CRITICAL", "HIGH"]]
+        
+        for i, threat in enumerate(critical_threats[:5], 1):  # Max 5 security tasks
+            task = {
+                "task": f"Mitigate {threat.get('category', 'Unknown')} threat: {threat.get('name', 'Unknown')}",
+                "estimated_hours": 2,
+                "security_task": True,
+                "threat_category": threat.get("category"),
+                "risk_rating": threat.get("risk_rating"),
+                "mitigation_strategies": threat.get("mitigation_strategies", [])[:2]  # Top 2 mitigations
+            }
+            security_tasks.append(task)
+        
+        if security_tasks:
+            # Insert security phase at the beginning
+            security_phase = PlanPhaseData(
+                phase_name="Security Hardening",
+                tasks=security_tasks,
+                acceptance_criteria=[
+                    f"All {len(critical_threats)} critical/high threats mitigated",
+                    "Security review completed",
+                    "Mitigation strategies implemented"
+                ]
+            )
+            
+            # Insert at position 0 (before implementation)
+            plan_data.phases.insert(0, security_phase)
+            
+            # Update DoD with security requirements
+            plan_data.definition_of_done.append("Security threats mitigated per threat analysis")
+            
+            self.logger.info(f"✅ Injected {len(security_tasks)} security tasks")
+        
+        return plan_data
     
     def _render_markdown(
         self,
@@ -1030,6 +1203,9 @@ class PlanningOrchestrator(BaseOrchestrator):
         
         if plan_data.tdd_requirements:
             plan_dict["tdd_requirements"] = plan_data.tdd_requirements
+        
+        if plan_data.copilot_instructions:
+            plan_dict["copilot_instructions"] = plan_data.copilot_instructions
         
         # Task 13A: Use 00-master-plan.md for hierarchical structure
         if plan_folder:
