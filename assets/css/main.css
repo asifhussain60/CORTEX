@@ -327,6 +327,16 @@ body {
         width: 250px;
         height: 250px;
         filter: drop-shadow(0 0 25px rgba(0, 212, 255, 0.5));
+        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    /* Expanded state for mobile when at top of page */
+    .hero-logo.logo-expanded {
+        width: 90vw;
+        height: 90vw;
+        max-width: 500px;
+        max-height: 500px;
+        filter: drop-shadow(0 0 60px rgba(0, 212, 255, 0.8));
     }
 }
 
@@ -335,6 +345,27 @@ body {
         width: 200px;
         height: 200px;
         filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.4));
+        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    /* Expanded state for small mobile when at top of page */
+    .hero-logo.logo-expanded {
+        width: 95vw;
+        height: 95vw;
+        max-width: 400px;
+        max-height: 400px;
+        filter: drop-shadow(0 0 60px rgba(0, 212, 255, 0.8));
+    }
+}
+
+/* Mobile Hero Section Adjustments */
+@media (max-width: 768px) {
+    .hero {
+        padding: 2rem 1rem 3rem;
+        min-height: 100vh; /* Ensure full viewport initially */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
 }
 
@@ -2378,7 +2409,7 @@ footer,
 .hero-cta-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
+    gap: 2rem;
     max-width: 900px;
     margin: var(--spacing-xl) auto 0;
     animation: fadeInUp 0.8s ease-out 0.4s both;
@@ -2387,7 +2418,7 @@ footer,
 @media (max-width: 768px) {
     .hero-cta-grid {
         grid-template-columns: 1fr;
-        gap: 1rem;
+        gap: 1.5rem;
     }
 }
 
@@ -2522,6 +2553,63 @@ footer,
 .phase-description {
     font-size: 1rem;
     color: var(--text-secondary);
+}
+
+/* Workflow Phases Mobile Responsiveness */
+@media (max-width: 768px) {
+    .workflow-phases {
+        grid-template-columns: 1fr !important;
+        gap: 2rem;
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .phase-card {
+        padding: 1.5rem 1rem;
+        margin-top: 0.75rem;
+        min-height: 160px;
+    }
+    
+    .phase-card:hover {
+        transform: none; /* Disable hover lift on mobile */
+    }
+    
+    .phase-icon {
+        font-size: 1.8rem;
+    }
+    
+    .phase-title {
+        font-size: 1rem;
+    }
+    
+    .phase-description {
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+}
+
+@media (max-width: 480px) {
+    .workflow-phases {
+        max-width: 100%;
+        gap: 1.5rem;
+    }
+    
+    .phase-card {
+        backdrop-filter: blur(8px); /* Reduce blur for performance */
+    }
+    
+    .phase-icon {
+        font-size: 1.5rem;
+    }
+    
+    .phase-title {
+        font-size: 0.95rem;
+    }
+    
+    .phase-description {
+        font-size: 0.85rem;
+    }
 }
 
 /* ============================================
