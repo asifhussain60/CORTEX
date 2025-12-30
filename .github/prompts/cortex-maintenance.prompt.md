@@ -89,6 +89,66 @@ Maintenance fixes MUST:
 
 **Reference:** `cortex-brain/documents/planning/active/CORTEX-4.0-GAPS-1230/`
 
+### Rule 5: Visual Progress Tracker Enforcement (NEW - December 30, 2025)
+
+**ALL Executive Summaries MUST include Visual Progress Tracker at the TOP.**
+
+**❌ FORBIDDEN:**
+- Executive summaries without visual tracker
+- Progress reports lacking ASCII progress bars
+- Phase outputs without completion visualization
+
+**✅ REQUIRED FORMAT:**
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                         {OPERATION_NAME} STATUS                              ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║  Overall Progress: [████████░░░░░░░░░░░░] XX%  {STATUS_EMOJI} {STATUS_TEXT}  ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║  Phase 1 - {Name}:  [██████████] 100%  ✅ Complete                           ║
+║  Phase 2 - {Name}:  [████████░░]  80%  🔄 In Progress                        ║
+║  Phase 3 - {Name}:  [░░░░░░░░░░]   0%  ⏳ Pending                            ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║  Tests: XX/XX passing  │  Code: X,XXX LOC  │  Status: {STATUS}               ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+**Locations that MUST have visual tracker:**
+- `cortex-brain/documents/planning/active/*/00-*.md` (master plans)
+- `cortex-brain/documents/reports/*.md` (all reports)
+- Phase completion messages in chat responses
+
+**Reference:** `cortex-brain/response-templates/planning.yaml` → `visual_progress_tracker`
+
+### Rule 6: Planning Executioner Visual Progress Bar (NEW - December 30, 2025)
+
+**Planning executioner MUST render visual progress bar at END of each phase.**
+
+**❌ FORBIDDEN:**
+- Phase completions without progress visualization
+- Text-only status updates
+- Autonomous mode skipping progress_bar component
+
+**✅ REQUIRED:**
+- `template_renderer.py` → `_render_with_components()` MUST include `progress_bar`
+- Planning responses MUST use templates from `response-templates-v4.yaml`
+- Each phase completion shows: `[████████░░] 80%` style progress
+
+**Implementation Check:**
+```python
+# src/response_templates/template_renderer.py
+# Line ~229: autonomous mode must NOT skip progress_bar
+components = ['header', 'body', 'progress_bar', 'footer']  # progress_bar REQUIRED
+```
+
+**Template Reference:**
+- `cortex-brain/response-templates/base-components.yaml` → `progress_bar_visual`
+- `cortex-brain/response-templates/planning.yaml` → `visual_progress_tracker`
+
+**Test Coverage:**
+- `tests/response_templates/test_visual_progress.py` - Validates progress bar rendering
+- Integration tests must verify progress bar appears in all phase outputs
+
 ---
 
 ## 🎯 10-Phase Optimized Maintenance Pipeline
