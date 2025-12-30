@@ -637,6 +637,13 @@ body {
     padding: 4rem 0;
 }
 
+/* Quick Links - Hidden on mobile, visible on tablets and desktop */
+@media (max-width: 767px) {
+    .quick-links-section {
+        display: none;
+    }
+}
+
 .section-title {
     font-size: 2.5rem;
     text-align: center;
@@ -4301,6 +4308,441 @@ footer,
         background: white;
         border: 1px solid #ccc;
         box-shadow: none;
+    }
+}
+
+/* ============================================
+   DEMO VIDEOS - SHOWCASE SECTION (Side-by-Side Layout)
+   ============================================ */
+
+/* Main Showcase Card */
+/* Container for demo showcase section */
+.demo-showcase-container {
+    max-width: 1200px;
+    margin: 3rem auto;
+    padding: 0 75px;
+}
+
+.demo-showcase-card {
+    padding: 2rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+}
+
+/* Header */
+.demo-showcase-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.demo-showcase-icon {
+    font-size: 3.5rem;
+    flex-shrink: 0;
+}
+
+.demo-showcase-title {
+    margin: 0;
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: var(--accent-primary);
+    letter-spacing: 0.5px;
+    text-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+}
+
+.demo-showcase-subtitle {
+    margin: 0.25rem 0 0;
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    line-height: 1.5;
+    max-width: 600px;
+}
+
+/* Side-by-Side Layout */
+.demo-showcase-layout {
+    display: grid;
+    grid-template-columns: 420px 1fr;
+    gap: 2rem;
+    align-items: center;
+}
+
+/* Left Sidebar */
+.demo-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding-right: 50px;
+}
+
+/* Vertical Tabs */
+.demo-tabs-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.demo-tab-v {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 1.25rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    color: var(--text-secondary);
+    text-align: left;
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.demo-tab-v:hover {
+    background: rgba(0, 212, 255, 0.08);
+    border-color: rgba(0, 212, 255, 0.2);
+    color: var(--text-primary);
+    transform: translateX(4px);
+}
+
+.demo-tab-v.active {
+    background: rgba(0, 212, 255, 0.15);
+    border-color: var(--accent-primary);
+    color: var(--text-primary);
+    box-shadow: 0 0 25px rgba(0, 212, 255, 0.2);
+    transform: translateX(4px);
+}
+
+.demo-tab-v-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.demo-tab-v-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.demo-tab-v-label {
+    font-weight: 700;
+    font-size: 1.125rem;
+    line-height: 1.3;
+}
+
+.demo-tab-v-desc {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+.demo-tab-v.active .demo-tab-v-desc {
+    color: var(--text-secondary);
+}
+
+/* Info Panel */
+.demo-info-panel {
+    padding: 1.5rem;
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.demo-info-content h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+    line-height: 1.3;
+}
+
+.demo-info-content p {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+/* Video Area */
+.demo-video-area {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 50px;
+}
+
+/* Tab Panels */
+.demo-tab-panel {
+    display: none;
+    animation: fadeIn 0.3s ease-out;
+    width: 100%;
+}
+
+.demo-tab-panel.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Video Wrapper - Portrait Mode (768x1024) */
+.demo-video-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #000;
+    aspect-ratio: 3 / 4;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+}
+
+.demo-video {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+/* Custom Play Button Overlay */
+.video-play-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
+    background: rgba(0, 212, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-base);
+    z-index: 10;
+    box-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+}
+
+.video-play-btn svg {
+    width: 36px;
+    height: 36px;
+    color: #fff;
+    margin-left: 4px; /* Visual center for play icon */
+}
+
+.video-play-btn:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+    background: var(--accent-primary);
+    box-shadow: 0 0 40px rgba(0, 212, 255, 0.7);
+}
+
+.video-play-btn.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Video Info Section */
+.demo-video-info {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.demo-video-title {
+    font-size: 1.25rem;
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+}
+
+.demo-video-description {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+/* Video Tags */
+.demo-video-tags {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.demo-tag {
+    padding: 0.35rem 0.75rem;
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 20px;
+    font-size: 0.8rem;
+    color: var(--accent-primary);
+}
+
+/* Coming Soon Placeholder */
+.demo-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(26, 31, 58, 0.9), rgba(10, 14, 39, 0.9));
+    aspect-ratio: 3 / 4;
+}
+
+.demo-coming-soon {
+    text-align: center;
+    padding: 2rem;
+}
+
+.coming-soon-icon {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 1rem;
+    opacity: 0.7;
+}
+
+.demo-coming-soon h4 {
+    font-size: 1.25rem;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.demo-coming-soon p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+/* Mobile Responsive - Demo Videos */
+@media (max-width: 900px) {
+    /* Reduce container padding on mobile */
+    .demo-showcase-container {
+        padding: 0 1rem;
+    }
+    
+    /* Reset sidebar and video area padding for mobile */
+    .demo-sidebar {
+        padding-right: 0;
+    }
+    
+    .demo-video-area {
+        padding-left: 0;
+    }
+    
+    /* Stack layout vertically on tablets/mobile */
+    .demo-showcase-layout {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    /* Horizontal scrolling tabs on mobile */
+    .demo-tabs-vertical {
+        flex-direction: row;
+        overflow-x: auto;
+        gap: 0.5rem;
+        padding-bottom: 0.5rem;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    
+    .demo-tabs-vertical::-webkit-scrollbar {
+        display: none;
+    }
+    
+    .demo-tab-v {
+        flex-shrink: 0;
+        padding: 0.625rem 0.875rem;
+    }
+    
+    .demo-tab-v-icon {
+        font-size: 1.25rem;
+    }
+    
+    .demo-tab-v-desc {
+        display: none;
+    }
+    
+    .demo-tab-v-label {
+        font-size: 0.85rem;
+        white-space: nowrap;
+    }
+    
+    /* Hide info panel on mobile - show simpler version */
+    .demo-info-panel {
+        display: none;
+    }
+    
+    /* Full-width video on mobile */
+    .demo-video-wrapper {
+        max-width: 100%;
+        border-radius: 8px;
+    }
+    
+    .demo-showcase-card {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 600px) {
+    /* Further reduce padding on small screens */
+    .demo-showcase-container {
+        padding: 0 0.5rem;
+    }
+    
+    .demo-showcase-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+    }
+    
+    .demo-showcase-title {
+        font-size: 1.25rem;
+    }
+    
+    .demo-tab-v {
+        padding: 0.5rem 0.75rem;
+    }
+    
+    .demo-tab-v-content {
+        display: none;
+    }
+    
+    .demo-tab-v-icon {
+        font-size: 1.5rem;
+    }
+    
+    /* Contained video on small mobile - no overflow */
+    .demo-video-wrapper {
+        width: 100%;
+        max-width: 100%;
+        border-radius: 8px;
+    }
+    
+    .demo-showcase-card {
+        padding: 1rem;
+        overflow: hidden;
+    }
+    
+    .video-play-btn {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .video-play-btn svg {
+        width: 28px;
+        height: 28px;
     }
 }
 

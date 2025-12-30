@@ -172,57 +172,141 @@
                 </div>
             </div>
         </div>
-    </section>
 
-    <section class="section">
-        <div class="container">
-            <h2 class="section-title text-center">Core Capabilities</h2>
-            <div class="feature-grid-3">
-                <article class="glass-card">
-                    <h3>🎯 Planning System</h3>
-                    <p>Transform vague requirements into executable plans with DoR/DoD validation, auto-complexity detection, and TDD integration.</p>
-                    <a href="orchestrators/planning-system.html" class="btn-link">Learn More →</a>
-                </article>
-                <article class="glass-card">
-                    <h3>✅ TDD Mastery</h3>
-                    <p>Enforced RED-GREEN-REFACTOR discipline with per-layer coverage tracking and automatic test generation.</p>
-                    <a href="orchestrators/tdd-orchestrator.html" class="btn-link">Learn More →</a>
-                </article>
-                <article class="glass-card">
-                    <h3>⚡ Autonomous Execution</h3>
-                    <p>Execute all plan phases autonomously with intelligent error recovery and progress tracking.</p>
-                    <a href="orchestrators/execution-orchestrator.html" class="btn-link">Learn More →</a>
-                </article>
-                <article class="glass-card">
-                    <h3>🧠 4-Tier Brain</h3>
-                    <p>Persistent memory architecture with SKULL governance, knowledge graph, and development context.</p>
-                    <a href="architecture/four-tier-brain.html" class="btn-link">Learn More →</a>
-                </article>
-                <article class="glass-card">
-                    <h3>📋 ADO Integration</h3>
-                    <p>Native Azure DevOps integration for work item generation, sprint planning, and story management.</p>
-                    <a href="orchestrators/ado-operations.html" class="btn-link">Learn More →</a>
-                </article>
-                <article class="glass-card">
-                    <h3>🔒 Code Sanitization</h3>
-                    <p>5-phase workflow to anonymize proprietary code for sharing while preserving functionality.</p>
-                    <a href="orchestrators/sanitization.html" class="btn-link">Learn More →</a>
-                </article>
-                <article class="glass-card">
-                    <h3><i class="fas fa-search-plus"></i> CORTEX LENS</h3>
-                    <p>Deep code intelligence through AST analysis, dependency mapping, and reverse engineering. Transform source code into actionable insights.</p>
-                    <a href="lens/index.html" class="btn-link">Explore LENS →</a>
-                </article>
-                <article class="glass-card">
-                    <h3>📚 CORTEX Best Practices</h3>
-                    <p>35 best practice libraries that CORTEX consults when writing code—covering testing, security, architecture, and software craft.</p>
-                    <a href="knowledge/index.html" class="btn-link">Explore Library →</a>
-                </article>
+        <!-- CORTEX Demo Videos - Tabbed Section -->
+        <div class="demo-showcase-container">
+            <div class="glass-card demo-showcase-card">
+                <div class="demo-showcase-header">
+                    <span class="demo-showcase-icon">🎬</span>
+                    <div>
+                        <h2 class="demo-showcase-title">CORTEX IN ACTION</h2>
+                        <p class="demo-showcase-subtitle">Watch CORTEX transform your development workflow</p>
+                    </div>
+                </div>
+                
+                <div class="demo-showcase-layout">
+                    <!-- Left Side: Vertical Tab Navigation + Info -->
+                    <div class="demo-sidebar">
+                        <div class="demo-tabs-vertical" role="tablist" aria-label="Demo video categories">
+                            <button class="demo-tab-v active" role="tab" aria-selected="true" aria-controls="tab-e2e" data-tab="e2e">
+                                <span class="demo-tab-v-icon">⚡</span>
+                                <div class="demo-tab-v-content">
+                                    <span class="demo-tab-v-label">E2E Execution</span>
+                                    <span class="demo-tab-v-desc">Full autonomous workflow</span>
+                                </div>
+                            </button>
+                            <button class="demo-tab-v" role="tab" aria-selected="false" aria-controls="tab-planning" data-tab="planning">
+                                <span class="demo-tab-v-icon">🎯</span>
+                                <div class="demo-tab-v-content">
+                                    <span class="demo-tab-v-label">Planning System</span>
+                                    <span class="demo-tab-v-desc">Strategic task breakdown</span>
+                                </div>
+                            </button>
+                            <button class="demo-tab-v" role="tab" aria-selected="false" aria-controls="tab-tdd" data-tab="tdd">
+                                <span class="demo-tab-v-icon">✅</span>
+                                <div class="demo-tab-v-content">
+                                    <span class="demo-tab-v-label">TDD Workflow</span>
+                                    <span class="demo-tab-v-desc">RED→GREEN→REFACTOR</span>
+                                </div>
+                            </button>
+                            <button class="demo-tab-v" role="tab" aria-selected="false" aria-controls="tab-lens" data-tab="lens">
+                                <span class="demo-tab-v-icon">🔍</span>
+                                <div class="demo-tab-v-content">
+                                    <span class="demo-tab-v-label">CORTEX Lens</span>
+                                    <span class="demo-tab-v-desc">Code intelligence & AST</span>
+                                </div>
+                            </button>
+                        </div>
+                        
+                        <!-- Video Info (shows below tabs on desktop) -->
+                        <div class="demo-info-panel">
+                            <div class="demo-info-content" data-for="e2e">
+                                <h3>End-to-End Autonomous Execution</h3>
+                                <p>Watch CORTEX autonomously execute a complete development workflow—from requirement analysis through implementation, testing, and deployment.</p>
+                                <div class="demo-video-tags">
+                                    <span class="demo-tag">Autonomous</span>
+                                    <span class="demo-tag">Multi-Phase</span>
+                                    <span class="demo-tag">Error Recovery</span>
+                                </div>
+                            </div>
+                            <div class="demo-info-content" data-for="planning" style="display: none;">
+                                <h3>Strategic Planning System</h3>
+                                <p>Transform vague requirements into executable plans with DoR/DoD validation, auto-complexity detection, and TDD integration.</p>
+                                <div class="demo-video-tags">
+                                    <span class="demo-tag">DoR/DoD</span>
+                                    <span class="demo-tag">Complexity Analysis</span>
+                                    <span class="demo-tag">Task Breakdown</span>
+                                </div>
+                            </div>
+                            <div class="demo-info-content" data-for="tdd" style="display: none;">
+                                <h3>TDD RED→GREEN→REFACTOR</h3>
+                                <p>Experience enforced test-driven development with per-layer coverage tracking and automatic test generation.</p>
+                                <div class="demo-video-tags">
+                                    <span class="demo-tag">RED Phase</span>
+                                    <span class="demo-tag">GREEN Phase</span>
+                                    <span class="demo-tag">REFACTOR Phase</span>
+                                </div>
+                            </div>
+                            <div class="demo-info-content" data-for="lens" style="display: none;">
+                                <h3>Deep Code Intelligence</h3>
+                                <p>Explore AST analysis, dependency mapping, and reverse engineering. Transform source code into actionable insights.</p>
+                                <div class="demo-video-tags">
+                                    <span class="demo-tag">AST Analysis</span>
+                                    <span class="demo-tag">Dependency Graph</span>
+                                    <span class="demo-tag">Code Insights</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right Side: Video Player -->
+                    <div class="demo-video-area">
+                        <div class="demo-tab-panel active" id="tab-e2e" role="tabpanel" aria-labelledby="e2e">
+                            <div class="demo-video-wrapper">
+                                <video class="demo-video" controls preload="metadata" poster="assets/images/CORTEX-logo.png">
+                                    <source src="assets/images/MP4/E2E-Execution.mp4" type="video/mp4">
+                                    Your browser does not support video playback.
+                                </video>
+                                <button class="video-play-btn" aria-label="Play video">
+                                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="demo-tab-panel" id="tab-planning" role="tabpanel" aria-labelledby="planning">
+                            <div class="demo-video-wrapper demo-placeholder">
+                                <div class="demo-coming-soon">
+                                    <span class="coming-soon-icon">🎯</span>
+                                    <h4>Planning System Demo</h4>
+                                    <p>Coming Soon</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="demo-tab-panel" id="tab-tdd" role="tabpanel" aria-labelledby="tdd">
+                            <div class="demo-video-wrapper demo-placeholder">
+                                <div class="demo-coming-soon">
+                                    <span class="coming-soon-icon">✅</span>
+                                    <h4>TDD Mastery Demo</h4>
+                                    <p>Coming Soon</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="demo-tab-panel" id="tab-lens" role="tabpanel" aria-labelledby="lens">
+                            <div class="demo-video-wrapper demo-placeholder">
+                                <div class="demo-coming-soon">
+                                    <span class="coming-soon-icon">🔍</span>
+                                    <h4>CORTEX Lens Demo</h4>
+                                    <p>Coming Soon</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </section>
-
-    <section class="section section-alt">
+    <section class="section section-alt quick-links-section">
         <div class="container">
             <h2 class="section-title text-center">Quick Links</h2>
             <div class="feature-grid-4">
@@ -300,6 +384,152 @@
             
             // Initial check
             updateLogoSize();
+        })();
+
+        // Demo Videos Tab Navigation
+        (function() {
+            const tabs = document.querySelectorAll('.demo-tab-v');
+            const panels = document.querySelectorAll('.demo-tab-panel');
+            const infoContents = document.querySelectorAll('.demo-info-content');
+            
+            if (!tabs.length || !panels.length) return;
+            
+            function switchTab(targetTab) {
+                const target = targetTab.getAttribute('data-tab');
+                
+                // Update tab states
+                tabs.forEach(tab => {
+                    const isActive = tab === targetTab;
+                    tab.classList.toggle('active', isActive);
+                    tab.setAttribute('aria-selected', isActive);
+                });
+                
+                // Update panel visibility with animation
+                panels.forEach(panel => {
+                    const isActive = panel.id === `tab-${target}`;
+                    if (isActive) {
+                        panel.classList.add('active');
+                        // Pause video when switching to new tab
+                        const video = panel.querySelector('video');
+                        if (video) video.pause();
+                    } else {
+                        panel.classList.remove('active');
+                        // Pause videos in inactive panels
+                        const video = panel.querySelector('video');
+                        if (video) video.pause();
+                    }
+                });
+                
+                // Update info panel content
+                infoContents.forEach(info => {
+                    info.style.display = info.getAttribute('data-for') === target ? 'block' : 'none';
+                });
+                
+                // Reset play button visibility
+                const activePanel = document.querySelector('.demo-tab-panel.active');
+                if (activePanel) {
+                    const playBtn = activePanel.querySelector('.video-play-btn');
+                    if (playBtn) playBtn.classList.remove('hidden');
+                }
+            }
+            
+            // Click handler for tabs
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => switchTab(tab));
+            });
+            
+            // Keyboard navigation (A11y)
+            tabs.forEach((tab, index) => {
+                tab.addEventListener('keydown', (e) => {
+                    let targetIndex;
+                    
+                    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                        e.preventDefault();
+                        targetIndex = (index + 1) % tabs.length;
+                    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                        e.preventDefault();
+                        targetIndex = (index - 1 + tabs.length) % tabs.length;
+                    } else if (e.key === 'Home') {
+                        e.preventDefault();
+                        targetIndex = 0;
+                    } else if (e.key === 'End') {
+                        e.preventDefault();
+                        targetIndex = tabs.length - 1;
+                    }
+                    
+                    if (targetIndex !== undefined) {
+                        tabs[targetIndex].focus();
+                        switchTab(tabs[targetIndex]);
+                    }
+                });
+            });
+            
+            // Touch swipe support for mobile
+            let touchStartX = 0;
+            let touchEndX = 0;
+            const videoArea = document.querySelector('.demo-video-area');
+            
+            if (videoArea) {
+                videoArea.addEventListener('touchstart', (e) => {
+                    touchStartX = e.changedTouches[0].screenX;
+                }, { passive: true });
+                
+                videoArea.addEventListener('touchend', (e) => {
+                    touchEndX = e.changedTouches[0].screenX;
+                    handleSwipe();
+                }, { passive: true });
+                
+                function handleSwipe() {
+                    const swipeThreshold = 50;
+                    const diff = touchStartX - touchEndX;
+                    
+                    if (Math.abs(diff) < swipeThreshold) return;
+                    
+                    const currentIndex = Array.from(tabs).findIndex(tab => tab.classList.contains('active'));
+                    let targetIndex;
+                    
+                    if (diff > 0) {
+                        // Swipe left - next tab
+                        targetIndex = Math.min(currentIndex + 1, tabs.length - 1);
+                    } else {
+                        // Swipe right - previous tab
+                        targetIndex = Math.max(currentIndex - 1, 0);
+                    }
+                    
+                    if (targetIndex !== currentIndex) {
+                        switchTab(tabs[targetIndex]);
+                    }
+                }
+            }
+            
+            // Custom Play Button functionality
+            document.querySelectorAll('.video-play-btn').forEach(btn => {
+                const wrapper = btn.closest('.demo-video-wrapper');
+                const video = wrapper ? wrapper.querySelector('video') : null;
+                
+                if (!video) return;
+                
+                // Click play button to start video
+                btn.addEventListener('click', () => {
+                    video.play();
+                    btn.classList.add('hidden');
+                });
+                
+                // Show play button when video is paused
+                video.addEventListener('pause', () => {
+                    btn.classList.remove('hidden');
+                });
+                
+                // Hide play button when video plays
+                video.addEventListener('play', () => {
+                    btn.classList.add('hidden');
+                });
+                
+                // Show play button when video ends
+                video.addEventListener('ended', () => {
+                    btn.classList.remove('hidden');
+                });
+            });
         })();
     </script>
 </body>
