@@ -107,6 +107,90 @@ requirements:
         - "Story points total"
         - "Phase-specific ADO item tracking"
     
+    visual_progress_enforcement:
+      description: |
+        ALL ADO operation responses MUST include visual progress tracker.
+        This matches the maintenance and planning prompt patterns for consistent UX.
+      
+      forbidden_behaviors:
+        - "Phase completions without progress visualization"
+        - "Text-only status updates (e.g., 'Phase 2 complete')"
+        - "Skipping progress bars in autonomous mode"
+        - "Displaying progress only at plan start/end (must show after EACH phase)"
+        - "Omitting ADO-specific metrics (work items, story points)"
+      
+      required_behaviors:
+        - "Render visual progress table after EVERY phase completion"
+        - "Use ASCII progress bars: `██████████░░░░░░░░░░` format"
+        - "Show overall progress percentage in header"
+        - "Display phase status with emojis (✅ Complete, 🔄 In Progress, ⏳ Pending)"
+        - "Include ADO metrics: work items created/planned, story points, links"
+      
+      required_format: |
+        ---
+        ### 📊 ADO WORK ITEM GENERATION STATUS
+        
+        **Overall Progress:** `████████░░░░░░░░░░░░` **XX%** {STATUS_EMOJI} {STATUS_TEXT}
+        
+        | Phase | Progress | Status |
+        |-------|----------|--------|
+        | Phase 1 - DISCOVERY | `██████████` | 100% ✅ Complete |
+        | Phase 2 - VALIDATION | `████████░░` | 80% 🔄 In Progress |
+        | Phase 3 - GENERATION | `░░░░░░░░░░` | 0% ⏳ Pending |
+        | Phase 4 - APPROVAL | `░░░░░░░░░░` | 0% ⏳ Pending |
+        | Phase 5 - EXECUTION | `░░░░░░░░░░` | 0% ⏳ Pending |
+        | Phase 6 - COMPLETION | `░░░░░░░░░░` | 0% ⏳ Pending |
+        
+        📊 **Work Items:** XX/XX created | **Story Points:** XXX | **Status:** {STATUS}
+        
+        ---
+      
+      locations_requiring_tracker:
+        - "Chat responses after each ADO phase completion"
+        - "cortex-brain/documents/reports/ado-*.md (ADO operation reports)"
+        - "ADO feature planning summaries"
+      
+      ado_specific_enhancements:
+        work_item_metrics:
+          - "Epics created/planned"
+          - "Features created/planned"
+          - "Tasks created/planned"
+          - "Total story points"
+        link_display:
+          - "ADO work item URLs (clickable links)"
+          - "Parent-child relationship indicators"
+        status_indicators:
+          - "✅ Created successfully"
+          - "🔗 Linked to parent"
+          - "⚠️ Creation pending"
+          - "❌ Creation failed"
+      
+      implementation_references:
+        template_file: "cortex-brain/response-templates-v4.yaml"
+        template_component: "components.visual_progress.plan_tracker"
+        renderer_method: "template_renderer.py::generate_phase_rows()"
+        progress_bar_generator: "template_renderer.py::generate_progress_bar()"
+        ado_orchestrator: "src/orchestrators/ado/ado_orchestrator.py"
+      
+      phase_transition_pattern: |
+        After EACH ADO phase completion, IMMEDIATELY render:
+        
+        ✅ Phase {N} - {NAME}: Complete
+           └─ Work Items: {created_count} created | Story Points: {points}
+           └─ Duration: {seconds}s
+           └─ Auto-proceeding to Phase {N+1}...
+        
+        ### 📊 ADO WORK ITEM GENERATION STATUS
+        [Full progress table showing updated status + ADO metrics]
+      
+      reference_implementations:
+        - source: ".github/prompts/cortex-maintenance.prompt.md"
+          lines: "254-260"
+          description: "Maintenance prompt demonstrates correct visual progress pattern"
+        - source: "cortex-brain/manifests/orchestrators/planning-system-4.0-manifest.yaml"
+          section: "REQ-005.visual_progress_enforcement"
+          description: "Planning system visual progress enforcement rules"
+    
   - requirement_id: "REQ-006"
     name: "Learning Library Auto-Documentation"
     inherited_from: "planning-system"

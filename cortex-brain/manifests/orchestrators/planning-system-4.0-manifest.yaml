@@ -506,6 +506,66 @@ requirements:
       - "Task 1.6: Embed in master plans (⏸️)"
       - "Task 1.7: Update manifest (✅ THIS FILE)"
       - "Task 1.8: Integration testing (⏸️)"
+    
+    visual_progress_enforcement:
+      description: |
+        ALL planning operation responses MUST include visual progress tracker.
+        This matches the maintenance prompt pattern for consistent UX.
+      
+      forbidden_behaviors:
+        - "Phase completions without progress visualization"
+        - "Text-only status updates (e.g., 'Phase 2 complete')"
+        - "Skipping progress bars in autonomous mode"
+        - "Displaying progress only at plan start/end (must show after EACH phase)"
+      
+      required_behaviors:
+        - "Render visual progress table after EVERY phase completion"
+        - "Use ASCII progress bars: `██████████░░░░░░░░░░` format"
+        - "Show overall progress percentage in header"
+        - "Display phase status with emojis (✅ Complete, 🔄 In Progress, ⏳ Pending)"
+        - "Include summary metrics (tests, LOC, status)"
+      
+      required_format: |
+        ---
+        ### 📊 PLAN EXECUTION STATUS
+        
+        **Overall Progress:** `████████░░░░░░░░░░░░` **XX%** {STATUS_EMOJI} {STATUS_TEXT}
+        
+        | Phase | Progress | Status |
+        |-------|----------|--------|
+        | Phase 1 - {Name} | `██████████` | 100% ✅ Complete |
+        | Phase 2 - {Name} | `████████░░` | 80% 🔄 In Progress |
+        | Phase 3 - {Name} | `░░░░░░░░░░` | 0% ⏳ Pending |
+        
+        📊 **Tests:** XX/XX passing | **Code:** X,XXX LOC | **Status:** {STATUS}
+        
+        ---
+      
+      locations_requiring_tracker:
+        - "cortex-brain/documents/planning/active/*/00-*.md (master plans)"
+        - "Chat responses after each phase completion"
+        - "cortex-brain/documents/reports/*.md (all planning reports)"
+      
+      implementation_references:
+        template_file: "cortex-brain/response-templates-v4.yaml"
+        template_component: "components.visual_progress.plan_tracker"
+        renderer_method: "template_renderer.py::generate_phase_rows()"
+        progress_bar_generator: "template_renderer.py::generate_progress_bar()"
+      
+      phase_transition_pattern: |
+        After EACH phase completion, IMMEDIATELY render:
+        
+        ✅ Phase {N} - {NAME}: Complete
+           └─ Actions: {count} | Fixed: {fixed_count} | Duration: {seconds}s
+           └─ Auto-proceeding to Phase {N+1}...
+        
+        ### 📊 PLAN EXECUTION STATUS
+        [Full progress table showing updated status]
+      
+      reference_implementation:
+        source: ".github/prompts/cortex-maintenance.prompt.md"
+        lines: "254-260"
+        description: "Maintenance prompt demonstrates correct visual progress pattern"
 
   - requirement_id: "REQ-006"
     name: "Learning Library Auto-Documentation"

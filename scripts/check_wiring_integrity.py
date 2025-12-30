@@ -86,25 +86,25 @@ class WiringIntegrityChecker:
         """Check wiring integrity for all components."""
         report = WiringReport(timestamp=datetime.now().isoformat())
         
-        print("🔌 Checking CORTEX Wiring Integrity...\n")
+        print("Checking CORTEX Wiring Integrity...\n")
         
         # 1. Check orchestrators
-        print("📋 Checking Orchestrators...")
+        print("[1/4] Checking Orchestrators...")
         orchestrator_status = self._check_orchestrators()
         report.components.extend(orchestrator_status)
         
         # 2. Check agents
-        print("🤖 Checking Agents...")
+        print("[2/4] Checking Agents...")
         agent_status = self._check_agents()
         report.components.extend(agent_status)
         
-        # 3. Check operation modules
-        print("⚙️  Checking Operation Modules...")
+        # 3. Check modules
+        print("[3/4] Checking Operation Modules...")
         module_status = self._check_modules()
         report.components.extend(module_status)
         
         # 4. Check plugins
-        print("🔌 Checking Plugins...")
+        print("[4/4] Checking Plugins...")
         plugin_status = self._check_plugins()
         report.components.extend(plugin_status)
         
@@ -209,13 +209,21 @@ class WiringIntegrityChecker:
                 for class_name in classes:
                     if 'Orchestrator' not in class_name:
                         continue
-                    if class_name in ('OrchestratorResult', 'OrchestratorConfig', 'BaseOrchestrator'):
+                    # Skip base/utility classes that don't need wiring
+                    if class_name in ('OrchestratorResult', 'OrchestratorConfig', 'BaseOrchestrator', 
+                                      'OrchestratorStatus', 'OrchestratorPhase', 'OrchestratorMetadata'):
                         continue
                     
-                    # Check if wired
+                    # Check if wired - compare both CamelCase and snake_case versions
+                    snake_case_name = ''.join(['_' + c.lower() if c.isupper() else c for c in class_name]).lstrip('_')
+                    name_without_orchestrator = class_name.replace('Orchestrator', '')
+                    snake_case_without = ''.join(['_' + c.lower() if c.isupper() else c for c in name_without_orchestrator]).lstrip('_')
+                    
                     is_wired = any(
                         class_name.lower() in wn.lower() or
-                        class_name.replace('Orchestrator', '').lower() in wn.lower()
+                        snake_case_name in wn.lower() or
+                        name_without_orchestrator.lower() in wn.lower() or
+                        snake_case_without in wn.lower()
                         for wn in wired_names
                     )
                     
@@ -250,11 +258,21 @@ class WiringIntegrityChecker:
             for class_name in classes:
                 if 'Agent' not in class_name:
                     continue
-                if class_name in ('BaseAgent', 'AgentConfig'):
+                # Skip base/utility classes that don't need wiring
+                if class_name in ('BaseAgent', 'AgentConfig', 'AgentRequest', 'AgentResponse', 
+                                  'AgentMessage', 'AgentType', 'AgentStatus', 'AgentMetadata'):
                     continue
                 
+                # Check if wired - compare both CamelCase and snake_case versions
+                snake_case_name = ''.join(['_' + c.lower() if c.isupper() else c for c in class_name]).lstrip('_')
+                name_without_agent = class_name.replace('Agent', '')
+                snake_case_without = ''.join(['_' + c.lower() if c.isupper() else c for c in name_without_agent]).lstrip('_')
+                
                 is_wired = any(
-                    class_name.lower() in wn.lower()
+                    class_name.lower() in wn.lower() or
+                    snake_case_name in wn.lower() or
+                    name_without_agent.lower() in wn.lower() or
+                    snake_case_without in wn.lower()
                     for wn in wired_names
                 )
                 
@@ -322,16 +340,29 @@ class WiringIntegrityChecker:
         for py_file in plugins_dir.rglob("*plugin*.py"):
             if '__pycache__' in str(py_file) or 'test_' in py_file.name:
                 continue
+            if py_file.name == 'base_plugin.py':  # Skip base/utility classes
+                continue
             
             classes = self._extract_classes(py_file)
             for class_name in classes:
                 if 'Plugin' not in class_name:
                     continue
-                if class_name in ('BasePlugin', 'PluginConfig'):
+                # Skip base/utility classes that don't need wiring
+                if class_name in ('BasePlugin', 'PluginConfig', 'PluginMetadata', 
+                                  'PluginCategory', 'PluginPriority', 'PluginManager',
+                                  'PluginRegistry'):
                     continue
                 
+                # Check if wired - compare both CamelCase and snake_case versions
+                snake_case_name = ''.join(['_' + c.lower() if c.isupper() else c for c in class_name]).lstrip('_')
+                name_without_plugin = class_name.replace('Plugin', '')
+                snake_case_without = ''.join(['_' + c.lower() if c.isupper() else c for c in name_without_plugin]).lstrip('_')
+                
                 is_wired = any(
-                    class_name.lower() in wn.lower()
+                    class_name.lower() in wn.lower() or
+                    snake_case_name in wn.lower() or
+                    name_without_plugin.lower() in wn.lower() or
+                    snake_case_without in wn.lower()
                     for wn in wired_names
                 )
                 
