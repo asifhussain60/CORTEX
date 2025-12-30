@@ -7,7 +7,7 @@ GitHub Copilot premature summarization.
 Token Budgets (Updated 2025-12-03 for mature system):
     - CORTEX.prompt.md: 12,000 tokens (consolidated entry point)
     - brain-protection-rules.yaml: 35,000 tokens (5000+ governance rules)
-    - response-templates.yaml: 25,000 tokens (30+ response templates)
+    - response-templates-v4.yaml: 25,000 tokens (30+ response templates)
     - copilot-instructions.md: 4,000 tokens (auto-discovery file)
     - TOTAL: 76,000 tokens (realistic for mature CORTEX system)
 
@@ -212,8 +212,8 @@ class GovernanceTokenValidator:
             "max_tokens": 35000,  # Increased from 8K (5000+ lines of rules)
             "char_to_token_ratio": 4
         },
-        "response-templates.yaml": {
-            "path": "cortex-brain/response-templates.yaml",
+        "response-templates-v4.yaml": {
+            "path": "cortex-brain/response-templates-v4.yaml",
             "max_tokens": 25000,  # Increased from 3K (30+ templates)
             "char_to_token_ratio": 4
         },
@@ -415,7 +415,7 @@ Examples:
 Token Budgets:
   CORTEX.prompt.md:              5,000 tokens
   brain-protection-rules.yaml:   8,000 tokens
-  response-templates.yaml:       3,000 tokens
+  response-templates-v4.yaml:       3,000 tokens
   copilot-instructions.md:       1,000 tokens
   TOTAL:                        17,000 tokens
 """

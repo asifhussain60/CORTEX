@@ -77,7 +77,7 @@ class FastCommandHandler:
             brain_path = config.brain_path
         
         self.brain_path = Path(brain_path)
-        self.template_path = self.brain_path / "response-templates.yaml"
+        self.template_path = self.brain_path / "response-templates-v4.yaml"
         self._templates = None
         self._version = None
     

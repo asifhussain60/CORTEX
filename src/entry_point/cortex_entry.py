@@ -184,7 +184,7 @@ class CortexEntry:
     def template_loader(self):
         """Lazy-load Template Loader."""
         if self._template_loader is None:
-            template_file = self.brain_path / "response-templates.yaml"
+            template_file = self.brain_path / "response-templates-v4.yaml"
             if template_file.exists():
                 try:
                     loader = _template_loader_module.TemplateLoader(template_file)

@@ -379,13 +379,13 @@ class HealthCheckUtility:
             HealthCheckResult for templates
         """
         try:
-            templates_path = self.brain_path / "response-templates.yaml"
+            templates_path = self.brain_path / "response-templates-v4.yaml"
             
             if not templates_path.exists():
                 return HealthCheckResult(
                     check_name="Response Templates",
                     passed=False,
-                    message="response-templates.yaml not found",
+                    message="response-templates-v4.yaml not found",
                     severity="WARNING"  # Warning because system can work without templates
                 )
             

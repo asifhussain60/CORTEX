@@ -82,7 +82,7 @@ class RegenerationTracker:
             'images': {},
             'diagrams': {},
             'global_dependencies': [
-                'cortex-brain/response-templates.yaml',
+                'cortex-brain/response-templates-v4.yaml',
                 'cortex-brain/brain-protection-rules.yaml',
                 'cortex-operations.yaml',
                 'cortex.config.json'

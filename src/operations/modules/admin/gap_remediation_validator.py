@@ -71,13 +71,13 @@ class GapRemediationValidator:
                 })
         
         # 2. Validate template format compliance
-        templates_path = self.project_root / "cortex-brain" / "response-templates.yaml"
+        templates_path = self.project_root / "cortex-brain" / "response-templates-v4.yaml"
         
         if not templates_path.exists():
             report.critical_issues += 1
             report.suggestions.append({
-                "type": "missing_templates",
-                "message": "Missing cortex-brain/response-templates.yaml"
+                "type": "missing_file",
+                "message": "Missing cortex-brain/response-templates-v4.yaml"
             })
         else:
             try:
@@ -137,7 +137,7 @@ class GapRemediationValidator:
                 report.warnings += 1
                 report.suggestions.append({
                     "type": "template_parse",
-                    "message": f"Failed to parse response-templates.yaml: {e}"
+                    "message": f"Failed to parse response-templates-v4.yaml: {e}"
                 })
         
         # 3. Validate brain protection rule severity

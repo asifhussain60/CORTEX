@@ -635,12 +635,12 @@ class DeploymentGates:
         
         try:
             import yaml
-            templates_path = self.project_root / "cortex-brain" / "response-templates.yaml"
+            templates_path = self.project_root / "cortex-brain" / "response-templates-v4.yaml"
             
             if not templates_path.exists():
                 gate["passed"] = False
                 gate["severity"] = "ERROR"
-                gate["message"] = "response-templates.yaml not found"
+                gate["message"] = "response-templates-v4.yaml not found"
                 return gate
             
             # Load and validate new template architecture (v3.2+)
@@ -1069,7 +1069,7 @@ class DeploymentGates:
         - Has required methods (estimate_from_tasks, generate_timeline_comparison)
         - Has test file with passing tests
         - Is documented in swagger-entry-point-guide.md
-        - Entry point triggers exist in response-templates.yaml
+        - Entry point triggers exist in response-templates-v4.yaml
         
         Returns:
             Gate result with timeframe estimator validation details
@@ -1162,8 +1162,8 @@ class DeploymentGates:
         if not checks["documented"]:
             issues.append("TimeframeEstimator not documented in implementation guides")
         
-        # Check 7: Entry point wiring (response-templates.yaml)
-        templates_path = self.project_root / "cortex-brain" / "response-templates.yaml"
+        # Check 7: Entry point wiring (response-templates-v4.yaml)
+        templates_path = self.project_root / "cortex-brain" / "response-templates-v4.yaml"
         if templates_path.exists():
             try:
                 content = templates_path.read_text(encoding='utf-8').lower()
@@ -1176,11 +1176,11 @@ class DeploymentGates:
                 if any(trigger in content for trigger in estimate_triggers):
                     checks["entry_point_wired"] = True
                 else:
-                    issues.append("No entry point triggers found in response-templates.yaml")
+                    issues.append("No entry point triggers found in response-templates-v4.yaml")
             except Exception as e:
                 issues.append(f"Could not validate entry points: {e}")
         else:
-            issues.append("response-templates.yaml not found")
+            issues.append("response-templates-v4.yaml not found")
         
         gate["details"] = {
             "checks": checks,
@@ -1396,7 +1396,7 @@ class DeploymentGates:
         - CORTEX.prompt.md exists at .github/prompts/
         - cortex-brain/ folder structure intact
         - Tier databases exist (tier1/, tier3/)
-        - response-templates.yaml exists and is valid
+        - response-templates-v4.yaml exists and is valid
         - Key orchestrators are wired to entry points
         - Brain protection rules exist
         
@@ -1469,8 +1469,8 @@ class DeploymentGates:
             tier_ok = False
         checks["tier_databases"] = tier_ok
         
-        # Check 4: response-templates.yaml exists and is valid YAML
-        templates_file = brain_path / 'response-templates.yaml' if brain_path.exists() else None
+        # Check 4: response-templates-v4.yaml exists and is valid YAML
+        templates_file = brain_path / 'response-templates-v4.yaml' if brain_path.exists() else None
         if templates_file and templates_file.exists():
             try:
                 import yaml
@@ -1482,15 +1482,15 @@ class DeploymentGates:
                     critical_templates = ['help_table', 'fallback', 'greeting']
                     missing_templates = [t for t in critical_templates if t not in data['templates']]
                     if missing_templates:
-                        issues.append(f"response-templates.yaml missing critical templates: {missing_templates}")
+                        issues.append(f"response-templates-v4.yaml missing critical templates: {missing_templates}")
                     else:
                         checks["response_templates"] = True
                 else:
-                    issues.append("response-templates.yaml missing 'templates' key")
+                    issues.append("response-templates-v4.yaml missing 'templates' key")
             except Exception as e:
-                issues.append(f"response-templates.yaml is invalid: {e}")
+                issues.append(f"response-templates-v4.yaml is invalid: {e}")
         else:
-            issues.append("response-templates.yaml not found in cortex-brain/")
+            issues.append("response-templates-v4.yaml not found in cortex-brain/")
         
         protection_file = brain_path / 'brain-protection-rules.yaml' if brain_path.exists() else None
         if protection_file and protection_file.exists():
@@ -1509,7 +1509,7 @@ class DeploymentGates:
         else:
             issues.append("brain-protection-rules.yaml not found in cortex-brain/")
         
-        # Check that response-templates.yaml references key orchestrators
+        # Check that response-templates-v4.yaml references key orchestrators
         wired_ok = True
         if templates_file and templates_file.exists():
             try:
@@ -2704,7 +2704,7 @@ class DeploymentGates:
                     f"Current score: {epm_status.get('score', 0)}/100"
                 )
                 gate["details"]["action"] = (
-                    "Add SetupEPMOrchestrator trigger to response-templates.yaml "
+                    "Add SetupEPMOrchestrator trigger to response-templates-v4.yaml "
                     "and ensure routing configuration exists"
                 )
                 gate["details"]["missing_layers"] = []
@@ -2767,7 +2767,7 @@ class DeploymentGates:
         Token Budgets (from TOKEN_EFFICIENCY_ENFORCEMENT SKULL rule):
         - CORTEX.prompt.md: 5,000 tokens (currently 11,836 = 136% over)
         - brain-protection-rules.yaml: 8,000 tokens (currently 63,098 = 688% over)
-        - response-templates.yaml: 3,000 tokens (currently 22,752 = 658% over)
+        - response-templates-v4.yaml: 3,000 tokens (currently 22,752 = 658% over)
         - copilot-instructions.md: 1,000 tokens (currently 3,416 = 241% over)
         
         Total Budget: 17,000 tokens
@@ -3087,7 +3087,7 @@ class DeploymentGates:
         - Multi-request detection (auto-planning for disconnected requests)
         - Challenge system (DoR validation with evidence-based alternatives)
         - Auto-commit flag (autonomous execution)
-        - Template integration (flags loaded from response-templates.yaml)
+        - Template integration (flags loaded from response-templates-v4.yaml)
         
         Returns:
             Gate result with ERROR severity (critical UX features)
@@ -3206,7 +3206,7 @@ class DeploymentGates:
                 gate["details"]["issues"].append("IncrementalPlanGenerator not found")
             
             # Check 6: Template integration
-            template_path = self.project_root / "cortex-brain" / "response-templates.yaml"
+            template_path = self.project_root / "cortex-brain" / "response-templates-v4.yaml"
             if template_path.exists():
                 content = template_path.read_text(encoding='utf-8')
                 
@@ -3220,9 +3220,9 @@ class DeploymentGates:
                 if all(template_flags):
                     gate["details"]["template_integration_verified"] = True
                 else:
-                    gate["details"]["issues"].append("Template flags incomplete in response-templates.yaml")
+                    gate["details"]["issues"].append("Template flags incomplete in response-templates-v4.yaml")
             else:
-                gate["details"]["issues"].append("response-templates.yaml not found")
+                gate["details"]["issues"].append("response-templates-v4.yaml not found")
             
             # Check 7: Test coverage
             test_path = self.project_root / "tests" / "test_ux_enhancements_integration.py"

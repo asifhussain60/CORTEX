@@ -32,7 +32,7 @@ class DocSyncHook:
     Monitors:
         - Agent files (src/cortex_agents/**/*.py)
         - Orchestrator files (src/orchestrators/**/*.py)
-        - Template files (cortex-brain/response-templates.yaml)
+        - Template files (cortex-brain/response-templates-v4.yaml)
     
     Actions:
         - Triggers architecture sync
@@ -61,7 +61,7 @@ class DocSyncHook:
         self.patterns = {
             'agents': 'src/cortex_agents/**/*.py',
             'orchestrators': 'src/orchestrators/**/*.py',
-            'templates': 'cortex-brain/response-templates.yaml'
+            'templates': 'cortex-brain/response-templates-v4.yaml'
         }
     
     def detect_changes(self) -> Dict[str, Any]:
@@ -107,7 +107,7 @@ class DocSyncHook:
                         if 'orchestrators' not in categories:
                             categories.append('orchestrators')
                     
-                    elif 'response-templates.yaml' in file_path:
+                    elif 'response-templates-v4.yaml' in file_path:
                         if 'templates' not in categories:
                             categories.append('templates')
             
@@ -136,7 +136,7 @@ class DocSyncHook:
                         if 'orchestrators' not in categories:
                             categories.append('orchestrators')
                     
-                    elif 'response-templates.yaml' in file_path:
+                    elif 'response-templates-v4.yaml' in file_path:
                         if 'templates' not in categories:
                             categories.append('templates')
         

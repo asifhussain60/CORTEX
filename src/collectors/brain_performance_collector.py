@@ -175,7 +175,7 @@ class BrainPerformanceCollector(BaseCollector):
             
             # Count of important brain files
             important_files = [
-                "response-templates.yaml",
+                "response-templates-v4.yaml",
                 "capabilities.yaml",
                 "lessons-learned.yaml",
                 "knowledge-graph.yaml"

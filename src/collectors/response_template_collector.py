@@ -72,7 +72,7 @@ class ResponseTemplateMetricsCollector(BaseCollector):
             if not self.brain_path:
                 return {}
             
-            template_file = self.brain_path / "response-templates.yaml"
+            template_file = self.brain_path / "response-templates-v4.yaml"
             if not template_file.exists():
                 return {}
             

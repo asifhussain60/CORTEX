@@ -49,7 +49,7 @@ class ConfidenceResponseGenerator:
         # Create template loader with default path if not provided
         if template_loader is None:
             project_root = get_root_path()
-            template_file = project_root / "cortex-brain" / "response-templates.yaml"
+            template_file = project_root / "cortex-brain" / "response-templates-v4.yaml"
             self.template_loader = TemplateLoader(template_file)
         else:
             self.template_loader = template_loader

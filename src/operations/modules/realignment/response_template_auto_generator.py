@@ -38,7 +38,7 @@ class ResponseTemplateAutoGenerator:
             cortex_root: Root directory of CORTEX installation
         """
         self.cortex_root = cortex_root
-        self.templates_file = cortex_root / "cortex-brain" / "response-templates.yaml"
+        self.templates_file = cortex_root / "cortex-brain" / "response-templates-v4.yaml"
         self.operations_dir = cortex_root / "src" / "operations"
         self.orchestrators_dir = cortex_root / "src" / "orchestrators"
         self.workflows_dir = cortex_root / "src" / "workflows"
@@ -204,7 +204,7 @@ class ResponseTemplateAutoGenerator:
                 return TemplateGenerationResult(
                     success=False,
                     operation_name=operation_name,
-                    error_message="response-templates.yaml not found"
+                    error_message="response-templates-v4.yaml not found"
                 )
             
             content = self.templates_file.read_text(encoding='utf-8')

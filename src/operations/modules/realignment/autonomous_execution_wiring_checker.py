@@ -163,17 +163,17 @@ class AutonomousExecutionWiringChecker:
     
     def _check_response_templates(self) -> Tuple[bool, str]:
         """Check if response templates exist for autonomous execution."""
-        templates_path = self.cortex_root / "cortex-brain" / "response-templates.yaml"
+        templates_path = self.cortex_root / "cortex-brain" / "response-templates-v4.yaml"
         
         if not templates_path.exists():
-            return False, "❌ response-templates.yaml not found"
+            return False, "❌ response-templates-v4.yaml not found"
         
         try:
             with open(templates_path, 'r', encoding='utf-8', errors='ignore') as f:
                 templates = yaml.safe_load(f)
             
             if not templates or 'templates' not in templates:
-                return False, "❌ No templates section in response-templates.yaml"
+                return False, "❌ No templates section in response-templates-v4.yaml"
             
             # Check for autonomous/planning templates
             # Templates are structured as dict keys, not list of objects

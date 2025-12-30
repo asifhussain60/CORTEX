@@ -66,7 +66,7 @@ class TemplateValidator:
         Validate all templates in a file or a specific template.
         
         Args:
-            template_file: Path to response-templates.yaml
+            template_file: Path to response-templates-v4.yaml
             template_name: Optional specific template to validate
             
         Returns:
@@ -77,7 +77,7 @@ class TemplateValidator:
             raise FileNotFoundError(f"Template file not found: {template_path}")
         
         try:
-            # Use universal YAML cache for response-templates.yaml
+            # Use universal YAML cache for response-templates-v4.yaml
             from src.utils.yaml_cache import load_yaml_cached
             data = load_yaml_cached(template_path)
         except ImportError:
@@ -423,8 +423,8 @@ def main():
     )
     parser.add_argument(
         '--file',
-        default='cortex-brain/templates/response-templates.yaml',
-        help='Path to templates file (default: cortex-brain/response-templates.yaml)'
+        default='cortex-brain/templates/response-templates-v4.yaml',
+        help='Path to templates file (default: cortex-brain/response-templates-v4.yaml)'
     )
     parser.add_argument(
         '--template',

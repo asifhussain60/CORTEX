@@ -56,7 +56,7 @@ class CriticalFileDetector:
         'pytest.ini',
         'setup.py',
         'pyproject.toml',
-        'cortex-brain/response-templates.yaml',
+        'cortex-brain/response-templates-v4.yaml',
         'cortex-brain/brain-protection-rules.yaml'
     ]
     

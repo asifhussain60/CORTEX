@@ -416,7 +416,7 @@ class EnvironmentSetup:
         essential_files = [
             'brain-protection-rules.yaml',
             'knowledge-graph.yaml',
-            'response-templates.yaml'
+            'response-templates-v4.yaml'
         ]
         
         missing_files = []

@@ -92,7 +92,7 @@ class TemplateSelector:
         
         try:
             # Load main templates file
-            main_templates_file = self.templates_path / "response-templates.yaml"
+            main_templates_file = self.templates_path / "response-templates-v4.yaml"
             if main_templates_file.exists():
                 with open(main_templates_file, 'r', encoding='utf-8') as f:
                     main_templates = yaml.safe_load(f)
@@ -101,7 +101,7 @@ class TemplateSelector:
             
             # Load additional template files
             for template_file in self.templates_path.glob("*.yaml"):
-                if template_file.name != "response-templates.yaml":
+                if template_file.name != "response-templates-v4.yaml":
                     try:
                         with open(template_file, 'r', encoding='utf-8') as f:
                             file_templates = yaml.safe_load(f)

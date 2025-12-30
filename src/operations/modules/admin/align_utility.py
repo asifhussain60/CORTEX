@@ -23,7 +23,7 @@ Validation Checks (Phase 0 + 8 Core):
     Core Checks:
         1. Brain tier structure (tier0-3)
         2. Protection rules (brain-protection-rules.yaml)
-        3. Response templates (response-templates.yaml)
+        3. Response templates (response-templates-v4.yaml)
         4. Working memory database
         5. Knowledge graph database
         6. Development context database
@@ -403,15 +403,15 @@ class AlignUtility:
             )
     
     def validate_response_templates(self) -> ValidationResult:
-        """Check response-templates.yaml exists and is valid."""
+        """Check response-templates-v4.yaml exists and is valid."""
         try:
-            templates_file = self.brain_path / "response-templates.yaml"
+            templates_file = self.brain_path / "response-templates-v4.yaml"
             
             if not templates_file.exists():
                 return ValidationResult(
                     check_name="Response Templates",
                     passed=False,
-                    message="response-templates.yaml not found",
+                    message="response-templates-v4.yaml not found",
                     details="Template system unavailable - CORTEX cannot format responses",
                     severity="ERROR"
                 )
@@ -797,11 +797,11 @@ class AlignUtility:
         Validate that discovered features are properly wired into CORTEX.
         
         Checks wiring for:
-        - Orchestrators (response-templates.yaml)
-        - Agents (response-templates.yaml)
+        - Orchestrators (response-templates-v4.yaml)
+        - Agents (response-templates-v4.yaml)
         - Plugins (plugin_registry.py)
         - Operation Modules (cortex-operations.yaml)
-        - Workflows (cortex-operations.yaml or response-templates.yaml)
+        - Workflows (cortex-operations.yaml or response-templates-v4.yaml)
         - Scripts (cortex-operations.yaml for user-facing)
         - Dashboards (dashboard operation exists)
         - Templates (all operations have templates)
@@ -1086,7 +1086,7 @@ class AlignUtility:
             
             # Existing scans (YAML-based)
             discovered['operations'] = self.scan_yaml('cortex-operations.yaml')
-            discovered['templates'] = self.scan_yaml('cortex-brain/response-templates.yaml')
+            discovered['templates'] = self.scan_yaml('cortex-brain/response-templates-v4.yaml')
             
             # NEW: Plugins (code-based)
             discovered['plugins'] = self.scan_directory(
@@ -1152,7 +1152,7 @@ class AlignUtility:
     
     def check_wiring_in_templates(self, module_name: str) -> bool:
         """
-        Check if module is wired in response-templates.yaml.
+        Check if module is wired in response-templates-v4.yaml.
         
         Args:
             module_name: Name of orchestrator/agent class
@@ -1161,7 +1161,7 @@ class AlignUtility:
             True if wired, False otherwise
         """
         try:
-            templates_file = self.brain_path / "response-templates.yaml"
+            templates_file = self.brain_path / "response-templates-v4.yaml"
             
             if not templates_file.exists():
                 return False
@@ -1267,9 +1267,9 @@ class AlignUtility:
             True if has triggers, False otherwise
         """
         try:
-            # Check if workflow is referenced in cortex-operations.yaml or response-templates.yaml
+            # Check if workflow is referenced in cortex-operations.yaml or response-templates-v4.yaml
             ops_yaml = self.root_path / "cortex-operations.yaml"
-            templates_yaml = self.brain_path / "response-templates.yaml"
+            templates_yaml = self.brain_path / "response-templates-v4.yaml"
             
             # Check operations file
             if ops_yaml.exists():

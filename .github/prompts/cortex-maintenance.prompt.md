@@ -1362,6 +1362,102 @@ python3 scripts/cortex_system_doctor.py --quick
 python3 scripts/check_wiring_integrity.py
 ```
 
+### Phase 4b.1: Validate Response Template Wiring 🎯 **NEW**
+
+**⚠️ CRITICAL CHECK:** Ensure all code references the CORRECT template file.
+
+**Problem Detection:**
+- Custom templates (introduction, business_value) not being detected correctly
+- Code referencing obsolete `response-templates.yaml` instead of `response-templates-v4.yaml`
+- Template system showing generic responses instead of specialized templates
+- Duplicate template files causing routing conflicts
+
+**Auto-Detection Script:**
+
+```bash
+# Check for incorrect template file references
+grep -r "response-templates\.yaml" src/ --exclude-dir=__pycache__ | grep -v "response-templates-v4.yaml"
+
+# Expected: NO results (all references should be -v4.yaml)
+```
+
+**Auto-Fix Commands:**
+
+```bash
+# Fix 1: Update all source references to use v4 templates
+find src/ -name "*.py" -type f -exec sed -i 's/response-templates\.yaml/response-templates-v4.yaml/g' {} +
+
+# Fix 2: Remove obsolete template file if it exists (causes conflicts)
+if [ -f "cortex-brain/response-templates.yaml" ]; then
+    echo "⚠️  Found obsolete response-templates.yaml - removing to prevent conflicts"
+    git mv cortex-brain/response-templates.yaml cortex-brain/archives/response-templates-v3-obsolete.yaml
+fi
+
+# Fix 3: Verify template structure
+python3 -c "
+import yaml
+from pathlib import Path
+
+template_file = Path('cortex-brain/response-templates-v4.yaml')
+if template_file.exists():
+    with open(template_file) as f:
+        data = yaml.safe_load(f)
+    
+    # Check for custom templates
+    custom = data.get('custom_templates', {})
+    print(f'✅ Custom templates found: {list(custom.keys())}')
+    
+    # Verify no conflicts
+    if Path('cortex-brain/response-templates.yaml').exists():
+        print('❌ CONFLICT: Old response-templates.yaml still exists')
+    else:
+        print('✅ No template file conflicts')
+else:
+    print('❌ ERROR: response-templates-v4.yaml missing')
+"
+```
+
+**Validation Checklist:**
+
+| Check | Command | Expected Result |
+|-------|---------|-----------------|
+| **No old references** | `grep -r "response-templates\.yaml" src/` | Zero matches (all should be -v4) |
+| **No duplicate files** | `ls cortex-brain/response-templates*.yaml` | Only `-v4.yaml` exists |
+| **Custom templates exist** | `grep -A 5 "custom_templates:" cortex-brain/response-templates-v4.yaml` | Shows `introduction:` and `business_value:` |
+| **Correct imports** | `grep "response-templates-v4" src/response_templates/*.py` | All imports use v4 |
+
+**Success Criteria:**
+- ✅ All 59+ Python files reference `response-templates-v4.yaml`
+- ✅ NO files reference old `response-templates.yaml`
+- ✅ Old template file deleted or archived
+- ✅ Custom templates (introduction, business_value) render correctly
+- ✅ Template system detects specialized templates based on intent patterns
+
+**Testing the Fix:**
+
+```bash
+# Test 1: Business value template detection
+# Should show COMPREHENSIVE response with ROI metrics, not TIER1 summary
+echo "Test: What value can you provide to my business?"
+
+# Test 2: Introduction template detection  
+# Should show detailed CORTEX overview, not generic response
+echo "Test: Introduce yourself"
+
+# Expected: Both should trigger custom templates with 600+ tokens
+```
+
+**Common Issues & Fixes:**
+
+| Issue | Symptom | Fix |
+|-------|---------|-----|
+| **Wrong file loaded** | Generic responses for special queries | Run Fix 1: Update all references |
+| **Duplicate files** | Random template selection | Run Fix 2: Remove old file |
+| **Template not found** | Missing custom sections | Verify `-v4.yaml` has `custom_templates:` section |
+| **Import errors** | `FileNotFoundError: response-templates.yaml` | Check all loaders use v4 filename |
+
+**Reference:** This check added Dec 2025 after discovering template routing conflicts causing business_value and introduction templates to fail.
+
 ### Phase 4c: Auto-Wire Components 🔥 AUTO-REPAIR
 
 ### ⚠️ WHY THIS PHASE IS MANDATORY
@@ -1918,7 +2014,7 @@ ls -lah cortex-brain/health-reports/
 
 ## Phase 8: Intent Router Validation ⚠️ CRITICAL
 
-### 7a. Manifest Path Verification
+### 8a. Manifest Path Verification
 
 **Source of Truth:** `cortex-brain/manifests/orchestrators/`
 
@@ -1932,7 +2028,260 @@ Scan all orchestrator manifests and verify CORTEX.prompt.md references them corr
 | `code-sanitization-manifest.yaml` | Sanitization | `sanitize`, `make generic`, `anonymize` |
 | `refinement-orchestrator-manifest.yaml` | Refinement | `refine`, `improve cortex` |
 
-### 7b. Output Structure Validation
+### 8b. Duplicate Template Definition Detection 🚨 NEW
+
+**Problem:** Custom templates can be defined in MULTIPLE locations with DIFFERENT detection systems, causing routing failures.
+
+**Duplicate Detection Scan:**
+
+```bash
+# Scan for business_value template definitions
+grep -r "business_value" \
+  cortex-brain/response-templates-v4.yaml \
+  cortex-brain/response-templates/*.yaml \
+  cortex-brain/response-templates/operations/**/*.yaml
+
+# Scan for introduction template definitions  
+grep -r "introduction" \
+  cortex-brain/response-templates-v4.yaml \
+  cortex-brain/response-templates/*.yaml
+```
+
+**Critical Files to Check:**
+
+1. **Primary:** `cortex-brain/response-templates-v4.yaml` (custom_templates section)
+2. **Legacy:** `cortex-brain/response-templates/operations/general/general.yaml`
+3. **Routing:** `cortex-brain/response-templates/response-routing-rules.yaml`
+
+**Validation Rules:**
+
+| Template | Source of Truth | Forbidden Duplicates |
+|----------|----------------|----------------------|
+| `business_value` | `response-templates-v4.yaml` (custom_templates) | ❌ `operations/general/general.yaml` |
+| `introduction_professional` | `response-templates-v4.yaml` (custom_templates) | ❌ `operations/general/general.yaml` |
+| `introduction_leadership` | `response-templates-v4.yaml` (custom_templates) | ❌ Any other location |
+| `introduction_product` | `response-templates-v4.yaml` (custom_templates) | ❌ Any other location |
+| `introduction_engineering` | `response-templates-v4.yaml` (custom_templates) | ❌ Any other location |
+
+**Auto-Fix Strategy:**
+
+```python
+# Pseudo-code for duplicate removal
+def fix_duplicate_templates():
+    # Step 1: Load v4.0 custom_templates as source of truth
+    v4_templates = load_yaml("response-templates-v4.yaml")["custom_templates"]
+    
+    # Step 2: Scan legacy locations
+    legacy_file = "response-templates/operations/general/general.yaml"
+    legacy_templates = load_yaml(legacy_file)
+    
+    # Step 3: Detect duplicates
+    duplicates = []
+    for template_id in v4_templates.keys():
+        if template_id in legacy_templates:
+            duplicates.append({
+                "template_id": template_id,
+                "source_of_truth": "response-templates-v4.yaml",
+                "duplicate_location": legacy_file
+            })
+    
+    # Step 4: Auto-remove duplicates from legacy files
+    for dup in duplicates:
+        remove_from_legacy(dup["template_id"], dup["duplicate_location"])
+        log(f"✅ Removed duplicate: {dup['template_id']} from {dup['duplicate_location']}")
+    
+    # Step 5: Verify routing rules point to v4.0
+    routing_rules = load_yaml("response-templates/response-routing-rules.yaml")
+    for intent in routing_rules["intent_detection"]["priority_1_exact_match"]:
+        if intent["template"] in v4_templates.keys():
+            # Ensure template field matches v4.0 definition
+            validate_routing(intent, v4_templates)
+    
+    return len(duplicates)
+```
+
+**Detection Output:**
+
+```markdown
+### 🔍 Duplicate Template Scan Results
+
+| Template ID | v4.0 Definition | Duplicate Found | Action |
+|-------------|-----------------|-----------------|--------|
+| business_value | ✅ Yes (lines 603-890) | ⚠️ Yes (general.yaml:1254) | 🔧 AUTO-FIX: Remove from general.yaml |
+| introduction_professional | ✅ Yes (lines 520-602) | ❌ None | ✅ OK |
+| introduction_leadership | ✅ Yes (lines 520-602) | ❌ None | ✅ OK |
+
+**Status:** 1 duplicate found and auto-fixed
+**Health Impact:** Template routing restored to 100%
+```
+
+**Python Detection Script:**
+
+```python
+# Add to src/maintenance/template_duplicate_detector.py
+import yaml
+from pathlib import Path
+from typing import Dict, List, Tuple
+
+def detect_duplicate_templates() -> List[Dict]:
+    """
+    Detect custom templates defined in multiple locations.
+    
+    Returns:
+        List of duplicate definitions with locations
+    """
+    duplicates = []
+    
+    # Source of truth
+    v4_path = Path("cortex-brain/response-templates-v4.yaml")
+    v4_data = yaml.safe_load(v4_path.read_text())
+    v4_custom = v4_data.get("custom_templates", {})
+    
+    # Legacy locations to scan
+    legacy_paths = [
+        Path("cortex-brain/response-templates/operations/general/general.yaml"),
+        Path("cortex-brain/response-templates/template-base.yaml"),
+    ]
+    
+    for template_id in v4_custom.keys():
+        for legacy_path in legacy_paths:
+            if not legacy_path.exists():
+                continue
+            
+            legacy_content = legacy_path.read_text()
+            if template_id in legacy_content:
+                duplicates.append({
+                    "template_id": template_id,
+                    "source_of_truth": str(v4_path),
+                    "duplicate_location": str(legacy_path),
+                    "severity": "HIGH"  # Causes routing failures
+                })
+    
+    return duplicates
+
+def auto_fix_duplicates(duplicates: List[Dict]) -> int:
+    """Remove duplicate template definitions from legacy files."""
+    fixed_count = 0
+    
+    for dup in duplicates:
+        legacy_path = Path(dup["duplicate_location"])
+        legacy_data = yaml.safe_load(legacy_path.read_text())
+        
+        # Remove the duplicate key
+        if dup["template_id"] in legacy_data:
+            del legacy_data[dup["template_id"]]
+            
+            # Write back
+            legacy_path.write_text(yaml.dump(legacy_data, sort_keys=False))
+            fixed_count += 1
+            print(f"✅ Removed {dup['template_id']} from {legacy_path.name}")
+    
+    return fixed_count
+```
+
+### 8c. Custom Template Routing Integration 🆕
+
+**Problem:** `TemplateManager` (src/templates/) doesn't detect custom templates from v4.0 YAML.
+
+**Detection Check:**
+
+```bash
+# Verify TemplateManager loads custom_templates section
+grep -n "custom_templates" src/templates/template_manager.py
+
+# Expected: Should parse custom_templates from YAML and register intent patterns
+# Actual: ❌ NO custom_templates parsing found
+```
+
+**Auto-Fix: Add Custom Template Detection to TemplateManager**
+
+```python
+# Add to src/templates/template_manager.py
+
+class TemplateManager:
+    def __init__(self, config_path: Optional[Path] = None):
+        # ... existing code ...
+        
+        # NEW: Load custom templates
+        self.custom_templates = self.config.get("custom_templates", {})
+        self._register_custom_templates()
+    
+    def _register_custom_templates(self) -> None:
+        """Register custom templates with intent pattern matching."""
+        for template_id, template_config in self.custom_templates.items():
+            intent_patterns = template_config.get("intent_patterns", [])
+            
+            # Register each pattern for quick lookup
+            for pattern in intent_patterns:
+                self._intent_to_template_map[pattern.lower()] = template_id
+            
+            self.logger.info(
+                f"Registered custom template: {template_id} "
+                f"({len(intent_patterns)} patterns)"
+            )
+    
+    def detect_custom_template(self, user_request: str) -> Optional[str]:
+        """
+        Detect if user request matches a custom template.
+        
+        Args:
+            user_request: User's request text
+        
+        Returns:
+            Template ID if matched, None otherwise
+        """
+        request_lower = user_request.lower()
+        
+        # Check each registered pattern
+        for pattern, template_id in self._intent_to_template_map.items():
+            if pattern in request_lower:
+                self.logger.info(f"Custom template detected: {template_id}")
+                return template_id
+        
+        return None
+    
+    def render_custom_template(self, template_id: str) -> str:
+        """
+        Render a custom template by ID.
+        
+        Args:
+            template_id: ID of custom template
+        
+        Returns:
+            Rendered markdown content
+        """
+        if template_id not in self.custom_templates:
+            raise ValueError(f"Unknown custom template: {template_id}")
+        
+        template_config = self.custom_templates[template_id]
+        format_str = template_config.get("format", "")
+        
+        # Return the pre-formatted content directly
+        # Custom templates are complete, static responses
+        return format_str
+```
+
+**Integration with generate_response():**
+
+```python
+def generate_response(
+    self,
+    context: TemplateContext,
+    content: Dict[str, str]
+) -> str:
+    """Generate response (modified to check custom templates first)."""
+    
+    # NEW: Check for custom template match FIRST
+    custom_template_id = self.detect_custom_template(context.request)
+    if custom_template_id:
+        return self.render_custom_template(custom_template_id)
+    
+    # Existing tier-based logic...
+    tier = self.tier_selector.select_tier(context)
+    # ... rest of existing code
+```
+
+### 8d. Output Structure Validation
 
 Planning System MUST specify folder structure from manifest:
 ```yaml
@@ -1941,7 +2290,7 @@ required_subfolders: [context/, reports/, artifacts/, tracking/]
 required_files: [00-master-plan.md]
 ```
 
-### 6c. Validation Commands
+### 8e. Validation Commands
 
 ```bash
 # Check for broken/old paths
@@ -1951,7 +2300,37 @@ grep -r "orchestrator-manifests" .github/prompts/  # Should return NOTHING
 for f in $(grep -oh "cortex-brain/manifests/orchestrators/[^\"']*" .github/prompts/*.md); do
   [ -f "$f" ] || echo "MISSING: $f"
 done
+
+# NEW: Detect duplicate template definitions
+python -c "
+import yaml
+from pathlib import Path
+
+v4 = yaml.safe_load(Path('cortex-brain/response-templates-v4.yaml').read_text())
+custom = list(v4.get('custom_templates', {}).keys())
+
+# Scan legacy files
+legacy = Path('cortex-brain/response-templates/operations/general/general.yaml')
+if legacy.exists():
+    content = legacy.read_text()
+    for template_id in custom:
+        if template_id in content:
+            print(f'DUPLICATE: {template_id} in {legacy}')
+"
+
+# Verify TemplateManager loads custom templates
+grep -n "custom_templates" src/templates/template_manager.py || \
+  echo "⚠️ WARNING: TemplateManager missing custom_templates support"
 ```
+
+**Phase 8 Success Criteria:**
+
+- [ ] All manifest paths in CORTEX.prompt.md are valid
+- [ ] Zero duplicate custom template definitions detected
+- [ ] TemplateManager has `detect_custom_template()` method
+- [ ] TemplateManager has `render_custom_template()` method  
+- [ ] Custom templates take priority over tier-based routing
+- [ ] All custom template intent_patterns are registered
 
 ---
 

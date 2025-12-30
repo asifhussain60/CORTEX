@@ -2,7 +2,7 @@
 """
 Template Cleanup Script - Move Root-Level Templates into templates: Section
 
-This script fixes the response-templates.yaml structure by moving all incorrectly
+This script fixes the response-templates-v4.yaml structure by moving all incorrectly
 placed root-level templates into the proper templates: section.
 
 Author: Asif Hussain
@@ -18,7 +18,7 @@ def fix_template_structure(templates_file: Path) -> dict:
     Fix template structure by moving root-level templates into templates: section.
     
     Args:
-        templates_file: Path to response-templates.yaml
+        templates_file: Path to response-templates-v4.yaml
     
     Returns:
         Dict with fix statistics
@@ -100,7 +100,7 @@ def fix_template_structure(templates_file: Path) -> dict:
 if __name__ == "__main__":
     # Get CORTEX root (5 levels up: realignment/ -> modules/ -> operations/ -> src/ -> CORTEX/)
     cortex_root = Path(__file__).resolve().parent.parent.parent.parent.parent
-    templates_file = cortex_root / "cortex-brain" / "response-templates.yaml"
+    templates_file = cortex_root / "cortex-brain" / "response-templates-v4.yaml"
     
     if not templates_file.exists():
         print(f"❌ Error: {templates_file} not found")

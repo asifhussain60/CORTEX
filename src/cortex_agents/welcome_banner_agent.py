@@ -13,7 +13,7 @@ FEATURES:
 INTEGRATION:
 - Triggered by UnifiedEntryPointOrchestrator on first interaction
 - Uses Tier 1 database for session state persistence
-- Template: rulebook_welcome_banner in response-templates.yaml
+- Template: rulebook_welcome_banner in response-templates-v4.yaml
 
 USAGE:
     from src.cortex_agents.welcome_banner_agent import WelcomeBannerAgent

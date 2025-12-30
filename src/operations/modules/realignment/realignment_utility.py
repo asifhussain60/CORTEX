@@ -1279,7 +1279,7 @@ def _check_response_template_coverage(cortex_root: Path) -> Dict[str, Any]:
             operations = list(ops_data["operations"].keys())
         
         # Load response templates
-        templates_yaml = cortex_root / "cortex-brain" / "response-templates.yaml"
+        templates_yaml = cortex_root / "cortex-brain" / "response-templates-v4.yaml"
         with open(templates_yaml, encoding='utf-8') as f:
             templates_data = yaml.safe_load(f)
             template_names = list(templates_data.get("templates", {}).keys())
@@ -1360,7 +1360,7 @@ def _check_template_structure(cortex_root: Path) -> Dict[str, Any]:
     try:
         import yaml
         
-        templates_yaml = cortex_root / "cortex-brain" / "response-templates.yaml"
+        templates_yaml = cortex_root / "cortex-brain" / "response-templates-v4.yaml"
         with open(templates_yaml, encoding='utf-8') as f:
             data = yaml.safe_load(f)
         
@@ -1404,7 +1404,7 @@ def _fix_template_structure(cortex_root: Path) -> Dict[str, Any]:
         import shutil
         from datetime import datetime
         
-        templates_yaml = cortex_root / "cortex-brain" / "response-templates.yaml"
+        templates_yaml = cortex_root / "cortex-brain" / "response-templates-v4.yaml"
         
         # Create backup
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
