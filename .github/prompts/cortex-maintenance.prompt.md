@@ -1,4 +1,3 @@
----
 mode: agent
 description: "CORTEX System Maintenance - Automated health checks, auto-repair, and system optimization"
 ---
@@ -57,6 +56,38 @@ Maintenance fixes MUST:
 - ✅ Work on all machines without re-running maintenance
 
 **Reference:** `cortex-brain/documents/analysis/maintenance-wiring-persistence-gap.md`
+
+### Rule 4: GAPS-1230 Alignment (NEW - December 30, 2025)
+
+**Phase 17 Implementation Alignment** enforces 5 CRITICAL system behaviors:
+
+**✅ GAP 1 - LLM Intent Classification:**
+- Intent router MUST use `LLMIntentClassifier` (not regex patterns)
+- Fallback to regex only when LLM unavailable
+- Location: `src/cortex_agents/llm_intent_classifier.py`
+
+**✅ GAP 2 - Auto-Engagement Planning:**
+- Planning MUST auto-engage for HIGH/CRITICAL complexity requests
+- `AutoEngagementEngine` evaluates: LOC, domains, security, architecture, history
+- Override patterns honored ("--no-plan", "skip plan", "just implement")
+- Location: `src/orchestrators/planning/auto_engagement_engine.py`
+
+**✅ GAP 3 - Incremental AST Context:**
+- AST context MUST build incrementally per conversation turn
+- NOT one-time at session start
+- `IncrementalASTBuilder` extracts symbols from user messages
+- Location: `src/orchestrators/planning/incremental_ast_builder.py`
+
+**✅ GAP 4 - Active Knowledge Consultation:**
+- Knowledge library (35+ YAML, 525+ rules) MUST be actively consulted
+- Orchestrators call `KnowledgeConsultant.consult()` before operations
+- Location: `src/orchestrators/base/knowledge_consultant.py`
+
+**✅ GAP 5 - Extended LLM Usage:**
+- LLM used for BOTH complexity assessment AND intent classification
+- Not complexity-only (TieredRouter pattern)
+
+**Reference:** `cortex-brain/documents/planning/active/CORTEX-4.0-GAPS-1230/`
 
 ---
 

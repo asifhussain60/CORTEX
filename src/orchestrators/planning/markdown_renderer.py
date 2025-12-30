@@ -301,22 +301,45 @@ class MarkdownRenderer:
         return "\n".join(md)
     
     def _render_overall_progress(self, phases: List[Dict[str, Any]]) -> str:
-        """Render overall progress bar from phases."""
+        """
+        Render visual progress tracker for phases.
+        
+        CORTEX 4.0 GAPS-1230: Visual progress bars are REQUIRED for all
+        planning outputs to provide clear feedback on phase completion status.
+        """
         if not phases:
             return ""
         
         # Calculate overall progress
         total_phases = len(phases)
         completed_phases = sum(1 for phase in phases if phase.get("status", "").lower() in ["complete", "completed", "done"])
-        progress_percent = int((completed_phases / total_phases) * 100) if total_phases > 0 else 0
+        in_progress_phases = sum(1 for phase in phases if phase.get("status", "").lower() in ["in_progress", "in progress", "active"])
+        not_started_phases = total_phases - completed_phases - in_progress_phases
         
-        # Create progress bar (width 20 for overall)
-        filled = int((progress_percent / 100) * 20)
-        empty = 20 - filled
-        progress_bar = f"[{'█' * filled}{'░' * empty}]"
+        # Calculate percentages
+        overall_percent = int((completed_phases / total_phases) * 100) if total_phases > 0 else 0
+        complete_percent = int((completed_phases / total_phases) * 100) if total_phases > 0 else 0
+        progress_percent = int((in_progress_phases / total_phases) * 100) if total_phases > 0 else 0
+        pending_percent = int((not_started_phases / total_phases) * 100) if total_phases > 0 else 0
+        
+        # Create progress bars (width 20)
+        def make_bar(percent: int, width: int = 20) -> str:
+            filled = int((percent / 100) * width)
+            empty = width - filled
+            return f"{'█' * filled}{'░' * empty}"
         
         md = []
-        md.append(f"**Overall Progress:** {progress_bar} {progress_percent}% ({completed_phases}/{total_phases} phases complete)\n")
+        md.append("```")
+        md.append("╔══════════════════════════════════════════════════════════════════════════════╗")
+        md.append("║                         📊 PROGRESS OVERVIEW                                 ║")
+        md.append("╠══════════════════════════════════════════════════════════════════════════════╣")
+        md.append(f"║  Overall Status: [{make_bar(overall_percent)}] {overall_percent:3d}%                            ║")
+        md.append("╠══════════════════════════════════════════════════════════════════════════════╣")
+        md.append(f"║  ✅ Completed:   [{make_bar(complete_percent)}] {complete_percent:3d}%  ({completed_phases} phases)            ║")
+        md.append(f"║  ⏳ In Progress: [{make_bar(progress_percent)}] {progress_percent:3d}%  ({in_progress_phases} phases)            ║")
+        md.append(f"║  ⏸️  Not Started: [{make_bar(pending_percent)}] {pending_percent:3d}%  ({not_started_phases} phases)            ║")
+        md.append("╚══════════════════════════════════════════════════════════════════════════════╝")
+        md.append("```")
         md.append("")
         return "\n".join(md)
     

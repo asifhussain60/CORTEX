@@ -153,28 +153,61 @@ templates:
     - how do i tackle this
     verbosity: concise
   planning_complete:
-    content: '🎯 **CORTEX Planning Complete**
-
+    content: |
+      🎯 **CORTEX Planning Complete**
       Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
-
 
       ✅ **Planning Session Complete**
 
-
       Plan saved to Tier 1 memory
-
       Session ID: {{session_id}}
 
+      **📊 Progress Overview:**
+      ```
+      Overall Status: [████████████████████] 100%
+      ✅ Completed:   [████████████████████] 100%
+      ⏳ In Progress: [░░░░░░░░░░░░░░░░░░░░]   0%
+      ⏸️  Not Started: [░░░░░░░░░░░░░░░░░░░░]   0%
+      ```
 
       Ready to begin Phase 1!
-
-      '
     context_needed: true
     metadata:
       category: planning
     response_type: detailed
     triggers: []
     verbosity: concise
+  planning_phase_complete:
+    content: |
+      🎯 **CORTEX Phase {{phase_num}} Complete**
+      Author: Asif Hussain | © 2024-2025 | github.com/asifhussain60/CORTEX
+
+      ✅ **Phase {{phase_num}}: {{phase_name}}** - COMPLETE
+
+      **📊 Progress Overview:**
+      ```
+      Overall Status: [{{progress_bar}}] {{progress_percentage}}%
+      ✅ Completed:   [{{completed_bar}}] {{completed_percentage}}%
+      ⏳ In Progress: [{{in_progress_bar}}] {{in_progress_percentage}}%
+      ⏸️  Not Started: [{{not_started_bar}}] {{not_started_percentage}}%
+      ```
+
+      **Phase Summary:**
+      - Tasks Completed: {{tasks_completed}}/{{tasks_total}}
+      - Duration: {{duration}}
+      - Files Modified: {{files_modified}}
+
+      🔍 **Next:** {{next_phase_name}} ({{next_phase_tasks}} tasks)
+    context_needed: true
+    metadata:
+      category: planning
+      operation: phase_completion
+    response_type: detailed
+    triggers:
+    - phase complete
+    - phase done
+    - finished phase
+    verbosity: detailed
   planning_plan_ready:
     content: '🎯 **CORTEX Implementation Plan**
 

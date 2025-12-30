@@ -5,7 +5,7 @@
 # Updated: 2025-12-20
 
 execution_modes:
-  # Autonomous execution support (matches Planning System pattern)
+  # Autonomous execution support (matches Planning System 2.0 pattern)
   # See: cortex-brain/manifests/orchestrators/planning-system-4.0-manifest.yaml (line 166+)
   supervised:
     description: "User approves each task/phase transition (manual control)"

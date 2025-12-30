@@ -228,9 +228,12 @@ class TemplateRenderer:
         if mode_customization.get('show', True) is False:
             return True
         
-        # Autonomous mode skips progress_bar for brevity
-        if mode == 'autonomous' and component_id == 'progress_bar':
-            return True
+        # CORTEX 4.0 GAPS-1230: progress_bar should ALWAYS be shown for planning
+        # operations regardless of mode - visual feedback is critical for
+        # phase completion tracking. Only skip in autonomous mode for 
+        # non-planning operations.
+        # Removed: if mode == 'autonomous' and component_id == 'progress_bar':
+        #              return True
         
         return False
     
