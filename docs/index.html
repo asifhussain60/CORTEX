@@ -130,7 +130,7 @@
             <div class="glass-card" style="padding: 2.5rem; background: var(--glass-bg); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: 16px;">
                 <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; margin-bottom: 2rem;">
                     <span style="font-size: 2.5rem;">⭐</span>
-                    <h2 style="margin: 0; font-size: 1.75rem; color: var(--accent-primary);">CORTEX Key Features</h2>
+                    <h2 style="margin: 0; font-size: 1.75rem; color: var(--accent-primary);">KEY FEATURES</h2>
                 </div>
                 
                 <div class="hero-cta-grid">
@@ -249,5 +249,58 @@
             </div>
         </div>
     </section>
+
+    <script>
+        // Mobile Logo Scroll Animation
+        (function() {
+            // Only run on mobile devices (≤768px)
+            if (window.innerWidth > 768) return;
+            
+            const logo = document.querySelector('.hero-logo');
+            if (!logo) return;
+            
+            // Start with expanded logo on mobile
+            logo.classList.add('logo-expanded');
+            
+            let ticking = false;
+            const scrollThreshold = 100; // px scrolled before shrinking
+            
+            function updateLogoSize() {
+                const scrollY = window.scrollY || window.pageYOffset;
+                
+                if (scrollY < scrollThreshold) {
+                    // At top - expand logo
+                    logo.classList.add('logo-expanded');
+                } else {
+                    // Scrolled down - shrink logo
+                    logo.classList.remove('logo-expanded');
+                }
+                
+                ticking = false;
+            }
+            
+            function requestTick() {
+                if (!ticking) {
+                    window.requestAnimationFrame(updateLogoSize);
+                    ticking = true;
+                }
+            }
+            
+            // Listen to scroll events
+            window.addEventListener('scroll', requestTick, { passive: true });
+            
+            // Handle window resize (if user rotates device)
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 768) {
+                    logo.classList.remove('logo-expanded');
+                } else {
+                    updateLogoSize();
+                }
+            });
+            
+            // Initial check
+            updateLogoSize();
+        })();
+    </script>
 </body>
 </html>
