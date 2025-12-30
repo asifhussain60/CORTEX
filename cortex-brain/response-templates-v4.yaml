@@ -206,6 +206,29 @@ components:
     bulleted: "- {item}"
     checkbox: "☐ {item}"
     checked: "✅ {item}"
+  
+  visual_progress:
+    description: "Visual progress bars for phase tracking"
+    phase_progress: |
+      **📊 Progress Overview:**
+      ```
+      Overall Status: [{filled_overall}{empty_overall}] {overall_percentage}%
+      ✅ Completed:   [{filled_complete}{empty_complete}] {complete_percentage}%
+      ⏳ In Progress: [{filled_progress}{empty_progress}] {progress_percentage}%
+      ⏸️  Not Started: [{filled_pending}{empty_pending}] {pending_percentage}%
+      ```
+    plan_tracker: |
+      ```
+      ╔══════════════════════════════════════════════════════════════════════════════╗
+      ║                         {plan_title}                                         ║
+      ╠══════════════════════════════════════════════════════════════════════════════╣
+      ║  Overall Progress: [{progress_bar}] {percentage}%                            ║
+      ╠══════════════════════════════════════════════════════════════════════════════╣
+      {phase_lines}
+      ╠══════════════════════════════════════════════════════════════════════════════╣
+      ║  Tests: {tests_passed}/{tests_total}  │  Code: {loc} LOC  │  Status: {status}║
+      ╚══════════════════════════════════════════════════════════════════════════════╝
+      ```
 
 # ============================================================================
 # SPECIAL TEMPLATES
