@@ -75,7 +75,7 @@ class WiringIntegrityChecker:
     
     def __init__(self, project_root: Path):
         self.root = project_root
-        self.operations_yaml = project_root / "cortex-operations.yaml"
+        self.operations_yaml = project_root / "cortex-brain" / "manifests" / "operations" / "cortex-operations.yaml"
         self.response_templates = project_root / "cortex-brain" / "response-templates-v4.yaml"
         
         # Cache loaded configurations

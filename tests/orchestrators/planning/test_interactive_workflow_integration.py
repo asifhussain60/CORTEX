@@ -36,7 +36,7 @@ class TestInteractiveWorkflowWiring:
         """Setup test fixtures."""
         # Minimal config for testing
         config = {
-            "cortex_root": "/Users/asifhussain/PROJECTS/CORTEX",
+            "cortex_root": Path(CORTEX_ROOT) / "",
             "brain_dir": "cortex-brain",
             "schema_path": "cortex-brain/manifests/planning/plan-schema.yaml"
         }
@@ -225,7 +225,7 @@ class TestInteractiveModeErrorHandling:
     def setup_method(self):
         """Setup test fixtures."""
         config = {
-            "cortex_root": "/Users/asifhussain/PROJECTS/CORTEX",
+            "cortex_root": Path(CORTEX_ROOT) / "",
             "brain_dir": "cortex-brain",
             "schema_path": "cortex-brain/manifests/planning/plan-schema.yaml"
         }

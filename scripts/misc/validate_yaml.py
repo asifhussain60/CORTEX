@@ -2,10 +2,10 @@ import yaml
 import sys
 
 files = [
-    'cortex-brain/response-base-components.yaml',
-    'cortex-brain/response-template-definitions.yaml',
-    'cortex-brain/response-profile-variants.yaml',
-    'cortex-brain/response-routing-rules.yaml'
+    'cortex-brain/response-templates/base-components.yaml',
+    'cortex-brain/response-templates-v4.yaml',
+    'cortex-brain/response-templates/profiles.yaml',
+    'cortex-brain/response-templates/response-routing-rules.yaml'
 ]
 
 for file in files:

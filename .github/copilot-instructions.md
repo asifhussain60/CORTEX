@@ -25,7 +25,7 @@ All command routing is defined in `CORTEX.prompt.md`. Key orchestrators:
 | `tdd`, `start tdd`, `run tests` | TDD Orchestrator → RED→GREEN→REFACTOR |
 | `ado`, `ado story`, `ado feature` | ADO Operations → work items |
 | `sanitize`, `make generic` | Sanitization → 5-phase cleanup |
-| `maintenance`, `health check` | Maintenance → 6-phase pipeline |
+| `maintenance`, `health check` | Maintenance → 11-phase pipeline |
 | `refine`, `improve` | Refinement → 7-phase improvement |
 
 **Manifest Location:** `cortex-brain/manifests/orchestrators/`
@@ -98,7 +98,7 @@ src/                    # Implementation
 
 Say `help` in Copilot Chat to see all operations.
 
-**For maintenance:** Use `system maintenance` to run 6-phase health pipeline.
+**For maintenance:** Use `system maintenance` to run 11-phase health pipeline.
 
 ---
 

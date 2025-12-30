@@ -22,7 +22,7 @@ from src.orchestrators.planning.planning_orchestrator import (
 def planning_orchestrator(tmp_path):
     """Create PlanningOrchestrator instance."""
     config = {
-        "cortex_root": "/Users/asifhussain/PROJECTS/CORTEX",
+        "cortex_root": Path(CORTEX_ROOT) / "",
         "active_plans_dir": str(tmp_path / "active"),
         "temp_plans_dir": str(tmp_path / "temp"),
         "tdd_enabled": True,

@@ -134,14 +134,27 @@ components:
       - "tasks_completed" # Task completion ratio
     rendering:
       method: "PlanningSession.render_progress_table()"
-      format: "Markdown table"
+      format: "Markdown table (integrated progress bar)"
+      display_timing:
+        - moment: "beginning"
+          show: "complete_phase_table"
+          description: "Show entire table with all phases at plan start"
+        - moment: "phase_completion"
+          show: "overall_progress_and_next_phase"
+          description: "Show overall progress bar and next phase only after each phase completes"
+        - moment: "overall_completion"
+          show: "complete_phase_table"
+          description: "Show entire table with all phases at plan completion"
+      template_reference: "autonomous_execution_progress"
       includes:
+        - "Overall progress bar in table header row"
         - "Phase number and name"
-        - "Status icons (✅ ⏳ 🔄)"
-        - "Progress percentage"
+        - "Status icons (✅ ⏳ ⏸️)"
+        - "Progress percentage per phase"
         - "Duration per phase"
         - "Token usage per phase"
         - "Task completion ratio"
+        - "TDD status (RED/GREEN/REFACTOR)"
 
   complexity_analyzer:
     enabled: true

@@ -1,153 +1,96 @@
-# 🧹 CORTEX Cleanup System
+# 🧹 CORTEX Cleanup System (ALIAS)
 
-**Version:** 1.0.0 | **Status:** ✅ PRODUCTION  
+**Version:** 2.0.0 | **Status:** ✅ ALIAS TO MAINTENANCE  
 **Author:** Asif Hussain | **Website:** https://asifhussain60.github.io/CORTEX/  
 **Copyright © 2025 Asif Hussain. All rights reserved.**
 
 ---
 
-## 🎯 Purpose
+## ⚠️ IMPORTANT: This is an Alias
 
-Comprehensive workspace cleanup orchestrator for CORTEX that:
-1. **Clears VS Code caches** for fresh state
-2. **Validates response templates** (visual progress bars, autonomous execution)
-3. **Removes deprecated references** (5-part templates, old configs)
-4. **Resolves duplicate files** (keeps latest, deletes conflicts)
-5. **Runs holistic validation** in a loop until clean
+**This file routes cleanup commands to the consolidated maintenance system.**
+
+All cleanup operations are now part of **Phase 2** in `cortex-maintenance.prompt.md`.
 
 ---
 
-## ⚡ Quick Commands
+## 🎯 Quick Command Routing
 
-| Command | Description |
-|---------|-------------|
-| `cleanup full` | Run all 5 phases end-to-end |
-| `cleanup cache` | Clear VS Code caches only |
-| `cleanup validate` | Run holistic validation only |
-| `cleanup duplicates` | Resolve duplicate files only |
-| `cleanup legacy` | Remove deprecated references only |
+| User Command | Routes To | Description |
+|--------------|-----------|-------------|
+| `cleanup full` | `system maintenance` (all 11 phases) | Full system maintenance with cleanup |
+| `cleanup cache` | Maintenance Phase 2a | Clear VS Code & Python caches |
+| `cleanup validate` | Maintenance Phase 2b | Validate response templates |
+| `cleanup legacy` | Maintenance Phase 2c | Remove 5-part template references |
+| `cleanup duplicates` | Maintenance Phase 2d | Resolve duplicate files |
+| `cleanup backups` | Maintenance Phase 2e-2g | Delete backup dirs/files |
 
 ---
 
-## 🔄 5-Phase Cleanup Pipeline
+## 📋 Consolidated Cleanup (Phase 2 Sub-Tasks)
 
-### Phase 1: VS Code Cache Clear
-**Purpose:** Remove stale cached data for fresh workspace state
+**All cleanup operations execute as part of Maintenance Phase 2:**
 
-**Actions:**
-```bash
-# Clear VS Code workspace cache
-rm -rf ~/Library/Application\ Support/Code/Cache/*
-rm -rf ~/Library/Application\ Support/Code/CachedData/*
-rm -rf ~/Library/Application\ Support/Code/CachedExtensions/*
-rm -rf ~/Library/Application\ Support/Code/CachedExtensionVSIXs/*
+### Phase 2: System Cleanup 🗑️
+- **2a:** Clear VS Code & Python caches
+- **2b:** Validate response templates (progress bars, autonomous execution)
+- **2c:** Remove legacy 5-part template references
+- **2d:** Resolve duplicate files
+- **2e:** Delete backup directories
+- **2f:** Delete backup files
+- **2g:** Consolidate duplicate reports
+- **2h:** Verify cleanup complete
 
-# Clear workspace-specific state
-rm -rf .vscode/.history/
-rm -rf .vscode/.cache/
-rm -rf .vscode/*.log
+---
 
-# Clear Python caches
-find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null
-find . -type f -name "*.pyc" -delete 2>/dev/null
-find . -type d -name ".pytest_cache" -exec rm -rf {} + 2>/dev/null
-find . -type d -name ".mypy_cache" -exec rm -rf {} + 2>/dev/null
+## 🚀 Usage
+
+### Run Full Maintenance (Includes All Cleanup)
+```
+system maintenance
 ```
 
-**Python Toolkit:** `cortex-toolkit/maintenance/clear_caches.py`
-
----
-
-### Phase 2: Response Template Validation
-**Purpose:** Ensure visual progress bars are wired correctly
-
-**Validation Checks:**
-
-| Check | Expected Value | File(s) to Verify |
-|-------|----------------|-------------------|
-| Planning progress template | `autonomous_execution_progress` | `planning_orchestrator.py` |
-| ADO progress template | `ado_execution_progress` | `ado_orchestrator.py` |
-| Maintenance progress template | `maintenance_execution_progress` | `cortex-maintenance.prompt.md` |
-| Sanitization progress template | `sanitization_execution_progress` | `code-sanitization-manifest.yaml` |
-| Refinement progress template | `refinement_execution_progress` | `refinement-orchestrator-manifest.yaml` |
-
-**Visual Progress Bar Requirements:**
-- ✅ Unicode block characters: `█` (filled) `░` (empty)
-- ✅ Percentage display: `[████████░░░░░░░░░░░░] 40%`
-- ✅ Phase table with status emojis: ✅ ⏳ ⏸️
-- ✅ TDD status column (where applicable)
-- ✅ Time tracking (elapsed/remaining)
-
-**Key Files:**
-- `cortex-brain/response-templates-v4.yaml` (canonical source)
-- `cortex-brain/response-templates/base-components.yaml` (component definitions)
-- `src/response_templates/template_renderer.py` (rendering logic)
-
----
-
-### Phase 3: Autonomous Execution Validation
-**Purpose:** Ensure autonomous execution defaults to `true`
-
-**Validation Points:**
-
-| Location | Setting | Expected |
-|----------|---------|----------|
-| `planning_orchestrator.py` | `auto_execute` kwarg default | `True` |
-| `planning_orchestrator.py` | `enable_autonomous_execution` config | `True` |
-| `ado_orchestrator.py` | `autonomous_execution` in copilot_instructions | `True` |
-| `plan_executor.py` | Default execution mode | `ExecutionMode.AUTONOMOUS` |
-
-**Search Pattern:**
-```python
-# Must find: default=True or True as explicit value
-kwargs.get("auto_execute", True)
-config.get("enable_autonomous_execution", True)
-"autonomous_execution": True
+### Run Specific Cleanup Phases
+```
+system maintenance --phases 2
 ```
 
 ---
 
-### Phase 4: Legacy Reference Removal
-**Purpose:** Remove ALL references to deprecated 5-part response templates
+## 📚 Documentation
 
-**Target Patterns to DELETE:**
-```yaml
-# MUST NOT EXIST in any file:
-inherits_from: core/base-templates/5-part-standard.yaml
-5-part-standard
-five-part-standard
-5_part_standard
-```
+**Full cleanup documentation:** See `cortex-maintenance.prompt.md` Phase 2
 
-**Files to Check:**
-- `cortex-brain/response-templates/**/*.yaml`
-- `.github/prompts/*.md`
-- `cortex-brain/*.yaml`
+**Implementation details:** `cortex-brain/documents/implementation-guides/maintenance/phase-2-cleanup.md`
 
-**Safe to Delete (if exists):**
-- `cortex-brain/response-templates/core/base-templates/5-part-standard.yaml`
-
-**Replacement Template:** `core/base-templates/adaptive-base.yaml`
+**Python toolkit:** `cortex-toolkit/maintenance/`
+- `clear_caches.py` - Cache clearing (Phase 2a)
+- `validate_templates.py` - Template validation (Phase 2b)
+- `remove_legacy_refs.py` - Legacy reference removal (Phase 2c)
+- `resolve_duplicates.py` - Duplicate resolution (Phase 2d)
 
 ---
 
-### Phase 5: Duplicate File Resolution
-**Purpose:** Find and resolve conflicting duplicate files
+## 🔗 Related Files
 
-**Detection Algorithm:**
-1. Find files with same base name in different locations
-2. Compare content hashes (SHA-256)
-3. If different content: identify correct version by:
-   - Version number in header
-   - Last modification date
-   - Line count (more comprehensive usually correct)
-4. Keep correct version, delete others
+| File | Purpose |
+|------|---------|
+| `.github/prompts/cortex-maintenance.prompt.md` | **Primary system (11 phases)** |
+| `cortex-brain/cleanup-rules.yaml` | Cleanup rule definitions |
+| `cortex-cleanup.ps1` | PowerShell cleanup wrapper |
 
-**Common Duplicate Patterns:**
-```
-# Response templates (check for duplicates)
-cortex-brain/response-templates.yaml
-cortex-brain/response-templates-v4.yaml       # ← Keep v4
+---
+
+**Why Consolidate?**
+1. **Single source of truth** - One maintenance system
+2. **Reduced redundancy** - No duplicate cleanup logic
+3. **Better integration** - Cleanup as part of holistic maintenance
+4. **Consistent execution** - Same autonomous execution model
+5. **Easier maintenance** - Update one file, not two
+
+---
+
+**Anti-Bloat:** This alias file MUST stay under 150 lines.
 cortex-brain/templates/response-templates-condensed.yaml
 
 # Planning manifests (check for old versions)

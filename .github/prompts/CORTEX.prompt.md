@@ -62,7 +62,8 @@ User: "implement user authentication"
 | `plan ado`, `ado story`, `ado feature` | ADO Operations | `ado-planning-manifest.yaml` | ADO work items |
 | `sanitize`, `make generic`, `anonymize` | Sanitization | `code-sanitization-manifest.yaml` | Sanitized codebase |
 | `refine`, `improve cortex`, `optimize code` | Refinement | `refinement-orchestrator-manifest.yaml` | 7-phase improvement |
-| `system maintenance`, `health check` | Maintenance | Via `cortex-maintenance.prompt.md` | Health reports |
+| `system maintenance`, `health check` | **Maintenance (11 phases)** | Via `cortex-maintenance.prompt.md` | Health reports + auto-repair |
+| `cleanup cache`, `cleanup full`, `cleanup [type]` | **Cleanup (alias)** | → Routes to Maintenance Phase 2 | Cache clear, template validation, legacy removal |
 | `help`, `show commands` | Help | Template-based | Command list |
 
 **Manifest Path:** `cortex-brain/manifests/orchestrators/{manifest-file}`
@@ -165,7 +166,9 @@ cortex-brain/                    src/
 | `start tdd` | RED→GREEN→REFACTOR workflow |
 | `debug [issue]` | Investigate and fix bug |
 | `open lens` | Show analytics dashboard |
-| `system maintenance` | 6-phase health pipeline |
+| `system maintenance` | 11-phase health pipeline with auto-repair |
+| `cleanup cache` | Clear VS Code/Python caches (Phase 2a) |
+| `cleanup full` | Run full maintenance (all 11 phases) |
 | `sanitize [dir]` | Remove company data |
 | `refine` | 7-phase system improvement |
 | `help` | Show all commands |

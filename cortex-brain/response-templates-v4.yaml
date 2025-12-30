@@ -861,8 +861,12 @@ anti_bloat:
 
 named_templates:
   autonomous_execution_progress:
-    description: "Enhanced progress template for autonomous plan execution with visual Unicode progress bars"
+    description: "Enhanced progress template for autonomous plan execution with visual Unicode progress bars integrated into phase table"
     tier: "TIER 3"
+    display_moments:
+      - "beginning": "Show complete phase table"
+      - "phase_completion": "Show overall progress and next phase"
+      - "overall_completion": "Show complete phase table"
     format: |
       ## 🧠 CORTEX Plan Execution
       **Author:** Asif Hussain | **Plan:** {{plan_name}}
@@ -870,24 +874,19 @@ named_templates:
       ---
       
       ### 📊 Execution Progress
-      ```
-      ╔══════════════════════════════════════════════════════════════════════════╗
-      ║  Plan: {{plan_name_truncated}}                                           ║
-      ╠══════════════════════════════════════════════════════════════════════════╣
-      ║  Overall: [{{overall_bar}}] {{overall_percentage}}%  {{status_emoji}}    ║
-      ║  Phase {{current_phase}}/{{total_phases}}: {{current_phase_name}}        ║
-      ║  Task: {{current_task}}                                                  ║
-      ║  Time: {{elapsed_time}} elapsed | ~{{remaining_time}} remaining          ║
-      ╚══════════════════════════════════════════════════════════════════════════╝
-      ```
       
-      ### 📋 Phase Breakdown
-      
+      {{#if show_full_table}}
       | # | Phase | Status | Progress | TDD Status | Tasks | Time |
       |---|-------|--------|----------|------------|-------|------|
+      | **Overall** | **{{status_emoji}}** | **[{{overall_bar}}] {{overall_percentage}}%** | **Phase {{current_phase}}/{{total_phases}}** | - | {{total_completed_tasks}}/{{total_tasks}} | {{total_elapsed_time}} |
       {{#each phases}}
       | {{phase_num}} | {{#if completed}}✅{{else if in_progress}}⏳{{else}}⏸️{{/if}} **{{phase_name}}** | {{status_text}} | [{{phase_bar}}] {{percentage}}% | {{#if tdd_enabled}}R{{#if red_done}}✅{{else}}⏸️{{/if}} G{{#if green_done}}✅{{else}}⏸️{{/if}} F{{#if refactor_done}}✅{{else}}⏸️{{/if}}{{else}}N/A{{/if}} | {{completed_tasks}}/{{total_tasks}} | {{elapsed_time}} |
       {{/each}}
+      {{else}}
+      | **Overall Progress** | **[{{overall_bar}}] {{overall_percentage}}%** | **Phase {{current_phase}}/{{total_phases}}** |
+      |---------------------|------------------------------------------------|------------------------------------------|
+      | **Next Phase** | ⏳ **{{next_phase_name}}** | Starting now |
+      {{/if}}
       
       {{#if threat_analysis_enabled}}
       ### 🔒 Security Analysis
@@ -929,8 +928,12 @@ named_templates:
   #   - refinement_execution_progress (7-phase)
   
   ado_execution_progress:
-    description: "Enhanced ADO work item generation progress with story points and hierarchy tracking"
+    description: "Enhanced ADO work item generation progress with story points and hierarchy tracking integrated into phase table"
     tier: "TIER 3"
+    display_moments:
+      - "beginning": "Show complete phase table with work item summary"
+      - "phase_completion": "Show overall progress and next phase"
+      - "overall_completion": "Show complete phase table with work item summary"
     format: |
       ## 🧠 CORTEX ADO Work Item Generation
       **Author:** Asif Hussain | **Feature:** {{feature_name}}
@@ -938,22 +941,17 @@ named_templates:
       ---
       
       ### 📊 ADO Generation Progress
-      ```
-      ╔══════════════════════════════════════════════════════════════════════════╗
-      ║  Feature: {{feature_name_truncated}}                                     ║
-      ╠══════════════════════════════════════════════════════════════════════════╣
-      ║  Overall: [{{overall_bar}}] {{overall_percentage}}%  {{status_emoji}}    ║
-      ║  Phase {{current_phase}}/{{total_phases}}: {{current_phase_name}}        ║
-      ║  Work Items: {{items_created}}/{{items_planned}} created                 ║
-      ║  Story Points: {{story_points_total}} SP total                           ║
-      ╚══════════════════════════════════════════════════════════════════════════╝
-      ```
       
-      ### 📋 ADO Workflow Phases
-      
-      | # | Phase | Status | Progress | Items | Time |
-      |---|-------|--------|----------|-------|------|
+      {{#if show_full_table}}
+      | # | Phase | Status | Progress | Items | SP | Time |
+      |---|-------|--------|----------|-------|-------|------|
+      | **Overall** | **{{status_emoji}}** | **[{{overall_bar}}] {{overall_percentage}}%** | **Phase {{current_phase}}/{{total_phases}}** | {{items_created}}/{{items_planned}} | {{story_points_total}} SP | {{total_elapsed_time}} |
       {{phase_rows}}
+      {{else}}
+      | **Overall Progress** | **[{{overall_bar}}] {{overall_percentage}}%** | **Phase {{current_phase}}/{{total_phases}}** |
+      |---------------------|------------------------------------------------|------------------------------------------|
+      | **Next Phase** | ⏳ **{{next_phase_name}}** | Starting now |
+      {{/if}}
       
       ### 🎫 Work Item Summary
       

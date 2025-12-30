@@ -122,6 +122,42 @@ system maintenance --dry-run
 
 ---
 
+## ⛔ DATA PRESERVATION RULES
+
+**Before ANY cleanup/deletion operation, verify:**
+
+- [ ] `cortex-brain/lessons-learned.yaml` preserved
+- [ ] `cortex-brain/knowledge-graph.yaml` preserved
+- [ ] `cortex-brain/tier1/*.md` preserved
+- [ ] `cortex-brain/tier2/*.yaml` preserved
+- [ ] User-added documents in `cortex-brain/documents/` preserved
+- [ ] `cortex-brain/user-dictionary.yaml` preserved
+- [ ] All `.db` files in `tier1/`, `tier2/`, `tier3/` preserved
+- [ ] `copilot_instructions` in plan files preserved during regeneration
+- [ ] `metadata.notes` and `metadata.tags` in plans preserved
+- [ ] `named_templates` in `response-templates-v4.yaml` preserved
+
+**Critical Data Locations (NEVER DELETE):**
+
+```
+cortex-brain/
+├── tier1/*.db              # Conversations, working memory
+├── tier2/*.db              # Knowledge graph, learned patterns  
+├── tier3/*.db              # Development context, metrics
+├── lessons-learned.yaml    # Accumulated learnings
+├── knowledge-graph.yaml    # Relationship mappings
+├── user-dictionary.yaml    # Custom terminology
+├── documents/              # User-created content
+└── response-templates-v4.yaml (named_templates section)
+```
+
+**References:**
+- Data Preservation: `cortex-brain/documents/implementation-guides/phase-2.5-data-preservation-rules.md`
+- Brain Protection: `cortex-brain/brain-protection-rules.yaml`
+- Upgrade Preservation: UPGRADE_BRAIN_PRESERVATION instinct
+
+---
+
 ## 🎯 Core Philosophy
 
 **MAINTENANCE = DIAGNOSE + AUTO-REPAIR + VERIFY**
@@ -292,26 +328,104 @@ components = ['header', 'body', 'progress_bar', 'footer']  # progress_bar REQUIR
    Phase 1 complete → "Ready for Phase 2?" → waits
 ```
 
+### Rule 8: Response Template Integrity (NEW - December 30, 2025)
+
+**ALL response template references MUST resolve to existing files.**
+
+**Problem:** Template cleanup revealed:
+- 27 files referencing non-existent `5-part-standard.yaml`
+- Duplicate template files causing routing conflicts
+- Missing introduction templates referenced in routing rules
+- Inconsistent schema versions across template files
+
+**Solution:** Validate template integrity on every maintenance run.
+
+**✅ REQUIRED Validation Checks:**
+1. Every `inherits_from` reference points to existing file
+2. Every `template:` in routing rules points to defined template
+3. No orphaned template definitions (defined but never used)
+4. Schema versions are consistent (v4.0)
+5. Introduction templates exist for all audiences
+6. No duplicate template definition files
+
+**❌ FORBIDDEN:**
+- `inherits_from: core/base-templates/5-part-standard.yaml` (file doesn't exist)
+- Template references to undefined templates
+- Duplicate routing/component files in `cortex-brain/` root
+- Multiple template definition files (only `response-templates-v4.yaml` allowed)
+
+**🔧 Auto-Repair Actions:**
+- Remove orphaned `inherits_from` references
+- Delete duplicate files in `cortex-brain/` root (keep `response-templates/` versions)
+- Generate missing introduction templates
+- Update routing rules to reference valid templates
+- Archive legacy template files to `cortex-brain/archives/`
+
+**Validation Script:**
+```python
+python3 -c "
+import yaml
+import os
+from pathlib import Path
+
+print('🔍 Validating Response Template Integrity...\n')
+
+# Load routing rules
+routing_file = Path('cortex-brain/response-templates/response-routing-rules.yaml')
+if routing_file.exists():
+    with open(routing_file, 'r', encoding='utf-8') as f:
+        routing = yaml.safe_load(f)
+    
+    # Get template file mappings
+    mappings = routing.get('validation', {}).get('template_file_mappings', {})
+    
+    errors = []
+    for template_id, file_path in mappings.items():
+        if not Path(file_path).exists():
+            errors.append(f'❌ {template_id} → {file_path} (NOT FOUND)')
+    
+    if errors:
+        print('\n'.join(errors))
+        print(f'\n❌ {len(errors)} broken reference(s) found!')
+        exit(1)
+    else:
+        print(f'✅ All {len(mappings)} template references are valid!')
+else:
+    print('❌ Routing rules file not found!')
+    exit(1)
+"
+```
+
+**Location in Pipeline:** Phase 2b (Template Validation) + Phase 11 (Final Verification)
+
+**Success Criteria:**
+- ✅ Zero orphaned `inherits_from` references
+- ✅ All routing rule templates resolve correctly
+- ✅ Single source of truth: `response-templates-v4.yaml`
+- ✅ Schema version consistency (v4.0)
+- ✅ No duplicate template files
+
 ---
 
-## 🎯 10-Phase Optimized Maintenance Pipeline
+## 🎯 11-Phase Optimized Maintenance Pipeline
 
 **⚠️ EVERY PHASE = DIAGNOSE + AUTO-REPAIR + VERIFY**
 
-### Pipeline Strategy: DISCOVER → CLEAN → WIRE → TEST → VERIFY
+### Pipeline Strategy: DISCOVER → CLEAN → PRESERVE → WIRE → TEST → VERIFY
 
 | Phase | Focus Area | Diagnose | Auto-Repair | Verify |
 |-------|-----------|----------|-------------|--------|
 | **1** | **🔍 DISCOVERY** | **Scan entire system for enhancements, gaps, bloat** | **Generate comprehensive action report** | **All issues cataloged** |
-| **2** | **🗑️ CLEANUP** | Find backups, duplicates, old reports | Delete all waste | Zero bloat remains |
-| **3** | **🔧 SCAFFOLDING** | Check toolkit generators exist | Create missing generators | Test generation works |
-| **4** | **🔌 WIRING** | Detect unwired components | Auto-wire orchestrators, agents | 100% wiring coverage |
-| **5** | **🧪 TESTING** | Run full test suite | Delete obsolete tests, fix bugs | 100% pass rate |
-| **6** | **📚 KNOWLEDGE** | Scan knowledge library | Fix broken refs, sync YAML↔MD | All guidelines accessible |
-| **7** | **🗂️ ORGANIZATION** | Check report structure | Archive old, consolidate duplicates | Clean hierarchy |
-| **8** | **🔀 ROUTING** | Validate intent router | Fix broken manifest paths | All routes functional |
-| **9** | **📝 PROMPTS** | Measure prompt bloat | Regenerate lean prompts | Each <200 lines |
-| **10** | **✅ VERIFICATION** | Run health diagnostics | Fix critical issues | Health score ≥95 |
+| **2** | **🗑️ CLEANUP** | Clear caches, validate templates, remove legacy, resolve duplicates, delete backups | **7 sub-phases (2a-2g):** Cache clear, template validation, legacy removal, duplicate resolution, backup deletion | Zero bloat, valid templates, no legacy refs |
+| **3** | **⛔ PRESERVATION** | Validate protected data paths exist | Verify no critical data in cleanup targets | All user data safe |
+| **4** | **🔧 SCAFFOLDING** | Check toolkit generators exist | Create missing generators | Test generation works |
+| **5** | **🔌 WIRING** | Detect unwired components | Auto-wire orchestrators, agents | 100% wiring coverage |
+| **6** | **🧪 TESTING** | Run full test suite | Delete obsolete tests, fix bugs | 100% pass rate |
+| **7** | **📚 KNOWLEDGE** | Scan knowledge library | Fix broken refs, sync YAML↔MD | All guidelines accessible |
+| **8** | **🗂️ ORGANIZATION** | Check report structure | Archive old, consolidate duplicates | Clean hierarchy |
+| **9** | **🔀 ROUTING** | Validate intent router | Fix broken manifest paths | All routes functional |
+| **10** | **📝 PROMPTS** | Measure prompt bloat | Regenerate lean prompts | Each <200 lines |
+| **11** | **✅ VERIFICATION** | Run health diagnostics | Fix critical issues | Health score ≥95 |
 
 ### Phase Execution Order (Optimized for Efficiency)
 
@@ -330,31 +444,34 @@ Phase 2: CLEANUP (Remove Waste)
   ├─ Delete duplicates
   └─ Archive old reports
   
-Phase 3: SCAFFOLDING (Foundation)
+Phase 3: PRESERVATION (Validate Protected Data)
+  └─ Verify critical data paths safe
+  
+Phase 4: SCAFFOLDING (Foundation)
   └─ Verify/create toolkit generators
   
-Phase 4: WIRING (Connections)
+Phase 5: WIRING (Connections)
   ├─ Auto-wire orchestrators
   ├─ Register agents
   └─ Update manifests
   
-Phase 5: TESTING (Quality)
+Phase 6: TESTING (Quality)
   ├─ Run test suite
   └─ Delete obsolete tests
   
-Phase 6: KNOWLEDGE (Content)
+Phase 7: KNOWLEDGE (Content)
   └─ Sync knowledge library
   
-Phase 7: ORGANIZATION (Structure)
+Phase 8: ORGANIZATION (Structure)
   └─ Organize reports
   
-Phase 8: ROUTING (Navigation)
+Phase 9: ROUTING (Navigation)
   └─ Fix intent router
   
-Phase 9: PROMPTS (Templates)
+Phase 10: PROMPTS (Templates)
   └─ Regenerate lean prompts
   
-Phase 10: VERIFICATION (Final Health Check)
+Phase 11: VERIFICATION (Final Health Check)
   └─ Confirm 100% system health
 ```
 
@@ -376,14 +493,15 @@ def execute_maintenance():
     phases = [
         (1, "DISCOVERY", discover_system),
         (2, "CLEANUP", cleanup_waste),
-        (3, "SCAFFOLDING", verify_scaffolds),
-        (4, "WIRING", wire_components),
-        (5, "TESTING", run_tests),
-        (6, "KNOWLEDGE", sync_knowledge),
-        (7, "ORGANIZATION", organize_reports),
-        (8, "ROUTING", fix_routing),
-        (9, "PROMPTS", optimize_prompts),
-        (10, "VERIFICATION", verify_health),
+        (3, "PRESERVATION", validate_preservation),
+        (4, "SCAFFOLDING", verify_scaffolds),
+        (5, "WIRING", wire_components),
+        (6, "TESTING", run_tests),
+        (7, "KNOWLEDGE", sync_knowledge),
+        (8, "ORGANIZATION", organize_reports),
+        (9, "ROUTING", fix_routing),
+        (10, "PROMPTS", optimize_prompts),
+        (11, "VERIFICATION", verify_health),
     ]
     
     results = {}
@@ -426,14 +544,15 @@ def execute_maintenance():
 |------------|------------|------------|
 | Phase 1→2 | Discovery report exists | Regenerate |
 | Phase 2→3 | Zero backups remain | Re-cleanup |
-| Phase 3→4 | Scaffolds verified | Create missing |
-| Phase 4→5 | 100% wiring coverage | Re-wire |
-| Phase 5→6 | Tests passing | Fix failures |
-| Phase 6→7 | Knowledge synced | Re-sync |
-| Phase 7→8 | Reports organized | Re-organize |
-| Phase 8→9 | Routes functional | Re-route |
-| Phase 9→10 | Prompts optimized | Re-optimize |
-| Phase 10→END | Health ≥95% | Escalate |
+| Phase 3→4 | Protected data verified | Stop maintenance |
+| Phase 4→5 | Scaffolds verified | Create missing |
+| Phase 5→6 | 100% wiring coverage | Re-wire |
+| Phase 6→7 | Tests passing | Fix failures |
+| Phase 7→8 | Knowledge synced | Re-sync |
+| Phase 8→9 | Reports organized | Re-organize |
+| Phase 9→10 | Routes functional | Re-route |
+| Phase 10→11 | Prompts optimized | Re-optimize |
+| Phase 11→END | Health ≥95% | Escalate |
 
 ### Final Report Structure
 
@@ -457,14 +576,15 @@ def execute_maintenance():
 |-------|----------|--------|
 | Phase 1 - Discovery | `██████████` | 100% ✅ |
 | Phase 2 - Cleanup | `██████████` | 100% ✅ |
-| Phase 3 - Scaffolding | `██████████` | 100% ✅ |
-| Phase 4 - Wiring | `██████████` | 100% ✅ |
-| Phase 5 - Testing | `██████████` | 100% ✅ |
-| Phase 6 - Knowledge | `██████████` | 100% ✅ |
-| Phase 7 - Organization | `██████████` | 100% ✅ |
-| Phase 8 - Routing | `██████████` | 100% ✅ |
-| Phase 9 - Prompts | `██████████` | 100% ✅ |
-| Phase 10 - Verification | `██████████` | 100% ✅ |
+| Phase 3 - Preservation | `██████████` | 100% ✅ |
+| Phase 4 - Scaffolding | `██████████` | 100% ✅ |
+| Phase 5 - Wiring | `██████████` | 100% ✅ |
+| Phase 6 - Testing | `██████████` | 100% ✅ |
+| Phase 7 - Knowledge | `██████████` | 100% ✅ |
+| Phase 8 - Organization | `██████████` | 100% ✅ |
+| Phase 9 - Routing | `██████████` | 100% ✅ |
+| Phase 10 - Prompts | `██████████` | 100% ✅ |
+| Phase 11 - Verification | `██████████` | 100% ✅ |
 
 📊 **Issues Found:** {count} | **Auto-Fixed:** {fixed} | **Health:** {score}%
 
@@ -811,24 +931,205 @@ echo "📊 Master Action Plan: cortex-brain/discovery-reports/MASTER-ACTION-PLAN
 
 ---
 
-## Phase 2: System Cleanup 🗑️ - REMOVE WASTE
+## Phase 2: System Cleanup 🗑️ - COMPREHENSIVE WASTE REMOVAL
 
 ### ⚠️ USES PHASE 1 DISCOVERY DATA
 
-**Purpose:** Delete ALL backup folders, files, and duplicate reports identified in Phase 1 discovery.
+**Purpose:** Delete ALL backup folders, files, duplicate reports, clear caches, validate templates, and remove legacy references.
 
 **Input:** Phase 1 discovery reports (`/tmp/backup_dirs.txt`, `/tmp/backup_files.txt`, `/tmp/duplicate_names.txt`)
 
-**Output:** Clean repository with zero bloat, committed to git.
+**Output:** Clean repository with zero bloat, validated templates, cleared caches, no legacy references.
+
+**Sub-Phases:**
+- **2a:** Clear VS Code & Python caches
+- **2b:** Validate response templates (progress bars, autonomous execution)
+- **2c:** Remove legacy 5-part template references
+- **2d:** Resolve duplicate files
+- **2e:** Delete backup directories
+- **2f:** Delete backup files
+- **2g:** Consolidate duplicate reports
 
 ---
 
-### 2a. Delete Backup Directories (from Phase 1 Discovery)
+### 2a. Clear VS Code & Python Caches 🧹
+
+**Purpose:** Remove stale cached data for fresh workspace state.
+
+**Actions:**
+```powershell
+# Windows paths for VS Code cache
+$VSCodeCache = @(
+    "$env:APPDATA\Code\Cache",
+    "$env:APPDATA\Code\CachedData",
+    "$env:APPDATA\Code\CachedExtensions",
+    "$env:APPDATA\Code\CachedExtensionVSIXs"
+)
+
+# Clear VS Code caches
+foreach ($path in $VSCodeCache) {
+    if (Test-Path $path) {
+        Remove-Item -Path $path -Recurse -Force -ErrorAction SilentlyContinue
+        Write-Host "✅ Cleared: $path"
+    }
+}
+
+# Clear workspace-specific state
+Remove-Item -Path ".vscode/.history" -Recurse -Force -ErrorAction SilentlyContinue
+Remove-Item -Path ".vscode/.cache" -Recurse -Force -ErrorAction SilentlyContinue
+Remove-Item -Path ".vscode/*.log" -Force -ErrorAction SilentlyContinue
+
+# Clear Python caches
+Get-ChildItem -Path . -Directory -Filter "__pycache__" -Recurse -ErrorAction SilentlyContinue | Remove-Item -Recurse -Force
+Get-ChildItem -Path . -File -Filter "*.pyc" -Recurse -ErrorAction SilentlyContinue | Remove-Item -Force
+Get-ChildItem -Path . -Directory -Filter ".pytest_cache" -Recurse -ErrorAction SilentlyContinue | Remove-Item -Recurse -Force
+Get-ChildItem -Path . -Directory -Filter ".mypy_cache" -Recurse -ErrorAction SilentlyContinue | Remove-Item -Recurse -Force
+
+Write-Host "✅ All caches cleared"
+```
+
+**Python Toolkit:** `cortex-toolkit/maintenance/clear_caches.py`
+
+---
+
+### 2b. Validate Response Templates 🎯
+
+**Purpose:** Ensure visual progress bars are wired correctly and autonomous execution is enabled.
+
+**Validation Checks:**
+
+| Check | Expected Value | File(s) to Verify |
+|-------|----------------|-------------------|
+| Planning progress template | `autonomous_execution_progress` | `planning_orchestrator.py` |
+| Visual progress bars | Unicode blocks `█░` | `response-templates-v4.yaml` |
+| Autonomous execution default | `True` | All orchestrator files |
+| Progress bar components | `progress_bar_visual` | `base-components.yaml` |
+
+**Actions:**
+```powershell
+# Check for progress bar templates
+$templatesFile = "cortex-brain\response-templates-v4.yaml"
+$content = Get-Content $templatesFile -Raw
+
+if ($content -match "progress_bar.*█.*░") {
+    Write-Host "✅ Progress bar templates valid"
+} else {
+    Write-Host "❌ Progress bar templates missing or invalid"
+}
+
+# Check autonomous execution defaults
+$orchestrators = Get-ChildItem -Path "src\orchestrators" -Filter "*.py" -Recurse
+foreach ($file in $orchestrators) {
+    $fileContent = Get-Content $file.FullName -Raw
+    if ($fileContent -match "auto_execute.*=.*True|autonomous_execution.*:.*True") {
+        Write-Host "✅ $($file.Name): Autonomous execution enabled"
+    }
+}
+```
+
+**Python Toolkit:** `cortex-toolkit/maintenance/validate_templates.py`
+
+---
+
+### 2c. Remove Legacy 5-Part Template References 🗑️
+
+**Purpose:** Remove ALL references to deprecated 5-part response templates.
+
+**Target Patterns to DELETE:**
+```yaml
+inherits_from: core/base-templates/5-part-standard.yaml
+5-part-standard
+five-part-standard
+5_part_standard
+```
+
+**Actions:**
+```powershell
+# Search for 5-part references
+$files = Get-ChildItem -Path "cortex-brain\response-templates" -Filter "*.yaml" -Recurse
+
+foreach ($file in $files) {
+    $content = Get-Content $file.FullName -Raw
+    if ($content -match "5-part|five-part|5_part") {
+        Write-Host "🔧 Removing legacy references from: $($file.Name)"
+        
+        # Remove inherits_from lines
+        $content = $content -replace "inherits_from:.*5-part.*\n", ""
+        
+        # Save cleaned content
+        Set-Content -Path $file.FullName -Value $content
+        Write-Host "✅ Cleaned: $($file.Name)"
+    }
+}
+```
+
+**Replacement Template:** `core/base-templates/adaptive-base.yaml`
+
+**Python Toolkit:** `cortex-toolkit/maintenance/remove_legacy_refs.py`
+
+---
+
+### 2d. Resolve Duplicate Files 🔍
+
+**Purpose:** Find and resolve conflicting duplicate files.
+
+**Detection Algorithm:**
+1. Find files with same base name in different locations
+2. Compare content hashes (SHA-256)
+3. If different content: identify correct version by:
+   - Version number in header
+   - Last modification date
+   - Line count (more comprehensive usually correct)
+4. Keep correct version, delete others
+
+**Actions:**
+```powershell
+# Find duplicate template files
+$duplicates = @{
+    "response-templates.yaml" = @(
+        "cortex-brain\response-templates.yaml",
+        "cortex-brain\response-templates-v4.yaml"
+    )
+    "response-routing-rules.yaml" = @(
+        "cortex-brain\response-routing-rules.yaml",
+        "cortex-brain\response-templates\response-routing-rules.yaml"
+    )
+}
+
+foreach ($name in $duplicates.Keys) {
+    $files = $duplicates[$name]
+    Write-Host "🔍 Checking duplicates for: $name"
+    
+    # Keep v4 or newest version
+    $keepFile = $files | Where-Object { $_ -match "v4" } | Select-Object -First 1
+    if (-not $keepFile) {
+        $keepFile = $files | Sort-Object { (Get-Item $_).LastWriteTime } -Descending | Select-Object -First 1
+    }
+    
+    # Delete others
+    foreach ($file in $files) {
+        if ($file -ne $keepFile -and (Test-Path $file)) {
+            Write-Host "🗑️  Deleting duplicate: $file"
+            Remove-Item -Path $file -Force
+        }
+    }
+    
+    Write-Host "✅ Kept: $keepFile"
+}
+```
+
+**Python Toolkit:** `cortex-toolkit/maintenance/resolve_duplicates.py`
+
+---
+
+### 2e. Delete Backup Directories (from Phase 1 Discovery)
+
+### 2e. Delete Backup Directories (from Phase 1 Discovery)
 
 **ALL BACKUPS MUST BE DELETED.** No exceptions.
 
 ```bash
-echo "🗑️  Phase 2: Deleting backup directories from Phase 1 discovery..."
+echo "🗑️  Phase 2e: Deleting backup directories from Phase 1 discovery..."
 
 # Verify Phase 1 data exists
 if [ ! -f /tmp/backup_dirs.txt ]; then
@@ -853,10 +1154,10 @@ echo "  ✅ Backup directories deleted"
 
 ---
 
-### 2b. Delete Backup Files (from Phase 1 Discovery)
+### 2f. Delete Backup Files (from Phase 1 Discovery)
 
 ```bash
-echo "🗑️  Deleting backup files from Phase 1 discovery..."
+echo "🗑️  Phase 2f: Deleting backup files from Phase 1 discovery..."
 
 BACKUP_FILES=$(wc -l < /tmp/backup_files.txt)
 echo "  Deleting $BACKUP_FILES backup files..."
@@ -874,10 +1175,12 @@ echo "  ✅ Backup files deleted"
 
 ---
 
-### 2c. Delete Duplicate Reports (from Phase 1 Discovery)
+### 2g. Consolidate Duplicate Reports (from Phase 1 Discovery)
+
+### 2g. Consolidate Duplicate Reports (from Phase 1 Discovery)
 
 ```bash
-echo "🗑️  Consolidating duplicate reports from Phase 1 discovery..."
+echo "🗑️  Phase 2g: Consolidating duplicate reports from Phase 1 discovery..."
 
 if [ -f /tmp/duplicate_names.txt ]; then
   DUPLICATE_COUNT=$(wc -l < /tmp/duplicate_names.txt)
@@ -898,63 +1201,23 @@ fi
 
 ---
 
-### 2d. Verify Cleanup Complete
+### 2h. Verify Cleanup Complete
 
-**ALL BACKUPS MUST BE DELETED.** No exceptions.
+**Verification that all cleanup sub-phases completed successfully:**
 
-Backup files and folders accumulate from:
-- Automated migrations (`*_backup_*`)
-- Manual file saves (`*.backup`, `*.bak`)
-- Timestamped backups (`backup_YYYYMMDD_HHMMSS`)
-- Old archive folders (`docs.backup.*`, `design-backup-*`)
+| Sub-Phase | Verification | Expected Result |
+|-----------|--------------|-----------------|
+| 2a - Caches | Check cache dirs empty | 0 cache files remain |
+| 2b - Templates | Validate progress bars | All templates valid |
+| 2c - Legacy | Search for 5-part refs | 0 references found |
+| 2d - Duplicates | Check for duplicate files | 0 duplicates remain |
+| 2e-2g - Backups | Verify Phase 1 targets deleted | 0 backups remain |
 
 **⛔ WHY DELETE ALL BACKUPS?**
 1. **Git is the backup system** - All changes are version controlled
 2. **Backups create bloat** - Duplicate files waste disk space
 3. **Backups confuse tools** - Search tools find stale copies
 4. **Backups violate DRY** - Don't Repeat Yourself principle
-
-### 0a. Discover All Backup Directories
-
-```bash
-# Find all backup directories recursively
-find . -type d \( \
-  -name "*backup*" -o \
-  -name "*_backup_*" -o \
-  -name "*.backup" -o \
-  -name "*archive*" -o \
-  -name "*old*" -o \
-  -name "*_bak" \
-\) ! -path "./.git/*" ! -path "./node_modules/*" | sort > /tmp/cortex_backup_dirs.txt
-
-# Count directories found
-BACKUP_DIR_COUNT=$(wc -l < /tmp/cortex_backup_dirs.txt)
-echo "📂 Found $BACKUP_DIR_COUNT backup directories"
-
-# Display preview (first 20)
-head -20 /tmp/cortex_backup_dirs.txt
-```
-
-**Expected Output:**
-```
-📂 Found 45+ backup directories
-./backups
-./backups/doctor_backup_20251227_151620
-./backups/sts_backup_20251228_090815
-./cortex-brain/backups
-./cortex-brain/backups/path-hardening/backup_20251216_162438
-./cortex-brain/archive
-./cortex-brain/archives
-./docs.backup.20251228_081437
-...
-```
-
-### 0b. Discover All Backup Files
-
-```bash
-# Find all backup files recursively
-find . -type f \( \
-  -name "*.backup" -o \
   -name "*.bak" -o \
   -name "*~" -o \
   -name "*.old" -o \
@@ -1199,7 +1462,7 @@ exit 0
 
 ---
 
-## Phase 2.5: Data Preservation Rules
+## Phase 3: Data Preservation Validation ⛔
 
 **Reference:** `cortex-brain/documents/implementation-guides/phase-2.5-data-preservation-rules.md`
 
@@ -1255,9 +1518,9 @@ fi
 
 ---
 
-## Phase 3: Toolkit Scaffolding Validation 🛠️
+## Phase 4: Toolkit Scaffolding Validation 🛠️
 
-### 3a. Verify Scaffold Generators Exist
+### 4a. Verify Scaffold Generators Exist
 
 **Critical:** Ensure automation utilities are present and functional.
 
@@ -1273,7 +1536,7 @@ grep -q "plan-scaffold" cortex-toolkit/toolkit-manifest.yaml || echo "ERROR: Pla
 grep -q "orchestrator-scaffold" cortex-toolkit/toolkit-manifest.yaml || echo "ERROR: Orchestrator scaffold not registered!"
 ```
 
-### 3a-2. Verify Interactive Planning Session ✨ NEW
+### 4a-2. Verify Interactive Planning Session ✨ NEW
 
 **Critical:** Ensure interactive planning workflow is properly wired.
 
@@ -1304,7 +1567,7 @@ python3 -m pytest tests/orchestrators/planning/test_interactive_planning_session
 # Expected: 18 session tests + 11 workflow tests = 29 total
 ```
 
-### 3a-3. Verify Vision API Auto-Engagement 👁️ NEW
+### 4a-3. Verify Vision API Auto-Engagement 👁️ NEW
 
 **Critical:** Ensure Vision API automatically engages when images are attached.
 
@@ -1357,7 +1620,7 @@ print(f"✅ Auto-analyze: {orchestrator.auto_analyze}")
 print(f"✅ Auto-inject: {orchestrator.inject_context}")
 ```
 
-### 3b. Test Scaffold Generators
+### 4b. Test Scaffold Generators
 
 ```bash
 # Test plan scaffold generator (dry run)
@@ -1375,7 +1638,7 @@ python cortex-toolkit/core/utilities/orchestrator_scaffold_generator.py --list-t
 - ✅ progress-tracker.json would be created
 - ✅ All orchestrator templates listed (planning, sanitization, tdd, ado, maintenance)
 
-### 3c. Verify Manifest Integration
+### 4c. Verify Manifest Integration
 
 Check that planning system manifest references automation:
 
@@ -1390,7 +1653,7 @@ grep -A 5 "automation:" cortex-brain/manifests/orchestrators/planning-system-4.0
 - `benefits:` lists automation advantages
 - `enforcement:` references maintenance requirement
 
-### 3d. Enforcement Rule
+### 4d. Enforcement Rule
 
 **⚠️ MANDATORY:** All new plans MUST use scaffold generator.
 
@@ -1400,9 +1663,9 @@ grep -A 5 "automation:" cortex-brain/manifests/orchestrators/planning-system-4.0
 
 ---
 
-## Phase 4: Component Wiring 🔌 - AUTO-WIRE ALL GAPS
+## Phase 5: Component Wiring 🔌 - AUTO-WIRE ALL GAPS
 
-### Phase 4a: Detect Wiring Gaps (DIAGNOSE)
+### Phase 5a: Detect Wiring Gaps (DIAGNOSE)
 
 ```bash
 # Run quick health diagnostic
@@ -1411,14 +1674,14 @@ python3 scripts/cortex_system_doctor.py --quick
 
 **Expected Output:** Health score with breakdown of issues.
 
-### Phase 4b: Run Wiring Check Script
+### Phase 5b: Run Wiring Check Script
 
 ```bash
 # Detect wiring gaps (generates report for Phase 4c)
 python3 scripts/check_wiring_integrity.py
 ```
 
-### Phase 4b.1: Validate Response Template Wiring 🎯 **NEW**
+### Phase 5b.1: Validate Response Template Wiring 🎯 **NEW**
 
 **⚠️ CRITICAL CHECK:** Ensure all code references the CORRECT template file.
 
@@ -1514,7 +1777,7 @@ echo "Test: Introduce yourself"
 
 **Reference:** This check added Dec 2025 after discovering template routing conflicts causing business_value and introduction templates to fail.
 
-### Phase 4c: Auto-Wire Components 🔥 AUTO-REPAIR
+### Phase 5c: Auto-Wire Components 🔥 AUTO-REPAIR
 
 ### ⚠️ WHY THIS PHASE IS MANDATORY
 
@@ -1526,7 +1789,7 @@ echo "Test: Introduce yourself"
 
 **Reference:** `cortex-brain/documents/analysis/maintenance-wiring-persistence-gap.md`
 
-### 4c. Run Auto-Wiring Script
+### 5c. Run Auto-Wiring Script
 
 ```bash
 # Preview what will be fixed (dry-run, default)
@@ -1557,7 +1820,7 @@ python3 scripts/check_wiring_integrity.py
 ✅ Wiring Coverage: 100% (was 50%)
 ```
 
-### 4d. Commit Wiring Fixes
+### 5d. Commit Wiring Fixes
 
 **⚠️ CRITICAL:** These changes MUST be committed to persist across machines.
 
@@ -1584,7 +1847,7 @@ Generated by: scripts/auto_wire_orchestrators.py"
 git push origin CORTEX-4.0
 ```
 
-### 4e. Verify Persistence on Another Machine
+### 5e. Verify Persistence on Another Machine
 
 ```bash
 # On Machine B (fresh clone or pull)
@@ -1603,7 +1866,7 @@ python3 scripts/check_wiring_integrity.py
 - ✅ Changes committed and pushed to remote
 - ✅ `git pull` on Machine B shows 100% wiring (without re-running auto-wire)
 
-### 4f. Troubleshooting
+### 5f. Troubleshooting
 
 **Issue:** Auto-wire script fails with "No wiring report found"
 
@@ -1637,7 +1900,7 @@ ls -lah src/**/*.bak.*
 
 ---
 
-## Phase 5: Test Suite Health 🧪 - ZERO TOLERANCE POLICY
+## Phase 6: Test Suite Health 🧪 - ZERO TOLERANCE POLICY
 
 ### ⚠️ CRITICAL ENFORCEMENT RULE
 
@@ -1893,9 +2156,9 @@ After running tests and cleanup, check:
 
 ---
 
-## Phase 6: Knowledge Library Validation 📚 CRITICAL
+## Phase 7: Knowledge Library Validation 📚 CRITICAL
 
-### 6a. Knowledge Library Structure Check
+### 7a. Knowledge Library Structure Check
 
 **Source of Truth:** `cortex-brain/knowledge/`
 
@@ -1928,7 +2191,7 @@ find cortex-brain/knowledge/ -maxdepth 1 -name "*.yaml" -type f
 - `testing/` - Testing strategies and patterns
 - `ui-ux/` - UI/UX design guidelines
 
-### 6b. Knowledge Library Reference Validation
+### 7b. Knowledge Library Reference Validation
 
 **Critical:** Ensure orchestrators and modules can reference knowledge library.
 
@@ -1942,7 +2205,7 @@ Verify these systems wire to knowledge library:
 | **TDD Orchestrator** | Guides test design | Check test pattern references |
 | **Documentation Generator** | Auto-generates docs from guidelines | Check template references |
 
-### 6c. Knowledge Library Sync Validation (NEW)
+### 7c. Knowledge Library Sync Validation (NEW)
 
 **Critical:** Ensure markdown templates stay in sync with YAML knowledge library.
 
@@ -1975,7 +2238,7 @@ python3 scripts/sync_knowledge_library.py --sync-all
 - `glassmorphism-design-standards.yaml` ↔ `glassmorphism-design-standards-v2.md`
 - Future template ↔ YAML pairs automatically detected via `metadata.sync` section
 
-### 5d. Knowledge File Schema Validation
+### 7d. Knowledge File Schema Validation
 
 Each knowledge YAML must have:
 
@@ -2010,7 +2273,7 @@ metadata:
         bad: [...]
 ```
 
-### 5d. Validation Commands
+### 7e. Validation Commands
 
 ```bash
 # Check all YAML files for metadata section
@@ -2031,7 +2294,7 @@ grep -rh "id: \"" cortex-brain/knowledge/ | sort | uniq -d
 grep "Total:" cortex-brain/knowledge/README.md
 ```
 
-### 5e. Integration Verification
+### 7f. Integration Verification
 
 Verify orchestrators can load knowledge library:
 
@@ -2046,7 +2309,7 @@ grep -r "knowledge" cortex-brain/manifests/orchestrators/*.yaml
 grep -A 5 "knowledge" cortex-brain/brain-protection-rules.yaml
 ```
 
-### 5f. Knowledge Library Health Metrics
+### 7g. Knowledge Library Health Metrics
 
 | Metric | Current | Target | Status |
 |--------|---------|--------|--------|
@@ -2059,18 +2322,18 @@ grep -A 5 "knowledge" cortex-brain/brain-protection-rules.yaml
 
 ---
 
-## Phase 7: Report Organization 🗂️
+## Phase 8: Report Organization 🗂️
 
 ```bash
-# Phase 5: Reports in cortex-brain/health-reports/
+# Phase 8: Reports in cortex-brain/health-reports/
 ls -lah cortex-brain/health-reports/
 ```
 
 ---
 
-## Phase 8: Intent Router Validation ⚠️ CRITICAL
+## Phase 9: Intent Router Validation ⚠️ CRITICAL
 
-### 8a. Manifest Path Verification
+### 9a. Manifest Path Verification
 
 **Source of Truth:** `cortex-brain/manifests/orchestrators/`
 
@@ -2084,7 +2347,7 @@ Scan all orchestrator manifests and verify CORTEX.prompt.md references them corr
 | `code-sanitization-manifest.yaml` | Sanitization | `sanitize`, `make generic`, `anonymize` |
 | `refinement-orchestrator-manifest.yaml` | Refinement | `refine`, `improve cortex` |
 
-### 8b. Duplicate Template Definition Detection 🚨 NEW
+### 9b. Duplicate Template Definition Detection 🚨 NEW
 
 **Problem:** Custom templates can be defined in MULTIPLE locations with DIFFERENT detection systems, causing routing failures.
 
@@ -2235,7 +2498,7 @@ def auto_fix_duplicates(duplicates: List[Dict]) -> int:
     return fixed_count
 ```
 
-### 8c. Custom Template Routing Integration 🆕
+### 9c. Custom Template Routing Integration 🆕
 
 **Problem:** `TemplateManager` (src/templates/) doesn't detect custom templates from v4.0 YAML.
 
@@ -2337,7 +2600,7 @@ def generate_response(
     # ... rest of existing code
 ```
 
-### 8d. Output Structure Validation
+### 9d. Output Structure Validation
 
 Planning System MUST specify folder structure from manifest:
 ```yaml
@@ -2346,7 +2609,7 @@ required_subfolders: [context/, reports/, artifacts/, tracking/]
 required_files: [00-master-plan.md]
 ```
 
-### 8e. Validation Commands
+### 9e. Validation Commands
 
 ```bash
 # Check for broken/old paths
@@ -2379,7 +2642,7 @@ grep -n "custom_templates" src/templates/template_manager.py || \
   echo "⚠️ WARNING: TemplateManager missing custom_templates support"
 ```
 
-**Phase 8 Success Criteria:**
+**Phase 9 Success Criteria:**
 
 - [ ] All manifest paths in CORTEX.prompt.md are valid
 - [ ] Zero duplicate custom template definitions detected
@@ -2390,13 +2653,13 @@ grep -n "custom_templates" src/templates/template_manager.py || \
 
 ---
 
-## Phase 9: Regenerate Lean Prompts (WITH COMPLETE INTENT ROUTER WIRING)
+## Phase 10: Regenerate Lean Prompts (WITH COMPLETE INTENT ROUTER WIRING)
 
 **Goal:** Create minimal, clean prompt files with proper intent routing for ALL orchestrators.
 
 **Reference:** `cortex-brain/documents/analysis/orchestrator-inventory-2025-12-29.md`
 
-### 8a. Pre-Regeneration: Orchestrator Discovery
+### 10a. Pre-Regeneration: Orchestrator Discovery
 
 **BEFORE regenerating prompts, scan ALL orchestrator manifests:**
 
@@ -2423,7 +2686,7 @@ grep -h "orchestrator_name:" cortex-brain/manifests/orchestrators/*.yaml
 - Onboarding (via `onboarding_interactive.py`)
 - Technical Documentation (`technical-documentation-orchestrator-manifest.yaml`)
 
-### 8b. CORTEX.prompt.md COMPLETE Structure (Target: <200 lines)
+### 10b. CORTEX.prompt.md COMPLETE Structure (Target: <200 lines)
 
 **Template with ALL orchestrators wired:**
 
@@ -2616,7 +2879,7 @@ cortex-brain/                    src/
 **Anti-Bloat:** This file MUST stay under 200 lines.
 ```
 
-### 8c. copilot-instructions.md COMPLETE Structure (Target: <150 lines)
+### 10c. copilot-instructions.md COMPLETE Structure (Target: <150 lines)
 
 **Template with ALL operations referenced:**
 
@@ -2731,7 +2994,7 @@ Say `help` in Copilot Chat to see all operations.
 **Anti-Bloat:** This file MUST stay under 150 lines. All details defer to CORTEX.prompt.md.
 ```
 
-### 8d. Wiring Rules
+### 10d. Wiring Rules
 
 1. **Single Source of Truth:** `CORTEX.prompt.md` is the intent router
 2. **copilot-instructions.md:** Points TO CORTEX.prompt.md, doesn't duplicate
@@ -2742,7 +3005,7 @@ Say `help` in Copilot Chat to see all operations.
 7. **SKULL Integration:** PLANNING_ISOLATION rule referenced in both files
 8. **Knowledge Library:** All orchestrators reference `cortex-brain/knowledge/` for guidelines
 
-### 8e. Auto-Repair Actions
+### 10e. Auto-Repair Actions
 
 When regenerating prompts, AUTOMATICALLY:
 
@@ -2757,7 +3020,7 @@ When regenerating prompts, AUTOMATICALLY:
 9. **Ensure** PLANNING_ISOLATION rule in SKULL section
 10. **Backup** existing files before overwriting
 
-### 8f. Validation Commands
+### 10f. Validation Commands
 
 ```bash
 # Check all orchestrators are wired
@@ -2817,7 +3080,19 @@ Run during every maintenance cycle:
 - [ ] CORTEX.prompt.md is <200 lines
 - [ ] copilot-instructions.md is <150 lines
 - [ ] copilot-instructions.md defers to CORTEX.prompt.md (no duplication)
-- [ ] Reports folder cleaned (see Phase 9)
+- [ ] Reports folder cleaned (see Phase 8)
+
+### Data Preservation (Phase 3) 🆕
+- [ ] `cortex-brain/lessons-learned.yaml` exists and not empty
+- [ ] `cortex-brain/knowledge-graph.yaml` exists and not empty
+- [ ] `cortex-brain/tier1/*.db` files preserved (no deletion)
+- [ ] `cortex-brain/tier2/*.db` files preserved (no deletion)
+- [ ] `cortex-brain/tier3/*.db` files preserved (no deletion)
+- [ ] `cortex-brain/user-dictionary.yaml` exists and not empty
+- [ ] User documents in `cortex-brain/documents/` preserved
+- [ ] `copilot_instructions` in active plan files intact
+- [ ] `named_templates` in `response-templates-v4.yaml` intact
+- [ ] Zero accidental deletions of critical data paths
 
 ### Intent Router Completeness 🆕
 - [ ] Planning System orchestrator in Intent Router
@@ -2896,11 +3171,11 @@ Run during every maintenance cycle:
 
 ---
 
-## Phase 10: Final System Verification ✅
+## Phase 11: Final System Verification ✅
 
 **Purpose:** Comprehensive health check to verify ALL previous phases completed successfully and system is at 100% health.
 
-### 10a. Run System Health Diagnostic
+### 11a. Run System Health Diagnostic
 
 ```bash
 # Run comprehensive health scan
@@ -2909,7 +3184,7 @@ python3 scripts/cortex_system_doctor.py --quick
 # Expected: Health score ≥95%
 ```
 
-### 10b. Verify All Phase Completions
+### 11b. Verify All Phase Completions
 
 ```bash
 # Check Phase 1: Discovery reports exist
@@ -2917,6 +3192,29 @@ ls cortex-brain/discovery-reports/MASTER-ACTION-PLAN-*.md
 
 # Check Phase 2: Zero backups
 find . -name "*backup*" ! -path "./.git/*" | wc -l  # Expected: 0
+
+# Check Phase 2b: Template validation (Rule 8)
+python3 -c "
+import yaml
+import os
+from pathlib import Path
+
+routing_file = Path('cortex-brain/response-templates/response-routing-rules.yaml')
+if routing_file.exists():
+    with open(routing_file, 'r', encoding='utf-8') as f:
+        routing = yaml.safe_load(f)
+    mappings = routing.get('validation', {}).get('template_file_mappings', {})
+    errors = [f'❌ {tid} → {fp}' for tid, fp in mappings.items() if not Path(fp).exists()]
+    if errors:
+        print('\n'.join(errors))
+        print(f'❌ FAIL: {len(errors)} broken template references')
+        exit(1)
+    else:
+        print(f'✅ PASS: All {len(mappings)} template references valid')
+else:
+    print('❌ FAIL: Routing rules missing')
+    exit(1)
+"
 
 # Check Phase 3: Generators functional
 test -f cortex-toolkit/core/utilities/plan_scaffold_generator.py && echo "✅"
@@ -2938,9 +3236,15 @@ python3 -m pytest tests/orchestrators/planning/ -v  # Expected: 100% pass
 
 # Check Phase 9: Prompts lean
 find .github/prompts/ -name "*.prompt.md" -exec wc -l {} \; | awk '$1 > 200 {print}' | wc -l  # Expected: 0
+
+# Check Phase 10: Template integrity (Rule 8 final check)
+echo "Verifying template file structure..."
+test -f cortex-brain/response-templates-v4.yaml && echo "✅ Master template file exists"
+test ! -f cortex-brain/response-routing-rules.yaml && echo "✅ No duplicate routing files in root"
+test ! -f cortex-brain/response-profile-variants.yaml && echo "✅ No duplicate profile files in root"
 ```
 
-### 10c. Generate Final Health Report
+### 11c. Generate Final Health Report
 
 ```bash
 cat > cortex-brain/health-reports/maintenance-complete-$(date +%Y%m%d).md << 'EOF'
@@ -2977,25 +3281,26 @@ EOF
 cat cortex-brain/health-reports/maintenance-complete-$(date +%Y%m%d).md
 ```
 
-### 10d. Commit All Maintenance Changes
+### 11d. Commit All Maintenance Changes
 
 ```bash
 # Stage all changes
 git add -A
 
 # Commit with comprehensive message
-git commit -m "chore: complete 10-phase maintenance cycle
+git commit -m "chore: complete 11-phase maintenance cycle
 
 Phase 1: Discovery - Cataloged all system issues
 Phase 2: Cleanup - Deleted $(cat /tmp/backup_dirs.txt /tmp/backup_files.txt 2>/dev/null | wc -l) backup items
-Phase 3: Scaffolding - Verified toolkit generators
-Phase 4: Wiring - Achieved 100% component wiring
-Phase 5: Testing - 100% test pass rate
-Phase 6: Knowledge - Synced knowledge library
-Phase 7: Organization - Consolidated reports
-Phase 8: Routing - Fixed intent router paths
-Phase 9: Prompts - Regenerated lean prompts
-Phase 10: Verification - System health 100%
+Phase 3: Preservation - Verified all critical data paths safe
+Phase 4: Scaffolding - Verified toolkit generators
+Phase 5: Wiring - Achieved 100% component wiring
+Phase 6: Testing - 100% test pass rate
+Phase 7: Knowledge - Synced knowledge library
+Phase 8: Organization - Consolidated reports
+Phase 9: Routing - Fixed intent router paths
+Phase 10: Prompts - Regenerated lean prompts
+Phase 11: Verification - System health 100%
 
 Health Score: 95%+ (was X%)
 Issues Resolved: $(grep "Issues Found" cortex-brain/discovery-reports/MASTER-ACTION-PLAN-*.md | awk '{sum+=$3} END {print sum}')
@@ -3010,7 +3315,7 @@ git push origin CORTEX-4.0
 
 **🎉 MAINTENANCE CYCLE COMPLETE!**
 
-All 10 phases executed successfully. System at peak health.
+All 11 phases executed successfully. System at peak health.
 
 ---
 

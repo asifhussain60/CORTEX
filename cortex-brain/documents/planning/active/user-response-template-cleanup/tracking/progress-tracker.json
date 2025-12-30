@@ -28,12 +28,16 @@
     },
     {
       "id": 3,
-      "name": "Consolidate Duplicates",
-      "status": "not-started",
-      "progress": 0,
+      "name": "Consolidate Duplicates & Template Files",
+      "status": "completed",
+      "progress": 100,
       "tasks": [
-        {"id": "3.1", "name": "Merge routing rules to v4", "status": "not-started"},
-        {"id": "3.2", "name": "Establish single source of truth", "status": "not-started"}
+        {"id": "3.1", "name": "Merge routing rules to v4", "status": "completed"},
+        {"id": "3.2.1", "name": "Backup all template files", "status": "completed"},
+        {"id": "3.2.2", "name": "Audit template usage analysis", "status": "completed"},
+        {"id": "3.2.3", "name": "Consolidate response-templates.yaml into v4", "status": "completed"},
+        {"id": "3.2.4", "name": "Update all references and validate", "status": "completed"},
+        {"id": "3.3", "name": "Establish single source of truth", "status": "completed"}
       ]
     },
     {
@@ -72,15 +76,24 @@
   "metrics": {
     "orphaned_references": {
       "before": 27,
-      "after": null
+      "after": 0
     },
     "duplicate_files": {
       "before": 6,
-      "after": null
+      "after": 3
     },
     "missing_templates": {
       "before": 5,
-      "after": null
+      "after": 0
+    },
+    "template_definition_files": {
+      "before": 5,
+      "after": 1,
+      "note": "Consolidated into response-templates-v4.yaml"
+    },
+    "response_tiers": {
+      "before": "Variable (5-part + v4)",
+      "after": "4 (INSTANT/FOCUSED/STRUCTURED/COMPREHENSIVE)"
     }
   }
 }

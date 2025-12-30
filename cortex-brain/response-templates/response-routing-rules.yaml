@@ -1,11 +1,29 @@
 # Response Routing Rules
-# Version: 3.0
+# Version: 4.0
 # Purpose: Intent detection and template selection logic
 # Part of: Response Template System Refactor (Phase 5)
+# Updated: 2025-12-30 (Template Cleanup Phase 5)
 
-schema_version: '3.0'
-last_updated: '2025-12-10'
-refactor_phase: 'modular_architecture'
+schema_version: '4.0'
+last_updated: '2025-12-30'
+refactor_phase: 'template_cleanup'
+
+# ============================================================================
+# TEMPLATE VALIDATION RULES (Added Phase 5)
+# ============================================================================
+
+validation:
+  on_load:
+    check_template_exists: true
+    check_inherits_from_exists: true
+    warn_on_missing: true
+  template_file_mappings:
+    introduction_professional: "cortex-brain/response-templates/operations/introduction/introduction.yaml"
+    introduction_engineering: "cortex-brain/response-templates/operations/introduction/introduction.yaml"
+    introduction_leadership: "cortex-brain/response-templates/operations/introduction/introduction.yaml"
+    introduction_product: "cortex-brain/response-templates/operations/introduction/introduction.yaml"
+    business_value: "cortex-brain/response-templates-v4.yaml"
+    security_posture: "cortex-brain/response-templates/operations/security/security.yaml"
 
 # ============================================================================
 # INTENT DETECTION - Map user input to template

@@ -355,11 +355,11 @@ def list_agents() -> list:
         """
         fix = WiringFix(
             pattern=WiringPattern.OPERATIONS_CONFIG,
-            target_file=self.root / "cortex-operations.yaml"
+            target_file=self.root / "cortex-brain" / "manifests" / "operations" / "cortex-operations.yaml"
         )
         
         try:
-            config_path = self.root / "cortex-operations.yaml"
+            config_path = self.root / "cortex-brain" / "manifests" / "operations" / "cortex-operations.yaml"
             if not config_path.exists():
                 fix.error_message = "cortex-operations.yaml not found"
                 return fix
@@ -370,17 +370,28 @@ def list_agents() -> list:
             if 'operations' not in config:
                 config['operations'] = {}
             
-            if orchestrator_name in config['operations']:
-                op_config = config['operations'][orchestrator_name]
+            # Ensure operations is a dict
+            if not isinstance(config.get('operations'), dict):
+                config['operations'] = {}
+            
+            operations = config['operations']
+            
+            if orchestrator_name in operations:
+                op_config = operations[orchestrator_name]
                 
-                if 'interactive_mode' in op_config and op_config['interactive_mode'] is True:
+                if isinstance(op_config, dict) and 'interactive_mode' in op_config and op_config['interactive_mode'] is True:
                     fix.success = True
                     fix.error_message = "Already configured (skipped)"
                     return fix
                 
-                # Add interactive_mode flag
-                op_config['interactive_mode'] = True
-                fix.lines_modified = 1
+                # Ensure op_config is a dict before modifying
+                if not isinstance(op_config, dict):
+                    operations[orchestrator_name] = {'interactive_mode': True}
+                    fix.lines_modified = 1
+                else:
+                    # Add interactive_mode flag
+                    op_config['interactive_mode'] = True
+                    fix.lines_modified = 1
             else:
                 # Create new operation entry
                 config['operations'][orchestrator_name] = {

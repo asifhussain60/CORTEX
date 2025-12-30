@@ -86,8 +86,26 @@ requirements:
     name: "Visual Progress Rendering"
     inherited_from: "planning-system"
     priority: "high"
-    status: "missing"
-    ado_specific_note: "Show ADO work item creation progress"
+    status: "implemented"
+    ado_specific_note: "Show ADO work item creation progress integrated into phase table"
+    implementation:
+      display_timing:
+        - moment: "beginning"
+          show: "complete_phase_table_with_work_items"
+          description: "Show entire table with all phases and work item summary at start"
+        - moment: "phase_completion"
+          show: "overall_progress_and_next_phase"
+          description: "Show overall progress bar and next phase only after each phase completes"
+        - moment: "overall_completion"
+          show: "complete_phase_table_with_work_items"
+          description: "Show entire table with all phases and work item summary at completion"
+      template_reference: "ado_execution_progress"
+      format: "Markdown table (integrated progress bar)"
+      includes:
+        - "Overall progress bar in table header row"
+        - "Work items created/planned count"
+        - "Story points total"
+        - "Phase-specific ADO item tracking"
     
   - requirement_id: "REQ-006"
     name: "Learning Library Auto-Documentation"
