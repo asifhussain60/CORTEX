@@ -104,6 +104,7 @@ admin_content_patterns:
     - "token_optimizer"  # Performance analysis
     - "doc_sync"  # Documentation sync
     - "enterprise_documentation"  # Enterprise doc generator (admin tool)
+    - "admin_dashboard"  # Enhanced dashboard with repo selector (admin only)
 
 # User Content Patterns (INCLUDED in publish)
 user_content_patterns:
@@ -116,6 +117,12 @@ user_content_patterns:
     
     # Specialist Agents
     - "src/cortex_agents/"
+    
+    # Orchestrators (plan execution, planning, rollback, etc.)
+    - "src/orchestrators/"
+    
+    # Planning (ADO parser, plan validators, etc.)
+    - "src/planning/"
     
     # Operations & Workflows
     - "src/operations/"

@@ -121,7 +121,7 @@ output_format:
         issue: "SQL injection vulnerability"
         recommendation: "Use parameterized queries"
         knowledge_link: "security.yaml#sql-injection"
-        code_snippet: "SELECT * FROM users WHERE username = '" + username + "'"
+        code_snippet: "SELECT * FROM users WHERE username = '\" + username + \"'"
         suggested_fix: "SELECT * FROM users WHERE username = %s"
     
     metrics:

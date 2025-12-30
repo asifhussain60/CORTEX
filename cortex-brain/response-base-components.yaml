@@ -161,6 +161,10 @@ shared_components:
       {{/threats}}
 
   # Request echo section (mirror user's request)
+  section_request_echo:
+    id: section_request_echo
+    type: section
+    variants:
       concise: "{{request_brief}}"
       balanced: "{{request_echo_content}}"
       verbose: "{{request_echo_content}}\n\n**Interpreted As:** {{request_interpretation}}"

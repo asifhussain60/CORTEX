@@ -173,9 +173,9 @@ coding_standards:
       client: "Client"         # StripeClient
     
     method_prefixes:
-      query: "Get", "Find", "List", "Query"
-      command: "Create", "Update", "Delete", "Process"
-      validation: "Validate", "Is", "Can", "Has"
+      query: ["Get", "Find", "List", "Query"]
+      command: ["Create", "Update", "Delete", "Process"]
+      validation: ["Validate", "Is", "Can", "Has"]
   
   async_requirements:
     - rule: "All API endpoints MUST be async"

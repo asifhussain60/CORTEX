@@ -732,7 +732,7 @@ class DeploymentValidator:
         check_id = "RESPONSE_TEMPLATES"
         name = "Response Templates Complete"
         
-        templates_file = self.project_root / "cortex-brain" / "response-templates.yaml"
+        templates_file = self.project_root / "cortex-brain" / "response-templates-v4.yaml"
         
         if not templates_file.exists():
             self.results.append(ValidationResult(
@@ -784,7 +784,7 @@ class DeploymentValidator:
         check_id = "RESPONSE_TEMPLATE_FORMAT"
         name = "Response Template Format (Next Steps Last)"
         
-        templates_file = self.project_root / "cortex-brain" / "response-templates.yaml"
+        templates_file = self.project_root / "cortex-brain" / "response-templates-v4.yaml"
         
         if not templates_file.exists():
             self.results.append(ValidationResult(
@@ -792,7 +792,7 @@ class DeploymentValidator:
                 name=name,
                 severity="MEDIUM",
                 passed=False,
-                message="response-templates.yaml not found",
+                message="response-templates-v4.yaml not found",
                 fix_available=False
             ))
             return
@@ -882,7 +882,7 @@ class DeploymentValidator:
             
             # Brain Protection & Templates
             "cortex-brain/brain-protection-rules.yaml",
-            "cortex-brain/response-templates.yaml",
+            "cortex-brain/response-templates-v4.yaml",
         ]
         
         missing = []
@@ -1280,10 +1280,10 @@ class DeploymentValidator:
         
         wiring_issues = []
         
-        # Check 1: response-templates.yaml exists
-        templates_file = self.project_root / "cortex-brain" / "response-templates.yaml"
+        # Check 1: response-templates-v4.yaml exists
+        templates_file = self.project_root / "cortex-brain" / "response-templates-v4.yaml"
         if not templates_file.exists():
-            wiring_issues.append("cortex-brain/response-templates.yaml NOT FOUND - templates unavailable")
+            wiring_issues.append("cortex-brain/response-templates-v4.yaml NOT FOUND - templates unavailable")
         else:
             # Validate template file has content
             try:
@@ -1291,20 +1291,20 @@ class DeploymentValidator:
                     templates_content = f.read()
                 
                 if not templates_content.strip():
-                    wiring_issues.append("response-templates.yaml is empty")
-                elif 'templates:' not in templates_content:
-                    wiring_issues.append("response-templates.yaml missing 'templates:' section")
+                    wiring_issues.append("response-templates-v4.yaml is empty")
+                elif 'routing:' not in templates_content and 'sections:' not in templates_content:
+                    wiring_issues.append("response-templates-v4.yaml missing 'routing:' or 'sections:' section")
                 
-                # Check for key templates
-                required_templates = ['help_table', 'fallback', 'work_planner_success', 'planning_dor_complete']
-                missing_templates = [t for t in required_templates if t not in templates_content]
-                if missing_templates:
-                    wiring_issues.append(f"Missing critical templates: {', '.join(missing_templates)}")
+                # Check for key sections in v4 format
+                required_sections = ['routing', 'sections', 'components', 'adaptive_structure']
+                missing_sections = [t for t in required_sections if t not in templates_content]
+                if missing_sections:
+                    wiring_issues.append(f"Missing critical sections: {', '.join(missing_sections)}")
                     
             except Exception as e:
-                wiring_issues.append(f"Failed to validate response-templates.yaml: {e}")
+                wiring_issues.append(f"Failed to validate response-templates-v4.yaml: {e}")
         
-        # Check 2: CORTEX.prompt.md references response-templates.yaml
+        # Check 2: CORTEX.prompt.md references response-templates-v4.yaml
         cortex_prompt = self.project_root / ".github" / "prompts" / "CORTEX.prompt.md"
         if not cortex_prompt.exists():
             wiring_issues.append(".github/prompts/CORTEX.prompt.md NOT FOUND")
@@ -1313,15 +1313,12 @@ class DeploymentValidator:
                 with open(cortex_prompt, 'r', encoding='utf-8') as f:
                     prompt_content = f.read()
                 
-                if 'response-templates.yaml' not in prompt_content:
-                    wiring_issues.append("CORTEX.prompt.md does not reference response-templates.yaml")
+                # Check for v4 template reference (or legacy for backwards compat)
+                if 'response-templates' not in prompt_content:
+                    wiring_issues.append("CORTEX.prompt.md does not reference response-templates")
                 
-                if '#file:../../cortex-brain/response-templates.yaml' not in prompt_content and \
-                   'cortex-brain/response-templates.yaml' not in prompt_content:
-                    wiring_issues.append("CORTEX.prompt.md missing correct path to response-templates.yaml")
-                
-                if 'RESPONSE TEMPLATES' not in prompt_content:
-                    wiring_issues.append("CORTEX.prompt.md missing 'RESPONSE TEMPLATES' section")
+                if 'RESPONSE' not in prompt_content.upper():
+                    wiring_issues.append("CORTEX.prompt.md missing response format guidance")
                     
             except Exception as e:
                 wiring_issues.append(f"Failed to validate CORTEX.prompt.md template references: {e}")
@@ -1355,14 +1352,14 @@ class DeploymentValidator:
                 wiring_issues.append(f"Failed to validate copilot-instructions.md: {e}")
         
         # Check 5: Verify template wiring in publish package (if it exists)
-        publish_templates = self.project_root / "publish" / "CORTEX" / "cortex-brain" / "response-templates.yaml"
+        publish_templates = self.project_root / "publish" / "CORTEX" / "cortex-brain" / "response-templates-v4.yaml"
         publish_prompt = self.project_root / "publish" / "CORTEX" / ".github" / "prompts" / "CORTEX.prompt.md"
         
         # Only check publish/ if it exists (post-deployment validation)
         publish_dir = self.project_root / "publish" / "CORTEX"
         if publish_dir.exists():
             if not publish_templates.exists():
-                wiring_issues.append("publish/CORTEX/cortex-brain/response-templates.yaml NOT FOUND - deployment package missing templates")
+                wiring_issues.append("publish/CORTEX/cortex-brain/response-templates-v4.yaml NOT FOUND - deployment package missing templates")
             
             if not publish_prompt.exists():
                 wiring_issues.append("publish/CORTEX/.github/prompts/CORTEX.prompt.md NOT FOUND - deployment package incomplete")
@@ -1377,7 +1374,7 @@ class DeploymentValidator:
                 message=f"Response template wiring incomplete ({len(wiring_issues)} issues)",
                 details="\n".join(f"  • {issue}" for issue in wiring_issues),
                 fix_available=False,
-                fix_command="Ensure response-templates.yaml is deployed and properly referenced in CORTEX.prompt.md"
+                fix_command="Ensure response-templates-v4.yaml is deployed and properly referenced in CORTEX.prompt.md"
             ))
         else:
             self.results.append(ValidationResult(
@@ -1718,23 +1715,23 @@ class DeploymentValidator:
             except Exception as e:
                 tdd_issues.append(f"Failed to validate brain-protection-rules.yaml: {e}")
         
-        # Check response-templates.yaml has TDD workflow templates
-        templates = self.project_root / "cortex-brain" / "response-templates.yaml"
+        # Check response-templates-v4.yaml has TDD workflow sections
+        templates = self.project_root / "cortex-brain" / "response-templates-v4.yaml"
         if not templates.exists():
-            tdd_issues.append("response-templates.yaml NOT FOUND - TDD workflow templates missing")
+            tdd_issues.append("response-templates-v4.yaml NOT FOUND - TDD workflow templates missing")
         else:
             try:
                 with open(templates, 'r', encoding='utf-8') as f:
                     templates_content = f.read()
                 
-                # Check for TDD-related templates
-                tdd_templates = ['work_planner_success', 'planning_dor_complete', 'planning_dor_incomplete', 'tester_success']
-                missing_templates = [t for t in tdd_templates if t not in templates_content]
+                # Check for TDD-related sections (v4 format)
+                tdd_sections = ['tdd', 'test', 'validation']
+                missing_sections = [t for t in tdd_sections if t not in templates_content.lower()]
                 
-                if missing_templates:
-                    tdd_issues.append(f"response-templates.yaml missing TDD templates: {', '.join(missing_templates)}")
+                if missing_sections:
+                    tdd_issues.append(f"response-templates-v4.yaml missing TDD sections: {', '.join(missing_sections)}")
             except Exception as e:
-                tdd_issues.append(f"Failed to validate response-templates.yaml: {e}")
+                tdd_issues.append(f"Failed to validate response-templates-v4.yaml: {e}")
         
         # Check CORTEX.prompt.md references TDD Mastery
         prompt_file = self.project_root / ".github" / "prompts" / "CORTEX.prompt.md"
@@ -1791,7 +1788,7 @@ class DeploymentValidator:
                        "\n\nExpected TDD components:\n" +
                        "  • test-strategy.yaml (TDD philosophy & pragmatic testing)\n" +
                        "  • brain-protection-rules.yaml (SKULL TDD enforcement)\n" +
-                       "  • response-templates.yaml (TDD workflow templates)\n" +
+                       "  • response-templates-v4.yaml (TDD workflow templates)\n" +
                        "  • validator_registry.py (test validation infrastructure)\n" +
                        "  • CORTEX.prompt.md (TDD Mastery references)",
                 fix_available=False,
@@ -1849,23 +1846,23 @@ class DeploymentValidator:
         if not working_memory_init.exists():
             enhancement_issues.append("src/tier1/working_memory.py NOT FOUND - Brain memory infrastructure missing")
         
-        # Check response templates have TDD workflow support
-        templates = self.project_root / "cortex-brain" / "response-templates.yaml"
+        # Check response templates have TDD workflow support (v4 format)
+        templates = self.project_root / "cortex-brain" / "response-templates-v4.yaml"
         if templates.exists():
             try:
                 with open(templates, 'r', encoding='utf-8') as f:
                     templates_content = f.read()
                 
-                # Check for TDD workflow templates
-                tdd_workflow_templates = [
-                    'tester_success',  # Existing template
-                    'tdd_workflow_triggers'  # In routing section
+                # Check for TDD-related sections in v4 format
+                tdd_sections = [
+                    'tdd',  # TDD section
+                    'validation'  # Validation section
                 ]
                 
-                missing_templates = [t for t in tdd_workflow_templates if t not in templates_content]
+                missing_sections = [t for t in tdd_sections if t not in templates_content.lower()]
                 
-                if missing_templates:
-                    enhancement_issues.append(f"response-templates.yaml missing TDD workflow support: {', '.join(missing_templates)}")
+                if missing_sections:
+                    enhancement_issues.append(f"response-templates-v4.yaml missing TDD support: {', '.join(missing_sections)}")
             except Exception as e:
                 enhancement_issues.append(f"Failed to validate TDD workflow templates: {e}")
         

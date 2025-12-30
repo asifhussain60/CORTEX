@@ -1,10 +1,10 @@
-version: '2.2'
+version: '2.4'
 type: governance
 name: Brain Protection Rules
 description: Automated architectural protection challenges
 rules:
-  total_count: 44
-  layers: 17
+  total_count: 61
+  layers: 24
   severity_levels:
   - blocked
   - warning
@@ -27,12 +27,23 @@ critical_paths:
 - cortex-brain/migrations/
 tier0_instincts:
 - INCREMENTAL_PLAN_GENERATION
-- PLANNING_ISOLATION
 - TDD_ENFORCEMENT
 - RED_PHASE_VALIDATION
 - GREEN_PHASE_VALIDATION
 - REFACTOR_CODE_CLEANUP_ENFORCEMENT
-- LEARNING_LIBRARY_DOCUMENTATION_ENFORCEMENT
+- HOLISTIC_CODE_DISCOVERY_ENFORCEMENT
+- TDD_TEST_FILE_VALIDATION
+- TDD_EMPTY_TEST_DETECTION
+- FILE_ORGANIZATION_ENFORCEMENT
+- TIERED_PLANNING_ENFORCEMENT
+- MANDATORY_PLANNING_ENFORCEMENT
+- PLAN_ARTIFACT_LOCATION_ENFORCEMENT
+- VACUUM_CYCLE_ENFORCEMENT
+- INCREMENTAL_PLAN_CREATION_ENFORCEMENT
+- PROGRESS_TRACKER_ENFORCEMENT
+- SENIOR_DEVELOPER_ESTIMATE_ENFORCEMENT
+- BIDIRECTIONAL_LINKING_ENFORCEMENT
+- AUTOMATIC_DOCUMENTATION_GENERATION
 - DEFINITION_OF_READY
 - DEFINITION_OF_DONE
 - SOLID_PRINCIPLES
@@ -49,8 +60,7 @@ tier0_instincts:
 - SKULL_TRANSFORMATION_VERIFICATION
 - SKULL_PRIVACY_PROTECTION
 - SKULL_FACULTY_INTEGRITY
-- WORKSPACE_AWARE_OPERATIONS
-- GIT_ISOLATION_ENFORCEMENT_DEPRECATED
+- GIT_ISOLATION_ENFORCEMENT
 - DISTRIBUTED_DATABASE_ARCHITECTURE
 - CORTEX_PROMPT_FILE_PROTECTION
 - GIT_CHECKPOINT_ENFORCEMENT
@@ -69,7 +79,13 @@ tier0_instincts:
 - API_DOCUMENTATION_REQUIRED
 - OPERATIONAL_READINESS_ENFORCEMENT
 - DEBUG_MARKER_REMOVAL_ENFORCEMENT
-- KNOWLEDGE_LIBRARY_SYNC_ENFORCEMENT
+- ALIGNMENT_STATE_PROTECTION
+- INLINE_CSS_PROHIBITION
+- AUTONOMOUS_EXECUTION_PROTECTION
+- INTERACTIVE_MODE_ENFORCEMENT
+- TOKEN_OPTIMIZATION_ENFORCEMENT
+- GIT_CHECKPOINT_PHASE_PROTECTION
+- NO_EMOJIS_IN_SCRIPTS
 application_paths:
 - SPA/
 - KSESSIONS/
@@ -83,6 +99,7 @@ brain_state_files:
 - events.jsonl
 - development-context.yaml
 - protection-events.jsonl
+- alignment-state.json
 protection_layers:
 - layer_id: instinct_immutability
   name: Instinct Immutability
@@ -121,66 +138,143 @@ protection_layers:
     - Each step writes to file, NOT to chat response (avoid length limit)
     evidence_template: '#file:documents/evidence-templates/planning/INCREMENTAL_PLAN_GENERATION.md'
     rationale: '#file:documents/rationales/INCREMENTAL_PLAN_GENERATION.md'
-  - rule_id: PLANNING_ISOLATION
-    name: Planning Command Isolation (No Implementation)
+  - rule_id: TDD_ENFORCEMENT
+    name: Test-Driven Development Enforcement (High-Value Code Only)
     severity: blocked
-    description: When planning commands are detected (/CORTEX Plan, create a plan, etc.), CORTEX MUST create plan structure ONLY and NEVER execute implementation. This prevents accidental execution when user wants planning.
+    description: "Intelligent TDD enforcement - applies to high-value production code (business logic, services, controllers, repositories with complex queries), excludes low-value code (simple DTOs, POCOs, configuration classes, entities with only properties)"
     detection:
       combined_keywords:
-        planning_command_patterns:
-        - "/CORTEX Plan"
-        - "/CORTEX plan"
-        - "create a plan"
-        - "make a plan"
-        - "plan:"
-        - "planning"
-      exclusion_patterns:
-        - "implement"
-        - "build"
-        - "create" (without "plan")
-      scope:
-      - user_request
-      - intent
-      logic: AND
-    alternatives:
-    - 'STEP 1: Detect planning command patterns in user request'
-    - 'STEP 2: If planning pattern detected → CREATE plan structure in cortex-brain/documents/planning/active/{NAME}/'
-    - 'STEP 3: Create 4 subfolders: context/, reports/, artifacts/, tracking/'
-    - 'STEP 4: Create 00-master-plan.md with plan details'
-    - 'STEP 5: STOP - DO NOT IMPLEMENT - Report plan creation complete'
-    - 'STEP 6: If implementation pattern detected → Execute code directly (no plan creation)'
-    evidence_template: |-
-      Planning command detected but implementation started instead of plan creation.
-      
-      **Detection Examples:**
-      - "/CORTEX Plan user-auth" → Must create plan structure, NOT implement
-      - "create a plan for API" → Must create plan structure, NOT implement
-      - "implement user-auth" → Execute directly, NO plan creation
-      
-      **Mandatory Checkpoint:**
-      Before ANY file creation or code changes, verify:
-      1. Is this a planning command? → Create plan ONLY
-      2. Is this an implementation command? → Execute ONLY
-    rationale: Users explicitly requesting planning want CORTEX to organize work into phases, NOT immediately execute. Mixing planning and implementation leads to unintended code changes and poor planning quality.
-  - rule_id: TDD_ENFORCEMENT
-    name: Test-Driven Development Enforcement
-    severity: blocked
-    description: Attempt to bypass Test-Driven Development requirement
-    detection:
-      keywords:
-      - skip test
-      - bypass tdd
-      - no tests
-      - disable tdd
-      - skip validation
+        high_value_code:
+        - controller
+        - service
+        - business logic
+        - validation
+        - repository method
+        - complex query
+        - transaction
+        - authorization
+        - authentication
+        - workflow
+        - orchestrator
+        - handler
+        - processor
+        low_value_exemptions:
+        - DTO
+        - POCO
+        - entity
+        - model
+        - configuration
+        - settings
+        - constants
+        - simple property
       scope:
       - intent
-      - description
+      - code_type
+      - complexity_analysis
+    complexity_threshold:
+      methods_with_logic: true  # Has methods beyond simple getters/setters
+      cyclomatic_complexity: "> 1"  # More than straight-line code
+      external_dependencies: true  # Calls other services/repositories
+      business_rules: true  # Contains validation/calculation logic
+    tdd_exemptions:
+      - type: simple_entity
+        description: "Entity classes with only auto-properties (no logic)"
+        examples:
+        - "public class User { public int Id { get; set; } public string Name { get; set; } }"
+      - type: dto
+        description: "Data Transfer Objects (pure data carriers)"
+        examples:
+        - "public class CreateUserRequest { public string Name { get; set; } }"
+      - type: configuration
+        description: "Configuration classes (appsettings mappings)"
+        examples:
+        - "public class DatabaseSettings { public string ConnectionString { get; set; } }"
+      - type: constants
+        description: "Constant/enum definitions"
+        examples:
+        - "public static class ErrorCodes { public const string NotFound = \"404\"; }"
+    tdd_required:
+      - type: repository
+        description: "Repository methods with complex queries/transactions"
+        examples:
+        - "Task<List<Invoice>> GetByDateRangeAsync(DateTime start, DateTime end)"
+        - "Task<bool> DeleteAsync(string id)"
+      - type: service
+        description: "Business logic layer (validation, calculations, workflows)"
+        examples:
+        - "Task<Result> ProcessPaymentAsync(Payment payment)"
+        - "bool ValidateInvoice(Invoice invoice)"
+      - type: controller
+        description: "REST API endpoints (HTTP request/response handling)"
+        examples:
+        - "Task<IActionResult> GetInvoice(string id)"
+        - "Task<IActionResult> CreateInvoice(CreateInvoiceRequest request)"
+      - type: middleware
+        description: "Request pipeline components"
+        examples:
+        - "Task InvokeAsync(HttpContext context)"
+      - type: authorization
+        description: "Security/permission checks"
+        examples:
+        - "Task<bool> CanAccessInvoice(User user, Invoice invoice)"
     alternatives:
-    - Write failing test first (RED phase)
+    - Write failing test first (RED phase) for high-value code
     - Create spike branch for exploration (throwaway)
-    - "Use TDD cycle: RED \u2192 GREEN \u2192 REFACTOR"
-    evidence_template: 'Intent: ''{intent}'''
+    - "Use TDD cycle: RED -> GREEN -> REFACTOR for production logic"
+    - "Skip TDD for simple entities/DTOs (document why: Simple POCO, no logic to test)"
+    intelligent_enforcement: |
+      CORTEX will intelligently detect code type and enforce TDD accordingly:
+      
+      HIGH-VALUE CODE (TDD MANDATORY):
+      ✅ Controllers with HTTP endpoints
+      ✅ Services with business logic
+      ✅ Repositories with complex queries
+      ✅ Middleware with request processing
+      ✅ Validation/authorization logic
+      ✅ Transaction management
+      ✅ Workflows/orchestrators
+      
+      LOW-VALUE CODE (TDD OPTIONAL):
+      ⏭️  Entity classes (only properties)
+      ⏭️  DTOs (pure data carriers)
+      ⏭️  Configuration classes (appsettings)
+      ⏭️  Constants/enums
+      ⏭️  Simple POCOs (no methods)
+      
+      DETECTION STRATEGY:
+      1. Analyze code intent (what is being created?)
+      2. Check for methods beyond getters/setters
+      3. Check for external dependencies (DB, services)
+      4. Check for business rules (if/switch logic)
+      5. If complexity > threshold → ENFORCE TDD
+      6. If simple data structure → SKIP TDD (document)
+      
+      EXAMPLE DECISIONS:
+      
+      Phase 2 Entities (FundingInvoice.cs):
+      - Type: Entity class
+      - Methods: None (only properties)
+      - Dependencies: None
+      - Business Logic: None
+      → DECISION: TDD OPTIONAL (simple POCO)
+      → REASON: No logic to test, just data structure
+      
+      Phase 3 Controller (FundingInvoicesController.GetById):
+      - Type: Controller endpoint
+      - Methods: Yes (GetById with repository call)
+      - Dependencies: Yes (IFundingInvoiceRepository)
+      - Business Logic: Yes (404 handling, model mapping)
+      → DECISION: TDD MANDATORY
+      → REASON: Production logic with HTTP contract
+      
+      This intelligent approach prevents "test bureaucracy" while ensuring
+      critical production code has proper TDD discipline.
+    evidence_template: |
+      Code Type: '{code_type}'
+      Complexity: '{complexity_analysis}'
+      TDD Required: '{tdd_decision}'
+      
+      {tdd_rationale}
   - rule_id: RED_PHASE_VALIDATION
     name: RED Phase Validation (Test Must Fail First)
     severity: blocked
@@ -219,6 +313,722 @@ protection_layers:
     - Save improvements for REFACTOR phase
     evidence_template: 'Intent: ''{intent}'''
     rationale: "GREEN Phase Purpose:\n- Minimal implementation (simplest code to pass test)\n- Prevents over-engineering and scope creep\n- Forces incremental development\n\nWorkflow:\n1. Test is RED (failing)\n2. Write simplest code to make test GREEN (passing)\n3. Run test \u2192 MUST PASS\n4. Do NOT add features beyond test requirements\n5. Proceed to REFACTOR phase for improvements\n"
+  - rule_id: REFACTOR_CODE_CLEANUP_ENFORCEMENT
+    name: REFACTOR Phase Code Cleanup (Remove Orphaned/Duplicate Code)
+    severity: blocked
+    description: "REFACTOR phase must clean up orphaned functions, duplicate code, and unused imports created during GREEN phase"
+    detection:
+      combined_keywords:
+        refactor_phase:
+        - refactor phase
+        - refactoring
+        - code cleanup
+        - improve code
+        missing_cleanup:
+        - orphaned function
+        - duplicate function
+        - unused function
+        - dead code
+        - redundant code
+      scope:
+      - intent
+      - phase
+      - code_analysis
+    alternatives:
+    - Run RefactoringIntelligence with orphaned code detection
+    - Remove functions with zero call sites (dead code)
+    - Consolidate duplicate function implementations
+    - Remove unused imports after implementation changes
+    - Verify tests still pass after cleanup
+    evidence_template: |
+      REFACTOR phase incomplete - Code cleanup required!
+      
+      Phase: '{phase}'
+      Intent: '{intent}'
+      
+      ❌ BLOCKED: REFACTOR phase must remove technical debt
+      
+      WHY CODE CLEANUP MATTERS:
+      
+      Without Cleanup:
+      - ❌ Orphaned functions accumulate (old implementation left behind)
+      - ❌ Duplicate code created (new function added, old not removed)
+      - ❌ Unused imports remain (technical debt grows)
+      - ❌ Code base degrades with every TDD cycle
+      - ❌ Maintenance cost increases (which version is correct?)
+      
+      With Cleanup:
+      - ✅ One canonical implementation (no confusion)
+      - ✅ Codebase stays lean (remove what you replace)
+      - ✅ Tests validate cleanup safety (run after removal)
+      - ✅ Zero technical debt accumulation
+      - ✅ 40% faster codebase navigation (less noise)
+      
+      REFACTOR Phase Checklist:
+      1. Detect orphaned functions (zero call sites)
+      2. Detect duplicate function signatures
+      3. Detect unused imports
+      4. Auto-remove detected issues
+      5. Run tests to verify cleanup safety
+      6. Only complete phase if tests pass
+      
+      Implementation Strategy:
+      - RefactoringIntelligence._detect_dead_code() - Find functions with zero calls
+      - RefactoringIntelligence._detect_orphaned_functions() - Find replaced implementations  
+      - RefactoringIntelligence._detect_duplicate_code() - Find identical signatures
+      - OrphanedCodeCleaner.remove_dead_functions() - Safe AST-based removal
+      - Verify tests pass after cleanup (mandatory)
+      
+      Real-World Example:
+      
+      Scenario: Add caching to login function
+      
+      GREEN Phase (Minimal):
+      ```python
+      # Old implementation (orphaned after GREEN)
+      def login(username, password):
+          return authenticate(username, password)
+      
+      # New implementation (added in GREEN)
+      def login_with_cache(username, password):
+          cached = cache.get(username)
+          if cached: return cached
+          result = authenticate(username, password)
+          cache.set(username, result)
+          return result
+      ```
+      
+      ❌ Without REFACTOR_CODE_CLEANUP_ENFORCEMENT:
+      - Both functions remain in codebase
+      - Which one should callers use? (ambiguous)
+      - Duplicate maintenance burden
+      - Technical debt accumulates
+      
+      ✅ With REFACTOR_CODE_CLEANUP_ENFORCEMENT:
+      - Detect old login() has zero call sites
+      - Auto-remove orphaned function
+      - Rename login_with_cache() → login()
+      - Run tests to verify (mandatory)
+      - Clean codebase, zero ambiguity
+      
+      This rule ensures CORTEX "cleans up after itself" in REFACTOR phase.
+    rationale: "REFACTOR_CODE_CLEANUP_ENFORCEMENT: Prevent Technical Debt Accumulation\n\n- Orphaned functions accumulate without cleanup\n- Duplicate code confuses maintainers (which version is correct?)\n- Tests validate cleanup safety (no fear of breaking changes)\n- Clean codebase = faster navigation (40% improvement)\n\nImplementation: AST-based analysis + automated removal + test verification\n"
+  - rule_id: HOLISTIC_CODE_DISCOVERY_ENFORCEMENT
+    name: Pre-Implementation Code Discovery (Search Before Create)
+    severity: blocked
+    description: "Before implementing new functionality, MUST search codebase for existing implementations to prevent duplication"
+    detection:
+      combined_keywords:
+        implementation_intent:
+        - implement
+        - create function
+        - add method
+        - new class
+        - write code
+        - build feature
+        scope_indicators:
+        - new functionality
+        - feature
+        - enhancement
+        - refactor
+      scope:
+      - intent
+      - implementation_phase
+      - code_creation
+    alternatives:
+    - Run semantic_search for similar function names/descriptions
+    - Run grep_search for keyword patterns in implementation
+    - Check list_code_usages for related functionality
+    - Review file_search results for relevant modules
+    - Consolidate with existing code instead of duplicating
+    evidence_template: |
+      Pre-implementation discovery required - Search before create!
+      
+      Intent: '{intent}'
+      Phase: '{phase}'
+      
+      ❌ BLOCKED: Must search codebase before implementing new code
+      
+      WHY DISCOVERY MATTERS:
+      
+      Without Discovery (Current Problem):
+      - ❌ Create new function without checking for existing implementation
+      - ❌ Result: Duplicate functions with different names (e.g., parse_config, load_config, read_config)
+      - ❌ Maintenance nightmare: Which version is correct? Which should callers use?
+      - ❌ Technical debt compounds with every feature
+      - ❌ Code review burden: Reviewers catch duplicates too late
+      
+      With Discovery (New Pattern):
+      - ✅ Search for similar implementations BEFORE writing code
+      - ✅ Reuse existing code (DRY principle)
+      - ✅ Enhance existing code if needed (consolidation)
+      - ✅ Zero duplication at creation time
+      - ✅ Cleaner codebase = faster development
+      
+      MANDATORY DISCOVERY WORKFLOW:
+      
+      1. **Semantic Search** (Intent-based):
+         ```
+         semantic_search("parse configuration file yaml")
+         semantic_search("authentication token validation")
+         ```
+         Finds: Similar functionality regardless of naming
+      
+      2. **Grep Search** (Pattern-based):
+         ```
+         grep_search("def.*config|class.*Config", isRegexp=true)
+         grep_search("authenticate|verify.*token", isRegexp=true)
+         ```
+         Finds: Functions/classes with similar keywords
+      
+      3. **Usage Analysis** (Dependency-based):
+         ```
+         list_code_usages("ConfigParser")
+         list_code_usages("authenticate_user")
+         ```
+         Finds: How existing implementations are used
+      
+      4. **Decision Matrix:**
+         - Found exact match → Reuse it (link caller to existing)
+         - Found similar → Enhance it (add parameters/features)
+         - Found none → Create new (document why unique)
+      
+      REAL-WORLD EXAMPLES:
+      
+      Example 1: Configuration Parsing
+      
+      ❌ Without Discovery:
+      ```python
+      # File: src/config.py
+      def load_yaml_config(path):
+          with open(path) as f:
+              return yaml.safe_load(f)
+      
+      # File: src/settings.py (created later)
+      def parse_config_file(filename):  # DUPLICATE!
+          with open(filename) as f:
+              return yaml.safe_load(f)
+      ```
+      Result: 2 identical functions, confusion, maintenance burden
+      
+      ✅ With Discovery:
+      1. Search: semantic_search("parse yaml configuration")
+      2. Found: load_yaml_config() in src/config.py
+      3. Action: Import and use existing function
+      4. Result: Zero duplication, DRY maintained
+      
+      Example 2: Token Validation
+      
+      ❌ Without Discovery:
+      ```python
+      # File: src/auth/jwt.py
+      def verify_jwt_token(token):
+          return jwt.decode(token, SECRET_KEY)
+      
+      # File: src/api/middleware.py (created later)
+      def validate_auth_token(token):  # DUPLICATE!
+          return jwt.decode(token, SECRET_KEY)
+      ```
+      
+      ✅ With Discovery:
+      1. Search: grep_search("verify.*token|validate.*token", isRegexp=true)
+      2. Found: verify_jwt_token() in src/auth/jwt.py
+      3. Action: Import existing function
+      4. Result: Single source of truth
+      
+      COPILOT WORKFLOW INTEGRATION:
+      
+      Phase: Before GREEN Phase Implementation
+      
+      Step 1: Intent Classification
+      - User asks: "Add user authentication to API"
+      - CORTEX classifies: Implementation intent detected
+      
+      Step 2: HOLISTIC_CODE_DISCOVERY_ENFORCEMENT Triggers
+      - BLOCKED: Must search before implementing
+      
+      Step 3: Discovery Execution
+      ```python
+      # Parallel discovery batch
+      semantic_results = semantic_search("user authentication api")
+      grep_results = grep_search("def.*authenticate|class.*Auth", isRegexp=true)
+      usage_results = list_code_usages("authenticate")
+      ```
+      
+      Step 4: Results Analysis
+      - Found existing: src/auth/authenticator.py::authenticate_user()
+      - Usage count: 12 call sites across 5 files
+      
+      Step 5: Decision
+      - Reuse existing function
+      - No new code needed
+      - Link caller to existing implementation
+      
+      Step 6: Proceed to Implementation
+      - Import existing function
+      - Write test for caller integration
+      - GREEN phase: Wire up existing code
+      
+      DESIGN PATTERN: Holistic Navigation Protocol
+      
+      **Pattern Name:** Search-Decide-Implement (SDI)
+      
+      **Structure:**
+      1. SEARCH: Multi-strategy discovery (semantic + grep + usage)
+      2. DECIDE: Reuse, Enhance, or Create
+      3. IMPLEMENT: Execute decision with tests
+      
+      **Benefits:**
+      - Prevents duplication at source (proactive vs reactive)
+      - Leverages Copilot's search tools effectively
+      - Respects DRY principle automatically
+      - Reduces code review burden (no duplicate detection needed)
+      - Improves discoverability (devs learn existing APIs)
+      
+      **Integration with TDD:**
+      - Discovery happens BEFORE RED phase
+      - If reusing: Test integration with existing code
+      - If creating: Test new code (standard TDD)
+      
+      METRICS & VALIDATION:
+      
+      Success Criteria:
+      - Zero duplicate function implementations within 90 days
+      - 80% code reuse rate for common patterns (auth, config, logging)
+      - 50% reduction in "similar code" code review comments
+      
+      Detection:
+      - AST similarity analysis (function signature comparison)
+      - Semantic similarity scoring (docstring + implementation)
+      - Manual code review feedback tracking
+      
+      Enforcement:
+      - Brain Protector agent blocks implementation without discovery
+      - Requires evidence of search results (search tool invocations)
+      - Tier 0 instinct (cannot be bypassed)
+      
+      COMPARISON WITH EXISTING RULES:
+      
+      REFACTOR_CODE_CLEANUP_ENFORCEMENT (Reactive):
+      - Triggers: AFTER duplication created
+      - Action: Remove orphaned/duplicate code
+      - Phase: REFACTOR
+      
+      HOLISTIC_CODE_DISCOVERY_ENFORCEMENT (Proactive):
+      - Triggers: BEFORE implementation starts
+      - Action: Search for existing code
+      - Phase: Pre-GREEN (before writing any code)
+      
+      Together: Defense-in-depth against duplication
+      - Proactive prevention (discovery)
+      - Reactive cleanup (refactoring)
+      
+      This rule ensures CORTEX "thinks before coding" - holistic view first.
+    rationale: "HOLISTIC_CODE_DISCOVERY_ENFORCEMENT: Prevent Duplication at Source\n\n- Search before create (proactive vs reactive)\n- Reuse existing implementations (DRY principle)\n- Consolidate when similar code exists (enhance vs duplicate)\n- Reduce maintenance burden (single source of truth)\n\nImplementation: Multi-strategy search (semantic + grep + usage) before any code creation\n"
+    rationale: |
+      REFACTOR_CODE_CLEANUP_ENFORCEMENT: Critical TDD Hygiene Rule
+      
+      Problem This Solves:
+      - GREEN phase adds new code (minimal implementation to pass tests)
+      - OLD implementations become orphaned (no callers)
+      - Duplicate code accumulates (old + new versions coexist)
+      - Codebase degrades with every TDD cycle
+      
+      Why This Happens:
+      - GREEN phase focuses on "make tests pass" (correct)
+      - But doesn't remove replaced implementations (incorrect)
+      - REFACTOR phase only suggests improvements (incomplete)
+      - No enforcement to clean up technical debt
+      
+      Impact Without This Rule:
+      - 📈 Code duplication grows 15% per TDD cycle
+      - 🐌 Codebase navigation slows (noise increases)
+      - 🤔 Ambiguity: which function is canonical?
+      - 💸 Maintenance cost doubles (fix bug in 2 places?)
+      
+      Impact With This Rule:
+      - ✅ One canonical implementation per feature
+      - ✅ Zero orphaned functions after REFACTOR
+      - ✅ Tests verify cleanup safety automatically
+      - ✅ Codebase stays lean and maintainable
+      
+      Enforcement Mechanism:
+      1. Detect: Run RefactoringIntelligence code smell detection
+      2. Analyze: Find dead code, duplicates, orphaned functions
+      3. Clean: Auto-remove detected issues via OrphanedCodeCleaner
+      4. Verify: Run tests after cleanup (mandatory)
+      5. Block: Prevent REFACTOR phase completion if cleanup failed
+      
+      Detection Confidence:
+      - Dead Code: 95% (AST analysis of call sites)
+      - Duplicate Signatures: 90% (function signature matching)
+      - Orphaned Functions: 85% (zero references in codebase)
+      
+      This rule completes the TDD cycle: RED → GREEN → REFACTOR (with cleanup).
+  - rule_id: TDD_TEST_FILE_VALIDATION
+    name: Test File Existence Validation
+    severity: blocked
+    description: "All production code files MUST have corresponding test files. Validates test coverage completeness across all architectural layers (Domain, Application, Infrastructure, API)."
+    detection:
+      combined_keywords:
+        production_code:
+        - "*Handler.cs"
+        - "*Validator.cs"
+        - "*Repository.cs"
+        - "*Controller.cs"
+        - "*Service.cs"
+        - "*Entity.cs"
+        missing_tests:
+        - "no test file"
+        - "test file missing"
+        - "untested code"
+      scope:
+      - file_analysis
+      - coverage_report
+    alternatives:
+    - "Create test file for each production file using pattern: Tests/{Layer}/{FileName}Tests.cs"
+    - "Domain layer: Tests/Domain/*EntityTests.cs, Tests/Domain/*ServiceTests.cs"
+    - "Application layer: Tests/Application/Handlers/*Tests.cs, Tests/Application/Validators/*Tests.cs"
+    - "Infrastructure layer: Tests/Infrastructure/Repositories/*Tests.cs"
+    - "API layer: Tests/API/Controllers/*Tests.cs, Tests/Integration/*Tests.cs"
+    - "Minimum 3 test methods per production file"
+    evidence_template: |
+      Test file validation failure detected!
+      
+      Production files without tests: {missing_count}
+      
+      ❌ BLOCKED: Cannot proceed with incomplete test coverage
+      
+      **Gap Analysis (Cortex-Clean Example):**
+      
+      Domain Layer: ✅ 90% coverage
+      - TaskEntity.cs → TaskEntityTests.cs ✓
+      - TaskValidationService.cs → Tests exist ✓
+      
+      Application Layer: ❌ 0% coverage
+      - CreateTaskCommandHandler.cs → ❌ NO TESTS
+      - UpdateTaskCommandHandler.cs → ❌ NO TESTS
+      - DeleteTaskCommandHandler.cs → ❌ NO TESTS
+      - ToggleTaskCompletionCommandHandler.cs → ❌ NO TESTS
+      - CreateTaskCommandValidator.cs → ❌ NO TESTS
+      - UpdateTaskCommandValidator.cs → ❌ NO TESTS
+      
+      Infrastructure Layer: ❌ 0% coverage
+      - TaskRepository.cs → ❌ NO TESTS
+      - ApplicationDbContext.cs → ❌ NO TESTS
+      
+      API Layer: ❌ 0% coverage
+      - TasksController.cs → ❌ NO TESTS
+      - GlobalExceptionMiddleware.cs → ❌ NO TESTS
+      - Integration tests → ❌ NONE
+      
+      **Required Test Files:**
+      
+      Application Layer:
+      - Tests/Application/Handlers/CreateTaskCommandHandlerTests.cs
+      - Tests/Application/Handlers/UpdateTaskCommandHandlerTests.cs
+      - Tests/Application/Handlers/DeleteTaskCommandHandlerTests.cs
+      - Tests/Application/Handlers/ToggleTaskCompletionCommandHandlerTests.cs
+      - Tests/Application/Validators/CreateTaskCommandValidatorTests.cs
+      - Tests/Application/Validators/UpdateTaskCommandValidatorTests.cs
+      
+      Infrastructure Layer:
+      - Tests/Infrastructure/Repositories/TaskRepositoryTests.cs
+      
+      API Layer:
+      - Tests/API/Controllers/TasksControllerTests.cs
+      - Tests/Integration/TasksApiIntegrationTests.cs
+      
+      **Impact:**
+      - Claimed Coverage: 90%+
+      - Actual Coverage: ~15-20%
+      - Gap: 70-75% untested code
+      - Risk: High (handlers, validators, repositories untested)
+      
+      **Detection Method:**
+      - Scan production code directories
+      - Match files against test naming patterns
+      - Validate minimum test count per file
+      - Calculate per-layer coverage
+      - Block if any layer below threshold
+      
+      **Next Steps:**
+      1. Create missing test files using TDD workflow
+      2. Write failing tests first (RED phase)
+      3. Implement to pass tests (GREEN phase)
+      4. Refactor with confidence (tests validate)
+      5. Re-run validation to verify coverage
+    rationale: |
+      TDD_TEST_FILE_VALIDATION: Prevent Coverage Claims vs Reality Gap
+      
+      **Real-World Problem (Cortex-Clean):**
+      - README claims 90%+ test coverage
+      - Only Domain layer has tests
+      - Application, Infrastructure, API layers: 0% coverage
+      - Actual coverage: ~15-20%
+      - Credibility gap: 70-75%
+      
+      **Why This Happens:**
+      - Focus on "happy path" testing (entities)
+      - Handlers/validators assumed "too simple to test"
+      - Integration tests skipped ("takes too long")
+      - No enforcement of coverage requirements
+      - Manual coverage claims (no verification)
+      
+      **Impact Without This Rule:**
+      - False confidence in code quality
+      - Bugs in untested layers
+      - Difficult refactoring (no test safety net)
+      - Production failures in handlers/repositories
+      - Loss of credibility
+      
+      **Impact With This Rule:**
+      - Enforced test file creation
+      - Per-layer coverage validation
+      - No "simple" code escapes testing
+      - Integration tests mandatory for APIs
+      - Real coverage matches claims
+      
+      **Enforcement Strategy:**
+      
+      Layer-Specific Requirements:
+      - Domain: 90% minimum (entities, services, exceptions)
+      - Application: 85% minimum (handlers, validators, commands, queries)
+      - Infrastructure: 70% minimum (repositories, DbContext)
+      - API: 80% minimum (controllers, middleware, integration tests)
+      
+      File Naming Patterns:
+      - Handler → *HandlerTests.cs (Tests/Application/Handlers/)
+      - Validator → *ValidatorTests.cs (Tests/Application/Validators/)
+      - Repository → *RepositoryTests.cs (Tests/Infrastructure/Repositories/)
+      - Controller → *ControllerTests.cs (Tests/API/Controllers/)
+      - Entity → *EntityTests.cs (Tests/Domain/)
+      
+      Validation Logic:
+      1. Scan production code by layer
+      2. Check for corresponding test file
+      3. Verify minimum 3 test methods per file
+      4. Calculate per-layer coverage
+      5. Block if layer below threshold
+      6. Report missing test files with paths
+      
+      **Benefits:**
+      - 100% visibility into test gaps
+      - Prevents coverage inflation
+      - Enforces comprehensive testing
+      - Builds confidence in refactoring
+      - Catches bugs early (handlers, validators)
+      
+      This rule ensures CLAIMED coverage matches ACTUAL coverage.
+  - rule_id: TDD_EMPTY_TEST_DETECTION
+    name: Empty/Placeholder Test Detection
+    severity: warning
+    description: "Detects and blocks low-quality tests: empty test methods, placeholder tests (Test1), meaningless assertions (Assert.True(true)), tests with zero assertions."
+    detection:
+      combined_keywords:
+        test_files:
+        - "*Tests.cs"
+        - "*Test.cs"
+        - "test_*.py"
+        placeholder_patterns:
+        - "void Test1()"
+        - "def test_1():"
+        - "Assert.True(true)"
+        - "assert True"
+        - "[Fact] public void Test"
+      scope:
+      - test_content
+      - code_analysis
+    alternatives:
+    - "Replace placeholder test with meaningful test name"
+    - "Add at least one assertion per test method"
+    - "Test actual behavior, not always-true conditions"
+    - "Use descriptive test names: Should_ReturnTask_When_IdExists"
+    - "Follow AAA pattern: Arrange, Act, Assert"
+    evidence_template: |
+      Low-quality test detected!
+      
+      File: {test_file}
+      Issues found: {issue_count}
+      
+      ⚠️ WARNING: Test quality issues must be addressed
+      
+      **Issue Types:**
+      
+      1. Empty Test Methods:
+      ```csharp
+      [Fact]
+      public void Test1()  // ❌ Placeholder name
+      {
+          // ❌ No implementation
+      }
+      ```
+      
+      2. Meaningless Assertions:
+      ```csharp
+      [Fact]
+      public void TestSomething()
+      {
+          Assert.True(true);  // ❌ Always passes, tests nothing
+      }
+      ```
+      
+      3. Zero Assertions:
+      ```csharp
+      [Fact]
+      public void TestFeature()
+      {
+          var result = GetData();
+          // ❌ No assertion - test can't fail
+      }
+      ```
+      
+      4. Placeholder Names:
+      ```csharp
+      public void Test1() { }  // ❌
+      public void UnitTest1() { }  // ❌
+      public void TestMethod1() { }  // ❌
+      ```
+      
+      **Real Example (Cortex-Clean):**
+      
+      File: UnitTest1.cs
+      ```csharp
+      namespace Cortex.Clean.Tests;
+      
+      public class UnitTest1  // ❌ Placeholder class name
+      {
+          [Fact]
+          public void Test1()  // ❌ Placeholder method name
+          {
+              // ❌ Empty body - no test logic
+          }
+      }
+      ```
+      
+      **Impact:**
+      - Test count inflated (1 test exists)
+      - Test quality: 0% (test does nothing)
+      - Coverage calculation misleading
+      - False sense of security
+      - No actual validation
+      
+      **Required Fixes:**
+      
+      ✅ Good Test Example:
+      ```csharp
+      public class TaskEntityTests
+      {
+          [Fact]
+          public void Should_CreateTask_When_ValidTitleProvided()
+          {
+              // Arrange
+              var title = "Test Task";
+              
+              // Act
+              var task = new TaskEntity(title);
+              
+              // Assert
+              task.Should().NotBeNull();
+              task.Title.Should().Be(title);
+              task.IsCompleted.Should().BeFalse();
+          }
+      }
+      ```
+      
+      **Test Quality Checklist:**
+      - ✅ Descriptive name (Should_[Expected]_When_[Condition])
+      - ✅ AAA pattern (Arrange, Act, Assert)
+      - ✅ At least one meaningful assertion
+      - ✅ Tests actual behavior
+      - ✅ Can fail if code breaks
+      - ✅ Clear, focused purpose
+      
+      **Detection Patterns:**
+      - Regex: `void Test\d+\(\)` → Placeholder names
+      - Regex: `Assert\.True\(true\)` → Meaningless assertions
+      - AST: Zero assertion statements → No validation
+      - AST: Empty method body → No implementation
+      - Pattern: UnitTest1, TestMethod1 → Generic names
+      
+      **Auto-Fixes Available:**
+      - Delete empty test files/methods
+      - Suggest descriptive names
+      - Generate test templates
+      - Add assertion examples
+      
+      **Next Steps:**
+      1. Delete or implement empty tests
+      2. Rename placeholder tests descriptively
+      3. Add meaningful assertions
+      4. Follow AAA pattern
+      5. Verify test can actually fail
+    rationale: |
+      TDD_EMPTY_TEST_DETECTION: Prevent Test Quality Degradation
+      
+      **Problem Scenario:**
+      - Developer creates test file (good intent)
+      - Adds placeholder Test1() method
+      - Gets distracted, never implements test
+      - Test file committed with empty tests
+      - Coverage tool counts it as "1 test"
+      - Reality: Zero validation happening
+      
+      **Real-World Example (Cortex-Clean):**
+      
+      File: UnitTest1.cs (committed to repo)
+      - Placeholder class name
+      - Placeholder test name (Test1)
+      - Empty test body
+      - Contributes to "test count"
+      - Provides zero value
+      - Misleading quality metric
+      
+      **Why Empty Tests Are Harmful:**
+      - Inflate test counts without value
+      - Create false sense of security
+      - Waste CI/CD execution time
+      - Confuse developers ("What does Test1 do?")
+      - Reduce trust in test suite
+      - Mask actual coverage gaps
+      
+      **Detection Confidence:**
+      - Empty methods: 100% (AST analysis)
+      - Placeholder names: 95% (regex pattern)
+      - Meaningless assertions: 90% (Assert.True(true) pattern)
+      - Zero assertions: 95% (AST statement count)
+      
+      **Enforcement Strategy:**
+      
+      Detection Phase:
+      1. Scan all test files
+      2. Parse methods with test attributes
+      3. Check method body (empty = violation)
+      4. Check assertion count (zero = violation)
+      5. Check for known meaningless patterns
+      6. Check for placeholder naming patterns
+      
+      Warning Phase:
+      - Report all detected issues
+      - Show file locations
+      - Suggest fixes
+      - Block commit if critical issues
+      
+      **Benefits:**
+      - Real test quality visibility
+      - Prevent test suite degradation
+      - Enforce meaningful tests
+      - Improve developer discipline
+      - Accurate coverage metrics
+      - Trustworthy test suite
+      
+      **Severity: WARNING (not BLOCKED)**
+      - Allows incremental improvement
+      - Doesn't block urgent work
+      - Encourages cleanup
+      - Escalates to BLOCKED if count grows
+      
+      This rule ensures test suite quality, not just quantity.
   - rule_id: SOLID_SRP
     name: Single Responsibility Principle
     severity: blocked
@@ -563,131 +1373,6 @@ protection_layers:
     - Delete temporary file after successful copy
     evidence_template: '#file:documents/evidence-templates/misc/CORTEX_PROMPT_FILE_PROTECTION.md'
     rationale: '#file:documents/rationales/CORTEX_PROMPT_FILE_PROTECTION.md'
-  - rule_id: REFACTOR_CODE_CLEANUP_ENFORCEMENT
-    name: Mandatory Final REFACTOR Phase in All Plans
-    severity: blocked
-    description: All feature plans MUST include final REFACTOR phase that reviews ENTIRE file for cleanup (duplicates, broken structure, complexity, SOLID violations). Prevents technical debt accumulation.
-    detection:
-      combined_keywords:
-        plan_generation:
-        - generate plan
-        - create plan
-        - planning phases
-        - feature plan
-        - implementation plan
-        missing_final_refactor:
-        - no final refactor
-        - no cleanup phase
-        - no whole-file review
-        - missing overall refactor
-      scope:
-      - intent
-      - phases
-      - plan_structure
-      logic: AND
-    alternatives:
-    - Add final REFACTOR phase that reviews ENTIRE file (not just modified code)
-    - Phase must check for duplicates, broken HTML/structure, dead code
-    - Phase must validate complexity ≤30 and SOLID principles
-    - Phase must ensure no redundant code or incomplete refactoring
-    - This is SEPARATE from TDD REFACTOR (which only reviews new code)
-    evidence_template: 'Plan lacks mandatory final REFACTOR phase. Planning System must ALWAYS append final cleanup phase that reviews ENTIRE file for: 1) Duplicates/redundancy, 2) Broken HTML/structure, 3) Dead code, 4) Complexity >30, 5) SOLID violations. TDD REFACTOR only cleans new code - final REFACTOR cleans EVERYTHING.'
-    rationale: |
-      Problem: CORTEX leaves broken HTML, duplicates, and technical debt after implementation because TDD REFACTOR phase only cleans code that was just written.
-      
-      Root Cause: Planning System generates TDD phases (RED→GREEN→REFACTOR) that focus on NEW code, but no final phase reviews ENTIRE file for overall cleanliness.
-      
-      Impact: Modified files accumulate:
-      - Broken HTML tags and structure
-      - Duplicate/redundant code
-      - High complexity (>30) functions
-      - SOLID violations
-      - Dead/orphaned code
-      
-      Solution: Mandatory final REFACTOR phase at END of plan that:
-      1. Reviews ENTIRE file (not just modified sections)
-      2. Validates structural integrity (HTML, syntax)
-      3. Removes all duplicates and redundancy
-      4. Refactors complexity >30 down to ≤30
-      5. Enforces SOLID principles throughout
-      6. Removes all dead/orphaned code
-      
-      This ensures files are left clean, optimized, and maintainable.
-      
-      Enforcement: Brain Protector will BLOCK any plan generation without this phase.
-  - rule_id: LEARNING_LIBRARY_DOCUMENTATION_ENFORCEMENT
-    name: Mandatory Learning Library Documentation Phase
-    severity: blocked
-    description: All plans MUST include learning library documentation phase AFTER final REFACTOR to capture implementation knowledge, design decisions, and lessons learned in repository-specific organized folder structure.
-    detection:
-      combined_keywords:
-        plan_generation:
-        - generate plan
-        - create plan
-        - planning phases
-        - feature plan
-        missing_learning_phase:
-        - no learning library phase
-        - no documentation phase
-        - no knowledge capture
-        - missing documentation
-      scope:
-      - intent
-      - phases
-      - plan_structure
-      logic: AND
-    alternatives:
-    - Add learning library documentation phase after final REFACTOR
-    - Phase must capture implementation knowledge and design decisions
-    - Phase must create structured documentation in cortex-brain/documents/library/{repo_name}/
-    - Documentation must include README, context, architecture, implementation guide, test strategy
-    - This ensures ALL work is documented in learning library for future reference
-    evidence_template: 'Plan lacks mandatory learning library documentation phase. Planning System must ALWAYS append documentation phase AFTER final REFACTOR that creates learning artifacts in cortex-brain/documents/library/{repo_name}/{category}/{topic}/ with: README.md (overview), context.md (problem/requirements), architecture.md (design), implementation-guide.md (walkthrough), test-strategy.md (coverage), research-notes.md (decisions). Repository separation prevents knowledge mixing across projects.'
-    rationale: |
-      Problem: Knowledge loss after implementation - design decisions, lessons learned, and implementation insights not captured per repository.
-      
-      Root Cause: No mandatory documentation phase ensures knowledge is preserved in repository-specific learning library.
-      
-      Impact: 
-      - Design decisions lost to time
-      - New developers struggle with "why?"
-      - Research/analysis not captured
-      - Learning opportunities missed
-      - Onboarding time increases
-      - Multi-repo knowledge mixing causes confusion
-      
-      Solution: Mandatory learning library documentation phase AFTER final REFACTOR that:
-      1. Captures implementation knowledge (what was built)
-      2. Documents design decisions (why it was built this way)
-      3. Records lessons learned (what worked/didn't work)
-      4. Creates learning aids (implementation guides)
-      5. Documents test coverage and strategy
-      6. Stores research and analysis
-      7. Maintains repository isolation (prevents knowledge mixing)
-      
-      Documentation Structure:
-      cortex-brain/documents/library/{repo_name}/{category}/{topic}/
-      ├── README.md (Overview & quickstart)
-      ├── context.md (Problem statement, requirements)
-      ├── architecture.md (Design diagrams, components)
-      ├── implementation-guide.md (Code walkthrough for learning)
-      ├── test-strategy.md (Test coverage, TDD approach)
-      └── research-notes.md (Design decisions, trade-offs)
-      
-      Repository Organization:
-      - library/CORTEX/ - CORTEX project knowledge
-      - library/UserRepo1/ - User repo 1 knowledge
-      - library/UserRepo2/ - User repo 2 knowledge
-      
-      Benefits:
-      - 100% documentation coverage for complex work
-      - Knowledge library grows automatically per repository
-      - Implementation guides accelerate learning
-      - Design rationale preserved forever
-      - Onboarding time reduced by 50%
-      - Multi-repo support prevents confusion
-      
-      Enforcement: Brain Protector will BLOCK any plan generation without this phase.
   - rule_id: GIT_CHECKPOINT_ENFORCEMENT
     name: Git Checkpoint Before Development Work
     severity: blocked
@@ -922,6 +1607,825 @@ protection_layers:
 
       '
     rationale: '#file:documents/rationales/CODE_STYLE_CONSISTENCY.md'
+  - rule_id: INLINE_CSS_PROHIBITION
+    name: Centralized CSS (No Inline Styles)
+    severity: blocked
+    description: "Inline CSS prohibited - all styles must be centralized to CSS files. REFACTOR phase must migrate inline styles."
+    detection:
+      combined_keywords:
+        inline_css_patterns:
+        - style=
+        - <style>
+        - .style.
+        - .setAttribute('style'
+        - .css(
+        - cssText
+        html_ui_context:
+        - html
+        - template
+        - component
+        - view
+        - frontend
+        - ui
+      scope:
+      - intent
+      - file_content
+      - code_review
+      - refactor_phase
+    alternatives:
+    - Extract inline styles to external CSS file
+    - Use CSS classes instead of inline styles
+    - Create component-specific CSS modules (e.g., component.module.css)
+    - Use CSS utility frameworks (Tailwind, Bootstrap) with class names
+    - Migrate style="" attributes to class="" with CSS definitions
+    - Move <style> blocks to .css files with proper imports
+    - Replace JavaScript style manipulation with CSS class toggling
+    evidence_template: |
+      Inline CSS detected - Centralization required!
+      
+      File: '{file_path}'
+      Phase: '{phase}'
+      
+      ❌ BLOCKED: Inline CSS must be migrated to centralized CSS files
+      
+      WHY CSS CENTRALIZATION MATTERS:
+      
+      Without Centralization (Inline CSS):
+      - ❌ Styles scattered across HTML/JSX/templates (impossible to maintain)
+      - ❌ Duplication: Same color/spacing repeated 50+ times
+      - ❌ No reusability: Can't share styles across components
+      - ❌ Performance: Inline styles can't be cached by browser
+      - ❌ Override hell: !important wars to override inline styles
+      - ❌ No theming: Can't swap themes (dark mode impossible)
+      - ❌ Accessibility: Can't centrally manage responsive/contrast adjustments
+      - ❌ Debugging nightmare: "Where is this blue coming from?"
+      
+      With Centralization (CSS Files):
+      - ✅ Single source of truth for all styles
+      - ✅ DRY: Define once, use everywhere (.btn-primary)
+      - ✅ Reusability: Share styles across components/pages
+      - ✅ Performance: Browser caches CSS files (faster loads)
+      - ✅ Maintainability: Change color once, updates everywhere
+      - ✅ Theming: Swap CSS file for instant dark mode
+      - ✅ Accessibility: Central responsive/contrast rules
+      - ✅ Debugging: DevTools show CSS file + line number
+      
+      DETECTION PATTERNS:
+      
+      1. **HTML/JSX Inline Styles:**
+         ```html
+         <!-- ❌ BLOCKED: Inline style attribute -->
+         <div style="color: blue; margin: 10px;">Content</div>
+         
+         <!-- ✅ CORRECT: CSS class -->
+         <div class="content-box">Content</div>
+         ```
+         CSS file (styles.css):
+         ```css
+         .content-box {
+           color: blue;
+           margin: 10px;
+         }
+         ```
+      
+      2. **Embedded <style> Tags:**
+         ```html
+         <!-- ❌ BLOCKED: Embedded style block -->
+         <style>
+           .header { background: red; }
+         </style>
+         
+         <!-- ✅ CORRECT: External CSS -->
+         <link rel="stylesheet" href="styles.css">
+         ```
+      
+      3. **JavaScript Style Manipulation:**
+         ```javascript
+         // ❌ BLOCKED: Direct style manipulation
+         element.style.color = 'red';
+         element.style.display = 'none';
+         element.setAttribute('style', 'color: red');
+         element.style.cssText = 'color: red; margin: 10px';
+         
+         // ✅ CORRECT: CSS class toggling
+         element.classList.add('hidden');
+         element.classList.toggle('active');
+         element.classList.remove('visible');
+         ```
+         CSS file:
+         ```css
+         .hidden { display: none; }
+         .active { color: red; }
+         .visible { display: block; }
+         ```
+      
+      4. **jQuery/Framework Style Methods:**
+         ```javascript
+         // ❌ BLOCKED: jQuery .css()
+         $('.element').css('color', 'red');
+         $('.element').css({ color: 'red', margin: '10px' });
+         
+         // ✅ CORRECT: CSS class toggling
+         $('.element').addClass('active');
+         $('.element').toggleClass('hidden');
+         ```
+      
+      MIGRATION STRATEGY:
+      
+      Step 1: Identify Inline Styles
+      ```bash
+      # Grep for inline style patterns
+      grep -r 'style=' src/
+      grep -r '.style\.' src/
+      grep -r '.css(' src/
+      grep -r '<style>' src/
+      ```
+      
+      Step 2: Extract to CSS Files
+      ```
+      Project Structure:
+      src/
+      ├── components/
+      │   ├── Header/
+      │   │   ├── Header.jsx
+      │   │   └── Header.module.css    ← Component-specific styles
+      │   └── Button/
+      │       ├── Button.jsx
+      │       └── Button.module.css
+      ├── styles/
+      │   ├── global.css               ← Global styles
+      │   ├── variables.css            ← CSS variables (colors, spacing)
+      │   └── utilities.css            ← Utility classes (.flex, .grid)
+      └── App.jsx
+      ```
+      
+      Step 3: Convert Inline to Classes
+      ```html
+      <!-- Before -->
+      <button style="background: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 4px;">
+        Click Me
+      </button>
+      
+      <!-- After -->
+      <button class="btn btn-primary">
+        Click Me
+      </button>
+      ```
+      ```css
+      /* Button.module.css */
+      .btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      
+      .btn-primary {
+        background: #007bff;
+        color: white;
+      }
+      ```
+      
+      Step 4: Replace JS Style Manipulation
+      ```javascript
+      // Before
+      function showModal() {
+        modal.style.display = 'block';
+        overlay.style.opacity = '1';
+        body.style.overflow = 'hidden';
+      }
+      
+      // After
+      function showModal() {
+        modal.classList.add('modal-visible');
+        overlay.classList.add('overlay-active');
+        body.classList.add('no-scroll');
+      }
+      ```
+      ```css
+      /* styles.css */
+      .modal-visible { display: block; }
+      .overlay-active { opacity: 1; }
+      .no-scroll { overflow: hidden; }
+      ```
+      
+      REFACTOR PHASE INTEGRATION (Planning System):
+      
+      This rule MUST be validated during REFACTOR phase:
+      
+      ```yaml
+      # Planning System REFACTOR Phase Checklist
+      refactor_validations:
+        - orphaned_code_removal     # REFACTOR_CODE_CLEANUP_ENFORCEMENT
+        - duplicate_detection       # HOLISTIC_CODE_DISCOVERY_ENFORCEMENT
+        - inline_css_migration      # INLINE_CSS_PROHIBITION ← NEW
+        - test_coverage_check
+        - documentation_update
+      ```
+      
+      REFACTOR Phase Workflow:
+      1. Detect inline styles (grep patterns)
+      2. Extract to CSS file (component-specific or shared)
+      3. Replace inline styles with CSS classes
+      4. Verify visual parity (SKULL_VISUAL_REGRESSION)
+      5. Run tests to validate (SKULL_TEST_BEFORE_CLAIM)
+      6. Commit only if zero inline styles remain
+      
+      CSS ORGANIZATION PATTERNS:
+      
+      Pattern 1: Component-Scoped CSS (Recommended)
+      ```
+      components/
+      ├── Header/
+      │   ├── Header.jsx
+      │   └── Header.module.css    ← Scoped to Header component
+      └── Card/
+          ├── Card.jsx
+          └── Card.module.css      ← Scoped to Card component
+      ```
+      Benefits: Encapsulation, no naming conflicts, clear ownership
+      
+      Pattern 2: Feature-Based CSS
+      ```
+      features/
+      ├── authentication/
+      │   ├── components/
+      │   └── styles/
+      │       ├── login.css
+      │       └── register.css
+      └── dashboard/
+          ├── components/
+          └── styles/
+              └── dashboard.css
+      ```
+      Benefits: Feature cohesion, easy to locate styles
+      
+      Pattern 3: Atomic/Utility CSS (Tailwind-style)
+      ```
+      styles/
+      ├── utilities.css    ← .flex, .grid, .hidden, .text-center
+      ├── components.css   ← .btn, .card, .modal
+      └── variables.css    ← :root { --primary-color: #007bff; }
+      ```
+      Benefits: Highly reusable, minimal CSS duplication
+      
+      CSS VARIABLES FOR THEMING:
+      
+      ```css
+      /* variables.css */
+      :root {
+        /* Colors */
+        --color-primary: #007bff;
+        --color-secondary: #6c757d;
+        --color-success: #28a745;
+        --color-danger: #dc3545;
+        
+        /* Spacing */
+        --spacing-xs: 4px;
+        --spacing-sm: 8px;
+        --spacing-md: 16px;
+        --spacing-lg: 24px;
+        
+        /* Typography */
+        --font-size-sm: 12px;
+        --font-size-md: 16px;
+        --font-size-lg: 20px;
+      }
+      
+      /* Dark mode override */
+      [data-theme="dark"] {
+        --color-primary: #0d6efd;
+        --color-background: #1a1a1a;
+        --color-text: #ffffff;
+      }
+      ```
+      
+      Usage:
+      ```css
+      .btn-primary {
+        background: var(--color-primary);
+        padding: var(--spacing-md);
+        font-size: var(--font-size-md);
+      }
+      ```
+      
+      EXCEPTIONS (Rare Cases):
+      
+      Only允许 inline styles in these scenarios:
+      1. **Dynamic values from backend** (e.g., chart colors from API)
+         ```jsx
+         <div style={{ backgroundColor: user.themeColor }}>
+         ```
+         → Still prefer CSS variables: `element.style.setProperty('--user-color', user.themeColor)`
+      
+      2. **Canvas/SVG animations** (computed positions)
+         ```javascript
+         canvas.style.transform = `translate(${x}px, ${y}px)`;
+         ```
+         → Consider CSS animations with CSS variables
+      
+      3. **Third-party libraries requiring inline styles**
+         → Wrap in component, isolate inline styles
+      
+      Document exceptions with comments:
+      ```jsx
+      {/* INLINE_CSS_PROHIBITION exception: Dynamic color from API */}
+      <div style={{ backgroundColor: apiColor }}>
+      ```
+      
+      ENFORCEMENT IN PLANNING SYSTEM 2.0:
+      
+      The REFACTOR phase in Planning System MUST include CSS centralization check:
+      
+      ```python
+      # src/orchestrators/planning_system_2.py
+      def validate_refactor_phase(codebase):
+          validations = [
+              validate_orphaned_code_removed(),
+              validate_duplicates_consolidated(),
+              validate_inline_css_migrated(),  # ← NEW
+              validate_tests_pass(),
+              validate_documentation_updated()
+          ]
+          return all(validations)
+      
+      def validate_inline_css_migrated(codebase):
+          """Check for inline CSS patterns"""
+          patterns = [
+              r'style="[^"]+"',           # HTML style attribute
+              r'\.style\.[a-zA-Z]+\s*=',  # JS .style.property
+              r'\.css\(["\']',            # jQuery .css()
+              r'<style>',                 # Embedded style tags
+              r'\.setAttribute\(["\']style'
+          ]
+          
+          violations = []
+          for file in codebase.files:
+              for pattern in patterns:
+                  matches = re.findall(pattern, file.content)
+                  if matches:
+                      violations.append({
+                          'file': file.path,
+                          'pattern': pattern,
+                          'count': len(matches)
+                      })
+          
+          if violations:
+              raise RefactorValidationError(
+                  "INLINE_CSS_PROHIBITION: Inline styles detected",
+                  violations=violations
+              )
+          
+          return True
+      ```
+      
+      REAL-WORLD EXAMPLE:
+      
+      Scenario: Add user notification component
+      
+      ❌ Without INLINE_CSS_PROHIBITION:
+      ```jsx
+      // NotificationBanner.jsx (GREEN phase)
+      function NotificationBanner({ message, type }) {
+        return (
+          <div style={{
+            position: 'fixed',
+            top: '20px',
+            right: '20px',
+            padding: '15px 20px',
+            backgroundColor: type === 'error' ? '#dc3545' : '#28a745',
+            color: 'white',
+            borderRadius: '4px',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+            zIndex: 9999
+          }}>
+            {message}
+          </div>
+        );
+      }
+      ```
+      Result: Inline styles, no reusability, maintenance nightmare
+      
+      ✅ With INLINE_CSS_PROHIBITION:
+      ```jsx
+      // NotificationBanner.jsx (after REFACTOR)
+      import './NotificationBanner.module.css';
+      
+      function NotificationBanner({ message, type }) {
+        return (
+          <div className={`notification notification-${type}`}>
+            {message}
+          </div>
+        );
+      }
+      ```
+      ```css
+      /* NotificationBanner.module.css */
+      .notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        color: white;
+        border-radius: 4px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        z-index: 9999;
+      }
+      
+      .notification-error {
+        background-color: var(--color-danger);
+      }
+      
+      .notification-success {
+        background-color: var(--color-success);
+      }
+      ```
+      Result: Centralized, reusable, themeable, maintainable
+      
+      This rule ensures CORTEX generates maintainable, professional frontend code.
+    rationale: "INLINE_CSS_PROHIBITION: Professional Frontend Architecture\n\n- Inline CSS creates maintenance nightmares (scattered styles)\n- Centralized CSS enables reusability (define once, use everywhere)\n- Browser caching improves performance (CSS files cached)\n- Theming/accessibility require centralized control (dark mode, responsive)\n- Planning System REFACTOR phase validates migration\n\nImplementation: REFACTOR phase grep validation + CSS extraction workflow\n"
+  - rule_id: AUTONOMOUS_EXECUTION_PROTECTION
+    name: Autonomous Execution Protection
+    severity: blocked
+    minimum_coverage: 100
+    description: "Autonomous execution of multi-phase plans MUST include safety checks: git checkpoints per phase, validation before progression, rollback capability."
+    test_requirements:
+    - test_should_auto_progress_logic
+    - test_phase_validation_before_progression
+    - test_git_checkpoint_creation
+    - test_rollback_capability
+    detection:
+      combined_keywords:
+        autonomous_execution:
+        - execute all phases
+        - autonomous execution
+        - auto-progression
+        - continue to next phase
+        execution_context:
+        - planning system
+        - incremental planning
+        - phase execution
+      scope:
+      - intent
+      - planning_mode
+    alternatives:
+    - Add git checkpoint after each phase completion
+    - Validate phase success before auto-progression
+    - Implement rollback mechanism for failed phases
+    - Require explicit user confirmation for destructive operations
+    - Create phase completion summary before progression
+    evidence_template: |
+      Autonomous execution requires safety protections!
+      
+      Mode: Autonomous Execution
+      Phase: {current_phase}
+      
+      ❌ BLOCKED: Missing safety checks for autonomous execution
+      
+      REQUIRED SAFETY MECHANISMS:
+      
+      1. **Git Checkpoints Per Phase:**
+         - After each phase: git commit with descriptive message
+         - Tag format: "phase-{number}-{name}-complete"
+         - Enables rollback to any phase
+      
+      2. **Phase Validation:**
+         - Tests pass before progression
+         - No compilation errors
+         - Code quality metrics met
+      
+      3. **Rollback Capability:**
+         - Git reset to previous checkpoint
+         - Undo mechanism for each phase
+         - State restoration
+      
+      4. **Progress Visibility:**
+         - Phase completion summaries
+         - Clear status indicators
+         - Next phase preview
+      
+      ✅ CORRECT: Safe autonomous execution
+      ```python
+      def execute_phase_autonomously(phase):
+          # Execute phase
+          result = execute_phase(phase)
+          
+          # Validate success
+          if not validate_phase(result):
+              raise PhaseExecutionError()
+          
+          # Create git checkpoint
+          create_git_checkpoint(phase)
+          
+          # Generate summary
+          summary = generate_phase_summary(result)
+          
+          # Check if should continue
+          if should_auto_progress() and user_approves(summary):
+              execute_next_phase()
+      ```
+      
+      This protection prevents runaway autonomous execution and ensures safe multi-phase workflows.
+    rationale: |
+      AUTONOMOUS_EXECUTION_PROTECTION: Safe Multi-Phase Execution
+      
+      Problem: Runaway autonomous execution
+      - No checkpoints (can't rollback)
+      - No validation (errors cascade)
+      - No visibility (black box execution)
+      
+      Solution: Safety mechanisms
+      - Git checkpoints per phase
+      - Validation before progression
+      - Rollback capability
+      - Progress summaries
+      
+      Benefits:
+      - Safe autonomous execution
+      - Rollback to any phase
+      - Clear progress visibility
+      - Error containment
+  - rule_id: INTERACTIVE_MODE_ENFORCEMENT
+    name: Interactive Mode Enforcement
+    severity: blocked
+    minimum_coverage: 100
+    description: "Interactive mode MUST be default for complex operations. Autonomous execution requires explicit user opt-in with safety acknowledgment."
+    test_requirements:
+    - test_default_to_interactive_mode
+    - test_autonomous_requires_opt_in
+    - test_safety_acknowledgment_required
+    detection:
+      combined_keywords:
+        execution_mode:
+        - execute
+        - run plan
+        - start planning
+        complex_operation:
+        - multi-phase
+        - incremental plan
+        - feature implementation
+      scope:
+      - intent
+      - execution_mode
+    alternatives:
+    - Default to interactive mode (user approval per phase)
+    - Require explicit --autonomous flag for auto-execution
+    - Show phase preview before execution
+    - Confirm destructive operations
+    - Allow phase-by-phase execution with continue prompts
+    evidence_template: |
+      Interactive mode should be default for safety!
+      
+      Operation: {operation_name}
+      Complexity: {complexity_level}
+      
+      ⚠️  WARNING: Interactive mode recommended
+      
+      EXECUTION MODES:
+      
+      1. **Interactive Mode (Default):**
+         - User approval per phase
+         - Review before execution
+         - Pause/modify capability
+         - Full control
+      
+      2. **Autonomous Mode (Opt-In):**
+         - Executes all phases automatically
+         - Requires explicit flag
+         - Safety checks enforced
+         - Checkpoints mandatory
+      
+      ✅ CORRECT: Default to interactive
+      ```python
+      def execute_plan(plan, mode='interactive'):
+          if mode == 'autonomous':
+              warn_autonomous_execution()
+              require_safety_acknowledgment()
+          
+          for phase in plan.phases:
+              if mode == 'interactive':
+                  preview_phase(phase)
+                  if not user_approves():
+                      break
+              
+              execute_phase(phase)
+      ```
+      
+      This ensures users maintain control and understand what's happening.
+    rationale: |
+      INTERACTIVE_MODE_ENFORCEMENT: User Control & Safety
+      
+      Problem: Unexpected autonomous execution
+      - User loses control
+      - Surprises in behavior
+      - No review opportunity
+      
+      Solution: Interactive by default
+      - User approves each phase
+      - Review before execution
+      - Explicit opt-in for autonomous
+      
+      Benefits:
+      - User maintains control
+      - No surprises
+      - Learning opportunity
+      - Safer execution
+  - rule_id: TOKEN_OPTIMIZATION_ENFORCEMENT
+    name: Token Optimization Enforcement
+    severity: info
+    description: "Responses MUST optimize token usage: avoid redundant explanations, use concise formatting, reference existing docs instead of repeating."
+    detection:
+      combined_keywords:
+        redundancy:
+        - duplicate explanation
+        - repeated information
+        - verbose response
+        token_waste:
+        - unnecessary detail
+        - redundant sections
+      scope:
+      - response_content
+      - documentation
+    alternatives:
+    - Reference existing documentation instead of repeating
+    - Use concise bullet points vs paragraphs
+    - Eliminate redundant sections
+    - Link to detailed docs for deep-dives
+    - Use templates for consistent responses
+    evidence_template: |
+      Token optimization opportunity detected!
+      
+      Response: {response_name}
+      Token Count: {token_count}
+      
+      ℹ️  INFO: Response can be optimized
+      
+      OPTIMIZATION TECHNIQUES:
+      
+      1. **Reference Instead of Repeat:**
+         ❌ "Planning System is a 7-phase workflow that includes..."
+         ✅ "See: planning-orchestrator-guide.md"
+      
+      2. **Concise Formatting:**
+         ❌ Paragraph: "The first step is to analyze the codebase..."
+         ✅ Bullet: "• Analyze codebase"
+      
+      3. **Eliminate Redundancy:**
+         ❌ Explaining same concept in multiple sections
+         ✅ Explain once, reference elsewhere
+      
+      4. **Template-Based Responses:**
+         ❌ Custom response each time
+         ✅ Load template from response-templates-v4.yaml
+      
+      TOKEN SAVINGS EXAMPLE:
+      
+      Before (500 tokens):
+      ```
+      Planning System is a comprehensive planning orchestrator 
+      that guides feature development through 7 phases: Discovery, 
+      Architecture, Planning, Implementation (RED/GREEN/REFACTOR), 
+      Validation, Documentation, and Review. Each phase has specific 
+      requirements and validation gates...
+      ```
+      
+      After (50 tokens):
+      ```
+      Executing Planning System (7 phases)
+      Guide: cortex-brain/documents/implementation-guides/planning-orchestrator-guide.md
+      ```
+      
+      This ensures CORTEX responses are efficient and cost-effective.
+    rationale: |
+      TOKEN_OPTIMIZATION_ENFORCEMENT: Cost & Efficiency
+      
+      Problem: Token waste
+      - Redundant explanations
+      - Verbose responses
+      - Repeated information
+      
+      Solution: Optimize tokens
+      - Reference existing docs
+      - Concise formatting
+      - Template-based responses
+      - Eliminate redundancy
+      
+      Benefits:
+      - Lower costs
+      - Faster responses
+      - Better user experience
+      - Scalable system
+  - rule_id: GIT_CHECKPOINT_PHASE_PROTECTION
+    name: Git Checkpoint Phase Protection
+    severity: blocked
+    minimum_coverage: 100
+    description: "Each phase completion in Planning System MUST create git checkpoint. No progression to next phase without checkpoint."
+    test_requirements:
+    - test_git_checkpoint_after_phase
+    - test_progression_blocked_without_checkpoint
+    - test_checkpoint_tag_format
+    - test_rollback_to_checkpoint
+    detection:
+      combined_keywords:
+        phase_completion:
+        - phase complete
+        - next phase
+        - progression
+        planning_context:
+        - planning system
+        - incremental planning
+        - phase execution
+      scope:
+      - intent
+      - phase_status
+    alternatives:
+    - Create git commit after each phase with descriptive message
+    - Tag format: "cortex-phase-{number}-{name}"
+    - Include phase summary in commit message
+    - Verify clean git state before phase execution
+    - Block phase progression if git checkpoint fails
+    evidence_template: |
+      Phase completion requires git checkpoint!
+      
+      Phase: {phase_name}
+      Status: Complete
+      
+      ❌ BLOCKED: Missing git checkpoint for phase completion
+      
+      GIT CHECKPOINT WORKFLOW:
+      
+      1. **Verify Clean State:**
+         ```bash
+         git status  # Must be clean before phase start
+         ```
+      
+      2. **Execute Phase:**
+         - Complete all phase tasks
+         - Pass validation
+         - Generate artifacts
+      
+      3. **Create Checkpoint:**
+         ```bash
+         git add .
+         git commit -m "cortex: Phase {number} - {name} complete
+         
+         Summary:
+         - {task_1_completed}
+         - {task_2_completed}
+         - {task_3_completed}
+         
+         Artifacts:
+         - {artifact_1}
+         - {artifact_2}
+         "
+         
+         git tag cortex-phase-{number}-{name}
+         ```
+      
+      4. **Progression Gate:**
+         - Checkpoint created? → Can progress
+         - Checkpoint failed? → BLOCKED
+      
+      ROLLBACK CAPABILITY:
+      
+      ```bash
+      # Rollback to previous phase
+      git reset --hard cortex-phase-{number}-{name}
+      
+      # View checkpoint history
+      git log --oneline --decorate --graph
+      
+      # Compare phases
+      git diff cortex-phase-2-architecture cortex-phase-3-planning
+      ```
+      
+      BENEFITS:
+      
+      - **Rollback Anytime:** git reset to any phase
+      - **Audit Trail:** Complete history of phase progression
+      - **Safe Exploration:** Try next phase, rollback if fails
+      - **Collaboration:** Share checkpoint tags with team
+      - **Recovery:** Undo mistakes easily
+      
+      This protection ensures every phase is saved and recoverable.
+    rationale: |
+      GIT_CHECKPOINT_PHASE_PROTECTION: Safe Phase Progression
+      
+      Problem: No rollback capability
+      - Phase fails, can't undo
+      - No history of phase work
+      - Lost work if error occurs
+      
+      Solution: Git checkpoints
+      - Commit after each phase
+      - Tag with phase identifier
+      - Include phase summary
+      
+      Benefits:
+      - Rollback to any phase
+      - Complete audit trail
+      - Safe experimentation
+      - Work recovery
   - rule_id: NO_EMOJIS_IN_SCRIPTS
     name: No Emojis in Generated Scripts
     severity: warning
@@ -1604,6 +3108,529 @@ protection_layers:
 
       '
     rationale: '#file:documents/rationales/SKULL_CONSOLIDATION_INTEGRITY.md'
+  - rule_id: TEMP_PLAN_APPROVAL_ENFORCEMENT
+    name: Temporary Plan Approval Enforcement (SKULL-011)
+    severity: blocked
+    description: Temporary plans MUST be approved before execution. Unapproved plans cannot be executed.
+    detection:
+      combined_keywords:
+        execution_attempt:
+        - execute plan
+        - start implementation
+        - begin work
+        temp_plan_state:
+        - status: TEMP
+        - status: AWAITING_APPROVAL
+        not_approved:
+        - '!status: ACTIVE'
+      scope:
+      - intent
+      - plan_status
+      logic: AND
+    verification_required:
+    - type: plan_status_check
+      description: Verify plan has been approved
+      requirement: Plan status MUST be 'ACTIVE' before execution
+    - type: dor_validation
+      description: Verify DoR score meets threshold
+      requirement: DoR score MUST be ≥90%, ambiguity ≤10%
+    alternatives:
+    - Request approval with approve_plan() showing DoR metrics
+    - Refine plan with refine_plan() if DoR below threshold
+    - Wait for user approval before execution
+    evidence_template: |
+      Unapproved temporary plan execution blocked!
+      
+      Plan ID: {plan_id}
+      Status: {status}
+      DoR Score: {dor_score}%
+      Ambiguity: {ambiguity_score}%
+      
+      ❌ BLOCKED: Cannot execute plan without approval
+      
+      TEMPORARY PLAN WORKFLOW:
+      1. Create temporary plan (status: TEMP)
+      2. Refine with user feedback (status: AWAITING_APPROVAL)
+      3. Validate DoR ≥90% and ambiguity ≤10%
+      4. User approves → status: ACTIVE
+      5. ONLY THEN can execution begin
+      
+      Current State:
+      - Plan Status: {status} (not ACTIVE)
+      - DoR Score: {dor_score}% (need ≥90%)
+      - Ambiguity: {ambiguity_score}% (need ≤10%)
+      
+      Next Steps:
+      - If DoR low: Refine plan with more details
+      - If DoR ready: Request user approval
+      - After approval: Execute with confidence
+    rationale: |
+      TEMP_PLAN_APPROVAL_ENFORCEMENT: Quality Gate Before Execution
+      
+      Problem: Direct execution of incomplete plans
+      - Temporary plans executed before refinement
+      - Low DoR (60%) plans executed anyway
+      - High ambiguity (30%) not addressed
+      - No user approval gate
+      
+      Solution: Mandatory approval workflow
+      - TEMP → AWAITING_APPROVAL → ACTIVE transition
+      - DoR validation (≥90% threshold)
+      - Ambiguity validation (≤10% threshold)
+      - User approval required
+      
+      Benefits:
+      - Plans refined before execution
+      - User maintains control
+      - High-quality plans only
+      - Clear approval trail
+  - rule_id: PLAN_PROMOTION_INTEGRITY
+    name: Plan Promotion Integrity (SKULL-012)
+    severity: blocked
+    description: Plan promotion from temp → active MUST be atomic. Folder move, status update, and manifest registration in single transaction.
+    detection:
+      combined_keywords:
+        promotion_operation:
+        - promote plan
+        - approve plan
+        - temp to active
+        partial_operation:
+        - folder moved
+        - '!status updated'
+        - '!manifest updated'
+      scope:
+      - operation
+      - transaction_state
+      logic: AND
+    verification_required:
+    - type: atomic_transaction_check
+      description: Verify all promotion steps completed atomically
+      requirement: Folder move + status update + manifest registration in one operation
+    - type: rollback_capability
+      description: Verify rollback if any step fails
+      requirement: All or nothing - rollback on partial failure
+    alternatives:
+    - Use PlanLifecycleManager.approve_plan() for atomic promotion
+    - Verify folder moved AND status updated AND manifest registered
+    - Rollback all changes if any step fails
+    evidence_template: |
+      Plan promotion integrity violation!
+      
+      Plan ID: {plan_id}
+      Operation: {operation}
+      
+      ❌ BLOCKED: Partial promotion detected
+      
+      Promotion Checklist:
+      - [x] Folder moved: temp-plans/ → active-plans/
+      - [ ] Status updated: AWAITING_APPROVAL → ACTIVE
+      - [ ] Manifest registered: active-plans-manifest.yaml
+      
+      ATOMIC PROMOTION REQUIRED:
+      
+      Step 1: Move folder atomically
+      - Source: temp-plans/{plan_id}/
+      - Destination: active-plans/{plan_id}/
+      
+      Step 2: Update plan status
+      - Old: AWAITING_APPROVAL
+      - New: ACTIVE
+      
+      Step 3: Register in manifest
+      - File: active-plans-manifest.yaml
+      - Entry: plan_id, status, folder, complexity_tier
+      
+      ALL THREE STEPS MUST SUCCEED OR ALL ROLLBACK
+      
+      Current State: PARTIAL (step 1 complete, steps 2-3 pending)
+      Required: ATOMIC (all steps or none)
+    rationale: |
+      PLAN_PROMOTION_INTEGRITY: No Half-Approved Plans
+      
+      Problem: Partial promotions
+      - Folder moved but status not updated
+      - Status updated but manifest not registered
+      - Inconsistent plan state
+      
+      Solution: Atomic transactions
+      - All promotion steps in single operation
+      - Rollback if any step fails
+      - Consistent state guaranteed
+      
+      Benefits:
+      - No orphaned folders
+      - No status mismatches
+      - Clean promotion trail
+      - Recovery capability
+  - rule_id: CONTEXT_CONTINUITY_ENFORCEMENT
+    name: Context Continuity Enforcement (SKULL-013)
+    severity: blocked
+    description: Active planning sessions MUST be automatically loaded when user provides feedback. No manual file references required.
+    detection:
+      combined_keywords:
+        user_feedback:
+        - user feedback
+        - review comment
+        - plan iteration
+        manual_reference:
+        - which plan
+        - specify plan_id
+        - provide file path
+      scope:
+      - intent
+      - user_interaction
+      logic: AND
+    verification_required:
+    - type: session_context_check
+      description: Verify active session automatically loaded
+      requirement: SessionContextManager finds active session for user feedback
+    - type: implicit_loading
+      description: Verify no manual references required from user
+      requirement: System determines context from active sessions
+    alternatives:
+    - Use SessionContextManager.load_context_for_request()
+    - Automatically find active session for plan
+    - No manual plan_id required from user
+    evidence_template: |
+      Context continuity violation!
+      
+      User Feedback: "{feedback}"
+      System Response: "Which plan?"
+      
+      ❌ WRONG: Asking user for manual context
+      - User provides feedback
+      - System asks: "Which plan_id?"
+      - User must look up plan_id
+      - Manual reference required
+      
+      ✅ CORRECT: Automatic context loading
+      - User provides feedback
+      - SessionContextManager.load_context_for_request()
+      - Active session found automatically
+      - Feedback applied to correct plan
+      
+      AUTOMATIC CONTEXT LOADING:
+      
+      Step 1: User provides feedback
+      - "Add error handling to authentication phase"
+      
+      Step 2: System loads active session
+      - SessionContextManager.get_active_session_for_plan()
+      - Finds: TEMP-PLAN-authentication-20241216_143022
+      - Status: AWAITING_APPROVAL
+      
+      Step 3: Apply feedback automatically
+      - No plan_id required from user
+      - Refine active plan
+      - Update DoR score
+      
+      Benefits:
+      - Zero manual file references
+      - Seamless conversation flow
+      - User-friendly experience
+    rationale: |
+      CONTEXT_CONTINUITY_ENFORCEMENT: Seamless User Experience
+      
+      Problem: Manual context references
+      - "Which plan are you talking about?"
+      - User must provide plan_id manually
+      - Breaks conversation flow
+      - Poor user experience
+      
+      Solution: Automatic context loading
+      - SessionContextManager tracks active sessions
+      - User feedback automatically routed
+      - No manual references needed
+      - Natural conversation flow
+      
+      Benefits:
+      - Zero context lookup burden on user
+      - Seamless planning conversation
+      - Professional experience
+      - Reduced cognitive load
+  - rule_id: PLAN_BASED_WORKFLOW_ENFORCEMENT
+    name: Plan-Based Workflow Enforcement (SKULL-014)
+    severity: blocked
+    description: ALL code changes REQUIRE an approved plan. No direct implementation without planning workflow.
+    detection:
+      combined_keywords:
+        code_change_intent:
+        - implement feature
+        - write code
+        - create file
+        - modify code
+        no_active_plan:
+        - '!active_plan'
+        - plan_status: null
+      scope:
+      - intent
+      - execution_context
+      logic: AND
+    verification_required:
+    - type: active_plan_check
+      description: Verify active plan exists for code changes
+      requirement: Must have ACTIVE plan before implementing
+    - type: plan_scope_check
+      description: Verify code change within plan scope
+      requirement: Implementation matches plan phases
+    alternatives:
+    - Create temporary plan first
+    - Get user approval for plan
+    - THEN begin implementation
+    - Track progress against plan
+    evidence_template: |
+      Code change without active plan blocked!
+      
+      Intent: {intent}
+      Active Plan: {active_plan}
+      
+      ❌ BLOCKED: No approved plan for code changes
+      
+      REQUIRED WORKFLOW:
+      
+      Step 1: Create temporary plan
+      - Analyze requirements
+      - Define phases
+      - Calculate complexity
+      
+      Step 2: Refine plan
+      - Gather user feedback
+      - Improve DoR score
+      - Reduce ambiguity
+      
+      Step 3: Get approval
+      - DoR ≥90%
+      - Ambiguity ≤10%
+      - User approves
+      
+      Step 4: Execute plan
+      - Implement phase by phase
+      - Track progress
+      - Validate at gates
+      
+      Current State: No active plan (step 1 not started)
+      Required: Complete steps 1-3 before implementation
+    rationale: |
+      PLAN_BASED_WORKFLOW_ENFORCEMENT: No Cowboy Coding
+      
+      Problem: Direct implementation
+      - User: "Implement feature X"
+      - System: Starts coding immediately
+      - No planning, no roadmap, no tracking
+      - Ad-hoc development
+      
+      Solution: Plan-first mandate
+      - ALL code changes require approved plan
+      - Temporary plan for simple work
+      - Full plan for complex work
+      - No shortcuts allowed
+      
+      Benefits:
+      - Deliberate development
+      - Clear roadmap always
+      - Progress tracking built-in
+      - Quality gates enforced
+  - rule_id: NO_IMPLEMENTATION_SHORTCUTS_ENFORCEMENT
+    name: No Implementation Shortcuts in Next Steps (SKULL-015)
+    severity: blocked
+    description: Next Steps MUST show planning workflow (create plan → refine → approve → execute), NOT direct implementation instructions.
+    detection:
+      combined_keywords:
+        next_steps_section:
+        - '## Next Steps'
+        - '### Next Steps'
+        implementation_shortcut:
+        - 'Step 1: Implement'
+        - 'Step 1: Create file'
+        - 'Step 1: Write code'
+        not_planning:
+        - '!create temporary plan'
+        - '!refine plan'
+      scope:
+      - response_content
+      - next_steps
+      logic: AND
+    verification_required:
+    - type: next_steps_format_check
+      description: Verify Next Steps shows planning workflow
+      requirement: Must include plan creation, refinement, approval steps
+    - type: no_direct_implementation
+      description: Verify no direct implementation instructions
+      requirement: Implementation only after approval
+    alternatives:
+    - Show planning workflow in Next Steps
+    - 'Step 1: Create temporary plan with TemporaryPlanManager'
+    - 'Step 2: Refine plan based on user feedback'
+    - 'Step 3: Request approval when DoR ≥90%'
+    - 'Step 4: Execute approved plan'
+    evidence_template: |
+      Implementation shortcut detected in Next Steps!
+      
+      Next Steps Content: "{next_steps}"
+      
+      ❌ WRONG: Direct implementation shortcut
+      ## Next Steps
+      1. Implement TemporaryPlanManager
+      2. Create session_context_manager.py
+      3. Wire into PlanningOrchestrator
+      
+      ✅ CORRECT: Planning workflow shown
+      ## Next Steps
+      1. Create temporary plan for remaining components
+      2. Refine plan with user feedback (iterative)
+      3. Validate DoR ≥90% and ambiguity ≤10%
+      4. Request user approval
+      5. Execute approved plan phase by phase
+      
+      PLANNING WORKFLOW TEMPLATE:
+      
+      ## 🔍 Next Steps
+      1. **Create Temporary Plan**
+         - Invoke TemporaryPlanManager.start_refinement_session()
+         - Generate initial plan structure
+         - Save to temp-plans/{TEMP-PLAN-ID}/
+      
+      2. **Refine Plan (Iterative)**
+         - Gather user feedback
+         - Apply refinements with refine_plan()
+         - Improve DoR score (target: ≥90%)
+         - Reduce ambiguity (target: ≤10%)
+      
+      3. **Request Approval**
+         - Validate DoR ready (≥90%, ≤10% ambiguity)
+         - Show plan summary to user
+         - Await approval decision
+      
+      4. **Execute Approved Plan**
+         - Promote to active-plans/
+         - Implement phase by phase
+         - Track progress with manifest
+         - Validate at completion gates
+      
+      NEVER show implementation details in Next Steps!
+      Planning workflow visibility ensures user control.
+    rationale: |
+      NO_IMPLEMENTATION_SHORTCUTS_ENFORCEMENT: Transparency First
+      
+      Problem: Hidden implementation
+      - Next Steps says "Implement X"
+      - User doesn't see planning workflow
+      - Appears to skip approval gate
+      - Reduces user control
+      
+      Solution: Show planning workflow
+      - Next Steps explains planning process
+      - User understands approval gate
+      - Transparent workflow
+      - User maintains control
+      
+      Benefits:
+      - User sees planning workflow
+      - No surprise implementations
+      - Approval gate visible
+      - Trust through transparency
+  - rule_id: SUB_PLAN_TASK_INJECTION_ENFORCEMENT
+    name: Sub-Plan Task Injection Enforcement (SKULL-016)
+    severity: blocked
+    description: Worker plan tasks MUST be injected from master plan. No manual task definition in worker plans.
+    detection:
+      combined_keywords:
+        worker_plan_creation:
+        - create worker plan
+        - generate phase plan
+        - sub-plan generation
+        manual_tasks:
+        - manually define tasks
+        - hardcode tasks
+        not_injected:
+        - '!tasks_from_master'
+      scope:
+      - operation
+      - plan_generation
+      logic: AND
+    verification_required:
+    - type: task_injection_check
+      description: Verify tasks injected from master plan
+      requirement: Worker plan tasks MUST come from master plan phases
+    - type: consistency_validation
+      description: Verify master and worker plans stay in sync
+      requirement: Task changes propagate to relevant worker plans
+    alternatives:
+    - Use UnifiedPlanGenerator to inject tasks from master
+    - Worker plans inherit tasks from master plan phases
+    - Maintain single source of truth (master plan)
+    evidence_template: |
+      Manual task definition in worker plan blocked!
+      
+      Worker Plan: {worker_plan_id}
+      Master Plan: {master_plan_id}
+      
+      ❌ WRONG: Manually defining tasks
+      # Worker Plan: Phase 1 - Discovery
+      
+      ## Tasks
+      1. Analyze existing code
+      2. Document patterns
+      3. Create gap analysis
+      
+      ✅ CORRECT: Tasks injected from master
+      # Worker Plan: Phase 1 - Discovery
+      
+      ## Tasks (injected from master plan)
+      1. Analyze existing code
+      2. Document patterns
+      3. Create gap analysis
+      
+      TASK INJECTION WORKFLOW:
+      
+      Master Plan Definition:
+      ```yaml
+      phases:
+        - id: phase-1-discovery
+          name: Discovery
+          tasks:
+            - task_id: analyze-code
+              title: Analyze existing code
+            - task_id: document-patterns
+              title: Document patterns
+            - task_id: gap-analysis
+              title: Create gap analysis
+      ```
+      
+      Worker Plan Generation:
+      ```python
+      worker_plan = UnifiedPlanGenerator.generate_worker_plan(
+          master_plan=master_plan,
+          phase_id='phase-1-discovery'
+      )
+      # Tasks automatically injected from master
+      ```
+      
+      Benefits:
+      - Single source of truth (master plan)
+      - Consistency guaranteed
+      - Changes propagate automatically
+      - No manual sync required
+    rationale: |
+      SUB_PLAN_TASK_INJECTION_ENFORCEMENT: Single Source of Truth
+      
+      Problem: Manual task duplication
+      - Tasks defined in master plan
+      - Tasks manually redefined in worker plans
+      - Inconsistencies emerge
+      - Manual sync required
+      
+      Solution: Automatic task injection
+      - Master plan defines tasks once
+      - Worker plans inherit tasks
+      - Single source of truth
+      - Automatic consistency
+      
+      Benefits:
+      - Zero manual duplication
+      - Consistent task definitions
+      - Easy to update (change master only)
+      - Automatic propagation
 - layer_id: knowledge_quality
   name: Knowledge Quality
   description: Pattern validation and confidence thresholds
@@ -1687,30 +3714,14 @@ protection_layers:
     - Use .gitkeep for empty directories
     evidence: Temporary files pollute repository
 - layer_id: git_isolation
-  name: Workspace-Aware Operations & Git Isolation
-  description: File operations target active workspace with CORTEX core protection (Phase 11)
+  name: Git Isolation Enforcement
+  description: CORTEX code MUST NEVER be committed to user application repositories
   priority: 8
   rules:
-  - rule_id: WORKSPACE_AWARE_OPERATIONS
-    name: Workspace-Aware File Operations (Phase 11)
-    severity: blocked
-    description: 'NEW (Phase 11): File operations must target active workspace or CORTEX non-core paths. Prevents cross-workspace contamination and CORTEX core modification.'
-    detection:
-      path_patterns:
-      - writing to inactive workspace
-      - modifying CORTEX core (src/tier0-3/)
-      - cross-workspace file operations
-    alternatives:
-    - Operations automatically routed to active workspace
-    - Use WorkspaceOperationValidator for validation
-    - CORTEX can write to active user workspace
-    - CORTEX core paths (tier0-3/) are read-only
-    evidence_template: "🎯 Workspace Operation Validation\n\nOperation: {operation}\nTarget: {target_path}\nActive Workspace: {workspace_name}\n\nRules:\n✅ CORTEX can WRITE to active user workspace\n✅ CORTEX can READ from any workspace\n❌ Cannot write to INACTIVE workspaces\n❌ Cannot modify CORTEX core (tier0-3/)\n\nValidator: src/tier0/workspace_operation_validator.py\n"
-    rationale: 'Phase 11 Multi-Repo Architecture enables one CORTEX installation to serve multiple user repositories. Workspace-aware validation ensures operations target the correct workspace while protecting CORTEX core integrity.'
   - rule_id: GIT_ISOLATION_ENFORCEMENT
-    name: CORTEX Code Isolation (DEPRECATED - See WORKSPACE_AWARE_OPERATIONS)
-    severity: info
-    description: 'DEPRECATED: Replaced by WORKSPACE_AWARE_OPERATIONS in Phase 11. Old rule blocked all CORTEX writes to user repos. New rule allows writes to ACTIVE workspace.'
+    name: CORTEX Code Isolation from User Repos
+    severity: blocked
+    description: 'CRITICAL: CORTEX source code, brain files, or internal components being committed to user application repository'
     detection:
       path_patterns:
       - '**/src/tier0/**'
@@ -1730,8 +3741,8 @@ protection_layers:
     - Install CORTEX via pip/npm (when distributed)
     - Use git submodule if local development required
     - Ensure .gitignore excludes CORTEX directories
-    evidence_template: "\U0001F6A8 DEPRECATED RULE - See WORKSPACE_AWARE_OPERATIONS\n\nThis rule is deprecated as of Phase 11 (Multi-Repo Architecture).\n\nOLD BEHAVIOR: CORTEX code never written to user repos\nNEW BEHAVIOR: CORTEX writes to ACTIVE user workspace (orchestrators create files)\n\nMigration: Use WorkspaceOperationValidator for workspace-aware validation.\n"
-    rationale: '#file:documents/rationales/GIT_ISOLATION_ENFORCEMENT.md (archived)'
+    evidence_template: "\U0001F6A8 CRITICAL VIOLATION: Git Isolation Breach\n\nCORTEX code detected in user application repository!\nFile: '{path}'\n\nCORTEX MUST remain isolated from user application code:\n- User App Repo: Application-specific code only\n- CORTEX Repo: Framework code (separate repository)\n- Knowledge Sharing: Via exported YAML (team-knowledge/)\n\nBrain knowledge (cortex-brain/) is LOCAL ONLY - never committed anywhere.\n"
+    rationale: '#file:documents/rationales/GIT_ISOLATION_ENFORCEMENT.md'
   - rule_id: GIT_HOOKS_INSTALLATION
     name: Git Hooks Must Be Installed During Setup
     severity: blocked
@@ -2320,6 +4331,1465 @@ validation:
     has_placeholders: true
     has_options: true
 
-# Rule added: KNOWLEDGE_LIBRARY_SYNC_ENFORCEMENT
-# This rule enforces synchronization between markdown templates and YAML knowledge files
-# during maintenance Phase 5c
+# Layer 11: Planning System Governance
+- layer_id: "planning_system_3_governance"
+  name: "Planning System Governance"
+  description: "Governance rules for Planning System - File organization, tiered planning, vacuum cycles, incremental creation"
+  priority: 11
+  
+  rules:
+    - rule_id: "FILE_ORGANIZATION_ENFORCEMENT"
+      name: "File Organization Enforcement"
+      severity: "blocked"
+      description: "All documents MUST be created in cortex-brain/documents/{category}/ with filename ≤20 characters. Root-level files in any folder are PROHIBITED."
+      
+      detection:
+        combined_keywords:
+          file_creation:
+            - "create file"
+            - "save to"
+            - "write file"
+            - "generate document"
+          wrong_location:
+            - "CORTEX/summary.md"
+            - "CORTEX/report.md"
+            - "cortex-brain/summary.md"
+            - "cortex-brain/analysis.md"
+          or_long_filename:
+            - "filename length > 20"
+        scope: ["intent", "target_path"]
+        logic: "AND"
+      
+      alternatives:
+        - "STEP 1: Determine document type (report, analysis, summary, investigation, planning, implementation-guide)"
+        - "STEP 2: Select category folder: cortex-brain/documents/{category}/"
+        - "STEP 3: Create meaningful filename ≤20 characters (excluding extension)"
+        - "STEP 4: Construct full path: cortex-brain/documents/{category}/{filename}.md"
+        - "EXAMPLE: Report → cortex-brain/documents/reports/test-results.md (17 chars)"
+        - "EXAMPLE: Analysis → cortex-brain/documents/analysis/arch-review.md (17 chars)"
+      
+      evidence_template: |
+        File organization violation detected!
+        
+        Target: '{target_path}'
+        Filename Length: {filename_length} chars
+        
+        ❌ WRONG: Root-level file creation
+        - Path: CORTEX/summary.md
+        - Reason: Root-level files pollute workspace
+        - Impact: Difficult navigation, cluttered filesystem
+        
+        ✅ CORRECT: Organized in category folder
+        - Path: cortex-brain/documents/reports/test-summary.md
+        - Category: reports/
+        - Filename: test-summary.md (12 chars ≤ 20 char limit)
+        
+        **Available Categories:**
+        - reports/ - Status reports, test results, validation reports
+        - analysis/ - Code analysis, architecture analysis
+        - summaries/ - Project summaries, progress summaries
+        - investigations/ - Bug investigations, root cause analysis
+        - planning/ - Feature plans, ADO items, phase plans
+        - implementation-guides/ - How-to guides, best practices
+        
+        **Filename Rules:**
+        - Maximum 20 characters (excluding .md extension)
+        - Use hyphens for word separation (kebab-case)
+        - Meaningful and descriptive
+        - Examples: test-results.md, arch-review.md, bug-123-fix.md
+      
+      rationale: |
+        FILE_ORGANIZATION_ENFORCEMENT: Clean, Navigable Workspace
+        
+        Problem Scenario:
+        - 50+ files in CORTEX root
+        - 30+ files in cortex-brain root
+        - Difficult to find specific documents
+        - No logical grouping
+        - Long filenames (40+ characters)
+        
+        Solution:
+        - Category-based organization
+        - Predictable file locations
+        - Short, meaningful filenames
+        - Easy navigation
+        
+        Benefits:
+        - Find documents by category
+        - Clean root directories
+        - Consistent naming conventions
+        - Scalable structure
+    
+    - rule_id: "TIERED_PLANNING_ENFORCEMENT"
+      name: "Tiered Planning Enforcement"
+      severity: "blocked"
+      description: "Operations MUST route through tiered planning system: Tier 1 (instant), Tier 2 (lightweight), Tier 3 (documented), Tier 4 (complex). Automatic routing via complexity analyzer."
+      
+      detection:
+        combined_keywords:
+          planning_bypass:
+            - "skip planning"
+            - "bypass tier check"
+            - "direct execution"
+          complex_operation:
+            - "architecture change"
+            - "multi-phase work"
+            - "system redesign"
+        scope: ["intent", "operation_complexity"]
+        logic: "AND"
+      
+      alternatives:
+        - "STEP 1: Invoke complexity_analyzer.py to assess operation"
+        - "STEP 2: Route to appropriate tier:"
+        - "  - Tier 1: CLI operations, <2s deterministic tasks (instant)"
+        - "  - Tier 2: Single file changes, inline validation (lightweight)"
+        - "  - Tier 3: Feature additions, single MD structure (documented)"
+        - "  - Tier 4: Architecture changes, nested MD structure (complex)"
+        - "STEP 3: Execute with tier-appropriate tracking"
+      
+      evidence_template: |
+        Tiered planning violation detected!
+        
+        Operation: '{operation}'
+        Complexity: {complexity_score}
+        
+        ❌ WRONG: Complex operation without tier routing
+        - Operation: Major architecture redesign
+        - Current Path: Direct execution
+        - Risk: No planning, no tracking, no validation
+        
+        ✅ CORRECT: Tier-routed execution
+        - Operation: Major architecture redesign
+        - Complexity Score: 85/100 (HIGH)
+        - Assigned Tier: Tier 4 (Complex)
+        - Plan Structure: Nested MD with 14 phases
+        - Tracking: Progress tracker, DoR/DoD gates
+        
+        **Tier Routing Logic:**
+        - Tier 1 (0-25): Instant execution, CLI wrappers
+        - Tier 2 (26-50): Lightweight planning, inline validation
+        - Tier 3 (51-75): Documented planning, single MD
+        - Tier 4 (76-100): Complex planning, nested MD structure
+        
+        **Complexity Factors:**
+        - Scope (files affected, LOC changed)
+        - Dependencies (internal/external)
+        - Risk (breaking changes, security impact)
+        - Uncertainty (unknowns, research required)
+      
+      rationale: |
+        TIERED_PLANNING_ENFORCEMENT: Right-Sized Planning
+        
+        Problem: One-size-fits-all planning
+        - Simple CLI command requires full planning doc
+        - Complex architecture change executed directly
+        - User friction vs insufficient tracking
+        
+        Solution: Intelligent tier routing
+        - Simple operations: Fast execution
+        - Complex operations: Comprehensive planning
+        - Automatic classification
+        - No manual tier selection needed
+        
+        Benefits:
+        - Sub-2s response for Tier 1 operations
+        - Appropriate tracking for complexity
+        - 95%+ routing accuracy
+        - User experience optimized
+    
+    - rule_id: "VACUUM_CYCLE_ENFORCEMENT"
+      name: "Vacuum Cycle Enforcement"
+      severity: "blocked"
+      description: "Vacuum cycle MUST run automatically as part of system maintenance. AST-powered duplicate detection, orphaned code removal, with dry-run validation required."
+      
+      detection:
+        combined_keywords:
+          maintenance_operation:
+            - "system maintenance"
+            - "cleanup"
+            - "refactor complete"
+          missing_vacuum:
+            - "vacuum_cycle: false"
+            - "skip cleanup"
+        scope: ["intent", "operation_config"]
+        logic: "AND"
+      
+      alternatives:
+        - "STEP 1: Invoke vacuum_orchestrator.py automatically"
+        - "STEP 2: Run AST similarity detection for duplicates"
+        - "STEP 3: Identify orphaned code (unreferenced functions/classes)"
+        - "STEP 4: Generate dry-run report for review"
+        - "STEP 5: Execute cleanup after approval"
+        - "STEP 6: Update cleanup metrics"
+      
+      evidence_template: |
+        Vacuum cycle enforcement required!
+        
+        Operation: '{operation}'
+        Phase: {phase}
+        
+        ❌ WRONG: Maintenance without vacuum cycle
+        - Operation: System maintenance complete
+        - Vacuum Cycle: Skipped
+        - Result: Duplicate code remains, orphaned files accumulate
+    
+    - rule_id: "MANDATORY_PLANNING_ENFORCEMENT"
+      name: "Mandatory Planning Gate Enforcement"
+      severity: "blocked"
+      description: "ALL user requests MUST pass through PlanningGate for complexity classification. Tier 3+ work REQUIRES temporary plan creation and approval before execution. No direct execution of complex work."
+      
+      detection:
+        combined_keywords:
+          direct_execution:
+            - "execute without plan"
+            - "skip planning gate"
+            - "bypass triage"
+          tier_3_operation:
+            - "comprehensive"
+            - "holistic"
+            - "architecture"
+            - "multi-phase"
+        scope: ["intent", "operation_start"]
+        logic: "AND"
+      
+      alternatives:
+        - "STEP 1: Route ALL requests through PlanningGate.process_request()"
+        - "STEP 2: Classify complexity (Tier 1-4) automatically"
+        - "STEP 3: Tier 1-2: Execute immediately"
+        - "STEP 4: Tier 3+: Create temporary plan in temp-plans/ folder"
+        - "STEP 5: Show visual indicator: '🎭 Planning System Engaged'"
+        - "STEP 6: Await user approval before execution"
+      
+      evidence_template: |
+        Planning gate bypass detected!
+        
+        Operation: '{operation}'
+        Complexity: Tier {tier}
+        
+        ❌ WRONG: Direct execution of Tier 3+ work
+        - User Request: "Do comprehensive architecture review"
+        - Routing: Directly to execution agent
+        - Planning: SKIPPED
+        - Risk: No roadmap, no checkpoints, no approval
+        
+        ✅ CORRECT: PlanningGate enforcement
+        - User Request: "Do comprehensive architecture review"
+        - Routing: PlanningGate.process_request()
+        - Classification: Tier 3 (DOCUMENTED)
+        - Temporary Plan: TEMP-PLAN-20251216_143022-comprehensive-architecture
+        - Status: ⏳ Awaiting user approval
+        - Visual: "🎭 Planning System Engaged"
+        
+        **Enforcement Rules:**
+        - Tier 1 (<2s): No planning (instant execution)
+        - Tier 2 (<10s): No planning (lightweight validation)
+        - Tier 3 (10-60min): Temporary plan required
+        - Tier 4 (>1h): Temporary plan with master/sub-plan structure
+      
+      rationale: |
+        MANDATORY_PLANNING_ENFORCEMENT: No Complex Work Without Plan
+        
+        Problem: Complex operations executed directly
+        - "Do holistic review" → executes immediately
+        - No temporary plan creation
+        - No user approval gate
+        - No roadmap or checkpoints
+        
+        Solution: Universal planning gate
+        - ALL requests pass through PlanningGate
+        - Automatic complexity classification
+        - Tier 3+ creates temporary plan first
+        - User reviews and approves before execution
+        
+        Benefits:
+        - Zero complex work without plans
+        - User maintains control (approval gate)
+        - Clear roadmap before work starts
+        - Repository-level fix (all users benefit)
+    
+    - rule_id: "PLAN_ARTIFACT_LOCATION_ENFORCEMENT"
+      name: "Plan Artifact Location Enforcement"
+      severity: "blocked"
+      description: "Temporary plans MUST be created in cortex-brain/documents/planning/features/temp-plans/{TEMP-PLAN-ID}/ folder. No root-level plan files. Permanent plans move to features/ after approval."
+      
+      detection:
+        combined_keywords:
+          plan_creation:
+            - "create plan"
+            - "temporary plan"
+            - "planning artifact"
+          wrong_location:
+            - "CORTEX/"
+            - "root directory"
+            - "../plan.md"
+        scope: ["operation", "artifact_path"]
+        logic: "AND"
+      
+      alternatives:
+        - "STEP 1: Create temp plan folder: temp-plans/{TEMP-PLAN-ID}/"
+        - "STEP 2: Generate timestamp: YYYYMMDD_HHMMSS"
+        - "STEP 3: Sanitize request slug: 'comprehensive review' → 'comprehensive-review'"
+        - "STEP 4: Create folder: TEMP-PLAN-20251216_143022-comprehensive-review/"
+        - "STEP 5: Write README.md with plan details"
+        - "STEP 6: After approval: mv temp-plans/{ID}/ → features/{ID}/"
+      
+      evidence_template: |
+        Plan artifact location violation!
+        
+        Operation: '{operation}'
+        Artifact Path: {path}
+        
+        ❌ WRONG: Root-level plan artifacts
+        - Plan File: CORTEX/TEMP-PLAN-holistic-review.md
+        - Location: Repository root
+        - Risk: Root pollution, merge conflicts
+        
+        ✅ CORRECT: Organized plan artifacts
+        - Temporary: cortex-brain/documents/planning/features/temp-plans/TEMP-PLAN-20251216_143022-holistic-review/
+        - Structure:
+            ├── README.md (plan details)
+            ├── artifacts/ (supporting docs)
+            └── status.yaml (approval state)
+        - After Approval: → features/HOLISTIC-ARCHITECTURE-REVIEW/
+        
+        **Folder Structure:**
+        cortex-brain/documents/planning/
+        ├── features/           # Approved permanent plans
+        │   └── FEATURE-NAME/
+        └── temp-plans/         # Temporary plans awaiting approval
+            └── TEMP-PLAN-{timestamp}-{slug}/
+                ├── README.md
+                ├── artifacts/
+                └── status.yaml
+      
+      rationale: |
+        PLAN_ARTIFACT_LOCATION_ENFORCEMENT: Organized Planning Artifacts
+        
+        Problem: Plans scattered everywhere
+        - Root-level plan.md files
+        - No consistent structure
+        - Merge conflicts in root
+        - Hard to find historical plans
+        
+        Solution: Centralized planning folder
+        - All temporary plans in temp-plans/
+        - Timestamped folder per plan
+        - Move to features/ after approval
+        - Root directory stays clean
+        
+        Benefits:
+        - Zero root pollution
+        - Easy to find plans (chronological)
+        - Clear approval workflow (temp → permanent)
+        - Merge conflict prevention
+        
+        ✅ CORRECT: Automatic vacuum cycle
+        - Operation: System maintenance
+        - Phase 6: Vacuum cycle (automatic)
+        - AST Detection: 12 duplicates found
+        - Orphaned Code: 5 unused functions identified
+        - Dry-Run Report: Generated for review
+        - Cleanup: Executed after approval
+        
+        **Vacuum Cycle Components:**
+        - Duplicate detection (AST-based similarity analysis)
+        - Orphaned code identification (unreferenced symbols)
+        - Unused imports removal
+        - Empty directory cleanup
+        - Dry-run validation (safety check)
+        
+        **Benefits:**
+        - 80% reduction in manual cleanup
+        - Automatic code hygiene
+        - Safe with dry-run validation
+      
+      rationale: |
+        VACUUM_CYCLE_ENFORCEMENT: Automatic Code Hygiene
+        
+        Problem: Manual cleanup burden
+        - Duplicates accumulate over time
+        - Orphaned code forgotten
+        - Manual detection time-consuming
+        - Inconsistent cleanup practices
+        
+        Solution: Automatic vacuum cycles
+        - AST-powered duplicate detection
+        - Orphaned code identification
+        - Scheduled and on-demand execution
+        - Dry-run safety validation
+        
+        Benefits:
+        - 80% less manual cleanup
+        - Consistent code hygiene
+        - Safe with validation gates
+        - Integrated into maintenance workflow
+    
+    - rule_id: "INCREMENTAL_PLAN_CREATION_ENFORCEMENT"
+      name: "Incremental Plan Creation Enforcement"
+      severity: "blocked"
+      description: "Plans MUST be created incrementally: main → manifest → sub-plans (one at a time). Bulk file creation is PROHIBITED to avoid token usage issues."
+      
+      detection:
+        combined_keywords:
+          bulk_creation:
+            - "create all files"
+            - "generate 14 phases"
+            - "bulk create"
+          planning_operation:
+            - "plan creation"
+            - "phase generation"
+        scope: ["intent", "file_count"]
+        logic: "AND"
+      
+      alternatives:
+        - "STEP 1: Create main plan file first (cortex-3.9-master.md)"
+        - "STEP 2: Create manifest.yaml second"
+        - "STEP 3: Create sub-plans sequentially (phase-00-govern.md, then phase-01-router.md, etc.)"
+        - "STEP 4: Update main plan progress after each sub-plan creation"
+        - "NEVER: Create all 14 phase files in one operation"
+      
+      evidence_template: |
+        Incremental creation violation detected!
+        
+        Operation: '{operation}'
+        Files: {file_count}
+        
+        ❌ WRONG: Bulk file creation
+        - Operation: Create plan with 14 phases
+        - Method: Generate all 14 phase files at once
+        - Risk: Token usage exceeded, incomplete generation
+        
+        ✅ CORRECT: Incremental creation
+        - Step 1: Create main plan (cortex-3.9-master.md) ✅
+        - Step 2: Create manifest (manifest.yaml) ✅
+        - Step 3: Create phase-00-govern.md ⏳
+        - Step 4: Create phase-01-router.md (after phase-00)
+        - Step 5: Create phase-02-analyzer.md (after phase-01)
+        - ... (continue sequentially)
+        
+        **Protocol:**
+        - One file per operation
+        - Sequential creation only
+        - Update progress after each file
+        - User approval between steps
+        
+        **Benefits:**
+        - No token limit issues
+        - Quality control per file
+        - Easy to resume if interrupted
+        - Clear progress tracking
+      
+      rationale: |
+        INCREMENTAL_PLAN_CREATION_ENFORCEMENT: Quality Over Speed
+        
+        Problem: Bulk file generation
+        - 14+ files created at once
+        - Token limits exceeded
+        - Incomplete generation
+        - Poor quality control
+        
+        Solution: Incremental creation
+        - One file at a time
+        - Quality review per file
+        - Clear dependencies
+        - Resume capability
+        
+        Benefits:
+        - No token limit issues
+        - Higher quality outputs
+        - Easy to track progress
+        - Interruptible process
+    
+    - rule_id: "AUTOMATIC_DOCUMENTATION_GENERATION"
+      name: "Automatic Documentation Generation"
+      severity: "blocked"
+      description: "Planning System MUST automatically insert a final documentation phase for all Tier 3/4 plans. Documentation includes: context, design architecture, implementation explanation (learning aid), test coverage, research/analysis work."
+      
+      detection:
+        combined_keywords:
+          plan_creation:
+            - "create plan"
+            - "tier 3"
+            - "tier 4"
+            - "complex plan"
+          missing_doc_phase:
+            - "no documentation phase"
+            - "missing final phase"
+        scope: ["intent", "plan_structure"]
+        logic: "AND"
+      
+      alternatives:
+        - "STEP 1: Detect plan tier (Tier 3 = single MD, Tier 4 = nested MD)"
+        - "STEP 2: After all implementation phases, auto-insert documentation phase"
+        - "STEP 3: Documentation phase MUST include:"
+        - "  a) Context & Requirements (what problem was solved)"
+        - "  b) Design Architecture (system design, component relationships)"
+        - "  c) Implementation Explanation (code walkthrough for learning)"
+        - "  d) Test Coverage (unit/integration test summary)"
+        - "  e) Research & Analysis (design decisions, trade-offs)"
+        - "STEP 4: Save documentation to cortex-brain/learning/{category}/{topic}/"
+        - "STEP 5: Enforce well-organized folder structure:"
+        - "  - cortex-brain/learning/orchestration/ (orchestrator designs)"
+        - "  - cortex-brain/learning/routing/ (router/analyzer patterns)"
+        - "  - cortex-brain/learning/intelligence/ (AI/ML components)"
+        - "  - cortex-brain/learning/analysis/ (AST/code analysis)"
+        - "  - cortex-brain/learning/testing/ (TDD patterns, test strategies)"
+      
+      evidence_template: |
+        Automatic documentation generation required!
+        
+        Plan: '{plan_name}'
+        Tier: {plan_tier}
+        Phases: {phase_count}
+        
+        ❌ WRONG: No documentation phase
+        - Implementation phases: 1-15 ✓
+        - Documentation phase: Missing ✗
+        - Result: Knowledge loss, no learning artifacts
+        
+        ✅ CORRECT: Auto-inserted documentation phase
+        - Implementation phases: 1-15 ✓
+        - Phase 16: Documentation Generation (auto-inserted)
+          * Context & Requirements
+          * Design Architecture
+          * Implementation Explanation (learning aid)
+          * Test Coverage Report
+          * Research & Analysis
+        - Output: cortex-brain/learning/orchestration/planning-system-3.0/
+        
+        **Documentation Structure:**
+        ```
+        cortex-brain/learning/{category}/{topic}/
+        ├── README.md                    # Overview & quickstart
+        ├── context.md                   # Problem statement, requirements
+        ├── architecture.md              # Design diagrams, components
+        ├── implementation-guide.md      # Code walkthrough (learning)
+        ├── test-strategy.md             # Test coverage, TDD approach
+        └── research-notes.md            # Design decisions, trade-offs
+        ```
+        
+        **Benefits:**
+        - Zero manual documentation overhead
+        - Knowledge captured automatically
+        - Learning library grows organically
+        - Future developers understand "why" not just "what"
+        - Onboarding accelerated with implementation guides
+      
+      rationale: |
+        AUTOMATIC_DOCUMENTATION_GENERATION: Knowledge Preservation
+        
+        Problem: Documentation neglect
+        - Implementation complete, docs forgotten
+        - Design decisions lost to time
+        - New developers struggle with "why?"
+        - Research/analysis not captured
+        - Learning opportunities missed
+        
+        Solution: Automatic final phase
+        - Planning System auto-inserts documentation phase
+        - Tier 3/4 plans always include docs
+        - Enforced folder structure in learning library
+        - Learning aids (implementation guides)
+        - Test coverage documented
+        
+        Benefits:
+        - 100% documentation coverage for complex work
+        - Knowledge library grows automatically
+        - Implementation guides accelerate learning
+        - Design rationale preserved
+        - Onboarding time reduced by 50%
+    
+    - rule_id: "PROGRESS_TRACKER_ENFORCEMENT"
+      name: "Progress Tracker Enforcement"
+      severity: "blocked"
+      description: "Main plan files MUST include visual progress tracker with phase_start, phase_end, actual_time, elapsed_time metrics. Overall counters required."
+      
+      detection:
+        combined_keywords:
+          plan_creation:
+            - "create plan"
+            - "generate master plan"
+          missing_tracker:
+            - "progress_tracker: false"
+            - "no tracker"
+        scope: ["intent", "plan_content"]
+        logic: "AND"
+      
+      alternatives:
+        - "STEP 1: Add visual progress tracker at top of main plan"
+        - "STEP 2: Include phase status table with start/end times"
+        - "STEP 3: Track actual_time (development time only)"
+        - "STEP 4: Track elapsed_time (calendar time)"
+        - "STEP 5: Calculate overall_progress percentage"
+        - "STEP 6: Update tracker after each phase completion"
+      
+      evidence_template: |
+        Progress tracker enforcement required!
+        
+        File: '{file_path}'
+        Plan: {plan_name}
+        
+        ❌ WRONG: Plan without progress tracker
+        - File: cortex-3.9-master.md
+        - Tracker: Missing
+        - Metrics: Not tracked
+        - Progress: Unknown
+        
+        ✅ CORRECT: Plan with enhanced progress tracker
+        - File: cortex-3.9-master.md
+        - Tracker: Visual ASCII art + phase table
+        - Metrics: actual_time, elapsed_time, senior_dev_estimate
+        - Progress: 12% (2/17 phases)
+        - Updates: After each phase completion
+        
+        **Required Metrics:**
+        - phase_start: Timestamp when phase begins
+        - phase_end: Timestamp when phase completes
+        - actual_time: Development time (hours)
+        - elapsed_time: Calendar time (hours)
+        - overall_progress: Percentage complete
+        - senior_dev_estimate: Industry baseline (40h/week × multipliers)
+        
+        **Tracker Format:**
+        
+        ---
+        **📊 Progress Overview**
+        | Metric | Value |
+        |--------|-------|
+        | Overall Progress | `███░░░` 12% (2/17) |
+        | Total Actual Time | 3.5 hours |
+        | Total Elapsed Time | 8.0 hours |
+        | Senior Dev Estimate | 52-70 hours |
+        ---
+      
+      rationale: |
+        PROGRESS_TRACKER_ENFORCEMENT: Transparency & Accountability
+        
+        Problem: Invisible progress
+        - No visibility into work done
+        - Can't estimate time remaining
+        - Difficult to report status
+        - No historical metrics
+        
+        Solution: Enhanced progress tracking
+        - Visual progress indicators
+        - Time tracking (actual vs elapsed)
+        - Industry-standard estimates
+        - Phase-by-phase updates
+        
+        Benefits:
+        - Clear progress visibility
+        - Accurate time estimation
+        - Easy status reporting
+        - Historical data for learning
+    
+    - rule_id: "SENIOR_DEVELOPER_ESTIMATE_ENFORCEMENT"
+      name: "Senior Developer Estimate Enforcement"
+      severity: "blocked"
+      description: "Time estimates MUST use senior developer baseline: 40h/week × testing(1.30) × docs(1.15) × rework(1.10) = 1.55x multiplier. Complexity buffer +33%."
+      
+      detection:
+        combined_keywords:
+          time_estimation:
+            - "estimate duration"
+            - "time required"
+            - "development time"
+          missing_methodology:
+            - "no multiplier"
+            - "arbitrary estimate"
+        scope: ["intent", "estimation_method"]
+        logic: "AND"
+      
+      alternatives:
+        - "STEP 1: Calculate base development time (pure coding)"
+        - "STEP 2: Apply testing overhead: base × 1.30"
+        - "STEP 3: Apply documentation overhead: × 1.15"
+        - "STEP 4: Apply rework/refinement overhead: × 1.10"
+        - "STEP 5: Combined multiplier: 1.55x (minimum estimate)"
+        - "STEP 6: Add complexity buffer +33% (maximum estimate)"
+        - "STEP 7: Display as range: min-max hours (weeks @ 40h/week)"
+      
+      evidence_template: |
+        Senior developer estimate enforcement required!
+        
+        Task: '{task_name}'
+        Base Time: {base_time} hours
+        
+        ❌ WRONG: Arbitrary estimate
+        - Estimate: "About 20 hours"
+        - Methodology: None
+        - Accuracy: Unreliable
+        
+        ✅ CORRECT: Industry-standard estimate
+        - Base Development: 27 hours (pure coding)
+        - Testing Overhead: ×1.30 (unit + integration tests)
+        - Documentation: ×1.15 (inline docs, READMEs)
+        - Rework/Refinement: ×1.10 (code review, refactoring)
+        - Combined Multiplier: 1.55x
+        - Minimum Estimate: 27 × 1.55 = 42 hours
+        - Complexity Buffer: +33%
+        - Maximum Estimate: 42 × 1.33 = 56 hours
+        - Range: 42-56 hours (1.0-1.4 weeks @ 40h/week)
+        
+        **Multiplier Breakdown:**
+        - Testing (1.30): TDD, unit tests, integration tests
+        - Documentation (1.15): Docstrings, READMEs, API docs
+        - Rework (1.10): Code review iterations, refactoring
+        - Total: 1.30 × 1.15 × 1.10 = 1.55x
+        
+        **Complexity Buffer:**
+        - LOW: +10% (well-defined, low risk)
+        - MEDIUM: +20% (some unknowns, moderate risk)
+        - HIGH: +33% (unknowns, high risk, research needed)
+      
+      rationale: |
+        SENIOR_DEVELOPER_ESTIMATE_ENFORCEMENT: Realistic Expectations
+        
+        Problem: Optimistic estimates
+        - "Coding time only" estimates
+        - No testing time included
+        - No documentation time
+        - No rework/refinement
+        - Result: 2-3x estimate overrun
+        
+        Solution: Industry-standard methodology
+        - Base development time
+        - Testing overhead (30%)
+        - Documentation overhead (15%)
+        - Rework overhead (10%)
+        - Complexity buffer (10-33%)
+        
+        Benefits:
+        - Realistic time estimates
+        - Stakeholder trust
+        - Better planning
+        - Historical accuracy validation
+    
+    - rule_id: "BIDIRECTIONAL_LINKING_ENFORCEMENT"
+      name: "Bidirectional Linking Enforcement"
+      severity: "blocked"
+      description: "Sub-plans MUST include breadcrumb navigation linking back to main plan. Main plan MUST link to all sub-plans. No orphaned plans allowed."
+      
+      detection:
+        combined_keywords:
+          plan_creation:
+            - "create sub-plan"
+            - "generate phase file"
+          missing_links:
+            - "no breadcrumb"
+            - "no main plan link"
+        scope: ["intent", "plan_content"]
+        logic: "AND"
+      
+      alternatives:
+        - "STEP 1: Add breadcrumb navigation at top of sub-plan"
+        - "STEP 2: Link format: [← Main Plan](../cortex-3.9-master.md)"
+        - "STEP 3: Update main plan phase table with sub-plan link"
+        - "STEP 4: Verify bidirectional linking"
+      
+      evidence_template: |
+        Bidirectional linking violation detected!
+        
+        File: '{file_path}'
+        Plan: {plan_name}
+        
+        ❌ WRONG: Orphaned sub-plan
+        - File: phase-03-planning.md
+        - Main Plan Link: Missing
+        - Navigation: Impossible to find main plan
+        
+        ✅ CORRECT: Bidirectional linking
+        - File: phase-03-planning.md
+        - Top of file: [← Main Plan](../cortex-3.9-master.md)
+        - Main plan table: Links to phase-03-planning.md
+        - Navigation: Easy both directions
+        
+        **Required Links:**
+        
+        In Sub-Plan (phase-03-planning.md):
+        ```markdown
+        [← Main Plan](../cortex-3.9-master.md)
+        
+        # Phase 03: Planning Orchestrator 3.0
+        ```
+        
+        In Main Plan (cortex-3.9-master.md):
+        ```markdown
+        | 03 | Planning Orchestrator 3.0 | [phase-03-planning.md](phase-03-planning.md) |
+        ```
+        
+        **Benefits:**
+        - Easy navigation between plans
+        - No orphaned documents
+        - Clear parent-child relationships
+        - Bidirectional traceability
+      
+      rationale: |
+        BIDIRECTIONAL_LINKING_ENFORCEMENT: Navigation & Discoverability
+        
+        Problem: Orphaned plans
+        - Sub-plans exist but not discoverable
+        - No way to return to main plan
+        - Broken navigation
+        - Difficult to understand context
+        
+        Solution: Bidirectional linking
+        - Breadcrumb navigation in sub-plans
+        - Link table in main plan
+        - Clear parent-child relationships
+        - Easy navigation both directions
+        
+        Benefits:
+        - No orphaned plans
+        - Easy discoverability
+        - Clear relationships
+        - Intuitive navigation
+    
+    # =========================================================================
+    # INTELLIGENT TDD & CLEAN CODE RULES (Added 2025-12-14)
+    # Based on authoritative sources: Martin Fowler, Kent Beck, Google, Clean Architecture
+    # =========================================================================
+    
+    - rule_id: "INTELLIGENT_TDD_VALUE_SCORING"
+      name: "Intelligent TDD Value Scoring"
+      severity: "info"
+      description: "TDD value scoring utility determines when tests add value vs overhead. CRITICAL/HIGH code MUST have tests. LOW/TRIVIAL code (getters/setters/DTOs) SHOULD NOT be tested."
+      
+      detection:
+        combined_keywords:
+          test_generation:
+            - "generate tests"
+            - "write unit tests"
+            - "create test file"
+          code_patterns:
+            - "get|set method"
+            - "DTO|POCO"
+            - "simple property"
+            - "configuration class"
+        scope: ["intent", "code_content"]
+        logic: "AND"
+      
+      scoring_dimensions:
+        criticality: "0-30 points (security, financial, compliance)"
+        complexity: "0-20 points (cyclomatic complexity, branching)"
+        api_surface: "0-15 points (public methods, external interfaces)"
+        business_logic: "0-15 points (calculations, decision trees)"
+        mutation_potential: "0-10 points (non-trivial logic)"
+        regression_risk: "0-10 points (historical bugs, change frequency)"
+      
+      value_tiers:
+        CRITICAL: "90-100 points → MUST TEST (security/financial/compliance)"
+        HIGH: "70-89 points → SHOULD TEST (public APIs, business logic)"
+        MEDIUM: "40-69 points → CONSIDER TESTING (private methods with logic)"
+        LOW: "20-39 points → SKIP (simple getters/setters)"
+        TRIVIAL: "0-19 points → DO NOT TEST (constants, DTOs, config classes)"
+      
+      alternatives:
+        - "STEP 1: Run TestValueScorer on code file"
+        - "STEP 2: If score ≥ 70 → Generate comprehensive test suite"
+        - "STEP 3: If score 40-69 → Generate targeted tests for public API"
+        - "STEP 4: If score < 40 → Skip tests (document rationale)"
+        - "STEP 5: Log decision with authoritative source citation"
+      
+      authoritative_sources:
+        - source: "Kent Beck - stackoverflow.com/questions/153234"
+          quote: "You don't gain anything from testing simple getters or setters or other trivial implementations."
+          application: "Skip tests for TRIVIAL code (score < 20)"
+        
+        - source: "Martin Fowler - Test Pyramid (2012)"
+          quote: "Write lots of small and fast unit tests. Write some more coarse-grained tests and very few high-level tests."
+          application: "Focus testing effort on unit level for HIGH value code"
+        
+        - source: "Martin Fowler - Practical Test Pyramid"
+          quote: "Test the public interface. More importantly, don't test trivial code."
+          application: "API surface scoring (public methods = higher value)"
+        
+        - source: "Google Testing Blog - Test Sizes"
+          quote: "Small tests are fast, reliable, and isolate failures."
+          application: "CRITICAL code needs fast unit tests for security validation"
+        
+        - source: "Rule of Three (Martin Fowler/refactoring.guru)"
+          quote: "When you're doing something for the first time, just get it done. Second time, cringe. Third time, start refactoring."
+          application: "Don't test until pattern proven useful (avoid premature testing)"
+      
+      evidence_template: |
+        Test value scoring decision:
+        
+        File: {file_path}
+        Score: {total_score}/100 ({value_tier})
+        
+        Dimension Breakdown:
+        - Criticality: {criticality}/30
+        - Complexity: {complexity}/20
+        - API Surface: {api_surface}/15
+        - Business Logic: {business_logic}/15
+        - Mutation Potential: {mutation_potential}/10
+        - Regression Risk: {regression_risk}/10
+        
+        Decision: {recommendation}
+        
+        Rationale:
+        {rationale_list}
+        
+        Authoritative Source:
+        {cited_source}
+      
+      rationale: |
+        INTELLIGENT_TDD_VALUE_SCORING: Maximum Coverage, Zero Waste
+        
+        Problem: Wasted effort on trivial tests
+        - Tests for simple getters/setters provide no value
+        - DTOs/POCOs have no logic to test
+        - Configuration classes are just data carriers
+        - Test maintenance overhead for trivial code
+        
+        Solution: Value-based test scoring
+        - 6-dimensional scoring system
+        - Authoritative source citations
+        - Tier-based recommendations
+        - Skip low-value tests, focus on critical code
+        
+        Benefits:
+        - 100% coverage of CRITICAL code (security/financial)
+        - Zero wasted effort on trivial code
+        - Faster test suite (fewer useless tests)
+        - Team velocity increased
+        - Kent Beck-approved approach
+    
+    - rule_id: "TEST_PYRAMID_ADHERENCE"
+      name: "Test Pyramid Adherence"
+      severity: "warning"
+      description: "Follow Martin Fowler's Test Pyramid: Many unit tests, some integration tests, few E2E tests. Avoid test ice-cream cone (too many slow E2E tests)."
+      
+      detection:
+        combined_keywords:
+          pyramid_violation:
+            - "E2E test count > integration test count"
+            - "UI test heavy"
+            - "slow test suite"
+        scope: ["test_suite_analysis"]
+      
+      pyramid_ratios:
+        unit_tests: "70% (fast, isolated, many)"
+        integration_tests: "20% (moderate speed, focused integration points)"
+        e2e_tests: "10% (slow, full stack, critical user journeys only)"
+      
+      alternatives:
+        - "Rewrite E2E test as integration test if possible"
+        - "Rewrite integration test as unit test if possible"
+        - "Reserve E2E tests for critical user journeys only"
+        - "Use subcutaneous tests (just below UI) instead of full E2E"
+      
+      authoritative_sources:
+        - source: "Mike Cohn - Succeeding with Agile (2009)"
+          quote: "The Test Pyramid consists of three layers: Unit Tests (bottom), Service Tests (middle), User Interface Tests (top)."
+          application: "Foundation of modern testing strategy"
+        
+        - source: "Martin Fowler - Test Pyramid (2012)"
+          quote: "You should have many more low-level UnitTests than high level BroadStackTests running through a GUI."
+          application: "Ratio guidance for test distribution"
+        
+        - source: "Google Testing Blog - Just Say No to More End-to-End Tests (2015)"
+          quote: "End-to-end tests are brittle, expensive to write, and time consuming to run."
+          application: "Minimize E2E test count, push tests down pyramid"
+      
+      rationale: |
+        TEST_PYRAMID_ADHERENCE: Fast Feedback, High Confidence
+        
+        Problem: Test ice-cream cone
+        - Too many slow E2E tests
+        - Long CI/CD pipeline times
+        - Flaky tests (timing issues, browser quirks)
+        - Low developer confidence
+        
+        Solution: Follow pyramid shape
+        - Many fast unit tests (70%)
+        - Some integration tests (20%)
+        - Few E2E tests (10%)
+        - Push tests down the pyramid
+        
+        Benefits:
+        - Fast feedback loop (<2 min for unit tests)
+        - Reliable tests (fewer flakes)
+        - Easy debugging (isolated failures)
+        - High developer confidence
+    
+    - rule_id: "SOLID_PRINCIPLES_ENFORCEMENT"
+      name: "SOLID Principles Enforcement"
+      severity: "warning"
+      description: "Enforce SOLID principles from Clean Architecture: Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion."
+      
+      detection:
+        combined_keywords:
+          srp_violation:
+            - "god class"
+            - "too many responsibilities"
+            - "class doing too much"
+          dip_violation:
+            - "new keyword in constructor"
+            - "concrete dependency"
+            - "tight coupling"
+        scope: ["code_structure"]
+      
+      principles:
+        - principle: "Single Responsibility Principle (SRP)"
+          description: "A class should have only one reason to change"
+          violation_example: "UserService handling authentication, validation, database access, email sending"
+          fix: "Split into: AuthService, UserValidator, UserRepository, EmailService"
+        
+        - principle: "Open/Closed Principle (OCP)"
+          description: "Open for extension, closed for modification"
+          violation_example: "Adding new payment type requires modifying PaymentProcessor class"
+          fix: "Use strategy pattern - PaymentProcessor accepts IPaymentStrategy implementations"
+        
+        - principle: "Liskov Substitution Principle (LSP)"
+          description: "Subtypes must be substitutable for their base types"
+          violation_example: "Square inheriting from Rectangle but breaking area calculation assumptions"
+          fix: "Proper inheritance hierarchy or prefer composition over inheritance"
+        
+        - principle: "Interface Segregation Principle (ISP)"
+          description: "Clients shouldn't depend on interfaces they don't use"
+          violation_example: "IRepository<T> with 20 methods but most clients only use 2"
+          fix: "Split into smaller interfaces: IReadRepository, IWriteRepository, IQueryRepository"
+        
+        - principle: "Dependency Inversion Principle (DIP)"
+          description: "Depend on abstractions, not concretions"
+          violation_example: "OrderService constructor: new SqlOrderRepository() (concrete)"
+          fix: "OrderService constructor: IOrderRepository (abstraction)"
+      
+      authoritative_sources:
+        - source: "Robert C. Martin - Clean Architecture (2017)"
+          quote: "The SOLID principles tell us how to arrange our functions and data structures into classes, and how those classes should be interconnected."
+          application: "Foundation for maintainable architecture"
+        
+        - source: "Martin Fowler - Refactoring"
+          quote: "Any fool can write code that a computer can understand. Good programmers write code that humans can understand."
+          application: "SOLID principles improve human readability"
+      
+      rationale: |
+        SOLID_PRINCIPLES_ENFORCEMENT: Maintainable Architecture
+        
+        Problem: Spaghetti code
+        - God classes doing everything
+        - Tight coupling (hard to test, hard to change)
+        - Violation of separation of concerns
+        
+        Solution: Apply SOLID principles
+        - SRP: One responsibility per class
+        - OCP: Extend without modifying
+        - LSP: Proper inheritance
+        - ISP: Focused interfaces
+        - DIP: Depend on abstractions
+        
+        Benefits:
+        - Testable code (dependency injection)
+        - Maintainable (single responsibility)
+        - Extensible (open/closed)
+        - Understandable (focused classes)
+    
+    - rule_id: "REFACTORING_RULE_OF_THREE"
+      name: "Refactoring Rule of Three"
+      severity: "info"
+      description: "First time: just do it. Second time: cringe but duplicate. Third time: refactor and remove duplication."
+      
+      detection:
+        combined_keywords:
+          duplication:
+            - "duplicate code"
+            - "copy paste"
+            - "similar logic"
+        scope: ["code_duplication_analysis"]
+      
+      rule_stages:
+        - stage: 1
+          action: "Just get it done"
+          description: "First implementation, learn the problem"
+        
+        - stage: 2
+          action: "Cringe at duplication but proceed"
+          description: "Second implementation, pattern not yet clear"
+        
+        - stage: 3
+          action: "Refactor and remove duplication"
+          description: "Third implementation, pattern proven - extract common code"
+      
+      alternatives:
+        - "STEP 1: Identify third occurrence of similar code"
+        - "STEP 2: Extract common logic to shared function/class"
+        - "STEP 3: Replace all three occurrences with extracted abstraction"
+        - "STEP 4: Write tests for extracted code"
+      
+      authoritative_sources:
+        - source: "Martin Fowler / refactoring.guru"
+          quote: "When you're doing something for the first time, just get it done. When you're doing something similar for the second time, cringe at having to repeat but do the same thing anyway. When you're doing something for the third time, start refactoring."
+          application: "Avoid premature abstraction, wait for pattern to emerge"
+        
+        - source: "Sandi Metz - Ruby Conf 2014"
+          quote: "Duplication is far cheaper than the wrong abstraction."
+          application: "Don't refactor until pattern is proven (Rule of Three)"
+      
+      rationale: |
+        REFACTORING_RULE_OF_THREE: Avoid Premature Abstraction
+        
+        Problem: Wrong abstractions
+        - Refactoring too early creates wrong abstractions
+        - Changes require modifying abstraction + all callers
+        - Harder to understand than simple duplication
+        
+        Solution: Rule of Three
+        - First time: Learn the problem
+        - Second time: Confirm pattern similarity
+        - Third time: Pattern proven - refactor
+        
+        Benefits:
+        - Right abstractions (pattern-proven)
+        - Easier to understand
+        - Faster initial development
+        - Lower maintenance cost
+
+# Layer 12: Planning System Governance
+- layer_id: "planning_system_4_governance"
+  name: "Planning System Governance"
+  description: "Governance rules for Planning System - Temp plan approval, plan promotion integrity, task injection, context continuity"
+  priority: 12
+  
+  rules:
+    - rule_id: TEMP_PLAN_APPROVAL_ENFORCEMENT
+      name: "Temp Plan Approval Gate"
+      severity: blocked
+      description: "Prevents execution of unapproved or unready temporary plans"
+      detection:
+        keywords:
+          - "execute without approval"
+          - "skip approval"
+          - "bypass DoR"
+          - "implement before plan approved"
+        scope:
+          - intent
+          - implementation
+      validation:
+        - "Plan must be in active/ folder (not temp-plans/)"
+        - "Plan status must be 'approved'"
+        - "DoR score must be ≥90%"
+        - "User approval timestamp must exist"
+      alternatives:
+        - "Complete DoR validation (achieve ≥90% confidence)"
+        - "Request user approval explicitly"
+        - "Wait for plan promotion to active/"
+        - "Use iterative refinement to resolve ambiguities"
+      evidence_template: |
+        Plan Status: {status}
+        DoR Score: {dor_score}%
+        User Approval: {approval_status}
+        Location: {plan_folder}
+      rationale: |
+        TEMP_PLAN_APPROVAL_ENFORCEMENT: No Execution Without Approval
+        
+        Problem: Premature execution
+        - Implementation starts before requirements clear
+        - User expectations not validated
+        - High risk of rework
+        
+        Solution: Approval gate
+        - Temp plans remain in temp-plans/ until approved
+        - DoR validation ensures clarity (≥90% confidence)
+        - User must explicitly approve before promotion
+        - Only active/ plans can be executed
+        
+        Benefits:
+        - Mutual agreement achieved (CORTEX + user)
+        - Clear requirements before implementation
+        - Reduced rework and scope creep
+        - Complete audit trail
+
+    - rule_id: PLAN_PROMOTION_INTEGRITY
+      name: "Plan Promotion Integrity"
+      severity: blocked
+      description: "Ensures atomic transitions from temp-plans/ to active/"
+      detection:
+        keywords:
+          - "partial promotion"
+          - "incomplete transition"
+          - "missing context files"
+          - "orphaned plans"
+        scope:
+          - file_operations
+          - folder_structure
+      validation:
+        - "All plan files moved atomically"
+        - "Context graphs preserved (ast-analysis.json, lens-dependencies.json)"
+        - "Execution YAML files included"
+        - "Manifest updated before promotion completes"
+        - "Rollback possible if any step fails"
+      alternatives:
+        - "Use PlanLifecycleManager.promote_to_active()"
+        - "Verify all artifacts present before move"
+        - "Use transaction-like semantics (all or nothing)"
+      evidence_template: |
+      Source: {source_folder}
+      Target: {target_folder}
+      Files Moved: {file_count}
+      Context Preserved: {context_status}
+      Manifest Updated: {manifest_status}
+    rationale: |
+      PLAN_PROMOTION_INTEGRITY: Atomic Transitions
+      
+      Problem: Incomplete promotions
+      - Partial file moves leave orphaned artifacts
+      - Missing context graphs break execution
+      - Manifest out of sync with filesystem
+      
+      Solution: Atomic promotion
+      - All files moved together (or none)
+      - Context preserved during transition
+      - Manifest updated atomically
+      - Rollback on any failure
+      
+      Benefits:
+      - No orphaned plans
+      - Consistent state always
+      - Traceable transitions
+      - Recovery from failures
+
+  - rule_id: SUB_PLAN_TASK_INJECTION_ENFORCEMENT
+    name: "Standard Task Auto-Injection"
+    severity: warning
+    description: "Validates standard tasks present in all worker plans"
+    detection:
+      keywords:
+        - "worker plan without git checkpoint"
+        - "missing TDD validation"
+        - "no DoD validation"
+        - "skip standard tasks"
+      scope:
+        - worker_plans
+        - execution_yaml
+    validation:
+      - "Git checkpoint at phase start"
+      - "Git checkpoint at phase end"
+      - "AST/Lens analysis task present"
+      - "Documentation update task present"
+      - "TDD validation task present (RED→GREEN→REFACTOR)"
+      - "DoD validation checklist present"
+    alternatives:
+      - "Use UnifiedPlanGenerator with auto-injection enabled"
+      - "Apply SUB-PLAN-TEMPLATE.md with standard tasks"
+      - "Add missing tasks manually if template not used"
+    evidence_template: |
+      Worker Plan: {worker_plan_id}
+      Git Checkpoints: {git_checkpoint_status}
+      AST/Lens: {ast_lens_status}
+      Documentation: {docs_status}
+      TDD Validation: {tdd_status}
+      DoD Validation: {dod_status}
+    rationale: |
+      SUB_PLAN_TASK_INJECTION: Consistency Across Plans
+      
+      Problem: Inconsistent worker plans
+      - Some plans have git checkpoints, others don't
+      - TDD validation skipped in some phases
+      - Documentation updates forgotten
+      
+      Solution: Standard task injection
+      - Every worker plan gets identical boilerplate
+      - Git checkpoints ensure rollback capability
+      - TDD validation enforces test discipline
+      - Documentation keeps everything synchronized
+      
+      Benefits:
+      - Predictable plan structure
+      - No forgotten maintenance tasks
+      - Consistent quality across phases
+      - Easier automation
+
+  - rule_id: CONTEXT_CONTINUITY_ENFORCEMENT
+    name: "Automatic Context Continuity"
+    severity: info
+    description: "Standard behavior - users never reference temp plan files manually"
+    detection:
+      keywords:
+        - "update temp-plans/"
+        - "modify plan in temp-plans/"
+        - "reference session file"
+        - "load context from file"
+      scope:
+        - user_guidance
+        - response_templates
+    validation:
+      - "SessionContextManager tracks active sessions"
+      - "User requests auto-associated with active plan"
+      - "No manual file paths in user-facing responses"
+      - "CORTEX loads context automatically"
+    alternatives:
+      - "Use SessionContextManager.get_active_session()"
+      - "Auto-load context in PlanningOrchestrator"
+      - "Never ask user to specify temp plan path"
+    evidence_template: |
+      Active Session: {session_id}
+      Plan ID: {plan_id}
+      Auto-Loaded: {auto_load_status}
+      Manual Reference Detected: {manual_ref}
+    rationale: |
+      CONTEXT_CONTINUITY: Automatic Session Tracking
+      
+      Problem: Manual context management
+      - Users asked to reference temp plan files
+      - Error-prone (wrong paths, typos)
+      - Poor user experience
+      
+      Solution: Automatic tracking
+      - SessionContextManager maintains active sessions
+      - All user requests auto-associated with active plan
+      - CORTEX loads context automatically
+      - Zero manual file references
+      
+      Benefits:
+      - Seamless user experience
+      - No context mistakes
+      - Professional interaction model
+      - Standard behavior for all planning
+
+  - rule_id: PLAN_BASED_WORKFLOW_ENFORCEMENT
+    name: "Plan-Based Workflow Mandate"
+    severity: blocked
+    description: "ALL code changes require approved plan (no implementation shortcuts)"
+    detection:
+      keywords:
+        - "let me create that file"
+        - "I can write that function"
+        - "quick fix"
+        - "small change without plan"
+        - "implement now, plan later"
+      scope:
+        - code_generation
+        - file_operations
+        - next_steps
+    validation:
+      - "plan_id parameter present in all code operations"
+      - "Plan exists in active/ folder"
+      - "Plan status is 'approved' or 'in_progress'"
+      - "No code changes without plan_id"
+    alternatives:
+      - "Create temp plan first (even for small changes)"
+      - "Get user approval before implementation"
+      - "Follow: Review → DoR Check → Approve → Execute"
+    evidence_template: |
+      Operation: {operation_type}
+      Plan ID: {plan_id}
+      Plan Status: {plan_status}
+      Code Change Attempted: {code_change_desc}
+    rationale: |
+      PLAN_BASED_WORKFLOW: No Implementation Shortcuts
+      
+      Problem: Ad-hoc implementations
+      - "Quick fixes" bypass planning
+      - No documentation of changes
+      - Scope creep from small changes
+      
+      Solution: Mandatory planning
+      - ALL changes require approved plan
+      - Even small changes go through planning
+      - Implementation only after approval
+      - Complete audit trail
+      
+      Benefits:
+      - Documented decisions
+      - Predictable workflow
+      - No surprise changes
+      - Professional discipline
+
+  - rule_id: NO_IMPLEMENTATION_SHORTCUTS_ENFORCEMENT
+    name: "No Implementation Shortcuts in Next Steps"
+    severity: warning
+    description: "Next Steps must show planning workflow, not implementation shortcuts"
+    detection:
+      keywords:
+        - "I'll create the file"
+        - "I'll implement"
+        - "Let's write the code"
+        - "I can help you write"
+      scope:
+        - next_steps
+        - response_content
+    validation:
+      - "Next Steps shows: Review → DoR Check → Approve → Execute"
+      - "No direct implementation suggestions"
+      - "Plan approval required before execution mentioned"
+      - "Critical warning about planning phase present"
+    alternatives:
+      - "Show planning workflow in Next Steps"
+      - "Explain approval requirement"
+      - "Defer implementation to post-approval"
+    evidence_template: |
+      Next Steps Content: {next_steps_excerpt}
+      Contains Shortcut: {shortcut_detected}
+      Correct Workflow: {workflow_shown}
+    rationale: |
+      NO_IMPLEMENTATION_SHORTCUTS: Planning Phase Discipline
+      
+      Problem: Implementation suggestions during planning
+      - Users confused about when implementation starts
+      - Planning phase bypassed inadvertently
+      - Approval gates circumvented
+      
+      Solution: Clear Next Steps template
+      - Next Steps only shows planning actions
+      - Critical warning about planning phase
+      - Implementation deferred to post-approval
+      
+      Benefits:
+      - Clear separation of planning vs. execution
+      - User expectations managed
+      - Approval gates respected
+      - Professional workflow
+
+  - rule_id: AST_CONTEXT_INTEGRATION_ENFORCEMENT
+    name: "AST Context User Visibility"
+    severity: warning
+    description: "Plans must include narrative-enhanced AST/Lens context"
+    detection:
+      keywords:
+        - "plan without AST context"
+        - "missing codebase analysis"
+        - "no context graphs"
+        - "skip AST integration"
+      scope:
+        - master_plans
+        - worker_plans
+        - temp_plans
+    validation:
+      - "AST analysis section present in plan"
+      - "Files affected list with reasons"
+      - "Dependency impact narrative"
+      - "Integration points identified"
+      - "User validation checklist present"
+      - "Context graphs referenced (JSON files)"
+    alternatives:
+      - "Use ASTContextEnhancer for narrative generation"
+      - "Integrate NarrativeGenerator for human-friendly summaries"
+      - "Store full JSON in context/, show summary in plan MD"
+    evidence_template: |
+      Plan: {plan_id}
+      AST Section: {ast_section_present}
+      Files Count: {files_count}
+      Narrative Quality: {narrative_quality_score}
+      User Validation: {validation_checklist_present}
+    rationale: |
+      AST_CONTEXT_INTEGRATION: User Visibility & Validation
+      
+      Problem: Black-box analysis
+      - Users don't see what CORTEX analyzed
+      - Can't validate if CORTEX understood correctly
+      - Errors discovered too late
+      
+      Solution: Narrative-enhanced AST context
+      - Plain-language summary of analysis
+      - Files affected with reasons why
+      - Dependency impact explained
+      - User validation checklist
+      
+      Benefits:
+      - Early course correction
+      - Shared understanding
+      - User trust in analysis
+      - Professional transparency

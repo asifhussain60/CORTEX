@@ -83,7 +83,7 @@ class RegeneratePromptsWrapper(BaseCLIWrapper):
                         {
                             'output': '.github/copilot-instructions.md',
                             'dependencies': [
-                                'cortex-brain/response-templates.yaml',
+                                'cortex-brain/response-templates-v4.yaml',
                                 'cortex-brain/brain-protection-rules.yaml',
                                 'cortex-operations.yaml',
                                 'scripts/regenerate_cortex_prompts.py',
@@ -96,12 +96,12 @@ class RegeneratePromptsWrapper(BaseCLIWrapper):
                         {
                             'output': '.github/prompts/CORTEX.prompt.md',
                             'dependencies': [
-                                'cortex-brain/response-templates.yaml',
+                                'cortex-brain/response-templates-v4.yaml',
                                 'cortex-brain/brain-protection-rules.yaml',
                                 'cortex-operations.yaml',
                                 'scripts/regenerate_cortex_prompts.py',
-                                'cortex-brain/orchestrator-manifests/planning-system-2.0-manifest.yaml',
-                                'cortex-brain/orchestrator-manifests/ado-planning-manifest.yaml'
+                                'cortex-brain/manifests/orchestrators/planning-system-4.0-manifest.yaml',
+                                'cortex-brain/manifests/orchestrators/ado-planning-manifest.yaml'
                             ]
                         }
                     ]

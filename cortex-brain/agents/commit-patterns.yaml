@@ -43,7 +43,7 @@ categories:
     priority: 5
     
   build_artifacts:
-    pattern: "^(bin|obj|node_modules|\.skip)$"
+    pattern: "^(bin|obj|node_modules|\\.skip)$"
     commit_type: "SKIP"
     action: "add to .gitignore"
     priority: 99
