@@ -4951,14 +4951,16 @@ validation:
         - senior_dev_estimate: Industry baseline (40h/week × multipliers)
         
         **Tracker Format:**
-        ```
-        ┌─────────────────────────────────────────┐
-        │ Overall Progress: [███░░░] 12% (2/17)   │
-        │ Total Actual Time: 3.5 hours            │
-        │ Total Elapsed Time: 8.0 hours           │
-        │ Senior Dev Estimate: 52-70 hours        │
-        └─────────────────────────────────────────┘
-        ```
+        
+        ---
+        **📊 Progress Overview**
+        | Metric | Value |
+        |--------|-------|
+        | Overall Progress | `███░░░` 12% (2/17) |
+        | Total Actual Time | 3.5 hours |
+        | Total Elapsed Time | 8.0 hours |
+        | Senior Dev Estimate | 52-70 hours |
+        ---
       
       rationale: |
         PROGRESS_TRACKER_ENFORCEMENT: Transparency & Accountability

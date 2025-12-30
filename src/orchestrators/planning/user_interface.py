@@ -29,6 +29,36 @@ from typing import Any, Dict, List, Optional, Callable
 logger = logging.getLogger(__name__)
 
 
+def _safe_print(text: str) -> None:
+    """
+    Print text safely handling Unicode encoding issues on Windows.
+    
+    Falls back to ASCII-compatible characters if encoding fails.
+    """
+    try:
+        print(text)
+    except UnicodeEncodeError:
+        # Replace common Unicode symbols with ASCII equivalents
+        ascii_text = text
+        replacements = {
+            '✅': '[OK]',
+            '❌': '[X]',
+            '⚠️': '[!]',
+            '❓': '[?]',
+            '📋': '[#]',
+            '🔍': '[*]',
+            '📁': '[D]',
+            '🎉': '[!]',
+        }
+        for unicode_char, ascii_char in replacements.items():
+            ascii_text = ascii_text.replace(unicode_char, ascii_char)
+        try:
+            print(ascii_text)
+        except UnicodeEncodeError:
+            # Ultimate fallback: encode with errors='replace'
+            print(ascii_text.encode('ascii', 'replace').decode('ascii'))
+
+
 class PromptType(Enum):
     """Types of user prompts."""
     TEXT = "text"           # Free-form text input
@@ -272,9 +302,9 @@ class PlanningUI:
             progress_line += f": {message}"
         
         if self.colorize:
-            print(f"\033[36m{progress_line}\033[0m")
+            _safe_print(f"\033[36m{progress_line}\033[0m")
         else:
-            print(progress_line)
+            _safe_print(progress_line)
     
     def display_section(self, title: str, content: Dict[str, Any]):
         """
@@ -311,30 +341,30 @@ class PlanningUI:
     def _print_success(self, text: str):
         """Print success message."""
         if self.colorize:
-            print(f"\033[32m✅ {text}\033[0m")
+            _safe_print(f"\033[32m✅ {text}\033[0m")
         else:
-            print(f"✅ {text}")
+            _safe_print(f"✅ {text}")
     
     def _print_error(self, text: str):
         """Print error message."""
         if self.colorize:
-            print(f"\033[31m❌ {text}\033[0m")
+            _safe_print(f"\033[31m❌ {text}\033[0m")
         else:
-            print(f"❌ {text}")
+            _safe_print(f"❌ {text}")
     
     def _print_warning(self, text: str):
         """Print warning message."""
         if self.colorize:
-            print(f"\033[33m⚠️  {text}\033[0m")
+            _safe_print(f"\033[33m⚠️  {text}\033[0m")
         else:
-            print(f"⚠️  {text}")
+            _safe_print(f"⚠️  {text}")
     
     def _print_info(self, text: str):
         """Print info message."""
         if self.colorize:
-            print(f"\033[36mℹ️  {text}\033[0m")
+            _safe_print(f"\033[36mℹ️  {text}\033[0m")
         else:
-            print(f"ℹ️  {text}")
+            _safe_print(f"ℹ️  {text}")
 
 
 # Convenience function for quick UI access

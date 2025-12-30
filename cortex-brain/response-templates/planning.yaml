@@ -162,13 +162,17 @@ templates:
       Plan saved to Tier 1 memory
       Session ID: {{session_id}}
 
-      **📊 Progress Overview:**
-      ```
-      Overall Status: [████████████████████] 100%
-      ✅ Completed:   [████████████████████] 100%
-      ⏳ In Progress: [░░░░░░░░░░░░░░░░░░░░]   0%
-      ⏸️  Not Started: [░░░░░░░░░░░░░░░░░░░░]   0%
-      ```
+      ---
+      ### 📊 Progress Overview
+      
+      | Category | Progress | Status |
+      |----------|----------|--------|
+      | **Overall** | `████████████████████` | **100%** |
+      | ✅ Completed | `████████████████████` | 100% |
+      | ⏳ In Progress | `░░░░░░░░░░░░░░░░░░░░` | 0% |
+      | ⏸️ Not Started | `░░░░░░░░░░░░░░░░░░░░` | 0% |
+      
+      ---
 
       Ready to begin Phase 1!
     context_needed: true
@@ -184,13 +188,17 @@ templates:
 
       ✅ **Phase {{phase_num}}: {{phase_name}}** - COMPLETE
 
-      **📊 Progress Overview:**
-      ```
-      Overall Status: [{{progress_bar}}] {{progress_percentage}}%
-      ✅ Completed:   [{{completed_bar}}] {{completed_percentage}}%
-      ⏳ In Progress: [{{in_progress_bar}}] {{in_progress_percentage}}%
-      ⏸️  Not Started: [{{not_started_bar}}] {{not_started_percentage}}%
-      ```
+      ---
+      ### 📊 Progress Overview
+      
+      | Category | Progress | Status |
+      |----------|----------|--------|
+      | **Overall** | `{{progress_bar}}` | **{{progress_percentage}}%** |
+      | ✅ Completed | `{{completed_bar}}` | {{completed_percentage}}% |
+      | ⏳ In Progress | `{{in_progress_bar}}` | {{in_progress_percentage}}% |
+      | ⏸️ Not Started | `{{not_started_bar}}` | {{not_started_percentage}}% |
+      
+      ---
 
       **Phase Summary:**
       - Tasks Completed: {{tasks_completed}}/{{tasks_total}}

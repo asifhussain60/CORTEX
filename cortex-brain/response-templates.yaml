@@ -379,7 +379,7 @@ templates:
     operation_name: Status Check
     understanding_content: "[State understanding]"
     challenge_content: "[State specific challenge or \"No Challenge\"]"
-    response_content: "[Natural language explanation]\n   \n   **Progress Overview:**\n   ```\n   Overall Status: [████████░░] 85%\n   ✅ Completed: [██████████] 100%\n   ⏳ In Progress: [██████░░░░] 60%\n   ⏸️  Not Started: [░░░░░░░░░░] 0%\n   ```"
+    response_content: "[Natural language explanation]\n   \n   ---\n   ### 📊 Progress Overview\n   \n   | Category | Progress | Status |\n   |----------|----------|--------|\n   | **Overall** | `████████░░` | **85%** |\n   | ✅ Completed | `██████████` | 100% |\n   | ⏳ In Progress | `██████░░░░` | 60% |\n   | ⏸️ Not Started | `░░░░░░░░░░` | 0% |\n   \n   ---"
     request_echo_content: "[Echo refined request]"
     next_steps_content: "[Context-appropriate format]"
   success_general:
@@ -983,7 +983,7 @@ templates:
     operation_name: Operation Progress
     understanding_content: "[State understanding]"
     challenge_content: "[State specific challenge or \"No Challenge\"]"
-    response_content: "[Natural language explanation]\n   \n   **Operation Progress:**\n   ```\n   Phase 1: [██████████] 100% ✅ Complete\n   Phase 2: [████████░░] 75% ⏳ In Progress\n   Phase 3: [░░░░░░░░░░] 0% ⏸️  Not Started\n   ```"
+    response_content: "[Natural language explanation]\n   \n   ---\n   ### 📊 Operation Progress\n   \n   | Phase | Progress | Status |\n   |-------|----------|--------|\n   | Phase 1 | `██████████` | 100% ✅ Complete |\n   | Phase 2 | `███████░░░` | 75% ⏳ In Progress |\n   | Phase 3 | `░░░░░░░░░░` | 0% ⏸️ Not Started |\n   \n   ---"
     request_echo_content: "[Echo refined request]"
     next_steps_content: "[Context-appropriate format]"
   operation_complete:
@@ -995,7 +995,7 @@ templates:
     operation_name: Operation Complete
     understanding_content: "[State understanding]"
     challenge_content: "[State specific challenge or \"No Challenge\"]"
-    response_content: "[Natural language explanation]\n   \n   **Completion Metrics:**\n   ```\n   Overall: [██████████] 100% ✅\n   Quality: [█████████░] 95%\n   Coverage: [████████░░] 85%\n   Performance: [█████████░] 90%\n   ```"
+    response_content: "[Natural language explanation]\n   \n   ---\n   ### 📊 Completion Metrics\n   \n   | Metric | Progress | Status |\n   |--------|----------|--------|\n   | **Overall** | `██████████` | **100%** ✅ |\n   | Quality | `█████████░` | 95% |\n   | Coverage | `████████░░` | 85% |\n   | Performance | `█████████░` | 90% |\n   \n   ---"
     request_echo_content: "[Echo refined request]"
     next_steps_content: "[Context-appropriate format]"
   question_documentation_issues:

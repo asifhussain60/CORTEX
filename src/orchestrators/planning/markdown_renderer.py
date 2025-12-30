@@ -328,18 +328,20 @@ class MarkdownRenderer:
             empty = width - filled
             return f"{'█' * filled}{'░' * empty}"
         
+        # CORTEX 4.0.2: Use markdown table format for reliable rendering
+        # Box-drawing characters (╔║╚═) render incorrectly in chat interfaces
         md = []
-        md.append("```")
-        md.append("╔══════════════════════════════════════════════════════════════════════════════╗")
-        md.append("║                         📊 PROGRESS OVERVIEW                                 ║")
-        md.append("╠══════════════════════════════════════════════════════════════════════════════╣")
-        md.append(f"║  Overall Status: [{make_bar(overall_percent)}] {overall_percent:3d}%                            ║")
-        md.append("╠══════════════════════════════════════════════════════════════════════════════╣")
-        md.append(f"║  ✅ Completed:   [{make_bar(complete_percent)}] {complete_percent:3d}%  ({completed_phases} phases)            ║")
-        md.append(f"║  ⏳ In Progress: [{make_bar(progress_percent)}] {progress_percent:3d}%  ({in_progress_phases} phases)            ║")
-        md.append(f"║  ⏸️  Not Started: [{make_bar(pending_percent)}] {pending_percent:3d}%  ({not_started_phases} phases)            ║")
-        md.append("╚══════════════════════════════════════════════════════════════════════════════╝")
-        md.append("```")
+        md.append("---")
+        md.append("### 📊 Progress Overview")
+        md.append("")
+        md.append("| Category | Progress | Status |")
+        md.append("|----------|----------|--------|")
+        md.append(f"| **Overall** | `{make_bar(overall_percent)}` | **{overall_percent}%** |")
+        md.append(f"| ✅ Completed | `{make_bar(complete_percent)}` | {complete_percent}% ({completed_phases} phases) |")
+        md.append(f"| ⏳ In Progress | `{make_bar(progress_percent)}` | {progress_percent}% ({in_progress_phases} phases) |")
+        md.append(f"| ⏸️ Not Started | `{make_bar(pending_percent)}` | {pending_percent}% ({not_started_phases} phases) |")
+        md.append("")
+        md.append("---")
         md.append("")
         return "\n".join(md)
     

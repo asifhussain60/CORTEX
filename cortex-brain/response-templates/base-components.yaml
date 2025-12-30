@@ -154,23 +154,28 @@ components:
   
   progress_bar:
     format: |
-      **Progress Overview:**
-      ```
-      Overall Status: [{{progress_bar}}] {{progress_percentage}}%
-      ✅ Completed: [{{completed_bar}}] {{completed_percentage}}%
-      ⏳ In Progress: [{{in_progress_bar}}] {{in_progress_percentage}}%
-      ⏸️  Not Started: [{{not_started_bar}}] {{not_started_percentage}}%
-      ```
-    description: "Visual progress bar for status checks"
+      ---
+      ### 📊 Progress Overview
+      
+      | Category | Progress | Status |
+      |----------|----------|--------|
+      | **Overall** | `{{progress_bar}}` | **{{progress_percentage}}%** |
+      | ✅ Completed | `{{completed_bar}}` | {{completed_percentage}}% |
+      | ⏳ In Progress | `{{in_progress_bar}}` | {{in_progress_percentage}}% |
+      | ⏸️ Not Started | `{{not_started_bar}}` | {{not_started_percentage}}% |
+      
+      ---
+    description: "Visual progress bar for status checks - uses markdown table for reliable rendering"
   
   banner_frame:
     format: |
-      ╔═════════════════════════════════════════════════════════════════════════════╗
-      ║                  {{banner_title}}                       ║
-      ╔═════════════════════════════════════════════════════════════════════════════╗
+      ---
+      ### 🚨 {{banner_title}}
+      
       {{banner_content}}
-      ╚═════════════════════════════════════════════════════════════════════════════╝
-    description: "Decorative banner frame for important notices"
+      
+      ---
+    description: "Banner frame for important notices - uses markdown for reliable rendering"
   
   code_example:
     format: |

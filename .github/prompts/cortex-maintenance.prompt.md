@@ -1,5 +1,6 @@
 mode: agent
 description: "CORTEX System Maintenance - Automated health checks, auto-repair, and system optimization"
+applyTo: "**"
 ---
 
 # 🩺 CORTEX System Maintenance
@@ -7,6 +8,117 @@ description: "CORTEX System Maintenance - Automated health checks, auto-repair, 
 **Purpose:** Automatically diagnose AND repair CORTEX system issues to maintain peak performance. This is NOT a diagnostic-only tool - it FIXES problems automatically.
 
 **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+---
+
+## 🤖 Autonomous Execution Mode
+
+**⚠️ CRITICAL: This prompt is designed for FULLY AUTONOMOUS execution.**
+
+### Execution Behavior
+
+| Setting | Value | Description |
+|---------|-------|-------------|
+| **Auto-Proceed** | ✅ ENABLED | Phases execute sequentially without user confirmation |
+| **Auto-Repair** | ✅ ENABLED | Issues are fixed immediately upon detection |
+| **Auto-Commit** | ✅ ENABLED | Changes are committed to git after each phase |
+| **Pause Points** | ❌ NONE | No user interaction required between phases |
+| **Rollback** | ✅ AUTO | Failed phases trigger automatic rollback |
+
+### ⛔ FORBIDDEN Behaviors in Autonomous Mode
+
+**❌ NEVER DO THESE:**
+- Ask "Should I proceed?" or "Do you want me to continue?"
+- Wait for user confirmation before starting next phase
+- Output "Ready for next phase?" messages
+- Pause execution after discovery/reports
+- Request approval for auto-repair actions
+- Generate partial reports and stop
+
+**✅ ALWAYS DO THESE:**
+- Execute ALL 10 phases in sequence automatically
+- Proceed to next phase immediately after current phase completes
+- Auto-repair ALL detected issues without asking
+- Commit changes after each phase automatically
+- Generate final consolidated report ONLY at Phase 10 completion
+- Show visual progress tracker at phase transitions
+
+### Phase Transition Logic
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    AUTONOMOUS EXECUTION FLOW                                │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   START ──► Phase 1 ──► Phase 2 ──► Phase 3 ──► Phase 4 ──► Phase 5       │
+│               │           │           │           │           │             │
+│               ▼           ▼           ▼           ▼           ▼             │
+│           [auto]      [auto]      [auto]      [auto]      [auto]           │
+│               │           │           │           │           │             │
+│               └───────────┴───────────┴───────────┴───────────┘             │
+│                                   │                                         │
+│   Phase 6 ◄── Phase 7 ◄── Phase 8 ◄── Phase 9 ◄── Phase 10 ◄──┘           │
+│      │           │           │           │           │                      │
+│      ▼           ▼           ▼           ▼           ▼                      │
+│   [auto]      [auto]      [auto]      [auto]    [FINAL]                    │
+│                                                     │                       │
+│                                                     ▼                       │
+│                                           CONSOLIDATED REPORT               │
+│                                                     │                       │
+│                                                     ▼                       │
+│                                                   END                       │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Auto-Transition Rules
+
+**After EACH phase completion, IMMEDIATELY:**
+
+1. **Render Progress Tracker** (visual ASCII progress bar)
+2. **Log Phase Summary** (one-liner: `✅ Phase N complete: {summary}`)
+3. **Start Next Phase** (no delay, no confirmation)
+4. **On Error:** Auto-repair OR rollback OR skip with warning
+
+**Phase Completion Template:**
+```
+✅ Phase {N} - {NAME}: Complete
+   └─ Actions: {count} | Fixed: {fixed_count} | Skipped: {skipped_count}
+   └─ Duration: {seconds}s
+   └─ Auto-proceeding to Phase {N+1}...
+```
+
+| Phase | Progress | Status |
+|-------|----------|--------|
+| Phase {N} | `██████████` | 100% ✅ Complete |
+| Phase {N+1} | `░░░░░░░░░░` | 0% 🔄 Starting |
+
+### Error Handling in Autonomous Mode
+
+| Error Type | Action | Continue? |
+|------------|--------|-----------|
+| **Non-Critical** | Log warning, continue | ✅ YES |
+| **Critical (fixable)** | Auto-repair, retry | ✅ YES |
+| **Critical (unfixable)** | Log error, skip phase | ✅ YES (with warning) |
+| **Catastrophic** | Rollback, abort | ❌ NO |
+
+**Catastrophic = Only if continuing would corrupt the system**
+
+### Invocation
+
+**Standard (autonomous):**
+```
+system maintenance
+```
+
+**With specific phases:**
+```
+system maintenance --phases 1,2,5
+```
+
+**Dry-run (no changes):**
+```
+system maintenance --dry-run
+```
 
 ---
 
@@ -99,19 +211,21 @@ Maintenance fixes MUST:
 - Phase outputs without completion visualization
 
 **✅ REQUIRED FORMAT:**
-```
-╔══════════════════════════════════════════════════════════════════════════════╗
-║                         {OPERATION_NAME} STATUS                              ║
-╠══════════════════════════════════════════════════════════════════════════════╣
-║  Overall Progress: [████████░░░░░░░░░░░░] XX%  {STATUS_EMOJI} {STATUS_TEXT}  ║
-╠══════════════════════════════════════════════════════════════════════════════╣
-║  Phase 1 - {Name}:  [██████████] 100%  ✅ Complete                           ║
-║  Phase 2 - {Name}:  [████████░░]  80%  🔄 In Progress                        ║
-║  Phase 3 - {Name}:  [░░░░░░░░░░]   0%  ⏳ Pending                            ║
-╠══════════════════════════════════════════════════════════════════════════════╣
-║  Tests: XX/XX passing  │  Code: X,XXX LOC  │  Status: {STATUS}               ║
-╚══════════════════════════════════════════════════════════════════════════════╝
-```
+
+---
+### 📊 {OPERATION_NAME} STATUS
+
+**Overall Progress:** `████████░░░░░░░░░░░░` **XX%** {STATUS_EMOJI} {STATUS_TEXT}
+
+| Phase | Progress | Status |
+|-------|----------|--------|
+| Phase 1 - {Name} | `██████████` | 100% ✅ Complete |
+| Phase 2 - {Name} | `████████░░` | 80% 🔄 In Progress |
+| Phase 3 - {Name} | `░░░░░░░░░░` | 0% ⏳ Pending |
+
+📊 **Tests:** XX/XX passing | **Code:** X,XXX LOC | **Status:** {STATUS}
+
+---
 
 **Locations that MUST have visual tracker:**
 - `cortex-brain/documents/planning/active/*/00-*.md` (master plans)
@@ -148,6 +262,35 @@ components = ['header', 'body', 'progress_bar', 'footer']  # progress_bar REQUIR
 **Test Coverage:**
 - `tests/response_templates/test_visual_progress.py` - Validates progress bar rendering
 - Integration tests must verify progress bar appears in all phase outputs
+
+### Rule 7: Autonomous Execution Enforcement (NEW - December 30, 2025)
+
+**Maintenance MUST execute ALL phases without user interaction.**
+
+**❌ FORBIDDEN:**
+- Asking "Should I proceed to Phase N?"
+- Waiting for user confirmation between phases
+- Stopping after discovery/reports to ask for approval
+- Partial execution (running phases 1-3 and stopping)
+- Interactive prompts mid-execution
+- "Let me know when you're ready" messages
+
+**✅ REQUIRED:**
+- Execute phases 1→10 in sequence automatically
+- Auto-repair ALL detected issues immediately
+- Auto-commit changes after each phase
+- Show visual progress tracker at transitions
+- Generate consolidated report ONLY at Phase 10
+- Proceed to next phase immediately after current completes
+
+**Validation Pattern:**
+```
+✅ CORRECT:
+   Phase 1 complete → Phase 2 starts immediately
+   
+❌ WRONG:
+   Phase 1 complete → "Ready for Phase 2?" → waits
+```
 
 ---
 
@@ -213,6 +356,128 @@ Phase 9: PROMPTS (Templates)
   
 Phase 10: VERIFICATION (Final Health Check)
   └─ Confirm 100% system health
+```
+
+### 🤖 Autonomous Execution Block
+
+**⚠️ EXECUTE ALL PHASES IN SEQUENCE WITHOUT STOPPING**
+
+When `system maintenance` is invoked, execute this consolidated flow:
+
+```python
+# PSEUDO-CODE FOR AUTONOMOUS EXECUTION
+# This is the EXACT behavior Copilot must follow
+
+def execute_maintenance():
+    """
+    Autonomous 10-phase maintenance pipeline.
+    NO USER INTERACTION between phases.
+    """
+    phases = [
+        (1, "DISCOVERY", discover_system),
+        (2, "CLEANUP", cleanup_waste),
+        (3, "SCAFFOLDING", verify_scaffolds),
+        (4, "WIRING", wire_components),
+        (5, "TESTING", run_tests),
+        (6, "KNOWLEDGE", sync_knowledge),
+        (7, "ORGANIZATION", organize_reports),
+        (8, "ROUTING", fix_routing),
+        (9, "PROMPTS", optimize_prompts),
+        (10, "VERIFICATION", verify_health),
+    ]
+    
+    results = {}
+    
+    for phase_num, phase_name, phase_func in phases:
+        # Show progress BEFORE phase
+        render_progress_tracker(phase_num, "IN_PROGRESS")
+        
+        # Execute phase (NO CONFIRMATION)
+        result = phase_func()
+        
+        # Auto-repair if issues found
+        if result.issues:
+            for issue in result.issues:
+                auto_repair(issue)  # FIX IMMEDIATELY
+        
+        # Log completion (NO PAUSE)
+        log(f"✅ Phase {phase_num} - {phase_name}: Complete")
+        
+        # Store result
+        results[phase_num] = result
+        
+        # IMMEDIATELY proceed to next phase
+        # ⛔ NO: "Ready for Phase N+1?"
+        # ⛔ NO: "Should I continue?"
+        # ✅ YES: Just start next phase
+    
+    # ONLY at end: Generate consolidated report
+    generate_final_report(results)
+    commit_all_changes()
+    
+    return "✅ All 10 phases complete!"
+```
+
+### Execution Checkpoints (Auto-Validated)
+
+**At each phase transition, auto-validate:**
+
+| Checkpoint | Validation | On Failure |
+|------------|------------|------------|
+| Phase 1→2 | Discovery report exists | Regenerate |
+| Phase 2→3 | Zero backups remain | Re-cleanup |
+| Phase 3→4 | Scaffolds verified | Create missing |
+| Phase 4→5 | 100% wiring coverage | Re-wire |
+| Phase 5→6 | Tests passing | Fix failures |
+| Phase 6→7 | Knowledge synced | Re-sync |
+| Phase 7→8 | Reports organized | Re-organize |
+| Phase 8→9 | Routes functional | Re-route |
+| Phase 9→10 | Prompts optimized | Re-optimize |
+| Phase 10→END | Health ≥95% | Escalate |
+
+### Final Report Structure
+
+**Generated ONLY after Phase 10 completion:**
+
+```markdown
+# 🩺 CORTEX Maintenance Report
+
+**Date:** {date}
+**Duration:** {total_duration}
+**Status:** ✅ ALL PHASES COMPLETE
+
+## Visual Progress Tracker
+
+---
+### 🚑 SYSTEM MAINTENANCE COMPLETE
+
+**Overall Progress:** `████████████████████` **100%** ✅ HEALTHY
+
+| Phase | Progress | Status |
+|-------|----------|--------|
+| Phase 1 - Discovery | `██████████` | 100% ✅ |
+| Phase 2 - Cleanup | `██████████` | 100% ✅ |
+| Phase 3 - Scaffolding | `██████████` | 100% ✅ |
+| Phase 4 - Wiring | `██████████` | 100% ✅ |
+| Phase 5 - Testing | `██████████` | 100% ✅ |
+| Phase 6 - Knowledge | `██████████` | 100% ✅ |
+| Phase 7 - Organization | `██████████` | 100% ✅ |
+| Phase 8 - Routing | `██████████` | 100% ✅ |
+| Phase 9 - Prompts | `██████████` | 100% ✅ |
+| Phase 10 - Verification | `██████████` | 100% ✅ |
+
+📊 **Issues Found:** {count} | **Auto-Fixed:** {fixed} | **Health:** {score}%
+
+---
+
+## Phase Summaries
+{phase_summaries}
+
+## Changes Made
+{git_diff_summary}
+
+## Next Maintenance
+Recommended: {next_date}
 ```
 
 ---
