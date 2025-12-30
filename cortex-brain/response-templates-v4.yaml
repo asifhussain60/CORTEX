@@ -861,7 +861,7 @@ anti_bloat:
 
 named_templates:
   autonomous_execution_progress:
-    description: "Enhanced progress template for autonomous plan execution with visual Unicode progress bars integrated into phase table"
+    description: "Enhanced progress template for autonomous plan execution with visual Unicode progress bars"
     tier: "TIER 3"
     orchestrator_engaged: true
     display_moments:
@@ -876,18 +876,13 @@ named_templates:
       
       ### 📊 Execution Progress
       
-      {{#if show_full_table}}
-      | # | Phase | Status | Progress | TDD Status | Tasks | Time |
-      |---|-------|--------|----------|------------|-------|------|
-      | **Overall** | **{{status_emoji}}** | **[{{overall_bar}}] {{overall_percentage}}%** | **Phase {{current_phase}}/{{total_phases}}** | - | {{total_completed_tasks}}/{{total_tasks}} | {{total_elapsed_time}} |
+      **Overall Progress:** `{{overall_bar}}` **{{overall_percentage}}%** {{status_emoji}} {{status_text}}
+      
+      | # | Phase | Progress | Deliverables | Time |
+      |---|-------|----------|--------------|------|
       {{#each phases}}
-      | {{phase_num}} | {{#if completed}}✅{{else if in_progress}}⏳{{else}}⏸️{{/if}} **{{phase_name}}** | {{status_text}} | [{{phase_bar}}] {{percentage}}% | {{#if tdd_enabled}}R{{#if red_done}}✅{{else}}⏸️{{/if}} G{{#if green_done}}✅{{else}}⏸️{{/if}} F{{#if refactor_done}}✅{{else}}⏸️{{/if}}{{else}}N/A{{/if}} | {{completed_tasks}}/{{total_tasks}} | {{elapsed_time}} |
+      | {{phase_num}} | {{#if completed}}✅{{else if in_progress}}⏳{{else}}⏸️{{/if}} **{{phase_name}}** | `{{phase_bar}}` {{percentage}}% | {{completed_tasks}}/{{total_tasks}} | {{elapsed_time}} |
       {{/each}}
-      {{else}}
-      | **Overall Progress** | **[{{overall_bar}}] {{overall_percentage}}%** | **Phase {{current_phase}}/{{total_phases}}** |
-      |---------------------|------------------------------------------------|------------------------------------------|
-      | **Next Phase** | ⏳ **{{next_phase_name}}** | Starting now |
-      {{/if}}
       
       {{#if threat_analysis_enabled}}
       ### 🔒 Security Analysis
@@ -929,7 +924,7 @@ named_templates:
   #   - refinement_execution_progress (7-phase)
   
   ado_execution_progress:
-    description: "Enhanced ADO work item generation progress with story points and hierarchy tracking integrated into phase table"
+    description: "Enhanced ADO work item generation progress with story points and hierarchy tracking"
     tier: "TIER 3"
     orchestrator_engaged: true
     display_moments:
@@ -944,16 +939,13 @@ named_templates:
       
       ### 📊 ADO Generation Progress
       
-      {{#if show_full_table}}
-      | # | Phase | Status | Progress | Items | SP | Time |
-      |---|-------|--------|----------|-------|-------|------|
-      | **Overall** | **{{status_emoji}}** | **[{{overall_bar}}] {{overall_percentage}}%** | **Phase {{current_phase}}/{{total_phases}}** | {{items_created}}/{{items_planned}} | {{story_points_total}} SP | {{total_elapsed_time}} |
-      {{phase_rows}}
-      {{else}}
-      | **Overall Progress** | **[{{overall_bar}}] {{overall_percentage}}%** | **Phase {{current_phase}}/{{total_phases}}** |
-      |---------------------|------------------------------------------------|------------------------------------------|
-      | **Next Phase** | ⏳ **{{next_phase_name}}** | Starting now |
-      {{/if}}
+      **Overall Progress:** `{{overall_bar}}` **{{overall_percentage}}%** {{status_emoji}} {{status_text}}
+      
+      | # | Phase | Progress | Deliverables | Time |
+      |---|-------|----------|--------------|------|
+      {{#each phases}}
+      | {{phase_num}} | {{#if completed}}✅{{else if in_progress}}⏳{{else}}⏸️{{/if}} **{{phase_name}}** | `{{phase_bar}}` {{percentage}}% | {{completed_tasks}}/{{total_tasks}} | {{elapsed_time}} |
+      {{/each}}
       
       ### 🎫 Work Item Summary
       
