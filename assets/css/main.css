@@ -4316,6 +4316,13 @@ footer,
    ============================================ */
 
 /* Main Showcase Card */
+/* Container for demo showcase section */
+.demo-showcase-container {
+    max-width: 1200px;
+    margin: 3rem auto;
+    padding: 0 75px;
+}
+
 .demo-showcase-card {
     padding: 2rem;
     background: var(--glass-bg);
@@ -4620,6 +4627,20 @@ footer,
 
 /* Mobile Responsive - Demo Videos */
 @media (max-width: 900px) {
+    /* Reduce container padding on mobile */
+    .demo-showcase-container {
+        padding: 0 1rem;
+    }
+    
+    /* Reset sidebar and video area padding for mobile */
+    .demo-sidebar {
+        padding-right: 0;
+    }
+    
+    .demo-video-area {
+        padding-left: 0;
+    }
+    
     /* Stack layout vertically on tablets/mobile */
     .demo-showcase-layout {
         grid-template-columns: 1fr;
@@ -4675,6 +4696,11 @@ footer,
 }
 
 @media (max-width: 600px) {
+    /* Further reduce padding on small screens */
+    .demo-showcase-container {
+        padding: 0 0.5rem;
+    }
+    
     .demo-showcase-header {
         flex-direction: column;
         text-align: center;
@@ -4697,17 +4723,16 @@ footer,
         font-size: 1.5rem;
     }
     
-    /* Edge-to-edge video on small mobile */
+    /* Contained video on small mobile - no overflow */
     .demo-video-wrapper {
-        margin-left: -1.5rem;
-        margin-right: -1.5rem;
-        width: calc(100% + 3rem);
-        border-radius: 0;
-        max-width: none;
+        width: 100%;
+        max-width: 100%;
+        border-radius: 8px;
     }
     
     .demo-showcase-card {
         padding: 1rem;
+        overflow: hidden;
     }
     
     .video-play-btn {
