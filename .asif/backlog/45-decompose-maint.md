@@ -13,67 +13,62 @@ Refactor `cortex-maintenance.prompt.md` from a single 1000+ line file into a mod
 ## 📋 Execution Steps
 
 ### Step 1: Analyze Current Maintenance Prompt Structure
-```powershell
+```bash
 # Get file size and line count
-$file = "d:\PROJECTS\CORTEX\.github\prompts\cortex-maintenance.prompt.md"
-$lines = (Get-Content $file).Count
-$sizeKB = [math]::Round((Get-Item $file).Length / 1KB, 2)
-Write-Host "File: $lines lines, $sizeKB KB"
+file="/Users/asifhussain/PROJECTS/CORTEX/.github/prompts/cortex-maintenance.prompt.md"
+lines=$(wc -l < "$file")
+sizeKB=$(du -k "$file" | cut -f1)
+echo "File: $lines lines, ${sizeKB}KB"
 
 # Identify major sections
-Select-String -Path $file -Pattern "^##\s+" | Select-Object LineNumber, Line | Format-Table -AutoSize
+grep -n "^##" "$file" | head -30
 ```
 
 **Expected Output:** List of all major sections (12 maintenance phases, rules, templates, etc.)
 
 ### Step 2: Design Folder Structure
 Create the modular architecture:
-```powershell
-$baseDir = "d:\PROJECTS\CORTEX\.github\prompts\maintenance"
-$folders = @(
-    "phases",        # Individual phase definitions
-    "rules",         # Validation and execution rules
-    "templates",     # Response templates specific to maintenance
-    "workflows"      # Phase sequencing and orchestration
-)
+```bash
+baseDir="/Users/asifhussain/PROJECTS/CORTEX/.github/prompts/maintenance"
+folders=("phases" "rules" "templates" "workflows")
 
-foreach ($folder in $folders) {
-    $path = Join-Path $baseDir $folder
-    New-Item -ItemType Directory -Path $path -Force | Out-Null
-    Write-Host "✅ Created: $path"
-}
+for folder in "${folders[@]}"; do
+    mkdir -p "$baseDir/$folder"
+    echo "✅ Created: $baseDir/$folder"
+done
 ```
 
 ### Step 3: Extract Phase Definitions
-Split each of the 12 phases into separate files:
-```powershell
-# Read the maintenance prompt
-$content = Get-Content "d:\PROJECTS\CORTEX\.github\prompts\cortex-maintenance.prompt.md" -Raw
-
+Split each of the 12 phases into separate files. Create phase template files:
+```bash
 # Phase names to extract
-$phases = @(
-    "phase-01-cleanup-obsolete",
-    "phase-02-consolidate-duplicates",
-    "phase-03-refactor-bloat",
-    "phase-04-documentation-audit",
-    "phase-05-test-coverage",
-    "phase-06-performance-optimization",
-    "phase-07-security-review",
-    "phase-08-dependency-updates",
-    "phase-09-code-quality",
-    "phase-10-technical-debt",
-    "phase-11-integration-validation",
+phases=(
+    "phase-01-cleanup-obsolete"
+    "phase-02-consolidate-duplicates"
+    "phase-03-refactor-bloat"
+    "phase-04-documentation-audit"
+    "phase-05-test-coverage"
+    "phase-06-performance-optimization"
+    "phase-07-security-review"
+    "phase-08-dependency-updates"
+    "phase-09-code-quality"
+    "phase-10-technical-debt"
+    "phase-11-integration-validation"
     "phase-12-final-verification"
 )
 
-# For each phase, extract content between ## Phase N and ## Phase N+1
-foreach ($i in 0..11) {
-    $phaseNum = $i + 1
-    $phaseFile = "d:\PROJECTS\CORTEX\.github\prompts\maintenance\phases\$($phases[$i]).md"
-    
-    # Extract phase content (manual extraction needed - this is a template)
-    $phaseContent = @"
-# Phase $phaseNum: {PHASE_NAME}
+baseDir="/Users/asifhussain/PROJECTS/CORTEX/.github/prompts/maintenance/phases"
+
+for i in {0..11}; do
+    phaseNum=$((i + 1))
+    phaseFile="$baseDir/${phases[$i]}.md"
+    echo "📝 Template created for: $phaseFile (manual extraction needed)"
+done
+```
+
+**Manual Action Required:** Extract actual phase content from original file into each phase file using the template structure below:
+```markdown
+# Phase {N}: {PHASE_NAME}
 
 **Duration:** {ESTIMATED_TIME} | **Criticality:** {HIGH/MEDIUM/LOW}
 
@@ -97,19 +92,32 @@ foreach ($i in 0..11) {
 ## 🔗 Dependencies
 - **Requires:** {PREVIOUS_PHASES}
 - **Blocks:** {SUBSEQUENT_PHASES}
-"@
-    
-    # Placeholder - manual extraction needed
-    Write-Host "📝 Template created for: $phaseFile (manual extraction needed)"
-}
 ```
 
-**Manual Action Required:** Extract actual phase content from original file into each phase file.
+## 🎯 Objective
+{PHASE_OBJECTIVE}
+
+---
+
+## 📋 Execution Steps
+{PHASE_STEPS}
+
+---
+
+## ✅ Success Criteria
+{PHASE_CRITERIA}
+
+---
+
+## 🔗 Dependencies
+- **Requires:** {PREVIOUS_PHASES}
+- **Blocks:** {SUBSEQUENT_PHASES}
+```
 
 ### Step 4: Create Main Orchestration File
-```powershell
-$mainFile = "d:\PROJECTS\CORTEX\.github\prompts\maintenance\maintenance-orchestrator.md"
-$content = @"
+Create file `/Users/asifhussain/PROJECTS/CORTEX/.github/prompts/maintenance/maintenance-orchestrator.md` with this content:
+
+```markdown
 # 🔧 CORTEX Maintenance System Orchestrator
 
 **Version:** 5.0.0 | **Author:** Asif Hussain  
@@ -125,7 +133,6 @@ Modular maintenance system with decomposed phases for maintainability and extens
 
 ## 📂 Architecture
 
-\`\`\`
 maintenance/
 ├── maintenance-orchestrator.md     # This file (entry point)
 ├── phases/                          # 12 individual phase definitions
@@ -141,7 +148,6 @@ maintenance/
 │   └── maintenance-responses.yaml
 └── workflows/                       # Phase sequencing
     └── 12-phase-pipeline.md
-\`\`\`
 
 ---
 
@@ -181,80 +187,71 @@ When user requests maintenance, load this orchestrator and:
 - **Brain Protection:** \`cortex-brain/brain-protection-rules.yaml\`
 - **Response Templates:** \`cortex-brain/response-templates-v4.yaml\`
 - **Git Checkpoint Rules:** \`cortex-brain/git-checkpoint-rules.yaml\`
-"@
-
-Set-Content -Path $mainFile -Value $content
-Write-Host "✅ Created: $mainFile"
 ```
 
-### Step 5: Update Master Prompt Reference
-```powershell
-# Update CORTEX.prompt.md to reference new modular structure
-$cortexPrompt = "d:\PROJECTS\CORTEX\.github\prompts\CORTEX.prompt.md"
-$content = Get-Content $cortexPrompt -Raw
+**Manual Action Required:** Create the orchestrator file with the above content.
 
-# Find maintenance reference and update
-if ($content -match "cortex-maintenance\.prompt\.md") {
-    Write-Host "⚠️  Update required in CORTEX.prompt.md"
-    Write-Host "Change reference from:"
-    Write-Host "  .github/prompts/cortex-maintenance.prompt.md"
-    Write-Host "To:"
-    Write-Host "  .github/prompts/maintenance/maintenance-orchestrator.md"
-} else {
-    Write-Host "✅ No update needed or already updated"
-}
+### Step 5: Update Master Prompt Reference
+```bash
+# Check if CORTEX.prompt.md references the old maintenance file
+cortexPrompt="/Users/asifhussain/PROJECTS/CORTEX/.github/prompts/CORTEX.prompt.md"
+
+if grep -q "cortex-maintenance.prompt.md" "$cortexPrompt"; then
+    echo "⚠️  Update required in CORTEX.prompt.md"
+    echo "Change reference from:"
+    echo "  .github/prompts/cortex-maintenance.prompt.md"
+    echo "To:"
+    echo "  .github/prompts/maintenance/maintenance-orchestrator.md"
+else
+    echo "✅ No update needed or already updated"
+fi
 ```
 
 **Manual Action Required:** Update the maintenance reference in `CORTEX.prompt.md`.
 
 ### Step 6: Create Backup and Archive Original
-```powershell
+```bash
 # Create backup before archiving
-$timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
-$backupDir = "d:\PROJECTS\CORTEX\cortex-brain\archives\prompts"
-$originalFile = "d:\PROJECTS\CORTEX\.github\prompts\cortex-maintenance.prompt.md"
+timestamp=$(date +%Y%m%d_%H%M%S)
+backupDir="/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/archives/prompts"
+originalFile="/Users/asifhussain/PROJECTS/CORTEX/.github/prompts/cortex-maintenance.prompt.md"
 
-New-Item -ItemType Directory -Path $backupDir -Force | Out-Null
+mkdir -p "$backupDir"
+cp "$originalFile" "$backupDir/cortex-maintenance.prompt.ARCHIVED.$timestamp.md"
 
-$backupFile = Join-Path $backupDir "cortex-maintenance.prompt.ARCHIVED.$timestamp.md"
-Copy-Item $originalFile $backupFile -Force
-
-Write-Host "✅ Archived original to: $backupFile"
-Write-Host "⚠️  Manual verification required before deleting original"
+echo "✅ Archived original to: $backupDir/cortex-maintenance.prompt.ARCHIVED.$timestamp.md"
+echo "⚠️  Manual verification required before deleting original"
 ```
 
 ### Step 7: Validation
-```powershell
+```bash
 # Verify all phase files exist
-$expectedPhases = 12
-$phaseFiles = Get-ChildItem "d:\PROJECTS\CORTEX\.github\prompts\maintenance\phases\*.md"
-$actualCount = $phaseFiles.Count
+expectedPhases=12
+baseDir="/Users/asifhussain/PROJECTS/CORTEX/.github/prompts/maintenance/phases"
+actualCount=$(ls -1 "$baseDir"/*.md 2>/dev/null | wc -l | tr -d ' ')
 
-if ($actualCount -eq $expectedPhases) {
-    Write-Host "✅ All $expectedPhases phase files present"
-    $phaseFiles | ForEach-Object { Write-Host "  - $($_.Name)" }
-} else {
-    Write-Host "❌ Expected $expectedPhases phases, found $actualCount" -ForegroundColor Red
-}
+if [ "$actualCount" -eq "$expectedPhases" ]; then
+    echo "✅ All $expectedPhases phase files present"
+    ls -1 "$baseDir"/*.md | xargs -I {} basename {}
+else
+    echo "❌ Expected $expectedPhases phases, found $actualCount"
+fi
 
 # Verify orchestrator exists
-if (Test-Path "d:\PROJECTS\CORTEX\.github\prompts\maintenance\maintenance-orchestrator.md") {
-    Write-Host "✅ Main orchestrator file present"
-} else {
-    Write-Host "❌ Main orchestrator file missing" -ForegroundColor Red
-}
+if [ -f "/Users/asifhussain/PROJECTS/CORTEX/.github/prompts/maintenance/maintenance-orchestrator.md" ]; then
+    echo "✅ Main orchestrator file present"
+else
+    echo "❌ Main orchestrator file missing"
+fi
 
-# Check total line count reduction
-$originalLines = (Get-Content "d:\PROJECTS\CORTEX\.github\prompts\cortex-maintenance.prompt.md").Count
-$newLines = 0
-Get-ChildItem "d:\PROJECTS\CORTEX\.github\prompts\maintenance" -Recurse -Filter "*.md" | ForEach-Object {
-    $newLines += (Get-Content $_.FullName).Count
-}
+# Check total line count comparison
+originalLines=$(wc -l < "/Users/asifhussain/PROJECTS/CORTEX/.github/prompts/cortex-maintenance.prompt.md" | tr -d ' ')
+newLines=$(find "/Users/asifhussain/PROJECTS/CORTEX/.github/prompts/maintenance" -name "*.md" -exec wc -l {} + | tail -1 | awk '{print $1}')
 
-Write-Host "`nLine count comparison:"
-Write-Host "  Original: $originalLines lines (single file)"
-Write-Host "  New: $newLines lines (distributed across multiple files)"
-Write-Host "  Largest file: $(Get-ChildItem 'd:\PROJECTS\CORTEX\.github\prompts\maintenance' -Recurse -Filter '*.md' | Sort-Object Length -Descending | Select-Object -First 1 | ForEach-Object { [math]::Round((Get-Content $_.FullName).Count) }) lines"
+echo ""
+echo "Line count comparison:"
+echo "  Original: $originalLines lines (single file)"
+echo "  New: $newLines lines (distributed across multiple files)"
 ```
 
 **Expected Output:** 
@@ -266,11 +263,11 @@ Write-Host "  Largest file: $(Get-ChildItem 'd:\PROJECTS\CORTEX\.github\prompts\
 
 ## ✅ Success Criteria
 - [ ] Folder structure created: `maintenance/phases/`, `maintenance/rules/`, `maintenance/templates/`, `maintenance/workflows/`
-  Verify: `Test-Path "d:\PROJECTS\CORTEX\.github\prompts\maintenance\phases"` returns `True`
+  Verify: `test -d /Users/asifhussain/PROJECTS/CORTEX/.github/prompts/maintenance/phases && echo "✅ Exists"`
 - [ ] 12 phase files created in `phases/` directory
-  Verify: `(Get-ChildItem "d:\PROJECTS\CORTEX\.github\prompts\maintenance\phases\*.md").Count` returns `12`
+  Verify: `ls -1 /Users/asifhussain/PROJECTS/CORTEX/.github/prompts/maintenance/phases/*.md | wc -l` returns `12`
 - [ ] Main orchestrator file created
-  Verify: `Test-Path "d:\PROJECTS\CORTEX\.github\prompts\maintenance\maintenance-orchestrator.md"` returns `True`
+  Verify: `test -f /Users/asifhussain/PROJECTS/CORTEX/.github/prompts/maintenance/maintenance-orchestrator.md && echo "✅ Exists"`
 - [ ] Original file archived with timestamp
   Verify: Backup exists in `cortex-brain/archives/prompts/`
 - [ ] No single file exceeds 300 lines
@@ -284,6 +281,6 @@ Write-Host "  Largest file: $(Get-ChildItem 'd:\PROJECTS\CORTEX\.github\prompts\
 
 ## 🗑️ AUTO-DELETE INSTRUCTION
 **After successful execution:** Delete this file with:
-```powershell
-Remove-Item "d:\PROJECTS\CORTEX\.asif\backlog\45-decompose-maint.md" -Force
+```bash
+rm -f /Users/asifhussain/PROJECTS/CORTEX/.asif/backlog/45-decompose-maint.md
 ```

@@ -14,18 +14,18 @@ Implement a LEGO-style composable template system where all orchestrators can co
 
 ### Step 1: Verify Existing Template Structure
 Read current templates and understand structure:
-```powershell
+```bash
 # Check for existing composable/block patterns
-Select-String -Path "cortex-brain\response-templates-v4.yaml" -Pattern "composable|block" | Select-Object -First 20
+grep -E "composable|block" cortex-brain/response-templates-v4.yaml | head -20
 
 # Check which manifests already have response_templates
-Get-ChildItem "cortex-brain\manifests\orchestrators\*-manifest.yaml" | ForEach-Object {
-  $hasTemplates = Select-String -Path $_.FullName -Pattern "response_templates:" -Quiet
-  [PSCustomObject]@{
-    File = $_.Name
-    HasResponseTemplates = $hasTemplates
-  }
-} | Format-Table -AutoSize
+for f in cortex-brain/manifests/orchestrators/*-manifest.yaml; do
+  if grep -q "response_templates:" "$f" 2>/dev/null; then
+    echo "✅ $(basename $f): Has response_templates"
+  else
+    echo "❌ $(basename $f): Missing response_templates"
+  fi
+done
 ```
 
 **Expected Output:** List of manifests showing which already have `response_templates` sections.
@@ -178,56 +178,47 @@ Edit `cortex-brain\response-templates-v4.yaml` to align existing templates:
 - Use standardized icons: ✅ (complete), 🔄 (in-progress), ⏳ (pending), ❌ (failed), ⏸️ (skipped)
 
 Verify:
-```powershell
-# Find the autonomous_execution_progress template
-$content = Get-Content "cortex-brain\response-templates-v4.yaml" -Raw
-$templateStart = $content.IndexOf("autonomous_execution_progress:")
-if ($templateStart -ge 0) {
-  $section = $content.Substring($templateStart, 500)
-  Write-Host "Template found at position $templateStart"
-  $section | Select-String -Pattern "Phase|Progress|Status"
-} else {
-  Write-Host "❌ Template not found"
-}
+```bash
+# Find the autonomous_execution_progress template and check headers
+if grep -q "autonomous_execution_progress:" /Users/asifhussain/PROJECTS/CORTEX/cortex-brain/response-templates-v4.yaml; then
+    echo "✅ Template found"
+    grep -A 30 "autonomous_execution_progress:" /Users/asifhussain/PROJECTS/CORTEX/cortex-brain/response-templates-v4.yaml | grep -E "Phase|Progress|Status" | head -5
+else
+    echo "❌ Template not found"
+fi
 
 # Check for standardized icons
-Select-String -Path "cortex-brain\response-templates-v4.yaml" -Pattern "✅|🔄|⏳|❌|⏸️" | Select-Object -First 10
+grep -E "✅|🔄|⏳|❌|⏸️" /Users/asifhussain/PROJECTS/CORTEX/cortex-brain/response-templates-v4.yaml | head -10
 ```
 
 **Expected Output:** Confirmation that table headers and icons are present in template.
 
 ### Step 8: Validate All Changes
-```powershell
+```bash
 # Check YAML syntax (requires PyYAML installed)
-try {
-  python -c "import yaml; yaml.safe_load(open('cortex-brain/response-templates-v4.yaml')); print('✅ Valid YAML')"
-} catch {
-  Write-Host "❌ YAML validation failed: $_" -ForegroundColor Red
-  exit 1
-}
+python -c "import yaml; yaml.safe_load(open('cortex-brain/response-templates-v4.yaml')); print('✅ Valid YAML')" || echo "❌ YAML validation failed"
 
 # Verify all manifests have response_templates
-$manifests = Get-ChildItem "cortex-brain\manifests\orchestrators\*-manifest.yaml"
-$results = @()
-foreach ($file in $manifests) {
-  $hasTemplates = Select-String -Path $file.FullName -Pattern "response_templates:" -Quiet
-  $status = if ($hasTemplates) { "✅" } else { "❌ (missing)" }
-  $results += [PSCustomObject]@{
-    File = $file.Name
-    HasResponseTemplates = $status
-  }
-}
-$results | Format-Table -AutoSize
-
-# Count manifests with response_templates
-$count = ($results | Where-Object { $_.HasResponseTemplates -eq "✅" }).Count
-Write-Host "`nTotal manifests with response_templates: $count / $($manifests.Count)" -ForegroundColor $(if ($count -eq 8) { 'Green' } else { 'Yellow' })
+echo "Checking manifests for response_templates:"
+count=0
+total=0
+for f in cortex-brain/manifests/orchestrators/*-manifest.yaml; do
+  total=$((total + 1))
+  if grep -q "response_templates:" "$f" 2>/dev/null; then
+    echo "✅ $(basename $f)"
+    count=$((count + 1))
+  else
+    echo "❌ $(basename $f) (missing)"
+  fi
+done
+echo ""
+echo "Total manifests with response_templates: $count / $total"
 ```
 
 **Expected Output:** 
 - "✅ Valid YAML" confirmation
 - Table showing all 8 manifests with ✅ status
-- "Total manifests with response_templates: 8 / 8" in green
+- "Total manifests with response_templates: 8 / 8"
 
 ---
 
@@ -264,6 +255,6 @@ Write-Host "`nTotal manifests with response_templates: $count / $($manifests.Cou
 
 ## 🗑️ AUTO-DELETE INSTRUCTION
 **After successful execution:** Delete this file with:
-```powershell
-Remove-Item "d:\PROJECTS\CORTEX\.asif\backlog\25-orchestrator-composable-templates.md" -Force
+```bash
+rm -f /Users/asifhussain/PROJECTS/CORTEX/.asif/backlog/25-orchestrator-composable-templates.md
 ```

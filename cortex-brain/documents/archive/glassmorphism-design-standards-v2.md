@@ -42,7 +42,151 @@ This document establishes the definitive glassmorphism design standard for CORTE
 
 ---
 
-## 🎨 Icon Standards
+## �️ View Hierarchy Standards
+
+Documentation pages follow a strict 3-tier hierarchy with different design rules per level.
+
+### View Levels
+
+| Level | Example Path | Logo Size | Footer | Breadcrumb |
+|-------|--------------|-----------|--------|------------|
+| **Home** | `index.html` | N/A | ✅ YES | ❌ NO |
+| **Level 1** | `/orchestrators/index.html` | 200×200 | ❌ NO | ✅ YES |
+| **Level 2** | `/orchestrators/planning-system.html` | 150×150 | ❌ NO | ✅ YES |
+
+### Home Page View
+- Full landing page with hero section
+- **Footer ALLOWED** (only page with footer)
+- No breadcrumb navigation (this IS the home)
+- Full site navigation in header/hero
+
+### First Level View (Section Index)
+- Existing breadcrumb bar at top (keep)
+- **200×200 CORTEX logo** in top-left corner
+- Large icon and title centered at top (prominent)
+- Category cards for sub-pages
+- ❌ **NO FOOTER** 
+
+### Second Level View (Detail Pages)
+- Existing breadcrumb bar at top (keep)
+- **150×150 CORTEX logo** in top-left corner
+- Detailed content with D3.js and Mermaid diagrams
+- Technical content for software engineers
+- ❌ **NO FOOTER**
+
+---
+
+## 📏 Panel Spacing Standards
+
+Standardized gap values for consistent layout across all views.
+
+### CSS Variables
+
+```css
+/* ============================================================
+   PANEL SPACING STANDARDS (Standardized Gaps)
+   ============================================================ */
+
+:root {
+    /* Standard panel gaps */
+    --panel-gap-xs: 0.5rem;    /* 8px - Tight grouping (related items) */
+    --panel-gap-sm: 1rem;      /* 16px - Default within sections */
+    --panel-gap-md: 1.5rem;    /* 24px - Between distinct panels */
+    --panel-gap-lg: 2rem;      /* 32px - Between major sections */
+    --panel-gap-xl: 3rem;      /* 48px - Hero to content separation */
+}
+
+/* Section containers */
+.section {
+    margin-bottom: var(--panel-gap-lg);
+}
+
+/* Card grids (metrics, features, concepts) */
+.metrics-grid, .feature-grid, .concept-grid {
+    gap: var(--panel-gap-md);
+}
+
+/* Glass cards within grids */
+.glass-card {
+    margin-bottom: 0; /* Grid gap handles spacing */
+}
+
+/* Standalone glass cards (not in grid) */
+.glass-card + .glass-card {
+    margin-top: var(--panel-gap-md);
+}
+
+/* Content sections within cards */
+.glass-card .content-section + .content-section {
+    margin-top: var(--panel-gap-sm);
+}
+
+/* Hero sections */
+.hero-section {
+    margin-bottom: var(--panel-gap-xl);
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    :root {
+        --panel-gap-md: 1rem;
+        --panel-gap-lg: 1.5rem;
+        --panel-gap-xl: 2rem;
+    }
+}
+```
+
+### Usage Guidelines
+
+| Context | Variable | Pixels |
+|---------|----------|--------|
+| Related items in same group | `--panel-gap-xs` | 8px |
+| Items within a section | `--panel-gap-sm` | 16px |
+| Between distinct panels | `--panel-gap-md` | 24px |
+| Between major sections | `--panel-gap-lg` | 32px |
+| Hero to content | `--panel-gap-xl` | 48px |
+
+---
+
+## 🦶 Footer Standards
+
+### Footer Visibility Rules
+
+| View Level | Footer | Rationale |
+|------------|--------|-----------|
+| **Home Page** (`index.html`) | ✅ YES | Landing page needs full navigation/credits |
+| **First Level** (`/section/index.html`) | ❌ NO | Content-focused, breadcrumbs provide navigation |
+| **Second Level** (`/section/page.html`) | ❌ NO | Detail pages, user navigates via breadcrumbs |
+
+### Implementation
+
+**Home Page (footer included):**
+```html
+<body>
+    <main>...</main>
+    <footer class="site-footer">...</footer>
+</body>
+```
+
+**All Other Pages (no footer):**
+```html
+<body>
+    <nav class="breadcrumb">...</nav>
+    <main>...</main>
+    <!-- NO FOOTER -->
+</body>
+```
+
+### Footer Removal Checklist
+When updating documentation pages, ensure:
+- [ ] Footer HTML removed from all Level 1 pages
+- [ ] Footer HTML removed from all Level 2 pages
+- [ ] Footer CSS can remain (only applied if HTML present)
+- [ ] Breadcrumb navigation is functional for back-navigation
+
+---
+
+## �🎨 Icon Standards
 
 ### FontAwesome vs Emoji
 

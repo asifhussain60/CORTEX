@@ -181,6 +181,36 @@ categories:
         execution_method: cli
         user_friendly_name: "HTML Validator"
         functionality: "Checks HTML files for syntax errors, unclosed tags, malformed attributes, and structural issues"
+        
+      - name: docgen-discovery
+        command: cortex-docgen-discover
+        script: documentation/docgen_discovery.py
+        description: Discover all documentable code elements (modules, classes, functions)
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli
+        user_friendly_name: "DocGen Discovery"
+        functionality: "Scans src/, manifests/, and docs/ to build comprehensive documentation manifest"
+        
+      - name: diagram-staleness
+        command: cortex-diagram-check
+        script: documentation/diagram_staleness.py
+        description: Check D3.js and Mermaid diagrams for staleness
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli
+        user_friendly_name: "Diagram Staleness Checker"
+        functionality: "Detects outdated diagrams based on related source code changes"
+        
+      - name: site-manifest
+        command: cortex-site-manifest
+        script: documentation/site_manifest.py
+        description: Generate site manifest with missing doc detection
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli
+        user_friendly_name: "Site Manifest Generator"
+        functionality: "Creates site map, detects missing documentation, checks broken links"
 
   testing:
     description: Testing utilities

@@ -1,24 +1,32 @@
 ---
 mode: agent
-description: CORTEX Backlog Review & Enhancement System - Reviews, enhances, and prioritizes backlog items
+description: CORTEX Backlog Review & Enhancement System - Reviews, enhances, prioritizes, and assesses complexity for planning hand-off
 ---
 
 # 📋 CORTEX Backlog Review & Enhancement System
 
-**Version:** 2.0.0 | **Author:** Asif Hussain  
-**Location:** `.asif/backlog/` | **Format:** Priority-prefixed markdown files
+**Version:** 4.0.0 | **Author:** Asif Hussain  
+**Location:** `.asif/backlog/` | **Format:** Priority-prefixed markdown files  
+**Platform:** macOS/Linux (bash commands)
 
 ---
 
 ## 🎯 Purpose
 
-**Review, enhance, and prioritize** CORTEX backlog items for optimal GitHub Copilot execution. This prompt does NOT execute backlog items—it prepares them for execution.
+**Review, enhance, prioritize, and assess complexity** of CORTEX backlog items for optimal GitHub Copilot execution. This prompt does NOT execute backlog items—it prepares them for execution and determines if planning is required.
 
 **Core Responsibilities:**
 1. **Review** all backlog files for manual instructions/enhancements needed
 2. **Enhance** instructions for Copilot executability (clear, atomic, verifiable)
 3. **Prioritize** by renaming files with correct priority prefixes (00-99)
 4. **Validate** format consistency and completeness
+5. **🧮 Assess Complexity** - Calculate complexity score (0-100) for each item
+6. **🔍 Holistic Analysis** - Analyze target file for autonomy refinements before execution
+7. **🎯 Optimize Delegation** - Delegate bloat detection & decomposition to `cortex-optimize.prompt.md`
+8. **🧪 TDD Evaluation** - Determine if TDD approach adds high value
+9. **🛡️ Hand-Off** - Route complex items (score ≥51) to Planning/ADO Orchestrators
+
+**Integration:** Uses `cortex-optimize.prompt.md` for deep file analysis (bloat, decomposition, technical debt)
 
 ---
 
@@ -80,6 +88,365 @@ mv .asif/backlog/old-name.md .asif/backlog/{NN}-{descriptive-name}.md
 
 **STEP 6: Generate Report**
 Output comprehensive review report (see format below)
+
+**STEP 7: Complexity Assessment & Planning Hand-Off**
+For each backlog item, calculate complexity score to determine if a comprehensive plan is required.
+
+---
+
+## 🧮 Complexity Scoring System
+
+### Calculate Complexity Score (0-100)
+
+For each backlog item, assess these dimensions:
+
+| Dimension | Weight | Score Range | Criteria |
+|-----------|--------|-------------|----------|
+| **Effort** | 25% | 0-25 | <1hr=5, 1-2hr=10, 2-4hr=15, 4-8hr=20, >8hr=25 |
+| **File Scope** | 20% | 0-20 | 1 file=5, 2-3 files=10, 4-6 files=15, >6 files=20 |
+| **Dependencies** | 20% | 0-20 | None=0, 1-2 deps=10, 3+ deps=15, Cross-system=20 |
+| **Risk Level** | 20% | 0-20 | Low=5, Medium=10, High=15, Critical=20 |
+| **Testing Required** | 15% | 0-15 | None=0, Unit=5, Integration=10, E2E=15 |
+
+**Total Score:** Sum of all dimensions (0-100)
+
+### Complexity Thresholds
+
+| Score Range | Complexity | Action |
+|-------------|------------|--------|
+| **0-25** | 🟢 SIMPLE | Execute directly from backlog item |
+| **26-50** | 🟡 MODERATE | Execute with checkpoints, no plan needed |
+| **51-75** | 🟠 COMPLEX | **🛡️ HAND-OFF to Planning Orchestrator** |
+| **76-100** | 🔴 HIGHLY COMPLEX | **🛡️ HAND-OFF to Planning + ADO Orchestrators** |
+
+### 🛡️ Planning Hand-Off Protocol
+
+**When Score ≥ 51 (COMPLEX or HIGHLY COMPLEX):**
+
+1. **Calculate & Display Score:**
+```markdown
+### 🧮 Complexity Assessment: {backlog-item-name}
+
+| Dimension | Score | Rationale |
+|-----------|-------|-----------|
+| Effort | {X}/25 | {reason} |
+| File Scope | {X}/20 | {reason} |
+| Dependencies | {X}/20 | {reason} |
+| Risk Level | {X}/20 | {reason} |
+| Testing Required | {X}/15 | {reason} |
+| **TOTAL** | **{X}/100** | **{COMPLEXITY_LEVEL}** |
+```
+
+2. **Determine Hand-Off Target:**
+   - Score 51-75 → 🛡️ **Planning Orchestrator** (`planning-system-4.0-manifest.yaml`)
+   - Score 76-100 → 🛡️ **Planning + ADO Orchestrators** (create work items for tracking)
+
+3. **Execute Hand-Off:**
+```markdown
+## 🛡️ HAND-OFF: Planning Required
+
+**Backlog Item:** `{filename}`
+**Complexity Score:** {score}/100 ({LEVEL})
+**Reason:** {why this needs a plan}
+
+**ROUTING TO:** Planning Orchestrator
+**Command:** `/CORTEX Plan {backlog-item-objective}`
+
+---
+⛔ STOPPING HERE - Planning Orchestrator will create comprehensive execution plan.
+```
+
+4. **For Score ≥ 76 (ADO Integration):**
+```markdown
+## 🛡️ HAND-OFF: Planning + ADO Required
+
+**Backlog Item:** `{filename}`
+**Complexity Score:** {score}/100 (HIGHLY COMPLEX)
+
+**STEP 1:** Planning Orchestrator creates execution plan
+**STEP 2:** ADO Orchestrator creates work items for tracking
+
+**ROUTING TO:** Planning Orchestrator THEN ADO Orchestrator
+**Commands:**
+1. `/CORTEX Plan {backlog-item-objective}`
+2. `ado story {backlog-item-objective}` (after plan created)
+
+---
+⛔ STOPPING HERE - Orchestrators will handle planning and work item creation.
+```
+
+### Complexity Score Examples
+
+**Example 1: Simple (Score 22)**
+```
+Backlog: "Update version number in package.json"
+- Effort: 5 (<1hr)
+- File Scope: 5 (1 file)
+- Dependencies: 0 (none)
+- Risk Level: 5 (low)
+- Testing: 5 (verify manually)
+TOTAL: 20 → 🟢 SIMPLE → Execute directly
+```
+
+**Example 2: Complex (Score 65)**
+```
+Backlog: "Refactor response templates into modular system"
+- Effort: 20 (4-8hr)
+- File Scope: 15 (4-6 files)
+- Dependencies: 15 (3+ deps)
+- Risk Level: 10 (medium)
+- Testing: 5 (unit tests)
+TOTAL: 65 → 🟠 COMPLEX → 🛡️ HAND-OFF to Planning
+```
+
+**Example 3: Highly Complex (Score 85)**
+```
+Backlog: "Implement interactive learning paths system"
+- Effort: 25 (>8hr)
+- File Scope: 20 (>6 files)
+- Dependencies: 20 (cross-system)
+- Risk Level: 10 (medium)
+- Testing: 10 (integration)
+TOTAL: 85 → 🔴 HIGHLY COMPLEX → 🛡️ HAND-OFF to Planning + ADO
+```
+
+---
+
+## 🔍 Holistic Analysis (Pre-Execution Refinement)
+
+**MANDATORY:** Before executing ANY backlog item, perform holistic analysis to ensure autonomous execution readiness.
+
+### When to Perform Holistic Analysis
+
+**Trigger:** When user invokes backlog prompt with a specific file reference (e.g., `#file:15-docgen-prompt.md`)
+
+### Analysis Protocol
+
+**STEP 1: Structural Analysis**
+```bash
+# Run toolkit analyzer (if available)
+python cortex-toolkit/core/utilities/backlog_analyzer.py --file ".asif/backlog/{filename}.md" --mode holistic
+```
+
+**If toolkit not available, perform manual analysis:**
+
+| Category | Check | Pass Criteria |
+|----------|-------|---------------|
+| **Format** | Header, metadata, steps, success criteria | All sections present |
+| **Clarity** | No vague language, all paths explicit | Zero ambiguity |
+| **Verifiability** | Every step has verification command | 100% coverage |
+| **Atomicity** | Each step = single action | No multi-action steps |
+| **Dependencies** | External deps documented | All deps listed |
+
+**STEP 2: Autonomy Gap Detection**
+
+Scan for these autonomy blockers:
+
+| Gap Type | Pattern | Fix |
+|----------|---------|-----|
+| **Vague Reference** | "the file", "the config" | Add explicit path |
+| **Missing Output** | Command without expected result | Add expected output |
+| **Human Judgment** | "if appropriate", "as needed" | Add decision criteria |
+| **Placeholder** | `{name}`, `{value}` | Replace with actual values |
+| **Ambiguous Verb** | "update", "fix", "improve" | Specify exact changes |
+
+**STEP 3: Apply Refinements**
+
+For each gap detected, apply fix directly to backlog item:
+
+```markdown
+### Before Refinement:
+Step 3: Update the config file
+
+### After Refinement:
+Step 3: Update Configuration
+Edit `cortex-brain/config/setup.yaml`:
+- Line 45: Change `enable_feature: false` → `enable_feature: true`
+- Verify: `grep "enable_feature: true" cortex-brain/config/setup.yaml`
+- Expected: `enable_feature: true`
+```
+
+**STEP 4: Add Execution Checkpoints**
+
+For items with complexity ≥26 (MODERATE+), add checkpoints:
+
+```markdown
+## ⏸️ Execution Checkpoints
+
+**Checkpoint 1 (After Step X):** Verify {condition}
+\`\`\`bash
+{verification_command} && echo "✅ CHECKPOINT 1 PASSED" || echo "❌ FAILED"
+\`\`\`
+
+**Checkpoint 2 (After Step Y):** Verify {condition}
+...
+```
+
+**STEP 5: Output Analysis Report**
+
+```markdown
+### 🔍 Holistic Analysis: {filename}
+
+| Metric | Before | After | Status |
+|--------|--------|-------|--------|
+| Autonomy Score | {X}% | {Y}% | ✅/⚠️ |
+| Vague References | {N} | 0 | ✅ |
+| Missing Outputs | {N} | 0 | ✅ |
+| Checkpoints Added | 0 | {N} | ✅ |
+
+**Refinements Applied:** {count}
+**Ready for Autonomous Execution:** YES/NO
+```
+
+**STEP 6: Optimize Prompt Delegation (Target File Analysis)**
+
+**When backlog item targets a specific file for modification**, delegate deep analysis to `cortex-optimize.prompt.md`:
+
+```markdown
+### 🎯 Optimize Delegation Check
+
+**Target File(s):** `{file_path}` (from backlog item)
+
+**Delegation Required IF:**
+- [ ] Target file >500 lines (prompts) / >1000 lines (code) / >300 lines (config)
+- [ ] Backlog item involves refactoring or restructuring
+- [ ] Multiple concerns detected in target file
+
+**Action:** Run `cortex-optimize.prompt.md` on target file FIRST
+```
+
+**If Optimize Delegation Triggered:**
+
+1. **Invoke Optimize Engine:**
+   ```
+   Reference: cortex-optimize.prompt.md
+   Target: {target_file_path}
+   Mode: Bloat Detection + Decomposition Analysis
+   ```
+
+2. **Bloat Detection (from Optimize):**
+   | Artifact Type | Threshold | Current Lines | Status |
+   |---------------|-----------|---------------|--------|
+   | Prompt | 500 | {N} | ✅/⚠️ BLOATED |
+   | Code | 1,000 | {N} | ✅/⚠️ BLOATED |
+   | Config | 300 | {N} | ✅/⚠️ BLOATED |
+
+3. **If BLOATED → Decomposition BEFORE Backlog Execution:**
+   - Optimize generates decomposition plan (Pattern 1-5)
+   - Create backlog item: `00-decompose-{filename}.md` (CRITICAL priority)
+   - Execute decomposition FIRST
+   - Then return to original backlog item
+
+4. **Inject Optimize Findings:**
+   ```markdown
+   ## 🎯 Pre-Execution Optimization Findings
+   
+   **Source:** `cortex-optimize.prompt.md` analysis
+   **Target:** `{file_path}`
+   
+   | Finding | Severity | Action |
+   |---------|----------|--------|
+   | {finding_1} | {P0-P3} | {action} |
+   | {finding_2} | {P0-P3} | {action} |
+   
+   **Decomposition Required:** YES/NO
+   **Technical Debt Items:** {count}
+   ```
+
+**Skip Optimize Delegation IF:**
+- Backlog item is documentation-only (README, comments)
+- Target file doesn't exist yet (new file creation)
+- Backlog item is simple config change (<10 lines affected)
+
+---
+
+## 🧪 TDD Value Assessment
+
+**MANDATORY:** Evaluate if Test-Driven Development adds HIGH value before execution.
+
+### TDD Evaluation Criteria
+
+| Indicator | Present? | TDD Value |
+|-----------|----------|-----------|
+| **Core Logic** | Business rules, calculations, algorithms | ✅ HIGH |
+| **Data Transformations** | Parsing, formatting, conversion | ✅ HIGH |
+| **API Contracts** | Input/output specifications | ✅ HIGH |
+| **Regression-Prone** | Code that broke before | ✅ HIGH |
+| **Complex Conditionals** | Multiple branches, edge cases | ✅ HIGH |
+| **Documentation** | Markdown, README updates | ❌ LOW |
+| **Configuration** | YAML, JSON settings | ❌ LOW |
+| **UI/Styling** | CSS, visual changes | ❌ LOW |
+| **File Operations** | Move, rename, delete files | ❌ LOW |
+| **One-off Scripts** | Migrations, data fixes | ❌ LOW |
+
+### TDD Decision Tree
+
+```
+IF backlog item involves:
+  - Core logic OR
+  - Data transformations OR
+  - API contracts OR
+  - Complex conditionals
+THEN:
+  TDD_VALUE = HIGH
+  Add TDD section to backlog item
+ELSE:
+  TDD_VALUE = LOW
+  Add simple verification approach
+```
+
+### When TDD Value = HIGH
+
+Add this section to the backlog item:
+
+```markdown
+## 🧪 TDD Approach (Recommended)
+**TDD Value:** HIGH - {reason}
+
+### RED Phase (Write failing tests first)
+1. Create test file: `tests/test_{feature}.py`
+2. Write test cases for: {list expected behaviors}
+3. Run tests: `pytest tests/test_{feature}.py -v`
+4. Verify: All tests FAIL (expected)
+
+### GREEN Phase (Minimal implementation)
+5. Implement minimum code to pass tests
+6. Run tests: `pytest tests/test_{feature}.py -v`
+7. Verify: All tests PASS
+
+### REFACTOR Phase (Clean up)
+8. Improve code quality while keeping tests green
+9. Final verify: `pytest tests/test_{feature}.py -v` → All PASS
+```
+
+### When TDD Value = LOW
+
+Add this section instead:
+
+```markdown
+## 🧪 Verification Approach
+**TDD Value:** LOW - {reason: documentation/config/file ops}
+
+**Verification Method:** Manual inspection + validation commands
+**No unit tests required**
+```
+
+### Toolkit Integration
+
+**Use toolkit analyzer for TDD evaluation:**
+```bash
+python cortex-toolkit/core/utilities/backlog_analyzer.py --file "{backlog_file}" --evaluate-tdd
+```
+
+**Output:**
+```json
+{
+  "tdd_value": "HIGH|LOW",
+  "indicators_detected": ["core_logic", "data_transformation"],
+  "recommendation": "Add TDD section with RED→GREEN→REFACTOR phases",
+  "test_file_suggestion": "tests/test_{feature}.py"
+}
+```
 
 ---
 
@@ -170,14 +537,29 @@ For each backlog item, verify and enhance:
    ↓
 6. RENAME: Update filenames with correct priority prefixes
    ↓
-7. REPORT: Generate comprehensive review summary
+7. COMPLEXITY SCORE: Calculate complexity for each item (0-100)
+   ↓
+8. HOLISTIC ANALYSIS: Analyze for autonomy gaps, apply refinements
+   ↓
+9. OPTIMIZE DELEGATION: For items targeting files, run cortex-optimize.prompt.md
+   - Bloat detection → If bloated, create decomposition backlog item first
+   - Technical debt → Inject findings into backlog context
+   ↓
+10. TDD EVALUATION: Determine if TDD adds HIGH value
+   ↓
+11. REPORT: Generate comprehensive review summary
+    ↓
+12. HAND-OFF DECISION:
+    - Score 0-50  → Ready for direct execution
+    - Score 51-75 → 🛡️ HAND-OFF to Planning Orchestrator
+    - Score 76-100 → 🛡️ HAND-OFF to Planning + ADO Orchestrators
 ```
 
 **No user interaction needed—fully autonomous review process**
 
 ---
 
-## � Review Report Format
+## 📄 Review Report Format
 
 After reviewing all backlog items, generate this report:
 
@@ -241,6 +623,29 @@ After reviewing all backlog items, generate this report:
 **File:** `brain-issues.md`
 - ❌ Not a backlog item (conversation log)
 - 🗑️ Recommended action: Delete or move to `.asif/archive/`
+
+---
+
+### 🧮 Complexity Scores & Hand-Off Decisions
+
+| File | Score | Complexity | TDD Value | Action |
+|------|-------|------------|-----------|--------|
+| `15-docgen-prompt.md` | 40/100 | � MODERATE | LOW | Execute with checkpoints |
+| `25-orchestrator-templates.md` | 42/100 | � MODERATE | LOW | Execute with checkpoints |
+| `40-yaml-bloat.md` | 48/100 | � MODERATE | LOW | Execute with checkpoints |
+| `45-decompose-maint.md` | 37/100 | � MODERATE | HIGH | Execute with TDD approach |
+| `65-learning-paths.md` | 54/100 | � COMPLEX | HIGH | 🛡️ HAND-OFF → Planning (TDD recommended) |
+
+#### 🛡️ Items Requiring Planning Hand-Off
+
+**🟠 COMPLEX (Score 51-75):** X items
+- Will be handed off to Planning Orchestrator for comprehensive plan creation
+- Items with HIGH TDD value will include TDD phases in plan
+
+**🔴 HIGHLY COMPLEX (Score 76-100):** X items
+- Check if "ADO" mentioned in backlog item content
+- If ADO mentioned: Hand off to Planning + ADO Orchestrators
+- If NO ADO: Hand off to Planning Orchestrator only
 
 ---
 
@@ -416,7 +821,7 @@ When creating new scripts, include in backlog item:
 
 ---
 
-## � Priority Assessment Guidelines
+## 🎯 Priority Assessment Guidelines
 
 Use this decision tree to assign priority:
 
