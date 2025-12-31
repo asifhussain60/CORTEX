@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX OWASP Top 10 - Interactive Security Vulnerability Visualization and Mitigation Guide">
+    <meta name="keywords" content="OWASP, top 10, security, vulnerabilities, injection, XSS, CSRF, authentication">
+    <meta name="author" content="Asif Hussain">
+    <title>OWASP Top 10 | CORTEX Security</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        /* OWASP Page Specific Styles */
+        .owasp-hero {
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .owasp-hero-title {
+            font-size: 2.5rem;
+            color: var(--accent-primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .owasp-hero-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Risk Summary Cards */
+        .risk-summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .risk-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
+        }
+
+        .risk-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .risk-card.critical { border-left: 4px solid #ff4444; }
+        .risk-card.high { border-left: 4px solid #ffa500; }
+        .risk-card.medium { border-left: 4px solid #ffcc00; }
+        .risk-card.low { border-left: 4px solid #00ff88; }
+
+        .risk-count {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .risk-card.critical .risk-count { color: #ff4444; }
+        .risk-card.high .risk-count { color: #ffa500; }
+        .risk-card.medium .risk-count { color: #ffcc00; }
+        .risk-card.low .risk-count { color: #00ff88; }
+
+        .risk-label {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        /* Chart Layout */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 1024px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .chart-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 350px;
+        }
+
+        /* OWASP Vulnerability Cards */
+        .vulnerability-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .vuln-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .vuln-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-primary);
+        }
+
+        .vuln-header {
+            padding: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .vuln-rank {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .vuln-rank.critical { background: rgba(255, 68, 68, 0.2); color: #ff4444; }
+        .vuln-rank.high { background: rgba(255, 165, 0, 0.2); color: #ffa500; }
+        .vuln-rank.medium { background: rgba(255, 204, 0, 0.2); color: #ffcc00; }
+
+        .vuln-title-group {
+            flex: 1;
+        }
+
+        .vuln-title {
+            margin: 0 0 0.25rem 0;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+        }
+
+        .vuln-severity {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .vuln-severity.critical { background: #ff4444; color: #fff; }
+        .vuln-severity.high { background: #ffa500; color: #000; }
+        .vuln-severity.medium { background: #ffcc00; color: #000; }
+
+        .vuln-body {
+            padding: 1.25rem;
+        }
+
+        .vuln-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .vuln-details {
+            display: none;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .vuln-details.expanded {
+            display: block;
+        }
+
+        .vuln-section {
+            margin-bottom: 1rem;
+        }
+
+        .vuln-section-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--accent-primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .vuln-section ul {
+            margin: 0;
+            padding-left: 1.25rem;
+            color: var(--text-secondary);
+        }
+
+        .vuln-section li {
+            margin-bottom: 0.25rem;
+        }
+
+        .vuln-expand-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(26, 31, 58, 0.7);
+            border: none;
+            border-top: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .vuln-expand-btn:hover {
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--accent-primary);
+        }
+
+        /* Filter Controls */
+        .filter-controls {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1.25rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--accent-primary);
+            color: var(--text-primary);
+        }
+
+        .filter-btn.active {
+            background: rgba(0, 212, 255, 0.2);
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        /* Code Example */
+        .code-example {
+            background: rgba(10, 14, 39, 0.8);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.85rem;
+            overflow-x: auto;
+            margin-top: 0.5rem;
+        }
+
+        .code-example .bad { color: #ff4444; }
+        .code-example .good { color: #00ff88; }
+        .code-example .comment { color: #6b7280; }
+
+        /* Mermaid Diagram */
+        .attack-flow-container {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .mermaid {
+            background: transparent !important;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .owasp-hero-title {
+                font-size: 1.75rem;
+            }
+
+            .vulnerability-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html"><i class="fas fa-home"></i> Home</a>
+        <span class="breadcrumb-separator">→</span>
+        <a href="index.html"><i class="fas fa-shield-alt"></i> Security</a>
+        <span class="breadcrumb-separator">→</span>
+        <span class="breadcrumb-current">OWASP Top 10</span>
+    </nav>
+
+    <!-- Logo Header -->
+    <div class="logo-header">
+        <a href="../index.html">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
+        </a>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="owasp-hero" id="main-content">
+        <h1 class="owasp-hero-title">
+            <i class="fas fa-shield-virus"></i>
+            OWASP Top 10
+        </h1>
+        <p class="owasp-hero-subtitle">
+            Interactive visualization of the most critical web application security risks with mitigation strategies
+        </p>
+    </section>
+
+    <main class="container">
+        <!-- Risk Summary Cards -->
+        <section class="risk-summary-grid">
+            <div class="risk-card critical">
+                <div class="risk-count">3</div>
+                <div class="risk-label">Critical Risk</div>
+            </div>
+            <div class="risk-card high">
+                <div class="risk-count">4</div>
+                <div class="risk-label">High Risk</div>
+            </div>
+            <div class="risk-card medium">
+                <div class="risk-count">3</div>
+                <div class="risk-label">Medium Risk</div>
+            </div>
+            <div class="risk-card low">
+                <div class="risk-count">0</div>
+                <div class="risk-label">Low Risk</div>
+            </div>
+        </section>
+
+        <!-- Charts Section -->
+        <section class="charts-grid">
+            <!-- Radar Chart -->
+            <div class="chart-card">
+                <h2 class="section-title" style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                    <i class="fas fa-chart-radar"></i>
+                    Risk Distribution
+                </h2>
+                <div class="chart-container">
+                    <canvas id="owaspRadarChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Bar Chart -->
+            <div class="chart-card">
+                <h2 class="section-title" style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                    <i class="fas fa-chart-bar"></i>
+                    Prevalence by Category
+                </h2>
+                <div class="chart-container">
+                    <canvas id="owaspBarChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Attack Flow Diagram -->
+        <section class="attack-flow-container">
+            <h2 class="section-title" style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem;">
+                <i class="fas fa-project-diagram"></i>
+                Common Attack Flow
+            </h2>
+            <div class="mermaid">
+sequenceDiagram
+    participant Attacker
+    participant WebApp
+    participant Database
+    participant User
+    
+    Note over Attacker,User: A03:2021 - Injection Attack Flow
+    
+    Attacker->>WebApp: Malicious Input<br/>(SQL/XSS payload)
+    WebApp->>Database: Unvalidated Query
+    Database-->>WebApp: Sensitive Data
+    WebApp-->>Attacker: Data Exfiltration
+    
+    Note over Attacker,User: A07:2021 - XSS Attack Flow
+    
+    Attacker->>WebApp: Inject Script
+    WebApp->>User: Serve Malicious Page
+    User->>Attacker: Session Token Stolen
+    
+    Note over Attacker,User: Mitigation: Input Validation + Output Encoding
+            </div>
+        </section>
+
+        <!-- Filter Controls -->
+        <section style="margin-top: 3rem;">
+            <h2 class="section-title" style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem;">
+                <i class="fas fa-list"></i>
+                OWASP Top 10 (2021)
+            </h2>
+            
+            <div class="filter-controls">
+                <button class="filter-btn active" data-filter="all">All Risks</button>
+                <button class="filter-btn" data-filter="critical">Critical</button>
+                <button class="filter-btn" data-filter="high">High</button>
+                <button class="filter-btn" data-filter="medium">Medium</button>
+            </div>
+
+            <!-- Vulnerability Cards -->
+            <div class="vulnerability-grid">
+                <!-- A01: Broken Access Control -->
+                <article class="vuln-card" data-severity="critical">
+                    <div class="vuln-header">
+                        <div class="vuln-rank critical">A01</div>
+                        <div class="vuln-title-group">
+                            <h3 class="vuln-title">Broken Access Control</h3>
+                            <span class="vuln-severity critical">CRITICAL</span>
+                        </div>
+                    </div>
+                    <div class="vuln-body">
+                        <p class="vuln-description">
+                            Access control enforces policy such that users cannot act outside of their intended permissions. Failures typically lead to unauthorized information disclosure, modification, or destruction of data.
+                        </p>
+                        <div class="vuln-details">
+                            <div class="vuln-section">
+                                <div class="vuln-section-title"><i class="fas fa-bug"></i> Common Weaknesses</div>
+                                <ul>
+                                    <li>Bypassing access control checks by modifying URLs</li>
+                                    <li>Viewing/editing someone else's account (IDOR)</li>
+                                    <li>Accessing API with missing access controls</li>
+                                    <li>Elevation of privilege (user to admin)</li>
+                                </ul>
+                            </div>
+                            <div class="vuln-section">
+                                <div class="vuln-section-title"><i class="fas fa-shield-alt"></i> Mitigations</div>
+                                <ul>
+                                    <li>Deny by default except for public resources</li>
+                                    <li>Implement access control mechanisms once</li>
+                                    <li>Model access controls should enforce record ownership</li>
+                                    <li>Log access control failures, alert on repeated failures</li>
+                                </ul>
+                            </div>
+                            <div class="vuln-section">
+                                <div class="vuln-section-title"><i class="fas fa-code"></i> Code Example</div>
+                                <div class="code-example">
+<span class="comment">// Bad: Direct Object Reference without authorization</span>
+<span class="bad">app.get('/api/users/:id', (req, res) => {
+  return db.users.findById(req.params.id);
+});</span>
+
+<span class="comment">// Good: Verify ownership before returning data</span>
+<span class="good">app.get('/api/users/:id', authorize, (req, res) => {
+  if (req.user.id !== req.params.id && !req.user.isAdmin) {
+    return res.status(403).json({ error: 'Forbidden' });
+  }
+  return db.users.findById(req.params.id);
+});</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="vuln-expand-btn" onclick="toggleDetails(this)">
+                        <i class="fas fa-chevron-down"></i> Show Details
+                    </button>
+                </article>
+
+                <!-- A02: Cryptographic Failures -->
+                <article class="vuln-card" data-severity="critical">
+                    <div class="vuln-header">
+                        <div class="vuln-rank critical">A02</div>
+                        <div class="vuln-title-group">
+                            <h3 class="vuln-title">Cryptographic Failures</h3>
+                            <span class="vuln-severity critical">CRITICAL</span>
+                        </div>
+                    </div>
+                    <div class="vuln-body">
+                        <p class="vuln-description">
+                            Previously known as "Sensitive Data Exposure," focusing on failures related to cryptography which often leads to sensitive data exposure or system compromise.
+                        </p>
+                        <div class="vuln-details">
+                            <div class="vuln-section">
+                                <div class="vuln-section-title"><i class="fas fa-bug"></i> Common Weaknesses</div>
+                                <ul>
+                                    <li>Transmitting data in clear text (HTTP, FTP)</li>
+                                    <li>Using old or weak cryptographic algorithms</li>
+                                    <li>Using default or weak crypto keys</li>
+                                    <li>Not enforcing encryption (missing TLS directives)</li>
+                                </ul>
+                            </div>
+                            <div class="vuln-section">
+                                <div class="vuln-section-title"><i class="fas fa-shield-alt"></i> Mitigations</div>
+                                <ul>
+                                    <li>Classify data and identify sensitive data</li>
+                                    <li>Encrypt all sensitive data at rest</li>
+                                    <li>Use strong algorithms, protocols, and keys</li>
+                                    <li>Disable caching for sensitive responses</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="vuln-expand-btn" onclick="toggleDetails(this)">
+                        <i class="fas fa-chevron-down"></i> Show Details
+                    </button>
+                </article>
+
+                <!-- A03: Injection -->
+                <article class="vuln-card" data-severity="critical">
+                    <div class="vuln-header">
+                        <div class="vuln-rank critical">A03</div>
+                        <div class="vuln-title-group">
+                            <h3 class="vuln-title">Injection</h3>
+                            <span class="vuln-severity critical">CRITICAL</span>
+                        </div>
+                    </div>
+                    <div class="vuln-body">
+                        <p class="vuln-description">
+                            An application is vulnerable to attack when user-supplied data is not validated, filtered, or sanitized. This includes SQL, NoSQL, OS, and LDAP injection.
+                        </p>
+                        <div class="vuln-details">
+                            <div class="vuln-section">
+                                <div class="vuln-section-title"><i class="fas fa-bug"></i> Common Weaknesses</div>
+                                <ul>
+                                    <li>SQL Injection via untrusted data in queries</li>
+                                    <li>LDAP injection in directory lookups</li>
+                                    <li>XPath injection in XML queries</li>
+                                    <li>OS command injection</li>
+                                </ul>
+                            </div>
+                            <div class="vuln-section">
+                                <div class="vuln-section-title"><i class="fas fa-shield-alt"></i> Mitigations</div>
+                                <ul>
+                                    <li>Use parameterized queries or prepared statements</li>
+                                    <li>Use ORM with proper escaping</li>
+                                    <li>Implement input validation (whitelist)</li>
+                                    <li>Escape special characters in queries</li>
+                                </ul>
+                            </div>
+                            <div class="vuln-section">
+                                <div class="vuln-section-title"><i class="fas fa-code"></i> Code Example</div>
+                                <div class="code-example">
+<span class="comment">// Bad: String concatenation in SQL</span>
+<span class="bad">query = "SELECT * FROM users WHERE id = '" + userId + "'";</span>
+
+<span class="comment">// Good: Parameterized query</span>
+<span class="good">query = "SELECT * FROM users WHERE id = ?";
+db.execute(query, [userId]);</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="vuln-expand-btn" onclick="toggleDetails(this)">
+                        <i class="fas fa-chevron-down"></i> Show Details
+                    </button>
+                </article>
+
+                <!-- A04: Insecure Design -->
+                <article class="vuln-card" data-severity="high">
+                    <div class="vuln-header">
+                        <div class="vuln-rank high">A04</div>
+                        <div class="vuln-title-group">
+                            <h3 class="vuln-title">Insecure Design</h3>
+                            <span class="vuln-severity high">HIGH</span>
+                        </div>
+                    </div>
+                    <div class="vuln-body">
+                        <p class="vuln-description">
+                            A new category focusing on risks related to design flaws. Secure design requires threat modeling, secure design patterns, and reference architectures.
+                        </p>
+                        <div class="vuln-details">
+                            <div class="vuln-section">
+                                <div class="vuln-section-title"><i class="fas fa-bug"></i> Common Weaknesses</div>
+                                <ul>
+                                    <li>Missing rate limiting on sensitive operations</li>
+                                    <li>Insufficient business logic validation</li>
+                                    <li>Trust boundaries not properly defined</li>
+                                    <li>Lack of threat modeling in design phase</li>
+                                </ul>
+                            </div>
+                            <div class="vuln-section">
+                                <div class="vuln-section-title"><i class="fas fa-shield-alt"></i> Mitigations</div>
+                                <ul>
+                                    <li>Use threat modeling from design phase</li>
+                                    <li>Integrate security into the development lifecycle</li>
+                                    <li>Use secure design patterns and libraries</li>
+                                    <li>Define trust boundaries and data flows</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="vuln-expand-btn" onclick="toggleDetails(this)">
+                        <i class="fas fa-chevron-down"></i> Show Details
+                    </button>
+                </article>
+
+                <!-- A05: Security Misconfiguration -->
+                <article class="vuln-card" data-severity="high">
+                    <div class="vuln-header">
+                        <div class="vuln-rank high">A05</div>
+                        <div class="vuln-title-group">
+                            <h3 class="vuln-title">Security Misconfiguration</h3>
+                            <span class="vuln-severity high">HIGH</span>
+                        </div>
+                    </div>
+                    <div class="vuln-body">
+                        <p class="vuln-description">
+                            Security misconfiguration is the most commonly seen issue. This includes insecure default configurations, incomplete configurations, and verbose error messages.
+                        </p>
+                        <div class="vuln-details">
+                            <div class="vuln-section">
+                                <div class="vuln-section-title"><i class="fas fa-bug"></i> Common Weaknesses</div>
+                                <ul>
+                                    <li>Default credentials left unchanged</li>
+                                    <li>Unnecessary features enabled</li>
+                                    <li>Error handling reveals too much information</li>
+                                    <li>Missing security headers</li>
+                                </ul>
+                            </div>
+                            <div class="vuln-section">
+                                <div class="vuln-section-title"><i class="fas fa-shield-alt"></i> Mitigations</div>
+                                <ul>
+                                    <li>Implement hardening procedures</li>
+                                    <li>Remove unnecessary features and frameworks</li>
+                                    <li>Use security headers (CSP, HSTS, etc.)</li>
+                                    <li>Automate configuration verification</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="vuln-expand-btn" onclick="toggleDetails(this)">
+                        <i class="fas fa-chevron-down"></i> Show Details
+                    </button>
+                </article>
+
+                <!-- A06: Vulnerable Components -->
+                <article class="vuln-card" data-severity="high">
+                    <div class="vuln-header">
+                        <div class="vuln-rank high">A06</div>
+                        <div class="vuln-title-group">
+                            <h3 class="vuln-title">Vulnerable & Outdated Components</h3>
+                            <span class="vuln-severity high">HIGH</span>
+                        </div>
+                    </div>
+                    <div class="vuln-body">
+                        <p class="vuln-description">
+                            Components like libraries, frameworks, and other software modules run with the same privileges as the application. Vulnerable components can undermine application defenses.
+                        </p>
+                        <div class="vuln-details">
+                            <div class="vuln-section">
+                                <div class="vuln-section-title"><i class="fas fa-bug"></i> Common Weaknesses</div>
+                                <ul>
+                                    <li>Unknown component versions in use</li>
+                                    <li>Vulnerable or outdated software</li>
+                                    <li>No regular vulnerability scanning</li>
+                                    <li>Not fixing dependencies in timely manner</li>
+                                </ul>
+                            </div>
+                            <div class="vuln-section">
+                                <div class="vuln-section-title"><i class="fas fa-shield-alt"></i> Mitigations</div>
+                                <ul>
+                                    <li>Maintain inventory of component versions</li>
+                                    <li>Monitor for vulnerabilities (CVE databases)</li>
+                                    <li>Only obtain components from official sources</li>
+                                    <li>Use software composition analysis tools</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="vuln-expand-btn" onclick="toggleDetails(this)">
+                        <i class="fas fa-chevron-down"></i> Show Details
+                    </button>
+                </article>
+
+                <!-- A07: Authentication Failures -->
+                <article class="vuln-card" data-severity="high">
+                    <div class="vuln-header">
+                        <div class="vuln-rank high">A07</div>
+                        <div class="vuln-title-group">
+                            <h3 class="vuln-title">Identification & Authentication Failures</h3>
+                            <span class="vuln-severity high">HIGH</span>
+                        </div>
+                    </div>
+                    <div class="vuln-body">
+                        <p class="vuln-description">
+                            Confirmation of the user's identity, authentication, and session management is critical. Weaknesses exist if the application permits automated attacks or uses weak credentials.
+                        </p>
+                        <div class="vuln-details">
+                            <div class="vuln-section">
+                                <div class="vuln-section-title"><i class="fas fa-bug"></i> Common Weaknesses</div>
+                                <ul>
+                                    <li>Permits automated credential attacks</li>
+                                    <li>Allows weak or well-known passwords</li>
+                                    <li>Missing or ineffective MFA</li>
+                                    <li>Session IDs exposed in URLs</li>
+                                </ul>
+                            </div>
+                            <div class="vuln-section">
+                                <div class="vuln-section-title"><i class="fas fa-shield-alt"></i> Mitigations</div>
+                                <ul>
+                                    <li>Implement multi-factor authentication</li>
+                                    <li>Don't ship with default credentials</li>
+                                    <li>Implement weak-password checks</li>
+                                    <li>Limit failed login attempts</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="vuln-expand-btn" onclick="toggleDetails(this)">
+                        <i class="fas fa-chevron-down"></i> Show Details
+                    </button>
+                </article>
+
+                <!-- A08: Software Integrity -->
+                <article class="vuln-card" data-severity="medium">
+                    <div class="vuln-header">
+                        <div class="vuln-rank medium">A08</div>
+                        <div class="vuln-title-group">
+                            <h3 class="vuln-title">Software & Data Integrity Failures</h3>
+                            <span class="vuln-severity medium">MEDIUM</span>
+                        </div>
+                    </div>
+                    <div class="vuln-body">
+                        <p class="vuln-description">
+                            A new category focusing on software updates, critical data, and CI/CD pipelines without verifying integrity. Includes insecure deserialization.
+                        </p>
+                        <div class="vuln-details">
+                            <div class="vuln-section">
+                                <div class="vuln-section-title"><i class="fas fa-bug"></i> Common Weaknesses</div>
+                                <ul>
+                                    <li>Using untrusted CDNs without integrity checks</li>
+                                    <li>Auto-update without signature verification</li>
+                                    <li>Insecure deserialization</li>
+                                    <li>Unsigned CI/CD pipeline modifications</li>
+                                </ul>
+                            </div>
+                            <div class="vuln-section">
+                                <div class="vuln-section-title"><i class="fas fa-shield-alt"></i> Mitigations</div>
+                                <ul>
+                                    <li>Use digital signatures to verify integrity</li>
+                                    <li>Use SRI (Subresource Integrity) for CDN resources</li>
+                                    <li>Implement code signing for CI/CD</li>
+                                    <li>Review code and configuration changes</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="vuln-expand-btn" onclick="toggleDetails(this)">
+                        <i class="fas fa-chevron-down"></i> Show Details
+                    </button>
+                </article>
+
+                <!-- A09: Security Logging -->
+                <article class="vuln-card" data-severity="medium">
+                    <div class="vuln-header">
+                        <div class="vuln-rank medium">A09</div>
+                        <div class="vuln-title-group">
+                            <h3 class="vuln-title">Security Logging & Monitoring Failures</h3>
+                            <span class="vuln-severity medium">MEDIUM</span>
+                        </div>
+                    </div>
+                    <div class="vuln-body">
+                        <p class="vuln-description">
+                            Without logging and monitoring, breaches cannot be detected. Insufficient logging, detection, monitoring, and active response allows attackers to persist.
+                        </p>
+                        <div class="vuln-details">
+                            <div class="vuln-section">
+                                <div class="vuln-section-title"><i class="fas fa-bug"></i> Common Weaknesses</div>
+                                <ul>
+                                    <li>Auditable events not logged</li>
+                                    <li>Logs only stored locally</li>
+                                    <li>No alerting for suspicious activities</li>
+                                    <li>Penetration tests don't trigger alerts</li>
+                                </ul>
+                            </div>
+                            <div class="vuln-section">
+                                <div class="vuln-section-title"><i class="fas fa-shield-alt"></i> Mitigations</div>
+                                <ul>
+                                    <li>Log all login, access control, and input validation failures</li>
+                                    <li>Ensure logs are generated in a format for log management</li>
+                                    <li>Establish effective monitoring and alerting</li>
+                                    <li>Create incident response plan</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="vuln-expand-btn" onclick="toggleDetails(this)">
+                        <i class="fas fa-chevron-down"></i> Show Details
+                    </button>
+                </article>
+
+                <!-- A10: SSRF -->
+                <article class="vuln-card" data-severity="medium">
+                    <div class="vuln-header">
+                        <div class="vuln-rank medium">A10</div>
+                        <div class="vuln-title-group">
+                            <h3 class="vuln-title">Server-Side Request Forgery (SSRF)</h3>
+                            <span class="vuln-severity medium">MEDIUM</span>
+                        </div>
+                    </div>
+                    <div class="vuln-body">
+                        <p class="vuln-description">
+                            SSRF flaws occur when a web application fetches a remote resource without validating the user-supplied URL. It allows attackers to coerce the application to send requests to an unexpected destination.
+                        </p>
+                        <div class="vuln-details">
+                            <div class="vuln-section">
+                                <div class="vuln-section-title"><i class="fas fa-bug"></i> Common Weaknesses</div>
+                                <ul>
+                                    <li>Fetching URLs provided by users without validation</li>
+                                    <li>Accessing internal services via user-supplied URLs</li>
+                                    <li>Cloud metadata endpoint access</li>
+                                    <li>Internal network scanning</li>
+                                </ul>
+                            </div>
+                            <div class="vuln-section">
+                                <div class="vuln-section-title"><i class="fas fa-shield-alt"></i> Mitigations</div>
+                                <ul>
+                                    <li>Segment remote resource access functionality</li>
+                                    <li>Enforce "deny by default" firewall policies</li>
+                                    <li>Sanitize and validate all user-supplied URLs</li>
+                                    <li>Disable HTTP redirections</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="vuln-expand-btn" onclick="toggleDetails(this)">
+                        <i class="fas fa-chevron-down"></i> Show Details
+                    </button>
+                </article>
+            </div>
+        </section>
+
+        <!-- Knowledge Library Link -->
+        <section class="glass-card" style="margin-top: 3rem; text-align: center;">
+            <h2 class="section-title"><i class="fas fa-book"></i> Learn More</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                Explore comprehensive OWASP documentation in the CORTEX Knowledge Library
+            </p>
+            <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+                <a href="dashboard.html" class="btn-hero btn-hero-primary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-chart-line"></i> Security Dashboard
+                </a>
+                <a href="index.html" class="btn-hero btn-hero-secondary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-shield-alt"></i> Security Hub
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Back to Top -->
+    <a href="#main-content" class="back-to-top" aria-label="Back to top"><i class="fas fa-arrow-up"></i></a>
+
+    <footer class="footer">
+        <p>&copy; 2024-2025 Asif Hussain. All rights reserved.</p>
+        <p>
+            <a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener" class="footer-link">
+                <i class="fab fa-github"></i> GitHub
+            </a> |
+            <a href="../index.html" class="footer-link">Home</a> |
+            <a href="index.html" class="footer-link">Security Hub</a>
+        </p>
+    </footer>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#7b61ff',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#00d4ff',
+                lineColor: '#a0a6c0',
+                secondaryColor: '#1a1f3a',
+                tertiaryColor: '#0a0e27',
+                background: 'transparent',
+                mainBkg: '#1a1f3a'
+            }
+        });
+
+        // OWASP Data
+        const owaspCategories = [
+            'Broken Access Control',
+            'Cryptographic Failures',
+            'Injection',
+            'Insecure Design',
+            'Security Misconfiguration',
+            'Vulnerable Components',
+            'Authentication Failures',
+            'Integrity Failures',
+            'Logging Failures',
+            'SSRF'
+        ];
+
+        const owaspRiskScores = [9.5, 9.0, 9.2, 7.5, 7.8, 8.0, 8.2, 6.5, 6.8, 6.2];
+        const owaspPrevalence = [94, 87, 83, 76, 90, 81, 72, 65, 70, 58];
+
+        // Radar Chart
+        const radarCtx = document.getElementById('owaspRadarChart').getContext('2d');
+        new Chart(radarCtx, {
+            type: 'radar',
+            data: {
+                labels: owaspCategories.map(c => c.split(' ').slice(0, 2).join(' ')),
+                datasets: [{
+                    label: 'Risk Score',
+                    data: owaspRiskScores,
+                    backgroundColor: 'rgba(255, 68, 68, 0.2)',
+                    borderColor: '#ff4444',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#ff4444'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 10,
+                        ticks: {
+                            stepSize: 2,
+                            color: '#a0a6c0'
+                        },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
+                        pointLabels: {
+                            color: '#ffffff',
+                            font: { size: 10 }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: { labels: { color: '#ffffff' } }
+                }
+            }
+        });
+
+        // Bar Chart
+        const barCtx = document.getElementById('owaspBarChart').getContext('2d');
+        new Chart(barCtx, {
+            type: 'bar',
+            data: {
+                labels: ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10'],
+                datasets: [{
+                    label: 'Prevalence %',
+                    data: owaspPrevalence,
+                    backgroundColor: [
+                        '#ff4444', '#ff4444', '#ff4444',  // Critical
+                        '#ffa500', '#ffa500', '#ffa500', '#ffa500',  // High
+                        '#ffcc00', '#ffcc00', '#ffcc00'  // Medium
+                    ],
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: { color: '#a0a6c0' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    },
+                    x: {
+                        ticks: { color: '#a0a6c0' },
+                        grid: { display: false }
+                    }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+
+        // Toggle Details
+        function toggleDetails(btn) {
+            const card = btn.closest('.vuln-card');
+            const details = card.querySelector('.vuln-details');
+            const icon = btn.querySelector('i');
+            
+            details.classList.toggle('expanded');
+            
+            if (details.classList.contains('expanded')) {
+                btn.innerHTML = '<i class="fas fa-chevron-up"></i> Hide Details';
+            } else {
+                btn.innerHTML = '<i class="fas fa-chevron-down"></i> Show Details';
+            }
+        }
+
+        // Filter Functionality
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                const filter = this.dataset.filter;
+                document.querySelectorAll('.vuln-card').forEach(card => {
+                    if (filter === 'all' || card.dataset.severity === filter) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Back to top
+        const backToTop = document.querySelector('.back-to-top');
+        window.addEventListener('scroll', () => {
+            backToTop.style.display = window.scrollY > 300 ? 'flex' : 'none';
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+    </script>
+</body>
+</html>

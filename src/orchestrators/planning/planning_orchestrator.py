@@ -96,6 +96,28 @@ except ImportError:
     THREAT_MODELER_AVAILABLE = False
     ThreatModelerAgent = None
 
+# Phase 2: Security Enhancement - Knowledge Library References
+SECURITY_KNOWLEDGE_LIBRARY_PATH = "cortex-brain/knowledge-library/security"
+SECURITY_DOCUMENTS = {
+    "threat_modeling": f"{SECURITY_KNOWLEDGE_LIBRARY_PATH}/threat-modeling-framework.md",
+    "owasp_top_10": f"{SECURITY_KNOWLEDGE_LIBRARY_PATH}/owasp-top-10-guide.md",
+    "api_security": f"{SECURITY_KNOWLEDGE_LIBRARY_PATH}/api-security-foundations.md",
+    "access_control": f"{SECURITY_KNOWLEDGE_LIBRARY_PATH}/access-control-patterns.md",
+    "data_protection": f"{SECURITY_KNOWLEDGE_LIBRARY_PATH}/data-protection-framework.md",
+    "incident_response": f"{SECURITY_KNOWLEDGE_LIBRARY_PATH}/incident-response-playbook.md",
+    "audit_logging": f"{SECURITY_KNOWLEDGE_LIBRARY_PATH}/audit-logging-standards.md",
+}
+
+# Phase 2: Security-Related Keywords for Enhanced Analysis
+SECURITY_KEYWORDS = {
+    "auth": ["authentication", "login", "password", "credential", "session", "token", "jwt", "oauth", "sso"],
+    "data": ["database", "storage", "pii", "sensitive", "encryption", "decrypt", "hash", "user data"],
+    "api": ["api", "endpoint", "rest", "graphql", "webhook", "request", "response", "http"],
+    "access": ["permission", "role", "rbac", "abac", "authorize", "access control", "privilege"],
+    "network": ["network", "firewall", "proxy", "ssl", "tls", "https", "certificate"],
+    "input": ["input", "validation", "sanitize", "form", "upload", "file", "user input"],
+}
+
 logger = logging.getLogger(__name__)
 
 # Enhancement 1: JSON Schema validation for manifests
@@ -964,6 +986,10 @@ class PlanningOrchestrator(BaseOrchestrator):
             threat_analysis=threat_analysis_result
         )
         
+        # Phase 2: AUTOMATIC security injection for ALL coding plans (MANDATORY)
+        # This runs BEFORE the conditional threat analysis injection
+        plan_data = self._inject_automatic_security_section(plan_data, feature_name)
+        
         # Phase 3.4: Auto-inject security tasks if critical/high threats found
         if threat_analysis_result and self._has_critical_threats(threat_analysis_result):
             plan_data = self._inject_security_tasks(plan_data, threat_analysis_result)
@@ -1111,6 +1137,268 @@ class PlanningOrchestrator(BaseOrchestrator):
         
         return plan_data
     
+    # ========================================================================
+    # Phase 2: Automatic Security Injection for ALL Coding Plans
+    # ========================================================================
+    
+    def _detect_security_relevance(self, feature_name: str, context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        """
+        Analyze feature for security relevance and determine which security domains apply.
+        
+        Phase 2: Security Enhancement - Automatic detection of security-relevant features.
+        
+        Args:
+            feature_name: Name/description of the feature
+            context: Optional additional context about the feature
+        
+        Returns:
+            Dictionary with security relevance analysis:
+            - is_security_relevant: bool
+            - relevance_score: float (0-1)
+            - matched_domains: list of matched security domains
+            - recommended_stride: list of STRIDE categories to analyze
+            - knowledge_references: list of relevant security documents
+        """
+        feature_lower = feature_name.lower()
+        context_text = str(context or {}).lower()
+        combined_text = f"{feature_lower} {context_text}"
+        
+        matched_domains = []
+        matched_keywords = []
+        
+        for domain, keywords in SECURITY_KEYWORDS.items():
+            for keyword in keywords:
+                if keyword in combined_text:
+                    if domain not in matched_domains:
+                        matched_domains.append(domain)
+                    matched_keywords.append(keyword)
+        
+        # Calculate relevance score
+        relevance_score = min(len(matched_domains) / len(SECURITY_KEYWORDS), 1.0)
+        
+        # Determine STRIDE categories based on matched domains
+        stride_mapping = {
+            "auth": ["Spoofing", "Elevation of Privilege"],
+            "data": ["Tampering", "Information Disclosure"],
+            "api": ["Spoofing", "Tampering", "Information Disclosure", "Denial of Service"],
+            "access": ["Elevation of Privilege", "Spoofing"],
+            "network": ["Tampering", "Information Disclosure", "Denial of Service"],
+            "input": ["Tampering", "Information Disclosure", "Denial of Service"],
+        }
+        
+        recommended_stride = set()
+        for domain in matched_domains:
+            recommended_stride.update(stride_mapping.get(domain, []))
+        
+        # Map to knowledge library documents
+        knowledge_mapping = {
+            "auth": ["threat_modeling", "access_control", "api_security"],
+            "data": ["data_protection", "audit_logging"],
+            "api": ["api_security", "owasp_top_10"],
+            "access": ["access_control", "threat_modeling"],
+            "network": ["api_security", "threat_modeling"],
+            "input": ["owasp_top_10", "api_security"],
+        }
+        
+        knowledge_refs = set()
+        for domain in matched_domains:
+            for ref in knowledge_mapping.get(domain, []):
+                knowledge_refs.add(SECURITY_DOCUMENTS.get(ref, ""))
+        
+        return {
+            "is_security_relevant": len(matched_domains) > 0,
+            "relevance_score": relevance_score,
+            "matched_domains": matched_domains,
+            "matched_keywords": matched_keywords,
+            "recommended_stride": list(recommended_stride) if recommended_stride else [
+                "Spoofing", "Tampering", "Repudiation", 
+                "Information Disclosure", "Denial of Service", "Elevation of Privilege"
+            ],
+            "knowledge_references": [ref for ref in knowledge_refs if ref],
+        }
+    
+    def _generate_security_section(self, feature_name: str, security_analysis: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Generate a comprehensive security section for the plan.
+        
+        Phase 2: Security Enhancement - Creates security documentation section for ALL plans.
+        
+        Args:
+            feature_name: Name of the feature
+            security_analysis: Results from _detect_security_relevance()
+        
+        Returns:
+            Dictionary containing security section content for plan
+        """
+        # Base security section (always included)
+        security_section = {
+            "security_analysis": {
+                "relevance_score": security_analysis.get("relevance_score", 0.0),
+                "matched_domains": security_analysis.get("matched_domains", []),
+                "stride_categories": security_analysis.get("recommended_stride", []),
+            },
+            "threat_modeling": {
+                "methodology": "STRIDE",
+                "categories_to_analyze": security_analysis.get("recommended_stride", []),
+                "reference_document": SECURITY_DOCUMENTS.get("threat_modeling", ""),
+            },
+            "security_requirements": {
+                "dor": [
+                    "Security threat model reviewed (STRIDE analysis)",
+                    "Data classification determined (Public/Internal/Confidential/Restricted)",
+                    "Authentication/Authorization requirements defined",
+                    "Input validation strategy documented",
+                ],
+                "dod": [
+                    "Security tests included in test suite (authentication, authorization, input validation)",
+                    "OWASP Top 10 vulnerabilities addressed",
+                    "Security code review completed",
+                    "No critical/high security vulnerabilities in scan",
+                ],
+            },
+            "knowledge_references": security_analysis.get("knowledge_references", []),
+        }
+        
+        # Add domain-specific requirements based on matched domains
+        domain_requirements = {
+            "auth": {
+                "dor": ["Multi-factor authentication requirements defined", "Session management strategy documented"],
+                "dod": ["Authentication bypass tests passed", "Session fixation/hijacking tests passed"],
+            },
+            "data": {
+                "dor": ["Data encryption requirements defined (at-rest and in-transit)", "Data retention policy documented"],
+                "dod": ["Encryption implementation verified", "Data leakage tests passed"],
+            },
+            "api": {
+                "dor": ["API rate limiting requirements defined", "API authentication mechanism selected"],
+                "dod": ["API security tests passed (injection, auth bypass, rate limiting)", "OpenAPI spec security annotations added"],
+            },
+            "access": {
+                "dor": ["Role hierarchy documented", "Least privilege principle applied"],
+                "dod": ["Authorization bypass tests passed", "Privilege escalation tests passed"],
+            },
+            "input": {
+                "dor": ["Input validation rules documented", "File upload restrictions defined"],
+                "dod": ["Injection tests passed (SQL, XSS, Command)", "Fuzzing tests passed"],
+            },
+        }
+        
+        for domain in security_analysis.get("matched_domains", []):
+            if domain in domain_requirements:
+                security_section["security_requirements"]["dor"].extend(
+                    domain_requirements[domain]["dor"]
+                )
+                security_section["security_requirements"]["dod"].extend(
+                    domain_requirements[domain]["dod"]
+                )
+        
+        # Remove duplicates while preserving order
+        security_section["security_requirements"]["dor"] = list(dict.fromkeys(
+            security_section["security_requirements"]["dor"]
+        ))
+        security_section["security_requirements"]["dod"] = list(dict.fromkeys(
+            security_section["security_requirements"]["dod"]
+        ))
+        
+        return security_section
+    
+    def _inject_automatic_security_section(self, plan_data: PlanData, feature_name: str) -> PlanData:
+        """
+        Automatically inject security section into ALL coding plans.
+        
+        Phase 2: Security Enhancement - MANDATORY for all plans.
+        
+        This method ensures every plan includes:
+        1. Security relevance analysis
+        2. Threat modeling section with STRIDE categories
+        3. Security-specific DoR requirements
+        4. Security-specific DoD requirements
+        5. References to security knowledge library
+        
+        Args:
+            plan_data: Original plan data
+            feature_name: Name of the feature being planned
+        
+        Returns:
+            Modified plan data with security section injected
+        """
+        self.logger.info(f"🔒 Phase 2: Injecting automatic security section for: {feature_name}")
+        
+        # Step 1: Analyze security relevance
+        security_analysis = self._detect_security_relevance(
+            feature_name, 
+            context={"description": plan_data.metadata.description}
+        )
+        
+        # Step 2: Generate security section
+        security_section = self._generate_security_section(feature_name, security_analysis)
+        
+        # Step 3: Add security metadata to threat_modeling field
+        if plan_data.threat_modeling is None:
+            plan_data.threat_modeling = {}
+        plan_data.threat_modeling.update(security_section["threat_modeling"])
+        plan_data.threat_modeling["auto_injected"] = True
+        plan_data.threat_modeling["security_analysis"] = security_section["security_analysis"]
+        
+        # Step 4: Inject security DoR requirements
+        security_dor = security_section["security_requirements"]["dor"]
+        for req in security_dor:
+            if req not in plan_data.definition_of_ready:
+                plan_data.definition_of_ready.append(req)
+        
+        # Step 5: Inject security DoD requirements
+        security_dod = security_section["security_requirements"]["dod"]
+        for req in security_dod:
+            if req not in plan_data.definition_of_done:
+                plan_data.definition_of_done.append(req)
+        
+        # Step 6: Add security testing phase if high relevance
+        if security_analysis.get("relevance_score", 0) >= 0.3:
+            security_test_phase = PlanPhaseData(
+                phase_name="Security Testing",
+                tasks=[
+                    {"task": "Run OWASP ZAP security scan", "estimated_hours": 1},
+                    {"task": "Execute authentication/authorization tests", "estimated_hours": 2},
+                    {"task": "Perform input validation testing", "estimated_hours": 1},
+                    {"task": "Review security scan results and fix findings", "estimated_hours": 2},
+                ],
+                acceptance_criteria=[
+                    "No critical/high vulnerabilities in security scan",
+                    "All authentication tests passing",
+                    "All authorization tests passing",
+                    "Input validation tests complete",
+                ],
+                dependencies=["Implementation"]
+            )
+            
+            # Insert before final verification phase (or append if no verification phase)
+            insert_position = len(plan_data.phases)
+            for i, phase in enumerate(plan_data.phases):
+                if "verification" in phase.phase_name.lower() or "review" in phase.phase_name.lower():
+                    insert_position = i
+                    break
+            
+            plan_data.phases.insert(insert_position, security_test_phase)
+            self.logger.info(f"✅ Injected Security Testing phase at position {insert_position}")
+        
+        # Step 7: Add copilot_instructions for security awareness
+        if plan_data.copilot_instructions is None:
+            plan_data.copilot_instructions = {}
+        
+        plan_data.copilot_instructions["security_injection"] = {
+            "enabled": True,
+            "relevance_score": security_analysis.get("relevance_score", 0),
+            "matched_domains": security_analysis.get("matched_domains", []),
+            "knowledge_references": security_section.get("knowledge_references", []),
+        }
+        
+        self.logger.info(
+            f"✅ Security section injected (relevance: {security_analysis.get('relevance_score', 0):.1%}, "
+            f"domains: {security_analysis.get('matched_domains', [])})"
+        )
+        
+        return plan_data
+
     def _render_markdown(
         self,
         plan_data: PlanData,

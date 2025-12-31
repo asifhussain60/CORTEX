@@ -1,0 +1,1493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX Threat Modeling - Interactive STRIDE Methodology, Attack Tree Builder, and Data Flow Diagrams">
+    <meta name="keywords" content="threat modeling, STRIDE, attack trees, DFD, security, DREAD, CVSS, risk assessment">
+    <meta name="author" content="Asif Hussain">
+    <title>Threat Modeling Guide | CORTEX Security</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        /* Threat Modeling Page Specific Styles */
+        :root {
+            --stride-spoofing: #e74c3c;
+            --stride-tampering: #f39c12;
+            --stride-repudiation: #9b59b6;
+            --stride-info-disclosure: #3498db;
+            --stride-dos: #1abc9c;
+            --stride-elevation: #e91e63;
+        }
+
+        .tm-hero {
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .tm-hero-title {
+            font-size: 2.5rem;
+            color: var(--accent-primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .tm-hero-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Wizard Steps */
+        .wizard-container {
+            margin-bottom: 3rem;
+        }
+
+        .wizard-progress {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .wizard-progress::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 10%;
+            right: 10%;
+            height: 4px;
+            background: var(--glass-border);
+            z-index: 0;
+        }
+
+        .wizard-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+            cursor: pointer;
+        }
+
+        .wizard-step-number {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            border: 2px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .wizard-step.active .wizard-step-number {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+            color: #fff;
+        }
+
+        .wizard-step.completed .wizard-step-number {
+            background: #00ff88;
+            border-color: #00ff88;
+            color: #1a1a2e;
+        }
+
+        .wizard-step-label {
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        .wizard-step.active .wizard-step-label {
+            color: var(--accent-primary);
+            font-weight: 600;
+        }
+
+        /* Wizard Content */
+        .wizard-content {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            min-height: 400px;
+            backdrop-filter: blur(10px);
+        }
+
+        .wizard-panel {
+            display: none;
+        }
+
+        .wizard-panel.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* STRIDE Cards */
+        .stride-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .stride-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stride-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .stride-card.spoofing::before { background: var(--stride-spoofing); }
+        .stride-card.tampering::before { background: var(--stride-tampering); }
+        .stride-card.repudiation::before { background: var(--stride-repudiation); }
+        .stride-card.info-disclosure::before { background: var(--stride-info-disclosure); }
+        .stride-card.dos::before { background: var(--stride-dos); }
+        .stride-card.elevation::before { background: var(--stride-elevation); }
+
+        .stride-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .stride-card.selected {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 2px var(--accent-primary);
+        }
+
+        .stride-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stride-card.spoofing .stride-icon { background: rgba(231, 76, 60, 0.2); color: var(--stride-spoofing); }
+        .stride-card.tampering .stride-icon { background: rgba(243, 156, 18, 0.2); color: var(--stride-tampering); }
+        .stride-card.repudiation .stride-icon { background: rgba(155, 89, 182, 0.2); color: var(--stride-repudiation); }
+        .stride-card.info-disclosure .stride-icon { background: rgba(52, 152, 219, 0.2); color: var(--stride-info-disclosure); }
+        .stride-card.dos .stride-icon { background: rgba(26, 188, 156, 0.2); color: var(--stride-dos); }
+        .stride-card.elevation .stride-icon { background: rgba(233, 30, 99, 0.2); color: var(--stride-elevation); }
+
+        .stride-title {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stride-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .stride-question {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--glass-border);
+            font-style: italic;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        /* Attack Tree Builder */
+        .attack-tree-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 2rem;
+            min-height: 500px;
+        }
+
+        .tree-toolbox {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1rem;
+        }
+
+        .toolbox-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .toolbox-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+        }
+
+        .tree-node-template {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px dashed var(--glass-border);
+            border-radius: 8px;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            cursor: grab;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tree-node-template:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-style: solid;
+        }
+
+        .tree-node-template:active {
+            cursor: grabbing;
+        }
+
+        .tree-canvas {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #attack-tree-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .tree-controls {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .tree-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: 1px solid var(--glass-border);
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tree-btn:hover {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        /* DFD Templates */
+        .dfd-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+
+        .dfd-template-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .dfd-template-title {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .dfd-diagram {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .dfd-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .dfd-btn {
+            flex: 1;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--glass-border);
+            background: transparent;
+            color: var(--text-primary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .dfd-btn:hover {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        /* Risk Calculator */
+        .risk-calc-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 1024px) {
+            .risk-calc-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .calc-panel {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .calc-title {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .calc-row {
+            margin-bottom: 1rem;
+        }
+
+        .calc-label {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .calc-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .calc-select:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+        }
+
+        .score-display {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 1.5rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+        }
+
+        .score-value {
+            font-size: 4rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .score-value.critical { color: #ff4444; }
+        .score-value.high { color: #ffa500; }
+        .score-value.medium { color: #ffcc00; }
+        .score-value.low { color: #00ff88; }
+
+        .score-label {
+            font-size: 1.5rem;
+            margin-top: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Export Panel */
+        .export-options {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+        }
+
+        .export-btn {
+            flex: 1;
+            min-width: 150px;
+            padding: 1rem;
+            border: 1px solid var(--glass-border);
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .export-btn:hover {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        .export-btn i {
+            display: block;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Navigation Buttons */
+        .wizard-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .wizard-btn {
+            padding: 0.75rem 1.5rem;
+            border: 1px solid var(--glass-border);
+            background: transparent;
+            color: var(--text-primary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .wizard-btn:hover {
+            background: var(--glass-bg);
+        }
+
+        .wizard-btn.primary {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        .wizard-btn.primary:hover {
+            filter: brightness(1.1);
+        }
+
+        .wizard-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .attack-tree-container {
+                grid-template-columns: 1fr;
+            }
+
+            .tree-toolbox {
+                display: none;
+            }
+
+            .wizard-progress {
+                overflow-x: auto;
+                padding-bottom: 1rem;
+            }
+
+            .wizard-step-label {
+                font-size: 0.75rem;
+                max-width: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">&rarr;</span>
+        <a href="index.html">Security</a>
+        <span class="breadcrumb-separator">&rarr;</span>
+        <span class="breadcrumb-current">Threat Modeling</span>
+    </nav>
+
+    <!-- Logo Header -->
+    <div class="logo-header">
+        <a href="../index.html">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
+        </a>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="tm-hero" id="main-content">
+        <h1 class="tm-hero-title">
+            <i class="fas fa-sitemap"></i>
+            Threat Modeling Guide
+        </h1>
+        <p class="tm-hero-subtitle">
+            Interactive STRIDE methodology walkthrough with attack tree builder, data flow diagrams, and risk scoring calculators for comprehensive threat analysis.
+        </p>
+    </section>
+
+    <section class="section file-content">
+        <div class="container">
+            <!-- Wizard Container -->
+            <div class="wizard-container">
+                <!-- Progress Steps -->
+                <div class="wizard-progress">
+                    <div class="wizard-step active" data-step="1">
+                        <div class="wizard-step-number">1</div>
+                        <div class="wizard-step-label">Define Scope</div>
+                    </div>
+                    <div class="wizard-step" data-step="2">
+                        <div class="wizard-step-number">2</div>
+                        <div class="wizard-step-label">STRIDE Analysis</div>
+                    </div>
+                    <div class="wizard-step" data-step="3">
+                        <div class="wizard-step-number">3</div>
+                        <div class="wizard-step-label">Attack Trees</div>
+                    </div>
+                    <div class="wizard-step" data-step="4">
+                        <div class="wizard-step-number">4</div>
+                        <div class="wizard-step-label">Data Flow</div>
+                    </div>
+                    <div class="wizard-step" data-step="5">
+                        <div class="wizard-step-number">5</div>
+                        <div class="wizard-step-label">Risk Scoring</div>
+                    </div>
+                    <div class="wizard-step" data-step="6">
+                        <div class="wizard-step-number">6</div>
+                        <div class="wizard-step-label">Export</div>
+                    </div>
+                </div>
+
+                <!-- Wizard Content -->
+                <div class="wizard-content">
+                    <!-- Step 1: Define Scope -->
+                    <div class="wizard-panel active" data-panel="1">
+                        <h2 style="margin-bottom: 1.5rem;"><i class="fas fa-crosshairs"></i> Step 1: Define Scope</h2>
+                        <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                            Begin by defining the boundaries of your threat model. Identify the system, application, or component you want to analyze and establish clear boundaries.
+                        </p>
+
+                        <div class="info-box info-box-primary" style="margin-bottom: 1.5rem;">
+                            <h3><i class="fas fa-lightbulb"></i> Scoping Tips</h3>
+                            <ul>
+                                <li>Start with a well-defined component or feature</li>
+                                <li>Identify all entry and exit points</li>
+                                <li>Document data flows and trust boundaries</li>
+                                <li>List all assets that need protection</li>
+                            </ul>
+                        </div>
+
+                        <div class="glass-card">
+                            <h3 style="margin-bottom: 1rem;"><i class="fas fa-edit"></i> System Information</h3>
+                            <div style="display: grid; gap: 1rem;">
+                                <div>
+                                    <label class="calc-label">System/Application Name</label>
+                                    <input type="text" id="system-name" class="calc-select" placeholder="e.g., User Authentication Service">
+                                </div>
+                                <div>
+                                    <label class="calc-label">Description</label>
+                                    <textarea id="system-desc" class="calc-select" rows="3" placeholder="Brief description of the system and its purpose..."></textarea>
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                    <div>
+                                        <label class="calc-label">Trust Boundary</label>
+                                        <select id="trust-boundary" class="calc-select">
+                                            <option value="external">External (Internet-facing)</option>
+                                            <option value="dmz">DMZ</option>
+                                            <option value="internal">Internal Network</option>
+                                            <option value="restricted">Restricted Zone</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="calc-label">Data Sensitivity</label>
+                                        <select id="data-sensitivity" class="calc-select">
+                                            <option value="public">Public</option>
+                                            <option value="internal">Internal</option>
+                                            <option value="confidential">Confidential</option>
+                                            <option value="restricted">Restricted/PII</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="wizard-nav">
+                            <button class="wizard-btn" disabled>
+                                <i class="fas fa-arrow-left"></i> Previous
+                            </button>
+                            <button class="wizard-btn primary" onclick="goToStep(2)">
+                                Next: STRIDE Analysis <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: STRIDE Analysis -->
+                    <div class="wizard-panel" data-panel="2">
+                        <h2 style="margin-bottom: 1.5rem;"><i class="fas fa-shield-halved"></i> Step 2: STRIDE Threat Analysis</h2>
+                        <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                            STRIDE is a threat classification model developed by Microsoft. Select each threat category to identify potential threats in your system.
+                        </p>
+
+                        <div class="stride-grid">
+                            <!-- Spoofing -->
+                            <div class="stride-card spoofing" onclick="toggleStrideCard(this)">
+                                <div class="stride-icon"><i class="fas fa-mask"></i></div>
+                                <h3 class="stride-title">S - Spoofing Identity</h3>
+                                <p class="stride-description">
+                                    Pretending to be someone or something else. Includes using stolen credentials, forging authentication tokens, or impersonating other systems.
+                                </p>
+                                <p class="stride-question">
+                                    "Can an attacker impersonate a user, service, or system?"
+                                </p>
+                            </div>
+
+                            <!-- Tampering -->
+                            <div class="stride-card tampering" onclick="toggleStrideCard(this)">
+                                <div class="stride-icon"><i class="fas fa-pen-to-square"></i></div>
+                                <h3 class="stride-title">T - Tampering with Data</h3>
+                                <p class="stride-description">
+                                    Unauthorized modification of data at rest or in transit. Includes altering database records, modifying API requests, or corrupting files.
+                                </p>
+                                <p class="stride-question">
+                                    "Can an attacker modify data or system behavior?"
+                                </p>
+                            </div>
+
+                            <!-- Repudiation -->
+                            <div class="stride-card repudiation" onclick="toggleStrideCard(this)">
+                                <div class="stride-icon"><i class="fas fa-user-xmark"></i></div>
+                                <h3 class="stride-title">R - Repudiation</h3>
+                                <p class="stride-description">
+                                    Denying having performed an action without ability to prove otherwise. Includes lack of audit logs, unsigned transactions, or missing non-repudiation controls.
+                                </p>
+                                <p class="stride-question">
+                                    "Can a user deny performing an action?"
+                                </p>
+                            </div>
+
+                            <!-- Information Disclosure -->
+                            <div class="stride-card info-disclosure" onclick="toggleStrideCard(this)">
+                                <div class="stride-icon"><i class="fas fa-eye"></i></div>
+                                <h3 class="stride-title">I - Information Disclosure</h3>
+                                <p class="stride-description">
+                                    Unauthorized access to sensitive information. Includes data breaches, error message leakage, or insufficient access controls on data stores.
+                                </p>
+                                <p class="stride-question">
+                                    "Can an attacker access sensitive information?"
+                                </p>
+                            </div>
+
+                            <!-- Denial of Service -->
+                            <div class="stride-card dos" onclick="toggleStrideCard(this)">
+                                <div class="stride-icon"><i class="fas fa-ban"></i></div>
+                                <h3 class="stride-title">D - Denial of Service</h3>
+                                <p class="stride-description">
+                                    Making a system unavailable or degrading its performance. Includes resource exhaustion, DDoS attacks, or algorithmic complexity attacks.
+                                </p>
+                                <p class="stride-question">
+                                    "Can an attacker disrupt or degrade service availability?"
+                                </p>
+                            </div>
+
+                            <!-- Elevation of Privilege -->
+                            <div class="stride-card elevation" onclick="toggleStrideCard(this)">
+                                <div class="stride-icon"><i class="fas fa-user-shield"></i></div>
+                                <h3 class="stride-title">E - Elevation of Privilege</h3>
+                                <p class="stride-description">
+                                    Gaining capabilities without proper authorization. Includes privilege escalation, bypassing authorization, or exploiting trust relationships.
+                                </p>
+                                <p class="stride-question">
+                                    "Can an attacker gain higher privileges than authorized?"
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="wizard-nav">
+                            <button class="wizard-btn" onclick="goToStep(1)">
+                                <i class="fas fa-arrow-left"></i> Previous
+                            </button>
+                            <button class="wizard-btn primary" onclick="goToStep(3)">
+                                Next: Attack Trees <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Attack Trees -->
+                    <div class="wizard-panel" data-panel="3">
+                        <h2 style="margin-bottom: 1.5rem;"><i class="fas fa-diagram-project"></i> Step 3: Attack Tree Builder</h2>
+                        <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                            Build attack trees by dragging nodes from the toolbox. Attack trees visualize how an attacker might achieve their goal through different paths.
+                        </p>
+
+                        <div class="attack-tree-container">
+                            <!-- Toolbox -->
+                            <div class="tree-toolbox">
+                                <div class="toolbox-section">
+                                    <div class="toolbox-title">Goal Nodes</div>
+                                    <div class="tree-node-template" draggable="true" data-type="goal">
+                                        <i class="fas fa-bullseye" style="color: #ff4444;"></i>
+                                        <span>Attack Goal</span>
+                                    </div>
+                                </div>
+                                <div class="toolbox-section">
+                                    <div class="toolbox-title">Sub-Goals</div>
+                                    <div class="tree-node-template" draggable="true" data-type="and">
+                                        <i class="fas fa-circle-plus" style="color: #ffa500;"></i>
+                                        <span>AND Node</span>
+                                    </div>
+                                    <div class="tree-node-template" draggable="true" data-type="or">
+                                        <i class="fas fa-code-branch" style="color: #00d4ff;"></i>
+                                        <span>OR Node</span>
+                                    </div>
+                                </div>
+                                <div class="toolbox-section">
+                                    <div class="toolbox-title">Leaf Nodes</div>
+                                    <div class="tree-node-template" draggable="true" data-type="attack">
+                                        <i class="fas fa-bolt" style="color: #e91e63;"></i>
+                                        <span>Attack Step</span>
+                                    </div>
+                                    <div class="tree-node-template" draggable="true" data-type="defense">
+                                        <i class="fas fa-shield-halved" style="color: #00ff88;"></i>
+                                        <span>Defense</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Canvas -->
+                            <div class="tree-canvas">
+                                <div class="tree-controls">
+                                    <button class="tree-btn" title="Zoom In" onclick="zoomTree(1.2)">
+                                        <i class="fas fa-magnifying-glass-plus"></i>
+                                    </button>
+                                    <button class="tree-btn" title="Zoom Out" onclick="zoomTree(0.8)">
+                                        <i class="fas fa-magnifying-glass-minus"></i>
+                                    </button>
+                                    <button class="tree-btn" title="Reset View" onclick="resetTreeView()">
+                                        <i class="fas fa-expand"></i>
+                                    </button>
+                                    <button class="tree-btn" title="Clear" onclick="clearTree()">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                                <svg id="attack-tree-svg"></svg>
+                            </div>
+                        </div>
+
+                        <div class="wizard-nav">
+                            <button class="wizard-btn" onclick="goToStep(2)">
+                                <i class="fas fa-arrow-left"></i> Previous
+                            </button>
+                            <button class="wizard-btn primary" onclick="goToStep(4)">
+                                Next: Data Flow <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Data Flow Diagrams -->
+                    <div class="wizard-panel" data-panel="4">
+                        <h2 style="margin-bottom: 1.5rem;"><i class="fas fa-arrows-split-up-and-left"></i> Step 4: Data Flow Diagrams</h2>
+                        <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                            Use these DFD templates to visualize data flows, trust boundaries, and potential threat entry points in your system.
+                        </p>
+
+                        <div class="dfd-grid">
+                            <!-- Web Application DFD -->
+                            <div class="dfd-template-card">
+                                <h3 class="dfd-template-title">
+                                    <i class="fas fa-globe" style="color: #3498db;"></i>
+                                    Web Application DFD
+                                </h3>
+                                <div class="dfd-diagram">
+                                    <div class="mermaid">
+flowchart LR
+    subgraph External["External Zone"]
+        U[User Browser]
+    end
+    subgraph DMZ["DMZ"]
+        LB[Load Balancer]
+        WAF[Web App Firewall]
+    end
+    subgraph Internal["Internal Zone"]
+        WS[Web Server]
+        AS[App Server]
+        DB[(Database)]
+    end
+    U -->|HTTPS| LB
+    LB --> WAF
+    WAF --> WS
+    WS --> AS
+    AS --> DB
+                                    </div>
+                                </div>
+                                <div class="dfd-actions">
+                                    <button class="dfd-btn" onclick="copyDFD('web')">
+                                        <i class="fas fa-copy"></i> Copy
+                                    </button>
+                                    <button class="dfd-btn" onclick="editDFD('web')">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Microservices DFD -->
+                            <div class="dfd-template-card">
+                                <h3 class="dfd-template-title">
+                                    <i class="fas fa-cubes" style="color: #9b59b6;"></i>
+                                    Microservices DFD
+                                </h3>
+                                <div class="dfd-diagram">
+                                    <div class="mermaid">
+flowchart TB
+    subgraph External["External"]
+        Client[API Client]
+    end
+    subgraph Gateway["API Gateway"]
+        AG[Gateway]
+        Auth[Auth Service]
+    end
+    subgraph Services["Internal Services"]
+        S1[Service A]
+        S2[Service B]
+        S3[Service C]
+    end
+    subgraph Data["Data Layer"]
+        MQ[Message Queue]
+        Cache[(Cache)]
+        DB[(Database)]
+    end
+    Client --> AG
+    AG --> Auth
+    AG --> S1
+    AG --> S2
+    S1 <--> MQ
+    S2 <--> MQ
+    S3 <--> MQ
+    S1 --> Cache
+    S2 --> DB
+                                    </div>
+                                </div>
+                                <div class="dfd-actions">
+                                    <button class="dfd-btn" onclick="copyDFD('microservices')">
+                                        <i class="fas fa-copy"></i> Copy
+                                    </button>
+                                    <button class="dfd-btn" onclick="editDFD('microservices')">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Authentication Flow DFD -->
+                            <div class="dfd-template-card">
+                                <h3 class="dfd-template-title">
+                                    <i class="fas fa-key" style="color: #f39c12;"></i>
+                                    Authentication Flow DFD
+                                </h3>
+                                <div class="dfd-diagram">
+                                    <div class="mermaid">
+sequenceDiagram
+    participant U as User
+    participant C as Client App
+    participant A as Auth Server
+    participant R as Resource Server
+    participant D as User Store
+
+    U->>C: Login Request
+    C->>A: Auth Request
+    A->>D: Validate Credentials
+    D-->>A: User Data
+    A-->>C: Access Token + Refresh Token
+    C->>R: API Request + Token
+    R->>A: Validate Token
+    A-->>R: Token Valid
+    R-->>C: Protected Resource
+                                    </div>
+                                </div>
+                                <div class="dfd-actions">
+                                    <button class="dfd-btn" onclick="copyDFD('auth')">
+                                        <i class="fas fa-copy"></i> Copy
+                                    </button>
+                                    <button class="dfd-btn" onclick="editDFD('auth')">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Cloud Architecture DFD -->
+                            <div class="dfd-template-card">
+                                <h3 class="dfd-template-title">
+                                    <i class="fas fa-cloud" style="color: #1abc9c;"></i>
+                                    Cloud Architecture DFD
+                                </h3>
+                                <div class="dfd-diagram">
+                                    <div class="mermaid">
+flowchart TB
+    subgraph Internet["Internet"]
+        Users[Users]
+        CDN[CDN]
+    end
+    subgraph Cloud["Cloud Provider"]
+        subgraph Public["Public Subnet"]
+            ALB[Load Balancer]
+            NAT[NAT Gateway]
+        end
+        subgraph Private["Private Subnet"]
+            EC2[Compute]
+            RDS[(RDS Database)]
+            S3[S3 Storage]
+        end
+    end
+    Users --> CDN
+    CDN --> ALB
+    ALB --> EC2
+    EC2 --> RDS
+    EC2 --> S3
+    EC2 --> NAT
+                                    </div>
+                                </div>
+                                <div class="dfd-actions">
+                                    <button class="dfd-btn" onclick="copyDFD('cloud')">
+                                        <i class="fas fa-copy"></i> Copy
+                                    </button>
+                                    <button class="dfd-btn" onclick="editDFD('cloud')">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="wizard-nav">
+                            <button class="wizard-btn" onclick="goToStep(3)">
+                                <i class="fas fa-arrow-left"></i> Previous
+                            </button>
+                            <button class="wizard-btn primary" onclick="goToStep(5)">
+                                Next: Risk Scoring <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 5: Risk Scoring -->
+                    <div class="wizard-panel" data-panel="5">
+                        <h2 style="margin-bottom: 1.5rem;"><i class="fas fa-calculator"></i> Step 5: Risk Scoring</h2>
+                        <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                            Calculate risk scores using industry-standard methodologies. Choose between CVSS 3.1 or DREAD scoring systems.
+                        </p>
+
+                        <div class="risk-calc-container">
+                            <!-- CVSS Calculator -->
+                            <div class="calc-panel">
+                                <h3 class="calc-title"><i class="fas fa-shield-halved"></i> CVSS 3.1 Calculator</h3>
+                                
+                                <div class="calc-row">
+                                    <label class="calc-label">Attack Vector (AV)</label>
+                                    <select id="cvss-av" class="calc-select" onchange="calculateCVSS()">
+                                        <option value="0.85">Network (N)</option>
+                                        <option value="0.62">Adjacent (A)</option>
+                                        <option value="0.55">Local (L)</option>
+                                        <option value="0.20">Physical (P)</option>
+                                    </select>
+                                </div>
+                                <div class="calc-row">
+                                    <label class="calc-label">Attack Complexity (AC)</label>
+                                    <select id="cvss-ac" class="calc-select" onchange="calculateCVSS()">
+                                        <option value="0.77">Low (L)</option>
+                                        <option value="0.44">High (H)</option>
+                                    </select>
+                                </div>
+                                <div class="calc-row">
+                                    <label class="calc-label">Privileges Required (PR)</label>
+                                    <select id="cvss-pr" class="calc-select" onchange="calculateCVSS()">
+                                        <option value="0.85">None (N)</option>
+                                        <option value="0.62">Low (L)</option>
+                                        <option value="0.27">High (H)</option>
+                                    </select>
+                                </div>
+                                <div class="calc-row">
+                                    <label class="calc-label">User Interaction (UI)</label>
+                                    <select id="cvss-ui" class="calc-select" onchange="calculateCVSS()">
+                                        <option value="0.85">None (N)</option>
+                                        <option value="0.62">Required (R)</option>
+                                    </select>
+                                </div>
+
+                                <div class="score-display">
+                                    <div class="score-value critical" id="cvss-score">9.8</div>
+                                    <div class="score-label" id="cvss-label">Critical</div>
+                                </div>
+                            </div>
+
+                            <!-- DREAD Calculator -->
+                            <div class="calc-panel">
+                                <h3 class="calc-title"><i class="fas fa-skull-crossbones"></i> DREAD Calculator</h3>
+                                
+                                <div class="calc-row">
+                                    <label class="calc-label">Damage Potential (1-10)</label>
+                                    <select id="dread-d" class="calc-select" onchange="calculateDREAD()">
+                                        <option value="10">10 - Complete system compromise</option>
+                                        <option value="8">8 - Significant data breach</option>
+                                        <option value="6">6 - Moderate impact</option>
+                                        <option value="4">4 - Minor damage</option>
+                                        <option value="2">2 - Minimal impact</option>
+                                    </select>
+                                </div>
+                                <div class="calc-row">
+                                    <label class="calc-label">Reproducibility (1-10)</label>
+                                    <select id="dread-r" class="calc-select" onchange="calculateDREAD()">
+                                        <option value="10">10 - Always reproducible</option>
+                                        <option value="7">7 - Usually reproducible</option>
+                                        <option value="5">5 - Sometimes reproducible</option>
+                                        <option value="3">3 - Rarely reproducible</option>
+                                        <option value="1">1 - Very difficult</option>
+                                    </select>
+                                </div>
+                                <div class="calc-row">
+                                    <label class="calc-label">Exploitability (1-10)</label>
+                                    <select id="dread-e" class="calc-select" onchange="calculateDREAD()">
+                                        <option value="10">10 - No skill required</option>
+                                        <option value="7">7 - Beginner skill</option>
+                                        <option value="5">5 - Intermediate skill</option>
+                                        <option value="3">3 - Advanced skill</option>
+                                        <option value="1">1 - Expert only</option>
+                                    </select>
+                                </div>
+                                <div class="calc-row">
+                                    <label class="calc-label">Affected Users (1-10)</label>
+                                    <select id="dread-a" class="calc-select" onchange="calculateDREAD()">
+                                        <option value="10">10 - All users</option>
+                                        <option value="7">7 - Most users</option>
+                                        <option value="5">5 - Some users</option>
+                                        <option value="3">3 - Few users</option>
+                                        <option value="1">1 - Very few</option>
+                                    </select>
+                                </div>
+                                <div class="calc-row">
+                                    <label class="calc-label">Discoverability (1-10)</label>
+                                    <select id="dread-di" class="calc-select" onchange="calculateDREAD()">
+                                        <option value="10">10 - Publicly known</option>
+                                        <option value="7">7 - Easily discoverable</option>
+                                        <option value="5">5 - Discoverable with effort</option>
+                                        <option value="3">3 - Hard to discover</option>
+                                        <option value="1">1 - Very obscure</option>
+                                    </select>
+                                </div>
+
+                                <div class="score-display">
+                                    <div class="score-value critical" id="dread-score">9.4</div>
+                                    <div class="score-label" id="dread-label">Critical</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="wizard-nav">
+                            <button class="wizard-btn" onclick="goToStep(4)">
+                                <i class="fas fa-arrow-left"></i> Previous
+                            </button>
+                            <button class="wizard-btn primary" onclick="goToStep(6)">
+                                Next: Export <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 6: Export -->
+                    <div class="wizard-panel" data-panel="6">
+                        <h2 style="margin-bottom: 1.5rem;"><i class="fas fa-file-export"></i> Step 6: Export Threat Model</h2>
+                        <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                            Export your threat model in various formats for documentation, review, and integration with other tools.
+                        </p>
+
+                        <div class="glass-card">
+                            <h3 style="margin-bottom: 1rem;"><i class="fas fa-file-lines"></i> Export Options</h3>
+                            <div class="export-options">
+                                <button class="export-btn" onclick="exportThreatModel('markdown')">
+                                    <i class="fab fa-markdown"></i>
+                                    <span>Markdown</span>
+                                    <small style="display: block; opacity: 0.7; font-size: 0.75rem;">Documentation</small>
+                                </button>
+                                <button class="export-btn" onclick="exportThreatModel('json')">
+                                    <i class="fas fa-code"></i>
+                                    <span>JSON</span>
+                                    <small style="display: block; opacity: 0.7; font-size: 0.75rem;">Integration</small>
+                                </button>
+                                <button class="export-btn" onclick="exportThreatModel('pdf')">
+                                    <i class="fas fa-file-pdf"></i>
+                                    <span>PDF</span>
+                                    <small style="display: block; opacity: 0.7; font-size: 0.75rem;">Reports</small>
+                                </button>
+                                <button class="export-btn" onclick="exportThreatModel('csv')">
+                                    <i class="fas fa-file-csv"></i>
+                                    <span>CSV</span>
+                                    <small style="display: block; opacity: 0.7; font-size: 0.75rem;">Spreadsheet</small>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="info-box info-box-success" style="margin-top: 1.5rem;">
+                            <h3><i class="fas fa-check-circle"></i> Threat Model Complete!</h3>
+                            <p>Your threat model has been created. Export it in your preferred format and integrate it into your security documentation.</p>
+                            <ul>
+                                <li>Review findings with your security team</li>
+                                <li>Create JIRA tickets for identified risks</li>
+                                <li>Schedule remediation timeline</li>
+                                <li>Plan follow-up threat modeling sessions</li>
+                            </ul>
+                        </div>
+
+                        <div class="wizard-nav">
+                            <button class="wizard-btn" onclick="goToStep(5)">
+                                <i class="fas fa-arrow-left"></i> Previous
+                            </button>
+                            <button class="wizard-btn primary" onclick="startNewThreatModel()">
+                                <i class="fas fa-plus"></i> Start New Threat Model
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <p>CORTEX Security &middot; Threat Modeling Guide</p>
+            <div class="footer-links">
+                <a href="index.html">Security Home</a>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="owasp.html">OWASP Top 10</a>
+                <a href="compliance.html">Compliance</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#3498db',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#2980b9',
+                lineColor: '#95a5a6',
+                secondaryColor: '#2c3e50',
+                tertiaryColor: '#1a1a2e',
+                background: '#1a1a2e'
+            },
+            flowchart: {
+                curve: 'basis'
+            }
+        });
+
+        // Wizard Navigation
+        let currentStep = 1;
+
+        function goToStep(step) {
+            // Update steps
+            document.querySelectorAll('.wizard-step').forEach((s, i) => {
+                s.classList.remove('active');
+                if (i + 1 < step) {
+                    s.classList.add('completed');
+                } else {
+                    s.classList.remove('completed');
+                }
+            });
+            document.querySelector(`.wizard-step[data-step="${step}"]`).classList.add('active');
+
+            // Update panels
+            document.querySelectorAll('.wizard-panel').forEach(p => p.classList.remove('active'));
+            document.querySelector(`.wizard-panel[data-panel="${step}"]`).classList.add('active');
+
+            currentStep = step;
+        }
+
+        // STRIDE Card Toggle
+        function toggleStrideCard(card) {
+            card.classList.toggle('selected');
+        }
+
+        // Attack Tree Functions
+        let treeData = {
+            nodes: [],
+            links: []
+        };
+        let treeZoom = 1;
+
+        function initAttackTree() {
+            const svg = d3.select('#attack-tree-svg');
+            const container = document.querySelector('.tree-canvas');
+            
+            svg.attr('width', container.clientWidth)
+               .attr('height', container.clientHeight - 60);
+
+            // Add placeholder text
+            svg.append('text')
+                .attr('x', container.clientWidth / 2)
+                .attr('y', container.clientHeight / 2 - 30)
+                .attr('text-anchor', 'middle')
+                .attr('fill', 'rgba(255,255,255,0.3)')
+                .attr('font-size', '16px')
+                .text('Drag nodes from the toolbox to build your attack tree');
+        }
+
+        function zoomTree(factor) {
+            treeZoom *= factor;
+            d3.select('#attack-tree-svg')
+                .transition()
+                .duration(300)
+                .attr('transform', `scale(${treeZoom})`);
+        }
+
+        function resetTreeView() {
+            treeZoom = 1;
+            d3.select('#attack-tree-svg')
+                .transition()
+                .duration(300)
+                .attr('transform', 'scale(1)');
+        }
+
+        function clearTree() {
+            treeData = { nodes: [], links: [] };
+            d3.select('#attack-tree-svg').selectAll('*').remove();
+            initAttackTree();
+        }
+
+        // CVSS Calculator
+        function calculateCVSS() {
+            const av = parseFloat(document.getElementById('cvss-av').value);
+            const ac = parseFloat(document.getElementById('cvss-ac').value);
+            const pr = parseFloat(document.getElementById('cvss-pr').value);
+            const ui = parseFloat(document.getElementById('cvss-ui').value);
+
+            // Simplified CVSS calculation
+            const exploitability = 8.22 * av * ac * pr * ui;
+            const impact = 6.42; // Assuming high impact for demo
+            
+            let score = Math.min(10, 1.08 * (impact + exploitability) / 2);
+            score = Math.round(score * 10) / 10;
+
+            updateScoreDisplay('cvss', score);
+        }
+
+        // DREAD Calculator
+        function calculateDREAD() {
+            const d = parseFloat(document.getElementById('dread-d').value);
+            const r = parseFloat(document.getElementById('dread-r').value);
+            const e = parseFloat(document.getElementById('dread-e').value);
+            const a = parseFloat(document.getElementById('dread-a').value);
+            const di = parseFloat(document.getElementById('dread-di').value);
+
+            const score = (d + r + e + a + di) / 5;
+            updateScoreDisplay('dread', Math.round(score * 10) / 10);
+        }
+
+        function updateScoreDisplay(type, score) {
+            const scoreEl = document.getElementById(`${type}-score`);
+            const labelEl = document.getElementById(`${type}-label`);
+
+            scoreEl.textContent = score.toFixed(1);
+            scoreEl.className = 'score-value';
+
+            if (score >= 9.0) {
+                scoreEl.classList.add('critical');
+                labelEl.textContent = 'Critical';
+            } else if (score >= 7.0) {
+                scoreEl.classList.add('high');
+                labelEl.textContent = 'High';
+            } else if (score >= 4.0) {
+                scoreEl.classList.add('medium');
+                labelEl.textContent = 'Medium';
+            } else {
+                scoreEl.classList.add('low');
+                labelEl.textContent = 'Low';
+            }
+        }
+
+        // DFD Functions
+        function copyDFD(type) {
+            const diagrams = {
+                web: `flowchart LR
+    subgraph External["External Zone"]
+        U[User Browser]
+    end
+    subgraph DMZ["DMZ"]
+        LB[Load Balancer]
+        WAF[Web App Firewall]
+    end
+    subgraph Internal["Internal Zone"]
+        WS[Web Server]
+        AS[App Server]
+        DB[(Database)]
+    end
+    U -->|HTTPS| LB
+    LB --> WAF
+    WAF --> WS
+    WS --> AS
+    AS --> DB`,
+                microservices: `flowchart TB
+    subgraph External["External"]
+        Client[API Client]
+    end
+    subgraph Gateway["API Gateway"]
+        AG[Gateway]
+        Auth[Auth Service]
+    end
+    subgraph Services["Internal Services"]
+        S1[Service A]
+        S2[Service B]
+        S3[Service C]
+    end
+    Client --> AG
+    AG --> Auth
+    AG --> S1
+    AG --> S2`,
+                auth: `sequenceDiagram
+    participant U as User
+    participant C as Client App
+    participant A as Auth Server
+    participant R as Resource Server
+    U->>C: Login Request
+    C->>A: Auth Request
+    A-->>C: Access Token
+    C->>R: API Request + Token
+    R-->>C: Protected Resource`,
+                cloud: `flowchart TB
+    subgraph Internet["Internet"]
+        Users[Users]
+        CDN[CDN]
+    end
+    subgraph Cloud["Cloud Provider"]
+        ALB[Load Balancer]
+        EC2[Compute]
+        RDS[(Database)]
+    end
+    Users --> CDN
+    CDN --> ALB
+    ALB --> EC2
+    EC2 --> RDS`
+            };
+
+            navigator.clipboard.writeText(diagrams[type]);
+            alert('DFD code copied to clipboard!');
+        }
+
+        function editDFD(type) {
+            alert(`Opening DFD editor for ${type} template...`);
+            // In production, this would open a modal editor
+        }
+
+        // Export Functions
+        function exportThreatModel(format) {
+            const systemName = document.getElementById('system-name').value || 'Unnamed System';
+            const systemDesc = document.getElementById('system-desc').value || 'No description provided';
+            
+            const selectedThreats = Array.from(document.querySelectorAll('.stride-card.selected'))
+                .map(card => card.querySelector('.stride-title').textContent);
+
+            const cvssScore = document.getElementById('cvss-score').textContent;
+            const dreadScore = document.getElementById('dread-score').textContent;
+
+            if (format === 'markdown') {
+                const markdown = `# Threat Model: ${systemName}
+
+## System Description
+${systemDesc}
+
+## STRIDE Analysis
+${selectedThreats.length > 0 ? selectedThreats.map(t => `- ${t}`).join('\n') : 'No threats selected'}
+
+## Risk Scores
+- **CVSS 3.1 Score:** ${cvssScore}
+- **DREAD Score:** ${dreadScore}
+
+## Recommendations
+- Review identified threats with security team
+- Implement mitigations for high-risk items
+- Schedule follow-up threat modeling session
+
+---
+*Generated by CORTEX Threat Modeling Guide*
+`;
+                downloadFile(markdown, `threat-model-${systemName.toLowerCase().replace(/\s+/g, '-')}.md`, 'text/markdown');
+            } else if (format === 'json') {
+                const json = JSON.stringify({
+                    system: systemName,
+                    description: systemDesc,
+                    threats: selectedThreats,
+                    scores: { cvss: cvssScore, dread: dreadScore },
+                    timestamp: new Date().toISOString()
+                }, null, 2);
+                downloadFile(json, `threat-model-${systemName.toLowerCase().replace(/\s+/g, '-')}.json`, 'application/json');
+            } else {
+                alert(`Export to ${format.toUpperCase()} would generate a ${format} file in production.`);
+            }
+        }
+
+        function downloadFile(content, filename, mimeType) {
+            const blob = new Blob([content], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function startNewThreatModel() {
+            if (confirm('Start a new threat model? Current progress will be lost.')) {
+                document.getElementById('system-name').value = '';
+                document.getElementById('system-desc').value = '';
+                document.querySelectorAll('.stride-card').forEach(c => c.classList.remove('selected'));
+                clearTree();
+                goToStep(1);
+            }
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            initAttackTree();
+            calculateCVSS();
+            calculateDREAD();
+        });
+    </script>
+</body>
+</html>

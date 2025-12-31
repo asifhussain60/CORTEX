@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX Data Protection - Data Classification, Encryption Standards, PII Handling, and Data Retention Guidelines">
+    <meta name="keywords" content="data protection, data classification, encryption, PII, GDPR, data retention, privacy">
+    <meta name="author" content="Asif Hussain">
+    <title>Data Protection | CORTEX Security</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        /* Data Protection Specific Styles */
+        :root {
+            --class-restricted: #e74c3c;
+            --class-confidential: #f39c12;
+            --class-internal: #3498db;
+            --class-public: #27ae60;
+        }
+
+        .dp-hero {
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .dp-hero-title {
+            font-size: 2.5rem;
+            color: var(--accent-primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .dp-hero-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Classification Cards */
+        .classification-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        @media (max-width: 1024px) {
+            .classification-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .classification-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .class-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .class-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .class-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .class-card.restricted::before { background: var(--class-restricted); }
+        .class-card.confidential::before { background: var(--class-confidential); }
+        .class-card.internal::before { background: var(--class-internal); }
+        .class-card.public::before { background: var(--class-public); }
+
+        .class-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+        }
+
+        .class-card.restricted .class-icon { background: rgba(231, 76, 60, 0.2); color: var(--class-restricted); }
+        .class-card.confidential .class-icon { background: rgba(243, 156, 18, 0.2); color: var(--class-confidential); }
+        .class-card.internal .class-icon { background: rgba(52, 152, 219, 0.2); color: var(--class-internal); }
+        .class-card.public .class-icon { background: rgba(39, 174, 96, 0.2); color: var(--class-public); }
+
+        .class-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .class-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .class-examples {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 0.75rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Data Lifecycle */
+        #data-lifecycle-chart {
+            width: 100%;
+            height: 400px;
+        }
+
+        /* Encryption Standards Table */
+        .encryption-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        .encryption-table th,
+        .encryption-table td {
+            padding: 1rem;
+            text-align: left;
+            border: 1px solid var(--glass-border);
+        }
+
+        .encryption-table th {
+            background: rgba(0, 0, 0, 0.3);
+            color: var(--accent-primary);
+            font-weight: 600;
+        }
+
+        .encryption-table tr:nth-child(even) {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .encryption-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            font-family: var(--font-mono);
+        }
+
+        .encryption-badge.strong { background: rgba(39, 174, 96, 0.2); color: #27ae60; }
+        .encryption-badge.recommended { background: rgba(0, 212, 255, 0.2); color: #00d4ff; }
+
+        /* PII Types */
+        .pii-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .pii-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .pii-item i {
+            color: var(--class-restricted);
+            font-size: 1.25rem;
+        }
+
+        .pii-item span {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Workflow Container */
+        .workflow-container {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .workflow-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Retention Schedule */
+        .retention-timeline {
+            position: relative;
+            padding-left: 2rem;
+            margin: 2rem 0;
+        }
+
+        .retention-timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--class-restricted), var(--class-confidential), var(--class-internal), var(--class-public));
+        }
+
+        .retention-item {
+            position: relative;
+            padding: 1rem 0 2rem;
+        }
+
+        .retention-item::before {
+            content: '';
+            position: absolute;
+            left: -2rem;
+            top: 1.25rem;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            transform: translateX(-5px);
+        }
+
+        .retention-item.r1::before { background: var(--class-restricted); }
+        .retention-item.r2::before { background: var(--class-confidential); }
+        .retention-item.r3::before { background: var(--class-internal); }
+        .retention-item.r4::before { background: var(--class-public); }
+
+        .retention-content {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+
+        .retention-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .retention-type {
+            font-weight: 600;
+        }
+
+        .retention-period {
+            padding: 0.25rem 0.75rem;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            color: var(--accent-primary);
+        }
+
+        .retention-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Tabs */
+        .tabs-container {
+            margin: 2rem 0;
+        }
+
+        .tabs-nav {
+            display: flex;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--glass-border);
+            margin-bottom: 1.5rem;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            padding: 1rem 1.5rem;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            position: relative;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-primary);
+        }
+
+        .tab-btn.active {
+            color: var(--accent-primary);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--accent-primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">&rarr;</span>
+        <a href="index.html">Security</a>
+        <span class="breadcrumb-separator">&rarr;</span>
+        <span class="breadcrumb-current">Data Protection</span>
+    </nav>
+
+    <!-- Logo Header -->
+    <div class="logo-header">
+        <a href="../index.html">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
+        </a>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="dp-hero" id="main-content">
+        <h1 class="dp-hero-title">
+            <i class="fas fa-lock"></i>
+            Data Protection
+        </h1>
+        <p class="dp-hero-subtitle">
+            Comprehensive data classification frameworks, encryption standards, PII handling policies, and data retention guidelines.
+        </p>
+    </section>
+
+    <section class="section file-content">
+        <div class="container">
+            <!-- Data Classification -->
+            <div class="glass-card">
+                <h2 class="section-title"><i class="fas fa-tags"></i> Data Classification Framework</h2>
+                
+                <div class="classification-grid">
+                    <div class="class-card restricted">
+                        <div class="class-icon"><i class="fas fa-user-shield"></i></div>
+                        <h3 class="class-title">Restricted</h3>
+                        <p class="class-description">Highly sensitive data requiring maximum protection. Unauthorized access could cause severe damage.</p>
+                        <div class="class-examples">
+                            <strong>Examples:</strong> PII, PHI, Payment Cards, Trade Secrets, Passwords
+                        </div>
+                    </div>
+
+                    <div class="class-card confidential">
+                        <div class="class-icon"><i class="fas fa-file-shield"></i></div>
+                        <h3 class="class-title">Confidential</h3>
+                        <p class="class-description">Sensitive business information with limited distribution. Disclosure could harm business interests.</p>
+                        <div class="class-examples">
+                            <strong>Examples:</strong> Financial Reports, Contracts, Employee Records, Strategic Plans
+                        </div>
+                    </div>
+
+                    <div class="class-card internal">
+                        <div class="class-icon"><i class="fas fa-building"></i></div>
+                        <h3 class="class-title">Internal</h3>
+                        <p class="class-description">Information for internal use only. Not intended for external distribution but not highly sensitive.</p>
+                        <div class="class-examples">
+                            <strong>Examples:</strong> Policies, Procedures, Internal Memos, Training Materials
+                        </div>
+                    </div>
+
+                    <div class="class-card public">
+                        <div class="class-icon"><i class="fas fa-globe"></i></div>
+                        <h3 class="class-title">Public</h3>
+                        <p class="class-description">Information approved for public release. No adverse impact from disclosure.</p>
+                        <div class="class-examples">
+                            <strong>Examples:</strong> Marketing Materials, Press Releases, Public Documentation
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Lifecycle Visualization -->
+            <div class="glass-card">
+                <h2 class="section-title"><i class="fas fa-sync-alt"></i> Data Lifecycle Management</h2>
+                <div id="data-lifecycle-chart"></div>
+            </div>
+
+            <!-- Tabs Section -->
+            <div class="tabs-container">
+                <div class="tabs-nav">
+                    <button class="tab-btn active" data-tab="encryption">Encryption Standards</button>
+                    <button class="tab-btn" data-tab="pii">PII Handling</button>
+                    <button class="tab-btn" data-tab="retention">Data Retention</button>
+                    <button class="tab-btn" data-tab="gdpr">GDPR Compliance</button>
+                </div>
+
+                <!-- Encryption Tab -->
+                <div class="tab-content active" id="encryption-tab">
+                    <div class="glass-card">
+                        <h3 class="section-title"><i class="fas fa-key"></i> Encryption Standards</h3>
+                        
+                        <table class="encryption-table">
+                            <thead>
+                                <tr>
+                                    <th>Use Case</th>
+                                    <th>Algorithm</th>
+                                    <th>Key Size</th>
+                                    <th>Status</th>
+                                    <th>Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Data at Rest</td>
+                                    <td><span class="encryption-badge recommended">AES-256-GCM</span></td>
+                                    <td>256-bit</td>
+                                    <td><span class="encryption-badge strong">Recommended</span></td>
+                                    <td>FIPS 140-2 compliant, authenticated encryption</td>
+                                </tr>
+                                <tr>
+                                    <td>Data in Transit</td>
+                                    <td><span class="encryption-badge recommended">TLS 1.3</span></td>
+                                    <td>256-bit</td>
+                                    <td><span class="encryption-badge strong">Required</span></td>
+                                    <td>Perfect forward secrecy, modern cipher suites</td>
+                                </tr>
+                                <tr>
+                                    <td>Password Storage</td>
+                                    <td><span class="encryption-badge recommended">Argon2id</span></td>
+                                    <td>N/A</td>
+                                    <td><span class="encryption-badge strong">Recommended</span></td>
+                                    <td>Memory-hard, winner of PHC competition</td>
+                                </tr>
+                                <tr>
+                                    <td>Digital Signatures</td>
+                                    <td><span class="encryption-badge recommended">Ed25519</span></td>
+                                    <td>256-bit</td>
+                                    <td><span class="encryption-badge strong">Recommended</span></td>
+                                    <td>Fast, secure, deterministic signatures</td>
+                                </tr>
+                                <tr>
+                                    <td>Key Exchange</td>
+                                    <td><span class="encryption-badge recommended">X25519</span></td>
+                                    <td>256-bit</td>
+                                    <td><span class="encryption-badge strong">Recommended</span></td>
+                                    <td>Curve25519 Diffie-Hellman</td>
+                                </tr>
+                                <tr>
+                                    <td>Database Encryption</td>
+                                    <td><span class="encryption-badge recommended">AES-256-XTS</span></td>
+                                    <td>512-bit (2×256)</td>
+                                    <td><span class="encryption-badge strong">Required</span></td>
+                                    <td>TDE for databases, disk-level encryption</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="workflow-container">
+                            <h4 class="workflow-title"><i class="fas fa-key"></i> Key Management Lifecycle</h4>
+                            <div class="mermaid">
+flowchart LR
+    subgraph Generation["Key Generation"]
+        A1[CSPRNG] --> A2[Key Pair Creation]
+    end
+    
+    subgraph Distribution["Key Distribution"]
+        B1[Secure Channel] --> B2[Key Wrapping]
+        B2 --> B3[HSM Storage]
+    end
+    
+    subgraph Usage["Key Usage"]
+        C1[Encryption] --> C2[Decryption]
+        C2 --> C3[Signing]
+    end
+    
+    subgraph Rotation["Key Rotation"]
+        D1[Schedule Rotation] --> D2[Generate New Key]
+        D2 --> D3[Re-encrypt Data]
+        D3 --> D4[Retire Old Key]
+    end
+    
+    subgraph Destruction["Key Destruction"]
+        E1[Secure Deletion] --> E2[Audit Log]
+    end
+    
+    Generation --> Distribution --> Usage --> Rotation --> Destruction
+    
+    style A1 fill:#27ae60,stroke:#1e8449,color:#fff
+    style B3 fill:#3498db,stroke:#2980b9,color:#fff
+    style D2 fill:#f39c12,stroke:#d68910,color:#000
+    style E1 fill:#e74c3c,stroke:#c0392b,color:#fff
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PII Tab -->
+                <div class="tab-content" id="pii-tab">
+                    <div class="glass-card">
+                        <h3 class="section-title"><i class="fas fa-user-secret"></i> PII Categories & Handling</h3>
+                        
+                        <div class="info-box info-box-warning" style="margin-bottom: 2rem;">
+                            <h4><i class="fas fa-exclamation-triangle"></i> Definition</h4>
+                            <p><strong>Personally Identifiable Information (PII)</strong> is any data that could potentially identify a specific individual, either alone or combined with other data.</p>
+                        </div>
+
+                        <h4 style="margin-bottom: 1rem;">Direct Identifiers (High Sensitivity)</h4>
+                        <div class="pii-grid">
+                            <div class="pii-item">
+                                <i class="fas fa-id-card"></i>
+                                <span>Social Security Number</span>
+                            </div>
+                            <div class="pii-item">
+                                <i class="fas fa-passport"></i>
+                                <span>Passport Number</span>
+                            </div>
+                            <div class="pii-item">
+                                <i class="fas fa-credit-card"></i>
+                                <span>Credit Card Numbers</span>
+                            </div>
+                            <div class="pii-item">
+                                <i class="fas fa-fingerprint"></i>
+                                <span>Biometric Data</span>
+                            </div>
+                            <div class="pii-item">
+                                <i class="fas fa-hospital"></i>
+                                <span>Medical Records</span>
+                            </div>
+                            <div class="pii-item">
+                                <i class="fas fa-car"></i>
+                                <span>Driver's License</span>
+                            </div>
+                        </div>
+
+                        <h4 style="margin: 2rem 0 1rem;">Indirect Identifiers (Medium Sensitivity)</h4>
+                        <div class="pii-grid">
+                            <div class="pii-item">
+                                <i class="fas fa-envelope"></i>
+                                <span>Email Address</span>
+                            </div>
+                            <div class="pii-item">
+                                <i class="fas fa-phone"></i>
+                                <span>Phone Number</span>
+                            </div>
+                            <div class="pii-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Physical Address</span>
+                            </div>
+                            <div class="pii-item">
+                                <i class="fas fa-birthday-cake"></i>
+                                <span>Date of Birth</span>
+                            </div>
+                            <div class="pii-item">
+                                <i class="fas fa-globe"></i>
+                                <span>IP Address</span>
+                            </div>
+                            <div class="pii-item">
+                                <i class="fas fa-briefcase"></i>
+                                <span>Employment Info</span>
+                            </div>
+                        </div>
+
+                        <div class="workflow-container" style="margin-top: 2rem;">
+                            <h4 class="workflow-title"><i class="fas fa-shield-alt"></i> PII Protection Workflow</h4>
+                            <div class="mermaid">
+flowchart TB
+    A[Data Collection] --> B{Contains PII?}
+    B -->|Yes| C[Classify Sensitivity]
+    B -->|No| D[Standard Processing]
+    
+    C --> E{Sensitivity Level?}
+    E -->|High| F[Encrypt + Access Controls]
+    E -->|Medium| G[Encrypt + Logging]
+    E -->|Low| H[Access Controls]
+    
+    F --> I[Minimize Collection]
+    G --> I
+    H --> I
+    
+    I --> J[Purpose Limitation]
+    J --> K[Retention Schedule]
+    K --> L{Still Needed?}
+    L -->|Yes| M[Secure Storage]
+    L -->|No| N[Secure Deletion]
+    
+    M --> O[Regular Audits]
+    
+    style F fill:#e74c3c,stroke:#c0392b,color:#fff
+    style N fill:#27ae60,stroke:#1e8449,color:#fff
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Retention Tab -->
+                <div class="tab-content" id="retention-tab">
+                    <div class="glass-card">
+                        <h3 class="section-title"><i class="fas fa-clock"></i> Data Retention Schedule</h3>
+                        
+                        <div class="retention-timeline">
+                            <div class="retention-item r1">
+                                <div class="retention-content">
+                                    <div class="retention-header">
+                                        <span class="retention-type">Financial Records</span>
+                                        <span class="retention-period">7 Years</span>
+                                    </div>
+                                    <p class="retention-description">Tax records, invoices, audit trails. Required for SOX compliance and tax regulations.</p>
+                                </div>
+                            </div>
+
+                            <div class="retention-item r2">
+                                <div class="retention-content">
+                                    <div class="retention-header">
+                                        <span class="retention-type">Employee Records</span>
+                                        <span class="retention-period">7 Years after termination</span>
+                                    </div>
+                                    <p class="retention-description">Personnel files, performance reviews, payroll records. Required for employment law compliance.</p>
+                                </div>
+                            </div>
+
+                            <div class="retention-item r3">
+                                <div class="retention-content">
+                                    <div class="retention-header">
+                                        <span class="retention-type">Customer Data</span>
+                                        <span class="retention-period">3 Years after last activity</span>
+                                    </div>
+                                    <p class="retention-description">Account information, transaction history. Subject to GDPR data minimization principles.</p>
+                                </div>
+                            </div>
+
+                            <div class="retention-item r4">
+                                <div class="retention-content">
+                                    <div class="retention-header">
+                                        <span class="retention-type">Security Logs</span>
+                                        <span class="retention-period">1 Year minimum</span>
+                                    </div>
+                                    <p class="retention-description">Access logs, authentication events, security incidents. Required for forensic analysis.</p>
+                                </div>
+                            </div>
+
+                            <div class="retention-item r2">
+                                <div class="retention-content">
+                                    <div class="retention-header">
+                                        <span class="retention-type">Legal Documents</span>
+                                        <span class="retention-period">Permanent</span>
+                                    </div>
+                                    <p class="retention-description">Contracts, licenses, regulatory filings. Retain for duration of business plus wind-down period.</p>
+                                </div>
+                            </div>
+
+                            <div class="retention-item r3">
+                                <div class="retention-content">
+                                    <div class="retention-header">
+                                        <span class="retention-type">Marketing Data</span>
+                                        <span class="retention-period">Until consent withdrawn</span>
+                                    </div>
+                                    <p class="retention-description">Marketing preferences, email subscriptions. Requires active consent under GDPR.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="workflow-container">
+                            <h4 class="workflow-title"><i class="fas fa-trash-alt"></i> Secure Data Disposal</h4>
+                            <div class="mermaid">
+flowchart LR
+    A[Retention Period Expires] --> B{Data Type?}
+    B -->|Digital| C[Cryptographic Erasure]
+    B -->|Physical| D[Cross-Cut Shredding]
+    B -->|Backups| E[Verify All Copies Deleted]
+    
+    C --> F[Overwrite with Random Data]
+    F --> G[Verify Deletion]
+    
+    D --> H[Certificate of Destruction]
+    
+    E --> I[Update Inventory]
+    G --> I
+    H --> I
+    
+    I --> J[Audit Log Entry]
+    
+    style C fill:#e74c3c,stroke:#c0392b,color:#fff
+    style D fill:#f39c12,stroke:#d68910,color:#000
+    style J fill:#27ae60,stroke:#1e8449,color:#fff
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GDPR Tab -->
+                <div class="tab-content" id="gdpr-tab">
+                    <div class="glass-card">
+                        <h3 class="section-title"><i class="fas fa-gavel"></i> GDPR Compliance</h3>
+                        
+                        <div class="workflow-container" style="border: none; padding: 0;">
+                            <div class="mermaid">
+flowchart TB
+    subgraph Lawfulness["Lawful Basis"]
+        A1[Consent] --> A2[Contract]
+        A2 --> A3[Legal Obligation]
+        A3 --> A4[Vital Interests]
+        A4 --> A5[Public Task]
+        A5 --> A6[Legitimate Interests]
+    end
+    
+    subgraph Rights["Data Subject Rights"]
+        B1[Right to Access] --> B2[Right to Rectification]
+        B2 --> B3[Right to Erasure]
+        B3 --> B4[Right to Restrict]
+        B4 --> B5[Right to Portability]
+        B5 --> B6[Right to Object]
+    end
+    
+    subgraph Principles["Data Protection Principles"]
+        C1[Lawfulness] --> C2[Purpose Limitation]
+        C2 --> C3[Data Minimization]
+        C3 --> C4[Accuracy]
+        C4 --> C5[Storage Limitation]
+        C5 --> C6[Integrity & Confidentiality]
+        C6 --> C7[Accountability]
+    end
+    
+    style A1 fill:#3498db,stroke:#2980b9,color:#fff
+    style B3 fill:#e74c3c,stroke:#c0392b,color:#fff
+    style C7 fill:#27ae60,stroke:#1e8449,color:#fff
+                            </div>
+                        </div>
+
+                        <div class="info-grid" style="margin-top: 2rem;">
+                            <div class="info-item">
+                                <h3><i class="fas fa-clock" style="color: var(--accent-primary);"></i> 72-Hour Rule</h3>
+                                <p>Data breaches must be reported to supervisory authority within 72 hours of awareness.</p>
+                            </div>
+                            <div class="info-item">
+                                <h3><i class="fas fa-shield-alt" style="color: var(--accent-primary);"></i> Privacy by Design</h3>
+                                <p>Build privacy protections into systems from the start, not as an afterthought.</p>
+                            </div>
+                            <div class="info-item">
+                                <h3><i class="fas fa-file-contract" style="color: var(--accent-primary);"></i> DPO Requirement</h3>
+                                <p>Appoint a Data Protection Officer for large-scale processing of sensitive data.</p>
+                            </div>
+                            <div class="info-item">
+                                <h3><i class="fas fa-globe-europe" style="color: var(--accent-primary);"></i> Cross-Border Transfers</h3>
+                                <p>Use approved mechanisms (SCCs, BCRs, adequacy decisions) for international transfers.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Best Practices -->
+            <div class="glass-card">
+                <h2 class="section-title"><i class="fas fa-star"></i> Data Protection Best Practices</h2>
+                
+                <div class="info-grid">
+                    <div class="info-item">
+                        <h3><i class="fas fa-search-minus" style="color: var(--accent-primary);"></i> Data Minimization</h3>
+                        <p>Collect only the data you need. Less data means less risk. Regularly review and purge unnecessary data.</p>
+                    </div>
+                    <div class="info-item">
+                        <h3><i class="fas fa-mask" style="color: var(--accent-primary);"></i> Anonymization</h3>
+                        <p>When possible, anonymize or pseudonymize data to reduce privacy risks while maintaining utility.</p>
+                    </div>
+                    <div class="info-item">
+                        <h3><i class="fas fa-user-lock" style="color: var(--accent-primary);"></i> Access Control</h3>
+                        <p>Implement least-privilege access. Users should only access data necessary for their role.</p>
+                    </div>
+                    <div class="info-item">
+                        <h3><i class="fas fa-clipboard-list" style="color: var(--accent-primary);"></i> Data Inventory</h3>
+                        <p>Maintain comprehensive records of what data you have, where it's stored, and who can access it.</p>
+                    </div>
+                    <div class="info-item">
+                        <h3><i class="fas fa-lock" style="color: var(--accent-primary);"></i> Encrypt Everything</h3>
+                        <p>Use strong encryption for data at rest and in transit. Manage keys securely with proper rotation.</p>
+                    </div>
+                    <div class="info-item">
+                        <h3><i class="fas fa-eye" style="color: var(--accent-primary);"></i> Monitor & Audit</h3>
+                        <p>Log all access to sensitive data. Regular audits ensure compliance and detect anomalies.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Back to Top -->
+    <a href="#main-content" class="back-to-top" aria-label="Back to top">↑</a>
+
+    <footer class="footer">
+        <p>&copy; 2024-2025 Asif Hussain. All rights reserved.</p>
+        <p>
+            <a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener" class="footer-link">GitHub</a> |
+            <a href="index.html" class="footer-link">Security Home</a> |
+            <a href="../index.html" class="footer-link">CORTEX Home</a>
+        </p>
+    </footer>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#00d4ff',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#00d4ff',
+                lineColor: '#a0a6c0',
+                secondaryColor: '#7b61ff',
+                tertiaryColor: '#1a1f3a'
+            }
+        });
+
+        // D3.js Data Lifecycle Circular Diagram
+        function createLifecycleChart() {
+            const container = document.getElementById('data-lifecycle-chart');
+            const width = container.clientWidth;
+            const height = 400;
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const radius = 150;
+
+            const svg = d3.select('#data-lifecycle-chart')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+
+            const phases = [
+                { name: 'Create', icon: '✏️', color: '#27ae60', description: 'Data collection & generation' },
+                { name: 'Store', icon: '💾', color: '#3498db', description: 'Secure storage & classification' },
+                { name: 'Use', icon: '⚙️', color: '#9b59b6', description: 'Processing & analysis' },
+                { name: 'Share', icon: '🔄', color: '#f39c12', description: 'Controlled distribution' },
+                { name: 'Archive', icon: '📦', color: '#1abc9c', description: 'Long-term retention' },
+                { name: 'Destroy', icon: '🗑️', color: '#e74c3c', description: 'Secure disposal' }
+            ];
+
+            const angleStep = (2 * Math.PI) / phases.length;
+
+            // Draw connecting lines
+            phases.forEach((phase, i) => {
+                const nextI = (i + 1) % phases.length;
+                const angle1 = -Math.PI / 2 + i * angleStep;
+                const angle2 = -Math.PI / 2 + nextI * angleStep;
+                
+                svg.append('line')
+                    .attr('x1', centerX + radius * Math.cos(angle1))
+                    .attr('y1', centerY + radius * Math.sin(angle1))
+                    .attr('x2', centerX + radius * Math.cos(angle2))
+                    .attr('y2', centerY + radius * Math.sin(angle2))
+                    .attr('stroke', 'rgba(255, 255, 255, 0.2)')
+                    .attr('stroke-width', 2)
+                    .attr('stroke-dasharray', '5,5');
+            });
+
+            // Draw center
+            svg.append('circle')
+                .attr('cx', centerX)
+                .attr('cy', centerY)
+                .attr('r', 50)
+                .attr('fill', 'rgba(0, 212, 255, 0.1)')
+                .attr('stroke', '#00d4ff')
+                .attr('stroke-width', 2);
+
+            svg.append('text')
+                .attr('x', centerX)
+                .attr('y', centerY - 8)
+                .attr('text-anchor', 'middle')
+                .text('Data')
+                .style('fill', '#fff')
+                .style('font-weight', '600');
+
+            svg.append('text')
+                .attr('x', centerX)
+                .attr('y', centerY + 12)
+                .attr('text-anchor', 'middle')
+                .text('Lifecycle')
+                .style('fill', '#a0a6c0')
+                .style('font-size', '12px');
+
+            // Draw phase nodes
+            phases.forEach((phase, i) => {
+                const angle = -Math.PI / 2 + i * angleStep;
+                const x = centerX + radius * Math.cos(angle);
+                const y = centerY + radius * Math.sin(angle);
+
+                // Node circle
+                const g = svg.append('g')
+                    .attr('class', 'phase-node')
+                    .style('cursor', 'pointer');
+
+                g.append('circle')
+                    .attr('cx', x)
+                    .attr('cy', y)
+                    .attr('r', 40)
+                    .attr('fill', phase.color)
+                    .attr('opacity', 0.8)
+                    .on('mouseover', function() {
+                        d3.select(this).attr('opacity', 1).attr('r', 45);
+                        tooltip.style('opacity', 1)
+                            .html(`<strong>${phase.name}</strong><br>${phase.description}`)
+                            .style('left', (d3.event ? d3.event.pageX : x) + 'px')
+                            .style('top', (d3.event ? d3.event.pageY - 40 : y) + 'px');
+                    })
+                    .on('mouseout', function() {
+                        d3.select(this).attr('opacity', 0.8).attr('r', 40);
+                        tooltip.style('opacity', 0);
+                    });
+
+                // Icon
+                g.append('text')
+                    .attr('x', x)
+                    .attr('y', y - 5)
+                    .attr('text-anchor', 'middle')
+                    .attr('dy', '0.35em')
+                    .text(phase.icon)
+                    .style('font-size', '20px');
+
+                // Label
+                const labelRadius = radius + 60;
+                const labelX = centerX + labelRadius * Math.cos(angle);
+                const labelY = centerY + labelRadius * Math.sin(angle);
+
+                svg.append('text')
+                    .attr('x', labelX)
+                    .attr('y', labelY)
+                    .attr('text-anchor', 'middle')
+                    .attr('dy', '0.35em')
+                    .text(phase.name)
+                    .style('fill', '#fff')
+                    .style('font-weight', '600');
+            });
+
+            // Tooltip
+            const tooltip = d3.select('body')
+                .append('div')
+                .style('position', 'absolute')
+                .style('background', 'rgba(26, 31, 58, 0.95)')
+                .style('border', '1px solid rgba(0, 212, 255, 0.3)')
+                .style('padding', '10px')
+                .style('border-radius', '8px')
+                .style('font-size', '12px')
+                .style('color', '#fff')
+                .style('pointer-events', 'none')
+                .style('opacity', 0)
+                .style('z-index', 1000);
+        }
+
+        // Tab functionality
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const tab = this.dataset.tab;
+
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+                this.classList.add('active');
+                document.getElementById(`${tab}-tab`).classList.add('active');
+            });
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            createLifecycleChart();
+        });
+
+        // Back to top button
+        const backToTop = document.querySelector('.back-to-top');
+        window.addEventListener('scroll', () => {
+            backToTop.style.display = window.scrollY > 300 ? 'flex' : 'none';
+        });
+    </script>
+</body>
+</html>

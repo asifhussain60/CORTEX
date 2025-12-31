@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX Penetration Testing - Red Team/Blue Team Exercises, Testing Methodologies, and Reporting Templates">
+    <meta name="keywords" content="penetration testing, pen test, red team, blue team, security assessment, ethical hacking, PTES">
+    <meta name="author" content="Asif Hussain">
+    <title>Penetration Testing | CORTEX Security</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        /* Penetration Testing Specific Styles */
+        :root {
+            --red-team: #e74c3c;
+            --blue-team: #3498db;
+            --purple-team: #9b59b6;
+            --phase-recon: #f39c12;
+            --phase-scan: #00d4ff;
+            --phase-exploit: #e74c3c;
+            --phase-maintain: #9b59b6;
+            --phase-report: #27ae60;
+        }
+
+        .pt-hero {
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .pt-hero-title {
+            font-size: 2.5rem;
+            color: var(--accent-primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .pt-hero-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Team Cards */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        @media (max-width: 1024px) {
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .team-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .team-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .team-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .team-card.red::before { background: var(--red-team); }
+        .team-card.blue::before { background: var(--blue-team); }
+        .team-card.purple::before { background: var(--purple-team); }
+
+        .team-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+        }
+
+        .team-card.red .team-icon {
+            background: rgba(231, 76, 60, 0.2);
+            color: var(--red-team);
+        }
+
+        .team-card.blue .team-icon {
+            background: rgba(52, 152, 219, 0.2);
+            color: var(--blue-team);
+        }
+
+        .team-card.purple .team-icon {
+            background: rgba(155, 89, 182, 0.2);
+            color: var(--purple-team);
+        }
+
+        .team-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .team-subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .team-description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .team-tools {
+            margin-top: 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        .tool-badge {
+            padding: 0.25rem 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Phase Timeline */
+        .phase-timeline {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin: 3rem 0;
+            padding: 0 1rem;
+        }
+
+        .phase-timeline::before {
+            content: '';
+            position: absolute;
+            top: 30px;
+            left: 60px;
+            right: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--phase-recon), var(--phase-scan), var(--phase-exploit), var(--phase-maintain), var(--phase-report));
+            border-radius: 2px;
+        }
+
+        .phase-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .phase-item:hover {
+            transform: scale(1.05);
+        }
+
+        .phase-number {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            transition: all 0.3s ease;
+        }
+
+        .phase-item:nth-child(1) .phase-number { background: var(--phase-recon); color: #000; }
+        .phase-item:nth-child(2) .phase-number { background: var(--phase-scan); color: #000; }
+        .phase-item:nth-child(3) .phase-number { background: var(--phase-exploit); color: #fff; }
+        .phase-item:nth-child(4) .phase-number { background: var(--phase-maintain); color: #fff; }
+        .phase-item:nth-child(5) .phase-number { background: var(--phase-report); color: #fff; }
+
+        .phase-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .phase-timeline {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .phase-timeline::before {
+                top: 0;
+                bottom: 0;
+                left: 30px;
+                right: auto;
+                width: 4px;
+                height: auto;
+                background: linear-gradient(180deg, var(--phase-recon), var(--phase-scan), var(--phase-exploit), var(--phase-maintain), var(--phase-report));
+            }
+
+            .phase-item {
+                flex-direction: row;
+                gap: 1rem;
+            }
+
+            .phase-number {
+                margin-bottom: 0;
+            }
+        }
+
+        /* Methodology Tabs */
+        .methodology-tabs {
+            display: flex;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--glass-border);
+            margin-bottom: 1.5rem;
+            overflow-x: auto;
+        }
+
+        .method-tab {
+            padding: 1rem 1.5rem;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            position: relative;
+        }
+
+        .method-tab:hover {
+            color: var(--text-primary);
+        }
+
+        .method-tab.active {
+            color: var(--accent-primary);
+        }
+
+        .method-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--accent-primary);
+        }
+
+        .method-content {
+            display: none;
+        }
+
+        .method-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Workflow Container */
+        .workflow-container {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .workflow-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Attack Surface Visualization */
+        #attack-surface-chart {
+            width: 100%;
+            height: 400px;
+        }
+
+        /* Findings Matrix */
+        .findings-matrix {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .finding-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .finding-severity {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 0.5rem 1rem;
+            border-radius: 0 12px 0 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .finding-severity.critical { background: #ff4444; color: #fff; }
+        .finding-severity.high { background: #ff8c00; color: #fff; }
+        .finding-severity.medium { background: #ffc107; color: #000; }
+        .finding-severity.low { background: #28a745; color: #fff; }
+
+        .finding-title {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            padding-right: 80px;
+        }
+
+        .finding-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .finding-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .finding-tag {
+            padding: 0.25rem 0.5rem;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            color: var(--accent-primary);
+        }
+
+        /* Report Template */
+        .report-template {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .report-section {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .report-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .report-section-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .report-section-title i {
+            color: var(--accent-primary);
+        }
+
+        .report-section p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Tools Grid */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .tool-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .tool-card:hover {
+            background: rgba(0, 212, 255, 0.05);
+            border-color: var(--accent-primary);
+        }
+
+        .tool-card i {
+            font-size: 2rem;
+            color: var(--accent-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .tool-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .tool-category {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        /* Checklist */
+        .checklist {
+            list-style: none;
+            margin: 1rem 0;
+        }
+
+        .checklist li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .checklist li:last-child {
+            border-bottom: none;
+        }
+
+        .checklist li i {
+            color: var(--accent-primary);
+            margin-top: 0.2rem;
+        }
+
+        .checklist li span {
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">&rarr;</span>
+        <a href="index.html">Security</a>
+        <span class="breadcrumb-separator">&rarr;</span>
+        <span class="breadcrumb-current">Penetration Testing</span>
+    </nav>
+
+    <!-- Logo Header -->
+    <div class="logo-header">
+        <a href="../index.html">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
+        </a>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="pt-hero" id="main-content">
+        <h1 class="pt-hero-title">
+            <i class="fas fa-user-secret"></i>
+            Penetration Testing
+        </h1>
+        <p class="pt-hero-subtitle">
+            Structured pen test planning, execution templates, and reporting formats for comprehensive security assessments.
+        </p>
+    </section>
+
+    <section class="section file-content">
+        <div class="container">
+            <!-- Team Types -->
+            <div class="glass-card">
+                <h2 class="section-title"><i class="fas fa-users"></i> Testing Team Types</h2>
+                
+                <div class="team-grid">
+                    <div class="team-card red">
+                        <div class="team-icon"><i class="fas fa-skull-crossbones"></i></div>
+                        <h3 class="team-title">Red Team</h3>
+                        <p class="team-subtitle">Offensive Security</p>
+                        <p class="team-description">Simulates real-world attackers using advanced tactics, techniques, and procedures (TTPs) to test organization's detection and response capabilities.</p>
+                        <div class="team-tools">
+                            <span class="tool-badge">Metasploit</span>
+                            <span class="tool-badge">Cobalt Strike</span>
+                            <span class="tool-badge">Custom Exploits</span>
+                        </div>
+                    </div>
+
+                    <div class="team-card blue">
+                        <div class="team-icon"><i class="fas fa-shield-halved"></i></div>
+                        <h3 class="team-title">Blue Team</h3>
+                        <p class="team-subtitle">Defensive Security</p>
+                        <p class="team-description">Focuses on defending against attacks, detecting threats, and responding to incidents. Maintains security monitoring and incident response.</p>
+                        <div class="team-tools">
+                            <span class="tool-badge">SIEM</span>
+                            <span class="tool-badge">EDR</span>
+                            <span class="tool-badge">Threat Hunting</span>
+                        </div>
+                    </div>
+
+                    <div class="team-card purple">
+                        <div class="team-icon"><i class="fas fa-handshake"></i></div>
+                        <h3 class="team-title">Purple Team</h3>
+                        <p class="team-subtitle">Collaborative Security</p>
+                        <p class="team-description">Combines Red and Blue team efforts for maximum effectiveness. Ensures attack simulations improve defensive capabilities.</p>
+                        <div class="team-tools">
+                            <span class="tool-badge">MITRE ATT&CK</span>
+                            <span class="tool-badge">Atomic Red Team</span>
+                            <span class="tool-badge">Detection Rules</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PTES Phases -->
+            <div class="glass-card">
+                <h2 class="section-title"><i class="fas fa-route"></i> Penetration Testing Execution Standard (PTES)</h2>
+                
+                <div class="phase-timeline">
+                    <div class="phase-item" data-phase="recon">
+                        <div class="phase-number">1</div>
+                        <div class="phase-label">Reconnaissance</div>
+                    </div>
+                    <div class="phase-item" data-phase="scan">
+                        <div class="phase-number">2</div>
+                        <div class="phase-label">Scanning</div>
+                    </div>
+                    <div class="phase-item" data-phase="exploit">
+                        <div class="phase-number">3</div>
+                        <div class="phase-label">Exploitation</div>
+                    </div>
+                    <div class="phase-item" data-phase="maintain">
+                        <div class="phase-number">4</div>
+                        <div class="phase-label">Maintain Access</div>
+                    </div>
+                    <div class="phase-item" data-phase="report">
+                        <div class="phase-number">5</div>
+                        <div class="phase-label">Reporting</div>
+                    </div>
+                </div>
+
+                <div class="workflow-container">
+                    <h3 class="workflow-title"><i class="fas fa-sitemap"></i> PTES Workflow</h3>
+                    <div class="mermaid">
+flowchart TB
+    subgraph Phase1["Phase 1: Pre-Engagement"]
+        A1[Scope Definition] --> A2[Rules of Engagement]
+        A2 --> A3[Authorization]
+        A3 --> A4[Communication Plan]
+    end
+    
+    subgraph Phase2["Phase 2: Intelligence Gathering"]
+        B1[OSINT] --> B2[Footprinting]
+        B2 --> B3[Social Engineering Recon]
+        B3 --> B4[Target Profiling]
+    end
+    
+    subgraph Phase3["Phase 3: Threat Modeling"]
+        C1[Asset Identification] --> C2[Threat Analysis]
+        C2 --> C3[Attack Vector Mapping]
+    end
+    
+    subgraph Phase4["Phase 4: Vulnerability Analysis"]
+        D1[Active Scanning] --> D2[Passive Analysis]
+        D2 --> D3[Vulnerability Correlation]
+    end
+    
+    subgraph Phase5["Phase 5: Exploitation"]
+        E1[Exploit Development] --> E2[Attack Execution]
+        E2 --> E3[Privilege Escalation]
+        E3 --> E4[Lateral Movement]
+    end
+    
+    subgraph Phase6["Phase 6: Post-Exploitation"]
+        F1[Data Exfiltration] --> F2[Persistence]
+        F2 --> F3[Cover Tracks]
+    end
+    
+    subgraph Phase7["Phase 7: Reporting"]
+        G1[Findings Documentation] --> G2[Risk Assessment]
+        G2 --> G3[Remediation Recommendations]
+        G3 --> G4[Executive Summary]
+    end
+    
+    Phase1 --> Phase2
+    Phase2 --> Phase3
+    Phase3 --> Phase4
+    Phase4 --> Phase5
+    Phase5 --> Phase6
+    Phase6 --> Phase7
+    
+    style A1 fill:#f39c12,stroke:#d68910,color:#000
+    style E2 fill:#e74c3c,stroke:#c0392b,color:#fff
+    style G4 fill:#27ae60,stroke:#1e8449,color:#fff
+                    </div>
+                </div>
+            </div>
+
+            <!-- Attack Surface Visualization -->
+            <div class="glass-card">
+                <h2 class="section-title"><i class="fas fa-radar"></i> Attack Surface Analysis</h2>
+                <div id="attack-surface-chart"></div>
+            </div>
+
+            <!-- Methodologies Tabs -->
+            <div class="glass-card">
+                <h2 class="section-title"><i class="fas fa-book"></i> Testing Methodologies</h2>
+                
+                <div class="methodology-tabs">
+                    <button class="method-tab active" data-method="web">Web Application</button>
+                    <button class="method-tab" data-method="network">Network</button>
+                    <button class="method-tab" data-method="api">API</button>
+                    <button class="method-tab" data-method="mobile">Mobile</button>
+                    <button class="method-tab" data-method="wireless">Wireless</button>
+                </div>
+
+                <!-- Web Application -->
+                <div class="method-content active" id="web-method">
+                    <div class="workflow-container" style="border: none; padding: 0;">
+                        <div class="mermaid">
+flowchart LR
+    subgraph Recon["Reconnaissance"]
+        A1[Spider/Crawl] --> A2[Directory Brute Force]
+    end
+    
+    subgraph Auth["Authentication"]
+        B1[Brute Force] --> B2[Session Management]
+        B2 --> B3[Password Policy]
+    end
+    
+    subgraph Injection["Injection"]
+        C1[SQL Injection] --> C2[XSS]
+        C2 --> C3[Command Injection]
+        C3 --> C4[LDAP/XML Injection]
+    end
+    
+    subgraph Logic["Business Logic"]
+        D1[Workflow Bypass] --> D2[Privilege Escalation]
+        D2 --> D3[Rate Limiting]
+    end
+    
+    Recon --> Auth --> Injection --> Logic
+    
+    style C1 fill:#e74c3c,stroke:#c0392b,color:#fff
+    style C2 fill:#e74c3c,stroke:#c0392b,color:#fff
+                        </div>
+                    </div>
+
+                    <h4 style="margin: 2rem 0 1rem;"><i class="fas fa-wrench"></i> Recommended Tools</h4>
+                    <div class="tools-grid">
+                        <div class="tool-card">
+                            <i class="fas fa-spider"></i>
+                            <div class="tool-name">Burp Suite</div>
+                            <div class="tool-category">Proxy & Scanner</div>
+                        </div>
+                        <div class="tool-card">
+                            <i class="fas fa-terminal"></i>
+                            <div class="tool-name">SQLMap</div>
+                            <div class="tool-category">SQL Injection</div>
+                        </div>
+                        <div class="tool-card">
+                            <i class="fas fa-folder-open"></i>
+                            <div class="tool-name">Dirbuster</div>
+                            <div class="tool-category">Directory Brute Force</div>
+                        </div>
+                        <div class="tool-card">
+                            <i class="fas fa-code"></i>
+                            <div class="tool-name">Nikto</div>
+                            <div class="tool-category">Web Scanner</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Network -->
+                <div class="method-content" id="network-method">
+                    <div class="workflow-container" style="border: none; padding: 0;">
+                        <div class="mermaid">
+flowchart TB
+    A[Network Discovery] --> B[Port Scanning]
+    B --> C[Service Enumeration]
+    C --> D[Vulnerability Scanning]
+    D --> E{Vulnerabilities Found?}
+    E -->|Yes| F[Exploit Development]
+    E -->|No| G[Manual Testing]
+    F --> H[Exploitation]
+    G --> H
+    H --> I[Privilege Escalation]
+    I --> J[Lateral Movement]
+    J --> K[Data Exfiltration]
+    
+    style H fill:#e74c3c,stroke:#c0392b,color:#fff
+    style K fill:#9b59b6,stroke:#7d3c98,color:#fff
+                        </div>
+                    </div>
+
+                    <h4 style="margin: 2rem 0 1rem;"><i class="fas fa-wrench"></i> Recommended Tools</h4>
+                    <div class="tools-grid">
+                        <div class="tool-card">
+                            <i class="fas fa-network-wired"></i>
+                            <div class="tool-name">Nmap</div>
+                            <div class="tool-category">Port Scanner</div>
+                        </div>
+                        <div class="tool-card">
+                            <i class="fas fa-bug"></i>
+                            <div class="tool-name">Metasploit</div>
+                            <div class="tool-category">Exploitation Framework</div>
+                        </div>
+                        <div class="tool-card">
+                            <i class="fas fa-shield-virus"></i>
+                            <div class="tool-name">Nessus</div>
+                            <div class="tool-category">Vulnerability Scanner</div>
+                        </div>
+                        <div class="tool-card">
+                            <i class="fas fa-ethernet"></i>
+                            <div class="tool-name">Wireshark</div>
+                            <div class="tool-category">Packet Analysis</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- API -->
+                <div class="method-content" id="api-method">
+                    <div class="workflow-container" style="border: none; padding: 0;">
+                        <div class="mermaid">
+flowchart LR
+    subgraph Discovery["API Discovery"]
+        A1[Documentation Review] --> A2[Endpoint Enumeration]
+        A2 --> A3[Parameter Analysis]
+    end
+    
+    subgraph Auth["Authentication"]
+        B1[Token Analysis] --> B2[OAuth Flow Testing]
+        B2 --> B3[API Key Security]
+    end
+    
+    subgraph Vulnerabilities["Vulnerability Testing"]
+        C1[BOLA/IDOR] --> C2[Mass Assignment]
+        C2 --> C3[Rate Limiting]
+        C3 --> C4[Injection Flaws]
+    end
+    
+    Discovery --> Auth --> Vulnerabilities
+    
+    style C1 fill:#e74c3c,stroke:#c0392b,color:#fff
+                        </div>
+                    </div>
+
+                    <div class="info-box info-box-primary" style="margin-top: 1.5rem;">
+                        <h4><i class="fas fa-list-check"></i> OWASP API Top 10</h4>
+                        <ul class="checklist">
+                            <li><i class="fas fa-check"></i> <span>API1:2023 - Broken Object Level Authorization (BOLA)</span></li>
+                            <li><i class="fas fa-check"></i> <span>API2:2023 - Broken Authentication</span></li>
+                            <li><i class="fas fa-check"></i> <span>API3:2023 - Broken Object Property Level Authorization</span></li>
+                            <li><i class="fas fa-check"></i> <span>API4:2023 - Unrestricted Resource Consumption</span></li>
+                            <li><i class="fas fa-check"></i> <span>API5:2023 - Broken Function Level Authorization</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Mobile -->
+                <div class="method-content" id="mobile-method">
+                    <div class="workflow-container" style="border: none; padding: 0;">
+                        <div class="mermaid">
+flowchart TB
+    subgraph Static["Static Analysis"]
+        A1[Binary Analysis] --> A2[Code Review]
+        A2 --> A3[Hardcoded Secrets]
+    end
+    
+    subgraph Dynamic["Dynamic Analysis"]
+        B1[Runtime Manipulation] --> B2[Network Traffic]
+        B2 --> B3[Data Storage]
+    end
+    
+    subgraph Backend["Backend Testing"]
+        C1[API Security] --> C2[Authentication]
+        C2 --> C3[Server-Side Logic]
+    end
+    
+    Static --> Dynamic --> Backend
+    
+    style A3 fill:#e74c3c,stroke:#c0392b,color:#fff
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Wireless -->
+                <div class="method-content" id="wireless-method">
+                    <div class="workflow-container" style="border: none; padding: 0;">
+                        <div class="mermaid">
+flowchart LR
+    A[Wireless Recon] --> B[Network Identification]
+    B --> C{Encryption Type?}
+    C -->|WEP| D[WEP Cracking]
+    C -->|WPA/WPA2| E[WPA Cracking]
+    C -->|WPA3| F[WPA3 Testing]
+    C -->|Open| G[Direct Access]
+    D --> H[Network Access]
+    E --> H
+    F --> H
+    G --> H
+    H --> I[Man-in-the-Middle]
+    I --> J[Traffic Analysis]
+    
+    style D fill:#e74c3c,stroke:#c0392b,color:#fff
+    style I fill:#f39c12,stroke:#d68910,color:#000
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sample Findings -->
+            <div class="glass-card">
+                <h2 class="section-title"><i class="fas fa-exclamation-triangle"></i> Sample Findings</h2>
+                
+                <div class="findings-matrix">
+                    <div class="finding-card">
+                        <div class="finding-severity critical">Critical</div>
+                        <h4 class="finding-title">SQL Injection in Login Form</h4>
+                        <p class="finding-description">The login form is vulnerable to SQL injection, allowing attackers to bypass authentication and access user data.</p>
+                        <div class="finding-meta">
+                            <span class="finding-tag">OWASP A03</span>
+                            <span class="finding-tag">CWE-89</span>
+                            <span class="finding-tag">CVSS 9.8</span>
+                        </div>
+                    </div>
+
+                    <div class="finding-card">
+                        <div class="finding-severity high">High</div>
+                        <h4 class="finding-title">Insecure Direct Object Reference</h4>
+                        <p class="finding-description">Users can access other users' data by manipulating object IDs in API requests.</p>
+                        <div class="finding-meta">
+                            <span class="finding-tag">OWASP A01</span>
+                            <span class="finding-tag">CWE-639</span>
+                            <span class="finding-tag">CVSS 7.5</span>
+                        </div>
+                    </div>
+
+                    <div class="finding-card">
+                        <div class="finding-severity medium">Medium</div>
+                        <h4 class="finding-title">Missing Rate Limiting</h4>
+                        <p class="finding-description">API endpoints lack rate limiting, enabling brute force attacks against authentication.</p>
+                        <div class="finding-meta">
+                            <span class="finding-tag">API4:2023</span>
+                            <span class="finding-tag">CWE-307</span>
+                            <span class="finding-tag">CVSS 5.3</span>
+                        </div>
+                    </div>
+
+                    <div class="finding-card">
+                        <div class="finding-severity low">Low</div>
+                        <h4 class="finding-title">Verbose Error Messages</h4>
+                        <p class="finding-description">Application returns detailed error messages revealing stack traces and internal paths.</p>
+                        <div class="finding-meta">
+                            <span class="finding-tag">CWE-209</span>
+                            <span class="finding-tag">CVSS 3.7</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Report Template -->
+            <div class="report-template">
+                <h2 class="section-title"><i class="fas fa-file-alt"></i> Pen Test Report Template</h2>
+                
+                <div class="report-section">
+                    <h4 class="report-section-title"><i class="fas fa-info-circle"></i> Executive Summary</h4>
+                    <p>High-level overview of findings, risk assessment, and key recommendations for executive stakeholders.</p>
+                </div>
+
+                <div class="report-section">
+                    <h4 class="report-section-title"><i class="fas fa-crosshairs"></i> Scope & Methodology</h4>
+                    <p>Define testing boundaries, rules of engagement, tools used, and testing timeline.</p>
+                </div>
+
+                <div class="report-section">
+                    <h4 class="report-section-title"><i class="fas fa-bug"></i> Findings Detail</h4>
+                    <p>Detailed vulnerability descriptions with evidence, reproduction steps, and CVSS scoring.</p>
+                </div>
+
+                <div class="report-section">
+                    <h4 class="report-section-title"><i class="fas fa-chart-bar"></i> Risk Assessment</h4>
+                    <p>Risk matrix showing likelihood, impact, and overall risk rating for each finding.</p>
+                </div>
+
+                <div class="report-section">
+                    <h4 class="report-section-title"><i class="fas fa-wrench"></i> Remediation Recommendations</h4>
+                    <p>Prioritized remediation steps with technical guidance and timeline recommendations.</p>
+                </div>
+
+                <div class="report-section">
+                    <h4 class="report-section-title"><i class="fas fa-clipboard-list"></i> Appendices</h4>
+                    <p>Supporting evidence, scan outputs, screenshots, and technical artifacts.</p>
+                </div>
+            </div>
+
+            <!-- MITRE ATT&CK Mapping -->
+            <div class="workflow-container">
+                <h3 class="workflow-title"><i class="fas fa-map"></i> MITRE ATT&CK Framework Mapping</h3>
+                <div class="mermaid">
+flowchart LR
+    subgraph Initial["Initial Access"]
+        T1190[Exploit Public-Facing Application]
+        T1566[Phishing]
+    end
+    
+    subgraph Execution["Execution"]
+        T1059[Command & Scripting]
+        T1203[Exploitation for Client Execution]
+    end
+    
+    subgraph Persistence["Persistence"]
+        T1098[Account Manipulation]
+        T1053[Scheduled Task/Job]
+    end
+    
+    subgraph Privilege["Privilege Escalation"]
+        T1068[Exploitation for Privilege Escalation]
+        T1078[Valid Accounts]
+    end
+    
+    subgraph Defense["Defense Evasion"]
+        T1070[Indicator Removal]
+        T1027[Obfuscated Files]
+    end
+    
+    subgraph Exfil["Exfiltration"]
+        T1041[Exfiltration Over C2]
+        T1048[Exfiltration Over Alternative Protocol]
+    end
+    
+    Initial --> Execution --> Persistence --> Privilege --> Defense --> Exfil
+    
+    style T1190 fill:#e74c3c,stroke:#c0392b,color:#fff
+    style T1068 fill:#f39c12,stroke:#d68910,color:#000
+    style T1041 fill:#9b59b6,stroke:#7d3c98,color:#fff
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Back to Top -->
+    <a href="#main-content" class="back-to-top" aria-label="Back to top">↑</a>
+
+    <footer class="footer">
+        <p>&copy; 2024-2025 Asif Hussain. All rights reserved.</p>
+        <p>
+            <a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener" class="footer-link">GitHub</a> |
+            <a href="index.html" class="footer-link">Security Home</a> |
+            <a href="../index.html" class="footer-link">CORTEX Home</a>
+        </p>
+    </footer>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#00d4ff',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#00d4ff',
+                lineColor: '#a0a6c0',
+                secondaryColor: '#7b61ff',
+                tertiaryColor: '#1a1f3a'
+            }
+        });
+
+        // D3.js Attack Surface Radar Chart
+        function createAttackSurfaceChart() {
+            const container = document.getElementById('attack-surface-chart');
+            const width = container.clientWidth;
+            const height = 400;
+            const radius = Math.min(width, height) / 2 - 60;
+
+            const svg = d3.select('#attack-surface-chart')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height)
+                .append('g')
+                .attr('transform', `translate(${width / 2},${height / 2})`);
+
+            const categories = [
+                { name: 'Web Apps', value: 85, color: '#e74c3c' },
+                { name: 'APIs', value: 75, color: '#3498db' },
+                { name: 'Network', value: 60, color: '#f39c12' },
+                { name: 'Cloud', value: 70, color: '#9b59b6' },
+                { name: 'Mobile', value: 45, color: '#1abc9c' },
+                { name: 'IoT', value: 30, color: '#e91e63' }
+            ];
+
+            const angleSlice = Math.PI * 2 / categories.length;
+
+            // Draw circular grid
+            const levels = 5;
+            for (let level = 1; level <= levels; level++) {
+                const levelRadius = radius * level / levels;
+                svg.append('circle')
+                    .attr('r', levelRadius)
+                    .attr('fill', 'none')
+                    .attr('stroke', 'rgba(255, 255, 255, 0.1)')
+                    .attr('stroke-dasharray', '3,3');
+
+                svg.append('text')
+                    .attr('x', 5)
+                    .attr('y', -levelRadius)
+                    .text(level * 20)
+                    .style('fill', '#6b7280')
+                    .style('font-size', '10px');
+            }
+
+            // Draw axis lines
+            categories.forEach((d, i) => {
+                const angle = angleSlice * i - Math.PI / 2;
+                svg.append('line')
+                    .attr('x1', 0)
+                    .attr('y1', 0)
+                    .attr('x2', radius * Math.cos(angle))
+                    .attr('y2', radius * Math.sin(angle))
+                    .attr('stroke', 'rgba(255, 255, 255, 0.2)');
+
+                // Labels
+                const labelRadius = radius + 30;
+                svg.append('text')
+                    .attr('x', labelRadius * Math.cos(angle))
+                    .attr('y', labelRadius * Math.sin(angle))
+                    .attr('text-anchor', 'middle')
+                    .attr('dy', '0.35em')
+                    .text(d.name)
+                    .style('fill', '#a0a6c0')
+                    .style('font-size', '12px');
+            });
+
+            // Draw data area
+            const lineGenerator = d3.lineRadial()
+                .angle((d, i) => angleSlice * i)
+                .radius(d => radius * d.value / 100)
+                .curve(d3.curveLinearClosed);
+
+            svg.append('path')
+                .datum(categories)
+                .attr('d', lineGenerator)
+                .attr('fill', 'rgba(0, 212, 255, 0.2)')
+                .attr('stroke', '#00d4ff')
+                .attr('stroke-width', 2);
+
+            // Draw data points
+            categories.forEach((d, i) => {
+                const angle = angleSlice * i - Math.PI / 2;
+                const x = radius * d.value / 100 * Math.cos(angle);
+                const y = radius * d.value / 100 * Math.sin(angle);
+
+                svg.append('circle')
+                    .attr('cx', x)
+                    .attr('cy', y)
+                    .attr('r', 6)
+                    .attr('fill', d.color)
+                    .attr('stroke', '#fff')
+                    .attr('stroke-width', 2)
+                    .style('cursor', 'pointer')
+                    .on('mouseover', function() {
+                        d3.select(this).attr('r', 10);
+                    })
+                    .on('mouseout', function() {
+                        d3.select(this).attr('r', 6);
+                    });
+            });
+        }
+
+        // Methodology tabs
+        document.querySelectorAll('.method-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const method = this.dataset.method;
+
+                document.querySelectorAll('.method-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.method-content').forEach(c => c.classList.remove('active'));
+
+                this.classList.add('active');
+                document.getElementById(`${method}-method`).classList.add('active');
+            });
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            createAttackSurfaceChart();
+        });
+
+        // Back to top button
+        const backToTop = document.querySelector('.back-to-top');
+        window.addEventListener('scroll', () => {
+            backToTop.style.display = window.scrollY > 300 ? 'flex' : 'none';
+        });
+    </script>
+</body>
+</html>

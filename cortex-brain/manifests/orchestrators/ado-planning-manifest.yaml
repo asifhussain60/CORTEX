@@ -202,8 +202,71 @@ requirements:
     name: "Interactive Threat Modeling"
     inherited_from: "planning-system"
     priority: "medium"
-    status: "missing"
+    status: "implemented"  # Phase 2: Security Enhancement
     ado_specific_note: "Threats added as ADO work items (type: Risk)"
+    phase2_enhancement:
+      description: |
+        Phase 2 Security Enhancement: Automatic security story generation
+        for ALL features. Security analysis is now MANDATORY.
+      implementation:
+        - "Security relevance automatically detected"
+        - "STRIDE categories mapped to ADO Risk items"
+        - "Security acceptance criteria auto-injected"
+        - "Security testing tasks auto-generated"
+      security_work_item_mapping:
+        threat_to_risk:
+          - stride_category: "Spoofing"
+            ado_type: "Risk"
+            priority: "2"
+            title_template: "[Security] Spoofing Risk: {threat_name}"
+          - stride_category: "Tampering"
+            ado_type: "Risk"
+            priority: "2"
+            title_template: "[Security] Tampering Risk: {threat_name}"
+          - stride_category: "Repudiation"
+            ado_type: "Risk"
+            priority: "3"
+            title_template: "[Security] Repudiation Risk: {threat_name}"
+          - stride_category: "Information Disclosure"
+            ado_type: "Risk"
+            priority: "1"
+            title_template: "[Security] Information Disclosure Risk: {threat_name}"
+          - stride_category: "Denial of Service"
+            ado_type: "Risk"
+            priority: "2"
+            title_template: "[Security] DoS Risk: {threat_name}"
+          - stride_category: "Elevation of Privilege"
+            ado_type: "Risk"
+            priority: "1"
+            title_template: "[Security] Privilege Escalation Risk: {threat_name}"
+      security_story_templates:
+        - template_id: "SEC-STORY-001"
+          title: "Security Testing Story"
+          type: "User Story"
+          description: |
+            As a security-conscious development team,
+            We need to perform comprehensive security testing,
+            So that we can identify and remediate vulnerabilities before release.
+          acceptance_criteria:
+            - "OWASP ZAP security scan completed with no critical findings"
+            - "Authentication bypass tests passed"
+            - "Authorization boundary tests passed"
+            - "Input validation and injection tests passed"
+            - "Security code review completed"
+          story_points: 5
+        - template_id: "SEC-STORY-002"
+          title: "Threat Model Review Story"
+          type: "User Story"
+          description: |
+            As a security engineer,
+            We need to review the threat model for this feature,
+            So that we can ensure all security risks are identified and mitigated.
+          acceptance_criteria:
+            - "STRIDE analysis completed for all components"
+            - "Data flow diagrams reviewed for security boundaries"
+            - "Mitigation strategies documented for each threat"
+            - "Residual risk accepted by product owner"
+          story_points: 3
     
   - requirement_id: "REQ-008"
     name: "TDD Reminders Visibility"
@@ -451,9 +514,38 @@ workflows:
             status: "missing"
           - step_id: "STEP-ADO-1.4"
             name: "Run Threat Modeling"
-            required: false
+            required: true  # Phase 2: Now MANDATORY for all features
             validation: "Threats converted to Risk work items"
-            status: "missing"
+            status: "implemented"  # Phase 2: Security Enhancement
+            phase2_enhancement:
+              description: "Phase 2 Security Enhancement - Automatic threat modeling"
+              behavior:
+                - "Security relevance automatically detected from feature description"
+                - "STRIDE analysis performed for all security-relevant domains"
+                - "Threats mapped to ADO Risk work items"
+                - "Security testing user story auto-generated"
+                - "Security acceptance criteria injected into parent Feature"
+              trigger_condition: "ALWAYS (not conditional on security keywords)"
+              knowledge_references:
+                - "cortex-brain/knowledge-library/security/threat-modeling-framework.md"
+                - "cortex-brain/knowledge-library/security/owasp-top-10-guide.md"
+          - step_id: "STEP-ADO-1.5"
+            name: "Generate Security Work Items"
+            required: true
+            validation: "Security stories and risk items created"
+            status: "implemented"  # Phase 2: Security Enhancement
+            phase2_enhancement:
+              description: "Phase 2 Security Enhancement - Security work item generation"
+              work_items_generated:
+                - type: "User Story"
+                  title: "[Security] Security Testing for {feature_name}"
+                  condition: "ALWAYS"
+                - type: "Risk"
+                  title: "[Security] {stride_category}: {threat_description}"
+                  condition: "For each identified STRIDE threat"
+                - type: "Task"
+                  title: "[Security] Implement mitigation: {mitigation_name}"
+                  condition: "For each critical/high threat"
             
       - phase_id: "PHASE-ADO-2"
         name: "Work Item Creation"
@@ -559,8 +651,14 @@ parity_checklist:
       parity: true
     - feature: "Threat Modeling"
       planning_status: "implemented"
-      ado_status: "missing"
-      parity: false
+      ado_status: "implemented"  # Phase 2: Security Enhancement
+      parity: true
+      phase2_note: "Automatic threat modeling now MANDATORY for all features"
+    - feature: "Security Work Item Generation"
+      planning_status: "implemented"
+      ado_status: "implemented"  # Phase 2: Security Enhancement
+      parity: true
+      phase2_note: "Security stories and risk items auto-generated"
     - feature: "TDD Requirements Injection"
       planning_status: "implemented"
       ado_status: "missing"

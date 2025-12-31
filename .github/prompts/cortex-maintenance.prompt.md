@@ -2432,6 +2432,186 @@ find cortex-brain/knowledge/ -maxdepth 1 -name "*.yaml" -type f
 - `testing/` - Testing strategies and patterns
 - `ui-ux/` - UI/UX design guidelines
 
+### 7a.1 Security Injection Verification (Phase 2 - Security Enhancement)
+
+**Purpose:** Verify that automatic security injection is active in all orchestrators.
+
+**This sub-phase validates Phase 2 Security Enhancement requirements:**
+
+| Orchestrator | Security Injection Method | Verification |
+|--------------|---------------------------|--------------|
+| **Planning Orchestrator** | `_inject_automatic_security_section()` | Method exists and is called in `_generate_plan()` |
+| **ADO Orchestrator** | Security work item templates | Manifest has `phase2_enhancement` sections |
+| **TDD Orchestrator** | Security test generation in RED phase | Manifest has security test patterns |
+| **Maintenance** | This verification (7a.1) | Self-verifying |
+
+**Validation Commands:**
+
+```bash
+# Check Planning Orchestrator has security injection
+grep -q "_inject_automatic_security_section" src/orchestrators/planning/planning_orchestrator.py && \
+  echo "✅ Planning Orchestrator: Security injection method exists" || \
+  echo "❌ Planning Orchestrator: Missing _inject_automatic_security_section()"
+
+# Check security injection is called in plan generation
+grep -A 5 "_generate_plan" src/orchestrators/planning/planning_orchestrator.py | \
+  grep -q "_inject_automatic_security_section" && \
+  echo "✅ Planning Orchestrator: Security injection is called" || \
+  echo "❌ Planning Orchestrator: Security injection NOT called in _generate_plan()"
+
+# Check security knowledge constants exist
+grep -q "SECURITY_KNOWLEDGE_LIBRARY_PATH" src/orchestrators/planning/planning_orchestrator.py && \
+  echo "✅ Planning Orchestrator: Security knowledge path defined" || \
+  echo "❌ Planning Orchestrator: Missing SECURITY_KNOWLEDGE_LIBRARY_PATH"
+
+# Check ADO manifest has security enhancements
+grep -q "phase2_enhancement" cortex-brain/manifests/orchestrators/ado-planning-manifest.yaml && \
+  echo "✅ ADO Manifest: Phase 2 security enhancement configured" || \
+  echo "❌ ADO Manifest: Missing phase2_enhancement sections"
+
+# Check ADO has security work item templates
+grep -q "security_story_templates" cortex-brain/manifests/orchestrators/ado-planning-manifest.yaml && \
+  echo "✅ ADO Manifest: Security story templates defined" || \
+  echo "❌ ADO Manifest: Missing security_story_templates"
+
+# Check TDD manifest has security test generation
+grep -q "security.*test\|Security Testing" cortex-brain/manifests/orchestrators/tdd-orchestrator-v4-manifest.yaml && \
+  echo "✅ TDD Manifest: Security testing configured" || \
+  echo "❌ TDD Manifest: Missing security test generation"
+
+# Verify security knowledge library exists
+test -d cortex-brain/knowledge-library/security && \
+  echo "✅ Security knowledge library exists" || \
+  echo "❌ Security knowledge library missing!"
+
+# Count security knowledge documents
+SECURITY_DOCS=$(find cortex-brain/knowledge-library/security -name "*.md" | wc -l | tr -d ' ')
+echo "📊 Security knowledge documents: $SECURITY_DOCS"
+if [ "$SECURITY_DOCS" -lt 10 ]; then
+  echo "⚠️ Warning: Expected at least 10 security documents (Phase 1 deliverables)"
+fi
+```
+
+**Expected Results (Phase 2 Complete):**
+
+| Check | Expected | Auto-Repair |
+|-------|----------|-------------|
+| `_inject_automatic_security_section()` exists | ✅ Method defined | Alert if missing |
+| Security injection called in `_generate_plan()` | ✅ Called | Alert if missing |
+| `SECURITY_KNOWLEDGE_LIBRARY_PATH` defined | ✅ Constant exists | Alert if missing |
+| ADO `phase2_enhancement` sections | ✅ Present | Alert if missing |
+| ADO `security_story_templates` | ✅ Defined | Alert if missing |
+| TDD security test generation | ✅ Configured | Alert if missing |
+| Security knowledge library | ✅ ≥10 documents | Alert if missing |
+
+**🔧 Auto-Repair Actions:**
+
+If security injection missing from Planning Orchestrator:
+```
+❌ CRITICAL: Security injection not implemented in Planning Orchestrator
+   Action: Review Phase 2 Security Enhancement implementation
+   Reference: cortex-brain/documents/planning/active/security-enhancement/00-master-plan.md
+```
+
+If ADO security templates missing:
+```
+❌ CRITICAL: ADO security work item templates not configured
+   Action: Update ado-planning-manifest.yaml with security_story_templates
+   Reference: Phase 2.2 ADO Integration Security Injection
+```
+
+**Success Criteria:**
+- ✅ ALL coding plans automatically include threat modeling section
+- ✅ ADO work items automatically include security stories  
+- ✅ Security knowledge library accessible (17+ documents from Phase 1)
+- ✅ Planning, ADO, TDD orchestrators have security integration
+
+### 7a.2 Security Folder Verification in Plans (Phase 3 - Security Documentation)
+
+**Purpose:** Verify that all active plans have the required security/ subfolder and security-documentation.md.
+
+**This sub-phase validates Phase 3 Security Documentation Automation requirements.**
+
+| Component | Verification | Auto-Repair |
+|-----------|--------------|-------------|
+| Security folder exists | `{plan}/security/` directory | Create if missing |
+| Security documentation exists | `security-documentation.md` | Generate from template |
+| Security template exists | `cortex-brain/templates/security/plan-security-template.md` | Alert if missing |
+| Scaffold generator updated | `--retrofit-security` option works | Alert if missing |
+
+**Validation Commands:**
+
+```bash
+# Check security folder template exists
+test -f cortex-brain/templates/security/plan-security-template.md && \
+  echo "✅ Security template exists" || \
+  echo "❌ Security template missing!"
+
+# Check security documentation standards
+test -f cortex-brain/knowledge-library/security/security-documentation-standards.md && \
+  echo "✅ Security documentation standards exist" || \
+  echo "❌ Security documentation standards missing!"
+
+# Count plans with security folders
+PLANS_TOTAL=$(find cortex-brain/documents/planning/active -maxdepth 1 -type d | wc -l | tr -d ' ')
+PLANS_WITH_SECURITY=$(find cortex-brain/documents/planning/active -maxdepth 2 -type d -name "security" | wc -l | tr -d ' ')
+
+echo "📊 Plans with security folders: $PLANS_WITH_SECURITY / $PLANS_TOTAL"
+
+# List plans missing security folders
+echo "🔍 Plans missing security folders:"
+for plan in cortex-brain/documents/planning/active/*/; do
+  if [ ! -d "$plan/security" ]; then
+    echo "   ❌ $(basename "$plan")"
+  fi
+done
+
+# Check scaffold generator has retrofit capability
+grep -q "retrofit_security_folder\|--retrofit-security" cortex-toolkit/core/utilities/plan_scaffold_generator.py && \
+  echo "✅ Scaffold generator: Security retrofit capability exists" || \
+  echo "❌ Scaffold generator: Missing retrofit capability"
+```
+
+**Expected Results (Phase 3 Complete):**
+
+| Check | Expected | Auto-Repair |
+|-------|----------|-------------|
+| Security template exists | ✅ | Alert if missing |
+| Security documentation standards | ✅ | Alert if missing |
+| All plans have security/ folder | ✅ 100% | Retrofit missing |
+| Security documentation in each plan | ✅ | Generate from template |
+| Scaffold generator updated | ✅ | Alert if missing |
+
+**🔧 Auto-Repair Actions:**
+
+If plan missing security folder:
+```bash
+# Retrofit single plan
+python3 cortex-toolkit/core/utilities/plan_scaffold_generator.py "{plan-name}" --retrofit-security
+
+# Retrofit ALL plans (batch operation)
+python3 cortex-toolkit/core/utilities/plan_scaffold_generator.py --retrofit-all
+```
+
+Report format for missing security folders:
+```
+⚠️ WARNING: {count} plans missing security folders
+
+Plans requiring security retrofit:
+   • {plan-name-1}
+   • {plan-name-2}
+
+Auto-repair: Running --retrofit-all...
+✅ Retrofitted {count} plans with security folders
+```
+
+**Success Criteria:**
+- ✅ ALL active plans have `security/` subfolder
+- ✅ ALL active plans have `security/security-documentation.md`
+- ✅ Security template is available for new plans
+- ✅ Scaffold generator automatically includes security folder
+- ✅ Retrofit capability available for existing plans
+
 ### 7b. Knowledge Library Reference Validation
 
 **Critical:** Ensure orchestrators and modules can reference knowledge library.

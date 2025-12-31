@@ -81,6 +81,84 @@ architecture:
         - "Parametrized testing"
         - "Property-based testing"
         - "Vision API integration"
+        - "Security test generation"  # Phase 2: Security Enhancement
+      
+      # Phase 2: Security Enhancement - Security Test Generation
+      security_test_generation:
+        enabled: true
+        description: "Phase 2 Security Enhancement - Automatic security test generation in RED phase"
+        trigger: "ALWAYS (for all features)"
+        security_test_categories:
+          - category: "authentication"
+            test_patterns:
+              - "test_authentication_required_for_protected_endpoints"
+              - "test_invalid_credentials_rejected"
+              - "test_session_timeout_enforced"
+              - "test_password_complexity_validation"
+            applicable_when: ["auth", "login", "password", "session", "token"]
+            
+          - category: "authorization"
+            test_patterns:
+              - "test_unauthorized_access_denied"
+              - "test_role_based_access_enforced"
+              - "test_privilege_escalation_prevented"
+              - "test_resource_ownership_validated"
+            applicable_when: ["permission", "role", "rbac", "authorize", "access"]
+            
+          - category: "input_validation"
+            test_patterns:
+              - "test_sql_injection_prevented"
+              - "test_xss_attack_prevented"
+              - "test_command_injection_prevented"
+              - "test_path_traversal_prevented"
+              - "test_invalid_input_rejected"
+            applicable_when: ["input", "form", "user input", "api", "request"]
+            
+          - category: "data_protection"
+            test_patterns:
+              - "test_sensitive_data_encrypted_at_rest"
+              - "test_sensitive_data_encrypted_in_transit"
+              - "test_pii_not_logged"
+              - "test_data_masking_applied"
+            applicable_when: ["data", "pii", "sensitive", "encrypt", "database"]
+            
+          - category: "rate_limiting"
+            test_patterns:
+              - "test_rate_limiting_enforced"
+              - "test_brute_force_protection_active"
+              - "test_concurrent_request_limiting"
+            applicable_when: ["api", "endpoint", "request", "rate"]
+            
+        security_test_templates:
+          authentication_test: |
+            def test_authentication_required_for_{endpoint}():
+                \"\"\"Verify that {endpoint} requires authentication.\"\"\"
+                response = client.get("/{endpoint}", headers={})
+                assert response.status_code == 401
+                assert "authentication required" in response.json().get("error", "").lower()
+          
+          injection_test: |
+            @pytest.mark.parametrize("malicious_input", [
+                "'; DROP TABLE users; --",
+                "<script>alert('xss')</script>",
+                "| cat /etc/passwd",
+                "../../../etc/passwd",
+            ])
+            def test_{input_field}_injection_prevented(malicious_input):
+                \"\"\"Verify that {input_field} rejects injection attacks.\"\"\"
+                response = client.post("/endpoint", json={{"{input_field}": malicious_input}})
+                assert response.status_code in [400, 422]
+          
+          authorization_test: |
+            def test_unauthorized_access_to_{resource}_denied():
+                \"\"\"Verify that unauthorized users cannot access {resource}.\"\"\"
+                response = client.get("/{resource}", headers={"Authorization": "Bearer invalid"})
+                assert response.status_code == 403
+        
+        knowledge_references:
+          - "cortex-brain/knowledge-library/security/owasp-top-10-guide.md"
+          - "cortex-brain/knowledge-library/security/api-security-foundations.md"
+          - "cortex-brain/knowledge-library/security/access-control-patterns.md"
       
     - name: "GREENPhaseStrategy"
       path: "src/orchestrators/tdd/strategies/green_phase_strategy.py"
@@ -91,6 +169,23 @@ architecture:
         - "Coverage tracking"
         - "Continuous test execution"
         - "Clean code validation"
+        - "Security implementation patterns"  # Phase 2: Security Enhancement
+      
+      # Phase 2: Security Enhancement - Secure Implementation Patterns
+      security_implementation:
+        enabled: true
+        description: "Phase 2 Security Enhancement - Apply secure coding patterns in GREEN phase"
+        patterns:
+          - pattern: "input_validation"
+            implementation: "Validate and sanitize all user input before processing"
+          - pattern: "parameterized_queries"
+            implementation: "Use parameterized queries for all database operations"
+          - pattern: "output_encoding"
+            implementation: "Encode output to prevent XSS attacks"
+          - pattern: "secure_headers"
+            implementation: "Set security headers (CSP, X-Frame-Options, etc.)"
+          - pattern: "secure_configuration"
+            implementation: "Remove debug info, use secure defaults"
       
     - name: "REFACTORPhaseStrategy"
       path: "src/orchestrators/tdd/strategies/refactor_phase_strategy.py"
@@ -101,15 +196,97 @@ architecture:
         - "Incremental application with validation"
         - "Pattern learning"
         - "Quality improvement tracking"
+        - "Security vulnerability remediation"  # Phase 2: Security Enhancement
+      
+      # Phase 2: Security Enhancement - Security Code Review
+      security_refactoring:
+        enabled: true
+        description: "Phase 2 Security Enhancement - Security-focused refactoring in REFACTOR phase"
+        checks:
+          - "Remove hardcoded secrets"
+          - "Eliminate insecure random number generation"
+          - "Fix improper error handling exposing sensitive info"
+          - "Address potential timing attacks"
+          - "Ensure proper resource cleanup"
+        tools:
+          - "OWASP dependency-check"
+          - "bandit (Python)"
+          - "npm audit (JavaScript)"
+    
+    # Phase 4: Documentation Enhancement - DOCUMENT Phase Strategy
+    - name: "DOCUMENTPhaseStrategy"
+      path: "src/orchestrators/tdd/strategies/document_phase_strategy.py"
+      purpose: "Auto-generate documentation with Mermaid diagrams"
+      description: "Phase 4 Enhancement - Generate comprehensive documentation after REFACTOR"
+      features:
+        - "Code structure analysis for diagram selection"
+        - "Mermaid diagram auto-generation"
+        - "API documentation extraction"
+        - "Architecture visualization"
+        - "Threat model diagram generation"
+        - "Integration with knowledge library standards"
+      
+      diagram_types:
+        - type: "architecture"
+          description: "C4 model component diagrams"
+          triggers: ["new_module", "class_hierarchy", "service_layer"]
+          template: "cortex-brain/templates/mermaid-diagrams/architecture-diagram-template.mmd"
+          
+        - type: "sequence"
+          description: "API call flows and interactions"
+          triggers: ["api_endpoints", "message_passing", "async_operations"]
+          template: "cortex-brain/templates/mermaid-diagrams/sequence-diagram-template.mmd"
+          
+        - type: "entity-relationship"
+          description: "Database schema and data models"
+          triggers: ["db_models", "orm_classes", "data_structures"]
+          template: "cortex-brain/templates/mermaid-diagrams/entity-relationship-template.mmd"
+          
+        - type: "state-machine"
+          description: "State transitions and workflows"
+          triggers: ["state_machine", "workflow_engine", "status_tracking"]
+          template: "cortex-brain/templates/mermaid-diagrams/state-machine-template.mmd"
+          
+        - type: "threat-model"
+          description: "Security threat models (STRIDE)"
+          triggers: ["security_feature", "auth_system", "data_protection"]
+          template: "cortex-brain/templates/mermaid-diagrams/threat-model-diagram-template.mmd"
+          
+        - type: "data-flow"
+          description: "Data processing pipelines"
+          triggers: ["data_pipeline", "etl_process", "message_queue"]
+          template: "cortex-brain/templates/mermaid-diagrams/data-flow-diagram-template.mmd"
+          
+        - type: "deployment"
+          description: "Infrastructure and deployment architecture"
+          triggers: ["deployment_config", "docker", "kubernetes", "cloud_infra"]
+          template: "cortex-brain/templates/mermaid-diagrams/deployment-diagram-template.mmd"
+      
+      analysis_engine:
+        ast_analysis: true
+        pattern_matching: true
+        code_metrics: true
+        security_scanning: true
+      
+      output:
+        formats: ["markdown", "svg", "png"]
+        location: "docs/diagrams/"
+        naming_convention: "{module_name}-{diagram_type}.mmd"
 
 # ========================================
 # Workflow
 # ========================================
 
 workflow:
-  name: "RED→GREEN→REFACTOR Cycle"
-  description: "Classic TDD workflow with adaptive learning"
+  name: "RED→GREEN→REFACTOR→DOCUMENT Cycle"
+  description: "Classic TDD workflow with adaptive learning, security integration, and automated documentation"
   
+  # Phase 2: Security Enhancement - Security integrated into all TDD phases
+  security_integration:
+    enabled: true
+    description: "Phase 2 Security Enhancement - Security considerations mandatory in TDD workflow"
+    enforcement_level: "mandatory"
+    
   phases:
     - id: "RED"
       name: "Generate Failing Tests"
@@ -120,6 +297,7 @@ workflow:
         - "No existing tests for feature"
         - "Git working directory clean"
         - "Test framework detected"
+        - "Security test categories identified (Phase 2)"  # Phase 2: Security Enhancement
       dod:
         - "Test file created"
         - "Tests run successfully"
@@ -127,7 +305,18 @@ workflow:
         - "Git checkpoint created"
         - "Documentation generated"
         - "At least 1 edge case covered"
+        - "Security tests included (auth, input validation, etc.)"  # Phase 2: Security Enhancement
       rollback: "Delete test file, revert git commit"
+      
+      # Phase 2: Security Enhancement - RED phase security requirements
+      security_requirements:
+        description: "Security tests MUST be generated in RED phase"
+        mandatory_tests:
+          - "Authentication tests (if feature handles auth)"
+          - "Authorization tests (if feature handles access control)"
+          - "Input validation tests (if feature accepts user input)"
+          - "Injection prevention tests (if feature interacts with DB/system)"
+        test_pattern_reference: "architecture.strategies[0].security_test_generation"
       
     - id: "GREEN"
       name: "Minimal Implementation"
@@ -136,6 +325,7 @@ workflow:
         - "Test file exists"
         - "Tests are failing"
         - "No passing tests"
+        - "Security tests identified in test file"  # Phase 2: Security Enhancement
       dod:
         - "Implementation file created"
         - "All (or most) tests passing (>90%)"
@@ -144,7 +334,18 @@ workflow:
         - "Git checkpoint created"
         - "Documentation updated"
         - "Test coverage acceptable (>= 80%)"
+        - "Security tests passing (auth, authz, input validation)"  # Phase 2: Security Enhancement
       rollback: "Delete implementation, revert git commit"
+      
+      # Phase 2: Security Enhancement - GREEN phase security requirements
+      security_requirements:
+        description: "Secure implementation patterns MUST be applied in GREEN phase"
+        mandatory_patterns:
+          - "Input validation on all user-provided data"
+          - "Parameterized queries for database operations"
+          - "Output encoding for rendered content"
+          - "Proper error handling (no sensitive info leakage)"
+        implementation_reference: "architecture.strategies[1].security_implementation"
       
     - id: "REFACTOR"
       name: "Code Improvement"
@@ -153,6 +354,7 @@ workflow:
         - "Implementation file exists"
         - "Tests are passing"
         - "No failing tests"
+        - "Security tests included and passing"  # Phase 2: Security Enhancement
       dod:
         - "All tests still passing"
         - "Quality score improved or maintained"
@@ -160,7 +362,87 @@ workflow:
         - "No new code smells introduced"
         - "Git checkpoint created"
         - "Documentation updated"
+        - "No security vulnerabilities introduced"  # Phase 2: Security Enhancement
+        - "Hardcoded secrets removed"  # Phase 2: Security Enhancement
       rollback: "Revert git commit to restore original"
+      
+      # Phase 2: Security Enhancement - REFACTOR phase security requirements
+      security_requirements:
+        description: "Security code review MUST be performed in REFACTOR phase"
+        mandatory_checks:
+          - "No hardcoded secrets (API keys, passwords, tokens)"
+          - "No insecure random number generation"
+          - "No sensitive data in error messages or logs"
+          - "Proper resource cleanup (file handles, connections)"
+          - "No timing vulnerabilities in auth code"
+        security_tools:
+          python: ["bandit", "safety"]
+          javascript: ["npm audit", "snyk"]
+          general: ["OWASP dependency-check", "trufflehog"]
+        refactoring_reference: "architecture.strategies[2].security_refactoring"
+    
+    # Phase 4: Documentation Enhancement - DOCUMENT phase after REFACTOR
+    - id: "DOCUMENT"
+      name: "Generate Documentation with Diagrams"
+      strategy: "DOCUMENTPhaseStrategy"
+      description: "Phase 4 Security Enhancement - Generate Mermaid diagrams and documentation"
+      dor:
+        - "REFACTOR phase completed"
+        - "All tests passing"
+        - "Code quality score >= 7.0"
+        - "Implementation files exist"
+      dod:
+        - "README.md updated (if applicable)"
+        - "Mermaid diagrams generated for complex logic"
+        - "API documentation updated"
+        - "Architecture diagrams created for new modules"
+        - "Git checkpoint created"
+      rollback: "Revert documentation changes, restore previous docs"
+      
+      # Phase 4: DOCUMENT phase diagram generation
+      diagram_generation:
+        enabled: true
+        description: "Phase 4 Enhancement - Auto-generate Mermaid diagrams from code"
+        triggers:
+          - trigger: "new_module"
+            diagram_type: "architecture"
+            template: "cortex-brain/templates/mermaid-diagrams/architecture-diagram-template.mmd"
+          - trigger: "api_endpoints"
+            diagram_type: "sequence"
+            template: "cortex-brain/templates/mermaid-diagrams/sequence-diagram-template.mmd"
+          - trigger: "data_models"
+            diagram_type: "entity-relationship"
+            template: "cortex-brain/templates/mermaid-diagrams/entity-relationship-template.mmd"
+          - trigger: "state_logic"
+            diagram_type: "state-machine"
+            template: "cortex-brain/templates/mermaid-diagrams/state-machine-template.mmd"
+          - trigger: "security_feature"
+            diagram_type: "threat-model"
+            template: "cortex-brain/templates/mermaid-diagrams/threat-model-diagram-template.mmd"
+          - trigger: "data_processing"
+            diagram_type: "data-flow"
+            template: "cortex-brain/templates/mermaid-diagrams/data-flow-diagram-template.mmd"
+          - trigger: "deployment"
+            diagram_type: "deployment"
+            template: "cortex-brain/templates/mermaid-diagrams/deployment-diagram-template.mmd"
+        
+        analysis_rules:
+          - rule: "class_count > 3"
+            action: "Generate architecture diagram"
+          - rule: "api_endpoints >= 1"
+            action: "Generate sequence diagram"
+          - rule: "db_models >= 1"
+            action: "Generate ER diagram"
+          - rule: "state_machine_patterns"
+            action: "Generate state diagram"
+          - rule: "security_relevant"
+            action: "Generate threat model diagram"
+        
+        output_location: "docs/diagrams/{module_name}/"
+        
+        knowledge_references:
+          - "cortex-brain/knowledge-library/standards/diagram-guidelines.md"
+          - "cortex-brain/templates/mermaid-diagrams/"
 
 # ========================================
 # Key Features
