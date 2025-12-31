@@ -102,6 +102,7 @@ LLM Classification → Keyword Regex → User Clarification
 |--------------|------|-------------|-------------------|
 | Planning System | 🛡️ AUTONOMOUS | Route intent → Load manifest → STOP | Execute planning workflow (folder creation, context gathering, plan generation) |
 | ADO Operations | 🛡️ AUTONOMOUS | Route intent → Load manifest → STOP | Generate work items, acceptance criteria, estimation |
+| Vacuum | 🛡️ AUTONOMOUS | Route intent → Load manifest → STOP | Deep filesystem cleanup, reorganization, validation |
 | TDD Mastery | 📋 GUIDED | Route intent → Read manifest → Execute steps | CORTEX follows TDD workflow instructions |
 | Debug Orchestrator | 📋 GUIDED | Route intent → Read manifest → Execute steps | CORTEX performs debugging analysis |
 | Cleanup | 🛡️ AUTONOMOUS | Route intent → Load rules → STOP | Execute cleanup logic (cache, bloat, temp files) |
@@ -127,6 +128,7 @@ LLM Classification → Keyword Regex → User Clarification
 | `refine`, `improve cortex`, `optimize code` | 📋 **Refinement (GUIDED)** | `refinement-orchestrator-manifest.yaml` | 7-phase improvement |
 | `system maintenance`, `health check` | 📋 **Maintenance (GUIDED)** | Via `cortex-maintenance.prompt.md` | 12-phase health + auto-repair |
 | `cleanup cache`, `cleanup full`, `cleanup [type]` | 🛡️ **Cleanup (AUTONOMOUS)** | → Routes to Maintenance Phase 0 | Cache clear, bloat removal |
+| `vacuum [path]`, `deep clean [path]`, `organize files` | 🛡️ **Vacuum (AUTONOMOUS)** | `cortex-vacuum.prompt.md` | Deep filesystem cleanup + reorganization |
 | `help`, `show commands` | **Help** | Template-based | Command list |
 
 **Manifest Path:** `cortex-brain/manifests/orchestrators/{manifest-file}`  
@@ -294,9 +296,10 @@ cortex-brain/                    src/
 |---------|-------------|
 | `/CORTEX Plan [feature]` | 🛡️ Create plan (uses Planning Orchestrator) |
 | `ado story [feature]` | 🛡️ Create ADO items (uses ADO Orchestrator) |
+| `vacuum [path]` | 🛡️ Deep filesystem cleanup + reorganization |
 | `system maintenance` | 12-phase health pipeline |
 | `help` | Show all commands |
 
-**Resources:** `cortex-brain/response-templates-v4.yaml`, `brain-protection-rules.yaml`, `cortex-maintenance.prompt.md`
+**Resources:** `cortex-brain/response-templates-v4.yaml`, `brain-protection-rules.yaml`, `cortex-maintenance.prompt.md`, `cortex-vacuum.prompt.md`
 
 **Anti-Bloat:** This file MUST stay under 250 lines (increased for LLM intent routing sections).
