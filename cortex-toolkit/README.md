@@ -21,6 +21,95 @@ CORTEX Toolkit is a comprehensive collection of well-architected tools for CORTE
 
 ---
 
+## 🆕 Template System Tools (NEW)
+
+Four specialized tools for the Orchestrator Composable Template System:
+
+### 1. validate_templates.py
+**Purpose:** Validates YAML syntax and structural integrity of response templates and orchestrator manifests.
+
+**Usage:**
+```bash
+python cortex-toolkit/validate_templates.py
+```
+
+**What it validates:**
+- ✅ YAML syntax for response-templates-v4.yaml
+- ✅ YAML syntax for all 8 orchestrator manifests
+- ✅ Required sections (template_selection_algorithm, composable_blocks, etc.)
+- ✅ Algorithm structure (context_signals, block_categories, composition_rules)
+- ✅ Progress bar standard (10-char width, █░ characters)
+- ✅ Manifest response_templates sections
+- ✅ Operation structure (context_signals, blocks, mandatory/conditional/orchestrator_specific)
+
+### 2. analyze_blocks.py
+**Purpose:** Analyzes composable block usage patterns across orchestrators and identifies optimization opportunities.
+
+**Usage:**
+```bash
+# Print to console
+python cortex-toolkit/analyze_blocks.py
+
+# Save to file
+python cortex-toolkit/analyze_blocks.py --save --output path/to/report.md
+```
+
+**Analysis includes:**
+- 📊 Shared Blocks (cross-orchestrator reusability)
+- 🎯 Orchestrator-Specific Blocks
+- 📈 Coverage Analysis
+- 💡 Optimization Recommendations
+
+### 3. progress_bar.py
+**Purpose:** Generates standardized progress bars following CORTEX progress_bar_standard specification.
+
+**Usage:**
+```python
+from cortex_toolkit.progress_bar import generate_progress_bar
+
+bar = generate_progress_bar(current=3, total=8, status="in_progress")
+# Output: 🔄 ███░░░░░░░ 37.5% (3/8)
+```
+
+**Demo:**
+```bash
+python cortex-toolkit/progress_bar.py
+```
+
+### 4. sync_plan_tracker.py ⭐ NEW
+**Purpose:** Synchronizes progress between master plan (00-master-plan.md) and tracker JSON file. Ensures decomposed plan files stay in sync with visual progress display.
+
+**Usage:**
+```bash
+# Sync from master plan to tracker
+python cortex-toolkit/sync_plan_tracker.py "cortex-brain/documents/planning/active/my-plan"
+
+# Update specific phase
+python cortex-toolkit/sync_plan_tracker.py "path/to/plan" --update-phase 3 --progress 75 --status in_progress
+
+# Validate consistency
+python cortex-toolkit/sync_plan_tracker.py "path/to/plan" --validate
+
+# Sync all active plans
+python cortex-toolkit/sync_plan_tracker.py --sync-all
+```
+
+**Features:**
+- ✅ Extract progress from master plan markdown table
+- ✅ Sync to tracking/progress-tracker.json
+- ✅ Update master plan progress bars from command line
+- ✅ Validate consistency between master and tracker
+- ✅ Generate bidirectional navigation links
+- ✅ Bulk sync all active plans
+
+**Integration:**
+- Each phase in plans should end with tracker update task
+- Prevents master plan/tracker drift
+- Enables automated progress reporting
+- Supports CI/CD validation workflows
+
+---
+
 ## 📦 Installation
 
 ### Windows (PowerShell)

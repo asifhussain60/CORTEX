@@ -586,6 +586,682 @@ requirements:
     notes: "Enforced via SKULL rules"
 
 # ========================================
+# Knowledge Library Integration (NEW)
+# ========================================
+
+knowledge_library_integration:
+  enabled: true
+  version: "1.0.0"
+  description: "Automatic integration of knowledge library best practices based on feature domain"
+  enforcement_rule: "KNOWLEDGE_LIBRARY_INTEGRATION_ENFORCEMENT"
+  source: "cortex-brain/brain-protection-rules.yaml"
+  implementation_phase: "Phase 2.5 (Week 5)"
+  
+  domain_detection:
+    enabled: true
+    method: "keyword_analysis"
+    sources:
+      - "feature_description"
+      - "user_story"
+      - "acceptance_criteria"
+      - "technical_requirements"
+    
+    classifiers:
+      architecture:
+        keywords:
+          - "ai"
+          - "ml"
+          - "machine learning"
+          - "microservice"
+          - "architecture"
+          - "scalability"
+          - "system design"
+          - "distributed"
+          - "reactive"
+        library_files:
+          - "cortex-brain/knowledge-library/architecture/ai-architecture.yaml"
+          - "cortex-brain/knowledge-library/architecture/microservices-transition.yaml"
+          - "cortex-brain/knowledge-library/architecture/reactive-systems.yaml"
+      
+      security:
+        keywords:
+          - "auth"
+          - "authentication"
+          - "authorization"
+          - "login"
+          - "password"
+          - "permission"
+          - "access control"
+          - "api endpoint"
+          - "security"
+          - "encryption"
+          - "jwt"
+          - "oauth"
+        library_files:
+          - "cortex-brain/knowledge-library/security/threat-modeling-framework.md"
+          - "cortex-brain/knowledge-library/security/owasp-top-10-guide.md"
+          - "cortex-brain/knowledge-library/security/api-security-foundations.md"
+          - "cortex-brain/knowledge-library/security/access-control-patterns.md"
+          - "cortex-brain/knowledge-library/security/data-protection-framework.md"
+      
+      compliance:
+        keywords:
+          - "gdpr"
+          - "hipaa"
+          - "pci"
+          - "pci-dss"
+          - "compliance"
+          - "privacy"
+          - "data protection"
+          - "regulation"
+          - "audit"
+        library_files:
+          - "cortex-brain/knowledge-library/compliance/gdpr-compliance-checklist.md"
+          - "cortex-brain/knowledge-library/compliance/hipaa-compliance-checklist.md"
+          - "cortex-brain/knowledge-library/compliance/pci-dss-compliance-checklist.md"
+          - "cortex-brain/knowledge-library/compliance/soc2-compliance-checklist.md"
+      
+      design_patterns:
+        keywords:
+          - "design pattern"
+          - "csharp"
+          - "c#"
+          - ".net"
+          - "pattern"
+          - "refactoring"
+        library_files:
+          - "cortex-brain/knowledge-library/design-patterns/csharp-patterns.yaml"
+      
+      standards:
+        keywords:
+          - "diagram"
+          - "architecture diagram"
+          - "visualization"
+          - "documentation"
+          - "technical spec"
+        library_files:
+          - "cortex-brain/knowledge-library/standards/diagram-guidelines.md"
+  
+  integration_points:
+    plan_context:
+      phase: "Phase 1 - Classification & Analysis"
+      action: "Detect applicable domains and load relevant library files"
+      output_section: "knowledge_library_references"
+      format: |
+        ### 📚 Knowledge Library References
+        
+        Based on detected domains, the following knowledge library files are applicable:
+        
+        {{#each applicable_files}}
+        **{{domain}} - {{file}}**
+        - **Relevant Sections:** {{sections}}
+        - **Application:** {{application}}
+        - **Key Patterns:** {{patterns}}
+        {{/each}}
+    
+    phase_tasks:
+      action: "Include library reminders in phase task lists"
+      format: "[ ] Review {{library_file}} - {{specific_section}}"
+      example: "[ ] Review OWASP A01 guidelines (access-control-patterns.md)"
+    
+    validation:
+      requirement: "Each plan with detected domain MUST include at least one library reference"
+      validation_phase: "Phase 6 - Documentation"
+      failure_action: "Warning + suggestion of applicable library files"
+  
+  plan_manifest_schema:
+    knowledge_library_references:
+      type: "array"
+      required: false
+      items:
+        - file: "string"
+          domain: "string"
+          relevant_sections: "array[string]"
+          application: "string"
+          key_patterns: "array[string]"
+
+# ========================================
+# Vision API Integration
+# ========================================
+
+vision_api_integration:
+  enabled: true
+  visual_indicator:
+    required: true
+    icon: "📷"
+    header_format: "## 📷🧠 CORTEX Plan Execution (Vision Engaged)"
+  
+  image_detection:
+    automatic: true
+    supported_formats: ["PNG", "JPG", "JPEG", "WEBP", "GIF"]
+    trigger_condition: "Any image attachment detected in planning request"
+  
+  analysis_configuration:
+    comprehensive_extraction:
+      priority_1_feature_identification:
+        - "UI mockups → Extract visible features and components"
+        - "Architecture diagrams → Identify system components and relationships"
+        - "Wireframes → Map user flows and interaction points"
+        - "Design comps → Extract layout structure and visual hierarchy"
+      
+      priority_2_technical_requirements:
+        - "Technology stack indicators"
+        - "Integration points between systems"
+        - "Data flow patterns"
+        - "API endpoints and contracts"
+      
+      priority_3_implementation_details:
+        - "Component hierarchy and nesting"
+        - "State management requirements"
+        - "Navigation patterns"
+        - "Form validation rules"
+    
+    output_format:
+      structured_sections:
+        - name: "image_metadata"
+          includes: ["dimensions", "format", "url_context", "image_type"]
+        
+        - name: "feature_extraction"
+          includes: ["identified_features", "complexity_estimates", "implementation_priority"]
+        
+        - name: "layout_structure"
+          includes: ["inferred_html", "css_selectors", "component_hierarchy"]
+        
+        - name: "implementation_guide"
+          includes: ["technology_recommendations", "file_structure", "development_phases"]
+        
+        - name: "test_automation_requirements"
+          includes: ["test_selectors", "test_scenarios", "coverage_strategy"]
+  
+  planning_specific_integration:
+    context_discovery_phase:
+      when: "Image shows UI design, mockup, or feature specification"
+      action: "Extract features and generate plan context"
+      output_template: |
+        ### 📷 Vision Analysis - Feature Extraction
+        
+        **Image Type:** {{image_type}} (UI Mockup / Architecture Diagram / Wireframe)
+        **Dimensions:** {{width}}x{{height}} | **Format:** {{format}}
+        {{#if url_detected}}
+        **URL Context:** {{url}}
+        {{/if}}
+        
+        **Identified Features ({{feature_count}} total):**
+        {{#each features}}
+        | Feature | Components | Complexity | Priority | Estimated Hours |
+        |---------|------------|------------|----------|-----------------|
+        | {{feature_name}} | {{component_list}} | {{complexity}} | {{priority}} | {{estimate}} |
+        {{/each}}
+        
+        **Layout Structure (Inferred DOM):**
+        ```html
+        {{inferred_html_structure}}
+        ```
+        
+        **Component Hierarchy:**
+        ```
+        {{component_tree}}
+        ```
+        
+        **Technology Recommendations:**
+        {{#each tech_recommendations}}
+        - {{technology}}: {{rationale}}
+        {{/each}}
+        
+        **Test Automation Selectors:**
+        {{#each test_selectors}}
+        - {{component_name}}: `{{selector}}` ({{selector_type}})
+        {{/each}}
+      
+      integration_points:
+        - location: "plan_context/visual_requirements.md"
+          content: "Store vision analysis output for reference"
+        
+        - location: "implementation_phases"
+          content: "Use extracted features to generate phase tasks"
+        
+        - location: "test_requirements"
+          content: "Include test selectors in TDD requirements"
+    
+    phase_generation:
+      when: "Features extracted from vision analysis"
+      action: "Generate implementation phases based on visual complexity"
+      logic: |
+        For each detected feature:
+          - Estimate complexity (low/medium/high)
+          - Assign to appropriate phase
+          - Generate subtasks based on component structure
+          - Include test automation requirements
+      
+      output_integration:
+        - "Phase task lists include vision-derived requirements"
+        - "Test selectors automatically added to TDD phases"
+        - "Component structure influences file organization"
+    
+    validation_phase:
+      when: "Image shows acceptance criteria or expected outcomes"
+      action: "Create validation checklist from visual requirements"
+      output_template: |
+        ### 📷 Vision Analysis - Validation Requirements
+        
+        **Visual Acceptance Criteria:**
+        {{#each visual_requirements}}
+        - [ ] {{requirement_name}}
+          - Reference: {{screenshot_section}}
+          - Test Selector: `{{test_selector}}`
+          - Expected Behavior: {{behavior}}
+        {{/each}}
+      
+      integration_points:
+        - "Phase 6 - Documentation (validation checklist)"
+        - "Final verification requirements"
+  
+  architectural_diagram_handling:
+    when: "Image contains architecture diagram or system design"
+    analysis_focus:
+      - "System components and their boundaries"
+      - "Communication patterns (REST, GraphQL, WebSocket)"
+      - "Data stores and persistence layers"
+      - "External integrations and third-party services"
+      - "Deployment architecture"
+    
+    output_template: |
+      ### 📷 Vision Analysis - Architecture Extraction
+      
+      **System Components Identified:**
+      {{#each components}}
+      | Component | Type | Technology | Responsibilities |
+      |-----------|------|------------|------------------|
+      | {{name}} | {{type}} | {{tech}} | {{responsibilities}} |
+      {{/each}}
+      
+      **Integration Points:**
+      {{#each integrations}}
+      - {{source}} → {{target}}: {{protocol}} ({{data_format}})
+      {{/each}}
+      
+      **Data Flow:**
+      ```mermaid
+      {{generated_mermaid_diagram}}
+      ```
+      
+      **Implementation Phases (Architecture-Driven):**
+      1. Core Services: {{core_components}}
+      2. Integration Layer: {{integration_components}}
+      3. Frontend Layer: {{ui_components}}
+    
+    plan_integration:
+      - "Generate phases based on architectural layers"
+      - "Create infrastructure setup tasks"
+      - "Include integration testing requirements"
+      - "Plan deployment pipeline stages"
+  
+  error_handling:
+    vision_api_unavailable:
+      action: "Continue with manual planning"
+      message: "⚠️ Vision API unavailable - proceeding with text-based planning"
+    
+    image_analysis_failed:
+      action: "Log error and continue"
+      message: "⚠️ Image analysis failed - manual review required"
+    
+    no_features_detected:
+      action: "Provide generic image description"
+      message: "📷 Image analyzed but no UI/architecture features detected - may require manual interpretation"
+  
+  output_artifacts:
+    plan_context_files:
+      - "visual_requirements.md" # Vision analysis output
+      - "feature_extraction.json" # Structured feature data
+      - "component_hierarchy.yaml" # Component structure
+      - "test_selectors.json" # Automation selectors
+    
+    manifest_updates:
+      - "00-master-plan.md" # Include vision-derived features
+      - "99-implementation-tracker.md" # Reference visual requirements
+
+# ========================================
+# Continuous Risk Analysis
+# ========================================
+
+continuous_risk_analysis:
+  enabled: true
+  enforcement_rule: "CONTINUOUS_RISK_ANALYSIS_ENFORCEMENT"
+  visual_indicator:
+    required: true
+    icon: "💀"
+    section_header: "### 💀 Risk Analysis & Recommendations"
+  
+  execution_frequency:
+    trigger: "Every user interaction turn during planning"
+    timing: "After user input, before response generation"
+    scope: "Analyze current plan state + new changes"
+  
+  risk_categories:
+    - category: "edge_cases"
+      icon: "🎯"
+      description: "Boundary conditions, null/empty inputs, extreme values, unexpected states"
+      analysis_prompts:
+        - "What happens with 0 items?"
+        - "How does system handle maximum load?"
+        - "What if API returns malformed/null data?"
+        - "Edge case: Extreme input sizes (0 bytes, 10GB files)"
+    
+    - category: "failure_modes"
+      icon: "💥"
+      description: "System failures, dependency outages, network issues, timeout scenarios"
+      analysis_prompts:
+        - "Database connection lost mid-transaction?"
+        - "Third-party API rate limit exceeded?"
+        - "Disk space exhausted during operation?"
+        - "Memory leak under sustained load?"
+    
+    - category: "race_conditions"
+      icon: "🏁"
+      description: "Concurrent access, state inconsistencies, deadlocks, timing issues"
+      analysis_prompts:
+        - "Two users modify same record simultaneously?"
+        - "Order of async operations non-deterministic?"
+        - "Cache invalidation race between read/write?"
+        - "Deadlock: Process A waits for B, B waits for A?"
+    
+    - category: "integration_pitfalls"
+      icon: "🔌"
+      description: "API versioning, contract changes, dependency conflicts, protocol mismatches"
+      analysis_prompts:
+        - "Third-party API deprecated endpoints?"
+        - "Breaking changes in library updates?"
+        - "OAuth token refresh during operation?"
+        - "Webhook delivery failures?"
+    
+    - category: "deployment_risks"
+      icon: "🚀"
+      description: "Zero-downtime deployment, database migrations, feature flags, rollout strategies"
+      analysis_prompts:
+        - "Schema change breaks old app version?"
+        - "Blue-green deployment routing issues?"
+        - "Feature flag toggle causes data inconsistency?"
+        - "Rolling restart loses in-flight requests?"
+    
+    - category: "security_vulnerabilities"
+      icon: "🔒"
+      description: "Injection attacks, XSS, CSRF, auth bypass, data exposure, privilege escalation"
+      analysis_prompts:
+        - "SQL injection via unsanitized input?"
+        - "JWT token doesn't expire?"
+        - "CORS misconfiguration exposes API?"
+        - "Sensitive data in logs/error messages?"
+    
+    - category: "performance_bottlenecks"
+      icon: "⚡"
+      description: "N+1 queries, inefficient algorithms, memory leaks, blocking operations"
+      analysis_prompts:
+        - "Loop makes hundreds of database calls?"
+        - "O(n²) algorithm on large dataset?"
+        - "Synchronous call blocks event loop?"
+        - "No pagination on list endpoints?"
+    
+    - category: "scalability_limits"
+      icon: "📈"
+      description: "Horizontal/vertical scaling constraints, stateful sessions, single points of failure"
+      analysis_prompts:
+        - "In-memory cache doesn't scale horizontally?"
+        - "Single database instance bottleneck?"
+        - "File upload to local disk (not distributed)?"
+        - "WebSocket server affinity required?"
+    
+    - category: "rollback_recovery"
+      icon: "🔄"
+      description: "Backup strategies, disaster recovery, data restoration, incident response"
+      analysis_prompts:
+        - "No automated backup before migration?"
+        - "Point-in-time recovery not configured?"
+        - "Rollback script doesn't reverse data changes?"
+        - "No health check for canary deployment?"
+    
+    - category: "data_integrity"
+      icon: "🗄️"
+      description: "Validation rules, constraint enforcement, transaction boundaries, consistency checks"
+      analysis_prompts:
+        - "Email format not validated?"
+        - "Foreign key constraint missing?"
+        - "Transaction spans multiple microservices?"
+        - "Eventual consistency window too large?"
+    
+    - category: "dependency_risks"
+      icon: "📦"
+      description: "Library vulnerabilities, supply chain attacks, unmaintained packages, version conflicts"
+      analysis_prompts:
+        - "Critical CVE in dependency?"
+        - "Library last updated years ago?"
+        - "Dependency diamond conflict?"
+        - "Transitive dependency security issue?"
+    
+    - category: "maintainability_issues"
+      icon: "🛠️"
+      description: "Code complexity, technical debt, documentation gaps, testing coverage"
+      analysis_prompts:
+        - "Function has 500+ lines?"
+        - "No unit tests for critical path?"
+        - "Magic numbers without constants?"
+        - "API contract not documented?"
+  
+  recommendation_template: |
+    ### 💀 Risk Analysis & Recommendations
+    
+    **Analysis Run:** Turn {{turn_number}} of {{total_turns}}
+    
+    {{#each risk_categories}}
+    #### {{category_icon}} {{category_name}}
+    
+    {{#each findings}}
+    **Finding {{finding_number}}:** {{risk_description}}
+    
+    - **Impact:** {{impact_icon}} {{impact_level}}
+    - **Likelihood:** {{likelihood}}
+    - **Current Plan:** {{current_approach}}
+    - **Gap Identified:** {{identified_gap}}
+    
+    **💡 Recommended Improvement:**
+    {{recommendation_text}}
+    
+    {{#if smarter_alternative}}
+    **🔄 Smarter Alternative:**
+    {{smarter_alternative}}
+    {{/if}}
+    
+    **❓ Decision Required:**
+    - ✅ **Yes - Accept & Integrate** (Add to plan)
+    - ❌ **No - Skip for Now** (Re-analyze next turn)
+    
+    ---
+    {{/each}}
+    {{/each}}
+  
+  impact_levels:
+    critical:
+      icon: "🔴"
+      description: "System failure, data loss, security breach"
+      action: "MUST address before deployment"
+    
+    high:
+      icon: "🟠"
+      description: "Major functionality impaired, significant performance degradation"
+      action: "SHOULD address in current sprint"
+    
+    medium:
+      icon: "🟡"
+      description: "Minor functionality issues, moderate performance impact"
+      action: "MAY address in next sprint"
+    
+    low:
+      icon: "🟢"
+      description: "Edge cases, minimal user impact"
+      action: "Nice to have, backlog candidate"
+  
+  user_response_handling:
+    accept:
+      actions:
+        - "Add to phase tasks in 00-master-plan.md"
+        - "Update validation checklist"
+        - "Create risk mitigation task"
+        - "Add to risk register (risk-analysis/risk-register.yaml)"
+        - "Update acceptance criteria if applicable"
+      
+      task_format: "[ ] {{risk_mitigation_action}} ({{category}} Risk #{{number}})"
+      
+      example: "[ ] Implement parameterized queries to prevent SQL injection (Security Risk #1)"
+    
+    reject:
+      actions:
+        - "Log rejection in risk-analysis/turn-{{N}}-risks.md"
+        - "Track reason if provided"
+        - "Re-analyze on next turn with updated context"
+        - "Escalate if CRITICAL risk rejected"
+      
+      re_analysis_conditions:
+        - "New context makes risk more relevant"
+        - "User adds related feature"
+        - "Risk severity increases"
+  
+  output_artifacts:
+    risk_analysis_folder: "cortex-brain/documents/planning/active/{plan_name}/risk-analysis/"
+    
+    generated_files:
+      - "turn-01-risks.md" # Risks identified on turn 1
+      - "turn-02-risks.md" # Risks identified on turn 2
+      - "turn-N-risks.md"  # Risks identified on turn N
+      - "accepted-recommendations.md" # All accepted risks + integration details
+      - "rejected-recommendations.md" # All rejected risks + reasons
+      - "risk-register.yaml" # Comprehensive risk tracking
+    
+    risk_register_schema: |
+      risks:
+        - id: "RISK-001"
+          category: "security_vulnerabilities"
+          description: "SQL injection via user search"
+          impact: "critical"
+          likelihood: "very_likely"
+          turn_identified: 2
+          status: "accepted"
+          mitigation: "Implement parameterized queries"
+          integration_phase: "Phase 3 - Implementation"
+          validation: "[ ] SQL injection tests pass"
+        
+        - id: "RISK-002"
+          category: "performance_bottlenecks"
+          description: "N+1 query in dashboard"
+          impact: "high"
+          likelihood: "likely"
+          turn_identified: 3
+          status: "rejected"
+          rejection_reason: "Will optimize post-MVP"
+          re_analysis_turns: [4, 5]
+  
+  integration_with_planning_phases:
+    phase_1_classification:
+      risk_focus: "High-level architecture risks, scalability concerns"
+      timing: "After complexity analysis"
+    
+    phase_2_context_discovery:
+      risk_focus: "Integration pitfalls, dependency risks, existing system constraints"
+      timing: "After holistic discovery"
+    
+    phase_3_design:
+      risk_focus: "Security vulnerabilities, data integrity, performance bottlenecks"
+      timing: "After design decisions made"
+    
+    phase_4_implementation:
+      risk_focus: "Race conditions, edge cases, failure modes"
+      timing: "Before implementation tasks finalized"
+    
+    phase_5_validation:
+      risk_focus: "Deployment risks, rollback recovery, maintainability"
+      timing: "Before validation checklist created"
+    
+    phase_6_documentation:
+      risk_focus: "Documentation gaps, technical debt awareness"
+      timing: "Before plan finalization"
+  
+  escalation_rules:
+    critical_risk_rejected:
+      action: "Present again next turn with stronger rationale"
+      message: "⚠️ CRITICAL risk previously identified - reconsider for production readiness"
+    
+    high_risk_rejected_twice:
+      action: "Escalate to CRITICAL priority"
+      message: "⚠️ This HIGH risk has been rejected twice - escalating to CRITICAL"
+    
+    medium_low_rejected:
+      action: "Reduce presentation frequency"
+      message: "Risk noted - will monitor for relevance"
+  
+  adaptive_learning:
+    track_user_priorities:
+      - "Which risk categories user accepts most"
+      - "Which categories user consistently rejects"
+      - "Risk threshold preferences (critical only vs. all levels)"
+    
+    noise_reduction:
+      - "Reduce low-priority risks if user focuses on critical/high"
+      - "Skip repeatedly rejected risks unless context changes"
+      - "Learn user's risk tolerance level"
+  
+  example_interaction:
+    turn_2: |
+      ## 🧠 CORTEX Plan Execution
+      
+      [Plan content...]
+      
+      ### ⚠️ Risk Analysis & Recommendations
+      
+      **Analysis Run:** Turn 2 of 5
+      
+      #### 🔒 Security Vulnerabilities
+      
+      **Finding 1:** SQL Injection Risk in User Search
+      
+      - **Impact:** 🔴 CRITICAL
+      - **Likelihood:** Very Likely
+      - **Current Plan:** "User search endpoint accepts raw query parameters"
+      - **Gap Identified:** No input sanitization or parameterized queries mentioned
+      
+      **💡 Recommended Improvement:**
+      Implement parameterized queries using SQLAlchemy ORM. Add input validation middleware to sanitize all user inputs. Implement rate limiting to prevent brute force attacks.
+      
+      **🔄 Smarter Alternative:**
+      Use Elasticsearch for full-text search instead of SQL LIKE queries. Provides built-in sanitization, better performance (indexing), and advanced features (fuzzy matching, relevance scoring, faceted search).
+      
+      **❓ Decision Required:**
+      - ✅ **Yes - Accept & Integrate** (Add to plan)
+      - ❌ **No - Skip for Now** (Re-analyze next turn)
+      
+      ---
+      
+      #### ⚡ Performance Bottlenecks
+      
+      **Finding 2:** N+1 Query Problem in Dashboard
+      
+      - **Impact:** 🟠 HIGH
+      - **Likelihood:** Likely (when user has many orders)
+      - **Current Plan:** "Load user profile, iterate through orders"
+      - **Gap Identified:** Each order requires separate database query
+      
+      **💡 Recommended Improvement:**
+      Use SQLAlchemy eager loading with `.options(joinedload(User.orders))` to fetch all data in single query. Add database indexes on foreign keys.
+      
+      **🔄 Smarter Alternative:**
+      Implement DataLoader pattern or GraphQL with DataLoader library. Automatically batches and caches requests, preventing N+1 across entire application.
+      
+      **❓ Decision Required:**
+      - ✅ **Yes - Accept & Integrate** (Add to plan)
+      - ❌ **No - Skip for Now** (Re-analyze next turn)
+      
+      ---
+      
+      **Next:** Please respond with Yes/No for each finding, or provide your next planning input.
+
+# ========================================
 # Workflow
 # ========================================
 
@@ -644,6 +1320,16 @@ workflow:
         enforcement_level: "MANDATORY"
         description: "All plans MUST include final REFACTOR phase that reviews ENTIRE file (not just new code) for duplicates, broken structure, complexity >30, SOLID violations, and dead code"
         purpose: "Prevent technical debt accumulation by ensuring modified files are left in clean, optimized state"
+      progress_tracker_sync:
+        rule_id: "TRACKER_SYNC_ENFORCEMENT"
+        enforcement_level: "MANDATORY"
+        description: "Every phase MUST include final task to update progress tracker in master plan"
+        purpose: "Keep master plan visual progress synchronized with actual work completion"
+        implementation:
+          - "Add task at end of each phase: 'Update progress tracker in 00-master-plan.md'"
+          - "Use sync_plan_tracker.py from CORTEX Toolkit for automation"
+          - "Validate consistency between master plan and tracking/progress-tracker.json"
+        example_task: "[ ] {Phase}.{Last_Task_Num+1} Update progress tracker in master plan (python cortex-toolkit/sync_plan_tracker.py --update-phase {N} --progress {PCT} --status {STATUS})"
         phase_requirements:
           name: "Final REFACTOR - Whole-File Cleanup"
           type: "quality_gate"
@@ -675,6 +1361,26 @@ workflow:
             - "_integrate_tdd_workflow() - Called after TDD phases added"
             - "execute() - Applied after plan generation"
           test_coverage: "tests/orchestrators/planning/test_final_refactor_enforcement.py"
+      bidirectional_linking:
+        rule_id: "PLAN_FILE_LINKING"
+        enforcement_level: "MANDATORY"
+        description: "All decomposed plan files MUST include bidirectional links to master plan and related files"
+        purpose: "Enable seamless navigation between master plan, context files, artifacts, and reports"
+        implementation:
+          - "Add '📄 Plan Navigation' section at end of each decomposed file"
+          - "Include links to: master plan, progress tracker, context files, artifacts, reports"
+          - "Use relative paths for portability"
+          - "Auto-generate links using sync_plan_tracker.py --generate-links"
+        template: |
+          ### 📄 Plan Navigation
+          
+          **Master Plan:** [00-master-plan.md](../00-master-plan.md)
+          **Progress Tracker:** [progress-tracker.json](../tracking/progress-tracker.json)
+          
+          **Related Files:**
+          - [Context File](../context/{file}.md)
+          - [Artifact](../artifacts/{artifact}.yaml)
+          - [Report](../reports/{report}.md)
 
 
     - id: 4
@@ -913,3 +1619,61 @@ version_history:
       - "Temporary plan management"
       - "Master plan lifecycle (active → completed)"
     author: "CORTEX Planning Team"
+
+# ========================================
+# Response Templates (Composable System)
+# ========================================
+
+response_templates:
+  use_algorithm: true
+  algorithm_version: "1.0"
+  algorithm_source: "cortex-brain/response-templates-v4.yaml::template_selection_algorithm"
+  
+  response_instructions: |
+    CRITICAL: When orchestrator_engaged is true (autonomous execution):
+    - MUST use cortex_header_shield block (includes 🛡️ shield icon)
+    - Header format: "## 🛡️🧠 CORTEX {title}"
+    - Shield icon provides visual confirmation of autonomous orchestrator engagement
+    - This enforces AUTONOMOUS_EXECUTION_PROTECTION brain protection rule
+  
+  operations:
+    plan_creation:
+      description: "Plan creation completion notification"
+      context_signals:
+        operation_type: "planning"
+        response_phase: "start"
+        complexity_tier: "STRUCTURED"
+        orchestrator_engaged: false
+      blocks:
+        mandatory: ["cortex_header", "next_action"]
+        conditional: ["understanding", "approach", "plan_summary_table", "plan_structure_tree", "plan_file_link"]
+        orchestrator_specific: []
+      rendering_order: ["cortex_header", "understanding", "plan_summary_table", "plan_structure_tree", "plan_file_link", "next_action"]
+    
+    plan_execution:
+      description: "Plan execution progress tracking (autonomous mode)"
+      context_signals:
+        operation_type: "execution"
+        response_phase: "in_progress"
+        complexity_tier: "COMPREHENSIVE"
+        orchestrator_engaged: true
+      blocks:
+        mandatory: ["cortex_header_shield", "progress_tracker_standard", "validation_status_dor_dod", "plan_file_link", "next_action"]
+        conditional: ["threat_analysis", "changes", "deliverables_matrix"]
+        orchestrator_specific: ["threat_analysis", "deliverables_matrix"]
+      rendering_order: ["cortex_header_shield", "progress_tracker_standard", "threat_analysis", "deliverables_matrix", "validation_status_dor_dod", "changes", "plan_file_link", "next_action"]
+    
+    plan_completion:
+      description: "Plan completion with achievements"
+      context_signals:
+        operation_type: "planning"
+        response_phase: "complete"
+        complexity_tier: "STRUCTURED"
+        orchestrator_engaged: true
+      blocks:
+        mandatory: ["cortex_header_shield", "progress_tracker_standard", "validation_status_dor_dod", "achievements"]
+        conditional: ["changes", "deliverables_matrix", "plan_file_link"]
+        orchestrator_specific: []
+      rendering_order: ["cortex_header_shield", "progress_tracker_standard", "achievements", "changes", "validation_status_dor_dod"]
+      completion_format: "🎉 CONGRATULATIONS"
+

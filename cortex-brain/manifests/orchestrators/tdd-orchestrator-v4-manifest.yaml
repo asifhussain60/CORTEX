@@ -680,3 +680,262 @@ future:
     - "AST-based refactoring engine"
     - "Visual test generation from UI mockups"
     - "Contract-driven development support"
+
+# ========================================
+# Response Templates (Composable System)
+# ========================================
+
+response_templates:
+  use_algorithm: true
+  algorithm_version: "1.0"
+  algorithm_source: "cortex-brain/response-templates-v4.yaml::template_selection_algorithm"
+  
+  operations:
+    red_phase:
+      description: "RED phase - failing tests"
+      context_signals:
+        operation_type: "execution"
+        response_phase: "in_progress"
+        complexity_tier: "FOCUSED"
+        orchestrator_type: "tdd"
+        orchestrator_engaged: false
+      blocks:
+        mandatory: ["cortex_header", "tdd_cycle_status", "test_results_summary", "next_action"]
+        conditional: ["coverage_metrics", "vision_analysis"]
+        orchestrator_specific: ["tdd_cycle_status", "test_results_summary", "coverage_metrics", "vision_analysis"]
+      rendering_order: ["cortex_header", "vision_analysis", "tdd_cycle_status", "test_results_summary", "next_action"]
+    
+    green_phase:
+      description: "GREEN phase - tests passing"
+      context_signals:
+        operation_type: "execution"
+        response_phase: "in_progress"
+        complexity_tier: "FOCUSED"
+        orchestrator_type: "tdd"
+        orchestrator_engaged: false
+      blocks:
+        mandatory: ["cortex_header", "tdd_cycle_status", "test_results_summary", "next_action"]
+        conditional: ["coverage_metrics", "changes", "vision_analysis"]
+        orchestrator_specific: ["tdd_cycle_status", "test_results_summary", "coverage_metrics", "vision_analysis"]
+      rendering_order: ["cortex_header", "vision_analysis", "tdd_cycle_status", "test_results_summary", "coverage_metrics", "changes", "next_action"]
+    
+    refactor_phase:
+      description: "REFACTOR phase - code cleanup"
+      context_signals:
+        operation_type: "execution"
+        response_phase: "complete"
+        complexity_tier: "STRUCTURED"
+        orchestrator_type: "tdd"
+        orchestrator_engaged: false
+      blocks:
+        mandatory: ["cortex_header", "tdd_cycle_status", "test_results_summary", "next_action"]
+        conditional: ["coverage_metrics", "changes", "vision_analysis"]
+        orchestrator_specific: ["tdd_cycle_status", "test_results_summary", "coverage_metrics", "vision_analysis"]
+      rendering_order: ["cortex_header", "vision_analysis", "tdd_cycle_status", "test_results_summary", "coverage_metrics", "changes", "next_action"]
+
+# Vision API Integration (Automatic Image Analysis)
+# ==================================================
+
+vision_api_integration:
+  enabled: true
+  visual_indicator:
+    required: true
+    icon: "📷"
+    header_format: "## 📷🧠 CORTEX TDD Mastery (Vision Engaged)"
+  
+  image_detection:
+    automatic: true
+    supported_formats: ["PNG", "JPG", "JPEG", "WEBP", "GIF"]
+    trigger_condition: "Any image attachment detected in user request"
+  
+  analysis_configuration:
+    comprehensive_extraction:
+      priority_1_ui_elements:
+        - "Interactive components (buttons, inputs, dropdowns, modals)"
+        - "Text content (labels, placeholders, error messages)"
+        - "Icons and imagery"
+        - "Layout structure and hierarchy"
+      
+      priority_2_technical_details:
+        - "URL extraction from address bar or visible links"
+        - "Technology indicators (frameworks, libraries)"
+        - "Responsive design patterns"
+        - "Accessibility features"
+      
+      priority_3_test_automation:
+        - "Element identification strategies"
+        - "Recommended selectors (data-testid, aria-label, id)"
+        - "Interaction points for testing"
+        - "Expected behaviors and validations"
+    
+    output_format:
+      structured_sections:
+        - name: "image_metadata"
+          includes: ["dimensions", "format", "url_context"]
+        
+        - name: "ui_element_inventory"
+          includes: ["element_type", "label", "recommended_selector", "test_id"]
+        
+        - name: "layout_structure"
+          includes: ["inferred_html", "css_selectors", "component_hierarchy"]
+        
+        - name: "test_automation_strategy"
+          includes: ["selector_recommendations", "test_scenarios", "expected_behaviors"]
+        
+        - name: "accessibility_audit"
+          includes: ["wcag_compliance", "aria_labels", "contrast_ratios", "keyboard_navigation"]
+  
+  tdd_specific_integration:
+    red_phase:
+      when: "Image shows UI mockup, design, or target interface"
+      action: "Generate failing test selectors and assertions"
+      output_template: |
+        ### 📷 Vision Analysis - Test Automation Strategy
+        
+        **UI Element Inventory:**
+        {{#each ui_elements}}
+        | Element | Type | Label | Test Selector | Test Scenario |
+        |---------|------|-------|---------------|---------------|
+        | {{element_name}} | {{element_type}} | "{{label}}" | `{{test_selector}}` | {{test_description}} |
+        {{/each}}
+        
+        **RED Phase Test Generation:**
+        ```python
+        # Test selectors extracted from vision analysis
+        {{#each test_cases}}
+        def test_{{test_name}}(self):
+            """{{test_description}}"""
+            element = driver.find_element(By.CSS_SELECTOR, "{{css_selector}}")
+            assert element.{{assertion_method}}() == {{expected_value}}
+        {{/each}}
+        ```
+        
+        **Recommended Selector Strategy:**
+        1. Primary: data-testid attributes (most stable)
+        2. Fallback: aria-label (accessible and semantic)
+        3. Last resort: CSS classes (if component-specific)
+      
+      integration_points:
+        - "test_file_generation"
+        - "selector_recommendation"
+        - "assertion_strategy"
+    
+    green_phase:
+      when: "Image shows expected UI state or passing condition"
+      action: "Validate implementation matches visual requirements"
+      output_template: |
+        ### 📷 Vision Analysis - Implementation Validation
+        
+        **Expected vs. Actual:**
+        {{#each visual_requirements}}
+        - [ ] {{requirement_name}}
+          - Visual Reference: {{screenshot_section}}
+          - Test Status: {{test_result}}
+          - Selector Used: `{{selector}}`
+        {{/each}}
+      
+      integration_points:
+        - "implementation_validation"
+        - "visual_regression_check"
+    
+    refactor_phase:
+      when: "Image shows code improvements or refactoring suggestions"
+      action: "Extract refactoring opportunities from visual comparison"
+      output_template: |
+        ### 📷 Vision Analysis - Refactoring Opportunities
+        
+        **Detected Improvements:**
+        {{#each improvements}}
+        - {{improvement_area}}
+          - Current: {{current_state}}
+          - Suggested: {{suggested_state}}
+          - Test Impact: {{test_changes_needed}}
+        {{/each}}
+      
+      integration_points:
+        - "refactoring_guidance"
+        - "test_update_requirements"
+  
+  selector_best_practices:
+    priority_order:
+      - selector_type: "data-testid"
+        stability: "high"
+        format: "data-testid='{{kebab-case-name}}'"
+        example: "data-testid='login-button'"
+        when_to_use: "Always preferred - most stable"
+      
+      - selector_type: "aria-label"
+        stability: "high"
+        format: "[aria-label='{{label text}}']"
+        example: "[aria-label='Submit form']"
+        when_to_use: "When element has accessible label"
+      
+      - selector_type: "id"
+        stability: "medium"
+        format: "#{{id-name}}"
+        example: "#email-input"
+        when_to_use: "If unique and meaningful"
+      
+      - selector_type: "class"
+        stability: "low"
+        format: ".{{component-class}}"
+        example: ".btn-primary"
+        when_to_use: "Component-based classes only"
+      
+      - selector_type: "xpath"
+        stability: "very-low"
+        format: "//{{complex-path}}"
+        example: "//div[@class='container']/button[1]"
+        when_to_use: "Last resort - very fragile"
+    
+    naming_conventions:
+      test_id_format: "kebab-case"
+      examples:
+        - "data-testid='login-form'"
+        - "data-testid='email-input-field'"
+        - "data-testid='submit-button'"
+        - "data-testid='error-message-container'"
+    
+    validation_checks:
+      - "Verify selector uniqueness across page"
+      - "Check stability across responsive breakpoints"
+      - "Ensure shadow DOM compatibility"
+      - "Validate accessibility support"
+  
+  test_generation_templates:
+    ui_interaction_test: |
+      def test_{{element_name}}_interaction(page):
+          """Test {{element_description}} interaction"""
+          element = page.locator("{{recommended_selector}}")
+          element.{{action}}({{action_params}})
+          assert element.{{assertion_method}}() == {{expected_result}}
+    
+    visual_regression_test: |
+      def test_{{component_name}}_visual(page):
+          """Visual regression test for {{component_description}}"""
+          component = page.locator("{{component_selector}}")
+          screenshot = component.screenshot()
+          assert_visual_match(screenshot, "{{baseline_image}}")
+    
+    accessibility_test: |
+      def test_{{element_name}}_accessibility(page):
+          """Accessibility test for {{element_description}}"""
+          element = page.locator("{{recommended_selector}}")
+          assert element.get_attribute("aria-label") is not None
+          assert element.is_visible()
+          assert element.is_enabled()
+  
+  error_handling:
+    vision_api_unavailable:
+      action: "Continue without vision analysis"
+      message: "⚠️ Vision API unavailable - proceeding without image analysis"
+    
+    image_analysis_failed:
+      action: "Log error and continue"
+      message: "⚠️ Image analysis failed - manual review required"
+    
+    no_ui_elements_detected:
+      action: "Provide generic image description"
+      message: "📷 Image analyzed but no UI elements detected - may be diagram or non-UI content"
+
+

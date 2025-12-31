@@ -321,6 +321,44 @@ phases:
       - "v3.0 release validation report"
 
 # ========================================
+# Response Templates (Composable System)
+# ========================================
+
+response_templates:
+  use_algorithm: true
+  algorithm_version: "1.0"
+  algorithm_source: "cortex-brain/response-templates-v4.yaml::template_selection_algorithm"
+  
+  operations:
+    dashboard_display:
+      description: "Dashboard visualization"
+      context_signals:
+        operation_type: "analysis"
+        response_phase: "start"
+        complexity_tier: "COMPREHENSIVE"
+        orchestrator_type: "lens"
+        orchestrator_engaged: false
+      blocks:
+        mandatory: ["cortex_header", "analytics_summary", "health_metrics", "next_action"]
+        conditional: ["system_recommendations"]
+        orchestrator_specific: ["analytics_summary", "health_metrics", "system_recommendations"]
+      rendering_order: ["cortex_header", "analytics_summary", "health_metrics", "system_recommendations", "next_action"]
+    
+    health_report:
+      description: "System health report"
+      context_signals:
+        operation_type: "analysis"
+        response_phase: "complete"
+        complexity_tier: "STRUCTURED"
+        orchestrator_type: "lens"
+        orchestrator_engaged: false
+      blocks:
+        mandatory: ["cortex_header", "health_metrics", "system_recommendations", "next_action"]
+        conditional: ["cautions"]
+        orchestrator_specific: ["health_metrics", "system_recommendations"]
+      rendering_order: ["cortex_header", "health_metrics", "cautions", "system_recommendations", "next_action"]
+
+# ========================================
 # Definition of Done (DoD)
 # ========================================
 

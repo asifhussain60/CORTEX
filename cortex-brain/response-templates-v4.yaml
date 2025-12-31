@@ -1,5 +1,5 @@
-schema_version: '4.0.2'
-last_updated: '2025-12-30'
+schema_version: '4.0.3'
+last_updated: '2025-12-31'
 architecture: adaptive_minimalism
 description: |
   Response Template System v4.0 - 97% reduction (15,851 → 486 lines)
@@ -16,6 +16,202 @@ description: |
   Custom Templates:
   - introduction: Comprehensive CORTEX overview for Engineers/Product Owners
   - business_value: ROI-focused presentation for Leadership
+
+# ============================================================================
+# TEMPLATE SELECTION ALGORITHM (LEGO-Style Composition)
+# ============================================================================
+
+template_selection_algorithm:
+  version: "1.0"
+  description: "Intelligent LEGO-style template composition - dynamically select and compose blocks based on context"
+  enabled: true
+  
+  # Context signals used for block selection
+  context_signals:
+    operation_type:
+      description: "Primary operation being performed"
+      values: [planning, execution, analysis, debug, refinement, documentation, ado, maintenance, sanitization, lens]
+      determines: [header_style, progress_format, completion_format]
+      
+    response_phase:
+      description: "Stage of operation execution"
+      values: [start, in_progress, complete, error]
+      determines: [status_indicators, next_steps_format]
+      
+    complexity_tier:
+      description: "Response complexity level from tier routing"
+      values: [INSTANT, FOCUSED, STRUCTURED, COMPREHENSIVE]
+      determines: [section_count, detail_level]
+      
+    orchestrator_type:
+      description: "Orchestrator executing the operation"
+      values: [planning, tdd, debug, lens, refinement, sanitization, documentation, ado]
+      determines: [specialized_blocks, validation_sections]
+      
+    orchestrator_engaged:
+      description: "Whether orchestrator is autonomously executing (shield mode)"
+      values: [true, false]
+      determines: [header_shield_icon, template_override]
+  
+  # Block categories with selection priorities
+  block_categories:
+    mandatory:
+      description: "Blocks that must always appear"
+      blocks:
+        - cortex_header          # Always first
+        - next_steps             # Always last (unless completion)
+    
+    conditional:
+      description: "Blocks selected based on context signals"
+      blocks:
+        - progress_tracker:
+            condition: "multi_phase_operation"
+            priority: 90
+        - understanding:
+            condition: "discovery_performed OR request_requires_clarification"
+            priority: 85
+        - validation_status:
+            condition: "validation_ran"
+            priority: 80
+        - changes:
+            condition: "files_modified"
+            priority: 75
+        - cautions:
+            condition: "risks_present"
+            priority: 70
+        - achievements:
+            condition: "milestones_reached"
+            priority: 65
+    
+    orchestrator_specific:
+      description: "Blocks unique to specific orchestrators"
+      planning:
+        - dor_dod_status
+        - deliverables_matrix
+        - plan_file_link
+        - threat_analysis
+        - plan_summary_table
+        - plan_structure_tree
+      tdd:
+        - tdd_cycle_status
+        - test_results_summary
+        - coverage_metrics
+        - refactor_suggestions
+      debug:
+        - bug_hypothesis
+        - root_cause_analysis
+        - fix_verification
+        - regression_test_status
+      ado:
+        - work_item_summary
+        - ado_links
+        - story_points_breakdown
+        - ado_auth_status
+      lens:
+        - analytics_summary
+        - health_metrics
+        - system_recommendations
+        - trend_analysis
+      refinement:
+        - improvement_areas
+        - code_quality_delta
+        - refactoring_suggestions
+        - before_after_metrics
+      sanitization:
+        - sanitization_findings
+        - pii_removed
+        - secrets_redacted
+        - anonymization_summary
+      documentation:
+        - doc_summary
+        - coverage_report
+        - missing_docs
+        - doc_quality_score
+  
+  # Composition rules for block ordering and selection
+  composition_rules:
+    block_order:
+      description: "Standard block ordering (some blocks may be skipped based on conditions)"
+      sequence:
+        - cortex_header
+        - understanding
+        - approach
+        - progress_tracker
+        - response
+        - orchestrator_specific_blocks  # Inserted here as a group
+        - changes
+        - validation_status
+        - cautions
+        - achievements
+        - next_steps
+    
+    max_sections:
+      description: "Maximum sections per complexity tier"
+      INSTANT: 1
+      FOCUSED: 3
+      STRUCTURED: 5
+      COMPREHENSIVE: 8
+    
+    selection_algorithm:
+      description: "Step-by-step block selection process"
+      steps:
+        - step: 1
+          action: "Add mandatory blocks (cortex_header, next_steps)"
+          
+        - step: 2
+          action: "Evaluate conditional blocks against context signals"
+          logic: "If context_signal matches when_to_use condition, add block with priority score"
+          
+        - step: 3
+          action: "Add orchestrator_specific blocks based on orchestrator_type"
+          logic: "All blocks for matching orchestrator type are added"
+          
+        - step: 4
+          action: "Sort all selected blocks by block_order sequence"
+          
+        - step: 5
+          action: "Apply max_sections limit for complexity_tier"
+          logic: "Keep highest priority blocks if exceeding limit"
+          
+        - step: 6
+          action: "Render blocks in order with proper spacing and formatting"
+    
+    override_rules:
+      description: "Special cases that override standard composition"
+      cases:
+        - condition: "orchestrator_engaged == true"
+          action: "Use named template (autonomous_execution_progress or ado_execution_progress)"
+          
+        - condition: "response_phase == 'complete' AND all_work_done == true"
+          action: "Use success_completion special template"
+          
+        - condition: "response_phase == 'error'"
+          action: "Use error_response special template"
+  
+  # Progress bar standardization
+  progress_bar_standard:
+    description: "Standardized progress bar configuration (10-character width)"
+    width: 10
+    filled_char: "█"
+    empty_char: "░"
+    icons:
+      complete: "✅"
+      in_progress: "🔄"
+      pending: "⏳"
+      failed: "❌"
+      skipped: "⏸️"
+    format: "`{{filled_chars}}{{empty_chars}}` **{{percentage}}%** {{status_icon}} {{status_text}}"
+    
+  # Helper methods for implementations
+  implementation_helpers:
+    description: "Methods available in TemplateRenderer for algorithm execution"
+    methods:
+      - "select_blocks(context_signals, orchestrator_type) -> List[Block]"
+      - "evaluate_condition(condition, context) -> bool"
+      - "sort_blocks_by_order(blocks, order_sequence) -> List[Block]"
+      - "apply_tier_limit(blocks, tier) -> List[Block]"
+      - "render_blocks(blocks, context) -> str"
+      - "generate_progress_bar(percentage, width=10) -> str"
 
 # ============================================================================
 # TIER ROUTING RULES
@@ -37,6 +233,544 @@ routing:
   tier4_comprehensive:
     triggers: [complex_operation, tokens_600_plus, sections_4_6]
     format: "## 🧠 CORTEX {title}\n**Author:** Asif Hussain\n\n---\n\n{4-6 sections}"
+
+# ============================================================================
+# COMPOSABLE BLOCKS (LEGO System)
+# ============================================================================
+
+composable_blocks:
+  version: "1.0"
+  description: "Reusable template blocks that compose like LEGO pieces"
+  
+  # ===== Standard Blocks (Shared Across Orchestrators) =====
+  
+  standard_blocks:
+    cortex_header:
+      block_id: "BLK-STD-001"
+      description: "Standard CORTEX header with author attribution"
+      category: "mandatory"
+      format: |
+        ## 🧠 CORTEX {{title}}
+        **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+      variables:
+        - title: "Response title (e.g., 'Code Analysis', 'Implementation Complete')"
+    
+    cortex_header_shield:
+      block_id: "BLK-STD-002"
+      description: "CORTEX header with shield icon for orchestrator-engaged mode"
+      category: "mandatory"
+      condition: "orchestrator_engaged == true"
+      format: |
+        ## 🛡️🧠 CORTEX {{title}}
+        **Author:** Asif Hussain | **{{context_label}}:** {{context_value}} | **Orchestrator:** {{orchestrator_name}} ✅
+      variables:
+        - title: "Response title"
+        - context_label: "Plan, Feature, Operation, etc."
+        - context_value: "Plan name, feature name, etc."
+        - orchestrator_name: "Planning System 4.0, ADO System, TDD Mastery, etc."
+    
+    progress_tracker_standard:
+      block_id: "BLK-STD-003"
+      description: "Standardized visual progress tracker with 10-char bars"
+      category: "conditional"
+      condition: "multi_phase_operation"
+      format: |
+        ### 📊 {{operation_name}} Progress
+        
+        **Overall Progress:** `{{overall_bar}}` **{{overall_percentage}}%** {{status_emoji}} {{status_text}}
+        
+        | # | Phase | Progress | Deliverables | Time |
+        |---|-------|----------|--------------|------|
+        {{#each phases}}
+        | {{phase_num}} | {{phase_icon}} **{{phase_name}}** | `{{phase_bar}}` {{percentage}}% | {{completed_tasks}}/{{total_tasks}} | {{elapsed_time}} |
+        {{/each}}
+      config:
+        bar_width: 10
+        filled_char: "█"
+        empty_char: "░"
+        icons:
+          complete: "✅"
+          in_progress: "🔄"
+          pending: "⏳"
+          failed: "❌"
+          skipped: "⏸️"
+      variables:
+        - operation_name: "Operation or plan name"
+        - overall_bar: "10-char progress bar"
+        - overall_percentage: "Overall % complete"
+        - status_emoji: "Icon from config.icons"
+        - status_text: "In Progress, Complete, etc."
+        - phases: "Array of phase objects"
+    
+    validation_status_dor_dod:
+      block_id: "BLK-STD-004"
+      description: "Definition of Ready/Done validation status"
+      category: "conditional"
+      condition: "validation_required"
+      format: |
+        ### ✅ Validation Status
+        
+        | Check | Status |
+        |-------|--------|
+        | **Definition of Ready** | {{#if dor_passed}}✅ Passed{{else}}⚠️ {{dor_violations}} issue(s){{/if}} |
+        | **Definition of Done** | {{#if dod_passed}}✅ Passed{{else}}⏳ {{dod_remaining}} remaining{{/if}} |
+      variables:
+        - dor_passed: "Boolean"
+        - dor_violations: "Count of DoR violations"
+        - dod_passed: "Boolean"
+        - dod_remaining: "Count of remaining DoD items"
+    
+    plan_file_link:
+      block_id: "BLK-STD-005"
+      description: "Clickable link to plan file in editor"
+      category: "conditional"
+      condition: "plan_created"
+      format: |
+        ### 📄 Plan File
+        
+        **Open in Editor:** [{{filename}}]({{path}})
+      variables:
+        - filename: "File name (e.g., 00-master-plan.md)"
+        - path: "Relative or absolute path"
+    
+    next_action:
+      block_id: "BLK-STD-006"
+      description: "Final next steps directive"
+      category: "mandatory"
+      format: |
+        **Next:** {{action}}
+      variables:
+        - action: "Single action directive or completion message"
+    
+    progress_bar_inline:
+      block_id: "BLK-STD-007"
+      description: "Simple inline progress bar"
+      category: "utility"
+      format: "`{{filled}}{{empty}}` {{percentage}}%"
+      config:
+        width: 10
+        filled_char: "█"
+        empty_char: "░"
+      variables:
+        - filled: "Filled portion (█ repeated)"
+        - empty: "Empty portion (░ repeated)"
+        - percentage: "Percentage complete"
+  
+  # ===== Planning Orchestrator Blocks =====
+  
+  planning_blocks:
+    threat_analysis:
+      block_id: "BLK-PLN-001"
+      description: "Security threat analysis summary"
+      orchestrator: "planning"
+      category: "conditional"
+      condition: "threat_analysis_enabled"
+      format: |
+        ### 🔒 Security Analysis
+        
+        | Metric | Value |
+        |--------|-------|
+        | **Threats** | {{threat_count}} ({{critical_count}} Critical, {{high_count}} High, {{medium_count}} Medium) |
+        | **STRIDE** | {{stride_categories}} |
+        | **Mitigations** | `{{mitigation_bar}}` {{mitigations_done}}/{{mitigations_total}} |
+      variables:
+        - threat_count: "Total threats identified"
+        - critical_count: "Critical severity count"
+        - high_count: "High severity count"
+        - medium_count: "Medium severity count"
+        - stride_categories: "STRIDE categories present"
+        - mitigation_bar: "Progress bar for mitigations"
+        - mitigations_done: "Mitigations completed"
+        - mitigations_total: "Total mitigations needed"
+    
+    plan_summary_table:
+      block_id: "BLK-PLN-002"
+      description: "Plan metrics summary table"
+      orchestrator: "planning"
+      category: "conditional"
+      condition: "operation == 'plan_creation'"
+      format: |
+        ### 📊 Plan Summary
+        
+        | Metric | Value |
+        |--------|-------|
+        | **Plan ID** | {{plan_id}} |
+        | **Phases** | {{phase_count}} |
+        | **Estimated Effort** | {{effort}} |
+        | **Files to Modify** | {{file_count}} |
+      variables:
+        - plan_id: "Unique plan identifier"
+        - phase_count: "Number of phases"
+        - effort: "Estimated hours/days"
+        - file_count: "Files to be modified"
+    
+    plan_structure_tree:
+      block_id: "BLK-PLN-003"
+      description: "ASCII folder structure for plan"
+      orchestrator: "planning"
+      category: "conditional"
+      condition: "operation == 'plan_creation'"
+      format: |
+        ### 📁 Plan Structure
+        
+        ```
+        {{plan_folder}}/
+        ├── 00-master-plan.md    # Main plan
+        ├── context/             # Context artifacts
+        ├── reports/             # Progress reports
+        ├── artifacts/           # Supporting files
+        └── tracking/            # progress-tracker.json
+        ```
+      variables:
+        - plan_folder: "Plan folder name"
+    
+    deliverables_matrix:
+      block_id: "BLK-PLN-004"
+      description: "Deliverables completion matrix"
+      orchestrator: "planning"
+      category: "conditional"
+      condition: "deliverables_tracked"
+      format: |
+        ### 📦 Deliverables
+        
+        | Deliverable | Status | Owner |
+        |-------------|--------|-------|
+        {{#each deliverables}}
+        | {{name}} | {{status_icon}} {{status}} | {{owner}} |
+        {{/each}}
+      variables:
+        - deliverables: "Array of deliverable objects"
+  
+  # ===== ADO Orchestrator Blocks =====
+  
+  ado_blocks:
+    work_item_summary:
+      block_id: "BLK-ADO-001"
+      description: "ADO work item breakdown with story points"
+      orchestrator: "ado"
+      category: "mandatory"
+      format: |
+        ### 🎫 Work Item Summary
+        
+        | Type | Count | Story Points | Status |
+        |------|-------|--------------|--------|
+        | **Epic** | {{epic_count}} | - | {{epic_status}} |
+        | **Feature** | {{feature_count}} | {{feature_sp}} SP | {{feature_status}} |
+        | **User Story** | {{story_count}} | {{story_sp}} SP | {{story_status}} |
+        | **Task** | {{task_count}} | {{task_sp}} SP | {{task_status}} |
+      variables:
+        - epic_count: "Number of epics"
+        - feature_count: "Number of features"
+        - story_count: "Number of user stories"
+        - task_count: "Number of tasks"
+        - feature_sp: "Feature story points"
+        - story_sp: "Story story points"
+        - task_sp: "Task story points"
+        - epic_status: "Epic status icon"
+        - feature_status: "Feature status icon"
+        - story_status: "Story status icon"
+        - task_status: "Task status icon"
+    
+    ado_links:
+      block_id: "BLK-ADO-002"
+      description: "External ADO work item links"
+      orchestrator: "ado"
+      category: "conditional"
+      condition: "ado_links_exist"
+      format: |
+        ### 🔗 Azure DevOps Links
+        
+        {{#each ado_links}}
+        - [{{type}}: {{title}}]({{url}})
+        {{/each}}
+      variables:
+        - ado_links: "Array of ADO link objects"
+    
+    ado_auth_status:
+      block_id: "BLK-ADO-003"
+      description: "ADO authentication status check"
+      orchestrator: "ado"
+      category: "mandatory"
+      format: |
+        ### ✅ Validation Status
+        
+        | Check | Status |
+        |-------|--------|
+        | **Definition of Ready** | {{#if dor_passed}}✅ Passed{{else}}⚠️ {{dor_violations}} issue(s){{/if}} |
+        | **Definition of Done** | {{#if dod_passed}}✅ Passed{{else}}⏳ {{dod_remaining}} remaining{{/if}} |
+        | **ADO Authentication** | {{#if ado_auth_valid}}✅ Connected{{else}}❌ Not authenticated{{/if}} |
+      variables:
+        - dor_passed: "Boolean"
+        - dor_violations: "DoR violation count"
+        - dod_passed: "Boolean"
+        - dod_remaining: "Remaining DoD items"
+        - ado_auth_valid: "Boolean ADO auth status"
+  
+  # ===== TDD Orchestrator Blocks =====
+  
+  tdd_blocks:
+    tdd_cycle_status:
+      block_id: "BLK-TDD-001"
+      description: "RED→GREEN→REFACTOR cycle status"
+      orchestrator: "tdd"
+      category: "mandatory"
+      format: |
+        ### 🔴🟢🔄 TDD Cycle
+        
+        | Phase | Status |
+        |-------|--------|
+        | 🔴 RED (Failing Test) | {{red_status}} |
+        | 🟢 GREEN (Passing Test) | {{green_status}} |
+        | 🔄 REFACTOR (Clean Up) | {{refactor_status}} |
+      variables:
+        - red_status: "✅ Complete, 🔄 In Progress, ⏳ Pending"
+        - green_status: "✅ Complete, 🔄 In Progress, ⏳ Pending"
+        - refactor_status: "✅ Complete, 🔄 In Progress, ⏳ Pending"
+    
+    test_results_summary:
+      block_id: "BLK-TDD-002"
+      description: "Test execution results"
+      orchestrator: "tdd"
+      category: "mandatory"
+      format: |
+        ### 📊 Test Results
+        
+        | Metric | Value |
+        |--------|-------|
+        | **Total Tests** | {{total_tests}} |
+        | **Passed** | ✅ {{passed_tests}} |
+        | **Failed** | ❌ {{failed_tests}} |
+        | **Skipped** | ⏸️ {{skipped_tests}} |
+        | **Duration** | {{duration}}s |
+      variables:
+        - total_tests: "Total test count"
+        - passed_tests: "Passed test count"
+        - failed_tests: "Failed test count"
+        - skipped_tests: "Skipped test count"
+        - duration: "Test execution time"
+    
+    coverage_metrics:
+      block_id: "BLK-TDD-003"
+      description: "Code coverage metrics"
+      orchestrator: "tdd"
+      category: "conditional"
+      condition: "coverage_available"
+      format: |
+        ### 📈 Coverage
+        
+        | Type | Coverage |
+        |------|----------|
+        | **Line** | `{{line_bar}}` {{line_coverage}}% |
+        | **Branch** | `{{branch_bar}}` {{branch_coverage}}% |
+        | **Function** | `{{function_bar}}` {{function_coverage}}% |
+      variables:
+        - line_coverage: "Line coverage percentage"
+        - branch_coverage: "Branch coverage percentage"
+        - function_coverage: "Function coverage percentage"
+        - line_bar: "10-char progress bar"
+        - branch_bar: "10-char progress bar"
+        - function_bar: "10-char progress bar"
+  
+  # ===== Debug Orchestrator Blocks =====
+  
+  debug_blocks:
+    bug_hypothesis:
+      block_id: "BLK-DBG-001"
+      description: "Initial bug hypothesis"
+      orchestrator: "debug"
+      category: "mandatory"
+      format: |
+        ### 🔍 Bug Hypothesis
+        
+        **Suspected Cause:** {{hypothesis}}  
+        **Confidence:** {{confidence}}%  
+        **Affected Components:** {{components}}
+      variables:
+        - hypothesis: "Suspected root cause"
+        - confidence: "Confidence percentage"
+        - components: "Comma-separated component list"
+    
+    root_cause_analysis:
+      block_id: "BLK-DBG-002"
+      description: "Root cause determination"
+      orchestrator: "debug"
+      category: "conditional"
+      condition: "root_cause_found"
+      format: |
+        ### ⚙️ Root Cause
+        
+        **Cause:** {{cause}}  
+        **Location:** `{{file}}:{{line}}`  
+        **Impact:** {{impact}}
+      variables:
+        - cause: "Root cause description"
+        - file: "File path"
+        - line: "Line number"
+        - impact: "Impact description"
+    
+    fix_verification:
+      block_id: "BLK-DBG-003"
+      description: "Fix verification status"
+      orchestrator: "debug"
+      category: "conditional"
+      condition: "fix_applied"
+      format: |
+        ### ✅ Fix Verification
+        
+        | Check | Status |
+        |-------|--------|
+        | **Tests Pass** | {{test_status}} |
+        | **No Regressions** | {{regression_status}} |
+        | **Code Review** | {{review_status}} |
+      variables:
+        - test_status: "✅ Passed, ❌ Failed"
+        - regression_status: "✅ Clean, ⚠️ Issues"
+        - review_status: "✅ Approved, ⏳ Pending"
+  
+  # ===== CORTEX Lens Blocks =====
+  
+  lens_blocks:
+    analytics_summary:
+      block_id: "BLK-LNS-001"
+      description: "System analytics overview"
+      orchestrator: "lens"
+      category: "mandatory"
+      format: |
+        ### 📈 Analytics Summary
+        
+        {{#each metrics}}
+        - **{{name}}:** {{value}} {{#if trend}}({{trend_icon}} {{trend}}){{/if}}
+        {{/each}}
+      variables:
+        - metrics: "Array of metric objects with name/value/trend"
+    
+    health_metrics:
+      block_id: "BLK-LNS-002"
+      description: "System health indicators"
+      orchestrator: "lens"
+      category: "mandatory"
+      format: |
+        ### 🏥 Health Metrics
+        
+        | Component | Status | Score |
+        |-----------|--------|-------|
+        {{#each components}}
+        | {{name}} | {{status_icon}} {{status}} | {{score}}/100 |
+        {{/each}}
+      variables:
+        - components: "Array of component health objects"
+    
+    system_recommendations:
+      block_id: "BLK-LNS-003"
+      description: "AI-generated system recommendations"
+      orchestrator: "lens"
+      category: "conditional"
+      condition: "recommendations_available"
+      format: |
+        ### 💡 Recommendations
+        
+        {{#each recommendations}}
+        {{priority_icon}} **{{title}}**  
+        {{description}}
+        {{/each}}
+      variables:
+        - recommendations: "Array of recommendation objects"
+  
+  # ===== Refinement Orchestrator Blocks =====
+  
+  refinement_blocks:
+    improvement_areas:
+      block_id: "BLK-RFN-001"
+      description: "Code improvement opportunities"
+      orchestrator: "refinement"
+      category: "mandatory"
+      format: |
+        ### 🎯 Improvement Areas
+        
+        | Area | Priority | Effort |
+        |------|----------|--------|
+        {{#each areas}}
+        | {{name}} | {{priority_icon}} {{priority}} | {{effort}} |
+        {{/each}}
+      variables:
+        - areas: "Array of improvement area objects"
+    
+    code_quality_delta:
+      block_id: "BLK-RFN-002"
+      description: "Before/after code quality metrics"
+      orchestrator: "refinement"
+      category: "conditional"
+      condition: "refactoring_complete"
+      format: |
+        ### 📊 Code Quality Improvement
+        
+        | Metric | Before | After | Delta |
+        |--------|--------|-------|-------|
+        {{#each metrics}}
+        | {{name}} | {{before}} | {{after}} | {{delta_icon}} {{delta}} |
+        {{/each}}
+      variables:
+        - metrics: "Array of metric delta objects"
+  
+  # ===== Sanitization Orchestrator Blocks =====
+  
+  sanitization_blocks:
+    sanitization_findings:
+      block_id: "BLK-SNT-001"
+      description: "Sanitization scan results"
+      orchestrator: "sanitization"
+      category: "mandatory"
+      format: |
+        ### 🔍 Sanitization Findings
+        
+        | Category | Found | Sanitized |
+        |----------|-------|-----------|
+        | **PII** | {{pii_found}} | {{pii_sanitized}} |
+        | **Secrets** | {{secrets_found}} | {{secrets_sanitized}} |
+        | **Internal Refs** | {{refs_found}} | {{refs_sanitized}} |
+      variables:
+        - pii_found: "PII instances found"
+        - pii_sanitized: "PII instances sanitized"
+        - secrets_found: "Secrets found"
+        - secrets_sanitized: "Secrets sanitized"
+        - refs_found: "Internal references found"
+        - refs_sanitized: "Internal references sanitized"
+  
+  # ===== Documentation Orchestrator Blocks =====
+  
+  documentation_blocks:
+    doc_summary:
+      block_id: "BLK-DOC-001"
+      description: "Documentation generation summary"
+      orchestrator: "documentation"
+      category: "mandatory"
+      format: |
+        ### 📚 Documentation Summary
+        
+        | Type | Count | Status |
+        |------|-------|--------|
+        {{#each doc_types}}
+        | {{type}} | {{count}} | {{status_icon}} {{status}} |
+        {{/each}}
+      variables:
+        - doc_types: "Array of documentation type objects"
+    
+    coverage_report:
+      block_id: "BLK-DOC-002"
+      description: "Documentation coverage metrics"
+      orchestrator: "documentation"
+      category: "conditional"
+      condition: "coverage_calculated"
+      format: |
+        ### 📈 Documentation Coverage
+        
+        | Component | Coverage |
+        |-----------|----------|
+        {{#each components}}
+        | {{name}} | `{{bar}}` {{percentage}}% |
+        {{/each}}
+      variables:
+        - components: "Array of component coverage objects"
 
 # ============================================================================
 # DYNAMIC SECTION LIBRARY

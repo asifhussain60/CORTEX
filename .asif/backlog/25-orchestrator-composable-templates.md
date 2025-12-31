@@ -14,10 +14,21 @@ Implement a LEGO-style composable template system where all orchestrators can co
 
 ### Step 1: Verify Existing Template Structure
 Read current templates and understand structure:
-```bash
-grep -n "composable\|block" cortex-brain/response-templates-v4.yaml | head -20
-grep -n "response_templates" cortex-brain/manifests/orchestrators/*.yaml
+```powershell
+# Check for existing composable/block patterns
+Select-String -Path "cortex-brain\response-templates-v4.yaml" -Pattern "composable|block" | Select-Object -First 20
+
+# Check which manifests already have response_templates
+Get-ChildItem "cortex-brain\manifests\orchestrators\*-manifest.yaml" | ForEach-Object {
+  $hasTemplates = Select-String -Path $_.FullName -Pattern "response_templates:" -Quiet
+  [PSCustomObject]@{
+    File = $_.Name
+    HasResponseTemplates = $hasTemplates
+  }
+} | Format-Table -AutoSize
 ```
+
+**Expected Output:** List of manifests showing which already have `response_templates` sections.
 
 ### Step 2: Add Composable Blocks Section to response-templates-v4.yaml
 Edit `cortex-brain/response-templates-v4.yaml`:
@@ -160,31 +171,63 @@ Repeat for these files in `cortex-brain/manifests/orchestrators/`:
 Each should have appropriate `response_templates` section matching their operations.
 
 ### Step 7: Update Progress Bar Templates
-Edit `cortex-brain/response-templates-v4.yaml` to align existing templates:
-- Find `autonomous_execution_progress` (around line 715)
-- Update columns to: `Phase | Progress | Status`
-- Use 10-character bar width
-- Use standardized icons: ✅ 🔄 ⏳ ❌ ⏸️
+Edit `cortex-brain\response-templates-v4.yaml` to align existing templates:
+- Locate `autonomous_execution_progress` (around line 715)
+- Update table headers to: `Phase | Progress | Status`
+- Ensure bar width is 10 characters (10 blocks total: filled █ + empty ░)
+- Use standardized icons: ✅ (complete), 🔄 (in-progress), ⏳ (pending), ❌ (failed), ⏸️ (skipped)
 
 Verify:
-```bash
-grep -A 15 "autonomous_execution_progress:" cortex-brain/response-templates-v4.yaml | grep -E "Phase|Progress|Status"
+```powershell
+# Find the autonomous_execution_progress template
+$content = Get-Content "cortex-brain\response-templates-v4.yaml" -Raw
+$templateStart = $content.IndexOf("autonomous_execution_progress:")
+if ($templateStart -ge 0) {
+  $section = $content.Substring($templateStart, 500)
+  Write-Host "Template found at position $templateStart"
+  $section | Select-String -Pattern "Phase|Progress|Status"
+} else {
+  Write-Host "❌ Template not found"
+}
+
+# Check for standardized icons
+Select-String -Path "cortex-brain\response-templates-v4.yaml" -Pattern "✅|🔄|⏳|❌|⏸️" | Select-Object -First 10
 ```
+
+**Expected Output:** Confirmation that table headers and icons are present in template.
 
 ### Step 8: Validate All Changes
-```bash
-# Check YAML syntax
-python -c "import yaml; yaml.safe_load(open('cortex-brain/response-templates-v4.yaml'))" && echo "✅ Valid YAML"
+```powershell
+# Check YAML syntax (requires PyYAML installed)
+try {
+  python -c "import yaml; yaml.safe_load(open('cortex-brain/response-templates-v4.yaml')); print('✅ Valid YAML')"
+} catch {
+  Write-Host "❌ YAML validation failed: $_" -ForegroundColor Red
+  exit 1
+}
 
 # Verify all manifests have response_templates
-for f in cortex-brain/manifests/orchestrators/*-manifest.yaml; do
-  if grep -q "response_templates:" "$f"; then
-    echo "✅ $f"
-  else
-    echo "❌ $f (missing response_templates)"
-  fi
-done
+$manifests = Get-ChildItem "cortex-brain\manifests\orchestrators\*-manifest.yaml"
+$results = @()
+foreach ($file in $manifests) {
+  $hasTemplates = Select-String -Path $file.FullName -Pattern "response_templates:" -Quiet
+  $status = if ($hasTemplates) { "✅" } else { "❌ (missing)" }
+  $results += [PSCustomObject]@{
+    File = $file.Name
+    HasResponseTemplates = $status
+  }
+}
+$results | Format-Table -AutoSize
+
+# Count manifests with response_templates
+$count = ($results | Where-Object { $_.HasResponseTemplates -eq "✅" }).Count
+Write-Host "`nTotal manifests with response_templates: $count / $($manifests.Count)" -ForegroundColor $(if ($count -eq 8) { 'Green' } else { 'Yellow' })
 ```
+
+**Expected Output:** 
+- "✅ Valid YAML" confirmation
+- Table showing all 8 manifests with ✅ status
+- "Total manifests with response_templates: 8 / 8" in green
 
 ---
 
@@ -221,6 +264,6 @@ done
 
 ## 🗑️ AUTO-DELETE INSTRUCTION
 **After successful execution:** Delete this file with:
-```bash
-rm -f /Users/asifhussain/PROJECTS/CORTEX/.asif/backlog/25-orchestrator-composable-templates.md
+```powershell
+Remove-Item "d:\PROJECTS\CORTEX\.asif\backlog\25-orchestrator-composable-templates.md" -Force
 ```

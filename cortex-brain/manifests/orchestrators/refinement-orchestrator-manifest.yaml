@@ -215,3 +215,41 @@ completion_criteria:
   zero_skull_violations: true
   validation_passed: true
   rollback_script_generated: true
+
+# ========================================
+# Response Templates (Composable System)
+# ========================================
+
+response_templates:
+  use_algorithm: true
+  algorithm_version: "1.0"
+  algorithm_source: "cortex-brain/response-templates-v4.yaml::template_selection_algorithm"
+  
+  operations:
+    analysis:
+      description: "Code analysis phase"
+      context_signals:
+        operation_type: "refinement"
+        response_phase: "start"
+        complexity_tier: "STRUCTURED"
+        orchestrator_type: "refinement"
+        orchestrator_engaged: false
+      blocks:
+        mandatory: ["cortex_header", "improvement_areas", "next_action"]
+        conditional: ["understanding", "approach"]
+        orchestrator_specific: ["improvement_areas"]
+      rendering_order: ["cortex_header", "understanding", "improvement_areas", "approach", "next_action"]
+    
+    improvement_complete:
+      description: "Refinement complete with metrics"
+      context_signals:
+        operation_type: "refinement"
+        response_phase: "complete"
+        complexity_tier: "COMPREHENSIVE"
+        orchestrator_type: "refinement"
+        orchestrator_engaged: false
+      blocks:
+        mandatory: ["cortex_header", "code_quality_delta", "changes", "next_action"]
+        conditional: ["improvement_areas", "test_results_summary", "achievements"]
+        orchestrator_specific: ["code_quality_delta"]
+      rendering_order: ["cortex_header", "improvement_areas", "code_quality_delta", "changes", "test_results_summary", "achievements", "next_action"]

@@ -360,6 +360,7 @@ validation:
     - "code_examples_tested"
     - "mobile_responsive"
     - "accessibility_wcag_aa"
+
 commands:
   generate_all: "generate technical documentation"
   generate_diagrams_only: "generate technical diagrams"
@@ -373,6 +374,9 @@ commands:
   generate_di_container: "generate dependency injection diagrams"
   generate_brain_timeline: "generate brain tier interaction diagrams"
   validate_diagram_coverage: "validate all 70+ diagrams render"
+
+cortex_4_migration:
+  components_used:
     - "brain_interface"
     - "template_manager_v4"
     - "di_container"
@@ -396,13 +400,6 @@ commands:
     - "D3.js utilities support all 15 diagram types"
     - "Documentation served locally with zero errors"
 
-commands:
-  generate_all: "generate technical documentation"
-  generate_diagrams_only: "generate technical diagrams"
-  generate_api_only: "generate api documentation"
-  serve_local: "serve technical documentation"
-  export_pdf: "export technical documentation to pdf"
-
 integration:
   inherits_from:
     - "planning-system-4.0-manifest.yaml"
@@ -414,3 +411,41 @@ integration:
     - "DiagramGenerator"
     - "ApiDocGenerator"
     - "TemplateEngine"
+
+# ========================================
+# Response Templates (Composable System)
+# ========================================
+
+response_templates:
+  use_algorithm: true
+  algorithm_version: "1.0"
+  algorithm_source: "cortex-brain/response-templates-v4.yaml::template_selection_algorithm"
+  
+  operations:
+    generation:
+      description: "Documentation generation"
+      context_signals:
+        operation_type: "documentation"
+        response_phase: "in_progress"
+        complexity_tier: "STRUCTURED"
+        orchestrator_type: "documentation"
+        orchestrator_engaged: false
+      blocks:
+        mandatory: ["cortex_header", "doc_summary", "next_action"]
+        conditional: ["coverage_report", "changes"]
+        orchestrator_specific: ["doc_summary", "coverage_report"]
+      rendering_order: ["cortex_header", "doc_summary", "coverage_report", "changes", "next_action"]
+    
+    coverage:
+      description: "Documentation coverage report"
+      context_signals:
+        operation_type: "documentation"
+        response_phase: "complete"
+        complexity_tier: "FOCUSED"
+        orchestrator_type: "documentation"
+        orchestrator_engaged: false
+      blocks:
+        mandatory: ["cortex_header", "coverage_report", "next_action"]
+        conditional: ["cautions"]
+        orchestrator_specific: ["coverage_report"]
+      rendering_order: ["cortex_header", "coverage_report", "cautions", "next_action"]

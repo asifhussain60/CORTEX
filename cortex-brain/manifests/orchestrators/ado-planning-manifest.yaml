@@ -98,14 +98,28 @@ requirements:
           description: "Show overall progress bar and next phase only after each phase completes"
         - moment: "overall_completion"
           show: "complete_phase_table_with_work_items"
-          description: "Show entire table with all phases and work item summary at completion"
-      template_reference: "ado_execution_progress"
-      format: "Markdown table (integrated progress bar)"
-      includes:
-        - "Overall progress bar in table header row"
-        - "Work items created/planned count"
-        - "Story points total"
-        - "Phase-specific ADO item tracking"
+      progress_tracker_sync:
+        inherited_from: "planning-system"
+        enforcement_level: "MANDATORY"
+        ado_specific_note: "Tracker sync includes ADO work item IDs and links"
+        implementation:
+          - "Each phase ends with: 'Update tracker with ADO work item details'"
+          - "Sync work item IDs to tracking/ado-work-items.json"
+          - "Update master plan progress with ADO completion status"
+      bidirectional_linking:
+        inherited_from: "planning-system"
+        enforcement_level: "MANDATORY"
+        ado_specific_additions:
+          - "Link to ADO work items in Azure DevOps"
+          - "Include work item URLs in navigation section"
+          - "Track parent-child relationships between ADO items and plan phases"
+    template_reference: "ado_execution_progress"
+    format: "Markdown table (integrated progress bar)"
+    includes:
+      - "Overall progress bar in table header row"
+      - "Work items created/planned count"
+      - "Story points total"
+      - "Phase-specific ADO item tracking"
     
     visual_progress_enforcement:
       description: |
@@ -595,23 +609,665 @@ workflows:
             status: "missing"
 
 # ========================================
-# Response Templates
+# Response Templates (Composable System)
 # ========================================
 
 response_templates:
-  - template_id: "TPL-ADO-001"
+  use_algorithm: true
+  algorithm_version: "1.0"
+  algorithm_source: "cortex-brain/response-templates-v4.yaml::template_selection_algorithm"
+  
+  response_instructions: |
+    CRITICAL: When orchestrator_engaged is true (autonomous execution):
+    - MUST use cortex_header_shield block (includes 🛡️ shield icon)
+    - Header format: "## 🛡️🧠 CORTEX {title}"
+    - Shield icon provides visual confirmation of autonomous orchestrator engagement
+    - This enforces AUTONOMOUS_EXECUTION_PROTECTION brain protection rule
+  
+  # Legacy template definition (for reference only)
+  legacy:
+    template_id: "TPL-ADO-001"
     template_name: "ado_agent"
-    required_sections:
-      - "understanding_content"
-      - "ado_items_created"
-      - "work_item_links"
-      - "progress_visualization"
-      - "tdd_requirements_section"
-    progress_visualization: true
-    status: "partial"
-    missing_elements:
-      - "progress_visualization"
-      - "tdd_requirements_section"
+    status: "deprecated"
+    replaced_by: "composable_blocks_system"
+  
+  operations:
+    story_creation:
+      description: "ADO work item generation in progress"
+      context_signals:
+        operation_type: "ado"
+        response_phase: "in_progress"
+        complexity_tier: "COMPREHENSIVE"
+        orchestrator_type: "ado"
+        orchestrator_engaged: true
+      blocks:
+        mandatory: ["cortex_header_shield", "progress_tracker_standard", "work_item_summary", "ado_auth_status", "plan_file_link", "next_action"]
+        conditional: ["ado_links", "validation_status_dor_dod"]
+        orchestrator_specific: ["work_item_summary", "ado_links", "ado_auth_status"]
+      rendering_order: ["cortex_header_shield", "progress_tracker_standard", "work_item_summary", "ado_links", "ado_auth_status", "plan_file_link", "next_action"]
+    
+    feature_breakdown:
+      description: "ADO feature breakdown complete"
+      context_signals:
+        operation_type: "ado"
+        response_phase: "complete"
+        complexity_tier: "STRUCTURED"
+        orchestrator_type: "ado"
+        orchestrator_engaged: true
+      blocks:
+        mandatory: ["cortex_header_shield", "progress_tracker_standard", "work_item_summary", "ado_links", "ado_auth_status", "achievements"]
+        conditional: ["plan_file_link"]
+        orchestrator_specific: ["work_item_summary", "ado_links", "ado_auth_status"]
+      rendering_order: ["cortex_header_shield", "progress_tracker_standard", "work_item_summary", "ado_links", "achievements", "ado_auth_status"]
+      completion_format: "🎉 CONGRATULATIONS"
+
+# ========================================
+# Knowledge Library Integration (NEW)
+# ========================================
+
+knowledge_library_integration:
+  enabled: true
+  version: "1.0.0"
+  description: "Automatic integration of knowledge library best practices in ADO work items"
+  enforcement_rule: "KNOWLEDGE_LIBRARY_INTEGRATION_ENFORCEMENT"
+  inherited_from: "planning-system-4.0-manifest.yaml"
+  source: "cortex-brain/brain-protection-rules.yaml"
+  ado_specific_enhancements: true
+  
+  integration_points:
+    acceptance_criteria:
+      action: "Inject library checklist items into acceptance criteria"
+      format: |
+        **Acceptance Criteria:**
+        - [ ] Feature functionality works as specified
+        - [ ] {{#each library_items}}
+        - [ ] {{library_name}}: {{checklist_item}}
+        {{/each}}
+      example: |
+        - [ ] OWASP A01: Access control verified at API level
+        - [ ] GDPR Art. 25: Privacy by design implemented
+    
+    work_item_description:
+      action: "Add knowledge library references section"
+      section_title: "📚 Knowledge Library References"
+      format: |
+        ### 📚 Knowledge Library References
+        
+        This work item should follow these best practices:
+        
+        {{#each applicable_files}}
+        **{{domain}} - {{file_name}}**
+        - **Relevant Sections:** {{sections}}
+        - **Checklist Items:** {{checklist_items}}
+        - **Validation:** {{validation_criteria}}
+        {{/each}}
+    
+    linked_tasks:
+      action: "Create linked tasks for security/compliance validation"
+      condition: "security OR compliance domain detected"
+      task_type: "ADO Task"
+      link_type: "Child"
+      examples:
+        - title: "Security Review - OWASP A01 Validation"
+          description: "Verify access control implementation against OWASP A01 guidelines"
+          assigned_to: "Security Team"
+        - title: "GDPR Compliance Check - Data Protection"
+          description: "Validate data handling against GDPR requirements"
+          assigned_to: "Compliance Officer"
+  
+  domain_detection:
+    inherited_from: "planning-system"
+    ado_specific_fields:
+      - "work_item_title"
+      - "work_item_description"
+      - "user_story"
+      - "acceptance_criteria"
+      - "tags"
+  
+  output_format:
+    work_item_custom_fields:
+      knowledge_library_refs:
+        field_name: "Custom.KnowledgeLibraryReferences"
+        type: "html"
+        format: "bulleted list with links"
+      compliance_requirements:
+        field_name: "Custom.ComplianceRequirements"
+        type: "string"
+        format: "comma-separated list"
+      security_considerations:
+        field_name: "Custom.SecurityConsiderations"
+        type: "html"
+        format: "checklist"
+  
+  validation:
+    requirement: "Security/compliance work items MUST include library references"
+    validation_phase: "Before ADO API call"
+    failure_action: "Block + require library reference addition"
+    warning_threshold: "0 library references for detected security/compliance domain"
+
+# ========================================
+# Vision API Integration
+# ========================================
+
+vision_api_integration:
+  enabled: true
+  visual_indicator:
+    required: true
+    icon: "📷"
+    header_format: "## 📷🧠 CORTEX ADO Work Item Generation (Vision Engaged)"
+  
+  image_detection:
+    automatic: true
+    supported_formats: ["PNG", "JPG", "JPEG", "WEBP", "GIF"]
+    trigger_condition: "Any image attachment detected in ADO work item request"
+  
+  analysis_configuration:
+    comprehensive_extraction:
+      priority_1_requirements:
+        - "UI mockups → Extract user stories and acceptance criteria"
+        - "Wireframes → Identify user flows and navigation patterns"
+        - "Design specs → Extract visual requirements"
+        - "Error screenshots → Identify bug reproduction steps"
+      
+      priority_2_work_item_details:
+        - "Functional requirements from visuals"
+        - "Technical constraints visible in image"
+        - "Integration touchpoints"
+        - "Test automation opportunities"
+      
+      priority_3_acceptance_criteria:
+        - "Visual validation requirements"
+        - "UI element presence checks"
+        - "Layout and styling expectations"
+        - "Interaction behaviors"
+    
+    output_format:
+      structured_sections:
+        - name: "image_metadata"
+          includes: ["dimensions", "format", "url_context", "work_item_context"]
+        
+        - name: "user_story_extraction"
+          includes: ["as_a_user", "i_want", "so_that", "visual_reference"]
+        
+        - name: "acceptance_criteria"
+          includes: ["testable_criteria", "visual_validation", "test_selectors"]
+        
+        - name: "test_automation_tasks"
+          includes: ["automation_selectors", "test_scenarios", "expected_behaviors"]
+        
+        - name: "technical_details"
+          includes: ["implementation_hints", "component_structure", "integration_points"]
+  
+  ado_specific_integration:
+    user_story_generation:
+      when: "Image shows UI mockup or feature design"
+      action: "Extract user story from visual requirements"
+      output_template: |
+        ### 📷 Vision Analysis - User Story Extraction
+        
+        **Image Context:** {{image_type}}
+        {{#if url_detected}}
+        **Reference URL:** {{url}}
+        {{/if}}
+        
+        **User Story:**
+        - **As a** {{user_role}}
+        - **I want** {{desired_functionality}}
+        - **So that** {{business_value}}
+        
+        **Visual Requirements:**
+        {{#each visual_elements}}
+        - {{element_name}}: {{description}}
+        {{/each}}
+        
+        **Acceptance Criteria (Vision-Derived):**
+        {{#each acceptance_criteria}}
+        - [ ] {{criterion}}
+          - Visual Reference: {{screenshot_section}}
+          - Test Selector: `{{test_selector}}`
+          - Validation Method: {{validation_approach}}
+        {{/each}}
+        
+        **Test Automation Selectors:**
+        | Element | Selector | Type | Expected Behavior |
+        |---------|----------|------|-------------------|
+        {{#each test_selectors}}
+        | {{element_name}} | `{{selector}}` | {{selector_type}} | {{behavior}} |
+        {{/each}}
+      
+      ado_field_mapping:
+        title: "Extracted from primary feature identified"
+        description: "Include vision analysis summary + visual requirements"
+        acceptance_criteria: "Visual validation requirements from image"
+        tags:
+          - "vision-derived"
+          - "{{complexity_level}}"
+          - "ui-automation"
+      
+      integration_points:
+        - field: "description"
+          content: "Full vision analysis with HTML structure"
+        
+        - field: "acceptance_criteria"
+          content: "Testable criteria with test selectors"
+        
+        - field: "tasks"
+          content: "Test automation tasks with selectors"
+        
+        - field: "attachments"
+          content: "Original image as work item attachment"
+    
+    bug_work_item_generation:
+      when: "Image shows error message, broken UI, or unexpected behavior"
+      action: "Extract bug details from screenshot"
+      output_template: |
+        ### 📷 Vision Analysis - Bug Report
+        
+        **Error Detection:**
+        {{#if error_message_detected}}
+        ```
+        {{extracted_error_text}}
+        ```
+        {{/if}}
+        
+        **Reproduction Steps (Visual):**
+        {{#each repro_steps}}
+        1. {{step_description}}
+           - Element: `{{element_selector}}`
+           - Action: {{user_action}}
+        {{/each}}
+        
+        **Expected vs. Actual:**
+        - Expected: {{expected_behavior}}
+        - Actual: {{actual_behavior}} (visible in screenshot)
+        
+        **Environment Details:**
+        {{#if url_detected}}
+        - URL: {{url}}
+        {{/if}}
+        {{#if browser_detected}}
+        - Browser: {{browser_info}}
+        {{/if}}
+        {{#if device_detected}}
+        - Device: {{device_info}}
+        {{/if}}
+      
+      ado_field_mapping:
+        title: "Bug - {{extracted_issue_summary}}"
+        repro_steps: "Vision-derived reproduction steps"
+        system_info: "Extracted from screenshot (URL, browser, device)"
+        severity: "Inferred from error type"
+        tags:
+          - "vision-derived"
+          - "screenshot-attached"
+          - "{{error_category}}"
+    
+    feature_work_item_generation:
+      when: "Image shows architecture diagram or system design"
+      action: "Extract technical requirements and implementation tasks"
+      output_template: |
+        ### 📷 Vision Analysis - Feature Requirements
+        
+        **Architecture Components:**
+        {{#each components}}
+        | Component | Type | Responsibilities | Integration Points |
+        |-----------|------|------------------|-------------------|
+        | {{name}} | {{type}} | {{responsibilities}} | {{integrations}} |
+        {{/each}}
+        
+        **Implementation Tasks:**
+        {{#each implementation_tasks}}
+        - [ ] {{task_name}}
+          - Component: {{component}}
+          - Complexity: {{complexity}}
+          - Dependencies: {{dependencies}}
+          - Test Strategy: {{test_approach}}
+        {{/each}}
+        
+        **Test Automation Requirements:**
+        {{#each test_requirements}}
+        - {{test_type}}: {{test_description}}
+          - Scope: {{test_scope}}
+          - Automation Level: {{automation_level}}
+        {{/each}}
+      
+      ado_field_mapping:
+        title: "Feature - {{extracted_feature_name}}"
+        description: "Architecture analysis + technical requirements"
+        tasks: "Generated from component breakdown"
+        linked_items: "Dependencies identified from diagram"
+        tags:
+          - "vision-derived"
+          - "architecture-driven"
+          - "{{complexity_level}}"
+  
+  work_item_enhancement:
+    automatic_enrichment:
+      description_field:
+        - "Include full vision analysis output"
+        - "Add inferred HTML structure"
+        - "Embed test automation selectors"
+      
+      acceptance_criteria_field:
+        - "Visual validation requirements"
+        - "UI element presence checks"
+        - "Test automation selectors for each criterion"
+      
+      tasks_field:
+        - "Generate test automation task per UI element"
+        - "Include recommended selector strategy"
+        - "Add visual regression test tasks"
+      
+      tags_field:
+        - "vision-derived" (always added)
+        - "{{complexity_level}}" (low/medium/high)
+        - "ui-automation" (if UI elements detected)
+        - "accessibility-required" (if a11y issues found)
+    
+    attachment_handling:
+      action: "Attach original image to ADO work item"
+      attachment_comment: "Vision API analysis source - {{analysis_timestamp}}"
+  
+  error_handling:
+    vision_api_unavailable:
+      action: "Continue with manual work item creation"
+      message: "⚠️ Vision API unavailable - proceeding with text-based work item"
+    
+    image_analysis_failed:
+      action: "Create work item without vision enhancement"
+      message: "⚠️ Image analysis failed - work item created without visual requirements"
+    
+    no_requirements_detected:
+      action: "Provide generic image description in work item"
+      message: "📷 Image attached but no requirements detected - manual interpretation needed"
+  
+  output_artifacts:
+    work_item_fields:
+      - "title" # Extracted from primary feature
+      - "description" # Full vision analysis
+      - "acceptance_criteria" # Visual validation requirements
+      - "tasks" # Test automation tasks
+      - "tags" # vision-derived, complexity, etc.
+      - "attachments" # Original image
+    
+    additional_documentation:
+      - "Visual Requirements Summary"
+      - "Test Automation Strategy"
+      - "Selector Recommendations"
+
+# ========================================
+# Continuous Risk Analysis (ADO-Specific)
+# ========================================
+
+continuous_risk_analysis:
+  enabled: true
+  inherited_from: "planning-system-4.0-manifest.yaml::continuous_risk_analysis"
+  enforcement_rule: "CONTINUOUS_RISK_ANALYSIS_ENFORCEMENT"
+  visual_indicator:
+    required: true
+    icon: "💀"
+    section_header: "### 💀 Risk Analysis & Recommendations (Work Item Enhancement)"
+  
+  execution_frequency:
+    trigger: "Every user interaction turn during ADO work item generation"
+    timing: "After user input, before work item creation"
+    scope: "Analyze work item requirements + acceptance criteria + tasks"
+  
+  ado_specific_enhancements:
+    risk_to_acceptance_criteria:
+      description: "Convert risk findings into testable acceptance criteria"
+      format: "[ ] System {{risk_validation}} ({{category}} Risk #{{number}})"
+      examples:
+        - "[ ] System handles SQL injection attempts gracefully (Security Risk #1)"
+        - "[ ] Dashboard loads in <2s with 1000+ orders (Performance Risk #2)"
+        - "[ ] Deployment rollback completes in <5 minutes (Deployment Risk #3)"
+    
+    risk_to_linked_tasks:
+      description: "Create separate work items for critical risks"
+      conditions:
+        - impact: "critical"
+          action: "Create linked Bug/Impediment work item"
+        - impact: "high"
+          action: "Create linked Task work item"
+      
+      task_template:
+        title: "[{{category}}] {{risk_summary}}"
+        work_item_type: "{{Bug|Task|Impediment}}"
+        description: |
+          **Risk Category:** {{category}}
+          **Impact:** {{impact_level}}
+          **Identified During:** ADO Planning Turn {{turn_number}}
+          
+          **Problem:**
+          {{risk_description}}
+          
+          **Recommendation:**
+          {{mitigation_strategy}}
+          
+          **Acceptance Criteria:**
+          {{#each validation_steps}}
+          - [ ] {{validation_step}}
+          {{/each}}
+        
+        link_type: "Related" # Link to original user story/feature
+        tags: ["risk-mitigation", "{{category}}", "{{impact_level}}"]
+    
+    risk_to_work_item_tags:
+      auto_generated_tags:
+        - "risk-{{category}}" # e.g., "risk-security", "risk-performance"
+        - "impact-{{level}}" # e.g., "impact-critical", "impact-high"
+        - "requires-{{expertise}}" # e.g., "requires-security-review", "requires-performance-testing"
+      
+      examples:
+        - "risk-security"
+        - "risk-performance"
+        - "impact-critical"
+        - "requires-security-review"
+    
+    risk_to_description_field:
+      enhancement: "Add dedicated 'Risk Mitigation' section to work item description"
+      format: |
+        ## 📋 Requirements
+        {{user_story_requirements}}
+        
+        ## ⚠️ Risk Mitigation Strategy
+        
+        {{#each accepted_risks}}
+        ### {{category_icon}} {{category_name}} - {{risk_title}}
+        
+        **Risk:** {{risk_description}}
+        **Impact:** {{impact_level}} | **Likelihood:** {{likelihood}}
+        
+        **Mitigation:**
+        {{mitigation_steps}}
+        
+        **Validation:**
+        {{validation_approach}}
+        
+        ---
+        {{/each}}
+        
+        ## ✅ Acceptance Criteria
+        {{acceptance_criteria_including_risk_validation}}
+  
+  recommendation_template_ado: |
+    ### 💀 Risk Analysis & Recommendations (Work Item Enhancement)
+    
+    **Analysis Run:** Turn {{turn_number}}
+    **Work Item Type:** {{work_item_type}}
+    
+    {{#each risk_categories}}
+    #### {{category_icon}} {{category_name}}
+    
+    {{#each findings}}
+    **Finding {{finding_number}}:** {{risk_description}}
+    
+    - **Impact:** {{impact_icon}} {{impact_level}}
+    - **Likelihood:** {{likelihood}}
+    - **Work Item Impact:** {{ado_impact_description}}
+    
+    **💡 Recommended Enhancement:**
+    {{recommendation_text}}
+    
+    **🔄 Proposed Work Item Changes:**
+    - **Acceptance Criteria:** Add "{{acceptance_criterion}}"
+    - **Tasks:** Add "{{mitigation_task}}"
+    {{#if create_linked_item}}
+    - **Linked Item:** Create {{linked_item_type}} - "{{linked_item_title}}"
+    {{/if}}
+    - **Tags:** Add {{#each tags}}`{{this}}`{{/each}}
+    
+    {{#if smarter_alternative}}
+    **🔄 Smarter Alternative:**
+    {{smarter_alternative}}
+    {{/if}}
+    
+    **❓ Decision Required:**
+    - ✅ **Yes - Enhance Work Item** (Integrate risk mitigation)
+    - ❌ **No - Skip for Now** (Re-analyze next turn)
+    
+    ---
+    {{/each}}
+    {{/each}}
+  
+  user_response_handling_ado:
+    accept:
+      actions:
+        - "Add to acceptance_criteria field"
+        - "Create mitigation task in tasks field"
+        - "Add risk tags to work item"
+        - "Add Risk Mitigation section to description"
+        - "Create linked work items if CRITICAL/HIGH"
+        - "Update risk register"
+      
+      acceptance_criteria_format: "[ ] {{risk_validation}} ({{category}} Risk #{{number}})"
+      
+      task_format: "- [ ] {{mitigation_action}} (Mitigates {{category}} Risk #{{number}})"
+      
+      example_enhancement:
+        before: |
+          Title: User Authentication
+          Acceptance Criteria:
+          - [ ] User can log in with email/password
+          - [ ] User can log out
+        
+        after: |
+          Title: User Authentication
+          Acceptance Criteria:
+          - [ ] User can log in with email/password
+          - [ ] User can log out
+          - [ ] System prevents SQL injection in login form (Security Risk #1)
+          - [ ] System implements rate limiting (3 attempts per minute) (Security Risk #2)
+          
+          Tasks:
+          - [ ] Implement parameterized queries for auth
+          - [ ] Add rate limiting middleware
+          - [ ] Add security unit tests
+          
+          Tags: risk-security, impact-critical, requires-security-review
+    
+    reject:
+      actions:
+        - "Log rejection in work item comments"
+        - "Track reason if provided"
+        - "Re-analyze on next turn"
+        - "Escalate if CRITICAL risk rejected"
+  
+  output_artifacts_ado:
+    risk_analysis_attachments:
+      - "risk-analysis-turn-{{N}}.md" # Attach to work item as file
+      - "accepted-risks-summary.md" # Attach to work item
+    
+    work_item_comments:
+      auto_comment_on_creation: |
+        ⚠️ **Risk Analysis Performed**
+        
+        Turn {{turn_number}} identified {{risk_count}} risks:
+        - 🔴 Critical: {{critical_count}}
+        - 🟠 High: {{high_count}}
+        - 🟡 Medium: {{medium_count}}
+        - 🟢 Low: {{low_count}}
+        
+        Accepted: {{accepted_count}} | Rejected: {{rejected_count}}
+        
+        See attached risk-analysis-turn-{{turn_number}}.md for details.
+  
+  integration_with_work_item_types:
+    user_story:
+      risk_focus: "Security, performance, edge cases, data integrity"
+      acceptance_criteria_enhancement: true
+      linked_tasks_generation: true
+    
+    feature:
+      risk_focus: "Architecture, scalability, integration, deployment"
+      acceptance_criteria_enhancement: true
+      linked_tasks_generation: true
+      linked_items_generation: true # Create technical spike for high-risk areas
+    
+    bug:
+      risk_focus: "Root cause analysis, regression prevention, deployment safety"
+      acceptance_criteria_enhancement: true
+      linked_tasks_generation: false # Bug already has repro steps
+    
+    task:
+      risk_focus: "Implementation edge cases, testing coverage"
+      acceptance_criteria_enhancement: true
+      linked_tasks_generation: false
+  
+  example_interaction_ado:
+    turn_2: |
+      ## 🧠 CORTEX ADO Work Item Generation
+      
+      [Work item content...]
+      
+      ### 💀 Risk Analysis & Recommendations (Work Item Enhancement)
+      
+      **Analysis Run:** Turn 2
+      **Work Item Type:** User Story
+      
+      #### 🔒 Security Vulnerabilities
+      
+      **Finding 1:** SQL Injection Risk in Search Feature
+      
+      - **Impact:** 🔴 CRITICAL
+      - **Likelihood:** Very Likely
+      - **Work Item Impact:** User story lacks input validation acceptance criteria
+      
+      **💡 Recommended Enhancement:**
+      Add security-focused acceptance criteria and create linked security review task.
+      
+      **🔄 Proposed Work Item Changes:**
+      - **Acceptance Criteria:** Add "[ ] System prevents SQL injection in search inputs"
+      - **Tasks:** Add "- [ ] Implement parameterized queries using SQLAlchemy"
+      - **Linked Item:** Create Task - "[Security] Implement Input Validation Middleware"
+      - **Tags:** Add `risk-security` `impact-critical` `requires-security-review`
+      
+      **🔄 Smarter Alternative:**
+      Use ElasticSearch for search functionality instead of SQL LIKE queries. Provides built-in sanitization, better performance, and prevents injection by design.
+      
+      **❓ Decision Required:**
+      - ✅ **Yes - Enhance Work Item** (Integrate risk mitigation)
+      - ❌ **No - Skip for Now** (Re-analyze next turn)
+      
+      ---
+      
+      **Next:** Please respond Yes/No, or provide your next input.
+  
+  escalation_rules_ado:
+    critical_risk_rejected:
+      action: "Add comment to work item flagging unmitigated critical risk"
+      comment_template: |
+        ⚠️ **CRITICAL RISK FLAGGED**
+        
+        A critical risk was identified but not integrated into this work item:
+        
+        **Risk:** {{risk_description}}
+        **Category:** {{category}}
+        **Recommended Mitigation:** {{mitigation_strategy}}
+        
+        Consider addressing before deployment.
+      
+      tag_addition: "unmitigated-critical-risk"
 
 # ========================================
 # Compliance Rules

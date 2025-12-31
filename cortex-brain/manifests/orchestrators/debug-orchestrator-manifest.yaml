@@ -673,3 +673,55 @@ changelog:
       - "Defined 10 requirements (4 critical, 4 high, 2 medium)"
       - "Documented integrations with TDD, Review, KG, Git"
       - "Established quality gates and performance targets"
+
+# ========================================
+# Response Templates (Composable System)
+# ========================================
+
+response_templates:
+  use_algorithm: true
+  algorithm_version: "1.0"
+  algorithm_source: "cortex-brain/response-templates-v4.yaml::template_selection_algorithm"
+  
+  operations:
+    investigation:
+      description: "Bug investigation start"
+      context_signals:
+        operation_type: "debug"
+        response_phase: "start"
+        complexity_tier: "STRUCTURED"
+        orchestrator_type: "debug"
+        orchestrator_engaged: false
+      blocks:
+        mandatory: ["cortex_header", "bug_hypothesis", "next_action"]
+        conditional: ["understanding", "approach"]
+        orchestrator_specific: ["bug_hypothesis"]
+      rendering_order: ["cortex_header", "understanding", "bug_hypothesis", "approach", "next_action"]
+    
+    root_cause_found:
+      description: "Root cause identified"
+      context_signals:
+        operation_type: "debug"
+        response_phase: "in_progress"
+        complexity_tier: "STRUCTURED"
+        orchestrator_type: "debug"
+        orchestrator_engaged: false
+      blocks:
+        mandatory: ["cortex_header", "root_cause_analysis", "next_action"]
+        conditional: ["bug_hypothesis", "changes"]
+        orchestrator_specific: ["root_cause_analysis"]
+      rendering_order: ["cortex_header", "bug_hypothesis", "root_cause_analysis", "changes", "next_action"]
+    
+    fix_verified:
+      description: "Fix verification complete"
+      context_signals:
+        operation_type: "debug"
+        response_phase: "complete"
+        complexity_tier: "STRUCTURED"
+        orchestrator_type: "debug"
+        orchestrator_engaged: false
+      blocks:
+        mandatory: ["cortex_header", "fix_verification", "changes", "next_action"]
+        conditional: ["root_cause_analysis", "test_results_summary"]
+        orchestrator_specific: ["fix_verification"]
+      rendering_order: ["cortex_header", "root_cause_analysis", "fix_verification", "changes", "next_action"]

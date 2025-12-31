@@ -339,3 +339,41 @@ user_interaction:
       message: "Running test suite ({{tests_run}}/{{total_tests}})..."
 
 success_template: sanitization_complete
+
+# ========================================
+# Response Templates (Composable System)
+# ========================================
+
+response_templates:
+  use_algorithm: true
+  algorithm_version: "1.0"
+  algorithm_source: "cortex-brain/response-templates-v4.yaml::template_selection_algorithm"
+  
+  operations:
+    scan:
+      description: "Sanitization scan results"
+      context_signals:
+        operation_type: "sanitization"
+        response_phase: "in_progress"
+        complexity_tier: "STRUCTURED"
+        orchestrator_type: "sanitization"
+        orchestrator_engaged: false
+      blocks:
+        mandatory: ["cortex_header", "sanitization_findings", "next_action"]
+        conditional: ["cautions"]
+        orchestrator_specific: ["sanitization_findings"]
+      rendering_order: ["cortex_header", "sanitization_findings", "cautions", "next_action"]
+    
+    complete:
+      description: "Sanitization complete"
+      context_signals:
+        operation_type: "sanitization"
+        response_phase: "complete"
+        complexity_tier: "STRUCTURED"
+        orchestrator_type: "sanitization"
+        orchestrator_engaged: false
+      blocks:
+        mandatory: ["cortex_header", "sanitization_findings", "changes", "next_action"]
+        conditional: ["achievements"]
+        orchestrator_specific: ["sanitization_findings"]
+      rendering_order: ["cortex_header", "sanitization_findings", "changes", "achievements", "next_action"]

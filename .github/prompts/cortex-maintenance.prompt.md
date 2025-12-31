@@ -585,6 +585,13 @@ grep -q "🛡️.*HAND-OFF" .github/prompts/CORTEX.prompt.md && echo "✅ Intent
 
 # Check response template headers have shield icon
 grep -q "## 🛡️🧠 CORTEX" cortex-brain/response-templates-v4.yaml && echo "✅ Templates have shield icon" || echo "❌ Missing shield icon in templates"
+
+# Check brain protection rule has visual confirmation governance
+grep -q "visual_confirmation:" cortex-brain/brain-protection-rules.yaml && echo "✅ Brain protection has visual confirmation governance" || echo "❌ Missing visual_confirmation in AUTONOMOUS_EXECUTION_PROTECTION rule"
+
+# Check manifests have response_instructions with shield icon enforcement
+grep -q "response_instructions:" cortex-brain/manifests/orchestrators/planning-system-4.0-manifest.yaml && echo "✅ Planning manifest has shield enforcement" || echo "❌ Missing response_instructions in planning manifest"
+grep -q "response_instructions:" cortex-brain/manifests/orchestrators/ado-planning-manifest.yaml && echo "✅ ADO manifest has shield enforcement" || echo "❌ Missing response_instructions in ADO manifest"
 ```
 
 **🔧 Auto-Repair Actions:**
@@ -594,6 +601,28 @@ If HAND-OFF orchestrators missing from Intent Router:
 | `/CORTEX Plan [x]`, `create a plan`, `make a plan`, `plan: [x]` | 🛡️ **Planning System** | `planning-system-4.0-manifest.yaml` | **HAND-OFF** → Use `autonomous_execution_progress` template |
 | `plan ado`, `ado story`, `ado feature` | 🛡️ **ADO Operations** | `ado-planning-manifest.yaml` | **HAND-OFF** → Use `ado_execution_progress` template |
 ```
+
+If brain protection rule missing visual_confirmation:
+- Add to AUTONOMOUS_EXECUTION_PROTECTION rule in brain-protection-rules.yaml:
+  ```yaml
+  visual_confirmation:
+    required: true
+    icon: "🛡️"
+    header_format: "## 🛡️🧠 CORTEX {{title}}"
+    purpose: "User visual confirmation that autonomous orchestrator has been engaged"
+    enforcement: "Response template must include shield icon in header for all autonomous operations"
+  ```
+
+If manifests missing response_instructions:
+- Add to planning-system-4.0-manifest.yaml and ado-planning-manifest.yaml:
+  ```yaml
+  response_instructions: |
+    CRITICAL: When orchestrator_engaged is true (autonomous execution):
+    - MUST use cortex_header_shield block (includes 🛡️ shield icon)
+    - Header format: "## 🛡️🧠 CORTEX {title}"
+    - Shield icon provides visual confirmation of autonomous orchestrator engagement
+    - This enforces AUTONOMOUS_EXECUTION_PROTECTION brain protection rule
+  ```
 
 If response templates missing shield icon:
 - Update `autonomous_execution_progress` header to: `## 🛡️🧠 CORTEX Plan Execution`
@@ -618,6 +647,10 @@ To add new HAND-OFF orchestrators:
 - ✅ All HAND-OFF orchestrators have 🛡️ in Intent Router
 - ✅ All HAND-OFF templates have `orchestrator_engaged: true`
 - ✅ All HAND-OFF response headers show 🛡️ shield icon
+- ✅ AUTONOMOUS_EXECUTION_PROTECTION rule has `visual_confirmation` section in brain-protection-rules.yaml
+- ✅ Planning and ADO manifests have `response_instructions` with shield icon enforcement
+- ✅ Knowledge library integration enabled in planning and ADO manifests
+- ✅ Knowledge library mapping document exists and is up-to-date
 - ✅ User sees 🛡️ when orchestrator is correctly engaged
 
 ---
@@ -2512,13 +2545,23 @@ After running tests and cleanup, check:
 
 ### 7a. Knowledge Library Structure Check
 
-**Source of Truth:** `cortex-brain/knowledge/`
+**Source of Truth:** `cortex-brain/knowledge/` AND `cortex-brain/knowledge-library/`
 
 Verify knowledge library structure and accessibility:
 
 ```bash
-# Verify knowledge library structure
-test -d cortex-brain/knowledge || echo "ERROR: Knowledge library missing!"
+# Verify knowledge library directories
+test -d cortex-brain/knowledge || echo "ERROR: Knowledge library (legacy) missing!"
+test -d cortex-brain/knowledge-library || echo "ERROR: Knowledge library (new) missing!"
+
+# Verify knowledge library mapping exists
+test -f cortex-brain/knowledge-library/knowledge-library-mapping.md || echo "❌ ERROR: Knowledge library mapping document missing!"
+
+# Count knowledge files by category (new structure)
+for dir in cortex-brain/knowledge-library/*/; do
+  echo "$(basename "$dir"): $(find "$dir" \( -name "*.yaml" -o -name "*.md" \) | wc -l) files"
+done
+```
 
 # Count knowledge files by category
 for dir in cortex-brain/knowledge/*/; do
@@ -2722,6 +2765,522 @@ Auto-repair: Running --retrofit-all...
 - ✅ Security template is available for new plans
 - ✅ Scaffold generator automatically includes security folder
 - ✅ Retrofit capability available for existing plans
+
+### 7a.3 Knowledge Library Integration Enforcement (NEW)
+
+**Purpose:** Verify that Planning and ADO orchestrators automatically reference knowledge library files based on feature domain.
+
+**Enforcement Rule:** `KNOWLEDGE_LIBRARY_INTEGRATION_ENFORCEMENT` (brain-protection-rules.yaml)
+
+**Validation Commands:**
+
+```powershell
+# Check brain protection rule exists
+if (Select-String -Path "cortex-brain/brain-protection-rules.yaml" -Pattern "KNOWLEDGE_LIBRARY_INTEGRATION_ENFORCEMENT" -Quiet) {
+    Write-Host "✅ Brain protection rule: KNOWLEDGE_LIBRARY_INTEGRATION_ENFORCEMENT exists"
+} else {
+    Write-Host "❌ Brain protection rule: Missing KNOWLEDGE_LIBRARY_INTEGRATION_ENFORCEMENT"
+}
+
+# Check knowledge library mapping document exists
+if (Test-Path "cortex-brain/knowledge-library/knowledge-library-mapping.md") {
+    Write-Host "✅ Knowledge library mapping document exists"
+} else {
+    Write-Host "❌ Knowledge library mapping document missing!"
+}
+
+# Check planning manifest has knowledge library integration
+if (Select-String -Path "cortex-brain/manifests/orchestrators/planning-system-4.0-manifest.yaml" -Pattern "knowledge_library_integration:" -Quiet) {
+    Write-Host "✅ Planning manifest: knowledge_library_integration configured"
+} else {
+    Write-Host "❌ Planning manifest: Missing knowledge_library_integration section"
+}
+
+# Check ADO manifest has knowledge library integration
+if (Select-String -Path "cortex-brain/manifests/orchestrators/ado-planning-manifest.yaml" -Pattern "knowledge_library_integration:" -Quiet) {
+    Write-Host "✅ ADO manifest: knowledge_library_integration configured"
+} else {
+    Write-Host "❌ ADO manifest: Missing knowledge_library_integration section"
+}
+
+# Verify knowledge library files exist per mapping
+$libraryPath = "cortex-brain/knowledge-library"
+$domains = @("architecture", "security", "compliance", "design-patterns", "standards")
+
+foreach ($domain in $domains) {
+    $domainPath = Join-Path $libraryPath $domain
+    if (Test-Path $domainPath) {
+        $fileCount = (Get-ChildItem -Path $domainPath -Include *.yaml,*.md -Recurse).Count
+        Write-Host "✅ $domain domain: $fileCount files"
+    } else {
+        Write-Host "❌ $domain domain: Directory missing!"
+    }
+}
+
+# Verify tier0 instinct includes knowledge library enforcement
+if (Select-String -Path "cortex-brain/brain-protection-rules.yaml" -Pattern "KNOWLEDGE_LIBRARY_INTEGRATION_ENFORCEMENT" -Context 0,5 | Select-String -Pattern "tier0_instincts" -Quiet) {
+    Write-Host "✅ Tier0 instinct: KNOWLEDGE_LIBRARY_INTEGRATION_ENFORCEMENT registered"
+} else {
+    Write-Host "⚠️  Warning: KNOWLEDGE_LIBRARY_INTEGRATION_ENFORCEMENT not in tier0_instincts list"
+}
+```
+
+**Expected Results:**
+
+| Check | Expected | Auto-Repair |
+|-------|----------|-------------|
+| Brain protection rule exists | ✅ | Alert if missing |
+| Mapping document exists | ✅ | Alert if missing |
+| Planning manifest configured | ✅ | Add integration section |
+| ADO manifest configured | ✅ | Add integration section |
+| Architecture domain files | ✅ ≥3 files | Alert if missing |
+| Security domain files | ✅ ≥10 files | Alert if missing |
+| Compliance domain files | ✅ ≥4 files | Alert if missing |
+| Design patterns domain files | ✅ ≥1 file | Alert if missing |
+| Standards domain files | ✅ ≥1 file | Alert if missing |
+| Tier0 instinct registered | ✅ | Add to tier0_instincts list |
+
+**🔧 Auto-Repair Actions:**
+
+If planning manifest missing knowledge_library_integration:
+```yaml
+# Add to planning-system-4.0-manifest.yaml after line ~580
+knowledge_library_integration:
+  enabled: true
+  version: "1.0.0"
+  description: "Automatic integration of knowledge library best practices"
+  enforcement_rule: "KNOWLEDGE_LIBRARY_INTEGRATION_ENFORCEMENT"
+  domain_detection:
+    enabled: true
+    classifiers:
+      security: [keywords]
+      compliance: [keywords]
+      # ... (see mapping document)
+```
+
+If ADO manifest missing knowledge_library_integration:
+```yaml
+# Add to ado-planning-manifest.yaml after response_templates section
+knowledge_library_integration:
+  enabled: true
+  inherited_from: "planning-system-4.0-manifest.yaml"
+  ado_specific_enhancements: true
+  integration_points:
+    acceptance_criteria: "Inject library checklist items"
+    work_item_description: "Add library references section"
+    linked_tasks: "Create validation tasks for security/compliance"
+```
+
+If knowledge library files missing:
+```
+❌ CRITICAL: Knowledge library incomplete
+   Architecture: Expected ≥3, found {count}
+   Security: Expected ≥10, found {count}
+   
+   Action: Review knowledge library inventory
+   Reference: cortex-brain/knowledge-library/knowledge-library-mapping.md
+```
+
+**Domain Detection Test:**
+
+---
+
+#### **Phase 7a.4: Vision API Integration Validation** 🔍
+
+**Objective:** Verify Vision API integration governance is properly configured
+
+**Validation Commands:**
+
+```powershell
+# Check brain protection rule exists
+if (Select-String -Path "cortex-brain/brain-protection-rules.yaml" -Pattern "VISION_API_INTEGRATION_ENFORCEMENT" -Quiet) {
+    Write-Host "✅ Brain protection rule: VISION_API_INTEGRATION_ENFORCEMENT exists"
+} else {
+    Write-Host "❌ Brain protection rule: Missing VISION_API_INTEGRATION_ENFORCEMENT"
+}
+
+# Verify rule in tier0_instincts
+if (Select-String -Path "cortex-brain/brain-protection-rules.yaml" -Pattern "- VISION_API_INTEGRATION_ENFORCEMENT" -Quiet) {
+    Write-Host "✅ Tier0 instinct: VISION_API_INTEGRATION_ENFORCEMENT registered"
+} else {
+    Write-Host "❌ Tier0 instinct: Missing VISION_API_INTEGRATION_ENFORCEMENT"
+}
+
+# Check TDD orchestrator manifest
+if (Select-String -Path "cortex-brain/manifests/orchestrators/tdd-orchestrator-v4-manifest.yaml" -Pattern "vision_api_integration:" -Quiet) {
+    Write-Host "✅ TDD manifest: vision_api_integration configured"
+} else {
+    Write-Host "❌ TDD manifest: Missing vision_api_integration section"
+}
+
+# Check Planning orchestrator manifest
+if (Select-String -Path "cortex-brain/manifests/orchestrators/planning-system-4.0-manifest.yaml" -Pattern "vision_api_integration:" -Quiet) {
+    Write-Host "✅ Planning manifest: vision_api_integration configured"
+} else {
+    Write-Host "❌ Planning manifest: Missing vision_api_integration section"
+}
+
+# Check ADO orchestrator manifest
+if (Select-String -Path "cortex-brain/manifests/orchestrators/ado-planning-manifest.yaml" -Pattern "vision_api_integration:" -Quiet) {
+    Write-Host "✅ ADO manifest: vision_api_integration configured"
+} else {
+    Write-Host "❌ ADO manifest: Missing vision_api_integration section"
+}
+
+# Verify visual indicator configuration
+if (Select-String -Path "cortex-brain/brain-protection-rules.yaml" -Pattern 'icon: "📷"' -Quiet) {
+    Write-Host "✅ Visual indicator: 📷 icon configured"
+} else {
+    Write-Host "❌ Visual indicator: Missing 📷 icon configuration"
+}
+
+# Check supported image formats
+$supportedFormats = @("PNG", "JPG", "JPEG", "WEBP", "GIF")
+$formatsFound = 0
+foreach ($format in $supportedFormats) {
+    if (Select-String -Path "cortex-brain/brain-protection-rules.yaml" -Pattern $format -Quiet) {
+        $formatsFound++
+    }
+}
+if ($formatsFound -eq $supportedFormats.Count) {
+    Write-Host "✅ Image formats: All 5 formats configured ($($supportedFormats -join ', '))"
+} else {
+    Write-Host "⚠️  Image formats: Only $formatsFound/$($supportedFormats.Count) formats found"
+}
+
+# Verify test automation selector best practices
+if (Select-String -Path "cortex-brain/brain-protection-rules.yaml" -Pattern "data-testid" -Quiet) {
+    Write-Host "✅ Selector strategy: data-testid best practice documented"
+} else {
+    Write-Host "❌ Selector strategy: Missing data-testid guidance"
+}
+```
+
+**Expected Validation Results:**
+
+| Check | Expected | Action if Failed |
+|-------|----------|------------------|
+| Brain protection rule exists | ✅ Rule defined | Add VISION_API_INTEGRATION_ENFORCEMENT |
+| Tier0 instinct registered | ✅ In tier0_instincts list | Add to tier0_instincts array |
+| TDD manifest configured | ✅ vision_api_integration section | Add vision config to TDD manifest |
+| Planning manifest configured | ✅ vision_api_integration section | Add vision config to Planning manifest |
+| ADO manifest configured | ✅ vision_api_integration section | Add vision config to ADO manifest |
+| Visual indicator configured | ✅ 📷 icon present | Fix visual_indicator config |
+| Image formats supported | ✅ All 5 formats | Add missing formats |
+| Selector best practices | ✅ data-testid documented | Add selector guidance |
+
+**Manual Test (Optional):**
+
+```powershell
+# Simulate image attachment scenario
+Write-Host "`n🧪 VISION API INTEGRATION TEST"
+Write-Host "================================"
+Write-Host ""
+Write-Host "Test Scenario: User attaches UI mockup during planning"
+Write-Host ""
+Write-Host "Expected Behavior:"
+Write-Host "1. Vision API automatically engaged (no manual prompt needed)"
+Write-Host "2. Response header includes: '## 📷🧠 CORTEX Plan Execution (Vision Engaged)'"
+Write-Host "3. Comprehensive analysis includes:"
+Write-Host "   - UI element inventory with test selectors"
+Write-Host "   - Layout structure (inferred HTML)"
+Write-Host "   - Test automation scenarios"
+Write-Host "   - Accessibility audit"
+Write-Host "4. Test selectors use data-testid format (e.g., data-testid='login-button')"
+Write-Host ""
+Write-Host "✅ Manual testing required: Attach image to planning/TDD/ADO request"
+```
+
+**Success Criteria:**
+- ✅ Brain protection rule: VISION_API_INTEGRATION_ENFORCEMENT exists
+- ✅ Tier0 instinct: Rule registered in tier0_instincts
+- ✅ TDD manifest: vision_api_integration configured
+- ✅ Planning manifest: vision_api_integration configured
+- ✅ ADO manifest: vision_api_integration configured
+- ✅ Visual indicator: 📷 icon configured
+- ✅ Image formats: PNG, JPG, JPEG, WEBP, GIF supported
+- ✅ Selector strategy: data-testid best practice documented
+- ✅ Comprehensive extraction: UI elements, layout, test scenarios
+- ✅ Error handling: Graceful degradation if Vision API unavailable
+
+**Remediation Guidance:**
+
+If brain protection rule missing:
+```yaml
+# Add to cortex-brain/brain-protection-rules.yaml after KNOWLEDGE_LIBRARY_INTEGRATION_ENFORCEMENT
+- rule_id: VISION_API_INTEGRATION_ENFORCEMENT
+  name: Automatic Vision API Engagement for Images
+  severity: blocked
+  minimum_coverage: 100
+  description: "CORTEX orchestrators MUST automatically engage Vision API when images attached"
+  visual_indicator:
+    required: true
+    icon: "📷"
+    placement: "response_header"
+    format: "## 📷🧠 CORTEX {{title}} (Vision Engaged)"
+  image_formats_supported:
+    - "PNG"
+    - "JPG"
+    - "JPEG"
+    - "WEBP"
+    - "GIF"
+  # ... (full spec in brain-protection-rules.yaml)
+```
+
+If TDD manifest missing vision_api_integration:
+```yaml
+# Add to tdd-orchestrator-v4-manifest.yaml after response_templates
+vision_api_integration:
+  enabled: true
+  visual_indicator:
+    icon: "📷"
+    header_format: "## 📷🧠 CORTEX TDD Mastery (Vision Engaged)"
+  tdd_specific_integration:
+    red_phase:
+      action: "Generate failing test selectors and assertions"
+    green_phase:
+      action: "Validate implementation matches visual requirements"
+    refactor_phase:
+      action: "Extract refactoring opportunities from visual comparison"
+```
+
+If selector best practices missing:
+```yaml
+# Add to vision_api_integration section
+selector_best_practices:
+  priority_order:
+    - selector_type: "data-testid"
+      format: "data-testid='{{kebab-case-name}}'"
+      when_to_use: "Always preferred - most stable"
+```
+
+---
+
+Test that planning system correctly detects domains:
+```powershell
+# Test cases for domain detection
+$testCases = @(
+    @{Feature="User authentication with JWT"; ExpectedDomain="security"},
+    @{Feature="HIPAA compliant patient portal"; ExpectedDomain="compliance,security"},
+    @{Feature="Microservices architecture design"; ExpectedDomain="architecture"},
+    @{Feature="Payment processing with PCI-DSS"; ExpectedDomain="compliance,security"}
+)
+
+Write-Host "`n🧪 Domain Detection Test Cases:"
+foreach ($test in $testCases) {
+    Write-Host "   Feature: $($test.Feature)"
+    Write-Host "   Expected: $($test.ExpectedDomain)"
+    # Manual validation during plan creation
+}
+```
+
+**Success Criteria:**
+- ✅ Brain protection rule `KNOWLEDGE_LIBRARY_INTEGRATION_ENFORCEMENT` exists
+- ✅ Knowledge library mapping document exists and is current
+- ✅ Planning manifest has knowledge_library_integration section
+- ✅ ADO manifest has knowledge_library_integration section
+- ✅ All domain folders exist with expected file counts
+- ✅ Tier0 instinct registered
+- ✅ Domain detection works correctly (manual validation)
+- ✅ Plans automatically include library references when applicable domain detected
+
+---
+
+#### **Phase 7a.5: Continuous Risk Analysis Validation** 🔍
+
+**Objective:** Verify continuous risk analysis runs on every planning/ADO turn
+
+**Validation Commands:**
+
+```powershell
+# Check brain protection rule exists
+if (Select-String -Path "cortex-brain/brain-protection-rules.yaml" -Pattern "CONTINUOUS_RISK_ANALYSIS_ENFORCEMENT" -Quiet) {
+    Write-Host "✅ Brain protection rule: CONTINUOUS_RISK_ANALYSIS_ENFORCEMENT exists"
+} else {
+    Write-Host "❌ Brain protection rule: Missing CONTINUOUS_RISK_ANALYSIS_ENFORCEMENT"
+}
+
+# Verify rule in tier0_instincts
+if (Select-String -Path "cortex-brain/brain-protection-rules.yaml" -Pattern "- CONTINUOUS_RISK_ANALYSIS_ENFORCEMENT" -Quiet) {
+    Write-Host "✅ Tier0 instinct: CONTINUOUS_RISK_ANALYSIS_ENFORCEMENT registered"
+} else {
+    Write-Host "❌ Tier0 instinct: Missing CONTINUOUS_RISK_ANALYSIS_ENFORCEMENT"
+}
+
+# Check Planning orchestrator manifest
+if (Select-String -Path "cortex-brain/manifests/orchestrators/planning-system-4.0-manifest.yaml" -Pattern "continuous_risk_analysis:" -Quiet) {
+    Write-Host "✅ Planning manifest: continuous_risk_analysis configured"
+} else {
+    Write-Host "❌ Planning manifest: Missing continuous_risk_analysis section"
+}
+
+# Check ADO orchestrator manifest
+if (Select-String -Path "cortex-brain/manifests/orchestrators/ado-planning-manifest.yaml" -Pattern "continuous_risk_analysis:" -Quiet) {
+    Write-Host "✅ ADO manifest: continuous_risk_analysis configured"
+} else {
+    Write-Host "❌ ADO manifest: Missing continuous_risk_analysis section"
+}
+
+# Verify risk categories count (should be 11)
+$riskCategories = @(
+    "edge_cases",
+    "failure_modes",
+    "race_conditions",
+    "integration_pitfalls",
+    "deployment_risks",
+    "security_vulnerabilities",
+    "performance_bottlenecks",
+    "scalability_limits",
+    "rollback_recovery",
+    "data_integrity",
+    "dependency_risks",
+    "maintainability_issues"
+)
+$categoriesFound = 0
+foreach ($category in $riskCategories) {
+    if (Select-String -Path "cortex-brain/brain-protection-rules.yaml" -Pattern $category -Quiet) {
+        $categoriesFound++
+    }
+}
+if ($categoriesFound -eq 12) {
+    Write-Host "✅ Risk categories: All 12 categories configured"
+} else {
+    Write-Host "⚠️  Risk categories: Only $categoriesFound/12 categories found"
+}
+
+# Verify visual indicator configuration
+if (Select-String -Path "cortex-brain/brain-protection-rules.yaml" -Pattern 'icon: "💀"' -Quiet) {
+    Write-Host "✅ Visual indicator: 💀 icon configured"
+} else {
+    Write-Host "❌ Visual indicator: Missing 💀 icon configuration"
+}
+
+# Check recommendation format
+if (Select-String -Path "cortex-brain/brain-protection-rules.yaml" -Pattern "recommendation_format:" -Quiet) {
+    Write-Host "✅ Recommendation format: Template configured"
+} else {
+    Write-Host "❌ Recommendation format: Missing template"
+}
+
+# Verify Yes/No decision pattern
+if (Select-String -Path "cortex-brain/brain-protection-rules.yaml" -Pattern "Accept & Integrate" -Quiet) {
+    Write-Host "✅ Decision options: Yes/No pattern configured"
+} else {
+    Write-Host "❌ Decision options: Missing Yes/No pattern"
+}
+```
+
+**Expected Validation Results:**
+
+| Check | Expected | Action if Failed |
+|-------|----------|------------------|
+| Brain protection rule exists | ✅ Rule defined | Add CONTINUOUS_RISK_ANALYSIS_ENFORCEMENT |
+| Tier0 instinct registered | ✅ In tier0_instincts list | Add to tier0_instincts array |
+| Planning manifest configured | ✅ continuous_risk_analysis section | Add risk analysis to Planning manifest |
+| ADO manifest configured | ✅ continuous_risk_analysis section | Add risk analysis to ADO manifest |
+| Risk categories complete | ✅ All 12 categories | Add missing categories |
+| Visual indicator configured | ✅ 💀 icon present | Fix visual_indicator config |
+| Recommendation format | ✅ Template exists | Add recommendation template |
+| Decision options | ✅ Yes/No pattern | Add Accept/Reject options |
+
+**Manual Test:**
+
+```powershell
+# Simulate planning interaction with risk analysis
+Write-Host "`n🧪 CONTINUOUS RISK ANALYSIS TEST"
+Write-Host "=================================="
+Write-Host ""
+Write-Host "Test Scenario: User creates plan for user authentication feature"
+Write-Host ""
+Write-Host "Expected Behavior:"
+Write-Host "1. Risk analysis runs automatically on EVERY turn (not just once)"
+Write-Host "2. Recommendations presented with icon: '### 💀 Risk Analysis & Recommendations'"
+Write-Host "3. Each finding includes:"
+Write-Host "   - Category (Security, Performance, etc.)"
+Write-Host "   - Impact level (🔴 CRITICAL, 🟠 HIGH, 🟡 MEDIUM, 🟢 LOW)"
+Write-Host "   - Current plan gap"
+Write-Host "   - Recommended improvement"
+Write-Host "   - Smarter alternative (if exists)"
+Write-Host "   - Yes/No decision options"
+Write-Host "4. If user accepts → Integrated into plan tasks"
+Write-Host "5. If user rejects → Re-analyzed on next turn"
+Write-Host "6. Risk register tracks all findings"
+Write-Host ""
+Write-Host "✅ Manual testing required: Create plan and verify risk analysis appears every turn"
+```
+
+**Success Criteria:**
+- ✅ Brain protection rule: CONTINUOUS_RISK_ANALYSIS_ENFORCEMENT exists
+- ✅ Tier0 instinct: Rule registered in tier0_instincts
+- ✅ Planning manifest: continuous_risk_analysis configured with 12 categories
+- ✅ ADO manifest: continuous_risk_analysis with ADO-specific enhancements
+- ✅ Visual indicator: 💀 icon configured
+- ✅ Risk categories: All 12 categories present (edge cases, failures, race conditions, integration, deployment, security, performance, scalability, rollback, data integrity, dependencies, maintainability)
+- ✅ Recommendation format: Structured template with impact/likelihood/gap/recommendation/alternative
+- ✅ Decision options: Yes (Accept & Integrate) / No (Reject, re-analyze next turn)
+- ✅ Turn-based execution: Runs on every user interaction
+- ✅ Output artifacts: risk-analysis/ folder with turn-based files
+- ✅ ADO integration: Risks converted to acceptance criteria, tasks, tags, linked items
+
+**Remediation Guidance:**
+
+If brain protection rule missing:
+```yaml
+# Add to cortex-brain/brain-protection-rules.yaml after VISION_API_INTEGRATION_ENFORCEMENT
+- rule_id: CONTINUOUS_RISK_ANALYSIS_ENFORCEMENT
+  name: Continuous Risk Analysis During Planning
+  severity: blocked
+  minimum_coverage: 100
+  description: "CORTEX MUST automatically analyze plans for risks on EVERY turn"
+  visual_indicator:
+    icon: "💀"
+    section_header: "### 💀 Risk Analysis & Recommendations"
+  analysis_categories:
+    - edge_cases
+    - failure_modes
+    - race_conditions
+    - integration_pitfalls
+    - deployment_risks
+    - security_vulnerabilities
+    - performance_bottlenecks
+    - scalability_limits
+    - rollback_recovery
+    - data_integrity
+    - dependency_risks
+    - maintainability_issues
+  # ... (full spec in brain-protection-rules.yaml)
+```
+
+If Planning manifest missing continuous_risk_analysis:
+```yaml
+# Add to planning-system-4.0-manifest.yaml after vision_api_integration
+continuous_risk_analysis:
+  enabled: true
+  enforcement_rule: "CONTINUOUS_RISK_ANALYSIS_ENFORCEMENT"
+  execution_frequency:
+    trigger: "Every user interaction turn"
+    timing: "After user input, before response"
+  risk_categories: [12 categories]
+  recommendation_template: "..."
+  user_response_handling:
+    accept: "Integrate into plan"
+    reject: "Re-analyze next turn"
+```
+
+If ADO manifest missing continuous_risk_analysis:
+```yaml
+# Add to ado-planning-manifest.yaml after vision_api_integration
+continuous_risk_analysis:
+  enabled: true
+  inherited_from: "planning-system-4.0-manifest.yaml"
+  ado_specific_enhancements:
+    risk_to_acceptance_criteria: true
+    risk_to_linked_tasks: true
+    risk_to_work_item_tags: true
+  recommendation_template_ado: "..."
+```
+
+---
 
 ### 7b. Knowledge Library Reference Validation
 
