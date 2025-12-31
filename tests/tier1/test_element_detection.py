@@ -14,6 +14,9 @@ import numpy as np
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / 'src'))
 
+# Skip all tests if cv2 not available (optional dependency)
+cv2 = pytest.importorskip("cv2", reason="opencv-python not installed (optional dependency)")
+
 from tier1.element_detection import (
     ElementDetector,
     ElementType,

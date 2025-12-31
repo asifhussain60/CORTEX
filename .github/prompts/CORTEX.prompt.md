@@ -50,25 +50,108 @@ User: "implement user authentication"
 
 ---
 
+## 🤖 LLM Intent Classification
+
+**Primary Method:** Use `LLMIntentClassifier` (src/cortex_agents/llm_intent_classifier.py) for intelligent intent detection.
+
+**Classification Process:**
+1. **Parse** → Extract core intent from user request (remove meta-directives)
+2. **Classify** → LLM analyzes against orchestrator capabilities
+3. **Confidence** → Assess match certainty (HIGH/MEDIUM/LOW)
+4. **Route** → Load appropriate orchestrator/template
+
+**Confidence Thresholds:**
+- **HIGH (≥0.8):** Execute immediately
+- **MEDIUM (0.5-0.8):** Confirm with user before execution
+- **LOW (<0.5):** Fallback to keyword matching or ask for clarification
+
+**Fallback Chain:**
+```
+LLM Classification → Keyword Regex → User Clarification
+```
+
+**When to use:**
+- User request doesn't match exact patterns
+- Ambiguous phrasing requires interpretation
+- Multiple orchestrators could apply
+
+---
+
+## 🛡️ Orchestrator Hand-Off Protocol
+
+**FORBIDDEN Behaviors for 🛡️ AUTONOMOUS Orchestrators:**
+1. ❌ Do NOT read the manifest and execute instructions yourself
+2. ❌ Do NOT provide guidance based on manifest content
+3. ❌ Do NOT implement features after detecting planning intent
+4. ❌ Do NOT continue after loading the orchestrator
+5. ❌ Do NOT summarize what the orchestrator will do
+
+**REQUIRED Behaviors for 🛡️ AUTONOMOUS Orchestrators:**
+1. ✅ Load manifest/orchestrator reference ONLY
+2. ✅ Use specified response template (e.g., `autonomous_execution_progress`)
+3. ✅ STOP immediately after hand-off header
+4. ✅ Let orchestrator Python code execute autonomously
+
+**Visual Marker:** 🛡️ = Orchestrator takes over, CORTEX stops
+
+---
+
+## 🔧 Orchestrator Autonomy Matrix
+
+| Orchestrator | Type | CORTEX Role | Orchestrator Role |
+|--------------|------|-------------|-------------------|
+| Planning System | 🛡️ AUTONOMOUS | Route intent → Load manifest → STOP | Execute planning workflow (folder creation, context gathering, plan generation) |
+| ADO Operations | 🛡️ AUTONOMOUS | Route intent → Load manifest → STOP | Generate work items, acceptance criteria, estimation |
+| TDD Mastery | 📋 GUIDED | Route intent → Read manifest → Execute steps | CORTEX follows TDD workflow instructions |
+| Debug Orchestrator | 📋 GUIDED | Route intent → Read manifest → Execute steps | CORTEX performs debugging analysis |
+| Cleanup | 🛡️ AUTONOMOUS | Route intent → Load rules → STOP | Execute cleanup logic (cache, bloat, temp files) |
+
+**Key Distinction:**
+- 🛡️ **AUTONOMOUS**: Has Python implementation, self-executing
+- 📋 **GUIDED**: Manifest contains instructions for CORTEX to follow
+
+---
+
 ## 🔀 Intent Router
 
 | Command | Orchestrator | Manifest | Behavior |
 |---------|--------------|----------|----------|
 | `introduce yourself`, `intro`, `hello`, `hi cortex`, `what is cortex` | **Introduction** | `response-templates-v4.yaml:introduction` | ASCII banner + capabilities overview |
-| `/CORTEX Plan [x]`, `create a plan`, `make a plan`, `plan: [x]` | 🛡️ **Planning System** | `planning-system-4.0-manifest.yaml` | **HAND-OFF** → Use `autonomous_execution_progress` template |
-| `plan ado`, `ado story`, `ado feature` | 🛡️ **ADO Operations** | `ado-planning-manifest.yaml` | **HAND-OFF** → Use `ado_execution_progress` template |
-| `start tdd`, `run tests`, `tdd [x]` | TDD Mastery | `tdd-orchestrator-v4-manifest.yaml` | Tests in `tests/` |
-| `debug [issue]`, `fix bug`, `troubleshoot` | Debug Orchestrator | `debug-orchestrator-manifest.yaml` | Bug report + fix |
-| `open lens`, `show dashboard`, `analytics` | CORTEX Lens | `cortex-lens-v3-manifest.yaml` | Dashboard visualization |
-| `onboard`, `getting started`, `learn cortex` | Onboarding | Via `onboarding_interactive.py` | Interactive 6-phase guide |
-| `sanitize`, `make generic`, `anonymize` | Sanitization | `code-sanitization-manifest.yaml` | Sanitized codebase |
-| `refine`, `improve cortex`, `optimize code` | Refinement | `refinement-orchestrator-manifest.yaml` | 7-phase improvement |
-| `system maintenance`, `health check` | **Maintenance (11 phases)** | Via `cortex-maintenance.prompt.md` | Health reports + auto-repair |
-| `cleanup cache`, `cleanup full`, `cleanup [type]` | **Cleanup (alias)** | → Routes to Maintenance Phase 2 | Cache clear, template validation, legacy removal |
-| `help`, `show commands` | Help | Template-based | Command list |
+| `/CORTEX Plan [x]`, `create a plan`, `make a plan`, `plan: [x]` | 🛡️ **Planning System (AUTONOMOUS)** | `planning-system-4.0-manifest.yaml` | **HAND-OFF** → Use `autonomous_execution_progress` template |
+| `plan ado`, `ado story`, `ado feature` | 🛡️ **ADO Operations (AUTONOMOUS)** | `ado-planning-manifest.yaml` | **HAND-OFF** → Use `ado_execution_progress` template |
+| `start tdd`, `run tests`, `tdd [x]` | 📋 **TDD Mastery (GUIDED)** | `tdd-orchestrator-v4-manifest.yaml` | Tests in `tests/` |
+| `debug [issue]`, `fix bug`, `troubleshoot` | 📋 **Debug Orchestrator (GUIDED)** | `debug-orchestrator-manifest.yaml` | Bug report + fix |
+| `open lens`, `show dashboard`, `analytics` | 📋 **CORTEX Lens (GUIDED)** | `cortex-lens-v3-manifest.yaml` | Dashboard visualization |
+| `onboard`, `getting started`, `learn cortex` | 📋 **Onboarding (GUIDED)** | Via `onboarding_interactive.py` | Interactive 6-phase guide |
+| `sanitize`, `make generic`, `anonymize` | 📋 **Sanitization (GUIDED)** | `code-sanitization-manifest.yaml` | Sanitized codebase |
+| `refine`, `improve cortex`, `optimize code` | 📋 **Refinement (GUIDED)** | `refinement-orchestrator-manifest.yaml` | 7-phase improvement |
+| `system maintenance`, `health check` | 📋 **Maintenance (GUIDED)** | Via `cortex-maintenance.prompt.md` | 12-phase health + auto-repair |
+| `cleanup cache`, `cleanup full`, `cleanup [type]` | 🛡️ **Cleanup (AUTONOMOUS)** | → Routes to Maintenance Phase 0 | Cache clear, bloat removal |
+| `help`, `show commands` | **Help** | Template-based | Command list |
 
 **Manifest Path:** `cortex-brain/manifests/orchestrators/{manifest-file}`  
 **Template Path:** `cortex-brain/response-templates-v4.yaml`
+
+### 🔍 Vision API Auto-Engagement
+
+**AUTOMATIC: When images are attached, Vision API engages WITHOUT user prompting.**
+
+**Supported Formats:** PNG, JPG, JPEG
+
+**Workflow:**
+1. Image detected in context → `vision_orchestrator.py` triggers
+2. GPT-4V analyzes image (<500ms)
+3. Analysis injected into conversation context
+4. Orchestrators use vision context automatically
+
+**Configuration:**
+- `auto_detect_images: true`
+- `auto_analyze_on_detect: true`
+- `auto_inject_context: true`
+
+**Integration:** Planning extracts UI elements, Debug extracts errors, ADO extracts work item details
+
+**Middleware:** `src/operations/utilities/vision_context_middleware.py`
 
 ### 🛡️ HAND-OFF Orchestrators (Shield Icon = Orchestrator Engaged)
 
@@ -112,6 +195,30 @@ When Planning System is engaged (🛡️), `00-master-plan.md` MUST include:
 
 ---
 
+## ⚠️ Fallback Behavior
+
+**1. LLM Classification Failure:**
+- If `LLMIntentClassifier` errors/times out → fallback to keyword matching
+- Use Intent Router table patterns (exact string matching)
+- Log failure for future classifier improvement
+
+**2. Orchestrator Execution Failure:**
+- If 🛡️ AUTONOMOUS orchestrator fails → report error to user with orchestrator name
+- Provide fallback: offer 📋 GUIDED alternative or manual steps
+- Log error for debugging
+
+**3. Missing Orchestrator:**
+- If manifest file doesn't exist → inform user orchestrator unavailable
+- Suggest similar orchestrators from Intent Router
+- Direct to `help` command for full list
+
+**4. Ambiguous Intent:**
+- If multiple orchestrators match (MEDIUM confidence <0.8) → ask user to clarify
+- Present options: "Did you mean: Planning System OR Refinement?"
+- Wait for explicit selection before routing
+
+---
+
 ## 📋 Response Format (v4.0)
 
 **Header:**
@@ -152,6 +259,7 @@ When Planning System is engaged (🛡️), `00-master-plan.md` MUST include:
 | **REFACTOR_CLEANUP** | Remove orphaned/duplicate code |
 | **GIT_ISOLATION** | CORTEX code never in user repos |
 | **PLANNING_ISOLATION** | Planning commands create plans ONLY, never implement |
+| **HAND_OFF_PROTOCOL** | 🛡️ AUTONOMOUS orchestrators execute independently (CORTEX stops after routing) |
 
 **Full rules:** `cortex-brain/brain-protection-rules.yaml`
 
@@ -186,9 +294,9 @@ cortex-brain/                    src/
 |---------|-------------|
 | `/CORTEX Plan [feature]` | 🛡️ Create plan (uses Planning Orchestrator) |
 | `ado story [feature]` | 🛡️ Create ADO items (uses ADO Orchestrator) |
-| `system maintenance` | 11-phase health pipeline |
+| `system maintenance` | 12-phase health pipeline |
 | `help` | Show all commands |
 
 **Resources:** `cortex-brain/response-templates-v4.yaml`, `brain-protection-rules.yaml`, `cortex-maintenance.prompt.md`
 
-**Anti-Bloat:** This file MUST stay under 200 lines.
+**Anti-Bloat:** This file MUST stay under 250 lines (increased for LLM intent routing sections).

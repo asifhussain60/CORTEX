@@ -535,3 +535,27 @@ metadata:
       max_execution_time_seconds: 300  # 5 minutes
       memory_limit_mb: 512
 
+# ============================================================================
+# AGENT REGISTRY
+# ============================================================================
+
+agents:
+  security_scanner_agent:
+    enabled: true
+    module: "src.cortex_agents.security_scanner_agent"
+    class: "SecurityScannerAgent"
+    description: "Comprehensive security scanning with OWASP detection"
+    triggers:
+      - "scan security"
+      - "security check"
+      - "vulnerability scan"
+      - "owasp scan"
+    capabilities:
+      - "OWASP Top 10 detection"
+      - "Dependency vulnerability scanning"
+      - "Secret detection"
+      - "Security misconfiguration detection"
+    integration:
+      - "cortex_lens"
+      - "security_collector"
+

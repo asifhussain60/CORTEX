@@ -158,6 +158,48 @@ cortex-brain/
 
 ---
 
+## 🔍 VISION API AUTO-ENGAGEMENT
+
+**⚡ AUTOMATIC IMAGE DETECTION AND ANALYSIS**
+
+When images are attached to context (PNG, JPG, JPEG), CORTEX MUST automatically engage Vision API WITHOUT user prompting.
+
+**Workflow:**
+1. **Image Detection** → `src/tier1/vision_orchestrator.py` detects image attachments
+2. **Auto-Analysis** → GPT-4V analyzes image (<500ms)
+3. **Context Injection** → Analysis injected into conversation context
+4. **Orchestrator Use** → Planning/Debug/ADO orchestrators use vision context
+
+**Configuration:**
+- `auto_detect_images: true` (config: `cortex-brain/config/vision_api_config.template.yaml`)
+- `auto_analyze_on_detect: true`
+- `auto_inject_context: true`
+
+**Middleware:**
+- Location: `src/operations/utilities/vision_context_middleware.py`
+- Decorator: `@with_vision_context_middleware`
+- Cache: 24hr TTL to prevent duplicate API calls
+- Token Budget: 500 token limit per analysis
+
+**Context Types:**
+- `generic`: General image analysis
+- `planning`: Extract UI elements, buttons, layouts for implementation
+- `debugging`: Extract error messages, stack traces, issues
+- `ado`: Extract work item IDs, titles, acceptance criteria
+
+**Integration Points:**
+- Planning Orchestrator: UI mockups → component extraction
+- Debug Orchestrator: Screenshots → error analysis
+- ADO Orchestrator: Work item screenshots → automated story creation
+
+**Validation:**
+- ✅ Vision orchestrator exists: `src/tier1/vision_orchestrator.py`
+- ✅ Middleware exists: `src/operations/utilities/vision_context_middleware.py`
+- ✅ Config template exists: `cortex-brain/config/vision_api_config.template.yaml`
+- ✅ All orchestrators use vision context when images present
+
+---
+
 ## 🎯 Core Philosophy
 
 **MAINTENANCE = DIAGNOSE + AUTO-REPAIR + VERIFY**
@@ -603,19 +645,25 @@ To add new HAND-OFF orchestrators:
 ### Phase Execution Order (Optimized for Efficiency)
 
 ```
+Phase 0: CLEANUP ORCHESTRATOR (Smart Cleanup)
+  ├─ Load cleanup rules: cortex-brain/cleanup-rules.yaml
+  ├─ Execute cleanup orchestrator: src/plugins/cleanup_orchestrator.py
+  ├─ Delete backups, archives, temp files
+  ├─ Preserve protected data paths (brain DBs, lessons-learned, etc.)
+  └─ Generate cleanup manifest
+  
 Phase 1: DISCOVERY (Holistic Scan)
   ├─ Identify all unwired components
-  ├─ Find all backup files/folders
   ├─ Detect duplicate reports
   ├─ Measure prompt bloat
   ├─ Check knowledge library sync
   ├─ Validate test suite health
   └─ Generate master action report
   
-Phase 2: CLEANUP (Remove Waste)
-  ├─ Delete backups
-  ├─ Delete duplicates
-  └─ Archive old reports
+Phase 2: TEMPLATE VALIDATION (Quality Check)
+  ├─ Validate all template references
+  ├─ Check response-templates-v4.yaml integrity
+  └─ Fix broken template paths
   
 Phase 3: PRESERVATION (Validate Protected Data)
   └─ Verify critical data paths safe
@@ -642,7 +690,7 @@ Phase 9: ROUTING (Navigation)
   └─ Fix intent router
   
 Phase 10: PROMPTS (Templates)
-  └─ Regenerate lean prompts
+  └─ Regenerate lean prompts (preserve ALL orchestrators + Vision API)
   
 Phase 11: VERIFICATION (Final Health Check)
   └─ Confirm 100% system health
@@ -660,12 +708,13 @@ When `system maintenance` is invoked, execute this consolidated flow:
 
 def execute_maintenance():
     """
-    Autonomous 10-phase maintenance pipeline.
+    Autonomous 12-phase maintenance pipeline.
     NO USER INTERACTION between phases.
     """
     phases = [
+        (0, "CLEANUP_ORCHESTRATOR", run_cleanup_orchestrator),
         (1, "DISCOVERY", discover_system),
-        (2, "CLEANUP", cleanup_waste),
+        (2, "TEMPLATE_VALIDATION", validate_templates),
         (3, "PRESERVATION", validate_preservation),
         (4, "SCAFFOLDING", verify_scaffolds),
         (5, "WIRING", wire_components),
@@ -772,6 +821,68 @@ def execute_maintenance():
 ## Next Maintenance
 Recommended: {next_date}
 ```
+
+---
+
+## Phase 0: Cleanup Orchestrator Execution 🧹 - SMART CLEANUP
+
+### 🎯 Purpose
+
+Execute the intelligent cleanup orchestrator as the FIRST step to remove bloat, backups, and temporary files while preserving all critical data. This uses dynamic YAML-based rules for safe, repeatable cleanup.
+
+**Orchestrator:** `src/plugins/cleanup_orchestrator.py`  
+**Rules:** `cortex-brain/cleanup-rules.yaml`  
+**Manifest:** `cortex-brain/manifests/orchestrators/aggressive-cleanup-rules.yaml`
+
+### 🚀 Execution
+
+```powershell
+# Phase 0: Run Cleanup Orchestrator
+echo "🧹 Phase 0: Executing Cleanup Orchestrator..."
+
+# Run cleanup with LIVE mode (always live, no dry-run)
+python src/plugins/cleanup_orchestrator.py
+
+if ($LASTEXITCODE -eq 0) {
+    echo "✅ Phase 0 complete: Cleanup orchestrator executed successfully"
+    
+    # Parse cleanup manifest for metrics
+    $manifest = Get-Content "cortex-brain/cleanup-manifests/cleanup-manifest-*.json" | ConvertFrom-Json | Select-Object -Last 1
+    
+    $deletedCount = $manifest.actions.deleted.Count
+    $archivedCount = $manifest.actions.archived.Count
+    $freedSpace = $manifest.summary.space_freed_mb
+    
+    echo "  📊 Files Deleted: $deletedCount"
+    echo "  📦 Files Archived: $archivedCount"
+    echo "  💾 Space Freed: $freedSpace MB"
+    echo ""
+    echo "👉 Proceeding to Phase 1: Discovery..."
+} else {
+    echo "❌ Phase 0 failed - see errors above"
+    exit 1
+}
+```
+
+### 🛡️ Data Preservation
+
+Cleanup orchestrator NEVER deletes:
+- `cortex-brain/tier{1,2,3}/*.db` (brain databases)
+- `cortex-brain/lessons-learned.yaml`
+- `cortex-brain/knowledge-graph.yaml`
+- `cortex-brain/user-dictionary.yaml`
+- `cortex-brain/documents/` (user content)
+- `.git/` directory
+- Active plan folders with `copilot_instructions`
+- `named_templates` in response-templates-v4.yaml
+
+### ✅ Success Criteria
+
+- Cleanup orchestrator executes without errors
+- Cleanup manifest generated in `cortex-brain/cleanup-manifests/`
+- Zero backups remain (verified in manifest)
+- All protected data paths intact
+- Space freed ≥100MB (typical)
 
 ---
 
@@ -3198,7 +3309,93 @@ grep -n "custom_templates" src/templates/template_manager.py || \
 
 ---
 
-## Phase 10: Regenerate Lean Prompts (WITH COMPLETE INTENT ROUTER WIRING)
+## 🛡️ ORCHESTRATOR HAND-OFF KNOWLEDGE
+
+**CORTEX Maintenance MUST know how to properly hand off to orchestrators instead of doing work itself.**
+
+### Complete Orchestrator Registry
+
+| Orchestrator | Triggers | Manifest | Hand-Off Behavior |
+|--------------|----------|----------|-------------------|
+| 🛡️ **Planning System** | `/CORTEX Plan`, `create a plan`, `make a plan` | `planning-system-4.0-manifest.yaml` | Creates `planning/active/{NAME}/` + 4 subfolders → STOPS (no implementation) |
+| 🛡️ **ADO Operations** | `ado story`, `ado feature`, `plan ado` | `ado-planning-manifest.yaml` | Creates ADO work items with acceptance criteria |
+| **TDD Mastery** | `start tdd`, `run tests`, `tdd [x]` | `tdd-orchestrator-v4-manifest.yaml` | RED→GREEN→REFACTOR cycle |
+| **Debug Orchestrator** | `debug`, `fix bug`, `troubleshoot` | `debug-orchestrator-manifest.yaml` | Bug analysis + fix |
+| **CORTEX Lens** | `open lens`, `show dashboard`, `analytics` | `cortex-lens-v3-manifest.yaml` | Visual dashboards |
+| **Code Sanitization** | `sanitize`, `make generic`, `anonymize` | `code-sanitization-manifest.yaml` | 5-phase sanitization |
+| **Refinement** | `refine`, `improve`, `optimize code` | `refinement-orchestrator-manifest.yaml` | 7-phase improvement |
+| **Tech Documentation** | `generate docs`, `api docs` | `technical-documentation-orchestrator-manifest.yaml` | Auto-generated documentation |
+| **Intelligent Dashboard** | `dashboard`, `metrics dashboard` | `intelligent-dashboard-manifest.yaml` | Real-time metrics visualization |
+| **Vision API** | *Auto-triggered on image attachments* | Via `vision_orchestrator.py` | Image analysis → context injection |
+
+### Hand-Off Protocol
+
+**When user requests match orchestrator triggers:**
+
+1. **Identify Match** - Parse user request against trigger patterns
+2. **Load Manifest** - Read orchestrator manifest from `cortex-brain/manifests/orchestrators/`
+3. **Hand Off Completely** - Defer to orchestrator logic (don't duplicate work)
+4. **Use Designated Template** - For 🛡️ orchestrators, use their specific response template
+5. **Monitor Execution** - Track orchestrator progress, report back to user
+
+**Example:**
+```
+User: "create a plan for user authentication"
+  ↓
+Match: Planning System (trigger: "create a plan")
+  ↓
+Load: planning-system-4.0-manifest.yaml
+  ↓
+Hand-Off: Planning Orchestrator creates folder structure
+  ↓
+Template: autonomous_execution_progress
+  ↓
+Response: ## 🛡️🧠 CORTEX Plan Execution + progress bars
+```
+
+### Vision API Auto-Engagement
+
+**SPECIAL: Vision API auto-triggers without user asking when images are attached.**
+
+**Detection Logic:**
+```python
+if attachments_contain_images(context):
+    vision_result = VisionOrchestrator.process_request(
+        user_request=request,
+        attachments=context['attachments'],
+        context_type='generic'  # or 'planning', 'debugging', 'ado'
+    )
+    inject_into_context(vision_result['context_data'])
+```
+
+**Integration Points:**
+- Planning Orchestrator: Extract UI elements from mockups
+- Debug Orchestrator: Extract error messages from screenshots
+- ADO Orchestrator: Extract work item details from screenshots
+
+**Configuration:**
+- `auto_detect_images: true` (in `cortex-brain/config/vision_api_config.template.yaml`)
+- `auto_analyze_on_detect: true`
+- `auto_inject_context: true`
+
+**Middleware:** `src/operations/utilities/vision_context_middleware.py` (decorator: `@with_vision_context_middleware`)
+
+### Maintenance Hand-Off Rules
+
+**When regenerating prompts (Phase 10), MUST:**
+
+1. ✅ Preserve ALL 10+ orchestrators in Intent Router
+2. ✅ Include Vision API auto-engagement rules
+3. ✅ Maintain 🛡️ shield markers for hand-off orchestrators
+4. ✅ Keep response template references
+5. ✅ Preserve planning vs implementation distinction
+6. ✅ Include SKULL rules (TDD_ENFORCEMENT, PLANNING_ISOLATION, etc.)
+7. ✅ Reference all manifest files in `cortex-brain/manifests/orchestrators/`
+8. ✅ Add cleanup orchestrator trigger to Intent Router
+
+---
+
+## Phase 10: Regenerate Lean Prompts (WITH COMPLETE ORCHESTRATOR + VISION API WIRING)
 
 **Goal:** Create minimal, clean prompt files with proper intent routing for ALL orchestrators.
 
@@ -3214,22 +3411,55 @@ find cortex-brain/manifests/orchestrators/ -name "*-manifest.yaml" -o -name "*-o
 
 # Extract orchestrator names and capabilities
 grep -h "orchestrator_name:" cortex-brain/manifests/orchestrators/*.yaml
+
+# Verify Vision API components
+test -f src/tier1/vision_orchestrator.py && echo "✅ Vision Orchestrator exists"
+test -f src/operations/utilities/vision_context_middleware.py && echo "✅ Vision Middleware exists"
+
+# Verify Cleanup Orchestrator
+test -f src/plugins/cleanup_orchestrator.py && echo "✅ Cleanup Orchestrator exists"
+test -f cortex-brain/cleanup-rules.yaml && echo "✅ Cleanup rules exist"
+
+# Verify LLM Intent Classifier exists
+test -f src/cortex_agents/llm_intent_classifier.py && echo "✅ LLM Intent Classifier exists"
 ```
 
-**Required Orchestrators for Intent Router (Minimum 8):**
+**Required Orchestrators for Intent Router (Minimum 10):**
 
-1. **Planning System** - `planning-system-4.0-manifest.yaml`
-2. **TDD Mastery** - `tdd-orchestrator-v4-manifest.yaml`
-3. **Debug Orchestrator** - `debug-orchestrator-manifest.yaml`
-4. **CORTEX Lens** - `cortex-lens-v3-manifest.yaml`
-5. **ADO Planning** - `ado-planning-manifest.yaml`
-6. **Code Sanitization** - `code-sanitization-manifest.yaml`
-7. **Refinement** - `refinement-orchestrator-manifest.yaml`
-8. **System Maintenance** - `cortex-maintenance.prompt.md`
+1. **Planning System** - `planning-system-4.0-manifest.yaml` (🛡️ **AUTONOMOUS**)
+2. **TDD Mastery** - `tdd-orchestrator-v4-manifest.yaml` (📋 **GUIDED**)
+3. **Debug Orchestrator** - `debug-orchestrator-manifest.yaml` (📋 **GUIDED**)
+4. **CORTEX Lens** - `cortex-lens-v3-manifest.yaml` (📋 **GUIDED**)
+5. **ADO Planning** - `ado-planning-manifest.yaml` (🛡️ **AUTONOMOUS**)
+6. **Code Sanitization** - `code-sanitization-manifest.yaml` (📋 **GUIDED**)
+7. **Refinement** - `refinement-orchestrator-manifest.yaml` (📋 **GUIDED**)
+8. **System Maintenance** - `cortex-maintenance.prompt.md` (📋 **GUIDED**)
+9. **Vision API** - `vision_orchestrator.py` (auto-triggered on images)
+10. **Cleanup Orchestrator** - `cleanup_orchestrator.py` (Phase 0 of maintenance)
+
+**Orchestrator Types:**
+- 🛡️ **AUTONOMOUS**: Has Python implementation, executes independently, CORTEX only routes
+- 📋 **GUIDED**: Manifest contains instructions, CORTEX reads and executes
 
 **Optional but Recommended:**
 - Onboarding (via `onboarding_interactive.py`)
 - Technical Documentation (`technical-documentation-orchestrator-manifest.yaml`)
+- Intelligent Dashboard (`intelligent-dashboard-manifest.yaml`)
+
+**⚠️ CRITICAL PRESERVATION REQUIREMENTS:**
+
+When regenerating CORTEX.prompt.md, MUST include:
+
+1. **LLM Intent Classification Section** (NEW - Gap 1 Fix)
+2. **Orchestrator Hand-Off Protocol** (NEW - Gap 2 Fix)
+3. **Orchestrator Autonomy Matrix** (NEW - Gap 4 Fix)
+4. **Fallback Behavior Definition** (NEW - Gap 3 Fix)
+5. **Vision API Section** - Auto-engagement on image attachments
+6. **Cleanup Orchestrator** - Mention in maintenance workflow
+7. **All 🛡️ Markers** - Planning System and ADO Operations
+8. **SKULL Rules** - All brain protection rules
+9. **Response Templates** - Reference to response-templates-v4.yaml
+10. **Planning Isolation** - Clear distinction between plan vs implement
 
 ### 10b. CORTEX.prompt.md COMPLETE Structure (Target: <200 lines)
 
@@ -3290,20 +3520,44 @@ User: "implement user authentication"
 
 ## 🔀 Intent Router
 
-| Command | Orchestrator | Manifest | Output |
-|---------|--------------|----------|--------|
-| `/CORTEX Plan [x]`, `create a plan`, `make a plan`, `plan: [x]` | **Planning System** | `planning-system-4.0-manifest.yaml` | `planning/active/{NAME}/` + 4 subfolders **→ STOPS HERE** |
+| Command | Orchestrator | Manifest | Behavior |
+|---------|--------------|----------|----------|
+| `introduce yourself`, `intro`, `hello`, `hi cortex`, `what is cortex` | **Introduction** | `response-templates-v4.yaml:introduction` | ASCII banner + capabilities overview |
+| `/CORTEX Plan [x]`, `create a plan`, `make a plan`, `plan: [x]` | 🛡️ **Planning System** | `planning-system-4.0-manifest.yaml` | **HAND-OFF** → Use `autonomous_execution_progress` template |
+| `plan ado`, `ado story`, `ado feature` | 🛡️ **ADO Operations** | `ado-planning-manifest.yaml` | **HAND-OFF** → Use `ado_execution_progress` template |
 | `start tdd`, `run tests`, `tdd [x]` | TDD Mastery | `tdd-orchestrator-v4-manifest.yaml` | Tests in `tests/` |
 | `debug [issue]`, `fix bug`, `troubleshoot` | Debug Orchestrator | `debug-orchestrator-manifest.yaml` | Bug report + fix |
 | `open lens`, `show dashboard`, `analytics` | CORTEX Lens | `cortex-lens-v3-manifest.yaml` | Dashboard visualization |
 | `onboard`, `getting started`, `learn cortex` | Onboarding | Via `onboarding_interactive.py` | Interactive 6-phase guide |
-| `plan ado`, `ado story`, `ado feature` | ADO Operations | `ado-planning-manifest.yaml` | ADO work items |
 | `sanitize`, `make generic`, `anonymize` | Sanitization | `code-sanitization-manifest.yaml` | Sanitized codebase |
 | `refine`, `improve cortex`, `optimize code` | Refinement | `refinement-orchestrator-manifest.yaml` | 7-phase improvement |
-| `system maintenance`, `health check` | Maintenance | Via `cortex-maintenance.prompt.md` | Health reports |
+| `system maintenance`, `health check` | **Maintenance (12 phases)** | Via `cortex-maintenance.prompt.md` | Health reports + auto-repair |
+| `cleanup cache`, `cleanup full`, `cleanup [type]` | **Cleanup (alias)** | → Routes to Maintenance Phase 0 | Cache clear, bloat removal |
 | `help`, `show commands` | Help | Template-based | Command list |
 
-**Manifest Path:** `cortex-brain/manifests/orchestrators/{manifest-file}`
+**Manifest Path:** `cortex-brain/manifests/orchestrators/{manifest-file}`  
+**Template Path:** `cortex-brain/response-templates-v4.yaml`
+
+### 🔍 Vision API Auto-Engagement
+
+**AUTOMATIC: When images are attached, Vision API engages WITHOUT user prompting.**
+
+**Supported Formats:** PNG, JPG, JPEG
+
+**Workflow:**
+1. Image detected in context → `vision_orchestrator.py` triggers
+2. GPT-4V analyzes image (<500ms)
+3. Analysis injected into conversation context
+4. Orchestrators use vision context automatically
+
+**Configuration:**
+- `auto_detect_images: true`
+- `auto_analyze_on_detect: true`
+- `auto_inject_context: true`
+
+**Integration:** Planning extracts UI elements, Debug extracts errors, ADO extracts work item details
+
+**Middleware:** `src/operations/utilities/vision_context_middleware.py`
 
 ### ⚠️ Planning vs. Implementation
 
@@ -3326,6 +3580,114 @@ cortex-brain/documents/planning/active/{PLAN_NAME}/
 ├── artifacts/           # Supporting files
 └── tracking/            # progress-tracker.json
 ```
+
+---
+
+## 🤖 LLM Intent Classification (NEW - Gap 1 Fix)
+
+**CRITICAL: Use LLM for intent detection, NOT regex patterns.**
+
+### Classification Process
+
+1. **Parse Request** → Remove meta-directives (`Follow instructions in...`)
+2. **Send to LLMIntentClassifier** → Analyze request text semantically
+3. **Receive Intent** → Get intent + confidence score (0.0-1.0)
+4. **Confidence Check**:
+   - ≥0.75: Use LLM classification
+   - <0.75: Fallback to keyword matching from Intent Router table
+5. **Route to Orchestrator** → Based on classified intent
+
+**Location:** `src/cortex_agents/llm_intent_classifier.py`
+
+**Example:**
+```
+User: "I need to design a new feature with TDD"
+LLM Intent: "planning" (confidence: 0.92) → Routes to Planning System
+✅ CORRECT: LLM detects planning intent despite no "plan" keyword
+
+User: "implement login page"
+LLM Intent: "implementation" (confidence: 0.88) → Direct implementation
+✅ CORRECT: No planning, direct coding
+```
+
+### Fallback Behavior
+
+| Scenario | Action |
+|----------|--------|
+| LLM classifier unavailable | Use keyword matching from Intent Router table |
+| Confidence < 0.75 | Fallback to keyword matching |
+| Multiple high-confidence matches | Ask user to clarify with options |
+| No match found | Show help menu + available commands |
+| Orchestrator manifest missing | Error message + suggest alternatives |
+
+---
+
+## 🛡️ Orchestrator Hand-Off Protocol (NEW - Gap 2 Fix)
+
+**When 🛡️ autonomous orchestrator detected, CORTEX must STOP and let orchestrator execute.**
+
+### 🛡️ Autonomous Orchestrators
+
+**These have Python implementations that execute independently:**
+- **Planning System** (`src/orchestrators/planning/`)
+- **ADO Operations** (`src/orchestrators/ado/`)
+
+### Hand-Off Behavior
+
+**❌ FORBIDDEN (CORTEX must NOT do these):**
+- Create folder structure yourself
+- Write plan phases yourself  
+- Generate master-plan.md content yourself
+- Implement any orchestrator logic directly
+- Execute orchestrator steps manually
+
+**✅ REQUIRED (CORTEX must ONLY do these):**
+1. Detect intent via LLMIntentClassifier
+2. Confirm orchestrator match (Planning/ADO)
+3. Display header: `## 🛡️🧠 CORTEX {Orchestrator} Execution`
+4. State: "🛡️ {Orchestrator} is executing autonomously..."
+5. **STOP** - Let orchestrator code execute
+6. Orchestrator generates ALL content (plans, progress, folders)
+
+**Visual Confirmation:**
+```markdown
+## 🛡️🧠 CORTEX Plan Execution
+
+🛡️ Planning System orchestrator is executing autonomously...
+
+[Orchestrator generates folder structure, master plan, etc.]
+
+✅ Planning System execution complete!
+```
+
+### 📋 Guided Orchestrators
+
+**These are manifest-driven, CORTEX reads and executes:**
+- TDD Mastery, Debug, Sanitization, Refinement, Maintenance, etc.
+
+**CORTEX Behavior:**
+1. Load manifest YAML
+2. Read instructions/phases
+3. Execute steps as guided by manifest
+4. CORTEX implements the logic
+
+---
+
+## 🔧 Orchestrator Autonomy Matrix (NEW - Gap 4 Fix)
+
+| Orchestrator | Type | CORTEX Role | Orchestrator Role |
+|--------------|------|-------------|-------------------|
+| Planning System | 🛡️ AUTONOMOUS | Intent detection + routing | Creates folders, plans, tracks progress |
+| ADO Operations | 🛡️ AUTONOMOUS | Intent detection + routing | Generates work items, stories, acceptance criteria |
+| TDD Mastery | 📋 GUIDED | Reads manifest + executes | Provides instructions/phases |
+| Debug | 📋 GUIDED | Reads manifest + executes | Provides investigation steps |
+| Sanitization | 📋 GUIDED | Reads manifest + executes | Provides cleanup rules |
+| Refinement | 📋 GUIDED | Reads manifest + executes | Provides improvement phases |
+| Maintenance | 📋 GUIDED | Reads this prompt + executes | Provides 12-phase pipeline |
+
+**Key Distinction:**
+- 🛡️ = CORTEX hands off, orchestrator executes autonomously
+- 📋 = CORTEX reads instructions and executes them
 
 ---
 
@@ -3583,8 +3945,36 @@ for f in $(grep -oh "cortex-brain/manifests/orchestrators/[^\"']*" .github/promp
 done
 
 # Check line counts
-wc -l .github/prompts/CORTEX.prompt.md  # Should be <200
+wc -l .github/prompts/CORTEX.prompt.md  # Should be <250 (increased for new sections)
 wc -l .github/copilot-instructions.md   # Should be <150
+
+# NEW: Verify LLM Intent Classification section exists
+grep -q "## 🤖 LLM Intent Classification" .github/prompts/CORTEX.prompt.md || \
+  echo "❌ MISSING: LLM Intent Classification section"
+
+# NEW: Verify Hand-Off Protocol section exists
+grep -q "## 🛡️ Orchestrator Hand-Off Protocol" .github/prompts/CORTEX.prompt.md || \
+  echo "❌ MISSING: Hand-Off Protocol section"
+
+# NEW: Verify Orchestrator Autonomy Matrix exists
+grep -q "## 🔧 Orchestrator Autonomy Matrix" .github/prompts/CORTEX.prompt.md || \
+  echo "❌ MISSING: Orchestrator Autonomy Matrix"
+
+# NEW: Verify Fallback Behavior section exists
+grep -q "Fallback Behavior\|fallback to keyword matching" .github/prompts/CORTEX.prompt.md || \
+  echo "❌ MISSING: Fallback Behavior section"
+
+# NEW: Verify LLMIntentClassifier reference
+grep -q "LLMIntentClassifier\|llm_intent_classifier.py" .github/prompts/CORTEX.prompt.md || \
+  echo "❌ MISSING: LLMIntentClassifier reference"
+
+# NEW: Check for 🛡️ AUTONOMOUS markers
+grep -c "🛡️ AUTONOMOUS" .github/prompts/CORTEX.prompt.md | \
+  awk '{if ($1 >= 2) print "✅ AUTONOMOUS markers present"; else print "❌ Missing AUTONOMOUS markers"}'
+
+# NEW: Check for 📋 GUIDED markers
+grep -c "📋 GUIDED" .github/prompts/CORTEX.prompt.md | \
+  awk '{if ($1 >= 5) print "✅ GUIDED markers present"; else print "❌ Missing GUIDED markers"}'
 ```
 
 ---
@@ -3713,6 +4103,34 @@ Run during every maintenance cycle:
 - [ ] Test cleanup report generated in `cortex-brain/documents/reports/`
 - [ ] Cleanup report shows Before → After with 100% achievement
 - [ ] Git commit includes detailed justification for deleted tests
+
+### 🆕 LLM Intent Routing Completeness (Phase 10 Enhancements)
+- [ ] **LLM Intent Classification** section exists in CORTEX.prompt.md
+  - [ ] LLMIntentClassifier explicitly referenced with import path
+  - [ ] Classification process documented (parse → classify → confidence → fallback)
+  - [ ] Confidence thresholds defined: HIGH (≥0.8), MEDIUM (0.5-0.8), LOW (<0.5)
+  - [ ] Fallback chain documented: LLM → keyword regex → user clarification
+- [ ] **Orchestrator Hand-Off Protocol** section exists in CORTEX.prompt.md
+  - [ ] FORBIDDEN behaviors for 🛡️ AUTONOMOUS orchestrators listed (5+ items)
+  - [ ] REQUIRED behaviors for 🛡️ AUTONOMOUS orchestrators listed (3+ items)
+  - [ ] Visual marker 🛡️ consistently used for autonomous orchestrators
+- [ ] **Orchestrator Autonomy Matrix** exists in CORTEX.prompt.md
+  - [ ] Table with CORTEX Role vs Orchestrator Role columns
+  - [ ] Minimum 3 orchestrator types listed (Planning, ADO, TDD)
+  - [ ] Clear distinction between 🛡️ AUTONOMOUS and 📋 GUIDED orchestrators
+- [ ] **Fallback Behavior** section exists in CORTEX.prompt.md
+  - [ ] LLM classification failure scenario covered
+  - [ ] Orchestrator execution failure scenario covered
+  - [ ] Missing orchestrator scenario covered
+  - [ ] Ambiguous intent scenario covered
+- [ ] **copilot-instructions.md** includes orchestrator awareness
+  - [ ] References CORTEX.prompt.md for full intent routing
+  - [ ] Distinguishes 🛡️ AUTONOMOUS vs 📋 GUIDED orchestrators
+  - [ ] Includes LLM Intent Classification reference
+  - [ ] Contains Hand-Off Protocol awareness section
+- [ ] All orchestrator listings use 🛡️/📋 visual markers consistently
+- [ ] Minimum 8 orchestrators total with clear type categorization
+- [ ] CORTEX.prompt.md line count <250 (increased for new sections)
 
 ---
 

@@ -1,8 +1,8 @@
 # CORTEX Toolkit - Tools Inventory
 
 **Version:** 1.0.1  
-**Last Updated:** December 30, 2025  
-**Total Tools:** 27 production-ready tools  
+**Last Updated:** December 31, 2025  
+**Total Tools:** 28 production-ready tools  
 **Categories:** 9  
 
 ---
@@ -11,7 +11,7 @@
 
 | Metric | Count |
 |--------|-------|
-| **Total Tools** | 27 |
+| **Total Tools** | 28 |
 | **Categories** | 9 |
 | **CLI Wrappers** | 7 |
 | **Platforms Supported** | Windows, Linux, macOS |
@@ -105,7 +105,7 @@ Performance profiling, metrics collection, and visualization.
 
 ---
 
-### 5. Documentation (3 tools)
+### 5. Documentation (4 tools)
 
 Documentation generation and maintenance.
 
@@ -114,11 +114,13 @@ Documentation generation and maintenance.
 | 15 | **docs-generate** | `cortex-docs-gen` | cli | No | Generate documentation from source code |
 | 16 | **prompts-regenerate** | `cortex-prompts-regen` | cli_wrapper | **Yes** | Regenerate AI prompt files |
 | 17 | **quick-reference** | `cortex-qr` | cli | No | Generate quick reference documentation |
+| 18 | **sitemap-generate** | `python cortex-toolkit/documentation/generate_sitemap.py` | cli | No | Generate glassmorphism-styled sitemap for docs |
 
 **Scripts:**
 - `documentation/generate_docs_from_code.py`
 - `documentation/regenerate_prompts.py`
 - `documentation/generate_quick_reference.py`
+- `documentation/generate_sitemap.py`
 
 **Wrappers:**
 - `cli/wrappers/regenerate_prompts_wrapper.py`
