@@ -1,18 +1,152 @@
 # 📚 CORTEX Documentation Generator
 
-**Version:** 1.1.0 | **Author:** Asif Hussain  
-**Purpose:** Generate and maintain documentation for CORTEX documentation site
+**Version:** 2.0.0 | **Author:** Asif Hussain  
+**Purpose:** Generate and maintain documentation for CORTEX documentation site  
+**Design Standard:** `cortex-brain/documents/archive/glassmorphism-design-standards-v2.md`
 
 ---
 
 ## 🎯 Objective
 
 Automate documentation generation for `http://localhost:8000` and GitHub Pages including:
-1. **Code Discovery** - Auto-discover modules, classes, functions, docstrings
-2. **Site Map Management** - Track pages, detect missing documentation
-3. **Diagram Staleness** - Flag outdated D3.js and Mermaid diagrams
-4. **Design Standardization** - Enforce glassmorphism view hierarchy
-5. **Story Generator** - Update CORTEX narrative chapters
+1. **Governance Validation** - Validate all generation against `docs/index.html` entry points
+2. **Code Discovery** - Auto-discover modules, classes, functions, docstrings
+3. **Site Map Management** - Track pages, detect missing documentation
+4. **Diagram Staleness** - Flag outdated D3.js and Mermaid diagrams
+5. **Design Standardization** - Enforce glassmorphism 2-level view hierarchy
+6. **Story Generator** - Update CORTEX narrative chapters
+7. **User Approval** - Request approval for NEW documentation not in index.html
+
+---
+
+## 🛡️ GOVERNANCE RULE (MANDATORY)
+
+### `docs/index.html` as Source of Truth
+
+**⛔ CRITICAL:** Documentation generation is GOVERNED by `docs/index.html`. Only generate documentation for:
+1. **Tiles** - Links in `hero-cta-grid` (KEY FEATURES section)
+2. **Anchors** - Navigation links elsewhere in index.html
+3. **Story Viewer** - `story/viewer.html` narrative
+
+### Authorized Entry Points (from docs/index.html)
+
+| Entry Point | Path | Level |
+|-------------|------|-------|
+| Architecture | `architecture/index.html` | Level 1 |
+| Security | `security/index.html` | Level 1 |
+| Orchestrators | `orchestrators/index.html` | Level 1 |
+| Token Optimization | `token-optimization/index.html` | Level 1 |
+| Sharpen The Saw | `sts/index.html` | Level 1 |
+| Knowledge | `knowledge/index.html` | Level 1 |
+| CORTEX LENS | `lens/index.html` | Level 1 |
+| Get Started | `getting-started/index.html` | Level 1 |
+| Story Viewer | `story/viewer.html` | Special |
+
+**Level 2 pages** are governed by their parent Level 1 index pages (e.g., `orchestrators/planning-system.html` governed by `orchestrators/index.html`).
+
+### ⛔ FORBIDDEN Actions
+
+- ❌ Creating documentation for features NOT linked from `docs/index.html`
+- ❌ Adding new tiles/anchors to index.html without user approval
+- ❌ Generating orphan pages (no parent navigation)
+- ❌ Creating Level 3+ pages (2-level max enforced)
+
+---
+
+## 🙋 User Approval Protocol (NEW Documentation)
+
+### When Discovery Finds Undocumented Features
+
+**If a feature is discovered but NOT in `docs/index.html`:**
+
+1. **DO NOT** generate documentation automatically
+2. **PRESENT** the approval template below to user
+3. **WAIT** for explicit user selection
+4. **ONLY THEN** generate documentation + update index.html
+
+### User Approval Response Template
+
+```markdown
+## 📋 New Documentation Request
+
+**Discovered Feature:** {feature_name}
+**Source:** `{source_file_path}`
+**Description:** {brief_description}
+
+---
+
+### 🎯 Action Required
+
+This feature is NOT currently linked from `docs/index.html`. 
+Documentation generation requires your approval.
+
+**Select an option:**
+
+| Option | Action | Command |
+|--------|--------|---------|
+| **A** | ✅ Approve & Add to Key Features | Reply: `approve A` |
+| **B** | ✅ Approve as Level 2 under existing section | Reply: `approve B: {parent_section}` |
+| **C** | ⏸️ Defer (do not generate now) | Reply: `defer` |
+| **D** | ❌ Reject (not needed) | Reply: `reject` |
+
+**Example responses:**
+- `approve A` → Adds new tile to KEY FEATURES grid
+- `approve B: orchestrators` → Adds as Level 2 under Orchestrators
+- `defer` → Skips generation, logs for future
+- `reject` → Removes from consideration
+
+---
+
+### 📍 If Approved (Option A or B)
+
+1. Documentation will be generated following glassmorphism standards
+2. `docs/index.html` will be updated with new entry point
+3. Breadcrumb navigation will be configured
+```
+
+---
+
+## 🏗️ Design Standards Enforcement
+
+### Reference Document
+**MANDATORY:** All generated views MUST follow `cortex-brain/documents/archive/glassmorphism-design-standards-v2.md`
+
+### 2-Level View Hierarchy (ENFORCED)
+
+| Level | Example | Logo Size | Footer | Breadcrumb |
+|-------|---------|-----------|--------|------------|
+| **Home** | `index.html` | N/A | ✅ YES | ❌ NO |
+| **Level 1** | `/orchestrators/index.html` | 200×200 | ❌ NO | ✅ YES |
+| **Level 2** | `/orchestrators/planning-system.html` | 150×150 | ❌ NO | ✅ YES |
+
+**⛔ Level 3+ pages are FORBIDDEN** - Restructure content into Level 2 if needed.
+
+### Panel Spacing (from glassmorphism-design-standards-v2.md)
+
+```css
+:root {
+    --panel-gap-xs: 0.5rem;    /* 8px - Tight grouping */
+    --panel-gap-sm: 1rem;      /* 16px - Within sections */
+    --panel-gap-md: 1.5rem;    /* 24px - Between panels */
+    --panel-gap-lg: 2rem;      /* 32px - Between sections */
+    --panel-gap-xl: 3rem;      /* 48px - Hero separation */
+}
+```
+
+### Required Elements per Level
+
+**Level 1 Pages:**
+- ✅ Breadcrumb bar at top
+- ✅ 200×200 CORTEX logo in top-left
+- ✅ Large icon + title centered
+- ✅ Category cards for Level 2 pages
+- ❌ NO footer
+
+**Level 2 Pages:**
+- ✅ Breadcrumb bar at top
+- ✅ 150×150 CORTEX logo in top-left
+- ✅ Detailed content, D3.js/Mermaid diagrams
+- ❌ NO footer
 
 ---
 
@@ -43,12 +177,34 @@ git --version      # Optional
 
 ## 📋 Execution Phases
 
+### Phase 0: Governance Validation (NEW - MANDATORY FIRST)
+
+**Before ANY discovery or generation:**
+
+```bash
+# Parse index.html for authorized entry points
+python cortex-toolkit/documentation/governance_validator.py --index docs/index.html
+```
+
+**Outputs:**
+- `cortex-brain/documents/authorized-entry-points.json`
+- List of Level 1 tiles from KEY FEATURES
+- List of Level 2 pages linked from Level 1 indexes
+
+**Validation Logic:**
+1. Parse `docs/index.html` for all `href` attributes in `hero-cta-grid`
+2. For each Level 1 page, parse its `index.html` for Level 2 links
+3. Build authorized entry point registry
+4. Any discovered feature NOT in registry → triggers User Approval Protocol
+
 ### Phase 1: Discovery
 **Toolkit Script:** `cortex-toolkit/documentation/docgen_discovery.py`
 
 ```bash
-# Run discovery
-python cortex-toolkit/documentation/docgen_discovery.py --output cortex-brain/documents/docgen-manifest.json
+# Run discovery WITH governance check
+python cortex-toolkit/documentation/docgen_discovery.py \
+    --output cortex-brain/documents/docgen-manifest.json \
+    --governance cortex-brain/documents/authorized-entry-points.json
 ```
 
 **Discovers:**
@@ -57,17 +213,24 @@ python cortex-toolkit/documentation/docgen_discovery.py --output cortex-brain/do
 - Orchestrator manifests in `cortex-brain/manifests/`
 - Existing documentation pages in `docs/`
 
+**New Behavior:**
+- Flags features NOT in authorized entry points
+- Queues them for User Approval Protocol
+- Does NOT auto-generate unauthorized docs
+
 ### Phase 2: Site Map Audit
 **Toolkit Script:** `cortex-toolkit/documentation/site_manifest.py`
 
 ```bash
-# Generate site manifest with missing docs detection
-python cortex-toolkit/documentation/site_manifest.py --check-missing
+# Generate site manifest with governance validation
+python cortex-toolkit/documentation/site_manifest.py \
+    --check-missing \
+    --governance cortex-brain/documents/authorized-entry-points.json
 ```
 
 **Outputs:**
 - `cortex-brain/documents/docgen-manifest.json` - Complete site map
-- List of features without documentation
+- List of features without documentation (requires approval)
 - Broken internal links
 
 ### Phase 3: Diagram Staleness Check
@@ -86,14 +249,16 @@ python cortex-toolkit/documentation/diagram_staleness.py
 ### Phase 4: Design Standards Enforcement
 **Reference:** `cortex-brain/documents/archive/glassmorphism-design-standards-v2.md`
 
-**View Hierarchy:**
-| Level | Logo Size | Footer | Example |
-|-------|-----------|--------|---------|
-| Home | N/A | ✅ YES | `index.html` |
-| Level 1 | 200×200 | ❌ NO | `/orchestrators/index.html` |
-| Level 2 | 150×150 | ❌ NO | `/orchestrators/planning-system.html` |
+**Validation Checklist:**
 
-**Panel Spacing:** Use `--panel-gap-*` CSS variables (xs/sm/md/lg/xl)
+| Check | Level 1 | Level 2 |
+|-------|---------|---------|
+| Logo size correct | 200×200 | 150×150 |
+| Breadcrumb present | ✅ | ✅ |
+| Footer absent | ✅ | ✅ |
+| Panel spacing vars used | ✅ | ✅ |
+| Mobile responsive | ✅ | ✅ |
+| FontAwesome icons (not emojis) | ✅ | ✅ |
 
 ### Phase 5: Story Generator (Manual)
 **Location:** `docs/story/`
@@ -108,12 +273,43 @@ When new features discovered, update narrative:
 
 ## 🛠️ Toolkit Scripts
 
+### governance_validator.py (NEW - RUN FIRST)
+Parses `docs/index.html` and builds authorized entry point registry.
+
+**Usage:**
+```bash
+python cortex-toolkit/documentation/governance_validator.py --index docs/index.html
+```
+
+**Outputs:**
+- `cortex-brain/documents/authorized-entry-points.json`
+
+**Registry Format:**
+```json
+{
+  "level_1": [
+    {"path": "architecture/index.html", "title": "Architecture", "icon": "🧠"},
+    {"path": "orchestrators/index.html", "title": "Orchestrators", "icon": "🎯"}
+  ],
+  "level_2": {
+    "orchestrators": [
+      {"path": "orchestrators/planning-system.html", "title": "Planning System"},
+      {"path": "orchestrators/tdd-mastery.html", "title": "TDD Mastery"}
+    ]
+  },
+  "special": ["story/viewer.html"]
+}
+```
+
 ### docgen_discovery.py
 Discovers all documentable code elements.
 
 **Usage:**
 ```bash
-python cortex-toolkit/documentation/docgen_discovery.py [--output FILE] [--format json|yaml]
+python cortex-toolkit/documentation/docgen_discovery.py \
+    [--output FILE] \
+    [--format json|yaml] \
+    [--governance FILE]  # NEW: validates against authorized-entry-points.json
 ```
 
 ### site_manifest.py
@@ -121,7 +317,10 @@ Generates site manifest and detects missing docs.
 
 **Usage:**
 ```bash
-python cortex-toolkit/documentation/site_manifest.py [--check-missing] [--check-links]
+python cortex-toolkit/documentation/site_manifest.py \
+    [--check-missing] \
+    [--check-links] \
+    [--governance FILE]  # NEW: validates against authorized-entry-points.json
 ```
 
 ### diagram_staleness.py
@@ -131,6 +330,21 @@ Checks diagram freshness against source changes.
 ```bash
 python cortex-toolkit/documentation/diagram_staleness.py [--max-age DAYS] [--update-manifest]
 ```
+
+### design_validator.py (NEW)
+Validates generated pages against glassmorphism-design-standards-v2.md.
+
+**Usage:**
+```bash
+python cortex-toolkit/documentation/design_validator.py --path docs/ --level 1|2
+```
+
+**Checks:**
+- Logo size (200×200 for L1, 150×150 for L2)
+- Footer presence (should be absent on L1/L2)
+- Breadcrumb presence (required on L1/L2)
+- Panel spacing CSS variables used
+- Mobile responsiveness
 
 ---
 
@@ -193,23 +407,42 @@ Use `.whiteboard-panel` class for pseudo-code in story chapters.
 
 ## ✅ Success Criteria
 
+- [ ] `cortex-brain/documents/authorized-entry-points.json` exists (governance registry)
 - [ ] `cortex-brain/documents/docgen-manifest.json` exists
 - [ ] `cortex-brain/documents/diagram-manifest.json` exists
 - [ ] All toolkit scripts executable
 - [ ] Diagram staleness detection working
 - [ ] Site map complete with missing doc detection
+- [ ] **Governance validation passes** (all generated docs have index.html entry points)
+- [ ] **2-level hierarchy enforced** (no Level 3+ pages)
+- [ ] **Glassmorphism standards applied** (logo sizes, no footers on L1/L2)
 
 ---
 
 ## 🔄 Workflow
 
 ```
-1. Run Discovery    → docgen_discovery.py
-2. Audit Site Map   → site_manifest.py --check-missing
-3. Check Diagrams   → diagram_staleness.py
-4. Update Stale     → Manual updates flagged
-5. Generate Docs    → generate_docs_from_code.py
+0. Governance Check → governance_validator.py (MANDATORY FIRST)
+   ↓
+1. Run Discovery    → docgen_discovery.py --governance authorized-entry-points.json
+   ↓
+2. User Approval    → Present approval template for unauthorized features
+   ↓
+3. Audit Site Map   → site_manifest.py --check-missing --governance
+   ↓
+4. Check Diagrams   → diagram_staleness.py
+   ↓
+5. Design Validate  → Check glassmorphism-design-standards-v2.md compliance
+   ↓
+6. Generate Docs    → Only for APPROVED entry points
+   ↓
+7. Update index.html → Add tiles/anchors for newly approved docs
 ```
+
+**Key Decision Points:**
+- Step 0: If governance file missing, create from index.html
+- Step 2: WAIT for user response before proceeding
+- Step 6: Skip unauthorized features (defer to future approval)
 
 ---
 

@@ -13,11 +13,7 @@ description: CORTEX Backlog Review & Enhancement System - Reviews, enhances, pri
 
 ## 🎯 Purpose
 
-**Review, enhance, prioritize| `15-docgen-prompt.md` | 40/100 | 🟡 MODERATE | LOW | Execute with checkpoints |
-| `25-orchestrator-templates.md` | 42/100 | 🟡 MODERATE | LOW | Execute with checkpoints |
-| `40-yaml-bloat.md` | 48/100 | 🟡 MODERATE | LOW | Execute with checkpoints |
-| `45-decompose-maint.md` | 37/100 | 🟡 MODERATE | HIGH | Execute with TDD approach |
-| `65-learning-paths.md` | 54/100 | 🟠 COMPLEX | HIGH | 🛡️ HAND-OFF → Planning (TDD recommended) | assess complexity** of CORTEX backlog items for optimal GitHub Copilot execution. This prompt does NOT execute backlog items—it prepares them for execution and determines if planning is required.
+**Review, enhance, prioritize, and assess complexity** of CORTEX backlog items for optimal GitHub Copilot execution. This prompt does NOT execute backlog items—it prepares them for execution and determines if planning is required.
 
 **Core Responsibilities:**
 1. **Review** all backlog files for manual instructions/enhancements needed
@@ -26,8 +22,11 @@ description: CORTEX Backlog Review & Enhancement System - Reviews, enhances, pri
 4. **Validate** format consistency and completeness
 5. **🧮 Assess Complexity** - Calculate complexity score (0-100) for each item
 6. **🔍 Holistic Analysis** - Analyze target file for autonomy refinements before execution
-7. **🧪 TDD Evaluation** - Determine if TDD approach adds high value
-8. **🛡️ Hand-Off** - Route complex items (score ≥51) to Planning/ADO Orchestrators
+7. **🎯 Optimize Delegation** - Delegate bloat detection & decomposition to `cortex-optimize.prompt.md`
+8. **🧪 TDD Evaluation** - Determine if TDD approach adds high value
+9. **🛡️ Hand-Off** - Route complex items (score ≥51) to Planning/ADO Orchestrators
+
+**Integration:** Uses `cortex-optimize.prompt.md` for deep file analysis (bloat, decomposition, technical debt)
 
 ---
 
@@ -299,6 +298,66 @@ For items with complexity ≥26 (MODERATE+), add checkpoints:
 **Ready for Autonomous Execution:** YES/NO
 ```
 
+**STEP 6: Optimize Prompt Delegation (Target File Analysis)**
+
+**When backlog item targets a specific file for modification**, delegate deep analysis to `cortex-optimize.prompt.md`:
+
+```markdown
+### 🎯 Optimize Delegation Check
+
+**Target File(s):** `{file_path}` (from backlog item)
+
+**Delegation Required IF:**
+- [ ] Target file >500 lines (prompts) / >1000 lines (code) / >300 lines (config)
+- [ ] Backlog item involves refactoring or restructuring
+- [ ] Multiple concerns detected in target file
+
+**Action:** Run `cortex-optimize.prompt.md` on target file FIRST
+```
+
+**If Optimize Delegation Triggered:**
+
+1. **Invoke Optimize Engine:**
+   ```
+   Reference: cortex-optimize.prompt.md
+   Target: {target_file_path}
+   Mode: Bloat Detection + Decomposition Analysis
+   ```
+
+2. **Bloat Detection (from Optimize):**
+   | Artifact Type | Threshold | Current Lines | Status |
+   |---------------|-----------|---------------|--------|
+   | Prompt | 500 | {N} | ✅/⚠️ BLOATED |
+   | Code | 1,000 | {N} | ✅/⚠️ BLOATED |
+   | Config | 300 | {N} | ✅/⚠️ BLOATED |
+
+3. **If BLOATED → Decomposition BEFORE Backlog Execution:**
+   - Optimize generates decomposition plan (Pattern 1-5)
+   - Create backlog item: `00-decompose-{filename}.md` (CRITICAL priority)
+   - Execute decomposition FIRST
+   - Then return to original backlog item
+
+4. **Inject Optimize Findings:**
+   ```markdown
+   ## 🎯 Pre-Execution Optimization Findings
+   
+   **Source:** `cortex-optimize.prompt.md` analysis
+   **Target:** `{file_path}`
+   
+   | Finding | Severity | Action |
+   |---------|----------|--------|
+   | {finding_1} | {P0-P3} | {action} |
+   | {finding_2} | {P0-P3} | {action} |
+   
+   **Decomposition Required:** YES/NO
+   **Technical Debt Items:** {count}
+   ```
+
+**Skip Optimize Delegation IF:**
+- Backlog item is documentation-only (README, comments)
+- Target file doesn't exist yet (new file creation)
+- Backlog item is simple config change (<10 lines affected)
+
 ---
 
 ## 🧪 TDD Value Assessment
@@ -482,11 +541,15 @@ For each backlog item, verify and enhance:
    ↓
 8. HOLISTIC ANALYSIS: Analyze for autonomy gaps, apply refinements
    ↓
-9. TDD EVALUATION: Determine if TDD adds HIGH value
+9. OPTIMIZE DELEGATION: For items targeting files, run cortex-optimize.prompt.md
+   - Bloat detection → If bloated, create decomposition backlog item first
+   - Technical debt → Inject findings into backlog context
    ↓
-10. REPORT: Generate comprehensive review summary
+10. TDD EVALUATION: Determine if TDD adds HIGH value
+   ↓
+11. REPORT: Generate comprehensive review summary
     ↓
-11. HAND-OFF DECISION:
+12. HAND-OFF DECISION:
     - Score 0-50  → Ready for direct execution
     - Score 51-75 → 🛡️ HAND-OFF to Planning Orchestrator
     - Score 76-100 → 🛡️ HAND-OFF to Planning + ADO Orchestrators
