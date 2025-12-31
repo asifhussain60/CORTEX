@@ -1,0 +1,874 @@
+# Tool Inventory Manifest v2.0
+#
+# Enhanced tool inventory with semantic capabilities, lifecycle tracking,
+# and dependency management for the CORTEX Toolkit Manager.
+#
+# Generated: 2025-12-31
+# Author: Asif Hussain
+# Version: 2.0.0
+
+version: "2.0.0"
+schema: "https://cortex.dev/schemas/tool-inventory-v2.json"
+generated: "2025-12-31T00:00:00Z"
+generator: "ToolkitManager.generate_inventory()"
+
+metadata:
+  total_tools: 35
+  active_tools: 31
+  deprecated_tools: 4
+  categories: 10
+  
+  # Statistics
+  stats:
+    tools_with_tests: 12
+    tools_with_docs: 8
+    tools_with_wrappers: 15
+    copilot_chat_tools: 2
+    cli_tools: 33
+
+# Lifecycle state definitions
+lifecycle_states:
+  active:
+    description: "Production ready, fully supported"
+    color: "green"
+  beta:
+    description: "Testing phase, may have issues"
+    color: "yellow"
+  deprecated:
+    description: "Scheduled for removal, use replacement"
+    color: "orange"
+  removed:
+    description: "No longer available"
+    color: "red"
+
+# Tool definitions with enhanced metadata
+tools:
+  # ============================================================================
+  # BRAIN OPERATIONS
+  # ============================================================================
+  - id: align
+    name: "System Alignment"
+    version: "1.0.0"
+    category: brain_operations
+    lifecycle: active
+    
+    capabilities:
+      - alignment
+      - consistency
+      - validation
+      - system-check
+    
+    can_do:
+      - "check system alignment"
+      - "validate brain tier consistency"
+      - "verify configuration integrity"
+    
+    execution:
+      command: cortex-align
+      script: core/brain/align.py
+      wrapper: cli/wrappers/align_wrapper.py
+      method: cli_wrapper
+      platforms: [windows, linux, macos]
+      requires_admin: false
+      idempotent: true
+      destructive: false
+      average_duration_seconds: 15
+      
+    depends_on: []
+    conflicts_with: []
+
+  - id: healthcheck
+    name: "Health Diagnostics"
+    version: "1.0.0"
+    category: brain_operations
+    lifecycle: active
+    
+    capabilities:
+      - health
+      - diagnostics
+      - monitoring
+      - validation
+    
+    can_do:
+      - "run system health check"
+      - "diagnose brain issues"
+      - "monitor system status"
+    
+    execution:
+      command: cortex-health
+      script: core/brain/healthcheck.py
+      wrapper: cli/wrappers/healthcheck_wrapper.py
+      method: cli_wrapper
+      platforms: [windows, linux, macos]
+      requires_admin: false
+      idempotent: true
+      destructive: false
+      average_duration_seconds: 30
+      
+    depends_on: []
+    conflicts_with: []
+
+  - id: optimize
+    name: "System Optimizer"
+    version: "1.0.0"
+    category: brain_operations
+    lifecycle: active
+    
+    capabilities:
+      - optimization
+      - performance
+      - tuning
+    
+    can_do:
+      - "optimize system performance"
+      - "tune brain operations"
+      - "improve response times"
+    
+    execution:
+      command: cortex-optimize
+      script: core/brain/optimize.py
+      wrapper: cli/wrappers/optimize_wrapper.py
+      method: cli_wrapper
+      platforms: [windows, linux, macos]
+      requires_admin: false
+      idempotent: true
+      destructive: false
+      average_duration_seconds: 60
+      
+    depends_on: [healthcheck]
+    conflicts_with: []
+
+  - id: cleanup
+    name: "Unified Cleanup Tool"
+    version: "2.0.0"
+    category: brain_operations
+    lifecycle: active
+    
+    capabilities:
+      - cleanup
+      - cache-clearing
+      - temp-removal
+      - maintenance
+      - system-hygiene
+    
+    can_do:
+      - "clean up temporary files"
+      - "clear VS Code cache"
+      - "remove Python __pycache__"
+      - "cleanup brain artifacts"
+      - "full system cleanup"
+    
+    modes:
+      - brain      # Brain artifact cleanup
+      - temp       # Temporary file cleanup
+      - cache      # Cache clearing
+      - full       # Orchestrates all modes
+    default_mode: full
+    
+    replaces:
+      - cleanup-temp
+      - clear-caches
+    
+    execution:
+      command: cortex-cleanup
+      script: core/brain/cleanup.py
+      wrapper: cli/wrappers/cleanup_wrapper.py
+      method: cli_wrapper
+      platforms: [windows, linux, macos]
+      requires_admin: false
+      idempotent: true
+      destructive: true
+      rollback_supported: true
+      average_duration_seconds: 45
+    
+    input_schema:
+      type: object
+      properties:
+        mode:
+          type: string
+          enum: [brain, temp, cache, full]
+          default: full
+        dry_run:
+          type: boolean
+          default: false
+    
+    output_schema:
+      type: object
+      properties:
+        files_removed:
+          type: integer
+        bytes_freed:
+          type: integer
+        errors:
+          type: array
+          items:
+            type: string
+      
+    depends_on: []
+    conflicts_with: [full-cleanup]
+
+  # ============================================================================
+  # OPERATIONS
+  # ============================================================================
+  - id: review
+    name: "Code Review Orchestrator"
+    version: "1.0.0"
+    category: operations
+    lifecycle: active
+    
+    capabilities:
+      - review
+      - code-analysis
+      - quality
+    
+    can_do:
+      - "orchestrate code review"
+      - "analyze code quality"
+      - "generate review reports"
+    
+    execution:
+      command: cortex-review
+      script: core/operations/review.py
+      wrapper: cli/wrappers/review_wrapper.py
+      method: cli_wrapper
+      platforms: [windows, linux, macos]
+      requires_admin: false
+      idempotent: true
+      destructive: false
+      
+    depends_on: []
+    conflicts_with: []
+
+  - id: deploy
+    name: "Deployment Tool"
+    version: "1.0.0"
+    category: operations
+    lifecycle: active
+    
+    capabilities:
+      - deployment
+      - publish
+      - release
+    
+    can_do:
+      - "deploy to publish directory"
+      - "release CORTEX updates"
+      - "publish documentation"
+    
+    execution:
+      command: cortex-deploy
+      script: core/operations/deploy.py
+      wrapper: cli/wrappers/deploy_wrapper.py
+      method: cli_wrapper
+      platforms: [windows, linux, macos]
+      requires_admin: true
+      idempotent: false
+      destructive: true
+      
+    depends_on: [validate]
+    conflicts_with: []
+
+  - id: sanitize
+    name: "Code Sanitizer"
+    version: "1.0.0"
+    category: operations
+    lifecycle: active
+    
+    capabilities:
+      - sanitization
+      - anonymization
+      - sharing
+    
+    can_do:
+      - "sanitize code for sharing"
+      - "anonymize sensitive data"
+      - "prepare code for external use"
+    
+    execution:
+      command: cortex-sanitize
+      script: core/operations/sanitize.py
+      wrapper: cli/wrappers/sanitize_wrapper.py
+      method: cli_wrapper
+      platforms: [windows, linux, macos]
+      requires_admin: false
+      idempotent: true
+      destructive: false
+      
+    depends_on: []
+    conflicts_with: []
+
+  # ============================================================================
+  # PLANNING
+  # ============================================================================
+  - id: plan
+    name: "Plan Generator"
+    version: "1.0.0"
+    category: planning
+    lifecycle: active
+    
+    capabilities:
+      - planning
+      - generation
+      - documentation
+    
+    can_do:
+      - "generate feature implementation plans"
+      - "create planning documentation"
+      - "scaffold planning structure"
+    
+    execution:
+      command: cortex-plan
+      script: core/planning/plan_generator.py
+      method: copilot_chat
+      platforms: [windows, linux, macos]
+      requires_admin: false
+      idempotent: true
+      destructive: false
+      
+    depends_on: []
+    conflicts_with: []
+
+  - id: ado
+    name: "Azure DevOps Manager"
+    version: "1.0.0"
+    category: planning
+    lifecycle: active
+    
+    capabilities:
+      - ado
+      - work-items
+      - azure
+    
+    can_do:
+      - "manage Azure DevOps work items"
+      - "create user stories"
+      - "generate ADO specs"
+    
+    execution:
+      command: cortex-ado
+      script: core/planning/ado_manager.py
+      method: copilot_chat
+      platforms: [windows, linux, macos]
+      requires_admin: false
+      idempotent: true
+      destructive: false
+      
+    depends_on: []
+    conflicts_with: []
+
+  - id: planning-file-manager
+    name: "Planning File Manager"
+    version: "1.0.0"
+    category: planning
+    lifecycle: active
+    
+    capabilities:
+      - file-management
+      - planning
+      - organization
+    
+    can_do:
+      - "manage planning documentation files"
+      - "organize planning artifacts"
+    
+    execution:
+      command: cortex-pfm
+      script: core/planning/planning_file_manager.py
+      method: cli
+      platforms: [windows, linux, macos]
+      requires_admin: false
+      
+    depends_on: []
+    conflicts_with: []
+
+  # ============================================================================
+  # DOCUMENTATION
+  # ============================================================================
+  - id: docs-generate
+    name: "Documentation Generator"
+    version: "1.0.0"
+    category: documentation
+    lifecycle: active
+    
+    capabilities:
+      - documentation
+      - generation
+      - code-docs
+    
+    can_do:
+      - "generate documentation from source code"
+      - "create API documentation"
+      - "build doc site"
+    
+    execution:
+      command: cortex-docs-gen
+      script: documentation/generate_docs_from_code.py
+      method: cli
+      platforms: [windows, linux, macos]
+      requires_admin: false
+      
+    depends_on: []
+    conflicts_with: []
+
+  - id: html-generator
+    name: "HTML Generator"
+    version: "1.0.0"
+    category: documentation
+    lifecycle: active
+    
+    capabilities:
+      - html
+      - generation
+      - templates
+    
+    can_do:
+      - "generate HTML from templates"
+      - "create web pages"
+      - "type-safe HTML element creation"
+    
+    execution:
+      command: cortex-html-gen
+      script: documentation/html-tools/generator.py
+      method: cli
+      platforms: [windows, linux, macos]
+      requires_admin: false
+      
+    depends_on: []
+    conflicts_with: []
+
+  - id: html-validator
+    name: "HTML Validator"
+    version: "1.0.0"
+    category: documentation
+    lifecycle: active
+    
+    capabilities:
+      - html
+      - validation
+      - syntax-check
+    
+    can_do:
+      - "validate HTML syntax"
+      - "check for unclosed tags"
+      - "detect structural issues"
+    
+    execution:
+      command: cortex-html-validate
+      script: documentation/html-tools/validator.py
+      method: cli
+      platforms: [windows, linux, macos]
+      requires_admin: false
+      
+    depends_on: []
+    conflicts_with: []
+
+  # ============================================================================
+  # TESTING
+  # ============================================================================
+  - id: validate
+    name: "Deployment Validator"
+    version: "1.0.0"
+    category: testing
+    lifecycle: active
+    
+    capabilities:
+      - validation
+      - testing
+      - integrity
+    
+    can_do:
+      - "validate deployment integrity"
+      - "check build artifacts"
+      - "verify release"
+    
+    execution:
+      command: cortex-validate
+      script: testing/validate_deployment.py
+      method: cli
+      platforms: [windows, linux, macos]
+      requires_admin: false
+      
+    depends_on: []
+    conflicts_with: []
+
+  - id: verify-no-mocks
+    name: "Mock Verifier"
+    version: "1.0.0"
+    category: testing
+    lifecycle: active
+    
+    capabilities:
+      - testing
+      - verification
+      - quality
+    
+    can_do:
+      - "verify no mock objects in tests"
+      - "check test quality"
+      - "ensure real implementations"
+    
+    execution:
+      command: cortex-verify-mocks
+      script: testing/verify_no_mocks.py
+      method: cli
+      platforms: [windows, linux, macos]
+      requires_admin: false
+      
+    depends_on: []
+    conflicts_with: []
+
+  # ============================================================================
+  # MAINTENANCE (includes deprecated tools)
+  # ============================================================================
+  - id: cleanup-temp
+    name: "Temp File Cleanup (Legacy)"
+    version: "1.0.0"
+    category: maintenance
+    lifecycle: deprecated
+    deprecated_date: "2025-12-31"
+    removal_date: "2026-03-31"
+    replacement: cleanup
+    deprecation_reason: "Consolidated into unified cleanup tool"
+    
+    capabilities:
+      - cleanup
+      - temp-files
+    
+    execution:
+      command: cortex-cleanup-temp
+      script: maintenance/cleanup_temp_files.py
+      method: cli
+      platforms: [windows, linux, macos]
+      requires_admin: false
+      
+    depends_on: []
+    conflicts_with: []
+
+  - id: detect-duplicates
+    name: "Duplicate Detector (Legacy)"
+    version: "1.0.0"
+    category: maintenance
+    lifecycle: deprecated
+    deprecated_date: "2025-12-31"
+    removal_date: "2026-03-31"
+    replacement: request-analyzer
+    deprecation_reason: "Superseded by RequestAnalyzer semantic detection in Toolkit Manager"
+    
+    capabilities:
+      - duplicate-detection
+      - analysis
+    
+    execution:
+      command: cortex-duplicates
+      script: maintenance/detect_duplicates.py
+      method: cli
+      platforms: [windows, linux, macos]
+      requires_admin: false
+      
+    depends_on: []
+    conflicts_with: []
+
+  - id: full-cleanup
+    name: "Full Cleanup Orchestrator"
+    version: "1.0.0"
+    category: maintenance
+    lifecycle: active
+    
+    capabilities:
+      - cleanup
+      - orchestration
+      - maintenance
+    
+    can_do:
+      - "run comprehensive 5-phase cleanup"
+      - "orchestrate all cleanup operations"
+    
+    execution:
+      command: cortex-full-cleanup
+      script: maintenance/full_cleanup.py
+      method: cli
+      platforms: [windows, linux, macos]
+      requires_admin: false
+      
+    depends_on: [cleanup]
+    conflicts_with: [cleanup]
+
+  - id: rename-planning-system-version
+    name: "Planning System Version Renamer"
+    version: "1.0.0"
+    category: maintenance
+    lifecycle: deprecated
+    deprecated_date: "2025-12-31"
+    removal_date: "2026-01-31"
+    replacement: null
+    deprecation_reason: "One-time migration utility, no longer needed"
+    
+    capabilities:
+      - migration
+      - rename
+    
+    execution:
+      command: cortex-rename-planning-version
+      script: rename_planning_system_version.py
+      method: cli
+      platforms: [windows, linux, macos]
+      requires_admin: false
+      
+    depends_on: []
+    conflicts_with: []
+
+  # ============================================================================
+  # GENERATORS
+  # ============================================================================
+  - id: extract-schemas
+    name: "Schema Extractor"
+    version: "1.0.0"
+    category: generators
+    lifecycle: active
+    
+    capabilities:
+      - schema
+      - extraction
+      - openapi
+    
+    can_do:
+      - "extract OpenAPI schemas from C# entity classes"
+      - "parse class definitions"
+      - "generate schema files"
+    
+    execution:
+      command: cortex-extract-schemas
+      script: core/generators/schema_extractor.py
+      wrapper: cli/wrappers/extract_schemas_wrapper.py
+      method: cli_wrapper
+      platforms: [windows, linux, macos]
+      requires_admin: false
+      
+    depends_on: []
+    conflicts_with: []
+
+  - id: generate-ra-specs-v4
+    name: "RA Spec Generator v4"
+    version: "4.0.0"
+    category: generators
+    lifecycle: active
+    
+    capabilities:
+      - generation
+      - openapi
+      - specs
+    
+    can_do:
+      - "generate production-ready RA API specifications"
+      - "create OpenAPI v4 specs"
+    
+    execution:
+      command: cortex-gen-ra-specs-v4
+      script: core/generators/openapi_generator_v4.py
+      wrapper: cli/wrappers/generate_ra_specs_v4_wrapper.py
+      method: cli_wrapper
+      platforms: [windows, linux, macos]
+      requires_admin: false
+      
+    depends_on: [extract-schemas]
+    conflicts_with: []
+
+  - id: plan-scaffold
+    name: "Plan Scaffold Generator"
+    version: "1.0.0"
+    category: utilities
+    lifecycle: active
+    
+    capabilities:
+      - scaffold
+      - planning
+      - generation
+    
+    can_do:
+      - "generate standard 4-folder planning structure"
+      - "create progress tracker JSON"
+      - "scaffold Planning System 4.0 folders"
+    
+    execution:
+      command: cortex-plan-scaffold
+      script: core/utilities/plan_scaffold_generator.py
+      method: cli
+      platforms: [windows, linux, macos]
+      requires_admin: false
+      
+    depends_on: []
+    conflicts_with: []
+
+  # ============================================================================
+  # ANALYTICS
+  # ============================================================================
+  - id: profile
+    name: "Performance Profiler"
+    version: "1.0.0"
+    category: analytics
+    lifecycle: active
+    
+    capabilities:
+      - profiling
+      - performance
+      - analysis
+    
+    can_do:
+      - "profile system performance"
+      - "analyze execution times"
+      - "generate performance reports"
+    
+    execution:
+      command: cortex-profile
+      script: analytics/profiling/profile_performance.py
+      method: cli
+      platforms: [windows, linux, macos]
+      requires_admin: false
+      
+    depends_on: []
+    conflicts_with: []
+
+  - id: metrics
+    name: "Metrics Collector"
+    version: "1.0.0"
+    category: analytics
+    lifecycle: active
+    
+    capabilities:
+      - metrics
+      - collection
+      - dashboard
+    
+    can_do:
+      - "collect system metrics"
+      - "display dashboard data"
+      - "track performance over time"
+    
+    execution:
+      command: cortex-metrics
+      script: analytics/metrics/collect_dashboard_data.py
+      method: cli
+      platforms: [windows, linux, macos]
+      requires_admin: false
+      
+    depends_on: []
+    conflicts_with: []
+
+  - id: uml
+    name: "UML Diagram Generator"
+    version: "1.0.0"
+    category: analytics
+    lifecycle: active
+    
+    capabilities:
+      - visualization
+      - uml
+      - diagrams
+    
+    can_do:
+      - "generate UML diagrams"
+      - "create class diagrams"
+      - "visualize architecture"
+    
+    execution:
+      command: cortex-uml
+      script: analytics/visualization/generate_uml_standalone.py
+      method: cli
+      platforms: [windows, linux, macos]
+      requires_admin: false
+      
+    depends_on: []
+    conflicts_with: []
+
+  # ============================================================================
+  # MIGRATION
+  # ============================================================================
+  - id: schema-migrate
+    name: "Schema Migrator"
+    version: "1.0.0"
+    category: migration
+    lifecycle: active
+    
+    capabilities:
+      - migration
+      - schema
+      - database
+    
+    can_do:
+      - "migrate database schemas"
+      - "upgrade schema versions"
+      - "transform data structures"
+    
+    execution:
+      command: cortex-schema-migrate
+      script: migration/schema_migrator.py
+      method: cli
+      platforms: [windows, linux, macos]
+      requires_admin: false
+      
+    depends_on: []
+    conflicts_with: []
+
+  - id: version-detect
+    name: "Version Detector"
+    version: "1.0.0"
+    category: migration
+    lifecycle: active
+    
+    capabilities:
+      - version
+      - detection
+      - analysis
+    
+    can_do:
+      - "detect CORTEX version"
+      - "analyze version compatibility"
+    
+    execution:
+      command: cortex-version-detect
+      script: migration/version_detector.py
+      method: cli
+      platforms: [windows, linux, macos]
+      requires_admin: false
+      
+    depends_on: []
+    conflicts_with: []
+
+# Capability taxonomy for RequestAnalyzer
+capability_taxonomy:
+  cleanup:
+    keywords: [clean, cleanup, clear, remove, delete, purge, temp, cache]
+    related: [maintenance, hygiene]
+  validation:
+    keywords: [validate, verify, check, test, lint, audit, inspect]
+    related: [testing, quality]
+  documentation:
+    keywords: [doc, docs, generate, markdown, html, reference, guide]
+    related: [generation, publishing]
+  migration:
+    keywords: [migrate, upgrade, convert, transform, schema, version]
+    related: [database, evolution]
+  analysis:
+    keywords: [analyze, profile, metrics, visualize, report, inspect]
+    related: [monitoring, performance]
+  generation:
+    keywords: [generate, create, scaffold, template, spec, build]
+    related: [automation, tooling]
+  deployment:
+    keywords: [deploy, publish, release, install, distribute]
+    related: [operations, devops]
+  planning:
+    keywords: [plan, roadmap, sprint, backlog, story, feature]
+    related: [management, organization]
+
+# Change log
+changelog:
+  - version: "2.0.0"
+    date: "2025-12-31"
+    changes:
+      - "Added semantic capabilities for RequestAnalyzer"
+      - "Added lifecycle state tracking"
+      - "Added dependency relationships"
+      - "Added execution characteristics"
+      - "Marked deprecated tools with replacement info"
+      - "Added capability taxonomy"
