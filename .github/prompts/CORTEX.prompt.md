@@ -127,7 +127,7 @@ LLM Classification → Keyword Regex → User Clarification
 | `sanitize`, `make generic`, `anonymize` | 📋 **Sanitization (GUIDED)** | `code-sanitization-manifest.yaml` | Sanitized codebase |
 | `refine`, `improve cortex`, `optimize code` | 📋 **Refinement (GUIDED)** | `refinement-orchestrator-manifest.yaml` | 7-phase improvement |
 | `optimize [artifact]`, `analyze [file]`, `improve [file]` | 📋 **Optimization (GUIDED)** | `cortex-optimize.prompt.md` | Deep analysis + decomposition strategy |
-| `system maintenance`, `health check` | 📋 **Maintenance (GUIDED)** | Via `maintenance/index.prompt.md` | 11-phase health + auto-repair (modular v2.0) |
+| `system maintenance`, `health check` | 📋 **Maintenance (GUIDED)** | Via `cortex-maintenance.prompt.md` | 11-phase health + auto-repair (modular v2.0) |
 | `cleanup cache`, `cleanup full`, `cleanup [type]` | 🛡️ **Cleanup (AUTONOMOUS)** | → Routes to Maintenance Phase 0 | Cache clear, bloat removal |
 | `vacuum [path]`, `deep clean [path]`, `organize files` | 🛡️ **Vacuum (AUTONOMOUS)** | `cortex-vacuum.prompt.md` | Deep filesystem cleanup + reorganization |
 | `help`, `show commands` | **Help** | Template-based | Command list |
@@ -302,6 +302,6 @@ cortex-brain/                    src/
 | `system maintenance` | 12-phase health pipeline |
 | `help` | Show all commands |
 
-**Resources:** `cortex-brain/response-templates-v4.yaml`, `brain-protection-rules.yaml`, `cortex-maintenance.prompt.md`, `cortex-vacuum.prompt.md`, `cortex-optimize.prompt.md`
+**Resources:** `cortex-brain/response-templates-v4.yaml`, `brain-protection-rules.yaml`, `cortex-maintenance.prompt.md` (v2.0 modular), `cortex-vacuum.prompt.md`, `cortex-optimize.prompt.md`
 
 **Anti-Bloat:** This file MUST stay under 250 lines (increased for LLM intent routing sections).

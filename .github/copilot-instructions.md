@@ -143,7 +143,7 @@ src/                    # Implementation
 
 Say `help` in Copilot Chat to see all operations.
 
-**For maintenance:** Use `system maintenance` to run 11-phase health pipeline (modular v2.0 - 80% faster loading).
+**For maintenance:** Use `system maintenance` to run 11-phase health pipeline via `cortex-maintenance.prompt.md` (modular v2.0 - 80% faster loading).
 
 ---
 

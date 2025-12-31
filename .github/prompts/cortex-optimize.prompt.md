@@ -277,53 +277,148 @@ Check if artifact exceeds thresholds:
 - Frequent merge conflicts in same file
 - Performance degradation from file size
 
+---
+
+## ⚠️ CRITICAL: Entry Point Preservation Rule
+
+**❌ DO NOT move the entry point during decomposition!**
+
+**✅ CORRECT Approach:**
+1. **Keep original file path** (e.g., `.github/prompts/cortex-maintenance.prompt.md`)
+2. **Replace content** with lightweight index (150-200 lines)
+3. **Create sub-folder** with same base name (e.g., `.github/prompts/maintenance/`)
+4. **Move implementation** to sub-folder files
+
+**❌ WRONG Approach:**
+1. ~~Move original file to sub-folder~~
+2. ~~Change entry point path~~
+3. ~~Update all consumer references~~
+
+**Why Entry Point Must Stay:**
+- ✅ **Zero breaking changes** - All invocations still work
+- ✅ **Backward compatibility** - Existing references unaffected
+- ✅ **User experience preserved** - Commands unchanged
+- ✅ **Minimal migration effort** - No consumer updates needed
+
+**Visual Comparison:**
+
+```
+✅ CORRECT DECOMPOSITION (Entry Point Preserved)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+BEFORE (v1.0 - Monolithic):
+.github/prompts/
+└── cortex-maintenance.prompt.md (4,844 lines) ← Entry point
+
+AFTER (v2.0 - Modular):
+.github/prompts/
+├── cortex-maintenance.prompt.md (138 lines) ← SAME LOCATION (now index)
+└── maintenance/                              ← NEW sub-folder
+    ├── core/ (4 files)
+    ├── pipeline/ (3 files)
+    ├── phases/ (12 files)
+    ├── guides/ (3 files)
+    └── metadata/ (3 files)
+
+User Command: "system maintenance" ← UNCHANGED
+References: CORTEX.prompt.md, copilot-instructions.md ← NO UPDATES NEEDED
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+❌ WRONG DECOMPOSITION (Entry Point Moved)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+BEFORE (v1.0):
+.github/prompts/
+└── cortex-maintenance.prompt.md (4,844 lines) ← Entry point
+
+AFTER (v2.0 - WRONG):
+.github/prompts/
+└── maintenance/
+    ├── index.prompt.md (194 lines) ← MOVED (breaks everything!)
+    ├── core/ (4 files)
+    └── ...
+
+Breaking Changes:
+❌ User command "system maintenance" → File not found
+❌ CORTEX.prompt.md reference → Must update to maintenance/index.prompt.md
+❌ copilot-instructions.md → Must update reference
+❌ Migration effort: HIGH (multiple consumer updates required)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+**Example (CORRECT):**
+```
+BEFORE: cortex-maintenance.prompt.md (4,844 lines at .github/prompts/)
+AFTER:
+  - cortex-maintenance.prompt.md (138 lines at .github/prompts/) ← INDEX, same location
+  - maintenance/ folder (26 files at .github/prompts/maintenance/) ← NEW sub-prompts
+```
+
+**Example (WRONG):**
+```
+❌ Moving cortex-maintenance.prompt.md → maintenance/index.prompt.md
+   This breaks all references and requires consumer updates!
+```
+
+---
+
 **Decomposition Patterns:**
 
 #### Pattern 1: Prompt File Decomposition
+
+**⚠️ CRITICAL: Original file path MUST remain as entry point!**
+
 **Before (Bloated):**
 ```
-system-prompt.md (1,200 lines)
-├── Introduction
-├── Core Instructions
-├── Edge Cases
-├── Security Rules
-├── Performance Tips
-├── Examples
-└── Troubleshooting
+.github/prompts/
+└── system-prompt.md (1,200 lines)  ← Entry point
+    ├── Introduction
+    ├── Core Instructions
+    ├── Edge Cases
+    ├── Security Rules
+    ├── Performance Tips
+    ├── Examples
+    └── Troubleshooting
 ```
 
 **After (Decomposed):**
 ```
-prompts/
-├── index.prompt.md (Main entry point, 150 lines)
-├── core/
-│   ├── instructions.prompt.md
-│   ├── edge-cases.prompt.md
-│   └── security-rules.prompt.md
-├── guides/
-│   ├── performance.prompt.md
-│   ├── examples.prompt.md
-│   └── troubleshooting.prompt.md
-└── metadata/
-    ├── version-history.md
-    └── references.md
+.github/prompts/
+├── system-prompt.md (150 lines)  ← SAME LOCATION = Entry point (now an index)
+└── system/                        ← NEW sub-folder with implementation
+    ├── core/
+    │   ├── instructions.prompt.md
+    │   ├── edge-cases.prompt.md
+    │   └── security-rules.prompt.md
+    ├── guides/
+    │   ├── performance.prompt.md
+    │   ├── examples.prompt.md
+    │   └── troubleshooting.prompt.md
+    └── metadata/
+        ├── version-history.md
+        └── references.md
 ```
 
-**Index File Structure:**
+**Entry Point Index File Structure (system-prompt.md):**
 ```markdown
-# System Prompt (Index)
+# System Prompt (v2.0 - Modular)
 **Version:** 2.0.0 | **Decomposed:** 2025-12-31
 
 ## 🎯 Purpose
 Centralized prompt system with modular sub-prompts.
 
-## 📚 Sub-Prompts
-1. **Core Instructions** → `core/instructions.prompt.md`
-2. **Edge Cases** → `core/edge-cases.prompt.md`
-3. **Security Rules** → `core/security-rules.prompt.md`
-4. **Performance Guide** → `guides/performance.prompt.md`
-5. **Examples** → `guides/examples.prompt.md`
-6. **Troubleshooting** → `guides/troubleshooting.prompt.md`
+**OLD (v1.0):** Single file (1,200 lines) ❌ BLOAT  
+**NEW (v2.0):** Index + 8 modular sub-prompts (150 lines main index) ✅ OPTIMIZED
+
+## 📚 Sub-Prompts (Load on Demand)
+1. **Core Instructions** → `system/core/instructions.prompt.md`
+2. **Edge Cases** → `system/core/edge-cases.prompt.md`
+3. **Security Rules** → `system/core/security-rules.prompt.md`
+4. **Performance Guide** → `system/guides/performance.prompt.md`
+5. **Examples** → `system/guides/examples.prompt.md`
+6. **Troubleshooting** → `system/guides/troubleshooting.prompt.md`
 
 ## 🔗 Load Order
 1. Core instructions (REQUIRED)
@@ -331,8 +426,27 @@ Centralized prompt system with modular sub-prompts.
 3. Security rules (REQUIRED)
 4. Guides (OPTIONAL, context-dependent)
 
-## 📋 Usage
-Reference sub-prompts: `Follow instructions in core/instructions.prompt.md`
+## 📋 Invocation (Unchanged from v1.0)
+All commands work identically - no breaking changes to user interface.
+
+## 📊 Performance Metrics (v2.0 vs v1.0)
+- Main file: 1,200 → 150 lines (87% reduction)
+- Context load: ~1,200 → ~400 lines (67% reduction)
+- Load time: 4.6x faster
+- Maintainability: 90% easier (isolated edits)
+```
+
+**Real-World Example (CORTEX Maintenance):**
+```
+✅ CORRECT:
+  - Entry: .github/prompts/cortex-maintenance.prompt.md (138 lines, INDEX)
+  - Impl:  .github/prompts/maintenance/* (26 files)
+  - User command: "system maintenance" (unchanged)
+
+❌ WRONG:
+  - Entry: .github/prompts/maintenance/index.prompt.md (MOVED)
+  - This breaks: "system maintenance" command
+  - Requires: Update all references in CORTEX.prompt.md, copilot-instructions.md
 ```
 
 ---
@@ -541,16 +655,19 @@ manifests/orchestrator/
 
 **Decomposition Checklist:**
 
-- [ ] **Index/Facade Created** - Single entry point references all sub-components
+- [ ] **⚠️ Entry Point Preserved** - Original file path unchanged (becomes index)
+- [ ] **Index/Facade Created** - Original file now references all sub-components
+- [ ] **Sub-Folder Created** - New folder with base name (e.g., `system/` for `system-prompt.md`)
 - [ ] **Logical Grouping** - Related components in same folder
 - [ ] **Clear Naming** - Folder/file names indicate purpose
-- [ ] **Documentation Updated** - README explains new structure
-- [ ] **Import Paths Updated** - All references point to new locations
+- [ ] **Zero Breaking Changes** - All invocations/commands still work
+- [ ] **Documentation Updated** - Index explains new structure + load strategy
+- [ ] **No Reference Updates Needed** - Consumer code unchanged (entry point same)
 - [ ] **Tests Still Pass** - No broken imports/references
 - [ ] **Version Bumped** - Major version increment (2.0.0)
-- [ ] **Migration Guide** - Document how to migrate from old structure
-- [ ] **Backward Compatibility** - Deprecation warnings for old paths (if applicable)
-- [ ] **Performance Validated** - No degradation from decomposition
+- [ ] **Migration Guide** - Document v1.0 → v2.0 changes
+- [ ] **Original Archived** - v1.0 moved to `cortex-brain/archives/`
+- [ ] **Performance Validated** - Load time improved, no degradation
 
 ---
 
@@ -566,13 +683,19 @@ manifests/orchestrator/
 
 **Decomposition Strategy:** Pattern 1 (Prompt File)
 
+**Entry Point Preservation:**
+- **OLD Path:** `.github/prompts/system-prompt.md` (1,200 lines, monolithic)
+- **NEW Path:** `.github/prompts/system-prompt.md` (150 lines, INDEX) ← SAME LOCATION
+- **Implementation:** `.github/prompts/system/` (8 files, modular)
+
 **New Structure:**
 \`\`\`
-{artifact-name}/
-├── index.prompt.md (150 lines)
-├── core/ (3 files, 450 lines)
-├── guides/ (3 files, 400 lines)
-└── metadata/ (2 files, 200 lines)
+.github/prompts/
+├── system-prompt.md (150 lines, INDEX) ← Entry point unchanged
+└── system/                          ← NEW sub-folder
+    ├── core/ (3 files, 450 lines)
+    ├── guides/ (3 files, 400 lines)
+    └── metadata/ (2 files, 200 lines)
 \`\`\`
 
 **Benefits:**
@@ -581,16 +704,17 @@ manifests/orchestrator/
 - ✅ Maintainable: Edit concerns independently
 - ✅ Testable: Validate sub-prompts separately
 - ✅ Scalable: Add new sections without bloating index
+- ✅ Zero breaking changes: Entry point path unchanged
 
 **Migration Effort:** 6 hours | **Risk:** LOW
 
 **Next Steps:**
-1. Create folder structure
+1. Create sub-folder: `.github/prompts/system/`
 2. Extract sections to sub-files
-3. Create index with references
-4. Update all consumers
-5. Validate functionality
-6. Archive old file
+3. Replace original file content with index (keep same path!)
+4. Validate: All commands/invocations still work
+5. Archive v1.0: Move to `cortex-brain/archives/{artifact-name}-v1.0.{ext}`
+6. Commit: "feat: Decompose {artifact-name} (v2.0) - 87% size reduction"
 ```
 
 ---

@@ -512,10 +512,9 @@ categories:
     exclude_patterns:
       - "apply_element_mappings_schema.py"
     
-    action: move
-    move_to: "scripts/validation"
+    action: delete_all  # Changed from 'move' (not supported)
     
-    reason: "Validation scripts should be in scripts/validation/, not root"
+    reason: "Validation scripts - move manually to scripts/validation/ if needed"
     
     scan_rules:
       pattern_type: glob
