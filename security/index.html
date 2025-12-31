@@ -117,22 +117,24 @@
         <span class="breadcrumb-current">Security</span>
     </nav>
 
-    <!-- Logo Header -->
-    <div class="logo-header">
-        <a href="../index.html">
-            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
-        </a>
-    </div>
-
-    <!-- Hero Section -->
+    <!-- Hero Section with Logo and Title Row -->
     <section class="hero" id="main-content">
-        <h1 class="hero-title">🛡️ CORTEX Security</h1>
-        <p class="hero-subtitle">Threat Modeling, OWASP Guidelines, Compliance, and Security Assessments</p>
-        <div class="file-metadata">
-            <span class="metadata-item">🔒 Secure by Design</span>
-            <span class="metadata-item">✅ OWASP Top 10</span>
-            <span class="metadata-item">📋 Compliance Ready</span>
-            <span class="metadata-item">📅 Updated: Dec 2025</span>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 2.5rem; flex-wrap: wrap; margin-bottom: 2rem;">
+            <!-- Logo -->
+            <a href="../index.html">
+                <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" style="width: 200px; height: 200px; filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.5)); transition: filter 0.2s ease-in-out;">
+            </a>
+            <!-- Title and Metadata -->
+            <div style="text-align: center;">
+                <h1 class="hero-title" style="margin-bottom: 0.5rem;">🛡️ CORTEX Security</h1>
+                <p class="hero-subtitle" style="margin-bottom: 1rem;">Threat Modeling, OWASP Guidelines, Compliance, and Security Assessments</p>
+                <div class="file-metadata">
+                    <span class="metadata-item">🔒 Secure by Design</span>
+                    <span class="metadata-item">✅ OWASP Top 10</span>
+                    <span class="metadata-item">📋 Compliance Ready</span>
+                    <span class="metadata-item">📅 Updated: Dec 2025</span>
+                </div>
+            </div>
         </div>
         
         <!-- Quick Access Dashboard Button -->
@@ -152,17 +154,47 @@
             <!-- Overview -->
             <div id="overview" class="content-section">
                 <div class="glass-card">
-                    <h2 class="section-title">📋 Security Overview</h2>
-                    <p>CORTEX provides comprehensive security templates, guidelines, and assessment tools to help development teams build secure applications. Our security framework covers threat modeling, OWASP compliance, vulnerability assessments, incident response, and regulatory compliance requirements.</p>
+                    <h2 class="section-title"><i class="fas fa-clipboard-list" aria-hidden="true"></i> Security Overview</h2>
+                    <p style="text-align: center; max-width: 900px; margin: 0 auto 2rem auto; color: var(--text-secondary); font-size: 1.1rem; line-height: 1.8;">CORTEX provides comprehensive security templates, guidelines, and assessment tools to help development teams build secure applications. Our security framework covers threat modeling, OWASP compliance, vulnerability assessments, incident response, and regulatory compliance requirements.</p>
+                </div>
+                
+                <!-- Security Objectives Grid -->
+                <h3 style="text-align: center; color: var(--accent-primary); margin: 2rem 0 1.5rem 0; font-size: 1.5rem;"><i class="fas fa-bullseye" aria-hidden="true"></i> Security Objectives</h3>
+                <div class="metrics-grid-4">
+                    <!-- Proactive Defense -->
+                    <div class="glass-card metric-card">
+                        <div class="feature-icon" style="width: 60px; height: 60px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-shield-alt" style="font-size: 1.75rem; color: var(--accent-primary);"></i>
+                        </div>
+                        <h4 style="color: var(--text-primary); margin-bottom: 0.5rem; font-size: 1.1rem;">Proactive Defense</h4>
+                        <p class="metric-description" style="font-size: 0.9rem; line-height: 1.6;">Identify and mitigate threats before deployment</p>
+                    </div>
                     
-                    <div class="info-box info-box-primary">
-                        <h3>🎯 Security Objectives</h3>
-                        <ul>
-                            <li><strong>Proactive Defense:</strong> Identify and mitigate threats before deployment</li>
-                            <li><strong>Compliance Assurance:</strong> Meet industry standards (GDPR, SOC 2, ISO 27001)</li>
-                            <li><strong>Risk Management:</strong> Systematic risk assessment and prioritization</li>
-                            <li><strong>Continuous Monitoring:</strong> Ongoing security validation and testing</li>
-                        </ul>
+                    <!-- Compliance Assurance -->
+                    <div class="glass-card metric-card">
+                        <div class="feature-icon" style="width: 60px; height: 60px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 212, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-check-double" style="font-size: 1.75rem; color: var(--success);"></i>
+                        </div>
+                        <h4 style="color: var(--text-primary); margin-bottom: 0.5rem; font-size: 1.1rem;">Compliance Assurance</h4>
+                        <p class="metric-description" style="font-size: 0.9rem; line-height: 1.6;">Meet industry standards (GDPR, SOC 2, ISO 27001)</p>
+                    </div>
+                    
+                    <!-- Risk Management -->
+                    <div class="glass-card metric-card">
+                        <div class="feature-icon" style="width: 60px; height: 60px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(255, 165, 0, 0.2), rgba(255, 68, 68, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-chart-line" style="font-size: 1.75rem; color: var(--warning);"></i>
+                        </div>
+                        <h4 style="color: var(--text-primary); margin-bottom: 0.5rem; font-size: 1.1rem;">Risk Management</h4>
+                        <p class="metric-description" style="font-size: 0.9rem; line-height: 1.6;">Systematic risk assessment and prioritization</p>
+                    </div>
+                    
+                    <!-- Continuous Monitoring -->
+                    <div class="glass-card metric-card">
+                        <div class="feature-icon" style="width: 60px; height: 60px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(123, 97, 255, 0.2), rgba(0, 212, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-sync-alt" style="font-size: 1.75rem; color: var(--accent-secondary);"></i>
+                        </div>
+                        <h4 style="color: var(--text-primary); margin-bottom: 0.5rem; font-size: 1.1rem;">Continuous Monitoring</h4>
+                        <p class="metric-description" style="font-size: 0.9rem; line-height: 1.6;">Ongoing security validation and testing</p>
                     </div>
                 </div>
             </div>
@@ -332,59 +364,73 @@
 
             <!-- Template Library -->
             <div id="templates" class="content-section">
-                <div class="glass-card">
-                    <h2 class="section-title">📚 Template Library</h2>
-                    <p>Access our comprehensive collection of security templates stored in the CORTEX knowledge library. All templates are tagged for easy retrieval and include practical examples.</p>
+                <div class="glass-card" style="padding: 3rem 3.5rem;">
+                    <!-- Title Header (no border, just styled) -->
+                    <h2 class="section-title" style="margin-bottom: 0.75rem;"><i class="fas fa-book-open" aria-hidden="true"></i> Template Library</h2>
+                    <p style="text-align: center; color: var(--text-secondary); margin-bottom: 2rem; font-size: 1rem;">Access our comprehensive collection of security templates stored in the CORTEX knowledge library. All templates are tagged for easy retrieval and include practical examples.</p>
                     
-                    <div class="info-box info-box-success">
-                        <h3>📂 Knowledge Library Location</h3>
-                        <p><code>cortex-brain/knowledge-library/security/</code></p>
-                        <p>All security templates are stored in the knowledge library and can be retrieved via CORTEX's RAG system for context-aware security guidance.</p>
+                    <!-- Knowledge Library Location (inside panel) -->
+                    <div style="background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 212, 255, 0.1)); border: 1px solid rgba(0, 255, 136, 0.3); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; text-align: center;">
+                        <h3 style="color: var(--success); margin-bottom: 0.5rem; font-size: 1.1rem;"><i class="fas fa-folder-open" aria-hidden="true"></i> Knowledge Library Location</h3>
+                        <code style="background: rgba(0, 0, 0, 0.3); padding: 0.5rem 1rem; border-radius: 6px; font-family: var(--font-mono); color: var(--accent-primary);">cortex-brain/knowledge-library/security/</code>
+                        <p style="color: var(--text-secondary); margin-top: 0.75rem; font-size: 0.9rem;">All security templates are stored in the knowledge library and can be retrieved via CORTEX's RAG system for context-aware security guidance.</p>
                     </div>
-
-                    <h3 style="margin-top: 2rem;">Available Templates</h3>
-                    <div class="workflow-phases">
-                        <div class="phase-item">
-                            <div class="phase-number">1</div>
-                            <div class="phase-content">
-                                <h4>Threat Modeling Template</h4>
-                                <p>STRIDE analysis, attack surface mapping, threat scenarios</p>
+                    
+                    <!-- Available Templates Grid (inside panel) -->
+                    <h3 style="text-align: center; color: var(--accent-primary); margin-bottom: 1.5rem; font-size: 1.2rem;"><i class="fas fa-file-alt" aria-hidden="true"></i> Available Templates</h3>
+                    <div class="feature-grid feature-grid-3" style="gap: 1.25rem;">
+                        <!-- Threat Modeling Template -->
+                        <div style="background: rgba(0, 0, 0, 0.2); border: 1px solid var(--glass-border); border-radius: 12px; padding: 1.5rem; text-align: center; transition: all 0.2s ease;">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(255, 68, 68, 0.2), rgba(255, 165, 0, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-crosshairs" style="font-size: 1.5rem; color: var(--danger);"></i>
                             </div>
+                            <h4 style="color: var(--text-primary); margin-bottom: 0.5rem; font-size: 1rem;">Threat Modeling Template</h4>
+                            <p style="color: var(--text-secondary); font-size: 0.85rem;">STRIDE analysis, attack surface mapping, threat scenarios</p>
                         </div>
-                        <div class="phase-item">
-                            <div class="phase-number">2</div>
-                            <div class="phase-content">
-                                <h4>OWASP Top 10 Checklist</h4>
-                                <p>Comprehensive vulnerability checklist with mitigation strategies</p>
+                        
+                        <!-- OWASP Top 10 Checklist -->
+                        <div style="background: rgba(0, 0, 0, 0.2); border: 1px solid var(--glass-border); border-radius: 12px; padding: 1.5rem; text-align: center; transition: all 0.2s ease;">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(255, 165, 0, 0.2), rgba(255, 68, 68, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-exclamation-triangle" style="font-size: 1.5rem; color: var(--warning);"></i>
                             </div>
+                            <h4 style="color: var(--text-primary); margin-bottom: 0.5rem; font-size: 1rem;">OWASP Top 10 Checklist</h4>
+                            <p style="color: var(--text-secondary); font-size: 0.85rem;">Comprehensive vulnerability checklist with mitigation strategies</p>
                         </div>
-                        <div class="phase-item">
-                            <div class="phase-number">3</div>
-                            <div class="phase-content">
-                                <h4>Security Plan Template</h4>
-                                <p>Complete security program planning and implementation</p>
+                        
+                        <!-- Security Plan Template -->
+                        <div style="background: rgba(0, 0, 0, 0.2); border: 1px solid var(--glass-border); border-radius: 12px; padding: 1.5rem; text-align: center; transition: all 0.2s ease;">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-clipboard-list" style="font-size: 1.5rem; color: var(--accent-primary);"></i>
                             </div>
+                            <h4 style="color: var(--text-primary); margin-bottom: 0.5rem; font-size: 1rem;">Security Plan Template</h4>
+                            <p style="color: var(--text-secondary); font-size: 0.85rem;">Complete security program planning and implementation</p>
                         </div>
-                        <div class="phase-item">
-                            <div class="phase-number">4</div>
-                            <div class="phase-content">
-                                <h4>Compliance Checklist</h4>
-                                <p>Multi-framework compliance tracking (GDPR, SOC 2, ISO)</p>
+                        
+                        <!-- Compliance Checklist -->
+                        <div style="background: rgba(0, 0, 0, 0.2); border: 1px solid var(--glass-border); border-radius: 12px; padding: 1.5rem; text-align: center; transition: all 0.2s ease;">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 212, 255, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-check-double" style="font-size: 1.5rem; color: var(--success);"></i>
                             </div>
+                            <h4 style="color: var(--text-primary); margin-bottom: 0.5rem; font-size: 1rem;">Compliance Checklist</h4>
+                            <p style="color: var(--text-secondary); font-size: 0.85rem;">Multi-framework compliance tracking (GDPR, SOC 2, ISO)</p>
                         </div>
-                        <div class="phase-item">
-                            <div class="phase-number">5</div>
-                            <div class="phase-content">
-                                <h4>Vulnerability Assessment</h4>
-                                <p>Structured vulnerability identification and prioritization</p>
+                        
+                        <!-- Vulnerability Assessment -->
+                        <div style="background: rgba(0, 0, 0, 0.2); border: 1px solid var(--glass-border); border-radius: 12px; padding: 1.5rem; text-align: center; transition: all 0.2s ease;">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(123, 97, 255, 0.2), rgba(0, 212, 255, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-search" style="font-size: 1.5rem; color: var(--accent-secondary);"></i>
                             </div>
+                            <h4 style="color: var(--text-primary); margin-bottom: 0.5rem; font-size: 1rem;">Vulnerability Assessment</h4>
+                            <p style="color: var(--text-secondary); font-size: 0.85rem;">Structured vulnerability identification and prioritization</p>
                         </div>
-                        <div class="phase-item">
-                            <div class="phase-number">6</div>
-                            <div class="phase-content">
-                                <h4>Penetration Test Report</h4>
-                                <p>Professional pen test documentation and findings</p>
+                        
+                        <!-- Penetration Test Report -->
+                        <div style="background: rgba(0, 0, 0, 0.2); border: 1px solid var(--glass-border); border-radius: 12px; padding: 1.5rem; text-align: center; transition: all 0.2s ease;">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-user-secret" style="font-size: 1.5rem; color: var(--info);"></i>
                             </div>
+                            <h4 style="color: var(--text-primary); margin-bottom: 0.5rem; font-size: 1rem;">Penetration Test Report</h4>
+                            <p style="color: var(--text-secondary); font-size: 0.85rem;">Professional pen test documentation and findings</p>
                         </div>
                     </div>
                 </div>
@@ -393,72 +439,110 @@
             <!-- Security Best Practices -->
             <div id="best-practices" class="content-section">
                 <div class="glass-card">
-                    <h2 class="section-title">🌟 Security Best Practices</h2>
+                    <h2 class="section-title"><i class="fas fa-star" aria-hidden="true"></i> Security Best Practices</h2>
+                </div>
+                
+                <!-- Best Practices Grid -->
+                <div class="feature-grid feature-grid-3">
+                    <!-- Secure by Design -->
+                    <div class="glass-card metric-card">
+                        <div style="width: 60px; height: 60px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-lock" style="font-size: 1.75rem; color: var(--accent-primary);"></i>
+                        </div>
+                        <h4 style="color: var(--text-primary); margin-bottom: 0.75rem; font-size: 1.1rem;">Secure by Design</h4>
+                        <p class="metric-description" style="font-size: 0.9rem; line-height: 1.6;">Integrate security from the earliest design phases. Consider security architecture, threat modeling, and security requirements during initial planning.</p>
+                    </div>
                     
-                    <div class="info-grid">
-                        <div class="info-item">
-                            <h3>🔐 Secure by Design</h3>
-                            <p>Integrate security from the earliest design phases. Consider security architecture, threat modeling, and security requirements during initial planning.</p>
+                    <!-- Defense in Depth -->
+                    <div class="glass-card metric-card">
+                        <div style="width: 60px; height: 60px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(123, 97, 255, 0.2), rgba(0, 212, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-layer-group" style="font-size: 1.75rem; color: var(--accent-secondary);"></i>
                         </div>
-                        <div class="info-item">
-                            <h3>🔄 Defense in Depth</h3>
-                            <p>Implement multiple layers of security controls. Don't rely on a single security measure—use authentication, authorization, encryption, and monitoring together.</p>
+                        <h4 style="color: var(--text-primary); margin-bottom: 0.75rem; font-size: 1.1rem;">Defense in Depth</h4>
+                        <p class="metric-description" style="font-size: 0.9rem; line-height: 1.6;">Implement multiple layers of security controls. Don't rely on a single security measure—use authentication, authorization, encryption, and monitoring together.</p>
+                    </div>
+                    
+                    <!-- Least Privilege -->
+                    <div class="glass-card metric-card">
+                        <div style="width: 60px; height: 60px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(255, 165, 0, 0.2), rgba(255, 68, 68, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-user-shield" style="font-size: 1.75rem; color: var(--warning);"></i>
                         </div>
-                        <div class="info-item">
-                            <h3>🎯 Least Privilege</h3>
-                            <p>Grant minimum necessary access rights. Users and systems should only have permissions required for their specific tasks.</p>
+                        <h4 style="color: var(--text-primary); margin-bottom: 0.75rem; font-size: 1.1rem;">Least Privilege</h4>
+                        <p class="metric-description" style="font-size: 0.9rem; line-height: 1.6;">Grant minimum necessary access rights. Users and systems should only have permissions required for their specific tasks.</p>
+                    </div>
+                    
+                    <!-- Security Testing -->
+                    <div class="glass-card metric-card">
+                        <div style="width: 60px; height: 60px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 212, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-vial" style="font-size: 1.75rem; color: var(--success);"></i>
                         </div>
-                        <div class="info-item">
-                            <h3>✅ Security Testing</h3>
-                            <p>Continuous security validation through automated scans, penetration testing, and security code reviews throughout the SDLC.</p>
+                        <h4 style="color: var(--text-primary); margin-bottom: 0.75rem; font-size: 1.1rem;">Security Testing</h4>
+                        <p class="metric-description" style="font-size: 0.9rem; line-height: 1.6;">Continuous security validation through automated scans, penetration testing, and security code reviews throughout the SDLC.</p>
+                    </div>
+                    
+                    <!-- Risk-Based Approach -->
+                    <div class="glass-card metric-card">
+                        <div style="width: 60px; height: 60px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-chart-pie" style="font-size: 1.75rem; color: var(--info);"></i>
                         </div>
-                        <div class="info-item">
-                            <h3>📊 Risk-Based Approach</h3>
-                            <p>Prioritize security efforts based on risk assessment. Focus resources on the most critical assets and highest probability threats.</p>
+                        <h4 style="color: var(--text-primary); margin-bottom: 0.75rem; font-size: 1.1rem;">Risk-Based Approach</h4>
+                        <p class="metric-description" style="font-size: 0.9rem; line-height: 1.6;">Prioritize security efforts based on risk assessment. Focus resources on the most critical assets and highest probability threats.</p>
+                    </div>
+                    
+                    <!-- Security Awareness -->
+                    <div class="glass-card metric-card">
+                        <div style="width: 60px; height: 60px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(255, 68, 68, 0.2), rgba(255, 165, 0, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-graduation-cap" style="font-size: 1.75rem; color: var(--danger);"></i>
                         </div>
-                        <div class="info-item">
-                            <h3>🎓 Security Awareness</h3>
-                            <p>Regular training for all team members. Security is everyone's responsibility—from developers to executives.</p>
-                        </div>
+                        <h4 style="color: var(--text-primary); margin-bottom: 0.75rem; font-size: 1.1rem;">Security Awareness</h4>
+                        <p class="metric-description" style="font-size: 0.9rem; line-height: 1.6;">Regular training for all team members. Security is everyone's responsibility—from developers to executives.</p>
                     </div>
                 </div>
             </div>
 
             <!-- Integration with CORTEX -->
             <div id="integration" class="content-section">
-                <div class="glass-card">
-                    <h2 class="section-title">🔗 Integration with CORTEX</h2>
+                <div class="glass-card" style="padding: 3rem 3.5rem;">
+                    <!-- Title Header (no border, just styled) -->
+                    <h2 class="section-title" style="margin-bottom: 0.75rem;"><i class="fas fa-link" aria-hidden="true"></i> Integration with CORTEX</h2>
+                    <p style="text-align: center; color: var(--text-secondary); margin-bottom: 2.5rem; font-size: 1rem;">CORTEX security templates integrate seamlessly with other CORTEX features for comprehensive security coverage.</p>
                     
-                    <p>CORTEX security templates integrate seamlessly with other CORTEX features:</p>
-
-                    <div class="workflow-phases" style="margin-top: 2rem;">
-                        <div class="phase-item">
-                            <div class="phase-icon">🎯</div>
-                            <div class="phase-content">
-                                <h4>Planning System</h4>
-                                <p>Incorporate security requirements into feature plans. Security considerations are included in the 4-folder planning structure.</p>
+                    <!-- Integration Grid (inside panel) -->
+                    <div class="metrics-grid-4">
+                        <!-- Planning System -->
+                        <div style="background: rgba(0, 0, 0, 0.2); border: 1px solid var(--glass-border); border-radius: 12px; padding: 1.5rem; text-align: center; transition: all 0.2s ease;">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-bullseye" style="font-size: 1.5rem; color: var(--accent-primary);"></i>
                             </div>
+                            <h4 style="color: var(--text-primary); margin-bottom: 0.5rem; font-size: 1rem;">Planning System</h4>
+                            <p style="color: var(--text-secondary); font-size: 0.85rem;">Incorporate security requirements into feature plans with 4-folder structure</p>
                         </div>
-                        <div class="phase-item">
-                            <div class="phase-icon">🧪</div>
-                            <div class="phase-content">
-                                <h4>TDD Orchestrator</h4>
-                                <p>Include security tests in TDD workflow. Write security-focused tests for authentication, authorization, and data validation.</p>
+                        
+                        <!-- TDD Orchestrator -->
+                        <div style="background: rgba(0, 0, 0, 0.2); border: 1px solid var(--glass-border); border-radius: 12px; padding: 1.5rem; text-align: center; transition: all 0.2s ease;">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 212, 255, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-vial" style="font-size: 1.5rem; color: var(--success);"></i>
                             </div>
+                            <h4 style="color: var(--text-primary); margin-bottom: 0.5rem; font-size: 1rem;">TDD Orchestrator</h4>
+                            <p style="color: var(--text-secondary); font-size: 0.85rem;">Security-focused tests for authentication, authorization, and validation</p>
                         </div>
-                        <div class="phase-item">
-                            <div class="phase-icon">🧹</div>
-                            <div class="phase-content">
-                                <h4>Code Sanitization</h4>
-                                <p>Remove sensitive data before sharing code. Sanitization orchestrator helps anonymize credentials and PII.</p>
+                        
+                        <!-- Code Sanitization -->
+                        <div style="background: rgba(0, 0, 0, 0.2); border: 1px solid var(--glass-border); border-radius: 12px; padding: 1.5rem; text-align: center; transition: all 0.2s ease;">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(255, 165, 0, 0.2), rgba(255, 68, 68, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-broom" style="font-size: 1.5rem; color: var(--warning);"></i>
                             </div>
+                            <h4 style="color: var(--text-primary); margin-bottom: 0.5rem; font-size: 1rem;">Code Sanitization</h4>
+                            <p style="color: var(--text-secondary); font-size: 0.85rem;">Remove sensitive data and anonymize credentials and PII</p>
                         </div>
-                        <div class="phase-item">
-                            <div class="phase-icon">📊</div>
-                            <div class="phase-content">
-                                <h4>CORTEX Lens</h4>
-                                <p>Analyze code for security vulnerabilities. AST analysis can identify potential security issues in existing codebases.</p>
+                        
+                        <!-- CORTEX Lens -->
+                        <div style="background: rgba(0, 0, 0, 0.2); border: 1px solid var(--glass-border); border-radius: 12px; padding: 1.5rem; text-align: center; transition: all 0.2s ease;">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(123, 97, 255, 0.2), rgba(0, 212, 255, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-chart-bar" style="font-size: 1.5rem; color: var(--accent-secondary);"></i>
                             </div>
+                            <h4 style="color: var(--text-primary); margin-bottom: 0.5rem; font-size: 1rem;">CORTEX Lens</h4>
+                            <p style="color: var(--text-secondary); font-size: 0.85rem;">AST analysis to identify security vulnerabilities in codebases</p>
                         </div>
                     </div>
                 </div>
@@ -466,29 +550,51 @@
 
             <!-- Quick Actions -->
             <div id="quick-actions" class="content-section">
-                <div class="glass-card">
-                    <h2 class="section-title">⚡ Quick Actions</h2>
+                <div class="glass-card" style="padding: 3rem 3.5rem;">
+                    <!-- Title Header (no border, just styled) -->
+                    <h2 class="section-title" style="margin-bottom: 0.75rem;"><i class="fas fa-bolt" aria-hidden="true"></i> Quick Actions</h2>
+                    <p style="text-align: center; color: var(--text-secondary); margin-bottom: 2.5rem; font-size: 1rem;">Get started quickly with these common security tasks. Use the commands below in CORTEX Chat to load templates instantly.</p>
                     
-                    <div class="cta-grid">
-                        <div class="cta-card">
-                            <h3>🎯 Start Threat Modeling</h3>
-                            <p>Begin a new threat modeling session for your application</p>
-                            <code class="command-example">Ask CORTEX: "Load threat modeling template"</code>
+                    <!-- Quick Actions Grid (inside the panel) -->
+                    <div class="metrics-grid-4">
+                        <!-- Start Threat Modeling -->
+                        <div style="background: rgba(0, 0, 0, 0.2); border: 1px solid var(--glass-border); border-radius: 12px; padding: 1.5rem; text-align: center; transition: all 0.2s ease;">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-crosshairs" style="font-size: 1.5rem; color: var(--accent-primary);"></i>
+                            </div>
+                            <h4 style="color: var(--text-primary); margin-bottom: 0.5rem; font-size: 1rem;">Start Threat Modeling</h4>
+                            <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1rem;">Begin a new threat modeling session for your application</p>
+                            <code style="display: block; background: rgba(0, 0, 0, 0.3); padding: 0.5rem; border-radius: 6px; font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent-primary);">Ask CORTEX: "Load threat modeling template"</code>
                         </div>
-                        <div class="cta-card">
-                            <h3>✅ OWASP Checklist</h3>
-                            <p>Validate your application against OWASP Top 10</p>
-                            <code class="command-example">Ask CORTEX: "Show OWASP Top 10 checklist"</code>
+                        
+                        <!-- OWASP Checklist -->
+                        <div style="background: rgba(0, 0, 0, 0.2); border: 1px solid var(--glass-border); border-radius: 12px; padding: 1.5rem; text-align: center; transition: all 0.2s ease;">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 212, 255, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-check-circle" style="font-size: 1.5rem; color: var(--success);"></i>
+                            </div>
+                            <h4 style="color: var(--text-primary); margin-bottom: 0.5rem; font-size: 1rem;">OWASP Checklist</h4>
+                            <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1rem;">Validate your application against OWASP Top 10</p>
+                            <code style="display: block; background: rgba(0, 0, 0, 0.3); padding: 0.5rem; border-radius: 6px; font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent-primary);">Ask CORTEX: "Show OWASP Top 10 checklist"</code>
                         </div>
-                        <div class="cta-card">
-                            <h3>📋 Compliance Check</h3>
-                            <p>Review compliance requirements for your project</p>
-                            <code class="command-example">Ask CORTEX: "Load compliance checklist"</code>
+                        
+                        <!-- Compliance Check -->
+                        <div style="background: rgba(0, 0, 0, 0.2); border: 1px solid var(--glass-border); border-radius: 12px; padding: 1.5rem; text-align: center; transition: all 0.2s ease;">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(123, 97, 255, 0.2), rgba(0, 212, 255, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-clipboard-check" style="font-size: 1.5rem; color: var(--accent-secondary);"></i>
+                            </div>
+                            <h4 style="color: var(--text-primary); margin-bottom: 0.5rem; font-size: 1rem;">Compliance Check</h4>
+                            <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1rem;">Review compliance requirements for your project</p>
+                            <code style="display: block; background: rgba(0, 0, 0, 0.3); padding: 0.5rem; border-radius: 6px; font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent-primary);">Ask CORTEX: "Load compliance checklist"</code>
                         </div>
-                        <div class="cta-card">
-                            <h3>🔍 Security Assessment</h3>
-                            <p>Conduct a vulnerability assessment</p>
-                            <code class="command-example">Ask CORTEX: "Load vulnerability assessment template"</code>
+                        
+                        <!-- Security Assessment -->
+                        <div style="background: rgba(0, 0, 0, 0.2); border: 1px solid var(--glass-border); border-radius: 12px; padding: 1.5rem; text-align: center; transition: all 0.2s ease;">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(255, 165, 0, 0.2), rgba(255, 68, 68, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-search" style="font-size: 1.5rem; color: var(--warning);"></i>
+                            </div>
+                            <h4 style="color: var(--text-primary); margin-bottom: 0.5rem; font-size: 1rem;">Security Assessment</h4>
+                            <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1rem;">Conduct a vulnerability assessment</p>
+                            <code style="display: block; background: rgba(0, 0, 0, 0.3); padding: 0.5rem; border-radius: 6px; font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent-primary);">Ask CORTEX: "Load vulnerability assessment template"</code>
                         </div>
                     </div>
                 </div>
