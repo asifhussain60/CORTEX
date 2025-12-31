@@ -43,9 +43,10 @@ def mock_brain():
     
     brain = MagicMock(spec=BrainInterface)
     
-    # Mock tier0 (Governance)
+    # Mock tier0 (BrainProtector - SKULL governance)
     brain.tier0 = MagicMock()
-    brain.tier0.check_rule.return_value = {"allowed": True}
+    brain.tier0.check_protection.return_value = (True, [])  # (is_safe, violations)
+    brain.tier0.get_rule.return_value = {"id": "TDD_ENFORCEMENT", "severity": "blocked"}
     
     # Mock tier1 (Working Memory)
     brain.tier1 = MagicMock()

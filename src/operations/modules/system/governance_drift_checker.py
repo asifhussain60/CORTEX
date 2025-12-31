@@ -1,7 +1,10 @@
 """
 Governance Drift Checker for CORTEX System Optimization
 
-Analyzes governance.yaml for rule ordering drift and inefficiencies.
+Analyzes brain-protection-rules.yaml for rule ordering drift and inefficiencies.
+
+Updated Dec 31, 2025: Now checks BrainProtector rules (brain-protection-rules.yaml)
+instead of deprecated governance.yaml.
 
 Author: Asif Hussain
 Copyright: © 2024-2025 Asif Hussain. All rights reserved.
@@ -49,19 +52,20 @@ class GovernanceDriftChecker:
     
     def check(self) -> Dict[str, Any]:
         """
-        Check governance.yaml for drift and inefficiencies.
+        Check brain-protection-rules.yaml for drift and inefficiencies.
         
         Returns:
             Dict with has_issues, issues list, health_score, and recommendations
         """
-        governance_path = self.project_root / "src" / "tier0" / "governance.yaml"
+        # Updated: Now checks brain-protection-rules.yaml (BrainProtector)
+        governance_path = self.project_root / "cortex-brain" / "brain-protection-rules.yaml"
         
         if not governance_path.exists():
             return {
                 'has_issues': True,
-                'issues': ["CRITICAL: governance.yaml not found"],
+                'issues': ["CRITICAL: brain-protection-rules.yaml not found"],
                 'health_score': 0.0,
-                'recommendations': ["Create governance.yaml in src/tier0/"]
+                'recommendations': ["Create brain-protection-rules.yaml in cortex-brain/"]
             }
         
         # Try cache first

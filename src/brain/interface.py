@@ -43,7 +43,7 @@ class BrainInterface:
     Unified interface to all CORTEX brain tiers.
     
     Architecture:
-        Tier 0 (Governance): ~/.cortex/shared/skull_rules.yaml (centralized)
+        Tier 0 (Governance): {workspace}/cortex-brain/brain-protection-rules.yaml (BrainProtector)
         Tier 1 (Working Memory): {workspace}/cortex-brain/tier1/conversations.db (per-repo)
         Tier 2 (Knowledge Graph): ~/.cortex/shared/tier2/knowledge-graph.db (centralized with namespaces)
         Tier 3 (Dev Context): {workspace}/cortex-brain/tier3/metrics.db (per-repo)
@@ -51,8 +51,8 @@ class BrainInterface:
     Usage:
         brain = BrainInterface(workspace_root)
         
-        # Tier 0: Governance
-        brain.tier0.validate_operation(...)
+        # Tier 0: Governance (SKULL protection)
+        brain.tier0.check_protection(...)
         
         # Tier 1: Working Memory
         brain.tier1.store_conversation(...)
@@ -99,16 +99,16 @@ class BrainInterface:
     @property
     def tier0(self):
         """
-        Tier 0: Governance (SKULL rules enforcement).
+        Tier 0: Governance (SKULL rules enforcement via BrainProtector).
         
-        Storage: ~/.cortex/shared/skull_rules.yaml (centralized)
+        Storage: {workspace}/cortex-brain/brain-protection-rules.yaml
         """
         if self._tier0 is None and self.config.enable_tier0:
-            from .tier0.governance import GovernanceEngine
+            from src.tier0.brain_protector import BrainProtector
             
-            rules_path = self.config.shared_root / "skull_rules.yaml"
-            self._tier0 = GovernanceEngine(rules_path)
-            self.logger.debug("Tier 0 (Governance) initialized")
+            # BrainProtector auto-resolves paths via resource_resolver
+            self._tier0 = BrainProtector()
+            self.logger.debug("Tier 0 (BrainProtector) initialized")
         
         return self._tier0
     
