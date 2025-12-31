@@ -1,0 +1,1103 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Complete CORTEX Documentation Sitemap - Navigate all features, orchestrators, and knowledge resources">
+    <title>Sitemap - CORTEX Documentation</title>
+    <link rel="icon" type="image/png" href="assets/images/CORTEX-logo-64.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/main.css">
+    <style>
+        /* Sitemap Glassmorphism Styles */
+        .sitemap-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .sitemap-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .sitemap-header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+        
+        .sitemap-header p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+        }
+        
+        .sitemap-grid {
+            display: grid;
+            gap: 2rem;
+        }
+        
+        .sitemap-section {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: all var(--transition-base);
+        }
+        
+        .sitemap-section:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: rgba(0, 212, 255, 0.3);
+        }
+        
+        .sitemap-section-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .sitemap-section-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            color: white;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+        }
+        
+        .sitemap-section-info {
+            flex: 1;
+        }
+        
+        .sitemap-section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .sitemap-section-desc {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+        
+        .sitemap-pages {
+            display: grid;
+            gap: 1rem;
+        }
+        
+        .sitemap-page-link {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.25rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            color: inherit;
+            transition: all var(--transition-base);
+        }
+        
+        .sitemap-page-link:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--accent-primary);
+            transform: translateX(8px);
+        }
+        
+        .sitemap-page-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-primary);
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+        
+        .sitemap-page-info {
+            flex: 1;
+        }
+        
+        .sitemap-page-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0 0 0.25rem 0;
+        }
+        
+        .sitemap-page-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+        
+        .sitemap-page-arrow {
+            color: var(--text-muted);
+            font-size: 1rem;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all var(--transition-base);
+        }
+        
+        .sitemap-page-link:hover .sitemap-page-arrow {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        /* Back to top button */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.25rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 212, 255, 0.4);
+            transition: all var(--transition-base);
+            opacity: 0;
+            visibility: hidden;
+        }
+        
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .back-to-top:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.6);
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .sitemap-container {
+                padding: 1rem;
+            }
+            
+            .sitemap-header h1 {
+                font-size: 2rem;
+            }
+            
+            .sitemap-header p {
+                font-size: 1rem;
+            }
+            
+            .sitemap-section {
+                padding: 1.5rem;
+            }
+            
+            .sitemap-section-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .sitemap-section-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+            
+            .sitemap-section-title {
+                font-size: 1.5rem;
+            }
+            
+            .sitemap-page-link {
+                padding: 0.875rem 1rem;
+            }
+            
+            .sitemap-page-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
+            }
+            
+            .sitemap-page-title {
+                font-size: 1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .sitemap-header h1 {
+                font-size: 1.75rem;
+            }
+            
+            .sitemap-section {
+                padding: 1.25rem;
+            }
+            
+            .sitemap-section-title {
+                font-size: 1.25rem;
+            }
+            
+            .sitemap-page-desc {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-content">
+            <a href="index.html" class="logo-link">
+                <img src="assets/images/CORTEX-logo-128.png" alt="CORTEX Logo" class="nav-logo">
+                <span class="logo-text">CORTEX</span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html"><i class="fas fa-home"></i> Home</a>
+                <a href="sitemap.html" class="active"><i class="fas fa-sitemap"></i> Sitemap</a>
+                <a href="https://github.com/asifhussain60/CORTEX" target="_blank" class="github-link">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <div class="sitemap-container">
+            <div class="sitemap-header">
+                <h1><i class="fas fa-sitemap"></i> Documentation Sitemap</h1>
+                <p>Complete navigation guide to all CORTEX documentation resources</p>
+            </div>
+            
+            <div class="sitemap-grid">
+                
+            <div class="sitemap-section">
+                <div class="sitemap-section-header">
+                    <div class="sitemap-section-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="sitemap-section-info">
+                        <h3 class="sitemap-section-title">Features</h3>
+                        <p class="sitemap-section-desc">Core capabilities and features</p>
+                    </div>
+                </div>
+                <div class="sitemap-pages">
+                    
+                    <a href="features/index.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">Features | Enterprise Development Intelligence</h4>
+                            <p class="sitemap-page-desc">Explore CORTEX's powerful features including Planning System, TDD Orchestration, Dashboard System, and intelligent automation</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="features/dashboard-system.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">CORTEX LENS - Dashboard System</h4>
+                            
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="features/git-operations.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">Git Operations</h4>
+                            
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="features/holistic-discovery.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">Holistic Code Discovery</h4>
+                            
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="features/orchestrators.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">Redirecting to Orchestrators...</h4>
+                            
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="features/planning-system.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">Planning System Features</h4>
+                            
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="features/response-templates.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">Response Template System</h4>
+                            
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="features/token-optimization.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">Token Optimization</h4>
+                            <p class="sitemap-page-desc">CORTEX Token Optimization - Reduce AI costs by 40% with intelligent response templates and tiered output</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                </div>
+            </div>
+            
+            <div class="sitemap-section">
+                <div class="sitemap-section-header">
+                    <div class="sitemap-section-icon">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <div class="sitemap-section-info">
+                        <h3 class="sitemap-section-title">Orchestrators</h3>
+                        <p class="sitemap-section-desc">8 intelligent workflow orchestrators</p>
+                    </div>
+                </div>
+                <div class="sitemap-pages">
+                    
+                    <a href="orchestrators/index.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">Orchestrators</h4>
+                            <p class="sitemap-page-desc">CORTEX Orchestrators - 6 Autonomous workflows for planning, TDD, execution, ADO, sanitization, and upgrade</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="orchestrators/ado-operations.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">ADO Operations</h4>
+                            <p class="sitemap-page-desc">CORTEX ADO Operations - Azure DevOps integration with automated story/feature generation</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="orchestrators/architectural-review.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">Architectural Review</h4>
+                            <p class="sitemap-page-desc">CORTEX Architectural Review Orchestrator - 6-phase analysis with 0-100 scoring for layer separation, SOLID compliance, and testability</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="orchestrators/cleanup-orchestrator.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">Cleanup Orchestrator</h4>
+                            <p class="sitemap-page-desc">CORTEX Cleanup Orchestrator - Holistic repository analysis with file categorization, production-readiness validation, and safe cleanup</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="orchestrators/cortex-lens.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">CORTEX Lens</h4>
+                            <p class="sitemap-page-desc">CORTEX Lens v3.0 - Admin dashboard parity with glassmorphism design, D3.js visualizations, and narrative story generation</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="orchestrators/debug-orchestrator.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">Debug Orchestrator</h4>
+                            <p class="sitemap-page-desc">CORTEX Debug Orchestrator - Automated bug resolution with root cause analysis, template-based debugging, and fix verification loops</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="orchestrators/execution-orchestrator.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">Execution Orchestrator</h4>
+                            <p class="sitemap-page-desc">CORTEX Execution Orchestrator - Autonomous plan execution with phase-by-phase implementation</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="orchestrators/git-checkpoint.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">Git Checkpoint</h4>
+                            <p class="sitemap-page-desc">CORTEX Git Checkpoint Orchestrator - Automatic rollback points with retention policies and milestone tracking</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="orchestrators/intelligent-dashboard.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">Intelligent Dashboard</h4>
+                            <p class="sitemap-page-desc">CORTEX Intelligent Dashboard - Auto-populate repository insights using AST analysis and reverse engineering</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="orchestrators/planning-system.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">Planning System</h4>
+                            <p class="sitemap-page-desc">CORTEX Planning System - Autonomous feature planning with DoR/DoD compliance and TDD integration</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="orchestrators/pre-flight.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">Pre-Flight Orchestrator</h4>
+                            <p class="sitemap-page-desc">CORTEX Pre-Flight Orchestrator - Environment validation before plan execution with pattern detection and remediation scripts</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="orchestrators/refinement-orchestrator.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">Refinement Orchestrator</h4>
+                            <p class="sitemap-page-desc">CORTEX Refinement Orchestrator - 7-phase holistic system improvement with SKULL test optimization and code quality enhancement</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="orchestrators/rollback-orchestrator.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">Rollback Orchestrator</h4>
+                            <p class="sitemap-page-desc">CORTEX Rollback Orchestrator - Safe checkpoint rollback with validation, safety checks, and user confirmation</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="orchestrators/sanitization.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">Code Sanitization</h4>
+                            <p class="sitemap-page-desc">CORTEX Code Sanitization - 5-phase workflow to scrub sensitive data for safe sharing</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="orchestrators/system-integrity.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">System Integrity</h4>
+                            <p class="sitemap-page-desc">CORTEX System Integrity Orchestrator - Comprehensive validation and auto-fix for plan alignment, tests, docs, and file organization</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="orchestrators/tdd-orchestrator.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">TDD Mastery</h4>
+                            <p class="sitemap-page-desc">CORTEX TDD Mastery - Enforced RED-GREEN-REFACTOR cycle with per-layer coverage validation</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="orchestrators/upgrade.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">Upgrade Orchestrator</h4>
+                            <p class="sitemap-page-desc">CORTEX Upgrade Orchestrator - Automated version upgrades with migration validation</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                </div>
+            </div>
+            
+            <div class="sitemap-section">
+                <div class="sitemap-section-header">
+                    <div class="sitemap-section-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="sitemap-section-info">
+                        <h3 class="sitemap-section-title">Governance</h3>
+                        <p class="sitemap-section-desc">SKULL rules and brain protection</p>
+                    </div>
+                </div>
+                <div class="sitemap-pages">
+                    
+                    <a href="governance/skull-rulebook.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">SKULL Rulebook Governance</h4>
+                            
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                </div>
+            </div>
+            
+            <div class="sitemap-section">
+                <div class="sitemap-section-header">
+                    <div class="sitemap-section-icon">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <div class="sitemap-section-info">
+                        <h3 class="sitemap-section-title">Knowledge Library</h3>
+                        <p class="sitemap-section-desc">Technical knowledge and patterns</p>
+                    </div>
+                </div>
+                <div class="sitemap-pages">
+                    
+                    <a href="knowledge/index.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">CORTEX Knowledge-Driven Code</h4>
+                            <p class="sitemap-page-desc">CORTEX Knowledge-Driven Code - 35 best practice libraries that CORTEX consults when writing code</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="knowledge/api-design.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">API Design Excellence | CORTEX Knowledge</h4>
+                            <p class="sitemap-page-desc">API Design Excellence - REST, GraphQL, and API versioning strategies</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="knowledge/cloud.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">Cloud Computing | CORTEX Knowledge</h4>
+                            <p class="sitemap-page-desc">Cloud Computing - AWS, Azure, GCP, serverless, and cloud-native architecture</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="knowledge/containers.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">Container Technology | CORTEX Knowledge</h4>
+                            <p class="sitemap-page-desc">Container Technology - Docker, Kubernetes, orchestration, and cloud-native deployment</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="knowledge/database.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">Database Design | CORTEX Knowledge</h4>
+                            <p class="sitemap-page-desc">Database Design - SQL, NoSQL, data modeling, and optimization strategies</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="knowledge/ddd.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">Domain-Driven Design | CORTEX Knowledge</h4>
+                            <p class="sitemap-page-desc">Domain-Driven Design - Bounded contexts, aggregates, strategic and tactical patterns</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="knowledge/design-patterns.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">Design Patterns Knowledge Library</h4>
+                            <p class="sitemap-page-desc">CORTEX Design Patterns Tutorial - Gang of Four patterns with modern C# implementations for CORTEX optimization</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="knowledge/devops.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">DevOps Practices | CORTEX Knowledge</h4>
+                            <p class="sitemap-page-desc">DevOps Practices - CI/CD, GitOps, infrastructure as code, and automation</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="knowledge/engineering.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">Software Engineering | CORTEX Knowledge</h4>
+                            <p class="sitemap-page-desc">Software Engineering - Best practices, design patterns, SOLID principles, clean code</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="knowledge/frontend.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">Frontend Development | CORTEX Knowledge</h4>
+                            <p class="sitemap-page-desc">Frontend Development - React, Vue, Angular, TypeScript, Modern Web Development</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="knowledge/messaging.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">Message-Driven Architecture | CORTEX Knowledge</h4>
+                            <p class="sitemap-page-desc">Message-Driven Architecture - Kafka, RabbitMQ, and event streaming patterns</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="knowledge/microservices.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">Microservices Architecture | CORTEX Knowledge</h4>
+                            <p class="sitemap-page-desc">Microservices Architecture - Patterns, resilience, security, and distributed system design</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="knowledge/mobile.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">Mobile Development | CORTEX Knowledge</h4>
+                            <p class="sitemap-page-desc">Mobile Development - React Native, Flutter, iOS, Android, Cross-Platform Apps</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="knowledge/performance.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">Performance Optimization | CORTEX Knowledge</h4>
+                            <p class="sitemap-page-desc">Performance Optimization - Profiling, caching, load testing, and scalability strategies</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="knowledge/rag-domains.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">RAG Domains | CORTEX Knowledge</h4>
+                            <p class="sitemap-page-desc">RAG Domains - Retrieval Augmented Generation, vector databases, embeddings, semantic search</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="knowledge/security.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">Application Security | CORTEX Knowledge</h4>
+                            <p class="sitemap-page-desc">Application Security - Authentication, authorization, OWASP Top 10, encryption, secure coding</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="knowledge/testing.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">Software Testing | CORTEX Knowledge</h4>
+                            <p class="sitemap-page-desc">Software Testing - Test pyramid, TDD, BDD, unit testing, integration testing, test automation</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="knowledge/ui-ux.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">UI/UX Design | CORTEX Knowledge</h4>
+                            <p class="sitemap-page-desc">UI/UX Design - Design Systems, Accessibility, Usability Patterns, WCAG Standards</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                </div>
+            </div>
+            
+            <div class="sitemap-section">
+                <div class="sitemap-section-header">
+                    <div class="sitemap-section-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <div class="sitemap-section-info">
+                        <h3 class="sitemap-section-title">Sharpen The Saw</h3>
+                        <p class="sitemap-section-desc">Security and quality practices</p>
+                    </div>
+                </div>
+                <div class="sitemap-pages">
+                    
+                    <a href="sts/index.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">Sharpen The Saw | CORTEX 4.0</h4>
+                            <p class="sitemap-page-desc">CORTEX Sharpen The Saw - Before & After Code Transformation Showcase</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="sts/code-quality.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">Code Quality | STS | CORTEX 4.0</h4>
+                            <p class="sitemap-page-desc">CORTEX Code Quality Showcase - DRY, KISS, YAGNI</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="sts/documentation.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">Documentation | STS | CORTEX 4.0</h4>
+                            <p class="sitemap-page-desc">CORTEX Documentation Showcase - Code Documentation Patterns</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="sts/performance.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">Performance | STS | CORTEX 4.0</h4>
+                            <p class="sitemap-page-desc">CORTEX Performance Showcase - Optimization Patterns</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="sts/security.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">Security | STS | CORTEX 4.0</h4>
+                            <p class="sitemap-page-desc">CORTEX Security Showcase</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="sts/solid.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">SOLID | STS | CORTEX 4.0</h4>
+                            <p class="sitemap-page-desc">CORTEX SOLID Principles Showcase</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="sts/testing.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">Testing | STS | CORTEX 4.0</h4>
+                            <p class="sitemap-page-desc">CORTEX Testing Showcase - Best Practices</p>
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                </div>
+            </div>
+            
+            <div class="sitemap-section">
+                <div class="sitemap-section-header">
+                    <div class="sitemap-section-icon">
+                        <i class="fas fa-book-reader"></i>
+                    </div>
+                    <div class="sitemap-section-info">
+                        <h3 class="sitemap-section-title">The Awakening</h3>
+                        <p class="sitemap-section-desc">CORTEX origin story</p>
+                    </div>
+                </div>
+                <div class="sitemap-pages">
+                    
+                    <a href="story/character-colors-reference.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">CORTEX Character Colors - Quick Reference</h4>
+                            
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                    <a href="story/viewer.html" class="sitemap-page-link">
+                        <div class="sitemap-page-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="sitemap-page-info">
+                            <h4 class="sitemap-page-title">The Awakening of Story Viewer</h4>
+                            
+                        </div>
+                        <div class="sitemap-page-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                
+                </div>
+            </div>
+            
+            </div>
+        </div>
+    </main>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // Back to top functionality
+        const backToTop = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+        
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>

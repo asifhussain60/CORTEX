@@ -173,6 +173,17 @@ class WiringIntegrityChecker:
         for template_name, template_data in templates_dict.get('templates', {}).items():
             wired.add(template_name)
         
+        # From operations-config.yaml (agents registry)
+        ops_config_path = self.root / "cortex-brain" / "operations-config.yaml"
+        if ops_config_path.exists():
+            with open(ops_config_path, 'r', encoding='utf-8') as f:
+                ops_config = yaml.safe_load(f) or {}
+                agents = ops_config.get('agents', {})
+                for agent_name, agent_data in agents.items():
+                    wired.add(agent_name)
+                    if isinstance(agent_data, dict) and 'class' in agent_data:
+                        wired.add(agent_data['class'])
+        
         return wired
     
     def _extract_classes(self, file_path: Path) -> List[str]:

@@ -1,0 +1,483 @@
+{
+  "timestamp": "2025-12-31T06:20:20.518024",
+  "mode": "live",
+  "workspace_root": "D:\\PROJECTS\\CORTEX",
+  "rules_file": "D:\\PROJECTS\\CORTEX\\cortex-brain\\cleanup-rules.yaml",
+  "statistics": {
+    "files_scanned": 257,
+    "files_deleted": 149,
+    "files_archived": 0,
+    "folders_deleted": 3,
+    "space_freed_bytes": 2064639,
+    "space_freed_mb": 1.9689931869506836,
+    "space_freed_gb": 0.001922844909131527,
+    "categories_processed": 23,
+    "execution_time_seconds": 63.419275
+  },
+  "categories": {
+    "python_cache": {
+      "count": 7,
+      "size_mb": 0.44455814361572266
+    },
+    "doc_pattern_cleanup": {
+      "count": 250,
+      "size_mb": 2.4593353271484375
+    }
+  },
+  "items": [
+    {
+      "path": "cortex-toolkit\\shared\\__pycache__",
+      "category": "python_cache",
+      "action": "delete_all",
+      "size_bytes": 24008,
+      "size_mb": 0.02289581298828125,
+      "reason": "Python cache files (regenerated automatically)",
+      "risk_level": "low"
+    },
+    {
+      "path": "cortex-toolkit\\core\\utilities\\__pycache__",
+      "category": "python_cache",
+      "action": "delete_all",
+      "size_bytes": 13037,
+      "size_mb": 0.012433052062988281,
+      "reason": "Python cache files (regenerated automatically)",
+      "risk_level": "low"
+    },
+    {
+      "path": ".pytest_cache\\CACHEDIR.TAG",
+      "category": "python_cache",
+      "action": "delete_all",
+      "size_bytes": 191,
+      "size_mb": 0.00018215179443359375,
+      "reason": "Python cache files (regenerated automatically)",
+      "risk_level": "low"
+    },
+    {
+      "path": ".pytest_cache\\v",
+      "category": "python_cache",
+      "action": "delete_all",
+      "size_bytes": 391872,
+      "size_mb": 0.37371826171875,
+      "reason": "Python cache files (regenerated automatically)",
+      "risk_level": "low"
+    },
+    {
+      "path": "cortex-toolkit\\shared\\__pycache__\\config.cpython-313.pyc",
+      "category": "python_cache",
+      "action": "delete_all",
+      "size_bytes": 7742,
+      "size_mb": 0.0073833465576171875,
+      "reason": "Python cache files (regenerated automatically)",
+      "risk_level": "low"
+    },
+    {
+      "path": "cortex-toolkit\\shared\\__pycache__\\toolkit_registry.cpython-313.pyc",
+      "category": "python_cache",
+      "action": "delete_all",
+      "size_bytes": 16266,
+      "size_mb": 0.015512466430664062,
+      "reason": "Python cache files (regenerated automatically)",
+      "risk_level": "low"
+    },
+    {
+      "path": "cortex-toolkit\\core\\utilities\\__pycache__\\plan_scaffold_generator.cpython-313.pyc",
+      "category": "python_cache",
+      "action": "delete_all",
+      "size_bytes": 13037,
+      "size_mb": 0.012433052062988281,
+      "reason": "Python cache files (regenerated automatically)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\story\\CORTEX-STORY-ENHANCEMENT-SUMMARY.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 10472,
+      "size_mb": 0.00998687744140625,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\story\\IMAGE-FIX-SUMMARY.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 3677,
+      "size_mb": 0.0035066604614257812,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    },
+    {
+      "path": "cortex-sample-apps\\_Real\\ra-modernized\\.review\\05-13-SUMMARY.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 5744,
+      "size_mb": 0.0054779052734375,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    },
+    {
+      "path": "cortex-sample-apps\\_Real\\ra-modernized\\docs\\phase-7a-executive-summary.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 10851,
+      "size_mb": 0.010348320007324219,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    },
+    {
+      "path": "cortex-sample-apps\\_Real\\RA-Domain\\discovery\\00-EXECUTIVE-SUMMARY.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 10776,
+      "size_mb": 0.01027679443359375,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    },
+    {
+      "path": "cortex-sample-apps\\_Real\\RA-Domain\\domain-models\\batch-3-1-summary.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 7446,
+      "size_mb": 0.0071010589599609375,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    },
+    {
+      "path": "cortex-sample-apps\\_Real\\RA-Domain\\toolkit\\ONEDRIVE-DEPLOYMENT-SUMMARY.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 7723,
+      "size_mb": 0.007365226745605469,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    },
+    {
+      "path": "cortex-sample-apps\\_Real\\payment-processor-modernized\\.review\\05-13-SUMMARY.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 5782,
+      "size_mb": 0.0055141448974609375,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    },
+    {
+      "path": "cortex-sample-apps\\_Real\\payment-processor-modernized\\docs\\phase-7a-executive-summary.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 11005,
+      "size_mb": 0.010495185852050781,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    },
+    {
+      "path": "cortex-brain\\documents\\archive\\00-EXECUTIVE-SUMMARY.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 9757,
+      "size_mb": 0.009305000305175781,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    },
+    {
+      "path": "cortex-brain\\documents\\archive\\cortex-toolkit-consolidation-summary.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 9776,
+      "size_mb": 0.0093231201171875,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    },
+    {
+      "path": "cortex-brain\\documents\\archive\\phase-7-integration-summary.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 11030,
+      "size_mb": 0.010519027709960938,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    },
+    {
+      "path": "cortex-brain\\documents\\archive\\PLAN-SUMMARY.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 6047,
+      "size_mb": 0.005766868591308594,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    },
+    {
+      "path": "cortex-brain\\documents\\archive\\styling-refactor-summary.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 8078,
+      "size_mb": 0.0077037811279296875,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    },
+    {
+      "path": "cortex-brain\\documents\\archive\\upgrade-strategy-summary.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 12568,
+      "size_mb": 0.01198577880859375,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    },
+    {
+      "path": "cortex-brain\\documents\\planning\\active\\STS-REGEN\\PLAN-SUMMARY.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 7025,
+      "size_mb": 0.006699562072753906,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    },
+    {
+      "path": "build\\lib\\src\\tier1\\IMPLEMENTATION-SUMMARY.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 7313,
+      "size_mb": 0.006974220275878906,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    },
+    {
+      "path": "build\\lib\\src\\tier3\\IMPLEMENTATION-SUMMARY.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 6170,
+      "size_mb": 0.0058841705322265625,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\story\\CORTEX-STORY-ENHANCEMENT-SUMMARY.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 10472,
+      "size_mb": 0.00998687744140625,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    },
+    {
+      "path": "docs\\story\\IMAGE-FIX-SUMMARY.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 3677,
+      "size_mb": 0.0035066604614257812,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    },
+    {
+      "path": "cortex-sample-apps\\_Real\\ra-modernized\\.review\\05-13-SUMMARY.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 5744,
+      "size_mb": 0.0054779052734375,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    },
+    {
+      "path": "cortex-sample-apps\\_Real\\ra-modernized\\docs\\phase-7a-executive-summary.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 10851,
+      "size_mb": 0.010348320007324219,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    },
+    {
+      "path": "cortex-sample-apps\\_Real\\RA-Domain\\discovery\\00-EXECUTIVE-SUMMARY.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 10776,
+      "size_mb": 0.01027679443359375,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    },
+    {
+      "path": "cortex-sample-apps\\_Real\\RA-Domain\\documents\\EXECUTIVE-SUMMARY-BATCHES-1-7.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 19935,
+      "size_mb": 0.019011497497558594,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    },
+    {
+      "path": "cortex-sample-apps\\_Real\\RA-Domain\\domain-models\\batch-3-1-summary.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 7446,
+      "size_mb": 0.0071010589599609375,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    },
+    {
+      "path": "cortex-sample-apps\\_Real\\RA-Domain\\findings\\issue-summary-dashboard.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 11347,
+      "size_mb": 0.010821342468261719,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    },
+    {
+      "path": "cortex-sample-apps\\_Real\\RA-Domain\\toolkit\\ONEDRIVE-DEPLOYMENT-SUMMARY.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 7723,
+      "size_mb": 0.007365226745605469,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    },
+    {
+      "path": "cortex-sample-apps\\_Real\\payment-processor-modernized\\.review\\05-13-SUMMARY.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 5782,
+      "size_mb": 0.0055141448974609375,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    },
+    {
+      "path": "cortex-sample-apps\\_Real\\payment-processor-modernized\\docs\\phase-7a-executive-summary.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 11005,
+      "size_mb": 0.010495185852050781,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    },
+    {
+      "path": "cortex-brain\\discovery-reports\\MAINTENANCE-SUMMARY-20251229.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 4196,
+      "size_mb": 0.004001617431640625,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    },
+    {
+      "path": "cortex-brain\\documents\\archive\\00-EXECUTIVE-SUMMARY.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 9757,
+      "size_mb": 0.009305000305175781,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    },
+    {
+      "path": "cortex-brain\\documents\\archive\\cortex-toolkit-consolidation-summary.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 9776,
+      "size_mb": 0.0093231201171875,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    },
+    {
+      "path": "cortex-brain\\documents\\archive\\EXECUTIVE-SUMMARY-auto-wire-maintenance.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 11971,
+      "size_mb": 0.011416435241699219,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    },
+    {
+      "path": "cortex-brain\\documents\\archive\\mobile-ux-fixes-summary-2025-12-30.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 6984,
+      "size_mb": 0.00666046142578125,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    },
+    {
+      "path": "cortex-brain\\documents\\archive\\phase-7-integration-summary.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 11030,
+      "size_mb": 0.010519027709960938,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    },
+    {
+      "path": "cortex-brain\\documents\\archive\\PLAN-SUMMARY.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 6047,
+      "size_mb": 0.005766868591308594,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    },
+    {
+      "path": "cortex-brain\\documents\\archive\\SESSION-SUMMARY-TASK-12.1.2.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 8223,
+      "size_mb": 0.007842063903808594,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    },
+    {
+      "path": "cortex-brain\\documents\\archive\\SESSION-SUMMARY-TASK-12.1.3.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 8636,
+      "size_mb": 0.008235931396484375,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    },
+    {
+      "path": "cortex-brain\\documents\\archive\\styling-refactor-summary.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 8078,
+      "size_mb": 0.0077037811279296875,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    },
+    {
+      "path": "cortex-brain\\documents\\archive\\upgrade-strategy-summary.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 12568,
+      "size_mb": 0.01198577880859375,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    },
+    {
+      "path": "cortex-brain\\documents\\planning\\active\\STS-REGEN\\PLAN-SUMMARY.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 7025,
+      "size_mb": 0.006699562072753906,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    },
+    {
+      "path": "build\\lib\\src\\tier1\\IMPLEMENTATION-SUMMARY.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 7313,
+      "size_mb": 0.006974220275878906,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    },
+    {
+      "path": "build\\lib\\src\\tier3\\IMPLEMENTATION-SUMMARY.md",
+      "category": "doc_pattern_cleanup",
+      "action": "delete_all",
+      "size_bytes": 6170,
+      "size_mb": 0.0058841705322265625,
+      "reason": "Unnecessary documentation, summary, review, and informational files (92 files, 1.05 MB)",
+      "risk_level": "low"
+    }
+  ],
+  "errors": [
+    "Category 'root_validation_scripts' failed: 'move' is not a valid CleanupAction"
+  ],
+  "warnings": []
+}

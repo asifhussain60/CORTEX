@@ -19,17 +19,30 @@
 
 All command routing is defined in `CORTEX.prompt.md`. Key orchestrators:
 
-| Intent Pattern | Route To |
-|----------------|----------|
-| `introduce yourself`, `intro`, `hello`, `hi cortex` | Introduction → ASCII banner + capabilities (load `response-templates-v4.yaml:introduction`) |
-| `plan`, `create a plan`, `make a plan` | Planning System → folder with 4 subfolders |
-| `tdd`, `start tdd`, `run tests` | TDD Orchestrator → RED→GREEN→REFACTOR |
-| `ado`, `ado story`, `ado feature` | ADO Operations → work items |
-| `sanitize`, `make generic` | Sanitization → 5-phase cleanup |
-| `maintenance`, `health check` | Maintenance → 11-phase pipeline |
-| `refine`, `improve` | Refinement → 7-phase improvement |
+| Intent Pattern | Route To | Type |
+|----------------|----------|------|
+| `introduce yourself`, `intro`, `hello`, `hi cortex` | Introduction → ASCII banner + capabilities | — |
+| `plan`, `create a plan`, `make a plan` | Planning System → folder with 4 subfolders | 🛡️ AUTONOMOUS |
+| `tdd`, `start tdd`, `run tests` | TDD Orchestrator → RED→GREEN→REFACTOR | 📋 GUIDED |
+| `ado`, `ado story`, `ado feature` | ADO Operations → work items | 🛡️ AUTONOMOUS |
+| `sanitize`, `make generic` | Sanitization → 5-phase cleanup | 📋 GUIDED |
+| `maintenance`, `health check` | Maintenance → 12-phase pipeline | 📋 GUIDED |
+| `refine`, `improve` | Refinement → 7-phase improvement | 📋 GUIDED |
+| **Image attachments** | **Vision API → Auto-analysis (no prompt needed)** | Auto |
+
+**Orchestrator Types:**
+- 🛡️ **AUTONOMOUS**: Python implementation, self-executing (CORTEX routes and stops)
+- 📋 **GUIDED**: Manifest instructions, CORTEX executes
+
+**LLM Intent Classification:** Use `LLMIntentClassifier` (src/cortex_agents/llm_intent_classifier.py) for intelligent routing when exact patterns don't match.
 
 **Manifest Location:** `cortex-brain/manifests/orchestrators/`
+
+### 🔍 Vision API Auto-Engagement
+
+**AUTOMATIC:** When images (PNG/JPG/JPEG) are attached, Vision API analyzes them WITHOUT user prompting. Analysis injected into context for all orchestrators.
+
+**Middleware:** `src/operations/utilities/vision_context_middleware.py`
 
 ### 🛡️ HAND-OFF Orchestrators
 
@@ -39,6 +52,14 @@ When you see 🛡️ in Intent Router, these orchestrators **MUST take over comp
 |--------------|---------|----------|--------|
 | **Planning** | `plan`, `create a plan` | `autonomous_execution_progress` | `## 🛡️🧠 CORTEX Plan Execution` |
 | **ADO** | `ado story`, `ado feature` | `ado_execution_progress` | `## 🛡️🧠 CORTEX ADO Work Item Generation` |
+
+**Hand-Off Protocol:**
+- ❌ Do NOT read manifest and execute yourself
+- ❌ Do NOT provide guidance based on manifest
+- ❌ Do NOT continue after loading orchestrator
+- ✅ Load manifest reference ONLY
+- ✅ Use specified response template
+- ✅ STOP immediately after hand-off header
 
 **Visual Confirmation:** 🛡️ in response header = Orchestrator correctly engaged
 
@@ -72,6 +93,8 @@ Defer to `CORTEX.prompt.md` for full spec. Summary:
 | TDD_ENFORCEMENT | Tests must fail before implementation |
 | HOLISTIC_DISCOVERY | Search before create (prevent duplication) |
 | GIT_ISOLATION | CORTEX code never commits to user repos |
+| PLANNING_ISOLATION | Planning commands create plans ONLY, never implement |
+| HAND_OFF_PROTOCOL | 🛡️ AUTONOMOUS orchestrators execute independently |
 
 **Full rules:** `cortex-brain/brain-protection-rules.yaml`
 
@@ -109,7 +132,7 @@ src/                    # Implementation
 | File | Purpose |
 |------|---------|
 | `.github/prompts/CORTEX.prompt.md` | Intent router (source of truth) |
-| `.github/prompts/cortex-maintenance.prompt.md` | 6-phase maintenance |
+| `.github/prompts/cortex-maintenance.prompt.md` | 12-phase maintenance |
 | `cortex-brain/brain-protection-rules.yaml` | SKULL rules |
 | `cortex-brain/response-templates-v4.yaml` | Response templates |
 | `cortex-brain/manifests/orchestrators/` | All orchestrator manifests |
@@ -120,7 +143,7 @@ src/                    # Implementation
 
 Say `help` in Copilot Chat to see all operations.
 
-**For maintenance:** Use `system maintenance` to run 11-phase health pipeline.
+**For maintenance:** Use `system maintenance` to run 12-phase health pipeline (starts with cleanup orchestrator).
 
 ---
 
