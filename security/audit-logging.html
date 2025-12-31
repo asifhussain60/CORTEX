@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audit Logging - CORTEX Security</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --accent-primary: #00d4ff;
+            --accent-secondary: #7c3aed;
+            --accent-tertiary: #10b981;
+            --bg-primary: #0a0e27;
+            --bg-secondary: #131835;
+            --bg-tertiary: #1a1f3e;
+            --text-primary: #ffffff;
+            --text-secondary: #a0aec0;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        .breadcrumb {
+            padding: 1rem 2rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .breadcrumb a {
+            color: var(--accent-primary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--accent-secondary);
+        }
+
+        .breadcrumb span {
+            color: var(--text-secondary);
+            margin: 0 0.5rem;
+        }
+
+        .page-header {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: linear-gradient(180deg, rgba(124, 58, 237, 0.1) 0%, transparent 100%);
+        }
+
+        .logo-container {
+            margin-bottom: 1.5rem;
+        }
+
+        .logo-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            font-size: 2.5rem;
+            box-shadow: 0 10px 40px rgba(0, 212, 255, 0.3);
+        }
+
+        .page-title {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .page-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .content-section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-title i {
+            color: var(--accent-primary);
+        }
+
+        /* Log Event Types Grid */
+        .event-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .event-card {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(124, 58, 237, 0.1));
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .event-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .event-card.security::before { background: #ef4444; }
+        .event-card.access::before { background: #00d4ff; }
+        .event-card.change::before { background: #f59e0b; }
+        .event-card.system::before { background: #10b981; }
+        .event-card.compliance::before { background: #7c3aed; }
+
+        .event-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .event-card.security .event-icon { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+        .event-card.access .event-icon { background: rgba(0, 212, 255, 0.2); color: #00d4ff; }
+        .event-card.change .event-icon { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
+        .event-card.system .event-icon { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+        .event-card.compliance .event-icon { background: rgba(124, 58, 237, 0.2); color: #a855f7; }
+
+        .event-card h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .event-card p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        .event-examples {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .event-examples span {
+            display: inline-block;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin: 0.25rem;
+            font-family: monospace;
+        }
+
+        /* Log Flow Visualization */
+        #log-flow {
+            width: 100%;
+            height: 450px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+        }
+
+        /* Retention Timeline */
+        #retention-timeline {
+            width: 100%;
+            height: 300px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+        }
+
+        /* Log Entry Sample */
+        .log-entry {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            overflow-x: auto;
+        }
+
+        .log-entry .timestamp { color: #64748b; }
+        .log-entry .level-info { color: #00d4ff; }
+        .log-entry .level-warn { color: #f59e0b; }
+        .log-entry .level-error { color: #ef4444; }
+        .log-entry .level-security { color: #a855f7; }
+        .log-entry .key { color: #10b981; }
+        .log-entry .value { color: #f8fafc; }
+        .log-entry .string { color: #c3e88d; }
+
+        /* SIEM Integration Cards */
+        .siem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+        }
+
+        .siem-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .siem-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent-primary);
+        }
+
+        .siem-card i {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .siem-card.splunk i { color: #65a637; }
+        .siem-card.elastic i { color: #00bfb3; }
+        .siem-card.sentinel i { color: #0078d4; }
+        .siem-card.datadog i { color: #632ca6; }
+        .siem-card.sumologic i { color: #000099; }
+
+        .siem-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .siem-card p {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        /* Mermaid Diagrams */
+        .mermaid {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        /* Compliance Requirements Table */
+        .compliance-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .compliance-table th,
+        .compliance-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .compliance-table th {
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--accent-primary);
+            font-weight: 600;
+        }
+
+        .compliance-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge.required {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .badge.recommended {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+        }
+
+        /* Live Log Viewer */
+        .log-viewer {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 12px;
+            padding: 1rem;
+            height: 350px;
+            overflow-y: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+        }
+
+        .log-viewer::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .log-viewer::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+        }
+
+        .log-viewer::-webkit-scrollbar-thumb {
+            background: var(--accent-primary);
+            border-radius: 4px;
+        }
+
+        .log-line {
+            display: flex;
+            gap: 1rem;
+            padding: 0.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .log-line .time { color: #64748b; min-width: 80px; }
+        .log-line .level { min-width: 60px; font-weight: 600; }
+        .log-line .level.INFO { color: #00d4ff; }
+        .log-line .level.WARN { color: #f59e0b; }
+        .log-line .level.ERROR { color: #ef4444; }
+        .log-line .level.SECURITY { color: #a855f7; }
+        .log-line .message { color: #e2e8f0; }
+
+        /* Log Statistics */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card.info .stat-value { color: #00d4ff; }
+        .stat-card.warn .stat-value { color: #f59e0b; }
+        .stat-card.error .stat-value { color: #ef4444; }
+        .stat-card.security .stat-value { color: #a855f7; }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        /* Alert Rules */
+        .alert-rules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .alert-rule {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+            border-left: 4px solid var(--accent-primary);
+        }
+
+        .alert-rule.critical { border-left-color: #ef4444; }
+        .alert-rule.high { border-left-color: #f59e0b; }
+        .alert-rule.medium { border-left-color: #00d4ff; }
+
+        .alert-rule h4 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .alert-rule p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .alert-rule code {
+            display: block;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            color: #10b981;
+        }
+
+        /* Volume Chart */
+        #volume-chart {
+            width: 100%;
+            height: 300px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+        }
+
+        /* Footer */
+        .page-footer {
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid var(--glass-border);
+            margin-top: 3rem;
+            color: var(--text-secondary);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-primary);
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .control-btn:hover {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        .control-btn.active {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        /* Code Block */
+        .code-block {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            overflow-x: auto;
+        }
+
+        .code-block .keyword { color: #c792ea; }
+        .code-block .string { color: #c3e88d; }
+        .code-block .comment { color: #546e7a; }
+        .code-block .function { color: #82aaff; }
+    </style>
+</head>
+<body>
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb">
+        <a href="../index.html">Home</a>
+        <span>/</span>
+        <a href="index.html">Security</a>
+        <span>/</span>
+        <span>Audit Logging</span>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="logo-container">
+            <div class="logo-icon">
+                <i class="fas fa-scroll"></i>
+            </div>
+        </div>
+        <h1 class="page-title">Audit Logging</h1>
+        <p class="page-subtitle">
+            Comprehensive audit logging and monitoring for security, compliance, and forensic analysis. 
+            Track every action, detect anomalies, and maintain accountability.
+        </p>
+    </header>
+
+    <!-- Main Content -->
+    <main class="content-section">
+
+        <!-- Log Statistics Dashboard -->
+        <section class="glass-card">
+            <h2 class="section-title">
+                <i class="fas fa-chart-line"></i>
+                Real-Time Log Statistics
+            </h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card info">
+                    <div class="stat-value" id="infoCount">12,847</div>
+                    <div class="stat-label">Info Events</div>
+                </div>
+                <div class="stat-card warn">
+                    <div class="stat-value" id="warnCount">234</div>
+                    <div class="stat-label">Warnings</div>
+                </div>
+                <div class="stat-card error">
+                    <div class="stat-value" id="errorCount">18</div>
+                    <div class="stat-label">Errors</div>
+                </div>
+                <div class="stat-card security">
+                    <div class="stat-value" id="securityCount">7</div>
+                    <div class="stat-label">Security Events</div>
+                </div>
+            </div>
+
+            <div id="volume-chart"></div>
+        </section>
+
+        <!-- Log Event Types -->
+        <section class="glass-card">
+            <h2 class="section-title">
+                <i class="fas fa-tags"></i>
+                Audit Event Categories
+            </h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                Categorize and prioritize events for efficient monitoring and response.
+            </p>
+            
+            <div class="event-grid">
+                <div class="event-card security">
+                    <div class="event-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Security Events</h3>
+                    <p>Critical security-related activities requiring immediate attention.</p>
+                    <div class="event-examples">
+                        <span>AUTH_FAILURE</span>
+                        <span>PRIVILEGE_ESCALATION</span>
+                        <span>SUSPICIOUS_ACTIVITY</span>
+                    </div>
+                </div>
+
+                <div class="event-card access">
+                    <div class="event-icon">
+                        <i class="fas fa-sign-in-alt"></i>
+                    </div>
+                    <h3>Access Events</h3>
+                    <p>User authentication, authorization, and session management.</p>
+                    <div class="event-examples">
+                        <span>LOGIN_SUCCESS</span>
+                        <span>LOGOUT</span>
+                        <span>TOKEN_REFRESH</span>
+                    </div>
+                </div>
+
+                <div class="event-card change">
+                    <div class="event-icon">
+                        <i class="fas fa-edit"></i>
+                    </div>
+                    <h3>Change Events</h3>
+                    <p>Data modifications, configuration changes, and updates.</p>
+                    <div class="event-examples">
+                        <span>DATA_CREATE</span>
+                        <span>DATA_UPDATE</span>
+                        <span>CONFIG_CHANGE</span>
+                    </div>
+                </div>
+
+                <div class="event-card system">
+                    <div class="event-icon">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <h3>System Events</h3>
+                    <p>Application lifecycle, performance, and health monitoring.</p>
+                    <div class="event-examples">
+                        <span>APP_START</span>
+                        <span>HEALTH_CHECK</span>
+                        <span>BACKUP_COMPLETE</span>
+                    </div>
+                </div>
+
+                <div class="event-card compliance">
+                    <div class="event-icon">
+                        <i class="fas fa-clipboard-check"></i>
+                    </div>
+                    <h3>Compliance Events</h3>
+                    <p>Regulatory and policy compliance tracking.</p>
+                    <div class="event-examples">
+                        <span>DATA_EXPORT</span>
+                        <span>CONSENT_RECORD</span>
+                        <span>ACCESS_REVIEW</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Log Architecture Flow -->
+        <section class="glass-card">
+            <h2 class="section-title">
+                <i class="fas fa-project-diagram"></i>
+                Log Collection Architecture
+            </h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                Centralized log collection, processing, and storage pipeline.
+            </p>
+            
+            <div class="mermaid">
+flowchart LR
+    subgraph Sources["Log Sources"]
+        A1[Application Logs]
+        A2[Security Logs]
+        A3[Infrastructure Logs]
+        A4[Network Logs]
+    end
+
+    subgraph Collection["Collection Layer"]
+        B1[Fluentd/Filebeat]
+        B2[Syslog Server]
+    end
+
+    subgraph Processing["Processing Layer"]
+        C1[Log Parser]
+        C2[Enrichment]
+        C3[Normalization]
+    end
+
+    subgraph Storage["Storage Layer"]
+        D1[(Hot Storage<br/>7 days)]
+        D2[(Warm Storage<br/>30 days)]
+        D3[(Cold Storage<br/>1+ year)]
+    end
+
+    subgraph Analysis["Analysis & Alerting"]
+        E1[SIEM Platform]
+        E2[Alert Rules]
+        E3[Dashboards]
+    end
+
+    A1 --> B1
+    A2 --> B1
+    A3 --> B2
+    A4 --> B2
+    B1 --> C1
+    B2 --> C1
+    C1 --> C2
+    C2 --> C3
+    C3 --> D1
+    D1 --> D2
+    D2 --> D3
+    D1 --> E1
+    E1 --> E2
+    E1 --> E3
+
+    style A1 fill:#00d4ff,stroke:#0284c7,color:#fff
+    style A2 fill:#ef4444,stroke:#dc2626,color:#fff
+    style E1 fill:#7c3aed,stroke:#6d28d9,color:#fff
+    style E2 fill:#f59e0b,stroke:#d97706,color:#fff
+            </div>
+        </section>
+
+        <!-- Live Log Viewer -->
+        <section class="glass-card">
+            <h2 class="section-title">
+                <i class="fas fa-stream"></i>
+                Live Log Stream
+            </h2>
+            
+            <div class="controls">
+                <button class="control-btn active" onclick="toggleStream(this)" id="streamToggle">
+                    <i class="fas fa-play"></i> Streaming
+                </button>
+                <button class="control-btn" onclick="filterLogs('all')">All</button>
+                <button class="control-btn" onclick="filterLogs('INFO')">Info</button>
+                <button class="control-btn" onclick="filterLogs('WARN')">Warnings</button>
+                <button class="control-btn" onclick="filterLogs('ERROR')">Errors</button>
+                <button class="control-btn" onclick="filterLogs('SECURITY')">Security</button>
+            </div>
+
+            <div class="log-viewer" id="logViewer">
+                <!-- Logs will be dynamically added -->
+            </div>
+        </section>
+
+        <!-- Structured Log Format -->
+        <section class="glass-card">
+            <h2 class="section-title">
+                <i class="fas fa-code"></i>
+                Structured Log Format
+            </h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                Use structured JSON logging for better searchability and analysis.
+            </p>
+
+            <div class="log-entry">
+{
+  <span class="key">"timestamp"</span>: <span class="string">"2024-01-15T10:23:45.123Z"</span>,
+  <span class="key">"level"</span>: <span class="level-security">"SECURITY"</span>,
+  <span class="key">"event_type"</span>: <span class="string">"AUTH_FAILURE"</span>,
+  <span class="key">"message"</span>: <span class="string">"Failed login attempt"</span>,
+  <span class="key">"user"</span>: {
+    <span class="key">"id"</span>: <span class="string">"user_12345"</span>,
+    <span class="key">"email"</span>: <span class="string">"john.doe@example.com"</span>,
+    <span class="key">"ip"</span>: <span class="string">"192.168.1.100"</span>
+  },
+  <span class="key">"context"</span>: {
+    <span class="key">"request_id"</span>: <span class="string">"req_abc123"</span>,
+    <span class="key">"session_id"</span>: <span class="string">"sess_xyz789"</span>,
+    <span class="key">"user_agent"</span>: <span class="string">"Mozilla/5.0..."</span>
+  },
+  <span class="key">"metadata"</span>: {
+    <span class="key">"attempt_count"</span>: <span class="value">3</span>,
+    <span class="key">"lockout_triggered"</span>: <span class="value">true</span>,
+    <span class="key">"geo_location"</span>: <span class="string">"New York, US"</span>
+  }
+}
+            </div>
+        </section>
+
+        <!-- Retention Timeline -->
+        <section class="glass-card">
+            <h2 class="section-title">
+                <i class="fas fa-clock"></i>
+                Log Retention Policy
+            </h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                Tiered retention based on log importance and compliance requirements.
+            </p>
+            <div id="retention-timeline"></div>
+        </section>
+
+        <!-- SIEM Integration -->
+        <section class="glass-card">
+            <h2 class="section-title">
+                <i class="fas fa-plug"></i>
+                SIEM Integration
+            </h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                CORTEX integrates with leading Security Information and Event Management platforms.
+            </p>
+            
+            <div class="siem-grid">
+                <div class="siem-card splunk">
+                    <i class="fas fa-chart-bar"></i>
+                    <h4>Splunk</h4>
+                    <p>Enterprise-grade log analytics and security monitoring</p>
+                </div>
+                <div class="siem-card elastic">
+                    <i class="fas fa-search"></i>
+                    <h4>Elastic SIEM</h4>
+                    <p>Open-source security analytics on ELK Stack</p>
+                </div>
+                <div class="siem-card sentinel">
+                    <i class="fab fa-microsoft"></i>
+                    <h4>Microsoft Sentinel</h4>
+                    <p>Cloud-native SIEM with AI-powered analytics</p>
+                </div>
+                <div class="siem-card datadog">
+                    <i class="fas fa-dog"></i>
+                    <h4>Datadog</h4>
+                    <p>Infrastructure monitoring with security monitoring</p>
+                </div>
+                <div class="siem-card sumologic">
+                    <i class="fas fa-cloud"></i>
+                    <h4>Sumo Logic</h4>
+                    <p>Cloud-native machine data analytics</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Alert Rules -->
+        <section class="glass-card">
+            <h2 class="section-title">
+                <i class="fas fa-bell"></i>
+                Alert Rules Configuration
+            </h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                Define alert rules to detect security incidents and anomalies.
+            </p>
+            
+            <div class="alert-rules-grid">
+                <div class="alert-rule critical">
+                    <h4><i class="fas fa-exclamation-circle" style="color: #ef4444;"></i> Brute Force Detection</h4>
+                    <p>Alert when multiple failed login attempts occur from same IP</p>
+                    <code>count(AUTH_FAILURE) by ip_address > 5 within 5m</code>
+                </div>
+                <div class="alert-rule critical">
+                    <h4><i class="fas fa-exclamation-circle" style="color: #ef4444;"></i> Privilege Escalation</h4>
+                    <p>Detect unauthorized privilege elevation attempts</p>
+                    <code>event_type = "PRIVILEGE_CHANGE" AND authorized = false</code>
+                </div>
+                <div class="alert-rule high">
+                    <h4><i class="fas fa-exclamation-triangle" style="color: #f59e0b;"></i> Unusual Access Patterns</h4>
+                    <p>Alert on access outside normal working hours</p>
+                    <code>event_type = "LOGIN" AND hour NOT IN (8..18)</code>
+                </div>
+                <div class="alert-rule high">
+                    <h4><i class="fas fa-exclamation-triangle" style="color: #f59e0b;"></i> Mass Data Export</h4>
+                    <p>Detect potential data exfiltration</p>
+                    <code>event_type = "DATA_EXPORT" AND record_count > 1000</code>
+                </div>
+                <div class="alert-rule medium">
+                    <h4><i class="fas fa-info-circle" style="color: #00d4ff;"></i> Configuration Changes</h4>
+                    <p>Track changes to security configurations</p>
+                    <code>event_type = "CONFIG_CHANGE" AND scope = "security"</code>
+                </div>
+                <div class="alert-rule medium">
+                    <h4><i class="fas fa-info-circle" style="color: #00d4ff;"></i> New Admin Account</h4>
+                    <p>Alert when new administrator accounts are created</p>
+                    <code>event_type = "USER_CREATE" AND role = "admin"</code>
+                </div>
+            </div>
+        </section>
+
+        <!-- Compliance Requirements -->
+        <section class="glass-card">
+            <h2 class="section-title">
+                <i class="fas fa-balance-scale"></i>
+                Compliance Requirements
+            </h2>
+            
+            <table class="compliance-table">
+                <thead>
+                    <tr>
+                        <th>Regulation</th>
+                        <th>Requirement</th>
+                        <th>Retention</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>SOC 2</td>
+                        <td>Audit trails for all system access and changes</td>
+                        <td>1 year minimum</td>
+                        <td><span class="badge required">Required</span></td>
+                    </tr>
+                    <tr>
+                        <td>GDPR</td>
+                        <td>Processing activity records, consent logs</td>
+                        <td>Duration of processing</td>
+                        <td><span class="badge required">Required</span></td>
+                    </tr>
+                    <tr>
+                        <td>HIPAA</td>
+                        <td>Access logs for PHI, modification history</td>
+                        <td>6 years</td>
+                        <td><span class="badge required">Required</span></td>
+                    </tr>
+                    <tr>
+                        <td>PCI-DSS</td>
+                        <td>Cardholder data access, security events</td>
+                        <td>1 year online, 1 year archive</td>
+                        <td><span class="badge required">Required</span></td>
+                    </tr>
+                    <tr>
+                        <td>ISO 27001</td>
+                        <td>Information security event logging</td>
+                        <td>As defined in policy</td>
+                        <td><span class="badge recommended">Recommended</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Log Analysis Workflow -->
+        <section class="glass-card">
+            <h2 class="section-title">
+                <i class="fas fa-search-plus"></i>
+                Security Log Analysis Workflow
+            </h2>
+            
+            <div class="mermaid">
+sequenceDiagram
+    participant L as Log Source
+    participant C as Collector
+    participant P as Parser
+    participant S as SIEM
+    participant A as Analyst
+    participant R as Response Team
+
+    L->>C: Raw Log Event
+    C->>P: Forward for Processing
+    P->>P: Parse & Normalize
+    P->>S: Enriched Event
+    S->>S: Correlation Analysis
+    
+    alt Anomaly Detected
+        S->>A: Generate Alert
+        A->>S: Investigate
+        A->>A: Analyze Context
+        
+        alt Confirmed Threat
+            A->>R: Escalate Incident
+            R->>R: Execute Response
+            R->>S: Update Indicators
+        else False Positive
+            A->>S: Tune Rule
+        end
+    end
+
+    Note over L,R: Continuous Monitoring Loop
+            </div>
+        </section>
+
+        <!-- Best Practices -->
+        <section class="glass-card">
+            <h2 class="section-title">
+                <i class="fas fa-lightbulb"></i>
+                Audit Logging Best Practices
+            </h2>
+            
+            <div class="event-grid">
+                <div class="event-card" style="border-left: 4px solid #00d4ff;">
+                    <h3><i class="fas fa-lock" style="color: #00d4ff;"></i> Log Integrity</h3>
+                    <p>Use cryptographic signatures or write-once storage to prevent log tampering. Implement centralized logging to reduce risk of local log manipulation.</p>
+                </div>
+                <div class="event-card" style="border-left: 4px solid #10b981;">
+                    <h3><i class="fas fa-clock" style="color: #10b981;"></i> Time Synchronization</h3>
+                    <p>Use NTP to ensure all systems have synchronized timestamps. Consistent timing is critical for event correlation and forensic analysis.</p>
+                </div>
+                <div class="event-card" style="border-left: 4px solid #f59e0b;">
+                    <h3><i class="fas fa-user-shield" style="color: #f59e0b;"></i> Sensitive Data Handling</h3>
+                    <p>Avoid logging sensitive data like passwords or PII. Use tokenization or masking for data that must be logged for compliance.</p>
+                </div>
+                <div class="event-card" style="border-left: 4px solid #7c3aed;">
+                    <h3><i class="fas fa-cogs" style="color: #7c3aed;"></i> Standardization</h3>
+                    <p>Adopt standard log formats (CEF, LEEF, JSON). Use consistent field naming conventions across all applications and services.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+        <div class="footer-links">
+            <a href="access-control.html"><i class="fas fa-arrow-left"></i> Access Control</a>
+            <a href="security-training.html">Security Training <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <p>© 2024 CORTEX Security Framework. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#7c3aed',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#8b5cf6',
+                lineColor: '#a78bfa',
+                secondaryColor: '#1e1b4b',
+                tertiaryColor: '#312e81',
+                background: '#0f172a',
+                mainBkg: '#1e1b4b',
+                nodeBorder: '#8b5cf6',
+                clusterBkg: '#1e1b4b',
+                clusterBorder: '#8b5cf6',
+                titleColor: '#fff',
+                edgeLabelBackground: '#1e1b4b'
+            }
+        });
+
+        // Sample log data
+        const sampleLogs = [
+            { time: '10:23:45', level: 'INFO', message: 'User login successful - user_12345' },
+            { time: '10:23:46', level: 'INFO', message: 'API request processed - GET /api/users' },
+            { time: '10:23:47', level: 'WARN', message: 'Rate limit approaching - client_abc' },
+            { time: '10:23:48', level: 'INFO', message: 'Database query completed - 23ms' },
+            { time: '10:23:49', level: 'SECURITY', message: 'Password change - user_67890' },
+            { time: '10:23:50', level: 'ERROR', message: 'Connection timeout - external_service' },
+            { time: '10:23:51', level: 'INFO', message: 'Cache invalidated - products_catalog' },
+            { time: '10:23:52', level: 'WARN', message: 'Memory usage high - 85%' },
+            { time: '10:23:53', level: 'INFO', message: 'Scheduled job completed - daily_backup' },
+            { time: '10:23:54', level: 'SECURITY', message: 'MFA verification success - user_34567' }
+        ];
+
+        let isStreaming = true;
+        let currentFilter = 'all';
+        let logIndex = 0;
+
+        function addLogLine(log) {
+            const viewer = document.getElementById('logViewer');
+            const line = document.createElement('div');
+            line.className = 'log-line';
+            line.dataset.level = log.level;
+            line.innerHTML = `
+                <span class="time">${log.time}</span>
+                <span class="level ${log.level}">${log.level}</span>
+                <span class="message">${log.message}</span>
+            `;
+            
+            if (currentFilter === 'all' || log.level === currentFilter) {
+                line.style.display = 'flex';
+            } else {
+                line.style.display = 'none';
+            }
+            
+            viewer.appendChild(line);
+            viewer.scrollTop = viewer.scrollHeight;
+
+            // Keep only last 100 logs
+            while (viewer.children.length > 100) {
+                viewer.removeChild(viewer.firstChild);
+            }
+        }
+
+        function streamLogs() {
+            if (!isStreaming) return;
+            
+            const log = sampleLogs[logIndex % sampleLogs.length];
+            const now = new Date();
+            const time = now.toTimeString().split(' ')[0].slice(0, 8);
+            addLogLine({ ...log, time });
+            
+            logIndex++;
+            updateStats();
+            
+            setTimeout(streamLogs, Math.random() * 2000 + 500);
+        }
+
+        function toggleStream(btn) {
+            isStreaming = !isStreaming;
+            btn.innerHTML = isStreaming ? '<i class="fas fa-pause"></i> Streaming' : '<i class="fas fa-play"></i> Paused';
+            btn.classList.toggle('active', isStreaming);
+            if (isStreaming) streamLogs();
+        }
+
+        function filterLogs(level) {
+            currentFilter = level;
+            const lines = document.querySelectorAll('.log-line');
+            lines.forEach(line => {
+                if (level === 'all' || line.dataset.level === level) {
+                    line.style.display = 'flex';
+                } else {
+                    line.style.display = 'none';
+                }
+            });
+
+            document.querySelectorAll('.control-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        let stats = { INFO: 12847, WARN: 234, ERROR: 18, SECURITY: 7 };
+
+        function updateStats() {
+            const levels = ['INFO', 'WARN', 'ERROR', 'SECURITY'];
+            const level = levels[Math.floor(Math.random() * levels.length)];
+            stats[level]++;
+            
+            document.getElementById('infoCount').textContent = stats.INFO.toLocaleString();
+            document.getElementById('warnCount').textContent = stats.WARN.toLocaleString();
+            document.getElementById('errorCount').textContent = stats.ERROR.toLocaleString();
+            document.getElementById('securityCount').textContent = stats.SECURITY.toLocaleString();
+        }
+
+        // Volume Chart
+        function createVolumeChart() {
+            const container = document.getElementById('volume-chart');
+            const width = container.clientWidth;
+            const height = 300;
+            const margin = { top: 30, right: 30, bottom: 50, left: 60 };
+
+            d3.select(container).selectAll("*").remove();
+
+            const svg = d3.select(container)
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+
+            const hours = Array.from({ length: 24 }, (_, i) => i);
+            const data = hours.map(h => ({
+                hour: h,
+                info: Math.floor(Math.random() * 500 + 300),
+                warn: Math.floor(Math.random() * 50 + 10),
+                error: Math.floor(Math.random() * 10 + 2),
+                security: Math.floor(Math.random() * 5)
+            }));
+
+            const x = d3.scaleBand()
+                .domain(hours)
+                .range([margin.left, width - margin.right])
+                .padding(0.2);
+
+            const y = d3.scaleLinear()
+                .domain([0, d3.max(data, d => d.info + d.warn + d.error + d.security)])
+                .nice()
+                .range([height - margin.bottom, margin.top]);
+
+            const stack = d3.stack()
+                .keys(['security', 'error', 'warn', 'info']);
+
+            const colors = {
+                info: '#00d4ff',
+                warn: '#f59e0b',
+                error: '#ef4444',
+                security: '#a855f7'
+            };
+
+            const series = stack(data);
+
+            svg.append('g')
+                .selectAll('g')
+                .data(series)
+                .enter()
+                .append('g')
+                .attr('fill', d => colors[d.key])
+                .selectAll('rect')
+                .data(d => d)
+                .enter()
+                .append('rect')
+                .attr('x', d => x(d.data.hour))
+                .attr('y', d => y(d[1]))
+                .attr('height', d => y(d[0]) - y(d[1]))
+                .attr('width', x.bandwidth())
+                .attr('rx', 2);
+
+            // X axis
+            svg.append('g')
+                .attr('transform', `translate(0,${height - margin.bottom})`)
+                .call(d3.axisBottom(x).tickFormat(d => `${d}:00`))
+                .selectAll('text')
+                .attr('fill', '#a0aec0')
+                .attr('font-size', '10px');
+
+            svg.selectAll('.domain, .tick line').attr('stroke', '#334155');
+
+            // Y axis
+            svg.append('g')
+                .attr('transform', `translate(${margin.left},0)`)
+                .call(d3.axisLeft(y).ticks(5))
+                .selectAll('text')
+                .attr('fill', '#a0aec0');
+
+            // Labels
+            svg.append('text')
+                .attr('x', margin.left)
+                .attr('y', margin.top - 10)
+                .attr('fill', '#a0aec0')
+                .attr('font-size', '12px')
+                .text('Log Volume by Hour');
+
+            // Legend
+            const legend = svg.append('g')
+                .attr('transform', `translate(${width - 200}, ${margin.top})`);
+
+            ['info', 'warn', 'error', 'security'].forEach((key, i) => {
+                const g = legend.append('g')
+                    .attr('transform', `translate(${i * 50}, 0)`);
+
+                g.append('rect')
+                    .attr('width', 12)
+                    .attr('height', 12)
+                    .attr('rx', 2)
+                    .attr('fill', colors[key]);
+
+                g.append('text')
+                    .attr('x', 16)
+                    .attr('y', 10)
+                    .attr('fill', '#a0aec0')
+                    .attr('font-size', '10px')
+                    .text(key.charAt(0).toUpperCase() + key.slice(1));
+            });
+        }
+
+        // Retention Timeline
+        function createRetentionTimeline() {
+            const container = document.getElementById('retention-timeline');
+            const width = container.clientWidth;
+            const height = 300;
+            const margin = { top: 40, right: 30, bottom: 40, left: 150 };
+
+            d3.select(container).selectAll("*").remove();
+
+            const svg = d3.select(container)
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+
+            const retentionData = [
+                { type: 'Security Events', hot: 30, warm: 90, cold: 365, color: '#ef4444' },
+                { type: 'Access Logs', hot: 7, warm: 30, cold: 365, color: '#00d4ff' },
+                { type: 'Application Logs', hot: 7, warm: 30, cold: 90, color: '#10b981' },
+                { type: 'Debug Logs', hot: 3, warm: 7, cold: 30, color: '#64748b' },
+                { type: 'Compliance Logs', hot: 30, warm: 365, cold: 2555, color: '#7c3aed' }
+            ];
+
+            const y = d3.scaleBand()
+                .domain(retentionData.map(d => d.type))
+                .range([margin.top, height - margin.bottom])
+                .padding(0.3);
+
+            const maxDays = d3.max(retentionData, d => d.hot + d.warm + d.cold);
+            const x = d3.scaleLinear()
+                .domain([0, maxDays])
+                .range([margin.left, width - margin.right]);
+
+            // Draw bars
+            retentionData.forEach(d => {
+                // Hot storage
+                svg.append('rect')
+                    .attr('x', margin.left)
+                    .attr('y', y(d.type))
+                    .attr('width', x(d.hot) - margin.left)
+                    .attr('height', y.bandwidth())
+                    .attr('fill', d.color)
+                    .attr('opacity', 1)
+                    .attr('rx', 4);
+
+                // Warm storage
+                svg.append('rect')
+                    .attr('x', x(d.hot))
+                    .attr('y', y(d.type))
+                    .attr('width', x(d.warm) - margin.left)
+                    .attr('height', y.bandwidth())
+                    .attr('fill', d.color)
+                    .attr('opacity', 0.5)
+                    .attr('rx', 0);
+
+                // Cold storage
+                svg.append('rect')
+                    .attr('x', x(d.hot + d.warm))
+                    .attr('y', y(d.type))
+                    .attr('width', x(d.cold) - margin.left)
+                    .attr('height', y.bandwidth())
+                    .attr('fill', d.color)
+                    .attr('opacity', 0.2)
+                    .attr('rx', 0);
+            });
+
+            // Y axis labels
+            svg.selectAll('.label')
+                .data(retentionData)
+                .enter()
+                .append('text')
+                .attr('x', margin.left - 10)
+                .attr('y', d => y(d.type) + y.bandwidth() / 2)
+                .attr('text-anchor', 'end')
+                .attr('dominant-baseline', 'middle')
+                .attr('fill', '#a0aec0')
+                .attr('font-size', '12px')
+                .text(d => d.type);
+
+            // X axis
+            svg.append('g')
+                .attr('transform', `translate(0,${height - margin.bottom})`)
+                .call(d3.axisBottom(x).ticks(5).tickFormat(d => d > 365 ? `${Math.round(d/365)}y` : `${d}d`))
+                .selectAll('text')
+                .attr('fill', '#a0aec0');
+
+            svg.selectAll('.domain, .tick line').attr('stroke', '#334155');
+
+            // Legend
+            const legendData = [
+                { label: 'Hot (Instant Access)', opacity: 1 },
+                { label: 'Warm (< 1 hour)', opacity: 0.5 },
+                { label: 'Cold (Archive)', opacity: 0.2 }
+            ];
+
+            const legend = svg.append('g')
+                .attr('transform', `translate(${margin.left}, ${margin.top - 25})`);
+
+            legendData.forEach((d, i) => {
+                const g = legend.append('g')
+                    .attr('transform', `translate(${i * 140}, 0)`);
+
+                g.append('rect')
+                    .attr('width', 16)
+                    .attr('height', 12)
+                    .attr('fill', '#00d4ff')
+                    .attr('opacity', d.opacity)
+                    .attr('rx', 2);
+
+                g.append('text')
+                    .attr('x', 22)
+                    .attr('y', 10)
+                    .attr('fill', '#a0aec0')
+                    .attr('font-size', '11px')
+                    .text(d.label);
+            });
+        }
+
+        // Initialize
+        createVolumeChart();
+        createRetentionTimeline();
+        streamLogs();
+
+        // Resize handlers
+        window.addEventListener('resize', () => {
+            createVolumeChart();
+            createRetentionTimeline();
+        });
+    </script>
+</body>
+</html>
