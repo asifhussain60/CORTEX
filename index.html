@@ -16,6 +16,8 @@
     <meta http-equiv="Expires" content="0">
     <title>CORTEX - Enterprise Development Intelligence</title>
     <link rel="icon" type="image/png" href="assets/images/CORTEX-logo-64.png">
+    <link rel="preload" href="assets/images/CORTEX-logo-512.png" as="image">
+    <link rel="preload" href="assets/images/Awakening-200.png" as="image">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/main.css?v=4.0.0">
     <style>
@@ -304,7 +306,7 @@
         <div style="max-width: 1200px; margin: 2rem auto 3rem; padding: 0 1rem;">
             <a href="story/viewer.html" class="btn-hero btn-hero-story btn-hero-full-width">
                 <span class="btn-hero-icon">
-                    <img src="assets/images/Awakening-400.png" alt="Awakening" class="awakening-image" loading="lazy">
+                    <img src="assets/images/Awakening-200.png" alt="Awakening" class="awakening-image" loading="eager" fetchpriority="high">
                 </span>
                 <span class="btn-hero-text" style="font-size: 2.5rem;">The Awakening Of CORTEX</span>
                 <span class="btn-hero-caption">Read all about the madness that lead to the creation of CORTEX</span>

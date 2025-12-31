@@ -2229,6 +2229,17 @@ footer,
     height: 200px;
     border-radius: 15px;
     object-fit: cover;
+    display: block;
+    margin: 0 auto 1rem auto;
+}
+
+/* Story button icon container needs to show images properly */
+.btn-hero-story .btn-hero-icon {
+    font-size: inherit;
+    line-height: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /* ============================================
