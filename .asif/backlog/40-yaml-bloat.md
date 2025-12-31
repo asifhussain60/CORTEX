@@ -13,34 +13,38 @@ Identify and refactor large YAML files (>5000 lines) into modular, maintainable 
 ## 📋 Execution Steps
 
 ### Step 1: Identify Large YAML Files
-```powershell
-# Find all YAML files and sort by size
-$yamlFiles = Get-ChildItem "d:\PROJECTS\CORTEX" -Recurse -Include "*.yaml","*.yml" -File
+```bash
+# Find all YAML files and sort by line count
+echo "📊 YAML Files Analysis"
+echo "========================================"
 
-Write-Host "📊 YAML Files Analysis" -ForegroundColor Cyan
-Write-Host "=" * 80
-
-$largeFiles = $yamlFiles | ForEach-Object {
-    $lines = (Get-Content $_.FullName).Count
-    $sizeKB = [math]::Round($_.Length / 1KB, 2)
+find /Users/asifhussain/PROJECTS/CORTEX -name "*.yaml" -o -name "*.yml" | while read f; do
+    lines=$(wc -l < "$f" 2>/dev/null | tr -d ' ')
+    sizeKB=$(du -k "$f" 2>/dev/null | cut -f1)
+    relPath=$(echo "$f" | sed "s|/Users/asifhussain/PROJECTS/CORTEX/||")
     
-    [PSCustomObject]@{
-        File = $_.FullName.Replace("d:\PROJECTS\CORTEX\", "")
-        Lines = $lines
-        SizeKB = $sizeKB
-        Priority = if ($lines -gt 5000) { "🔴 CRITICAL" } 
-                   elseif ($lines -gt 2000) { "🟠 HIGH" }
-                   elseif ($lines -gt 1000) { "🟡 MEDIUM" }
-                   else { "🟢 OK" }
-    }
-} | Sort-Object Lines -Descending
+    if [ "$lines" -gt 5000 ]; then
+        priority="🔴 CRITICAL"
+    elif [ "$lines" -gt 2000 ]; then
+        priority="🟠 HIGH"
+    elif [ "$lines" -gt 1000 ]; then
+        priority="🟡 MEDIUM"
+    else
+        priority="🟢 OK"
+    fi
+    
+    echo "$lines|$sizeKB|$priority|$relPath"
+done | sort -t'|' -k1 -nr | head -20 | column -t -s'|'
 
-# Display results
-$largeFiles | Format-Table -AutoSize
-
-# Focus on files > 1000 lines
-$refactorCandidates = $largeFiles | Where-Object { $_.Lines -gt 1000 }
-Write-Host "`n🎯 Refactoring Candidates (>1000 lines): $($refactorCandidates.Count)" -ForegroundColor Yellow
+# Count refactoring candidates
+echo ""
+echo "🎯 Refactoring Candidates (>1000 lines):"
+find /Users/asifhussain/PROJECTS/CORTEX -name "*.yaml" -o -name "*.yml" | while read f; do
+    lines=$(wc -l < "$f" 2>/dev/null | tr -d ' ')
+    if [ "$lines" -gt 1000 ]; then
+        echo "  - $f ($lines lines)"
+    fi
+done
 ```
 
 **Expected Output:** Sorted list of all YAML files with line counts, identifying files needing refactoring.
@@ -48,22 +52,22 @@ Write-Host "`n🎯 Refactoring Candidates (>1000 lines): $($refactorCandidates.C
 ### Step 2: Analyze Structure of Large Files
 For each file >1000 lines, analyze structure:
 
-```powershell
-$targetFiles = @(
-    "cortex-brain\response-templates-v4.yaml",
-    "cortex-brain\operations-config.yaml",
-    "cortex-brain\knowledge-graph.yaml"
-    # Add others from Step 1 results
+```bash
+targetFiles=(
+    "cortex-brain/response-templates-v4.yaml"
+    "cortex-brain/operations-config.yaml"
+    "cortex-brain/knowledge-graph.yaml"
 )
 
-foreach ($file in $targetFiles) {
-    $fullPath = "d:\PROJECTS\CORTEX\$file"
+for file in "${targetFiles[@]}"; do
+    fullPath="/Users/asifhussain/PROJECTS/CORTEX/$file"
     
-    Write-Host "`n📄 Analyzing: $file" -ForegroundColor Cyan
-    Write-Host "=" * 80
+    echo ""
+    echo "📄 Analyzing: $file"
+    echo "========================================"
     
     # Show top-level keys (main sections)
-    python -c @"
+    python3 -c "
 import yaml
 try:
     with open('$fullPath', 'r', encoding='utf-8') as f:
@@ -79,93 +83,88 @@ try:
         print(f'Root structure: {type(data).__name__}')
 except Exception as e:
     print(f'Error: {e}')
-"@
-}
+"
+done
 ```
 
 **Expected Output:** For each large file, list of top-level sections and their item counts.
 
 ### Step 3: Design Modular Structure
-For each large file, create decomposition plan:
+For each large file, create decomposition plan. Here is the target structure:
 
-```powershell
-# Example: response-templates-v4.yaml decomposition
-$decompositionPlan = @{
-    "response-templates-v4.yaml" = @{
-        BaseDir = "cortex-brain\response-templates"
-        Files = @(
-            @{ Name = "core-templates.yaml"; Sections = @("cortex_header", "understanding", "approach") }
-            @{ Name = "progress-templates.yaml"; Sections = @("progress_tracker_standard", "autonomous_execution_progress") }
-            @{ Name = "orchestrator-templates.yaml"; Sections = @("planning", "tdd", "debug", "refinement") }
-            @{ Name = "composable-blocks.yaml"; Sections = @("composable_blocks", "generic_blocks") }
-            @{ Name = "response-formats.yaml"; Sections = @("instant", "quick", "standard", "comprehensive") }
-        )
-        MainFile = "templates-index.yaml"  # References all component files
-    }
-    "operations-config.yaml" = @{
-        BaseDir = "cortex-brain\config\operations"
-        Files = @(
-            @{ Name = "cleanup-config.yaml"; Sections = @("cleanup_rules", "cleanup_targets") }
-            @{ Name = "refactor-config.yaml"; Sections = @("refactoring_rules", "refactor_patterns") }
-            @{ Name = "documentation-config.yaml"; Sections = @("doc_generation_rules", "doc_templates") }
-            @{ Name = "validation-config.yaml"; Sections = @("validation_rules", "quality_gates") }
-        )
-        MainFile = "operations-index.yaml"
-    }
-}
+**response-templates-v4.yaml decomposition:**
+| Component File | Sections |
+|----------------|----------|
+| `core-templates.yaml` | cortex_header, understanding, approach |
+| `progress-templates.yaml` | progress_tracker_standard, autonomous_execution_progress |
+| `orchestrator-templates.yaml` | planning, tdd, debug, refinement |
+| `composable-blocks.yaml` | composable_blocks, generic_blocks |
+| `response-formats.yaml` | instant, quick, standard, comprehensive |
+| `templates-index.yaml` | Main index referencing all components |
 
-# Display decomposition plan
-$decompositionPlan.GetEnumerator() | ForEach-Object {
-    Write-Host "`n📦 Decomposition Plan: $($_.Key)" -ForegroundColor Green
-    Write-Host "  Base Directory: $($_.Value.BaseDir)"
-    Write-Host "  Component Files:"
-    $_.Value.Files | ForEach-Object {
-        Write-Host "    - $($_.Name)"
-        Write-Host "      Sections: $($_.Sections -join ', ')"
-    }
-    Write-Host "  Main Index: $($_.Value.MainFile)"
-}
-```
+**Base Directory:** `cortex-brain/response-templates/`
+
+**operations-config.yaml decomposition:**
+| Component File | Sections |
+|----------------|----------|
+| `cleanup-config.yaml` | cleanup_rules, cleanup_targets |
+| `refactor-config.yaml` | refactoring_rules, refactor_patterns |
+| `documentation-config.yaml` | doc_generation_rules, doc_templates |
+| `validation-config.yaml` | validation_rules, quality_gates |
+| `operations-index.yaml` | Main index referencing all components |
+
+**Base Directory:** `cortex-brain/config/operations/`
 
 **Expected Output:** Detailed decomposition plans showing how large files will be split.
 
 ### Step 4: Create Directory Structure
-```powershell
+```bash
 # Create directories for modular YAML files
-$directories = @(
+directories=(
     "cortex-brain\response-templates",
     "cortex-brain\config\operations",
     "cortex-brain\knowledge\modules"
 )
+### Step 4: Create Directory Structure
+```bash
+# Create directories for modular YAML files
+directories=(
+    "cortex-brain/response-templates"
+    "cortex-brain/config/operations"
+    "cortex-brain/knowledge/modules"
+)
 
-foreach ($dir in $directories) {
-    $fullPath = "d:\PROJECTS\CORTEX\$dir"
-    if (-not (Test-Path $fullPath)) {
-        New-Item -ItemType Directory -Path $fullPath -Force | Out-Null
-        Write-Host "✅ Created: $dir"
-    } else {
-        Write-Host "✓ Exists: $dir"
-    }
-}
+for dir in "${directories[@]}"; do
+    fullPath="/Users/asifhussain/PROJECTS/CORTEX/$dir"
+    if [ ! -d "$fullPath" ]; then
+        mkdir -p "$fullPath"
+        echo "✅ Created: $dir"
+    else
+        echo "✓ Exists: $dir"
+    fi
+done
 ```
 
 ### Step 5: Extract and Modularize Components
 For each large file, extract sections into component files:
 
-```powershell
+```bash
 # Example: Extract response-templates-v4.yaml sections
-$sourceFile = "d:\PROJECTS\CORTEX\cortex-brain\response-templates-v4.yaml"
-$targetDir = "d:\PROJECTS\CORTEX\cortex-brain\response-templates"
+sourceFile="/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/response-templates-v4.yaml"
+targetDir="/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/response-templates"
 
-python -c @"
+python3 << 'EOF'
 import yaml
 from pathlib import Path
 
 # Load source file
-with open('$sourceFile', 'r', encoding='utf-8') as f:
+sourceFile = "/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/response-templates-v4.yaml"
+targetDir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/response-templates")
+
+with open(sourceFile, 'r', encoding='utf-8') as f:
     data = yaml.safe_load(f)
 
-# Define extraction plan (from Step 3)
+# Define extraction plan
 extraction_plan = {
     'core-templates.yaml': ['cortex_header', 'understanding', 'approach', 'response', 'changes', 'next_steps'],
     'progress-templates.yaml': ['progress_tracker_standard', 'autonomous_execution_progress', 'ado_execution_progress'],
@@ -182,13 +181,13 @@ for filename, sections in extraction_plan.items():
             extracted[section] = data[section]
     
     # Write component file
-    target_path = Path('$targetDir') / filename
+    target_path = targetDir / filename
     with open(target_path, 'w', encoding='utf-8') as f:
         yaml.dump(extracted, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
     
     print(f'✅ Created: {filename} ({len(extracted)} sections)')
 
-# Create index file referencing all components
+# Create index file
 index = {
     'version': '4.0',
     'components': list(extraction_plan.keys()),
@@ -201,22 +200,19 @@ index = {
     ]
 }
 
-with open(Path('$targetDir') / 'templates-index.yaml', 'w', encoding='utf-8') as f:
+with open(targetDir / 'templates-index.yaml', 'w', encoding='utf-8') as f:
     yaml.dump(index, f, default_flow_style=False)
 
-print(f'✅ Created: templates-index.yaml')
-"@
+print('✅ Created: templates-index.yaml')
+EOF
 ```
 
 **Expected Output:** Component YAML files created in target directory with extracted sections.
 
 ### Step 6: Create Loading Mechanism
-Create utility to load modular YAML files:
+Create utility to load modular YAML files at `/Users/asifhussain/PROJECTS/CORTEX/src/cortex_brain/yaml_loader.py`:
 
-```powershell
-$loaderScript = "d:\PROJECTS\CORTEX\src\cortex_brain\yaml_loader.py"
-
-$loaderContent = @'
+```python
 """
 YAML Modular Loader
 Loads and merges modular YAML files based on index file.
@@ -269,78 +265,77 @@ if __name__ == "__main__":
     loader = ModularYamlLoader(Path("cortex-brain/response-templates"))
     templates = loader.load_indexed("templates-index.yaml")
     print(f"Loaded {len(templates)} templates from modular files")
-'@
-
-Set-Content -Path $loaderScript -Value $loaderContent
-Write-Host "✅ Created: $loaderScript"
 ```
 
 ### Step 7: Update References
 Update code that loads the original large YAML files:
 
-```powershell
+```bash
 # Find all Python files that import the large YAML files
-$importPatterns = @(
-    "response-templates-v4.yaml",
-    "operations-config.yaml"
-)
+importPatterns=("response-templates-v4.yaml" "operations-config.yaml")
 
-foreach ($pattern in $importPatterns) {
-    Write-Host "`n🔍 Finding references to: $pattern" -ForegroundColor Cyan
+for pattern in "${importPatterns[@]}"; do
+    echo ""
+    echo "🔍 Finding references to: $pattern"
     
-    $matches = Get-ChildItem "d:\PROJECTS\CORTEX\src" -Recurse -Filter "*.py" | 
-        Select-String -Pattern $pattern -List
+    matches=$(grep -r "$pattern" /Users/asifhussain/PROJECTS/CORTEX/src --include="*.py" -l 2>/dev/null)
     
-    if ($matches) {
-        Write-Host "Files to update:" -ForegroundColor Yellow
-        $matches | ForEach-Object {
-            Write-Host "  - $($_.Path.Replace('d:\PROJECTS\CORTEX\', '')): Line $($_.LineNumber)"
-        }
-        Write-Host "`n⚠️  Manual update required to use ModularYamlLoader"
-    } else {
-        Write-Host "✅ No direct references found (or already updated)"
-    }
-}
+    if [ -n "$matches" ]; then
+        echo "Files to update:"
+        echo "$matches" | while read f; do
+            lineNum=$(grep -n "$pattern" "$f" | head -1 | cut -d: -f1)
+            relPath=$(echo "$f" | sed "s|/Users/asifhussain/PROJECTS/CORTEX/||")
+            echo "  - $relPath: Line $lineNum"
+        done
+        echo ""
+        echo "⚠️  Manual update required to use ModularYamlLoader"
+    else
+        echo "✅ No direct references found (or already updated)"
+    fi
+done
 ```
 
 **Manual Action Required:** Update identified files to use `ModularYamlLoader` instead of direct YAML loading.
 
 ### Step 8: Archive Original Files
-```powershell
+```bash
 # Create backups before archiving
-$timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
-$archiveDir = "d:\PROJECTS\CORTEX\cortex-brain\archives\yaml-refactor-$timestamp"
-New-Item -ItemType Directory -Path $archiveDir -Force | Out-Null
+timestamp=$(date +%Y%m%d_%H%M%S)
+archiveDir="/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/archives/yaml-refactor-$timestamp"
+mkdir -p "$archiveDir"
 
-$filesToArchive = @(
-    "cortex-brain\response-templates-v4.yaml",
-    "cortex-brain\operations-config.yaml"
+filesToArchive=(
+    "cortex-brain/response-templates-v4.yaml"
+    "cortex-brain/operations-config.yaml"
 )
 
-foreach ($file in $filesToArchive) {
-    $sourcePath = "d:\PROJECTS\CORTEX\$file"
-    $fileName = Split-Path $file -Leaf
-    $archivePath = Join-Path $archiveDir $fileName
+for file in "${filesToArchive[@]}"; do
+    sourcePath="/Users/asifhussain/PROJECTS/CORTEX/$file"
+    fileName=$(basename "$file")
+    archivePath="$archiveDir/$fileName"
     
-    if (Test-Path $sourcePath) {
-        Copy-Item $sourcePath $archivePath -Force
-        Write-Host "✅ Archived: $file"
-    }
-}
+    if [ -f "$sourcePath" ]; then
+        cp "$sourcePath" "$archivePath"
+        echo "✅ Archived: $file"
+    fi
+done
 
-Write-Host "`n📦 Original files archived to: $archiveDir"
-Write-Host "⚠️  Manual verification required before deleting originals"
+echo ""
+echo "📦 Original files archived to: $archiveDir"
+echo "⚠️  Manual verification required before deleting originals"
 ```
 
 ### Step 9: Validation
-```powershell
-# Validate modular YAML structure
-python -c @"
+```bash
+python3 << 'EOF'
 from pathlib import Path
+import sys
+sys.path.insert(0, '/Users/asifhussain/PROJECTS/CORTEX')
+
 from src.cortex_brain.yaml_loader import ModularYamlLoader
 
 # Test response-templates loading
-loader = ModularYamlLoader(Path('cortex-brain/response-templates'))
+loader = ModularYamlLoader(Path('/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/response-templates'))
 templates = loader.load_indexed('templates-index.yaml')
 
 print('✅ Modular Loading Test:')
@@ -355,26 +350,17 @@ if missing:
     print(f'❌ Missing templates: {missing}')
 else:
     print(f'✅ All expected templates present')
-
-# Compare with original file
-import yaml
-with open('cortex-brain/archives/yaml-refactor-*/response-templates-v4.yaml', 'r') as f:
-    original = yaml.safe_load(f)
-
-if len(templates) == len(original):
-    print(f'✅ Template count matches original ({len(templates)})')
-else:
-    print(f'⚠️  Count mismatch: Original={len(original)}, Modular={len(templates)}')
-"@
+EOF
 
 # Check file sizes
-Write-Host "`n📊 File Size Comparison:" -ForegroundColor Cyan
-$original = Get-Item "d:\PROJECTS\CORTEX\cortex-brain\archives\yaml-refactor-*\response-templates-v4.yaml" | Select-Object -First 1
-$modular = Get-ChildItem "d:\PROJECTS\CORTEX\cortex-brain\response-templates\*.yaml"
+echo ""
+echo "📊 File Size Comparison:"
+originalSize=$(du -k /Users/asifhussain/PROJECTS/CORTEX/cortex-brain/archives/yaml-refactor-*/response-templates-v4.yaml 2>/dev/null | cut -f1 | head -1)
+modularTotal=$(du -k /Users/asifhussain/PROJECTS/CORTEX/cortex-brain/response-templates/*.yaml 2>/dev/null | awk '{sum+=$1} END {print sum}')
+modularCount=$(ls -1 /Users/asifhussain/PROJECTS/CORTEX/cortex-brain/response-templates/*.yaml 2>/dev/null | wc -l | tr -d ' ')
 
-Write-Host "  Original: $([math]::Round($original.Length / 1KB, 2)) KB (single file)"
-Write-Host "  Modular: $([math]::Round(($modular | Measure-Object -Property Length -Sum).Sum / 1KB, 2)) KB ($($ modular.Count) files)"
-Write-Host "  Largest modular file: $([math]::Round(($modular | Sort-Object Length -Descending | Select-Object -First 1).Length / 1KB, 2)) KB"
+echo "  Original: ${originalSize}KB (single file)"
+echo "  Modular: ${modularTotal}KB ($modularCount files)"
 ```
 
 **Expected Output:**
@@ -390,13 +376,13 @@ Write-Host "  Largest modular file: $([math]::Round(($modular | Sort-Object Leng
 - [ ] Decomposition plan created for each large file
   Verify: Plan shows component files and sections for each target file
 - [ ] Modular directory structure created
-  Verify: Directories exist: `response-templates/`, `config/operations/`, `knowledge/modules/`
+  Verify: `test -d /Users/asifhussain/PROJECTS/CORTEX/cortex-brain/response-templates && echo "✅ Exists"`
 - [ ] Component YAML files extracted and created
   Verify: Each large file split into 3-7 component files
 - [ ] No single component file exceeds 1000 lines
-  Verify: `Get-ChildItem cortex-brain\response-templates\*.yaml | ForEach-Object { (Get-Content $_.FullName).Count }` all <1000
+  Verify: `wc -l /Users/asifhussain/PROJECTS/CORTEX/cortex-brain/response-templates/*.yaml | sort -n`
 - [ ] `ModularYamlLoader` utility created and tested
-  Verify: Script exists at `src/cortex_brain/yaml_loader.py` and loads files correctly
+  Verify: `test -f /Users/asifhussain/PROJECTS/CORTEX/src/cortex_brain/yaml_loader.py && echo "✅ Exists"`
 - [ ] Original files archived with timestamp
   Verify: Archive directory exists with original files
 - [ ] All references updated to use modular loading
@@ -422,6 +408,8 @@ Write-Host "  Largest modular file: $([math]::Round(($modular | Sort-Object Leng
 
 ## 🗑️ AUTO-DELETE INSTRUCTION
 **After successful execution:** Delete this file with:
-```powershell
+```bash
+rm -f /Users/asifhussain/PROJECTS/CORTEX/.asif/backlog/40-yaml-bloat.md
+```
 Remove-Item "d:\PROJECTS\CORTEX\.asif\backlog\40-yaml-bloat.md" -Force
 ```

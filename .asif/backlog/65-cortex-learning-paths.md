@@ -13,31 +13,28 @@ Create an interactive, wizard-style learning path system with three tracks (Begi
 ## 📋 Execution Steps
 
 ### Step 1: Design Learning Path Architecture
-```powershell
+```bash
 # Create directory structure
-$baseDir = "d:\PROJECTS\CORTEX\docs\learning-paths"
-$paths = @("beginner", "mid-level", "professional", "shared-resources")
+baseDir="/Users/asifhussain/PROJECTS/CORTEX/docs/learning-paths"
+paths=("beginner" "mid-level" "professional" "shared-resources")
 
-foreach ($path in $paths) {
-    $fullPath = Join-Path $baseDir $path
-    New-Item -ItemType Directory -Path $fullPath -Force | Out-Null
-    Write-Host "✅ Created: $fullPath"
-}
+for path in "${paths[@]}"; do
+    mkdir -p "$baseDir/$path"
+    echo "✅ Created: $baseDir/$path"
+done
 
 # Create sub-directories for each track
-$subDirs = @("modules", "exercises", "projects", "assessments")
-foreach ($path in @("beginner", "mid-level", "professional")) {
-    foreach ($sub in $subDirs) {
-        $dir = Join-Path $baseDir "$path\$sub"
-        New-Item -ItemType Directory -Path $dir -Force | Out-Null
-    }
-}
+subDirs=("modules" "exercises" "projects" "assessments")
+for path in beginner mid-level professional; do
+    for sub in "${subDirs[@]}"; do
+        mkdir -p "$baseDir/$path/$sub"
+    done
+done
 ```
 
 ### Step 2: Create Learning Path Index
-```powershell
-$indexFile = "d:\PROJECTS\CORTEX\docs\learning-paths\index.md"
-$content = @"
+Create file `/Users/asifhussain/PROJECTS/CORTEX/docs/learning-paths/index.md` with content:
+```markdown
 # 🎓 CORTEX Learning Paths
 
 Choose your learning path based on your experience level:
@@ -76,16 +73,13 @@ Choose your learning path based on your experience level:
 - [Common Patterns](shared-resources/patterns.md)
 - [Troubleshooting Guide](shared-resources/troubleshooting.md)
 - [FAQ](shared-resources/faq.md)
-"@
-
-Set-Content -Path $indexFile -Value $content
-Write-Host "✅ Created: $indexFile"
 ```
 
+**Manual Action Required:** Create this file at the specified path.
+
 ### Step 3: Create Beginner Path Curriculum
-```powershell
-$beginnerIndex = "d:\PROJECTS\CORTEX\docs\learning-paths\beginner\index.md"
-$content = @"
+Create file `/Users/asifhussain/PROJECTS/CORTEX/docs/learning-paths/beginner/index.md` with content:
+```markdown
 # 🌱 Beginner Learning Path
 
 **Welcome to CORTEX!** This path will guide you from zero to building your first application.
@@ -147,16 +141,13 @@ Complete all modules and pass the final project review to earn your:
 **CORTEX Beginner Developer Certificate**
 
 [Start Module 1 →](modules/01-getting-started.md)
-"@
-
-Set-Content -Path $beginnerIndex -Value $content
-Write-Host "✅ Created: $beginnerIndex"
 ```
 
+**Manual Action Required:** Create this file at the specified path.
+
 ### Step 4: Create Mid-Level Path Curriculum
-```powershell
-$midLevelIndex = "d:\PROJECTS\CORTEX\docs\learning-paths\mid-level\index.md"
-$content = @"
+Create file `/Users/asifhussain/PROJECTS/CORTEX/docs/learning-paths/mid-level/index.md` with content:
+```markdown
 # 🚀 Mid-Level Learning Path
 
 **For developers and technical professionals** ready to leverage CORTEX for efficient development.
@@ -219,16 +210,13 @@ Complete all modules to earn:
 **CORTEX Intermediate Developer Certificate**
 
 [Start Module 1 →](modules/01-architecture.md)
-"@
-
-Set-Content -Path $midLevelIndex -Value $content
-Write-Host "✅ Created: $midLevelIndex"
 ```
 
+**Manual Action Required:** Create this file at the specified path.
+
 ### Step 5: Create Professional Path Curriculum
-```powershell
-$professionalIndex = "d:\PROJECTS\CORTEX\docs\learning-paths\professional\index.md"
-$content = @"
+Create file `/Users/asifhussain/PROJECTS/CORTEX/docs/learning-paths/professional/index.md` with content:
+```markdown
 # ⚡ Professional Learning Path
 
 **For senior developers and architects** mastering advanced CORTEX capabilities.
@@ -294,16 +282,13 @@ Complete all modules to earn:
 **CORTEX Professional Developer Certificate**
 
 [Start Module 1 →](modules/01-advanced-architecture.md)
-"@
-
-Set-Content -Path $professionalIndex -Value $content
-Write-Host "✅ Created: $professionalIndex"
 ```
 
+**Manual Action Required:** Create this file at the specified path.
+
 ### Step 6: Create Interactive Wizard Component
-```powershell
-$wizardScript = "d:\PROJECTS\CORTEX\src\learning_paths\wizard.py"
-$content = @'
+Create file `/Users/asifhussain/PROJECTS/CORTEX/src/learning_paths/wizard.py` with content:
+```python
 """
 CORTEX Learning Path Wizard
 Interactive wizard for guiding users through learning paths.
@@ -417,29 +402,23 @@ if __name__ == "__main__":
     wizard = LearningWizard()
     choice = wizard.start()
     print("\n" + wizard.generate_customized_path())
-'@
-
-# Create directory if needed
-$scriptDir = "d:\PROJECTS\CORTEX\src\learning_paths"
-New-Item -ItemType Directory -Path $scriptDir -Force | Out-Null
-Set-Content -Path $wizardScript -Value $content
-Write-Host "✅ Created: $wizardScript"
 ```
 
-### Step 7: Add Learning Paths to Documentation Home
-```powershell
-# Update docs home page to include learning paths tile
-$docsHome = "d:\PROJECTS\CORTEX\docs\index.md"
+**Manual Action Required:** Create this file at the specified path. Also create directory: `mkdir -p /Users/asifhussain/PROJECTS/CORTEX/src/learning_paths`
 
-if (Test-Path $docsHome) {
-    $content = Get-Content $docsHome -Raw
-    
-    if ($content -notmatch "learning-paths") {
-        Write-Host "⚠️  Add Learning Paths tile to docs home page"
-        Write-Host ""
-        Write-Host "Add this tile to the documentation home page:"
-        Write-Host ""
-        Write-Host @"
+### Step 7: Add Learning Paths to Documentation Home
+```bash
+# Check if docs home page exists and has learning-paths reference
+docsHome="/Users/asifhussain/PROJECTS/CORTEX/docs/index.md"
+
+if [ -f "$docsHome" ]; then
+    if grep -q "learning-paths" "$docsHome"; then
+        echo "✅ Learning paths already referenced in docs"
+    else
+        echo "⚠️  Add Learning Paths tile to docs home page"
+        echo ""
+        echo "Add this tile to the documentation home page:"
+        cat << 'TILE'
 ### 🎓 Get Started
 
 New to CORTEX? Choose your learning path:
@@ -448,24 +427,22 @@ New to CORTEX? Choose your learning path:
 
 Three guided paths: Beginner | Mid-Level | Professional
 "@
-    } else {
-        Write-Host "✅ Learning paths already referenced in docs"
-    }
-} else {
-    Write-Host "❌ docs/index.md not found"
-    Write-Host "Create documentation home page first"
-}
+[**Start Learning →**](learning-paths/index.md)
+
+Three guided paths: Beginner | Mid-Level | Professional
+TILE
+    fi
+else
+    echo "❌ docs/index.md not found"
+    echo "Create documentation home page first"
+fi
 ```
 
 **Manual Action Required:** Add learning paths tile to documentation home page.
 
 ### Step 8: Create Module Templates
-For each track, create module templates that instructors/content creators can fill:
-
-```powershell
-# Example: Beginner Module 1 template
-$module1 = "d:\PROJECTS\CORTEX\docs\learning-paths\beginner\modules\01-getting-started.md"
-$content = @"
+Create module template file `/Users/asifhussain/PROJECTS/CORTEX/docs/learning-paths/beginner/modules/01-getting-started.md` with content:
+```markdown
 # Module 1: Getting Started
 
 **Duration:** 4 hours | **Difficulty:** Easy
@@ -532,38 +509,36 @@ By the end of this module, you will:
 - [ ] Ready to move to Module 2
 
 [← Back to Path Overview](../index.md) | [Next Module: Development Basics →](02-development-basics.md)
-"@
-
-New-Item -ItemType Directory -Path (Split-Path $module1) -Force | Out-Null
-Set-Content -Path $module1 -Value $content
-Write-Host "✅ Created module template: $module1"
-Write-Host "📝 Content creation required for all modules"
 ```
 
+**Manual Action Required:** Create the module template file. Create directory first: `mkdir -p /Users/asifhussain/PROJECTS/CORTEX/docs/learning-paths/beginner/modules`
+
 ### Step 9: Validation
-```powershell
+```bash
 # Verify learning path structure
-$requiredPaths = @(
-    "docs\learning-paths\index.md",
-    "docs\learning-paths\beginner\index.md",
-    "docs\learning-paths\mid-level\index.md",
-    "docs\learning-paths\professional\index.md",
-    "src\learning_paths\wizard.py"
+requiredPaths=(
+    "docs/learning-paths/index.md"
+    "docs/learning-paths/beginner/index.md"
+    "docs/learning-paths/mid-level/index.md"
+    "docs/learning-paths/professional/index.md"
+    "src/learning_paths/wizard.py"
 )
 
-Write-Host "`n✅ Structure Validation:" -ForegroundColor Cyan
-foreach ($path in $requiredPaths) {
-    $fullPath = "d:\PROJECTS\CORTEX\$path"
-    if (Test-Path $fullPath) {
-        Write-Host "  ✅ $path"
-    } else {
-        Write-Host "  ❌ $path (missing)" -ForegroundColor Red
-    }
-}
+echo ""
+echo "✅ Structure Validation:"
+for path in "${requiredPaths[@]}"; do
+    fullPath="/Users/asifhussain/PROJECTS/CORTEX/$path"
+    if [ -f "$fullPath" ]; then
+        echo "  ✅ $path"
+    else
+        echo "  ❌ $path (missing)"
+    fi
+done
 
 # Count created modules
-$moduleCount = (Get-ChildItem "d:\PROJECTS\CORTEX\docs\learning-paths" -Recurse -Filter "*.md").Count
-Write-Host "`nTotal learning path documents: $moduleCount"
+moduleCount=$(find /Users/asifhussain/PROJECTS/CORTEX/docs/learning-paths -name "*.md" 2>/dev/null | wc -l | tr -d ' ')
+echo ""
+echo "Total learning path documents: $moduleCount"
 ```
 
 **Expected Output:** All required files present, structure validated.
@@ -572,23 +547,23 @@ Write-Host "`nTotal learning path documents: $moduleCount"
 
 ## ✅ Success Criteria
 - [ ] Learning paths directory structure created
-  Verify: `Test-Path "d:\PROJECTS\CORTEX\docs\learning-paths"` returns `True`
+  Verify: `test -d /Users/asifhussain/PROJECTS/CORTEX/docs/learning-paths && echo "✅ Exists"`
 - [ ] Index page with three learning tracks created
-  Verify: File exists: `docs\learning-paths\index.md`
+  Verify: `test -f /Users/asifhussain/PROJECTS/CORTEX/docs/learning-paths/index.md && echo "✅ Exists"`
 - [ ] Beginner path curriculum defined with 5 modules
-  Verify: `docs\learning-paths\beginner\index.md` contains Module 1-5
+  Verify: `grep -c "Module" /Users/asifhussain/PROJECTS/CORTEX/docs/learning-paths/beginner/index.md`
 - [ ] Mid-level path curriculum defined with 6 modules
-  Verify: `docs\learning-paths\mid-level\index.md` contains Module 1-6
+  Verify: `grep -c "Module" /Users/asifhussain/PROJECTS/CORTEX/docs/learning-paths/mid-level/index.md`
 - [ ] Professional path curriculum defined with 7 modules
-  Verify: `docs\learning-paths\professional\index.md` contains Module 1-7
+  Verify: `grep -c "Module" /Users/asifhussain/PROJECTS/CORTEX/docs/learning-paths/professional/index.md`
 - [ ] Interactive wizard script created
-  Verify: `src\learning_paths\wizard.py` exists and runs
+  Verify: `test -f /Users/asifhussain/PROJECTS/CORTEX/src/learning_paths/wizard.py && python3 -c "import sys; sys.path.insert(0,'.'); from src.learning_paths.wizard import LearningWizard; print('✅ Imports OK')"`
 - [ ] Learning paths linked from documentation home
-  Verify: docs home page contains link to learning paths
+  Verify: `grep -l "learning-paths" /Users/asifhussain/PROJECTS/CORTEX/docs/index.md`
 - [ ] Module templates created for content population
   Verify: At least one module template exists for each track
 - [ ] Shared resources directory created
-  Verify: `docs\learning-paths\shared-resources\` exists
+  Verify: `test -d /Users/asifhussain/PROJECTS/CORTEX/docs/learning-paths/shared-resources && echo "✅ Exists"`
 
 ---
 
@@ -607,6 +582,6 @@ This backlog item creates the STRUCTURE for learning paths. Content creation req
 
 ## 🗑️ AUTO-DELETE INSTRUCTION
 **After successful execution:** Delete this file with:
-```powershell
-Remove-Item "d:\PROJECTS\CORTEX\.asif\backlog\65-cortex-learning-paths.md" -Force
+```bash
+rm -f /Users/asifhussain/PROJECTS/CORTEX/.asif/backlog/65-cortex-learning-paths.md
 ```
