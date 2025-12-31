@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX ADO Orchestrator - Autonomous Azure DevOps work item generation from plans">
+    <title>ADO Orchestrator - CORTEX</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+    <!-- Skip Link -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- Breadcrumb Navigation (Top) -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">→</span>
+        <a href="index.html">Orchestrators</a>
+        <span class="breadcrumb-separator">→</span>
+        <span class="breadcrumb-current">ADO Orchestrator</span>
+    </nav>
+    
+    <!-- Logo Header (Below Breadcrumb) -->
+    <div class="logo-header">
+        <a href="../index.html">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
+        </a>
+    </div>
+    
+    <!-- Main Content -->
+    <main class="container" id="main-content">
+        <!-- Main Content Card -->
+        <div class="glass-card">
+            <h1>🎯 ADO Orchestrator</h1>
+            
+            <!-- Intro Description -->
+            <p>
+                Transform your planning artifacts into ready-to-import Azure DevOps work items. The ADO 
+                Orchestrator analyzes your planning manifest and generates properly structured Features, 
+                User Stories, and Tasks with acceptance criteria, effort estimates, and relationships 
+                automatically configured—eliminating hours of manual ADO data entry.
+            </p>
+            
+            <!-- Key Metrics -->
+            <div class="metrics-grid metrics-grid-4">
+                <div class="metric-card glass-card">
+                    <div class="metric-value">3</div>
+                    <div class="metric-label">Work Item Types</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">100%</div>
+                    <div class="metric-label">Plan Integration</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">Auto</div>
+                    <div class="metric-label">Hierarchy Mapping</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">5min</div>
+                    <div class="metric-label">Avg Generation Time</div>
+                </div>
+            </div>
+            
+            <!-- Command -->
+            <div class="command-card">
+                <code class="command-syntax">plan ado [feature name]</code>
+                <p class="command-description">
+                    Generates Azure DevOps work items from an existing planning manifest.
+                </p>
+                <div class="command-example">
+                    plan ado user authentication
+                </div>
+            </div>
+        </div>
+        
+        <!-- Core Features -->
+        <section class="section-workflow">
+            <div class="glass-card">
+                <h2><span>📋</span> Generated Work Item Types</h2>
+                
+                <div class="workflow-phases">
+                    <div class="phase-card">
+                        <span class="phase-number">1</span>
+                        <span class="phase-icon">🎯</span>
+                        <div class="phase-title">Features</div>
+                        <p class="phase-description">High-level business capabilities with value statements</p>
+                    </div>
+                    <div class="phase-card">
+                        <span class="phase-number">2</span>
+                        <span class="phase-icon">📖</span>
+                        <div class="phase-title">User Stories</div>
+                        <p class="phase-description">User-focused requirements with acceptance criteria</p>
+                    </div>
+                    <div class="phase-card">
+                        <span class="phase-number">3</span>
+                        <span class="phase-icon">✅</span>
+                        <div class="phase-title">Tasks</div>
+                        <p class="phase-description">Technical implementation tasks with effort estimates</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Key Capabilities -->
+        <section class="section-features">
+            <div class="glass-card">
+                <h2><span>⚡</span> Key Capabilities</h2>
+                <ul class="feature-list">
+                    <li><strong>Manifest Integration:</strong> Reads directly from planning manifest YAML</li>
+                    <li><strong>Hierarchy Mapping:</strong> Automatically creates parent-child relationships</li>
+                    <li><strong>Acceptance Criteria:</strong> Converts DoD items to ADO acceptance criteria</li>
+                    <li><strong>Effort Estimation:</strong> Maps complexity tiers to story points</li>
+                    <li><strong>Tag Generation:</strong> Auto-generates tags from feature categories</li>
+                    <li><strong>Export Format:</strong> CSV or JSON ready for ADO import</li>
+                </ul>
+            </div>
+        </section>
+        
+        <!-- Related Links -->
+        <section class="section-related">
+            <div class="glass-card">
+                <h2><span>🔗</span> Related Documentation</h2>
+                <div class="related-links">
+                    <a href="planning-system.html" class="btn btn-outline">Planning System</a>
+                    <a href="ado-operations.html" class="btn btn-outline">ADO Operations</a>
+                    <a href="../features/planning-system.html" class="btn btn-outline">Planning Features</a>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>

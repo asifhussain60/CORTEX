@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX Sanitization Orchestrator - 5-phase code sanitization for secure sharing">
+    <title>Sanitization Orchestrator - CORTEX</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+    <!-- Skip Link -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- Breadcrumb Navigation (Top) -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">→</span>
+        <a href="index.html">Orchestrators</a>
+        <span class="breadcrumb-separator">→</span>
+        <span class="breadcrumb-current">Sanitization Orchestrator</span>
+    </nav>
+    
+    <!-- Logo Header (Below Breadcrumb) -->
+    <div class="logo-header">
+        <a href="../index.html">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
+        </a>
+    </div>
+    
+    <!-- Main Content -->
+    <main class="container" id="main-content">
+        <!-- Main Content Card -->
+        <div class="glass-card">
+            <h1>🧹 Sanitization Orchestrator</h1>
+            
+            <!-- Intro Description -->
+            <p>
+                Share your code safely without exposing proprietary information. The Sanitization 
+                Orchestrator performs intelligent 5-phase cleanup that removes company-specific data, 
+                secrets, internal URLs, and proprietary identifiers while preserving code functionality—
+                complete with build validation to ensure the sanitized code still compiles and passes tests.
+            </p>
+            
+            <!-- Key Metrics -->
+            <div class="metrics-grid metrics-grid-4">
+                <div class="metric-card glass-card">
+                    <div class="metric-value">5</div>
+                    <div class="metric-label">Phases</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">100%</div>
+                    <div class="metric-label">Reversible</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">Auto</div>
+                    <div class="metric-label">Secret Detection</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">Build</div>
+                    <div class="metric-label">Validation</div>
+                </div>
+            </div>
+            
+            <!-- Command -->
+            <div class="command-card">
+                <code class="command-syntax">sanitize [directory]</code>
+                <p class="command-description">
+                    Sanitizes code in the specified directory, removing sensitive company data.
+                </p>
+                <div class="command-example">
+                    sanitize ./src/auth-module
+                </div>
+            </div>
+        </div>
+        
+        <!-- 5 Phase Workflow -->
+        <section class="section-workflow">
+            <div class="glass-card">
+                <h2><span>📋</span> The 5-Phase Workflow</h2>
+                
+                <div class="workflow-phases">
+                    <div class="phase-card">
+                        <span class="phase-number">1</span>
+                        <span class="phase-icon">🔍</span>
+                        <div class="phase-title">Analysis</div>
+                        <p class="phase-description">Scan codebase for sensitive patterns, company identifiers, and secrets</p>
+                    </div>
+                    <div class="phase-card">
+                        <span class="phase-number">2</span>
+                        <span class="phase-icon">🗺️</span>
+                        <div class="phase-title">Mapping</div>
+                        <p class="phase-description">Create reversible mapping of sensitive values to generic replacements</p>
+                    </div>
+                    <div class="phase-card">
+                        <span class="phase-number">3</span>
+                        <span class="phase-icon">🔄</span>
+                        <div class="phase-title">Transform</div>
+                        <p class="phase-description">Apply transformations consistently across all files</p>
+                    </div>
+                    <div class="phase-card">
+                        <span class="phase-number">4</span>
+                        <span class="phase-icon">✅</span>
+                        <div class="phase-title">Validate</div>
+                        <p class="phase-description">Build and test sanitized code to ensure functionality preserved</p>
+                    </div>
+                    <div class="phase-card">
+                        <span class="phase-number">5</span>
+                        <span class="phase-icon">📊</span>
+                        <div class="phase-title">Report</div>
+                        <p class="phase-description">Generate detailed sanitization report with statistics</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Detection Categories -->
+        <section class="section-features">
+            <div class="glass-card">
+                <h2><span>🔒</span> What Gets Sanitized</h2>
+                <ul class="feature-list">
+                    <li><strong>Company Names:</strong> Organization identifiers, brand names</li>
+                    <li><strong>Internal URLs:</strong> Intranet, internal APIs, private domains</li>
+                    <li><strong>Secrets:</strong> API keys, tokens, passwords, connection strings</li>
+                    <li><strong>Email Addresses:</strong> Corporate email patterns</li>
+                    <li><strong>IP Addresses:</strong> Internal network addresses</li>
+                    <li><strong>Database Names:</strong> Production/staging database identifiers</li>
+                    <li><strong>Employee Names:</strong> Author tags, comments with names</li>
+                </ul>
+            </div>
+        </section>
+        
+        <!-- Related Links -->
+        <section class="section-related">
+            <div class="glass-card">
+                <h2><span>🔗</span> Related Documentation</h2>
+                <div class="related-links">
+                    <a href="sanitization.html" class="btn btn-outline">Sanitization Guide</a>
+                    <a href="../security/index.html" class="btn btn-outline">Security</a>
+                    <a href="../governance/skull-rulebook.html" class="btn btn-outline">SKULL Rules</a>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>

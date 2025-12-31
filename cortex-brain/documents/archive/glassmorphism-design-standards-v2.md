@@ -1,8 +1,8 @@
 # CORTEX Glassmorphism Design Standards v2.2
 
-**Version:** 2.2.0  
+**Version:** 2.3.0  
 **Created:** December 28, 2025  
-**Updated:** December 29, 2025  
+**Updated:** December 31, 2025  
 **Author:** Asif Hussain  
 **Purpose:** Unified glassmorphism design system for all CORTEX documentation views  
 **Supersedes:** `documentation-styling-standards.md` v1.1.0
@@ -13,6 +13,7 @@
 
 | Version | Date | Changes |
 |---------|------|---------|
+| **2.3.0** | Dec 31, 2025 | Added Contained Action Panel pattern with nested tiles, title + description header, and usage guidelines |
 | **2.2.0** | Dec 29, 2025 | Added Adaptive Code Panel Height Algorithm with auto-height vs fixed-height logic, mobile-responsive thresholds, JavaScript implementation |
 | **2.1.0** | Dec 29, 2025 | Added D3.js Layout Pattern Selection Guide, Hub-Spoke implementation patterns, Anti-patterns section for tree diagrams with many leaf nodes |
 | **2.0.0** | Dec 28, 2025 | Initial glassmorphism v2 standards, Mermaid diagram guidelines, FontAwesome requirements |
@@ -145,6 +146,165 @@ Standardized gap values for consistent layout across all views.
 | Between distinct panels | `--panel-gap-md` | 24px |
 | Between major sections | `--panel-gap-lg` | 32px |
 | Hero to content | `--panel-gap-xl` | 48px |
+
+---
+
+## 🎯 Contained Action Panel Pattern
+
+A unified panel pattern where a title header and multiple action tiles are wrapped within a single glassmorphism container. This creates visual cohesion and groups related actions together.
+
+### When to Use
+
+| Use Case | Example |
+|----------|---------|
+| **Quick Actions** | Group of command shortcuts or call-to-action buttons |
+| **Feature Highlights** | Related features that belong together conceptually |
+| **Dashboard Widgets** | Multiple metrics or stats that form a logical group |
+| **Navigation Hubs** | Collection of links to related pages |
+
+### Visual Structure
+
+```
+┌─────────────────────────────────────────────────┐
+│  ⚡ Section Title (styled, no border)           │
+│  Description text explaining the section...     │
+│                                                 │
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌────┐ │
+│  │  Tile 1  │ │  Tile 2  │ │  Tile 3  │ │ T4 │ │
+│  │  (icon)  │ │  (icon)  │ │  (icon)  │ │    │ │
+│  │  Title   │ │  Title   │ │  Title   │ │    │ │
+│  │  Desc    │ │  Desc    │ │  Desc    │ │    │ │
+│  └──────────┘ └──────────┘ └──────────┘ └────┘ │
+└─────────────────────────────────────────────────┘
+```
+
+### HTML Structure
+
+```html
+<!-- Contained Action Panel -->
+<div class="glass-card" style="padding: 3rem 3.5rem;">
+    <!-- Title Header (no border, just styled) -->
+    <h2 class="section-title" style="margin-bottom: 0.75rem;">
+        <i class="fas fa-bolt" aria-hidden="true"></i> Quick Actions
+    </h2>
+    <p style="text-align: center; color: var(--text-secondary); margin-bottom: 2.5rem; font-size: 1rem;">
+        Get started quickly with these common tasks. Use the commands below to load templates instantly.
+    </p>
+    
+    <!-- Nested Tile Grid -->
+    <div class="metrics-grid-4">
+        <!-- Action Tile (nested, subtle styling) -->
+        <div style="background: rgba(0, 0, 0, 0.2); border: 1px solid var(--glass-border); border-radius: 12px; padding: 1.5rem; text-align: center; transition: all 0.2s ease;">
+            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-crosshairs" style="font-size: 1.5rem; color: var(--accent-primary);"></i>
+            </div>
+            <h4 style="color: var(--text-primary); margin-bottom: 0.5rem; font-size: 1rem;">Action Title</h4>
+            <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1rem;">Brief description of the action</p>
+            <code style="display: block; background: rgba(0, 0, 0, 0.3); padding: 0.5rem; border-radius: 6px; font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent-primary);">Command or CTA text</code>
+        </div>
+        <!-- Additional tiles... -->
+    </div>
+</div>
+```
+
+### CSS Specifications
+
+| Property | Outer Panel | Inner Tiles |
+|----------|-------------|-------------|
+| **Background** | `var(--glass-bg)` via `.glass-card` | `rgba(0, 0, 0, 0.2)` |
+| **Border** | `var(--glass-border)` via `.glass-card` | `1px solid var(--glass-border)` |
+| **Border Radius** | `var(--radius-lg)` (16px) | `12px` |
+| **Padding** | `3rem 3.5rem` | `1.5rem` |
+| **Transition** | None | `all 0.2s ease` |
+
+### Padding Guidelines
+
+| Content Density | Outer Padding | Rationale |
+|-----------------|---------------|-----------|
+| **4+ tiles** | `3rem 3.5rem` | Generous breathing room for busy layouts |
+| **2-3 tiles** | `2.5rem 3rem` | Balanced spacing |
+| **Single tile** | `2rem` | Compact but comfortable |
+
+### Description Best Practices
+
+**✅ Include description when:**
+- Actions require context or explanation
+- Users need guidance on how to use the feature
+- The section serves as an entry point to deeper content
+
+**❌ Skip description when:**
+- Actions are self-explanatory (e.g., standard navigation)
+- Space is at a premium
+- Visual icons provide sufficient context
+
+**Example descriptions:**
+```html
+<!-- Informative -->
+<p>Get started quickly with these common security tasks. Use the commands below in CORTEX Chat to load templates instantly.</p>
+
+<!-- Instructional -->
+<p>Click any tile below to dive deeper into the topic and access detailed documentation.</p>
+
+<!-- Contextual -->
+<p>These integrations connect CORTEX security features with your existing workflow.</p>
+```
+
+### Icon Container Styling
+
+Each tile uses a gradient icon container for visual consistency:
+
+```css
+/* Icon container within tiles */
+.action-icon {
+    width: 50px;
+    height: 50px;
+    margin: 0 auto 1rem auto;
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2));
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.action-icon i {
+    font-size: 1.5rem;
+    color: var(--accent-primary);
+}
+```
+
+**Color Variations:**
+| Purpose | Gradient Colors | Icon Color |
+|---------|-----------------|------------|
+| Primary/Default | `cyan → purple` | `var(--accent-primary)` |
+| Success/Positive | `green → cyan` | `var(--success)` |
+| Warning/Caution | `orange → red` | `var(--warning)` |
+| Info/Secondary | `blue → purple` | `var(--info)` |
+
+### Mobile Responsiveness
+
+```css
+@media (max-width: 768px) {
+    /* Reduce outer padding on mobile */
+    .contained-action-panel {
+        padding: 2rem 1.5rem;
+    }
+    
+    /* Stack tiles vertically */
+    .metrics-grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .metrics-grid-4 {
+        grid-template-columns: 1fr;
+    }
+}
+```
+
+### Reference Implementation
+
+**File:** `docs/security/index.html` - Quick Actions section
 
 ---
 

@@ -1,0 +1,5560 @@
+{
+  "version": "1.1",
+  "generated": "2025-12-31T14:58:23.907791",
+  "generator": "site_manifest.py",
+  "site_url": "http://localhost:8000",
+  "footer_rules": {
+    "home_page_only": true,
+    "excluded_levels": [
+      "level1",
+      "level2"
+    ]
+  },
+  "logo_standards": {
+    "level1": "200x200",
+    "level2": "150x150"
+  },
+  "statistics": {
+    "total_pages": 142,
+    "compliant_pages": 67,
+    "non_compliant_pages": 75,
+    "missing_docs": 4,
+    "broken_links": 455,
+    "sections": 21,
+    "level1_pages": 17,
+    "level2_pages": 124
+  },
+  "pages": [
+    {
+      "path": "index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/index.html",
+      "title": "CORTEX - Enterprise Development Intelligence",
+      "section": "root",
+      "level": "home",
+      "has_footer": false,
+      "has_breadcrumb": false,
+      "logo_size": 51,
+      "internal_links": [
+        "story/viewer.html",
+        "architecture/index.html",
+        "security/index.html",
+        "orchestrators/index.html",
+        "token-optimization/index.html",
+        "sts/index.html",
+        "knowledge/index.html",
+        "toolkit-manager/index.html",
+        "lens/index.html",
+        "getting-started/index.html",
+        "features/index.html",
+        "governance/skull-rulebook.html",
+        "faq.html",
+        "sitemap.html"
+      ],
+      "compliance_issues": [
+        "Home page should have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 87501,
+      "modified": "2025-12-31T14:41:20.227391"
+    },
+    {
+      "path": "dashboard-diagnostic.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/dashboard-diagnostic.html",
+      "title": "Dashboard Diagnostic",
+      "section": "dashboard-diagnostic.html",
+      "level": "level1",
+      "has_footer": false,
+      "has_breadcrumb": false,
+      "logo_size": null,
+      "internal_links": [],
+      "compliance_issues": [
+        "LEVEL1 pages should have breadcrumb navigation"
+      ],
+      "is_compliant": false,
+      "size_bytes": 7874,
+      "modified": "2025-12-29T16:27:03.700810"
+    },
+    {
+      "path": "sitemap.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/sitemap.html",
+      "title": "Sitemap - CORTEX Documentation",
+      "section": "sitemap.html",
+      "level": "level1",
+      "has_footer": false,
+      "has_breadcrumb": false,
+      "logo_size": 6,
+      "internal_links": [
+        "index.html",
+        "index.html",
+        "sitemap.html",
+        "features/index.html",
+        "features/dashboard-system.html",
+        "toolkit-manager/index.html",
+        "features/git-operations.html",
+        "features/holistic-discovery.html",
+        "features/orchestrators.html",
+        "features/planning-system.html",
+        "features/response-templates.html",
+        "features/token-optimization.html",
+        "orchestrators/index.html",
+        "orchestrators/ado-operations.html",
+        "orchestrators/architectural-review.html",
+        "orchestrators/cleanup-orchestrator.html",
+        "orchestrators/cortex-lens.html",
+        "orchestrators/debug-orchestrator.html",
+        "orchestrators/execution-orchestrator.html",
+        "orchestrators/git-checkpoint.html",
+        "orchestrators/intelligent-dashboard.html",
+        "orchestrators/planning-system.html",
+        "orchestrators/pre-flight.html",
+        "orchestrators/refinement-orchestrator.html",
+        "orchestrators/rollback-orchestrator.html",
+        "orchestrators/sanitization.html",
+        "orchestrators/system-integrity.html",
+        "orchestrators/tdd-orchestrator.html",
+        "orchestrators/upgrade.html",
+        "governance/skull-rulebook.html",
+        "knowledge/index.html",
+        "knowledge/api-design.html",
+        "knowledge/cloud.html",
+        "knowledge/containers.html",
+        "knowledge/database.html",
+        "knowledge/ddd.html",
+        "knowledge/design-patterns.html",
+        "knowledge/devops.html",
+        "knowledge/engineering.html",
+        "knowledge/frontend.html",
+        "knowledge/messaging.html",
+        "knowledge/microservices.html",
+        "knowledge/mobile.html",
+        "knowledge/performance.html",
+        "knowledge/rag-domains.html",
+        "knowledge/security.html",
+        "knowledge/testing.html",
+        "knowledge/ui-ux.html",
+        "sts/index.html",
+        "sts/code-quality.html",
+        "sts/documentation.html",
+        "sts/performance.html",
+        "sts/security.html",
+        "sts/solid.html",
+        "sts/testing.html",
+        "story/character-colors-reference.html",
+        "story/viewer.html"
+      ],
+      "compliance_issues": [
+        "LEVEL1 pages should have breadcrumb navigation",
+        "Level1 logo should be 200x200, found 6"
+      ],
+      "is_compliant": false,
+      "size_bytes": 53109,
+      "modified": "2025-12-31T14:41:20.227378"
+    },
+    {
+      "path": "test-tabs.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/test-tabs.html",
+      "title": "Tab Test",
+      "section": "test-tabs.html",
+      "level": "level1",
+      "has_footer": false,
+      "has_breadcrumb": false,
+      "logo_size": null,
+      "internal_links": [],
+      "compliance_issues": [
+        "LEVEL1 pages should have breadcrumb navigation"
+      ],
+      "is_compliant": false,
+      "size_bytes": 3552,
+      "modified": "2025-12-29T16:25:35.660654"
+    },
+    {
+      "path": "faq.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/faq.html",
+      "title": "FAQ - CORTEX",
+      "section": "faq.html",
+      "level": "level1",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "index.html",
+        "index.html",
+        "getting-started/index.html",
+        "story/index.html",
+        "features/index.html",
+        "getting-started/multi-repo-setup.html",
+        "architecture/four-tier-brain.html",
+        "architecture/orchestrator-ecosystem.html",
+        "architecture/agent-system.html",
+        "architecture/skull-protection.html",
+        "architecture/working-memory.html",
+        "features/planning-system.html",
+        "features/tdd-mastery.html",
+        "features/ado-operations.html",
+        "technical/orchestrators/code-sanitization.html",
+        "technical/orchestrators/refinement-orchestrator.html",
+        "features/tdd-mastery.html",
+        "getting-started/tutorial.html",
+        "getting-started/first-commands.html",
+        "story/index.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 39914,
+      "modified": "2025-12-28T17:48:49.596700"
+    },
+    {
+      "path": "cortex-lens-output/test-repo/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/cortex-lens-output/test-repo/index.html",
+      "title": "test-repo - API Service Analysis",
+      "section": "cortex-lens-output",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": false,
+      "logo_size": null,
+      "internal_links": [],
+      "compliance_issues": [
+        "LEVEL2 pages should have breadcrumb navigation"
+      ],
+      "is_compliant": false,
+      "size_bytes": 33184,
+      "modified": "2025-12-29T16:13:28.054032"
+    },
+    {
+      "path": "cortex-lens-output/CORTEX/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/cortex-lens-output/CORTEX/index.html",
+      "title": "CORTEX - Console Application Analysis",
+      "section": "cortex-lens-output",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": false,
+      "logo_size": null,
+      "internal_links": [],
+      "compliance_issues": [
+        "LEVEL2 pages should have breadcrumb navigation"
+      ],
+      "is_compliant": false,
+      "size_bytes": 37658,
+      "modified": "2025-12-29T16:42:46.943077"
+    },
+    {
+      "path": "cortex-lens-output/comparison/comparison.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/cortex-lens-output/comparison/comparison.html",
+      "title": "comparison",
+      "section": "cortex-lens-output",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": false,
+      "logo_size": null,
+      "internal_links": [],
+      "compliance_issues": [
+        "LEVEL2 pages should have breadcrumb navigation"
+      ],
+      "is_compliant": false,
+      "size_bytes": 99,
+      "modified": "2025-12-29T16:13:28.057752"
+    },
+    {
+      "path": "cortex-lens-output/mock-landing/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/cortex-lens-output/mock-landing/index.html",
+      "title": "CORTEX - Repository Analysis",
+      "section": "cortex-lens-output",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": false,
+      "logo_size": null,
+      "internal_links": [],
+      "compliance_issues": [
+        "LEVEL2 pages should have breadcrumb navigation"
+      ],
+      "is_compliant": false,
+      "size_bytes": 57788,
+      "modified": "2025-12-29T16:13:28.058079"
+    },
+    {
+      "path": "cortex-lens-output/mock-landing/tests/test-runner.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/cortex-lens-output/mock-landing/tests/test-runner.html",
+      "title": "CORTEX Landing Page - Test Runner",
+      "section": "cortex-lens-output",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": false,
+      "logo_size": null,
+      "internal_links": [],
+      "compliance_issues": [
+        "LEVEL2 pages should have breadcrumb navigation"
+      ],
+      "is_compliant": false,
+      "size_bytes": 10542,
+      "modified": "2025-12-29T16:13:28.058871"
+    },
+    {
+      "path": "security/penetration-testing.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/security/penetration-testing.html",
+      "title": "Penetration Testing | CORTEX Security",
+      "section": "security",
+      "level": "level2",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../index.html",
+        "index.html",
+        "../index.html"
+      ],
+      "compliance_issues": [
+        "LEVEL2 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 41210,
+      "modified": "2025-12-30T19:08:59.113533"
+    },
+    {
+      "path": "security/threat-intelligence.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/security/threat-intelligence.html",
+      "title": "Threat Intelligence - CORTEX Security",
+      "section": "security",
+      "level": "level2",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "security-training.html",
+        "index.html"
+      ],
+      "compliance_issues": [
+        "LEVEL2 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 51196,
+      "modified": "2025-12-30T19:08:59.123943"
+    },
+    {
+      "path": "security/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/security/index.html",
+      "title": "CORTEX Security | Threat Modeling & Compliance",
+      "section": "security",
+      "level": "level1",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "../index.html",
+        "dashboard.html",
+        "threat-modeling.html",
+        "owasp.html",
+        "compliance.html",
+        "vulnerability-assessment.html",
+        "penetration-testing.html",
+        "incident-response.html",
+        "risk-assessment.html",
+        "data-protection.html",
+        "access-control.html",
+        "audit-logging.html",
+        "security-training.html",
+        "threat-intelligence.html",
+        "../index.html",
+        "../architecture/index.html"
+      ],
+      "compliance_issues": [
+        "LEVEL1 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 28795,
+      "modified": "2025-12-30T18:44:32.707085"
+    },
+    {
+      "path": "security/compliance.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/security/compliance.html",
+      "title": "Compliance Matrix | CORTEX Security",
+      "section": "security",
+      "level": "level2",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../index.html",
+        "dashboard.html",
+        "owasp.html",
+        "index.html",
+        "../index.html",
+        "index.html"
+      ],
+      "compliance_issues": [
+        "LEVEL2 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 37146,
+      "modified": "2025-12-30T17:57:03.749603"
+    },
+    {
+      "path": "security/access-control.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/security/access-control.html",
+      "title": "Access Control - CORTEX Security",
+      "section": "security",
+      "level": "level2",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "index.html",
+        "audit-logging.html"
+      ],
+      "compliance_issues": [
+        "LEVEL2 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 51607,
+      "modified": "2025-12-30T19:08:59.123708"
+    },
+    {
+      "path": "security/dashboard.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/security/dashboard.html",
+      "title": "Security Dashboard | CORTEX",
+      "section": "security",
+      "level": "level2",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../index.html",
+        "owasp.html",
+        "compliance.html",
+        "threat-modeling.html",
+        "index.html",
+        "../index.html",
+        "index.html"
+      ],
+      "compliance_issues": [
+        "LEVEL2 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 33599,
+      "modified": "2025-12-30T17:57:03.510666"
+    },
+    {
+      "path": "security/owasp.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/security/owasp.html",
+      "title": "OWASP Top 10 | CORTEX Security",
+      "section": "security",
+      "level": "level2",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../index.html",
+        "dashboard.html",
+        "index.html",
+        "../index.html",
+        "index.html"
+      ],
+      "compliance_issues": [
+        "LEVEL2 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 46444,
+      "modified": "2025-12-30T17:57:03.558619"
+    },
+    {
+      "path": "security/security-training.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/security/security-training.html",
+      "title": "Security Training - CORTEX Security",
+      "section": "security",
+      "level": "level2",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "audit-logging.html",
+        "threat-intelligence.html"
+      ],
+      "compliance_issues": [
+        "LEVEL2 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 55071,
+      "modified": "2025-12-30T19:08:59.123802"
+    },
+    {
+      "path": "security/vulnerability-assessment.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/security/vulnerability-assessment.html",
+      "title": "Vulnerability Assessment | CORTEX Security",
+      "section": "security",
+      "level": "level2",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../index.html",
+        "index.html",
+        "../index.html"
+      ],
+      "compliance_issues": [
+        "LEVEL2 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 48099,
+      "modified": "2025-12-30T19:08:59.113385"
+    },
+    {
+      "path": "security/data-protection.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/security/data-protection.html",
+      "title": "Data Protection | CORTEX Security",
+      "section": "security",
+      "level": "level2",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../index.html",
+        "index.html",
+        "../index.html"
+      ],
+      "compliance_issues": [
+        "LEVEL2 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 42138,
+      "modified": "2025-12-30T19:08:59.123441"
+    },
+    {
+      "path": "security/threat-modeling.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/security/threat-modeling.html",
+      "title": "Threat Modeling Guide | CORTEX Security",
+      "section": "security",
+      "level": "level2",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../index.html",
+        "index.html",
+        "dashboard.html",
+        "owasp.html",
+        "compliance.html"
+      ],
+      "compliance_issues": [
+        "LEVEL2 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 62463,
+      "modified": "2025-12-30T18:34:23.023077"
+    },
+    {
+      "path": "security/incident-response.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/security/incident-response.html",
+      "title": "Incident Response | CORTEX Security",
+      "section": "security",
+      "level": "level2",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../index.html",
+        "index.html",
+        "../index.html"
+      ],
+      "compliance_issues": [
+        "LEVEL2 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 47650,
+      "modified": "2025-12-30T19:08:59.113629"
+    },
+    {
+      "path": "security/audit-logging.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/security/audit-logging.html",
+      "title": "Audit Logging - CORTEX Security",
+      "section": "security",
+      "level": "level2",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "access-control.html",
+        "security-training.html"
+      ],
+      "compliance_issues": [
+        "LEVEL2 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 48578,
+      "modified": "2025-12-30T19:08:59.123541"
+    },
+    {
+      "path": "security/risk-assessment.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/security/risk-assessment.html",
+      "title": "Risk Assessment | CORTEX Security",
+      "section": "security",
+      "level": "level2",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../index.html",
+        "index.html",
+        "../index.html"
+      ],
+      "compliance_issues": [
+        "LEVEL2 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 48968,
+      "modified": "2025-12-30T19:08:59.123412"
+    },
+    {
+      "path": "features/dashboard-system.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/features/dashboard-system.html",
+      "title": "CORTEX LENS - Dashboard System",
+      "section": "features",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../technical/orchestrators/index.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 14003,
+      "modified": "2025-12-28T17:48:49.596843"
+    },
+    {
+      "path": "features/token-optimization.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/features/token-optimization.html",
+      "title": "Token Optimization - CORTEX",
+      "section": "features",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "../index.html",
+        "index.html",
+        "response-templates.html",
+        "../orchestrators/planning-system.html",
+        "../architecture/four-tier-brain.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 14499,
+      "modified": "2025-12-28T17:48:49.597633"
+    },
+    {
+      "path": "features/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/features/index.html",
+      "title": "Features | CORTEX - Enterprise Development Intelligence",
+      "section": "features",
+      "level": "level1",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "../index.html",
+        "planning-system.html",
+        "../orchestrators/tdd-orchestrator.html",
+        "dashboard-system.html",
+        "holistic-discovery.html",
+        "response-templates.html",
+        "token-optimization.html",
+        "../orchestrators/sanitization-engine.html",
+        "git-operations.html",
+        "../orchestrators/index.html",
+        "../getting-started/index.html",
+        "../architecture/index.html"
+      ],
+      "compliance_issues": [
+        "LEVEL1 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 27212,
+      "modified": "2025-12-29T12:27:40.163520"
+    },
+    {
+      "path": "features/orchestrators.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/features/orchestrators.html",
+      "title": "Redirecting to Orchestrators...",
+      "section": "features",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": false,
+      "logo_size": null,
+      "internal_links": [
+        "../orchestrators/index.html",
+        "../orchestrators/index.html"
+      ],
+      "compliance_issues": [
+        "LEVEL2 pages should have breadcrumb navigation"
+      ],
+      "is_compliant": false,
+      "size_bytes": 3007,
+      "modified": "2025-12-28T17:48:49.597165"
+    },
+    {
+      "path": "features/holistic-discovery.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/features/holistic-discovery.html",
+      "title": "Holistic Code Discovery - CORTEX",
+      "section": "features",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "index.html",
+        "response-templates.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 11768,
+      "modified": "2025-12-28T17:48:49.597022"
+    },
+    {
+      "path": "features/planning-system.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/features/planning-system.html",
+      "title": "Planning System - CORTEX Features",
+      "section": "features",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../orchestrators/planning-system.html",
+        "tdd-mastery.html",
+        "execution-orchestrator.html",
+        "ado-operations.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 12868,
+      "modified": "2025-12-28T17:48:49.597325"
+    },
+    {
+      "path": "features/response-templates.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/features/response-templates.html",
+      "title": "Response Template System - CORTEX",
+      "section": "features",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "index.html",
+        "../architecture/index.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 12731,
+      "modified": "2025-12-30T08:38:30.310734"
+    },
+    {
+      "path": "features/git-operations.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/features/git-operations.html",
+      "title": "Git Operations - CORTEX",
+      "section": "features",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "index.html",
+        "response-templates.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 11199,
+      "modified": "2025-12-28T17:48:49.596934"
+    },
+    {
+      "path": "token-optimization/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/token-optimization/index.html",
+      "title": "Token Optimization - CORTEX",
+      "section": "token-optimization",
+      "level": "level1",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 36410,
+      "modified": "2025-12-29T12:27:40.167128"
+    },
+    {
+      "path": "roi-calculator/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/roi-calculator/index.html",
+      "title": "ROI Calculator | CORTEX",
+      "section": "roi-calculator",
+      "level": "level1",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": 51,
+      "internal_links": [
+        "../index.html",
+        "../index.html",
+        "../index.html"
+      ],
+      "compliance_issues": [
+        "LEVEL1 pages should NOT have footer",
+        "Level1 logo should be 200x200, found 51"
+      ],
+      "is_compliant": false,
+      "size_bytes": 37626,
+      "modified": "2025-12-30T20:11:41.902602"
+    },
+    {
+      "path": "orchestrators/architectural-review.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/orchestrators/architectural-review.html",
+      "title": "Architectural Review - CORTEX",
+      "section": "orchestrators",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../index.html",
+        "cortex-lens.html",
+        "system-integrity.html",
+        "refinement-orchestrator.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 23217,
+      "modified": "2025-12-28T17:48:49.604385"
+    },
+    {
+      "path": "orchestrators/sanitization.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/orchestrators/sanitization.html",
+      "title": "Code Sanitization - CORTEX",
+      "section": "orchestrators",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../index.html",
+        "../governance/skull-rulebook.html",
+        "../architecture/multi-repo.html",
+        "../features/token-optimization.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 8335,
+      "modified": "2025-12-28T17:48:49.605764"
+    },
+    {
+      "path": "orchestrators/cortex-lens.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/orchestrators/cortex-lens.html",
+      "title": "CORTEX Lens - CORTEX",
+      "section": "orchestrators",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../index.html",
+        "intelligent-dashboard.html",
+        "refinement-orchestrator.html",
+        "debug-orchestrator.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 26206,
+      "modified": "2025-12-28T17:48:49.604639"
+    },
+    {
+      "path": "orchestrators/git-checkpoint.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/orchestrators/git-checkpoint.html",
+      "title": "Git Checkpoint - CORTEX",
+      "section": "orchestrators",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../index.html",
+        "tdd-orchestrator.html",
+        "debug-orchestrator.html",
+        "planning-system.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 21958,
+      "modified": "2025-12-28T17:48:49.605014"
+    },
+    {
+      "path": "orchestrators/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/orchestrators/index.html",
+      "title": "Orchestrators - CORTEX",
+      "section": "orchestrators",
+      "level": "level1",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "../index.html",
+        "planning-system.html",
+        "tdd-orchestrator.html",
+        "execution-orchestrator.html",
+        "ado-operations.html",
+        "sanitization.html",
+        "upgrade.html",
+        "system-maintenance.html",
+        "system-integrity.html",
+        "git-checkpoint.html",
+        "rollback-orchestrator.html",
+        "cleanup-orchestrator.html",
+        "pre-flight.html",
+        "cortex-lens.html",
+        "architectural-review.html",
+        "refinement-orchestrator.html",
+        "intelligent-dashboard.html",
+        "debug-orchestrator.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 28367,
+      "modified": "2025-12-29T07:02:35.631115"
+    },
+    {
+      "path": "orchestrators/pre-flight.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/orchestrators/pre-flight.html",
+      "title": "Pre-Flight Orchestrator - CORTEX",
+      "section": "orchestrators",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../index.html",
+        "planning-system.html",
+        "cortex-lens.html",
+        "system-integrity.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 21647,
+      "modified": "2025-12-28T17:48:49.605493"
+    },
+    {
+      "path": "orchestrators/intelligent-dashboard.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/orchestrators/intelligent-dashboard.html",
+      "title": "Intelligent Dashboard - CORTEX",
+      "section": "orchestrators",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../index.html",
+        "cortex-lens.html",
+        "refinement-orchestrator.html",
+        "planning-system.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 21092,
+      "modified": "2025-12-28T17:48:49.605208"
+    },
+    {
+      "path": "orchestrators/rollback-orchestrator.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/orchestrators/rollback-orchestrator.html",
+      "title": "Rollback Orchestrator - CORTEX",
+      "section": "orchestrators",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../index.html",
+        "git-checkpoint.html",
+        "tdd-orchestrator.html",
+        "cleanup-orchestrator.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 22026,
+      "modified": "2025-12-28T17:48:49.605664"
+    },
+    {
+      "path": "orchestrators/ado-operations.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/orchestrators/ado-operations.html",
+      "title": "ADO Operations - CORTEX",
+      "section": "orchestrators",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../index.html",
+        "planning-system.html",
+        "../features/token-optimization.html",
+        "execution-orchestrator.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 7357,
+      "modified": "2025-12-28T17:48:49.604274"
+    },
+    {
+      "path": "orchestrators/planning-system.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/orchestrators/planning-system.html",
+      "title": "Planning System - CORTEX",
+      "section": "orchestrators",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../index.html",
+        "tdd-orchestrator.html",
+        "execution-orchestrator.html",
+        "ado-operations.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 12503,
+      "modified": "2025-12-28T17:48:49.605356"
+    },
+    {
+      "path": "orchestrators/upgrade.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/orchestrators/upgrade.html",
+      "title": "Upgrade Orchestrator - CORTEX",
+      "section": "orchestrators",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../index.html",
+        "../getting-started/deployment.html",
+        "../architecture/index.html",
+        "../governance/skull-rulebook.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 8769,
+      "modified": "2025-12-28T17:48:49.606132"
+    },
+    {
+      "path": "orchestrators/system-integrity.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/orchestrators/system-integrity.html",
+      "title": "System Integrity - CORTEX",
+      "section": "orchestrators",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../index.html",
+        "cleanup-orchestrator.html",
+        "git-checkpoint.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 24865,
+      "modified": "2025-12-28T17:48:49.605868"
+    },
+    {
+      "path": "orchestrators/tdd-orchestrator.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/orchestrators/tdd-orchestrator.html",
+      "title": "TDD Mastery - CORTEX",
+      "section": "orchestrators",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../index.html",
+        "planning-system.html",
+        "../governance/skull-rulebook.html",
+        "execution-orchestrator.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 21857,
+      "modified": "2025-12-28T17:48:49.605949"
+    },
+    {
+      "path": "orchestrators/refinement-orchestrator.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/orchestrators/refinement-orchestrator.html",
+      "title": "Refinement Orchestrator - CORTEX",
+      "section": "orchestrators",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../index.html",
+        "system-integrity.html",
+        "tdd-orchestrator.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 27944,
+      "modified": "2025-12-28T17:48:49.605557"
+    },
+    {
+      "path": "orchestrators/execution-orchestrator.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/orchestrators/execution-orchestrator.html",
+      "title": "Execution Orchestrator - CORTEX",
+      "section": "orchestrators",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../index.html",
+        "planning-system.html",
+        "tdd-orchestrator.html",
+        "../features/token-optimization.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 7297,
+      "modified": "2025-12-28T17:48:49.604893"
+    },
+    {
+      "path": "orchestrators/debug-orchestrator.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/orchestrators/debug-orchestrator.html",
+      "title": "Debug Orchestrator - CORTEX",
+      "section": "orchestrators",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../index.html",
+        "tdd-orchestrator.html",
+        "git-checkpoint.html",
+        "cortex-lens.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 27945,
+      "modified": "2025-12-28T17:48:49.604758"
+    },
+    {
+      "path": "orchestrators/cleanup-orchestrator.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/orchestrators/cleanup-orchestrator.html",
+      "title": "Cleanup Orchestrator - CORTEX",
+      "section": "orchestrators",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../index.html",
+        "system-integrity.html",
+        "git-checkpoint.html",
+        "rollback-orchestrator.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 20821,
+      "modified": "2025-12-28T17:48:49.604521"
+    },
+    {
+      "path": "lens/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/lens/index.html",
+      "title": "CORTEX LENS - AST Analysis & Reverse Engineering",
+      "section": "lens",
+      "level": "level1",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "../index.html",
+        "../cortex-lens-output/CORTEX/index.html",
+        "../cortex-lens-output/CORTEX/index.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 69935,
+      "modified": "2025-12-29T16:29:04.609203"
+    },
+    {
+      "path": "architecture/architecture-FULL.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/architecture/architecture-FULL.html",
+      "title": "Architecture - CORTEX",
+      "section": "architecture",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 1469,
+      "modified": "2025-12-28T17:48:49.591461"
+    },
+    {
+      "path": "architecture/knowledge-graph.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/architecture/knowledge-graph.html",
+      "title": "Knowledge Graph (Tier 2) - CORTEX Architecture",
+      "section": "architecture",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../future/technical-evolution.html",
+        "four-tier-brain.html",
+        "skull-protection.html",
+        "orchestrator-ecosystem.html",
+        "agent-system.html",
+        "working-memory.html",
+        "index.html",
+        "index.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 13777,
+      "modified": "2025-12-28T17:48:49.592194"
+    },
+    {
+      "path": "architecture/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/architecture/index.html",
+      "title": "CORTEX Architecture | Enterprise AI Assistant",
+      "section": "architecture",
+      "level": "level1",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "../index.html",
+        "four-tier-brain.html",
+        "skull-protection.html",
+        "working-memory.html",
+        "knowledge-graph.html",
+        "development-context.html",
+        "agent-system.html",
+        "orchestrator-ecosystem.html",
+        "../orchestrators/index.html",
+        "../orchestrators/planning-system.html",
+        "architecture-FULL.html",
+        "../sts/index.html",
+        "../index.html",
+        "../index.html",
+        "index.html"
+      ],
+      "compliance_issues": [
+        "LEVEL1 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 52962,
+      "modified": "2025-12-29T08:33:28.694967"
+    },
+    {
+      "path": "architecture/skull-protection.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/architecture/skull-protection.html",
+      "title": "SKULL Protection System - CORTEX Architecture",
+      "section": "architecture",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../future/technical-evolution.html",
+        "../governance/skull-rulebook.html",
+        "four-tier-brain.html",
+        "../governance/skull-rulebook.html",
+        "orchestrator-ecosystem.html",
+        "index.html",
+        "index.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 15386,
+      "modified": "2025-12-28T17:48:49.592414"
+    },
+    {
+      "path": "architecture/development-context.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/architecture/development-context.html",
+      "title": "Development Context (Tier 3) - CORTEX Architecture",
+      "section": "architecture",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../future/technical-evolution.html",
+        "four-tier-brain.html",
+        "skull-protection.html",
+        "orchestrator-ecosystem.html",
+        "agent-system.html",
+        "working-memory.html",
+        "knowledge-graph.html",
+        "index.html",
+        "index.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 13353,
+      "modified": "2025-12-28T17:48:49.591690"
+    },
+    {
+      "path": "getting-started/tutorial.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/getting-started/tutorial.html",
+      "title": "Interactive Tutorial - CORTEX",
+      "section": "getting-started",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../architecture/four-tier-brain.html",
+        "../features/planning-system.html",
+        "../features/tdd-mastery.html",
+        "../features/ado-operations.html",
+        "../technical/orchestrators/code-sanitization.html",
+        "../technical/orchestrators/refinement-orchestrator.html",
+        "multi-repo-setup.html",
+        "first-commands.html",
+        "../architecture/index.html",
+        "../features/index.html",
+        "../technical/orchestrators/index.html",
+        "../faq.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 17176,
+      "modified": "2025-12-28T17:48:49.597731"
+    },
+    {
+      "path": "getting-started/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/getting-started/index.html",
+      "title": "Getting Started - CORTEX 4.0",
+      "section": "getting-started",
+      "level": "level1",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "../index.html",
+        "../index.html"
+      ],
+      "compliance_issues": [
+        "LEVEL1 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 28848,
+      "modified": "2025-12-29T12:47:39.879488"
+    },
+    {
+      "path": "knowledge/ui-ux.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/ui-ux.html",
+      "title": "UI/UX Design | CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "index.html",
+        "../index.html"
+      ],
+      "compliance_issues": [
+        "LEVEL2 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 32419,
+      "modified": "2025-12-29T07:02:35.630961"
+    },
+    {
+      "path": "knowledge/design-patterns.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/design-patterns.html",
+      "title": "Design Patterns - CORTEX Knowledge Library",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../index.html"
+      ],
+      "compliance_issues": [
+        "LEVEL2 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 33839,
+      "modified": "2025-12-29T13:15:35.277662"
+    },
+    {
+      "path": "knowledge/api-design.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/api-design.html",
+      "title": "API Design Excellence | CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "https://spec.openapis.org/oas/latest.html",
+        "../index.html",
+        "index.html"
+      ],
+      "compliance_issues": [
+        "LEVEL2 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 30851,
+      "modified": "2025-12-29T08:33:28.695819"
+    },
+    {
+      "path": "knowledge/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/index.html",
+      "title": "CORTEX Knowledge-Driven Code",
+      "section": "knowledge",
+      "level": "level1",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "../index.html",
+        "frontend.html",
+        "ui-ux.html",
+        "mobile.html",
+        "api-design.html",
+        "microservices.html",
+        "messaging.html",
+        "database.html",
+        "performance.html",
+        "cloud.html",
+        "containers.html",
+        "devops.html",
+        "engineering.html",
+        "design-patterns.html",
+        "ddd.html",
+        "security.html",
+        "testing.html",
+        "rag-domains.html"
+      ],
+      "compliance_issues": [
+        "LEVEL1 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 42115,
+      "modified": "2025-12-29T14:21:58.397448"
+    },
+    {
+      "path": "knowledge/microservices.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/microservices.html",
+      "title": "Microservices Architecture | CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../index.html",
+        "microservices/resilience-patterns.html",
+        "../index.html",
+        "index.html"
+      ],
+      "compliance_issues": [
+        "LEVEL2 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 48324,
+      "modified": "2025-12-29T13:52:22.609605"
+    },
+    {
+      "path": "knowledge/database.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/database.html",
+      "title": "Database Design | CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../index.html",
+        "index.html"
+      ],
+      "compliance_issues": [
+        "LEVEL2 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 30640,
+      "modified": "2025-12-29T07:02:35.628947"
+    },
+    {
+      "path": "knowledge/performance.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/performance.html",
+      "title": "Performance Optimization | CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "https://www.brendangregg.com/perf.html",
+        "../index.html",
+        "index.html"
+      ],
+      "compliance_issues": [
+        "LEVEL2 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 33036,
+      "modified": "2025-12-29T07:02:35.630353"
+    },
+    {
+      "path": "knowledge/containers.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/containers.html",
+      "title": "Container Technology | CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../index.html",
+        "index.html"
+      ],
+      "compliance_issues": [
+        "LEVEL2 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 24354,
+      "modified": "2025-12-29T07:02:35.628761"
+    },
+    {
+      "path": "knowledge/mobile.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/mobile.html",
+      "title": "Mobile Development | CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "index.html",
+        "../index.html"
+      ],
+      "compliance_issues": [
+        "LEVEL2 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 34626,
+      "modified": "2025-12-29T07:02:35.630201"
+    },
+    {
+      "path": "knowledge/engineering.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/engineering.html",
+      "title": "Software Engineering | CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../index.html",
+        "index.html"
+      ],
+      "compliance_issues": [
+        "LEVEL2 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 20200,
+      "modified": "2025-12-29T07:02:35.629395"
+    },
+    {
+      "path": "knowledge/security.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/security.html",
+      "title": "Application Security | CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../index.html",
+        "index.html"
+      ],
+      "compliance_issues": [
+        "LEVEL2 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 23970,
+      "modified": "2025-12-29T07:02:35.630636"
+    },
+    {
+      "path": "knowledge/cloud.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/cloud.html",
+      "title": "Cloud Computing | CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../index.html",
+        "index.html"
+      ],
+      "compliance_issues": [
+        "LEVEL2 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 23744,
+      "modified": "2025-12-29T07:02:35.628588"
+    },
+    {
+      "path": "knowledge/frontend.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/frontend.html",
+      "title": "Frontend Development | CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "index.html",
+        "../index.html"
+      ],
+      "compliance_issues": [
+        "LEVEL2 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 45663,
+      "modified": "2025-12-29T07:02:35.629566"
+    },
+    {
+      "path": "knowledge/ddd.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/ddd.html",
+      "title": "Domain-Driven Design | CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../index.html",
+        "index.html"
+      ],
+      "compliance_issues": [
+        "LEVEL2 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 20113,
+      "modified": "2025-12-29T07:02:35.629095"
+    },
+    {
+      "path": "knowledge/devops.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/devops.html",
+      "title": "DevOps Practices | CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../index.html",
+        "index.html"
+      ],
+      "compliance_issues": [
+        "LEVEL2 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 19734,
+      "modified": "2025-12-29T07:02:35.629240"
+    },
+    {
+      "path": "knowledge/testing.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/testing.html",
+      "title": "Software Testing | CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../index.html",
+        "index.html"
+      ],
+      "compliance_issues": [
+        "LEVEL2 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 23963,
+      "modified": "2025-12-29T07:02:35.630795"
+    },
+    {
+      "path": "knowledge/messaging.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/messaging.html",
+      "title": "Message-Driven Architecture | CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../index.html",
+        "index.html"
+      ],
+      "compliance_issues": [
+        "LEVEL2 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 32474,
+      "modified": "2025-12-29T07:02:35.629880"
+    },
+    {
+      "path": "knowledge/rag-domains.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/rag-domains.html",
+      "title": "RAG Domains | CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html",
+        "../index.html",
+        "index.html"
+      ],
+      "compliance_issues": [
+        "LEVEL2 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 28485,
+      "modified": "2025-12-29T07:02:35.630507"
+    },
+    {
+      "path": "knowledge/microservices/resilience-patterns.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/microservices/resilience-patterns.html",
+      "title": "Resilience Patterns - CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../../index.html",
+        "../index.html",
+        "../microservices.html",
+        "service-mesh.html",
+        "../api-design/api-gateway.html",
+        "../performance/caching-strategies.html",
+        "../testing/chaos-engineering.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 21182,
+      "modified": "2025-12-28T17:48:49.603070"
+    },
+    {
+      "path": "knowledge/database/oracle-best-practices.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/database/oracle-best-practices.html",
+      "title": "Oracle Best Practices - CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../../index.html",
+        "../index.html",
+        "../database.html",
+        "sql-best-practices.html",
+        "../performance/profiling-analysis.html",
+        "../security/secure-coding-practices.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 16236,
+      "modified": "2025-12-28T17:48:49.599139"
+    },
+    {
+      "path": "knowledge/database/sql-best-practices.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/database/sql-best-practices.html",
+      "title": "SQL Best Practices - CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../../index.html",
+        "../index.html",
+        "../database.html",
+        "nosql-patterns.html",
+        "orm-best-practices.html",
+        "../performance/query-optimization.html",
+        "../security/data-protection.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 21427,
+      "modified": "2025-12-28T17:48:49.599185"
+    },
+    {
+      "path": "knowledge/devops/cicd-pipelines.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/devops/cicd-pipelines.html",
+      "title": "CI/CD Pipelines - CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../../index.html",
+        "../index.html",
+        "../devops.html",
+        "infrastructure-as-code.html",
+        "monitoring-observability.html",
+        "../containers/kubernetes-patterns.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 23145,
+      "modified": "2025-12-28T17:48:49.599954"
+    },
+    {
+      "path": "knowledge/devops/monitoring-observability.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/devops/monitoring-observability.html",
+      "title": "Monitoring & Observability - CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../../index.html",
+        "../index.html",
+        "../devops.html",
+        "cicd-pipelines.html",
+        "../cloud/aws-best-practices.html",
+        "../performance/profiling-analysis.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 22426,
+      "modified": "2025-12-28T17:48:49.600113"
+    },
+    {
+      "path": "knowledge/devops/infrastructure-as-code.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/devops/infrastructure-as-code.html",
+      "title": "Infrastructure as Code - CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../../index.html",
+        "../index.html",
+        "../devops.html",
+        "cicd-pipelines.html",
+        "monitoring-observability.html",
+        "../cloud/aws-best-practices.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 20120,
+      "modified": "2025-12-28T17:48:49.600033"
+    },
+    {
+      "path": "knowledge/domains/embeddings-strategy.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/domains/embeddings-strategy.html",
+      "title": "Embeddings Strategy - CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../../index.html",
+        "../index.html",
+        "../rag-domains.html",
+        "vector-database-guide.html",
+        "retrieval-pipeline.html",
+        "domain-rag-integration.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 15763,
+      "modified": "2025-12-28T17:48:49.600337"
+    },
+    {
+      "path": "knowledge/domains/domain-rag-integration.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/domains/domain-rag-integration.html",
+      "title": "Domain RAG Integration - CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../../index.html",
+        "../index.html",
+        "../rag-domains.html",
+        "embeddings-strategy.html",
+        "vector-database-guide.html",
+        "retrieval-pipeline.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 21068,
+      "modified": "2025-12-28T17:48:49.600230"
+    },
+    {
+      "path": "knowledge/domains/vector-database-guide.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/domains/vector-database-guide.html",
+      "title": "Vector Database Guide - CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../../index.html",
+        "../index.html",
+        "../rag-domains.html",
+        "embeddings-strategy.html",
+        "retrieval-pipeline.html",
+        "domain-rag-integration.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 20606,
+      "modified": "2025-12-28T17:48:49.600483"
+    },
+    {
+      "path": "knowledge/domains/retrieval-pipeline.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/domains/retrieval-pipeline.html",
+      "title": "Retrieval Pipeline - CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../../index.html",
+        "../index.html",
+        "../rag-domains.html",
+        "embeddings-strategy.html",
+        "vector-database-guide.html",
+        "domain-rag-integration.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 21797,
+      "modified": "2025-12-28T17:48:49.600407"
+    },
+    {
+      "path": "knowledge/frontend/typescript-frontend.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/frontend/typescript-frontend.html",
+      "title": "TypeScript Frontend - CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../../index.html",
+        "../index.html",
+        "../frontend.html",
+        "react-best-practices.html",
+        "component-architecture.html",
+        "../api-design/graphql.html",
+        "../testing/unit-testing.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 18976,
+      "modified": "2025-12-28T17:48:49.602468"
+    },
+    {
+      "path": "knowledge/frontend/component-architecture.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/frontend/component-architecture.html",
+      "title": "Component Architecture - CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../../index.html",
+        "../index.html",
+        "../frontend.html",
+        "react-best-practices.html",
+        "state-management.html",
+        "typescript-frontend.html",
+        "../ui-ux/design-systems.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 25458,
+      "modified": "2025-12-28T17:48:49.602191"
+    },
+    {
+      "path": "knowledge/frontend/state-management.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/frontend/state-management.html",
+      "title": "State Management - CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../../index.html",
+        "../index.html",
+        "../frontend.html",
+        "react-best-practices.html",
+        "component-architecture.html",
+        "../performance/react-performance.html",
+        "typescript-frontend.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 25353,
+      "modified": "2025-12-28T17:48:49.602378"
+    },
+    {
+      "path": "knowledge/frontend/react-best-practices.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/frontend/react-best-practices.html",
+      "title": "React Best Practices - CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../../index.html",
+        "../index.html",
+        "../frontend.html",
+        "../../index.html",
+        "typescript-frontend.html",
+        "state-management.html",
+        "component-architecture.html",
+        "../testing/unit-testing.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 18153,
+      "modified": "2025-12-28T17:48:49.602303"
+    },
+    {
+      "path": "knowledge/ddd/bounded-contexts.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/ddd/bounded-contexts.html",
+      "title": "Bounded Contexts - CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../../index.html",
+        "../index.html",
+        "../ddd.html",
+        "aggregates-entities.html",
+        "domain-events.html",
+        "../microservices/resilience-patterns.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 21594,
+      "modified": "2025-12-28T17:48:49.599511"
+    },
+    {
+      "path": "knowledge/ddd/domain-events.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/ddd/domain-events.html",
+      "title": "Domain Events - CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../../index.html",
+        "../index.html",
+        "../ddd.html",
+        "aggregates-entities.html",
+        "bounded-contexts.html",
+        "../messaging/event-driven-patterns.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 24766,
+      "modified": "2025-12-28T17:48:49.599665"
+    },
+    {
+      "path": "knowledge/ddd/ddd-fundamentals.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/ddd/ddd-fundamentals.html",
+      "title": "DDD Fundamentals - CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../../index.html",
+        "../index.html",
+        "../ddd.html",
+        "bounded-contexts.html",
+        "aggregates.html",
+        "domain-events.html",
+        "../microservices/service-design.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 24372,
+      "modified": "2025-12-28T17:48:49.599587"
+    },
+    {
+      "path": "knowledge/ddd/aggregates-entities.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/ddd/aggregates-entities.html",
+      "title": "Aggregates & Entities - CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../../index.html",
+        "../index.html",
+        "../ddd.html",
+        "bounded-contexts.html",
+        "domain-events.html",
+        "../engineering/design-patterns.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 22516,
+      "modified": "2025-12-28T17:48:49.599422"
+    },
+    {
+      "path": "knowledge/api-design/graphql.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/api-design/graphql.html",
+      "title": "GraphQL Best Practices - CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../../index.html",
+        "../index.html",
+        "../api-design.html",
+        "rest-api.html",
+        "../frontend/typescript-frontend.html",
+        "../performance/caching-strategies.html",
+        "../security/auth-authz.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 24695,
+      "modified": "2025-12-28T17:48:49.598289"
+    },
+    {
+      "path": "knowledge/api-design/rest-api.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/api-design/rest-api.html",
+      "title": "REST API Best Practices - CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../../index.html",
+        "../index.html",
+        "../api-design.html",
+        "graphql.html",
+        "api-gateway.html",
+        "../security/auth-authz.html",
+        "../performance/caching-strategies.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 24345,
+      "modified": "2025-12-28T17:48:49.598381"
+    },
+    {
+      "path": "knowledge/testing/tdd.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/testing/tdd.html",
+      "title": "Test-Driven Development - CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../../index.html",
+        "../index.html",
+        "../testing.html",
+        "unit-testing.html",
+        "integration-testing.html",
+        "../engineering/clean-code.html",
+        "../engineering/refactoring.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 24877,
+      "modified": "2025-12-28T17:48:49.603980"
+    },
+    {
+      "path": "knowledge/cloud/aws-best-practices.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/cloud/aws-best-practices.html",
+      "title": "AWS Best Practices - CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../../index.html",
+        "../index.html",
+        "../cloud.html",
+        "azure-patterns.html",
+        "../containers/kubernetes-patterns.html",
+        "../devops/iac.html",
+        "../security/cloud-security.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 21309,
+      "modified": "2025-12-28T17:48:49.598633"
+    },
+    {
+      "path": "knowledge/files/engineering/design-patterns.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/files/engineering/design-patterns.html",
+      "title": "Design Patterns | CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../../../index.html",
+        "../../index.html",
+        "../../engineering.html",
+        "solid-principles.html",
+        "refactoring.html",
+        "clean-code.html",
+        "anti-patterns.html",
+        "../../index.html",
+        "../../engineering.html",
+        "../../../index.html"
+      ],
+      "compliance_issues": [
+        "LEVEL2 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 50571,
+      "modified": "2025-12-28T17:48:49.601452"
+    },
+    {
+      "path": "knowledge/files/engineering/solid-principles.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/files/engineering/solid-principles.html",
+      "title": "SOLID Principles | CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../../../index.html",
+        "../../index.html",
+        "../../engineering.html",
+        "design-patterns.html",
+        "clean-code.html",
+        "refactoring.html",
+        "../testing/tdd-best-practices.html",
+        "../../index.html",
+        "../../engineering.html",
+        "../../../index.html"
+      ],
+      "compliance_issues": [
+        "LEVEL2 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 43230,
+      "modified": "2025-12-28T17:48:49.601965"
+    },
+    {
+      "path": "knowledge/files/engineering/code-review.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/files/engineering/code-review.html",
+      "title": "Code Review Best Practices | CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../../../index.html",
+        "../../index.html",
+        "../../engineering.html",
+        "clean-code.html",
+        "refactoring.html",
+        "../security/secure-coding-practices.html",
+        "../testing/tdd-best-practices.html",
+        "../../index.html",
+        "../../engineering.html",
+        "../../../index.html"
+      ],
+      "compliance_issues": [
+        "LEVEL2 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 44274,
+      "modified": "2025-12-28T17:48:49.601311"
+    },
+    {
+      "path": "knowledge/files/engineering/rest-api-design.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/files/engineering/rest-api-design.html",
+      "title": "REST API Design Best Practices | CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../../../index.html",
+        "../../index.html",
+        "../../engineering.html",
+        "graphql-best-practices.html",
+        "../security/api-security-checklist.html",
+        "design-patterns.html",
+        "../testing/api-testing-strategies.html",
+        "../../index.html",
+        "../../engineering.html",
+        "../../../index.html"
+      ],
+      "compliance_issues": [
+        "LEVEL2 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 38580,
+      "modified": "2025-12-28T17:48:49.601837"
+    },
+    {
+      "path": "knowledge/files/engineering/graphql-best-practices.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/files/engineering/graphql-best-practices.html",
+      "title": "GraphQL Best Practices | CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../../../index.html",
+        "../../index.html",
+        "../../engineering.html",
+        "rest-api-design.html",
+        "../security/api-security-checklist.html",
+        "../performance/caching-strategies.html",
+        "../testing/api-testing-strategies.html",
+        "../../index.html",
+        "../../engineering.html",
+        "../../../index.html"
+      ],
+      "compliance_issues": [
+        "LEVEL2 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 35532,
+      "modified": "2025-12-28T17:48:49.601573"
+    },
+    {
+      "path": "knowledge/files/engineering/refactoring.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/files/engineering/refactoring.html",
+      "title": "Refactoring Catalog | CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../../../index.html",
+        "../../index.html",
+        "../../engineering.html",
+        "clean-code.html",
+        "code-review.html",
+        "design-patterns.html",
+        "../testing/tdd-best-practices.html",
+        "../../index.html",
+        "../../engineering.html",
+        "../../../index.html"
+      ],
+      "compliance_issues": [
+        "LEVEL2 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 39163,
+      "modified": "2025-12-28T17:48:49.601695"
+    },
+    {
+      "path": "knowledge/files/engineering/anti-patterns.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/files/engineering/anti-patterns.html",
+      "title": "Anti-Patterns Catalog | CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../../../index.html",
+        "../../index.html",
+        "../../engineering.html",
+        "refactoring.html",
+        "design-patterns.html",
+        "clean-code.html",
+        "code-review.html",
+        "../../index.html",
+        "../../engineering.html",
+        "../../../index.html"
+      ],
+      "compliance_issues": [
+        "LEVEL2 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 42659,
+      "modified": "2025-12-28T17:48:49.601029"
+    },
+    {
+      "path": "knowledge/files/engineering/clean-code.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/files/engineering/clean-code.html",
+      "title": "Clean Code Principles | CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../../../index.html",
+        "../../index.html",
+        "../../engineering.html",
+        "solid-principles.html",
+        "refactoring.html",
+        "code-review.html",
+        "../testing/tdd-best-practices.html",
+        "../../index.html",
+        "../../engineering.html",
+        "../../../index.html"
+      ],
+      "compliance_issues": [
+        "LEVEL2 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 32046,
+      "modified": "2025-12-28T17:48:49.601156"
+    },
+    {
+      "path": "knowledge/containers/kubernetes-patterns.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/containers/kubernetes-patterns.html",
+      "title": "Kubernetes Patterns - CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../../index.html",
+        "../index.html",
+        "../containers.html",
+        "docker-best-practices.html",
+        "helm-patterns.html",
+        "../devops/gitops.html",
+        "../cloud/aws-best-practices.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 20783,
+      "modified": "2025-12-28T17:48:49.598851"
+    },
+    {
+      "path": "knowledge/engineering/anti-patterns.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/engineering/anti-patterns.html",
+      "title": "Anti-Patterns Catalog - CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../../index.html",
+        "../index.html",
+        "../engineering.html",
+        "clean-code.html",
+        "design-patterns.html",
+        "refactoring.html",
+        "solid-principles.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 25053,
+      "modified": "2025-12-28T17:48:49.600759"
+    },
+    {
+      "path": "knowledge/engineering/clean-code.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/engineering/clean-code.html",
+      "title": "Clean Code Principles - CORTEX Knowledge",
+      "section": "knowledge",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../../index.html",
+        "../index.html",
+        "../engineering.html",
+        "anti-patterns.html",
+        "design-patterns.html",
+        "refactoring.html",
+        "solid-principles.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 26777,
+      "modified": "2025-12-28T17:48:49.600838"
+    },
+    {
+      "path": "toolkit-manager/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/toolkit-manager/index.html",
+      "title": "Toolkit Manager | CORTEX 4.0",
+      "section": "toolkit-manager",
+      "level": "level1",
+      "has_footer": true,
+      "has_breadcrumb": false,
+      "logo_size": 40,
+      "internal_links": [
+        "../index.html",
+        "../index.html",
+        "../getting-started/index.html",
+        "../features/index.html",
+        "../technical/index.html",
+        "../faq.html",
+        "../index.html",
+        "../sitemap.html",
+        "../faq.html"
+      ],
+      "compliance_issues": [
+        "LEVEL1 pages should NOT have footer",
+        "LEVEL1 pages should have breadcrumb navigation",
+        "Level1 logo should be 200x200, found 40"
+      ],
+      "is_compliant": false,
+      "size_bytes": 24605,
+      "modified": "2025-12-31T14:41:20.227351"
+    },
+    {
+      "path": "governance/skull-rulebook.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/governance/skull-rulebook.html",
+      "title": "SKULL Rulebook - CORTEX Governance",
+      "section": "governance",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": 300,
+      "internal_links": [
+        "../index.html"
+      ],
+      "compliance_issues": [
+        "Level2 logo should be 150x150, found 300"
+      ],
+      "is_compliant": false,
+      "size_bytes": 24709,
+      "modified": "2025-12-28T17:48:49.597885"
+    },
+    {
+      "path": "technical/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/technical/index.html",
+      "title": "\ud83d\udcda CORTEX Technical Documentation",
+      "section": "technical",
+      "level": "level1",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": 6,
+      "internal_links": [
+        "../index.html",
+        "../index.html",
+        "architecture/overview.html",
+        "architecture/4-tier-brain.html",
+        "architecture/orchestrator-framework.html",
+        "architecture/agent-framework.html",
+        "architecture/diagrams/system-architecture.html",
+        "../index.html",
+        "../architecture/index.html",
+        "../orchestrators/index.html",
+        "../features/index.html",
+        "api/orchestrators/planning-system.html",
+        "api/orchestrators/tdd-mastery.html",
+        "api/orchestrators/maintenance.html",
+        "api/agents/strategic-planning-agent.html",
+        "api/agents/code-execution-agent.html",
+        "workflows/planning-workflow.html",
+        "workflows/tdd-workflow.html",
+        "workflows/maintenance-workflow.html",
+        "setup-guides/quick-start.html",
+        "integration/copilot-integration.html",
+        "deployment/overview.html",
+        "troubleshooting/index.html",
+        "../index.html",
+        "../architecture/index.html",
+        "../orchestrators/index.html",
+        "../features/index.html",
+        "architecture/overview.html",
+        "api/index.html",
+        "setup-guides/quick-start.html",
+        "workflows/index.html",
+        "architecture/diagrams/system-architecture.html"
+      ],
+      "compliance_issues": [
+        "LEVEL1 pages should NOT have footer",
+        "Level1 logo should be 200x200, found 6"
+      ],
+      "is_compliant": false,
+      "size_bytes": 62901,
+      "modified": "2025-12-28T17:48:49.628281"
+    },
+    {
+      "path": "technical/security/dashboard.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/technical/security/dashboard.html",
+      "title": "CORTEX Security Dashboard | Threat Visualization & Compliance",
+      "section": "technical",
+      "level": "level2",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "../orchestrators/index.html"
+      ],
+      "compliance_issues": [
+        "LEVEL2 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 37842,
+      "modified": "2025-12-30T18:34:22.989279"
+    },
+    {
+      "path": "technical/orchestrators/architectural-review.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/technical/orchestrators/architectural-review.html",
+      "title": "Architectural Review - Technical Documentation | CORTEX",
+      "section": "technical",
+      "level": "level2",
+      "has_footer": true,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../../index.html",
+        "../index.html",
+        "index.html",
+        "../../index.html",
+        "../../orchestrators/architectural-review.html",
+        "../../orchestrators/architectural-review.html",
+        "index.html"
+      ],
+      "compliance_issues": [
+        "LEVEL2 pages should NOT have footer"
+      ],
+      "is_compliant": false,
+      "size_bytes": 25632,
+      "modified": "2025-12-28T17:48:49.628512"
+    },
+    {
+      "path": "technical/orchestrators/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/technical/orchestrators/index.html",
+      "title": "CORTEX Orchestrators | Interactive Map",
+      "section": "technical",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../../index.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 18046,
+      "modified": "2025-12-28T17:48:49.628610"
+    },
+    {
+      "path": "technical/orchestrators/ado-planning.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/technical/orchestrators/ado-planning.html",
+      "title": "ADO Planning Orchestrator | CORTEX Technical Documentation",
+      "section": "technical",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../../index.html",
+        "index.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 5373,
+      "modified": "2025-12-28T17:48:49.628439"
+    },
+    {
+      "path": "story/character-colors-reference.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/story/character-colors-reference.html",
+      "title": "CORTEX Character Colors - Quick Reference",
+      "section": "story",
+      "level": "level2",
+      "has_footer": true,
+      "has_breadcrumb": false,
+      "logo_size": null,
+      "internal_links": [],
+      "compliance_issues": [
+        "LEVEL2 pages should NOT have footer",
+        "LEVEL2 pages should have breadcrumb navigation"
+      ],
+      "is_compliant": false,
+      "size_bytes": 13098,
+      "modified": "2025-12-28T17:48:49.608652"
+    },
+    {
+      "path": "story/viewer.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/story/viewer.html",
+      "title": "The Awakening of CORTEX - Story Viewer",
+      "section": "story",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 7412,
+      "modified": "2025-12-29T09:17:49.855222"
+    },
+    {
+      "path": "story/Chapter-11/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/story/Chapter-11/index.html",
+      "title": "Chapter 11: The Knowledge Keeper - The Awakening of CORTEX",
+      "section": "story",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": false,
+      "logo_size": null,
+      "internal_links": [],
+      "compliance_issues": [
+        "LEVEL2 pages should have breadcrumb navigation"
+      ],
+      "is_compliant": false,
+      "size_bytes": 11337,
+      "modified": "2025-12-29T12:27:40.165438"
+    },
+    {
+      "path": "story/Chapter-10/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/story/Chapter-10/index.html",
+      "title": "Chapter 10: The Self-Healing System - The Awakening of CORTEX",
+      "section": "story",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": false,
+      "logo_size": null,
+      "internal_links": [],
+      "compliance_issues": [
+        "LEVEL2 pages should have breadcrumb navigation"
+      ],
+      "is_compliant": false,
+      "size_bytes": 11044,
+      "modified": "2025-12-29T12:27:40.165297"
+    },
+    {
+      "path": "story/Chapter-04/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/story/Chapter-04/index.html",
+      "title": "Chapter 4: Tier 2 - The Learning Machine - The Awakening of CORTEX",
+      "section": "story",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": false,
+      "logo_size": null,
+      "internal_links": [],
+      "compliance_issues": [
+        "LEVEL2 pages should have breadcrumb navigation"
+      ],
+      "is_compliant": false,
+      "size_bytes": 9809,
+      "modified": "2025-12-29T12:27:40.164396"
+    },
+    {
+      "path": "story/Chapter-03/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/story/Chapter-03/index.html",
+      "title": "Chapter 3: Tier 1 - Memory Awakens - The Awakening of CORTEX",
+      "section": "story",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": false,
+      "logo_size": null,
+      "internal_links": [],
+      "compliance_issues": [
+        "LEVEL2 pages should have breadcrumb navigation"
+      ],
+      "is_compliant": false,
+      "size_bytes": 11632,
+      "modified": "2025-12-29T12:27:40.164263"
+    },
+    {
+      "path": "story/Chapter-02/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/story/Chapter-02/index.html",
+      "title": "Chapter 2: Tier 0 - The Gatekeeper - The Awakening of CORTEX",
+      "section": "story",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": false,
+      "logo_size": null,
+      "internal_links": [],
+      "compliance_issues": [
+        "LEVEL2 pages should have breadcrumb navigation"
+      ],
+      "is_compliant": false,
+      "size_bytes": 10188,
+      "modified": "2025-12-29T12:27:40.164139"
+    },
+    {
+      "path": "story/Prologue/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/story/Prologue/index.html",
+      "title": "Prologue: The Basement Laboratory - The Awakening of CORTEX",
+      "section": "story",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": false,
+      "logo_size": null,
+      "internal_links": [],
+      "compliance_issues": [
+        "LEVEL2 pages should have breadcrumb navigation"
+      ],
+      "is_compliant": false,
+      "size_bytes": 13813,
+      "modified": "2025-12-29T12:27:40.165892"
+    },
+    {
+      "path": "story/Chapter-05/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/story/Chapter-05/index.html",
+      "title": "Chapter 5: The Test-Driven Rebellion - The Awakening of CORTEX",
+      "section": "story",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": false,
+      "logo_size": null,
+      "internal_links": [],
+      "compliance_issues": [
+        "LEVEL2 pages should have breadcrumb navigation"
+      ],
+      "is_compliant": false,
+      "size_bytes": 11919,
+      "modified": "2025-12-29T12:27:40.164539"
+    },
+    {
+      "path": "story/tests/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/story/tests/index.html",
+      "title": "index",
+      "section": "story",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": false,
+      "logo_size": null,
+      "internal_links": [],
+      "compliance_issues": [
+        "LEVEL2 pages should have breadcrumb navigation"
+      ],
+      "is_compliant": false,
+      "size_bytes": 77,
+      "modified": "2025-12-28T17:48:49.626551"
+    },
+    {
+      "path": "story/Chapter-12/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/story/Chapter-12/index.html",
+      "title": "Chapter 12: The Convergence - The Awakening of CORTEX",
+      "section": "story",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": false,
+      "logo_size": null,
+      "internal_links": [],
+      "compliance_issues": [
+        "LEVEL2 pages should have breadcrumb navigation"
+      ],
+      "is_compliant": false,
+      "size_bytes": 13950,
+      "modified": "2025-12-29T12:27:40.165580"
+    },
+    {
+      "path": "story/Chapter-13/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/story/Chapter-13/index.html",
+      "title": "Chapter 13: The Refiner - The Awakening of CORTEX",
+      "section": "story",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": false,
+      "logo_size": null,
+      "internal_links": [],
+      "compliance_issues": [
+        "LEVEL2 pages should have breadcrumb navigation"
+      ],
+      "is_compliant": false,
+      "size_bytes": 16646,
+      "modified": "2025-12-29T12:27:40.165725"
+    },
+    {
+      "path": "story/Chapter-07/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/story/Chapter-07/index.html",
+      "title": "Chapter 7: The Planning Revolution - The Awakening of CORTEX",
+      "section": "story",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": false,
+      "logo_size": null,
+      "internal_links": [],
+      "compliance_issues": [
+        "LEVEL2 pages should have breadcrumb navigation"
+      ],
+      "is_compliant": false,
+      "size_bytes": 11745,
+      "modified": "2025-12-29T12:27:40.164845"
+    },
+    {
+      "path": "story/Chapter-09/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/story/Chapter-09/index.html",
+      "title": "Chapter 9: The Sanitizer's Dilemma - The Awakening of CORTEX",
+      "section": "story",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": false,
+      "logo_size": null,
+      "internal_links": [],
+      "compliance_issues": [
+        "LEVEL2 pages should have breadcrumb navigation"
+      ],
+      "is_compliant": false,
+      "size_bytes": 12826,
+      "modified": "2025-12-29T12:27:40.165156"
+    },
+    {
+      "path": "story/Chapter-08/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/story/Chapter-08/index.html",
+      "title": "Chapter 8: The Enterprise Awakening - The Awakening of CORTEX",
+      "section": "story",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": false,
+      "logo_size": null,
+      "internal_links": [],
+      "compliance_issues": [
+        "LEVEL2 pages should have breadcrumb navigation"
+      ],
+      "is_compliant": false,
+      "size_bytes": 14698,
+      "modified": "2025-12-29T12:27:40.164999"
+    },
+    {
+      "path": "story/Chapter-06/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/story/Chapter-06/index.html",
+      "title": "Chapter 6: The Great Orchestration - The Awakening of CORTEX",
+      "section": "story",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": false,
+      "logo_size": null,
+      "internal_links": [],
+      "compliance_issues": [
+        "LEVEL2 pages should have breadcrumb navigation"
+      ],
+      "is_compliant": false,
+      "size_bytes": 16160,
+      "modified": "2025-12-29T12:27:40.164714"
+    },
+    {
+      "path": "story/Chapter-01/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/story/Chapter-01/index.html",
+      "title": "Chapter 1: The Amnesia Crisis - The Awakening of CORTEX",
+      "section": "story",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": false,
+      "logo_size": null,
+      "internal_links": [],
+      "compliance_issues": [
+        "LEVEL2 pages should have breadcrumb navigation"
+      ],
+      "is_compliant": false,
+      "size_bytes": 9139,
+      "modified": "2025-12-29T12:27:40.163993"
+    },
+    {
+      "path": "validation/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/validation/index.html",
+      "title": "Phase 13B STS Validation - CORTEX",
+      "section": "validation",
+      "level": "level1",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "capabilities.html",
+        "metrics.html",
+        "../architecture/four-tier-brain.html",
+        "../governance/skull-rulebook.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 18528,
+      "modified": "2025-12-28T17:48:49.628947"
+    },
+    {
+      "path": "sts/documentation.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/sts/documentation.html",
+      "title": "Documentation | STS | CORTEX 4.0",
+      "section": "sts",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 9559,
+      "modified": "2025-12-29T15:32:45.010036"
+    },
+    {
+      "path": "sts/code-quality.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/sts/code-quality.html",
+      "title": "Code Quality | STS | CORTEX 4.0",
+      "section": "sts",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 9557,
+      "modified": "2025-12-29T15:32:45.010036"
+    },
+    {
+      "path": "sts/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/sts/index.html",
+      "title": "Sharpen The Saw | CORTEX 4.0",
+      "section": "sts",
+      "level": "level1",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "../index.html",
+        "security.html",
+        "solid.html",
+        "code-quality.html",
+        "performance.html",
+        "testing.html",
+        "documentation.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 9222,
+      "modified": "2025-12-29T15:12:30.158198"
+    },
+    {
+      "path": "sts/performance.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/sts/performance.html",
+      "title": "Performance | STS | CORTEX 4.0",
+      "section": "sts",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 22038,
+      "modified": "2025-12-29T15:32:45.010044"
+    },
+    {
+      "path": "sts/security.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/sts/security.html",
+      "title": "Security | STS | CORTEX 4.0",
+      "section": "sts",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 12119,
+      "modified": "2025-12-29T15:32:45.010003"
+    },
+    {
+      "path": "sts/solid.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/sts/solid.html",
+      "title": "SOLID | STS | CORTEX 4.0",
+      "section": "sts",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 11782,
+      "modified": "2025-12-29T15:32:45.010003"
+    },
+    {
+      "path": "sts/testing.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/sts/testing.html",
+      "title": "Testing | STS | CORTEX 4.0",
+      "section": "sts",
+      "level": "level2",
+      "has_footer": false,
+      "has_breadcrumb": true,
+      "logo_size": null,
+      "internal_links": [
+        "../index.html",
+        "index.html"
+      ],
+      "compliance_issues": [],
+      "is_compliant": true,
+      "size_bytes": 9290,
+      "modified": "2025-12-29T15:32:45.010045"
+    }
+  ],
+  "missing_docs": [
+    {
+      "type": "section",
+      "name": "future",
+      "description": "Missing section: 4.0 Vision - Future roadmap",
+      "suggested_path": "future/index.html"
+    },
+    {
+      "type": "orchestrator",
+      "name": "ado-orchestrator",
+      "description": "Missing documentation for ado-orchestrator",
+      "suggested_path": "orchestrators/ado-orchestrator.html"
+    },
+    {
+      "type": "orchestrator",
+      "name": "sanitization-orchestrator",
+      "description": "Missing documentation for sanitization-orchestrator",
+      "suggested_path": "orchestrators/sanitization-orchestrator.html"
+    },
+    {
+      "type": "orchestrator",
+      "name": "onboarding-orchestrator",
+      "description": "Missing documentation for onboarding-orchestrator",
+      "suggested_path": "orchestrators/onboarding-orchestrator.html"
+    }
+  ],
+  "broken_links": [
+    {
+      "source": "faq.html",
+      "broken_link": "story/index.html",
+      "resolved_path": "story/index.html"
+    },
+    {
+      "source": "faq.html",
+      "broken_link": "getting-started/multi-repo-setup.html",
+      "resolved_path": "getting-started/multi-repo-setup.html"
+    },
+    {
+      "source": "faq.html",
+      "broken_link": "architecture/four-tier-brain.html",
+      "resolved_path": "architecture/four-tier-brain.html"
+    },
+    {
+      "source": "faq.html",
+      "broken_link": "architecture/orchestrator-ecosystem.html",
+      "resolved_path": "architecture/orchestrator-ecosystem.html"
+    },
+    {
+      "source": "faq.html",
+      "broken_link": "architecture/agent-system.html",
+      "resolved_path": "architecture/agent-system.html"
+    },
+    {
+      "source": "faq.html",
+      "broken_link": "architecture/working-memory.html",
+      "resolved_path": "architecture/working-memory.html"
+    },
+    {
+      "source": "faq.html",
+      "broken_link": "features/tdd-mastery.html",
+      "resolved_path": "features/tdd-mastery.html"
+    },
+    {
+      "source": "faq.html",
+      "broken_link": "features/ado-operations.html",
+      "resolved_path": "features/ado-operations.html"
+    },
+    {
+      "source": "faq.html",
+      "broken_link": "technical/orchestrators/code-sanitization.html",
+      "resolved_path": "technical/orchestrators/code-sanitization.html"
+    },
+    {
+      "source": "faq.html",
+      "broken_link": "technical/orchestrators/refinement-orchestrator.html",
+      "resolved_path": "technical/orchestrators/refinement-orchestrator.html"
+    },
+    {
+      "source": "faq.html",
+      "broken_link": "features/tdd-mastery.html",
+      "resolved_path": "features/tdd-mastery.html"
+    },
+    {
+      "source": "faq.html",
+      "broken_link": "getting-started/first-commands.html",
+      "resolved_path": "getting-started/first-commands.html"
+    },
+    {
+      "source": "faq.html",
+      "broken_link": "story/index.html",
+      "resolved_path": "story/index.html"
+    },
+    {
+      "source": "security/penetration-testing.html",
+      "broken_link": "../index.html",
+      "resolved_path": "security/../index.html"
+    },
+    {
+      "source": "security/penetration-testing.html",
+      "broken_link": "../index.html",
+      "resolved_path": "security/../index.html"
+    },
+    {
+      "source": "security/penetration-testing.html",
+      "broken_link": "../index.html",
+      "resolved_path": "security/../index.html"
+    },
+    {
+      "source": "security/threat-intelligence.html",
+      "broken_link": "../index.html",
+      "resolved_path": "security/../index.html"
+    },
+    {
+      "source": "security/index.html",
+      "broken_link": "../index.html",
+      "resolved_path": "security/../index.html"
+    },
+    {
+      "source": "security/index.html",
+      "broken_link": "../index.html",
+      "resolved_path": "security/../index.html"
+    },
+    {
+      "source": "security/index.html",
+      "broken_link": "../index.html",
+      "resolved_path": "security/../index.html"
+    },
+    {
+      "source": "security/index.html",
+      "broken_link": "../architecture/index.html",
+      "resolved_path": "security/../architecture/index.html"
+    },
+    {
+      "source": "security/compliance.html",
+      "broken_link": "../index.html",
+      "resolved_path": "security/../index.html"
+    },
+    {
+      "source": "security/compliance.html",
+      "broken_link": "../index.html",
+      "resolved_path": "security/../index.html"
+    },
+    {
+      "source": "security/compliance.html",
+      "broken_link": "../index.html",
+      "resolved_path": "security/../index.html"
+    },
+    {
+      "source": "security/access-control.html",
+      "broken_link": "../index.html",
+      "resolved_path": "security/../index.html"
+    },
+    {
+      "source": "security/dashboard.html",
+      "broken_link": "../index.html",
+      "resolved_path": "security/../index.html"
+    },
+    {
+      "source": "security/dashboard.html",
+      "broken_link": "../index.html",
+      "resolved_path": "security/../index.html"
+    },
+    {
+      "source": "security/dashboard.html",
+      "broken_link": "../index.html",
+      "resolved_path": "security/../index.html"
+    },
+    {
+      "source": "security/owasp.html",
+      "broken_link": "../index.html",
+      "resolved_path": "security/../index.html"
+    },
+    {
+      "source": "security/owasp.html",
+      "broken_link": "../index.html",
+      "resolved_path": "security/../index.html"
+    },
+    {
+      "source": "security/owasp.html",
+      "broken_link": "../index.html",
+      "resolved_path": "security/../index.html"
+    },
+    {
+      "source": "security/security-training.html",
+      "broken_link": "../index.html",
+      "resolved_path": "security/../index.html"
+    },
+    {
+      "source": "security/vulnerability-assessment.html",
+      "broken_link": "../index.html",
+      "resolved_path": "security/../index.html"
+    },
+    {
+      "source": "security/vulnerability-assessment.html",
+      "broken_link": "../index.html",
+      "resolved_path": "security/../index.html"
+    },
+    {
+      "source": "security/vulnerability-assessment.html",
+      "broken_link": "../index.html",
+      "resolved_path": "security/../index.html"
+    },
+    {
+      "source": "security/data-protection.html",
+      "broken_link": "../index.html",
+      "resolved_path": "security/../index.html"
+    },
+    {
+      "source": "security/data-protection.html",
+      "broken_link": "../index.html",
+      "resolved_path": "security/../index.html"
+    },
+    {
+      "source": "security/data-protection.html",
+      "broken_link": "../index.html",
+      "resolved_path": "security/../index.html"
+    },
+    {
+      "source": "security/threat-modeling.html",
+      "broken_link": "../index.html",
+      "resolved_path": "security/../index.html"
+    },
+    {
+      "source": "security/threat-modeling.html",
+      "broken_link": "../index.html",
+      "resolved_path": "security/../index.html"
+    },
+    {
+      "source": "security/incident-response.html",
+      "broken_link": "../index.html",
+      "resolved_path": "security/../index.html"
+    },
+    {
+      "source": "security/incident-response.html",
+      "broken_link": "../index.html",
+      "resolved_path": "security/../index.html"
+    },
+    {
+      "source": "security/incident-response.html",
+      "broken_link": "../index.html",
+      "resolved_path": "security/../index.html"
+    },
+    {
+      "source": "security/audit-logging.html",
+      "broken_link": "../index.html",
+      "resolved_path": "security/../index.html"
+    },
+    {
+      "source": "security/risk-assessment.html",
+      "broken_link": "../index.html",
+      "resolved_path": "security/../index.html"
+    },
+    {
+      "source": "security/risk-assessment.html",
+      "broken_link": "../index.html",
+      "resolved_path": "security/../index.html"
+    },
+    {
+      "source": "security/risk-assessment.html",
+      "broken_link": "../index.html",
+      "resolved_path": "security/../index.html"
+    },
+    {
+      "source": "features/dashboard-system.html",
+      "broken_link": "../index.html",
+      "resolved_path": "features/../index.html"
+    },
+    {
+      "source": "features/dashboard-system.html",
+      "broken_link": "../technical/orchestrators/index.html",
+      "resolved_path": "features/../technical/orchestrators/index.html"
+    },
+    {
+      "source": "features/token-optimization.html",
+      "broken_link": "../index.html",
+      "resolved_path": "features/../index.html"
+    },
+    {
+      "source": "features/token-optimization.html",
+      "broken_link": "../index.html",
+      "resolved_path": "features/../index.html"
+    },
+    {
+      "source": "features/token-optimization.html",
+      "broken_link": "../orchestrators/planning-system.html",
+      "resolved_path": "features/../orchestrators/planning-system.html"
+    },
+    {
+      "source": "features/token-optimization.html",
+      "broken_link": "../architecture/four-tier-brain.html",
+      "resolved_path": "features/../architecture/four-tier-brain.html"
+    },
+    {
+      "source": "features/index.html",
+      "broken_link": "../index.html",
+      "resolved_path": "features/../index.html"
+    },
+    {
+      "source": "features/index.html",
+      "broken_link": "../index.html",
+      "resolved_path": "features/../index.html"
+    },
+    {
+      "source": "features/index.html",
+      "broken_link": "../orchestrators/tdd-orchestrator.html",
+      "resolved_path": "features/../orchestrators/tdd-orchestrator.html"
+    },
+    {
+      "source": "features/index.html",
+      "broken_link": "../orchestrators/sanitization-engine.html",
+      "resolved_path": "features/../orchestrators/sanitization-engine.html"
+    },
+    {
+      "source": "features/index.html",
+      "broken_link": "../orchestrators/index.html",
+      "resolved_path": "features/../orchestrators/index.html"
+    },
+    {
+      "source": "features/index.html",
+      "broken_link": "../getting-started/index.html",
+      "resolved_path": "features/../getting-started/index.html"
+    },
+    {
+      "source": "features/index.html",
+      "broken_link": "../architecture/index.html",
+      "resolved_path": "features/../architecture/index.html"
+    },
+    {
+      "source": "features/orchestrators.html",
+      "broken_link": "../orchestrators/index.html",
+      "resolved_path": "features/../orchestrators/index.html"
+    },
+    {
+      "source": "features/orchestrators.html",
+      "broken_link": "../orchestrators/index.html",
+      "resolved_path": "features/../orchestrators/index.html"
+    },
+    {
+      "source": "features/holistic-discovery.html",
+      "broken_link": "../index.html",
+      "resolved_path": "features/../index.html"
+    },
+    {
+      "source": "features/planning-system.html",
+      "broken_link": "../index.html",
+      "resolved_path": "features/../index.html"
+    },
+    {
+      "source": "features/planning-system.html",
+      "broken_link": "../orchestrators/planning-system.html",
+      "resolved_path": "features/../orchestrators/planning-system.html"
+    },
+    {
+      "source": "features/planning-system.html",
+      "broken_link": "tdd-mastery.html",
+      "resolved_path": "features/tdd-mastery.html"
+    },
+    {
+      "source": "features/planning-system.html",
+      "broken_link": "execution-orchestrator.html",
+      "resolved_path": "features/execution-orchestrator.html"
+    },
+    {
+      "source": "features/planning-system.html",
+      "broken_link": "ado-operations.html",
+      "resolved_path": "features/ado-operations.html"
+    },
+    {
+      "source": "features/response-templates.html",
+      "broken_link": "../index.html",
+      "resolved_path": "features/../index.html"
+    },
+    {
+      "source": "features/response-templates.html",
+      "broken_link": "../architecture/index.html",
+      "resolved_path": "features/../architecture/index.html"
+    },
+    {
+      "source": "features/git-operations.html",
+      "broken_link": "../index.html",
+      "resolved_path": "features/../index.html"
+    },
+    {
+      "source": "token-optimization/index.html",
+      "broken_link": "../index.html",
+      "resolved_path": "token-optimization/../index.html"
+    },
+    {
+      "source": "roi-calculator/index.html",
+      "broken_link": "../index.html",
+      "resolved_path": "roi-calculator/../index.html"
+    },
+    {
+      "source": "roi-calculator/index.html",
+      "broken_link": "../index.html",
+      "resolved_path": "roi-calculator/../index.html"
+    },
+    {
+      "source": "roi-calculator/index.html",
+      "broken_link": "../index.html",
+      "resolved_path": "roi-calculator/../index.html"
+    },
+    {
+      "source": "orchestrators/architectural-review.html",
+      "broken_link": "../index.html",
+      "resolved_path": "orchestrators/../index.html"
+    },
+    {
+      "source": "orchestrators/architectural-review.html",
+      "broken_link": "../index.html",
+      "resolved_path": "orchestrators/../index.html"
+    },
+    {
+      "source": "orchestrators/sanitization.html",
+      "broken_link": "../index.html",
+      "resolved_path": "orchestrators/../index.html"
+    },
+    {
+      "source": "orchestrators/sanitization.html",
+      "broken_link": "../index.html",
+      "resolved_path": "orchestrators/../index.html"
+    },
+    {
+      "source": "orchestrators/sanitization.html",
+      "broken_link": "../governance/skull-rulebook.html",
+      "resolved_path": "orchestrators/../governance/skull-rulebook.html"
+    },
+    {
+      "source": "orchestrators/sanitization.html",
+      "broken_link": "../architecture/multi-repo.html",
+      "resolved_path": "orchestrators/../architecture/multi-repo.html"
+    },
+    {
+      "source": "orchestrators/sanitization.html",
+      "broken_link": "../features/token-optimization.html",
+      "resolved_path": "orchestrators/../features/token-optimization.html"
+    },
+    {
+      "source": "orchestrators/cortex-lens.html",
+      "broken_link": "../index.html",
+      "resolved_path": "orchestrators/../index.html"
+    },
+    {
+      "source": "orchestrators/cortex-lens.html",
+      "broken_link": "../index.html",
+      "resolved_path": "orchestrators/../index.html"
+    },
+    {
+      "source": "orchestrators/git-checkpoint.html",
+      "broken_link": "../index.html",
+      "resolved_path": "orchestrators/../index.html"
+    },
+    {
+      "source": "orchestrators/git-checkpoint.html",
+      "broken_link": "../index.html",
+      "resolved_path": "orchestrators/../index.html"
+    },
+    {
+      "source": "orchestrators/index.html",
+      "broken_link": "../index.html",
+      "resolved_path": "orchestrators/../index.html"
+    },
+    {
+      "source": "orchestrators/index.html",
+      "broken_link": "../index.html",
+      "resolved_path": "orchestrators/../index.html"
+    },
+    {
+      "source": "orchestrators/index.html",
+      "broken_link": "system-maintenance.html",
+      "resolved_path": "orchestrators/system-maintenance.html"
+    },
+    {
+      "source": "orchestrators/pre-flight.html",
+      "broken_link": "../index.html",
+      "resolved_path": "orchestrators/../index.html"
+    },
+    {
+      "source": "orchestrators/pre-flight.html",
+      "broken_link": "../index.html",
+      "resolved_path": "orchestrators/../index.html"
+    },
+    {
+      "source": "orchestrators/intelligent-dashboard.html",
+      "broken_link": "../index.html",
+      "resolved_path": "orchestrators/../index.html"
+    },
+    {
+      "source": "orchestrators/intelligent-dashboard.html",
+      "broken_link": "../index.html",
+      "resolved_path": "orchestrators/../index.html"
+    },
+    {
+      "source": "orchestrators/rollback-orchestrator.html",
+      "broken_link": "../index.html",
+      "resolved_path": "orchestrators/../index.html"
+    },
+    {
+      "source": "orchestrators/rollback-orchestrator.html",
+      "broken_link": "../index.html",
+      "resolved_path": "orchestrators/../index.html"
+    },
+    {
+      "source": "orchestrators/ado-operations.html",
+      "broken_link": "../index.html",
+      "resolved_path": "orchestrators/../index.html"
+    },
+    {
+      "source": "orchestrators/ado-operations.html",
+      "broken_link": "../index.html",
+      "resolved_path": "orchestrators/../index.html"
+    },
+    {
+      "source": "orchestrators/ado-operations.html",
+      "broken_link": "../features/token-optimization.html",
+      "resolved_path": "orchestrators/../features/token-optimization.html"
+    },
+    {
+      "source": "orchestrators/planning-system.html",
+      "broken_link": "../index.html",
+      "resolved_path": "orchestrators/../index.html"
+    },
+    {
+      "source": "orchestrators/planning-system.html",
+      "broken_link": "../index.html",
+      "resolved_path": "orchestrators/../index.html"
+    },
+    {
+      "source": "orchestrators/upgrade.html",
+      "broken_link": "../index.html",
+      "resolved_path": "orchestrators/../index.html"
+    },
+    {
+      "source": "orchestrators/upgrade.html",
+      "broken_link": "../index.html",
+      "resolved_path": "orchestrators/../index.html"
+    },
+    {
+      "source": "orchestrators/upgrade.html",
+      "broken_link": "../getting-started/deployment.html",
+      "resolved_path": "orchestrators/../getting-started/deployment.html"
+    },
+    {
+      "source": "orchestrators/upgrade.html",
+      "broken_link": "../architecture/index.html",
+      "resolved_path": "orchestrators/../architecture/index.html"
+    },
+    {
+      "source": "orchestrators/upgrade.html",
+      "broken_link": "../governance/skull-rulebook.html",
+      "resolved_path": "orchestrators/../governance/skull-rulebook.html"
+    },
+    {
+      "source": "orchestrators/system-integrity.html",
+      "broken_link": "../index.html",
+      "resolved_path": "orchestrators/../index.html"
+    },
+    {
+      "source": "orchestrators/system-integrity.html",
+      "broken_link": "../index.html",
+      "resolved_path": "orchestrators/../index.html"
+    },
+    {
+      "source": "orchestrators/tdd-orchestrator.html",
+      "broken_link": "../index.html",
+      "resolved_path": "orchestrators/../index.html"
+    },
+    {
+      "source": "orchestrators/tdd-orchestrator.html",
+      "broken_link": "../index.html",
+      "resolved_path": "orchestrators/../index.html"
+    },
+    {
+      "source": "orchestrators/tdd-orchestrator.html",
+      "broken_link": "../governance/skull-rulebook.html",
+      "resolved_path": "orchestrators/../governance/skull-rulebook.html"
+    },
+    {
+      "source": "orchestrators/refinement-orchestrator.html",
+      "broken_link": "../index.html",
+      "resolved_path": "orchestrators/../index.html"
+    },
+    {
+      "source": "orchestrators/refinement-orchestrator.html",
+      "broken_link": "../index.html",
+      "resolved_path": "orchestrators/../index.html"
+    },
+    {
+      "source": "orchestrators/execution-orchestrator.html",
+      "broken_link": "../index.html",
+      "resolved_path": "orchestrators/../index.html"
+    },
+    {
+      "source": "orchestrators/execution-orchestrator.html",
+      "broken_link": "../index.html",
+      "resolved_path": "orchestrators/../index.html"
+    },
+    {
+      "source": "orchestrators/execution-orchestrator.html",
+      "broken_link": "../features/token-optimization.html",
+      "resolved_path": "orchestrators/../features/token-optimization.html"
+    },
+    {
+      "source": "orchestrators/debug-orchestrator.html",
+      "broken_link": "../index.html",
+      "resolved_path": "orchestrators/../index.html"
+    },
+    {
+      "source": "orchestrators/debug-orchestrator.html",
+      "broken_link": "../index.html",
+      "resolved_path": "orchestrators/../index.html"
+    },
+    {
+      "source": "orchestrators/cleanup-orchestrator.html",
+      "broken_link": "../index.html",
+      "resolved_path": "orchestrators/../index.html"
+    },
+    {
+      "source": "orchestrators/cleanup-orchestrator.html",
+      "broken_link": "../index.html",
+      "resolved_path": "orchestrators/../index.html"
+    },
+    {
+      "source": "lens/index.html",
+      "broken_link": "../index.html",
+      "resolved_path": "lens/../index.html"
+    },
+    {
+      "source": "lens/index.html",
+      "broken_link": "../index.html",
+      "resolved_path": "lens/../index.html"
+    },
+    {
+      "source": "lens/index.html",
+      "broken_link": "../cortex-lens-output/CORTEX/index.html",
+      "resolved_path": "lens/../cortex-lens-output/CORTEX/index.html"
+    },
+    {
+      "source": "lens/index.html",
+      "broken_link": "../cortex-lens-output/CORTEX/index.html",
+      "resolved_path": "lens/../cortex-lens-output/CORTEX/index.html"
+    },
+    {
+      "source": "architecture/architecture-FULL.html",
+      "broken_link": "../index.html",
+      "resolved_path": "architecture/../index.html"
+    },
+    {
+      "source": "architecture/knowledge-graph.html",
+      "broken_link": "../index.html",
+      "resolved_path": "architecture/../index.html"
+    },
+    {
+      "source": "architecture/knowledge-graph.html",
+      "broken_link": "../future/technical-evolution.html",
+      "resolved_path": "architecture/../future/technical-evolution.html"
+    },
+    {
+      "source": "architecture/knowledge-graph.html",
+      "broken_link": "four-tier-brain.html",
+      "resolved_path": "architecture/four-tier-brain.html"
+    },
+    {
+      "source": "architecture/knowledge-graph.html",
+      "broken_link": "orchestrator-ecosystem.html",
+      "resolved_path": "architecture/orchestrator-ecosystem.html"
+    },
+    {
+      "source": "architecture/knowledge-graph.html",
+      "broken_link": "agent-system.html",
+      "resolved_path": "architecture/agent-system.html"
+    },
+    {
+      "source": "architecture/knowledge-graph.html",
+      "broken_link": "working-memory.html",
+      "resolved_path": "architecture/working-memory.html"
+    },
+    {
+      "source": "architecture/index.html",
+      "broken_link": "../index.html",
+      "resolved_path": "architecture/../index.html"
+    },
+    {
+      "source": "architecture/index.html",
+      "broken_link": "../index.html",
+      "resolved_path": "architecture/../index.html"
+    },
+    {
+      "source": "architecture/index.html",
+      "broken_link": "four-tier-brain.html",
+      "resolved_path": "architecture/four-tier-brain.html"
+    },
+    {
+      "source": "architecture/index.html",
+      "broken_link": "working-memory.html",
+      "resolved_path": "architecture/working-memory.html"
+    },
+    {
+      "source": "architecture/index.html",
+      "broken_link": "agent-system.html",
+      "resolved_path": "architecture/agent-system.html"
+    },
+    {
+      "source": "architecture/index.html",
+      "broken_link": "orchestrator-ecosystem.html",
+      "resolved_path": "architecture/orchestrator-ecosystem.html"
+    },
+    {
+      "source": "architecture/index.html",
+      "broken_link": "../orchestrators/index.html",
+      "resolved_path": "architecture/../orchestrators/index.html"
+    },
+    {
+      "source": "architecture/index.html",
+      "broken_link": "../orchestrators/planning-system.html",
+      "resolved_path": "architecture/../orchestrators/planning-system.html"
+    },
+    {
+      "source": "architecture/index.html",
+      "broken_link": "../sts/index.html",
+      "resolved_path": "architecture/../sts/index.html"
+    },
+    {
+      "source": "architecture/index.html",
+      "broken_link": "../index.html",
+      "resolved_path": "architecture/../index.html"
+    },
+    {
+      "source": "architecture/index.html",
+      "broken_link": "../index.html",
+      "resolved_path": "architecture/../index.html"
+    },
+    {
+      "source": "architecture/skull-protection.html",
+      "broken_link": "../index.html",
+      "resolved_path": "architecture/../index.html"
+    },
+    {
+      "source": "architecture/skull-protection.html",
+      "broken_link": "../future/technical-evolution.html",
+      "resolved_path": "architecture/../future/technical-evolution.html"
+    },
+    {
+      "source": "architecture/skull-protection.html",
+      "broken_link": "../governance/skull-rulebook.html",
+      "resolved_path": "architecture/../governance/skull-rulebook.html"
+    },
+    {
+      "source": "architecture/skull-protection.html",
+      "broken_link": "four-tier-brain.html",
+      "resolved_path": "architecture/four-tier-brain.html"
+    },
+    {
+      "source": "architecture/skull-protection.html",
+      "broken_link": "../governance/skull-rulebook.html",
+      "resolved_path": "architecture/../governance/skull-rulebook.html"
+    },
+    {
+      "source": "architecture/skull-protection.html",
+      "broken_link": "orchestrator-ecosystem.html",
+      "resolved_path": "architecture/orchestrator-ecosystem.html"
+    },
+    {
+      "source": "architecture/development-context.html",
+      "broken_link": "../index.html",
+      "resolved_path": "architecture/../index.html"
+    },
+    {
+      "source": "architecture/development-context.html",
+      "broken_link": "../future/technical-evolution.html",
+      "resolved_path": "architecture/../future/technical-evolution.html"
+    },
+    {
+      "source": "architecture/development-context.html",
+      "broken_link": "four-tier-brain.html",
+      "resolved_path": "architecture/four-tier-brain.html"
+    },
+    {
+      "source": "architecture/development-context.html",
+      "broken_link": "orchestrator-ecosystem.html",
+      "resolved_path": "architecture/orchestrator-ecosystem.html"
+    },
+    {
+      "source": "architecture/development-context.html",
+      "broken_link": "agent-system.html",
+      "resolved_path": "architecture/agent-system.html"
+    },
+    {
+      "source": "architecture/development-context.html",
+      "broken_link": "working-memory.html",
+      "resolved_path": "architecture/working-memory.html"
+    },
+    {
+      "source": "getting-started/tutorial.html",
+      "broken_link": "../index.html",
+      "resolved_path": "getting-started/../index.html"
+    },
+    {
+      "source": "getting-started/tutorial.html",
+      "broken_link": "../architecture/four-tier-brain.html",
+      "resolved_path": "getting-started/../architecture/four-tier-brain.html"
+    },
+    {
+      "source": "getting-started/tutorial.html",
+      "broken_link": "../features/planning-system.html",
+      "resolved_path": "getting-started/../features/planning-system.html"
+    },
+    {
+      "source": "getting-started/tutorial.html",
+      "broken_link": "../features/tdd-mastery.html",
+      "resolved_path": "getting-started/../features/tdd-mastery.html"
+    },
+    {
+      "source": "getting-started/tutorial.html",
+      "broken_link": "../features/ado-operations.html",
+      "resolved_path": "getting-started/../features/ado-operations.html"
+    },
+    {
+      "source": "getting-started/tutorial.html",
+      "broken_link": "../technical/orchestrators/code-sanitization.html",
+      "resolved_path": "getting-started/../technical/orchestrators/code-sanitization.html"
+    },
+    {
+      "source": "getting-started/tutorial.html",
+      "broken_link": "../technical/orchestrators/refinement-orchestrator.html",
+      "resolved_path": "getting-started/../technical/orchestrators/refinement-orchestrator.html"
+    },
+    {
+      "source": "getting-started/tutorial.html",
+      "broken_link": "multi-repo-setup.html",
+      "resolved_path": "getting-started/multi-repo-setup.html"
+    },
+    {
+      "source": "getting-started/tutorial.html",
+      "broken_link": "first-commands.html",
+      "resolved_path": "getting-started/first-commands.html"
+    },
+    {
+      "source": "getting-started/tutorial.html",
+      "broken_link": "../architecture/index.html",
+      "resolved_path": "getting-started/../architecture/index.html"
+    },
+    {
+      "source": "getting-started/tutorial.html",
+      "broken_link": "../features/index.html",
+      "resolved_path": "getting-started/../features/index.html"
+    },
+    {
+      "source": "getting-started/tutorial.html",
+      "broken_link": "../technical/orchestrators/index.html",
+      "resolved_path": "getting-started/../technical/orchestrators/index.html"
+    },
+    {
+      "source": "getting-started/tutorial.html",
+      "broken_link": "../faq.html",
+      "resolved_path": "getting-started/../faq.html"
+    },
+    {
+      "source": "getting-started/index.html",
+      "broken_link": "../index.html",
+      "resolved_path": "getting-started/../index.html"
+    },
+    {
+      "source": "getting-started/index.html",
+      "broken_link": "../index.html",
+      "resolved_path": "getting-started/../index.html"
+    },
+    {
+      "source": "getting-started/index.html",
+      "broken_link": "../index.html",
+      "resolved_path": "getting-started/../index.html"
+    },
+    {
+      "source": "knowledge/ui-ux.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/../index.html"
+    },
+    {
+      "source": "knowledge/ui-ux.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/../index.html"
+    },
+    {
+      "source": "knowledge/design-patterns.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/../index.html"
+    },
+    {
+      "source": "knowledge/design-patterns.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/../index.html"
+    },
+    {
+      "source": "knowledge/api-design.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/../index.html"
+    },
+    {
+      "source": "knowledge/api-design.html",
+      "broken_link": "https://spec.openapis.org/oas/latest.html",
+      "resolved_path": "knowledge/https:/spec.openapis.org/oas/latest.html"
+    },
+    {
+      "source": "knowledge/api-design.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/../index.html"
+    },
+    {
+      "source": "knowledge/index.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/../index.html"
+    },
+    {
+      "source": "knowledge/index.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/../index.html"
+    },
+    {
+      "source": "knowledge/microservices.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/../index.html"
+    },
+    {
+      "source": "knowledge/microservices.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/../index.html"
+    },
+    {
+      "source": "knowledge/microservices.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/../index.html"
+    },
+    {
+      "source": "knowledge/database.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/../index.html"
+    },
+    {
+      "source": "knowledge/database.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/../index.html"
+    },
+    {
+      "source": "knowledge/performance.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/../index.html"
+    },
+    {
+      "source": "knowledge/performance.html",
+      "broken_link": "https://www.brendangregg.com/perf.html",
+      "resolved_path": "knowledge/https:/www.brendangregg.com/perf.html"
+    },
+    {
+      "source": "knowledge/performance.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/../index.html"
+    },
+    {
+      "source": "knowledge/containers.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/../index.html"
+    },
+    {
+      "source": "knowledge/containers.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/../index.html"
+    },
+    {
+      "source": "knowledge/mobile.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/../index.html"
+    },
+    {
+      "source": "knowledge/mobile.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/../index.html"
+    },
+    {
+      "source": "knowledge/engineering.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/../index.html"
+    },
+    {
+      "source": "knowledge/engineering.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/../index.html"
+    },
+    {
+      "source": "knowledge/security.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/../index.html"
+    },
+    {
+      "source": "knowledge/security.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/../index.html"
+    },
+    {
+      "source": "knowledge/cloud.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/../index.html"
+    },
+    {
+      "source": "knowledge/cloud.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/../index.html"
+    },
+    {
+      "source": "knowledge/frontend.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/../index.html"
+    },
+    {
+      "source": "knowledge/frontend.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/../index.html"
+    },
+    {
+      "source": "knowledge/ddd.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/../index.html"
+    },
+    {
+      "source": "knowledge/ddd.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/../index.html"
+    },
+    {
+      "source": "knowledge/devops.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/../index.html"
+    },
+    {
+      "source": "knowledge/devops.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/../index.html"
+    },
+    {
+      "source": "knowledge/testing.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/../index.html"
+    },
+    {
+      "source": "knowledge/testing.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/../index.html"
+    },
+    {
+      "source": "knowledge/messaging.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/../index.html"
+    },
+    {
+      "source": "knowledge/messaging.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/../index.html"
+    },
+    {
+      "source": "knowledge/rag-domains.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/../index.html"
+    },
+    {
+      "source": "knowledge/rag-domains.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/../index.html"
+    },
+    {
+      "source": "knowledge/microservices/resilience-patterns.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "knowledge/microservices/../../index.html"
+    },
+    {
+      "source": "knowledge/microservices/resilience-patterns.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/microservices/../index.html"
+    },
+    {
+      "source": "knowledge/microservices/resilience-patterns.html",
+      "broken_link": "../microservices.html",
+      "resolved_path": "knowledge/microservices/../microservices.html"
+    },
+    {
+      "source": "knowledge/microservices/resilience-patterns.html",
+      "broken_link": "service-mesh.html",
+      "resolved_path": "knowledge/microservices/service-mesh.html"
+    },
+    {
+      "source": "knowledge/microservices/resilience-patterns.html",
+      "broken_link": "../api-design/api-gateway.html",
+      "resolved_path": "knowledge/microservices/../api-design/api-gateway.html"
+    },
+    {
+      "source": "knowledge/microservices/resilience-patterns.html",
+      "broken_link": "../performance/caching-strategies.html",
+      "resolved_path": "knowledge/microservices/../performance/caching-strategies.html"
+    },
+    {
+      "source": "knowledge/microservices/resilience-patterns.html",
+      "broken_link": "../testing/chaos-engineering.html",
+      "resolved_path": "knowledge/microservices/../testing/chaos-engineering.html"
+    },
+    {
+      "source": "knowledge/database/oracle-best-practices.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "knowledge/database/../../index.html"
+    },
+    {
+      "source": "knowledge/database/oracle-best-practices.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/database/../index.html"
+    },
+    {
+      "source": "knowledge/database/oracle-best-practices.html",
+      "broken_link": "../database.html",
+      "resolved_path": "knowledge/database/../database.html"
+    },
+    {
+      "source": "knowledge/database/oracle-best-practices.html",
+      "broken_link": "../performance/profiling-analysis.html",
+      "resolved_path": "knowledge/database/../performance/profiling-analysis.html"
+    },
+    {
+      "source": "knowledge/database/oracle-best-practices.html",
+      "broken_link": "../security/secure-coding-practices.html",
+      "resolved_path": "knowledge/database/../security/secure-coding-practices.html"
+    },
+    {
+      "source": "knowledge/database/sql-best-practices.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "knowledge/database/../../index.html"
+    },
+    {
+      "source": "knowledge/database/sql-best-practices.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/database/../index.html"
+    },
+    {
+      "source": "knowledge/database/sql-best-practices.html",
+      "broken_link": "../database.html",
+      "resolved_path": "knowledge/database/../database.html"
+    },
+    {
+      "source": "knowledge/database/sql-best-practices.html",
+      "broken_link": "nosql-patterns.html",
+      "resolved_path": "knowledge/database/nosql-patterns.html"
+    },
+    {
+      "source": "knowledge/database/sql-best-practices.html",
+      "broken_link": "orm-best-practices.html",
+      "resolved_path": "knowledge/database/orm-best-practices.html"
+    },
+    {
+      "source": "knowledge/database/sql-best-practices.html",
+      "broken_link": "../performance/query-optimization.html",
+      "resolved_path": "knowledge/database/../performance/query-optimization.html"
+    },
+    {
+      "source": "knowledge/database/sql-best-practices.html",
+      "broken_link": "../security/data-protection.html",
+      "resolved_path": "knowledge/database/../security/data-protection.html"
+    },
+    {
+      "source": "knowledge/devops/cicd-pipelines.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "knowledge/devops/../../index.html"
+    },
+    {
+      "source": "knowledge/devops/cicd-pipelines.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/devops/../index.html"
+    },
+    {
+      "source": "knowledge/devops/cicd-pipelines.html",
+      "broken_link": "../devops.html",
+      "resolved_path": "knowledge/devops/../devops.html"
+    },
+    {
+      "source": "knowledge/devops/cicd-pipelines.html",
+      "broken_link": "../containers/kubernetes-patterns.html",
+      "resolved_path": "knowledge/devops/../containers/kubernetes-patterns.html"
+    },
+    {
+      "source": "knowledge/devops/monitoring-observability.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "knowledge/devops/../../index.html"
+    },
+    {
+      "source": "knowledge/devops/monitoring-observability.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/devops/../index.html"
+    },
+    {
+      "source": "knowledge/devops/monitoring-observability.html",
+      "broken_link": "../devops.html",
+      "resolved_path": "knowledge/devops/../devops.html"
+    },
+    {
+      "source": "knowledge/devops/monitoring-observability.html",
+      "broken_link": "../cloud/aws-best-practices.html",
+      "resolved_path": "knowledge/devops/../cloud/aws-best-practices.html"
+    },
+    {
+      "source": "knowledge/devops/monitoring-observability.html",
+      "broken_link": "../performance/profiling-analysis.html",
+      "resolved_path": "knowledge/devops/../performance/profiling-analysis.html"
+    },
+    {
+      "source": "knowledge/devops/infrastructure-as-code.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "knowledge/devops/../../index.html"
+    },
+    {
+      "source": "knowledge/devops/infrastructure-as-code.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/devops/../index.html"
+    },
+    {
+      "source": "knowledge/devops/infrastructure-as-code.html",
+      "broken_link": "../devops.html",
+      "resolved_path": "knowledge/devops/../devops.html"
+    },
+    {
+      "source": "knowledge/devops/infrastructure-as-code.html",
+      "broken_link": "../cloud/aws-best-practices.html",
+      "resolved_path": "knowledge/devops/../cloud/aws-best-practices.html"
+    },
+    {
+      "source": "knowledge/domains/embeddings-strategy.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "knowledge/domains/../../index.html"
+    },
+    {
+      "source": "knowledge/domains/embeddings-strategy.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/domains/../index.html"
+    },
+    {
+      "source": "knowledge/domains/embeddings-strategy.html",
+      "broken_link": "../rag-domains.html",
+      "resolved_path": "knowledge/domains/../rag-domains.html"
+    },
+    {
+      "source": "knowledge/domains/domain-rag-integration.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "knowledge/domains/../../index.html"
+    },
+    {
+      "source": "knowledge/domains/domain-rag-integration.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/domains/../index.html"
+    },
+    {
+      "source": "knowledge/domains/domain-rag-integration.html",
+      "broken_link": "../rag-domains.html",
+      "resolved_path": "knowledge/domains/../rag-domains.html"
+    },
+    {
+      "source": "knowledge/domains/vector-database-guide.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "knowledge/domains/../../index.html"
+    },
+    {
+      "source": "knowledge/domains/vector-database-guide.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/domains/../index.html"
+    },
+    {
+      "source": "knowledge/domains/vector-database-guide.html",
+      "broken_link": "../rag-domains.html",
+      "resolved_path": "knowledge/domains/../rag-domains.html"
+    },
+    {
+      "source": "knowledge/domains/retrieval-pipeline.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "knowledge/domains/../../index.html"
+    },
+    {
+      "source": "knowledge/domains/retrieval-pipeline.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/domains/../index.html"
+    },
+    {
+      "source": "knowledge/domains/retrieval-pipeline.html",
+      "broken_link": "../rag-domains.html",
+      "resolved_path": "knowledge/domains/../rag-domains.html"
+    },
+    {
+      "source": "knowledge/frontend/typescript-frontend.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "knowledge/frontend/../../index.html"
+    },
+    {
+      "source": "knowledge/frontend/typescript-frontend.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/frontend/../index.html"
+    },
+    {
+      "source": "knowledge/frontend/typescript-frontend.html",
+      "broken_link": "../frontend.html",
+      "resolved_path": "knowledge/frontend/../frontend.html"
+    },
+    {
+      "source": "knowledge/frontend/typescript-frontend.html",
+      "broken_link": "../api-design/graphql.html",
+      "resolved_path": "knowledge/frontend/../api-design/graphql.html"
+    },
+    {
+      "source": "knowledge/frontend/typescript-frontend.html",
+      "broken_link": "../testing/unit-testing.html",
+      "resolved_path": "knowledge/frontend/../testing/unit-testing.html"
+    },
+    {
+      "source": "knowledge/frontend/component-architecture.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "knowledge/frontend/../../index.html"
+    },
+    {
+      "source": "knowledge/frontend/component-architecture.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/frontend/../index.html"
+    },
+    {
+      "source": "knowledge/frontend/component-architecture.html",
+      "broken_link": "../frontend.html",
+      "resolved_path": "knowledge/frontend/../frontend.html"
+    },
+    {
+      "source": "knowledge/frontend/component-architecture.html",
+      "broken_link": "../ui-ux/design-systems.html",
+      "resolved_path": "knowledge/frontend/../ui-ux/design-systems.html"
+    },
+    {
+      "source": "knowledge/frontend/state-management.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "knowledge/frontend/../../index.html"
+    },
+    {
+      "source": "knowledge/frontend/state-management.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/frontend/../index.html"
+    },
+    {
+      "source": "knowledge/frontend/state-management.html",
+      "broken_link": "../frontend.html",
+      "resolved_path": "knowledge/frontend/../frontend.html"
+    },
+    {
+      "source": "knowledge/frontend/state-management.html",
+      "broken_link": "../performance/react-performance.html",
+      "resolved_path": "knowledge/frontend/../performance/react-performance.html"
+    },
+    {
+      "source": "knowledge/frontend/react-best-practices.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "knowledge/frontend/../../index.html"
+    },
+    {
+      "source": "knowledge/frontend/react-best-practices.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/frontend/../index.html"
+    },
+    {
+      "source": "knowledge/frontend/react-best-practices.html",
+      "broken_link": "../frontend.html",
+      "resolved_path": "knowledge/frontend/../frontend.html"
+    },
+    {
+      "source": "knowledge/frontend/react-best-practices.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "knowledge/frontend/../../index.html"
+    },
+    {
+      "source": "knowledge/frontend/react-best-practices.html",
+      "broken_link": "../testing/unit-testing.html",
+      "resolved_path": "knowledge/frontend/../testing/unit-testing.html"
+    },
+    {
+      "source": "knowledge/ddd/bounded-contexts.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "knowledge/ddd/../../index.html"
+    },
+    {
+      "source": "knowledge/ddd/bounded-contexts.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/ddd/../index.html"
+    },
+    {
+      "source": "knowledge/ddd/bounded-contexts.html",
+      "broken_link": "../ddd.html",
+      "resolved_path": "knowledge/ddd/../ddd.html"
+    },
+    {
+      "source": "knowledge/ddd/bounded-contexts.html",
+      "broken_link": "../microservices/resilience-patterns.html",
+      "resolved_path": "knowledge/ddd/../microservices/resilience-patterns.html"
+    },
+    {
+      "source": "knowledge/ddd/domain-events.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "knowledge/ddd/../../index.html"
+    },
+    {
+      "source": "knowledge/ddd/domain-events.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/ddd/../index.html"
+    },
+    {
+      "source": "knowledge/ddd/domain-events.html",
+      "broken_link": "../ddd.html",
+      "resolved_path": "knowledge/ddd/../ddd.html"
+    },
+    {
+      "source": "knowledge/ddd/domain-events.html",
+      "broken_link": "../messaging/event-driven-patterns.html",
+      "resolved_path": "knowledge/ddd/../messaging/event-driven-patterns.html"
+    },
+    {
+      "source": "knowledge/ddd/ddd-fundamentals.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "knowledge/ddd/../../index.html"
+    },
+    {
+      "source": "knowledge/ddd/ddd-fundamentals.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/ddd/../index.html"
+    },
+    {
+      "source": "knowledge/ddd/ddd-fundamentals.html",
+      "broken_link": "../ddd.html",
+      "resolved_path": "knowledge/ddd/../ddd.html"
+    },
+    {
+      "source": "knowledge/ddd/ddd-fundamentals.html",
+      "broken_link": "aggregates.html",
+      "resolved_path": "knowledge/ddd/aggregates.html"
+    },
+    {
+      "source": "knowledge/ddd/ddd-fundamentals.html",
+      "broken_link": "../microservices/service-design.html",
+      "resolved_path": "knowledge/ddd/../microservices/service-design.html"
+    },
+    {
+      "source": "knowledge/ddd/aggregates-entities.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "knowledge/ddd/../../index.html"
+    },
+    {
+      "source": "knowledge/ddd/aggregates-entities.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/ddd/../index.html"
+    },
+    {
+      "source": "knowledge/ddd/aggregates-entities.html",
+      "broken_link": "../ddd.html",
+      "resolved_path": "knowledge/ddd/../ddd.html"
+    },
+    {
+      "source": "knowledge/ddd/aggregates-entities.html",
+      "broken_link": "../engineering/design-patterns.html",
+      "resolved_path": "knowledge/ddd/../engineering/design-patterns.html"
+    },
+    {
+      "source": "knowledge/api-design/graphql.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "knowledge/api-design/../../index.html"
+    },
+    {
+      "source": "knowledge/api-design/graphql.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/api-design/../index.html"
+    },
+    {
+      "source": "knowledge/api-design/graphql.html",
+      "broken_link": "../api-design.html",
+      "resolved_path": "knowledge/api-design/../api-design.html"
+    },
+    {
+      "source": "knowledge/api-design/graphql.html",
+      "broken_link": "../frontend/typescript-frontend.html",
+      "resolved_path": "knowledge/api-design/../frontend/typescript-frontend.html"
+    },
+    {
+      "source": "knowledge/api-design/graphql.html",
+      "broken_link": "../performance/caching-strategies.html",
+      "resolved_path": "knowledge/api-design/../performance/caching-strategies.html"
+    },
+    {
+      "source": "knowledge/api-design/graphql.html",
+      "broken_link": "../security/auth-authz.html",
+      "resolved_path": "knowledge/api-design/../security/auth-authz.html"
+    },
+    {
+      "source": "knowledge/api-design/rest-api.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "knowledge/api-design/../../index.html"
+    },
+    {
+      "source": "knowledge/api-design/rest-api.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/api-design/../index.html"
+    },
+    {
+      "source": "knowledge/api-design/rest-api.html",
+      "broken_link": "../api-design.html",
+      "resolved_path": "knowledge/api-design/../api-design.html"
+    },
+    {
+      "source": "knowledge/api-design/rest-api.html",
+      "broken_link": "api-gateway.html",
+      "resolved_path": "knowledge/api-design/api-gateway.html"
+    },
+    {
+      "source": "knowledge/api-design/rest-api.html",
+      "broken_link": "../security/auth-authz.html",
+      "resolved_path": "knowledge/api-design/../security/auth-authz.html"
+    },
+    {
+      "source": "knowledge/api-design/rest-api.html",
+      "broken_link": "../performance/caching-strategies.html",
+      "resolved_path": "knowledge/api-design/../performance/caching-strategies.html"
+    },
+    {
+      "source": "knowledge/testing/tdd.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "knowledge/testing/../../index.html"
+    },
+    {
+      "source": "knowledge/testing/tdd.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/testing/../index.html"
+    },
+    {
+      "source": "knowledge/testing/tdd.html",
+      "broken_link": "../testing.html",
+      "resolved_path": "knowledge/testing/../testing.html"
+    },
+    {
+      "source": "knowledge/testing/tdd.html",
+      "broken_link": "unit-testing.html",
+      "resolved_path": "knowledge/testing/unit-testing.html"
+    },
+    {
+      "source": "knowledge/testing/tdd.html",
+      "broken_link": "integration-testing.html",
+      "resolved_path": "knowledge/testing/integration-testing.html"
+    },
+    {
+      "source": "knowledge/testing/tdd.html",
+      "broken_link": "../engineering/clean-code.html",
+      "resolved_path": "knowledge/testing/../engineering/clean-code.html"
+    },
+    {
+      "source": "knowledge/testing/tdd.html",
+      "broken_link": "../engineering/refactoring.html",
+      "resolved_path": "knowledge/testing/../engineering/refactoring.html"
+    },
+    {
+      "source": "knowledge/cloud/aws-best-practices.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "knowledge/cloud/../../index.html"
+    },
+    {
+      "source": "knowledge/cloud/aws-best-practices.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/cloud/../index.html"
+    },
+    {
+      "source": "knowledge/cloud/aws-best-practices.html",
+      "broken_link": "../cloud.html",
+      "resolved_path": "knowledge/cloud/../cloud.html"
+    },
+    {
+      "source": "knowledge/cloud/aws-best-practices.html",
+      "broken_link": "azure-patterns.html",
+      "resolved_path": "knowledge/cloud/azure-patterns.html"
+    },
+    {
+      "source": "knowledge/cloud/aws-best-practices.html",
+      "broken_link": "../containers/kubernetes-patterns.html",
+      "resolved_path": "knowledge/cloud/../containers/kubernetes-patterns.html"
+    },
+    {
+      "source": "knowledge/cloud/aws-best-practices.html",
+      "broken_link": "../devops/iac.html",
+      "resolved_path": "knowledge/cloud/../devops/iac.html"
+    },
+    {
+      "source": "knowledge/cloud/aws-best-practices.html",
+      "broken_link": "../security/cloud-security.html",
+      "resolved_path": "knowledge/cloud/../security/cloud-security.html"
+    },
+    {
+      "source": "knowledge/files/engineering/design-patterns.html",
+      "broken_link": "../../../index.html",
+      "resolved_path": "knowledge/files/engineering/../../../index.html"
+    },
+    {
+      "source": "knowledge/files/engineering/design-patterns.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "knowledge/files/engineering/../../index.html"
+    },
+    {
+      "source": "knowledge/files/engineering/design-patterns.html",
+      "broken_link": "../../engineering.html",
+      "resolved_path": "knowledge/files/engineering/../../engineering.html"
+    },
+    {
+      "source": "knowledge/files/engineering/design-patterns.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "knowledge/files/engineering/../../index.html"
+    },
+    {
+      "source": "knowledge/files/engineering/design-patterns.html",
+      "broken_link": "../../engineering.html",
+      "resolved_path": "knowledge/files/engineering/../../engineering.html"
+    },
+    {
+      "source": "knowledge/files/engineering/design-patterns.html",
+      "broken_link": "../../../index.html",
+      "resolved_path": "knowledge/files/engineering/../../../index.html"
+    },
+    {
+      "source": "knowledge/files/engineering/solid-principles.html",
+      "broken_link": "../../../index.html",
+      "resolved_path": "knowledge/files/engineering/../../../index.html"
+    },
+    {
+      "source": "knowledge/files/engineering/solid-principles.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "knowledge/files/engineering/../../index.html"
+    },
+    {
+      "source": "knowledge/files/engineering/solid-principles.html",
+      "broken_link": "../../engineering.html",
+      "resolved_path": "knowledge/files/engineering/../../engineering.html"
+    },
+    {
+      "source": "knowledge/files/engineering/solid-principles.html",
+      "broken_link": "../testing/tdd-best-practices.html",
+      "resolved_path": "knowledge/files/engineering/../testing/tdd-best-practices.html"
+    },
+    {
+      "source": "knowledge/files/engineering/solid-principles.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "knowledge/files/engineering/../../index.html"
+    },
+    {
+      "source": "knowledge/files/engineering/solid-principles.html",
+      "broken_link": "../../engineering.html",
+      "resolved_path": "knowledge/files/engineering/../../engineering.html"
+    },
+    {
+      "source": "knowledge/files/engineering/solid-principles.html",
+      "broken_link": "../../../index.html",
+      "resolved_path": "knowledge/files/engineering/../../../index.html"
+    },
+    {
+      "source": "knowledge/files/engineering/code-review.html",
+      "broken_link": "../../../index.html",
+      "resolved_path": "knowledge/files/engineering/../../../index.html"
+    },
+    {
+      "source": "knowledge/files/engineering/code-review.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "knowledge/files/engineering/../../index.html"
+    },
+    {
+      "source": "knowledge/files/engineering/code-review.html",
+      "broken_link": "../../engineering.html",
+      "resolved_path": "knowledge/files/engineering/../../engineering.html"
+    },
+    {
+      "source": "knowledge/files/engineering/code-review.html",
+      "broken_link": "../security/secure-coding-practices.html",
+      "resolved_path": "knowledge/files/engineering/../security/secure-coding-practices.html"
+    },
+    {
+      "source": "knowledge/files/engineering/code-review.html",
+      "broken_link": "../testing/tdd-best-practices.html",
+      "resolved_path": "knowledge/files/engineering/../testing/tdd-best-practices.html"
+    },
+    {
+      "source": "knowledge/files/engineering/code-review.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "knowledge/files/engineering/../../index.html"
+    },
+    {
+      "source": "knowledge/files/engineering/code-review.html",
+      "broken_link": "../../engineering.html",
+      "resolved_path": "knowledge/files/engineering/../../engineering.html"
+    },
+    {
+      "source": "knowledge/files/engineering/code-review.html",
+      "broken_link": "../../../index.html",
+      "resolved_path": "knowledge/files/engineering/../../../index.html"
+    },
+    {
+      "source": "knowledge/files/engineering/rest-api-design.html",
+      "broken_link": "../../../index.html",
+      "resolved_path": "knowledge/files/engineering/../../../index.html"
+    },
+    {
+      "source": "knowledge/files/engineering/rest-api-design.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "knowledge/files/engineering/../../index.html"
+    },
+    {
+      "source": "knowledge/files/engineering/rest-api-design.html",
+      "broken_link": "../../engineering.html",
+      "resolved_path": "knowledge/files/engineering/../../engineering.html"
+    },
+    {
+      "source": "knowledge/files/engineering/rest-api-design.html",
+      "broken_link": "../security/api-security-checklist.html",
+      "resolved_path": "knowledge/files/engineering/../security/api-security-checklist.html"
+    },
+    {
+      "source": "knowledge/files/engineering/rest-api-design.html",
+      "broken_link": "../testing/api-testing-strategies.html",
+      "resolved_path": "knowledge/files/engineering/../testing/api-testing-strategies.html"
+    },
+    {
+      "source": "knowledge/files/engineering/rest-api-design.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "knowledge/files/engineering/../../index.html"
+    },
+    {
+      "source": "knowledge/files/engineering/rest-api-design.html",
+      "broken_link": "../../engineering.html",
+      "resolved_path": "knowledge/files/engineering/../../engineering.html"
+    },
+    {
+      "source": "knowledge/files/engineering/rest-api-design.html",
+      "broken_link": "../../../index.html",
+      "resolved_path": "knowledge/files/engineering/../../../index.html"
+    },
+    {
+      "source": "knowledge/files/engineering/graphql-best-practices.html",
+      "broken_link": "../../../index.html",
+      "resolved_path": "knowledge/files/engineering/../../../index.html"
+    },
+    {
+      "source": "knowledge/files/engineering/graphql-best-practices.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "knowledge/files/engineering/../../index.html"
+    },
+    {
+      "source": "knowledge/files/engineering/graphql-best-practices.html",
+      "broken_link": "../../engineering.html",
+      "resolved_path": "knowledge/files/engineering/../../engineering.html"
+    },
+    {
+      "source": "knowledge/files/engineering/graphql-best-practices.html",
+      "broken_link": "../security/api-security-checklist.html",
+      "resolved_path": "knowledge/files/engineering/../security/api-security-checklist.html"
+    },
+    {
+      "source": "knowledge/files/engineering/graphql-best-practices.html",
+      "broken_link": "../performance/caching-strategies.html",
+      "resolved_path": "knowledge/files/engineering/../performance/caching-strategies.html"
+    },
+    {
+      "source": "knowledge/files/engineering/graphql-best-practices.html",
+      "broken_link": "../testing/api-testing-strategies.html",
+      "resolved_path": "knowledge/files/engineering/../testing/api-testing-strategies.html"
+    },
+    {
+      "source": "knowledge/files/engineering/graphql-best-practices.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "knowledge/files/engineering/../../index.html"
+    },
+    {
+      "source": "knowledge/files/engineering/graphql-best-practices.html",
+      "broken_link": "../../engineering.html",
+      "resolved_path": "knowledge/files/engineering/../../engineering.html"
+    },
+    {
+      "source": "knowledge/files/engineering/graphql-best-practices.html",
+      "broken_link": "../../../index.html",
+      "resolved_path": "knowledge/files/engineering/../../../index.html"
+    },
+    {
+      "source": "knowledge/files/engineering/refactoring.html",
+      "broken_link": "../../../index.html",
+      "resolved_path": "knowledge/files/engineering/../../../index.html"
+    },
+    {
+      "source": "knowledge/files/engineering/refactoring.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "knowledge/files/engineering/../../index.html"
+    },
+    {
+      "source": "knowledge/files/engineering/refactoring.html",
+      "broken_link": "../../engineering.html",
+      "resolved_path": "knowledge/files/engineering/../../engineering.html"
+    },
+    {
+      "source": "knowledge/files/engineering/refactoring.html",
+      "broken_link": "../testing/tdd-best-practices.html",
+      "resolved_path": "knowledge/files/engineering/../testing/tdd-best-practices.html"
+    },
+    {
+      "source": "knowledge/files/engineering/refactoring.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "knowledge/files/engineering/../../index.html"
+    },
+    {
+      "source": "knowledge/files/engineering/refactoring.html",
+      "broken_link": "../../engineering.html",
+      "resolved_path": "knowledge/files/engineering/../../engineering.html"
+    },
+    {
+      "source": "knowledge/files/engineering/refactoring.html",
+      "broken_link": "../../../index.html",
+      "resolved_path": "knowledge/files/engineering/../../../index.html"
+    },
+    {
+      "source": "knowledge/files/engineering/anti-patterns.html",
+      "broken_link": "../../../index.html",
+      "resolved_path": "knowledge/files/engineering/../../../index.html"
+    },
+    {
+      "source": "knowledge/files/engineering/anti-patterns.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "knowledge/files/engineering/../../index.html"
+    },
+    {
+      "source": "knowledge/files/engineering/anti-patterns.html",
+      "broken_link": "../../engineering.html",
+      "resolved_path": "knowledge/files/engineering/../../engineering.html"
+    },
+    {
+      "source": "knowledge/files/engineering/anti-patterns.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "knowledge/files/engineering/../../index.html"
+    },
+    {
+      "source": "knowledge/files/engineering/anti-patterns.html",
+      "broken_link": "../../engineering.html",
+      "resolved_path": "knowledge/files/engineering/../../engineering.html"
+    },
+    {
+      "source": "knowledge/files/engineering/anti-patterns.html",
+      "broken_link": "../../../index.html",
+      "resolved_path": "knowledge/files/engineering/../../../index.html"
+    },
+    {
+      "source": "knowledge/files/engineering/clean-code.html",
+      "broken_link": "../../../index.html",
+      "resolved_path": "knowledge/files/engineering/../../../index.html"
+    },
+    {
+      "source": "knowledge/files/engineering/clean-code.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "knowledge/files/engineering/../../index.html"
+    },
+    {
+      "source": "knowledge/files/engineering/clean-code.html",
+      "broken_link": "../../engineering.html",
+      "resolved_path": "knowledge/files/engineering/../../engineering.html"
+    },
+    {
+      "source": "knowledge/files/engineering/clean-code.html",
+      "broken_link": "../testing/tdd-best-practices.html",
+      "resolved_path": "knowledge/files/engineering/../testing/tdd-best-practices.html"
+    },
+    {
+      "source": "knowledge/files/engineering/clean-code.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "knowledge/files/engineering/../../index.html"
+    },
+    {
+      "source": "knowledge/files/engineering/clean-code.html",
+      "broken_link": "../../engineering.html",
+      "resolved_path": "knowledge/files/engineering/../../engineering.html"
+    },
+    {
+      "source": "knowledge/files/engineering/clean-code.html",
+      "broken_link": "../../../index.html",
+      "resolved_path": "knowledge/files/engineering/../../../index.html"
+    },
+    {
+      "source": "knowledge/containers/kubernetes-patterns.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "knowledge/containers/../../index.html"
+    },
+    {
+      "source": "knowledge/containers/kubernetes-patterns.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/containers/../index.html"
+    },
+    {
+      "source": "knowledge/containers/kubernetes-patterns.html",
+      "broken_link": "../containers.html",
+      "resolved_path": "knowledge/containers/../containers.html"
+    },
+    {
+      "source": "knowledge/containers/kubernetes-patterns.html",
+      "broken_link": "docker-best-practices.html",
+      "resolved_path": "knowledge/containers/docker-best-practices.html"
+    },
+    {
+      "source": "knowledge/containers/kubernetes-patterns.html",
+      "broken_link": "helm-patterns.html",
+      "resolved_path": "knowledge/containers/helm-patterns.html"
+    },
+    {
+      "source": "knowledge/containers/kubernetes-patterns.html",
+      "broken_link": "../devops/gitops.html",
+      "resolved_path": "knowledge/containers/../devops/gitops.html"
+    },
+    {
+      "source": "knowledge/containers/kubernetes-patterns.html",
+      "broken_link": "../cloud/aws-best-practices.html",
+      "resolved_path": "knowledge/containers/../cloud/aws-best-practices.html"
+    },
+    {
+      "source": "knowledge/engineering/anti-patterns.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "knowledge/engineering/../../index.html"
+    },
+    {
+      "source": "knowledge/engineering/anti-patterns.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/engineering/../index.html"
+    },
+    {
+      "source": "knowledge/engineering/anti-patterns.html",
+      "broken_link": "../engineering.html",
+      "resolved_path": "knowledge/engineering/../engineering.html"
+    },
+    {
+      "source": "knowledge/engineering/anti-patterns.html",
+      "broken_link": "design-patterns.html",
+      "resolved_path": "knowledge/engineering/design-patterns.html"
+    },
+    {
+      "source": "knowledge/engineering/anti-patterns.html",
+      "broken_link": "refactoring.html",
+      "resolved_path": "knowledge/engineering/refactoring.html"
+    },
+    {
+      "source": "knowledge/engineering/anti-patterns.html",
+      "broken_link": "solid-principles.html",
+      "resolved_path": "knowledge/engineering/solid-principles.html"
+    },
+    {
+      "source": "knowledge/engineering/clean-code.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "knowledge/engineering/../../index.html"
+    },
+    {
+      "source": "knowledge/engineering/clean-code.html",
+      "broken_link": "../index.html",
+      "resolved_path": "knowledge/engineering/../index.html"
+    },
+    {
+      "source": "knowledge/engineering/clean-code.html",
+      "broken_link": "../engineering.html",
+      "resolved_path": "knowledge/engineering/../engineering.html"
+    },
+    {
+      "source": "knowledge/engineering/clean-code.html",
+      "broken_link": "design-patterns.html",
+      "resolved_path": "knowledge/engineering/design-patterns.html"
+    },
+    {
+      "source": "knowledge/engineering/clean-code.html",
+      "broken_link": "refactoring.html",
+      "resolved_path": "knowledge/engineering/refactoring.html"
+    },
+    {
+      "source": "knowledge/engineering/clean-code.html",
+      "broken_link": "solid-principles.html",
+      "resolved_path": "knowledge/engineering/solid-principles.html"
+    },
+    {
+      "source": "toolkit-manager/index.html",
+      "broken_link": "../index.html",
+      "resolved_path": "toolkit-manager/../index.html"
+    },
+    {
+      "source": "toolkit-manager/index.html",
+      "broken_link": "../index.html",
+      "resolved_path": "toolkit-manager/../index.html"
+    },
+    {
+      "source": "toolkit-manager/index.html",
+      "broken_link": "../getting-started/index.html",
+      "resolved_path": "toolkit-manager/../getting-started/index.html"
+    },
+    {
+      "source": "toolkit-manager/index.html",
+      "broken_link": "../features/index.html",
+      "resolved_path": "toolkit-manager/../features/index.html"
+    },
+    {
+      "source": "toolkit-manager/index.html",
+      "broken_link": "../technical/index.html",
+      "resolved_path": "toolkit-manager/../technical/index.html"
+    },
+    {
+      "source": "toolkit-manager/index.html",
+      "broken_link": "../faq.html",
+      "resolved_path": "toolkit-manager/../faq.html"
+    },
+    {
+      "source": "toolkit-manager/index.html",
+      "broken_link": "../index.html",
+      "resolved_path": "toolkit-manager/../index.html"
+    },
+    {
+      "source": "toolkit-manager/index.html",
+      "broken_link": "../sitemap.html",
+      "resolved_path": "toolkit-manager/../sitemap.html"
+    },
+    {
+      "source": "toolkit-manager/index.html",
+      "broken_link": "../faq.html",
+      "resolved_path": "toolkit-manager/../faq.html"
+    },
+    {
+      "source": "governance/skull-rulebook.html",
+      "broken_link": "../index.html",
+      "resolved_path": "governance/../index.html"
+    },
+    {
+      "source": "technical/index.html",
+      "broken_link": "../index.html",
+      "resolved_path": "technical/../index.html"
+    },
+    {
+      "source": "technical/index.html",
+      "broken_link": "../index.html",
+      "resolved_path": "technical/../index.html"
+    },
+    {
+      "source": "technical/index.html",
+      "broken_link": "architecture/overview.html",
+      "resolved_path": "technical/architecture/overview.html"
+    },
+    {
+      "source": "technical/index.html",
+      "broken_link": "architecture/4-tier-brain.html",
+      "resolved_path": "technical/architecture/4-tier-brain.html"
+    },
+    {
+      "source": "technical/index.html",
+      "broken_link": "architecture/orchestrator-framework.html",
+      "resolved_path": "technical/architecture/orchestrator-framework.html"
+    },
+    {
+      "source": "technical/index.html",
+      "broken_link": "architecture/agent-framework.html",
+      "resolved_path": "technical/architecture/agent-framework.html"
+    },
+    {
+      "source": "technical/index.html",
+      "broken_link": "architecture/diagrams/system-architecture.html",
+      "resolved_path": "technical/architecture/diagrams/system-architecture.html"
+    },
+    {
+      "source": "technical/index.html",
+      "broken_link": "../index.html",
+      "resolved_path": "technical/../index.html"
+    },
+    {
+      "source": "technical/index.html",
+      "broken_link": "../architecture/index.html",
+      "resolved_path": "technical/../architecture/index.html"
+    },
+    {
+      "source": "technical/index.html",
+      "broken_link": "../orchestrators/index.html",
+      "resolved_path": "technical/../orchestrators/index.html"
+    },
+    {
+      "source": "technical/index.html",
+      "broken_link": "../features/index.html",
+      "resolved_path": "technical/../features/index.html"
+    },
+    {
+      "source": "technical/index.html",
+      "broken_link": "api/orchestrators/planning-system.html",
+      "resolved_path": "technical/api/orchestrators/planning-system.html"
+    },
+    {
+      "source": "technical/index.html",
+      "broken_link": "api/orchestrators/tdd-mastery.html",
+      "resolved_path": "technical/api/orchestrators/tdd-mastery.html"
+    },
+    {
+      "source": "technical/index.html",
+      "broken_link": "api/orchestrators/maintenance.html",
+      "resolved_path": "technical/api/orchestrators/maintenance.html"
+    },
+    {
+      "source": "technical/index.html",
+      "broken_link": "api/agents/strategic-planning-agent.html",
+      "resolved_path": "technical/api/agents/strategic-planning-agent.html"
+    },
+    {
+      "source": "technical/index.html",
+      "broken_link": "api/agents/code-execution-agent.html",
+      "resolved_path": "technical/api/agents/code-execution-agent.html"
+    },
+    {
+      "source": "technical/index.html",
+      "broken_link": "workflows/planning-workflow.html",
+      "resolved_path": "technical/workflows/planning-workflow.html"
+    },
+    {
+      "source": "technical/index.html",
+      "broken_link": "workflows/tdd-workflow.html",
+      "resolved_path": "technical/workflows/tdd-workflow.html"
+    },
+    {
+      "source": "technical/index.html",
+      "broken_link": "workflows/maintenance-workflow.html",
+      "resolved_path": "technical/workflows/maintenance-workflow.html"
+    },
+    {
+      "source": "technical/index.html",
+      "broken_link": "setup-guides/quick-start.html",
+      "resolved_path": "technical/setup-guides/quick-start.html"
+    },
+    {
+      "source": "technical/index.html",
+      "broken_link": "integration/copilot-integration.html",
+      "resolved_path": "technical/integration/copilot-integration.html"
+    },
+    {
+      "source": "technical/index.html",
+      "broken_link": "deployment/overview.html",
+      "resolved_path": "technical/deployment/overview.html"
+    },
+    {
+      "source": "technical/index.html",
+      "broken_link": "troubleshooting/index.html",
+      "resolved_path": "technical/troubleshooting/index.html"
+    },
+    {
+      "source": "technical/index.html",
+      "broken_link": "../index.html",
+      "resolved_path": "technical/../index.html"
+    },
+    {
+      "source": "technical/index.html",
+      "broken_link": "../architecture/index.html",
+      "resolved_path": "technical/../architecture/index.html"
+    },
+    {
+      "source": "technical/index.html",
+      "broken_link": "../orchestrators/index.html",
+      "resolved_path": "technical/../orchestrators/index.html"
+    },
+    {
+      "source": "technical/index.html",
+      "broken_link": "../features/index.html",
+      "resolved_path": "technical/../features/index.html"
+    },
+    {
+      "source": "technical/index.html",
+      "broken_link": "architecture/overview.html",
+      "resolved_path": "technical/architecture/overview.html"
+    },
+    {
+      "source": "technical/index.html",
+      "broken_link": "api/index.html",
+      "resolved_path": "technical/api/index.html"
+    },
+    {
+      "source": "technical/index.html",
+      "broken_link": "setup-guides/quick-start.html",
+      "resolved_path": "technical/setup-guides/quick-start.html"
+    },
+    {
+      "source": "technical/index.html",
+      "broken_link": "workflows/index.html",
+      "resolved_path": "technical/workflows/index.html"
+    },
+    {
+      "source": "technical/index.html",
+      "broken_link": "architecture/diagrams/system-architecture.html",
+      "resolved_path": "technical/architecture/diagrams/system-architecture.html"
+    },
+    {
+      "source": "technical/security/dashboard.html",
+      "broken_link": "../index.html",
+      "resolved_path": "technical/security/../index.html"
+    },
+    {
+      "source": "technical/security/dashboard.html",
+      "broken_link": "../orchestrators/index.html",
+      "resolved_path": "technical/security/../orchestrators/index.html"
+    },
+    {
+      "source": "technical/orchestrators/architectural-review.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "technical/orchestrators/../../index.html"
+    },
+    {
+      "source": "technical/orchestrators/architectural-review.html",
+      "broken_link": "../index.html",
+      "resolved_path": "technical/orchestrators/../index.html"
+    },
+    {
+      "source": "technical/orchestrators/architectural-review.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "technical/orchestrators/../../index.html"
+    },
+    {
+      "source": "technical/orchestrators/architectural-review.html",
+      "broken_link": "../../orchestrators/architectural-review.html",
+      "resolved_path": "technical/orchestrators/../../orchestrators/architectural-review.html"
+    },
+    {
+      "source": "technical/orchestrators/architectural-review.html",
+      "broken_link": "../../orchestrators/architectural-review.html",
+      "resolved_path": "technical/orchestrators/../../orchestrators/architectural-review.html"
+    },
+    {
+      "source": "technical/orchestrators/index.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "technical/orchestrators/../../index.html"
+    },
+    {
+      "source": "technical/orchestrators/ado-planning.html",
+      "broken_link": "../../index.html",
+      "resolved_path": "technical/orchestrators/../../index.html"
+    },
+    {
+      "source": "story/viewer.html",
+      "broken_link": "../index.html",
+      "resolved_path": "story/../index.html"
+    },
+    {
+      "source": "validation/index.html",
+      "broken_link": "../index.html",
+      "resolved_path": "validation/../index.html"
+    },
+    {
+      "source": "validation/index.html",
+      "broken_link": "capabilities.html",
+      "resolved_path": "validation/capabilities.html"
+    },
+    {
+      "source": "validation/index.html",
+      "broken_link": "metrics.html",
+      "resolved_path": "validation/metrics.html"
+    },
+    {
+      "source": "validation/index.html",
+      "broken_link": "../architecture/four-tier-brain.html",
+      "resolved_path": "validation/../architecture/four-tier-brain.html"
+    },
+    {
+      "source": "validation/index.html",
+      "broken_link": "../governance/skull-rulebook.html",
+      "resolved_path": "validation/../governance/skull-rulebook.html"
+    },
+    {
+      "source": "sts/documentation.html",
+      "broken_link": "../index.html",
+      "resolved_path": "sts/../index.html"
+    },
+    {
+      "source": "sts/code-quality.html",
+      "broken_link": "../index.html",
+      "resolved_path": "sts/../index.html"
+    },
+    {
+      "source": "sts/index.html",
+      "broken_link": "../index.html",
+      "resolved_path": "sts/../index.html"
+    },
+    {
+      "source": "sts/index.html",
+      "broken_link": "../index.html",
+      "resolved_path": "sts/../index.html"
+    },
+    {
+      "source": "sts/performance.html",
+      "broken_link": "../index.html",
+      "resolved_path": "sts/../index.html"
+    },
+    {
+      "source": "sts/security.html",
+      "broken_link": "../index.html",
+      "resolved_path": "sts/../index.html"
+    },
+    {
+      "source": "sts/solid.html",
+      "broken_link": "../index.html",
+      "resolved_path": "sts/../index.html"
+    },
+    {
+      "source": "sts/testing.html",
+      "broken_link": "../index.html",
+      "resolved_path": "sts/../index.html"
+    }
+  ],
+  "_checksum": "ab2cefbff6cef2bf"
+}
