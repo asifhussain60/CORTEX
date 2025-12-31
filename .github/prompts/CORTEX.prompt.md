@@ -54,6 +54,7 @@ User: "implement user authentication"
 
 | Command | Orchestrator | Manifest | Behavior |
 |---------|--------------|----------|----------|
+| `introduce yourself`, `intro`, `hello`, `hi cortex`, `what is cortex` | **Introduction** | `response-templates-v4.yaml:introduction` | ASCII banner + capabilities overview |
 | `/CORTEX Plan [x]`, `create a plan`, `make a plan`, `plan: [x]` | 🛡️ **Planning System** | `planning-system-4.0-manifest.yaml` | **HAND-OFF** → Use `autonomous_execution_progress` template |
 | `plan ado`, `ado story`, `ado feature` | 🛡️ **ADO Operations** | `ado-planning-manifest.yaml` | **HAND-OFF** → Use `ado_execution_progress` template |
 | `start tdd`, `run tests`, `tdd [x]` | TDD Mastery | `tdd-orchestrator-v4-manifest.yaml` | Tests in `tests/` |
@@ -66,7 +67,8 @@ User: "implement user authentication"
 | `cleanup cache`, `cleanup full`, `cleanup [type]` | **Cleanup (alias)** | → Routes to Maintenance Phase 2 | Cache clear, template validation, legacy removal |
 | `help`, `show commands` | Help | Template-based | Command list |
 
-**Manifest Path:** `cortex-brain/manifests/orchestrators/{manifest-file}`
+**Manifest Path:** `cortex-brain/manifests/orchestrators/{manifest-file}`  
+**Template Path:** `cortex-brain/response-templates-v4.yaml`
 
 ### 🛡️ HAND-OFF Orchestrators (Shield Icon = Orchestrator Engaged)
 
@@ -112,7 +114,9 @@ When Planning System is engaged (🛡️), `00-master-plan.md` MUST include:
 
 ## 📋 Response Format (v4.0)
 
-**Header (ALWAYS):**
+**Header:**
+- **Introduction only** (`introduce yourself`, `intro`, `hello`): Start with ASCII banner directly — **NO header before banner**
+- **All other responses**: Add standard header:
 ```markdown
 ## 🧠 CORTEX {Title}
 **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX

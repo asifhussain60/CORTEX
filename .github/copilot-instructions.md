@@ -21,6 +21,7 @@ All command routing is defined in `CORTEX.prompt.md`. Key orchestrators:
 
 | Intent Pattern | Route To |
 |----------------|----------|
+| `introduce yourself`, `intro`, `hello`, `hi cortex` | Introduction → ASCII banner + capabilities (load `response-templates-v4.yaml:introduction`) |
 | `plan`, `create a plan`, `make a plan` | Planning System → folder with 4 subfolders |
 | `tdd`, `start tdd`, `run tests` | TDD Orchestrator → RED→GREEN→REFACTOR |
 | `ado`, `ado story`, `ado feature` | ADO Operations → work items |
@@ -57,7 +58,7 @@ When you see 🛡️ in Intent Router, these orchestrators **MUST take over comp
 
 Defer to `CORTEX.prompt.md` for full spec. Summary:
 
-- **Header:** Always include `## 🧠 CORTEX {Title}` + author line (or `## 🛡️🧠` for HAND-OFF orchestrators)
+- **Header:** Introduction only starts with ASCII banner (no header). All other responses add `## 🧠 CORTEX {Title}` + author line.
 - **Body:** Scales with complexity (INSTANT → COMPREHENSIVE)
 - **Next Steps:** EXACTLY ONE action OR completion message
 - **Completion:** Use `# 🎉 CONGRATULATIONS` when all work done
