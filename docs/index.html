@@ -326,16 +326,10 @@
                     <div class="bwc-main">
                         <div class="bwc-text">
                             <h3 class="bwc-title">
-                                <span class="bwc-title-highlight">CORTEX Built By CORTEX</span>
+                                <span class="bwc-title-highlight">Wondering What CORTEX Can Do?</span>
                             </h3>
                             <p class="bwc-tagline">
-                                <span class="bwc-quote-mark">"</span>
                                 The best proof of concept is using your own product to build itself.
-                                <span class="bwc-quote-mark">"</span>
-                            </p>
-                            <p class="bwc-wondering">
-                                <span class="bwc-wondering-icon">💭</span>
-                                <span class="bwc-wondering-text">If you're wondering what CORTEX can do...</span>
                             </p>
                             <p class="bwc-description">
                                 Every page, diagram, animation, and feature on this documentation site was 
@@ -434,7 +428,7 @@
             /* Built With CORTEX Panel - Ultra Premium Glassmorphism */
             .built-with-cortex-panel {
                 position: relative;
-                background: linear-gradient(135deg, rgba(123, 97, 255, 0.12) 0%, rgba(0, 212, 255, 0.08) 50%, rgba(0, 255, 136, 0.06) 100%);
+                background: linear-gradient(135deg, rgba(123, 97, 255, 0.15) 0%, rgba(0, 212, 255, 0.10) 50%, rgba(0, 255, 136, 0.08) 100%);
                 border: 1px solid rgba(123, 97, 255, 0.4);
                 border-radius: 24px;
                 padding: 3rem;
@@ -444,7 +438,8 @@
                 box-shadow: 
                     0 0 60px rgba(123, 97, 255, 0.15),
                     0 0 100px rgba(0, 212, 255, 0.1),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+                    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                    inset 0 0 80px rgba(0, 0, 0, 0.3);
                 transition: all 0.4s ease;
             }
             
@@ -759,30 +754,36 @@
                 display: block;
                 font-size: 2.5rem;
                 font-weight: 800;
-                color: #00d4ff;
+                color: #ffffff;
                 letter-spacing: 0.05em;
                 text-transform: uppercase;
                 margin: 0;
-                text-shadow: 0 0 20px rgba(0, 212, 255, 0.5),
-                             0 0 40px rgba(0, 212, 255, 0.3),
-                             0 2px 4px rgba(0, 0, 0, 0.3);
+                text-shadow: 0 0 20px rgba(255, 255, 255, 0.5),
+                             0 0 40px rgba(255, 255, 255, 0.3),
+                             0 2px 6px rgba(0, 0, 0, 0.6);
+                line-height: 1.2;
+                word-wrap: break-word;
+                overflow-wrap: break-word;
+                hyphens: auto;
             }
             
             .bwc-description {
                 font-size: 1.15rem;
-                color: rgba(255, 255, 255, 0.9);
+                color: rgba(255, 255, 255, 1.0);
                 line-height: 1.8;
                 margin: 0;
                 font-weight: 400;
-                text-align: center;
+                text-align: justify;
                 max-width: 900px;
                 margin: 0 auto;
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
             }
             
             .bwc-description strong {
-                color: var(--accent-primary);
+                color: #00f5ff;
                 font-weight: 600;
-                text-shadow: 0 0 10px rgba(123, 97, 255, 0.4);
+                text-shadow: 0 0 15px rgba(0, 245, 255, 0.6),
+                             0 2px 4px rgba(0, 0, 0, 0.5);
             }
             
             /* Enhanced Stats Grid */
@@ -949,13 +950,19 @@
                 font-size: 1.35rem;
                 font-weight: 500;
                 font-style: italic;
-                color: rgba(255, 255, 255, 0.95);
-                margin: 1rem 0 1.5rem 0;
-                padding: 0;
+                color: rgba(255, 255, 255, 0.85);
+                margin: 1rem auto 1.5rem auto;
+                padding: 1rem 1.75rem;
                 line-height: 1.6;
-                text-shadow: 0 2px 8px rgba(123, 97, 255, 0.3),
-                             0 0 30px rgba(123, 97, 255, 0.2);
+                text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
                 letter-spacing: 0.01em;
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                border-radius: 12px;
+                background: rgba(255, 255, 255, 0.02);
+                backdrop-filter: blur(8px);
+                -webkit-backdrop-filter: blur(8px);
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+                max-width: 800px;
             }
             
             /* Wondering prompt */
@@ -994,16 +1001,15 @@
             }
             
             .bwc-quote-mark {
-                font-size: 1.5rem;
+                font-size: 3rem;
                 font-style: normal;
                 font-weight: 700;
-                background: linear-gradient(135deg, var(--accent-secondary), var(--accent-primary));
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
-                opacity: 0.6;
+                color: #ffffff;
+                opacity: 0.7;
                 vertical-align: middle;
-                margin: 0 0.25rem;
+                margin: 0 0.5rem;
+                line-height: 1;
+                display: inline-block;
             }
             
             /* Mobile Responsive - Tablet */
@@ -1025,6 +1031,7 @@
                 
                 .bwc-title-highlight {
                     font-size: 1.4rem;
+                    letter-spacing: 0.03em;
                 }
                 
                 .bwc-stats {
@@ -1095,20 +1102,18 @@
                 .bwc-description {
                     font-size: 0.9rem;
                     line-height: 1.6;
+                    text-align: justify;
                 }
                 
                 .bwc-tagline {
-                    font-size: 0.9rem;
+                    font-size: 1.1rem;
+                    padding: 0.875rem 1.25rem;
+                    border-radius: 10px;
+                    margin: 0.875rem auto 1.25rem auto;
                 }
                 
-                .bwc-quote-mark {
-                    font-size: 1.25rem;
-                }
                 
-                .bwc-corner { display: none; }
-                .bwc-scan-line { display: none; }
-                
-                /* Reduce particles on mobile */
+                /* Hide more particles on small screens */
                 .bwc-particle:nth-child(4),
                 .bwc-particle:nth-child(5),
                 .bwc-particle:nth-child(6) {
@@ -1134,10 +1139,13 @@
                 
                 .bwc-title-highlight {
                     font-size: 1.2rem;
+                    letter-spacing: 0.02em;
+                    line-height: 1.3;
                 }
                 
                 .bwc-description {
                     font-size: 0.85rem;
+                    text-align: justify;
                 }
                 
                 .bwc-stats {
@@ -1222,12 +1230,11 @@
                 }
                 
                 .bwc-tagline {
-                    font-size: 0.8rem;
-                    padding-top: 0.25rem;
-                }
-                
-                .bwc-quote-mark {
-                    font-size: 1rem;
+                    font-size: 0.95rem;
+                    padding: 0.75rem 1rem;
+                    border-radius: 8px;
+                    margin: 0.75rem auto 1rem auto;
+                    line-height: 1.5;
                 }
                 
                 /* Hide more particles on small screens */
@@ -1255,7 +1262,16 @@
             /* Very small phones (320px) */
             @media (max-width: 360px) {
                 .bwc-title-highlight {
-                    font-size: 1.1rem;
+                    font-size: 1rem;
+                    letter-spacing: 0.01em;
+                    line-height: 1.35;
+                }
+                
+                .bwc-tagline {
+                    font-size: 0.85rem;
+                    padding: 0.625rem 0.875rem;
+                    border-radius: 6px;
+                    line-height: 1.45;
                 }
                 
                 .bwc-stat-value {
