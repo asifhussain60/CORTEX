@@ -6,193 +6,296 @@
     <title>Phase 13B STS Validation - CORTEX</title>
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <!-- Logo Header -->
-    <div class="logo-header">
-        <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo" />
-    </div>
-    
     <!-- Breadcrumb Navigation -->
-    <nav class="breadcrumb">
-        <a href="../index.html">Home</a>
-        <span class="separator">→</span>
-        <span class="current">Validation</span>
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html"><i class="fas fa-home" aria-hidden="true"></i> Home</a>
+        <span class="breadcrumb-separator">→</span>
+        <span class="breadcrumb-current">Validation</span>
     </nav>
     
     <!-- Main Content -->
     <main class="container">
-        <!-- Feature Benefit Panel -->
-        <div class="feature-benefit-panel">
-            <span class="icon">✅</span>
-            <p class="description">
-                Trust matters in AI systems. Phase 13B System Test Suite (STS) validates CORTEX's 9 core capabilities 
-                through automated end-to-end tests—from deployment to multi-workspace detection, TDD enforcement to 
-                vision-based mockup analysis. Every feature is proven to work in real-world scenarios before release, 
-                with 72% average efficiency gains measured and documented. You're not just getting promises; you're 
-                getting battle-tested intelligence that saves hours of development time.
-            </p>
+        <!-- Hero Section with Logo and Title Row -->
+        <section class="hero" id="main-content">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 2.5rem; flex-wrap: wrap; margin-bottom: 2rem;">
+                <!-- Logo -->
+                <a href="../index.html">
+                    <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" style="width: 200px; height: 200px; filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.5)); transition: filter 0.2s ease-in-out;">
+                </a>
+                <!-- Title and Metadata -->
+                <div style="text-align: center;">
+                    <h1 class="hero-title" style="margin-bottom: 0.5rem;">✅ STS Validation</h1>
+                    <p class="hero-subtitle" style="margin-bottom: 1rem;">Phase 13B System Test Suite validates CORTEX's 9 core capabilities</p>
+                    <div class="file-metadata">
+                        <span class="metadata-item">🎯 9/9 Validated</span>
+                        <span class="metadata-item">⚡ 72% Time Savings</span>
+                        <span class="metadata-item">✅ 100% Pass Rate</span>
+                        <span class="metadata-item">📅 Updated: Dec 2025</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Feature Benefit Panel (Contained Action Panel Style) -->
+        <div class="glass-card" style="padding: 2.5rem 3rem; margin-bottom: 2rem; border-left: 4px solid var(--success);">
+            <div style="display: flex; align-items: flex-start; gap: 1.5rem;">
+                <div style="width: 60px; height: 60px; min-width: 60px; background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(0, 212, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-shield-alt" style="font-size: 1.75rem; color: var(--success);"></i>
+                </div>
+                <div>
+                    <h2 style="color: var(--success); margin-bottom: 0.75rem; font-size: 1.25rem;"><i class="fas fa-check-circle" aria-hidden="true"></i> Battle-Tested Intelligence</h2>
+                    <p style="color: var(--text-secondary); line-height: 1.8; margin: 0;">
+                        Trust matters in AI systems. Phase 13B System Test Suite (STS) validates CORTEX's 9 core capabilities 
+                        through automated end-to-end tests—from deployment to multi-workspace detection, TDD enforcement to 
+                        vision-based mockup analysis. Every feature is proven to work in real-world scenarios before release, 
+                        with 72% average efficiency gains measured and documented.
+                    </p>
+                </div>
+            </div>
         </div>
         
-        <!-- Main Content Card -->
-        <div class="glass-card">
-            <h1>Phase 13B: System Test Suite (STS) Validation</h1>
+        <!-- Key Metrics -->
+        <section class="section-overview" style="margin-bottom: 2rem;">
+            <h2 class="section-title"><i class="fas fa-chart-bar" aria-hidden="true"></i> Validation Results</h2>
             
-            <!-- Key Metrics -->
-            <section class="section-overview">
-                <h2>📊 Validation Results</h2>
-                
-                <div class="metrics-grid">
-                    <div class="metric-card">
-                        <div class="metric-value">9/9</div>
-                        <div class="metric-label">Capabilities Validated</div>
+            <div class="metrics-grid-4">
+                <div class="glass-card metric-card">
+                    <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(0, 212, 255, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-tasks" style="font-size: 1.5rem; color: var(--success);"></i>
                     </div>
-                    <div class="metric-card">
-                        <div class="metric-value">72%</div>
-                        <div class="metric-label">Avg Time Savings</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-value">100%</div>
-                        <div class="metric-label">Test Pass Rate</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-value">E2E</div>
-                        <div class="metric-label">Real-World Tests</div>
-                    </div>
+                    <div class="metric-value">9/9</div>
+                    <div class="metric-label">Capabilities Validated</div>
                 </div>
-            </section>
-            
-            <!-- 9 Validated Capabilities -->
-            <section class="section-workflow">
-                <h2>🎯 9 Validated Capabilities</h2>
-                
-                <div class="capability-grid">
-                    <div class="glass-card capability-card">
-                        <span class="badge badge-success">Capability 1</span>
-                        <h3>🚀 Deployment Validation</h3>
-                        <p><strong>What's Tested:</strong> Fresh CORTEX installation from scratch</p>
-                        <ul>
-                            <li>Clone repository</li>
-                            <li>Install dependencies</li>
-                            <li>Configure cortex.config.json</li>
-                            <li>Verify health check passes</li>
-                        </ul>
-                        <p class="efficiency"><strong>Efficiency:</strong> 75% time savings (30min → 7min)</p>
+                <div class="glass-card metric-card">
+                    <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-tachometer-alt" style="font-size: 1.5rem; color: var(--accent-primary);"></i>
                     </div>
-                    
-                    <div class="glass-card capability-card">
-                        <span class="badge badge-success">Capability 2</span>
-                        <h3>🏗️ Multi-Workspace Detection</h3>
-                        <p><strong>What's Tested:</strong> 1:∞ architecture with isolated contexts</p>
-                        <ul>
-                            <li>Auto-detect workspace roots</li>
-                            <li>Create Tier 3 databases per workspace</li>
-                            <li>Isolate project contexts</li>
-                            <li>Share Tier 0-2 knowledge</li>
-                        </ul>
-                        <p class="efficiency"><strong>Efficiency:</strong> 80% time savings (15min → 3min)</p>
-                    </div>
-                    
-                    <div class="glass-card capability-card">
-                        <span class="badge badge-success">Capability 3</span>
-                        <h3>🔄 Upgrade Orchestrator</h3>
-                        <p><strong>What's Tested:</strong> Brain-safe upgrades with zero data loss</p>
-                        <ul>
-                            <li>Backup brain databases</li>
-                            <li>Execute 9-phase upgrade workflow</li>
-                            <li>Validate brain integrity</li>
-                            <li>Rollback on failure</li>
-                        </ul>
-                        <p class="efficiency"><strong>Efficiency:</strong> 85% time savings (60min → 9min)</p>
-                    </div>
-                    
-                    <div class="glass-card capability-card">
-                        <span class="badge badge-success">Capability 4</span>
-                        <h3>🎭 End-to-End Orchestration</h3>
-                        <p><strong>What's Tested:</strong> Complete feature implementation cycle</p>
-                        <ul>
-                            <li>Planning System (DoR validation)</li>
-                            <li>TDD Mastery (RED-GREEN-REFACTOR)</li>
-                            <li>Autonomous execution</li>
-                            <li>DoD compliance verification</li>
-                        </ul>
-                        <p class="efficiency"><strong>Efficiency:</strong> 70% time savings (8h → 2.4h)</p>
-                    </div>
-                    
-                    <div class="glass-card capability-card">
-                        <span class="badge badge-success">Capability 5</span>
-                        <h3>🧠 Brain Persistence</h3>
-                        <p><strong>What's Tested:</strong> 4-Tier Brain data integrity</p>
-                        <ul>
-                            <li>Tier 0: SKULL rules enforcement</li>
-                            <li>Tier 1: Working memory FIFO (70 conversations)</li>
-                            <li>Tier 2: Knowledge graph (8,429 nodes)</li>
-                            <li>Tier 3: Per-workspace context</li>
-                        </ul>
-                        <p class="efficiency"><strong>Efficiency:</strong> 65% time savings (context restoration)</p>
-                    </div>
-                    
-                    <div class="glass-card capability-card">
-                        <span class="badge badge-success">Capability 6</span>
-                        <h3>🤝 Agent Collaboration</h3>
-                        <p><strong>What's Tested:</strong> Multi-agent coordination</p>
-                        <ul>
-                            <li>Strategic Planning Agent</li>
-                            <li>Code Execution Agent</li>
-                            <li>Shared context via BrainIntegrator</li>
-                            <li>Failure pattern learning</li>
-                        </ul>
-                        <p class="efficiency"><strong>Efficiency:</strong> 60% time savings (complex tasks)</p>
-                    </div>
-                    
-                    <div class="glass-card capability-card">
-                        <span class="badge badge-success">Capability 7</span>
-                        <h3>⚡ Performance Optimization</h3>
-                        <p><strong>What's Tested:</strong> System responsiveness under load</p>
-                        <ul>
-                            <li>Planning System: <3s response</li>
-                            <li>TDD Cycle: <5min per phase</li>
-                            <li>Brain query: <200ms</li>
-                            <li>Dashboard load: <2s</li>
-                        </ul>
-                        <p class="efficiency"><strong>Efficiency:</strong> 70% faster than manual workflows</p>
-                    </div>
-                    
-                    <div class="glass-card capability-card">
-                        <span class="badge badge-success">Capability 8</span>
-                        <h3>🔒 Regression Prevention</h3>
-                        <p><strong>What's Tested:</strong> No feature breakage across versions</p>
-                        <ul>
-                            <li>Run 770 LOC test suite</li>
-                            <li>Validate SKULL rule enforcement</li>
-                            <li>Check DoR/DoD compliance</li>
-                            <li>Verify TDD mandatory cycles</li>
-                        </ul>
-                        <p class="efficiency"><strong>Efficiency:</strong> 100% bug prevention (pre-release)</p>
-                    </div>
-                    
-                    <div class="glass-card capability-card">
-                        <span class="badge badge-success">Capability 9</span>
-                        <h3>👁️ Vision API / Mockup Analysis</h3>
-                        <p><strong>What's Tested:</strong> Screenshot-based UI validation</p>
-                        <ul>
-                            <li>Analyze mockup images</li>
-                            <li>Extract color palette (20 colors)</li>
-                            <li>Detect UI elements (68 detected)</li>
-                            <li>Generate implementation suggestions</li>
-                        </ul>
-                        <p class="efficiency"><strong>Efficiency:</strong> 81% time savings (1.5h → 17min)</p>
-                    </div>
+                    <div class="metric-value">72%</div>
+                    <div class="metric-label">Avg Time Savings</div>
                 </div>
-            </section>
+                <div class="glass-card metric-card">
+                    <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(123, 97, 255, 0.2), rgba(0, 212, 255, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-check-circle" style="font-size: 1.5rem; color: var(--accent-secondary);"></i>
+                    </div>
+                    <div class="metric-value">100%</div>
+                    <div class="metric-label">Test Pass Rate</div>
+                </div>
+                <div class="glass-card metric-card">
+                    <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(255, 165, 0, 0.2), rgba(255, 68, 68, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-globe" style="font-size: 1.5rem; color: var(--warning);"></i>
+                    </div>
+                    <div class="metric-value">E2E</div>
+                    <div class="metric-label">Real-World Tests</div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 9 Validated Capabilities -->
+        <section class="section-workflow">
+            <h2 class="section-title"><i class="fas fa-bullseye" aria-hidden="true"></i> 9 Validated Capabilities</h2>
             
-            <!-- STS Workflow -->
-            <section class="section-architecture">
-                <h2>🔄 STS Validation Workflow</h2>
+            <div class="feature-grid feature-grid-3">
+                <!-- Capability 1: Deployment -->
+                <div class="glass-card metric-card" style="text-align: left; padding: 1.5rem;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(0, 212, 255, 0.2)); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-rocket" style="color: var(--success);"></i>
+                        </div>
+                        <div>
+                            <span class="badge badge-success" style="font-size: 0.7rem;">Capability 1</span>
+                            <h4 style="margin: 0; color: var(--text-primary);">Deployment Validation</h4>
+                        </div>
+                    </div>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.75rem;"><strong>What's Tested:</strong> Fresh CORTEX installation from scratch</p>
+                    <ul style="color: var(--text-muted); font-size: 0.85rem; margin: 0; padding-left: 1.25rem;">
+                        <li>Clone repository</li>
+                        <li>Install dependencies</li>
+                        <li>Configure cortex.config.json</li>
+                        <li>Verify health check passes</li>
+                    </ul>
+                    <p style="color: var(--success); font-size: 0.85rem; margin-top: 0.75rem; margin-bottom: 0;"><i class="fas fa-bolt"></i> 75% time savings (30min → 7min)</p>
+                </div>
                 
-                <div class="diagram-container">
-                    <div id="stsWorkflow" class="diagram-canvas">
-                        <pre class="mermaid">
+                <!-- Capability 2: Multi-Workspace -->
+                <div class="glass-card metric-card" style="text-align: left; padding: 1.5rem;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-sitemap" style="color: var(--accent-primary);"></i>
+                        </div>
+                        <div>
+                            <span class="badge badge-success" style="font-size: 0.7rem;">Capability 2</span>
+                            <h4 style="margin: 0; color: var(--text-primary);">Multi-Workspace Detection</h4>
+                        </div>
+                    </div>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.75rem;"><strong>What's Tested:</strong> 1:∞ architecture with isolated contexts</p>
+                    <ul style="color: var(--text-muted); font-size: 0.85rem; margin: 0; padding-left: 1.25rem;">
+                        <li>Auto-detect workspace roots</li>
+                        <li>Create Tier 3 databases per workspace</li>
+                        <li>Isolate project contexts</li>
+                        <li>Share Tier 0-2 knowledge</li>
+                    </ul>
+                    <p style="color: var(--success); font-size: 0.85rem; margin-top: 0.75rem; margin-bottom: 0;"><i class="fas fa-bolt"></i> 80% time savings (15min → 3min)</p>
+                </div>
+                
+                <!-- Capability 3: Upgrade -->
+                <div class="glass-card metric-card" style="text-align: left; padding: 1.5rem;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(123, 97, 255, 0.2), rgba(0, 212, 255, 0.2)); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-sync-alt" style="color: var(--accent-secondary);"></i>
+                        </div>
+                        <div>
+                            <span class="badge badge-success" style="font-size: 0.7rem;">Capability 3</span>
+                            <h4 style="margin: 0; color: var(--text-primary);">Upgrade Orchestrator</h4>
+                        </div>
+                    </div>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.75rem;"><strong>What's Tested:</strong> Brain-safe upgrades with zero data loss</p>
+                    <ul style="color: var(--text-muted); font-size: 0.85rem; margin: 0; padding-left: 1.25rem;">
+                        <li>Backup brain databases</li>
+                        <li>Execute 9-phase upgrade workflow</li>
+                        <li>Validate brain integrity</li>
+                        <li>Rollback on failure</li>
+                    </ul>
+                    <p style="color: var(--success); font-size: 0.85rem; margin-top: 0.75rem; margin-bottom: 0;"><i class="fas fa-bolt"></i> 85% time savings (60min → 9min)</p>
+                </div>
+                
+                <!-- Capability 4: E2E Orchestration -->
+                <div class="glass-card metric-card" style="text-align: left; padding: 1.5rem;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(255, 165, 0, 0.2), rgba(255, 68, 68, 0.2)); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-theater-masks" style="color: var(--warning);"></i>
+                        </div>
+                        <div>
+                            <span class="badge badge-success" style="font-size: 0.7rem;">Capability 4</span>
+                            <h4 style="margin: 0; color: var(--text-primary);">End-to-End Orchestration</h4>
+                        </div>
+                    </div>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.75rem;"><strong>What's Tested:</strong> Complete feature implementation cycle</p>
+                    <ul style="color: var(--text-muted); font-size: 0.85rem; margin: 0; padding-left: 1.25rem;">
+                        <li>Planning System (DoR validation)</li>
+                        <li>TDD Mastery (RED-GREEN-REFACTOR)</li>
+                        <li>Autonomous execution</li>
+                        <li>DoD compliance verification</li>
+                    </ul>
+                    <p style="color: var(--success); font-size: 0.85rem; margin-top: 0.75rem; margin-bottom: 0;"><i class="fas fa-bolt"></i> 70% time savings (8h → 2.4h)</p>
+                </div>
+                
+                <!-- Capability 5: Brain Persistence -->
+                <div class="glass-card metric-card" style="text-align: left; padding: 1.5rem;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-brain" style="color: var(--info);"></i>
+                        </div>
+                        <div>
+                            <span class="badge badge-success" style="font-size: 0.7rem;">Capability 5</span>
+                            <h4 style="margin: 0; color: var(--text-primary);">Brain Persistence</h4>
+                        </div>
+                    </div>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.75rem;"><strong>What's Tested:</strong> 4-Tier Brain data integrity</p>
+                    <ul style="color: var(--text-muted); font-size: 0.85rem; margin: 0; padding-left: 1.25rem;">
+                        <li>Tier 0: SKULL rules enforcement</li>
+                        <li>Tier 1: Working memory FIFO (70 conversations)</li>
+                        <li>Tier 2: Knowledge graph (8,429 nodes)</li>
+                        <li>Tier 3: Per-workspace context</li>
+                    </ul>
+                    <p style="color: var(--success); font-size: 0.85rem; margin-top: 0.75rem; margin-bottom: 0;"><i class="fas fa-bolt"></i> 65% time savings (context restoration)</p>
+                </div>
+                
+                <!-- Capability 6: Agent Collaboration -->
+                <div class="glass-card metric-card" style="text-align: left; padding: 1.5rem;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(59, 130, 246, 0.2)); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-users" style="color: var(--success);"></i>
+                        </div>
+                        <div>
+                            <span class="badge badge-success" style="font-size: 0.7rem;">Capability 6</span>
+                            <h4 style="margin: 0; color: var(--text-primary);">Agent Collaboration</h4>
+                        </div>
+                    </div>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.75rem;"><strong>What's Tested:</strong> Multi-agent coordination</p>
+                    <ul style="color: var(--text-muted); font-size: 0.85rem; margin: 0; padding-left: 1.25rem;">
+                        <li>Strategic Planning Agent</li>
+                        <li>Code Execution Agent</li>
+                        <li>Shared context via BrainIntegrator</li>
+                        <li>Failure pattern learning</li>
+                    </ul>
+                    <p style="color: var(--success); font-size: 0.85rem; margin-top: 0.75rem; margin-bottom: 0;"><i class="fas fa-bolt"></i> 60% time savings (complex tasks)</p>
+                </div>
+                
+                <!-- Capability 7: Performance -->
+                <div class="glass-card metric-card" style="text-align: left; padding: 1.5rem;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(255, 68, 68, 0.2), rgba(255, 165, 0, 0.2)); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-tachometer-alt" style="color: var(--danger);"></i>
+                        </div>
+                        <div>
+                            <span class="badge badge-success" style="font-size: 0.7rem;">Capability 7</span>
+                            <h4 style="margin: 0; color: var(--text-primary);">Performance Optimization</h4>
+                        </div>
+                    </div>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.75rem;"><strong>What's Tested:</strong> System responsiveness under load</p>
+                    <ul style="color: var(--text-muted); font-size: 0.85rem; margin: 0; padding-left: 1.25rem;">
+                        <li>Planning System: &lt;3s response</li>
+                        <li>TDD Cycle: &lt;5min per phase</li>
+                        <li>Brain query: &lt;200ms</li>
+                        <li>Dashboard load: &lt;2s</li>
+                    </ul>
+                    <p style="color: var(--success); font-size: 0.85rem; margin-top: 0.75rem; margin-bottom: 0;"><i class="fas fa-bolt"></i> 70% faster than manual workflows</p>
+                </div>
+                
+                <!-- Capability 8: Regression Prevention -->
+                <div class="glass-card metric-card" style="text-align: left; padding: 1.5rem;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(255, 68, 68, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-lock" style="color: var(--danger);"></i>
+                        </div>
+                        <div>
+                            <span class="badge badge-success" style="font-size: 0.7rem;">Capability 8</span>
+                            <h4 style="margin: 0; color: var(--text-primary);">Regression Prevention</h4>
+                        </div>
+                    </div>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.75rem;"><strong>What's Tested:</strong> No feature breakage across versions</p>
+                    <ul style="color: var(--text-muted); font-size: 0.85rem; margin: 0; padding-left: 1.25rem;">
+                        <li>Run 770 LOC test suite</li>
+                        <li>Validate SKULL rule enforcement</li>
+                        <li>Check DoR/DoD compliance</li>
+                        <li>Verify TDD mandatory cycles</li>
+                    </ul>
+                    <p style="color: var(--success); font-size: 0.85rem; margin-top: 0.75rem; margin-bottom: 0;"><i class="fas fa-bolt"></i> 100% bug prevention (pre-release)</p>
+                </div>
+                
+                <!-- Capability 9: Vision API -->
+                <div class="glass-card metric-card" style="text-align: left; padding: 1.5rem;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(16, 185, 129, 0.2)); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-eye" style="color: var(--accent-primary);"></i>
+                        </div>
+                        <div>
+                            <span class="badge badge-success" style="font-size: 0.7rem;">Capability 9</span>
+                            <h4 style="margin: 0; color: var(--text-primary);">Vision API / Mockup Analysis</h4>
+                        </div>
+                    </div>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.75rem;"><strong>What's Tested:</strong> Screenshot-based UI validation</p>
+                    <ul style="color: var(--text-muted); font-size: 0.85rem; margin: 0; padding-left: 1.25rem;">
+                        <li>Analyze mockup images</li>
+                        <li>Extract color palette (20 colors)</li>
+                        <li>Detect UI elements (68 detected)</li>
+                        <li>Generate implementation suggestions</li>
+                    </ul>
+                    <p style="color: var(--success); font-size: 0.85rem; margin-top: 0.75rem; margin-bottom: 0;"><i class="fas fa-bolt"></i> 81% time savings (1.5h → 17min)</p>
+                </div>
+            </div>
+        </section>
+            
+        <!-- STS Workflow -->
+        <section class="section-architecture" style="margin-top: 2rem;">
+            <h2 class="section-title"><i class="fas fa-sync-alt" aria-hidden="true"></i> STS Validation Workflow</h2>
+            
+            <div class="diagram-container">
+                <div id="stsWorkflow" class="diagram-canvas">
+                    <pre class="mermaid">
 sequenceDiagram
     participant Dev as Developer
     participant STS as STS Validator
@@ -226,9 +329,9 @@ sequenceDiagram
                 </div>
             </section>
             
-            <!-- Efficiency Analysis -->
-            <section class="section-metrics">
-                <h2>📈 Efficiency Analysis</h2>
+        <!-- Efficiency Analysis -->
+        <section class="section-metrics" style="margin-top: 2rem;">
+            <h2 class="section-title"><i class="fas fa-chart-line" aria-hidden="true"></i> Efficiency Analysis</h2>
                 
                 <div class="glass-card">
                     <h3>Time Savings Breakdown</h3>
@@ -307,73 +410,89 @@ sequenceDiagram
             </section>
             
             <!-- Test Execution -->
-            <section class="section-testing">
-                <h2>🧪 Test Execution Details</h2>
-                
-                <div class="test-details-grid">
-                    <div class="glass-card test-detail-card">
-                        <h3>Test Suite Stats</h3>
-                        <ul>
-                            <li><strong>Total Tests:</strong> 770 LOC validation suite</li>
-                            <li><strong>Execution Time:</strong> ~15 minutes</li>
-                            <li><strong>Pass Rate:</strong> 100%</li>
-                            <li><strong>Coverage:</strong> 9 critical capabilities</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="glass-card test-detail-card">
-                        <h3>Validation Criteria</h3>
-                        <ul>
-                            <li>✅ Functional correctness</li>
-                            <li>✅ Performance benchmarks met</li>
-                            <li>✅ Data integrity preserved</li>
-                            <li>✅ Error handling robust</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="glass-card test-detail-card">
-                        <h3>Quality Gates</h3>
-                        <ul>
-                            <li>DoR validation (8 requirements)</li>
-                            <li>DoD compliance (6 checks)</li>
-                            <li>SKULL rule enforcement (22 rules)</li>
-                            <li>TDD mandatory (RED-GREEN-REFACTOR)</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
+        <section class="section-testing" style="margin-top: 2rem;">
+            <h2 class="section-title"><i class="fas fa-vial" aria-hidden="true"></i> Test Execution Details</h2>
             
-            <!-- Next Steps -->
-            <section class="section-next-steps">
-                <h2>📚 Related Documentation</h2>
-                
-                <div class="links-grid">
-                    <a href="capabilities.html" class="glass-card link-card">
-                        <span class="icon">🎯</span>
-                        <h3>Capability Details</h3>
-                        <p>Deep-dive into each validated capability</p>
-                    </a>
-                    
-                    <a href="metrics.html" class="glass-card link-card">
-                        <span class="icon">📊</span>
-                        <h3>Performance Metrics</h3>
-                        <p>Detailed benchmarks and efficiency data</p>
-                    </a>
-                    
-                    <a href="../architecture/four-tier-brain.html" class="glass-card link-card">
-                        <span class="icon">🧠</span>
-                        <h3>4-Tier Brain</h3>
-                        <p>Architecture validated in STS</p>
-                    </a>
-                    
-                    <a href="../governance/skull-rulebook.html" class="glass-card link-card">
-                        <span class="icon">🛡️</span>
-                        <h3>SKULL Rules</h3>
-                        <p>22 governance rules enforced</p>
-                    </a>
+            <div class="feature-grid feature-grid-3">
+                <div class="glass-card" style="padding: 1.5rem;">
+                    <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-list-ol" style="font-size: 1.5rem; color: var(--accent-primary);"></i>
+                    </div>
+                    <h3 style="text-align: center; margin-bottom: 1rem;">Test Suite Stats</h3>
+                    <ul style="color: var(--text-secondary); font-size: 0.9rem; padding-left: 1.25rem;">
+                        <li><strong>Total Tests:</strong> 770 LOC validation suite</li>
+                        <li><strong>Execution Time:</strong> ~15 minutes</li>
+                        <li><strong>Pass Rate:</strong> 100%</li>
+                        <li><strong>Coverage:</strong> 9 critical capabilities</li>
+                    </ul>
                 </div>
-            </section>
-        </div>
+                
+                <div class="glass-card" style="padding: 1.5rem;">
+                    <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(0, 212, 255, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-clipboard-check" style="font-size: 1.5rem; color: var(--success);"></i>
+                    </div>
+                    <h3 style="text-align: center; margin-bottom: 1rem;">Validation Criteria</h3>
+                    <ul style="color: var(--text-secondary); font-size: 0.9rem; padding-left: 1.25rem;">
+                        <li><i class="fas fa-check" style="color: var(--success);"></i> Functional correctness</li>
+                        <li><i class="fas fa-check" style="color: var(--success);"></i> Performance benchmarks met</li>
+                        <li><i class="fas fa-check" style="color: var(--success);"></i> Data integrity preserved</li>
+                        <li><i class="fas fa-check" style="color: var(--success);"></i> Error handling robust</li>
+                    </ul>
+                </div>
+                
+                <div class="glass-card" style="padding: 1.5rem;">
+                    <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(123, 97, 255, 0.2), rgba(0, 212, 255, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-shield-alt" style="font-size: 1.5rem; color: var(--accent-secondary);"></i>
+                    </div>
+                    <h3 style="text-align: center; margin-bottom: 1rem;">Quality Gates</h3>
+                    <ul style="color: var(--text-secondary); font-size: 0.9rem; padding-left: 1.25rem;">
+                        <li>DoR validation (8 requirements)</li>
+                        <li>DoD compliance (6 checks)</li>
+                        <li>SKULL rule enforcement (22 rules)</li>
+                        <li>TDD mandatory (RED-GREEN-REFACTOR)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Next Steps -->
+        <section class="section-next-steps" style="margin-top: 2rem;">
+            <h2 class="section-title"><i class="fas fa-book-open" aria-hidden="true"></i> Related Documentation</h2>
+            
+            <div class="metrics-grid-4">
+                <a href="capabilities.html" class="glass-card metric-card" style="text-decoration: none;">
+                    <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-bullseye" style="font-size: 1.5rem; color: var(--accent-primary);"></i>
+                    </div>
+                    <h4 style="color: var(--text-primary); margin-bottom: 0.5rem;">Capability Details</h4>
+                    <p class="metric-description">Deep-dive into each validated capability</p>
+                </a>
+                
+                <a href="metrics.html" class="glass-card metric-card" style="text-decoration: none;">
+                    <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(0, 212, 255, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-chart-bar" style="font-size: 1.5rem; color: var(--success);"></i>
+                    </div>
+                    <h4 style="color: var(--text-primary); margin-bottom: 0.5rem;">Performance Metrics</h4>
+                    <p class="metric-description">Detailed benchmarks and efficiency data</p>
+                </a>
+                
+                <a href="../architecture/four-tier-brain.html" class="glass-card metric-card" style="text-decoration: none;">
+                    <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(123, 97, 255, 0.2), rgba(59, 130, 246, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-brain" style="font-size: 1.5rem; color: var(--accent-secondary);"></i>
+                    </div>
+                    <h4 style="color: var(--text-primary); margin-bottom: 0.5rem;">4-Tier Brain</h4>
+                    <p class="metric-description">Architecture validated in STS</p>
+                </a>
+                
+                <a href="../governance/skull-rulebook.html" class="glass-card metric-card" style="text-decoration: none;">
+                    <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(255, 68, 68, 0.2), rgba(255, 165, 0, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-skull-crossbones" style="font-size: 1.5rem; color: var(--danger);"></i>
+                    </div>
+                    <h4 style="color: var(--text-primary); margin-bottom: 0.5rem;">SKULL Rules</h4>
+                    <p class="metric-description">22 governance rules enforced</p>
+                </a>
+            </div>
+        </section>
     </main>
     
     <!-- Mermaid Library -->
