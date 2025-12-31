@@ -22,20 +22,26 @@
         <span class="breadcrumb-separator">→</span>
         <span class="breadcrumb-current">Knowledge Library</span>
     </nav>
-    
-    <!-- Logo Header (Below Breadcrumb) -->
-    <div class="logo-header">
-        <a href="../index.html">
-            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
-        </a>
-    </div>
 
-    <!-- Hero Section -->
+    <!-- Hero Section with Logo and Title Row -->
     <section class="hero" id="main-content">
-        <h1 class="hero-title">📚 Knowledge-Driven Code</h1>
-        <p class="hero-subtitle">
-            35 best practice libraries that CORTEX consults when implementing code—covering testing, security, architecture, and software craft
-        </p>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 2.5rem; flex-wrap: wrap; margin-bottom: 2rem;">
+            <!-- Logo -->
+            <a href="../index.html">
+                <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" style="width: 200px; height: 200px; filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.5)); transition: filter 0.2s ease-in-out;">
+            </a>
+            <!-- Title and Metadata -->
+            <div style="text-align: center;">
+                <h1 class="hero-title" style="margin-bottom: 0.5rem;">📚 Knowledge-Driven Code</h1>
+                <p class="hero-subtitle" style="margin-bottom: 1rem;">35 best practice libraries that CORTEX consults when implementing code</p>
+                <div class="file-metadata">
+                    <span class="metadata-item">📖 35 Best Practices</span>
+                    <span class="metadata-item">🏗️ 16 Categories</span>
+                    <span class="metadata-item">🌐 5 Domain Groups</span>
+                    <span class="metadata-item">📅 Updated: Dec 2025</span>
+                </div>
+            </div>
+        </div>
     </section>
 
     <!-- Interactive Knowledge Map -->
@@ -126,7 +132,9 @@
                 <!-- Domain 1: Frontend & UI -->
                 <article class="domain-card glass-card" data-domain="frontend-ui">
                     <div class="domain-header">
-                        <span class="domain-icon">🎨</span>
+                        <div style="width: 50px; height: 50px; background: linear-gradient(135deg, rgba(33, 150, 243, 0.2), rgba(100, 181, 246, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-palette" style="font-size: 1.5rem; color: #2196F3;"></i>
+                        </div>
                         <div class="domain-title-group">
                             <h3 class="domain-title">Frontend & UI</h3>
                             <span class="domain-file-count">14 files</span>
@@ -137,13 +145,13 @@
                     </p>
                     <div class="category-preview">
                         <a href="frontend.html" class="category-chip" data-category="frontend">
-                            💻 Frontend
+                            <i class="fas fa-laptop-code"></i> Frontend
                         </a>
                         <a href="ui-ux.html" class="category-chip" data-category="ui-ux">
-                            🎨 UI/UX
+                            <i class="fas fa-paint-brush"></i> UI/UX
                         </a>
                         <a href="mobile.html" class="category-chip" data-category="mobile">
-                            📱 Mobile
+                            <i class="fas fa-mobile-alt"></i> Mobile
                         </a>
                     </div>
                     <div class="domain-footer">
@@ -154,7 +162,9 @@
                 <!-- Domain 2: Backend & APIs -->
                 <article class="domain-card glass-card" data-domain="backend-apis">
                     <div class="domain-header">
-                        <span class="domain-icon">🔌</span>
+                        <div style="width: 50px; height: 50px; background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(129, 199, 132, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-plug" style="font-size: 1.5rem; color: #4CAF50;"></i>
+                        </div>
                         <div class="domain-title-group">
                             <h3 class="domain-title">Backend & APIs</h3>
                             <span class="domain-file-count">12 files</span>
@@ -165,13 +175,13 @@
                     </p>
                     <div class="category-preview">
                         <a href="api-design.html" class="category-chip" data-category="api-design">
-                            🔌 API Design
+                            <i class="fas fa-plug"></i> API Design
                         </a>
                         <a href="microservices.html" class="category-chip" data-category="microservices">
-                            ⚙️ Microservices
+                            <i class="fas fa-cogs"></i> Microservices
                         </a>
                         <a href="messaging.html" class="category-chip" data-category="messaging">
-                            📬 Messaging
+                            <i class="fas fa-envelope"></i> Messaging
                         </a>
                     </div>
                     <div class="domain-footer">
@@ -182,7 +192,9 @@
                 <!-- Domain 3: Data & Storage -->
                 <article class="domain-card glass-card" data-domain="data-storage">
                     <div class="domain-header">
-                        <span class="domain-icon">🗄️</span>
+                        <div style="width: 50px; height: 50px; background: linear-gradient(135deg, rgba(255, 152, 0, 0.2), rgba(255, 183, 77, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-database" style="font-size: 1.5rem; color: #FF9800;"></i>
+                        </div>
                         <div class="domain-title-group">
                             <h3 class="domain-title">Data & Storage</h3>
                             <span class="domain-file-count">9 files</span>
@@ -193,10 +205,10 @@
                     </p>
                     <div class="category-preview">
                         <a href="database.html" class="category-chip" data-category="database">
-                            🗄️ Databases
+                            <i class="fas fa-database"></i> Databases
                         </a>
                         <a href="performance.html" class="category-chip" data-category="performance">
-                            ⚡ Performance
+                            <i class="fas fa-bolt"></i> Performance
                         </a>
                     </div>
                     <div class="domain-footer">
@@ -207,7 +219,9 @@
                 <!-- Domain 4: Infrastructure & Cloud -->
                 <article class="domain-card glass-card" data-domain="infrastructure-cloud">
                     <div class="domain-header">
-                        <span class="domain-icon">☁️</span>
+                        <div style="width: 50px; height: 50px; background: linear-gradient(135deg, rgba(156, 39, 176, 0.2), rgba(186, 104, 200, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-cloud" style="font-size: 1.5rem; color: #9C27B0;"></i>
+                        </div>
                         <div class="domain-title-group">
                             <h3 class="domain-title">Infrastructure & Cloud</h3>
                             <span class="domain-file-count">10 files</span>
@@ -218,13 +232,13 @@
                     </p>
                     <div class="category-preview">
                         <a href="cloud.html" class="category-chip" data-category="cloud">
-                            ☁️ Cloud
+                            <i class="fas fa-cloud"></i> Cloud
                         </a>
                         <a href="containers.html" class="category-chip" data-category="containers">
-                            📦 Containers
+                            <i class="fas fa-cube"></i> Containers
                         </a>
                         <a href="devops.html" class="category-chip" data-category="devops">
-                            🚀 DevOps
+                            <i class="fas fa-rocket"></i> DevOps
                         </a>
                     </div>
                     <div class="domain-footer">
@@ -235,7 +249,9 @@
                 <!-- Domain 5: Software Craft -->
                 <article class="domain-card glass-card" data-domain="software-craft">
                     <div class="domain-header">
-                        <span class="domain-icon">🏗️</span>
+                        <div style="width: 50px; height: 50px; background: linear-gradient(135deg, rgba(244, 67, 54, 0.2), rgba(239, 83, 80, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-layer-group" style="font-size: 1.5rem; color: #F44336;"></i>
+                        </div>
                         <div class="domain-title-group">
                             <h3 class="domain-title">Software Craft</h3>
                             <span class="domain-file-count">20 files</span>
@@ -246,22 +262,22 @@
                     </p>
                     <div class="category-preview">
                         <a href="engineering.html" class="category-chip" data-category="engineering">
-                            🛠️ Engineering
+                            <i class="fas fa-tools"></i> Engineering
                         </a>
                         <a href="design-patterns.html" class="category-chip" data-category="design-patterns">
-                            🎨 Design Patterns
+                            <i class="fas fa-drafting-compass"></i> Design Patterns
                         </a>
                         <a href="ddd.html" class="category-chip" data-category="ddd">
-                            📐 DDD
+                            <i class="fas fa-project-diagram"></i> DDD
                         </a>
                         <a href="security.html" class="category-chip" data-category="security">
-                            🔒 Security
+                            <i class="fas fa-shield-alt"></i> Security
                         </a>
                         <a href="testing.html" class="category-chip" data-category="testing">
-                            ✅ Testing
+                            <i class="fas fa-check-double"></i> Testing
                         </a>
                         <a href="rag-domains.html" class="category-chip" data-category="rag-domains">
-                            🧠 RAG
+                            <i class="fas fa-brain"></i> RAG
                         </a>
                     </div>
                     <div class="domain-footer">
@@ -415,32 +431,32 @@
             diagramContainer.innerHTML = `
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; padding: 2rem;">
                     <div class="relationship-node">
-                        <div class="relationship-icon">💻</div>
+                        <div class="relationship-icon"><i class="fas fa-laptop-code" style="color: #2196F3;"></i></div>
                         <div>Frontend</div>
                         <div class="relationship-connections">→ Testing, Performance</div>
                     </div>
                     <div class="relationship-node">
-                        <div class="relationship-icon">🔌</div>
+                        <div class="relationship-icon"><i class="fas fa-plug" style="color: #4CAF50;"></i></div>
                         <div>API Design</div>
                         <div class="relationship-connections">→ Security, Testing</div>
                     </div>
                     <div class="relationship-node">
-                        <div class="relationship-icon">⚙️</div>
+                        <div class="relationship-icon"><i class="fas fa-cogs" style="color: #4CAF50;"></i></div>
                         <div>Microservices</div>
                         <div class="relationship-connections">→ Cloud, Containers</div>
                     </div>
                     <div class="relationship-node">
-                        <div class="relationship-icon">🗄️</div>
+                        <div class="relationship-icon"><i class="fas fa-database" style="color: #FF9800;"></i></div>
                         <div>Databases</div>
                         <div class="relationship-connections">→ Performance, Security</div>
                     </div>
                     <div class="relationship-node">
-                        <div class="relationship-icon">☁️</div>
+                        <div class="relationship-icon"><i class="fas fa-cloud" style="color: #9C27B0;"></i></div>
                         <div>Cloud</div>
                         <div class="relationship-connections">→ DevOps, Containers</div>
                     </div>
                     <div class="relationship-node">
-                        <div class="relationship-icon">🛠️</div>
+                        <div class="relationship-icon"><i class="fas fa-tools" style="color: #F44336;"></i></div>
                         <div>Engineering</div>
                         <div class="relationship-connections">→ All Categories</div>
                     </div>

@@ -7,6 +7,7 @@
     <meta name="description" content="Explore CORTEX's powerful features including Planning System, TDD Orchestration, Dashboard System, and intelligent automation">
     <meta name="keywords" content="CORTEX features, AI development tools, planning system, TDD, dashboard, automation">
     <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" href="../assets/images/CORTEX-logo.png" type="image/png">
 </head>
 <body>
@@ -17,32 +18,35 @@
         <span class="breadcrumb-current">Features</span>
     </nav>
 
-    <!-- Logo Header -->
-    <div class="logo-header">
-        <a href="../index.html">
-            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
-        </a>
-    </div>
+    <!-- Hero Section with Logo and Title Row -->
+    <section class="hero" id="main-content">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 2.5rem; flex-wrap: wrap; margin-bottom: 2rem;">
+            <!-- Logo -->
+            <a href="../index.html">
+                <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" style="width: 200px; height: 200px; filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.5)); transition: filter 0.2s ease-in-out;">
+            </a>
+            <!-- Title and Metadata -->
+            <div style="text-align: center;">
+                <h1 class="hero-title" style="margin-bottom: 0.5rem;">✨ CORTEX Features</h1>
+                <p class="hero-subtitle" style="margin-bottom: 1rem;">Powerful AI-driven capabilities that transform your development workflow</p>
+                <div class="file-metadata">
+                    <span class="metadata-item">🎯 Planning System</span>
+                    <span class="metadata-item">✅ TDD Orchestration</span>
+                    <span class="metadata-item">📊 Dashboard System</span>
+                    <span class="metadata-item">📅 Updated: Dec 2025</span>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Main Content -->
     <main class="container">
-        <!-- Hero Section -->
-        <section class="section">
-            <div class="glass-card" style="text-align: center; padding: 3rem 2rem;">
-                <div style="font-size: 4rem; margin-bottom: 1rem;">✨</div>
-                <h1 style="font-size: 2.5rem; margin-bottom: 1rem; line-height: 1.2;">CORTEX Features</h1>
-                <p style="font-size: 1.25rem; color: var(--text-secondary); max-width: 800px; margin: 0 auto; line-height: 1.6;">
-                    Powerful AI-driven capabilities that transform your development workflow through intelligent automation, 
-                    context awareness, and strategic planning
-                </p>
-            </div>
-        </section>
 
         <!-- What Are CORTEX Features -->
         <section class="section">
             <div class="glass-card">
                 <h2 style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem;">
-                    <span style="font-size: 2rem;">🎯</span>
+                    <i class="fas fa-bullseye" style="font-size: 1.75rem; color: var(--accent-primary);"></i>
                     What Are CORTEX Features?
                 </h2>
                 <p style="font-size: 1.0625rem; line-height: 1.75; color: var(--text-secondary); margin-bottom: 1.5rem;">
@@ -60,59 +64,63 @@
 
         <!-- Core Features -->
         <section class="section">
-            <h2 style="font-size: 2rem; margin-bottom: 2rem; text-align: center;">
-                <span style="color: var(--accent-primary);">🚀</span> Core Features
-            </h2>
+            <h2 class="section-title"><i class="fas fa-rocket" aria-hidden="true"></i> Core Features</h2>
             
-            <div class="metrics-grid-3">
+            <div class="feature-grid feature-grid-3">
                 <!-- Planning System -->
                 <a href="planning-system.html" class="glass-card feature-card" style="text-decoration: none; color: inherit; display: block; transition: all 0.3s ease;">
-                    <div style="font-size: 3rem; text-align: center; margin-bottom: 1rem;">📋</div>
-                    <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--accent-primary);">Planning System</h3>
-                    <p style="font-size: 0.875rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;">Strategic Feature Planning</p>
+                    <div style="width: 60px; height: 60px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-clipboard-list" style="font-size: 1.75rem; color: var(--accent-primary);"></i>
+                    </div>
+                    <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--accent-primary); text-align: center;">Planning System</h3>
+                    <p style="font-size: 0.875rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; text-align: center;">Strategic Feature Planning</p>
                     <p style="font-size: 1rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 1.5rem;">
                         Transform vague requirements into crystal-clear, executable plans with automatic DoR/DoD validation, 
                         multi-phase project detection, and test case generation.
                     </p>
                     <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.9375rem;">
-                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border);">✓ 4-folder structured planning</li>
-                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border);">✓ DoR/DoD compliance checks</li>
-                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border);">✓ Automatic TDD integration</li>
-                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border);">✓ Phase-based execution</li>
+                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border);"><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i>4-folder structured planning</li>
+                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border);"><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i>DoR/DoD compliance checks</li>
+                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border);"><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i>Automatic TDD integration</li>
+                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border);"><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i>Phase-based execution</li>
                     </ul>
                 </a>
 
                 <!-- TDD Orchestrator -->
                 <a href="../orchestrators/tdd-orchestrator.html" class="glass-card feature-card" style="text-decoration: none; color: inherit; display: block; transition: all 0.3s ease;">
-                    <div style="font-size: 3rem; text-align: center; margin-bottom: 1rem;">🧪</div>
-                    <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--accent-primary);">TDD Orchestration</h3>
-                    <p style="font-size: 0.875rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;">Test-Driven Development Mastery</p>
+                    <div style="width: 60px; height: 60px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(0, 212, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-vial" style="font-size: 1.75rem; color: var(--success);"></i>
+                    </div>
+                    <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--accent-primary); text-align: center;">TDD Orchestration</h3>
+                    <p style="font-size: 0.875rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; text-align: center;">Test-Driven Development Mastery</p>
                     <p style="font-size: 1rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 1.5rem;">
                         Enforce RED→GREEN→REFACTOR discipline with automated test generation, continuous validation, 
                         and intelligent refactoring suggestions.
                     </p>
                     <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.9375rem;">
-                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border);">✓ Automated test scaffolding</li>
-                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border);">✓ RED phase enforcement</li>
-                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border);">✓ Coverage tracking</li>
-                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border);">✓ Refactoring guidance</li>
+                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border);"><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i>Automated test scaffolding</li>
+                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border);"><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i>RED phase enforcement</li>
+                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border);"><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i>Coverage tracking</li>
+                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border);"><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i>Refactoring guidance</li>
                     </ul>
                 </a>
 
                 <!-- Dashboard System -->
                 <a href="dashboard-system.html" class="glass-card feature-card" style="text-decoration: none; color: inherit; display: block; transition: all 0.3s ease;">
-                    <div style="font-size: 3rem; text-align: center; margin-bottom: 1rem;">🔍</div>
-                    <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--accent-primary);">CORTEX LENS</h3>
-                    <p style="font-size: 0.875rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;">Real-Time Dashboard System</p>
+                    <div style="width: 60px; height: 60px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(123, 97, 255, 0.2), rgba(0, 212, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-search-plus" style="font-size: 1.75rem; color: var(--accent-secondary);"></i>
+                    </div>
+                    <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--accent-primary); text-align: center;">CORTEX LENS</h3>
+                    <p style="font-size: 0.875rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; text-align: center;">Real-Time Dashboard System</p>
                     <p style="font-size: 1rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 1.5rem;">
                         Beautiful glassmorphism dashboards with D3.js visualizations providing real-time insights into 
                         orchestrators, system health, and development metrics.
                     </p>
                     <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.9375rem;">
-                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border);">✓ Interactive D3.js charts</li>
-                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border);">✓ Real-time metrics</li>
-                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border);">✓ System health monitoring</li>
-                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border);">✓ Glassmorphism design</li>
+                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border);"><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i>Interactive D3.js charts</li>
+                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border);"><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i>Real-time metrics</li>
+                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border);"><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i>System health monitoring</li>
+                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border);"><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i>Glassmorphism design</li>
                     </ul>
                 </a>
             </div>
@@ -120,59 +128,63 @@
 
         <!-- Intelligence & Automation -->
         <section class="section">
-            <h2 style="font-size: 2rem; margin-bottom: 2rem; text-align: center;">
-                <span style="color: var(--accent-primary);">🧠</span> Intelligence & Automation
-            </h2>
+            <h2 class="section-title"><i class="fas fa-brain" aria-hidden="true"></i> Intelligence & Automation</h2>
             
-            <div class="metrics-grid-3">
+            <div class="feature-grid feature-grid-3">
                 <!-- Holistic Discovery -->
                 <a href="holistic-discovery.html" class="glass-card feature-card" style="text-decoration: none; color: inherit; display: block; transition: all 0.3s ease;">
-                    <div style="font-size: 3rem; text-align: center; margin-bottom: 1rem;">🔎</div>
-                    <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--accent-primary);">Holistic Discovery</h3>
-                    <p style="font-size: 0.875rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;">Prevent Code Duplication</p>
+                    <div style="width: 60px; height: 60px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-search" style="font-size: 1.75rem; color: var(--info);"></i>
+                    </div>
+                    <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--accent-primary); text-align: center;">Holistic Discovery</h3>
+                    <p style="font-size: 0.875rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; text-align: center;">Prevent Code Duplication</p>
                     <p style="font-size: 1rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 1.5rem;">
                         Search-before-create enforcement that scans your entire codebase before generating new code, 
                         preventing duplication and maintaining architectural consistency.
                     </p>
                     <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.9375rem;">
-                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border);">✓ Semantic code search</li>
-                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border);">✓ Pattern detection</li>
-                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border);">✓ Architecture analysis</li>
-                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border);">✓ Duplicate prevention</li>
+                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border);"><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i>Semantic code search</li>
+                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border);"><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i>Pattern detection</li>
+                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border);"><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i>Architecture analysis</li>
+                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border);"><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i>Duplicate prevention</li>
                     </ul>
                 </a>
 
                 <!-- Response Templates -->
                 <a href="response-templates.html" class="glass-card feature-card" style="text-decoration: none; color: inherit; display: block; transition: all 0.3s ease;">
-                    <div style="font-size: 3rem; text-align: center; margin-bottom: 1rem;">💬</div>
-                    <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--accent-primary);">Response Templates</h3>
-                    <p style="font-size: 0.875rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;">Adaptive Communication</p>
+                    <div style="width: 60px; height: 60px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(16, 185, 129, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-comment-dots" style="font-size: 1.75rem; color: var(--accent-primary);"></i>
+                    </div>
+                    <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--accent-primary); text-align: center;">Response Templates</h3>
+                    <p style="font-size: 0.875rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; text-align: center;">Adaptive Communication</p>
                     <p style="font-size: 1rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 1.5rem;">
                         Dynamic response formatting that scales from instant answers to comprehensive documentation, 
                         with consistent branding and context-aware detail levels.
                     </p>
                     <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.9375rem;">
-                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border);">✓ 5 complexity tiers</li>
-                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border);">✓ Consistent formatting</li>
-                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border);">✓ Brand compliance</li>
-                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border);">✓ Context scaling</li>
+                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border);"><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i>5 complexity tiers</li>
+                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border);"><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i>Consistent formatting</li>
+                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border);"><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i>Brand compliance</li>
+                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border);"><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i>Context scaling</li>
                     </ul>
                 </a>
 
                 <!-- Token Optimization -->
                 <a href="token-optimization.html" class="glass-card feature-card" style="text-decoration: none; color: inherit; display: block; transition: all 0.3s ease;">
-                    <div style="font-size: 3rem; text-align: center; margin-bottom: 1rem;">⚡</div>
-                    <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--accent-primary);">Token Optimization</h3>
-                    <p style="font-size: 0.875rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;">Efficient Context Management</p>
+                    <div style="width: 60px; height: 60px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(255, 165, 0, 0.2), rgba(255, 68, 68, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-bolt" style="font-size: 1.75rem; color: var(--warning);"></i>
+                    </div>
+                    <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--accent-primary); text-align: center;">Token Optimization</h3>
+                    <p style="font-size: 0.875rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; text-align: center;">Efficient Context Management</p>
                     <p style="font-size: 1rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 1.5rem;">
                         Intelligent token usage that maximizes context quality while minimizing costs through smart 
                         summarization, caching, and context pruning.
                     </p>
                     <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.9375rem;">
-                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border);">✓ Context compression</li>
-                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border);">✓ Smart summarization</li>
-                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border);">✓ Cache utilization</li>
-                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border);">✓ Cost tracking</li>
+                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border);"><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i>Context compression</li>
+                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border);"><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i>Smart summarization</li>
+                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border);"><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i>Cache utilization</li>
+                        <li style="padding: 0.5rem 0; border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border);"><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i>Cost tracking</li>
                     </ul>
                 </a>
             </div>
@@ -180,16 +192,16 @@
 
         <!-- System Operations -->
         <section class="section">
-            <h2 style="font-size: 2rem; margin-bottom: 2rem; text-align: center;">
-                <span style="color: var(--accent-primary);">🛠️</span> System Operations
-            </h2>
+            <h2 class="section-title"><i class="fas fa-tools" aria-hidden="true"></i> System Operations</h2>
             
-            <div class="metrics-grid-2">
+            <div class="feature-grid feature-grid-2">
                 <!-- Sanitization Engine -->
                 <a href="../orchestrators/sanitization-engine.html" class="glass-card feature-card" style="text-decoration: none; color: inherit; display: block; transition: all 0.3s ease;">
-                    <div style="font-size: 3rem; text-align: center; margin-bottom: 1rem;">🧹</div>
-                    <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--accent-primary);">Sanitization Engine</h3>
-                    <p style="font-size: 0.875rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;">Code Privacy & Security</p>
+                    <div style="width: 60px; height: 60px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(0, 212, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-broom" style="font-size: 1.75rem; color: var(--success);"></i>
+                    </div>
+                    <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--accent-primary); text-align: center;">Sanitization Engine</h3>
+                    <p style="font-size: 0.875rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; text-align: center;">Code Privacy & Security</p>
                     <p style="font-size: 1rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 1.5rem;">
                         5-phase automated sanitization that removes sensitive data, PII, and proprietary information 
                         while maintaining code functionality and architectural integrity.
@@ -204,8 +216,10 @@
 
                 <!-- Git Operations -->
                 <a href="git-operations.html" class="glass-card feature-card" style="text-decoration: none; color: inherit; display: block; transition: all 0.3s ease;">
-                    <div style="font-size: 3rem; text-align: center; margin-bottom: 1rem;">🔄</div>
-                    <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--accent-primary);">Git Operations</h3>
+                    <div style="width: 60px; height: 60px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-code-branch" style="font-size: 1.75rem; color: var(--accent-primary);"></i>
+                    </div>
+                    <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--accent-primary); text-align: center;">Git Operations</h3>
                     <p style="font-size: 0.875rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;">Intelligent Version Control</p>
                     <p style="font-size: 1rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 1.5rem;">
                         Smart Git workflow automation with checkpoint creation, branch management, and commit 
@@ -225,7 +239,9 @@
         <section class="section">
             <div class="glass-card">
                 <h2 style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 2rem; justify-content: center;">
-                    <span style="font-size: 2rem;">🔗</span>
+                    <div style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-link" style="font-size: 1.25rem; color: var(--accent-primary);"></i>
+                    </div>
                     Integration Ecosystem
                 </h2>
                 
@@ -258,7 +274,9 @@
         <section class="section">
             <div class="glass-card">
                 <h2 style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 2rem; justify-content: center;">
-                    <span style="font-size: 2rem;">💡</span>
+                    <div style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(255, 193, 7, 0.2), rgba(255, 152, 0, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-lightbulb" style="font-size: 1.25rem; color: var(--warning);"></i>
+                    </div>
                     Why CORTEX Features Matter
                 </h2>
                 
@@ -294,34 +312,21 @@
                 </p>
                 <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
                     <a href="../orchestrators/index.html" class="btn-hero btn-hero-primary" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 1rem 2rem; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); border: none; border-radius: 12px; color: white; text-decoration: none; font-weight: 600; transition: all 0.3s ease; min-height: 48px;">
-                        <span style="font-size: 1.5rem;">🎯</span>
+                        <i class="fas fa-crosshairs" style="font-size: 1.25rem;"></i>
                         <span>View Orchestrators</span>
                     </a>
                     <a href="../getting-started/index.html" class="btn-hero btn-hero-secondary" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 1rem 2rem; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 12px; color: white; text-decoration: none; font-weight: 600; transition: all 0.3s ease; backdrop-filter: blur(10px); min-height: 48px;">
-                        <span style="font-size: 1.5rem;">🚀</span>
+                        <i class="fas fa-rocket" style="font-size: 1.25rem;"></i>
                         <span>Getting Started</span>
                     </a>
                     <a href="../architecture/index.html" class="btn-hero btn-hero-secondary" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 1rem 2rem; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 12px; color: white; text-decoration: none; font-weight: 600; transition: all 0.3s ease; backdrop-filter: blur(10px); min-height: 48px;">
-                        <span style="font-size: 1.5rem;">🏗️</span>
+                        <i class="fas fa-layer-group" style="font-size: 1.25rem;"></i>
                         <span>Architecture</span>
                     </a>
                 </div>
             </div>
         </section>
     </main>
-
-    <!-- Footer -->
-    <footer style="text-align: center; padding: 3rem 2rem; margin-top: 4rem; border-top: 1px solid rgba(255, 255, 255, 0.1);">
-        <p style="color: rgba(255, 255, 255, 0.6); margin-bottom: 1rem;">
-            <strong>CORTEX</strong> - Enterprise Development Intelligence<br>
-            © 2025 Asif Hussain. All rights reserved.
-        </p>
-        <p style="margin-top: 1rem;">
-            <a href="https://github.com/asifhussain60/CORTEX" style="color: var(--accent-primary); text-decoration: none; margin: 0 0.5rem;">GitHub</a>
-            <span style="color: rgba(255, 255, 255, 0.3);">|</span>
-            <a href="https://asifhussain60.github.io/CORTEX/" style="color: var(--accent-primary); text-decoration: none; margin: 0 0.5rem;">Documentation</a>
-        </p>
-    </footer>
 
     <style>
         /* Feature card hover effects */

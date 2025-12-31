@@ -681,23 +681,6 @@
     </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="main-nav">
-        <div class="nav-content">
-            <a href="../index.html" class="logo-link">
-                <img src="../assets/images/CORTEX-logo-64.png" alt="CORTEX" class="nav-logo">
-                <span class="logo-text">CORTEX</span>
-            </a>
-            <div class="nav-links">
-                <a href="../index.html"><i class="fas fa-home"></i> Home</a>
-                <a href="../features/" class="active"><i class="fas fa-cube"></i> Features</a>
-                <a href="https://github.com/asifhussain60/CORTEX" target="_blank" class="github-link">
-                    <i class="fab fa-github"></i> GitHub
-                </a>
-            </div>
-        </div>
-    </nav>
-
     <!-- Breadcrumb -->
     <nav class="breadcrumb" aria-label="Breadcrumb">
         <a href="../index.html"><i class="fas fa-home"></i> Home</a>
@@ -705,14 +688,25 @@
         <span class="breadcrumb-current">ROI Calculator</span>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="roi-hero">
-        <div class="logo-container">
-            <div class="logo-glow"></div>
-            <img src="../assets/images/CORTEX-logo-512.png" alt="CORTEX" class="cortex-logo">
+    <!-- Hero Section with Logo and Title Row -->
+    <section class="hero" id="main-content">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 2.5rem; flex-wrap: wrap; margin-bottom: 2rem;">
+            <!-- Logo -->
+            <a href="../index.html">
+                <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" style="width: 200px; height: 200px; filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.5)); transition: filter 0.2s ease-in-out;">
+            </a>
+            <!-- Title and Metadata -->
+            <div style="text-align: center;">
+                <h1 class="hero-title" style="margin-bottom: 0.5rem;">💰 ROI Calculator</h1>
+                <p class="hero-subtitle" style="margin-bottom: 1rem;">Calculate your team's savings with CORTEX AI-powered development intelligence</p>
+                <div class="file-metadata">
+                    <span class="metadata-item">📊 Real Metrics</span>
+                    <span class="metadata-item">⚡ Instant Results</span>
+                    <span class="metadata-item">💵 Cost Savings</span>
+                    <span class="metadata-item">📅 Updated: Dec 2025</span>
+                </div>
+            </div>
         </div>
-        <h1><i class="fas fa-calculator"></i> ROI Calculator</h1>
-        <p class="subtitle">Calculate your team's savings with CORTEX AI-powered development intelligence. Based on real-world metrics and industry benchmarks.</p>
     </section>
 
     <!-- Calculator Section -->
@@ -879,19 +873,6 @@
             </div>
         </div>
     </section>
-
-    <!-- Footer Note -->
-    <footer class="footer-note">
-        <p>
-            <i class="fas fa-info-circle"></i> 
-            Calculations based on industry benchmarks and real-world metrics from 
-            <a href="https://github.blog/news-insights/research/survey-reveals-ais-impact-on-the-developer-experience/" target="_blank">GitHub Research</a> 
-            and current AI API pricing (Dec 2025).
-        </p>
-        <p style="margin-top: 0.5rem;">
-            © 2025 <a href="https://github.com/asifhussain60">Asif Hussain</a>. CORTEX is open-source and free to use.
-        </p>
-    </footer>
 
     <script>
         // ============================================

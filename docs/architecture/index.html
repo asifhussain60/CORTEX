@@ -8,6 +8,7 @@
     <meta name="author" content="Asif Hussain">
     <title>CORTEX Architecture | Enterprise AI Assistant</title>
     <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
@@ -20,22 +21,24 @@
         <span class="breadcrumb-current">Architecture</span>
     </nav>
 
-    <!-- Logo Header -->
-    <div class="logo-header">
-        <a href="../index.html">
-            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
-        </a>
-    </div>
-
-    <!-- Hero Section -->
+    <!-- Hero Section with Logo and Title Row -->
     <section class="hero" id="main-content">
-        <h1 class="hero-title">🏛️ CORTEX Architecture</h1>
-        <p class="hero-subtitle">Four-Tier Brain, Agent System, and Orchestrator Ecosystem</p>
-        <div class="file-metadata">
-            <span class="metadata-item">🧠 4 Brain Tiers</span>
-            <span class="metadata-item">🤖 2 Specialist Agents</span>
-            <span class="metadata-item">⚙️ 8 Orchestrators</span>
-            <span class="metadata-item">📅 Updated: Dec 2025</span>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 2.5rem; flex-wrap: wrap; margin-bottom: 2rem;">
+            <!-- Logo -->
+            <a href="../index.html">
+                <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" style="width: 200px; height: 200px; filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.5)); transition: filter 0.2s ease-in-out;">
+            </a>
+            <!-- Title and Metadata -->
+            <div style="text-align: center;">
+                <h1 class="hero-title" style="margin-bottom: 0.5rem;">🏛️ CORTEX Architecture</h1>
+                <p class="hero-subtitle" style="margin-bottom: 1rem;">Four-Tier Brain, Agent System, and Orchestrator Ecosystem</p>
+                <div class="file-metadata">
+                    <span class="metadata-item">🧠 4 Brain Tiers</span>
+                    <span class="metadata-item">🤖 2 Specialist Agents</span>
+                    <span class="metadata-item">⚙️ 8 Orchestrators</span>
+                    <span class="metadata-item">📅 Updated: Dec 2025</span>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -44,17 +47,29 @@
             <!-- Overview -->
             <div id="overview" class="content-section">
                 <div class="glass-card">
-                    <h2 class="section-title">📋 Executive Summary</h2>
+                    <h2 class="section-title" style="display: flex; align-items: center; gap: 0.75rem;">
+                        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-clipboard-list" style="font-size: 1.25rem; color: var(--accent-primary);"></i>
+                        </div>
+                        Executive Summary
+                    </h2>
                     <p>CORTEX is built on a <strong>four-tier brain architecture</strong> that provides intelligent memory management, pattern learning, and context preservation across conversations. Two <strong>specialist agents</strong> (Planning and Strategic Reasoning) work within orchestrators to coordinate complex multi-phase workflows. The system enforces safety through <strong>SKULL brain protection rules</strong> at Tier 0, while maintaining sub-100ms working memory access at Tier 1.</p>
                     
-                    <div class="info-box info-box-primary">
-                        <strong>Key Architectural Principles:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Brain Protection First:</strong> Tier 0 SKULL rules enforce safety</li>
-                            <li><strong>Test-Driven Development:</strong> TDD mandatory for all production code</li>
-                            <li><strong>Git Isolation:</strong> CORTEX code never mixed with user repos</li>
-                            <li><strong>Context Preservation:</strong> Four-Tier Brain maintains long-term memory</li>
-                        </ul>
+                    <div class="glass-card" style="background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(123, 97, 255, 0.05)); border-left: 4px solid var(--accent-primary); margin: 1.5rem 0;">
+                        <div style="display: flex; align-items: flex-start; gap: 1rem;">
+                            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <i class="fas fa-key" style="font-size: 1.25rem; color: var(--accent-primary);"></i>
+                            </div>
+                            <div>
+                                <strong style="color: var(--accent-primary);">Key Architectural Principles:</strong>
+                                <ul class="feature-list" style="margin-top: 0.75rem;">
+                                    <li><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i><strong>Brain Protection First:</strong> Tier 0 SKULL rules enforce safety</li>
+                                    <li><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i><strong>Test-Driven Development:</strong> TDD mandatory for all production code</li>
+                                    <li><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i><strong>Git Isolation:</strong> CORTEX code never mixed with user repos</li>
+                                    <li><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i><strong>Context Preservation:</strong> Four-Tier Brain maintains long-term memory</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
 
                     <h3>System Architecture Overview</h3>
@@ -105,7 +120,12 @@ graph LR
             <!-- Four-Tier Brain -->
             <div id="brain-architecture" class="content-section">
                 <div class="glass-card">
-                    <h2 class="section-title">🧠 Four-Tier Brain Architecture</h2>
+                    <h2 class="section-title" style="display: flex; align-items: center; gap: 0.75rem;">
+                        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(123, 97, 255, 0.2), rgba(0, 212, 255, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-brain" style="font-size: 1.25rem; color: var(--accent-secondary);"></i>
+                        </div>
+                        Four-Tier Brain Architecture
+                    </h2>
                     <p>The brain is organized into four hierarchical tiers, each serving a distinct purpose in memory management and intelligence. Data flows from Tier 0 governance through working memory to long-term pattern storage.</p>
 
                     <h3>Brain Data Flow</h3>
@@ -136,7 +156,9 @@ graph TB
                     <h3>Tier Details</h3>
                     <div class="framework-grid">
                         <div class="framework-panel">
-                            <span class="framework-panel-icon">🛡️</span>
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(248, 113, 113, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-shield-alt" style="font-size: 1.5rem; color: var(--danger);"></i>
+                            </div>
                             <h3>Tier 0: Governance</h3>
                             <p class="framework-subtitle">SKULL Brain Protection Rules</p>
                             <h4>Purpose</h4>
@@ -159,7 +181,9 @@ graph TB
                         </div>
 
                         <div class="framework-panel">
-                            <span class="framework-panel-icon">💾</span>
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(52, 211, 153, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-memory" style="font-size: 1.5rem; color: var(--success);"></i>
+                            </div>
                             <h3>Tier 1: Working Memory</h3>
                             <p class="framework-subtitle">70-Conversation FIFO Buffer</p>
                             <h4>Purpose</h4>
@@ -182,7 +206,9 @@ graph TB
                         </div>
 
                         <div class="framework-panel">
-                            <span class="framework-panel-icon">🕸️</span>
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(96, 165, 250, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-project-diagram" style="font-size: 1.5rem; color: var(--info);"></i>
+                            </div>
                             <h3>Tier 2: Knowledge Graph</h3>
                             <p class="framework-subtitle">Pattern Learning & Relationships</p>
                             <h4>Purpose</h4>
@@ -207,7 +233,9 @@ graph TB
 
                     <div class="framework-grid" style="margin-top: 2rem;">
                         <div class="framework-panel">
-                            <span class="framework-panel-icon">📊</span>
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(251, 191, 36, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-chart-bar" style="font-size: 1.5rem; color: var(--warning);"></i>
+                            </div>
                             <h3>Tier 3: Development Context</h3>
                             <p class="framework-subtitle">Per-Repository Metrics</p>
                             <h4>Purpose</h4>
@@ -230,7 +258,9 @@ graph TB
                         </div>
 
                         <div class="framework-panel">
-                            <span class="framework-panel-icon">⚡</span>
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-bolt" style="font-size: 1.5rem; color: var(--accent-primary);"></i>
+                            </div>
                             <h3>Performance Profile</h3>
                             <p class="framework-subtitle">Speed & Efficiency</p>
                             <h4>Response Times</h4>
@@ -250,7 +280,9 @@ graph TB
                         </div>
 
                         <div class="framework-panel">
-                            <span class="framework-panel-icon">🔄</span>
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-sync-alt" style="font-size: 1.5rem; color: var(--accent-primary);"></i>
+                            </div>
                             <h3>Brain Maintenance</h3>
                             <p class="framework-subtitle">Automatic Optimization</p>
                             <h4>Cleanup Operations</h4>
@@ -275,7 +307,12 @@ graph TB
             <!-- Agent System -->
             <div id="agent-system" class="content-section">
                 <div class="glass-card">
-                    <h2 class="section-title">🤖 Specialist Agent System</h2>
+                    <h2 class="section-title" style="display: flex; align-items: center; gap: 0.75rem;">
+                        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(96, 165, 250, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-robot" style="font-size: 1.25rem; color: var(--info);"></i>
+                        </div>
+                        Specialist Agent System
+                    </h2>
                     <p>Two specialist agents provide focused intelligence for complex operations. Agents are <strong>embedded within orchestrators</strong>, not standalone services. They analyze requests, generate plans, and provide strategic recommendations.</p>
 
                     <h3>Agent Architecture</h3>
@@ -319,7 +356,9 @@ graph LR
                     <h3>Agent Capabilities</h3>
                     <div class="framework-grid">
                         <div class="framework-panel">
-                            <span class="framework-panel-icon">🎯</span>
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-crosshairs" style="font-size: 1.5rem; color: var(--accent-primary);"></i>
+                            </div>
                             <h3>Planning Agent</h3>
                             <p class="framework-subtitle">Feature Planning & Task Decomposition</p>
                             <h4>Core Capabilities</h4>
@@ -345,7 +384,9 @@ graph LR
                         </div>
 
                         <div class="framework-panel">
-                            <span class="framework-panel-icon">🧠</span>
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(123, 97, 255, 0.2), rgba(0, 212, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-brain" style="font-size: 1.5rem; color: var(--accent-secondary);"></i>
+                            </div>
                             <h3>Strategic Reasoning Agent</h3>
                             <p class="framework-subtitle">Architecture Analysis & Pattern Recognition</p>
                             <h4>Core Capabilities</h4>
@@ -371,7 +412,9 @@ graph LR
                         </div>
 
                         <div class="framework-panel">
-                            <span class="framework-panel-icon">🔗</span>
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-link" style="font-size: 1.5rem; color: var(--accent-primary);"></i>
+                            </div>
                             <h3>Agent Collaboration</h3>
                             <p class="framework-subtitle">Orchestrator Integration Pattern</p>
                             <h4>How Agents Work</h4>
@@ -402,7 +445,12 @@ graph LR
             <!-- Orchestrator Ecosystem -->
             <div id="orchestrators" class="content-section">
                 <div class="glass-card">
-                    <h2 class="section-title">⚙️ Orchestrator Ecosystem</h2>
+                    <h2 class="section-title" style="display: flex; align-items: center; gap: 0.75rem;">
+                        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(251, 191, 36, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-cogs" style="font-size: 1.25rem; color: var(--warning);"></i>
+                        </div>
+                        Orchestrator Ecosystem
+                    </h2>
                     <p>Orchestrators coordinate complex multi-phase workflows with validation gates, checkpoints, and rollback support. All orchestrators inherit from <code>BaseOrchestrator</code> and follow a consistent execution pattern.</p>
 
                     <h3>Orchestrator Execution Flow</h3>
@@ -437,7 +485,9 @@ graph LR
                     <h3>8 Core Orchestrators</h3>
                     <div class="framework-grid">
                         <div class="framework-panel">
-                            <span class="framework-panel-icon">📋</span>
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-clipboard-list" style="font-size: 1.5rem; color: var(--accent-primary);"></i>
+                            </div>
                             <h3>Planning System</h3>
                             <p class="framework-subtitle">Multi-Phase Feature Planning</p>
                             <h4>Purpose</h4>
@@ -460,7 +510,9 @@ graph LR
                         </div>
 
                         <div class="framework-panel">
-                            <span class="framework-panel-icon">✅</span>
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(52, 211, 153, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-check-double" style="font-size: 1.5rem; color: var(--success);"></i>
+                            </div>
                             <h3>TDD Orchestrator</h3>
                             <p class="framework-subtitle">RED→GREEN→REFACTOR Workflow</p>
                             <h4>Purpose</h4>
@@ -484,7 +536,9 @@ graph LR
                         </div>
 
                         <div class="framework-panel">
-                            <span class="framework-panel-icon">🔧</span>
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(251, 191, 36, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-wrench" style="font-size: 1.5rem; color: var(--warning);"></i>
+                            </div>
                             <h3>System Maintenance</h3>
                             <p class="framework-subtitle">7-Phase Health Pipeline</p>
                             <h4>Purpose</h4>
@@ -508,7 +562,9 @@ graph LR
 
                     <div class="framework-grid" style="margin-top: 2rem;">
                         <div class="framework-panel">
-                            <span class="framework-panel-icon">🧹</span>
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(52, 211, 153, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-broom" style="font-size: 1.5rem; color: var(--success);"></i>
+                            </div>
                             <h3>Code Sanitization</h3>
                             <p class="framework-subtitle">5-Phase Data Removal</p>
                             <h4>Purpose</h4>
@@ -528,7 +584,9 @@ graph LR
                         </div>
 
                         <div class="framework-panel">
-                            <span class="framework-panel-icon">✨</span>
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-magic" style="font-size: 1.5rem; color: var(--accent-primary);"></i>
+                            </div>
                             <h3>System Refinement</h3>
                             <p class="framework-subtitle">7-Phase Improvement</p>
                             <h4>Purpose</h4>
@@ -550,7 +608,9 @@ graph LR
                         </div>
 
                         <div class="framework-panel">
-                            <span class="framework-panel-icon">📊</span>
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(96, 165, 250, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-chart-line" style="font-size: 1.5rem; color: var(--info);"></i>
+                            </div>
                             <h3>ADO Operations</h3>
                             <p class="framework-subtitle">Azure DevOps Integration</p>
                             <h4>Purpose</h4>
@@ -571,7 +631,9 @@ graph LR
 
                     <div class="framework-grid" style="margin-top: 2rem;">
                         <div class="framework-panel">
-                            <span class="framework-panel-icon">🏗️</span>
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(123, 97, 255, 0.2), rgba(0, 212, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-layer-group" style="font-size: 1.5rem; color: var(--accent-secondary);"></i>
+                            </div>
                             <h3>Architectural Review</h3>
                             <p class="framework-subtitle">6-Phase Analysis</p>
                             <h4>Purpose</h4>
@@ -590,7 +652,9 @@ graph LR
                         </div>
 
                         <div class="framework-panel">
-                            <span class="framework-panel-icon">💾</span>
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(52, 211, 153, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-code-branch" style="font-size: 1.5rem; color: var(--success);"></i>
+                            </div>
                             <h3>Git Checkpoint</h3>
                             <p class="framework-subtitle">Automatic Commit System</p>
                             <h4>Purpose</h4>
@@ -609,7 +673,9 @@ graph LR
                         </div>
 
                         <div class="framework-panel">
-                            <span class="framework-panel-icon">📦</span>
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-cube" style="font-size: 1.5rem; color: var(--accent-primary);"></i>
+                            </div>
                             <h3>BaseOrchestrator</h3>
                             <p class="framework-subtitle">Inheritance Pattern</p>
                             <h4>Common Features</h4>
@@ -629,9 +695,16 @@ graph LR
                         </div>
                     </div>
 
-                    <div class="info-box info-box-info" style="margin-top: 2rem;">
-                        <strong>Orchestrator Manifest Location:</strong>
-                        <p style="margin-top: 0.5rem;">All orchestrator manifests are stored in <code>cortex-brain/manifests/orchestrators/</code>. Each manifest defines phases, validation rules, checkpoints, and agent integration points.</p>
+                    <div class="glass-card" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(96, 165, 250, 0.05)); border-left: 4px solid var(--info); margin-top: 2rem;">
+                        <div style="display: flex; align-items: flex-start; gap: 1rem;">
+                            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(96, 165, 250, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <i class="fas fa-info-circle" style="font-size: 1.25rem; color: var(--info);"></i>
+                            </div>
+                            <div>
+                                <strong style="color: var(--info);">Orchestrator Manifest Location:</strong>
+                                <p style="margin-top: 0.5rem;">All orchestrator manifests are stored in <code>cortex-brain/manifests/orchestrators/</code>. Each manifest defines phases, validation rules, checkpoints, and agent integration points.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -639,7 +712,12 @@ graph LR
             <!-- System Flow -->
             <div id="system-flow" class="content-section">
                 <div class="glass-card">
-                    <h2 class="section-title">🔄 Complete System Flow</h2>
+                    <h2 class="section-title" style="display: flex; align-items: center; gap: 0.75rem;">
+                        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-exchange-alt" style="font-size: 1.25rem; color: var(--accent-primary);"></i>
+                        </div>
+                        Complete System Flow
+                    </h2>
                     <p>Understanding how a user request flows through CORTEX from initial command to final response with brain updates.</p>
 
                     <h3>Request → Response Pipeline</h3>
@@ -678,7 +756,9 @@ graph TB
                     <h3>Execution Methods</h3>
                     <div class="framework-grid">
                         <div class="framework-panel">
-                            <span class="framework-panel-icon">💻</span>
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-terminal" style="font-size: 1.5rem; color: var(--accent-primary);"></i>
+                            </div>
                             <h3>CLI Wrapper</h3>
                             <p class="framework-subtitle">Command-Line Operations</p>
                             <h4>Use Cases</h4>
@@ -703,7 +783,9 @@ graph TB
                         </div>
 
                         <div class="framework-panel">
-                            <span class="framework-panel-icon">💬</span>
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(123, 97, 255, 0.2), rgba(0, 212, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-comments" style="font-size: 1.5rem; color: var(--accent-secondary);"></i>
+                            </div>
                             <h3>Copilot Chat</h3>
                             <p class="framework-subtitle">Interactive Workflows</p>
                             <h4>Use Cases</h4>
@@ -728,7 +810,9 @@ graph TB
                         </div>
 
                         <div class="framework-panel">
-                            <span class="framework-panel-icon">🔧</span>
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(251, 191, 36, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-cog" style="font-size: 1.5rem; color: var(--warning);"></i>
+                            </div>
                             <h3>Internal</h3>
                             <p class="framework-subtitle">Infrastructure Components</p>
                             <h4>Components</h4>
@@ -752,11 +836,18 @@ graph TB
             <!-- Technology Stack -->
             <div id="technology-stack" class="content-section">
                 <div class="glass-card">
-                    <h2 class="section-title">🛠️ Technology Stack</h2>
+                    <h2 class="section-title" style="display: flex; align-items: center; gap: 0.75rem;">
+                        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(251, 191, 36, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-tools" style="font-size: 1.25rem; color: var(--warning);"></i>
+                        </div>
+                        Technology Stack
+                    </h2>
 
                     <div class="framework-grid">
                         <div class="framework-panel">
-                            <span class="framework-panel-icon">🐍</span>
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(96, 165, 250, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fab fa-python" style="font-size: 1.5rem; color: var(--info);"></i>
+                            </div>
                             <h3>Core Technologies</h3>
                             <h4>Primary Stack</h4>
                             <ul>
@@ -774,7 +865,9 @@ graph TB
                         </div>
 
                         <div class="framework-panel">
-                            <span class="framework-panel-icon">📦</span>
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-cubes" style="font-size: 1.5rem; color: var(--accent-primary);"></i>
+                            </div>
                             <h3>Key Libraries</h3>
                             <h4>Testing & Quality</h4>
                             <ul>
@@ -792,7 +885,9 @@ graph TB
                         </div>
 
                         <div class="framework-panel">
-                            <span class="framework-panel-icon">🌐</span>
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(52, 211, 153, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-globe" style="font-size: 1.5rem; color: var(--success);"></i>
+                            </div>
                             <h3>Documentation</h3>
                             <h4>Static Site</h4>
                             <ul>
@@ -814,11 +909,18 @@ graph TB
             <!-- Performance Metrics -->
             <div id="performance" class="content-section">
                 <div class="glass-card">
-                    <h2 class="section-title">⚡ Performance Characteristics</h2>
+                    <h2 class="section-title" style="display: flex; align-items: center; gap: 0.75rem;">
+                        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-bolt" style="font-size: 1.25rem; color: var(--accent-primary);"></i>
+                        </div>
+                        Performance Characteristics
+                    </h2>
 
                     <div class="framework-grid">
                         <div class="framework-panel">
-                            <span class="framework-panel-icon">💾</span>
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-memory" style="font-size: 1.5rem; color: var(--accent-primary);"></i>
+                            </div>
                             <h3>Working Memory</h3>
                             <div style="text-align: center; margin: 1.5rem 0;">
                                 <div style="font-size: 3rem; font-weight: 700; color: var(--accent-primary);">&lt; 100ms</div>
@@ -832,7 +934,9 @@ graph TB
                         </div>
 
                         <div class="framework-panel">
-                            <span class="framework-panel-icon">📋</span>
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(52, 211, 153, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-tasks" style="font-size: 1.5rem; color: var(--success);"></i>
+                            </div>
                             <h3>Planning</h3>
                             <div style="text-align: center; margin: 1.5rem 0;">
                                 <div style="font-size: 3rem; font-weight: 700; color: var(--success);">&lt; 5s</div>
@@ -846,7 +950,9 @@ graph TB
                         </div>
 
                         <div class="framework-panel">
-                            <span class="framework-panel-icon">💾</span>
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(96, 165, 250, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-code-branch" style="font-size: 1.5rem; color: var(--info);"></i>
+                            </div>
                             <h3>Git Checkpoint</h3>
                             <div style="text-align: center; margin: 1.5rem 0;">
                                 <div style="font-size: 3rem; font-weight: 700; color: var(--info);">&lt; 1s</div>
@@ -862,7 +968,9 @@ graph TB
 
                     <div class="framework-grid" style="margin-top: 2rem;">
                         <div class="framework-panel">
-                            <span class="framework-panel-icon">🔧</span>
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(251, 191, 36, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-wrench" style="font-size: 1.5rem; color: var(--warning);"></i>
+                            </div>
                             <h3>Maintenance</h3>
                             <div style="text-align: center; margin: 1.5rem 0;">
                                 <div style="font-size: 3rem; font-weight: 700; color: var(--warning);">&lt; 5min</div>
@@ -876,7 +984,9 @@ graph TB
                         </div>
 
                         <div class="framework-panel">
-                            <span class="framework-panel-icon">💿</span>
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(123, 97, 255, 0.2), rgba(0, 212, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-hdd" style="font-size: 1.5rem; color: var(--accent-secondary);"></i>
+                            </div>
                             <h3>Disk Usage</h3>
                             <div style="text-align: center; margin: 1.5rem 0;">
                                 <div style="font-size: 3rem; font-weight: 700; color: var(--accent-secondary);">~500MB</div>
@@ -891,7 +1001,9 @@ graph TB
                         </div>
 
                         <div class="framework-panel">
-                            <span class="framework-panel-icon">📊</span>
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(52, 211, 153, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-file-alt" style="font-size: 1.5rem; color: var(--success);"></i>
+                            </div>
                             <h3>Template Response</h3>
                             <div style="text-align: center; margin: 1.5rem 0;">
                                 <div style="font-size: 3rem; font-weight: 700; color: var(--success);">Instant</div>
@@ -910,11 +1022,18 @@ graph TB
             <!-- Deep Dive Links -->
             <div id="resources" class="content-section">
                 <div class="glass-card">
-                    <h2 class="section-title">📚 Deep Dive Documentation</h2>
+                    <h2 class="section-title" style="display: flex; align-items: center; gap: 0.75rem;">
+                        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(123, 97, 255, 0.2), rgba(0, 212, 255, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-book" style="font-size: 1.25rem; color: var(--accent-secondary);"></i>
+                        </div>
+                        Deep Dive Documentation
+                    </h2>
                     
                     <div class="framework-grid">
                         <div class="framework-panel">
-                            <span class="framework-panel-icon">🧠</span>
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(123, 97, 255, 0.2), rgba(0, 212, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-brain" style="font-size: 1.5rem; color: var(--accent-secondary);"></i>
+                            </div>
                             <h3>Brain Architecture</h3>
                             <ul>
                                 <li><a href="four-tier-brain.html">Four-Tier Brain Architecture</a></li>
@@ -926,7 +1045,9 @@ graph TB
                         </div>
 
                         <div class="framework-panel">
-                            <span class="framework-panel-icon">🤖</span>
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(96, 165, 250, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-robot" style="font-size: 1.5rem; color: var(--info);"></i>
+                            </div>
                             <h3>Agents & Orchestrators</h3>
                             <ul>
                                 <li><a href="agent-system.html">Agent System</a></li>
@@ -937,7 +1058,9 @@ graph TB
                         </div>
 
                         <div class="framework-panel">
-                            <span class="framework-panel-icon">📖</span>
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(52, 211, 153, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-book-open" style="font-size: 1.5rem; color: var(--success);"></i>
+                            </div>
                             <h3>Complete Specifications</h3>
                             <ul>
                                 <li><a href="architecture-FULL.html">Full Architecture Document</a></li>
@@ -951,17 +1074,6 @@ graph TB
             </div>
         </div>
     </section>
-
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 CORTEX Architecture. Created by Asif Hussain.</p>
-            <p>
-                <a href="../index.html">Home</a> |
-                <a href="index.html">Architecture</a> |
-                <a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener">GitHub</a>
-            </p>
-        </div>
-    </footer>
 
     <script>
         mermaid.initialize({ 
