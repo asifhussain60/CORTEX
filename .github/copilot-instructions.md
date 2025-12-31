@@ -132,7 +132,7 @@ src/                    # Implementation
 | File | Purpose |
 |------|---------|
 | `.github/prompts/CORTEX.prompt.md` | Intent router (source of truth) |
-| `.github/prompts/cortex-maintenance.prompt.md` | 12-phase maintenance |
+| `.github/prompts/maintenance/index.prompt.md` | 11-phase maintenance (modular v2.0) |
 | `cortex-brain/brain-protection-rules.yaml` | SKULL rules |
 | `cortex-brain/response-templates-v4.yaml` | Response templates |
 | `cortex-brain/manifests/orchestrators/` | All orchestrator manifests |
@@ -143,7 +143,7 @@ src/                    # Implementation
 
 Say `help` in Copilot Chat to see all operations.
 
-**For maintenance:** Use `system maintenance` to run 12-phase health pipeline (starts with cleanup orchestrator).
+**For maintenance:** Use `system maintenance` to run 11-phase health pipeline via `cortex-maintenance.prompt.md` (modular v2.0 - 80% faster loading).
 
 ---
 

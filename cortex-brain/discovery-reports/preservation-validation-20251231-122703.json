@@ -1,0 +1,54 @@
+{
+  "timestamp": "2025-12-31T12:27:03.168423",
+  "critical_pass": true,
+  "protected_paths": [
+    {
+      "path": "cortex-brain/lessons-learned.yaml",
+      "exists": true,
+      "type": "file"
+    },
+    {
+      "path": "cortex-brain/knowledge-graph.yaml",
+      "exists": true,
+      "type": "file"
+    },
+    {
+      "path": "cortex-brain/user-dictionary.yaml",
+      "exists": true,
+      "type": "file"
+    },
+    {
+      "path": "cortex-brain/tier1/",
+      "exists": true,
+      "type": "directory"
+    },
+    {
+      "path": "cortex-brain/tier2/",
+      "exists": true,
+      "type": "directory"
+    },
+    {
+      "path": "cortex-brain/tier3/",
+      "exists": true,
+      "type": "directory"
+    },
+    {
+      "path": "cortex-brain/documents/",
+      "exists": true,
+      "type": "directory"
+    },
+    {
+      "path": "cortex-brain/response-templates-v4.yaml",
+      "exists": true,
+      "type": "file"
+    }
+  ],
+  "database_files": 6,
+  "user_content": {
+    "status": "found",
+    "total_files": 238,
+    "md_files": 142,
+    "yaml_files": 96
+  },
+  "action_items": []
+}
