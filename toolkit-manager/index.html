@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX Toolkit Manager - Intelligent Tool Orchestration Layer">
+    <meta name="keywords" content="CORTEX, toolkit, orchestration, tools, automation, security">
+    <meta name="author" content="Asif Hussain">
+    <title>Toolkit Manager | CORTEX 4.0</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <style>
+        /* Toolkit Manager Hero */
+        .toolkit-hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, rgba(123, 97, 255, 0.15) 0%, rgba(0, 212, 255, 0.10) 50%, rgba(0, 255, 136, 0.08) 100%);
+            border-radius: 24px;
+            margin-bottom: 3rem;
+            border: 1px solid rgba(123, 97, 255, 0.3);
+        }
+
+        .toolkit-hero-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .toolkit-hero h1 {
+            font-size: 3rem;
+            margin: 0;
+            background: linear-gradient(135deg, #00d4ff 0%, #7b61ff 50%, #00ff88 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .toolkit-hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        /* Feature Grid */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .feature-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 32px rgba(0, 212, 255, 0.2);
+            border-color: var(--accent-primary);
+        }
+
+        .feature-card h3 {
+            color: var(--accent-primary);
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.25rem;
+        }
+
+        .feature-card h3 i {
+            font-size: 1.5rem;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            margin-bottom: 0;
+            line-height: 1.6;
+        }
+
+        .feature-card ul {
+            margin: 0.75rem 0 0 0;
+            padding-left: 1.25rem;
+            color: var(--text-secondary);
+        }
+
+        .feature-card li {
+            margin: 0.25rem 0;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: var(--glass-bg);
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            display: block;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Architecture Diagram */
+        .architecture-section {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .architecture-section h2 {
+            color: var(--accent-primary);
+            margin-top: 0;
+        }
+
+        .architecture-diagram {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2rem;
+            border-radius: 8px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.85rem;
+            overflow-x: auto;
+            white-space: pre;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        /* Code Example */
+        .code-section {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .code-section h2 {
+            color: var(--accent-primary);
+            margin-top: 0;
+        }
+
+        .code-block {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        .code-block code {
+            color: #10b981;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .code-block .comment {
+            color: #6b7280;
+        }
+
+        .code-block .keyword {
+            color: #7b61ff;
+        }
+
+        .code-block .string {
+            color: #f59e0b;
+        }
+
+        .code-block .function {
+            color: #00d4ff;
+        }
+
+        /* Tool Inventory Section */
+        .inventory-section {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .inventory-section h2 {
+            color: var(--accent-primary);
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .inventory-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .inventory-table th,
+        .inventory-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .inventory-table th {
+            color: var(--accent-primary);
+            font-weight: 600;
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        .inventory-table tr:hover td {
+            background: rgba(0, 212, 255, 0.05);
+        }
+
+        .lifecycle-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .lifecycle-active {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .lifecycle-deprecated {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 3rem;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(123, 97, 255, 0.1) 100%);
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            margin: 2rem 0;
+        }
+
+        .cta-section h2 {
+            color: var(--accent-primary);
+            margin-top: 0;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+        }
+
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .cta-btn-primary {
+            background: var(--accent-primary);
+            color: #000;
+        }
+
+        .cta-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0, 212, 255, 0.4);
+        }
+
+        .cta-btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            border: 1px solid var(--glass-border);
+        }
+
+        .cta-btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--accent-primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .toolkit-hero h1 {
+                font-size: 2rem;
+            }
+
+            .toolkit-hero-icon {
+                font-size: 3rem;
+            }
+
+            .architecture-diagram {
+                font-size: 0.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav-bar" role="navigation" aria-label="Main navigation">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">
+                <img src="../assets/images/CORTEX-logo-128.png" alt="CORTEX Logo" width="40" height="40">
+                <span>CORTEX</span>
+            </a>
+            <div class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="../getting-started/index.html">Get Started</a>
+                <a href="../features/index.html">Features</a>
+                <a href="../technical/index.html">Technical</a>
+                <a href="../faq.html">FAQ</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Hero Section -->
+            <div class="toolkit-hero">
+                <span class="toolkit-hero-icon">🛠️</span>
+                <h1>Toolkit Manager</h1>
+                <p>Intelligent Tool Orchestration Layer for CORTEX</p>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <span class="stat-value">35+</span>
+                    <span class="stat-label">Tools</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">329</span>
+                    <span class="stat-label">Tests</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">10</span>
+                    <span class="stat-label">Categories</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">8</span>
+                    <span class="stat-label">Components</span>
+                </div>
+            </div>
+
+            <!-- Feature Grid -->
+            <h2 style="color: var(--accent-primary); margin-bottom: 1rem;">Core Components</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3><i class="fas fa-shield-alt"></i> GateKeeper</h3>
+                    <p>Pre-execution validation ensuring safe tool operations</p>
+                    <ul>
+                        <li>Tool existence verification</li>
+                        <li>Platform compatibility checks</li>
+                        <li>Argument sanitization</li>
+                        <li>Rate limiting protection</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3><i class="fas fa-search"></i> Request Analyzer</h3>
+                    <p>Semantic analysis preventing duplicate tool creation</p>
+                    <ul>
+                        <li>Capability keyword matching</li>
+                        <li>Similarity scoring (Jaccard)</li>
+                        <li>Overlap detection</li>
+                        <li>Creation recommendations</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3><i class="fas fa-undo-alt"></i> Recovery Manager</h3>
+                    <p>Checkpoint and rollback for destructive operations</p>
+                    <ul>
+                        <li>Automatic checkpoints</li>
+                        <li>State snapshots</li>
+                        <li>One-click rollback</li>
+                        <li>Auto-prune (max 50)</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3><i class="fas fa-project-diagram"></i> Dependency Manager</h3>
+                    <p>Tool dependency graph with validation</p>
+                    <ul>
+                        <li>Dependency graph building</li>
+                        <li>Circular detection (DFS)</li>
+                        <li>Topological ordering</li>
+                        <li>Missing dependency alerts</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3><i class="fas fa-file-code"></i> Manifest Schema v2</h3>
+                    <p>Enhanced tool definitions with capabilities</p>
+                    <ul>
+                        <li>JSON Schema validation</li>
+                        <li>Capability keywords</li>
+                        <li>Lifecycle tracking</li>
+                        <li>v1 → v2 migration</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3><i class="fas fa-lock"></i> Security Guard</h3>
+                    <p>Input sanitization and threat detection</p>
+                    <ul>
+                        <li>Shell injection blocking</li>
+                        <li>Path traversal prevention</li>
+                        <li>SQL/XSS detection</li>
+                        <li>Privilege escalation checks</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3><i class="fas fa-history"></i> Audit Logger</h3>
+                    <p>Tamper-evident execution logging</p>
+                    <ul>
+                        <li>JSONL format</li>
+                        <li>Chain hash integrity</li>
+                        <li>Query by tool/date</li>
+                        <li>Statistics & reporting</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3><i class="fas fa-cogs"></i> Tool Auditor</h3>
+                    <p>Toolkit analysis and consolidation</p>
+                    <ul>
+                        <li>Overlap detection</li>
+                        <li>Orphan tool finding</li>
+                        <li>Coverage analysis</li>
+                        <li>Consolidation recommendations</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Architecture Section -->
+            <div class="architecture-section">
+                <h2><i class="fas fa-sitemap"></i> Architecture</h2>
+                <div class="architecture-diagram">┌──────────────────────────────────────────────────────────────────┐
+│                    TOOLKIT MANAGER (CENTRAL)                     │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐              │
+│  │  Request    │→ │  Gate       │→ │  Execution  │              │
+│  │  Analyzer   │  │  Keeper     │  │  Engine     │              │
+│  └─────────────┘  └─────────────┘  └─────────────┘              │
+│         ↓                ↓                ↓                      │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐              │
+│  │ Duplication │  │  Security   │  │  Recovery   │              │
+│  │ Prevention  │  │  Guard      │  │  Manager    │              │
+│  └─────────────┘  └─────────────┘  └─────────────┘              │
+│                          ↓                                       │
+│                  ┌─────────────┐                                 │
+│                  │ Dependency  │                                 │
+│                  │ Manager     │                                 │
+│                  └─────────────┘                                 │
+│                          ↓                                       │
+│                  ┌─────────────┐                                 │
+│                  │   Audit     │                                 │
+│                  │   Logger    │                                 │
+│                  └─────────────┘                                 │
+│                                                                  │
+└──────────────────────────────────────────────────────────────────┘</div>
+            </div>
+
+            <!-- Code Example -->
+            <div class="code-section">
+                <h2><i class="fas fa-code"></i> Quick Start</h2>
+                <div class="code-block">
+                    <code><span class="comment"># Basic Usage</span>
+<span class="keyword">from</span> core.toolkit_manager <span class="keyword">import</span> ToolkitManager, ExecutionContext
+
+<span class="comment"># Initialize</span>
+manager = <span class="function">ToolkitManager</span>()
+
+<span class="comment"># Execute a tool (async)</span>
+result = <span class="keyword">await</span> manager.<span class="function">execute</span>(<span class="string">'align'</span>, [<span class="string">'--check-only'</span>])
+
+<span class="comment"># Check result</span>
+<span class="keyword">if</span> result.success:
+    <span class="function">print</span>(result.stdout)
+<span class="keyword">else</span>:
+    <span class="function">print</span>(<span class="string">f"Error: {result.error}"</span>)</code>
+                </div>
+
+                <div class="code-block">
+                    <code><span class="comment"># With Dry Run & Checkpoint</span>
+context = <span class="function">ExecutionContext</span>(
+    tool=<span class="string">"cleanup"</span>,
+    args=[<span class="string">"--all"</span>],
+    dry_run=<span class="keyword">True</span>,           <span class="comment"># Preview without executing</span>
+    checkpoint_enabled=<span class="keyword">True</span>  <span class="comment"># Auto-checkpoint for rollback</span>
+)
+
+result = <span class="keyword">await</span> manager.<span class="function">execute</span>(<span class="string">"cleanup"</span>, [<span class="string">"--all"</span>], context)</code>
+                </div>
+            </div>
+
+            <!-- Tool Inventory -->
+            <div class="inventory-section">
+                <h2><i class="fas fa-toolbox"></i> Tool Categories</h2>
+                <table class="inventory-table">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Tools</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>brain_operations</strong></td>
+                            <td>4</td>
+                            <td>CORTEX brain tier operations (align, healthcheck, optimize, cleanup)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>operations</strong></td>
+                            <td>3</td>
+                            <td>System operations and orchestration (review, deploy, sanitize)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>planning</strong></td>
+                            <td>3</td>
+                            <td>Planning and ADO management (plan, ado, planning-file-manager)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>analytics</strong></td>
+                            <td>4</td>
+                            <td>Analysis and reporting (profile, metrics, visualize, uml)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>documentation</strong></td>
+                            <td>7</td>
+                            <td>Documentation generation (docs-generate, html-generator, etc.)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>testing</strong></td>
+                            <td>3</td>
+                            <td>Testing utilities (validate, test-performance, verify-no-mocks)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>migration</strong></td>
+                            <td>2</td>
+                            <td>Database and schema migration (schema-migrate, version-detect)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>maintenance</strong></td>
+                            <td>4</td>
+                            <td>Maintenance tools (cleanup-temp, detect-duplicates, full-cleanup)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>generators</strong></td>
+                            <td>5</td>
+                            <td>Code and specification generators (extract-schemas, etc.)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>utilities</strong></td>
+                            <td>4</td>
+                            <td>General utility tools (token-calculator, version-manager, etc.)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- CTA Section -->
+            <div class="cta-section">
+                <h2>Ready to Get Started?</h2>
+                <p style="color: var(--text-secondary);">
+                    Explore the Toolkit Manager documentation or dive into the implementation.
+                </p>
+                <div class="cta-buttons">
+                    <a href="https://github.com/asifhussain60/CORTEX/tree/CORTEX-4.0/cortex-toolkit/core" class="cta-btn cta-btn-primary">
+                        <i class="fab fa-github"></i> View Source
+                    </a>
+                    <a href="https://github.com/asifhussain60/CORTEX/blob/CORTEX-4.0/cortex-toolkit/docs/toolkit-manager-guide.md" class="cta-btn cta-btn-secondary">
+                        <i class="fas fa-book"></i> Documentation
+                    </a>
+                    <a href="../index.html" class="cta-btn cta-btn-secondary">
+                        <i class="fas fa-home"></i> Back to Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <img src="../assets/images/CORTEX-logo-128.png" alt="CORTEX" width="32" height="32">
+                    <span>CORTEX 4.0</span>
+                </div>
+                <div class="footer-links">
+                    <a href="../sitemap.html">Sitemap</a>
+                    <a href="https://github.com/asifhussain60/CORTEX">GitHub</a>
+                    <a href="../faq.html">FAQ</a>
+                </div>
+                <p class="footer-copyright">
+                    © 2025 Asif Hussain. Built with CORTEX.
+                </p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
