@@ -753,6 +753,10 @@ named_templates:
       | **Definition of Ready** | {{#if dor_passed}}✅ Passed{{else}}⚠️ {{dor_violations}} issue(s){{/if}} |
       | **Definition of Done** | {{#if dod_passed}}✅ Passed{{else}}⏳ {{dod_remaining}} remaining{{/if}} |
       
+      ### 📄 Plan File
+      
+      **Open in Editor:** [{{plan_filename}}]({{plan_path}})
+      
       **Next:** {{next_action}}
     context_needed: true
     metadata:
@@ -824,6 +828,10 @@ named_templates:
       | **Definition of Done** | {{#if dod_passed}}✅ Passed{{else}}⏳ {{dod_remaining}} remaining{{/if}} |
       | **ADO Authentication** | {{#if ado_auth_valid}}✅ Connected{{else}}❌ Not authenticated{{/if}} |
       
+      ### 📄 Plan File
+      
+      **Open in Editor:** [{{plan_filename}}]({{plan_path}})
+      
       **Next:** {{next_action}}
     context_needed: true
     metadata:
@@ -837,6 +845,48 @@ named_templates:
         - "generate_ado_phase_rows(phases)"
         - "format_elapsed_time(seconds)"
         - "render_ado_progress(...) - Full convenience method"
+  
+  plan_created:
+    description: "Template for plan creation completion with clickable file link"
+    tier: "TIER 2"
+    priority: "mandatory"
+    format: |
+      ## 🛡️🧠 CORTEX Plan Created
+      **Author:** Asif Hussain | **Plan:** {{plan_name}}
+      
+      ---
+      
+      ### 📊 Plan Summary
+      
+      | Metric | Value |
+      |--------|-------|
+      | **Plan ID** | {{plan_id}} |
+      | **Phases** | {{phase_count}} |
+      | **Estimated Effort** | {{effort}} |
+      | **Files to Modify** | {{file_count}} |
+      
+      ### 📁 Plan Structure
+      
+      ```
+      {{plan_folder}}/
+      ├── 00-master-plan.md    # Main plan
+      ├── context/             # Context artifacts
+      ├── reports/             # Progress reports
+      ├── artifacts/           # Supporting files
+      └── tracking/            # progress-tracker.json
+      ```
+      
+      ### 📄 Open Plan in Editor
+      
+      **Click to open:** [00-master-plan.md]({{plan_path}})
+      
+      ---
+      
+      **Next:** {{next_action}}
+    metadata:
+      category: planning
+      operation: plan_creation
+    post_creation_action: "Always include clickable link to plan file"
   
   progress_bar_simple:
     description: "Simple inline progress bar for quick status updates"

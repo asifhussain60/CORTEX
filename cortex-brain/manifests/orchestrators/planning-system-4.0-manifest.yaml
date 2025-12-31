@@ -827,10 +827,53 @@ phase_1_status:
       notes: "Requires test suite creation"
 
 # ========================================
+# Post-Creation Actions
+# ========================================
+
+post_creation_actions:
+  description: "Mandatory actions after plan creation completes"
+  enabled: true
+  actions:
+    - action_id: "PCA-001"
+      name: "Provide Clickable Plan Link"
+      priority: "mandatory"
+      description: |
+        After creating a plan, ALWAYS provide a clickable markdown link
+        in the Copilot Chat response so user can open the plan in editor.
+      format: |
+        📄 **Plan Created:** [00-master-plan.md]({{plan_path}})
+        
+        Click the link above to open the plan in the editor for review.
+      example: |
+        📄 **Plan Created:** [00-master-plan.md](cortex-brain/documents/planning/active/my-feature/00-master-plan.md)
+        
+        Click the link above to open the plan in the editor for review.
+      
+    - action_id: "PCA-002"
+      name: "Summary Statistics"
+      priority: "recommended"
+      description: "Show plan summary statistics after creation"
+      format: |
+        | Metric | Value |
+        |--------|-------|
+        | **Plan ID** | {{plan_id}} |
+        | **Phases** | {{phase_count}} |
+        | **Estimated Effort** | {{effort}} |
+        | **Files to Modify** | {{file_count}} |
+
+# ========================================
 # Version History
 # ========================================
 
 version_history:
+  - version: "4.0.2"
+    date: "2025-12-31"
+    changes:
+      - "Added post_creation_actions section"
+      - "Mandatory clickable link to plan in Copilot Chat responses"
+      - "User can now click to open plan directly in editor"
+    author: "CORTEX Planning Team"
+
   - version: "4.0.0"
     date: "2025-12-19"
     changes:

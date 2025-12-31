@@ -1,0 +1,185 @@
+{
+  "plan_id": "COMPOSABLE-TEMPLATES-001",
+  "plan_name": "Orchestrator Composable Template System",
+  "created": "2025-12-31T00:00:00Z",
+  "last_updated": "2025-12-31T00:00:00Z",
+  "overall_progress": 0,
+  "status": "not_started",
+  "estimated_effort": "8-10 hours",
+  "phases": [
+    {
+      "phase_num": 1,
+      "name": "Discovery & Analysis",
+      "status": "pending",
+      "progress": 0,
+      "deliverables_completed": 0,
+      "deliverables_total": 4,
+      "tasks": [
+        { "id": "1.1", "description": "Inventory all existing sections in response-templates-v4.yaml", "status": "pending" },
+        { "id": "1.2", "description": "Document all when_to_use conditions for each section", "status": "pending" },
+        { "id": "1.3", "description": "Check existing response_templates in orchestrator manifests", "status": "pending" },
+        { "id": "1.4", "description": "Identify template usage patterns across orchestrators", "status": "pending" }
+      ],
+      "output": "context/current-state-analysis.md",
+      "start_time": null,
+      "end_time": null,
+      "elapsed_seconds": 0
+    },
+    {
+      "phase_num": 2,
+      "name": "Template Migration Review",
+      "status": "pending",
+      "progress": 0,
+      "deliverables_completed": 0,
+      "deliverables_total": 3,
+      "tasks": [
+        { "id": "2.1", "description": "Catalog all named templates", "status": "pending" },
+        { "id": "2.2", "description": "Identify reusable blocks within existing templates", "status": "pending" },
+        { "id": "2.3", "description": "Create migration mapping: old templates → composable blocks", "status": "pending" }
+      ],
+      "output": "context/template-migration-mapping.md",
+      "start_time": null,
+      "end_time": null,
+      "elapsed_seconds": 0
+    },
+    {
+      "phase_num": 3,
+      "name": "Intelligent Template Algorithm",
+      "status": "pending",
+      "progress": 0,
+      "deliverables_completed": 0,
+      "deliverables_total": 4,
+      "tasks": [
+        { "id": "3.1", "description": "Define context signals for template selection", "status": "pending" },
+        { "id": "3.2", "description": "Create block priority rules", "status": "pending" },
+        { "id": "3.3", "description": "Design composition algorithm with block ordering logic", "status": "pending" },
+        { "id": "3.4", "description": "Add algorithm specification to response-templates-v4.yaml", "status": "pending" }
+      ],
+      "output": "response-templates-v4.yaml (template_selection_algorithm section)",
+      "start_time": null,
+      "end_time": null,
+      "elapsed_seconds": 0
+    },
+    {
+      "phase_num": 4,
+      "name": "Orchestrator Template Generation",
+      "status": "pending",
+      "progress": 0,
+      "deliverables_completed": 0,
+      "deliverables_total": 8,
+      "tasks": [
+        { "id": "4.1", "description": "Generate Planning orchestrator templates", "status": "pending" },
+        { "id": "4.2", "description": "Generate TDD orchestrator templates", "status": "pending" },
+        { "id": "4.3", "description": "Generate Debug orchestrator templates", "status": "pending" },
+        { "id": "4.4", "description": "Generate CORTEX Lens templates", "status": "pending" },
+        { "id": "4.5", "description": "Generate Refinement orchestrator templates", "status": "pending" },
+        { "id": "4.6", "description": "Generate Sanitization orchestrator templates", "status": "pending" },
+        { "id": "4.7", "description": "Generate Documentation orchestrator templates", "status": "pending" },
+        { "id": "4.8", "description": "Generate ADO orchestrator templates", "status": "pending" }
+      ],
+      "output": "artifacts/orchestrator-templates.yaml",
+      "start_time": null,
+      "end_time": null,
+      "elapsed_seconds": 0
+    },
+    {
+      "phase_num": 5,
+      "name": "Composable Blocks Schema",
+      "status": "pending",
+      "progress": 0,
+      "deliverables_completed": 0,
+      "deliverables_total": 2,
+      "tasks": [
+        { "id": "5.1", "description": "Add composable_blocks section to response-templates-v4.yaml", "status": "pending" },
+        { "id": "5.2", "description": "Define all generic and specialized blocks with rendering formats", "status": "pending" }
+      ],
+      "output": "response-templates-v4.yaml (composable_blocks section)",
+      "start_time": null,
+      "end_time": null,
+      "elapsed_seconds": 0
+    },
+    {
+      "phase_num": 6,
+      "name": "Manifest Updates (All 8)",
+      "status": "pending",
+      "progress": 0,
+      "deliverables_completed": 0,
+      "deliverables_total": 8,
+      "tasks": [
+        { "id": "6.1", "description": "Update planning-system-4.0-manifest.yaml", "status": "pending" },
+        { "id": "6.2", "description": "Update tdd-orchestrator-v4-manifest.yaml", "status": "pending" },
+        { "id": "6.3", "description": "Update debug-orchestrator-manifest.yaml", "status": "pending" },
+        { "id": "6.4", "description": "Update cortex-lens-v3-manifest.yaml", "status": "pending" },
+        { "id": "6.5", "description": "Update refinement-orchestrator-manifest.yaml", "status": "pending" },
+        { "id": "6.6", "description": "Update code-sanitization-manifest.yaml", "status": "pending" },
+        { "id": "6.7", "description": "Update technical-documentation-orchestrator-manifest.yaml", "status": "pending" },
+        { "id": "6.8", "description": "Verify ado-planning-manifest.yaml", "status": "pending" }
+      ],
+      "output": "8 updated manifest files",
+      "start_time": null,
+      "end_time": null,
+      "elapsed_seconds": 0
+    },
+    {
+      "phase_num": 7,
+      "name": "Progress Bar Standardization",
+      "status": "pending",
+      "progress": 0,
+      "deliverables_completed": 0,
+      "deliverables_total": 2,
+      "tasks": [
+        { "id": "7.1", "description": "Update all progress templates to use standardized format", "status": "pending" },
+        { "id": "7.2", "description": "Ensure consistent: 10-char width, █░ chars, ✅🔄⏳❌⏸️ icons", "status": "pending" }
+      ],
+      "output": "response-templates-v4.yaml (standardized progress)",
+      "start_time": null,
+      "end_time": null,
+      "elapsed_seconds": 0
+    },
+    {
+      "phase_num": 8,
+      "name": "Validation & REFACTOR",
+      "status": "pending",
+      "progress": 0,
+      "deliverables_completed": 0,
+      "deliverables_total": 5,
+      "tasks": [
+        { "id": "8.1", "description": "Validate all YAML syntax", "status": "pending" },
+        { "id": "8.2", "description": "Count response_templates occurrences (target: 8)", "status": "pending" },
+        { "id": "8.3", "description": "Verify template_selection_algorithm is complete", "status": "pending" },
+        { "id": "8.4", "description": "Test CORTEX response rendering", "status": "pending" },
+        { "id": "8.5", "description": "REFACTOR: Remove deprecated templates, clean up duplicates", "status": "pending" }
+      ],
+      "output": "reports/validation-report.md",
+      "start_time": null,
+      "end_time": null,
+      "elapsed_seconds": 0
+    }
+  ],
+  "success_criteria": {
+    "template_selection_algorithm_exists": false,
+    "composable_blocks_exists": false,
+    "manifest_count_with_templates": 1,
+    "manifest_count_target": 8,
+    "orchestrator_specific_templates_generated": false,
+    "yaml_valid": true,
+    "standardized_progress_bars": false,
+    "no_breaking_changes": true
+  },
+  "files_to_modify": [
+    "cortex-brain/response-templates-v4.yaml",
+    "cortex-brain/manifests/orchestrators/planning-system-4.0-manifest.yaml",
+    "cortex-brain/manifests/orchestrators/tdd-orchestrator-v4-manifest.yaml",
+    "cortex-brain/manifests/orchestrators/debug-orchestrator-manifest.yaml",
+    "cortex-brain/manifests/orchestrators/cortex-lens-v3-manifest.yaml",
+    "cortex-brain/manifests/orchestrators/refinement-orchestrator-manifest.yaml",
+    "cortex-brain/manifests/orchestrators/code-sanitization-manifest.yaml",
+    "cortex-brain/manifests/orchestrators/technical-documentation-orchestrator-manifest.yaml",
+    "cortex-brain/manifests/orchestrators/ado-planning-manifest.yaml"
+  ],
+  "files_to_create": [
+    "context/template-migration-mapping.md",
+    "artifacts/orchestrator-templates.yaml",
+    "reports/validation-report.md"
+  ]
+}

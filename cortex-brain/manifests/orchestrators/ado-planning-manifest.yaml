@@ -703,3 +703,43 @@ validation:
     report_missing_features: true
     report_path: "cortex-brain/documents/reports/ado-planning-drift-report.md"
     compare_with_planning_2.0: true
+
+# ========================================
+# Post-Creation Actions
+# ========================================
+
+post_creation_actions:
+  description: "Mandatory actions after ADO plan/work item creation completes"
+  enabled: true
+  actions:
+    - action_id: "PCA-ADO-001"
+      name: "Provide Clickable Plan Link"
+      priority: "mandatory"
+      description: |
+        After creating an ADO plan, ALWAYS provide a clickable markdown link
+        in the Copilot Chat response so user can open the plan in editor.
+      format: |
+        📄 **ADO Plan Created:** [{{plan_filename}}]({{plan_path}})
+        
+        Click the link above to open the plan in the editor for review.
+      example: |
+        📄 **ADO Plan Created:** [my-feature-ado-plan.yaml](cortex-brain/documents/planning/active/ado/my-feature-ado-plan.yaml)
+        
+        Click the link above to open the plan in the editor for review.
+      
+    - action_id: "PCA-ADO-002"
+      name: "Work Item Summary"
+      priority: "mandatory"
+      description: "Show work item creation summary"
+      format: |
+        ### 🎫 Work Items Generated
+        
+        | Type | Count | Status |
+        |------|-------|--------|
+        | Epic | {{epic_count}} | {{epic_status}} |
+        | Feature | {{feature_count}} | {{feature_status}} |
+        | User Story | {{story_count}} | {{story_status}} |
+        | Task | {{task_count}} | {{task_status}} |
+        
+        📄 **Plan File:** [{{plan_filename}}]({{plan_path}})
+
