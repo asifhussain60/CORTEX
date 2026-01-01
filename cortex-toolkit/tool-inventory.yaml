@@ -13,10 +13,10 @@ generated: "2025-12-31T00:00:00Z"
 generator: "ToolkitManager.generate_inventory()"
 
 metadata:
-  total_tools: 35
-  active_tools: 31
+  total_tools: 36
+  active_tools: 32
   deprecated_tools: 4
-  categories: 10
+  categories: 11
   
   # Statistics
   stats:
@@ -833,6 +833,43 @@ tools:
       
     depends_on: []
     conflicts_with: []
+
+  - id: masonry-validator
+    name: "Masonry Grid Validator"
+    version: "1.0.0"
+    category: validation
+    lifecycle: active
+    
+    capabilities:
+      - validation
+      - grid-layout
+      - css-generation
+      - gap-detection
+    
+    can_do:
+      - "validate masonry grid layouts"
+      - "detect gaps in Tetris patterns"
+      - "ensure complete grid fills"
+      - "generate validated CSS rules"
+      - "verify 100% grid coverage"
+    
+    execution:
+      command: cortex-validate-masonry
+      script: validation/masonry_grid_validator.py
+      method: cli
+      platforms: [windows, linux, macos]
+      requires_admin: false
+      idempotent: true
+      destructive: false
+      average_duration_seconds: 2
+      
+    depends_on: []
+    conflicts_with: []
+    
+    usage_examples:
+      - "Validate all CORTEX panel layouts"
+      - "Check for gaps in Orchestrators panel"
+      - "Generate CSS for validated grids"
 
 # Capability taxonomy for RequestAnalyzer
 capability_taxonomy:

@@ -84,10 +84,11 @@ Level 2 (Detail Pages: 137 component pages)
 - **TEMPLATE-BASED:** Use standardized HTML templates with glass header/footer
 - **CSS CLASSES ONLY:** Zero inline styles in new views
 - **NO LEVEL 3:** All detail content fits within Level 2, use tabs/accordions for depth
+- **⚠️ PRESERVE FILE PATHS:** MUST use existing file names/paths (e.g., `docs/index.html`, `docs/security/index.html`) to prevent breaking existing links - DO NOT create new file names like `index-level0-multipanel.html`
 
 **Implementation Principle:** 
-- Level 0: Additive only - insert new panels between existing elements
-- Level 1 & 2: Rebuild from scratch - ensure clean, standardized structure without legacy issues
+- Level 0: Additive only - insert new panels between existing elements (SAME FILE: docs/index.html)
+- Level 1 & 2: Rebuild from scratch - ensure clean, standardized structure without legacy issues (SAME FILE PATHS: docs/{domain}/index.html, docs/{domain}/{page}.html)
 
 ---
 
@@ -99,9 +100,9 @@ After comprehensive discovery analysis of all 9 tiles in the KEY FEATURES panel,
 ### Final Tile Classification
 
 **Multi-Panel Treatment (3 tiles):**
-1. **🛡️ Security**: 13 pages, 4 categories (Protection, Assessment, Compliance, Response)
-2. **🎯 Orchestrators**: 19 pages, 5 categories (Planning, Execution, System, Analysis, Debug)
-3. **🔧 Sharpen The Saw**: 6 pages, 6 categories (Security, SOLID, Quality, Performance, Testing, Documentation)
+1. **🛡️ Security**: 13 pages, 4 categories (Protection, Assessment, Compliance, Response) - **2x2 grid**
+2. **🎯 Orchestrators**: 19 pages, 5 categories (Planning, Execution, System, Analysis, Debug) - **2x3 grid (1 odd panel)**
+3. **🔧 Sharpen The Saw**: 6 pages, 6 categories (Security, SOLID, Quality, Performance, Testing, Documentation) - **3x2 grid (compact single-tag)**
 
 **Standard Tile Treatment (6 tiles):**
 4. **📚 Best Practices**: 17 knowledge domains - Scrollable Level 1 hub with domain tabs
@@ -227,9 +228,11 @@ file_search("docs/**/*.html") # 150 HTML files discovered
 
 ## 📊 Phase Breakdown
 
+**Total Duration:** 52 hours (includes safety buffer for new validation steps)
+
 ### Phase 0: Discovery & CSS Foundation
 
-**Duration:** 3 hours | **Complexity:** MEDIUM
+**Duration:** 4 hours | **Complexity:** MEDIUM
 
 **Objectives:**
 - **DISCOVERY FIRST:** Audit all existing HTML views to capture enhancements and structure
@@ -259,6 +262,9 @@ file_search("docs/**/*.html") # 150 HTML files discovered
 10. [ ] **🎨 ADD RANDOMIZED COLOR VARIATIONS:** Add 7-color system (cyan/purple/teal/indigo/pink/emerald/amber) using nth-of-type and nth-child selectors for pseudo-random distribution
 11. [ ] Define responsive breakpoints (768px, 640px) for all new classes
 12. [ ] **VERIFY:** Zero inline styles in CSS file itself
+12a. [ ] **🛡️ ADD BROWSER FALLBACKS:** Add `@supports` queries for backdrop-filter (IE11, old Android fallback to opaque backgrounds)
+12b. [ ] **🛡️ ADD CSS GRID FALLBACKS:** Add flexbox fallback for browsers without CSS Grid support (IE11 compatibility)
+12c. [ ] **⚡ ADD PERFORMANCE THROTTLING:** Disable backdrop-filter on low-end devices using media query `(max-resolution: 1dppx)`
 13. [ ] **TEST:** Responsive breakpoints on mobile (375px), tablet (768px), desktop (1440px)
 
 **Deliverables:**
@@ -299,8 +305,9 @@ file_search("docs/**/*.html") # 150 HTML files discovered
 4. [ ] Add Tetris grid (`.level0-category-tags`) for each category
 5. [ ] Style tags with `.level0-category-tag` class (NO inline styles)
 6. [ ] **🎨 APPLY RANDOMIZED COLOR VARIATIONS:** Distribute 7 colors (cyan/purple/teal/indigo/pink/emerald/amber) pseudo-randomly across tags using nth-child selectors (see glassmorphism-design-standard.md "7-Color Anti-Monotony Pattern")
-7. [ ] **VERIFY:** Zero `style=""` attributes in Security panel HTML
-8. [ ] **TEST:** Security panel renders correctly on mobile (1-column), tablet (2-column), desktop (2-column)
+7. [ ] **✅ VALIDATE MASONRY GRID:** Run `python src/validation/masonry_grid_validator.py` to ensure complete fill (100% coverage, zero gaps)
+8. [ ] **VERIFY:** Zero `style=""` attributes in Security panel HTML
+9. [ ] **TEST:** Security panel renders correctly on mobile (1-column), tablet (2-column), desktop (2-column)
 
 #### 1.2 Orchestrators Panel (19 pages, 5 categories)
 1. [ ] Remove existing Orchestrators tile HTML from `docs/index.html`
@@ -314,31 +321,47 @@ file_search("docs/**/*.html") # 150 HTML files discovered
 4. [ ] Add Tetris grid for each category
 5. [ ] Style with `.level0-category-tag` class (NO inline styles)
 6. [ ] **🎨 APPLY RANDOMIZED COLOR VARIATIONS:** Use different 7-color distribution than Security panel to maximize visual variety (all 7 colors: cyan/purple/teal/indigo/pink/emerald/amber)
-7. [ ] **VERIFY:** Zero `style=""` attributes in Orchestrators panel HTML
-8. [ ] **TEST:** Orchestrators panel responsive on 3 screen sizes
+7. [ ] **✅ VALIDATE MASONRY GRIDS:** Run validator for all 5 categories (Planning, Execution, System, Analysis, Debug) - must achieve 100% grid coverage
+8. [ ] **VERIFY:** Zero `style=""` attributes in Orchestrators panel HTML
+9. [ ] **TEST:** Orchestrators panel responsive on 3 screen sizes
 
 #### 1.3 Sharpen The Saw Panel (6 pages, 6 categories)
 1. [ ] Remove existing STS tile HTML from `docs/index.html`
-2. [ ] Add `.level0-main-panel-wrapper` container
-3. [ ] Create 6 category sub-panels (1 page each):
+2. [ ] Add `.main-panel-wrapper` container with `#sts-panel` ID
+3. [ ] Create **3x2 grid** with 6 category sub-panels (1 page each):
    - **Security**: sts/security.html
    - **SOLID**: sts/solid.html
    - **Code Quality**: sts/code-quality.html
    - **Performance**: sts/performance.html
    - **Testing**: sts/testing.html
    - **Documentation**: sts/documentation.html
-4. [ ] Add Tetris grid with 1 tag per category
-5. [ ] Style with `.level0-category-tag` class (NO inline styles)
-6. [ ] **🎨 APPLY RANDOMIZED COLOR VARIATIONS:** Assign different color variant from 7-color palette to each of the 6 categories using pseudo-random distribution (cyan/purple/teal/indigo/pink/emerald/amber)
-7. [ ] **VERIFY:** Zero `style=""` attributes in STS panel HTML
-8. [ ] **TEST:** STS panel responsive on 3 screen sizes
+4. [ ] Add `.grid-3x2` class to `.category-panels-grid` for side-by-side layout
+5. [ ] Add `.single-tag` class to each `.category-subpanel` for compact styling
+6. [ ] Single full-width link per category (no Tetris grid needed)
+7. [ ] Style with `.category-tag` class (NO inline styles)
+8. [ ] **🎨 APPLY COLOR VARIATIONS:** Cyan (1st), Purple (2nd), Emerald (3rd), Indigo (4th) - cycling pattern
+9. [ ] **VERIFY:** Zero `style=""` attributes in STS panel HTML
+10. [ ] **TEST:** STS panel responsive on 3 screen sizes (3x2 grid collapses to 1-column on mobile)
+
+**Grid Layout Intelligence:** See `glassmorphism-design-standard.md` (Pattern 15, lines 58-91, 1729-1823) for complete implementation
+
+**Masonry Validation Tool (v1.0.0):**
+- **Location:** `src/validation/masonry_grid_validator.py`
+- **Command:** `python src/validation/masonry_grid_validator.py`
+- **Validates:** Complete grid fills, gap detection, coverage % calculation
+- **Registered:** `cortex-toolkit/tool-inventory.yaml` (Tool ID: masonry-validator)
+- **Requirements:** 100% coverage, zero gaps, all cells filled
 
 **Deliverables:**
 - `docs/index.html` (updated with 3 multi-panels)
 - Inline styles report in `context/inline-styles-removed.md`
+- Masonry validation report (✅ all panels pass)
 
 **Validation Gate:**
 - ✅ All 3 panels use Pattern 15 structure
+- ✅ **Masonry grids validated:** 100% coverage, zero gaps (run validator tool)
+  - **⚠️ If validation fails:** Regenerate Tetris pattern using validator's suggested layout, re-run until 100% coverage achieved
+  - **🔒 Pre-commit hook:** Add git hook to block commits if validation fails: `python src/validation/masonry_grid_validator.py`
 - ✅ Zero inline `style=""` attributes across all 3 panels
 - ✅ All category tags link to correct Level 2 pages
 - ✅ Responsive layout functional: 1-column (mobile), 2-column (tablet/desktop)
@@ -360,8 +383,11 @@ file_search("docs/**/*.html") # 150 HTML files discovered
 
 **Tasks:**
 
-#### 2.1 Discovery Review
+#### 2.1 Discovery Review & Content Preservation
 1. [ ] Review `context/view-hierarchy-audit.md` for Level 1 content requirements
+1a. [ ] **📦 EXPORT EXISTING CONTENT:** Run `python scripts/export_html_content.py docs/ → context/content-backup/` to preserve all text/images/code
+1b. [ ] **📋 CREATE CONTENT INVENTORY:** Generate JSON mapping of all existing content for migration verification
+1c. [ ] **🔍 DOCUMENT DEPENDENCIES:** Identify any JavaScript dependencies or dynamic features that need migration
 2. [ ] Identify enhancement opportunities for each Level 1 hub
 3. [ ] Document navigation structure for each hub
 
@@ -618,6 +644,8 @@ file_search("docs/**/*.html") # 150 HTML files discovered
    - [ ] Create appropriate CSS class in `glassmorphism.css`
    - [ ] Document class purpose and usage
    - [ ] Update HTML to use new class
+12a. [ ] **🔒 CHECK CSS CLASS CONFLICTS:** Run `grep -r "\.grid-3x2\|\.glass-card" docs/assets/` to detect name collisions with existing frameworks
+12b. [ ] **🛡️ SANITIZE INLINE STYLES:** Reject any `javascript:`, `data:`, or `vbscript:` URIs during extraction (XSS prevention)
 13. [ ] Replace all color inline styles with CSS variables (`--accent-primary`, etc.)
 14. [ ] Replace all layout inline styles with utility classes (`.flex-row`, `.grid-2col`, etc.)
 15. [ ] Replace all animation inline styles with animation classes (`.fade-in`, `.slide-up`, etc.)
@@ -661,6 +689,8 @@ file_search("docs/**/*.html") # 150 HTML files discovered
 2. [ ] Test Security panel at 768px (tablet) - expect 2-column layout
 3. [ ] Test Security panel at 1440px (desktop) - expect 2-column layout
 4. [ ] Fix any overflow or layout break issues
+4a. [ ] **📱 TEST TETRIS OVERFLOW:** Simulate 10+ card category on 375px, verify vertical scroll doesn't hide footer
+4b. [ ] **🔧 ADD OVERFLOW PROTECTION:** Add `max-height: 600px; overflow-y: auto;` to `.category-tags`, add text truncation to long titles
 
 **Orchestrators Panel:**
 5. [ ] Test Orchestrators panel at 375px - 1-column
@@ -743,6 +773,8 @@ file_search("docs/**/*.html") # 150 HTML files discovered
 13. [ ] Include common patterns (header, footer, card, button, link)
 14. [ ] Document Level 1 and Level 2 templates
 15. [ ] Document NO Level 3 enforcement strategy
+15a. [ ] **⚡ ADD PERFORMANCE OPTIMIZATIONS:** Document lazy loading strategy (`<img loading="lazy">`), CSS minification process
+15b. [ ] **🗜️ MINIFY CSS FOR PRODUCTION:** Generate `glassmorphism.min.css` using cssnano, add cache busting (`?v=4.1.0`)
 
 **Deliverables:**
 - `glassmorphism-design-standard.md` v4.1.0 (updated)
@@ -775,6 +807,9 @@ file_search("docs/**/*.html") # 150 HTML files discovered
 3. [ ] Check for unused CSS classes
 4. [ ] **VERIFY:** NO inline styles anywhere in HTML files
 5. [ ] **VERIFY:** NO Level 3 navigation links in any view
+5a. [ ] **🔗 RUN LINK VALIDATION:** Use `linkchecker docs/index.html --check-extern` to detect broken links
+5b. [ ] **📊 GENERATE BROKEN LINKS REPORT:** Document all 404s in `reports/broken-links.md` and fix before completion
+5c. [ ] **🔒 ENFORCE HTTPS:** Update all absolute URLs to HTTPS, add HSTS header, check for mixed content warnings
 6. [ ] **VERIFY:** All deep content uses tabs/accordions, not Level 3 pages
 
 #### 7.2 View Hierarchy Validation
@@ -900,6 +935,63 @@ file_search("docs/**/*.html") # 150 HTML files discovered
 
 ---
 
+### Phase 9: Staging Deployment & Pre-Production Validation
+
+**Duration:** 2 hours | **Complexity:** LOW
+
+**Objectives:**
+- Deploy to staging environment for pre-production testing
+- Run automated validation suite
+- Get stakeholder approval before production release
+- Document rollback procedure
+
+**Tasks:**
+
+#### 9.1 Staging Environment Setup
+1. [ ] Create staging branch: `git checkout -b staging`
+2. [ ] Deploy to staging URL: `asifhussain60.github.io/CORTEX-staging/`
+3. [ ] Verify all assets load correctly
+4. [ ] Test navigation across all 3 levels
+
+#### 9.2 Automated Testing
+5. [ ] Run Lighthouse audit on 20 sample pages (target: >90 performance score)
+6. [ ] Run link validation: `linkchecker` on entire site
+7. [ ] Run visual regression tests: Compare staging vs production screenshots
+8. [ ] Check mobile responsiveness on real devices (iOS Safari, Android Chrome)
+
+#### 9.3 Stakeholder Review
+9. [ ] Document all changes in `reports/staging-review.md`
+10. [ ] Share staging URL with stakeholders for approval
+11. [ ] Address any feedback or issues found
+12. [ ] Get written approval to proceed to production
+
+#### 9.4 Production Deployment
+13. [ ] Merge staging to main: `git checkout main && git merge staging`
+14. [ ] Tag release: `git tag v4.1.0`
+15. [ ] Push to production: `git push origin main --tags`
+16. [ ] Monitor deployment for 24 hours (check analytics, error logs)
+
+#### 9.5 Rollback Planning
+17. [ ] Document rollback procedure in `reports/rollback-plan.md`
+18. [ ] Test rollback: `git revert` to previous commit, verify site restoration
+19. [ ] Create emergency contact list for deployment issues
+20. [ ] Set up monitoring alerts for broken links, performance degradation
+
+**Deliverables:**
+- Staging deployment validation report: `reports/staging-validation.md`
+- Lighthouse audit results (all pages)
+- Visual regression comparison
+- Rollback procedure documentation
+
+**Validation Gate:**
+- ✅ Staging tests pass (Lighthouse >90, zero broken links)
+- ✅ Visual regression approved by stakeholders
+- ✅ Mobile testing complete on iOS/Android
+- ✅ Rollback procedure tested and documented
+- ✅ Stakeholder approval received
+
+---
+
 ## 📊 Success Metrics
 
 | Metric | Target | Measurement Method |
@@ -928,12 +1020,16 @@ file_search("docs/**/*.html") # 150 HTML files discovered
 6. ✅ Security, Orchestrators, and STS use multi-panel Pattern 15
 7. ✅ All views responsive on mobile (375px), tablet (768px), desktop (1440px)
 8. ✅ All new CSS classes documented in glassmorphism-design-standard.md
-9. ✅ Cross-browser testing passed (Chrome, Firefox, Safari, Edge)
-10. ✅ Performance benchmarks met (<3s load, ≥60fps, <50MB GPU)
+9. ✅ Cross-browser testing passed (Chrome, Firefox, Safari, Edge) **with fallbacks for unsupported browsers**
+10. ✅ Performance benchmarks met (<3s load, ≥60fps, <50MB GPU) **with throttling on low-end devices**
 11. ✅ WCAG 2.1 AA accessibility compliance verified
 12. ✅ Visual regression tests passed (improvements documented)
 13. ✅ Git commits follow SKULL rule (no CORTEX code in user repos)
 14. ✅ Phase 8 REFACTOR complete (whole-file cleanup)
+15. ✅ **Phase 9 STAGING complete (pre-production validation passed)**
+16. ✅ **Link validation passed (zero broken links)**
+17. ✅ **Content migration verified (no data loss during rebuild)**
+18. ✅ **Rollback procedure tested and documented**
 
 ---
 

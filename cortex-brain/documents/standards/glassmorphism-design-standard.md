@@ -43,22 +43,47 @@ Level 0 (Home) → Level 1 (Tile Overview) → Level 2 (Component Detail)
 
 **Level 0 Tile Patterns:**
 
-| Tile | Pattern | Rationale |
-|------|---------|-----------|
-| **Security (13 pages, 4 categories)** | Multi-Panel | Complex categorization requires visual separation |
-| **Orchestrators (19 pages, 5 categories)** | Multi-Panel | Most complex tile, needs clear organization |
-| **Architecture (4 pages)** | Standard Tile | Simple structure, direct navigation |
-| **Token Optimization (3 pages)** | Standard Tile | Simple linear workflow |
-| **Sharpen The Saw (6 categories)** | Standard Tile | Medium complexity, tile sufficient |
-| **Best Practices (35 guidelines)** | Standard Tile | Guideline format works in tile |
-| **Toolkit Manager (3 pages)** | Standard Tile | Simple structure |
-| **CORTEX Lens (3 pages)** | Standard Tile | Simple workflow |
-| **Get Started (3 pages)** | Standard Tile | Onboarding sequence |
+| Tile | Pattern | Grid Layout | Rationale |
+|------|---------|-------------|-----------|
+| **Security (13 pages, 4 categories)** | Multi-Panel | 2x2 (4 subpanels) | Complex categorization requires visual separation |
+| **Orchestrators (19 pages, 5 categories)** | Multi-Panel | 2x3 (5 subpanels, 1 odd) | Most complex tile, needs clear organization |
+| **Sharpen The Saw (6 pages, 6 categories)** | Multi-Panel | 3x2 (6 subpanels, compact single-tag) | 6 single-link categories displayed side-by-side |
+| **Architecture (4 pages)** | Standard Tile | N/A | Simple structure, direct navigation |
+| **Token Optimization (3 pages)** | Standard Tile | N/A | Simple linear workflow |
+| **Best Practices (35 guidelines)** | Standard Tile | N/A | Guideline format works in tile |
+| **Toolkit Manager (3 pages)** | Standard Tile | N/A | Simple structure |
+| **CORTEX Lens (3 pages)** | Standard Tile | N/A | Simple workflow |
+| **Get Started (3 pages)** | Standard Tile | N/A | Onboarding sequence |
 
-**Multi-Panel Pattern (Security, Orchestrators):**
+**Multi-Panel Pattern Intelligence (v4.0.1):**
+
+**Grid Layout Rules:**
+- **4 subpanels:** 2x2 grid (Security pattern)
+- **5 subpanels:** 2x3 grid with 1 odd panel (Orchestrators pattern)
+- **6 subpanels:** 3x2 grid (STS pattern - side-by-side rows)
+- **Single-tag subpanels:** More compact sizing (min-height: 280px vs 380px)
+
+**HTML Implementation:**
+```html
+<!-- 3x2 Grid for 6 panels -->
+<div class="category-panels-grid grid-3x2">
+    <div class="category-subpanel single-tag">
+        <!-- Icon, title, description, single link -->
+    </div>
+    <!-- Repeat 6 times -->
+</div>
+```
+
+**CSS Classes:**
+- `.grid-3x2` - Forces 3x2 layout (2 columns, 3 rows)
+- `.single-tag` - Compact subpanel styling for single links
+- Default (no class) - 2x2 grid for 4-5 panels
+
+**When to use each pattern:**
 - Main wrapper panel containing multiple category sub-panels
 - Each sub-panel shows category icon, title, description, and links
-- Tetris/masonry grid layout for visual interest
+- Tetris/masonry grid layout for visual interest (multi-tag subpanels)
+- Full-width single links for single-tag subpanels (STS pattern)
 - Non-clickable sub-panels (display only), clickable tags within
 
 **Standard Tile Pattern (All Others):**
@@ -1701,60 +1726,110 @@ def complex_function(data, config):
 
 ---
 
-### Pattern 15: Level 0 Multi-Panel System (Security, Orchestrators)
+### Pattern 15: Level 0 Multi-Panel System (Security, Orchestrators, STS)
 
-**Use Cases:** Home page tiles with many Level 2 pages requiring categorization (Security: 13 pages/4 categories, Orchestrators: 19 pages/5 categories)
+**Use Cases:** Home page tiles with many Level 2 pages requiring categorization
+- **Security:** 13 pages/4 categories
+- **Orchestrators:** 19 pages/5 categories
+- **Sharpen The Saw:** 6 pages/6 categories
 
 **Design Philosophy:**
 - **Progressive Disclosure**: Show categories first, then links within categories
-- **Visual Hierarchy**: Main panel → Category sub-panels → Tetris grid of links
+- **Visual Hierarchy**: Main panel → Category sub-panels → Links (Tetris grid for multi-tag, full-width for single-tag)
 - **Non-Clickable Containers**: Sub-panels are display only, links within are clickable
 - **Glassmorphism**: Layered glass effects with gradients and shadows
+- **Intelligent Layout**: Adaptive grid based on panel count and tag density
+
+**Grid Layout Intelligence (v4.0.1):**
+
+| Subpanels | Grid Layout | CSS Class | Tag Layout | Use Case |
+|-----------|-------------|-----------|------------|----------|
+| 4 | 2x2 | (default) | Tetris/masonry | Security pattern |
+| 5 | 2x3 (1 odd) | (default) | Tetris/masonry | Orchestrators pattern |
+| 6 | 3x2 | `.grid-3x2` | Single full-width | STS pattern |
+
+**Single-Tag Subpanel Styling:**
+- Add `.single-tag` class to subpanels with only 1 link
+- More compact sizing: `min-height: 280px` (vs 380px for multi-tag)
+- Smaller icons: 60x60px (vs 70x70px)
+- Full-width link (no Tetris grid needed)
 
 **HTML Structure:**
+
+**Example 1: Security Panel (4 subpanels, multi-tag, 2x2 grid):**
 ```html
-<!-- Security Panel Example -->
-<section class="level0-key-features-section">
-    <div class="level0-main-panel-wrapper">
-        <div class="level0-panel-header-centered">
-            <h2 class="level0-panel-title-main">
+<section class="key-features-section" id="security-panel">
+    <div class="main-panel-wrapper">
+        <div class="panel-header-centered">
+            <h2 class="panel-title-main">
                 <span>🛡️</span>
                 <span>SECURITY</span>
             </h2>
-            <p class="level0-panel-subtitle-main">Comprehensive threat modeling, compliance standards, and security assessments</p>
+            <p class="panel-subtitle-main">Comprehensive threat modeling, compliance standards, and security assessments</p>
         </div>
 
-        <div class="level0-category-panels-grid">
-            <!-- Protection Category -->
-            <div class="level0-category-subpanel">
-                <div class="level0-category-icon-wrapper">
-                    <span class="level0-category-icon">🔒</span>
+        <div class="category-panels-grid">
+            <!-- Protection Category (multi-tag) -->
+            <div class="category-subpanel">
+                <div class="category-icon-wrapper">
+                    <span class="category-icon">🔒</span>
                 </div>
-                <h3 class="level0-category-title">Protection</h3>
-                <p class="level0-category-description">Role-based access control, data encryption, privacy safeguards, and comprehensive activity tracking.</p>
-                <div class="level0-category-tags">
-                    <a href="security/access-control.html" class="level0-category-tag">
+                <h3 class="category-title">Protection</h3>
+                <p class="category-description">Role-based access control, data encryption, privacy safeguards, and comprehensive activity tracking.</p>
+                <div class="category-tags">
+                    <a href="security/access-control.html" class="category-tag">
                         <span>Access Control</span>
                     </a>
-                    <a href="security/data-protection.html" class="level0-category-tag">
+                    <a href="security/data-protection.html" class="category-tag">
                         <span>Data Protection</span>
                     </a>
-                    <a href="security/audit-logging.html" class="level0-category-tag">
+                    <a href="security/audit-logging.html" class="category-tag">
                         <span>Audit Logging</span>
                     </a>
                 </div>
             </div>
-
             <!-- Repeat for Assessment, Compliance, Response categories -->
         </div>
     </div>
 </section>
 ```
 
-**CSS (defined in `glassmorphism.css`):**
+**Example 2: STS Panel (6 subpanels, single-tag, 3x2 grid):**
+```html
+<section class="key-features-section" id="sts-panel">
+    <div class="main-panel-wrapper">
+        <div class="panel-header-centered">
+            <h2 class="panel-title-main">
+                <span>🔧</span>
+                <span>SHARPEN THE SAW</span>
+            </h2>
+            <p class="panel-subtitle-main">Continuous improvement through security, SOLID principles, and quality standards</p>
+        </div>
+
+        <!-- 3x2 Grid with single-tag subpanels -->
+        <div class="category-panels-grid grid-3x2">
+            <div class="category-subpanel single-tag">
+                <div class="category-icon-wrapper">
+                    <span class="category-icon">🛡️</span>
+                </div>
+                <h3 class="category-title">Security</h3>
+                <p class="category-description">Security-first development practices, threat modeling integration, and defensive coding patterns.</p>
+                <div class="category-tags">
+                    <a href="sts/security.html" class="category-tag">
+                        <span>Security Best Practices</span>
+                    </a>
+                </div>
+            </div>
+            <!-- Repeat for SOLID, Code Quality, Performance, Testing, Documentation -->
+        </div>
+    </div>
+</section>
+```
+
+**CSS (defined in `docs/index.html` or external stylesheet):**
 ```css
 /* Main panel wrapper */
-.level0-main-panel-wrapper {
+.main-panel-wrapper {
     background: linear-gradient(135deg, rgba(123, 97, 255, 0.15), rgba(0, 212, 255, 0.10));
     border: 1px solid rgba(123, 97, 255, 0.4);
     border-radius: 16px;
@@ -1762,8 +1837,28 @@ def complex_function(data, config):
     backdrop-filter: blur(10px);
 }
 
+/* Category panels grid - Intelligent layout */
+.category-panels-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+@media (min-width: 768px) {
+    /* Default: 2x2 grid for 4-5 panels */
+    .category-panels-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    /* 3x2 grid for 6 panels (STS pattern) */
+    .category-panels-grid.grid-3x2 {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+    }
+}
+
 /* Category sub-panel (non-clickable) */
-.level0-category-subpanel {
+.category-subpanel {
     background: linear-gradient(135deg, rgba(10, 14, 39, 0.8), rgba(26, 31, 58, 0.8));
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 16px;
@@ -1772,8 +1867,26 @@ def complex_function(data, config):
     min-height: 380px;
 }
 
+/* Single-tag subpanels: More compact */
+.category-subpanel.single-tag {
+    min-height: 280px;
+    padding: 1.5rem 1.25rem;
+}
+
+.category-subpanel.single-tag .category-icon-wrapper {
+    width: 60px;
+    height: 60px;
+    font-size: 2rem;
+}
+
+.category-subpanel.single-tag .category-tag {
+    grid-column: span 3; /* Full width */
+    font-size: 0.95rem;
+    padding: 0.75rem 1rem;
+}
+
 /* Tetris/masonry grid for category tags */
-.level0-category-tags {
+.category-tags {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-auto-rows: 60px;
@@ -1781,18 +1894,19 @@ def complex_function(data, config):
 }
 
 /* Individual tag (clickable link) */
-.level0-category-tag {
+.category-tag {
     background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(123, 97, 255, 0.15));
     border: 1px solid rgba(0, 212, 255, 0.35);
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
-.level0-category-tag:hover {
+.category-tag:hover {
     background: linear-gradient(135deg, rgba(0, 212, 255, 0.3), rgba(123, 97, 255, 0.25));
     transform: translateY(-3px);
     box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
 }
+```
 
 /* 🎨 COLOR VARIATIONS (Complementary Palette) */
 /* Randomized distribution across panels for visual variety */
