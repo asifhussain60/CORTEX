@@ -1,6 +1,6 @@
 # 🎨 Level 0-2 Glassmorphism Standardization - Master Implementation Plan (CORRECTED)
 
-**Version:** 6.0.0 LEVEL-BASED-RECURSIVE  
+**Version:** 6.0.1 LEVEL-BASED-RECURSIVE  
 **Author:** Asif Hussain  
 **Date:** January 1, 2026  
 **Status:** 📋 READY FOR EXECUTION  
@@ -37,6 +37,7 @@
 - **REFACTOR_CODE_CLEANUP_ENFORCEMENT:** Final phase requires ≥18 tasks across 5 categories
 - **MICRO_BATCH_STRATEGY:** 2-3 files per batch to prevent "Sorry, response too long" errors
 - **TOOLKIT_MANAGER_VALIDATION:** All phases validated by Toolkit Manager for adherence to glassmorphism-design-standard.md
+- **PROPER_SPACING:** All stacked elements MUST have ≥24px vertical spacing (v4.0.1)
 
 ---
 
@@ -113,23 +114,27 @@ Level 2 (Detail Pages: 137+ files - specific components)
 - 7-color randomized palette using nth-child selectors
 - Extract ALL inline styles to CSS classes
 - Non-clickable subpanels + clickable tags within
+- **SPACING:** `gap: var(--space-lg)` (24px) between all subpanels
 
 **Orchestrators Panel (2×3 Grid):**
 - 5 subpanels: Planning, Execution, System, Analysis, Debug
 - 7-color randomized palette (different distribution)
 - Extract ALL inline styles to CSS classes
 - Non-clickable subpanels + clickable tags within
+- **SPACING:** `row-gap: var(--space-lg)` + `column-gap: var(--space-lg)` (24px each)
 
 **Sharpen The Saw Panel (3×2 Grid):**
 - 6 subpanels: Code Quality, SOLID, Testing, Performance, Security, Docs
 - Single-tag compact design (full-width links)
 - Extract ALL inline styles to CSS classes
 - Non-clickable subpanels + clickable tags within
+- **SPACING:** `gap: var(--space-lg)` (24px) - CRITICAL for 3-row layout
 
 **Validation:**
 - Visual check at 375px/768px/1440px
 - CORTEX verifies ZERO inline styles
-- **Toolkit Manager:** Validates against glassmorphism-design-standard.md
+- **Spacing Check:** All subpanels have ≥24px vertical/horizontal gaps
+- **Toolkit Manager:** Validates against glassmorphism-design-standard.md v4.0.1
 - **Deliverable:** `reports/phase1.1-multi-panel-validation.md`
 
 #### 1.2: Standard Tiles Implementation (Batch 2)
@@ -176,6 +181,7 @@ Level 2 (Detail Pages: 137+ files - specific components)
 - Mobile-friendliness (375px/768px/1440px)
 - ZERO inline styles
 - Animation tier compliance (T3 only)
+- **Spacing validation:** All multi-panel grids have ≥24px gaps
 - Cross-browser testing (Chrome, Firefox, Safari, Edge)
 
 **Validation:**
@@ -645,6 +651,12 @@ Level 2 (Detail Pages: 137+ files - specific components)
 - **Clickable**: Glowing border + lift (`translateY(-2px)`) + `cursor: pointer`
 - **Non-Clickable**: Glass reflection (8s animation) + `cursor: default` + NO glow
 
+**Spacing Requirements (v4.0.1):**
+- **Stacked Cards:** `margin-bottom: var(--space-lg)` (24px minimum)
+- **Grid Gaps:** `gap: var(--space-lg)` (24px horizontal + vertical)
+- **Grid Rows:** `row-gap: var(--space-lg)` explicitly set for multi-row grids
+- **Section Spacing:** `margin-bottom: var(--space-2xl)` (48px between major sections)
+
 **Pattern Usage:**
 - **Pattern 15**: Level 0 Multi-Panel (Security, Orchestrators, STS)
 - **Pattern 8-14**: Level 2 tile-specific patterns
@@ -751,6 +763,7 @@ skull_rules_enforced:
   - REFACTOR_CODE_CLEANUP_ENFORCEMENT
   - MICRO_BATCH_STRATEGY
   - TOOLKIT_MANAGER_VALIDATION
+  - PROPER_SPACING  # v4.0.1 - Minimum 24px gaps
 
 validation_requirements:
   baseline_established: true
@@ -760,6 +773,7 @@ validation_requirements:
   zero_violations_required: true
   visual_verification: true
   toolkit_manager_certification: true
+  spacing_validation: true  # v4.0.1 - Check all stacked elements
 
 level_based_execution:
   enabled: true
@@ -780,4 +794,4 @@ governance_compliance:
 
 ---
 
-**End of Master Plan v6.0.0 - Level-Based Recursive**
+**End of Master Plan v6.0.1 - Level-Based Recursive with Spacing Requirements**

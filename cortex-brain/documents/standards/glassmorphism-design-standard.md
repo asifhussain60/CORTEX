@@ -1,6 +1,6 @@
 # 🎨 Glassmorphism Design Standard
 
-**Version:** 4.0.0 | **Status:** ✅ PRODUCTION  
+**Version:** 4.0.1 | **Status:** ✅ PRODUCTION  
 **Author:** Asif Hussain | **Last Updated:** January 1, 2026  
 **Copyright © 2025 Asif Hussain. All rights reserved.**
 
@@ -108,6 +108,7 @@ Level 0 (Home) → Level 1 (Tile Overview) → Level 2 (Component Detail)
 9. **NO Inline Styles** - All styling via CSS classes (zero tolerance for `style=""` attributes)
 10. **Header/Footer Standard** - Standardized glass header/footer across ALL views
 11. **Responsive Mandatory** - Mobile-first design with 375px base, tablet 768px, desktop 1440px breakpoints
+12. **Proper Spacing** - All stacked elements MUST have adequate margin/padding (minimum 1.5rem vertical gap between cards/panels) (v4.0.1)
 
 ---
 
@@ -362,6 +363,156 @@ Level 0 (Home) → Level 1 (Tile Overview) → Level 2 (Component Detail)
     }
 }
 ```
+
+---
+
+## 📐 Spacing System (v4.0.1)
+
+### ⚠️ CRITICAL: Proper Spacing for Stacked Elements
+
+**Issue:** Cards/panels stacking without adequate vertical spacing creates cramped, unprofessional layouts.
+
+**Solution:** Enforce minimum spacing requirements using CSS variables and layout utilities.
+
+### Spacing Variables
+
+```css
+:root {
+    /* Core spacing scale */
+    --space-xs: 0.25rem;   /* 4px - Tiny gaps */
+    --space-sm: 0.5rem;    /* 8px - Small gaps */
+    --space-md: 1rem;      /* 16px - Medium gaps */
+    --space-lg: 1.5rem;    /* 24px - Large gaps (DEFAULT for stacked cards) */
+    --space-xl: 2rem;      /* 32px - Extra large gaps */
+    --space-2xl: 3rem;     /* 48px - Section spacing */
+    --space-3xl: 4rem;     /* 64px - Major section spacing */
+}
+```
+
+### Stacked Element Rules
+
+**Minimum Requirements:**
+- **Cards/Panels:** `margin-bottom: var(--space-lg)` (1.5rem / 24px)
+- **Category Sections:** `margin-bottom: var(--space-2xl)` (3rem / 48px)
+- **Multi-Panel Grids:** `gap: var(--space-lg)` (1.5rem / 24px)
+- **Grid Rows:** `row-gap: var(--space-lg)` minimum
+
+### Grid Layout Spacing
+
+```css
+/* Multi-panel grids (Security, Orchestrators, STS) */
+.category-panels-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-lg);  /* 24px gaps between all panels */
+    margin-bottom: var(--space-2xl);
+}
+
+/* 2x2 Grid (4 panels - Security) */
+.category-panels-grid:not(.grid-3x2) {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: var(--space-lg);
+    column-gap: var(--space-lg);
+}
+
+/* 3x2 Grid (6 panels - STS) */
+.category-panels-grid.grid-3x2 {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(3, auto);
+    row-gap: var(--space-lg);  /* CRITICAL: Prevents cramped rows */
+    column-gap: var(--space-lg);
+}
+
+/* 2x3 Grid (5 panels - Orchestrators) */
+.category-panels-grid.grid-2x3 {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(3, auto);
+    row-gap: var(--space-lg);
+    column-gap: var(--space-lg);
+}
+```
+
+### Stacked Card Layouts
+
+```css
+/* Card stacking (Level 1 & 2 pages) */
+.glass-card + .glass-card {
+    margin-top: var(--space-lg);  /* 24px between consecutive cards */
+}
+
+/* Section spacing */
+.content-section {
+    margin-bottom: var(--space-2xl);  /* 48px between major sections */
+}
+
+/* Subpanels within multi-panels */
+.category-subpanel {
+    padding: var(--space-lg);  /* Internal padding */
+    /* Spacing handled by parent grid gap */
+}
+```
+
+### Responsive Spacing
+
+```css
+/* Mobile: Tighter spacing for smaller screens */
+@media (max-width: 767px) {
+    .category-panels-grid {
+        grid-template-columns: 1fr;  /* Single column */
+        gap: var(--space-md);  /* 16px on mobile */
+    }
+    
+    .glass-card + .glass-card {
+        margin-top: var(--space-md);
+    }
+}
+
+/* Tablet & Desktop: Full spacing */
+@media (min-width: 768px) {
+    .category-panels-grid {
+        gap: var(--space-lg);  /* 24px on larger screens */
+    }
+}
+```
+
+### Common Mistakes to Avoid
+
+❌ **WRONG:**
+```css
+/* No spacing between stacked elements */
+.glass-card {
+    margin-bottom: 0;
+}
+
+/* Cramped grid rows */
+.grid {
+    row-gap: 8px;  /* Too tight! */
+}
+```
+
+✅ **CORRECT:**
+```css
+/* Adequate spacing */
+.glass-card {
+    margin-bottom: var(--space-lg);
+}
+
+/* Comfortable grid spacing */
+.grid {
+    gap: var(--space-lg);  /* 24px all around */
+}
+```
+
+### Validation Checklist
+
+Before marking any phase complete, validate spacing:
+
+- [ ] All stacked cards have ≥24px vertical spacing
+- [ ] Multi-panel grids use `gap: var(--space-lg)`
+- [ ] Grid `row-gap` is explicitly set (not just `gap`)
+- [ ] Section spacing is ≥48px between major sections
+- [ ] Mobile spacing scales down appropriately (≥16px)
+- [ ] Visual inspection shows no cramped/touching elements
 
 ---
 
@@ -2768,6 +2919,12 @@ document.documentElement.style.setProperty('--glass-bg', 'rgba(26, 31, 58, 0.6)'
 
 ## 📄 Version History
 
+### v4.0.1 (January 1, 2026)
+- 🎯 **NEW:** Added Core Principle #12 - Proper Spacing rule
+- ✨ Enforced minimum 1.5rem (24px) vertical gap between stacked cards/panels
+- 🐛 **FIX:** Resolved cramped spacing in multi-panel layouts (Security, Orchestrators, STS)
+- 📚 Updated spacing requirements for grid layouts and stacked elements
+
 ### v4.0.0 (January 1, 2026)
 - 🎯 **BREAKING:** Enforced 2-level maximum hierarchy (Level 0 → Level 1 → Level 2)
 - 🎯 **BREAKING:** Animation Tier System v4.0.0 with strict scope enforcement
@@ -2830,6 +2987,6 @@ document.documentElement.style.setProperty('--glass-bg', 'rgba(26, 31, 58, 0.6)'
 ---
 
 **Generated by:** CORTEX Optimization Engine v2.0.0  
-**Standard Version:** 4.0.0  
+**Standard Version:** 4.0.1  
 **Last Review:** January 1, 2026  
 **Next Review:** Q2 2026
