@@ -445,6 +445,16 @@ Level 0 (Home) → Level 1 (Tile Overview) → Level 2 (Component Detail)
     margin-bottom: var(--space-2xl);  /* 48px between major sections */
 }
 
+/* Key features sections (Security, Orchestrators, STS panels) */
+.key-features-section {
+    margin-bottom: var(--space-3xl);  /* 64px between major panel sections */
+}
+
+/* Main panel wrappers */
+.main-panel-wrapper {
+    margin-bottom: var(--space-2xl);  /* 48px after each panel */
+}
+
 /* Subpanels within multi-panels */
 .category-subpanel {
     padding: var(--space-lg);  /* Internal padding */
@@ -511,6 +521,8 @@ Before marking any phase complete, validate spacing:
 - [ ] Multi-panel grids use `gap: var(--space-lg)`
 - [ ] Grid `row-gap` is explicitly set (not just `gap`)
 - [ ] Section spacing is ≥48px between major sections
+- [ ] Key features sections have ≥64px bottom margin
+- [ ] Main panel wrappers have ≥48px bottom margin
 - [ ] Mobile spacing scales down appropriately (≥16px)
 - [ ] Visual inspection shows no cramped/touching elements
 
