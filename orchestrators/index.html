@@ -23,15 +23,15 @@
     
     <!-- Hero Section with Logo and Title Row -->
     <section class="hero" id="main-content">
-        <div style="display: flex; align-items: center; justify-content: center; gap: 2.5rem; flex-wrap: wrap; margin-bottom: 2rem;">
+        <div class="level1-hero-header">
             <!-- Logo -->
             <a href="../index.html">
-                <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" style="width: 200px; height: 200px; filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.5)); transition: filter 0.2s ease-in-out;">
+                <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="level1-hero-logo animation-t1">
             </a>
             <!-- Title and Metadata -->
-            <div style="text-align: center;">
-                <h1 class="hero-title" style="margin-bottom: 0.5rem;">🎭 CORTEX Orchestrators</h1>
-                <p class="hero-subtitle" style="margin-bottom: 1rem;">6 Autonomous Workflow Coordinators for Planning, TDD, and Execution</p>
+            <div class="level1-hero-content">
+                <h1 class="hero-title level1-hero-title">🎭 CORTEX Orchestrators</h1>
+                <p class="hero-subtitle level1-hero-subtitle">6 Autonomous Workflow Coordinators for Planning, TDD, and Execution</p>
                 <div class="file-metadata">
                     <span class="metadata-item">🎯 6 Primary Workflows</span>
                     <span class="metadata-item">🛠️ 6 System Tools</span>
@@ -46,16 +46,16 @@
     <section class="orchestrator-viz-section">
         <div class="glass-card">
             <h2 class="section-title">🎭 Interactive Orchestrator Map</h2>
-            <p style="text-align: center; color: var(--text-secondary); margin-bottom: 2rem;">Click and drag nodes • Filter by category • Click for details</p>
+            <p class="level1-viz-instructions">Click and drag nodes • Filter by category • Click for details</p>
             
-            <div class="viz-controls" style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center;">
+            <div class="viz-controls level1-viz-controls">
                 <button class="viz-btn viz-all active" data-category="all">All</button>
                 <button class="viz-btn viz-planning" data-category="planning">Planning (4)</button>
                 <button class="viz-btn viz-execution" data-category="execution">Execution (2)</button>
                 <button class="viz-btn viz-system" data-category="system">System (4)</button>
                 <button class="viz-btn viz-analysis" data-category="analysis">Analysis (3)</button>
                 <button class="viz-btn viz-debug" data-category="debug">Debug (2)</button>
-                <button class="viz-btn" id="resetVizBtn" style="background: linear-gradient(135deg, #7b61ff 0%, #00d4ff 100%); color: white; margin-left: 10px;">
+                <button class="viz-btn level1-viz-reset-btn animation-t2" id="resetVizBtn">
                     <i class="fas fa-redo-alt"></i> Reset View
                 </button>
             </div>
