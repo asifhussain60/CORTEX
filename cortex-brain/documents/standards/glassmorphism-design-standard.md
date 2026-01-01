@@ -1,7 +1,7 @@
 # 🎨 Glassmorphism Design Standard
 
-**Version:** 3.2.0 | **Status:** ✅ PRODUCTION  
-**Author:** Asif Hussain | **Last Updated:** December 31, 2025  
+**Version:** 4.0.0 | **Status:** ✅ PRODUCTION  
+**Author:** Asif Hussain | **Last Updated:** January 1, 2026  
 **Copyright © 2025 Asif Hussain. All rights reserved.**
 
 ---
@@ -13,6 +13,34 @@ This standard defines **modern glassmorphism patterns** for CORTEX documentation
 **Target:** HTML documentation, dashboards, STS showcases, interactive visualizations  
 **Compatibility:** Chrome 90+, Firefox 88+, Safari 14+, Edge 90+
 
+**⚠️ Animation Philosophy (v4.0.0):**
+- **Subtle & Modern:** All animations designed to be non-distracting
+- **Clickable Tiles:** Glowing border + lift + large pointer cursor on hover
+- **Non-Clickable Tiles:** Slow glass reflection (8s) + default cursor, NO glow
+- **Consistent Styling:** Clear visual differentiation between interactive and display elements
+
+**Scope:** Applies to ALL 9 CORTEX home page tiles and their 2-level hierarchies:
+1. 🧠 Architecture → SKULL, Knowledge Graph, Brain Tiers, Context
+2. 🛡️ Security → Threat Modeling, Compliance, Audits
+3. 🎯 Orchestrators → 17 autonomous workflow detail pages
+4. 💰 Token Optimization → Analysis, Strategies, Savings
+5. 🔧 Sharpen The Saw → Code Quality, SOLID, Testing, Performance, Security, Docs
+6. 📚 CORTEX Best Practices → 35 Guidelines (3 Level 2 pages)
+7. 🛠️ Toolkit Manager → Discovery, Orchestration, Integration
+8. 🔍 CORTEX LENS → AST, Reverse Engineering, Intelligence
+9. 🚀 Get Started → Installation, Configuration, First Steps
+
+---
+
+## 🏗️ View Hierarchy (2-Level Maximum)
+
+**Critical Rule:** All tiles follow this structure:
+```
+Level 0 (Home) → Level 1 (Tile Overview) → Level 2 (Component Detail)
+```
+
+**⛔ NO Level 3:** Use expandable sections, tabs, or modals for deeper content.
+
 ---
 
 ## 🎯 Core Principles
@@ -23,59 +51,134 @@ This standard defines **modern glassmorphism patterns** for CORTEX documentation
 4. **GPU Acceleration** - Hardware-accelerated transforms
 5. **Performance First** - Conditional blur, lazy loading
 6. **Accessibility** - WCAG 2.1 AA compliance, reduced-motion support
-7. **Subtle by Default** - T1 animations for all standard pages (v3.2.0)
+7. **Subtle by Default** - T1 animations for ALL Level 1 & Level 2 pages (v4.0.0)
+8. **2-Level Maximum** - All 9 tiles limited to Level 0 → Level 1 → Level 2
 
 ---
 
-## 🎬 Animation Tier System (NEW v3.2.0)
+## 🎬 Animation Tier System (v4.0.0 - Universal Standard)
 
 ### ⛔ CRITICAL: Subtle Animations by Default
 
-All documentation pages use **T1 (Subtle)** animations. Dramatic animations are reserved for hero sections only.
+**ALL documentation pages across ALL 9 tiles** use **T1 (Subtle)** animations. Dramatic animations are ONLY for Level 0 (Home page hero).
 
 ### Animation Tiers
 
-| Tier | Name | Use Case | Duration | Effects |
-|------|------|----------|----------|---------|
-| **T1** | Subtle | All standard pages, documentation, feature pages | 0.2-0.3s | Opacity, light transforms, simple transitions |
-| **T2** | Accent | Interactive elements requiring user feedback | 0.1-0.2s | Button press, form focus, selection highlight |
-| **T3** | Dramatic | HERO sections, landing pages ONLY | 2-10s | borderGlowSweep, blobMorph, particle effects |
+| Tier | Name | Use Case | Duration | Effects | Scope |
+|------|------|----------|----------|---------|-------|
+| **T1** | Subtle | ALL Level 1 & Level 2 pages (9 tiles) | 0.2-0.3s | Opacity, light transforms, simple transitions | Universal |
+| **T2** | Accent | Interactive elements requiring feedback | 0.1-0.2s | Button press, form focus, selection highlight | UI elements |
+| **T3** | Dramatic | ONLY Level 0 (docs/index.html hero) | 2-10s | borderGlowSweep, blobMorph, particle effects | Home only |
 
 ### T1: Subtle Animations (DEFAULT)
 
 **✅ REQUIRED for all Level 1, Level 2, and Level 3 pages**
 
+#### Clickable Tiles (Interactive Cards, Buttons, Links)
+
+**Visual Indicators:**
+- ✅ Glowing border on hover (subtle accent)
+- ✅ `cursor: pointer` (large hand)
+- ✅ Slight lift effect (`translateY(-2px)`)
+- ❌ NO glass reflections
+- ❌ NO infinite animations
+
 ```css
-/* T1 Subtle Hover - APPROVED DEFAULT */
-.glass-card-subtle {
-    transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+/* T1 Clickable Tile - APPROVED */
+.glass-card-clickable {
+    position: relative;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.glass-card-subtle:hover {
+.glass-card-clickable:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    border-color: rgba(0, 212, 255, 0.6);
+    box-shadow: 
+        0 8px 24px rgba(0, 0, 0, 0.3),
+        0 0 20px rgba(0, 212, 255, 0.3); /* Subtle glow */
 }
 
-/* T1 Subtle Focus - APPROVED */
+/* Large hand pointer */
+.glass-card-clickable:hover {
+    cursor: pointer;
+}
+```
+
+#### Non-Clickable Tiles (Display Cards, Info Panels)
+
+**Visual Indicators:**
+- ✅ Glass reflection with slow animation (8s)
+- ✅ `cursor: default` (no pointer)
+- ✅ NO lift effect
+- ❌ NO glowing borders
+- ❌ NO hover glow
+
+```css
+/* T1 Non-Clickable Tile - APPROVED */
+.glass-card-display {
+    position: relative;
+    cursor: default;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+}
+
+/* Glass reflection (subtle, slow) */
+.glass-card-display::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        135deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.03) 45%,
+        rgba(255, 255, 255, 0.08) 50%,
+        rgba(255, 255, 255, 0.03) 55%,
+        transparent 100%
+    );
+    animation: glassReflection 8s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes glassReflection {
+    0%, 100% { transform: translate(-100%, -100%); }
+    50% { transform: translate(50%, 50%); }
+}
+
+/* NO hover effects on display cards */
+.glass-card-display:hover {
+    /* No transform, no glow, no border change */
+}
+```
+
+#### Subtle Focus States (All Interactive Elements)
+
+```css
+/* T1 Focus - APPROVED */
 .interactive-element:focus {
     outline: 2px solid var(--accent-primary);
     outline-offset: 2px;
     transition: outline-color 0.2s ease;
 }
 
-/* T1 Subtle Nav Link - APPROVED */
+/* T1 Nav Link - APPROVED */
 .nav-link {
+    cursor: pointer;
     transition: color 0.2s ease, background-color 0.2s ease;
 }
 ```
 
-**T1 Properties:**
-- `transition-duration: 0.2s - 0.3s`
-- `transform: translateY(-2px to -4px)` maximum
-- No infinite animations
-- No keyframe animations on cards
-- No glow pulses or sweeps
-- No filter effects
+**T1 Properties Summary:**
+- `transition-duration: 0.2s - 0.3s` (fast, responsive)
+- **Clickable:** Glow border + lift + pointer cursor
+- **Non-Clickable:** Glass reflection (8s) + default cursor
+- NO infinite animations on clickable tiles
+- NO keyframe animations on clickable cards
+- NO glow on non-clickable tiles
 
 ### T2: Accent Animations (Interactive Feedback)
 
@@ -707,6 +810,653 @@ document.querySelectorAll('.morph-card').forEach(card => {
 
 ---
 
+## 🎨 Tile-Specific Patterns (v4.0.0)
+
+### Pattern 8: Architecture Component Cards
+
+**Use Cases:** SKULL Protection layers, Knowledge Graph nodes, Brain Tiers, Development Context modules
+
+**HTML Structure:**
+```html
+<div class="glass-card architecture-component">
+    <div class="component-header">
+        <i class="fas fa-brain"></i>
+        <h3>SKULL Protection Layer 1</h3>
+        <span class="badge">118 Rules</span>
+    </div>
+    <div class="component-body">
+        <p>Protection layer description...</p>
+    </div>
+    <div class="component-footer">
+        <button class="btn-glass">View Details</button>
+    </div>
+</div>
+```
+
+**CSS:**
+```css
+.architecture-component {
+    border-left: 4px solid var(--accent-primary);
+    cursor: pointer;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Clickable: Glow on hover */
+.architecture-component:hover {
+    transform: translateY(-2px);
+    border-color: rgba(0, 212, 255, 0.8);
+    box-shadow: 
+        0 8px 24px rgba(0, 0, 0, 0.3),
+        0 0 20px rgba(0, 212, 255, 0.3),
+        inset -2px 0 10px rgba(0, 212, 255, 0.2); /* Left border glow */
+    cursor: pointer;
+}
+
+.architecture-component .component-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.architecture-component .badge {
+    background: rgba(0, 212, 255, 0.2);
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    margin-left: auto;
+}
+```
+
+**D3.js Integration:**
+- **SKULL Protection:** Concentric rings (15 layers)
+- **Knowledge Graph:** Force-directed graph (54 nodes)
+- **Brain Tiers:** Sankey diagram (Tier 0→1→2→3)
+- **Dev Context:** Hierarchical tree
+
+### Pattern 9: Orchestrator Workflow Cards
+
+**Use Cases:** 17 orchestrator detail pages (TDD, Planning, Debug, ADO, Cleanup, Refinement, etc.)
+
+**HTML Structure:**
+```html
+<div class="glass-card orchestrator-workflow">
+    <div class="workflow-phase-indicator">
+        <span class="phase active">1</span>
+        <span class="phase-connector"></span>
+        <span class="phase">2</span>
+        <span class="phase-connector"></span>
+        <span class="phase">3</span>
+    </div>
+    <h3>TDD Orchestrator: RED Phase</h3>
+    <p>Write failing test first...</p>
+    <div class="workflow-actions">
+        <button class="btn-glass">Next Phase</button>
+    </div>
+</div>
+```
+
+**CSS:**
+```css
+.orchestrator-workflow .workflow-phase-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-xl);
+}
+
+.orchestrator-workflow .phase {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    font-weight: 700;
+}
+
+.orchestrator-workflow {
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.orchestrator-workflow:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+        0 8px 24px rgba(0, 0, 0, 0.3),
+        0 0 20px rgba(0, 212, 255, 0.3);
+    cursor: pointer;
+}
+
+.orchestrator-workflow .phase.active {
+    background: var(--accent-primary);
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+}
+
+.orchestrator-workflow .phase-connector {
+    width: 24px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.2);
+}
+```
+
+**Mermaid Diagrams:** Each orchestrator uses specific diagram type (see Phase 5 in plan)
+
+### Pattern 10: STS Category Grid
+
+**Use Cases:** Sharpen The Saw 6 categories (Code Quality, SOLID, Testing, Performance, Security, Documentation)
+
+**HTML Structure:**
+```html
+<div class="sts-category-grid">
+    <div class="glass-card sts-category">
+        <i class="fas fa-code-quality fa-3x"></i>
+        <h3>Code Quality</h3>
+        <p class="metric-value">92%</p>
+        <p class="metric-label">Compliance</p>
+        <a href="code-quality.html" class="btn-glass">Explore</a>
+    </div>
+    <!-- Repeat for 6 categories -->
+</div>
+```
+
+**CSS:**
+```css
+.sts-category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-xl);
+    margin: var(--spacing-2xl) 0;
+}
+
+.sts-category {
+    text-align: center;
+    padding: var(--spacing-2xl);
+    cursor: pointer;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.sts-category:hover {
+    transform: translateY(-2px);
+    border-color: rgba(0, 212, 255, 0.6);
+    box-shadow: 
+        0 8px 24px rgba(0, 0, 0, 0.3),
+        0 0 20px rgba(0, 212, 255, 0.3);
+    cursor: pointer;
+}
+
+.sts-category i {
+    color: var(--accent-primary);
+    margin-bottom: var(--spacing-lg);
+    opacity: 0.8;
+}
+
+.sts-category .metric-value {
+    font-size: var(--font-3xl);
+    font-weight: 800;
+    color: var(--accent-primary);
+    margin: var(--spacing-md) 0;
+}
+```
+
+**D3.js Visuals:**
+- **Code Quality:** Radar chart (6 dimensions)
+- **SOLID:** Force-directed graph (5 principles)
+- **Testing:** Bar chart (coverage %)
+- **Performance:** Line chart (latency)
+- **Security:** Treemap (vulnerabilities)
+- **Documentation:** Bar chart (doc coverage)
+
+### Pattern 11: Best Practices Guideline Cards
+
+**Use Cases:** 35 guidelines organized into 3 Level 2 pages
+
+**HTML Structure:**
+```html
+<div class="glass-card guideline-card">
+    <div class="guideline-number">23</div>
+    <h4>Always Use Type Hints</h4>
+    <p class="guideline-category">Code Quality</p>
+    <div class="guideline-content">
+        <p>Type hints improve code readability...</p>
+        <pre><code class="language-python">
+def calculate(x: int, y: int) -> int:
+    return x + y
+        </code></pre>
+    </div>
+    <div class="guideline-footer">
+        <span class="badge">Recommended</span>
+    </div>
+</div>
+```
+
+**CSS:**
+```css
+.guideline-card {
+    position: relative;
+    padding-left: calc(var(--spacing-xl) + 40px);
+    cursor: default;
+    overflow: hidden;
+}
+
+/* Glass reflection (non-clickable display) */
+.guideline-card::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        135deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.03) 45%,
+        rgba(255, 255, 255, 0.08) 50%,
+        rgba(255, 255, 255, 0.03) 55%,
+        transparent 100%
+    );
+    animation: glassReflection 8s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.guideline-card > * {
+    position: relative;
+    z-index: 1;
+}
+
+.guideline-card .guideline-number {
+    position: absolute;
+    top: var(--spacing-xl);
+    left: var(--spacing-xl);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 212, 255, 0.2);
+    border: 2px solid var(--accent-primary);
+    border-radius: 50%;
+    font-weight: 700;
+    font-size: 1.125rem;
+}
+
+.guideline-card .guideline-category {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--spacing-md);
+}
+
+.guideline-card pre {
+    background: rgba(0, 0, 0, 0.3);
+    padding: var(--spacing-md);
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: var(--spacing-md) 0;
+}
+```
+
+**Visual Organization:** Accordion or tabbed interface with expandable sections
+
+### Pattern 12: Toolkit Tool Cards
+
+**Use Cases:** Tool Discovery, Tool Orchestration, Tool Integration pages
+
+**HTML Structure:**
+```html
+<div class="glass-card toolkit-tool">
+    <div class="tool-header">
+        <i class="fas fa-wrench"></i>
+        <h3>Semantic Search Tool</h3>
+        <span class="tool-status active">ACTIVE</span>
+    </div>
+    <div class="tool-capabilities">
+        <span class="capability-badge">Code Analysis</span>
+        <span class="capability-badge">Pattern Detection</span>
+        <span class="capability-badge">Context Retrieval</span>
+    </div>
+    <div class="tool-description">
+        <p>Searches codebase using natural language queries...</p>
+    </div>
+    <div class="tool-stats">
+        <div class="stat">
+            <span class="stat-value">1,234</span>
+            <span class="stat-label">Searches</span>
+        </div>
+        <div class="stat">
+            <span class="stat-value">98%</span>
+            <span class="stat-label">Accuracy</span>
+        </div>
+    </div>
+</div>
+```
+
+**CSS:**
+```css
+.toolkit-tool {
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.toolkit-tool:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+        0 8px 24px rgba(0, 0, 0, 0.3),
+        0 0 20px rgba(0, 212, 255, 0.3);
+    cursor: pointer;
+}
+
+.toolkit-tool .tool-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.toolkit-tool .tool-status {
+    margin-left: auto;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.toolkit-tool .tool-status.active {
+    background: rgba(0, 255, 127, 0.2);
+    color: #00ff7f;
+    border: 1px solid #00ff7f;
+}
+
+.toolkit-tool .tool-capabilities {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+}
+
+.toolkit-tool .capability-badge {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.25rem 0.5rem;
+    border-radius: 8px;
+    font-size: 0.75rem;
+}
+
+.toolkit-tool .tool-stats {
+    display: flex;
+    gap: var(--spacing-xl);
+    margin-top: var(--spacing-lg);
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.toolkit-tool .stat {
+    text-align: center;
+}
+
+.toolkit-tool .stat-value {
+    display: block;
+    font-size: var(--font-2xl);
+    font-weight: 700;
+    color: var(--accent-primary);
+}
+
+.toolkit-tool .stat-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+```
+
+**D3.js Visuals:**
+- **Tool Discovery:** Treemap (tool categories)
+- **Tool Orchestration:** Sankey diagram (tool chain)
+- **Tool Integration:** Force-directed graph (dependencies)
+
+### Pattern 13: LENS Analysis Cards
+
+**Use Cases:** AST Analysis, Reverse Engineering, Code Intelligence pages
+
+**HTML Structure:**
+```html
+<div class="glass-card lens-analysis">
+    <div class="analysis-header">
+        <i class="fas fa-search-code"></i>
+        <h3>Function Complexity Analysis</h3>
+    </div>
+    <div class="code-preview">
+        <pre><code class="language-python">
+def complex_function(data, config):
+    # Analyzed code...
+    pass
+        </code></pre>
+    </div>
+    <div class="analysis-results">
+        <div class="metric">
+            <span class="metric-label">Cyclomatic Complexity</span>
+            <span class="metric-value warning">12</span>
+        </div>
+        <div class="metric">
+            <span class="metric-label">Lines of Code</span>
+            <span class="metric-value">45</span>
+        </div>
+        <div class="metric">
+            <span class="metric-label">Dependencies</span>
+            <span class="metric-value">8</span>
+        </div>
+    </div>
+    <div class="analysis-insights">
+        <p><i class="fas fa-lightbulb"></i> Consider extracting helper functions to reduce complexity.</p>
+    </div>
+</div>
+```
+
+**CSS:**
+```css
+.lens-analysis {
+    cursor: default;
+    overflow: hidden;
+}
+
+/* Glass reflection (non-clickable display) */
+.lens-analysis::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        135deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.03) 45%,
+        rgba(255, 255, 255, 0.08) 50%,
+        rgba(255, 255, 255, 0.03) 55%,
+        transparent 100%
+    );
+    animation: glassReflection 8s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.lens-analysis > * {
+    position: relative;
+    z-index: 1;
+}
+
+.lens-analysis .code-preview {
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 8px;
+    padding: var(--spacing-md);
+    margin: var(--spacing-lg) 0;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.lens-analysis .analysis-results {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-lg);
+    margin: var(--spacing-lg) 0;
+}
+
+.lens-analysis .metric {
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+    padding: var(--spacing-md);
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+}
+
+.lens-analysis .metric-value {
+    display: block;
+    font-size: var(--font-2xl);
+    font-weight: 700;
+    margin-top: var(--spacing-xs);
+}
+
+.lens-analysis .metric-value.warning {
+    color: #ffa500;
+}
+
+.lens-analysis .analysis-insights {
+    background: rgba(0, 212, 255, 0.1);
+    border-left: 4px solid var(--accent-primary);
+    padding: var(--spacing-md);
+    border-radius: 8px;
+    margin-top: var(--spacing-lg);
+}
+
+.lens-analysis .analysis-insights i {
+    color: var(--accent-primary);
+    margin-right: var(--spacing-xs);
+}
+```
+
+**D3.js Visuals:**
+- **AST Analysis:** Hierarchical tree diagram
+- **Reverse Engineering:** Force-directed graph (modules)
+- **Code Intelligence:** Heatmap (file complexity)
+
+### Pattern 14: Get Started Step Cards
+
+**Use Cases:** Installation, Configuration, First Steps pages
+
+**HTML Structure:**
+```html
+<div class="glass-card step-card">
+    <div class="step-number">1</div>
+    <h3>Install CORTEX</h3>
+    <p>Run the following command to install CORTEX:</p>
+    <div class="code-block">
+        <button class="copy-btn" aria-label="Copy code">
+            <i class="fas fa-copy"></i>
+        </button>
+        <pre><code class="language-bash">pip install cortex-ai</code></pre>
+    </div>
+    <div class="step-footer">
+        <p class="time-estimate"><i class="far fa-clock"></i> ~2 minutes</p>
+    </div>
+</div>
+```
+
+**CSS:**
+```css
+.step-card {
+    position: relative;
+    padding-top: calc(var(--spacing-xl) + 50px);
+    cursor: default;
+    overflow: hidden;
+}
+
+/* Glass reflection (non-clickable display) */
+.step-card::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        135deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.03) 45%,
+        rgba(255, 255, 255, 0.08) 50%,
+        rgba(255, 255, 255, 0.03) 55%,
+        transparent 100%
+    );
+    animation: glassReflection 8s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.step-card > * {
+    position: relative;
+    z-index: 1;
+}
+
+.step-card .step-number {
+    position: absolute;
+    top: var(--spacing-xl);
+    left: var(--spacing-xl);
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+    border-radius: 50%;
+    font-size: 1.5rem;
+    font-weight: 800;
+    box-shadow: 0 4px 15px rgba(0, 212, 255, 0.4);
+}
+
+.step-card .code-block {
+    position: relative;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 8px;
+    padding: var(--spacing-md);
+    margin: var(--spacing-lg) 0;
+}
+
+.step-card .copy-btn {
+    position: absolute;
+    top: var(--spacing-sm);
+    right: var(--spacing-sm);
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    padding: 0.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.step-card .copy-btn:hover {
+    background: rgba(0, 212, 255, 0.3);
+}
+
+.step-card .time-estimate {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    margin-top: var(--spacing-md);
+}
+
+.step-card .time-estimate i {
+    margin-right: var(--spacing-xs);
+}
+```
+
+**Visual Elements:** Step-by-step numbered cards with copy-to-clipboard functionality
+
+---
+
 ## ✨ Micro-Interactions Library
 
 ### Ripple Effect (Click Feedback)
@@ -1236,8 +1986,10 @@ class GlassPerformanceMonitor {
 - Provide reduced-motion fallbacks
 - Test on mobile devices (blur is expensive)
 - Use CSS variables for consistency
-- Layer multiple glass effects for depth
-- Add subtle animations (0.3-0.6s duration)
+- **Clickable tiles:** Glow border + lift + `cursor: pointer`
+- **Non-clickable tiles:** Glass reflection (8s) + `cursor: default`
+- Add subtle animations (0.3s duration max)
+- Keep animations modern and non-distracting
 
 ### DON'T ❌
 - Overuse blur (>30px becomes unreadable)
@@ -1252,18 +2004,41 @@ class GlassPerformanceMonitor {
 
 ## 📊 Pattern Selection Guide
 
-| Use Case | Pattern | Why |
-|----------|---------|-----|
-| Default card | Multi-Layer Glass Card | Balanced depth + performance |
-| Dashboard widget | Neuglass Card | Tactile feel, soft shadows |
-| Expandable content | Morphing Glass Card | Smooth transitions |
-| Hero section | Light Leak Glass | Ambient motion, depth |
-| Decorative element | Liquid Blob Glass | Eye-catching, organic |
-| Modal overlay | Glass Modal | Focus + backdrop blur |
-| Notification | Glass Toast | Quick feedback, auto-dismiss |
-| Side navigation | Glass Drawer | Slide-in animation |
-| Form control | Glass Dropdown | Clear hierarchy |
-| Info bubble | Glass Tooltip | Subtle, non-intrusive |
+| Use Case | Pattern | Interactivity | Animation |
+|----------|---------|---------------|-----------|
+| Clickable tile/card | Multi-Layer Glass Card (Variant A) | Interactive | Glow border + lift on hover |
+| Display card/panel | Multi-Layer Glass Card (Variant B) | Non-interactive | Glass reflection (8s) |
+| Dashboard widget | Neuglass Card | Interactive | Soft shadow + lift |
+| Architecture tile | Pattern 8 | Interactive | Left border glow + lift |
+| Orchestrator card | Pattern 9 | Interactive | Phase glow + lift |
+| STS category | Pattern 10 | Interactive | Icon glow + lift |
+| Guideline card | Pattern 11 | Non-interactive | Glass reflection only |
+| Tool card | Pattern 12 | Interactive | Tool icon glow + lift |
+| Analysis result | Pattern 13 | Non-interactive | Glass reflection only |
+| Setup step | Pattern 14 | Non-interactive | Glass reflection only |
+| Modal overlay | Glass Modal | Interactive | Focus + backdrop blur |
+| Notification | Glass Toast | Non-interactive | Slide-in animation |
+| Form control | Glass Dropdown | Interactive | Border glow on focus |
+
+**Key Differentiation:**
+- **Interactive (Clickable):** `cursor: pointer` + glowing border on hover + `translateY(-2px)` lift
+- **Non-Interactive (Display):** `cursor: default` + slow glass reflection (8s) + NO hover glow
+
+---| Use Case | Pattern | Interactivity | Animation |
+|----------|---------|---------------|------------|
+| Clickable tile/card | Multi-Layer Glass Card (Variant A) | Interactive | Glow border + lift on hover |
+| Display card/panel | Multi-Layer Glass Card (Variant B) | Non-interactive | Glass reflection (8s) |
+| Dashboard widget | Neuglass Card | Interactive | Soft shadow + lift |
+| Architecture tile | Pattern 8 | Interactive | Left border glow + lift |
+| Orchestrator card | Pattern 9 | Interactive | Phase glow + lift |
+| STS category | Pattern 10 | Interactive | Icon glow + lift |
+| Guideline card | Pattern 11 | Non-interactive | Glass reflection only |
+| Tool card | Pattern 12 | Interactive | Tool icon glow + lift |
+| Analysis result | Pattern 13 | Non-interactive | Glass reflection only |
+| Setup step | Pattern 14 | Non-interactive | Glass reflection only |
+| Modal overlay | Glass Modal | Interactive | Focus + backdrop blur |
+| Notification | Glass Toast | Non-interactive | Slide-in animation |
+| Form control | Glass Dropdown | Interactive | Border glow on focus |
 
 ---
 
@@ -1299,6 +2074,30 @@ document.documentElement.style.setProperty('--glass-bg', 'rgba(26, 31, 58, 0.6)'
 ---
 
 ## 📄 Version History
+
+### v4.0.0 (January 1, 2026)
+- 🎯 **BREAKING:** Enforced 2-level maximum hierarchy (Level 0 → Level 1 → Level 2)
+- 🎯 **BREAKING:** Animation Tier System v4.0.0 with strict scope enforcement
+- 🎨 **NEW:** Subtle & modern animation philosophy - non-distracting by design
+- 🎨 **NEW:** Clear differentiation between clickable (glow border + pointer) vs non-clickable (glass reflection + default cursor)
+- ✨ Added scope for all 9 CORTEX tiles (Architecture, Security, Orchestrators, Token Optimization, STS, Best Practices, Toolkit Manager, LENS, Get Started)
+- ✨ Documented 42 Level 2 pages across 9 tiles with specific D3.js/Mermaid visualizations
+- ✨ Added T1 (Subtle) as universal default for ALL Level 1/2 pages
+- ✨ Added T3 (Dramatic) restriction to ONLY Level 0 (Home hero)
+- ✨ Pattern 1 split into Variant A (Clickable) and Variant B (Display) with distinct hover behaviors
+- ✨ Updated Pattern 8-14 with consistent clickable/non-clickable styling
+- ⛔ Deprecated Level 3 pages (use inline/modal instead)
+- 📚 Added tile-specific visual patterns with clear interactivity indicators
+- 📚 Added animation migration guide (T3→T1) for existing pages
+- 📚 Updated Pattern Selection Guide with interactivity column
+- 🔄 Updated view hierarchy architecture diagram
+- 🔄 Removed all dramatic animations from standard page patterns
+
+### v3.2.0 (December 31, 2025)
+- ✨ Added Animation Tier System (T1/T2/T3)
+- ✨ Added Layout Pattern Collection
+- 📚 Updated Pattern 6 (Metrics Dashboard) with flexbox vs grid guidance
+- 📚 Updated Pattern 7 (Navigation Footer) with balanced layout
 
 ### v3.1.0 (December 31, 2025)
 - ✨ Added Pattern 6: Metrics Dashboard (Centered Flexbox)
@@ -1337,7 +2136,7 @@ document.documentElement.style.setProperty('--glass-bg', 'rgba(26, 31, 58, 0.6)'
 
 ---
 
-**Generated by:** CORTEX Optimization Engine v1.0.0  
-**Standard Version:** 3.1.0  
-**Last Review:** December 31, 2025  
+**Generated by:** CORTEX Optimization Engine v2.0.0  
+**Standard Version:** 4.0.0  
+**Last Review:** January 1, 2026  
 **Next Review:** Q2 2026

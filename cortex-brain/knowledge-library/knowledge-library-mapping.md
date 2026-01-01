@@ -122,6 +122,37 @@ This document defines the mapping between detected domains/keywords and applicab
 
 ---
 
+### Design & UX/UI Domain
+
+**Triggers:**
+- `ui`, `ux`, `user interface`, `user experience`
+- `design system`, `glassmorphism`, `visual design`
+- `documentation site`, `documentation website`
+- `accessibility`, `wcag`, `a11y`
+- `responsive design`, `mobile`, `layout`
+- `interaction`, `animation`, `hover state`
+- `usability`, `user-centered`
+
+**Applicable Library Files:**
+
+| File | Focus | When to Use |
+|------|-------|-------------|
+| `design/ui-ux-documentation-best-practices.yaml` | Documentation UI/UX | Documentation sites, web interfaces, user-facing pages |
+
+**Key Sections:**
+- Progressive disclosure patterns
+- Visual hierarchy and spacing systems
+- Glassmorphism implementation (v4.0 compatible)
+- Animation tier system (T1/T2/T3)
+- Accessibility (WCAG 2.1 AA)
+- Responsive design (mobile-first)
+- Data visualization best practices
+- Multi-visual approach for documentation
+- Hub-and-spoke navigation pattern
+- Performance optimization
+
+---
+
 ### Standards Domain
 
 **Triggers:**

@@ -1,0 +1,831 @@
+# 🎨 Level 2 Documentation Glassmorphism Standardization Plan
+
+**Version:** 3.0.0 | **Status:** 🟡 ACTIVE  
+**Author:** Asif Hussain | **Created:** December 31, 2025  
+**Updated:** January 1, 2026  
+**Copyright © 2025 Asif Hussain. All rights reserved.**
+
+---
+
+## 📋 Executive Summary
+
+This plan standardizes the **entire CORTEX documentation hierarchy** across **all 9 home page tiles** to follow the **Glassmorphism Design Standard v3.2.0**, with a **strict 2-level maximum depth** for all feature areas. This applies universally to:
+
+1. 🧠 **Architecture** (4-Tier Brain System)
+2. 🛡️ **Security** (Threat Modeling & Compliance)
+3. 🎯 **Orchestrators** (6 Autonomous Workflows)
+4. 💰 **Token Optimization** (97% Input Reduction)
+5. 🔧 **Sharpen The Saw** (77 Flaws Transformed)
+6. 📚 **CORTEX Best Practices** (35 Guidelines)
+7. 🛠️ **Toolkit Manager** (Tool Orchestration Layer)
+8. 🔍 **CORTEX LENS** (AST Analysis & Reverse Engineering)
+9. 🚀 **Get Started** (5-Minute Setup)
+
+---
+
+## 🏗️ View Hierarchy Architecture
+
+### ⛔ CRITICAL RULE: Maximum 2 Levels Only
+```
+Level 0 → Level 1 → Level 2 (MAX)
+   ↓         ↓         ↓
+ Home    Overview   Detail
+```
+
+**NO Level 3+ views permitted.** All high-value showcasing, diagrams (D3.js, Mermaid), and detailed content MUST fit within Level 2. Use expandable sections, tabs, or modals for additional depth.
+
+---
+
+## 🎬 Animation Tier System (v3.0.0)
+
+### ⛔ CRITICAL: Subtle Animations by Default
+
+**User Directive:** "I want glassmorphism to have subtle animation across all 9 tiles (Architecture, Security, Orchestrators, Token Optimization, Sharpen The Saw, CORTEX Best Practices, Toolkit Manager, CORTEX LENS, Get Started) with NO dramatic effects like those used on skull protector and knowledge graph."
+
+### Animation Tiers
+
+| Tier | Name | Use Case | Examples |
+|------|------|----------|----------|
+| **T1** | **Subtle** (DEFAULT) | ALL Level 1 & Level 2 pages for all 9 tiles | Hover opacity, light transforms, simple transitions |
+| **T2** | **Accent** | Interactive elements requiring user feedback | Button press, form focus, selection highlight |
+| **T3** | **Dramatic** | ONLY Home page (Level 0) hero section | borderGlowSweep, blobMorph, particle effects |
+
+**Scope:** This standard applies universally to ALL 9 home page tiles and their Level 2 sub-pages.
+
+### Tier 1: Subtle Animations (DEFAULT FOR ALL PAGES)
+
+```css
+/* ✅ APPROVED - Subtle hover effects */
+.glass-card {
+    transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+}
+
+.glass-card:hover {
+    transform: translateY(-2px);
+    opacity: 0.95;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* ✅ APPROVED - Simple focus states */
+.interactive-element:focus {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 2px;
+}
+
+/* ✅ APPROVED - Gentle transitions */
+.nav-link {
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+```
+
+**Subtle Animation Properties (T1):**
+- `transition-duration: 0.2s - 0.3s` (fast, responsive)
+- `transform: translateY(-2px to -4px)` (minimal lift)
+- `opacity: 0.9 - 1.0` (slight dimming on hover)
+- No infinite animations
+- No keyframe animations on cards
+- No glow pulses or sweeps
+- No filter effects
+
+**⛔ Applies to ALL 9 feature tile hierarchies:**
+1. 🧠 Architecture → SKULL Protection, Knowledge Graph, 4-Tier Brain, Context Analysis
+2. 🛡️ Security → Threat Modeling, Compliance, Security Audits
+3. 🎯 Orchestrators → TDD, Planning, Debug, ADO, Cleanup, Refinement (+ 10 more)
+4. 💰 Token Optimization → Token Analysis, Reduction Strategies, Cost Savings
+5. 🔧 Sharpen The Saw → Code Quality, SOLID, Testing, Performance, Security, Docs
+6. 📚 CORTEX Best Practices → 35 Implementation Guidelines
+7. 🛠️ Toolkit Manager → Tool Discovery, Orchestration, Integration
+8. 🔍 CORTEX LENS → AST Analysis, Reverse Engineering, Code Intelligence
+9. 🚀 Get Started → Setup, Configuration, First Steps
+
+### Tier 2: Accent Animations (Interactive Feedback)
+
+```css
+/* ✅ APPROVED - Button feedback */
+.btn-glass:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
+}
+
+/* ✅ APPROVED - Form focus */
+input:focus {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.2);
+    transition: all 0.2s ease;
+}
+
+/* ✅ APPROVED - Selection indicator */
+.tab-active {
+    border-bottom: 2px solid var(--accent-primary);
+    transition: border-color 0.2s ease;
+}
+```
+
+### Tier 3: Dramatic Animations (RESTRICTED)
+
+**⛔ ONLY ALLOWED ON:**
+- `docs/index.html` (Home page hero)
+- Landing page hero sections
+- Special showcase pages (explicitly marked)
+
+**❌ FORBIDDEN ON:**
+- ALL Level 1 pages (9 feature tiles)
+- ALL Level 2 detail pages for any tile
+- Architecture components (SKULL, Knowledge Graph, Brain Tiers)
+- Orchestrator detail pages
+- STS category pages
+- Best practices guidelines
+- Toolkit tool pages
+- LENS analysis pages
+- Setup instruction pages
+
+```css
+/* ❌ DEPRECATED for ALL Level 1/2 pages across all 9 tiles */
+@keyframes borderGlowSweep { /* HERO ONLY */ }
+@keyframes blobMorph { /* HERO ONLY */ }
+@keyframes lightLeakPrimary { /* HERO ONLY */ }
+@keyframes glowPulse { /* HERO ONLY */ }
+```
+
+### Pages Requiring Animation Simplification
+
+| Tile | Page | Current | Target | Action |
+|------|------|---------|--------|--------|
+| Architecture | `skull-protection.html` | T3 (borderGlowSweep, pulse) | T1 (subtle hover) | 🔴 SIMPLIFY |
+| Architecture | `knowledge-graph.html` | T3 (glow filters, sweeps) | T1 (subtle hover) | 🔴 SIMPLIFY |
+| Architecture | `index.html` | T1 | T1 | ✅ OK |
+| Orchestrators | `index.html` | T1 | T1 | ✅ OK |
+| All Others | All Level 1/2 pages | Must be T1 | T1 | 🟡 VERIFY |
+
+---
+
+## 📊 Complete Tile Hierarchy (2-Level Maximum)
+
+### 1. 🧠 Architecture (4-Tier Brain System)
+```
+Level 1: architecture/index.html
+├── Level 2: skull-protection.html (SKULL Protection with 118 rules)
+├── Level 2: knowledge-graph.html (54 knowledge patterns)
+├── Level 2: brain-tiers.html (Tier 0-3 governance)
+└── Level 2: development-context.html (Context analysis)
+```
+
+### 2. 🛡️ Security (Threat Modeling & Compliance)
+```
+Level 1: security/index.html
+├── Level 2: threat-modeling.html (Security analysis framework)
+├── Level 2: compliance.html (Standards & regulations)
+└── Level 2: security-audits.html (Audit reports & findings)
+```
+
+### 3. 🎯 Orchestrators (6 Autonomous Workflows)
+```
+Level 1: orchestrators/index.html
+├── Level 2: tdd-orchestrator.html
+├── Level 2: planning-system.html
+├── Level 2: debug-orchestrator.html
+├── Level 2: ado-operations.html
+├── Level 2: cleanup-orchestrator.html
+├── Level 2: refinement-orchestrator.html
+├── Level 2: sanitization-orchestrator.html
+├── Level 2: execution-orchestrator.html
+├── Level 2: intelligent-dashboard.html
+├── Level 2: onboarding-orchestrator.html
+├── Level 2: cortex-lens.html
+├── Level 2: git-checkpoint.html
+├── Level 2: pre-flight.html
+├── Level 2: rollback-orchestrator.html
+├── Level 2: system-integrity.html
+├── Level 2: upgrade.html
+└── Level 2: architectural-review.html
+```
+
+### 4. 💰 Token Optimization (97% Input Reduction, $8.6K Savings)
+```
+Level 1: token-optimization/index.html
+├── Level 2: token-analysis.html (Usage patterns & metrics)
+├── Level 2: reduction-strategies.html (Optimization techniques)
+└── Level 2: cost-savings.html (ROI & financial impact)
+```
+
+### 5. 🔧 Sharpen The Saw (77 Flaws Transformed)
+```
+Level 1: sts/index.html
+├── Level 2: code-quality.html (Quality metrics & standards)
+├── Level 2: solid.html (SOLID principles implementation)
+├── Level 2: testing.html (Testing strategies & coverage)
+├── Level 2: performance.html (Performance optimization)
+├── Level 2: security.html (Security best practices)
+└── Level 2: documentation.html (Documentation standards)
+```
+
+### 6. 📚 CORTEX Best Practices (35 Guidelines)
+```
+Level 1: knowledge/index.html
+├── Level 2: implementation-guidelines.html (35 guidelines organized by category)
+├── Level 2: coding-standards.html (Code quality & patterns)
+└── Level 2: workflow-best-practices.html (Process & methodology)
+```
+
+### 7. 🛠️ Toolkit Manager (Tool Orchestration Layer)
+```
+Level 1: toolkit-manager/index.html
+├── Level 2: tool-discovery.html (Available tools & capabilities)
+├── Level 2: tool-orchestration.html (Workflow automation)
+└── Level 2: tool-integration.html (Integration patterns)
+```
+
+### 8. 🔍 CORTEX LENS (AST Analysis & Reverse Engineering)
+```
+Level 1: lens/index.html
+├── Level 2: ast-analysis.html (Abstract syntax tree analysis)
+├── Level 2: reverse-engineering.html (Code structure extraction)
+└── Level 2: code-intelligence.html (Pattern detection & insights)
+```
+
+### 9. 🚀 Get Started (5-Minute Setup)
+```
+Level 1: getting-started/index.html
+├── Level 2: installation.html (Setup instructions)
+├── Level 2: configuration.html (Configuration guide)
+└── Level 2: first-steps.html (Quick start tutorial)
+```
+
+---
+
+## 📊 Visual Progress Tracking
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  📊 OVERALL PROGRESS                                            │
+│  ┌───────────────────────────────────────────────────────┐     │
+│  │ ████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ │ 15%       │     │
+│  └───────────────────────────────────────────────────────┘     │
+│                                                                 │
+│  PHASE 0: Functionality Discovery         [✓] 6/6 tasks ✅     │
+│  PHASE 1: Foundation (CSS/Variables)      [✓] 4/4 tasks ✅     │
+│  PHASE 2: High Priority Views (9 Tiles)   [■] 2/42 pages       │
+│  PHASE 3: Medium Priority Views           [-] Reserved          │
+│  PHASE 4: D3.js Visualizations (9 Tiles)  [■] 2/20 components  │
+│  PHASE 5: Mermaid Diagrams (9 Tiles)      [ ] 0/21 diagrams    │
+│  PHASE 6: Micro-Interactions              [ ] 0/5 patterns     │
+│  PHASE 7: Mobile Responsiveness           [ ] 0/6 tasks        │
+│  PHASE 8: Testing & Validation            [ ] 0/4 checks       │
+│  PHASE 9: REFACTOR (Animation Cleanup)    [ ] 0/6 tasks        │
+│                                                                 │
+│  LEVEL 0: Home Page                       [✓] APPROVED ✅       │
+│  LEVEL 1: Tile Overview Pages (9)        [✓] 9/9 APPROVED ✅   │
+│  LEVEL 2: Component Detail Pages          [■] 2/42 complete    │
+│  LEVEL 3: Detail Pages                    [✓] Deprecated ⛔     │
+│                                                                 │
+│  🎨 TILE-SPECIFIC PATTERNS                                      │
+│  Pattern 8: Architecture Component Cards  [✓] Documented ✅     │
+│  Pattern 9: Orchestrator Workflow Cards   [✓] Documented ✅     │
+│  Pattern 10: STS Category Grid            [✓] Documented ✅     │
+│  Pattern 11: Best Practices Guidelines    [✓] Documented ✅     │
+│  Pattern 12: Toolkit Tool Cards           [✓] Documented ✅     │
+│  Pattern 13: LENS Analysis Cards          [✓] Documented ✅     │
+│  Pattern 14: Get Started Step Cards       [✓] Documented ✅     │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🏗️ Phase Breakdown
+
+### Phase 0: Functionality Discovery ✅ COMPLETE
+**Duration:** 1-2 sessions | **Completed:** December 31, 2025
+
+| Task | Description | Output | Status |
+|------|-------------|--------|--------|
+| 0.1 | Orchestrator Inventory | 20 orchestrators documented | ✅ |
+| 0.2 | SKULL Rules Audit | 15 layers, 118 rules | ✅ |
+| 0.3 | Knowledge Graph Metrics | 54 patterns (YAML-based) | ✅ |
+| 0.4 | TDD Workflow Analysis | 3 phases documented | ✅ |
+| 0.5 | Memory Tier Structure | 3 active tiers | ✅ |
+| 0.6 | API & Command Mapping | 15 command routes | ✅ |
+
+---
+
+### Phase 1: Foundation Setup ✅ COMPLETE
+**Duration:** 1 session | **Completed:** December 31, 2025
+
+| Task | Description | Status |
+|------|-------------|--------|
+| 1.1 | Update `main.css` with v4.0 glass patterns | ✅ |
+| 1.2 | Create `variables.css` design tokens | ✅ |
+| 1.3 | Create `glass-patterns.css` component library | ✅ |
+| 1.4 | Add `micro-interactions.css` library | ✅ |
+
+**Files Created:**
+- `docs/assets/css/variables.css` - 230+ lines of design tokens
+- `docs/assets/css/glass-patterns.css` - 5 glass patterns + 5 UI components
+- `docs/assets/css/micro-interactions.css` - Ripple, tilt, glow, shimmer effects
+
+---
+
+### Phase 2: 🧠 Architecture Tile (Complete Development)
+**Duration:** 2-3 sessions | **Priority:** 🔴 HIGH | **Status:** 🟡 IN PROGRESS
+
+#### 2.1 Architecture Tile (4 Pages)
+| View | File | D3.js Visual | Status | Notes |
+|------|------|--------------|--------|-------|
+| SKULL Protection | `architecture/skull-protection.html` | Force-directed graph | ✅ | 🔴 **T3→T1 fix required** |
+| Knowledge Graph | `architecture/knowledge-graph.html` | Concentric rings | ✅ | 🔴 **T3→T1 fix required** |
+| Brain Tiers | `architecture/brain-tiers.html` | Sankey diagram | ⬜ | Tier 0-3 governance |
+| Dev Context | `architecture/development-context.html` | Hierarchical tree | ⬜ | Context analysis |
+
+#### 2.2 Security Tile (3 Pages)
+| View | File | Mermaid Diagram | Status | Notes |
+|------|------|-----------------|--------|-------|
+| Threat Modeling | `security/threat-modeling.html` | stateDiagram-v2 | ⬜ | Security analysis framework |
+| Compliance | `security/compliance.html` | flowchart TB | ⬜ | Standards & regulations |
+| Security Audits | `security/security-audits.html` | timeline | ⬜ | Audit reports & findings |
+
+#### 2.3 Orchestrators Tile (17 Pages)
+| View | File | Mermaid Diagram | Status | Notes |
+|------|------|-----------------|--------|-------|
+| TDD Orchestrator | `orchestrators/tdd-orchestrator.html` | sequenceDiagram | ⬜ | RED→GREEN→REFACTOR |
+| Planning System | `orchestrators/planning-system.html` | flowchart LR | ⬜ | 4-folder structure |
+| Debug Orchestrator | `orchestrators/debug-orchestrator.html` | stateDiagram-v2 | ⬜ | 7-phase debugging |
+| ADO Operations | `orchestrators/ado-operations.html` | flowchart TD | ⬜ | Work item generation |
+| Cleanup | `orchestrators/cleanup-orchestrator.html` | flowchart TB | ⬜ | 5-phase cleanup |
+| Refinement | `orchestrators/refinement-orchestrator.html` | flowchart LR | ⬜ | 7-phase improvement |
+| Sanitization | `orchestrators/sanitization-orchestrator.html` | sequenceDiagram | ⬜ | Generic conversion |
+| Execution | `orchestrators/execution-orchestrator.html` | stateDiagram-v2 | ⬜ | Autonomous execution |
+| Dashboard | `orchestrators/intelligent-dashboard.html` | graph LR | ⬜ | Real-time monitoring |
+| Onboarding | `orchestrators/onboarding-orchestrator.html` | flowchart TD | ⬜ | User onboarding |
+| CORTEX LENS | `orchestrators/cortex-lens.html` | graph TB | ⬜ | AST analysis |
+| Git Checkpoint | `orchestrators/git-checkpoint.html` | sequenceDiagram | ⬜ | Git snapshots |
+| Pre-Flight | `orchestrators/pre-flight.html` | flowchart LR | ⬜ | Pre-execution checks |
+| Rollback | `orchestrators/rollback-orchestrator.html` | stateDiagram-v2 | ⬜ | Recovery |
+| System Integrity | `orchestrators/system-integrity.html` | flowchart TB | ⬜ | Health verification |
+| Upgrade | `orchestrators/upgrade.html` | sequenceDiagram | ⬜ | Version upgrades |
+| Arch Review | `orchestrators/architectural-review.html` | graph TD | ⬜ | Design review |
+
+#### 2.4 Token Optimization Tile (3 Pages)
+| View | File | D3.js Visual | Status | Notes |
+|------|------|--------------|--------|-------|
+| Token Analysis | `token-optimization/token-analysis.html` | Bar chart (stacked) | ⬜ | Usage patterns |
+| Strategies | `token-optimization/reduction-strategies.html` | Sankey (before/after) | ⬜ | Optimization techniques |
+| Cost Savings | `token-optimization/cost-savings.html` | Line chart (trend) | ⬜ | ROI & financial impact |
+
+#### 2.5 Sharpen The Saw Tile (6 Pages)
+| View | File | D3.js Visual | Status | Notes |
+|------|------|--------------|--------|-------|
+| Code Quality | `sts/code-quality.html` | Radar chart (6 dims) | ⬜ | Quality metrics |
+| SOLID | `sts/solid.html` | Force-directed (5 nodes) | ⬜ | SOLID principles |
+| Testing | `sts/testing.html` | Bar chart (coverage %) | ⬜ | Testing strategies |
+| Performance | `sts/performance.html` | Line chart (latency) | ⬜ | Performance optimization |
+| Security | `sts/security.html` | Treemap (vulns) | ⬜ | Security practices |
+| Documentation | `sts/documentation.html` | Bar chart (doc coverage) | ⬜ | Doc standards |
+
+#### 2.6 Best Practices Tile (3 Pages)
+| View | File | Visual | Status | Notes |
+|------|------|--------|--------|-------|
+| Guidelines | `knowledge/implementation-guidelines.html` | Accordion/tabs | ⬜ | 35 guidelines |
+| Standards | `knowledge/coding-standards.html` | Code examples | ⬜ | Code quality & patterns |
+| Workflow | `knowledge/workflow-best-practices.html` | Mermaid flowchart | ⬜ | Process & methodology |
+
+#### 2.7 Toolkit Manager Tile (3 Pages)
+| View | File | D3.js Visual | Status | Notes |
+|------|------|--------------|--------|-------|
+| Tool Discovery | `toolkit-manager/tool-discovery.html` | Treemap (categories) | ⬜ | Available tools |
+| Orchestration | `toolkit-manager/tool-orchestration.html` | Sankey (tool chain) | ⬜ | Workflow automation |
+| Integration | `toolkit-manager/tool-integration.html` | Force-directed (deps) | ⬜ | Integration patterns |
+
+#### 2.8 CORTEX LENS Tile (3 Pages)
+| View | File | D3.js Visual | Status | Notes |
+|------|------|--------------|--------|-------|
+| AST Analysis | `lens/ast-analysis.html` | Tree diagram | ⬜ | Syntax tree analysis |
+| Reverse Eng | `lens/reverse-engineering.html` | Force-directed (modules) | ⬜ | Code structure extraction |
+| Intelligence | `lens/code-intelligence.html` | Heatmap (complexity) | ⬜ | Pattern detection |
+
+#### 2.9 Get Started Tile (3 Pages)
+| View | File | Visual | Status | Notes |
+|------|------|--------|--------|-------|
+| Installation | `getting-started/installation.html` | Step cards | ⬜ | Setup instructions |
+| Configuration | `getting-started/configuration.html` | Code snippets + tabs | ⬜ | Config guide |
+| First Steps | `getting-started/first-steps.html` | Interactive terminal | ⬜ | Quick start tutorial |
+
+**Phase 2 Summary:** 42 Level 2 pages across 9 tiles (2 complete, 2 need T3→T1 fix, 38 pending)
+
+---
+
+### Phase 3: Medium Priority Views
+**Duration:** 2-3 sessions | **Priority:** 🟡 MEDIUM
+
+**NOTE:** Phase 3 previously had generic feature pages. With v3.0.0 2-level structure, all views are now organized under Phase 2 (tile-specific). Phase 3 reserved for future enhancements.
+
+| View | File | Status | Notes |
+|------|------|--------|-------|
+| (Reserved) | - | - | Placeholder for future enhancements |
+
+---
+
+### Phase 4: D3.js Visualization Components (ALL 9 Tiles)
+**Duration:** 4-5 sessions | **Priority:** 🟡 MEDIUM
+
+#### 4.1 Architecture Tile Visuals
+| Component | Target View | Type | Status |
+|-----------|-------------|------|--------|
+| 4-Tier Sankey | `brain-tiers.html` | Sankey diagram | ⬜ |
+| Force-Directed Graph | `knowledge-graph.html` | Force-directed (54 nodes) | ✅ |
+| Concentric Rings | `skull-protection.html` | Concentric (15 layers) | ✅ |
+| Hierarchical Tree | `development-context.html` | Tree diagram | ⬜ |
+
+#### 4.2 Token Optimization Tile Visuals
+| Component | Target View | Type | Status |
+|-----------|-------------|------|--------|
+| Token Distribution Bar | `token-analysis.html` | Stacked bar chart | ⬜ |
+| Before/After Sankey | `reduction-strategies.html` | Sankey diagram | ⬜ |
+| Savings Trend Line | `cost-savings.html` | Line chart (time series) | ⬜ |
+
+#### 4.3 Sharpen The Saw Tile Visuals
+| Component | Target View | Type | Status |
+|-----------|-------------|------|--------|
+| Quality Radar | `code-quality.html` | Radar chart (6 dimensions) | ⬜ |
+| SOLID Force Graph | `solid.html` | Force-directed (5 principles) | ⬜ |
+| Coverage Bar Chart | `testing.html` | Bar chart (% coverage) | ⬜ |
+| Latency Line Chart | `performance.html` | Line chart (latency over time) | ⬜ |
+| Vulnerability Treemap | `security.html` | Treemap (category sizes) | ⬜ |
+| Doc Coverage Bar | `documentation.html` | Bar chart (% documented) | ⬜ |
+
+#### 4.4 Toolkit Manager Tile Visuals
+| Component | Target View | Type | Status |
+|-----------|-------------|------|--------|
+| Tool Category Treemap | `tool-discovery.html` | Treemap (tool categories) | ⬜ |
+| Tool Chain Sankey | `tool-orchestration.html` | Sankey (tool flow) | ⬜ |
+| Dependency Graph | `tool-integration.html` | Force-directed (dependencies) | ⬜ |
+
+#### 4.5 CORTEX LENS Tile Visuals
+| Component | Target View | Type | Status |
+|-----------|-------------|------|--------|
+| AST Tree | `ast-analysis.html` | Hierarchical tree | ⬜ |
+| Module Force Graph | `reverse-engineering.html` | Force-directed (modules) | ⬜ |
+| Complexity Heatmap | `code-intelligence.html` | Heatmap (file complexity) | ⬜ |
+
+**D3.js Animation Standard (v4.0.0):**
+- Node hover: `opacity` and `stroke-width` only
+- Transitions: `0.2s ease` duration (T1 tier)
+- NO infinite glow animations
+- NO filter effects on hover
+- Use CSS variables for colors
+
+---
+
+### Phase 5: Mermaid Diagram Integration (ALL 9 Tiles)
+**Duration:** 3-4 sessions | **Priority:** 🟢 STANDARD
+
+#### 5.1 Security Tile Diagrams
+| Diagram | Target View | Type | Status |
+|---------|-------------|------|--------|
+| Threat State Machine | `threat-modeling.html` | stateDiagram-v2 | ⬜ |
+| Compliance Workflow | `compliance.html` | flowchart TB | ⬜ |
+| Audit Timeline | `security-audits.html` | timeline | ⬜ |
+
+#### 5.2 Orchestrators Tile Diagrams (17 Pages)
+| Diagram | Target View | Type | Status |
+|---------|-------------|------|--------|
+| TDD Sequence | `tdd-orchestrator.html` | sequenceDiagram | ⬜ |
+| Planning Flow | `planning-system.html` | flowchart LR | ⬜ |
+| Debug State Machine | `debug-orchestrator.html` | stateDiagram-v2 | ⬜ |
+| ADO Workflow | `ado-operations.html` | flowchart TD | ⬜ |
+| Cleanup Flow | `cleanup-orchestrator.html` | flowchart TB | ⬜ |
+| Refinement Flow | `refinement-orchestrator.html` | flowchart LR | ⬜ |
+| Sanitization Sequence | `sanitization-orchestrator.html` | sequenceDiagram | ⬜ |
+| Execution State | `execution-orchestrator.html` | stateDiagram-v2 | ⬜ |
+| Dashboard Graph | `intelligent-dashboard.html` | graph LR | ⬜ |
+| Onboarding Flow | `onboarding-orchestrator.html` | flowchart TD | ⬜ |
+| LENS Graph | `cortex-lens.html` | graph TB | ⬜ |
+| Git Checkpoint Sequence | `git-checkpoint.html` | sequenceDiagram | ⬜ |
+| Pre-Flight Flow | `pre-flight.html` | flowchart LR | ⬜ |
+| Rollback State | `rollback-orchestrator.html` | stateDiagram-v2 | ⬜ |
+| Integrity Flow | `system-integrity.html` | flowchart TB | ⬜ |
+| Upgrade Sequence | `upgrade.html` | sequenceDiagram | ⬜ |
+| Arch Review Graph | `architectural-review.html` | graph TD | ⬜ |
+
+#### 5.3 Best Practices Tile Diagrams
+| Diagram | Target View | Type | Status |
+|---------|-------------|------|--------|
+| Workflow Process | `workflow-best-practices.html` | flowchart LR | ⬜ |
+
+**Mermaid Animation Standard (v4.0.0):**
+- Use `init` theme with CSS variables
+- NO animations on diagram elements
+- Hover states handled via CSS (T1 tier)
+- Responsive sizing via `%%{init: {'flowchart': {'width': 100%}}}%%`
+
+---
+
+### Phase 6: Micro-Interactions Implementation
+**Duration:** 1 session | **Priority:** 🟢 STANDARD
+
+| Interaction | Pattern | Animation Tier | Status |
+|-------------|---------|----------------|--------|
+| Hover Effects | Simple transform | T1 (Subtle) | ⬜ |
+| Focus States | Outline + shadow | T2 (Accent) | ⬜ |
+| Button Feedback | Scale on press | T2 (Accent) | ⬜ |
+| Form Validation | Border color | T2 (Accent) | ⬜ |
+| Loading States | Opacity pulse | T1 (Subtle) | ⬜ |
+
+**⛔ DEPRECATED Interactions (remove from standard pages):**
+- ~~Ripple Effect (`ripple-glass`)~~ → Too dramatic (T3 only)
+- ~~3D Tilt (`tilt-glass`)~~ → Too dramatic (T3 only)
+- ~~Glow Pulse (`pulse-glow-glass`)~~ → Too dramatic (T3 only)
+- ~~Magnetic Hover (`magnetic-glass`)~~ → Too dramatic (T3 only)
+
+**Approved T1 Hover Pattern (ALL Level 1/2 pages):**
+```css
+.glass-card:hover {
+    transform: translateY(-2px);
+    opacity: 0.95;
+    transition: all 0.2s ease;
+}
+```
+
+---
+
+### Phase 7: Mobile Responsiveness 📱
+**Duration:** 2 sessions | **Priority:** 🔴 HIGH
+
+| Task | Description | Status |
+|------|-------------|--------|
+| 7.1 | Viewport Meta Tags | ⬜ |
+| 7.2 | Mobile-First CSS | ⬜ |
+| 7.3 | Touch-Friendly Targets (44x44px min) | ⬜ |
+| 7.4 | D3.js Responsive SVGs | ⬜ |
+| 7.5 | Conditional Blur (disable on low-end) | ⬜ |
+| 7.6 | Navigation Adaptation | ⬜ |
+
+---
+
+### Phase 8: Testing & Validation
+**Duration:** 1 session | **Priority:** 🔴 REQUIRED
+
+| Test | Tool | Pass Criteria | Status |
+|------|------|---------------|--------|
+| Visual Regression | Percy/Chromatic | No unexpected changes | ⬜ |
+| Performance | Lighthouse | Score ≥90 | ⬜ |
+| Accessibility | axe DevTools | 0 violations | ⬜ |
+| Cross-Browser | BrowserStack | Chrome, Firefox, Safari, Edge | ⬜ |
+
+---
+
+### Phase 9: REFACTOR (Animation Cleanup) ⚠️ SKULL ENFORCED
+**Duration:** 1 session | **Priority:** 🔴 MANDATORY
+
+| Task | Description | Status |
+|------|-------------|--------|
+| 9.1 | Remove `borderGlowSweep` from all Level 2 pages | ⬜ |
+| 9.2 | Remove `blobMorph` from all Level 2 pages | ⬜ |
+| 9.3 | Replace `glowPulse` with simple hover transitions | ⬜ |
+| 9.4 | Audit all pages for T3 animations on non-hero sections | ⬜ |
+| 9.5 | Consolidate duplicate glass patterns | ⬜ |
+| 9.6 | Update inline styles to CSS variables | ⬜ |
+
+**SKULL Rule Enforcement:**
+- ✅ `REFACTOR_CLEANUP`: Remove orphaned dramatic animation styles
+- ✅ `HOLISTIC_DISCOVERY`: Verify no duplicate patterns created
+- ✅ `TDD_ENFORCEMENT`: All changes tested before merge
+
+---
+
+## 📁 Complete File Inventory (v3.0.0 - 2-Level Structure)
+
+### Level 0 (1 file)
+```
+docs/index.html                      # ✅ APPROVED - T3 animations OK (hero only)
+```
+
+### Level 1 (9 files) - ALL APPROVED
+```
+docs/
+├── architecture/index.html          # ✅ T1 animations
+├── security/index.html              # ✅ T1 animations
+├── orchestrators/index.html         # ✅ T1 animations (EXEMPLAR)
+├── token-optimization/index.html    # ✅ T1 animations
+├── sts/index.html                   # ✅ T1 animations
+├── knowledge/index.html             # ✅ T1 animations
+├── toolkit-manager/index.html       # ✅ T1 animations
+├── lens/index.html                  # ✅ T1 animations
+└── getting-started/index.html       # ✅ T1 animations
+```
+
+### Level 2 (42 files) - 2/42 COMPLETE, 2 NEED T3→T1 FIX
+
+#### Architecture (4 pages)
+```
+docs/architecture/
+├── skull-protection.html            # ✅ Done - 🔴 NEEDS T3→T1 FIX
+├── knowledge-graph.html             # ✅ Done - 🔴 NEEDS T3→T1 FIX
+├── brain-tiers.html                 # ⬜ TODO
+└── development-context.html         # ⬜ TODO
+```
+
+#### Security (3 pages)
+```
+docs/security/
+├── threat-modeling.html             # ⬜ TODO
+├── compliance.html                  # ⬜ TODO
+└── security-audits.html             # ⬜ TODO
+```
+
+#### Orchestrators (17 pages)
+```
+docs/orchestrators/
+├── tdd-orchestrator.html            # ⬜ TODO
+├── planning-system.html             # ⬜ TODO
+├── debug-orchestrator.html          # ⬜ TODO
+├── ado-operations.html              # ⬜ TODO
+├── cleanup-orchestrator.html        # ⬜ TODO
+├── refinement-orchestrator.html     # ⬜ TODO
+├── sanitization-orchestrator.html   # ⬜ TODO
+├── execution-orchestrator.html      # ⬜ TODO
+├── intelligent-dashboard.html       # ⬜ TODO
+├── onboarding-orchestrator.html     # ⬜ TODO
+├── cortex-lens.html                 # ⬜ TODO
+├── git-checkpoint.html              # ⬜ TODO
+├── pre-flight.html                  # ⬜ TODO
+├── rollback-orchestrator.html       # ⬜ TODO
+├── system-integrity.html            # ⬜ TODO
+├── upgrade.html                     # ⬜ TODO
+└── architectural-review.html        # ⬜ TODO
+```
+
+#### Token Optimization (3 pages)
+```
+docs/token-optimization/
+├── token-analysis.html              # ⬜ TODO
+├── reduction-strategies.html        # ⬜ TODO
+└── cost-savings.html                # ⬜ TODO
+```
+
+#### Sharpen The Saw (6 pages)
+```
+docs/sts/
+├── code-quality.html                # ⬜ TODO
+├── solid.html                       # ⬜ TODO
+├── testing.html                     # ⬜ TODO
+├── performance.html                 # ⬜ TODO
+├── security.html                    # ⬜ TODO
+└── documentation.html               # ⬜ TODO
+```
+
+#### Best Practices (3 pages)
+```
+docs/knowledge/
+├── implementation-guidelines.html   # ⬜ TODO
+├── coding-standards.html            # ⬜ TODO
+└── workflow-best-practices.html     # ⬜ TODO
+```
+
+#### Toolkit Manager (3 pages)
+```
+docs/toolkit-manager/
+├── tool-discovery.html              # ⬜ TODO
+├── tool-orchestration.html          # ⬜ TODO
+└── tool-integration.html            # ⬜ TODO
+```
+
+#### CORTEX LENS (3 pages)
+```
+docs/lens/
+├── ast-analysis.html                # ⬜ TODO
+├── reverse-engineering.html         # ⬜ TODO
+└── code-intelligence.html           # ⬜ TODO
+```
+
+#### Get Started (3 pages)
+```
+docs/getting-started/
+├── installation.html                # ⬜ TODO
+├── configuration.html               # ⬜ TODO
+└── first-steps.html                 # ⬜ TODO
+```
+
+### Level 3 (DEPRECATED - Use inline/modal)
+```
+# ⛔ NO Level 3 files in v3.0.0
+# Use expandable sections, modals, or drawers instead of separate pages
+# Example: Rule details in skull-protection.html are inline expandable
+```
+
+**File Count Summary:**
+- Level 0: 1 file (Home page)
+- Level 1: 9 files (Tile overviews)
+- Level 2: 42 files (Component details)
+- Total: 52 HTML files
+
+---
+
+## 🔧 Layout Standards (MANDATORY)
+
+### Pattern 6: Metrics Dashboard (Centered Flexbox)
+```css
+.metrics-dashboard {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: var(--spacing-lg);
+    width: 100%;
+    margin: 0 auto var(--spacing-3xl);
+    padding: 0 var(--spacing-lg);
+}
+
+.metric-card {
+    text-align: center;
+    padding: var(--spacing-xl) var(--spacing-2xl);
+    min-width: 140px;
+    flex: 0 1 auto;
+}
+```
+
+### Pattern 7: Balanced Navigation Footer
+```html
+<nav class="nav-footer" style="display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto var(--spacing-2xl); padding: var(--spacing-xl);">
+    <a href="prev.html" class="nav-link prev" style="min-width: 220px; text-align: center;">
+        ← Previous Page
+    </a>
+    <a href="next.html" class="nav-link next" style="min-width: 220px; text-align: center;">
+        Next Page →
+    </a>
+</nav>
+```
+
+---
+
+## ⚠️ Constraints
+
+1. **No Level 4+ views** - Consolidate into Level 3 with expandable content
+2. **Colors unchanged** - Level 1 approved colors must be preserved
+3. **Pattern compliance** - All views must use Pattern 6 (metrics) and Pattern 7 (nav)
+4. **Animation Tier T1** - All Level 2 pages use Subtle animations ONLY
+5. **CSS imports required** - `variables.css`, `main.css`, `glass-patterns.css`, `micro-interactions.css`
+
+---
+
+## ✅ Definition of Done
+
+- [ ] All Level 1 pages verified against exemplar checklist
+- [ ] All Level 2 pages use Pattern 6 (metrics) and Pattern 7 (nav)
+- [ ] All Level 2 pages use T1 (Subtle) animations only
+- [ ] No view deeper than Level 3
+- [ ] Visual differentiation clear between levels
+- [ ] Colors preserved from approved designs
+- [ ] Mobile responsive (320px minimum)
+- [ ] Lighthouse performance ≥90
+- [ ] `skull-protection.html` animations simplified to T1
+- [ ] `knowledge-graph.html` animations simplified to T1
+
+---
+
+## 📚 Reference Documents
+
+- `cortex-brain/documents/standards/glassmorphism-design-standard.md` (v3.1.0)
+- Exemplar: `http://localhost:8000/orchestrators/index.html`
+- CSS Stack: `variables.css`, `glass-patterns.css`, `micro-interactions.css`
+
+---
+
+## 🤖 copilot_instructions
+
+```yaml
+response_template: autonomous_execution_progress
+tdd_enforcement: true
+final_refactor_required: true
+max_nesting_depth: 3
+level_1_colors: preserve_existing
+level_1_exemplar: orchestrators/index.html
+animation_tier_default: T1 (Subtle)
+animation_tier_hero_only: T3 (Dramatic)
+mandatory_patterns:
+  - Pattern 6 (Centered Flexbox Metrics)
+  - Pattern 7 (Balanced Navigation)
+skull_rules:
+  - REFACTOR_CLEANUP
+  - HOLISTIC_DISCOVERY
+completion_marker: "# 🎉 CONGRATULATIONS"
+```
+
+---
+
+## 🚀 Server Launch
+
+```bash
+./scripts/launch_docs.sh
+# Opens http://localhost:8000
+```
+
+---
+
+**Plan Status:** 🟡 ACTIVE  
+**Next Action:** Simplify animations in `skull-protection.html` and `knowledge-graph.html` (Phase 9 tasks)
+
+---
+
+*Generated by CORTEX Planning System v4.0*  
+*Updated: December 31, 2025 - Added Animation Tier System v2.1.0*  
+*Reference: `response-templates-v4.yaml:863`*
