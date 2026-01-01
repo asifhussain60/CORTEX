@@ -5055,3 +5055,97 @@ h1, h2, h3, h4, h5, h6, p, span, div {
     }
 }
 
+/* ============================================
+   CATEGORY PANELS GRID (Security, Orchestrators, STS)
+   ============================================ */
+.category-panels-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-lg, 1.5rem); /* 24px minimum spacing */
+    row-gap: var(--space-lg, 1.5rem);
+    column-gap: var(--space-lg, 1.5rem);
+    margin-bottom: 2rem;
+}
+
+@media (min-width: 768px) {
+    .category-panels-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .category-panels-grid.grid-3x2 {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.category-subpanel {
+    background: linear-gradient(135deg, rgba(10, 14, 39, 0.8), rgba(26, 31, 58, 0.8));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 2rem 1.5rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    min-height: 200px;
+}
+
+.category-subpanel:hover {
+    transform: translateY(-4px);
+    border-color: rgba(0, 212, 255, 0.4);
+    box-shadow: 0 8px 32px rgba(0, 212, 255, 0.2);
+}
+
+.category-icon-wrapper {
+    font-size: 2.3rem;
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2));
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem auto;
+}
+
+.category-icon {
+    display: inline-block;
+}
+
+.category-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--accent-primary, #00d4ff);
+    margin-bottom: 0.75rem;
+    text-align: center;
+}
+
+.category-description {
+    color: var(--text-secondary, #a0a6c0);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+    text-align: center;
+}
+
+.category-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.category-tag {
+    display: inline-block;
+    padding: 0.4rem 0.9rem;
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: var(--accent-primary, #00d4ff);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.category-tag:hover {
+    background: rgba(0, 212, 255, 0.2);
+    border-color: rgba(0, 212, 255, 0.5);
+    transform: translateY(-2px);
+}
+

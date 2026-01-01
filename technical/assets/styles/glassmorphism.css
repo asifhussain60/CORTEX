@@ -622,7 +622,9 @@ body {
 .level0-category-panels-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 2rem;
+    gap: var(--space-lg); /* 24px minimum spacing */
+    row-gap: var(--space-lg); /* Explicit row gap for vertical spacing */
+    column-gap: var(--space-lg); /* Explicit column gap for horizontal spacing */
     margin-bottom: 2rem;
 }
 
@@ -633,6 +635,9 @@ body {
 @media (min-width: 768px) {
     .level0-category-panels-grid {
         grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-lg); /* Maintain 24px spacing on larger screens */
+        row-gap: var(--space-lg);
+        column-gap: var(--space-lg);
     }
 }
 
