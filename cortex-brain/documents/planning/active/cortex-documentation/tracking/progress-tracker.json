@@ -45,12 +45,12 @@
     "phase_2": {
       "name": "Level 1 Hub Pages",
       "status": "in_progress",
-      "progress_percent": 0,
-      "tasks_completed": 0,
+      "progress_percent": 17,
+      "tasks_completed": 1,
       "tasks_total": 6,
       "tasks": [
         { "id": "2.0", "name": "Discovery & Validation Setup", "status": "not_started" },
-        { "id": "2.1", "name": "Multi-Panel Tile Hubs (3 files)", "status": "not_started" },
+        { "id": "2.1", "name": "Multi-Panel Tile Hubs (3 files)", "status": "in_progress", "detail": "Orchestrators Hub (2.1.2) completed" },
         { "id": "2.2", "name": "Standard Tile Hubs (6 files)", "status": "not_started" },
         { "id": "2.3", "name": "Level 1 Link Validation", "status": "not_started" },
         { "id": "2.4", "name": "Level 1 Mobile Validation", "status": "not_started" },

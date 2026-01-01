@@ -1,700 +1,1093 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Architecture - CORTEX</title>
-    <link href="../assets/images/CORTEX-logo.png" rel="icon" type="image/png">
-    <!-- Glassmorphism v3.0 CSS Stack -->
-    <link href="../assets/css/variables.css" rel="stylesheet">
-    <link href="../assets/css/main.css" rel="stylesheet">
-    <link href="../assets/css/glass-patterns.css" rel="stylesheet">
-    <link href="../assets/css/micro-interactions.css" rel="stylesheet">
-    <!-- D3.js for Architecture Visualization -->
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <style>
-        /* Page-specific overrides */
-        body {
-            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
-            min-height: 100vh;
-        }
-        
-        /* Hero Section with Light Leak */
-        .hero-section {
-            position: relative;
-            padding: var(--spacing-3xl) var(--spacing-xl);
-            overflow: hidden;
-        }
-        
-        .hero-section::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -25%;
-            width: 150%;
-            height: 200%;
-            background: radial-gradient(ellipse at center, rgba(0, 212, 255, 0.15) 0%, transparent 50%);
-            animation: lightLeak 8s ease-in-out infinite;
-            pointer-events: none;
-        }
-        
-        @keyframes lightLeak {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: 0.3; }
-            50% { transform: translate(10%, -5%) rotate(5deg); opacity: 0.6; }
-        }
-        
-        .hero-title {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-primary) 50%, var(--accent-secondary) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-align: center;
-            margin-bottom: var(--spacing-md);
-        }
-        
-        .hero-subtitle {
-            font-size: var(--font-lg);
-            color: var(--text-secondary);
-            text-align: center;
-            max-width: 800px;
-            margin: 0 auto var(--spacing-2xl);
-        }
-        
-        /* Metrics Dashboard */
-        .metrics-dashboard {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            gap: var(--spacing-lg);
-            width: 100%;
-            margin: 0 auto var(--spacing-3xl);
-            padding: 0 var(--spacing-lg);
-        }
-        
-        .metric-card {
-            text-align: center;
-            padding: var(--spacing-xl) var(--spacing-2xl);
-            min-width: 140px;
-            flex: 0 1 auto;
-        }
-        
-        .metric-value {
-            font-size: var(--font-3xl);
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: var(--spacing-xs);
-        }
-        
-        .metric-label {
-            font-size: var(--font-sm);
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-        }
-        
-        /* Architecture Visualization Container */
-        .architecture-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: var(--spacing-2xl) var(--spacing-lg);
-        }
-        
-        .section-header {
-            text-align: center;
-            margin-bottom: var(--spacing-2xl);
-        }
-        
-        .section-title {
-            font-size: var(--font-2xl);
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: var(--spacing-sm);
-        }
-        
-        .section-description {
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        
-        /* 4-Tier Diagram */
-        #tier-diagram {
-            width: 100%;
-            height: 500px;
-            border-radius: var(--radius-xl);
-            overflow: hidden;
-        }
-        
-        #tier-diagram svg {
-            width: 100%;
-            height: 100%;
-        }
-        
-        /* Tier Cards Grid */
-        .tier-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: var(--spacing-lg);
-            margin-top: var(--spacing-2xl);
-        }
-        
-        .tier-card {
-            padding: var(--spacing-xl);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .tier-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            background: linear-gradient(180deg, var(--accent-primary), var(--accent-secondary));
-            border-radius: var(--radius-sm) 0 0 var(--radius-sm);
-        }
-        
-        .tier-number {
-            font-size: var(--font-sm);
-            font-weight: 700;
-            color: var(--accent-primary);
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            margin-bottom: var(--spacing-xs);
-        }
-        
-        .tier-name {
-            font-size: var(--font-xl);
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: var(--spacing-sm);
-        }
-        
-        .tier-description {
-            color: var(--text-secondary);
-            font-size: var(--font-sm);
-            line-height: 1.6;
-            margin-bottom: var(--spacing-md);
-        }
-        
-        .tier-stats {
-            display: flex;
-            gap: var(--spacing-md);
-            flex-wrap: wrap;
-        }
-        
-        .tier-stat {
-            background: rgba(255, 255, 255, 0.05);
-            padding: var(--spacing-xs) var(--spacing-sm);
-            border-radius: var(--radius-sm);
-            font-size: var(--font-xs);
-        }
-        
-        .tier-stat-value {
-            color: var(--accent-primary);
-            font-weight: 600;
-        }
-        
-        .tier-stat-label {
-            color: var(--text-muted);
-            margin-left: var(--spacing-2xs);
-        }
-        
-        /* SKULL Protection Section */
-        .skull-preview {
-            margin-top: var(--spacing-3xl);
-        }
-        
-        .protection-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: var(--spacing-lg);
-        }
-        
-        .protection-card {
-            padding: var(--spacing-xl);
-        }
-        
-        /* Architecture Component Cards */
-        .protection-card a {
-            display: block;
-            text-decoration: none;
-            color: inherit;
-        }
-        
-        .protection-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 24px rgba(0, 212, 255, 0.3);
-        }
-        
-        .protection-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: var(--radius-lg);
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(139, 92, 246, 0.2));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            margin-bottom: var(--spacing-md);
-        }
-        
-        .protection-title {
-            font-size: var(--font-lg);
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: var(--spacing-sm);
-        }
-        
-        .protection-description {
-            color: var(--text-secondary);
-            font-size: var(--font-sm);
-            line-height: 1.6;
-        }
-        
-        /* Navigation Footer */
-        .nav-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1200px;
-            margin: var(--spacing-3xl) auto var(--spacing-2xl);
-            padding: var(--spacing-xl) var(--spacing-lg);
-            gap: var(--spacing-lg);
-            flex-wrap: wrap;
-        }
-        
-        .nav-link {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--spacing-sm);
-            padding: var(--spacing-md) var(--spacing-xl);
-            color: var(--text-secondary);
-            text-decoration: none;
-            background: var(--glass-bg, rgba(26, 31, 58, 0.7));
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
-            border-radius: var(--radius-lg, 12px);
-            transition: all 0.3s ease;
-            min-height: 44px;
-        }
-        
-        .nav-link:hover {
-            color: var(--accent-primary);
-            border-color: var(--accent-primary);
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
-        }
-        
-        .nav-link.prev:hover {
-            transform: translateX(-4px);
-        }
-        
-        .nav-link.next:hover {
-            transform: translateX(4px);
-        }
-        
-        /* Breadcrumb Enhancement */
-        .breadcrumb {
-            padding: var(--spacing-md) var(--spacing-xl);
-            font-size: var(--font-sm);
-        }
-        
-        .breadcrumb a {
-            color: var(--text-muted);
-            text-decoration: none;
-            transition: color var(--transition-fast);
-        }
-        
-        .breadcrumb a:hover {
-            color: var(--accent-primary);
-        }
-        
-        .breadcrumb-separator {
-            color: var(--text-muted);
-            margin: 0 var(--spacing-sm);
-        }
-        
-        .breadcrumb-current {
-            color: var(--text-secondary);
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX Architecture - Four-Tier Brain, Agent System, and Orchestrator Ecosystem">
+    <meta name="keywords" content="cortex, architecture, brain tiers, agents, orchestrators, ai assistant">
+    <meta name="author" content="Asif Hussain">
+    <title>CORTEX Architecture | Enterprise AI Assistant</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
-    <!-- Breadcrumb -->
-    <nav class="breadcrumb">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
         <a href="../index.html">Home</a>
-        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-separator">→</span>
         <span class="breadcrumb-current">Architecture</span>
     </nav>
 
-    <!-- Hero Section with Light Leak Effect -->
-    <section class="hero-section">
-        <h1 class="hero-title">CORTEX Architecture</h1>
-        <p class="hero-subtitle">
-            A 4-tier memory system with <strong>118 SKULL rules</strong> across 
-            <strong>15 protection layers</strong>, safeguarding against bloat, 
-            duplication, and technical debt.
-        </p>
-        
-        <!-- Metrics Dashboard -->
-        <div class="metrics-dashboard">
-            <div class="glass-card metric-card tilt-glass">
-                <div class="metric-value">4</div>
-                <div class="metric-label">Memory Tiers</div>
-            </div>
-            <div class="glass-card metric-card tilt-glass">
-                <div class="metric-value">118</div>
-                <div class="metric-label">SKULL Rules</div>
-            </div>
-            <div class="glass-card metric-card tilt-glass">
-                <div class="metric-value">15</div>
-                <div class="metric-label">Protection Layers</div>
-            </div>
-            <div class="glass-card metric-card tilt-glass">
-                <div class="metric-value">20</div>
-                <div class="metric-label">Orchestrators</div>
-            </div>
-            <div class="glass-card metric-card tilt-glass">
-                <div class="metric-value">&lt;1ms</div>
-                <div class="metric-label">Access Latency</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Architecture Visualization -->
-    <section class="architecture-container">
-        <div class="section-header">
-            <h2 class="section-title">4-Tier Memory Architecture</h2>
-            <p class="section-description">
-                Hierarchical memory system from volatile working memory to persistent knowledge graphs
-            </p>
-        </div>
-        
-        <!-- D3.js Tier Diagram -->
-        <div class="neuglass-card" id="tier-diagram">
-            <svg id="architecture-svg"></svg>
-        </div>
-        
-        <!-- Tier Detail Cards -->
-        <div class="tier-grid">
-            <div class="glass-card tier-card pulse-glow-glass">
-                <div class="tier-number">Tier 0</div>
-                <div class="tier-name">Governance Layer</div>
-                <div class="tier-description">
-                    Immutable protection rules, brain protection instincts, and core system governance. 
-                    The foundational layer that cannot be modified during runtime.
-                </div>
-                <div class="tier-stats">
-                    <div class="tier-stat">
-                        <span class="tier-stat-value">65</span>
-                        <span class="tier-stat-label">Instincts</span>
-                    </div>
-                    <div class="tier-stat">
-                        <span class="tier-stat-value">Immutable</span>
-                        <span class="tier-stat-label">State</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="glass-card tier-card pulse-glow-glass">
-                <div class="tier-number">Tier 1</div>
-                <div class="tier-name">Working Memory</div>
-                <div class="tier-description">
-                    Active conversation context, session state, and immediate task memory. 
-                    Volatile storage optimized for current session performance.
-                </div>
-                <div class="tier-stats">
-                    <div class="tier-stat">
-                        <span class="tier-stat-value">70</span>
-                        <span class="tier-stat-label">Conversations</span>
-                    </div>
-                    <div class="tier-stat">
-                        <span class="tier-stat-value">JSONL</span>
-                        <span class="tier-stat-label">Format</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="glass-card tier-card pulse-glow-glass">
-                <div class="tier-number">Tier 2</div>
-                <div class="tier-name">Knowledge Graph</div>
-                <div class="tier-description">
-                    Semantic relationships, pattern libraries, and cross-session learning. 
-                    Persistent knowledge that grows with each interaction.
-                </div>
-                <div class="tier-stats">
-                    <div class="tier-stat">
-                        <span class="tier-stat-value">54</span>
-                        <span class="tier-stat-label">Patterns</span>
-                    </div>
-                    <div class="tier-stat">
-                        <span class="tier-stat-value">YAML</span>
-                        <span class="tier-stat-label">Format</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="glass-card tier-card pulse-glow-glass">
-                <div class="tier-number">Tier 3</div>
-                <div class="tier-name">Development Context</div>
-                <div class="tier-description">
-                    Project-specific context, codebase understanding, and development patterns. 
-                    Adapts to the user's development environment.
-                </div>
-                <div class="tier-stats">
-                    <div class="tier-stat">
-                        <span class="tier-stat-value">Dynamic</span>
-                        <span class="tier-stat-label">Content</span>
-                    </div>
-                    <div class="tier-stat">
-                        <span class="tier-stat-value">Multi-format</span>
-                        <span class="tier-stat-label">Storage</span>
-                    </div>
+    <!-- Hero Section with Logo and Title Row -->
+    <section class="hero" id="main-content">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 2.5rem; flex-wrap: wrap; margin-bottom: 2rem;">
+            <!-- Logo -->
+            <a href="../index.html">
+                <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" style="width: 200px; height: 200px; filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.5)); transition: filter 0.2s ease-in-out;">
+            </a>
+            <!-- Title and Metadata -->
+            <div style="text-align: center;">
+                <h1 class="hero-title" style="margin-bottom: 0.5rem;">🏛️ CORTEX Architecture</h1>
+                <p class="hero-subtitle" style="margin-bottom: 1rem;">Four-Tier Brain, Agent System, and Orchestrator Ecosystem</p>
+                <div class="file-metadata">
+                    <span class="metadata-item">🧠 4 Brain Tiers</span>
+                    <span class="metadata-item">🤖 2 Specialist Agents</span>
+                    <span class="metadata-item">⚙️ 8 Orchestrators</span>
+                    <span class="metadata-item">📅 Updated: Dec 2025</span>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Architecture Components - Level 2 Overview Cards -->
-    <section class="architecture-container skull-preview">
-        <div class="section-header">
-            <h2 class="section-title">🧠 Architecture Components</h2>
-            <p class="section-description">
-                Explore the core architectural elements of CORTEX's intelligent brain system
-            </p>
-        </div>
-        
-        <div class="protection-grid">
-            <a href="skull-protection.html" class="neuglass-card protection-card level1-card-link animation-t1">
-                <div class="protection-icon">🛡️</div>
-                <div class="protection-title">SKULL Protection</div>
-                <div class="protection-description">
-                    15-layer defense system with 118 automated rules protecting brain integrity. 
-                    Concentric security model enforcing TDD, holistic discovery, and git isolation.
-                </div>
-                <div class="tier-stats level1-tier-stats">
-                    <div class="tier-stat">
-                        <span class="tier-stat-value">15</span>
-                        <span class="tier-stat-label">Layers</span>
-                    </div>
-                    <div class="tier-stat">
-                        <span class="tier-stat-value">118</span>
-                        <span class="tier-stat-label">Rules</span>
-                    </div>
-                </div>
-            </a>
-            
-            <a href="knowledge-graph.html" class="neuglass-card protection-card level1-card-link animation-t1">
-                <div class="protection-icon">🕸️</div>
-                <div class="protection-title">Knowledge Graph</div>
-                <div class="protection-description">
-                    Semantic network with 8,429 concept nodes and 24,817 relationship edges. 
-                    Force-directed visualization of patterns, learning, and cross-session memory.
-                </div>
-                <div class="tier-stats level1-tier-stats">
-                    <div class="tier-stat">
-                        <span class="tier-stat-value">8,429</span>
-                        <span class="tier-stat-label">Nodes</span>
-                    </div>
-                    <div class="tier-stat">
-                        <span class="tier-stat-value">12ms</span>
-                        <span class="tier-stat-label">Search</span>
-                    </div>
-                </div>
-            </a>
-            
-            <a href="brain-tiers.html" class="neuglass-card protection-card level1-card-link animation-t1">
-                <div class="protection-icon">🏗️</div>
-                <div class="protection-title">Brain Tiers</div>
-                <div class="protection-description">
-                    4-tier governance hierarchy from Tier 0 (immutable rules) through Tier 3 
-                    (development context). Sankey flow showing memory architecture and data persistence.
-                </div>
-                <div class="tier-stats level1-tier-stats">
-                    <div class="tier-stat">
-                        <span class="tier-stat-value">4</span>
-                        <span class="tier-stat-label">Tiers</span>
-                    </div>
-                    <div class="tier-stat">
-                        <span class="tier-stat-value">SQLite</span>
-                        <span class="tier-stat-label">Storage</span>
-                    </div>
-                </div>
-            </a>
-            
-            <a href="development-context.html" class="neuglass-card protection-card level1-card-link animation-t1">
-                <div class="protection-icon">🔧</div>
-                <div class="protection-title">Development Context</div>
-                <div class="protection-description">
-                    Hierarchical tree of 40+ context categories across 8 domains. Dynamic project 
-                    understanding adapting to codebase structure and development patterns.
-                </div>
-                <div class="tier-stats level1-tier-stats">
-                    <div class="tier-stat">
-                        <span class="tier-stat-value">40+</span>
-                        <span class="tier-stat-label">Categories</span>
-                    </div>
-                    <div class="tier-stat">
-                        <span class="tier-stat-value">8</span>
-                        <span class="tier-stat-label">Domains</span>
-                    </div>
-                </div>
-            </a>
-        </div>
-    </section>
-
-    <!-- Navigation Footer -->
-    <nav class="nav-footer level1-nav-footer">
-        <a href="../index.html" class="nav-link prev level1-nav-link-center">
-            ← Back to Home
-        </a>
-    </nav>
-
-    <!-- D3.js Architecture Visualization -->
-    <script>
-        // Initialize D3.js visualization
-        document.addEventListener('DOMContentLoaded', function() {
-            const svg = d3.select('#architecture-svg');
-            const container = document.getElementById('tier-diagram');
-            const width = container.clientWidth;
-            const height = container.clientHeight;
-            
-            svg.attr('viewBox', `0 0 ${width} ${height}`);
-            
-            // Tier data
-            const tiers = [
-                { id: 'tier0', name: 'Tier 0: Governance', y: 0.15, color: '#ff6b6b', width: 0.5 },
-                { id: 'tier1', name: 'Tier 1: Working Memory', y: 0.35, color: '#4ecdc4', width: 0.65 },
-                { id: 'tier2', name: 'Tier 2: Knowledge Graph', y: 0.55, color: '#45b7d1', width: 0.8 },
-                { id: 'tier3', name: 'Tier 3: Dev Context', y: 0.75, color: '#96ceb4', width: 0.95 }
-            ];
-            
-            // Create gradient definitions
-            const defs = svg.append('defs');
-            
-            tiers.forEach(tier => {
-                const gradient = defs.append('linearGradient')
-                    .attr('id', `gradient-${tier.id}`)
-                    .attr('x1', '0%')
-                    .attr('y1', '0%')
-                    .attr('x2', '100%')
-                    .attr('y2', '0%');
-                
-                gradient.append('stop')
-                    .attr('offset', '0%')
-                    .attr('stop-color', tier.color)
-                    .attr('stop-opacity', 0.3);
-                
-                gradient.append('stop')
-                    .attr('offset', '50%')
-                    .attr('stop-color', tier.color)
-                    .attr('stop-opacity', 0.6);
-                
-                gradient.append('stop')
-                    .attr('offset', '100%')
-                    .attr('stop-color', tier.color)
-                    .attr('stop-opacity', 0.3);
-            });
-            
-            // Draw tier layers
-            const tierGroup = svg.append('g').attr('class', 'tiers');
-            
-            tiers.forEach((tier, index) => {
-                const tierWidth = width * tier.width;
-                const tierHeight = height * 0.15;
-                const x = (width - tierWidth) / 2;
-                const y = height * tier.y;
-                
-                // Tier background
-                tierGroup.append('rect')
-                    .attr('x', x)
-                    .attr('y', y)
-                    .attr('width', tierWidth)
-                    .attr('height', tierHeight)
-                    .attr('rx', 12)
-                    .attr('ry', 12)
-                    .attr('fill', `url(#gradient-${tier.id})`)
-                    .attr('stroke', tier.color)
-                    .attr('stroke-width', 2)
-                    .attr('stroke-opacity', 0.5)
-                    .style('filter', 'blur(0.5px)')
-                    .style('cursor', 'pointer')
-                    .on('mouseover', function() {
-                        d3.select(this)
-                            .transition()
-                            .duration(200)
-                            .attr('stroke-opacity', 1)
-                            .attr('stroke-width', 3);
-                    })
-                    .on('mouseout', function() {
-                        d3.select(this)
-                            .transition()
-                            .duration(200)
-                            .attr('stroke-opacity', 0.5)
-                            .attr('stroke-width', 2);
-                    });
-                
-                // Tier label
-                tierGroup.append('text')
-                    .attr('x', width / 2)
-                    .attr('y', y + tierHeight / 2)
-                    .attr('dy', '0.35em')
-                    .attr('text-anchor', 'middle')
-                    .attr('fill', '#ffffff')
-                    .attr('font-size', '16px')
-                    .attr('font-weight', '600')
-                    .attr('pointer-events', 'none')
-                    .text(tier.name);
-                
-                // Connection lines (except for last tier)
-                if (index < tiers.length - 1) {
-                    const nextTier = tiers[index + 1];
-                    const lineY = y + tierHeight;
-                    const nextY = height * nextTier.y;
+    <section class="section file-content">
+        <div class="container">
+            <!-- Overview -->
+            <div id="overview" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title" style="display: flex; align-items: center; gap: 0.75rem;">
+                        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-clipboard-list" style="font-size: 1.25rem; color: var(--accent-primary);"></i>
+                        </div>
+                        Executive Summary
+                    </h2>
+                    <p>CORTEX is built on a <strong>four-tier brain architecture</strong> that provides intelligent memory management, pattern learning, and context preservation across conversations. Two <strong>specialist agents</strong> (Planning and Strategic Reasoning) work within orchestrators to coordinate complex multi-phase workflows. The system enforces safety through <strong>SKULL brain protection rules</strong> at Tier 0, while maintaining sub-100ms working memory access at Tier 1.</p>
                     
-                    tierGroup.append('line')
-                        .attr('x1', width / 2)
-                        .attr('y1', lineY)
-                        .attr('x2', width / 2)
-                        .attr('y2', nextY)
-                        .attr('stroke', 'rgba(255, 255, 255, 0.2)')
-                        .attr('stroke-width', 2)
-                        .attr('stroke-dasharray', '5,5');
-                }
-            });
-            
-            // Add decorative elements
-            const decorGroup = svg.append('g').attr('class', 'decorations');
-            
-            // Floating particles
-            for (let i = 0; i < 20; i++) {
-                decorGroup.append('circle')
-                    .attr('cx', Math.random() * width)
-                    .attr('cy', Math.random() * height)
-                    .attr('r', Math.random() * 3 + 1)
-                    .attr('fill', 'rgba(0, 212, 255, 0.3)')
-                    .style('animation', `float ${3 + Math.random() * 4}s ease-in-out infinite`)
-                    .style('animation-delay', `${Math.random() * 2}s`);
+                    <div class="glass-card" style="background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(123, 97, 255, 0.05)); border-left: 4px solid var(--accent-primary); margin: 1.5rem 0;">
+                        <div style="display: flex; align-items: flex-start; gap: 1rem;">
+                            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <i class="fas fa-key" style="font-size: 1.25rem; color: var(--accent-primary);"></i>
+                            </div>
+                            <div>
+                                <strong style="color: var(--accent-primary);">Key Architectural Principles:</strong>
+                                <ul class="feature-list" style="margin-top: 0.75rem;">
+                                    <li><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i><strong>Brain Protection First:</strong> Tier 0 SKULL rules enforce safety</li>
+                                    <li><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i><strong>Test-Driven Development:</strong> TDD mandatory for all production code</li>
+                                    <li><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i><strong>Git Isolation:</strong> CORTEX code never mixed with user repos</li>
+                                    <li><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i><strong>Context Preservation:</strong> Four-Tier Brain maintains long-term memory</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3>System Architecture Overview</h3>
+                    <div style="background: rgba(0, 0, 0, 0.3); padding: 2rem; border-radius: 12px; margin: 1.5rem 0; overflow-x: auto; text-align: center;">
+                        <div class="mermaid">
+graph LR
+    A["🧠 CORTEX<br/>Core System"]
+    
+    A --> B["🏛️ Four-Tier Brain<br/>Memory Architecture"]
+    A --> C["🤖 Agent System<br/>Specialist Intelligence"]
+    A --> D["⚙️ Orchestrators<br/>Workflow Coordination"]
+    
+    B --> B1["🛡️ Tier 0<br/>SKULL Rules"]
+    B --> B2["💾 Tier 1<br/>Working Memory"]
+    B --> B3["🕸️ Tier 2<br/>Knowledge Graph"]
+    B --> B4["📊 Tier 3<br/>Dev Context"]
+    
+    C --> C1["📋 Planning Agent<br/>Task Decomposition"]
+    C --> C2["🔍 Strategic Agent<br/>Architecture Analysis"]
+    
+    D --> D1["🎯 Planning System"]
+    D --> D2["✅ TDD Orchestrator"]
+    D --> D3["🔧 Maintenance"]
+    D --> D4["🧹 Sanitization"]
+    
+    style A fill:#7b61ff,stroke:#9f87ff,stroke-width:3px,color:#fff
+    style B fill:#10b981,stroke:#34d399,stroke-width:2px,color:#fff
+    style C fill:#3b82f6,stroke:#60a5fa,stroke-width:2px,color:#fff
+    style D fill:#f59e0b,stroke:#fbbf24,stroke-width:2px,color:#fff
+    
+    style B1 fill:#064e3b,color:#fff
+    style B2 fill:#064e3b,color:#fff
+    style B3 fill:#064e3b,color:#fff
+    style B4 fill:#064e3b,color:#fff
+    
+    style C1 fill:#1e3a8a,color:#fff
+    style C2 fill:#1e3a8a,color:#fff
+    
+    style D1 fill:#78350f,color:#fff
+    style D2 fill:#78350f,color:#fff
+    style D3 fill:#78350f,color:#fff
+    style D4 fill:#78350f,color:#fff
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Four-Tier Brain -->
+            <div id="brain-architecture" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title" style="display: flex; align-items: center; gap: 0.75rem;">
+                        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(123, 97, 255, 0.2), rgba(0, 212, 255, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-brain" style="font-size: 1.25rem; color: var(--accent-secondary);"></i>
+                        </div>
+                        Four-Tier Brain Architecture
+                    </h2>
+                    <p>The brain is organized into four hierarchical tiers, each serving a distinct purpose in memory management and intelligence. Data flows from Tier 0 governance through working memory to long-term pattern storage.</p>
+
+                    <h3>Brain Data Flow</h3>
+                    <div style="background: rgba(0, 0, 0, 0.3); padding: 2rem; border-radius: 12px; margin: 1.5rem 0; overflow-x: auto; text-align: center;">
+                        <div class="mermaid">
+graph TB
+    T0["🛡️ Tier 0: SKULL Rules<br/><small>Brain Protection & Safety</small>"]
+    T1["💾 Tier 1: Working Memory<br/><small>70-Conversation FIFO</small>"]
+    T2["🕸️ Tier 2: Knowledge Graph<br/><small>Pattern Learning</small>"]
+    T3["📊 Tier 3: Development Context<br/><small>Per-Repo Metrics</small>"]
+    
+    T0 -->|"Validates"| T1
+    T1 -->|"Stores"| T2
+    T2 -->|"Enriches"| T3
+    T3 -->|"Informs"| T1
+    T2 -->|"Patterns"| T1
+    
+    T0 -.->|"Enforces TDD"| T2
+    T0 -.->|"Git Isolation"| T3
+    
+    style T0 fill:#ef4444,stroke:#f87171,stroke-width:3px,color:#fff
+    style T1 fill:#10b981,stroke:#34d399,stroke-width:3px,color:#fff
+    style T2 fill:#3b82f6,stroke:#60a5fa,stroke-width:3px,color:#fff
+    style T3 fill:#f59e0b,stroke:#fbbf24,stroke-width:3px,color:#fff
+                        </div>
+                    </div>
+
+                    <h3>Tier Details</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(248, 113, 113, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-shield-alt" style="font-size: 1.5rem; color: var(--danger);"></i>
+                            </div>
+                            <h3>Tier 0: Governance</h3>
+                            <p class="framework-subtitle">SKULL Brain Protection Rules</p>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Brain protection and safety enforcement</li>
+                                <li>Validates all operations before execution</li>
+                                <li>Prevents code duplication and anti-patterns</li>
+                            </ul>
+                            <h4>SKULL Rules</h4>
+                            <ul>
+                                <li><strong>TDD_ENFORCEMENT:</strong> RED→GREEN→REFACTOR mandatory</li>
+                                <li><strong>HOLISTIC_DISCOVERY:</strong> Search before create</li>
+                                <li><strong>REFACTOR_CLEANUP:</strong> Remove orphaned code</li>
+                                <li><strong>GIT_ISOLATION:</strong> CORTEX/user separation</li>
+                            </ul>
+                            <h4>Storage</h4>
+                            <ul>
+                                <li><code>cortex-brain/brain-protection-rules.yaml</code></li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(52, 211, 153, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-memory" style="font-size: 1.5rem; color: var(--success);"></i>
+                            </div>
+                            <h3>Tier 1: Working Memory</h3>
+                            <p class="framework-subtitle">70-Conversation FIFO Buffer</p>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Recent conversation history with fast access</li>
+                                <li>Sub-100ms retrieval performance</li>
+                                <li>Context for current session</li>
+                            </ul>
+                            <h4>Capabilities</h4>
+                            <ul>
+                                <li><strong>Retention:</strong> Last 70 conversations</li>
+                                <li><strong>Format:</strong> JSON Lines (JSONL)</li>
+                                <li><strong>Cleanup:</strong> Automatic FIFO eviction</li>
+                                <li><strong>Performance:</strong> &lt; 100ms retrieval</li>
+                            </ul>
+                            <h4>Storage</h4>
+                            <ul>
+                                <li><code>cortex-brain/conversation-context.jsonl</code></li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(96, 165, 250, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-project-diagram" style="font-size: 1.5rem; color: var(--info);"></i>
+                            </div>
+                            <h3>Tier 2: Knowledge Graph</h3>
+                            <p class="framework-subtitle">Pattern Learning & Relationships</p>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Long-term pattern storage</li>
+                                <li>Relationship mapping between modules</li>
+                                <li>Technology stack learning</li>
+                            </ul>
+                            <h4>Capabilities</h4>
+                            <ul>
+                                <li><strong>Patterns:</strong> Code patterns, architectural decisions</li>
+                                <li><strong>Relationships:</strong> Module dependencies</li>
+                                <li><strong>Learning:</strong> Technology stack patterns</li>
+                                <li><strong>Retrieval:</strong> Context-aware matching</li>
+                            </ul>
+                            <h4>Storage</h4>
+                            <ul>
+                                <li><code>cortex-brain/knowledge-graph.yaml</code></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="framework-grid" style="margin-top: 2rem;">
+                        <div class="framework-panel">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(251, 191, 36, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-chart-bar" style="font-size: 1.5rem; color: var(--warning);"></i>
+                            </div>
+                            <h3>Tier 3: Development Context</h3>
+                            <p class="framework-subtitle">Per-Repository Metrics</p>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Repository-specific context and metrics</li>
+                                <li>Multi-repo support (1:∞ scaling)</li>
+                                <li>Hotspot and complexity tracking</li>
+                            </ul>
+                            <h4>Capabilities</h4>
+                            <ul>
+                                <li><strong>Hotspots:</strong> High change frequency files</li>
+                                <li><strong>Complexity:</strong> Cyclomatic complexity tracking</li>
+                                <li><strong>Coverage:</strong> Per-module test coverage</li>
+                                <li><strong>Multi-Repo:</strong> Separate context per repo</li>
+                            </ul>
+                            <h4>Storage</h4>
+                            <ul>
+                                <li><code>cortex-brain/development-context.yaml</code></li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-bolt" style="font-size: 1.5rem; color: var(--accent-primary);"></i>
+                            </div>
+                            <h3>Performance Profile</h3>
+                            <p class="framework-subtitle">Speed & Efficiency</p>
+                            <h4>Response Times</h4>
+                            <ul>
+                                <li><strong>Tier 0:</strong> Instant (rule validation)</li>
+                                <li><strong>Tier 1:</strong> &lt; 100ms (memory access)</li>
+                                <li><strong>Tier 2:</strong> &lt; 500ms (pattern matching)</li>
+                                <li><strong>Tier 3:</strong> &lt; 1s (metric retrieval)</li>
+                            </ul>
+                            <h4>Storage Size</h4>
+                            <ul>
+                                <li><strong>Total:</strong> ~500MB (codebase + brain)</li>
+                                <li><strong>Tier 1:</strong> ~5MB (70 conversations)</li>
+                                <li><strong>Tier 2:</strong> ~50MB (patterns)</li>
+                                <li><strong>Tier 3:</strong> ~10MB per repo</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-sync-alt" style="font-size: 1.5rem; color: var(--accent-primary);"></i>
+                            </div>
+                            <h3>Brain Maintenance</h3>
+                            <p class="framework-subtitle">Automatic Optimization</p>
+                            <h4>Cleanup Operations</h4>
+                            <ul>
+                                <li><strong>FIFO Eviction:</strong> Tier 1 (automatic)</li>
+                                <li><strong>Pattern Pruning:</strong> Tier 2 (monthly)</li>
+                                <li><strong>Metric Refresh:</strong> Tier 3 (per commit)</li>
+                                <li><strong>Backup:</strong> All tiers (weekly)</li>
+                            </ul>
+                            <h4>Health Checks</h4>
+                            <ul>
+                                <li>SKULL rule validation</li>
+                                <li>Storage capacity monitoring</li>
+                                <li>Performance benchmarking</li>
+                                <li>Integrity verification</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Agent System -->
+            <div id="agent-system" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title" style="display: flex; align-items: center; gap: 0.75rem;">
+                        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(96, 165, 250, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-robot" style="font-size: 1.25rem; color: var(--info);"></i>
+                        </div>
+                        Specialist Agent System
+                    </h2>
+                    <p>Two specialist agents provide focused intelligence for complex operations. Agents are <strong>embedded within orchestrators</strong>, not standalone services. They analyze requests, generate plans, and provide strategic recommendations.</p>
+
+                    <h3>Agent Architecture</h3>
+                    <div style="background: rgba(0, 0, 0, 0.3); padding: 2rem; border-radius: 12px; margin: 1.5rem 0; overflow-x: auto; text-align: center;">
+                        <div class="mermaid">
+graph LR
+    User["👤 User Request"]
+    
+    User --> O1["📋 Planning System<br/>Orchestrator"]
+    User --> O2["🔍 Architectural Review<br/>Orchestrator"]
+    
+    O1 --> A1["🎯 Planning Agent<br/><small>Task Decomposition</small>"]
+    O2 --> A2["🧠 Strategic Agent<br/><small>Architecture Analysis</small>"]
+    
+    A1 --> P1["📝 Plan Generation"]
+    A1 --> P2["⚡ Complexity Analysis"]
+    A1 --> P3["✅ DoR/DoD Validation"]
+    
+    A2 --> S1["🏗️ Pattern Detection"]
+    A2 --> S2["📊 Dependency Analysis"]
+    A2 --> S3["💡 Recommendations"]
+    
+    P1 --> Brain["🧠 Four-Tier Brain"]
+    P2 --> Brain
+    P3 --> Brain
+    S1 --> Brain
+    S2 --> Brain
+    S3 --> Brain
+    
+    style User fill:#7b61ff,stroke:#9f87ff,stroke-width:3px,color:#fff
+    style O1 fill:#10b981,stroke:#34d399,stroke-width:2px,color:#fff
+    style O2 fill:#10b981,stroke:#34d399,stroke-width:2px,color:#fff
+    
+    style A1 fill:#3b82f6,stroke:#60a5fa,stroke-width:3px,color:#fff
+    style A2 fill:#3b82f6,stroke:#60a5fa,stroke-width:3px,color:#fff
+    
+    style Brain fill:#f59e0b,stroke:#fbbf24,stroke-width:2px,color:#fff
+                        </div>
+                    </div>
+
+                    <h3>Agent Capabilities</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-crosshairs" style="font-size: 1.5rem; color: var(--accent-primary);"></i>
+                            </div>
+                            <h3>Planning Agent</h3>
+                            <p class="framework-subtitle">Feature Planning & Task Decomposition</p>
+                            <h4>Core Capabilities</h4>
+                            <ul>
+                                <li><strong>Complexity Analysis:</strong> AUTO detection (HIGH/MEDIUM/LOW)</li>
+                                <li><strong>Plan Generation:</strong> Multi-phase plans with TDD</li>
+                                <li><strong>DoR/DoD:</strong> Definition of Ready/Done validation</li>
+                                <li><strong>Manifest Creation:</strong> YAML-based structure</li>
+                            </ul>
+                            <h4>Output Structure</h4>
+                            <ul>
+                                <li>Master plan document</li>
+                                <li>Phase breakdown with checkpoints</li>
+                                <li>TDD test specifications</li>
+                                <li>Progress tracking JSON</li>
+                            </ul>
+                            <h4>Integration</h4>
+                            <ul>
+                                <li>Works within Planning System orchestrator</li>
+                                <li>Consults Tier 2 for patterns</li>
+                                <li>Updates Tier 3 with plan context</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(123, 97, 255, 0.2), rgba(0, 212, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-brain" style="font-size: 1.5rem; color: var(--accent-secondary);"></i>
+                            </div>
+                            <h3>Strategic Reasoning Agent</h3>
+                            <p class="framework-subtitle">Architecture Analysis & Pattern Recognition</p>
+                            <h4>Core Capabilities</h4>
+                            <ul>
+                                <li><strong>Architecture Review:</strong> 6-phase analysis (0-100 scoring)</li>
+                                <li><strong>Pattern Detection:</strong> Design patterns and anti-patterns</li>
+                                <li><strong>Dependency Analysis:</strong> Coupling and cohesion metrics</li>
+                                <li><strong>Recommendations:</strong> Actionable improvement suggestions</li>
+                            </ul>
+                            <h4>Analysis Output</h4>
+                            <ul>
+                                <li>Architecture health score</li>
+                                <li>Pattern identification report</li>
+                                <li>Dependency graph visualization</li>
+                                <li>Priority-ranked improvements</li>
+                            </ul>
+                            <h4>Integration</h4>
+                            <ul>
+                                <li>Works within Architectural Review orchestrator</li>
+                                <li>Queries Tier 2 for historical patterns</li>
+                                <li>Updates Tier 3 with complexity metrics</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-link" style="font-size: 1.5rem; color: var(--accent-primary);"></i>
+                            </div>
+                            <h3>Agent Collaboration</h3>
+                            <p class="framework-subtitle">Orchestrator Integration Pattern</p>
+                            <h4>How Agents Work</h4>
+                            <ul>
+                                <li><strong>Embedded:</strong> Not standalone services</li>
+                                <li><strong>Context-Aware:</strong> Access to Four-Tier Brain</li>
+                                <li><strong>Orchestrator-Driven:</strong> Invoked by workflow phases</li>
+                                <li><strong>Stateless:</strong> No persistent agent state</li>
+                            </ul>
+                            <h4>Communication Pattern</h4>
+                            <ul>
+                                <li>Orchestrator passes context bundle</li>
+                                <li>Agent analyzes and generates output</li>
+                                <li>Output stored in brain tiers</li>
+                                <li>Orchestrator proceeds to next phase</li>
+                            </ul>
+                            <h4>Future Expansion</h4>
+                            <ul>
+                                <li>Testing Agent (test generation)</li>
+                                <li>Refactoring Agent (code improvement)</li>
+                                <li>Documentation Agent (doc generation)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Orchestrator Ecosystem -->
+            <div id="orchestrators" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title" style="display: flex; align-items: center; gap: 0.75rem;">
+                        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(251, 191, 36, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-cogs" style="font-size: 1.25rem; color: var(--warning);"></i>
+                        </div>
+                        Orchestrator Ecosystem
+                    </h2>
+                    <p>Orchestrators coordinate complex multi-phase workflows with validation gates, checkpoints, and rollback support. All orchestrators inherit from <code>BaseOrchestrator</code> and follow a consistent execution pattern.</p>
+
+                    <h3>Orchestrator Execution Flow</h3>
+                    <div style="background: rgba(0, 0, 0, 0.3); padding: 2rem; border-radius: 12px; margin: 1.5rem 0; overflow-x: auto; text-align: center;">
+                        <div class="mermaid">
+graph LR
+    Start["🚀 Start<br/><small>User command</small>"]
+    Load["📥 Load Manifest<br/><small>YAML config</small>"]
+    Validate["✅ Validate Context<br/><small>DoR check</small>"]
+    Phase1["📍 Phase 1<br/><small>Execute + checkpoint</small>"]
+    Gate1["🚪 Validation Gate<br/><small>Continue?</small>"]
+    Phase2["📍 Phase N<br/><small>Repeat pattern</small>"]
+    Complete["🎉 Complete<br/><small>Final report</small>"]
+    Rollback["⏮️ Rollback<br/><small>Git revert</small>"]
+    
+    Start --> Load
+    Load --> Validate
+    Validate -->|"Pass"| Phase1
+    Validate -->|"Fail"| Rollback
+    Phase1 --> Gate1
+    Gate1 -->|"Pass"| Phase2
+    Gate1 -->|"Fail"| Rollback
+    Phase2 --> Complete
+    
+    style Start fill:#10b981,stroke:#34d399,stroke-width:3px,color:#fff
+    style Complete fill:#10b981,stroke:#34d399,stroke-width:3px,color:#fff
+    style Rollback fill:#ef4444,stroke:#f87171,stroke-width:3px,color:#fff
+    style Gate1 fill:#f59e0b,stroke:#fbbf24,stroke-width:2px,color:#fff
+                        </div>
+                    </div>
+
+                    <h3>8 Core Orchestrators</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-clipboard-list" style="font-size: 1.5rem; color: var(--accent-primary);"></i>
+                            </div>
+                            <h3>Planning System</h3>
+                            <p class="framework-subtitle">Multi-Phase Feature Planning</p>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Feature planning and task decomposition</li>
+                                <li>Automatic TDD test specification</li>
+                                <li>Complexity-based phase generation</li>
+                            </ul>
+                            <h4>Phases</h4>
+                            <ul>
+                                <li><strong>Analysis:</strong> Understand requirements</li>
+                                <li><strong>Design:</strong> Architecture and patterns</li>
+                                <li><strong>Planning:</strong> Task breakdown</li>
+                                <li><strong>TDD Spec:</strong> Test requirements</li>
+                            </ul>
+                            <h4>Output</h4>
+                            <ul>
+                                <li><code>cortex-brain/documents/planning/active/{name}/</code></li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(52, 211, 153, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-check-double" style="font-size: 1.5rem; color: var(--success);"></i>
+                            </div>
+                            <h3>TDD Orchestrator</h3>
+                            <p class="framework-subtitle">RED→GREEN→REFACTOR Workflow</p>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Enforce test-driven development</li>
+                                <li>Prevent untested production code</li>
+                                <li>Maintain >80% coverage</li>
+                            </ul>
+                            <h4>Phases</h4>
+                            <ul>
+                                <li><strong>RED:</strong> Write failing tests</li>
+                                <li><strong>GREEN:</strong> Minimal passing code</li>
+                                <li><strong>REFACTOR:</strong> Improve design</li>
+                            </ul>
+                            <h4>Validation</h4>
+                            <ul>
+                                <li>Tests must fail initially (RED)</li>
+                                <li>All tests must pass (GREEN)</li>
+                                <li>Coverage maintained (REFACTOR)</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(251, 191, 36, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-wrench" style="font-size: 1.5rem; color: var(--warning);"></i>
+                            </div>
+                            <h3>System Maintenance</h3>
+                            <p class="framework-subtitle">7-Phase Health Pipeline</p>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Comprehensive system health check</li>
+                                <li>Performance optimization</li>
+                                <li>Brain maintenance and cleanup</li>
+                            </ul>
+                            <h4>Phases</h4>
+                            <ul>
+                                <li><strong>Health Check:</strong> System diagnostics</li>
+                                <li><strong>Brain Optimization:</strong> Tier cleanup</li>
+                                <li><strong>Test Validation:</strong> Coverage analysis</li>
+                                <li><strong>Documentation:</strong> Doc freshness</li>
+                                <li><strong>Security:</strong> Vulnerability scan</li>
+                                <li><strong>Performance:</strong> Benchmarking</li>
+                                <li><strong>Reporting:</strong> Generate report</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="framework-grid" style="margin-top: 2rem;">
+                        <div class="framework-panel">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(52, 211, 153, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-broom" style="font-size: 1.5rem; color: var(--success);"></i>
+                            </div>
+                            <h3>Code Sanitization</h3>
+                            <p class="framework-subtitle">5-Phase Data Removal</p>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Remove sensitive company data</li>
+                                <li>Make codebase generic/shareable</li>
+                                <li>Preserve functionality</li>
+                            </ul>
+                            <h4>Phases</h4>
+                            <ul>
+                                <li><strong>Discovery:</strong> Find sensitive data</li>
+                                <li><strong>Analysis:</strong> Impact assessment</li>
+                                <li><strong>Replacement:</strong> Generic substitutes</li>
+                                <li><strong>Validation:</strong> Test still pass</li>
+                                <li><strong>Reporting:</strong> Change summary</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-magic" style="font-size: 1.5rem; color: var(--accent-primary);"></i>
+                            </div>
+                            <h3>System Refinement</h3>
+                            <p class="framework-subtitle">7-Phase Improvement</p>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Holistic system improvement</li>
+                                <li>Code quality enhancement</li>
+                                <li>Architecture optimization</li>
+                            </ul>
+                            <h4>Phases</h4>
+                            <ul>
+                                <li><strong>Analysis:</strong> Current state assessment</li>
+                                <li><strong>Architecture:</strong> Strategic agent review</li>
+                                <li><strong>Refactoring:</strong> Code improvements</li>
+                                <li><strong>Testing:</strong> Coverage enhancement</li>
+                                <li><strong>Documentation:</strong> Doc updates</li>
+                                <li><strong>Performance:</strong> Optimization</li>
+                                <li><strong>Validation:</strong> Final checks</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(96, 165, 250, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-chart-line" style="font-size: 1.5rem; color: var(--info);"></i>
+                            </div>
+                            <h3>ADO Operations</h3>
+                            <p class="framework-subtitle">Azure DevOps Integration</p>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Generate Azure DevOps work items</li>
+                                <li>Convert plans to user stories</li>
+                                <li>Sprint planning automation</li>
+                            </ul>
+                            <h4>Capabilities</h4>
+                            <ul>
+                                <li>User story generation</li>
+                                <li>Feature breakdown</li>
+                                <li>Acceptance criteria creation</li>
+                                <li>Story point estimation</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="framework-grid" style="margin-top: 2rem;">
+                        <div class="framework-panel">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(123, 97, 255, 0.2), rgba(0, 212, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-layer-group" style="font-size: 1.5rem; color: var(--accent-secondary);"></i>
+                            </div>
+                            <h3>Architectural Review</h3>
+                            <p class="framework-subtitle">6-Phase Analysis</p>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Comprehensive architecture assessment</li>
+                                <li>Pattern identification</li>
+                                <li>Strategic recommendations</li>
+                            </ul>
+                            <h4>Uses Strategic Agent</h4>
+                            <ul>
+                                <li>0-100 health scoring</li>
+                                <li>Design pattern detection</li>
+                                <li>Coupling analysis</li>
+                                <li>Prioritized improvements</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(52, 211, 153, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-code-branch" style="font-size: 1.5rem; color: var(--success);"></i>
+                            </div>
+                            <h3>Git Checkpoint</h3>
+                            <p class="framework-subtitle">Automatic Commit System</p>
+                            <h4>Purpose</h4>
+                            <ul>
+                                <li>Phase-boundary commits</li>
+                                <li>Rollback safety net</li>
+                                <li>Change history tracking</li>
+                            </ul>
+                            <h4>Features</h4>
+                            <ul>
+                                <li><strong>Metadata:</strong> Phase info in commit message</li>
+                                <li><strong>Rollback:</strong> Revert to any checkpoint</li>
+                                <li><strong>Performance:</strong> &lt; 1 second</li>
+                                <li><strong>Validation:</strong> Pre-commit tests</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-cube" style="font-size: 1.5rem; color: var(--accent-primary);"></i>
+                            </div>
+                            <h3>BaseOrchestrator</h3>
+                            <p class="framework-subtitle">Inheritance Pattern</p>
+                            <h4>Common Features</h4>
+                            <ul>
+                                <li>Manifest loading (YAML)</li>
+                                <li>Phase execution framework</li>
+                                <li>Validation gate enforcement</li>
+                                <li>Checkpoint management</li>
+                            </ul>
+                            <h4>Extensibility</h4>
+                            <ul>
+                                <li>Override phase methods</li>
+                                <li>Custom validation logic</li>
+                                <li>Agent integration hooks</li>
+                                <li>Error handling patterns</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="glass-card" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(96, 165, 250, 0.05)); border-left: 4px solid var(--info); margin-top: 2rem;">
+                        <div style="display: flex; align-items: flex-start; gap: 1rem;">
+                            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(96, 165, 250, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <i class="fas fa-info-circle" style="font-size: 1.25rem; color: var(--info);"></i>
+                            </div>
+                            <div>
+                                <strong style="color: var(--info);">Orchestrator Manifest Location:</strong>
+                                <p style="margin-top: 0.5rem;">All orchestrator manifests are stored in <code>cortex-brain/manifests/orchestrators/</code>. Each manifest defines phases, validation rules, checkpoints, and agent integration points.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Flow -->
+            <div id="system-flow" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title" style="display: flex; align-items: center; gap: 0.75rem;">
+                        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-exchange-alt" style="font-size: 1.25rem; color: var(--accent-primary);"></i>
+                        </div>
+                        Complete System Flow
+                    </h2>
+                    <p>Understanding how a user request flows through CORTEX from initial command to final response with brain updates.</p>
+
+                    <h3>Request → Response Pipeline</h3>
+                    <div style="background: rgba(0, 0, 0, 0.3); padding: 2rem; border-radius: 12px; margin: 1.5rem 0; overflow-x: auto; text-align: center;">
+                        <div class="mermaid">
+graph TB
+    User["👤 User Command<br/><small>Copilot Chat</small>"]
+    Intent["🎯 Intent Classification<br/><small>Route to orchestrator</small>"]
+    T0["🛡️ Tier 0 Validation<br/><small>SKULL rules check</small>"]
+    Context["📚 Context Retrieval<br/><small>Pull from brain tiers</small>"]
+    Agent["🤖 Agent Analysis<br/><small>If needed</small>"]
+    Orch["⚙️ Orchestrator Execution<br/><small>Multi-phase workflow</small>"]
+    Checkpoint["💾 Git Checkpoints<br/><small>Phase boundaries</small>"]
+    Response["📤 Response Generation<br/><small>Template-based</small>"]
+    Update["🧠 Brain Update<br/><small>Store patterns</small>"]
+    
+    User --> Intent
+    Intent --> T0
+    T0 -->|"Pass"| Context
+    T0 -->|"Fail"| Response
+    Context --> Agent
+    Agent --> Orch
+    Orch --> Checkpoint
+    Checkpoint --> Response
+    Response --> Update
+    
+    style User fill:#7b61ff,stroke:#9f87ff,stroke-width:3px,color:#fff
+    style T0 fill:#ef4444,stroke:#f87171,stroke-width:2px,color:#fff
+    style Agent fill:#3b82f6,stroke:#60a5fa,stroke-width:2px,color:#fff
+    style Orch fill:#f59e0b,stroke:#fbbf24,stroke-width:2px,color:#fff
+    style Response fill:#10b981,stroke:#34d399,stroke-width:3px,color:#fff
+    style Update fill:#10b981,stroke:#34d399,stroke-width:2px,color:#fff
+                        </div>
+                    </div>
+
+                    <h3>Execution Methods</h3>
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-terminal" style="font-size: 1.5rem; color: var(--accent-primary);"></i>
+                            </div>
+                            <h3>CLI Wrapper</h3>
+                            <p class="framework-subtitle">Command-Line Operations</p>
+                            <h4>Use Cases</h4>
+                            <ul>
+                                <li>File I/O operations</li>
+                                <li>Git operations (commit, push)</li>
+                                <li>System maintenance scripts</li>
+                                <li>Batch processing</li>
+                            </ul>
+                            <h4>Commands</h4>
+                            <ul>
+                                <li><code>cortex align</code></li>
+                                <li><code>cortex healthcheck</code></li>
+                                <li><code>cortex optimize</code></li>
+                            </ul>
+                            <h4>Performance</h4>
+                            <ul>
+                                <li><strong>Fast:</strong> Direct Python execution</li>
+                                <li><strong>Scriptable:</strong> CI/CD integration</li>
+                                <li><strong>Silent:</strong> No interactive prompts</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(123, 97, 255, 0.2), rgba(0, 212, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-comments" style="font-size: 1.5rem; color: var(--accent-secondary);"></i>
+                            </div>
+                            <h3>Copilot Chat</h3>
+                            <p class="framework-subtitle">Interactive Workflows</p>
+                            <h4>Use Cases</h4>
+                            <ul>
+                                <li>Feature planning</li>
+                                <li>TDD development</li>
+                                <li>Interactive feedback</li>
+                                <li>Exploratory analysis</li>
+                            </ul>
+                            <h4>Commands</h4>
+                            <ul>
+                                <li><code>plan [feature]</code></li>
+                                <li><code>start tdd</code></li>
+                                <li><code>refine</code></li>
+                            </ul>
+                            <h4>Performance</h4>
+                            <ul>
+                                <li><strong>Interactive:</strong> User feedback loops</li>
+                                <li><strong>Adaptive:</strong> Template-based responses</li>
+                                <li><strong>Contextual:</strong> Brain-aware</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(251, 191, 36, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-cog" style="font-size: 1.5rem; color: var(--warning);"></i>
+                            </div>
+                            <h3>Internal</h3>
+                            <p class="framework-subtitle">Infrastructure Components</p>
+                            <h4>Components</h4>
+                            <ul>
+                                <li>Brain tier managers</li>
+                                <li>Manifest loaders</li>
+                                <li>Template renderers</li>
+                                <li>Validation engines</li>
+                            </ul>
+                            <h4>Not User-Facing</h4>
+                            <ul>
+                                <li>Called by orchestrators</li>
+                                <li>Support infrastructure</li>
+                                <li>Background processes</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Technology Stack -->
+            <div id="technology-stack" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title" style="display: flex; align-items: center; gap: 0.75rem;">
+                        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(251, 191, 36, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-tools" style="font-size: 1.25rem; color: var(--warning);"></i>
+                        </div>
+                        Technology Stack
+                    </h2>
+
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(96, 165, 250, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fab fa-python" style="font-size: 1.5rem; color: var(--info);"></i>
+                            </div>
+                            <h3>Core Technologies</h3>
+                            <h4>Primary Stack</h4>
+                            <ul>
+                                <li><strong>Python 3.8+:</strong> Core language</li>
+                                <li><strong>GitHub Copilot:</strong> AI pair programming</li>
+                                <li><strong>VS Code:</strong> Development environment</li>
+                                <li><strong>Git:</strong> Version control + checkpointing</li>
+                            </ul>
+                            <h4>Data Formats</h4>
+                            <ul>
+                                <li><strong>YAML:</strong> Configuration and manifests</li>
+                                <li><strong>JSON/JSONL:</strong> Brain storage</li>
+                                <li><strong>Markdown:</strong> Documentation</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-cubes" style="font-size: 1.5rem; color: var(--accent-primary);"></i>
+                            </div>
+                            <h3>Key Libraries</h3>
+                            <h4>Testing & Quality</h4>
+                            <ul>
+                                <li><strong>pytest:</strong> Testing framework</li>
+                                <li><strong>coverage.py:</strong> Code coverage tracking</li>
+                                <li><strong>radon:</strong> Complexity analysis</li>
+                                <li><strong>mypy:</strong> Type checking</li>
+                            </ul>
+                            <h4>Utilities</h4>
+                            <ul>
+                                <li><strong>pyyaml:</strong> YAML parsing</li>
+                                <li><strong>click:</strong> CLI framework</li>
+                                <li><strong>jinja2:</strong> Template rendering</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(52, 211, 153, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-globe" style="font-size: 1.5rem; color: var(--success);"></i>
+                            </div>
+                            <h3>Documentation</h3>
+                            <h4>Static Site</h4>
+                            <ul>
+                                <li><strong>HTML5:</strong> Semantic markup</li>
+                                <li><strong>CSS3:</strong> Glassmorphism design</li>
+                                <li><strong>Mermaid.js:</strong> Diagram rendering</li>
+                                <li><strong>D3.js:</strong> Interactive visualizations</li>
+                            </ul>
+                            <h4>Hosting</h4>
+                            <ul>
+                                <li><strong>GitHub Pages:</strong> Static hosting</li>
+                                <li><strong>Custom Domain:</strong> asifhussain60.github.io</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance Metrics -->
+            <div id="performance" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title" style="display: flex; align-items: center; gap: 0.75rem;">
+                        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-bolt" style="font-size: 1.25rem; color: var(--accent-primary);"></i>
+                        </div>
+                        Performance Characteristics
+                    </h2>
+
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-memory" style="font-size: 1.5rem; color: var(--accent-primary);"></i>
+                            </div>
+                            <h3>Working Memory</h3>
+                            <div style="text-align: center; margin: 1.5rem 0;">
+                                <div style="font-size: 3rem; font-weight: 700; color: var(--accent-primary);">&lt; 100ms</div>
+                                <div style="font-size: 1rem; color: var(--text-secondary);">Tier 1 Retrieval Time</div>
+                            </div>
+                            <ul>
+                                <li>JSONL sequential read</li>
+                                <li>In-memory caching</li>
+                                <li>70 conversation buffer</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(52, 211, 153, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-tasks" style="font-size: 1.5rem; color: var(--success);"></i>
+                            </div>
+                            <h3>Planning</h3>
+                            <div style="text-align: center; margin: 1.5rem 0;">
+                                <div style="font-size: 3rem; font-weight: 700; color: var(--success);">&lt; 5s</div>
+                                <div style="font-size: 1rem; color: var(--text-secondary);">8-Phase Plan Generation</div>
+                            </div>
+                            <ul>
+                                <li>Planning Agent analysis</li>
+                                <li>Manifest creation</li>
+                                <li>TDD specification</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(96, 165, 250, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-code-branch" style="font-size: 1.5rem; color: var(--info);"></i>
+                            </div>
+                            <h3>Git Checkpoint</h3>
+                            <div style="text-align: center; margin: 1.5rem 0;">
+                                <div style="font-size: 3rem; font-weight: 700; color: var(--info);">&lt; 1s</div>
+                                <div style="font-size: 1rem; color: var(--text-secondary);">Commit with Metadata</div>
+                            </div>
+                            <ul>
+                                <li>Phase boundary commits</li>
+                                <li>Rollback ready</li>
+                                <li>Automatic staging</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="framework-grid" style="margin-top: 2rem;">
+                        <div class="framework-panel">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(251, 191, 36, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-wrench" style="font-size: 1.5rem; color: var(--warning);"></i>
+                            </div>
+                            <h3>Maintenance</h3>
+                            <div style="text-align: center; margin: 1.5rem 0;">
+                                <div style="font-size: 3rem; font-weight: 700; color: var(--warning);">&lt; 5min</div>
+                                <div style="font-size: 1rem; color: var(--text-secondary);">Full 7-Phase Cycle</div>
+                            </div>
+                            <ul>
+                                <li>Health checks</li>
+                                <li>Brain optimization</li>
+                                <li>Report generation</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(123, 97, 255, 0.2), rgba(0, 212, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-hdd" style="font-size: 1.5rem; color: var(--accent-secondary);"></i>
+                            </div>
+                            <h3>Disk Usage</h3>
+                            <div style="text-align: center; margin: 1.5rem 0;">
+                                <div style="font-size: 3rem; font-weight: 700; color: var(--accent-secondary);">~500MB</div>
+                                <div style="font-size: 1rem; color: var(--text-secondary);">Codebase + Brain Storage</div>
+                            </div>
+                            <ul>
+                                <li>Source code: ~200MB</li>
+                                <li>Brain storage: ~65MB</li>
+                                <li>Documentation: ~150MB</li>
+                                <li>Dependencies: ~85MB</li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(52, 211, 153, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-file-alt" style="font-size: 1.5rem; color: var(--success);"></i>
+                            </div>
+                            <h3>Template Response</h3>
+                            <div style="text-align: center; margin: 1.5rem 0;">
+                                <div style="font-size: 3rem; font-weight: 700; color: var(--success);">Instant</div>
+                                <div style="font-size: 1rem; color: var(--text-secondary);">No Python Execution</div>
+                            </div>
+                            <ul>
+                                <li>YAML-based templates</li>
+                                <li>4-tier response scaling</li>
+                                <li>Context-aware formatting</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Deep Dive Links -->
+            <div id="resources" class="content-section">
+                <div class="glass-card">
+                    <h2 class="section-title" style="display: flex; align-items: center; gap: 0.75rem;">
+                        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(123, 97, 255, 0.2), rgba(0, 212, 255, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-book" style="font-size: 1.25rem; color: var(--accent-secondary);"></i>
+                        </div>
+                        Deep Dive Documentation
+                    </h2>
+                    
+                    <div class="framework-grid">
+                        <div class="framework-panel">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(123, 97, 255, 0.2), rgba(0, 212, 255, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-brain" style="font-size: 1.5rem; color: var(--accent-secondary);"></i>
+                            </div>
+                            <h3>Brain Architecture</h3>
+                            <ul>
+                                <li><a href="four-tier-brain.html">Four-Tier Brain Architecture</a></li>
+                                <li><a href="skull-protection.html">SKULL Protection (Tier 0)</a></li>
+                                <li><a href="working-memory.html">Working Memory (Tier 1)</a></li>
+                                <li><a href="knowledge-graph.html">Knowledge Graph (Tier 2)</a></li>
+                                <li><a href="development-context.html">Development Context (Tier 3)</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(96, 165, 250, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-robot" style="font-size: 1.5rem; color: var(--info);"></i>
+                            </div>
+                            <h3>Agents & Orchestrators</h3>
+                            <ul>
+                                <li><a href="agent-system.html">Agent System</a></li>
+                                <li><a href="orchestrator-ecosystem.html">Orchestrator Ecosystem</a></li>
+                                <li><a href="../orchestrators/index.html">Interactive Orchestrator Map</a></li>
+                                <li><a href="../orchestrators/planning-system.html">Planning System Details</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="framework-panel">
+                            <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(52, 211, 153, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-book-open" style="font-size: 1.5rem; color: var(--success);"></i>
+                            </div>
+                            <h3>Complete Specifications</h3>
+                            <ul>
+                                <li><a href="architecture-FULL.html">Full Architecture Document</a></li>
+                                <li><a href="../sts/index.html">Shippable Test Suite (STS)</a></li>
+                                <li><a href="../index.html">CORTEX Home</a></li>
+                                <li><a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener">GitHub Repository</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#7b61ff',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#9f87ff',
+                lineColor: '#60a5fa',
+                secondaryColor: '#10b981',
+                tertiaryColor: '#f59e0b'
             }
         });
-        
-        // Add floating animation
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes float {
-                0%, 100% { transform: translateY(0); opacity: 0.3; }
-                50% { transform: translateY(-10px); opacity: 0.6; }
-            }
-        `;
-        document.head.appendChild(style);
     </script>
 </body>
 </html>
