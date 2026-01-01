@@ -1,6 +1,6 @@
 # 🎨 Glassmorphism Design Standard
 
-**Version:** 3.1.0 | **Status:** ✅ PRODUCTION  
+**Version:** 3.2.0 | **Status:** ✅ PRODUCTION  
 **Author:** Asif Hussain | **Last Updated:** December 31, 2025  
 **Copyright © 2025 Asif Hussain. All rights reserved.**
 
@@ -23,6 +23,165 @@ This standard defines **modern glassmorphism patterns** for CORTEX documentation
 4. **GPU Acceleration** - Hardware-accelerated transforms
 5. **Performance First** - Conditional blur, lazy loading
 6. **Accessibility** - WCAG 2.1 AA compliance, reduced-motion support
+7. **Subtle by Default** - T1 animations for all standard pages (v3.2.0)
+
+---
+
+## 🎬 Animation Tier System (NEW v3.2.0)
+
+### ⛔ CRITICAL: Subtle Animations by Default
+
+All documentation pages use **T1 (Subtle)** animations. Dramatic animations are reserved for hero sections only.
+
+### Animation Tiers
+
+| Tier | Name | Use Case | Duration | Effects |
+|------|------|----------|----------|---------|
+| **T1** | Subtle | All standard pages, documentation, feature pages | 0.2-0.3s | Opacity, light transforms, simple transitions |
+| **T2** | Accent | Interactive elements requiring user feedback | 0.1-0.2s | Button press, form focus, selection highlight |
+| **T3** | Dramatic | HERO sections, landing pages ONLY | 2-10s | borderGlowSweep, blobMorph, particle effects |
+
+### T1: Subtle Animations (DEFAULT)
+
+**✅ REQUIRED for all Level 1, Level 2, and Level 3 pages**
+
+```css
+/* T1 Subtle Hover - APPROVED DEFAULT */
+.glass-card-subtle {
+    transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+}
+
+.glass-card-subtle:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* T1 Subtle Focus - APPROVED */
+.interactive-element:focus {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 2px;
+    transition: outline-color 0.2s ease;
+}
+
+/* T1 Subtle Nav Link - APPROVED */
+.nav-link {
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+```
+
+**T1 Properties:**
+- `transition-duration: 0.2s - 0.3s`
+- `transform: translateY(-2px to -4px)` maximum
+- No infinite animations
+- No keyframe animations on cards
+- No glow pulses or sweeps
+- No filter effects
+
+### T2: Accent Animations (Interactive Feedback)
+
+**✅ APPROVED for buttons, forms, tabs**
+
+```css
+/* T2 Button Feedback - APPROVED */
+.btn-glass:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
+}
+
+/* T2 Form Focus - APPROVED */
+input:focus {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.2);
+    transition: all 0.2s ease;
+}
+
+/* T2 Tab Selection - APPROVED */
+.tab-active {
+    border-bottom: 2px solid var(--accent-primary);
+    transition: border-color 0.2s ease;
+}
+```
+
+### T3: Dramatic Animations (RESTRICTED)
+
+**⛔ ONLY ALLOWED ON:**
+- `docs/index.html` (Home page hero section)
+- Landing page hero sections
+- Explicitly marked showcase pages
+
+**❌ FORBIDDEN ON:**
+- Level 2 feature pages
+- Documentation content pages
+- Architecture visualization pages
+- Orchestrator detail pages
+- Any page with primary content focus
+
+```css
+/* T3 Dramatic - HERO SECTIONS ONLY */
+@keyframes borderGlowSweep {
+    0%, 100% { background-position: -200% 0; }
+    50% { background-position: 200% 0; }
+}
+
+@keyframes blobMorph {
+    0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+    50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+}
+
+@keyframes lightLeakPrimary {
+    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; }
+    100% { transform: translate(-30%, -30%) scale(1.2); opacity: 0.5; }
+}
+
+@keyframes glowPulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(0, 212, 255, 0.3); }
+    50% { box-shadow: 0 0 40px rgba(0, 212, 255, 0.6); }
+}
+```
+
+### Animation Tier Quick Reference
+
+| Animation | Tier | Allowed Pages |
+|-----------|------|---------------|
+| `transition: transform 0.2s` | T1 | ✅ All pages |
+| `transition: opacity 0.2s` | T1 | ✅ All pages |
+| `transform: translateY(-2px)` | T1 | ✅ All pages |
+| `transform: scale(0.98)` | T2 | ✅ Buttons only |
+| `outline` focus states | T2 | ✅ All interactive elements |
+| `borderGlowSweep` | T3 | ⛔ Hero only |
+| `blobMorph` | T3 | ⛔ Hero only |
+| `lightLeakPrimary` | T3 | ⛔ Hero only |
+| `glowPulse` | T3 | ⛔ Hero only |
+| Infinite animations | T3 | ⛔ Hero only |
+| SVG filter glow effects | T3 | ⛔ Hero only |
+
+### Migration from T3 to T1
+
+When simplifying dramatic animations:
+
+```css
+/* ❌ BEFORE (T3 Dramatic) */
+.glass-card::after {
+    animation: borderGlowSweep 2s ease-in-out infinite;
+}
+
+.glass-card:hover {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(0, 212, 255, 0.5);
+}
+
+/* ✅ AFTER (T1 Subtle) */
+.glass-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.glass-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+/* Remove ::after with borderGlowSweep entirely */
+```
 
 ---
 
