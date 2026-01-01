@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OWASP Top 10 - CORTEX Security</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo-64.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/main.css?v=4.0.0">
+</head>
+<body>
+    <div class="level1-container">
+        <header class="page-header">
+            <nav class="breadcrumb">
+                <a href="../index.html#security-panel"><i class="fas fa-shield-alt"></i> Security</a>
+                <span>/</span>
+                <span>OWASP Top 10</span>
+            </nav>
+            <h1>OWASP Top 10 Security Risks</h1>
+            <p class="subtitle">2021 Edition - Most critical web application security risks</p>
+        </header>
+
+        <main class="page-content">
+            <div class="glass-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-exclamation-triangle"></i> OWASP Top 10 2021</h2>
+                    <p>The Open Web Application Security Project (OWASP) Top 10 represents the most critical security risks to web applications.</p>
+                </div>
+
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Vulnerability</th>
+                            <th>Description</th>
+                            <th>Severity</th>
+                            <th>Mitigation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="table-cell-emphasis">A01</td>
+                            <td><strong>Broken Access Control</strong></td>
+                            <td>Restrictions on authenticated users not properly enforced. Attackers can access unauthorized functionality and/or data, such as accessing other users' accounts, viewing sensitive files, or modifying data.</td>
+                            <td><span class="severity-badge critical">Critical</span></td>
+                            <td>Implement proper authorization checks at the server side. Deny by default. Use centralized access control mechanisms. Minimize CORS usage.</td>
+                        </tr>
+                        <tr>
+                            <td class="table-cell-emphasis">A02</td>
+                            <td><strong>Cryptographic Failures</strong></td>
+                            <td>Failures related to cryptography (or lack thereof) that often lead to exposure of sensitive data. Previously known as "Sensitive Data Exposure," this includes weaknesses in encryption, key management, and data protection.</td>
+                            <td><span class="severity-badge critical">Critical</span></td>
+                            <td>Classify data processed, stored, or transmitted. Apply controls per classification. Encrypt all sensitive data at rest and in transit. Use strong, up-to-date encryption algorithms. Proper key management.</td>
+                        </tr>
+                        <tr>
+                            <td class="table-cell-emphasis">A03</td>
+                            <td><strong>Injection</strong></td>
+                            <td>Application is vulnerable when user-supplied data is not validated, filtered, or sanitized. Includes SQL, NoSQL, OS command, ORM, LDAP, and Expression Language (EL) or Object Graph Navigation Library (OGNL) injection.</td>
+                            <td><span class="severity-badge critical">Critical</span></td>
+                            <td>Use parameterized queries, prepared statements, or stored procedures. Use ORM frameworks safely. Validate input using positive server-side validation. Escape special characters. Use LIMIT and other SQL controls within queries.</td>
+                        </tr>
+                        <tr>
+                            <td class="table-cell-emphasis">A04</td>
+                            <td><strong>Insecure Design</strong></td>
+                            <td>Risks related to design and architectural flaws. Missing or ineffective control design. Different from insecure implementation - even perfect implementation cannot fix insecure design. Requires secure development lifecycle and threat modeling.</td>
+                            <td><span class="severity-badge high">High</span></td>
+                            <td>Establish and use a secure development lifecycle with security professionals. Use threat modeling for critical flows. Integrate security language and controls into user stories. Implement plausibility checks at each tier.</td>
+                        </tr>
+                        <tr>
+                            <td class="table-cell-emphasis">A05</td>
+                            <td><strong>Security Misconfiguration</strong></td>
+                            <td>Missing appropriate security hardening or improperly configured permissions. Includes insecure default configurations, incomplete or ad hoc configurations, open cloud storage, misconfigured HTTP headers, verbose error messages with sensitive information.</td>
+                            <td><span class="severity-badge high">High</span></td>
+                            <td>Implement secure installation processes. Use minimal platform without unnecessary features. Review and update configurations. Use segmented application architecture. Send security directives to clients (e.g., Security Headers).</td>
+                        </tr>
+                        <tr>
+                            <td class="table-cell-emphasis">A06</td>
+                            <td><strong>Vulnerable and Outdated Components</strong></td>
+                            <td>Using components with known vulnerabilities. Includes unsupported or out-of-date versions of OS, web/application server, DBMS, APIs, and all components, libraries, and frameworks. Not scanning for vulnerabilities regularly.</td>
+                            <td><span class="severity-badge high">High</span></td>
+                            <td>Remove unused dependencies, features, files, and documentation. Continuously inventory versions of client-side and server-side components. Monitor sources like CVE and NVD. Only obtain components from official sources. Monitor for unmaintained libraries.</td>
+                        </tr>
+                        <tr>
+                            <td class="table-cell-emphasis">A07</td>
+                            <td><strong>Identification and Authentication Failures</strong></td>
+                            <td>Confirmation of user's identity, authentication, and session management is critical to protect against authentication-related attacks. Previously "Broken Authentication." Includes credential stuffing, brute force, and weak passwords.</td>
+                            <td><span class="severity-badge high">High</span></td>
+                            <td>Implement multi-factor authentication. Do not ship or deploy with default credentials. Implement weak password checks. Limit or delay failed login attempts. Use secure session management. Align password length, complexity, and rotation policies with NIST 800-63b.</td>
+                        </tr>
+                        <tr>
+                            <td class="table-cell-emphasis">A08</td>
+                            <td><strong>Software and Data Integrity Failures</strong></td>
+                            <td>Code and infrastructure that does not protect against integrity violations. Includes insecure CI/CD pipelines, auto-update without integrity verification, and serialization/deserialization issues. Previously included "Insecure Deserialization."</td>
+                            <td><span class="severity-badge medium">Medium</span></td>
+                            <td>Use digital signatures to verify software or data is from expected source and has not been altered. Ensure libraries and dependencies are consuming trusted repositories. Use software supply chain security tools. Ensure CI/CD pipeline has proper segregation.</td>
+                        </tr>
+                        <tr>
+                            <td class="table-cell-emphasis">A09</td>
+                            <td><strong>Security Logging and Monitoring Failures</strong></td>
+                            <td>Insufficient logging, detection, monitoring, and active response. Without logging and monitoring, breaches cannot be detected. Includes logins, failed logins, and high-value transactions not logged. Warnings and errors generate inadequate logs.</td>
+                            <td><span class="severity-badge medium">Medium</span></td>
+                            <td>Ensure all login, access control, and server-side input validation failures can be logged with sufficient user context for suspicious or malicious accounts. Ensure logs are in a format that can be consumed by centralized log management. Establish effective monitoring and alerting.</td>
+                        </tr>
+                        <tr>
+                            <td class="table-cell-emphasis">A10</td>
+                            <td><strong>Server-Side Request Forgery (SSRF)</strong></td>
+                            <td>SSRF flaws occur whenever a web application fetches a remote resource without validating the user-supplied URL. Allows an attacker to coerce the application to send a crafted request to an unexpected destination, even when protected by firewall, VPN, or network ACL.</td>
+                            <td><span class="severity-badge medium">Medium</span></td>
+                            <td>Sanitize and validate all client-supplied input data. Enforce URL schema, port, and destination with a positive allow list. Do not send raw responses to clients. Disable HTTP redirections. Use network segmentation to separate resource access.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="glass-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-info-circle"></i> Additional Information</h2>
+                </div>
+                <div class="card-content">
+                    <p><strong>Source:</strong> <a href="https://owasp.org/Top10/" target="_blank" rel="noopener noreferrer">OWASP Top 10 - 2021</a></p>
+                    <p><strong>Last Updated:</strong> 2021 Edition</p>
+                    <p><strong>Next Update:</strong> Expected in 2025</p>
+                    <div class="alert-info">
+                        <i class="fas fa-lightbulb"></i>
+                        <div>
+                            <strong>Note:</strong> The OWASP Top 10 is updated periodically based on data collected from organizations worldwide. It represents a broad consensus about the most critical security risks to web applications.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="page-footer">
+            <a href="penetration-testing.html" class="nav-link"><i class="fas fa-arrow-left"></i> Previous: Penetration Testing</a>
+            <a href="../index.html#security-panel" class="nav-link">Back to Security Hub <i class="fas fa-home"></i></a>
+        </footer>
+    </div>
+</body>
+</html>

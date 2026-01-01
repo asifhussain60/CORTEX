@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Penetration Testing - Authorized simulated cyber attacks to evaluate security defenses">
+    <title>Penetration Testing - CORTEX Security</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo-64.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/main.css?v=4.0.0">
+</head>
+<body>
+    <!-- Glass Header -->
+    <header class="glass-header">
+        <div class="header-content">
+            <nav class="header-nav">
+                <a href="../index.html#security-panel" class="nav-link">
+                    <i class="fas fa-shield-alt"></i>Security
+                </a>
+                <a href="../index.html" class="nav-link">
+                    <i class="fas fa-home"></i>Home
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">
+                <i class="fas fa-user-secret"></i> Penetration Testing
+            </h1>
+            <p class="page-subtitle">
+                Authorized simulated cyber attacks to evaluate security defenses and identify exploitable vulnerabilities
+            </p>
+        </div>
+
+        <!-- Penetration Testing Methodology -->
+        <section class="glass-card">
+            <h2 class="section-title">
+                <i class="fas fa-route"></i>
+                Penetration Testing Methodology
+            </h2>
+            
+            <div class="process-flow">
+                <!-- Phase 1: Planning & Reconnaissance -->
+                <div class="glass-card process-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Planning & Reconnaissance</h3>
+                        <p>Gather intelligence about the target system using passive and active techniques. Collect information about network infrastructure, domain names, IP addresses, and organizational structure to map out the attack surface.</p>
+                        
+                        <div class="activity-list">
+                            <div class="activity-item">
+                                <i class="fas fa-globe"></i>
+                                <span>OSINT gathering from public sources (DNS records, WHOIS, social media)</span>
+                            </div>
+                            <div class="activity-item">
+                                <i class="fas fa-search"></i>
+                                <span>Google dorking and search engine reconnaissance</span>
+                            </div>
+                            <div class="activity-item">
+                                <i class="fas fa-sitemap"></i>
+                                <span>Network mapping and subdomain enumeration</span>
+                            </div>
+                            <div class="activity-item">
+                                <i class="fas fa-envelope"></i>
+                                <span>Email harvesting and employee identification</span>
+                            </div>
+                        </div>
+                        
+                        <div class="tools-list">
+                            <span class="tool-badge">Maltego</span>
+                            <span class="tool-badge">theHarvester</span>
+                            <span class="tool-badge">Shodan</span>
+                            <span class="tool-badge">Recon-ng</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step-connector"></div>
+
+                <!-- Phase 2: Scanning & Enumeration -->
+                <div class="glass-card process-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Scanning & Enumeration</h3>
+                        <p>Actively probe target systems to identify open ports, running services, operating systems, and potential vulnerabilities. Map out the attack surface for exploitation planning.</p>
+                        
+                        <div class="activity-list">
+                            <div class="activity-item">
+                                <i class="fas fa-network-wired"></i>
+                                <span>Port scanning to identify open services (TCP/UDP)</span>
+                            </div>
+                            <div class="activity-item">
+                                <i class="fas fa-server"></i>
+                                <span>Service version detection and banner grabbing</span>
+                            </div>
+                            <div class="activity-item">
+                                <i class="fas fa-bug"></i>
+                                <span>Vulnerability scanning with automated tools</span>
+                            </div>
+                            <div class="activity-item">
+                                <i class="fas fa-fingerprint"></i>
+                                <span>OS fingerprinting and technology stack identification</span>
+                            </div>
+                        </div>
+                        
+                        <div class="tools-list">
+                            <span class="tool-badge">Nmap</span>
+                            <span class="tool-badge">Nessus</span>
+                            <span class="tool-badge">Nikto</span>
+                            <span class="tool-badge">OpenVAS</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step-connector"></div>
+
+                <!-- Phase 3: Exploitation -->
+                <div class="glass-card process-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Exploitation</h3>
+                        <p>Attempt to exploit identified vulnerabilities to gain unauthorized access, escalate privileges, or compromise systems. Document successful exploitation techniques and payloads for reporting.</p>
+                        
+                        <div class="activity-list">
+                            <div class="activity-item">
+                                <i class="fas fa-bomb"></i>
+                                <span>Exploit development and payload customization</span>
+                            </div>
+                            <div class="activity-item">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>Privilege escalation (vertical and horizontal)</span>
+                            </div>
+                            <div class="activity-item">
+                                <i class="fas fa-user-lock"></i>
+                                <span>Password cracking and credential harvesting</span>
+                            </div>
+                            <div class="activity-item">
+                                <i class="fas fa-key"></i>
+                                <span>Authentication bypass and session hijacking</span>
+                            </div>
+                        </div>
+                        
+                        <div class="tools-list">
+                            <span class="tool-badge">Metasploit</span>
+                            <span class="tool-badge">SQLmap</span>
+                            <span class="tool-badge">Hydra</span>
+                            <span class="tool-badge">Burp Suite</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step-connector"></div>
+
+                <!-- Phase 4: Post-Exploitation -->
+                <div class="glass-card process-step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Post-Exploitation & Maintaining Access</h3>
+                        <p>Establish persistent access to compromised systems using backdoors, rootkits, or legitimate credential persistence. Demonstrate how attackers maintain long-term access and lateral movement capabilities.</p>
+                        
+                        <div class="activity-list">
+                            <div class="activity-item">
+                                <i class="fas fa-door-open"></i>
+                                <span>Backdoor installation and persistence mechanisms</span>
+                            </div>
+                            <div class="activity-item">
+                                <i class="fas fa-user-cog"></i>
+                                <span>Creating rogue user accounts with elevated privileges</span>
+                            </div>
+                            <div class="activity-item">
+                                <i class="fas fa-ghost"></i>
+                                <span>Rootkit deployment for stealth operations</span>
+                            </div>
+                            <div class="activity-item">
+                                <i class="fas fa-eye-slash"></i>
+                                <span>Log tampering and evidence removal</span>
+                            </div>
+                        </div>
+                        
+                        <div class="tools-list">
+                            <span class="tool-badge">Cobalt Strike</span>
+                            <span class="tool-badge">Empire</span>
+                            <span class="tool-badge">Mimikatz</span>
+                            <span class="tool-badge">PowerSploit</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step-connector"></div>
+
+                <!-- Phase 5: Reporting -->
+                <div class="glass-card process-step">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h3>Analysis & Reporting</h3>
+                        <p>Compile comprehensive findings including executive summaries, technical details, risk assessments, and remediation recommendations. Present clear, actionable security improvements with prioritized remediation roadmaps.</p>
+                        
+                        <div class="activity-list">
+                            <div class="activity-item">
+                                <i class="fas fa-file-alt"></i>
+                                <span>Executive summary for non-technical stakeholders</span>
+                            </div>
+                            <div class="activity-item">
+                                <i class="fas fa-code"></i>
+                                <span>Technical report with proof-of-concept exploits</span>
+                            </div>
+                            <div class="activity-item">
+                                <i class="fas fa-chart-line"></i>
+                                <span>Risk assessment and severity scoring (CVSS)</span>
+                            </div>
+                            <div class="activity-item">
+                                <i class="fas fa-tools"></i>
+                                <span>Remediation roadmap with prioritized fixes</span>
+                            </div>
+                        </div>
+                        
+                        <div class="tools-list">
+                            <span class="tool-badge">Dradis</span>
+                            <span class="tool-badge">Faraday</span>
+                            <span class="tool-badge">CVSS Calculator</span>
+                            <span class="tool-badge">Report Templates</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testing Types -->
+        <section class="glass-card">
+            <h2 class="section-title">
+                <i class="fas fa-th-large"></i>
+                Types of Penetration Testing
+            </h2>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-eye-slash"></i>
+                    </div>
+                    <h3>Black Box Testing</h3>
+                    <p>No prior knowledge of the target system. Simulates external attacker perspective with zero internal information.</p>
+                    <div class="feature-meta">
+                        <strong>Scope:</strong> Public-facing infrastructure, external attack vectors
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h3>White Box Testing</h3>
+                    <p>Full knowledge of system architecture, source code, and credentials. Comprehensive security audit approach.</p>
+                    <div class="feature-meta">
+                        <strong>Scope:</strong> Complete infrastructure, source code, configurations
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-adjust"></i>
+                    </div>
+                    <h3>Gray Box Testing</h3>
+                    <p>Partial knowledge of system internals. Simulates insider threat or compromised user account scenario.</p>
+                    <div class="feature-meta">
+                        <strong>Scope:</strong> Limited credentials, network diagrams, partial access
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <h3>Network Penetration Testing</h3>
+                    <p>Focus on network infrastructure, routers, firewalls, switches, and segmentation vulnerabilities.</p>
+                    <div class="feature-meta">
+                        <strong>Scope:</strong> Internal/external networks, wireless, VPNs
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3>Web Application Testing</h3>
+                    <p>Target web applications for OWASP Top 10 vulnerabilities including injection attacks, XSS, and authentication flaws.</p>
+                    <div class="feature-meta">
+                        <strong>Scope:</strong> Web apps, APIs, authentication mechanisms
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Mobile Application Testing</h3>
+                    <p>Assess mobile apps (iOS/Android) for insecure data storage, weak cryptography, and API vulnerabilities.</p>
+                    <div class="feature-meta">
+                        <strong>Scope:</strong> Mobile apps, backend APIs, device security
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-wifi"></i>
+                    </div>
+                    <h3>Wireless Network Testing</h3>
+                    <p>Evaluate wireless security including encryption weaknesses, rogue access points, and WLAN vulnerabilities.</p>
+                    <div class="feature-meta">
+                        <strong>Scope:</strong> WiFi networks, Bluetooth, RF communications
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Social Engineering Testing</h3>
+                    <p>Test human factors through phishing campaigns, pretexting, baiting, and physical security assessments.</p>
+                    <div class="feature-meta">
+                        <strong>Scope:</strong> Email phishing, phone pretexting, physical access
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Best Practices -->
+        <section class="glass-card">
+            <h2 class="section-title">
+                <i class="fas fa-star"></i>
+                Best Practices & Ethics
+            </h2>
+            
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-file-contract"></i>
+                    </div>
+                    <h3>Written Authorization</h3>
+                    <p>Always obtain explicit written permission before conducting any penetration testing activities. Define scope, rules of engagement, and legal boundaries clearly.</p>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Minimize Disruption</h3>
+                    <p>Avoid actions that could cause system downtime, data loss, or business interruption. Test in controlled environments when possible.</p>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <h3>Comprehensive Documentation</h3>
+                    <p>Document every step, tool used, exploit attempted, and finding discovered. Maintain detailed logs for reproducibility and evidence.</p>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-user-lock"></i>
+                    </div>
+                    <h3>Confidentiality</h3>
+                    <p>Treat all findings, access credentials, and client information with strict confidentiality. Securely store and transmit sensitive data.</p>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-redo"></i>
+                    </div>
+                    <h3>Retest After Remediation</h3>
+                    <p>Conduct follow-up testing to verify that identified vulnerabilities have been properly remediated and new issues haven't been introduced.</p>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-balance-scale"></i>
+                    </div>
+                    <h3>Legal Compliance</h3>
+                    <p>Ensure all testing activities comply with applicable laws, regulations, and industry standards. Understand Computer Fraud and Abuse Act (CFAA) implications.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="glass-footer">
+        <div class="footer-content">
+            <p><strong>CORTEX</strong> - AI Assistant with Strategic Planning</p>
+            <p>© 2025 Asif Hussain. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
