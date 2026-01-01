@@ -1,524 +1,1203 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta content="width=device-width, initial-scale=1.0" name="viewport">
-<title>SKULL Protection System - CORTEX Architecture</title>
-<link href="../assets/images/CORTEX-logo.png" rel="icon" type="image/png">
-<link href="../assets/css/main.css" rel="stylesheet">
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>SKULL Protection System - CORTEX Architecture</title>
+    <link href="../assets/images/CORTEX-logo.png" rel="icon" type="image/png">
+    <!-- Glassmorphism v3.0 CSS Stack -->
+    <link href="../assets/css/variables.css" rel="stylesheet">
+    <link href="../assets/css/main.css" rel="stylesheet">
+    <link href="../assets/css/glass-patterns.css" rel="stylesheet">
+    <link href="../assets/css/micro-interactions.css" rel="stylesheet">
+    <style>
+        /* Page-specific overrides */
+        body {
+            background: linear-gradient(135deg, var(--bg-primary) 0%, #1a0a2e 50%, var(--bg-tertiary) 100%);
+            min-height: 100vh;
+        }
+        
+        /* Hero Section with Shield Glow */
+        .hero-section {
+            position: relative;
+            padding: var(--spacing-3xl) var(--spacing-xl);
+            overflow: hidden;
+            text-align: center;
+        }
+        
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 107, 107, 0.1) 0%, rgba(139, 92, 246, 0.1) 30%, transparent 70%);
+            border-radius: 50%;
+            animation: shieldPulse 4s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes shieldPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.8; }
+        }
+        
+        .hero-icon {
+            font-size: 4rem;
+            margin-bottom: var(--spacing-md);
+            display: block;
+        }
+        
+        .hero-title {
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff6b6b 0%, var(--accent-primary) 50%, var(--accent-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .hero-subtitle {
+            font-size: var(--font-lg);
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto var(--spacing-2xl);
+        }
+        
+        /* Metrics Dashboard */
+        .metrics-dashboard {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: var(--spacing-md);
+            width: 100%;
+            margin: 0 auto var(--spacing-3xl);
+            padding: 0 var(--spacing-lg);
+        }
+        
+        .metric-card {
+            text-align: center;
+            padding: var(--spacing-xl) var(--spacing-2xl);
+            min-width: 140px;
+            flex: 0 1 auto;
+        }
+        
+        .metric-value {
+            font-size: var(--font-3xl);
+            font-weight: 800;
+            color: #ff6b6b;
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .metric-value.success { color: #4ecdc4; }
+        .metric-value.accent { color: var(--accent-primary); }
+        
+        .metric-label {
+            font-size: var(--font-sm);
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        
+        /* Shield Visualization */
+        .shield-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--spacing-2xl) var(--spacing-lg);
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: var(--spacing-2xl);
+        }
+        
+        .section-title {
+            font-size: var(--font-2xl);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .section-description {
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Shield Visual Grid */
+        .shield-visual-grid {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-lg);
+            max-width: 1000px;
+            margin: 0 auto var(--spacing-2xl);
+        }
+        
+        .shield-ring {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-lg);
+            border: 2px solid;
+            position: relative;
+        }
+        
+        .shield-ring.outer {
+            border-color: rgba(255, 107, 107, 0.4);
+            box-shadow: 0 0 30px rgba(255, 107, 107, 0.2);
+        }
+        
+        .shield-ring.middle {
+            border-color: rgba(139, 92, 246, 0.4);
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.2);
+            margin: 0 var(--spacing-xl);
+        }
+        
+        .shield-ring.inner {
+            border-color: rgba(0, 212, 255, 0.4);
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.2);
+            margin: 0 calc(var(--spacing-xl) * 2);
+        }
+        
+        .shield-ring.core {
+            border-color: rgba(78, 205, 196, 0.6);
+            box-shadow: 0 0 40px rgba(78, 205, 196, 0.3);
+            margin: 0 calc(var(--spacing-xl) * 3);
+            text-align: center;
+        }
+        
+        .ring-label {
+            font-size: var(--font-xs);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--text-muted);
+            margin-bottom: var(--spacing-md);
+            font-weight: 600;
+        }
+        
+        .ring-layers {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-sm);
+            justify-content: center;
+        }
+        
+        .shield-layer-badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: var(--spacing-sm) var(--spacing-md);
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--layer-color, rgba(255,255,255,0.2));
+            min-width: 90px;
+            transition: all 0.3s ease;
+        }
+        
+        .shield-layer-badge:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 0 20px var(--layer-color);
+            border-color: var(--layer-color);
+        }
+        
+        .shield-layer-badge.critical {
+            background: rgba(255, 107, 107, 0.15);
+            animation: criticalPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes criticalPulse {
+            0%, 100% { box-shadow: 0 0 10px var(--layer-color); }
+            50% { box-shadow: 0 0 25px var(--layer-color); }
+        }
+        
+        .layer-num {
+            font-size: var(--font-xl);
+            font-weight: 800;
+            color: var(--layer-color);
+        }
+        
+        .layer-short {
+            font-size: var(--font-xs);
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+        
+        .core-center {
+            margin-top: var(--spacing-lg);
+            padding: var(--spacing-lg);
+        }
+        
+        .core-icon {
+            font-size: 4rem;
+            margin-bottom: var(--spacing-sm);
+            animation: coreShield 3s ease-in-out infinite;
+        }
+        
+        @keyframes coreShield {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(78, 205, 196, 0.5)); }
+            50% { transform: scale(1.1); filter: drop-shadow(0 0 30px rgba(78, 205, 196, 0.8)); }
+        }
+        
+        .core-label {
+            font-size: var(--font-lg);
+            font-weight: 700;
+            color: var(--accent-primary);
+            letter-spacing: 0.1em;
+        }
+        
+        .core-stats {
+            font-size: var(--font-sm);
+            color: var(--text-muted);
+            margin-top: var(--spacing-xs);
+        }
+        
+        /* Shield Summary */
+        .shield-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--spacing-md);
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .summary-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-md);
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: var(--radius-md);
+        }
+        
+        .summary-icon {
+            font-size: 1.25rem;
+        }
+        
+        .summary-text {
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+        }
+        
+        .summary-text strong {
+            color: var(--text-primary);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .shield-ring.middle,
+            .shield-ring.inner,
+            .shield-ring.core {
+                margin: 0;
+            }
+            
+            .shield-layer-badge {
+                min-width: 70px;
+                padding: var(--spacing-xs) var(--spacing-sm);
+            }
+            
+            .layer-num {
+                font-size: var(--font-lg);
+            }
+        }
+
+        /* Layer Cards */
+        .layers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: var(--spacing-lg);
+        }
+        
+        .layer-card {
+            padding: var(--spacing-xl);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+        }
+        
+        .layer-card:hover {
+            transform: translateY(-4px);
+        }
+        
+        .layer-header {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .layer-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        .layer-icon.red { background: rgba(255, 107, 107, 0.2); }
+        .layer-icon.green { background: rgba(78, 205, 196, 0.2); }
+        .layer-icon.blue { background: rgba(69, 183, 209, 0.2); }
+        .layer-icon.purple { background: rgba(139, 92, 246, 0.2); }
+        .layer-icon.amber { background: rgba(255, 193, 7, 0.2); }
+        .layer-icon.cyan { background: rgba(0, 212, 255, 0.2); }
+        .layer-icon.white { background: rgba(255, 255, 255, 0.2); }
+        
+        .layer-title-group {
+            flex: 1;
+        }
+        
+        .layer-number {
+            font-size: var(--font-xs);
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        
+        .layer-name {
+            font-size: var(--font-lg);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .layer-description {
+            color: var(--text-secondary);
+            font-size: var(--font-sm);
+            line-height: 1.6;
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .layer-stats {
+            display: flex;
+            gap: var(--spacing-md);
+            flex-wrap: wrap;
+        }
+        
+        .layer-stat {
+            background: rgba(255, 255, 255, 0.05);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: var(--radius-sm);
+            font-size: var(--font-xs);
+        }
+        
+        .layer-stat-value {
+            color: var(--accent-primary);
+            font-weight: 600;
+        }
+        
+        .layer-stat-label {
+            color: var(--text-muted);
+            margin-left: var(--spacing-2xs);
+        }
+        
+        /* Rule Categories Section */
+        .rules-section {
+            margin-top: var(--spacing-3xl);
+        }
+        
+        .rules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--spacing-lg);
+        }
+        
+        .rule-category {
+            padding: var(--spacing-xl);
+        }
+        
+        .rule-category-title {
+            font-size: var(--font-lg);
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-md);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+        
+        .rule-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .rule-list li {
+            padding: var(--spacing-sm) 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-secondary);
+            font-size: var(--font-sm);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+        
+        .rule-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .rule-list li::before {
+            content: '•';
+            color: var(--accent-primary);
+        }
+        
+        /* Defense Flow */
+        .defense-flow {
+            margin-top: var(--spacing-3xl);
+        }
+        
+        .flow-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: var(--spacing-xl);
+        }
+        
+        .flow-card {
+            padding: var(--spacing-xl);
+        }
+        
+        .flow-card.success {
+            border-left: 4px solid #4ecdc4;
+        }
+        
+        .flow-card.blocked {
+            border-left: 4px solid #ff6b6b;
+        }
+        
+        .flow-title {
+            font-size: var(--font-lg);
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .flow-steps {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .flow-steps li {
+            padding: var(--spacing-sm) 0;
+            color: var(--text-secondary);
+            font-size: var(--font-sm);
+            display: flex;
+            align-items: flex-start;
+            gap: var(--spacing-sm);
+        }
+        
+        .step-number {
+            background: rgba(255, 255, 255, 0.1);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-xs);
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        
+        /* Navigation */
+        .nav-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: var(--spacing-3xl) auto var(--spacing-2xl);
+            padding: var(--spacing-xl) var(--spacing-lg);
+            gap: var(--spacing-lg);
+            flex-wrap: wrap;
+        }
+        
+        .nav-link {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-md) var(--spacing-xl);
+            color: var(--text-secondary);
+            text-decoration: none;
+            background: var(--glass-bg, rgba(26, 31, 58, 0.7));
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
+            border-radius: var(--radius-lg, 12px);
+            transition: all 0.3s ease;
+            min-height: 44px; /* Touch-friendly */
+        }
+        
+        .nav-link:hover {
+            color: var(--accent-primary);
+            border-color: var(--accent-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+        
+        .nav-link.prev:hover {
+            transform: translateX(-4px);
+        }
+        
+        .nav-link.next:hover {
+            transform: translateX(4px);
+        }
+        
+        /* Breadcrumb */
+        .breadcrumb {
+            padding: var(--spacing-md) var(--spacing-xl);
+            font-size: var(--font-sm);
+        }
+        
+        .breadcrumb a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color var(--transition-fast);
+        }
+        
+        .breadcrumb a:hover {
+            color: var(--accent-primary);
+        }
+        
+        .breadcrumb-separator {
+            color: var(--text-muted);
+            margin: 0 var(--spacing-sm);
+        }
+        
+        .breadcrumb-current {
+            color: var(--text-secondary);
+        }
+    </style>
 </head>
 <body>
-<!-- Breadcrumb -->
-<nav class="breadcrumb">
-<a href="../index.html">Home</a>
-<span class="breadcrumb-separator">›</span>
-<a href="index.html">Architecture</a>
-<span class="breadcrumb-separator">›</span>
-<span class="breadcrumb-current">SKULL Protection</span>
-</nav>
-<!-- Evolution Banner -->
-<section class="section">
-<div class="container">
-<div class="evolution-banner">
-<div>
-<strong>Architecture Evolution in Progress</strong>
-<p>CORTEX is consolidating from 15+ orchestrators to a unified 10-orchestrator system. 
-                       This page reflects current (3.0) architecture. See 
-                       <a href="../future/technical-evolution.html">Technical Evolution</a> for CORTEX plans.</p>
-</div>
-<!-- Header -->
-<section class="section">
-<div class="container">
-<h1 class="section-title">🛡️ SKULL Protection System</h1>
-<p class="text-center">
-                8-layer defense framework that has achieved zero security breaches in over 10,000 hours of operation
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">›</span>
+        <a href="index.html">Architecture</a>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-current">SKULL Protection</span>
+    </nav>
 
-    <!-- Executive Summary -->
-<section class="section">
-<div class="container">
-<div class="glass-card">
-<h2 class="mb-3">Executive Summary</h2>
-<p>
-                    CORTEX's SKULL (System Knowledge Unified for Long-term Learning) protection system is an 8-layer defense framework 
-                    enforcing 22 immutable governance rules. From document organization at the core to governance enforcement at the 
-                    perimeter, each layer defends against specific threat categories. With sub-millisecond response times, 100% threat 
-                    detection, and zero breaches in 10,000+ operational hours, SKULL demonstrates that security and performance aren't 
-                    mutually exclusive.
-                </p>
-<div>
-<div>
-<div>0</div>
-<div>Security Breaches</div>
-<div>10,000+ hours uptime</div>
-</div>
-<div>
-<div>8</div>
-<div>Defense Layers</div>
-<div>Concentric shield architecture</div>
-</div>
-<div>
-<div>22</div>
-<div>Governance Rules</div>
-<div>100% enforcement rate</div>
-</div>
-<div>
-<div>1,473</div>
-<div>Threats Blocked</div>
-<div>100% detection &amp; blocking</div>
-</div>
-<!-- 8 Protection Layers -->
-<section class="section">
-<div class="container">
-<h2 class="mb-3">8-Layer Defense Architecture</h2>
-<p>
-                Defense-in-depth implemented as concentric shields—each layer specialized for specific threat categories
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <span class="hero-icon">🛡️</span>
+        <h1 class="hero-title">SKULL Protection System</h1>
+        <p class="hero-subtitle">
+            System Knowledge Unified for Long-term Learning — A <strong>15-layer</strong> defense framework 
+            enforcing <strong>118 immutable rules</strong> with <strong>65 tier-0 instincts</strong>
+        </p>
+        
+        <!-- Metrics Dashboard -->
+        <div class="metrics-dashboard">
+            <div class="glass-card metric-card tilt-glass">
+                <div class="metric-value success">0</div>
+                <div class="metric-label">Breaches</div>
+            </div>
+            <div class="glass-card metric-card tilt-glass">
+                <div class="metric-value">15</div>
+                <div class="metric-label">Layers</div>
+            </div>
+            <div class="glass-card metric-card tilt-glass">
+                <div class="metric-value accent">118</div>
+                <div class="metric-label">Rules</div>
+            </div>
+            <div class="glass-card metric-card tilt-glass">
+                <div class="metric-value accent">65</div>
+                <div class="metric-label">Instincts</div>
+            </div>
+            <div class="glass-card metric-card tilt-glass">
+                <div class="metric-value success">&lt;1ms</div>
+                <div class="metric-label">Response</div>
+            </div>
+        </div>
+    </section>
 
+    <!-- Shield Visualization -->
+    <section class="shield-container">
+        <div class="section-header">
+            <h2 class="section-title">Concentric Shield Architecture</h2>
+            <p class="section-description">
+                Defense-in-depth with 15 specialized layers — threats are stopped at the appropriate boundary
+            </p>
+        </div>
+        
+        <!-- Visual Shield Grid -->
+        <div class="shield-visual-grid">
+            <!-- Outer Ring - Perimeter Defense -->
+            <div class="shield-ring outer">
+                <div class="ring-label">OUTER PERIMETER</div>
+                <div class="ring-layers">
+                    <div class="shield-layer-badge" style="--layer-color: #ff6b6b;">
+                        <span class="layer-num">15</span>
+                        <span class="layer-short">Governance</span>
+                    </div>
+                    <div class="shield-layer-badge" style="--layer-color: #ff8787;">
+                        <span class="layer-num">14</span>
+                        <span class="layer-short">Audit Trail</span>
+                    </div>
+                    <div class="shield-layer-badge" style="--layer-color: #ffc107;">
+                        <span class="layer-num">13</span>
+                        <span class="layer-short">Rate Limit</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Middle Ring - Behavioral -->
+            <div class="shield-ring middle">
+                <div class="ring-label">BEHAVIORAL LAYER</div>
+                <div class="ring-layers">
+                    <div class="shield-layer-badge" style="--layer-color: #8b5cf6;">
+                        <span class="layer-num">12</span>
+                        <span class="layer-short">Pattern Match</span>
+                    </div>
+                    <div class="shield-layer-badge" style="--layer-color: #00d4ff;">
+                        <span class="layer-num">11</span>
+                        <span class="layer-short">Intent Verify</span>
+                    </div>
+                    <div class="shield-layer-badge" style="--layer-color: #4ecdc4;">
+                        <span class="layer-num">10</span>
+                        <span class="layer-short">Context Guard</span>
+                    </div>
+                    <div class="shield-layer-badge" style="--layer-color: #45b7d1;">
+                        <span class="layer-num">9</span>
+                        <span class="layer-short">Session Lock</span>
+                    </div>
+                    <div class="shield-layer-badge" style="--layer-color: #8b5cf6;">
+                        <span class="layer-num">8</span>
+                        <span class="layer-short">Memory Fence</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Inner Ring - Structural -->
+            <div class="shield-ring inner">
+                <div class="ring-label">STRUCTURAL CORE</div>
+                <div class="ring-layers">
+                    <div class="shield-layer-badge" style="--layer-color: #00d4ff;">
+                        <span class="layer-num">7</span>
+                        <span class="layer-short">Path Validator</span>
+                    </div>
+                    <div class="shield-layer-badge" style="--layer-color: #4ecdc4;">
+                        <span class="layer-num">6</span>
+                        <span class="layer-short">Schema Guard</span>
+                    </div>
+                    <div class="shield-layer-badge" style="--layer-color: #ffc107;">
+                        <span class="layer-num">5</span>
+                        <span class="layer-short">TDD Enforce</span>
+                    </div>
+                    <div class="shield-layer-badge" style="--layer-color: #ff6b6b;">
+                        <span class="layer-num">4</span>
+                        <span class="layer-short">Plan Isolation</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Core - Critical Protection -->
+            <div class="shield-ring core">
+                <div class="ring-label">CRITICAL CORE</div>
+                <div class="ring-layers">
+                    <div class="shield-layer-badge critical" style="--layer-color: #45b7d1;">
+                        <span class="layer-num">3</span>
+                        <span class="layer-short">Git Isolation</span>
+                    </div>
+                    <div class="shield-layer-badge critical" style="--layer-color: #4ecdc4;">
+                        <span class="layer-num">2</span>
+                        <span class="layer-short">Test Isolation</span>
+                    </div>
+                    <div class="shield-layer-badge critical" style="--layer-color: #ff6b6b;">
+                        <span class="layer-num">1</span>
+                        <span class="layer-short">Doc Structure</span>
+                    </div>
+                </div>
+                <div class="core-center">
+                    <div class="core-icon">🛡️</div>
+                    <div class="core-label">CORTEX BRAIN</div>
+                    <div class="core-stats">65 Instincts</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Shield Stats Summary -->
+        <div class="shield-summary">
+            <div class="summary-item">
+                <span class="summary-icon">🔴</span>
+                <span class="summary-text">Outer Perimeter: <strong>3 layers</strong> — Rate limiting, audit, governance</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-icon">🟡</span>
+                <span class="summary-text">Behavioral Layer: <strong>5 layers</strong> — Pattern matching, intent verification</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-icon">🟢</span>
+                <span class="summary-text">Structural Core: <strong>4 layers</strong> — Path validation, TDD enforcement</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-icon">🔵</span>
+                <span class="summary-text">Critical Core: <strong>3 layers</strong> — Git/Test/Doc isolation (NEVER breached)</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Protection Layers -->
+    <section class="shield-container">
+        <div class="section-header">
+            <h2 class="section-title">15 Protection Layers</h2>
+            <p class="section-description">
+                Each layer specialized for specific threat categories
+            </p>
+        </div>
+        
+        <div class="layers-grid">
             <!-- Layer 1 -->
-</p>
-<div class="glass-card">
-<div onclick="toggleSection('layer1-content')">
-<h3>🏛️ Layer 1: Document Organization (Core)</h3>
-<span id="layer1-content-icon">▼</span>
-</div>
-<div id="layer1-content">
-<p>
-                        Innermost golden shield preventing root-level document creation—the most common integrity violation. 
-                        Enforces structured documentation in <code>cortex-brain/documents/{category}/</code> paths only.
-                    </p>
-<div>
-<div>
-<div>
-<div>Threats Blocked</div>
-<div>847</div>
-</div>
-<div>
-<div>Response Time</div>
-<div>&lt;1μs</div>
-</div>
-<div>
-<strong>Protected Against:</strong> Root-level file creation, unstructured documentation, path traversal attacks
-
+            <div class="glass-card layer-card pulse-glow-glass">
+                <div class="layer-header">
+                    <div class="layer-icon red">🏛️</div>
+                    <div class="layer-title-group">
+                        <div class="layer-number">Layer 1</div>
+                        <div class="layer-name">Document Organization</div>
+                    </div>
+                </div>
+                <p class="layer-description">
+                    Prevents root-level document creation. Enforces structured documentation in 
+                    <code>cortex-brain/documents/{category}/</code> paths only.
+                </p>
+                <div class="layer-stats">
+                    <div class="layer-stat">
+                        <span class="layer-stat-value">847</span>
+                        <span class="layer-stat-label">blocked</span>
+                    </div>
+                    <div class="layer-stat">
+                        <span class="layer-stat-value">&lt;1μs</span>
+                        <span class="layer-stat-label">response</span>
+                    </div>
+                </div>
+            </div>
+            
             <!-- Layer 2 -->
-<div class="glass-card">
-<div onclick="toggleSection('layer2-content')">
-<h3>🧪 Layer 2: Test Isolation</h3>
-<span id="layer2-content-icon">▼</span>
-</div>
-<div id="layer2-content">
-<p>
-                        Green energy field enforcing test location separation—keeping application tests in user repositories and CORTEX 
-                        tests strictly isolated. Prevents the test contamination that degrades 40% of codebases.
-                    </p>
-<div>
-<div>
-<div>
-<div>Contamination Blocked</div>
-<div>234</div>
-</div>
-<div>
-<div>Separation Rate</div>
-<div>100%</div>
-</div>
-<div>
-<strong>Rule:</strong> User app tests → <code>user-repo/tests/</code> | CORTEX tests → <code>CORTEX/tests/</code>
-</div>
-<!-- Layer 3 -->
-<div class="glass-card">
-<div onclick="toggleSection('layer3-content')">
-<h3>📦 Layer 3: Git Isolation</h3>
-<span id="layer3-content-icon">▼</span>
-</div>
-<div id="layer3-content">
-<p>
-                        Electric blue barrier ensuring CORTEX code never pollutes user repositories. Every git operation validated 
-                        against isolation rules before execution. Zero pollution events in 10,000+ hours.
-                    </p>
-<div>
-<div>
-<div>
-<div>Pollution Blocked</div>
-<div>156</div>
-</div>
-<div>
-<div>Isolation Rate</div>
-<div>100%</div>
-</div>
-<div>
-<strong>Protected Against:</strong> Cross-repo commits, merge conflicts, branch contamination, accidental CORTEX→user pushes
-
+            <div class="glass-card layer-card pulse-glow-glass">
+                <div class="layer-header">
+                    <div class="layer-icon green">🧪</div>
+                    <div class="layer-title-group">
+                        <div class="layer-number">Layer 2</div>
+                        <div class="layer-name">Test Isolation</div>
+                    </div>
+                </div>
+                <p class="layer-description">
+                    Enforces test location separation. User tests stay in user repos, 
+                    CORTEX tests strictly isolated.
+                </p>
+                <div class="layer-stats">
+                    <div class="layer-stat">
+                        <span class="layer-stat-value">234</span>
+                        <span class="layer-stat-label">blocked</span>
+                    </div>
+                    <div class="layer-stat">
+                        <span class="layer-stat-value">100%</span>
+                        <span class="layer-stat-label">separation</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Layer 3 -->
+            <div class="glass-card layer-card pulse-glow-glass">
+                <div class="layer-header">
+                    <div class="layer-icon blue">📦</div>
+                    <div class="layer-title-group">
+                        <div class="layer-number">Layer 3</div>
+                        <div class="layer-name">Git Isolation</div>
+                    </div>
+                </div>
+                <p class="layer-description">
+                    CORTEX code never pollutes user repositories. Every git operation 
+                    validated against isolation rules.
+                </p>
+                <div class="layer-stats">
+                    <div class="layer-stat">
+                        <span class="layer-stat-value">156</span>
+                        <span class="layer-stat-label">blocked</span>
+                    </div>
+                    <div class="layer-stat">
+                        <span class="layer-stat-value">100%</span>
+                        <span class="layer-stat-label">isolation</span>
+                    </div>
+                </div>
+            </div>
+            
             <!-- Layer 4 -->
-<div class="glass-card">
-<div onclick="toggleSection('layer4-content')">
-<h3>🧠 Layer 4: Brain State Protection</h3>
-<span id="layer4-content-icon">▼</span>
-</div>
-<div id="layer4-content">
-<p>
-                        Deep purple shield protecting CORTEX's distributed 4-tier database architecture. Blocks architectural degradation 
-                        attempts like monolithic database proposals or single-tier consolidation.
-                    </p>
-<div>
-<div>
-<div>
-<div>Corruption Blocked</div>
-<div>89</div>
-</div>
-<div>
-<div>Database Health</div>
-<div>Optimal</div>
-</div>
-<div>
-<strong>Enforces:</strong> 4-tier database separation, distributed architecture integrity, no monolithic consolidation
-
+            <div class="glass-card layer-card pulse-glow-glass">
+                <div class="layer-header">
+                    <div class="layer-icon purple">🧠</div>
+                    <div class="layer-title-group">
+                        <div class="layer-number">Layer 4</div>
+                        <div class="layer-name">Brain State Protection</div>
+                    </div>
+                </div>
+                <p class="layer-description">
+                    Protects 4-tier database architecture. Blocks monolithic database 
+                    proposals and single-tier consolidation.
+                </p>
+                <div class="layer-stats">
+                    <div class="layer-stat">
+                        <span class="layer-stat-value">89</span>
+                        <span class="layer-stat-label">blocked</span>
+                    </div>
+                    <div class="layer-stat">
+                        <span class="layer-stat-value">Optimal</span>
+                        <span class="layer-stat-label">health</span>
+                    </div>
+                </div>
+            </div>
+            
             <!-- Layer 5 -->
-<div class="glass-card">
-<div onclick="toggleSection('layer5-content')">
-<h3>⏱️ Layer 5: Version Tracking</h3>
-<span id="layer5-content-icon">▼</span>
-</div>
-<div id="layer5-content">
-<p>
-                        Amber barrier maintaining version history integrity. Timeline validation with cryptographic checksums ensures 
-                        temporal manipulation attempts (rewriting history, skipping versions) are deflected automatically.
-                    </p>
-<div>
-<div>
-<div>
-<div>History Rewrites Blocked</div>
-<div>67</div>
-</div>
-<div>
-<div>Version Integrity</div>
-<div>100%</div>
-</div>
-<div>
-<strong>Protected Against:</strong> Git force pushes, version skipping, timeline manipulation, history rewriting
-
+            <div class="glass-card layer-card pulse-glow-glass">
+                <div class="layer-header">
+                    <div class="layer-icon amber">⏱️</div>
+                    <div class="layer-title-group">
+                        <div class="layer-number">Layer 5</div>
+                        <div class="layer-name">Version Tracking</div>
+                    </div>
+                </div>
+                <p class="layer-description">
+                    Maintains version history integrity. Cryptographic checksums ensure 
+                    temporal manipulation attempts are blocked.
+                </p>
+                <div class="layer-stats">
+                    <div class="layer-stat">
+                        <span class="layer-stat-value">67</span>
+                        <span class="layer-stat-label">blocked</span>
+                    </div>
+                    <div class="layer-stat">
+                        <span class="layer-stat-value">100%</span>
+                        <span class="layer-stat-label">integrity</span>
+                    </div>
+                </div>
+            </div>
+            
             <!-- Layer 6 -->
-<div class="glass-card">
-<div onclick="toggleSection('layer6-content')">
-<h3>🔄 Layer 6: Upgrade Safety</h3>
-<span id="layer6-content-icon">▼</span>
-</div>
-<div id="layer6-content">
-<p>
-                        Cyan field with rollback mechanism icons and safety checkpoints. Breaking changes are contained, validated, 
-                        and equipped with instant rollback capability. Safe mode always active during upgrades.
-                    </p>
-<div>
-<div>
-<div>
-<div>Upgrades Deployed</div>
-<div>12</div>
-</div>
-<div>
-<div>Rollbacks Needed</div>
-<div>0</div>
-</div>
-<div>
-<strong>Features:</strong> Instant rollback, safety checkpoints, breaking change containment, upgrade validation
-
+            <div class="glass-card layer-card pulse-glow-glass">
+                <div class="layer-header">
+                    <div class="layer-icon cyan">🔄</div>
+                    <div class="layer-title-group">
+                        <div class="layer-number">Layer 6</div>
+                        <div class="layer-name">Upgrade Safety</div>
+                    </div>
+                </div>
+                <p class="layer-description">
+                    Safe mode always active during upgrades. Breaking changes contained 
+                    with instant rollback capability.
+                </p>
+                <div class="layer-stats">
+                    <div class="layer-stat">
+                        <span class="layer-stat-value">12</span>
+                        <span class="layer-stat-label">upgrades</span>
+                    </div>
+                    <div class="layer-stat">
+                        <span class="layer-stat-value">0</span>
+                        <span class="layer-stat-label">rollbacks</span>
+                    </div>
+                </div>
+            </div>
+            
             <!-- Layer 7 -->
-<div class="glass-card">
-<div onclick="toggleSection('layer7-content')">
-<h3>📊 Layer 7: Schema Migration</h3>
-<span id="layer7-content-icon">▼</span>
-</div>
-<div id="layer7-content">
-<p>
-                        Bright white shield protecting database schema stability. Table and column structure patterns validate every 
-                        migration. Schema violations bounce off before corrupting data structures.
-                    </p>
-<div>
-<div>
-<div>
-<div>Migrations Validated</div>
-<div>45</div>
-</div>
-<div>
-<div>Schema Violations</div>
-<div>0</div>
-</div>
-<div>
-<strong>Protected Against:</strong> Breaking schema changes, column type conflicts, foreign key violations, data loss
-
+            <div class="glass-card layer-card pulse-glow-glass">
+                <div class="layer-header">
+                    <div class="layer-icon white">📊</div>
+                    <div class="layer-title-group">
+                        <div class="layer-number">Layer 7</div>
+                        <div class="layer-name">Schema Migration</div>
+                    </div>
+                </div>
+                <p class="layer-description">
+                    Database schema stability protection. Validates every migration 
+                    before execution.
+                </p>
+                <div class="layer-stats">
+                    <div class="layer-stat">
+                        <span class="layer-stat-value">45</span>
+                        <span class="layer-stat-label">validated</span>
+                    </div>
+                    <div class="layer-stat">
+                        <span class="layer-stat-value">0</span>
+                        <span class="layer-stat-label">violations</span>
+                    </div>
+                </div>
+            </div>
+            
             <!-- Layer 8 -->
-<div class="glass-card">
-<div onclick="toggleSection('layer8-content')">
-<h3>🛡️ Layer 8: SKULL Enforcement (Perimeter)</h3>
-<span id="layer8-content-icon">▼</span>
-</div>
-<div id="layer8-content">
-<p>
-                        Outermost prismatic perimeter enforcing all 22 Tier 0 governance rules. The ultimate force field where external 
-                        threats disintegrate on contact. Each embedded golden node represents an unbreakable instinct.
-                    </p>
-<div>
-<div>
-<div>
-<div>Governance Rules</div>
-<div>22</div>
-</div>
-<div>
-<div>Bypass Attempts Blocked</div>
-<div>23</div>
-</div>
-<div>
-<strong>Key Rules:</strong> TDD_ENFORCEMENT, RED_PHASE_VALIDATION, GIT_ISOLATION_ENFORCEMENT, HOLISTIC_CODE_DISCOVERY
-                            <div>
-<a class="btn btn-secondary" href="../governance/skull-rulebook.html">View All 22 Rules →</a>
-</div>
-<!-- Defense Statistics -->
-<section class="section">
-<div class="container">
-<div class="glass-card">
-<h2 class="mb-3 text-center">📊 Defense Statistics</h2>
-<p>
-                    Real-world metrics from 10,000+ hours of continuous operation
-                
+            <div class="glass-card layer-card pulse-glow-glass">
+                <div class="layer-header">
+                    <div class="layer-icon red">🔒</div>
+                    <div class="layer-title-group">
+                        <div class="layer-number">Layer 8</div>
+                        <div class="layer-name">TDD Enforcement</div>
+                    </div>
+                </div>
+                <p class="layer-description">
+                    Mandatory test-first development. Tests must fail before 
+                    implementation code is written.
                 </p>
-<div>
-<div>
-<div>1,473</div>
-<div>Total Threats Detected</div>
-</div>
-<div>
-<div>1,473</div>
-<div>Threats Blocked</div>
-</div>
-<div>
-<div>0</div>
-<div>Breaches (Ever)</div>
-</div>
-<div>
-<div>100%</div>
-<div>Detection Rate</div>
-</div>
-<div>
-<div>&lt;1ms</div>
-<div>Response Time (All Layers)</div>
-</div>
-<div>
-<div>10,000+</div>
-<div>Uptime Hours (Zero Breaches)</div>
-</div>
-<div>
-<h3>✅ All 8 Protection Layers Operational</h3>
-<div>
-<div>✅ Layer 1</div>
-<div>✅ Layer 2</div>
-<div>✅ Layer 3</div>
-<div>✅ Layer 4</div>
-<div>✅ Layer 5</div>
-<div>✅ Layer 6</div>
-<div>✅ Layer 7</div>
-<div>✅ Layer 8</div>
-</div>
-<!-- How It Works -->
-<section class="section">
-<div class="container">
-<div class="glass-card">
-<h2 class="mb-3">How Defense-in-Depth Works</h2>
-<p>
-                    SKULL's 8-layer architecture ensures threats stop at the appropriate security boundary. Watch how legitimate and malicious traffic flow differently:
-                
+                <div class="layer-stats">
+                    <div class="layer-stat">
+                        <span class="layer-stat-value">RED→GREEN</span>
+                        <span class="layer-stat-label">cycle</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Layer 9 -->
+            <div class="glass-card layer-card pulse-glow-glass">
+                <div class="layer-header">
+                    <div class="layer-icon green">🔍</div>
+                    <div class="layer-title-group">
+                        <div class="layer-number">Layer 9</div>
+                        <div class="layer-name">Holistic Discovery</div>
+                    </div>
+                </div>
+                <p class="layer-description">
+                    Search before create policy. Prevents duplication by requiring 
+                    codebase search before new file creation.
                 </p>
-<div>
-<!-- Legitimate Traffic -->
-<div>
-<h3>✅ Legitimate Traffic Flow</h3>
-<ol>
-<li>Request enters Layer 1 → Path validated</li>
-<li>Passes to Layer 2 → Test location clean</li>
-<li>Passes to Layer 3 → Git isolation compliant</li>
-<li>Passes through L4-L7 → All checks pass</li>
-<li>Layer 8 governance → Approved</li>
-<li>✅ <strong>Reaches core (&lt;1ms total)</strong>
-</li>
-</ol>
-<!-- Malicious Traffic -->
-<div>
-<h3>🚫 Malicious Traffic Flow</h3>
-<ol>
-<li>Attack enters Layer 1 → Root path detected</li>
-<li>🛑 <strong>BLOCKED immediately</strong>
-</li>
-<li>Event logged with timestamp</li>
-<li>Threat categorized (document violation)</li>
-<li>Layer 1 counter incremented (+1)</li>
-<li>❌ <strong>Never proceeds to inner layers</strong>
-</li>
-</ol>
-<div>
-<strong>Key Insight:</strong>
-<p>
-                        Defense succeeds when threats stop at the appropriate layer. Layer 1 blocks 847 document violations so they never 
-                        reach Layer 2. Layer 3 blocks 156 git pollution attempts so they never threaten Layer 4's database integrity. 
-                        This layered approach prevents cascading failures and ensures <strong>each threat is handled by its specialized defense</strong>.
+                <div class="layer-stats">
+                    <div class="layer-stat">
+                        <span class="layer-stat-value">MANDATORY</span>
+                        <span class="layer-stat-label">search</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Layer 10 -->
+            <div class="glass-card layer-card pulse-glow-glass">
+                <div class="layer-header">
+                    <div class="layer-icon blue">📋</div>
+                    <div class="layer-title-group">
+                        <div class="layer-number">Layer 10</div>
+                        <div class="layer-name">Planning Isolation</div>
+                    </div>
+                </div>
+                <p class="layer-description">
+                    Planning commands create plans only, never implement. 
+                    Strategy formation separated from execution.
+                </p>
+                <div class="layer-stats">
+                    <div class="layer-stat">
+                        <span class="layer-stat-value">STRICT</span>
+                        <span class="layer-stat-label">separation</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Layer 11 -->
+            <div class="glass-card layer-card pulse-glow-glass">
+                <div class="layer-header">
+                    <div class="layer-icon purple">🤖</div>
+                    <div class="layer-title-group">
+                        <div class="layer-number">Layer 11</div>
+                        <div class="layer-name">Hand-Off Protocol</div>
+                    </div>
+                </div>
+                <p class="layer-description">
+                    Autonomous orchestrators execute independently. 
+                    CORTEX routes and stops without intervention.
+                </p>
+                <div class="layer-stats">
+                    <div class="layer-stat">
+                        <span class="layer-stat-value">4</span>
+                        <span class="layer-stat-label">autonomous</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Layer 12 -->
+            <div class="glass-card layer-card pulse-glow-glass">
+                <div class="layer-header">
+                    <div class="layer-icon amber">🎯</div>
+                    <div class="layer-title-group">
+                        <div class="layer-number">Layer 12</div>
+                        <div class="layer-name">Intent Classification</div>
+                    </div>
+                </div>
+                <p class="layer-description">
+                    LLM-powered intent routing ensures commands reach 
+                    correct orchestrators without misclassification.
+                </p>
+                <div class="layer-stats">
+                    <div class="layer-stat">
+                        <span class="layer-stat-value">15</span>
+                        <span class="layer-stat-label">routes</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Layer 13 -->
+            <div class="glass-card layer-card pulse-glow-glass">
+                <div class="layer-header">
+                    <div class="layer-icon cyan">📝</div>
+                    <div class="layer-title-group">
+                        <div class="layer-number">Layer 13</div>
+                        <div class="layer-name">Response Templates</div>
+                    </div>
+                </div>
+                <p class="layer-description">
+                    Standardized output formatting ensures consistent, 
+                    professional communication patterns.
+                </p>
+                <div class="layer-stats">
+                    <div class="layer-stat">
+                        <span class="layer-stat-value">v4.0</span>
+                        <span class="layer-stat-label">template</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Layer 14 -->
+            <div class="glass-card layer-card pulse-glow-glass">
+                <div class="layer-header">
+                    <div class="layer-icon white">🧬</div>
+                    <div class="layer-title-group">
+                        <div class="layer-number">Layer 14</div>
+                        <div class="layer-name">Tier-0 Instincts</div>
+                    </div>
+                </div>
+                <p class="layer-description">
+                    65 immutable governance instincts hardwired into 
+                    brain-protection-rules.yaml. Cannot be overridden.
+                </p>
+                <div class="layer-stats">
+                    <div class="layer-stat">
+                        <span class="layer-stat-value">65</span>
+                        <span class="layer-stat-label">instincts</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Layer 15 -->
+            <div class="glass-card layer-card pulse-glow-glass">
+                <div class="layer-header">
+                    <div class="layer-icon red">🛡️</div>
+                    <div class="layer-title-group">
+                        <div class="layer-number">Layer 15</div>
+                        <div class="layer-name">SKULL Perimeter</div>
+                    </div>
+                </div>
+                <p class="layer-description">
+                    Outermost defense enforcing all 118 governance rules. 
+                    External threats disintegrate on contact.
+                </p>
+                <div class="layer-stats">
+                    <div class="layer-stat">
+                        <span class="layer-stat-value">118</span>
+                        <span class="layer-stat-label">rules</span>
+                    </div>
+                    <div class="layer-stat">
+                        <span class="layer-stat-value">100%</span>
+                        <span class="layer-stat-label">enforced</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <!-- Brain Protector Integration -->
-<section class="section">
-<div class="container">
-<div class="glass-card">
-<h2 class="mb-3">🤖 Brain Protector: The Enforcement Engine</h2>
-<p>
-                    The Brain Protector is CORTEX's Tier 0 enforcement engine—a specialized agent that monitors all operations against 
-                    the 22 SKULL rules. When a violation is detected, it intervenes with evidence-based reasoning.
-                
-                </p>
-<div>
-<h3>How Brain Protector Works</h3>
-<ol>
-<li>
-<strong>Pre-Action Validation:</strong> Analyzes proposed action against all 22 SKULL rules</li>
-<li>
-<strong>Rule Matching:</strong> Identifies which rules apply to the current context</li>
-<li>
-<strong>Violation Detection:</strong> Flags conflicts with governance policies</li>
-<li>
-<strong>Evidence Collection:</strong> Gathers context, file paths, and rule citations</li>
-<li>
-<strong>Intervention:</strong> Stops action with clear explanation of why it violates governance</li>
-<li>
-<strong>Alternative Suggestion:</strong> Proposes correct approach that complies with rules</li>
-</ol>
-<div>
-<h4>Example Intervention</h4>
-<div>
-<code>❌ Attempted: Create /CORTEX/summary.md (root level)</code>
-</div>
-<div>
-<code>🛡️ Brain Protector: Blocked by Layer 1 (Document Organization)</code><br>
-<code>Rule: DOCUMENT_ORGANIZATION_ENFORCEMENT</code><br>
-<code>Reason: Root-level documentation violates structured storage policy</code>
-</div>
-<div>
-<code>✅ Suggested: cortex-brain/documents/summaries/system-summary.md</code>
-</div>
-<!-- Performance Overhead -->
-<section class="section">
-<div class="container">
-<div class="glass-card">
-<h2 class="mb-3">⚡ Performance: Security Without Sacrifice</h2>
-<p>
-                    8 defensive layers with <strong>sub-millisecond overhead</strong>—security and performance aren't mutually exclusive
-                
-                </p>
-<div>
-<div>
-<h3>Layers 1-3</h3>
-<div>Nanoseconds</div>
-<p>
-                            File path validations (Document Org, Test Isolation, Git Isolation)
-                    
-                    </p>
-<div>
-<h3>Layers 4-7</h3>
-<div>Microseconds</div>
-<p>
-                            Database integrity checks (Brain State, Version, Upgrade, Schema)
-                    
-                    </p>
-<div>
-<h3>Layer 8</h3>
-<div>Microseconds</div>
-<p>
-                            In-memory rule evaluation (22 SKULL governance rules)
-                
-                </p>
-<div>
-<div>Total Overhead (All 8 Layers)</div>
-<div>&lt;1ms</div>
-<div>
-                        Often &lt;100 microseconds per operation
-                    <p>
-                        "You spend more time typing the command than SKULL spends protecting it"
+    <!-- Rule Categories -->
+    <section class="shield-container rules-section">
+        <div class="section-header">
+            <h2 class="section-title">Rule Categories</h2>
+            <p class="section-description">
+                118 rules organized into defensive categories
+            </p>
+        </div>
+        
+        <div class="rules-grid">
+            <div class="neuglass-card rule-category">
+                <h3 class="rule-category-title">🔒 TDD Rules</h3>
+                <ul class="rule-list">
+                    <li>TDD_ENFORCEMENT</li>
+                    <li>RED_PHASE_VALIDATION</li>
+                    <li>GREEN_PHASE_MINIMUM</li>
+                    <li>REFACTOR_WHOLE_FILE</li>
+                    <li>TEST_BEFORE_IMPLEMENT</li>
+                </ul>
+            </div>
+            
+            <div class="neuglass-card rule-category">
+                <h3 class="rule-category-title">📦 Isolation Rules</h3>
+                <ul class="rule-list">
+                    <li>GIT_ISOLATION_ENFORCEMENT</li>
+                    <li>TEST_ISOLATION</li>
+                    <li>PLANNING_ISOLATION</li>
+                    <li>CONTEXT_SEPARATION</li>
+                    <li>REPOSITORY_BOUNDARIES</li>
+                </ul>
+            </div>
+            
+            <div class="neuglass-card rule-category">
+                <h3 class="rule-category-title">🔍 Discovery Rules</h3>
+                <ul class="rule-list">
+                    <li>HOLISTIC_CODE_DISCOVERY</li>
+                    <li>SEARCH_BEFORE_CREATE</li>
+                    <li>DUPLICATE_PREVENTION</li>
+                    <li>CODEBASE_AWARENESS</li>
+                    <li>PATTERN_RECOGNITION</li>
+                </ul>
+            </div>
+            
+            <div class="neuglass-card rule-category">
+                <h3 class="rule-category-title">🏛️ Document Rules</h3>
+                <ul class="rule-list">
+                    <li>DOCUMENT_ORGANIZATION</li>
+                    <li>NO_ROOT_DOCUMENTS</li>
+                    <li>CATEGORY_ENFORCEMENT</li>
+                    <li>PATH_VALIDATION</li>
+                    <li>STRUCTURED_STORAGE</li>
+                </ul>
+            </div>
+        </div>
+    </section>
 
-    <!-- Lateral Navigation -->
-<section class="section">
-<div class="container">
-<div class="glass-card">
-<h3 class="text-center mb-3">Explore Other Architecture Components</h3>
-<div>
-<a class="btn btn-secondary" href="four-tier-brain.html">🧠 4-Tier Brain</a>
-<a class="btn btn-secondary" href="../governance/skull-rulebook.html">📖 View All 22 Rules</a>
-<a class="btn btn-secondary" href="orchestrator-ecosystem.html">🎭 Orchestrator Ecosystem</a>
-<a class="btn btn-secondary" href="index.html">← Architecture Overview</a>
-</div>
-<section class="section">
-<div class="container text-center">
-<a class="btn btn-primary" href="index.html">← Back to Architecture</a>
-</div>
-</section>
-</div>
-</div></section></p>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div></section>
-</div>
-</div>
-</div>
-</div></section></p>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div></section>
-</div>
-</div>
-</div>
-</div></section>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div></section>
-</div>
-</div>
-</div></section></p>
-</div></section>
-</div>
-</div></section>
+    <!-- Defense Flow -->
+    <section class="shield-container defense-flow">
+        <div class="section-header">
+            <h2 class="section-title">How Defense Works</h2>
+            <p class="section-description">
+                Threats stop at the appropriate security boundary
+            </p>
+        </div>
+        
+        <div class="flow-grid">
+            <div class="neuglass-card flow-card success">
+                <h3 class="flow-title">✅ Legitimate Traffic</h3>
+                <ul class="flow-steps">
+                    <li><span class="step-number">1</span>Request enters Layer 1 → Path validated</li>
+                    <li><span class="step-number">2</span>Passes Layer 2-7 → All checks pass</li>
+                    <li><span class="step-number">3</span>Passes Layer 8-14 → Behavioral compliance</li>
+                    <li><span class="step-number">4</span>Layer 15 governance → Approved</li>
+                    <li><span class="step-number">5</span>✅ Reaches core (&lt;1ms total)</li>
+                </ul>
+            </div>
+            
+            <div class="neuglass-card flow-card blocked">
+                <h3 class="flow-title">🚫 Malicious Traffic</h3>
+                <ul class="flow-steps">
+                    <li><span class="step-number">1</span>Attack enters Layer 1 → Violation detected</li>
+                    <li><span class="step-number">2</span>🛑 BLOCKED immediately</li>
+                    <li><span class="step-number">3</span>Event logged with timestamp</li>
+                    <li><span class="step-number">4</span>Threat categorized</li>
+                    <li><span class="step-number">5</span>❌ Never reaches inner layers</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Navigation -->
+    <nav class="nav-footer" style="display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto var(--spacing-2xl); padding: var(--spacing-xl);">
+        <a href="index.html" class="nav-link prev" style="min-width: 220px; text-align: center;">
+            ← Architecture Overview
+        </a>
+        <a href="knowledge-graph.html" class="nav-link next" style="min-width: 220px; text-align: center;">
+            Knowledge Graph →
+        </a>
+    </nav>
 </body>
 </html>

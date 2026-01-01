@@ -1,9 +1,9 @@
 metadata:
-  title: CORTEX Glassmorphism Design Standards v2.0
+  title: CORTEX Glassmorphism Design Standards v2.1
   category: ui-ux
-  version: 2.0.0
+  version: 2.1.0
   created: '2025-12-28'
-  updated: '2025-12-29'
+  updated: '2025-12-31'
   author: Asif Hussain
   tags:
   - glassmorphism
@@ -12,6 +12,8 @@ metadata:
   - accessibility
   - wcag
   - design-system
+  - image-centering
+  - navigation-consistency
   sync:
     source_markdown: cortex-brain/documents/templates/glassmorphism-design-standards-v2.md
     sync_enabled: true
@@ -303,6 +305,63 @@ ui_ux_section:
       - description: Blocking scripts in <head>
         code: "<head>\n  <script src=\"heavy-library.js\"></script>\n</head>\n"
         reason: Move to end of <body> or use defer/async
+  - id: ui_ux_007
+    name: Image and Media Centering
+    severity: HIGH
+    description: 'All standalone images, icons, diagrams, and media elements MUST be
+      horizontally centered within their container. Hero icons and visualizations
+      require explicit centering rules.
+
+      '
+    centering_requirements:
+      block_images: 'display: block; margin: 0 auto'
+      inline_icons: 'text-align: center on parent'
+      svg_diagrams: 'margin: 0 auto or flexbox centering'
+      hero_icons: 'display: block; text-align: center'
+    examples:
+      good:
+      - description: Centered hero icon
+        code: ".hero-icon {\n  font-size: 4rem;\n  display: block;\n  text-align: center;\n  margin-bottom: var(--spacing-md);\n}\n"
+      - description: Centered block image
+        code: "img.centered {\n  display: block;\n  margin: 0 auto;\n  max-width: 100%;\n}\n"
+      - description: Flexbox centered container
+        code: ".icon-container {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}\n"
+      bad:
+      - description: Uncentered hero icon
+        code: ".hero-icon {\n  font-size: 4rem;\n  /* Missing centering - icon will align left */\n}\n"
+        reason: Hero elements must be centered for visual balance
+      - description: Float-based centering (deprecated)
+        code: "img {\n  float: none;\n  /* Float doesn't center, use margin: auto */\n}\n"
+        reason: Use modern CSS (flexbox, grid, or margin auto)
+  - id: ui_ux_008
+    name: Navigation Button Consistency
+    severity: HIGH
+    description: 'All navigation buttons (prev/next, footer nav) MUST have identical
+      styling. Use dedicated nav-link class with consistent glassmorphism, not mixed
+      glass-card + nav-link.
+
+      '
+    navigation_requirements:
+      min_height: 44px (touch-friendly)
+      consistent_padding: var(--spacing-md) var(--spacing-xl)
+      glass_effect: backdrop-filter blur(10px)
+      hover_state: border-color accent + glow + subtle transform
+      class_pattern: 'nav-link prev|next (not glass-card nav-link)'
+    examples:
+      good:
+      - description: Consistent navigation buttons
+        code: ".nav-link {\n  display: inline-flex;\n  align-items: center;\n  gap: var(--spacing-sm);\n  padding: var(--spacing-md) var(--spacing-xl);\n  color: var(--text-secondary);\n  text-decoration: none;\n  background: var(--glass-bg);\n  backdrop-filter: blur(10px);\n  -webkit-backdrop-filter: blur(10px);\n  border: 1px solid var(--glass-border);\n  border-radius: var(--radius-lg);\n  transition: all 0.3s ease;\n  min-height: 44px;\n}\n\n.nav-link:hover {\n  color: var(--accent-primary);\n  border-color: var(--accent-primary);\n  box-shadow: var(--glow);\n}\n"
+      - description: Directional hover transforms
+        code: ".nav-link.prev:hover {\n  transform: translateX(-4px);\n}\n\n.nav-link.next:hover {\n  transform: translateX(4px);\n}\n"
+      bad:
+      - description: Mixed class styling (inconsistent)
+        code: '<a class="glass-card nav-link">Back</a>
+
+          '
+        reason: Use nav-link alone with built-in glass styling
+      - description: Asymmetric navigation styling
+        code: ".nav-prev { background: blue; }\n.nav-next { background: green; }\n"
+        reason: Navigation buttons must have identical base styling
 enforcement:
   automated_validation: true
   validation_frequency: On every maintenance Phase 5
