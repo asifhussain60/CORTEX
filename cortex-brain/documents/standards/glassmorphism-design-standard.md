@@ -41,6 +41,31 @@ Level 0 (Home) → Level 1 (Tile Overview) → Level 2 (Component Detail)
 
 **⛔ NO Level 3:** Use expandable sections, tabs, or modals for deeper content.
 
+**Level 0 Tile Patterns:**
+
+| Tile | Pattern | Rationale |
+|------|---------|-----------|
+| **Security (13 pages, 4 categories)** | Multi-Panel | Complex categorization requires visual separation |
+| **Orchestrators (19 pages, 5 categories)** | Multi-Panel | Most complex tile, needs clear organization |
+| **Architecture (4 pages)** | Standard Tile | Simple structure, direct navigation |
+| **Token Optimization (3 pages)** | Standard Tile | Simple linear workflow |
+| **Sharpen The Saw (6 categories)** | Standard Tile | Medium complexity, tile sufficient |
+| **Best Practices (35 guidelines)** | Standard Tile | Guideline format works in tile |
+| **Toolkit Manager (3 pages)** | Standard Tile | Simple structure |
+| **CORTEX Lens (3 pages)** | Standard Tile | Simple workflow |
+| **Get Started (3 pages)** | Standard Tile | Onboarding sequence |
+
+**Multi-Panel Pattern (Security, Orchestrators):**
+- Main wrapper panel containing multiple category sub-panels
+- Each sub-panel shows category icon, title, description, and links
+- Tetris/masonry grid layout for visual interest
+- Non-clickable sub-panels (display only), clickable tags within
+
+**Standard Tile Pattern (All Others):**
+- Single clickable card navigating to Level 1 index
+- Icon, title, caption layout
+- Hover glow and lift effect
+
 ---
 
 ## 🎯 Core Principles
@@ -53,6 +78,225 @@ Level 0 (Home) → Level 1 (Tile Overview) → Level 2 (Component Detail)
 6. **Accessibility** - WCAG 2.1 AA compliance, reduced-motion support
 7. **Subtle by Default** - T1 animations for ALL Level 1 & Level 2 pages (v4.0.0)
 8. **2-Level Maximum** - All 9 tiles limited to Level 0 → Level 1 → Level 2
+9. **NO Inline Styles** - All styling via CSS classes (zero tolerance for `style=""` attributes)
+10. **Header/Footer Standard** - Standardized glass header/footer across ALL views
+11. **Responsive Mandatory** - Mobile-first design with 375px base, tablet 768px, desktop 1440px breakpoints
+
+---
+
+## 🎨 Header & Footer Standardization
+
+### Required Structure
+
+**ALL HTML views (Level 0-2) MUST include:**
+
+#### Glass Header
+```html
+<header class="glass-header">
+    <div class="header-content">
+        <div class="header-brand">
+            <i class="fas fa-brain"></i>
+            <h1>CORTEX</h1>
+        </div>
+        <nav class="header-nav">
+            <a href="/index.html" class="nav-link">Home</a>
+            <a href="/knowledge/index.html" class="nav-link">Knowledge</a>
+            <a href="/orchestrators/index.html" class="nav-link">Orchestrators</a>
+            <a href="https://github.com/asifhussain60/CORTEX" class="nav-link" target="_blank">
+                <i class="fab fa-github"></i> GitHub
+            </a>
+        </nav>
+    </div>
+</header>
+```
+
+#### Glass Footer
+```html
+<footer class="glass-footer">
+    <div class="footer-content">
+        <div class="footer-copyright">
+            <p>© 2025 Asif Hussain. All rights reserved.</p>
+        </div>
+        <div class="footer-links">
+            <a href="https://github.com/asifhussain60/CORTEX" target="_blank">
+                <i class="fab fa-github"></i> GitHub
+            </a>
+            <a href="https://asifhussain60.github.io/CORTEX/" target="_blank">
+                <i class="fas fa-home"></i> Website
+            </a>
+            <span class="footer-version">CORTEX v4.0</span>
+        </div>
+    </div>
+</footer>
+```
+
+### CSS Classes
+
+```css
+/* Glass Header */
+.glass-header {
+    background: rgba(10, 14, 39, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    transition: all 0.3s ease;
+}
+
+.header-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.header-brand i {
+    font-size: 1.5rem;
+    color: var(--accent-primary);
+}
+
+.header-brand h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.header-nav {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+.nav-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.nav-link:hover {
+    color: var(--accent-primary);
+}
+
+/* Glass Footer */
+.glass-footer {
+    background: rgba(10, 14, 39, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 2rem;
+    margin-top: 4rem;
+    transition: all 0.3s ease;
+}
+
+.footer-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer-copyright p {
+    color: var(--text-muted);
+    margin: 0;
+    font-size: 0.875rem;
+}
+
+.footer-links {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.footer-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.footer-links a:hover {
+    color: var(--accent-primary);
+}
+
+.footer-version {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 0.75rem;
+    background: rgba(0, 212, 255, 0.1);
+    border-radius: 12px;
+    border: 1px solid rgba(0, 212, 255, 0.2);
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 768px) {
+    .header-content,
+    .footer-content {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .header-nav {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .footer-links {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+}
+```
+
+### Mobile-First Responsive Design
+
+**Base:** 375px (mobile)
+- Single column layouts
+- Stacked navigation
+- Touch-friendly 44px minimum tap targets
+
+**Tablet:** 768px breakpoint
+- 2-column grids for multi-panels
+- Horizontal navigation
+- Expanded spacing
+
+**Desktop:** 1440px breakpoint
+- 2-column grids with wider gaps
+- Full navigation with icons
+- Maximum content width: 1400px
+
+**Implementation Rule:**
+```css
+/* Mobile-first approach */
+.component {
+    /* Mobile styles (default) */
+}
+
+@media (min-width: 768px) {
+    .component {
+        /* Tablet enhancements */
+    }
+}
+
+@media (min-width: 1440px) {
+    .component {
+        /* Desktop enhancements */
+    }
+}
+```
 
 ---
 
@@ -1457,6 +1701,322 @@ def complex_function(data, config):
 
 ---
 
+### Pattern 15: Level 0 Multi-Panel System (Security, Orchestrators)
+
+**Use Cases:** Home page tiles with many Level 2 pages requiring categorization (Security: 13 pages/4 categories, Orchestrators: 19 pages/5 categories)
+
+**Design Philosophy:**
+- **Progressive Disclosure**: Show categories first, then links within categories
+- **Visual Hierarchy**: Main panel → Category sub-panels → Tetris grid of links
+- **Non-Clickable Containers**: Sub-panels are display only, links within are clickable
+- **Glassmorphism**: Layered glass effects with gradients and shadows
+
+**HTML Structure:**
+```html
+<!-- Security Panel Example -->
+<section class="level0-key-features-section">
+    <div class="level0-main-panel-wrapper">
+        <div class="level0-panel-header-centered">
+            <h2 class="level0-panel-title-main">
+                <span>🛡️</span>
+                <span>SECURITY</span>
+            </h2>
+            <p class="level0-panel-subtitle-main">Comprehensive threat modeling, compliance standards, and security assessments</p>
+        </div>
+
+        <div class="level0-category-panels-grid">
+            <!-- Protection Category -->
+            <div class="level0-category-subpanel">
+                <div class="level0-category-icon-wrapper">
+                    <span class="level0-category-icon">🔒</span>
+                </div>
+                <h3 class="level0-category-title">Protection</h3>
+                <p class="level0-category-description">Role-based access control, data encryption, privacy safeguards, and comprehensive activity tracking.</p>
+                <div class="level0-category-tags">
+                    <a href="security/access-control.html" class="level0-category-tag">
+                        <span>Access Control</span>
+                    </a>
+                    <a href="security/data-protection.html" class="level0-category-tag">
+                        <span>Data Protection</span>
+                    </a>
+                    <a href="security/audit-logging.html" class="level0-category-tag">
+                        <span>Audit Logging</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Repeat for Assessment, Compliance, Response categories -->
+        </div>
+    </div>
+</section>
+```
+
+**CSS (defined in `glassmorphism.css`):**
+```css
+/* Main panel wrapper */
+.level0-main-panel-wrapper {
+    background: linear-gradient(135deg, rgba(123, 97, 255, 0.15), rgba(0, 212, 255, 0.10));
+    border: 1px solid rgba(123, 97, 255, 0.4);
+    border-radius: 16px;
+    padding: 2.5rem;
+    backdrop-filter: blur(10px);
+}
+
+/* Category sub-panel (non-clickable) */
+.level0-category-subpanel {
+    background: linear-gradient(135deg, rgba(10, 14, 39, 0.8), rgba(26, 31, 58, 0.8));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 2rem 1.5rem;
+    cursor: default; /* Non-clickable */
+    min-height: 380px;
+}
+
+/* Tetris/masonry grid for category tags */
+.level0-category-tags {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 60px;
+    gap: 0.75rem;
+}
+
+/* Individual tag (clickable link) */
+.level0-category-tag {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(123, 97, 255, 0.15));
+    border: 1px solid rgba(0, 212, 255, 0.35);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.level0-category-tag:hover {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.3), rgba(123, 97, 255, 0.25));
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+}
+
+/* 🎨 COLOR VARIATIONS (Complementary Palette) */
+/* Randomized distribution across panels for visual variety */
+
+/* Cyan - Default base color */
+.level0-category-tag {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(123, 97, 255, 0.15));
+    border-color: rgba(0, 212, 255, 0.35);
+    color: rgba(0, 212, 255, 0.95);
+}
+.level0-category-tag:hover {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.3), rgba(123, 97, 255, 0.25));
+    border-color: rgba(0, 212, 255, 0.6);
+    box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+}
+
+/* Purple - Secondary accent */
+.level0-category-tag.tag-purple {
+    background: linear-gradient(135deg, rgba(123, 97, 255, 0.15), rgba(186, 85, 211, 0.15));
+    border-color: rgba(123, 97, 255, 0.35);
+    color: rgba(186, 85, 211, 0.95);
+}
+.level0-category-tag.tag-purple:hover {
+    background: linear-gradient(135deg, rgba(123, 97, 255, 0.3), rgba(186, 85, 211, 0.25));
+    border-color: rgba(123, 97, 255, 0.6);
+    box-shadow: 0 6px 20px rgba(123, 97, 255, 0.4);
+}
+
+/* Teal - Tertiary accent */
+.level0-category-tag.tag-teal {
+    background: linear-gradient(135deg, rgba(20, 184, 166, 0.15), rgba(0, 212, 255, 0.15));
+    border-color: rgba(20, 184, 166, 0.35);
+    color: rgba(20, 184, 166, 0.95);
+}
+.level0-category-tag.tag-teal:hover {
+    background: linear-gradient(135deg, rgba(20, 184, 166, 0.3), rgba(0, 212, 255, 0.25));
+    border-color: rgba(20, 184, 166, 0.6);
+    box-shadow: 0 6px 20px rgba(20, 184, 166, 0.4);
+}
+
+/* 🎲 RANDOMIZED COLOR DISTRIBUTION (Anti-Monotony Pattern) */
+/* Apply colors pseudo-randomly across categories to avoid predictable patterns */
+/* Example for 4-category panel (Security): */
+
+/* Protection category - Mixed colors */
+.level0-category-subpanel:nth-of-type(1) .level0-category-tag:nth-child(1) { /* Cyan */ }
+.level0-category-subpanel:nth-of-type(1) .level0-category-tag:nth-child(2) { 
+    background: linear-gradient(135deg, rgba(123, 97, 255, 0.15), rgba(186, 85, 211, 0.15));
+    border-color: rgba(123, 97, 255, 0.35);
+    color: rgba(186, 85, 211, 0.95);
+}
+.level0-category-subpanel:nth-of-type(1) .level0-category-tag:nth-child(3) { 
+    background: linear-gradient(135deg, rgba(20, 184, 166, 0.15), rgba(0, 212, 255, 0.15));
+    border-color: rgba(20, 184, 166, 0.35);
+    color: rgba(20, 184, 166, 0.95);
+}
+
+/* Assessment category - Different mix */
+.level0-category-subpanel:nth-of-type(2) .level0-category-tag:nth-child(1) { 
+    background: linear-gradient(135deg, rgba(20, 184, 166, 0.15), rgba(0, 212, 255, 0.15));
+    border-color: rgba(20, 184, 166, 0.35);
+    color: rgba(20, 184, 166, 0.95);
+}
+.level0-category-subpanel:nth-of-type(2) .level0-category-tag:nth-child(2) { 
+    background: linear-gradient(135deg, rgba(123, 97, 255, 0.15), rgba(186, 85, 211, 0.15));
+    border-color: rgba(123, 97, 255, 0.35);
+    color: rgba(186, 85, 211, 0.95);
+}
+.level0-category-subpanel:nth-of-type(2) .level0-category-tag:nth-child(3) { /* Cyan */ }
+.level0-category-subpanel:nth-of-type(2) .level0-category-tag:nth-child(4) { 
+    background: linear-gradient(135deg, rgba(20, 184, 166, 0.15), rgba(0, 212, 255, 0.15));
+    border-color: rgba(20, 184, 166, 0.35);
+    color: rgba(20, 184, 166, 0.95);
+}
+
+/* Compliance category - Another mix */
+.level0-category-subpanel:nth-of-type(3) .level0-category-tag:nth-child(1) { 
+    background: linear-gradient(135deg, rgba(20, 184, 166, 0.15), rgba(0, 212, 255, 0.15));
+    border-color: rgba(20, 184, 166, 0.35);
+    color: rgba(20, 184, 166, 0.95);
+}
+.level0-category-subpanel:nth-of-type(3) .level0-category-tag:nth-child(2) { /* Cyan */ }
+.level0-category-subpanel:nth-of-type(3) .level0-category-tag:nth-child(3) { 
+    background: linear-gradient(135deg, rgba(123, 97, 255, 0.15), rgba(186, 85, 211, 0.15));
+    border-color: rgba(123, 97, 255, 0.35);
+    color: rgba(186, 85, 211, 0.95);
+}
+
+/* Response category - Final mix */
+.level0-category-subpanel:nth-of-type(4) .level0-category-tag:nth-child(1) { /* Cyan */ }
+.level0-category-subpanel:nth-of-type(4) .level0-category-tag:nth-child(2) { 
+    background: linear-gradient(135deg, rgba(20, 184, 166, 0.15), rgba(0, 212, 255, 0.15));
+    border-color: rgba(20, 184, 166, 0.35);
+    color: rgba(20, 184, 166, 0.95);
+}
+.level0-category-subpanel:nth-of-type(4) .level0-category-tag:nth-child(3) { 
+    background: linear-gradient(135deg, rgba(123, 97, 255, 0.15), rgba(186, 85, 211, 0.15));
+    border-color: rgba(123, 97, 255, 0.35);
+    color: rgba(186, 85, 211, 0.95);
+}
+
+/* Apply hover states to randomized colors */
+.level0-category-subpanel:nth-of-type(1) .level0-category-tag:nth-child(1):hover,
+.level0-category-subpanel:nth-of-type(2) .level0-category-tag:nth-child(3):hover,
+.level0-category-subpanel:nth-of-type(3) .level0-category-tag:nth-child(2):hover,
+.level0-category-subpanel:nth-of-type(4) .level0-category-tag:nth-child(1):hover {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.3), rgba(123, 97, 255, 0.25));
+    border-color: rgba(0, 212, 255, 0.6);
+    box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+}
+
+.level0-category-subpanel:nth-of-type(1) .level0-category-tag:nth-child(2):hover,
+.level0-category-subpanel:nth-of-type(2) .level0-category-tag:nth-child(2):hover,
+.level0-category-subpanel:nth-of-type(3) .level0-category-tag:nth-child(3):hover,
+.level0-category-subpanel:nth-of-type(4) .level0-category-tag:nth-child(3):hover {
+    background: linear-gradient(135deg, rgba(123, 97, 255, 0.3), rgba(186, 85, 211, 0.25));
+    border-color: rgba(123, 97, 255, 0.6);
+    box-shadow: 0 6px 20px rgba(123, 97, 255, 0.4);
+}
+
+.level0-category-subpanel:nth-of-type(1) .level0-category-tag:nth-child(3):hover,
+.level0-category-subpanel:nth-of-type(2) .level0-category-tag:nth-child(1):hover,
+.level0-category-subpanel:nth-of-type(2) .level0-category-tag:nth-child(4):hover,
+.level0-category-subpanel:nth-of-type(3) .level0-category-tag:nth-child(1):hover,
+.level0-category-subpanel:nth-of-type(4) .level0-category-tag:nth-child(2):hover {
+    background: linear-gradient(135deg, rgba(20, 184, 166, 0.3), rgba(0, 212, 255, 0.25));
+    border-color: rgba(20, 184, 166, 0.6);
+    box-shadow: 0 6px 20px rgba(20, 184, 166, 0.4);
+}
+
+/* Tetris layout patterns (see glassmorphism.css for full specs) */
+.level0-category-subpanel:nth-of-type(1) .level0-category-tag:nth-child(1) { 
+    grid-column: span 1; grid-row: span 3; font-size: 1.2rem; 
+}
+/* ... additional patterns for dynamic sizing */
+```
+
+**Key Features:**
+- **2-column grid** on desktop (768px+), **1-column** on mobile
+- **Tetris/masonry layout** within each category for visual interest
+- **Dynamic font sizing** based on tag importance (1rem - 1.2rem)
+- **Shimmer hover effect** on tags (light sweep animation)
+- **Glassmorphism layers**: Main panel → Sub-panels → Tags (3 depth levels)
+- **🎨 Color Variations**: Apply `.tag-purple`, `.tag-teal`, `.tag-indigo`, or `.tag-pink` to create visual variety while maintaining the blue glassmorphism theme
+
+**Color Variation Usage (Anti-Monotony Pattern):**
+
+**🎲 Randomized Distribution:** Instead of applying sequential color patterns (1st=cyan, 2nd=purple, 3rd=teal), distribute colors pseudo-randomly across categories to avoid visual monotony.
+
+**Implementation Strategy:**
+```css
+/* BAD: Sequential pattern - looks monotonous */
+.level0-category-tag:nth-child(3n+1) { color: cyan; }
+.level0-category-tag:nth-child(3n+2) { color: purple; }
+.level0-category-tag:nth-child(3n+3) { color: teal; }
+
+/* GOOD: Randomized pattern - visual variety */
+.level0-category-subpanel:nth-of-type(1) .level0-category-tag:nth-child(1) { color: cyan; }
+.level0-category-subpanel:nth-of-type(1) .level0-category-tag:nth-child(2) { color: purple; }
+.level0-category-subpanel:nth-of-type(1) .level0-category-tag:nth-child(3) { color: teal; }
+.level0-category-subpanel:nth-of-type(2) .level0-category-tag:nth-child(1) { color: teal; }
+.level0-category-subpanel:nth-of-type(2) .level0-category-tag:nth-child(2) { color: purple; }
+/* ... randomized across panels */
+```
+
+**Color Palette (7-color system):**
+- **Cyan**: `rgba(0, 212, 255)` - Primary accent, complements blue theme
+- **Purple**: `rgba(123, 97, 255) → rgba(186, 85, 211)` - Warmth accent
+- **Teal**: `rgba(20, 184, 166)` - Bridge accent  
+- **Indigo**: `rgba(79, 70, 229) → rgba(99, 102, 241)` - Deep accent
+- **Pink**: `rgba(236, 72, 153) → rgba(244, 114, 182)` - Vibrant accent
+- **Emerald**: `rgba(16, 185, 129) → rgba(52, 211, 153)` - Success accent
+- **Amber**: `rgba(245, 158, 11) → rgba(251, 191, 36)` - Energy accent
+
+**Design Rationale:**
+- **Anti-Monotony**: Randomized 7-color distribution prevents predictable visual patterns
+- **Complementary**: All 7 colors harmonize with blue glassmorphism base theme
+- **Accessibility**: Sufficient contrast ratios maintained across all variants (WCAG 2.1 AA)
+- **Visual Hierarchy**: Color variety aids visual scanning and tile distinction
+- **Extended Palette**: 7 colors provide maximum diversity for large multi-panel sections
+
+**Usage Guidelines:**
+1. Use randomized distribution across all multi-panel sections (Security, Orchestrators, STS)
+2. Distribute colors pseudo-randomly via nth-of-type/nth-child CSS selectors
+3. Aim for balanced distribution (~14% per color across entire panel)
+4. Apply to ALL levels (Level 0, Level 1, Level 2) for consistency
+5. Available as `.tag-purple`, `.tag-teal`, `.tag-indigo`, `.tag-pink`, `.tag-emerald`, `.tag-amber` modifier classes
+
+```html
+<!-- Example: Security Protection category with randomized colors -->
+```html
+<!-- Example: Security Protection category with randomized colors -->
+<div class="level0-category-tags">
+    <a href="security/access-control.html" class="level0-category-tag">Access Control</a> <!-- Cyan -->
+    <a href="security/data-protection.html" class="level0-category-tag">Data Protection</a> <!-- Purple -->
+    <a href="security/audit-logging.html" class="level0-category-tag">Audit Logging</a> <!-- Teal -->
+</div>
+
+<!-- Assessment category - Different distribution -->
+<div class="level0-category-tags">
+    <a href="security/threat-modeling.html" class="level0-category-tag">Threat Modeling</a> <!-- Teal -->
+    <a href="security/risk-assessment.html" class="level0-category-tag">Risk Assessment</a> <!-- Purple -->
+    <a href="security/vulnerability-assessment.html" class="level0-category-tag">Vulnerability Assessment</a> <!-- Cyan -->
+    <a href="security/penetration-testing.html" class="level0-category-tag">Penetration Testing</a> <!-- Teal -->
+</div>
+```
+
+**Accessibility:**
+- Sub-panels use `cursor: default` (non-interactive containers)
+- Tags use `cursor: pointer` (clickable links)
+- Semantic HTML with proper heading hierarchy
+- Keyboard navigation via tab
+
+**Performance:**
+- CSS-only animations (GPU-accelerated)
+- No JavaScript required
+- Responsive with minimal media queries
+
+---
+
+**Visual Elements:** Step-by-step numbered cards with copy-to-clipboard functionality
+
+---
+
 ## ✨ Micro-Interactions Library
 
 ### Ripple Effect (Click Feedback)
@@ -2004,25 +2564,28 @@ class GlassPerformanceMonitor {
 
 ## 📊 Pattern Selection Guide
 
-| Use Case | Pattern | Interactivity | Animation |
-|----------|---------|---------------|-----------|
-| Clickable tile/card | Multi-Layer Glass Card (Variant A) | Interactive | Glow border + lift on hover |
-| Display card/panel | Multi-Layer Glass Card (Variant B) | Non-interactive | Glass reflection (8s) |
-| Dashboard widget | Neuglass Card | Interactive | Soft shadow + lift |
-| Architecture tile | Pattern 8 | Interactive | Left border glow + lift |
-| Orchestrator card | Pattern 9 | Interactive | Phase glow + lift |
-| STS category | Pattern 10 | Interactive | Icon glow + lift |
-| Guideline card | Pattern 11 | Non-interactive | Glass reflection only |
-| Tool card | Pattern 12 | Interactive | Tool icon glow + lift |
-| Analysis result | Pattern 13 | Non-interactive | Glass reflection only |
-| Setup step | Pattern 14 | Non-interactive | Glass reflection only |
-| Modal overlay | Glass Modal | Interactive | Focus + backdrop blur |
-| Notification | Glass Toast | Non-interactive | Slide-in animation |
-| Form control | Glass Dropdown | Interactive | Border glow on focus |
+| Use Case | Pattern | Interactivity | Animation | Level |
+|----------|---------|---------------|-----------|-------|
+| **Level 0 multi-category tile (13-19 pages)** | Pattern 15 (Multi-Panel) | Sub-panels: non-interactive, Tags: clickable | Tetris grid, shimmer on hover | Level 0 |
+| **Level 0 simple tile (3-6 pages)** | Standard Tile | Interactive | Glow border + lift | Level 0 |
+| Clickable tile/card | Multi-Layer Glass Card (Variant A) | Interactive | Glow border + lift on hover | All levels |
+| Display card/panel | Multi-Layer Glass Card (Variant B) | Non-interactive | Glass reflection (8s) | All levels |
+| Dashboard widget | Neuglass Card | Interactive | Soft shadow + lift | Level 1-2 |
+| Architecture tile | Pattern 8 | Interactive | Left border glow + lift | Level 1-2 |
+| Orchestrator card | Pattern 9 | Interactive | Phase glow + lift | Level 1-2 |
+| STS category | Pattern 10 | Interactive | Icon glow + lift | Level 1-2 |
+| Guideline card | Pattern 11 | Non-interactive | Glass reflection only | Level 1-2 |
+| Tool card | Pattern 12 | Interactive | Tool icon glow + lift | Level 1-2 |
+| Analysis result | Pattern 13 | Non-interactive | Glass reflection only | Level 1-2 |
+| Setup step | Pattern 14 | Non-interactive | Glass reflection only | Level 1-2 |
+| Modal overlay | Glass Modal | Interactive | Focus + backdrop blur | All levels |
+| Notification | Glass Toast | Non-interactive | Slide-in animation | All levels |
+| Form control | Glass Dropdown | Interactive | Border glow on focus | All levels |
 
 **Key Differentiation:**
 - **Interactive (Clickable):** `cursor: pointer` + glowing border on hover + `translateY(-2px)` lift
 - **Non-Interactive (Display):** `cursor: default` + slow glass reflection (8s) + NO hover glow
+- **Level 0 Multi-Panel:** Reserved for tiles with 10+ pages requiring categorization
 
 ---| Use Case | Pattern | Interactivity | Animation |
 |----------|---------|---------------|------------|

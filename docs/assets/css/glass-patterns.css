@@ -721,6 +721,265 @@
 }
 
 /* ============================================
+   COLOR VARIATIONS: 7-Color Complementary Palette
+   ============================================
+   Use Case: Level 0 Multi-Panel category tags (masonry tiles)
+   Distribution: Randomized via nth-child selectors to avoid monotony
+   Palette: Cyan, Purple, Teal, Indigo, Pink, Emerald, Amber
+*/
+
+/* Base Color (Cyan) - Default accent */
+.level0-category-tag {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(123, 97, 255, 0.15));
+    border-color: rgba(0, 212, 255, 0.35);
+    color: rgba(0, 212, 255, 0.95);
+}
+
+/* Variation 1: Purple - Warmth accent */
+.level0-category-tag.tag-purple {
+    background: linear-gradient(135deg, rgba(123, 97, 255, 0.15), rgba(186, 85, 211, 0.15));
+    border-color: rgba(123, 97, 255, 0.35);
+    color: rgba(186, 85, 211, 0.95);
+}
+
+/* Variation 2: Teal - Bridge accent */
+.level0-category-tag.tag-teal {
+    background: linear-gradient(135deg, rgba(20, 184, 166, 0.15), rgba(0, 212, 255, 0.15));
+    border-color: rgba(20, 184, 166, 0.35);
+    color: rgba(20, 184, 166, 0.95);
+}
+
+/* Variation 3: Indigo - Deep accent */
+.level0-category-tag.tag-indigo {
+    background: linear-gradient(135deg, rgba(79, 70, 229, 0.15), rgba(99, 102, 241, 0.15));
+    border-color: rgba(79, 70, 229, 0.35);
+    color: rgba(129, 140, 248, 0.95);
+}
+
+/* Variation 4: Pink - Vibrant accent */
+.level0-category-tag.tag-pink {
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(244, 114, 182, 0.15));
+    border-color: rgba(236, 72, 153, 0.35);
+    color: rgba(244, 114, 182, 0.95);
+}
+
+/* Variation 5: Emerald - Success accent */
+.level0-category-tag.tag-emerald {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(52, 211, 153, 0.15));
+    border-color: rgba(16, 185, 129, 0.35);
+    color: rgba(52, 211, 153, 0.95);
+}
+
+/* Variation 6: Amber - Energy accent */
+.level0-category-tag.tag-amber {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(251, 191, 36, 0.15));
+    border-color: rgba(245, 158, 11, 0.35);
+    color: rgba(251, 191, 36, 0.95);
+}
+
+/* ============================================
+   RANDOMIZED COLOR DISTRIBUTION
+   ============================================
+   Pseudo-random distribution across panels and categories
+   Pattern: Distribute all 7 colors to avoid repetitive visual patterns
+*/
+
+/* Panel 1 (e.g., Security Protection) */
+.level0-category-subpanel:nth-of-type(1) .level0-category-tag:nth-child(1) { } /* Cyan default */
+.level0-category-subpanel:nth-of-type(1) .level0-category-tag:nth-child(2) {
+    background: linear-gradient(135deg, rgba(123, 97, 255, 0.15), rgba(186, 85, 211, 0.15));
+    border-color: rgba(123, 97, 255, 0.35);
+    color: rgba(186, 85, 211, 0.95);
+}
+.level0-category-subpanel:nth-of-type(1) .level0-category-tag:nth-child(3) {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(52, 211, 153, 0.15));
+    border-color: rgba(16, 185, 129, 0.35);
+    color: rgba(52, 211, 153, 0.95);
+}
+.level0-category-subpanel:nth-of-type(1) .level0-category-tag:nth-child(4) {
+    background: linear-gradient(135deg, rgba(20, 184, 166, 0.15), rgba(0, 212, 255, 0.15));
+    border-color: rgba(20, 184, 166, 0.35);
+    color: rgba(20, 184, 166, 0.95);
+}
+
+/* Panel 2 (e.g., Security Assessment) */
+.level0-category-subpanel:nth-of-type(2) .level0-category-tag:nth-child(1) {
+    background: linear-gradient(135deg, rgba(79, 70, 229, 0.15), rgba(99, 102, 241, 0.15));
+    border-color: rgba(79, 70, 229, 0.35);
+    color: rgba(129, 140, 248, 0.95);
+}
+.level0-category-subpanel:nth-of-type(2) .level0-category-tag:nth-child(2) {
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(244, 114, 182, 0.15));
+    border-color: rgba(236, 72, 153, 0.35);
+    color: rgba(244, 114, 182, 0.95);
+}
+.level0-category-subpanel:nth-of-type(2) .level0-category-tag:nth-child(3) {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(251, 191, 36, 0.15));
+    border-color: rgba(245, 158, 11, 0.35);
+    color: rgba(251, 191, 36, 0.95);
+}
+.level0-category-subpanel:nth-of-type(2) .level0-category-tag:nth-child(4) { } /* Cyan default */
+.level0-category-subpanel:nth-of-type(2) .level0-category-tag:nth-child(5) {
+    background: linear-gradient(135deg, rgba(20, 184, 166, 0.15), rgba(0, 212, 255, 0.15));
+    border-color: rgba(20, 184, 166, 0.35);
+    color: rgba(20, 184, 166, 0.95);
+}
+
+/* Panel 3 (e.g., Security Compliance) */
+.level0-category-subpanel:nth-of-type(3) .level0-category-tag:nth-child(1) {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(52, 211, 153, 0.15));
+    border-color: rgba(16, 185, 129, 0.35);
+    color: rgba(52, 211, 153, 0.95);
+}
+.level0-category-subpanel:nth-of-type(3) .level0-category-tag:nth-child(2) {
+    background: linear-gradient(135deg, rgba(123, 97, 255, 0.15), rgba(186, 85, 211, 0.15));
+    border-color: rgba(123, 97, 255, 0.35);
+    color: rgba(186, 85, 211, 0.95);
+}
+.level0-category-subpanel:nth-of-type(3) .level0-category-tag:nth-child(3) {
+    background: linear-gradient(135deg, rgba(79, 70, 229, 0.15), rgba(99, 102, 241, 0.15));
+    border-color: rgba(79, 70, 229, 0.35);
+    color: rgba(129, 140, 248, 0.95);
+}
+.level0-category-subpanel:nth-of-type(3) .level0-category-tag:nth-child(4) {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(251, 191, 36, 0.15));
+    border-color: rgba(245, 158, 11, 0.35);
+    color: rgba(251, 191, 36, 0.95);
+}
+
+/* Panel 4 (e.g., Security Response) */
+.level0-category-subpanel:nth-of-type(4) .level0-category-tag:nth-child(1) {
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(244, 114, 182, 0.15));
+    border-color: rgba(236, 72, 153, 0.35);
+    color: rgba(244, 114, 182, 0.95);
+}
+.level0-category-subpanel:nth-of-type(4) .level0-category-tag:nth-child(2) { } /* Cyan default */
+.level0-category-subpanel:nth-of-type(4) .level0-category-tag:nth-child(3) {
+    background: linear-gradient(135deg, rgba(20, 184, 166, 0.15), rgba(0, 212, 255, 0.15));
+    border-color: rgba(20, 184, 166, 0.35);
+    color: rgba(20, 184, 166, 0.95);
+}
+.level0-category-subpanel:nth-of-type(4) .level0-category-tag:nth-child(4) {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(52, 211, 153, 0.15));
+    border-color: rgba(16, 185, 129, 0.35);
+    color: rgba(52, 211, 153, 0.95);
+}
+
+/* Panel 5 (e.g., Orchestrators Planning) */
+.level0-category-subpanel:nth-of-type(5) .level0-category-tag:nth-child(1) {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(251, 191, 36, 0.15));
+    border-color: rgba(245, 158, 11, 0.35);
+    color: rgba(251, 191, 36, 0.95);
+}
+.level0-category-subpanel:nth-of-type(5) .level0-category-tag:nth-child(2) {
+    background: linear-gradient(135deg, rgba(79, 70, 229, 0.15), rgba(99, 102, 241, 0.15));
+    border-color: rgba(79, 70, 229, 0.35);
+    color: rgba(129, 140, 248, 0.95);
+}
+.level0-category-subpanel:nth-of-type(5) .level0-category-tag:nth-child(3) {
+    background: linear-gradient(135deg, rgba(123, 97, 255, 0.15), rgba(186, 85, 211, 0.15));
+    border-color: rgba(123, 97, 255, 0.35);
+    color: rgba(186, 85, 211, 0.95);
+}
+.level0-category-subpanel:nth-of-type(5) .level0-category-tag:nth-child(4) {
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(244, 114, 182, 0.15));
+    border-color: rgba(236, 72, 153, 0.35);
+    color: rgba(244, 114, 182, 0.95);
+}
+.level0-category-subpanel:nth-of-type(5) .level0-category-tag:nth-child(5) {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(52, 211, 153, 0.15));
+    border-color: rgba(16, 185, 129, 0.35);
+    color: rgba(52, 211, 153, 0.95);
+}
+
+/* Panel 6+ (Additional categories) */
+.level0-category-subpanel:nth-of-type(6) .level0-category-tag:nth-child(1) { } /* Cyan default */
+.level0-category-subpanel:nth-of-type(6) .level0-category-tag:nth-child(2) {
+    background: linear-gradient(135deg, rgba(20, 184, 166, 0.15), rgba(0, 212, 255, 0.15));
+    border-color: rgba(20, 184, 166, 0.35);
+    color: rgba(20, 184, 166, 0.95);
+}
+.level0-category-subpanel:nth-of-type(6) .level0-category-tag:nth-child(3) {
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(244, 114, 182, 0.15));
+    border-color: rgba(236, 72, 153, 0.35);
+    color: rgba(244, 114, 182, 0.95);
+}
+
+/* ============================================
+   HOVER STATES: Color Variations
+   ============================================ */
+
+/* Cyan hover */
+.level0-category-tag:hover { 
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.3), rgba(123, 97, 255, 0.25));
+    border-color: rgba(0, 212, 255, 0.6);
+    box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+}
+
+/* Purple hover */
+.level0-category-tag.tag-purple:hover,
+.level0-category-subpanel:nth-of-type(1) .level0-category-tag:nth-child(2):hover,
+.level0-category-subpanel:nth-of-type(3) .level0-category-tag:nth-child(2):hover,
+.level0-category-subpanel:nth-of-type(5) .level0-category-tag:nth-child(3):hover {
+    background: linear-gradient(135deg, rgba(123, 97, 255, 0.3), rgba(186, 85, 211, 0.25));
+    border-color: rgba(123, 97, 255, 0.6);
+    box-shadow: 0 6px 20px rgba(123, 97, 255, 0.4);
+}
+
+/* Teal hover */
+.level0-category-tag.tag-teal:hover,
+.level0-category-subpanel:nth-of-type(1) .level0-category-tag:nth-child(4):hover,
+.level0-category-subpanel:nth-of-type(2) .level0-category-tag:nth-child(5):hover,
+.level0-category-subpanel:nth-of-type(4) .level0-category-tag:nth-child(3):hover,
+.level0-category-subpanel:nth-of-type(6) .level0-category-tag:nth-child(2):hover {
+    background: linear-gradient(135deg, rgba(20, 184, 166, 0.3), rgba(0, 212, 255, 0.25));
+    border-color: rgba(20, 184, 166, 0.6);
+    box-shadow: 0 6px 20px rgba(20, 184, 166, 0.4);
+}
+
+/* Indigo hover */
+.level0-category-tag.tag-indigo:hover,
+.level0-category-subpanel:nth-of-type(2) .level0-category-tag:nth-child(1):hover,
+.level0-category-subpanel:nth-of-type(3) .level0-category-tag:nth-child(3):hover,
+.level0-category-subpanel:nth-of-type(5) .level0-category-tag:nth-child(2):hover {
+    background: linear-gradient(135deg, rgba(79, 70, 229, 0.3), rgba(99, 102, 241, 0.25));
+    border-color: rgba(79, 70, 229, 0.6);
+    box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
+}
+
+/* Pink hover */
+.level0-category-tag.tag-pink:hover,
+.level0-category-subpanel:nth-of-type(2) .level0-category-tag:nth-child(2):hover,
+.level0-category-subpanel:nth-of-type(4) .level0-category-tag:nth-child(1):hover,
+.level0-category-subpanel:nth-of-type(5) .level0-category-tag:nth-child(4):hover,
+.level0-category-subpanel:nth-of-type(6) .level0-category-tag:nth-child(3):hover {
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.3), rgba(244, 114, 182, 0.25));
+    border-color: rgba(236, 72, 153, 0.6);
+    box-shadow: 0 6px 20px rgba(236, 72, 153, 0.4);
+}
+
+/* Emerald hover */
+.level0-category-tag.tag-emerald:hover,
+.level0-category-subpanel:nth-of-type(1) .level0-category-tag:nth-child(3):hover,
+.level0-category-subpanel:nth-of-type(3) .level0-category-tag:nth-child(1):hover,
+.level0-category-subpanel:nth-of-type(4) .level0-category-tag:nth-child(4):hover,
+.level0-category-subpanel:nth-of-type(5) .level0-category-tag:nth-child(5):hover {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.3), rgba(52, 211, 153, 0.25));
+    border-color: rgba(16, 185, 129, 0.6);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+/* Amber hover */
+.level0-category-tag.tag-amber:hover,
+.level0-category-subpanel:nth-of-type(2) .level0-category-tag:nth-child(3):hover,
+.level0-category-subpanel:nth-of-type(3) .level0-category-tag:nth-child(4):hover,
+.level0-category-subpanel:nth-of-type(5) .level0-category-tag:nth-child(1):hover {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.3), rgba(251, 191, 36, 0.25));
+    border-color: rgba(245, 158, 11, 0.6);
+    box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+}
+
+/* ============================================
    RESPONSIVE GLASS ADJUSTMENTS
    ============================================ */
 
