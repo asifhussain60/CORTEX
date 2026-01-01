@@ -126,9 +126,9 @@ LLM Classification → Keyword Regex → User Clarification
 | `onboard`, `getting started`, `learn cortex` | 📋 **Onboarding (GUIDED)** | Via `onboarding_interactive.py` | Interactive 6-phase guide |
 | `sanitize`, `make generic`, `anonymize` | 📋 **Sanitization (GUIDED)** | `code-sanitization-manifest.yaml` | Sanitized codebase |
 | `refine`, `improve cortex`, `optimize code` | 📋 **Refinement (GUIDED)** | `refinement-orchestrator-manifest.yaml` | 7-phase improvement |
-| `optimize [artifact]`, `analyze [file]`, `improve [file]` | 📋 **Optimization (GUIDED)** | `cortex-optimize.prompt.md` | Deep analysis + decomposition strategy |
+| `refactor [artifact]`, `analyze [file]`, `optimize [file]` | 📋 **Refactor (GUIDED)** | `cortex-refactor.prompt.md` | Deep analysis + decomposition strategy |
 | `system maintenance`, `health check` | 📋 **Maintenance (GUIDED)** | Via `cortex-maintenance.prompt.md` | 11-phase health + auto-repair (modular v2.0) |
-| `cleanup cache`, `cleanup full`, `cleanup [type]` | 🛡️ **Cleanup (AUTONOMOUS)** | → Routes to Maintenance Phase 0 | Cache clear, bloat removal |
+| `cleanup cache`, `cleanup full`, `cleanup [type]` | � **Maintenance Phase 2** | Via `cortex-maintenance.prompt.md` | Cache clear, bloat removal (Phase 2) |
 | `vacuum [path]`, `deep clean [path]`, `organize files` | 🛡️ **Vacuum (AUTONOMOUS)** | `cortex-vacuum.prompt.md` | Deep filesystem cleanup + reorganization |
 | `help`, `show commands` | **Help** | Template-based | Command list |
 
@@ -298,10 +298,10 @@ cortex-brain/                    src/
 | `/CORTEX Plan [feature]` | 🛡️ Create plan (uses Planning Orchestrator) |
 | `ado story [feature]` | 🛡️ Create ADO items (uses ADO Orchestrator) |
 | `vacuum [path]` | 🛡️ Deep filesystem cleanup + reorganization |
-| `optimize [artifact]` | 📋 Deep analysis with bloat detection + decomposition |
+| `refactor [artifact]` | 📋 Deep analysis with bloat detection + decomposition |
 | `system maintenance` | 12-phase health pipeline |
 | `help` | Show all commands |
 
-**Resources:** `cortex-brain/response-templates-v4.yaml`, `brain-protection-rules.yaml`, `cortex-maintenance.prompt.md` (v2.0 modular), `cortex-vacuum.prompt.md`, `cortex-optimize.prompt.md`
+**Resources:** `cortex-brain/response-templates-v4.yaml`, `brain-protection-rules.yaml`, `cortex-maintenance.prompt.md` (v2.0 modular), `cortex-vacuum.prompt.md`, `cortex-refactor.prompt.md`
 
 **Anti-Bloat:** This file MUST stay under 250 lines (increased for LLM intent routing sections).

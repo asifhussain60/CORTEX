@@ -1,8 +1,8 @@
 # 🎯 CORTEX Optimization Engine
 
-**Version:** 1.0.0 | **Status:** ✅ PRODUCTION  
+**Version:** 1.1.0 | **Status:** ✅ PRODUCTION  
 **Author:** Asif Hussain | **Website:** https://asifhussain60.github.io/CORTEX/  
-**Copyright © 2025 Asif Hussain. All rights reserved.**
+**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 
 ---
 
@@ -668,6 +668,10 @@ manifests/orchestrator/
 - [ ] **Migration Guide** - Document v1.0 → v2.0 changes
 - [ ] **Original Archived** - v1.0 moved to `cortex-brain/archives/`
 - [ ] **Performance Validated** - Load time improved, no degradation
+- [ ] **🛠️ Helper Tools Requested** - Ask Toolkit Manager for validation tools (Section 11.1)
+- [ ] **📋 Post-Decomposition Validation** - Run full validation (Section 11.2)
+- [ ] **✅ Functionality Matrix Verified** - All items preserved (Section 11.3)
+- [ ] **📊 Validation Report Generated** - Document results (Section 11.4)
 
 ---
 
@@ -712,9 +716,18 @@ manifests/orchestrator/
 1. Create sub-folder: `.github/prompts/system/`
 2. Extract sections to sub-files
 3. Replace original file content with index (keep same path!)
-4. Validate: All commands/invocations still work
-5. Archive v1.0: Move to `cortex-brain/archives/{artifact-name}-v1.0.{ext}`
-6. Commit: "feat: Decompose {artifact-name} (v2.0) - 87% size reduction"
+4. **🛠️ Request Helper Tools from Toolkit Manager** (Section 11.1)
+5. **📋 Run Post-Decomposition Validation** (Section 11.2)
+6. **✅ Verify Functionality Matrix** (Section 11.3) - All functions, classes, imports preserved
+7. **📊 Generate Validation Report** (Section 11.4)
+8. Archive v1.0: Move to `cortex-brain/archives/{artifact-name}-v1.0.{ext}`
+9. Commit: "feat: Decompose {artifact-name} (v2.0) - 87% size reduction"
+
+**🛠️ Toolkit Manager Helper Tool Request:**
+\`\`\`
+Request tools: decomp-diff, decomp-coverage, decomp-test
+See Section 11.1 for Toolkit Manager integration commands
+\`\`\`
 ```
 
 ---
@@ -733,6 +746,342 @@ manifests/orchestrator/
 - [ ] **Feature Flags** - Gradual rollout capability
 - [ ] **Monitoring/Alerting** - Metrics, logs, traces
 - [ ] **Smoke Tests** - Post-deployment validation
+
+---
+
+### 1️⃣1️⃣ Post-Decomposition Validation (MANDATORY)
+
+**⚠️ CRITICAL: Before AND after any decomposition, validate functionality is IDENTICAL!**
+
+When a file is decomposed (split into multiple smaller files), the optimization process MUST:
+1. **BEFORE decomposition:** Capture baseline behavior (tests, outputs, function signatures)
+2. **AFTER decomposition:** Validate identical behavior against baseline
+3. All original functionality is preserved
+4. No code paths are lost
+5. All imports/exports work correctly
+6. Integration points remain intact
+7. Tests still pass
+
+---
+
+#### 11.0 Pre-Decomposition Baseline Capture (⛔ MANDATORY FIRST STEP)
+
+**Before ANY decomposition, capture the baseline state:**
+
+```bash
+# Step 1: Capture function/class signatures
+python -c "import ast; print(ast.dump(ast.parse(open('original.py').read())))" > baseline_ast.txt
+
+# Step 2: Run existing tests and capture output
+pytest tests/ --tb=short > baseline_test_output.txt 2>&1
+echo "Exit code: $?" >> baseline_test_output.txt
+
+# Step 3: Capture public API (for Python)
+python -c "
+import original_module
+import inspect
+for name, obj in inspect.getmembers(original_module):
+    if not name.startswith('_'):
+        print(f'{name}: {type(obj).__name__}')
+" > baseline_public_api.txt
+
+# Step 4: Generate function call traces (if applicable)
+python -m trace --trace original.py > baseline_trace.txt 2>&1
+```
+
+**Baseline Artifacts to Capture:**
+
+| Artifact | File | Purpose |
+|----------|------|---------|
+| **AST Dump** | `baseline_ast.txt` | Structural comparison |
+| **Test Output** | `baseline_test_output.txt` | Behavior verification |
+| **Public API** | `baseline_public_api.txt` | Interface contract |
+| **Function Signatures** | `baseline_signatures.json` | Parameter/return types |
+| **Import Graph** | `baseline_imports.txt` | Dependency map |
+| **Test Coverage** | `baseline_coverage.xml` | Code path coverage |
+
+**Baseline Capture Script:**
+```python
+# cortex-toolkit/scripts/capture_baseline.py
+import ast
+import json
+import inspect
+import sys
+from pathlib import Path
+
+def capture_baseline(file_path: str, output_dir: str = ".refactor-baseline"):
+    """Capture baseline state before decomposition."""
+    output_path = Path(output_dir)
+    output_path.mkdir(exist_ok=True)
+    
+    source = Path(file_path).read_text()
+    
+    # 1. AST structure
+    tree = ast.parse(source)
+    (output_path / "ast_dump.txt").write_text(ast.dump(tree, indent=2))
+    
+    # 2. Function signatures
+    signatures = {}
+    for node in ast.walk(tree):
+        if isinstance(node, ast.FunctionDef):
+            args = [a.arg for a in node.args.args]
+            signatures[node.name] = {
+                "args": args,
+                "lineno": node.lineno,
+                "decorators": [ast.dump(d) for d in node.decorator_list]
+            }
+        elif isinstance(node, ast.ClassDef):
+            signatures[f"class:{node.name}"] = {
+                "bases": [ast.dump(b) for b in node.bases],
+                "lineno": node.lineno,
+                "methods": []
+            }
+    
+    (output_path / "signatures.json").write_text(json.dumps(signatures, indent=2))
+    
+    # 3. Import statements
+    imports = []
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Import):
+            imports.extend([alias.name for alias in node.names])
+        elif isinstance(node, ast.ImportFrom):
+            imports.append(f"from {node.module} import {[a.name for a in node.names]}")
+    
+    (output_path / "imports.txt").write_text("\n".join(imports))
+    
+    # 4. Public API (names not starting with _)
+    public_names = []
+    for node in ast.walk(tree):
+        if isinstance(node, (ast.FunctionDef, ast.ClassDef, ast.Assign)):
+            if isinstance(node, ast.Assign):
+                for target in node.targets:
+                    if isinstance(target, ast.Name) and not target.id.startswith('_'):
+                        public_names.append(target.id)
+            elif not node.name.startswith('_'):
+                public_names.append(node.name)
+    
+    (output_path / "public_api.txt").write_text("\n".join(sorted(set(public_names))))
+    
+    print(f"✅ Baseline captured to {output_path}/")
+    print(f"   - Functions: {len([s for s in signatures if not s.startswith('class:')])}")
+    print(f"   - Classes: {len([s for s in signatures if s.startswith('class:')])}")
+    print(f"   - Imports: {len(imports)}")
+    print(f"   - Public API: {len(public_names)}")
+    
+    return output_path
+
+if __name__ == "__main__":
+    capture_baseline(sys.argv[1])
+```
+
+**⛔ STOP: Do NOT proceed with decomposition until baseline is captured!**
+
+---
+
+#### 11.1 Toolkit Manager Helper Tool Requests
+
+**Before validation, request helper tools from Toolkit Manager:**
+
+```markdown
+## 🛠️ Helper Tool Request: Decomposition Validator
+
+**Request to Toolkit Manager:**
+Create the following helper tools for post-decomposition validation:
+
+### Tool 1: `decomp-diff` - Functionality Diff Analyzer
+- **Purpose:** Compare original monolithic file against decomposed files
+- **Capabilities:** [diff, analyze, compare, validate]
+- **Input:** Original file path + decomposed folder path
+- **Output:** Functionality delta report (missing functions, lost imports, orphaned code)
+
+### Tool 2: `decomp-coverage` - Coverage Validator
+- **Purpose:** Ensure all original code is accounted for in decomposed files
+- **Capabilities:** [coverage, trace, validate]
+- **Input:** Original file + decomposed file list
+- **Output:** Coverage percentage + unmapped code blocks
+
+### Tool 3: `decomp-test` - Integration Test Generator
+- **Purpose:** Generate integration tests to verify decomposed system works identically
+- **Capabilities:** [test, generate, validate]
+- **Input:** Original file + decomposed structure
+- **Output:** Test file that validates functional equivalence
+```
+
+**Toolkit Manager Integration Command:**
+```python
+from cortex_toolkit.core.toolkit_manager import ToolkitManager, ToolSpec
+
+manager = ToolkitManager()
+
+# Request helper tool creation
+decomp_validator_spec = ToolSpec(
+    name="decomp-validator",
+    description="Validates decomposed files preserve all original functionality",
+    command="python",
+    script_path="cortex-toolkit/scripts/decomp_validator.py",
+    category="validation",
+    capabilities=["validate", "diff", "coverage", "decomposition"],
+    depends_on=["align"]  # Uses align for structure validation
+)
+
+# Check if tool can be created (avoids duplication)
+check = manager.can_create_tool(decomp_validator_spec)
+if check.can_create:
+    # Toolkit Manager creates the tool
+    manager.register_tool(decomp_validator_spec)
+```
+
+---
+
+#### 11.2 Validation Checklist (Run After Every Decomposition)
+
+**Automated Validation Steps:**
+
+| Step | Validation | Tool | Pass Criteria |
+|------|------------|------|---------------|
+| 1 | **Function Count Match** | `decomp-diff` | Original funcs = Sum(decomposed funcs) |
+| 2 | **Class Count Match** | `decomp-diff` | Original classes = Sum(decomposed classes) |
+| 3 | **Import Coverage** | `decomp-coverage` | 100% imports mapped |
+| 4 | **Export Coverage** | `decomp-coverage` | 100% exports mapped |
+| 5 | **Line Coverage** | `decomp-coverage` | ≥99% lines accounted for |
+| 6 | **Test Compatibility** | `decomp-test` | All original tests pass |
+| 7 | **Integration Test** | `decomp-test` | Entry point works identically |
+
+**Manual Validation Steps:**
+
+- [ ] **Entry Point Test:** Original invocation command still works
+- [ ] **Consumer Test:** All files that reference the original still compile/run
+- [ ] **Behavior Test:** Output is identical for same inputs
+- [ ] **Error Handling:** Same errors thrown for same invalid inputs
+- [ ] **Performance Test:** No significant performance degradation (≤10%)
+
+---
+
+#### 11.3 Functionality Preservation Matrix
+
+**For Code Files:**
+
+| Original | Decomposed Location | Validation |
+|----------|---------------------|------------|
+| All public functions | Must exist in decomposed files | ✅ Required |
+| All public classes | Must exist in decomposed files | ✅ Required |
+| All constants | Must exist in shared/constants | ✅ Required |
+| All type definitions | Must exist in shared/types | ✅ Required |
+| All imports | Must be valid in new structure | ✅ Required |
+| Internal helpers | Can be reorganized | ⚠️ Optional |
+| Comments/docstrings | Should be preserved | ⚠️ Optional |
+
+**For Prompt Files:**
+
+| Original | Decomposed Location | Validation |
+|----------|---------------------|------------|
+| All sections | Must exist in sub-prompts | ✅ Required |
+| All instructions | Must be loadable via index | ✅ Required |
+| All examples | Must be in guides/ or examples/ | ✅ Required |
+| All references | Links must resolve correctly | ✅ Required |
+| Version info | Must be in metadata/ | ✅ Required |
+
+**For Config Files:**
+
+| Original | Decomposed Location | Validation |
+|----------|---------------------|------------|
+| All settings | Must exist in domain configs | ✅ Required |
+| All env overrides | Must exist in environments/ | ✅ Required |
+| Import chain | Must be resolvable | ✅ Required |
+| Default values | Must be preserved | ✅ Required |
+
+---
+
+#### 11.4 Validation Report Template
+
+```markdown
+# 📋 Decomposition Validation Report
+
+**Artifact:** {original_file_path}
+**Decomposed To:** {decomposed_folder_path}
+**Validated:** {date}
+**Status:** {PASSED | FAILED | PARTIAL}
+
+---
+
+## 🔍 Functionality Coverage
+
+| Metric | Original | Decomposed | Delta | Status |
+|--------|----------|------------|-------|--------|
+| Functions | 45 | 45 | 0 | ✅ PASS |
+| Classes | 12 | 12 | 0 | ✅ PASS |
+| Imports | 23 | 23 | 0 | ✅ PASS |
+| Exports | 18 | 18 | 0 | ✅ PASS |
+| Lines | 1,200 | 1,210 | +10 | ✅ PASS |
+
+---
+
+## 🧪 Test Results
+
+| Test Suite | Original | Decomposed | Status |
+|------------|----------|------------|--------|
+| Unit Tests | 48/48 | 48/48 | ✅ PASS |
+| Integration | 12/12 | 12/12 | ✅ PASS |
+| Entry Point | PASS | PASS | ✅ PASS |
+
+---
+
+## ⚠️ Issues Found
+
+{List any issues, or "None - decomposition validated successfully"}
+
+---
+
+## ✅ Validation Checklist
+
+- [x] Function count matches
+- [x] Class count matches
+- [x] All imports resolved
+- [x] All exports accessible
+- [x] Entry point works
+- [x] Tests pass
+- [x] No performance degradation
+
+---
+
+**Conclusion:** Decomposition validated successfully. No functionality lost.
+```
+
+---
+
+#### 11.5 Recovery on Validation Failure
+
+**If validation fails:**
+
+1. **DO NOT proceed** with further optimization
+2. **Use Toolkit Manager Recovery:**
+   ```python
+   # Rollback to pre-decomposition checkpoint
+   result = await manager.recovery_manager.rollback_to_checkpoint(checkpoint_id)
+   ```
+3. **Analyze failure:**
+   - Missing functions → Check extraction logic
+   - Broken imports → Update import paths
+   - Failed tests → Compare behavior differences
+4. **Re-attempt decomposition** with corrected approach
+5. **Re-validate** after fixes
+
+**Validation Failure Output:**
+```markdown
+### ❌ Decomposition Validation FAILED
+
+**Failures:**
+1. **Missing Function:** `process_config()` not found in decomposed files
+2. **Broken Import:** `from .utils import helper` fails in core/main.py
+3. **Test Failure:** `test_config_loading` fails with ImportError
+
+**Action Required:**
+- [ ] Locate `process_config()` and add to correct sub-file
+- [ ] Fix import path for `helper` function
+- [ ] Run validation again after fixes
+
+**Rollback Available:** Checkpoint `decomp-001` created before decomposition
+```
 
 ---
 
@@ -869,13 +1218,26 @@ def fetch_data(url):
 3. Estimate migration effort
 4. Suggest alternative architectures
 
-### Phase 4: Report Generation (5 min)
+### Phase 4: Decomposition Execution (If Required) (15 min)
+1. Create sub-folder structure
+2. Extract sections to sub-files
+3. Replace original with index file
+4. **🛠️ Request helper tools from Toolkit Manager** (Section 11.1)
+
+### Phase 5: Post-Decomposition Validation (MANDATORY) (10 min)
+1. **Run validation checklist** (Section 11.2)
+2. **Verify functionality matrix** (Section 11.3)
+3. **Generate validation report** (Section 11.4)
+4. If validation fails → **Rollback** (Section 11.5)
+5. If validation passes → Proceed to archive
+
+### Phase 6: Report Generation (5 min)
 1. Use Optimization Report Template
 2. Include action plan with owners
 3. Add validation checklist
 4. Export to `cortex-brain/documents/optimization/`
 
-**Total Time:** 35 minutes per artifact
+**Total Time:** 60 minutes per artifact (with decomposition + validation)
 
 ---
 
@@ -966,7 +1328,12 @@ CORTEX:
 6. ✅ Test coverage maintained or increased
 7. ✅ Documentation updated with new architecture
 8. ✅ Rollback plan documented
-9. ✅ If decomposed: Migration guide provided + backward compatibility plan
+9. ✅ If decomposed: **Post-decomposition validation PASSED** (Section 11)
+   - Helper tools requested from Toolkit Manager
+   - Functionality matrix verified (100% coverage)
+   - All original tests pass
+   - Validation report generated
+10. ✅ If decomposed: Migration guide provided + backward compatibility confirmed
 
 ---
 
@@ -980,6 +1347,7 @@ CORTEX:
 ---
 
 **Version History:**
+- v1.1.0 (2026-01-01): Added Post-Decomposition Validation (Section 11) with Toolkit Manager integration
 - v1.0.0 (2025-01-31): Initial release
 
 **Maintainer:** Asif Hussain | **License:** Proprietary
