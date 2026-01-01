@@ -15,9 +15,11 @@ This standard defines **modern glassmorphism patterns** for CORTEX documentation
 
 **⚠️ Animation Philosophy (v4.0.0):**
 - **Subtle & Modern:** All animations designed to be non-distracting
+- **Level 1 & Level 2 Pages:** ONLY T1 subtle animations (0.2-0.3s transitions, no dramatic effects)
 - **Clickable Tiles:** Glowing border + lift + large pointer cursor on hover
 - **Non-Clickable Tiles:** Slow glass reflection (8s) + default cursor, NO glow
 - **Consistent Styling:** Clear visual differentiation between interactive and display elements
+- **⛔ NO Dramatic Animations:** borderGlowSweep, blobMorph, and other T3 effects ONLY on Level 0 (Home page)
 
 **Scope:** Applies to ALL 9 CORTEX home page tiles and their 2-level hierarchies:
 1. 🧠 Architecture → SKULL, Knowledge Graph, Brain Tiers, Context
@@ -113,23 +115,35 @@ Level 0 (Home) → Level 1 (Tile Overview) → Level 2 (Component Detail)
 
 ### Required Structure
 
-**ALL HTML views (Level 0-2) MUST include:**
+**⚠️ CRITICAL: Logo only on Level 0 (Home Page)**
 
-#### Glass Header
+#### Level 0 Glass Header (WITH LOGO)
 ```html
 <header class="glass-header">
     <div class="header-content">
-        <div class="header-brand">
+        <a href="index.html" class="header-brand">
             <i class="fas fa-brain"></i>
             <h1>CORTEX</h1>
-        </div>
+        </a>
         <nav class="header-nav">
-            <a href="/index.html" class="nav-link">Home</a>
-            <a href="/knowledge/index.html" class="nav-link">Knowledge</a>
-            <a href="/orchestrators/index.html" class="nav-link">Orchestrators</a>
+            <a href="#features" class="nav-link">Features</a>
+            <a href="#documentation" class="nav-link">Documentation</a>
             <a href="https://github.com/asifhussain60/CORTEX" class="nav-link" target="_blank">
                 <i class="fab fa-github"></i> GitHub
             </a>
+        </nav>
+    </div>
+</header>
+```
+
+#### Level 1 & Level 2 Glass Header (NO LOGO - Navigation Only)
+```html
+<header class="glass-header">
+    <div class="header-content">
+        <nav class="header-nav">
+            <a href="../index.html" class="nav-link"><i class="fas fa-home"></i> Home</a>
+            <a href="../security/index.html" class="nav-link"><i class="fas fa-shield-halved"></i> Security</a>
+            <a href="../documentation.html" class="nav-link"><i class="fas fa-book"></i> Documentation</a>
         </nav>
     </div>
 </header>
@@ -171,7 +185,8 @@ Level 0 (Home) → Level 1 (Tile Overview) → Level 2 (Component Detail)
     transition: all 0.3s ease;
 }
 
-.header-content {
+/* Level 0: Header with logo and navigation (space-between) */
+.glass-header .header-content {
     max-width: 1400px;
     margin: 0 auto;
     display: flex;
@@ -179,10 +194,16 @@ Level 0 (Home) → Level 1 (Tile Overview) → Level 2 (Component Detail)
     align-items: center;
 }
 
+/* Level 1 & 2: Header with navigation only (centered) */
+.glass-header .header-content:has(.header-nav:only-child) {
+    justify-content: center;
+}
+
 .header-brand {
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    text-decoration: none;
 }
 
 .header-brand i {
@@ -208,10 +229,29 @@ Level 0 (Home) → Level 1 (Tile Overview) → Level 2 (Component Detail)
     text-decoration: none;
     font-weight: 500;
     transition: color 0.2s ease;
+    cursor: pointer;
 }
 
 .nav-link:hover {
     color: var(--accent-primary);
+}
+
+.nav-link i {
+    margin-right: 0.25rem;
+}
+
+/* Mermaid Diagram Container */
+.mermaid-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: var(--spacing-xl, 2rem) 0;
+    width: 100%;
+}
+
+.mermaid {
+    max-width: 800px;
+    width: 100%;
 }
 
 /* Glass Footer */
@@ -378,11 +418,12 @@ Level 0 (Home) → Level 1 (Tile Overview) → Level 2 (Component Detail)
 #### Non-Clickable Tiles (Display Cards, Info Panels)
 
 **Visual Indicators:**
-- ✅ Glass reflection with slow animation (8s)
+- ✅ Static glass highlight (top edge glow)
 - ✅ `cursor: default` (no pointer)
 - ✅ NO lift effect
 - ❌ NO glowing borders
 - ❌ NO hover glow
+- ❌ NO infinite animations (REMOVED in v4.0.0)
 
 ```css
 /* T1 Non-Clickable Tile - APPROVED */
@@ -393,29 +434,16 @@ Level 0 (Home) → Level 1 (Tile Overview) → Level 2 (Component Detail)
     overflow: hidden;
 }
 
-/* Glass reflection (subtle, slow) */
+/* T1 Subtle: Static glass highlight (NO animation) */
 .glass-card-display::before {
     content: '';
     position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(
-        135deg,
-        transparent 0%,
-        rgba(255, 255, 255, 0.03) 45%,
-        rgba(255, 255, 255, 0.08) 50%,
-        rgba(255, 255, 255, 0.03) 55%,
-        transparent 100%
-    );
-    animation: glassReflection 8s ease-in-out infinite;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
     pointer-events: none;
-}
-
-@keyframes glassReflection {
-    0%, 100% { transform: translate(-100%, -100%); }
-    50% { transform: translate(50%, 50%); }
 }
 
 /* NO hover effects on display cards */
@@ -563,9 +591,35 @@ When simplifying dramatic animations:
 
 **Use Case:** Default card pattern for all content containers
 
-**Implementation:**
+**⚠️ LEVEL 1 & LEVEL 2 IMPLEMENTATION (T1 Subtle):**
 ```css
 .glass-card {
+    position: relative;
+    background: rgba(26, 31, 58, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: var(--space-lg);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+/* T1 Hover: Simple lift + glow (NO animation) */
+.glass-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 212, 255, 0.15);
+    border-color: rgba(0, 212, 255, 0.3);
+}
+
+/* NO animated border glow on Level 1/2 pages */
+/* NO ::after pseudo-elements with borderGlowSweep animations */
+/* NO infinite keyframe animations */
+```
+
+**⚠️ LEVEL 0 ONLY (T3 Dramatic - Hero Sections):**
+```css
+.glass-card-hero {
     /* Layer 1: Frosted background with gradient */
     position: relative;
     background: linear-gradient(
@@ -574,79 +628,39 @@ When simplifying dramatic animations:
         rgba(26, 31, 58, 0.4) 100%
     );
     backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    
-    /* Gradient border */
-    border: 1px solid;
-    border-image: linear-gradient(
-        135deg,
-        rgba(255, 255, 255, 0.3),
-        rgba(255, 255, 255, 0.05)
-    ) 1;
-    
-    /* Depth shadows */
-    box-shadow: 
-        0 8px 32px rgba(0, 0, 0, 0.37),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 16px;
     padding: var(--space-lg);
-    
-    /* GPU acceleration */
-    transform: translateZ(0);
-    will-change: transform, opacity;
-    backface-visibility: hidden;
-    
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Layer 2: Inner glow (light source simulation) */
-.glass-card::before {
+/* Layer 2: Inner glow (light source) */
+.glass-card-hero::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     height: 40%;
-    background: linear-gradient(
-        180deg,
-        rgba(255, 255, 255, 0.15) 0%,
-        transparent 100%
-    );
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, transparent 100%);
     border-radius: inherit;
     pointer-events: none;
 }
 
-/* Layer 3: Hover depth effect */
-.glass-card:hover {
-    backdrop-filter: blur(25px) saturate(200%);
-    transform: translateY(-4px) scale(1.01);
-    box-shadow: 
-        0 16px 48px rgba(0, 0, 0, 0.5),
-        inset 0 2px 0 rgba(255, 255, 255, 0.3),
-        0 0 0 1px rgba(0, 212, 255, 0.5);
-}
-
-/* Layer 4: Animated border glow */
-.glass-card::after {
+/* Layer 3: Animated border glow (HERO ONLY) */
+.glass-card-hero::after {
     content: '';
     position: absolute;
     inset: -2px;
-    background: linear-gradient(
-        45deg,
-        transparent 30%,
-        rgba(0, 212, 255, 0.3) 50%,
-        transparent 70%
-    );
+    background: linear-gradient(45deg, transparent 30%, rgba(0, 212, 255, 0.3) 50%, transparent 70%);
     background-size: 200% 200%;
     border-radius: inherit;
     opacity: 0;
-    transition: opacity 0.4s ease;
-    pointer-events: none;
     z-index: -1;
 }
 
-.glass-card:hover::after {
+.glass-card-hero:hover::after {
     opacity: 1;
     animation: borderGlowSweep 2s ease-in-out infinite;
 }
@@ -1085,6 +1099,8 @@ document.querySelectorAll('.morph-card').forEach(card => {
 
 **Use Cases:** SKULL Protection layers, Knowledge Graph nodes, Brain Tiers, Development Context modules
 
+**⚠️ T1 SUBTLE ANIMATIONS ONLY (Level 1 & Level 2 pages)**
+
 **HTML Structure:**
 ```html
 <div class="glass-card architecture-component">
@@ -1102,22 +1118,22 @@ document.querySelectorAll('.morph-card').forEach(card => {
 </div>
 ```
 
-**CSS:**
+**CSS (T1 Subtle - NO infinite animations):**
 ```css
 .architecture-component {
     border-left: 4px solid var(--accent-primary);
+    background: rgba(26, 31, 58, 0.7);
+    backdrop-filter: blur(20px);
     cursor: pointer;
     transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Clickable: Glow on hover */
+/* T1 Clickable: Simple glow on hover (NO animation) */
 .architecture-component:hover {
     transform: translateY(-2px);
-    border-color: rgba(0, 212, 255, 0.8);
-    box-shadow: 
-        0 8px 24px rgba(0, 0, 0, 0.3),
-        0 0 20px rgba(0, 212, 255, 0.3),
-        inset -2px 0 10px rgba(0, 212, 255, 0.2); /* Left border glow */
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 
+                0 0 40px rgba(0, 212, 255, 0.15);
+    border-color: rgba(0, 212, 255, 0.5);
     cursor: pointer;
 }
 

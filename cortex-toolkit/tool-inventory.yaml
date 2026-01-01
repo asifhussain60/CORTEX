@@ -13,8 +13,8 @@ generated: "2025-12-31T00:00:00Z"
 generator: "ToolkitManager.generate_inventory()"
 
 metadata:
-  total_tools: 36
-  active_tools: 32
+  total_tools: 39
+  active_tools: 35
   deprecated_tools: 4
   categories: 11
   
@@ -24,7 +24,7 @@ metadata:
     tools_with_docs: 8
     tools_with_wrappers: 15
     copilot_chat_tools: 2
-    cli_tools: 33
+    cli_tools: 36
 
 # Lifecycle state definitions
 lifecycle_states:
@@ -870,6 +870,212 @@ tools:
       - "Validate all CORTEX panel layouts"
       - "Check for gaps in Orchestrators panel"
       - "Generate CSS for validated grids"
+
+  - id: glassmorphism-validator
+    name: "Glassmorphism Design Standard Validator"
+    version: "1.0.0"
+    category: validation
+    lifecycle: active
+    
+    capabilities:
+      - validation
+      - design-standard
+      - html-validation
+      - css-validation
+      - architecture-enforcement
+      - production-readiness
+    
+    can_do:
+      - "validate HTML against glassmorphism-design-standard.md v4.0.0"
+      - "detect inline style violations (NO_INLINE_STYLES)"
+      - "enforce view hierarchy (NO_LEVEL_3)"
+      - "verify header/footer standardization"
+      - "validate animation tier usage (T1 only for Level 1/2)"
+      - "check production-ready file naming"
+      - "generate comprehensive validation reports"
+      - "enforce SKULL rules for UI consistency"
+    
+    execution:
+      command: python src/validation/glassmorphism_validator.py
+      script: validation/glassmorphism_validator.py
+      method: cli
+      platforms: [windows, linux, macos]
+      requires_admin: false
+      idempotent: true
+      destructive: false
+      average_duration_seconds: 10
+      
+    input_schema:
+      type: object
+      properties:
+        docs_root:
+          type: string
+          default: "docs"
+          description: "Path to docs/ directory"
+        report_file:
+          type: string
+          description: "Output report path (markdown)"
+        fail_on_warnings:
+          type: boolean
+          default: false
+          description: "Exit with error if warnings present"
+    
+    output_schema:
+      type: object
+      properties:
+        total_files_scanned:
+          type: integer
+        passed_files:
+          type: integer
+        failed_files:
+          type: integer
+        issues:
+          type: array
+        is_valid:
+          type: boolean
+      
+    depends_on: []
+    conflicts_with: []
+    
+    enforces_rules:
+      - NO_INLINE_STYLES
+      - NO_LEVEL_3
+      - HEADER_FOOTER_STANDARD
+      - T1_ANIMATIONS_ONLY
+      - PRODUCTION_FILE_NAMING
+      - RESPONSIVE_MANDATORY
+    
+    usage_examples:
+      - "Validate all docs/ HTML files before commit"
+      - "Generate validation report for master plan execution"
+      - "Verify glassmorphism compliance after Phase 1-3"
+      - "Pre-deployment validation check"
+
+  - id: glassmorphism-remediation
+    name: "Glassmorphism Remediation Engine"
+    version: "1.0.0"
+    category: validation
+    lifecycle: active
+    
+    capabilities:
+      - remediation
+      - auto-fix
+      - design-standard
+      - code-transformation
+      - backup-management
+    
+    can_do:
+      - "automatically fix inline style violations"
+      - "add missing glass headers/footers"
+      - "remove T3 dramatic animations from Level 1/2"
+      - "rename files with forbidden patterns"
+      - "create backups before modifications"
+      - "generate remediation reports"
+    
+    execution:
+      command: python src/validation/glassmorphism_remediation.py
+      script: validation/glassmorphism_remediation.py
+      method: cli
+      platforms: [windows, linux, macos]
+      requires_admin: false
+      idempotent: false
+      destructive: true
+      rollback_supported: true
+      average_duration_seconds: 30
+      
+    input_schema:
+      type: object
+      properties:
+        docs_root:
+          type: string
+          default: "docs"
+        backup_dir:
+          type: string
+          description: "Backup directory path"
+        fix_inline_styles:
+          type: boolean
+          default: false
+        add_headers:
+          type: boolean
+          default: false
+        add_footers:
+          type: boolean
+          default: false
+        remove_t3_animations:
+          type: boolean
+          default: false
+        rename_files:
+          type: boolean
+          default: false
+        all:
+          type: boolean
+          default: false
+          description: "Apply all fixes"
+    
+    output_schema:
+      type: object
+      properties:
+        total_actions:
+          type: integer
+        successful_actions:
+          type: integer
+        failed_actions:
+          type: integer
+        backup_location:
+          type: string
+      
+    depends_on: [glassmorphism-validator]
+    conflicts_with: []
+    
+    usage_examples:
+      - "Fix all inline styles before commit"
+      - "Add missing headers/footers to Level 1 pages"
+      - "Clean up T3 animations from detail pages"
+      - "Batch rename files to production names"
+      - "Apply all fixes with single command (--all)"
+
+  - id: glassmorphism-pre-commit
+    name: "Glassmorphism Pre-Commit Hook"
+    version: "1.0.0"
+    category: validation
+    lifecycle: active
+    
+    capabilities:
+      - validation
+      - git-hooks
+      - pre-commit
+      - quality-gate
+      - ci-cd
+    
+    can_do:
+      - "block commits with design standard violations"
+      - "run glassmorphism validation before commit"
+      - "provide fix suggestions in commit rejection"
+      - "allow warnings but block errors/critical issues"
+    
+    execution:
+      command: python src/validation/glassmorphism_pre_commit_hook.py
+      script: validation/glassmorphism_pre_commit_hook.py
+      method: git_hook
+      platforms: [windows, linux, macos]
+      requires_admin: false
+      idempotent: true
+      destructive: false
+      average_duration_seconds: 10
+      
+    installation:
+      - "Copy to .git/hooks/pre-commit"
+      - "Make executable (chmod +x on Linux/Mac)"
+      - "Automatically runs before every commit"
+      
+    depends_on: [glassmorphism-validator]
+    conflicts_with: []
+    
+    usage_examples:
+      - "Install as git pre-commit hook"
+      - "Prevent commits with inline styles"
+      - "Enforce production-ready file names"
+      - "Block Level 3 view creation"
 
 # Capability taxonomy for RequestAnalyzer
 capability_taxonomy:
