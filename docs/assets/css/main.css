@@ -5275,3 +5275,2306 @@ h1, h2, h3, h4, h5, h6, p, span, div {
     margin-top: var(--space-lg, 1.5rem);  /* 24px between consecutive cards */
 }
 
+/* ============================================
+   LEVEL 0 SPECIFIC CLASSES (Design Standard v4.0.1)
+   Replacing inline styles with reusable classes
+   ============================================ */
+
+/* Level 0 Container Wrapper */
+.level0-container {
+    max-width: 1200px;
+    margin: 3rem auto;
+    padding: 0 1rem;
+}
+
+.level0-container--narrow {
+    max-width: 1000px;
+}
+
+.level0-container--wide {
+    max-width: 1400px;
+}
+
+/* Level 0 Section Panel */
+.level0-section-panel {
+    padding: 2.5rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+}
+
+/* Level 0 Panel Header */
+.level0-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.level0-panel-icon {
+    font-size: 2.5rem;
+}
+
+.level0-panel-title {
+    margin: 0;
+    font-size: 1.75rem;
+    color: var(--accent-primary);
+}
+
+/* Level 0 Content Card */
+.level0-content-card {
+    padding: 2rem;
+    text-align: left;
+}
+
+/* Level 0 Card Header */
+.level0-card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+}
+
+.level0-card-icon {
+    font-size: 3rem;
+}
+
+.level0-card-title {
+    margin: 0;
+    font-size: 2rem;
+    color: var(--accent-primary);
+}
+
+.level0-card-title--secondary {
+    color: var(--accent-secondary);
+}
+
+/* Level 0 Card Content */
+.level0-card-text {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    margin-bottom: 1.25rem;
+}
+
+.level0-card-text:last-child {
+    margin-bottom: 0;
+}
+
+.level0-card-text strong {
+    color: var(--accent-primary);
+}
+
+.level0-card-text--secondary strong {
+    color: var(--accent-secondary);
+}
+
+/* Level 0 Feature Grid */
+.level0-feature-grid {
+    gap: 2rem;
+}
+
+/* Level 0 CTA Button Text */
+.level0-cta-text {
+    font-size: 2.5rem;
+}
+
+/* Level 0 Stat Bar (Data Attribute Driven) */
+.level0-stat-fill {
+    width: 0%;
+    transition: width 1s ease-out;
+}
+
+.level0-stat-fill[data-fill="0"] { width: 0%; }
+.level0-stat-fill[data-fill="10"] { width: 10%; }
+.level0-stat-fill[data-fill="20"] { width: 20%; }
+.level0-stat-fill[data-fill="30"] { width: 30%; }
+.level0-stat-fill[data-fill="40"] { width: 40%; }
+.level0-stat-fill[data-fill="50"] { width: 50%; }
+.level0-stat-fill[data-fill="60"] { width: 60%; }
+.level0-stat-fill[data-fill="70"] { width: 70%; }
+.level0-stat-fill[data-fill="80"] { width: 80%; }
+.level0-stat-fill[data-fill="85"] { width: 85%; }
+.level0-stat-fill[data-fill="90"] { width: 90%; }
+.level0-stat-fill[data-fill="100"] { width: 100%; }
+
+/* Animation Tiers (Design Standard v4.0.1) */
+
+/* Tier 1: Subtle animations for L1/L2 */
+.animation-t1 {
+    transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+}
+
+.animation-t1:hover {
+    transform: translateY(-2px);
+}
+
+/* Tier 2: Accent animations for buttons */
+.animation-t2 {
+    transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+}
+
+.animation-t2:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3);
+}
+
+/* Tier 3: Dramatic animations for Level 0 ONLY */
+.animation-t3 {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animation-t3:hover {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 
+        0 16px 48px rgba(0, 0, 0, 0.5),
+        0 0 40px rgba(0, 212, 255, 0.3);
+}
+
+/* Level 0 Hero Enhancements */
+.level0-hero-section {
+    position: relative;
+    overflow: hidden;
+}
+
+.level0-hero-section::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+        circle at 30% 30%,
+        rgba(0, 212, 255, 0.15) 0%,
+        transparent 50%
+    );
+    animation: heroLightPulse 8s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+@keyframes heroLightPulse {
+    0% { opacity: 0.5; transform: translate(0, 0); }
+    100% { opacity: 0.8; transform: translate(5%, 5%); }
+}
+
+/* ============================================
+   LEVEL 1 SPECIFIC CLASSES (Design Standard v4.0.1)
+   Hub pages - T1 animations only
+   ============================================ */
+
+/* Level 1 Hub Hero Header */
+.level1-hero-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+}
+
+.level1-hero-logo {
+    width: 200px;
+    height: 200px;
+    filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.5));
+    transition: filter 0.2s ease-in-out;
+}
+
+.level1-hero-logo:hover {
+    filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.7));
+}
+
+.level1-hero-content {
+    text-align: center;
+}
+
+.level1-hero-title {
+    margin-bottom: 0.5rem;
+}
+
+.level1-hero-subtitle {
+    margin-bottom: 1rem;
+}
+
+/* Level 1 Section Cards */
+.level1-section-card {
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+}
+
+.level1-section-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+/* Level 1 Feature Items */
+.level1-feature-item {
+    transition: transform 0.2s ease-out;
+}
+
+.level1-feature-item:hover {
+    transform: translateY(-2px);
+}
+
+/* Level 1 Button Links */
+.level1-btn {
+    transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+}
+
+.level1-btn:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 16px rgba(0, 212, 255, 0.25);
+}
+
+/* Level 1 Viz Controls */
+.level1-viz-instructions {
+    text-align: center;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+}
+
+.level1-viz-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.level1-viz-reset-btn {
+    background: linear-gradient(135deg, #7b61ff 0%, #00d4ff 100%);
+    color: white;
+    margin-left: 10px;
+}
+
+/* Level 1 Text Styles */
+.level1-text-muted {
+    color: rgba(255, 255, 255, 0.8);
+    margin-top: 1rem;
+}
+
+.level1-section-spacing {
+    margin-top: 2rem;
+}
+
+.level1-section-spacing-lg {
+    margin-top: 3rem;
+}
+
+.level1-section-heading {
+    text-align: center;
+    color: #fff;
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.level1-heading-icon {
+    color: #a78bfa;
+}
+
+/* Level 1 Card Links (architecture pattern) */
+.level1-card-link {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.level1-card-link:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 32px rgba(0, 212, 255, 0.2);
+}
+
+.level1-tier-stats {
+    margin-top: var(--spacing-md);
+}
+
+/* Level 1 Navigation Footer */
+.level1-nav-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto var(--spacing-2xl);
+    padding: var(--spacing-xl);
+}
+
+.level1-nav-link-center {
+    min-width: 220px;
+    text-align: center;
+}
+
+/* Level 1 Map and Legend Styles */
+.level1-map-container {
+    min-height: 580px;
+    position: relative;
+    overflow: hidden;
+}
+
+.level1-map-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1rem;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+
+.level1-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.level1-legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.level1-legend-dot--hub { background: #7b61ff; }
+.level1-legend-dot--frontend { background: #2196F3; }
+.level1-legend-dot--backend { background: #4CAF50; }
+.level1-legend-dot--data { background: #FF9800; }
+.level1-legend-dot--cloud { background: #9C27B0; }
+.level1-legend-dot--craft { background: #F44336; }
+
+/* Level 1 Domain Icon Containers */
+.level1-domain-icon-container {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.level1-domain-icon-container--frontend {
+    background: linear-gradient(135deg, rgba(33, 150, 243, 0.2), rgba(100, 181, 246, 0.2));
+}
+
+.level1-domain-icon-container--backend {
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(129, 199, 132, 0.2));
+}
+
+.level1-domain-icon-container--data {
+    background: linear-gradient(135deg, rgba(255, 152, 0, 0.2), rgba(255, 183, 77, 0.2));
+}
+
+.level1-domain-icon-container--cloud {
+    background: linear-gradient(135deg, rgba(156, 39, 176, 0.2), rgba(186, 104, 200, 0.2));
+}
+
+.level1-domain-icon-container--craft {
+    background: linear-gradient(135deg, rgba(244, 67, 54, 0.2), rgba(239, 83, 80, 0.2));
+}
+
+.level1-domain-icon {
+    font-size: 1.5rem;
+}
+
+.level1-domain-icon--frontend { color: #2196F3; }
+.level1-domain-icon--backend { color: #4CAF50; }
+.level1-domain-icon--data { color: #FF9800; }
+.level1-domain-icon--cloud { color: #9C27B0; }
+.level1-domain-icon--craft { color: #F44336; }
+
+/* Level 1 Text Utilities */
+.level1-text-center-muted {
+    text-align: center;
+    color: var(--text-secondary);
+    margin-top: 1rem;
+}
+
+.level1-text-intro {
+    margin-bottom: 2rem;
+    color: var(--text-secondary);
+}
+
+/* Level 1 Grid Layouts */
+.level1-relationship-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    padding: 2rem;
+}
+
+/* Level 1 Feature Card Styles */
+.level1-feature-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: all 0.3s ease;
+}
+
+.level1-feature-card-link:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 32px rgba(0, 212, 255, 0.2);
+}
+
+.level1-feature-icon-container {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 1rem auto;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.level1-feature-icon-container--primary {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2));
+}
+
+.level1-feature-icon-container--success {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(0, 212, 255, 0.2));
+}
+
+.level1-feature-icon-container--warning {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.2), rgba(255, 152, 0, 0.2));
+}
+
+.level1-feature-icon-container--purple {
+    background: linear-gradient(135deg, rgba(123, 97, 255, 0.2), rgba(156, 39, 176, 0.2));
+}
+
+.level1-feature-icon-container--info {
+    background: linear-gradient(135deg, rgba(33, 150, 243, 0.2), rgba(0, 212, 255, 0.2));
+}
+
+.level1-feature-icon-container--danger {
+    background: linear-gradient(135deg, rgba(244, 67, 54, 0.2), rgba(239, 83, 80, 0.2));
+}
+
+.level1-feature-icon-lg {
+    font-size: 1.75rem;
+}
+
+.level1-feature-icon--primary { color: var(--accent-primary); }
+.level1-feature-icon--success { color: var(--success); }
+.level1-feature-icon--warning { color: var(--warning, #ffc107); }
+.level1-feature-icon--purple { color: #7b61ff; }
+.level1-feature-icon--info { color: #2196F3; }
+.level1-feature-icon--danger { color: #f44336; }
+
+.level1-feature-title {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--accent-primary);
+    text-align: center;
+}
+
+.level1-feature-subtitle {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.level1-feature-description {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.level1-feature-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.9375rem;
+}
+
+.level1-feature-list-item {
+    padding: 0.5rem 0;
+    border-top: 1px solid var(--glass-border);
+}
+
+.level1-feature-list-item:last-child {
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.level1-check-icon {
+    color: var(--success);
+    margin-right: 0.5rem;
+}
+
+/* Level 1 Section Header Styles */
+.level1-section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.level1-section-header-icon {
+    font-size: 1.75rem;
+    color: var(--accent-primary);
+}
+
+.level1-intro-text {
+    font-size: 1.0625rem;
+    line-height: 1.75;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.level1-intro-text--no-margin {
+    margin-bottom: 0;
+}
+
+.level1-highlight {
+    color: var(--accent-primary);
+}
+
+/* Level 1 Feature Additional Colors */
+.level1-feature-icon-container--warning {
+    background: linear-gradient(135deg, rgba(255, 165, 0, 0.2), rgba(255, 68, 68, 0.2));
+}
+
+.level1-feature-icon-container--mixed {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(16, 185, 129, 0.2));
+}
+
+.level1-feature-icon--warning { color: var(--warning, #ffc107); }
+
+/* Level 1 Integration Cards */
+.level1-integration-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+    justify-content: center;
+}
+
+.level1-integration-icon-container {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.level1-integration-icon-container--primary {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2));
+}
+
+.level1-integration-icon-container--warning {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.2), rgba(255, 152, 0, 0.2));
+}
+
+.level1-integration-icon {
+    font-size: 1.25rem;
+}
+
+/* Level 1 Metric Styles */
+.level1-metric-value {
+    font-size: 1.5rem;
+    color: var(--accent-primary);
+    margin-bottom: 0.5rem;
+}
+
+.level1-metric-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.25rem;
+}
+
+.level1-metric-detail {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+/* Level 1 Benefit Cards */
+.level1-benefit-content {
+    padding: 1.5rem;
+}
+
+.level1-benefit-title {
+    color: var(--accent-primary);
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+}
+
+.level1-benefit-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.8;
+}
+
+.level1-feature-subtitle--no-center {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+}
+
+/* Level 1 Benefit List Items */
+.level1-benefit-list-item {
+    margin-bottom: 0.75rem;
+}
+
+.level1-benefit-arrow {
+    color: var(--accent-primary);
+}
+
+/* Level 1 CTA Section */
+.level1-cta-card {
+    text-align: center;
+    padding: 3rem 2rem;
+}
+
+.level1-cta-title {
+    margin-bottom: 1rem;
+}
+
+.level1-cta-description {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+}
+
+.level1-cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.level1-btn-hero {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    min-height: 48px;
+}
+
+.level1-btn-hero--primary {
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    border: none;
+}
+
+.level1-btn-hero--secondary {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px);
+}
+
+.level1-btn-hero:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 212, 255, 0.25);
+}
+
+.level1-btn-icon {
+    font-size: 1.25rem;
+}
+
+/* Level 1 Validation Page Styles */
+.level1-feature-panel {
+    padding: 2.5rem 3rem;
+    margin-bottom: 2rem;
+    border-left: 4px solid var(--success);
+}
+
+.level1-panel-flex {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+}
+
+.level1-panel-icon-container {
+    width: 60px;
+    height: 60px;
+    min-width: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.level1-panel-icon-container--success {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(0, 212, 255, 0.2));
+}
+
+.level1-section-spacing-md {
+    margin-bottom: 2rem;
+}
+
+.level1-stat-icon-container {
+    width: 50px;
+    height: 50px;
+    margin: 0 auto 1rem auto;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.level1-stat-icon-container--success {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(0, 212, 255, 0.2));
+}
+
+.level1-stat-icon-container--primary {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2));
+}
+
+.level1-stat-icon-container--purple {
+    background: linear-gradient(135deg, rgba(123, 97, 255, 0.2), rgba(0, 212, 255, 0.2));
+}
+
+.level1-stat-icon-container--warning {
+    background: linear-gradient(135deg, rgba(255, 165, 0, 0.2), rgba(255, 68, 68, 0.2));
+}
+
+/* Level 1 Validation Card Styles */
+.level1-validation-card {
+    text-align: left;
+    padding: 1.5rem;
+}
+
+.level1-validation-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.level1-validation-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.level1-validation-icon--success {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(0, 212, 255, 0.2));
+}
+
+.level1-validation-icon--info {
+    background: linear-gradient(135deg, rgba(33, 150, 243, 0.2), rgba(0, 212, 255, 0.2));
+}
+
+.level1-validation-icon--purple {
+    background: linear-gradient(135deg, rgba(123, 97, 255, 0.2), rgba(156, 39, 176, 0.2));
+}
+
+.level1-validation-badge {
+    font-size: 0.7rem;
+}
+
+.level1-validation-title {
+    margin: 0;
+    color: var(--text-primary);
+}
+
+.level1-validation-description {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+}
+
+.level1-validation-list {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin: 0;
+    padding-left: 1.25rem;
+}
+
+.level1-validation-result {
+    font-size: 0.85rem;
+    margin-top: 0.75rem;
+    margin-bottom: 0;
+}
+
+.level1-validation-result--success {
+    color: var(--success);
+}
+
+.level1-validation-result--info {
+    color: var(--info);
+}
+
+.level1-panel-title {
+    color: var(--success);
+    margin-bottom: 0.75rem;
+    font-size: 1.25rem;
+}
+
+.level1-panel-text {
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin: 0;
+}
+
+/* Level 1 Validation Icon Colors (additions) */
+.level1-validation-icon--primary {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2));
+}
+
+.level1-validation-icon--secondary {
+    background: linear-gradient(135deg, rgba(123, 97, 255, 0.2), rgba(0, 212, 255, 0.2));
+}
+
+.level1-validation-icon--warning {
+    background: linear-gradient(135deg, rgba(255, 165, 0, 0.2), rgba(255, 68, 68, 0.2));
+}
+
+.level1-validation-icon--blue {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(123, 97, 255, 0.2));
+}
+
+.level1-validation-icon--success-blue {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(59, 130, 246, 0.2));
+}
+
+.level1-validation-icon--danger {
+    background: linear-gradient(135deg, rgba(255, 68, 68, 0.2), rgba(255, 165, 0, 0.2));
+}
+
+.level1-validation-icon--danger-purple {
+    background: linear-gradient(135deg, rgba(255, 68, 68, 0.2), rgba(123, 97, 255, 0.2));
+}
+
+.level1-validation-icon--mixed {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(16, 185, 129, 0.2));
+}
+
+/* Level 1 Additional Icon Colors */
+.level1-feature-icon--secondary { color: var(--accent-secondary); }
+.level1-feature-icon--danger { color: var(--danger, #f44336); }
+
+/* Level 1 Section Spacing */
+.level1-section-margin-top {
+    margin-top: 2rem;
+}
+
+/* Level 1 Testing Section */
+.level1-testing-card {
+    padding: 1.5rem;
+}
+
+.level1-testing-title {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.level1-testing-list {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    padding-left: 1.25rem;
+}
+
+/* Level 1 Navigation Cards */
+.level1-nav-card {
+    text-decoration: none;
+}
+
+.level1-nav-card-title {
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.level1-stat-icon-container--purple-blue {
+    background: linear-gradient(135deg, rgba(123, 97, 255, 0.2), rgba(59, 130, 246, 0.2));
+}
+
+.level1-stat-icon-container--danger {
+    background: linear-gradient(135deg, rgba(255, 68, 68, 0.2), rgba(255, 165, 0, 0.2));
+}
+
+/* Level 1 Getting Started Styles */
+.level1-highlight-card {
+    padding: 2rem;
+    margin-bottom: 3rem;
+    border: 2px solid var(--accent-primary);
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(123, 97, 255, 0.15));
+}
+
+.level1-highlight-title {
+    color: var(--accent-primary);
+    margin-bottom: 1rem;
+}
+
+.level1-highlight-text {
+    font-size: 1.125rem;
+    line-height: 1.8;
+    margin-bottom: 1rem;
+}
+
+.level1-feature-box {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 1.5rem;
+    border-radius: 8px;
+}
+
+.level1-feature-box-title {
+    color: var(--accent-primary);
+    margin-bottom: 0.75rem;
+}
+
+.level1-feature-box-text {
+    color: var(--text-secondary);
+}
+
+.level1-hint-text {
+    margin-top: 1.5rem;
+    font-style: italic;
+    color: var(--text-muted);
+}
+
+.level1-standard-card {
+    padding: 2rem;
+    margin-bottom: 3rem;
+}
+
+.level1-intro-paragraph {
+    font-size: 1.0625rem;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+}
+
+.level1-content-paragraph {
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+}
+
+.level1-ratio-badge {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent-primary);
+    background: rgba(0, 212, 255, 0.1);
+    padding: 0.15rem 0.5rem;
+    border-radius: 6px;
+    border: 1px solid var(--accent-primary);
+    display: inline-block;
+    margin: 0 0.15rem;
+    vertical-align: middle;
+}
+
+.level1-code-block {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 2rem;
+    border-radius: 12px;
+    margin: 2rem 0;
+}
+
+.level1-subsection-title {
+    color: var(--accent-primary);
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.level1-metrics-gap {
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+/* Level 1 Getting Started Additional Styles */
+.level1-check-icon-success {
+    color: #10b981;
+    margin-top: 0.25rem;
+}
+
+.level1-check-icon-error {
+    color: #ef4444;
+    margin-top: 0.25rem;
+}
+
+.level1-list-item-flex {
+    padding: 0.5rem 0;
+    display: flex;
+    gap: 0.75rem;
+}
+
+.level1-list-item-flex-lg {
+    padding: 0.75rem 0;
+    display: flex;
+    gap: 1rem;
+}
+
+.level1-text-muted-span {
+    color: var(--text-muted);
+}
+
+.level1-link-primary {
+    color: var(--accent-primary);
+}
+
+.level1-code-terminal {
+    background: rgba(0, 0, 0, 0.4);
+    padding: 1rem;
+    border-radius: 6px;
+    font-family: monospace;
+    color: #00ff88;
+}
+
+.level1-comparison-title-success {
+    color: #10b981;
+    margin-bottom: 1rem;
+}
+
+.level1-comparison-title-error {
+    color: #ef4444;
+    margin-bottom: 1rem;
+}
+
+.level1-step-icon-check-primary {
+    color: var(--accent-primary);
+    font-size: 1.25rem;
+    margin-top: 0.25rem;
+}
+
+.level1-step-icon-check-secondary {
+    color: var(--text-secondary);
+    font-size: 1.25rem;
+    margin-top: 0.25rem;
+}
+
+.level1-list-unstyled {
+    list-style: none;
+    padding: 0;
+}
+
+.level1-copy-btn {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    background: var(--accent-primary);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+}
+
+.level1-comparison-box-success {
+    background: rgba(16, 185, 129, 0.1);
+    border-left: 4px solid #10b981;
+    padding: 1.5rem;
+    border-radius: 6px;
+}
+
+.level1-comparison-box-error {
+    background: rgba(239, 68, 68, 0.1);
+    border-left: 4px solid #ef4444;
+    padding: 1.5rem;
+    border-radius: 6px;
+}
+
+.level1-step-title {
+    font-size: 1rem;
+    margin: 0;
+    color: var(--text-primary);
+}
+
+.level1-step-icon-lg-primary {
+    font-size: 2.5rem;
+    color: var(--accent-primary);
+    margin-bottom: 0.75rem;
+}
+
+.level1-step-icon-lg-secondary {
+    font-size: 2.5rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.75rem;
+}
+
+.level1-note-text {
+    margin: 0;
+}
+
+/* Level 1 Getting Started Additional Styles - Batch 2 */
+.level1-pre-code {
+    margin: 0;
+    color: #00ff88;
+    font-size: 0.9rem;
+}
+
+.level1-pre-code-alt {
+    margin: 0;
+    color: #00ff88;
+}
+
+.level1-pre-code-muted {
+    margin: 0;
+    color: var(--text-secondary);
+}
+
+.level1-inline-code {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+}
+
+.level1-nav-card-lg {
+    padding: 1.5rem;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.level1-metrics-gap-sm {
+    gap: 1.5rem;
+}
+
+.level1-terminal-box {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.level1-terminal-box-relative {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    position: relative;
+    font-family: 'Courier New', monospace;
+}
+
+.level1-terminal-box-sm {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+
+.level1-callout-primary {
+    background: rgba(0, 212, 255, 0.1);
+    border-left: 4px solid var(--accent-primary);
+    padding: 1rem 1.5rem;
+    margin-top: 1.5rem;
+    border-radius: 6px;
+}
+
+.level1-callout-success-mt-lg {
+    background: rgba(16, 185, 129, 0.1);
+    border-left: 4px solid #10b981;
+    padding: 1rem 1.5rem;
+    margin-top: 2rem;
+    border-radius: 6px;
+}
+
+.level1-callout-error-mt {
+    background: rgba(239, 68, 68, 0.1);
+    border-left: 4px solid #ef4444;
+    padding: 1rem 1.5rem;
+    margin-top: 1.5rem;
+    border-radius: 6px;
+}
+
+.level1-callout-warning {
+    background: rgba(255, 165, 0, 0.1);
+    border-left: 4px solid var(--warning);
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    border-radius: 6px;
+}
+
+.level1-section-title-mt-md {
+    color: var(--accent-primary);
+    margin-top: 1.5rem;
+}
+
+.level1-section-title-mt-lg {
+    color: var(--accent-primary);
+    margin-top: 2rem;
+}
+
+.level1-section-title-muted {
+    color: var(--text-secondary);
+    margin-top: 2rem;
+}
+
+.level1-content-text {
+    line-height: 1.8;
+    margin-bottom: 1rem;
+}
+
+.level1-nav-grid {
+    gap: 1rem;
+    margin: 3rem 0;
+}
+
+.level1-standard-card-muted {
+    padding: 2rem;
+    margin-bottom: 3rem;
+    opacity: 0.9;
+}
+
+.level1-ratio-badge {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent-primary);
+    background: rgba(0, 212, 255, 0.1);
+    padding: 0.15rem 0.5rem;
+    border-radius: 6px;
+    border: 1px solid var(--accent-primary);
+    display: inline-block;
+    margin: 0 0.15rem;
+    vertical-align: middle;
+}
+
+.level1-inline-code {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+}
+
+.level1-content-prose {
+    line-height: 1.8;
+    margin-bottom: 1rem;
+}
+
+.level1-nav-grid-4 {
+    gap: 1rem;
+    margin: 3rem 0;
+}
+
+/* Level 1 Lens Page Styles */
+.level1-pkg-name {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.level1-pkg-version {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+.level1-stat-row-purple {
+    background: rgba(123, 97, 255, 0.1);
+    padding: 0.75rem;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.level1-stat-row-green {
+    background: rgba(16, 185, 129, 0.1);
+    padding: 0.75rem;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.level1-stat-row-yellow {
+    background: rgba(245, 158, 11, 0.1);
+    padding: 0.75rem;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.level1-stat-row-blue {
+    background: rgba(59, 130, 246, 0.1);
+    padding: 0.75rem;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.level1-stat-label-sm {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+.level1-module-title-green {
+    font-size: 1.5rem;
+    color: #10b981;
+}
+
+.level1-module-title-purple {
+    font-size: 1.5rem;
+    color: #7b61ff;
+}
+
+.level1-big-number-green {
+    font-size: 2.5rem;
+    color: #10b981;
+    font-weight: 700;
+}
+
+.level1-big-number-blue {
+    font-size: 2.5rem;
+    color: #3b82f6;
+    font-weight: 700;
+}
+
+.level1-big-number-purple {
+    font-size: 2.5rem;
+    color: #7b61ff;
+    font-weight: 700;
+}
+
+.level1-big-number-yellow {
+    font-size: 2.5rem;
+    color: #f59e0b;
+    font-weight: 700;
+}
+
+/* Level 1 Lens Page Styles - Batch 2 */
+.level1-text-success-bold {
+    color: #10b981;
+    font-weight: 600;
+}
+
+.level1-text-blue-bold {
+    color: #3b82f6;
+    font-weight: 600;
+}
+
+.level1-text-yellow-bold {
+    color: #f59e0b;
+    font-weight: 600;
+}
+
+.level1-badge-success-lg {
+    color: #10b981;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.level1-badge-blue-lg {
+    color: #3b82f6;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.level1-badge-yellow-lg {
+    color: #f59e0b;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.level1-text-primary {
+    color: var(--text-primary);
+}
+
+.level1-text-secondary {
+    color: var(--text-secondary);
+}
+
+.level1-text-accent-bold {
+    color: var(--accent-primary);
+}
+
+.level1-panel-purple-center {
+    background: rgba(123, 97, 255, 0.1);
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.level1-panel-purple-center-border {
+    background: rgba(123, 97, 255, 0.1);
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+    border-left: 4px solid #7b61ff;
+}
+
+.level1-panel-purple-sm {
+    background: rgba(123, 97, 255, 0.1);
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.level1-panel-green-center {
+    background: rgba(16, 185, 129, 0.1);
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.level1-panel-green-center-border {
+    background: rgba(16, 185, 129, 0.1);
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+    border-left: 4px solid #10b981;
+}
+
+.level1-panel-green-sm {
+    background: rgba(16, 185, 129, 0.1);
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.level1-panel-yellow-center {
+    background: rgba(245, 158, 11, 0.1);
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.level1-panel-yellow-center-border {
+    background: rgba(245, 158, 11, 0.1);
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+    border-left: 4px solid #f59e0b;
+}
+
+.level1-panel-blue-center-border {
+    background: rgba(59, 130, 246, 0.1);
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+    border-left: 4px solid #3b82f6;
+}
+
+.level1-emoji-icon-lg {
+    color: var(--accent-secondary);
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.level1-stat-bar-green {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 1rem 0;
+    padding: 1rem;
+    background: rgba(16, 185, 129, 0.1);
+    border-radius: 4px;
+}
+
+.level1-stat-bar-yellow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 1rem 0;
+    padding: 1rem;
+    background: rgba(245, 158, 11, 0.1);
+    border-radius: 4px;
+}
+
+.level1-stat-bar-blue {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 1rem 0;
+    padding: 1rem;
+    background: rgba(59, 130, 246, 0.1);
+    border-radius: 4px;
+}
+
+.level1-stat-bar-blue-sm {
+    display: flex;
+    justify-content: space-between;
+    margin: 0.5rem 0;
+    padding: 0.75rem;
+    background: rgba(59, 130, 246, 0.1);
+    border-radius: 4px;
+}
+
+.level1-flex-between-sm {
+    display: flex;
+    justify-content: space-between;
+    margin: 0.5rem 0;
+}
+
+.level1-auto-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 0.75rem;
+}
+
+.level1-h4-success {
+    color: #10b981;
+    margin: 0 0 1rem 0;
+}
+
+.level1-h4-blue {
+    color: #3b82f6;
+    margin: 0 0 1rem 0;
+}
+
+.level1-h4-yellow {
+    color: #f59e0b;
+    margin: 0 0 1rem 0;
+}
+
+.level1-text-muted-0 {
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* Level 1 Lens Page Styles - Batch 3 */
+.level1-text-muted-sm {
+    color: var(--text-secondary);
+    margin: 0.5rem 0 0 0;
+}
+
+.level1-text-success-strong {
+    color: #10b981;
+}
+
+.level1-text-error-strong {
+    color: #ef4444;
+}
+
+.level1-list-muted {
+    color: var(--text-secondary);
+    margin: 0.5rem 0;
+}
+
+.level1-dark-panel {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 1.5rem;
+    border-radius: 8px;
+}
+
+.level1-dark-panel-mt {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.level1-dark-panel-my {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+}
+
+.level1-dark-panel-center {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 2rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+    text-align: center;
+}
+
+.level1-alert-success-border {
+    background: rgba(16, 185, 129, 0.1);
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid #10b981;
+    margin-top: 1rem;
+}
+
+.level1-alert-error-border {
+    background: rgba(239, 68, 68, 0.1);
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid #ef4444;
+}
+
+.level1-grid-2-mt {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.level1-grid-3-my {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.level1-grid-auto-my {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.level1-section-header-0 {
+    color: var(--accent-primary);
+    margin-top: 0;
+}
+
+.level1-emoji-md {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.level1-h4-tab-green {
+    margin: 0.5rem 0;
+    color: #10b981;
+}
+
+.level1-h4-tab-blue {
+    margin: 0.5rem 0;
+    color: #3b82f6;
+}
+
+.level1-h4-tab-purple {
+    margin: 0.5rem 0;
+    color: #7b61ff;
+}
+
+.level1-h4-tab-red {
+    margin: 0.5rem 0;
+    color: #ef4444;
+}
+
+.level1-h4-tab-yellow {
+    margin: 0.5rem 0;
+    color: #f59e0b;
+}
+
+.level1-icon-js {
+    color: #f7df1e;
+}
+
+.level1-icon-python {
+    color: #3776ab;
+}
+
+.level1-icon-yellow {
+    color: #f59e0b;
+}
+
+.level1-icon-blue {
+    color: #3b82f6;
+}
+
+.level1-icon-green {
+    color: #10b981;
+}
+
+.level1-desc-sm {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.level1-link-primary-bold {
+    color: var(--accent-primary);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* Level 1 Lens Page Styles - Batch 4 */
+.level1-demo-tabs-content {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 2rem;
+    border-radius: 0 0 8px 8px;
+    min-height: 600px;
+}
+
+.level1-legend-green {
+    background: #10b981;
+    border-color: #34d399;
+}
+
+.level1-legend-blue {
+    background: #3b82f6;
+    border-color: #60a5fa;
+}
+
+.level1-legend-purple {
+    background: #7b61ff;
+    border-color: #9f87ff;
+}
+
+.level1-legend-yellow {
+    background: #f59e0b;
+    border-color: #fbbf24;
+}
+
+.level1-phase-card-flex {
+    flex: 1;
+    min-width: 200px;
+}
+
+.level1-panel-purple-lg-border {
+    background: rgba(123, 97, 255, 0.1);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid #7b61ff;
+}
+
+.level1-panel-green-lg-border {
+    background: rgba(16, 185, 129, 0.1);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid #10b981;
+}
+
+.level1-panel-red-lg-border {
+    background: rgba(239, 68, 68, 0.1);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid #ef4444;
+}
+
+.level1-panel-yellow-lg-border {
+    background: rgba(245, 158, 11, 0.1);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid #f59e0b;
+}
+
+.level1-panel-blue-lg-border {
+    background: rgba(59, 130, 246, 0.1);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid #3b82f6;
+}
+
+.level1-emoji-xl {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.level1-demo-tabs-nav {
+    display: flex;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px 8px 0 0;
+    border-bottom: 2px solid var(--glass-border);
+}
+
+.level1-text-muted-sm-alt {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+}
+
+.level1-text-secondary-bold-sm {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin: 0.5rem 0;
+    font-weight: 600;
+}
+
+.level1-text-secondary-sm {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin: 0.5rem 0;
+}
+
+.level1-inline-code-accent {
+    background: rgba(0, 212, 255, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.level1-span-cyan {
+    color: rgba(0, 212, 255, 0.8);
+}
+
+.level1-span-green {
+    color: rgba(16, 185, 129, 0.8);
+}
+
+.level1-gradient-success-primary {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(0, 212, 255, 0.1));
+}
+
+.level1-workflow-phases {
+    margin-top: 1.5rem;
+}
+
+.level1-grid-auto-280-mt {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.level1-hero-title-mb-sm {
+    margin-bottom: 0.5rem;
+}
+
+.level1-section-header-center {
+    color: var(--accent-primary);
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.level1-section-header-secondary {
+    color: var(--accent-secondary);
+    margin-bottom: 1rem;
+}
+
+.level1-h4-purple-mt0 {
+    color: #7b61ff;
+    margin-top: 0;
+}
+
+.level1-h4-legend {
+    margin-top: 0;
+    font-size: 1rem;
+    color: var(--accent-primary);
+}
+
+.level1-icon-xl-yellow {
+    font-size: 2rem;
+    color: #f59e0b;
+}
+
+.level1-icon-xl-red {
+    font-size: 2rem;
+    color: #ef4444;
+}
+
+.level1-icon-xl-primary {
+    font-size: 2rem;
+    color: var(--accent-primary);
+}
+
+.level1-icon-xl-green {
+    font-size: 2rem;
+    color: #10b981;
+}
+
+.level1-icon-xl-secondary {
+    font-size: 2rem;
+    color: var(--accent-secondary);
+}
+
+/* Level 1 Lens Page Styles - Batch 5 (Final) */
+.level1-icon-xl-purple {
+    font-size: 2rem;
+    color: #8b5cf6;
+}
+
+.level1-logo-img {
+    width: 200px;
+    height: 200px;
+    filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.5));
+    transition: filter 0.2s ease-in-out;
+}
+
+.level1-hero-subtitle-mb {
+    margin-bottom: 1rem;
+}
+
+.level1-text-muted-sm-mt {
+    margin: 0.5rem 0 0 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.level1-text-center-muted {
+    text-align: center;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+}
+
+.level1-text-center-muted-lg {
+    text-align: center;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+}
+
+.level1-text-center-muted-sm {
+    text-align: center;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+}
+
+.level1-text-center-muted-mt {
+    text-align: center;
+    color: var(--text-secondary);
+    margin-top: 1rem;
+}
+
+.level1-pre-dark {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 1rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 1rem 0;
+}
+
+.level1-dark-panel-xl {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 2rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+}
+
+.level1-dark-panel-xl-my {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 2rem;
+    border-radius: 12px;
+    margin: 1.5rem 0;
+    overflow-x: auto;
+    text-align: center;
+}
+
+.level1-callout-purple-my {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: rgba(123, 97, 255, 0.1);
+    border-radius: 8px;
+    border-left: 4px solid #7b61ff;
+}
+
+.level1-margin-2y {
+    margin: 2rem 0;
+}
+
+.level1-margin-3y {
+    margin: 3rem 0;
+}
+
+.level1-text-center {
+    text-align: center;
+}
+
+.level1-section-title-mt0 {
+    margin-top: 0;
+}
+
+.level1-text-prose-lg {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    margin-top: 1rem;
+}
+
+.level1-text-prose {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+}
+
+.level1-glass-card-xl {
+    padding: 2.5rem;
+}
+
+.level1-flex-center-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+}
+
+.level1-section-my {
+    margin: 3rem 0;
+}
+
+/* Level 2 Detail Page Styles */
+.level2-container-center {
+    text-align: center;
+    background: transparent;
+}
+
+.level2-logo-xl-glow {
+    width: 300px;
+    height: 300px;
+    border: none;
+    background: transparent;
+    display: inline-block;
+    box-shadow: 0 0 40px rgba(0, 212, 255, 0.6), 0 0 80px rgba(0, 212, 255, 0.3);
+    border-radius: 0;
+    padding: 0;
+}
+
+.level2-emoji-xl {
+    font-size: 2.5rem;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+}
+
+.level2-section-card {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    padding: 2rem;
+}
+
+.level2-section-title-cyan {
+    margin-top: 0;
+    color: #00d4ff;
+    text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+}
+
+.level2-section-title-purple {
+    margin-top: 0;
+    color: #7c3aed;
+    text-shadow: 0 0 10px rgba(124, 58, 237, 0.5);
+}
+
+.level2-section-title-green {
+    margin-top: 0;
+    color: #10b981;
+    text-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+}
+
+.level2-section-title-yellow {
+    margin-top: 0;
+    color: #eab308;
+    text-shadow: 0 0 10px rgba(234, 179, 8, 0.5);
+}
+
+.level2-section-title-red {
+    margin-top: 0;
+    color: #ef4444;
+    text-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+}
+
+.level2-section-title-blue {
+    margin-top: 0;
+    color: #3b82f6;
+    text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+}
+
+.level2-section-title-orange {
+    margin-top: 0;
+    color: #f59e0b;
+    text-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+}
+
+.level2-emoji-xxl {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+/* Level 2 Additional Utility Classes */
+.level2-badge-pink {
+    background: #E91E63;
+}
+
+.level2-badge-green {
+    background: #4CAF50;
+}
+
+.level2-badge-green-alt {
+    background: #10b981;
+}
+
+.level2-badge-red {
+    background: #f44336;
+}
+
+.level2-badge-orange {
+    background: #FF9800;
+}
+
+.level2-badge-blue {
+    background: #3b82f6;
+}
+
+.level2-badge-purple {
+    background: #7b61ff;
+}
+
+.level2-text-accent {
+    color: var(--accent-primary);
+}
+
+.level2-text-muted-mb {
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+}
+
+.level2-text-muted-mb-lg {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.level2-text-center-muted {
+    text-align: center;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.level2-text-muted-prose {
+    color: var(--text-secondary);
+    max-width: 800px;
+    margin: 1rem auto;
+    line-height: 1.8;
+}
+
+.level2-cta-primary {
+    display: inline-block;
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.level2-text-center-padded {
+    text-align: center;
+    padding: 3rem;
+}
+
+.level2-text-sm-mt {
+    margin-top: 1.5rem;
+    font-size: 0.875rem;
+}
+
+.level2-text-xs {
+    font-size: 0.875rem;
+}
+
+.level2-container-centered {
+    max-width: 600px;
+    margin: 0 auto 2rem;
+}
+
+.level2-mb-lg {
+    margin-bottom: 1.5rem;
+}
+
+.level2-mt-md {
+    margin-top: 1rem;
+}
+
+.level2-card-min-width {
+    min-width: 220px;
+    text-align: center;
+}
+
+.level2-flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.level2-text-muted-0 {
+    margin: 0;
+    color: #aaa;
+}
+
+.level2-text-success-mt0 {
+    margin-top: 0;
+    color: #10b981;
+}
+
+.level2-dark-panel-lg {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 2rem;
+    border-radius: 8px;
+}
+
+.level2-dark-panel-md {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.level2-list-clean {
+    list-style: none;
+    padding: 0;
+    margin-top: 0.5rem;
+}
+
+.level2-width-full-mt {
+    width: 100%;
+    margin-top: 1rem;
+}
+
+/* Level 2 Final Batch Classes */
+.level2-score-low {
+    color: var(--security-low);
+}
+
+.level2-legend-purple {
+    background: #9C27B0;
+}
+
+.level2-legend-blue-alt {
+    background: #2196F3;
+}
+
+.level2-legend-red {
+    background: #ef4444;
+}
+
+.level2-legend-orange {
+    background: #f59e0b;
+}
+
+.level2-text-muted-prose-alt {
+    color: var(--text-secondary);
+    max-width: 800px;
+    margin: 1rem auto;
+}
+
+.level2-text-center-muted-alt {
+    text-align: center;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+}
+
+.level2-dark-panel-xl-my {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 2rem;
+    border-radius: 12px;
+    margin: 1.5rem 0;
+    overflow-x: auto;
+}
+
+.level2-dark-panel-xl-my-alt {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 2rem;
+    border-radius: 12px;
+    margin: 1.5rem 0;
+}
+
+.level2-cta-gradient {
+    display: inline-block;
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1.125rem;
+    transition: transform 0.2s;
+}
+
+.level2-nav-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto var(--spacing-2xl);
+    padding: var(--spacing-xl);
+}
+
+.level2-pre-dark-mt {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 0.5rem;
+}
+
+.level2-chart-container {
+    height: 300px;
+}
+
+
+
+
