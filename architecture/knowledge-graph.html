@@ -1,1039 +1,2075 @@
-<!DOCTYPE html><!DOCTYPE html>
+<!DOCTYPE html><!DOCTYPE html><!DOCTYPE html>
 
-<html lang="en"><html lang="en">
+<html lang="en">
 
-<head><head>
+<head><html lang="en"><html lang="en">
 
-    <meta charset="utf-8"><meta charset="utf-8">
+    <meta charset="utf-8">
 
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"><head><head>
 
-    <title>Knowledge Graph (Tier 2) - CORTEX Architecture</title><title>Knowledge Graph (Tier 2) - CORTEX Architecture</title>
+    <title>Knowledge Graph - CORTEX Architecture</title>
 
-    <link href="../assets/images/CORTEX-logo.png" rel="icon" type="image/png"><link href="../assets/images/CORTEX-logo.png" rel="icon" type="image/png">
+    <link href="../assets/images/CORTEX-logo.png" rel="icon" type="image/png">    <meta charset="utf-8"><meta charset="utf-8">
 
-    <!-- Glassmorphism v3.0 CSS Stack --><link href="../assets/css/main.css" rel="stylesheet">
+    <!-- Glassmorphism v3.0 CSS Stack -->
 
-    <link href="../assets/css/variables.css" rel="stylesheet"></head>
+    <link href="../assets/css/variables.css" rel="stylesheet">    <meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <link href="../assets/css/main.css" rel="stylesheet"><body>
+    <link href="../assets/css/main.css" rel="stylesheet">
 
-    <link href="../assets/css/glass-patterns.css" rel="stylesheet"><!-- Breadcrumb -->
+    <link href="../assets/css/glass-patterns.css" rel="stylesheet">    <title>Knowledge Graph (Tier 2) - CORTEX Architecture</title><title>Knowledge Graph (Tier 2) - CORTEX Architecture</title>
 
-    <link href="../assets/css/micro-interactions.css" rel="stylesheet"><nav class="breadcrumb">
+    <link href="../assets/css/micro-interactions.css" rel="stylesheet">
 
-    <!-- D3.js for Force-Directed Graph --><a href="../index.html">Home</a>
+    <!-- D3.js for Force-Directed Graph -->    <link href="../assets/images/CORTEX-logo.png" rel="icon" type="image/png"><link href="../assets/images/CORTEX-logo.png" rel="icon" type="image/png">
 
-    <script src="https://d3js.org/d3.v7.min.js"></script><span class="breadcrumb-separator">›</span>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
 
-    <style><a href="index.html">Architecture</a>
+    <style>    <!-- Glassmorphism v3.0 CSS Stack --><link href="../assets/css/main.css" rel="stylesheet">
 
-        /* Page-specific overrides */<span class="breadcrumb-separator">›</span>
+        /* Page-specific overrides */
 
-        body {<span class="breadcrumb-current">Knowledge Graph (Tier 2)</span>
+        body {    <link href="../assets/css/variables.css" rel="stylesheet"></head>
 
-            background: linear-gradient(135deg, var(--bg-primary) 0%, #0a1628 50%, #1a0a2e 100%);</nav>
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
 
-            min-height: 100vh;<!-- Evolution Banner -->
+            min-height: 100vh;    <link href="../assets/css/main.css" rel="stylesheet"><body>
 
-        }<section class="section">
+        }
 
-        <div class="container">
+            <link href="../assets/css/glass-patterns.css" rel="stylesheet"><!-- Breadcrumb -->
 
-        /* Hero Section with Network Effect */<div class="evolution-banner">
+        /* Hero Section with Light Leak */
 
-        .hero-section {<div>
+        .hero-section {    <link href="../assets/css/micro-interactions.css" rel="stylesheet"><nav class="breadcrumb">
 
-            position: relative;<strong>Architecture Evolution in Progress</strong>
+            position: relative;
 
-            padding: var(--spacing-3xl) var(--spacing-xl);<p>CORTEX is consolidating from 15+ orchestrators to a unified 10-orchestrator system. 
+            padding: var(--spacing-2xl) var(--spacing-xl) var(--spacing-xl);    <!-- D3.js for Force-Directed Graph --><a href="../index.html">Home</a>
 
-            overflow: hidden;                       This page reflects current (3.0) architecture. See 
+            overflow: hidden;
 
-            text-align: center;                       <a href="../future/technical-evolution.html">Technical Evolution</a> for CORTEX plans.</p>
-
-        }</div>
-
-        <!-- Header -->
-
-        .hero-section::before {<section class="section">
-
-            content: '';<div class="container">
-
-            position: absolute;<h1 class="section-title">🕸️ Knowledge Graph (Tier 2)</h1>
-
-            top: 0;<p class="text-center">
-
-            left: 0;                Self-organizing semantic network with Hebbian learning connecting 8,429 concept nodes across 24,817 weighted relationships
-
-            right: 0;
-
-            bottom: 0;    <!-- Executive Summary -->
-
-            background: <section class="section">
-
-                radial-gradient(circle at 20% 30%, rgba(139, 92, 246, 0.1) 0%, transparent 30%),<div class="container">
-
-                radial-gradient(circle at 80% 70%, rgba(0, 212, 255, 0.1) 0%, transparent 30%);<div class="glass-card">
-
-            animation: networkPulse 6s ease-in-out infinite;<h2 class="mb-3">Executive Summary</h2>
-
-            pointer-events: none;<p>
-
-        }                    CORTEX's Tier 2 knowledge graph is a 3D force-directed network where concepts self-organize based on usage patterns. 
-
-                            This is long-term semantic memory—8,429 purple nodes representing concepts (TDD, Git Checkpoints, Planning) connected 
-
-        @keyframes networkPulse {                    by 24,817 weighted edges. The graph learns continuously through <strong>Hebbian learning</strong>: when concepts activate 
-
-            0%, 100% { opacity: 0.5; }                    together, their connection strengthens. With 12ms semantic search powered by FTS5 full-text engine and natural clustering 
-
-            50% { opacity: 0.8; }                    from force-directed physics, this tier discovers relationships humans might miss.
-
-        }                </p>
-
-        <div>
-
-        .hero-icon {<div>
-
-            font-size: 4rem;<div>8,429</div>
-
-            margin-bottom: var(--spacing-md);<div>Concept Nodes</div>
-
-            display: block;<div>Semantic entities</div>
-
-        }</div>
-
-        <div>
-
-        .hero-title {<div>24,817</div>
-
-            font-size: clamp(2rem, 4vw, 3.5rem);<div>Connections</div>
-
-            font-weight: 800;<div>Weighted relationships</div>
-
-            background: linear-gradient(135deg, #8b5cf6 0%, var(--accent-primary) 50%, #4ecdc4 100%);</div>
-
-            -webkit-background-clip: text;<div>
-
-            -webkit-text-fill-color: transparent;<div>12ms</div>
-
-            background-clip: text;<div>Search Time</div>
-
-            margin-bottom: var(--spacing-md);<div>FTS5 semantic</div>
-
-        }</div>
-
-        <div>
-
-        .hero-subtitle {<div>3,214</div>
-
-            font-size: var(--font-lg);<div>Strong Links</div>
-
-            color: var(--text-secondary);<div>Weight >0.7</div>
-
-            max-width: 700px;</div>
-
-            margin: 0 auto var(--spacing-2xl);<!-- Hebbian Learning -->
-
-        }<section class="section">
-
-        <div class="container">
-
-        /* Metrics Dashboard */<div class="glass-card">
-
-        .metrics-dashboard {<h2 class="mb-3">🧠 Hebbian Learning: "Nodes That Fire Together, Wire Together"</h2>
-
-            display: grid;<p>
-
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));                    The graph strengthens connections based on co-activation frequency. When "TDD" and "Git Checkpoints" appear together 
-
-            gap: var(--spacing-md);                    in user queries, their edge weight increases. This mimics biological neural networks—repeated usage patterns become 
-
-            max-width: 900px;                    structural knowledge.
-
-            margin: 0 auto var(--spacing-3xl);                
-
-            padding: 0 var(--spacing-lg);                </p>
-
-        }<div>
-
-        <h3>Edge Weight Evolution</h3>
-
-        .metric-card {<div>
-
-            text-align: center;<div>
-
-            padding: var(--spacing-lg);<div>INITIAL</div>
-
-        }<div>0.25</div>
-
-        <div>Light purple edge</div>
-
-        .metric-value {<div>Weak association</div>
-
-            font-size: var(--font-2xl);</div>
-
-            font-weight: 800;<div>
-
-            background: linear-gradient(135deg, #8b5cf6, var(--accent-primary));<div>LEARNING</div>
-
-            -webkit-background-clip: text;<div>0.55</div>
-
-            -webkit-text-fill-color: transparent;<div>Cyan pulsing edge</div>
-
-            background-clip: text;<div>Active strengthening</div>
-
-            margin-bottom: var(--spacing-2xs);</div>
-
-        }<div>
-
-        <div>STRONG</div>
-
-        .metric-label {<div>0.85</div>
-
-            font-size: var(--font-xs);<div>Gold thick edge</div>
-
-            color: var(--text-muted);<div>Established pattern</div>
-
-            text-transform: uppercase;</div>
-
-            letter-spacing: 0.1em;<div>
-
-        }<div>PRUNING</div>
-
-        <div>0.10</div>
-
-        /* Graph Visualization */<div>Fading edge</div>
-
-        .graph-container {<div>Candidate for removal</div>
-
-            max-width: 1400px;</div>
-
-            margin: 0 auto;<div>
-
-            padding: var(--spacing-2xl) var(--spacing-lg);<h3>📈 Learning Algorithm</h3>
-
-        }<div>
-
-        <div>
-
-        .section-header {<div>When Concepts Co-Activate:</div>
-
-            text-align: center;<ul>
-
-            margin-bottom: var(--spacing-2xl);<li>Detect simultaneous node activation (user query mentions both)</li>
-
-        }<li>Increment edge weight: <code>weight += 0.05</code>
-
-        </li>
-
-        .section-title {<li>Visual update: light purple → cyan (learning indicator)</li>
-
-            font-size: var(--font-2xl);<li>After multiple co-activations (>20), promote to gold</li>
-
-            font-weight: 700;</ul>
-
-            color: var(--text-primary);<div>
-
-            margin-bottom: var(--spacing-sm);<div>When Connections Weaken:</div>
-
-        }<ul>
-
-        <li>Time decay if not co-activated: <code>weight -= 0.01/day</code>
-
-        .section-description {</li>
-
-            color: var(--text-secondary);<li>Edges below 0.15 threshold marked for pruning</li>
-
-            max-width: 600px;<li>Automatic cleanup removes weak edges (keeps graph lean)</li>
-
-            margin: 0 auto;<li>Strong connections (>0.7) resist decay—persistent knowledge</li>
-
-        }</ul>
-
-        <!-- Graph Structure & Physics -->
-
-        #force-graph {<section class="section">
-
-            width: 100%;<div class="container">
-
-            height: 600px;<h2 class="mb-3">🎯 Force-Directed Graph Physics</h2>
-
-            border-radius: var(--radius-xl);<p>
-
-            margin-bottom: var(--spacing-2xl);                Graph physics automatically organizes concepts without manual categorization
-
-            position: relative;            
-
-            overflow: hidden;            </p>
-
-        }<div class="glass-card">
-
-        <div onclick="toggleSection('physics-content')">
-
-        #force-graph svg {<h3>⚛️ Physics Simulation</h3>
-
-            width: 100%;<span id="physics-content-icon">▼</span>
-
-            height: 100%;</div>
-
-        }<div id="physics-content">
-
-        <p>
-
-        .graph-legend {                        Force-directed layout treats nodes as charged particles and edges as springs. Strongly connected nodes pull together, 
-
-            display: flex;                        weakly connected nodes push apart. The result: semantic clusters emerge naturally.
-
-            justify-content: center;                    </p>
-
-            gap: var(--spacing-xl);<div>
-
-            flex-wrap: wrap;<div>
-
-            margin-top: var(--spacing-lg);<div>
-
-        }<div>Attractive Forces:</div>
-
-        <ul>
-
-        .legend-item {<li>Edges act as springs pulling connected nodes closer</li>
-
-            display: flex;<li>Strong edges (gold) = stronger spring force</li>
-
-            align-items: center;<li>Nodes with many connections become cluster centers</li>
-
-            gap: var(--spacing-sm);</ul>
-
-            font-size: var(--font-sm);<div>
-
-            color: var(--text-secondary);<div>Repulsive Forces:</div>
-
-        }<ul>
-
-        <li>All nodes repel each other (prevent overlap)</li>
-
-        .legend-dot {<li>Weakly connected nodes pushed to graph periphery</li>
-
-            width: 12px;<li>Creates natural spacing for readability</li>
-
-            height: 12px;</ul>
-
-            border-radius: 50%;<div>
-
-        }<strong>Result:</strong> Concepts that frequently co-occur gravitate together. 
-
-                                    TDD, Test Coverage, and Red-Green-Refactor form tight cluster. Planning, ADO, DoR/DoD form another. 
-
-        /* Pattern Categories */                            Graph structure reveals real usage patterns—no manual organization needed.
-
-        .patterns-grid {            
-
-            display: grid;            <div class="glass-card">
-
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));<div onclick="toggleSection('nodes-content')">
-
-            gap: var(--spacing-lg);<h3>📊 Node Sizes & Importance</h3>
-
-            margin-top: var(--spacing-2xl);<span id="nodes-content-icon">▼</span>
-
-        }</div>
-
-        <div id="nodes-content">
-
-        .pattern-card {<p>
-
-            padding: var(--spacing-xl);                        Node size indicates connectivity—how many concepts link to it. Large nodes are "hub concepts" referenced frequently. 
-
-        }                        Small nodes are specialized terms with limited scope.
-
-                            </p>
-
-        .pattern-header {<div>
-
-            display: flex;<div>
-
-            align-items: center;<div>
-
-            gap: var(--spacing-md);<div>Large Nodes</div>
-
-            margin-bottom: var(--spacing-md);<div>50-100 connections</div>
-
-        }<div>
-
-                                            "TDD Workflow", "Planning", "Git Checkpoints"—core concepts referenced everywhere
-
-        .pattern-icon {                            <div>
-
-            width: 48px;<div>Medium Nodes</div>
-
-            height: 48px;<div>20-49 connections</div>
-
-            border-radius: var(--radius-lg);<div>
-
-            display: flex;                                    "ADO Integration", "Test Coverage"—important but domain-specific
-
-            align-items: center;                            <div>
-
-            justify-content: center;<div>Small Nodes</div>
-
-            font-size: 1.5rem;<div>5-19 connections</div>
-
-            flex-shrink: 0;<div>
-
-        }                                    "Error Handling", "Config Files"—specialized terms with limited reach
+        }    <script src="https://d3js.org/d3.v7.min.js"></script><span class="breadcrumb-separator">›</span>
 
         
 
-        .pattern-icon.tdd { background: rgba(255, 107, 107, 0.2); }    <!-- Semantic Clusters -->
+        .hero-section::before {    <style><a href="index.html">Architecture</a>
 
-        .pattern-icon.arch { background: rgba(139, 92, 246, 0.2); }<section class="section">
+            content: '';
 
-        .pattern-icon.ops { background: rgba(0, 212, 255, 0.2); }<div class="container">
+            position: absolute;        /* Page-specific overrides */<span class="breadcrumb-separator">›</span>
 
-        .pattern-icon.ui { background: rgba(78, 205, 196, 0.2); }<div class="glass-card">
+            top: -50%;
 
-        <h2 class="mb-3">🗂️ Self-Organizing Semantic Clusters</h2>
+            left: -25%;        body {<span class="breadcrumb-current">Knowledge Graph (Tier 2)</span>
 
-        .pattern-title {<p>
+            width: 150%;
 
-            font-size: var(--font-lg);                    Four natural clusters emerged from usage patterns—no manual categorization required
+            height: 200%;            background: linear-gradient(135deg, var(--bg-primary) 0%, #0a1628 50%, #1a0a2e 100%);</nav>
 
-            font-weight: 600;                
+            background: radial-gradient(ellipse at center, rgba(139, 92, 246, 0.15) 0%, transparent 50%);
 
-            color: var(--text-primary);                </p>
+            animation: lightLeak 8s ease-in-out infinite;            min-height: 100vh;<!-- Evolution Banner -->
 
-        }<div>
+            pointer-events: none;
 
-        <div>
+        }        }<section class="section">
 
-        .pattern-count {<h3>🧪 TDD & Testing Cluster (Top-Left)</h3>
+        
 
-            font-size: var(--font-sm);<p>
+        @keyframes lightLeak {        <div class="container">
 
-            color: var(--text-muted);                            Concepts frequently co-occurring in test-first workflows
+            0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: 0.3; }
 
-        }                        </p>
+            50% { transform: translate(10%, -5%) rotate(5deg); opacity: 0.6; }        /* Hero Section with Network Effect */<div class="evolution-banner">
 
-        <div>
+        }
 
-        .pattern-list {<strong>Core Concepts:</strong>
+                .hero-section {<div>
 
-            list-style: none;<ul>
+        .hero-title {
 
-            padding: 0;<li>TDD Workflow (94 connections)</li>
+            font-size: clamp(2rem, 4vw, 3rem);            position: relative;<strong>Architecture Evolution in Progress</strong>
 
-            margin: 0;<li>Red-Green-Refactor (76 connections)</li>
+            font-weight: 800;
 
-        }<li>Test Coverage (68 connections)</li>
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-secondary) 50%, var(--accent-primary) 100%);            padding: var(--spacing-3xl) var(--spacing-xl);<p>CORTEX is consolidating from 15+ orchestrators to a unified 10-orchestrator system. 
 
-        <li>Unit Tests (54 connections)</li>
+            -webkit-background-clip: text;
 
-        .pattern-list li {<li>4-Layer Testing (42 connections)</li>
+            -webkit-text-fill-color: transparent;            overflow: hidden;                       This page reflects current (3.0) architecture. See 
 
-            padding: var(--spacing-sm) 0;</ul>
+            background-clip: text;
 
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);<div>
+            text-align: center;            text-align: center;                       <a href="../future/technical-evolution.html">Technical Evolution</a> for CORTEX plans.</p>
 
-            color: var(--text-secondary);<h3>🏗️ Architecture & Design Cluster (Top-Right)</h3>
+            margin-bottom: var(--spacing-md);
 
-            font-size: var(--font-sm);<p>
+        }        }</div>
 
-            display: flex;                            System design, patterns, and structural concepts
+        
 
-            align-items: center;                        </p>
+        .hero-subtitle {        <!-- Header -->
 
-            gap: var(--spacing-sm);<div>
+            font-size: var(--font-lg);
 
-        }<strong>Core Concepts:</strong>
+            color: var(--text-secondary);        .hero-section::before {<section class="section">
 
-        <ul>
+            text-align: center;
 
-        .pattern-list li:last-child {<li>4-Tier Brain (82 connections)</li>
+            max-width: 800px;            content: '';<div class="container">
 
-            border-bottom: none;<li>SKULL Protection (71 connections)</li>
+            margin: 0 auto var(--spacing-xl);
 
-        }<li>Agent System (65 connections)</li>
+        }            position: absolute;<h1 class="section-title">🕸️ Knowledge Graph (Tier 2)</h1>
 
-        <li>Orchestrators (58 connections)</li>
+        
 
-        .pattern-list li::before {<li>Force-Directed Graph (39 connections)</li>
+        /* Metrics Dashboard */            top: 0;<p class="text-center">
 
-            content: '◆';</ul>
+        .metrics-dashboard {
 
-            color: var(--accent-primary);<div>
+            display: flex;            left: 0;                Self-organizing semantic network with Hebbian learning connecting 8,429 concept nodes across 24,817 weighted relationships
 
-            font-size: 8px;<h3>⚙️ Operations & Workflows Cluster (Bottom-Left)</h3>
+            flex-wrap: wrap;
 
-        }<p>
+            justify-content: center;            right: 0;
 
-                                    Processes, automation, and operational tasks
+            align-items: center;
 
-        /* Hebbian Learning Section */                        </p>
+            gap: var(--spacing-md);            bottom: 0;    <!-- Executive Summary -->
 
-        .learning-section {<div>
+            width: 100%;
 
-            margin-top: var(--spacing-3xl);<strong>Core Concepts:</strong>
+            margin: 0 auto var(--spacing-2xl);            background: <section class="section">
 
-        }<ul>
+            padding: 0 var(--spacing-lg);
 
-        <li>Planning System (88 connections)</li>
+        }                radial-gradient(circle at 20% 30%, rgba(139, 92, 246, 0.1) 0%, transparent 30%),<div class="container">
+
+        
+
+        .metric-card {                radial-gradient(circle at 80% 70%, rgba(0, 212, 255, 0.1) 0%, transparent 30%);<div class="glass-card">
+
+            text-align: center;
+
+            padding: var(--spacing-lg) var(--spacing-xl);            animation: networkPulse 6s ease-in-out infinite;<h2 class="mb-3">Executive Summary</h2>
+
+            min-width: 120px;
+
+            flex: 0 1 auto;            pointer-events: none;<p>
+
+        }
+
+                }                    CORTEX's Tier 2 knowledge graph is a 3D force-directed network where concepts self-organize based on usage patterns. 
+
+        .metric-value {
+
+            font-size: var(--font-2xl);                            This is long-term semantic memory—8,429 purple nodes representing concepts (TDD, Git Checkpoints, Planning) connected 
+
+            font-weight: 800;
+
+            background: linear-gradient(135deg, var(--accent-secondary), var(--accent-primary));        @keyframes networkPulse {                    by 24,817 weighted edges. The graph learns continuously through <strong>Hebbian learning</strong>: when concepts activate 
+
+            -webkit-background-clip: text;
+
+            -webkit-text-fill-color: transparent;            0%, 100% { opacity: 0.5; }                    together, their connection strengthens. With 12ms semantic search powered by FTS5 full-text engine and natural clustering 
+
+            background-clip: text;
+
+            margin-bottom: var(--spacing-xs);            50% { opacity: 0.8; }                    from force-directed physics, this tier discovers relationships humans might miss.
+
+        }
+
+                }                </p>
+
+        .metric-label {
+
+            font-size: var(--font-xs);        <div>
+
+            color: var(--text-muted);
+
+            text-transform: uppercase;        .hero-icon {<div>
+
+            letter-spacing: 0.1em;
+
+        }            font-size: 4rem;<div>8,429</div>
+
+        
+
+        /* Graph Container */            margin-bottom: var(--spacing-md);<div>Concept Nodes</div>
+
+        .graph-container {
+
+            max-width: 1600px;            display: block;<div>Semantic entities</div>
+
+            margin: 0 auto;
+
+            padding: 0 var(--spacing-lg) var(--spacing-2xl);        }</div>
+
+        }
+
+                <div>
+
+        .graph-wrapper {
+
+            display: grid;        .hero-title {<div>24,817</div>
+
+            grid-template-columns: 1fr 320px;
+
+            gap: var(--spacing-lg);            font-size: clamp(2rem, 4vw, 3.5rem);<div>Connections</div>
+
+        }
+
+                    font-weight: 800;<div>Weighted relationships</div>
+
+        @media (max-width: 1200px) {
+
+            .graph-wrapper {            background: linear-gradient(135deg, #8b5cf6 0%, var(--accent-primary) 50%, #4ecdc4 100%);</div>
+
+                grid-template-columns: 1fr;
+
+            }            -webkit-background-clip: text;<div>
+
+        }
+
+                    -webkit-text-fill-color: transparent;<div>12ms</div>
+
+        /* Force-Directed Graph */
+
+        #knowledge-graph {            background-clip: text;<div>Search Time</div>
+
+            width: 100%;
+
+            height: 700px;            margin-bottom: var(--spacing-md);<div>FTS5 semantic</div>
+
+            border-radius: var(--radius-xl);
+
+            overflow: hidden;        }</div>
+
+            position: relative;
+
+        }        <div>
+
+        
+
+        #knowledge-graph svg {        .hero-subtitle {<div>3,214</div>
+
+            width: 100%;
+
+            height: 100%;            font-size: var(--font-lg);<div>Strong Links</div>
+
+            cursor: grab;
+
+        }            color: var(--text-secondary);<div>Weight >0.7</div>
+
+        
+
+        #knowledge-graph svg:active {            max-width: 700px;</div>
+
+            cursor: grabbing;
+
+        }            margin: 0 auto var(--spacing-2xl);<!-- Hebbian Learning -->
+
+        
+
+        /* Graph Controls */        }<section class="section">
+
+        .graph-controls {
+
+            position: absolute;        <div class="container">
+
+            top: var(--spacing-md);
+
+            left: var(--spacing-md);        /* Metrics Dashboard */<div class="glass-card">
+
+            display: flex;
+
+            gap: var(--spacing-xs);        .metrics-dashboard {<h2 class="mb-3">🧠 Hebbian Learning: "Nodes That Fire Together, Wire Together"</h2>
+
+            z-index: 10;
+
+        }            display: grid;<p>
+
+        
+
+        .control-btn {            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));                    The graph strengthens connections based on co-activation frequency. When "TDD" and "Git Checkpoints" appear together 
+
+            width: 40px;
+
+            height: 40px;            gap: var(--spacing-md);                    in user queries, their edge weight increases. This mimics biological neural networks—repeated usage patterns become 
+
+            border-radius: var(--radius-md);
+
+            background: var(--glass-bg, rgba(26, 31, 58, 0.8));            max-width: 900px;                    structural knowledge.
+
+            backdrop-filter: blur(10px);
+
+            border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));            margin: 0 auto var(--spacing-3xl);                
+
+            color: var(--text-secondary);
+
+            font-size: 1.2rem;            padding: 0 var(--spacing-lg);                </p>
+
+            cursor: pointer;
+
+            transition: all 0.2s ease;        }<div>
+
+            display: flex;
+
+            align-items: center;        <h3>Edge Weight Evolution</h3>
+
+            justify-content: center;
+
+        }        .metric-card {<div>
+
+        
+
+        .control-btn:hover {            text-align: center;<div>
+
+            color: var(--accent-primary);
+
+            border-color: var(--accent-primary);            padding: var(--spacing-lg);<div>INITIAL</div>
+
+            transform: scale(1.05);
+
+        }        }<div>0.25</div>
+
+        
+
+        /* Category Legend */        <div>Light purple edge</div>
+
+        .category-legend {
+
+            position: absolute;        .metric-value {<div>Weak association</div>
+
+            bottom: var(--spacing-md);
+
+            left: var(--spacing-md);            font-size: var(--font-2xl);</div>
+
+            display: flex;
+
+            flex-wrap: wrap;            font-weight: 800;<div>
+
+            gap: var(--spacing-sm);
+
+            max-width: calc(100% - var(--spacing-2xl));            background: linear-gradient(135deg, #8b5cf6, var(--accent-primary));<div>LEARNING</div>
+
+            z-index: 10;
+
+        }            -webkit-background-clip: text;<div>0.55</div>
+
+        
+
+        .legend-item {            -webkit-text-fill-color: transparent;<div>Cyan pulsing edge</div>
+
+            display: flex;
+
+            align-items: center;            background-clip: text;<div>Active strengthening</div>
+
+            gap: var(--spacing-xs);
+
+            padding: var(--spacing-xs) var(--spacing-sm);            margin-bottom: var(--spacing-2xs);</div>
+
+            background: var(--glass-bg, rgba(26, 31, 58, 0.8));
+
+            backdrop-filter: blur(10px);        }<div>
+
+            border-radius: var(--radius-sm);
+
+            font-size: var(--font-xs);        <div>STRONG</div>
+
+            color: var(--text-secondary);
+
+            cursor: pointer;        .metric-label {<div>0.85</div>
+
+            transition: all 0.2s ease;
+
+            border: 1px solid transparent;            font-size: var(--font-xs);<div>Gold thick edge</div>
+
+        }
+
+                    color: var(--text-muted);<div>Established pattern</div>
+
+        .legend-item:hover, .legend-item.active {
+
+            border-color: var(--accent-primary);            text-transform: uppercase;</div>
+
+            color: var(--text-primary);
+
+        }            letter-spacing: 0.1em;<div>
+
+        
+
+        .legend-dot {        }<div>PRUNING</div>
+
+            width: 10px;
+
+            height: 10px;        <div>0.10</div>
+
+            border-radius: 50%;
+
+        }        /* Graph Visualization */<div>Fading edge</div>
+
+        
+
+        /* Detail Panel */        .graph-container {<div>Candidate for removal</div>
+
+        .detail-panel {
+
+            padding: var(--spacing-xl);            max-width: 1400px;</div>
+
+            height: 700px;
+
+            overflow-y: auto;            margin: 0 auto;<div>
+
+        }
+
+                    padding: var(--spacing-2xl) var(--spacing-lg);<h3>📈 Learning Algorithm</h3>
+
+        .detail-header {
+
+            margin-bottom: var(--spacing-lg);        }<div>
+
+        }
+
+                <div>
+
+        .detail-category {
+
+            font-size: var(--font-xs);        .section-header {<div>When Concepts Co-Activate:</div>
+
+            font-weight: 600;
+
+            color: var(--accent-secondary);            text-align: center;<ul>
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.1em;            margin-bottom: var(--spacing-2xl);<li>Detect simultaneous node activation (user query mentions both)</li>
+
+            margin-bottom: var(--spacing-xs);
+
+        }        }<li>Increment edge weight: <code>weight += 0.05</code>
+
+        
+
+        .detail-title {        </li>
+
+            font-size: var(--font-xl);
+
+            font-weight: 700;        .section-title {<li>Visual update: light purple → cyan (learning indicator)</li>
+
+            color: var(--text-primary);
+
+            margin-bottom: var(--spacing-sm);            font-size: var(--font-2xl);<li>After multiple co-activations (>20), promote to gold</li>
+
+            line-height: 1.3;
+
+        }            font-weight: 700;</ul>
+
+        
+
+        .detail-description {            color: var(--text-primary);<div>
+
+            color: var(--text-secondary);
+
+            font-size: var(--font-sm);            margin-bottom: var(--spacing-sm);<div>When Connections Weaken:</div>
+
+            line-height: 1.6;
+
+            margin-bottom: var(--spacing-lg);        }<ul>
+
+        }
+
+                <li>Time decay if not co-activated: <code>weight -= 0.01/day</code>
+
+        .detail-stats {
+
+            display: grid;        .section-description {</li>
+
+            grid-template-columns: repeat(2, 1fr);
+
+            gap: var(--spacing-sm);            color: var(--text-secondary);<li>Edges below 0.15 threshold marked for pruning</li>
+
+            margin-bottom: var(--spacing-lg);
+
+        }            max-width: 600px;<li>Automatic cleanup removes weak edges (keeps graph lean)</li>
+
+        
+
+        .stat-box {            margin: 0 auto;<li>Strong connections (>0.7) resist decay—persistent knowledge</li>
+
+            background: rgba(255, 255, 255, 0.03);
+
+            padding: var(--spacing-sm);        }</ul>
+
+            border-radius: var(--radius-sm);
+
+            text-align: center;        <!-- Graph Structure & Physics -->
+
+        }
+
+                #force-graph {<section class="section">
+
+        .stat-value {
+
+            font-size: var(--font-lg);            width: 100%;<div class="container">
+
+            font-weight: 700;
+
+            color: var(--accent-primary);            height: 600px;<h2 class="mb-3">🎯 Force-Directed Graph Physics</h2>
+
+        }
+
+                    border-radius: var(--radius-xl);<p>
+
+        .stat-label {
+
+            font-size: var(--font-xs);            margin-bottom: var(--spacing-2xl);                Graph physics automatically organizes concepts without manual categorization
+
+            color: var(--text-muted);
+
+        }            position: relative;            
+
+        
+
+        .detail-section {            overflow: hidden;            </p>
+
+            margin-bottom: var(--spacing-lg);
+
+        }        }<div class="glass-card">
+
+        
+
+        .detail-section-title {        <div onclick="toggleSection('physics-content')">
+
+            font-size: var(--font-sm);
+
+            font-weight: 600;        #force-graph svg {<h3>⚛️ Physics Simulation</h3>
+
+            color: var(--text-primary);
+
+            margin-bottom: var(--spacing-sm);            width: 100%;<span id="physics-content-icon">▼</span>
+
+            display: flex;
+
+            align-items: center;            height: 100%;</div>
+
+            gap: var(--spacing-xs);
+
+        }        }<div id="physics-content">
+
+        
+
+        .detail-list {        <p>
+
+            list-style: none;
+
+            padding: 0;        .graph-legend {                        Force-directed layout treats nodes as charged particles and edges as springs. Strongly connected nodes pull together, 
+
+            margin: 0;
+
+        }            display: flex;                        weakly connected nodes push apart. The result: semantic clusters emerge naturally.
+
+        
+
+        .detail-list li {            justify-content: center;                    </p>
+
+            font-size: var(--font-sm);
+
+            color: var(--text-secondary);            gap: var(--spacing-xl);<div>
+
+            padding: var(--spacing-xs) 0;
+
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);            flex-wrap: wrap;<div>
+
+            display: flex;
+
+            align-items: flex-start;            margin-top: var(--spacing-lg);<div>
+
+            gap: var(--spacing-xs);
+
+        }        }<div>Attractive Forces:</div>
+
+        
+
+        .detail-list li::before {        <ul>
+
+            content: '→';
+
+            color: var(--accent-secondary);        .legend-item {<li>Edges act as springs pulling connected nodes closer</li>
+
+            flex-shrink: 0;
+
+        }            display: flex;<li>Strong edges (gold) = stronger spring force</li>
+
+        
+
+        .detail-list li:last-child {            align-items: center;<li>Nodes with many connections become cluster centers</li>
+
+            border-bottom: none;
+
+        }            gap: var(--spacing-sm);</ul>
+
+        
+
+        .empty-state {            font-size: var(--font-sm);<div>
+
+            text-align: center;
+
+            padding: var(--spacing-2xl);            color: var(--text-secondary);<div>Repulsive Forces:</div>
+
+            color: var(--text-muted);
+
+        }        }<ul>
+
+        
+
+        .empty-state-icon {        <li>All nodes repel each other (prevent overlap)</li>
+
+            font-size: 3rem;
+
+            margin-bottom: var(--spacing-md);        .legend-dot {<li>Weakly connected nodes pushed to graph periphery</li>
+
+            opacity: 0.5;
+
+        }            width: 12px;<li>Creates natural spacing for readability</li>
+
+        
+
+        /* Node Tooltip */            height: 12px;</ul>
+
+        .node-tooltip {
+
+            position: absolute;            border-radius: 50%;<div>
+
+            padding: var(--spacing-sm) var(--spacing-md);
+
+            background: var(--glass-bg, rgba(26, 31, 58, 0.95));        }<strong>Result:</strong> Concepts that frequently co-occur gravitate together. 
+
+            backdrop-filter: blur(10px);
+
+            border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.15));                                    TDD, Test Coverage, and Red-Green-Refactor form tight cluster. Planning, ADO, DoR/DoD form another. 
+
+            border-radius: var(--radius-md);
+
+            font-size: var(--font-sm);        /* Pattern Categories */                            Graph structure reveals real usage patterns—no manual organization needed.
+
+            color: var(--text-primary);
+
+            pointer-events: none;        .patterns-grid {            
+
+            z-index: 100;
+
+            max-width: 280px;            display: grid;            <div class="glass-card">
+
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+
+            opacity: 0;            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));<div onclick="toggleSection('nodes-content')">
+
+            transition: opacity 0.15s ease;
+
+        }            gap: var(--spacing-lg);<h3>📊 Node Sizes & Importance</h3>
+
+        
+
+        .node-tooltip.visible {            margin-top: var(--spacing-2xl);<span id="nodes-content-icon">▼</span>
+
+            opacity: 1;
+
+        }        }</div>
+
+        
+
+        .tooltip-title {        <div id="nodes-content">
+
+            font-weight: 600;
+
+            margin-bottom: var(--spacing-2xs);        .pattern-card {<p>
+
+        }
+
+                    padding: var(--spacing-xl);                        Node size indicates connectivity—how many concepts link to it. Large nodes are "hub concepts" referenced frequently. 
+
+        .tooltip-category {
+
+            font-size: var(--font-xs);        }                        Small nodes are specialized terms with limited scope.
+
+            color: var(--accent-secondary);
+
+        }                            </p>
+
+        
+
+        /* Breadcrumb */        .pattern-header {<div>
+
+        .breadcrumb {
+
+            padding: var(--spacing-md) var(--spacing-xl);            display: flex;<div>
+
+            font-size: var(--font-sm);
+
+        }            align-items: center;<div>
+
+        
+
+        .breadcrumb a {            gap: var(--spacing-md);<div>Large Nodes</div>
+
+            color: var(--text-muted);
+
+            text-decoration: none;            margin-bottom: var(--spacing-md);<div>50-100 connections</div>
+
+            transition: color var(--transition-fast);
+
+        }        }<div>
+
+        
+
+        .breadcrumb a:hover {                                            "TDD Workflow", "Planning", "Git Checkpoints"—core concepts referenced everywhere
+
+            color: var(--accent-primary);
+
+        }        .pattern-icon {                            <div>
+
+        
+
+        .breadcrumb-separator {            width: 48px;<div>Medium Nodes</div>
+
+            color: var(--text-muted);
+
+            margin: 0 var(--spacing-sm);            height: 48px;<div>20-49 connections</div>
+
+        }
+
+                    border-radius: var(--radius-lg);<div>
+
+        .breadcrumb-current {
+
+            color: var(--text-secondary);            display: flex;                                    "ADO Integration", "Test Coverage"—important but domain-specific
+
+        }
+
+                    align-items: center;                            <div>
+
+        /* Navigation Footer */
+
+        .nav-footer {            justify-content: center;<div>Small Nodes</div>
+
+            display: flex;
+
+            justify-content: space-between;            font-size: 1.5rem;<div>5-19 connections</div>
+
+            align-items: center;
+
+            max-width: 1200px;            flex-shrink: 0;<div>
+
+            margin: var(--spacing-2xl) auto var(--spacing-2xl);
+
+            padding: var(--spacing-xl) var(--spacing-lg);        }                                    "Error Handling", "Config Files"—specialized terms with limited reach
+
+            gap: var(--spacing-lg);
+
+            flex-wrap: wrap;        
+
+        }
+
+                .pattern-icon.tdd { background: rgba(255, 107, 107, 0.2); }    <!-- Semantic Clusters -->
+
+        .nav-link {
+
+            display: inline-flex;        .pattern-icon.arch { background: rgba(139, 92, 246, 0.2); }<section class="section">
+
+            align-items: center;
+
+            gap: var(--spacing-sm);        .pattern-icon.ops { background: rgba(0, 212, 255, 0.2); }<div class="container">
+
+            padding: var(--spacing-md) var(--spacing-xl);
+
+            color: var(--text-secondary);        .pattern-icon.ui { background: rgba(78, 205, 196, 0.2); }<div class="glass-card">
+
+            text-decoration: none;
+
+            background: var(--glass-bg, rgba(26, 31, 58, 0.7));        <h2 class="mb-3">🗂️ Self-Organizing Semantic Clusters</h2>
+
+            backdrop-filter: blur(10px);
+
+            -webkit-backdrop-filter: blur(10px);        .pattern-title {<p>
+
+            border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
+
+            border-radius: var(--radius-lg, 12px);            font-size: var(--font-lg);                    Four natural clusters emerged from usage patterns—no manual categorization required
+
+            transition: all 0.3s ease;
+
+            min-height: 44px;            font-weight: 600;                
+
+            min-width: 200px;
+
+            justify-content: center;            color: var(--text-primary);                </p>
+
+        }
+
+                }<div>
+
+        .nav-link:hover {
+
+            color: var(--accent-primary);        <div>
+
+            border-color: var(--accent-primary);
+
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);        .pattern-count {<h3>🧪 TDD & Testing Cluster (Top-Left)</h3>
+
+        }
+
+                    font-size: var(--font-sm);<p>
+
+        /* Search Box */
+
+        .search-container {            color: var(--text-muted);                            Concepts frequently co-occurring in test-first workflows
+
+            position: absolute;
+
+            top: var(--spacing-md);        }                        </p>
+
+            right: var(--spacing-md);
+
+            z-index: 10;        <div>
+
+        }
+
+                .pattern-list {<strong>Core Concepts:</strong>
+
+        .search-input {
+
+            width: 200px;            list-style: none;<ul>
+
+            padding: var(--spacing-sm) var(--spacing-md);
+
+            background: var(--glass-bg, rgba(26, 31, 58, 0.8));            padding: 0;<li>TDD Workflow (94 connections)</li>
+
+            backdrop-filter: blur(10px);
+
+            border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));            margin: 0;<li>Red-Green-Refactor (76 connections)</li>
+
+            border-radius: var(--radius-md);
+
+            color: var(--text-primary);        }<li>Test Coverage (68 connections)</li>
+
+            font-size: var(--font-sm);
+
+            outline: none;        <li>Unit Tests (54 connections)</li>
+
+            transition: all 0.2s ease;
+
+        }        .pattern-list li {<li>4-Layer Testing (42 connections)</li>
+
+        
+
+        .search-input:focus {            padding: var(--spacing-sm) 0;</ul>
+
+            border-color: var(--accent-primary);
+
+            width: 250px;            border-bottom: 1px solid rgba(255, 255, 255, 0.05);<div>
+
+        }
+
+                    color: var(--text-secondary);<h3>🏗️ Architecture & Design Cluster (Top-Right)</h3>
+
+        .search-input::placeholder {
+
+            color: var(--text-muted);            font-size: var(--font-sm);<p>
+
+        }
+
+    </style>            display: flex;                            System design, patterns, and structural concepts
+
+</head>
+
+<body>            align-items: center;                        </p>
+
+    <!-- Breadcrumb -->
+
+    <nav class="breadcrumb">            gap: var(--spacing-sm);<div>
+
+        <a href="../index.html">Home</a>
+
+        <span class="breadcrumb-separator">›</span>        }<strong>Core Concepts:</strong>
+
+        <a href="index.html">Architecture</a>
+
+        <span class="breadcrumb-separator">›</span>        <ul>
+
+        <span class="breadcrumb-current">Knowledge Graph</span>
+
+    </nav>        .pattern-list li:last-child {<li>4-Tier Brain (82 connections)</li>
+
+
+
+    <!-- Hero Section -->            border-bottom: none;<li>SKULL Protection (71 connections)</li>
+
+    <section class="hero-section">
+
+        <h1 class="hero-title">🧠 Knowledge Graph</h1>        }<li>Agent System (65 connections)</li>
+
+        <p class="hero-subtitle">
+
+            54 learned patterns across 9 categories, automatically extracted from conversations        <li>Orchestrators (58 connections)</li>
+
+            with confidence decay of 5% per 90 days unused.
+
+        </p>        .pattern-list li::before {<li>Force-Directed Graph (39 connections)</li>
+
+        
+
+        <!-- Metrics Dashboard -->            content: '◆';</ul>
+
+        <div class="metrics-dashboard">
+
+            <div class="glass-card metric-card tilt-glass">            color: var(--accent-primary);<div>
+
+                <div class="metric-value">54</div>
+
+                <div class="metric-label">Total Patterns</div>            font-size: 8px;<h3>⚙️ Operations & Workflows Cluster (Bottom-Left)</h3>
+
+            </div>
+
+            <div class="glass-card metric-card tilt-glass">        }<p>
+
+                <div class="metric-value">9</div>
+
+                <div class="metric-label">Categories</div>                                    Processes, automation, and operational tasks
+
+            </div>
+
+            <div class="glass-card metric-card tilt-glass">        /* Hebbian Learning Section */                        </p>
+
+                <div class="metric-value">7</div>
+
+                <div class="metric-label">Learning Sessions</div>        .learning-section {<div>
+
+            </div>
+
+            <div class="glass-card metric-card tilt-glass">            margin-top: var(--spacing-3xl);<strong>Core Concepts:</strong>
+
+                <div class="metric-value">v2.1</div>
+
+                <div class="metric-label">Graph Version</div>        }<ul>
+
+            </div>
+
+        </div>        <li>Planning System (88 connections)</li>
+
+    </section>
 
         .learning-stages {<li>Git Checkpoints (79 connections)</li>
 
-            display: grid;<li>System Maintenance (66 connections)</li>
+    <!-- Graph Container -->
 
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));<li>Dashboard Launcher (51 connections)</li>
+    <section class="graph-container">            display: grid;<li>System Maintenance (66 connections)</li>
 
-            gap: var(--spacing-lg);<li>Align Orchestrator (47 connections)</li>
+        <div class="graph-wrapper">
 
-        }</ul>
+            <!-- Force-Directed Graph -->            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));<li>Dashboard Launcher (51 connections)</li>
 
-        <div>
+            <div class="neuglass-card" id="knowledge-graph">
 
-        .stage-card {<h3>👥 User Interactions Cluster (Bottom-Right)</h3>
+                <!-- Graph Controls -->            gap: var(--spacing-lg);<li>Align Orchestrator (47 connections)</li>
 
-            padding: var(--spacing-xl);<p>
+                <div class="graph-controls">
 
-            text-align: center;                            Interface, commands, and user-facing features
+                    <button class="control-btn" id="zoom-in" title="Zoom In">+</button>        }</ul>
 
-            position: relative;                        </p>
+                    <button class="control-btn" id="zoom-out" title="Zoom Out">−</button>
 
-        }<div>
+                    <button class="control-btn" id="reset-zoom" title="Reset View">⟲</button>        <div>
 
-        <strong>Core Concepts:</strong>
+                    <button class="control-btn" id="toggle-labels" title="Toggle Labels">T</button>
 
-        .stage-weight {<ul>
+                </div>        .stage-card {<h3>👥 User Interactions Cluster (Bottom-Right)</h3>
 
-            font-size: var(--font-3xl);<li>Response Templates (92 connections)</li>
+                
 
-            font-weight: 800;<li>ADO Operations (74 connections)</li>
+                <!-- Search Box -->            padding: var(--spacing-xl);<p>
 
-            margin-bottom: var(--spacing-xs);<li>Intent Router (68 connections)</li>
+                <div class="search-container">
 
-        }<li>Profile Agent (55 connections)</li>
+                    <input type="text" class="search-input" id="pattern-search" placeholder="Search patterns...">            text-align: center;                            Interface, commands, and user-facing features
 
-        <li>Welcome Banner (41 connections)</li>
+                </div>
 
-        .stage-weight.initial { color: #a78bfa; }</ul>
+                            position: relative;                        </p>
 
-        .stage-weight.learning { color: var(--accent-primary); }<div>
+                <!-- SVG Container -->
 
-        .stage-weight.strong { color: #ffc107; }<p>
+                <svg id="graph-svg"></svg>        }<div>
 
-        .stage-weight.pruning { color: #ff6b6b; }<strong>Zero Manual Categories:</strong> These clusters formed naturally from force-directed physics 
+                
+
+                <!-- Category Legend -->        <strong>Core Concepts:</strong>
+
+                <div class="category-legend" id="legend"></div>
+
+                        .stage-weight {<ul>
+
+                <!-- Node Tooltip -->
+
+                <div class="node-tooltip" id="tooltip">            font-size: var(--font-3xl);<li>Response Templates (92 connections)</li>
+
+                    <div class="tooltip-title"></div>
+
+                    <div class="tooltip-category"></div>            font-weight: 800;<li>ADO Operations (74 connections)</li>
+
+                </div>
+
+            </div>            margin-bottom: var(--spacing-xs);<li>Intent Router (68 connections)</li>
+
+            
+
+            <!-- Detail Panel -->        }<li>Profile Agent (55 connections)</li>
+
+            <div class="neuglass-card detail-panel" id="detail-panel">
+
+                <div class="empty-state">        <li>Welcome Banner (41 connections)</li>
+
+                    <div class="empty-state-icon">🔍</div>
+
+                    <p>Click on a pattern node to view details</p>        .stage-weight.initial { color: #a78bfa; }</ul>
+
+                    <p style="font-size: var(--font-xs); margin-top: var(--spacing-sm);">
+
+                        Drag nodes to rearrange • Scroll to zoom • Click categories to filter        .stage-weight.learning { color: var(--accent-primary); }<div>
+
+                    </p>
+
+                </div>        .stage-weight.strong { color: #ffc107; }<p>
+
+            </div>
+
+        </div>        .stage-weight.pruning { color: #ff6b6b; }<strong>Zero Manual Categories:</strong> These clusters formed naturally from force-directed physics 
+
+    </section>
 
                                 acting on co-occurrence patterns. The graph discovered these semantic groupings by analyzing real usage—not predefined taxonomy.
 
-        .stage-name {
+    <!-- Navigation Footer -->
 
-            font-size: var(--font-sm);    <!-- Semantic Search (FTS5) -->
+    <nav class="nav-footer">        .stage-name {
 
-            font-weight: 600;<section class="section">
+        <a href="skull-protection.html" class="nav-link prev">
 
-            color: var(--text-primary);<div class="container">
+            ← SKULL Protection            font-size: var(--font-sm);    <!-- Semantic Search (FTS5) -->
+
+        </a>
+
+        <a href="development-context.html" class="nav-link next">            font-weight: 600;<section class="section">
+
+            Development Context →
+
+        </a>            color: var(--text-primary);<div class="container">
+
+    </nav>
 
             margin-bottom: var(--spacing-xs);<div class="glass-card">
 
-        }<h2 class="mb-3">🔍 Semantic Search with FTS5</h2>
+    <!-- D3.js Force-Directed Graph -->
 
-        <p>
+    <script>        }<h2 class="mb-3">🔍 Semantic Search with FTS5</h2>
 
-        .stage-description {                    Understanding relationships, not just keyword matching—powered by SQLite's FTS5 full-text engine
+        // Knowledge Graph Data - 54 patterns across 9 categories
 
-            font-size: var(--font-xs);                
+        const graphData = {        <p>
 
-            color: var(--text-muted);                </p>
+            categories: [
 
-        }<div>
+                { id: 'validation_insights', name: 'Validation Insights', color: '#ff6b6b', count: 16 },        .stage-description {                    Understanding relationships, not just keyword matching—powered by SQLite's FTS5 full-text engine
 
-        <h3>Example Query Flow</h3>
+                { id: 'workflow_patterns', name: 'Workflow Patterns', color: '#4ecdc4', count: 10 },
 
-        /* Search Demo */<div>
+                { id: 'architectural_patterns', name: 'Architectural Patterns', color: '#45b7d1', count: 7 },            font-size: var(--font-xs);                
 
-        .search-demo {<div>User Query:</div>
+                { id: 'intent_patterns', name: 'Intent Patterns', color: '#96ceb4', count: 2 },
 
-            margin-top: var(--spacing-3xl);<div>
+                { id: 'file_relationships', name: 'File Relationships', color: '#dda0dd', count: 6 },            color: var(--text-muted);                </p>
 
-        }                            "How does TDD work with git checkpoints?"
+                { id: 'test_patterns', name: 'Test Patterns', color: '#ffeaa7', count: 3 },
 
-                            
+                { id: 'optimization_patterns', name: 'Optimization Patterns', color: '#74b9ff', count: 3 },        }<div>
 
-        .search-flow {                    <div>
+                { id: 'documentation_patterns', name: 'Documentation Patterns', color: '#fd79a8', count: 1 },
 
-            display: grid;<div>
+                { id: 'ui_patterns', name: 'UI Patterns', color: '#a29bfe', count: 2 }        <h3>Example Query Flow</h3>
 
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));<div>STEP 1</div>
+            ],
 
-            gap: var(--spacing-md);<div>FTS5 Search</div>
+            patterns: [        /* Search Demo */<div>
 
-            margin-top: var(--spacing-xl);<div>
+                // Validation Insights (16)
 
-        }                                8,429 nodes scanned for "TDD" + "git checkpoints"
+                { id: 'filesystem_validation', name: 'Filesystem Validation Required', category: 'validation_insights', confidence: 1.0, severity: 'critical', description: 'Multi-layer validation after every file write: exists() + size > 0 + count matches expected', impact: 'False positives damage user trust, silent failures undetected', connections: ['test_patterns', 'workflow_patterns'] },        .search-demo {<div>User Query:</div>
 
-                                <div>
+                { id: 'copilot_history_loop', name: 'Copilot History Loop Fix', category: 'validation_insights', confidence: 1.0, severity: 'critical', description: 'Large MD documents cause "Summarizing..." delays - migrate to YAML for 60% token reduction', impact: '10-30 second delay per interaction', connections: ['workflow_patterns'] },
 
-        .search-step {<div>STEP 2</div>
+                { id: 'skull_protection', name: 'SKULL Protection Layer', category: 'validation_insights', confidence: 1.0, severity: 'critical', description: 'Test Before Claim, Integration Verification, Visual Regression, Retry Without Learning', impact: 'Prevents false "Fixed ✓" claims', connections: ['test_patterns', 'architectural_patterns'] },            margin-top: var(--spacing-3xl);<div>
 
-            padding: var(--spacing-lg);<div>Node Activation</div>
+                { id: 'kds_quadrant', name: 'KDS Quadrant Completeness', category: 'validation_insights', confidence: 1.0, severity: 'medium', description: 'Story + Technical + Image Prompt + High-Level Technical for complete understanding', impact: 'Documentation missing perspectives', connections: ['documentation_patterns', 'intent_patterns'] },
 
-            text-align: center;<div>
+                { id: 'powershell_regex', name: 'PowerShell Regex Escaping', category: 'validation_insights', confidence: 0.95, severity: 'high', description: 'Use hex escape sequences (\\x27, \\x22) instead of backtick escaping', impact: 'Regex patterns fail to parse', connections: [] },        }                            "How does TDD work with git checkpoints?"
 
-            position: relative;                                24 relevant nodes light up (TDD, Git, Testing, etc.)
+                { id: 'powershell_paths', name: 'PowerShell Path Handling', category: 'validation_insights', confidence: 0.98, severity: 'high', description: 'Detect workspace path ending with KDS to avoid path doubling', impact: 'Hardcoded paths fail in workspace', connections: [] },
 
-        }                        <div>
+                { id: 'powershell_jobs', name: 'PowerShell Start-Job', category: 'validation_insights', confidence: 0.9, severity: 'medium', description: 'Use -ScriptBlock instead of -FilePath for better parameter handling', impact: 'Complex parameters fail in jobs', connections: [] },                            
 
-        <div>STEP 3</div>
+                { id: 'powershell_deps', name: 'PowerShell Dependencies', category: 'validation_insights', confidence: 1.0, severity: 'high', description: 'powershell-yaml module required for YAML operations', impact: 'YAML operations fail silently', connections: [] },
 
-        .search-step::after {<div>Path Finding</div>
+                { id: 'wpf_icons', name: 'WPF Icon Validation', category: 'validation_insights', confidence: 0.95, severity: 'critical', description: 'Validate Material Design icons with Enum.TryParse BEFORE using in XAML', impact: 'Runtime XamlParseException crashes', connections: ['test_patterns'] },        .search-flow {                    <div>
 
-            content: '→';<div>
+                { id: 'wpf_silent', name: 'WPF Silent Failures', category: 'validation_insights', confidence: 0.92, severity: 'high', description: 'XAML errors cause silent app crashes - use dotnet run for error output', impact: 'User clicks .exe, nothing happens', connections: ['test_patterns'] },
 
-            position: absolute;                                Golden trail: TDD → Test Success → Git Checkpoint (2 hops)
+                { id: 'tdd_violation', name: 'TDD Violation (WPF)', category: 'validation_insights', confidence: 1.0, severity: 'high', description: 'UI components are HIGH RISK - TDD is MANDATORY for WPF/XAML', impact: '30 minutes debugging vs 5 minutes tests', connections: ['test_patterns', 'workflow_patterns'] },            display: grid;<div>
 
-            right: -12px;                        <div>
+                { id: 'windows_compat', name: 'Windows Platform Compatibility', category: 'validation_insights', confidence: 1.0, severity: 'high', description: 'Unix-only functions (fcntl, os.getuid) unavailable on Windows', impact: 'ModuleNotFoundError on Windows', connections: ['architectural_patterns'] },
 
-            top: 50%;<div>STEP 4</div>
+                { id: 'arch_integration', name: 'Architecture Level Integration', category: 'validation_insights', confidence: 0.9, severity: 'medium', description: 'New components should integrate into existing orchestrators, not standalone', impact: 'Fragmented systems without visibility', connections: ['architectural_patterns'] },            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));<div>STEP 1</div>
 
-            transform: translateY(-50%);<div>Context Expand</div>
+                { id: 'user_feedback', name: 'Iterative User Feedback', category: 'validation_insights', confidence: 1.0, severity: 'medium', description: 'Implement quickly, then refine based on clarifying feedback', impact: 'Over-analysis upfront wastes time', connections: ['workflow_patterns'] },
 
-            color: var(--text-muted);<div>
+                { id: 'natural_language', name: 'Natural Language Entry Points', category: 'validation_insights', confidence: 0.9, severity: 'medium', description: 'Support conversational commands alongside programmatic APIs', impact: 'Cognitive load with programmatic-only', connections: ['intent_patterns'] },            gap: var(--spacing-md);<div>FTS5 Search</div>
 
-            font-size: var(--font-lg);                                1-hop neighbors illuminate (Test Runner, Commit Handler, etc.)
+                { id: 'git_validation', name: 'Status Validation Against Git', category: 'validation_insights', confidence: 0.98, severity: 'high', description: 'Check git history before relying on planning document status fields', impact: 'False progress reports (0% vs 100%)', connections: ['workflow_patterns'] },
 
-        }                    
+                            margin-top: var(--spacing-xl);<div>
 
-                            <div>
+                // Workflow Patterns (10)
 
-        .search-step:last-child::after {<div>
+                { id: 'yaml_migration', name: 'YAML Migration Workflow', category: 'workflow_patterns', confidence: 0.98, severity: 'high', description: '8-step workflow: identify, categorize, schema, convert, validate, commit, delete, verify', impact: '60% token reduction, eliminates delays', connections: ['validation_insights'] },        }                                8,429 nodes scanned for "TDD" + "git checkpoints"
 
-            display: none;<div>24</div>
+                { id: 'kds_quadrant_workflow', name: 'KDS Quadrant Creation', category: 'workflow_patterns', confidence: 1.0, severity: 'medium', description: 'Story → Technical → Image Prompt → High-Level Technical', impact: 'Complete documentation coverage', connections: ['documentation_patterns'] },
 
-        }<div>Matches Found</div>
+                { id: 'ps_debug', name: 'PowerShell Script Debugging', category: 'workflow_patterns', confidence: 0.95, severity: 'medium', description: 'Run script directly with test params before Start-Job integration', impact: 'Saves 30 minutes debugging', connections: [] },                                <div>
 
-        </div>
+                { id: 'ps_regex_pattern', name: 'PowerShell Regex Best Practice', category: 'workflow_patterns', confidence: 0.95, severity: 'medium', description: 'Use hex escape for quotes: \\x27 for single, \\x22 for double', impact: 'Avoids parsing ambiguity', connections: [] },
 
-        .step-number {<div>
+                { id: 'wpf_tdd', name: 'WPF Application TDD', category: 'workflow_patterns', confidence: 0.95, severity: 'high', description: 'Phase 0: Tests → Phase 1: RED → Phase 2: GREEN → Phase 3: REFACTOR', impact: 'Catches runtime errors at test-time', connections: ['test_patterns'] },        .search-step {<div>STEP 2</div>
 
-            width: 32px;<div>12ms</div>
+                { id: 'wpf_icon_pattern', name: 'WPF Icon Validation Pattern', category: 'workflow_patterns', confidence: 0.95, severity: 'high', description: 'Extract icons → Theory test → Enum.TryParse → Test passes → Safe for XAML', impact: 'Prevents XamlParseException', connections: ['test_patterns'] },
 
-            height: 32px;<div>Query Time</div>
+                { id: 'wpf_smoke', name: 'WPF Smoke Test Pattern', category: 'workflow_patterns', confidence: 0.92, severity: 'medium', description: 'Verify .exe, .dll, themes, runtime config, target framework', impact: 'Catches deployment issues early', connections: ['test_patterns'] },            padding: var(--spacing-lg);<div>Node Activation</div>
+
+                { id: 'systematic_debug', name: 'Systematic Multi-Stage Debugging', category: 'workflow_patterns', confidence: 0.95, severity: 'high', description: '5 stages: symptoms → data layer → API layer → platform layer → integration', impact: 'Prevents cascading failures', connections: ['architectural_patterns'] },
+
+                { id: 'feedback_iteration', name: 'User Feedback Iteration', category: 'workflow_patterns', confidence: 1.0, severity: 'medium', description: 'Report → Initial solution → Clarifying feedback → Refine → Validate', impact: 'Exposes edge cases early', connections: [] },            text-align: center;<div>
+
+                { id: 'feature_removal', name: 'Systematic Feature Removal', category: 'workflow_patterns', confidence: 0.98, severity: 'high', description: '8 phases: source → tests → config → docs → comments → skips → runtime → alternatives', impact: 'Prevents residual confusion', connections: ['architectural_patterns'] },
+
+                            position: relative;                                24 relevant nodes light up (TDD, Git, Testing, etc.)
+
+                // Architectural Patterns (7)
+
+                { id: 'api_auth', name: 'API Auth: None', category: 'architectural_patterns', confidence: 0.9, severity: 'medium', description: 'No authentication layer for internal APIs', impact: 'Simplifies internal communication', connections: [] },        }                        <div>
+
+                { id: 'service_naming', name: 'Service Naming Convention', category: 'architectural_patterns', confidence: 0.95, severity: 'low', description: 'I{Name} interface pattern for services', impact: 'Consistent codebase navigation', connections: [] },
+
+                { id: 'ui_pattern', name: 'UI Pattern: Feature-Based', category: 'architectural_patterns', confidence: 0.9, severity: 'medium', description: 'Feature-based component structure', impact: 'Better code organization', connections: ['ui_patterns'] },        <div>STEP 3</div>
+
+                { id: 'api_routing', name: 'API Routing: Attribute-Based', category: 'architectural_patterns', confidence: 0.95, severity: 'low', description: 'Attribute-based routing for APIs', impact: 'Clear endpoint definitions', connections: [] },
+
+                { id: 'viability_assessment', name: 'Feature Viability Reassessment', category: 'architectural_patterns', confidence: 0.98, severity: 'high', description: 'Systematic framework for deciding when to remove working features', impact: 'Complexity cost > Value = Remove', connections: ['workflow_patterns'] },        .search-step::after {<div>Path Finding</div>
+
+                { id: 'stub_replacement', name: 'Stub Replacement Pattern', category: 'architectural_patterns', confidence: 0.95, severity: 'medium', description: 'Replace removed features with deprecation stubs returning "Not available"', impact: 'Preserves orchestrator flow', connections: ['workflow_patterns'] },
+
+                { id: 'efficiency_accuracy', name: 'Efficiency vs Accuracy Tradeoff', category: 'architectural_patterns', confidence: 0.95, severity: 'high', description: 'Per-request vs background vs no monitoring analysis', impact: 'Optimal monitoring strategy', connections: [] },            content: '→';<div>
+
+                
+
+                // Intent Patterns (2)            position: absolute;                                Golden trail: TDD → Test Success → Git Checkpoint (2 hops)
+
+                { id: 'kds_doc_intent', name: 'KDS Quadrant Documentation', category: 'intent_patterns', confidence: 0.95, severity: 'medium', description: 'Triggers: update docs, publish documentation, refresh documentation', impact: 'Routes to work-planner', connections: ['workflow_patterns'] },
+
+                { id: 'kds_structure', name: 'KDS Quadrant Structure', category: 'intent_patterns', confidence: 1.0, severity: 'medium', description: '4 perspectives: Story, Technical, Image Prompt, High-Level Technical', impact: 'Multiple learning styles covered', connections: ['documentation_patterns'] },            right: -12px;                        <div>
+
+                
+
+                // File Relationships (6)            top: 50%;<div>STEP 4</div>
+
+                { id: 'dashboard_test', name: 'Dashboard Test Coverage', category: 'file_relationships', confidence: 0.8, severity: 'low', description: 'dashboard.spec.ts → dashboard.razor relationship', impact: 'Test coverage mapping', connections: ['test_patterns'] },
+
+                { id: 'brain_integrity', name: 'Brain Integrity Tests', category: 'file_relationships', confidence: 0.8, severity: 'medium', description: 'test-brain-integrity.spec.ts coverage mapping', impact: 'Brain protection testing', connections: ['test_patterns'] },            transform: translateY(-50%);<div>Context Expand</div>
+
+                { id: 'user_service', name: 'UserService Tests', category: 'file_relationships', confidence: 0.8, severity: 'low', description: 'UserServiceTests.cs → UserService.razor', impact: 'Service layer testing', connections: ['test_patterns'] },
+
+                { id: 'fixture_backup', name: 'Fixture Backup Mapping', category: 'file_relationships', confidence: 0.8, severity: 'low', description: 'Pre-independence migration backup mappings', impact: 'Migration tracking', connections: [] },            color: var(--text-muted);<div>
+
+                { id: 'test_dashboard_backup', name: 'Test Dashboard Backup', category: 'file_relationships', confidence: 0.8, severity: 'low', description: 'Backup test file relationships', impact: 'Historical tracking', connections: [] },
+
+                { id: 'user_service_backup', name: 'UserService Backup', category: 'file_relationships', confidence: 0.8, severity: 'low', description: 'Backup service test relationships', impact: 'Migration history', connections: [] },            font-size: var(--font-lg);                                1-hop neighbors illuminate (Test Runner, Commit Handler, etc.)
+
+                
+
+                // Test Patterns (3)        }                    
+
+                { id: 'selector_strategy', name: 'Selector Strategy: ID', category: 'test_patterns', confidence: 0.95, severity: 'medium', description: 'Use ID selectors for test element targeting', impact: 'Stable test selectors', connections: ['workflow_patterns'] },
+
+                { id: 'test_framework', name: 'Test Framework: Playwright', category: 'test_patterns', confidence: 0.95, severity: 'medium', description: 'Playwright for E2E and UI testing', impact: 'Cross-browser testing', connections: [] },                            <div>
+
+                { id: 'test_types', name: 'Test Types: E2E + Unit', category: 'test_patterns', confidence: 0.95, severity: 'medium', description: 'Combination of E2E and unit tests', impact: 'Complete test coverage', connections: [] },
+
+                        .search-step:last-child::after {<div>
+
+                // Optimization Patterns (3)
+
+                { id: 'hardcoded_fix', name: 'Hardcoded Violation Remediation', category: 'optimization_patterns', confidence: 0.95, severity: 'high', description: 'Systematic approach: analyze → prioritize → batch fix → validate', impact: '913 violations fixed', connections: ['workflow_patterns'] },            display: none;<div>24</div>
+
+                { id: 'test_fixture_opt', name: 'Test Fixture Optimization', category: 'optimization_patterns', confidence: 0.92, severity: 'medium', description: 'Convert hardcoded paths to dynamic fixtures', impact: 'Zero hardcoded paths in tests', connections: ['test_patterns'] },
+
+                { id: 'env_config', name: 'Environment Configuration', category: 'optimization_patterns', confidence: 0.88, severity: 'medium', description: 'Replace hardcoded values with configurable patterns', impact: 'Improved maintainability', connections: ['architectural_patterns'] },        }<div>Matches Found</div>
+
+                
+
+                // Documentation Patterns (1)        </div>
+
+                { id: 'mkdocs_repair', name: 'MkDocs Repair Workflow', category: 'documentation_patterns', confidence: 0.95, severity: 'high', description: '5 phases: navigation simplification → content restructuring → CSS fixes → validation → cleanup', impact: '65% navigation complexity reduction', connections: ['workflow_patterns', 'ui_patterns'] },
+
+                        .step-number {<div>
+
+                // UI Patterns (2)
+
+                { id: 'css_zindex', name: 'CSS Z-Index Layering', category: 'ui_patterns', confidence: 0.95, severity: 'high', description: 'Explicit z-index hierarchy: sidebar(3) > navbar(2) > content(1)', impact: 'Prevents UI element overlap', connections: ['documentation_patterns'] },            width: 32px;<div>12ms</div>
+
+                { id: 'responsive_bp', name: 'Responsive Breakpoints', category: 'ui_patterns', confidence: 0.9, severity: 'medium', description: 'Mobile-first: 768px (mobile) → 1024px (tablet) → 1025px+ (desktop)', impact: '100% responsive functionality', connections: [] }
+
+            ]            height: 32px;<div>Query Time</div>
+
+        };
 
             border-radius: 50%;</div>
 
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));<div>
+        // D3.js Force-Directed Graph Implementation
 
-            display: flex;<div>2</div>
+        document.addEventListener('DOMContentLoaded', function() {            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));<div>
 
-            align-items: center;<div>Shortest Path Hops</div>
+            const container = document.getElementById('knowledge-graph');
 
-            justify-content: center;</div>
+            const svg = d3.select('#graph-svg');            display: flex;<div>2</div>
 
-            font-size: var(--font-sm);<div>
+            const tooltip = document.getElementById('tooltip');
 
-            font-weight: 700;<h3>Why Semantic > Keyword?</h3>
+            const detailPanel = document.getElementById('detail-panel');            align-items: center;<div>Shortest Path Hops</div>
 
-            color: white;<div>
+            const legend = document.getElementById('legend');
 
-            margin: 0 auto var(--spacing-sm);<div>
+                        justify-content: center;</div>
 
-        }<div>❌ Keyword Search Would Find:</div>
+            const width = container.clientWidth;
 
-        <ul>
+            const height = container.clientHeight;            font-size: var(--font-sm);<div>
 
-        .step-title {<li>Exact matches for "TDD" and "git checkpoints"</li>
-
-            font-size: var(--font-sm);<li>Misses related concepts (Test Success, Commit Handler)</li>
-
-            font-weight: 600;<li>No relationship understanding</li>
-
-            color: var(--text-primary);</ul>
-
-            margin-bottom: var(--spacing-xs);<div>
-
-        }<div>✅ Semantic Search Finds:</div>
-
-        <ul>
-
-        .step-description {<li>Direct matches PLUS connected concepts</li>
-
-            font-size: var(--font-xs);<li>Shortest path reveals workflow relationship</li>
-
-            color: var(--text-muted);<li>Context expansion surfaces relevant neighbors</li>
-
-        }</ul>
-
-        <!-- Key Takeaways -->
-
-        /* Navigation */<section class="section">
-
-        .nav-footer {<div class="container">
-
-            display: flex;<div class="glass-card">
-
-            justify-content: space-between;<h2 class="mb-3 text-center">🎓 Key Takeaways</h2>
-
-            align-items: center;<div>
-
-            max-width: 1200px;<div>
-
-            margin: var(--spacing-3xl) auto 0;<div>🧠</div>
-
-            padding: var(--spacing-xl) var(--spacing-lg);<div>
-
-            gap: var(--spacing-lg);<strong>Hebbian Learning:</strong>
-
-            flex-wrap: wrap;<span> "Nodes that fire together, wire together"—edges strengthen (0.25→0.85) based on co-activation frequency, mimicking biological neural networks</span>
-
-        }</div>
-
-        <div>
-
-        .nav-link {<div>⚛️</div>
-
-            display: flex;<div>
-
-            align-items: center;<strong>Force-Directed Layout:</strong>
-
-            gap: var(--spacing-sm);<span> Physics simulation (attractive spring forces + repulsive node forces) naturally clusters related concepts—4 semantic clusters emerged without manual categorization</span>
-
-            padding: var(--spacing-md) var(--spacing-lg);</div>
-
-            color: var(--text-secondary);<div>
-
-            text-decoration: none;<div>🎨</div>
-
-            transition: all var(--transition-fast);<div>
-
-        }<strong>Weighted Edges:</strong>
-
-        <span> Gold (>0.7) = strong associations, cyan (0.4-0.7) = active learning, light purple (<0.4) = weak/pruning—visual strength indicators without metrics inspection</span>
-
-        .nav-link:hover {</div>
-
-            color: var(--accent-primary);<div>
-
-        }<div>🔍</div>
-
-        <div>
-
-        /* Breadcrumb */<strong>12ms Semantic Search:</strong>
-
-        .breadcrumb {<span> FTS5 full-text engine + graph traversal finds relationships, not just keywords—8,429 nodes scanned with shortest-path discovery and context expansion</span>
-
-            padding: var(--spacing-md) var(--spacing-xl);</div>
-
-            font-size: var(--font-sm);<div>
-
-        }<div>🗂️</div>
-
-        <div>
-
-        .breadcrumb a {<strong>Self-Organizing Clusters:</strong>
-
-            color: var(--text-muted);<span> 4 natural clusters (TDD/Testing, Architecture, Operations, User Interactions) formed from usage patterns—graph discovers semantic groupings humans might miss</span>
-
-            text-decoration: none;</div>
-
-            transition: color var(--transition-fast);<!-- Lateral Navigation -->
-
-        }<section class="section">
-
-        <div class="container">
-
-        .breadcrumb a:hover {<div class="glass-card">
-
-            color: var(--accent-primary);<h3 class="text-center mb-3">Explore Other Architecture Components</h3>
-
-        }<div>
-
-        <a class="btn btn-secondary" href="four-tier-brain.html">🧠 4-Tier Brain</a>
-
-        .breadcrumb-separator {<a class="btn btn-secondary" href="skull-protection.html">🛡️ SKULL Protection</a>
-
-            color: var(--text-muted);<a class="btn btn-secondary" href="orchestrator-ecosystem.html">🎭 Orchestrator Ecosystem</a>
-
-            margin: 0 var(--spacing-sm);<a class="btn btn-secondary" href="agent-system.html">🤖 Agent System</a>
-
-        }<a class="btn btn-secondary" href="working-memory.html">💾 Working Memory (Tier 1)</a>
-
-        <a class="btn btn-secondary" href="index.html">← Architecture Overview</a>
-
-        .breadcrumb-current {</div>
-
-            color: var(--text-secondary);<section class="section">
-
-        }<div class="container text-center">
-
-        <a class="btn btn-primary" href="index.html">← Back to Architecture</a>
-
-        /* Responsive */</div>
-
-        @media (max-width: 768px) {</section>
-
-            .search-step::after {</div>
-
-                display: none;</div></section>
-
-            }</div>
-
-        }</div>
-
-    </style></div>
-
-</head></div>
-
-<body></div>
-
-    <!-- Breadcrumb --></div>
-
-    <nav class="breadcrumb"></div>
-
-        <a href="../index.html">Home</a></div></section>
-
-        <span class="breadcrumb-separator">›</span></div>
-
-        <a href="architecture-FULL.html">Architecture</a></div>
-
-        <span class="breadcrumb-separator">›</span></div>
-
-        <span class="breadcrumb-current">Knowledge Graph (Tier 2)</span></div>
-
-    </nav></div>
-
-</div>
-
-    <!-- Hero Section --></div>
-
-    <section class="hero-section"></div>
-
-        <span class="hero-icon">🕸️</span></div>
-
-        <h1 class="hero-title">Knowledge Graph</h1></div>
-
-        <p class="hero-subtitle"></div>
-
-            Tier 2 semantic memory with <strong>54 patterns</strong> organized across </div>
-
-            self-organizing clusters using Hebbian learning and force-directed physics</div>
-
-        </p></div>
-
-        </div>
-
-        <!-- Metrics Dashboard --></div>
-
-        <div class="metrics-dashboard"></div>
-
-            <div class="glass-card metric-card tilt-glass"></div>
-
-                <div class="metric-value">54</div></div></section></p>
-
-                <div class="metric-label">Patterns</div></div>
-
-            </div></div>
-
-            <div class="glass-card metric-card tilt-glass"></div>
-
-                <div class="metric-value">4</div></div>
-
-                <div class="metric-label">Clusters</div></div>
-
-            </div></div>
-
-            <div class="glass-card metric-card tilt-glass"></div>
-
-                <div class="metric-value">12ms</div></div>
-
-                <div class="metric-label">Search</div></div>
-
-            </div></div>
-
-            <div class="glass-card metric-card tilt-glass"></div>
-
-                <div class="metric-value">YAML</div></div></section>
-
-                <div class="metric-label">Format</div></div>
-
-            </div></div>
-
-        </div></div>
-
-    </section></div>
-
-</div>
-
-    <!-- Force-Directed Graph Visualization --></div>
-
-    <section class="graph-container"></div>
-
-        <div class="section-header"></div>
-
-            <h2 class="section-title">Interactive Pattern Network</h2></div>
-
-            <p class="section-description"></div>
-
-                Force-directed layout reveals natural semantic clusters</div>
-
-            </p></div>
-
-        </div></div>
-
-        </div>
-
-        <div class="neuglass-card" id="force-graph"></div>
-
-            <svg id="graph-svg"></svg></div>
-
-        </div></div>
-
-        </div></section>
-
-        <div class="graph-legend"></div>
-
-            <div class="legend-item"></div>
-
-                <div class="legend-dot" style="background: #ff6b6b;"></div></div>
-
-                <span>TDD & Testing</span></div>
-
-            </div></div>
-
-            <div class="legend-item"></div>
-
-                <div class="legend-dot" style="background: #8b5cf6;"></div></div>
-
-                <span>Architecture</span></div></section>
-
-            </div></div>
-
-            <div class="legend-item"></div>
-
-                <div class="legend-dot" style="background: #00d4ff;"></div></div></section></p>
-
-                <span>Operations</span></div></section>
-
-            </div></div>
-
-            <div class="legend-item"></div></section>
-
-                <div class="legend-dot" style="background: #4ecdc4;"></div></body>
-
-                <span>User Interface</span></html>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- Pattern Categories -->
-    <section class="graph-container">
-        <div class="section-header">
-            <h2 class="section-title">Pattern Categories</h2>
-            <p class="section-description">
-                54 patterns organized into 4 semantic clusters
-            </p>
-        </div>
-        
-        <div class="patterns-grid">
-            <div class="glass-card pattern-card pulse-glow-glass">
-                <div class="pattern-header">
-                    <div class="pattern-icon tdd">🧪</div>
-                    <div>
-                        <div class="pattern-title">TDD & Testing</div>
-                        <div class="pattern-count">14 patterns</div>
-                    </div>
-                </div>
-                <ul class="pattern-list">
-                    <li>Red-Green-Refactor Cycle</li>
-                    <li>Test-First Development</li>
-                    <li>4-Layer Testing Strategy</li>
-                    <li>Coverage Enforcement</li>
-                    <li>Mock Patterns</li>
-                    <li>Integration Testing</li>
-                </ul>
-            </div>
             
-            <div class="glass-card pattern-card pulse-glow-glass">
-                <div class="pattern-header">
-                    <div class="pattern-icon arch">🏗️</div>
-                    <div>
-                        <div class="pattern-title">Architecture</div>
-                        <div class="pattern-count">12 patterns</div>
-                    </div>
-                </div>
-                <ul class="pattern-list">
-                    <li>4-Tier Brain System</li>
-                    <li>SKULL Protection Layers</li>
-                    <li>Orchestrator Patterns</li>
-                    <li>Agent Communication</li>
-                    <li>Memory Tier Design</li>
-                    <li>Manifest-Driven Config</li>
-                </ul>
-            </div>
-            
-            <div class="glass-card pattern-card pulse-glow-glass">
-                <div class="pattern-header">
-                    <div class="pattern-icon ops">⚙️</div>
-                    <div>
-                        <div class="pattern-title">Operations</div>
-                        <div class="pattern-count">16 patterns</div>
-                    </div>
-                </div>
-                <ul class="pattern-list">
-                    <li>Planning System Workflow</li>
-                    <li>Git Checkpoint Strategy</li>
-                    <li>Maintenance Pipeline</li>
-                    <li>ADO Integration</li>
-                    <li>Sanitization Process</li>
-                    <li>Refinement Cycle</li>
-                </ul>
-            </div>
-            
-            <div class="glass-card pattern-card pulse-glow-glass">
-                <div class="pattern-header">
-                    <div class="pattern-icon ui">👥</div>
-                    <div>
-                        <div class="pattern-title">User Interface</div>
-                        <div class="pattern-count">12 patterns</div>
-                    </div>
-                </div>
-                <ul class="pattern-list">
-                    <li>Response Templates v4</li>
-                    <li>Intent Classification</li>
-                    <li>Command Routing</li>
-                    <li>ASCII Banners</li>
-                    <li>Progress Indicators</li>
-                    <li>Error Handling UX</li>
-                </ul>
-            </div>
-        </div>
-    </section>
 
-    <!-- Hebbian Learning -->
-    <section class="graph-container learning-section">
-        <div class="section-header">
-            <h2 class="section-title">🧠 Hebbian Learning</h2>
-            <p class="section-description">
-                "Nodes that fire together, wire together" — connections strengthen with co-activation
-            </p>
-        </div>
-        
-        <div class="learning-stages">
-            <div class="neuglass-card stage-card">
-                <div class="stage-weight initial">0.25</div>
-                <div class="stage-name">Initial</div>
-                <div class="stage-description">Weak association, new connection</div>
-            </div>
+            svg.attr('viewBox', `0 0 ${width} ${height}`);            font-weight: 700;<h3>Why Semantic > Keyword?</h3>
+
             
-            <div class="neuglass-card stage-card">
-                <div class="stage-weight learning">0.55</div>
-                <div class="stage-name">Learning</div>
-                <div class="stage-description">Active strengthening</div>
-            </div>
+
+            let showLabels = true;            color: white;<div>
+
+            let activeCategory = null;
+
+                        margin: 0 auto var(--spacing-sm);<div>
+
+            // Create category color map
+
+            const categoryColors = {};        }<div>❌ Keyword Search Would Find:</div>
+
+            graphData.categories.forEach(cat => {
+
+                categoryColors[cat.id] = cat.color;        <ul>
+
+            });
+
+                    .step-title {<li>Exact matches for "TDD" and "git checkpoints"</li>
+
+            // Create nodes and links
+
+            const nodes = [];            font-size: var(--font-sm);<li>Misses related concepts (Test Success, Commit Handler)</li>
+
+            const links = [];
+
+                        font-weight: 600;<li>No relationship understanding</li>
+
+            // Add category central nodes (larger)
+
+            graphData.categories.forEach(cat => {            color: var(--text-primary);</ul>
+
+                nodes.push({
+
+                    id: cat.id,            margin-bottom: var(--spacing-xs);<div>
+
+                    name: cat.name,
+
+                    type: 'category',        }<div>✅ Semantic Search Finds:</div>
+
+                    color: cat.color,
+
+                    count: cat.count,        <ul>
+
+                    radius: 35
+
+                });        .step-description {<li>Direct matches PLUS connected concepts</li>
+
+            });
+
+                        font-size: var(--font-xs);<li>Shortest path reveals workflow relationship</li>
+
+            // Add pattern nodes
+
+            graphData.patterns.forEach(pattern => {            color: var(--text-muted);<li>Context expansion surfaces relevant neighbors</li>
+
+                nodes.push({
+
+                    id: pattern.id,        }</ul>
+
+                    name: pattern.name,
+
+                    type: 'pattern',        <!-- Key Takeaways -->
+
+                    category: pattern.category,
+
+                    color: categoryColors[pattern.category],        /* Navigation */<section class="section">
+
+                    confidence: pattern.confidence,
+
+                    severity: pattern.severity,        .nav-footer {<div class="container">
+
+                    description: pattern.description,
+
+                    impact: pattern.impact,            display: flex;<div class="glass-card">
+
+                    connections: pattern.connections,
+
+                    radius: 12 + (pattern.confidence * 8)            justify-content: space-between;<h2 class="mb-3 text-center">🎓 Key Takeaways</h2>
+
+                });
+
+                            align-items: center;<div>
+
+                // Link pattern to its category
+
+                links.push({            max-width: 1200px;<div>
+
+                    source: pattern.category,
+
+                    target: pattern.id,            margin: var(--spacing-3xl) auto 0;<div>🧠</div>
+
+                    strength: 0.8
+
+                });            padding: var(--spacing-xl) var(--spacing-lg);<div>
+
+                
+
+                // Add cross-category connections            gap: var(--spacing-lg);<strong>Hebbian Learning:</strong>
+
+                if (pattern.connections) {
+
+                    pattern.connections.forEach(conn => {            flex-wrap: wrap;<span> "Nodes that fire together, wire together"—edges strengthen (0.25→0.85) based on co-activation frequency, mimicking biological neural networks</span>
+
+                        if (graphData.categories.find(c => c.id === conn)) {
+
+                            links.push({        }</div>
+
+                                source: pattern.id,
+
+                                target: conn,        <div>
+
+                                strength: 0.2
+
+                            });        .nav-link {<div>⚛️</div>
+
+                        }
+
+                    });            display: flex;<div>
+
+                }
+
+            });            align-items: center;<strong>Force-Directed Layout:</strong>
+
             
-            <div class="neuglass-card stage-card">
-                <div class="stage-weight strong">0.85</div>
+
+            // Create simulation            gap: var(--spacing-sm);<span> Physics simulation (attractive spring forces + repulsive node forces) naturally clusters related concepts—4 semantic clusters emerged without manual categorization</span>
+
+            const simulation = d3.forceSimulation(nodes)
+
+                .force('link', d3.forceLink(links).id(d => d.id).distance(d => d.strength > 0.5 ? 100 : 180).strength(d => d.strength * 0.5))            padding: var(--spacing-md) var(--spacing-lg);</div>
+
+                .force('charge', d3.forceManyBody().strength(d => d.type === 'category' ? -500 : -150))
+
+                .force('center', d3.forceCenter(width / 2, height / 2))            color: var(--text-secondary);<div>
+
+                .force('collision', d3.forceCollide().radius(d => d.radius + 5));
+
+                        text-decoration: none;<div>🎨</div>
+
+            // Create zoom behavior
+
+            const zoom = d3.zoom()            transition: all var(--transition-fast);<div>
+
+                .scaleExtent([0.3, 3])
+
+                .on('zoom', (event) => {        }<strong>Weighted Edges:</strong>
+
+                    g.attr('transform', event.transform);
+
+                });        <span> Gold (>0.7) = strong associations, cyan (0.4-0.7) = active learning, light purple (<0.4) = weak/pruning—visual strength indicators without metrics inspection</span>
+
+            
+
+            svg.call(zoom);        .nav-link:hover {</div>
+
+            
+
+            // Create container group            color: var(--accent-primary);<div>
+
+            const g = svg.append('g');
+
+                    }<div>🔍</div>
+
+            // Create gradient definitions
+
+            const defs = svg.append('defs');        <div>
+
+            
+
+            // Glow filter        /* Breadcrumb */<strong>12ms Semantic Search:</strong>
+
+            const filter = defs.append('filter')
+
+                .attr('id', 'glow')        .breadcrumb {<span> FTS5 full-text engine + graph traversal finds relationships, not just keywords—8,429 nodes scanned with shortest-path discovery and context expansion</span>
+
+                .attr('x', '-50%')
+
+                .attr('y', '-50%')            padding: var(--spacing-md) var(--spacing-xl);</div>
+
+                .attr('width', '200%')
+
+                .attr('height', '200%');            font-size: var(--font-sm);<div>
+
+            
+
+            filter.append('feGaussianBlur')        }<div>🗂️</div>
+
+                .attr('stdDeviation', '3')
+
+                .attr('result', 'coloredBlur');        <div>
+
+            
+
+            const feMerge = filter.append('feMerge');        .breadcrumb a {<strong>Self-Organizing Clusters:</strong>
+
+            feMerge.append('feMergeNode').attr('in', 'coloredBlur');
+
+            feMerge.append('feMergeNode').attr('in', 'SourceGraphic');            color: var(--text-muted);<span> 4 natural clusters (TDD/Testing, Architecture, Operations, User Interactions) formed from usage patterns—graph discovers semantic groupings humans might miss</span>
+
+            
+
+            // Draw links            text-decoration: none;</div>
+
+            const link = g.append('g')
+
+                .attr('class', 'links')            transition: color var(--transition-fast);<!-- Lateral Navigation -->
+
+                .selectAll('line')
+
+                .data(links)        }<section class="section">
+
+                .join('line')
+
+                .attr('stroke', d => d.strength > 0.5 ? 'rgba(255,255,255,0.15)' : 'rgba(139,92,246,0.2)')        <div class="container">
+
+                .attr('stroke-width', d => d.strength > 0.5 ? 1.5 : 1)
+
+                .attr('stroke-dasharray', d => d.strength > 0.5 ? 'none' : '3,3');        .breadcrumb a:hover {<div class="glass-card">
+
+            
+
+            // Draw nodes            color: var(--accent-primary);<h3 class="text-center mb-3">Explore Other Architecture Components</h3>
+
+            const node = g.append('g')
+
+                .attr('class', 'nodes')        }<div>
+
+                .selectAll('g')
+
+                .data(nodes)        <a class="btn btn-secondary" href="four-tier-brain.html">🧠 4-Tier Brain</a>
+
+                .join('g')
+
+                .attr('class', d => `node node-${d.type}`)        .breadcrumb-separator {<a class="btn btn-secondary" href="skull-protection.html">🛡️ SKULL Protection</a>
+
+                .call(d3.drag()
+
+                    .on('start', dragstarted)            color: var(--text-muted);<a class="btn btn-secondary" href="orchestrator-ecosystem.html">🎭 Orchestrator Ecosystem</a>
+
+                    .on('drag', dragged)
+
+                    .on('end', dragended));            margin: 0 var(--spacing-sm);<a class="btn btn-secondary" href="agent-system.html">🤖 Agent System</a>
+
+            
+
+            // Node circles        }<a class="btn btn-secondary" href="working-memory.html">💾 Working Memory (Tier 1)</a>
+
+            node.append('circle')
+
+                .attr('r', d => d.radius)        <a class="btn btn-secondary" href="index.html">← Architecture Overview</a>
+
+                .attr('fill', d => d.type === 'category' ? d.color : `${d.color}88`)
+
+                .attr('stroke', d => d.color)        .breadcrumb-current {</div>
+
+                .attr('stroke-width', d => d.type === 'category' ? 3 : 2)
+
+                .attr('filter', 'url(#glow)')            color: var(--text-secondary);<section class="section">
+
+                .style('cursor', 'pointer');
+
+                    }<div class="container text-center">
+
+            // Node labels
+
+            const labels = node.append('text')        <a class="btn btn-primary" href="index.html">← Back to Architecture</a>
+
+                .attr('dy', d => d.type === 'category' ? 50 : 25)
+
+                .attr('text-anchor', 'middle')        /* Responsive */</div>
+
+                .attr('fill', '#ffffff')
+
+                .attr('font-size', d => d.type === 'category' ? '12px' : '9px')        @media (max-width: 768px) {</section>
+
+                .attr('font-weight', d => d.type === 'category' ? '600' : '400')
+
+                .attr('pointer-events', 'none')            .search-step::after {</div>
+
+                .text(d => d.type === 'category' ? d.name.replace('_', ' ') : truncate(d.name, 20))
+
+                .style('opacity', d => d.type === 'category' ? 1 : 0.8);                display: none;</div></section>
+
+            
+
+            // Category count badges            }</div>
+
+            node.filter(d => d.type === 'category')
+
+                .append('text')        }</div>
+
+                .attr('dy', 5)
+
+                .attr('text-anchor', 'middle')    </style></div>
+
+                .attr('fill', '#ffffff')
+
+                .attr('font-size', '14px')</head></div>
+
+                .attr('font-weight', '700')
+
+                .attr('pointer-events', 'none')<body></div>
+
+                .text(d => d.count);
+
+                <!-- Breadcrumb --></div>
+
+            // Severity indicators for patterns
+
+            node.filter(d => d.type === 'pattern')    <nav class="breadcrumb"></div>
+
+                .append('circle')
+
+                .attr('cx', d => d.radius - 4)        <a href="../index.html">Home</a></div></section>
+
+                .attr('cy', d => -d.radius + 4)
+
+                .attr('r', 4)        <span class="breadcrumb-separator">›</span></div>
+
+                .attr('fill', d => getSeverityColor(d.severity))
+
+                .attr('stroke', '#1a1f3a')        <a href="architecture-FULL.html">Architecture</a></div>
+
+                .attr('stroke-width', 1);
+
+                    <span class="breadcrumb-separator">›</span></div>
+
+            // Node interactions
+
+            node.on('mouseover', function(event, d) {        <span class="breadcrumb-current">Knowledge Graph (Tier 2)</span></div>
+
+                const tooltipEl = document.getElementById('tooltip');
+
+                tooltipEl.querySelector('.tooltip-title').textContent = d.name;    </nav></div>
+
+                tooltipEl.querySelector('.tooltip-category').textContent = 
+
+                    d.type === 'category' ? `${d.count} patterns` : d.category.replace(/_/g, ' ');</div>
+
+                
+
+                tooltipEl.style.left = (event.pageX + 15) + 'px';    <!-- Hero Section --></div>
+
+                tooltipEl.style.top = (event.pageY - 10) + 'px';
+
+                tooltipEl.classList.add('visible');    <section class="hero-section"></div>
+
+                
+
+                // Highlight connected nodes        <span class="hero-icon">🕸️</span></div>
+
+                d3.select(this).select('circle')
+
+                    .transition()        <h1 class="hero-title">Knowledge Graph</h1></div>
+
+                    .duration(200)
+
+                    .attr('r', d.radius * 1.2);        <p class="hero-subtitle"></div>
+
+            })
+
+            .on('mouseout', function(event, d) {            Tier 2 semantic memory with <strong>54 patterns</strong> organized across </div>
+
+                document.getElementById('tooltip').classList.remove('visible');
+
+                            self-organizing clusters using Hebbian learning and force-directed physics</div>
+
+                d3.select(this).select('circle')
+
+                    .transition()        </p></div>
+
+                    .duration(200)
+
+                    .attr('r', d.radius);        </div>
+
+            })
+
+            .on('click', function(event, d) {        <!-- Metrics Dashboard --></div>
+
+                showDetailPanel(d);
+
+            });        <div class="metrics-dashboard"></div>
+
+            
+
+            // Simulation tick            <div class="glass-card metric-card tilt-glass"></div>
+
+            simulation.on('tick', () => {
+
+                link                <div class="metric-value">54</div></div></section></p>
+
+                    .attr('x1', d => d.source.x)
+
+                    .attr('y1', d => d.source.y)                <div class="metric-label">Patterns</div></div>
+
+                    .attr('x2', d => d.target.x)
+
+                    .attr('y2', d => d.target.y);            </div></div>
+
+                
+
+                node.attr('transform', d => `translate(${d.x},${d.y})`);            <div class="glass-card metric-card tilt-glass"></div>
+
+            });
+
+                            <div class="metric-value">4</div></div>
+
+            // Build legend
+
+            graphData.categories.forEach(cat => {                <div class="metric-label">Clusters</div></div>
+
+                const item = document.createElement('div');
+
+                item.className = 'legend-item';            </div></div>
+
+                item.dataset.category = cat.id;
+
+                item.innerHTML = `            <div class="glass-card metric-card tilt-glass"></div>
+
+                    <span class="legend-dot" style="background: ${cat.color}"></span>
+
+                    <span>${cat.name}</span>                <div class="metric-value">12ms</div></div>
+
+                    <span style="opacity: 0.6">(${cat.count})</span>
+
+                `;                <div class="metric-label">Search</div></div>
+
+                item.addEventListener('click', () => toggleCategory(cat.id));
+
+                legend.appendChild(item);            </div></div>
+
+            });
+
+                        <div class="glass-card metric-card tilt-glass"></div>
+
+            // Control buttons
+
+            document.getElementById('zoom-in').addEventListener('click', () => {                <div class="metric-value">YAML</div></div></section>
+
+                svg.transition().call(zoom.scaleBy, 1.3);
+
+            });                <div class="metric-label">Format</div></div>
+
+            
+
+            document.getElementById('zoom-out').addEventListener('click', () => {            </div></div>
+
+                svg.transition().call(zoom.scaleBy, 0.7);
+
+            });        </div></div>
+
+            
+
+            document.getElementById('reset-zoom').addEventListener('click', () => {    </section></div>
+
+                svg.transition().call(zoom.transform, d3.zoomIdentity);
+
+            });</div>
+
+            
+
+            document.getElementById('toggle-labels').addEventListener('click', () => {    <!-- Force-Directed Graph Visualization --></div>
+
+                showLabels = !showLabels;
+
+                labels.style('opacity', showLabels ? d => d.type === 'category' ? 1 : 0.8 : 0);    <section class="graph-container"></div>
+
+            });
+
+                    <div class="section-header"></div>
+
+            // Search functionality
+
+            document.getElementById('pattern-search').addEventListener('input', function(e) {            <h2 class="section-title">Interactive Pattern Network</h2></div>
+
+                const query = e.target.value.toLowerCase();
+
+                            <p class="section-description"></div>
+
+                node.style('opacity', d => {
+
+                    if (!query) return 1;                Force-directed layout reveals natural semantic clusters</div>
+
+                    return d.name.toLowerCase().includes(query) || 
+
+                           (d.description && d.description.toLowerCase().includes(query)) ? 1 : 0.2;            </p></div>
+
+                });
+
+                        </div></div>
+
+                link.style('opacity', query ? 0.1 : d => d.strength > 0.5 ? 0.3 : 0.15);
+
+            });        </div>
+
+            
+
+            // Helper functions        <div class="neuglass-card" id="force-graph"></div>
+
+            function dragstarted(event, d) {
+
+                if (!event.active) simulation.alphaTarget(0.3).restart();            <svg id="graph-svg"></svg></div>
+
+                d.fx = d.x;
+
+                d.fy = d.y;        </div></div>
+
+            }
+
+                    </div></section>
+
+            function dragged(event, d) {
+
+                d.fx = event.x;        <div class="graph-legend"></div>
+
+                d.fy = event.y;
+
+            }            <div class="legend-item"></div>
+
+            
+
+            function dragended(event, d) {                <div class="legend-dot" style="background: #ff6b6b;"></div></div>
+
+                if (!event.active) simulation.alphaTarget(0);
+
+                d.fx = null;                <span>TDD & Testing</span></div>
+
+                d.fy = null;
+
+            }            </div></div>
+
+            
+
+            function truncate(str, len) {            <div class="legend-item"></div>
+
+                return str.length > len ? str.substring(0, len) + '...' : str;
+
+            }                <div class="legend-dot" style="background: #8b5cf6;"></div></div>
+
+            
+
+            function getSeverityColor(severity) {                <span>Architecture</span></div></section>
+
+                const colors = {
+
+                    critical: '#ff6b6b',            </div></div>
+
+                    high: '#ffa502',
+
+                    medium: '#45b7d1',            <div class="legend-item"></div>
+
+                    low: '#96ceb4'
+
+                };                <div class="legend-dot" style="background: #00d4ff;"></div></div></section></p>
+
+                return colors[severity] || '#888888';
+
+            }                <span>Operations</span></div></section>
+
+            
+
+            function toggleCategory(categoryId) {            </div></div>
+
+                const legendItems = document.querySelectorAll('.legend-item');
+
+                            <div class="legend-item"></div></section>
+
+                if (activeCategory === categoryId) {
+
+                    // Deactivate - show all                <div class="legend-dot" style="background: #4ecdc4;"></div></body>
+
+                    activeCategory = null;
+
+                    legendItems.forEach(item => item.classList.remove('active'));                <span>User Interface</span></html>
+
+                    node.style('opacity', 1);
+
+                    link.style('opacity', d => d.strength > 0.5 ? 0.3 : 0.15);            </div>
+
+                } else {        </div>
+
+                    // Activate filter    </section>
+
+                    activeCategory = categoryId;
+
+                    legendItems.forEach(item => {    <!-- Pattern Categories -->
+
+                        item.classList.toggle('active', item.dataset.category === categoryId);    <section class="graph-container">
+
+                    });        <div class="section-header">
+
+                                <h2 class="section-title">Pattern Categories</h2>
+
+                    node.style('opacity', d => {            <p class="section-description">
+
+                        if (d.id === categoryId) return 1;                54 patterns organized into 4 semantic clusters
+
+                        if (d.category === categoryId) return 1;            </p>
+
+                        return 0.15;        </div>
+
+                    });        
+
+                            <div class="patterns-grid">
+
+                    link.style('opacity', d => {            <div class="glass-card pattern-card pulse-glow-glass">
+
+                        if (d.source.id === categoryId || d.target.id === categoryId ||                <div class="pattern-header">
+
+                            d.source.category === categoryId || d.target.category === categoryId) {                    <div class="pattern-icon tdd">🧪</div>
+
+                            return 0.5;                    <div>
+
+                        }                        <div class="pattern-title">TDD & Testing</div>
+
+                        return 0.05;                        <div class="pattern-count">14 patterns</div>
+
+                    });                    </div>
+
+                }                </div>
+
+            }                <ul class="pattern-list">
+
+                                <li>Red-Green-Refactor Cycle</li>
+
+            function showDetailPanel(d) {                    <li>Test-First Development</li>
+
+                if (d.type === 'category') {                    <li>4-Layer Testing Strategy</li>
+
+                    // Show category details                    <li>Coverage Enforcement</li>
+
+                    const categoryPatterns = graphData.patterns.filter(p => p.category === d.id);                    <li>Mock Patterns</li>
+
+                                        <li>Integration Testing</li>
+
+                    detailPanel.innerHTML = `                </ul>
+
+                        <div class="detail-header">            </div>
+
+                            <div class="detail-category">Category</div>            
+
+                            <div class="detail-title">${d.name}</div>            <div class="glass-card pattern-card pulse-glow-glass">
+
+                        </div>                <div class="pattern-header">
+
+                                            <div class="pattern-icon arch">🏗️</div>
+
+                        <div class="detail-stats">                    <div>
+
+                            <div class="stat-box">                        <div class="pattern-title">Architecture</div>
+
+                                <div class="stat-value">${d.count}</div>                        <div class="pattern-count">12 patterns</div>
+
+                                <div class="stat-label">Patterns</div>                    </div>
+
+                            </div>                </div>
+
+                            <div class="stat-box">                <ul class="pattern-list">
+
+                                <div class="stat-value">${(categoryPatterns.reduce((acc, p) => acc + p.confidence, 0) / categoryPatterns.length * 100).toFixed(0)}%</div>                    <li>4-Tier Brain System</li>
+
+                                <div class="stat-label">Avg Confidence</div>                    <li>SKULL Protection Layers</li>
+
+                            </div>                    <li>Orchestrator Patterns</li>
+
+                        </div>                    <li>Agent Communication</li>
+
+                                            <li>Memory Tier Design</li>
+
+                        <div class="detail-section">                    <li>Manifest-Driven Config</li>
+
+                            <div class="detail-section-title">📋 Patterns in Category</div>                </ul>
+
+                            <ul class="detail-list">            </div>
+
+                                ${categoryPatterns.map(p => `            
+
+                                    <li style="cursor: pointer" onclick="document.querySelector('[data-node-id=\\'${p.id}\\']')?.click()">            <div class="glass-card pattern-card pulse-glow-glass">
+
+                                        ${p.name}                <div class="pattern-header">
+
+                                        <span style="color: ${getSeverityColor(p.severity)}; font-size: 10px; margin-left: auto;">${p.severity}</span>                    <div class="pattern-icon ops">⚙️</div>
+
+                                    </li>                    <div>
+
+                                `).join('')}                        <div class="pattern-title">Operations</div>
+
+                            </ul>                        <div class="pattern-count">16 patterns</div>
+
+                        </div>                    </div>
+
+                    `;                </div>
+
+                } else {                <ul class="pattern-list">
+
+                    // Show pattern details                    <li>Planning System Workflow</li>
+
+                    detailPanel.innerHTML = `                    <li>Git Checkpoint Strategy</li>
+
+                        <div class="detail-header">                    <li>Maintenance Pipeline</li>
+
+                            <div class="detail-category">${d.category.replace(/_/g, ' ')}</div>                    <li>ADO Integration</li>
+
+                            <div class="detail-title">${d.name}</div>                    <li>Sanitization Process</li>
+
+                            <div class="detail-description">${d.description}</div>                    <li>Refinement Cycle</li>
+
+                        </div>                </ul>
+
+                                    </div>
+
+                        <div class="detail-stats">            
+
+                            <div class="stat-box">            <div class="glass-card pattern-card pulse-glow-glass">
+
+                                <div class="stat-value">${(d.confidence * 100).toFixed(0)}%</div>                <div class="pattern-header">
+
+                                <div class="stat-label">Confidence</div>                    <div class="pattern-icon ui">👥</div>
+
+                            </div>                    <div>
+
+                            <div class="stat-box">                        <div class="pattern-title">User Interface</div>
+
+                                <div class="stat-value" style="color: ${getSeverityColor(d.severity)}">${d.severity}</div>                        <div class="pattern-count">12 patterns</div>
+
+                                <div class="stat-label">Severity</div>                    </div>
+
+                            </div>                </div>
+
+                        </div>                <ul class="pattern-list">
+
+                                            <li>Response Templates v4</li>
+
+                        <div class="detail-section">                    <li>Intent Classification</li>
+
+                            <div class="detail-section-title">⚠️ Impact</div>                    <li>Command Routing</li>
+
+                            <p style="font-size: var(--font-sm); color: var(--text-secondary); line-height: 1.6;">                    <li>ASCII Banners</li>
+
+                                ${d.impact}                    <li>Progress Indicators</li>
+
+                            </p>                    <li>Error Handling UX</li>
+
+                        </div>                </ul>
+
+                                    </div>
+
+                        ${d.connections && d.connections.length > 0 ? `        </div>
+
+                        <div class="detail-section">    </section>
+
+                            <div class="detail-section-title">🔗 Connected Categories</div>
+
+                            <ul class="detail-list">    <!-- Hebbian Learning -->
+
+                                ${d.connections.map(conn => {    <section class="graph-container learning-section">
+
+                                    const cat = graphData.categories.find(c => c.id === conn);        <div class="section-header">
+
+                                    return cat ? `<li>${cat.name}</li>` : '';            <h2 class="section-title">🧠 Hebbian Learning</h2>
+
+                                }).join('')}            <p class="section-description">
+
+                            </ul>                "Nodes that fire together, wire together" — connections strengthen with co-activation
+
+                        </div>            </p>
+
+                        ` : ''}        </div>
+
+                    `;        
+
+                }        <div class="learning-stages">
+
+            }            <div class="neuglass-card stage-card">
+
+                            <div class="stage-weight initial">0.25</div>
+
+            // Handle window resize                <div class="stage-name">Initial</div>
+
+            window.addEventListener('resize', () => {                <div class="stage-description">Weak association, new connection</div>
+
+                const newWidth = container.clientWidth;            </div>
+
+                const newHeight = container.clientHeight;            
+
+                svg.attr('viewBox', `0 0 ${newWidth} ${newHeight}`);            <div class="neuglass-card stage-card">
+
+                simulation.force('center', d3.forceCenter(newWidth / 2, newHeight / 2));                <div class="stage-weight learning">0.55</div>
+
+                simulation.alpha(0.3).restart();                <div class="stage-name">Learning</div>
+
+            });                <div class="stage-description">Active strengthening</div>
+
+        });            </div>
+
+    </script>            
+
+</body>            <div class="neuglass-card stage-card">
+
+</html>                <div class="stage-weight strong">0.85</div>
+
                 <div class="stage-name">Strong</div>
                 <div class="stage-description">Established pattern</div>
             </div>
