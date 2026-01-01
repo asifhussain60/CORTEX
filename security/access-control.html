@@ -3,65 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Access Control - Role-based access, authentication, and authorization strategies">
     <title>Access Control - CORTEX Security</title>
-    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo-64.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <link rel="stylesheet" href="../assets/css/main.css?v=4.0.0">
     <style>
+        /* ============================================
+           GLASSMORPHISM v4.0.0 - Level 1 View
+           Animation Tier: T1 (Subtle)
+           NO infinite animations
+           NO inline styles
+           ============================================ */
+        
         :root {
             --accent-primary: #00d4ff;
-            --accent-secondary: #7c3aed;
-            --accent-tertiary: #10b981;
+            --accent-secondary: #0ea5e9;
+            --accent-tertiary: #06b6d4;
             --bg-primary: #0a0e27;
             --bg-secondary: #131835;
             --bg-tertiary: #1a1f3e;
             --text-primary: #ffffff;
             --text-secondary: #a0aec0;
+            --text-muted: #64748b;
             --glass-bg: rgba(255, 255, 255, 0.05);
             --glass-border: rgba(255, 255, 255, 0.1);
+            --spacing-xs: 0.25rem;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --spacing-2xl: 3rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
             background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
             min-height: 100vh;
             color: var(--text-primary);
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
         }
 
-        .breadcrumb {
-            padding: 1rem 2rem;
-            background: var(--glass-bg);
+        /* ============================================
+           GLASS HEADER - Level 1 (NO LOGO)
+           ============================================ */
+        .glass-header {
+            background: rgba(10, 14, 39, 0.8);
             backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--glass-border);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        .breadcrumb a {
-            color: var(--accent-primary);
-            text-decoration: none;
-            transition: color 0.3s ease;
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        .breadcrumb a:hover {
-            color: var(--accent-secondary);
+        .header-nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
         }
 
-        .breadcrumb span {
+        .nav-link {
             color: var(--text-secondary);
-            margin: 0 0.5rem;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+            cursor: pointer;
         }
 
+        .nav-link:hover {
+            color: var(--accent-primary);
+        }
+
+        .nav-link i {
+            margin-right: 0.25rem;
+        }
+
+        /* ============================================
+           MAIN CONTENT
+           ============================================ */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--spacing-2xl) var(--spacing-xl);
+        }
+
+        /* ============================================
+           PAGE HEADER
+           ============================================ */
         .page-header {
             text-align: center;
-            padding: 3rem 2rem;
-            background: linear-gradient(180deg, rgba(124, 58, 237, 0.1) 0%, transparent 100%);
+            margin-bottom: var(--spacing-2xl);
         }
 
-        .logo-container {
-            margin-bottom: 1.5rem;
-        }
-
-        .logo-icon {
+        .header-icon {
             width: 80px;
             height: 80px;
             background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
@@ -69,1370 +119,563 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto;
+            margin: 0 auto var(--spacing-lg);
             font-size: 2.5rem;
             box-shadow: 0 10px 40px rgba(0, 212, 255, 0.3);
         }
 
         .page-title {
-            font-size: 3rem;
-            font-weight: 800;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: var(--spacing-md);
             background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 1rem;
         }
 
-        .page-subtitle {
-            font-size: 1.25rem;
+        .page-description {
             color: var(--text-secondary);
+            font-size: 1.125rem;
             max-width: 700px;
             margin: 0 auto;
         }
 
-        .content-section {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
+        /* ============================================
+           GLASS CARDS - T1 Subtle
+           ============================================ */
         .glass-card {
-            background: var(--glass-bg);
+            background: rgba(26, 31, 58, 0.7);
             backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 16px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-xl);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            cursor: pointer;
         }
 
         .glass-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 212, 255, 0.15);
+            border-color: rgba(0, 212, 255, 0.3);
+        }
+
+        .glass-card-display {
+            background: rgba(26, 31, 58, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-xl);
+            position: relative;
+            overflow: hidden;
+            cursor: default;
+        }
+
+        /* T1 Subtle: Static glass highlight (NO animation) */
+        .glass-card-display::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            pointer-events: none;
         }
 
         .section-title {
             font-size: 1.75rem;
             font-weight: 700;
-            margin-bottom: 1.5rem;
+            margin-bottom: var(--spacing-lg);
             display: flex;
             align-items: center;
             gap: 0.75rem;
+            color: var(--text-primary);
         }
 
         .section-title i {
             color: var(--accent-primary);
         }
 
-        /* Access Control Models Grid */
+        .section-description {
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-lg);
+            line-height: 1.8;
+        }
+
+        /* ============================================
+           ACCESS MODELS GRID
+           ============================================ */
         .models-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-xl);
         }
 
         .model-card {
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(124, 58, 237, 0.1));
-            border: 1px solid var(--glass-border);
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(14, 165, 233, 0.1));
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 12px;
-            padding: 1.5rem;
-            position: relative;
-            overflow: hidden;
+            padding: var(--spacing-lg);
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
         }
 
-        .model-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
-        }
-
-        .model-card.rbac::before {
-            background: linear-gradient(90deg, #00d4ff, #0ea5e9);
-        }
-
-        .model-card.abac::before {
-            background: linear-gradient(90deg, #7c3aed, #a855f7);
-        }
-
-        .model-card.pbac::before {
-            background: linear-gradient(90deg, #10b981, #34d399);
-        }
-
-        .model-card.mac::before {
-            background: linear-gradient(90deg, #f59e0b, #fbbf24);
+        .model-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(0, 212, 255, 0.3);
+            box-shadow: 0 8px 24px rgba(0, 212, 255, 0.2);
         }
 
         .model-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
+            font-size: 2rem;
+            margin-bottom: var(--spacing-md);
+            color: var(--accent-primary);
         }
 
-        .model-card.rbac .model-icon {
-            background: rgba(0, 212, 255, 0.2);
-            color: #00d4ff;
-        }
-
-        .model-card.abac .model-icon {
-            background: rgba(124, 58, 237, 0.2);
-            color: #a855f7;
-        }
-
-        .model-card.pbac .model-icon {
-            background: rgba(16, 185, 129, 0.2);
-            color: #10b981;
-        }
-
-        .model-card.mac .model-icon {
-            background: rgba(245, 158, 11, 0.2);
-            color: #f59e0b;
-        }
-
-        .model-card h3 {
+        .model-title {
             font-size: 1.25rem;
             font-weight: 600;
-            margin-bottom: 0.75rem;
+            margin-bottom: var(--spacing-sm);
+            color: var(--text-primary);
         }
 
-        .model-card p {
+        .model-description {
             color: var(--text-secondary);
             font-size: 0.9rem;
-            margin-bottom: 1rem;
             line-height: 1.6;
         }
 
-        .model-features {
+        /* ============================================
+           FEATURES GRID
+           ============================================ */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .feature-item {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 8px;
+            padding: var(--spacing-md);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            transition: border-color 0.2s ease, background 0.2s ease;
+        }
+
+        .feature-item:hover {
+            border-color: rgba(0, 212, 255, 0.4);
+            background: rgba(0, 212, 255, 0.15);
+        }
+
+        .feature-item i {
+            color: var(--accent-primary);
+            font-size: 1.25rem;
+        }
+
+        .feature-item span {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        /* ============================================
+           CODE EXAMPLE
+           ============================================ */
+        .code-block {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: var(--spacing-lg);
+            overflow-x: auto;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .code-block pre {
+            margin: 0;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 0.875rem;
+            line-height: 1.6;
+            color: var(--text-primary);
+        }
+
+        .code-header {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-md);
+            padding-bottom: var(--spacing-sm);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .code-header i {
+            color: var(--accent-primary);
+        }
+
+        .code-header span {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        /* ============================================
+           MERMAID DIAGRAM CONTAINER
+           ============================================ */
+        .mermaid-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: var(--spacing-xl) 0;
+            width: 100%;
+        }
+
+        .mermaid {
+            max-width: 800px;
+            width: 100%;
+        }
+
+        /* ============================================
+           BEST PRACTICES LIST
+           ============================================ */
+        .practices-list {
             list-style: none;
             padding: 0;
             margin: 0;
         }
 
-        .model-features li {
+        .practices-list li {
             display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 0;
-            border-bottom: 1px solid var(--glass-border);
-            font-size: 0.85rem;
+            align-items: flex-start;
+            gap: var(--spacing-md);
+            padding: var(--spacing-md) 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .model-features li:last-child {
+        .practices-list li:last-child {
             border-bottom: none;
         }
 
-        .model-features li i {
-            color: var(--accent-tertiary);
-        }
-
-        /* Permission Hierarchy Visualization */
-        #permission-hierarchy {
-            width: 100%;
-            height: 500px;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 12px;
-            margin-bottom: 1rem;
-        }
-
-        /* Access Review Wizard */
-        .wizard-container {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 12px;
-            padding: 2rem;
-        }
-
-        .wizard-steps {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 2rem;
-            position: relative;
-        }
-
-        .wizard-steps::before {
-            content: '';
-            position: absolute;
-            top: 20px;
-            left: 10%;
-            right: 10%;
-            height: 2px;
-            background: var(--glass-border);
-        }
-
-        .wizard-step {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .step-number {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--bg-tertiary);
-            border: 2px solid var(--glass-border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .wizard-step.active .step-number {
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-            border-color: transparent;
-        }
-
-        .wizard-step.completed .step-number {
-            background: var(--accent-tertiary);
-            border-color: transparent;
-        }
-
-        .step-label {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            text-align: center;
-        }
-
-        .wizard-step.active .step-label {
+        .practices-list i {
             color: var(--accent-primary);
+            margin-top: 0.25rem;
         }
 
-        .wizard-content {
-            background: var(--glass-bg);
-            border-radius: 12px;
-            padding: 1.5rem;
-            min-height: 200px;
-        }
-
-        /* Principle Cards */
-        .principles-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .principle-card {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 12px;
-            padding: 1.5rem;
-            border-left: 4px solid var(--accent-primary);
-        }
-
-        .principle-card.defense {
-            border-left-color: #ef4444;
-        }
-
-        .principle-card.least-privilege {
-            border-left-color: #f59e0b;
-        }
-
-        .principle-card.separation {
-            border-left-color: #10b981;
-        }
-
-        .principle-card.zero-trust {
-            border-left-color: #7c3aed;
-        }
-
-        .principle-card h4 {
-            font-size: 1.1rem;
-            margin-bottom: 0.75rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .principle-card p {
+        .practices-list span {
             color: var(--text-secondary);
-            font-size: 0.9rem;
             line-height: 1.6;
         }
 
-        /* IAM Integration Cards */
-        .iam-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-        }
-
-        .iam-card {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 1.25rem;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .iam-card:hover {
-            transform: translateY(-3px);
-            border-color: var(--accent-primary);
-        }
-
-        .iam-card i {
-            font-size: 2rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .iam-card.azure i { color: #0078d4; }
-        .iam-card.okta i { color: #00297a; }
-        .iam-card.aws i { color: #ff9900; }
-        .iam-card.keycloak i { color: #4d4d4d; }
-
-        .iam-card h4 {
-            font-size: 1rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .iam-card p {
-            color: var(--text-secondary);
-            font-size: 0.8rem;
-        }
-
-        /* Comparison Table */
-        .comparison-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-        }
-
-        .comparison-table th,
-        .comparison-table td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid var(--glass-border);
-        }
-
-        .comparison-table th {
-            background: rgba(0, 212, 255, 0.1);
-            color: var(--accent-primary);
-            font-weight: 600;
-        }
-
-        .comparison-table tr:hover td {
-            background: rgba(255, 255, 255, 0.02);
-        }
-
-        .check-mark {
-            color: var(--accent-tertiary);
-        }
-
-        .x-mark {
-            color: #ef4444;
-        }
-
-        /* Mermaid Diagrams */
-        .mermaid {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin: 1rem 0;
-        }
-
-        /* Code Block */
-        .code-block {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 8px;
-            padding: 1rem;
-            margin: 1rem 0;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.85rem;
-            overflow-x: auto;
-        }
-
-        .code-block .keyword { color: #c792ea; }
-        .code-block .string { color: #c3e88d; }
-        .code-block .comment { color: #546e7a; }
-        .code-block .function { color: #82aaff; }
-
-        /* Access Matrix Visualization */
-        #access-matrix {
-            width: 100%;
-            height: 400px;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 12px;
-        }
-
-        /* Role Builder */
-        .role-builder {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-        }
-
-        @media (max-width: 768px) {
-            .role-builder {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .permission-checklist {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .permission-checklist li {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.75rem;
-            border-bottom: 1px solid var(--glass-border);
-            cursor: pointer;
-            transition: background 0.2s ease;
-        }
-
-        .permission-checklist li:hover {
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .permission-checklist input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            accent-color: var(--accent-primary);
-        }
-
-        .role-preview {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 12px;
-            padding: 1.5rem;
-        }
-
-        .role-preview h4 {
-            margin-bottom: 1rem;
-            color: var(--accent-primary);
-        }
-
-        .permission-tag {
-            display: inline-block;
-            background: rgba(0, 212, 255, 0.2);
-            color: var(--accent-primary);
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            margin: 0.25rem;
-        }
-
-        .permission-tag.write {
-            background: rgba(245, 158, 11, 0.2);
-            color: #f59e0b;
-        }
-
-        .permission-tag.delete {
-            background: rgba(239, 68, 68, 0.2);
-            color: #ef4444;
-        }
-
-        .permission-tag.admin {
-            background: rgba(124, 58, 237, 0.2);
-            color: #a855f7;
-        }
-
-        /* Footer */
-        .page-footer {
-            text-align: center;
+        /* ============================================
+           GLASS FOOTER
+           ============================================ */
+        .glass-footer {
+            background: rgba(10, 14, 39, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
             padding: 2rem;
-            border-top: 1px solid var(--glass-border);
-            margin-top: 3rem;
-            color: var(--text-secondary);
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-copyright p {
+            color: var(--text-muted);
+            margin: 0;
+            font-size: 0.875rem;
         }
 
         .footer-links {
             display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-bottom: 1rem;
+            gap: 1.5rem;
+            align-items: center;
         }
 
         .footer-links a {
             color: var(--text-secondary);
             text-decoration: none;
-            transition: color 0.3s ease;
+            transition: color 0.2s ease;
         }
 
         .footer-links a:hover {
             color: var(--accent-primary);
         }
+
+        .footer-version {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 12px;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        /* ============================================
+           RESPONSIVE DESIGN
+           ============================================ */
+        @media (max-width: 768px) {
+            .header-nav {
+                gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .nav-link span {
+                display: none;
+            }
+
+            .page-title {
+                font-size: 1.75rem;
+            }
+
+            .main-content {
+                padding: var(--spacing-lg);
+            }
+
+            .models-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-header {
+                padding: var(--spacing-lg);
+            }
+
+            .header-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 1.75rem;
+            }
+
+            .section-title {
+                font-size: 1.25rem;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- Breadcrumb Navigation -->
-    <nav class="breadcrumb">
-        <a href="../index.html">Home</a>
-        <span>/</span>
-        <a href="index.html">Security</a>
-        <span>/</span>
-        <span>Access Control</span>
-    </nav>
-
-    <!-- Page Header -->
-    <header class="page-header">
-        <div class="logo-container">
-            <div class="logo-icon">
-                <i class="fas fa-key"></i>
-            </div>
+    <!-- Glass Header (Level 1 - NO LOGO) -->
+    <header class="glass-header">
+        <div class="header-content">
+            <nav class="header-nav">
+                <a href="../index.html" class="nav-link"><i class="fas fa-home"></i> <span>Home</span></a>
+                <a href="index.html" class="nav-link"><i class="fas fa-shield-halved"></i> <span>Security</span></a>
+                <a href="../architecture/index.html" class="nav-link"><i class="fas fa-brain"></i> <span>Architecture</span></a>
+                <a href="https://github.com/asifhussain60/CORTEX" class="nav-link" target="_blank"><i class="fab fa-github"></i></a>
+            </nav>
         </div>
-        <h1 class="page-title">Access Control</h1>
-        <p class="page-subtitle">
-            Implement robust access control mechanisms using RBAC, ABAC, and Zero Trust principles 
-            to protect your systems and data from unauthorized access.
-        </p>
     </header>
 
     <!-- Main Content -->
-    <main class="content-section">
-        
-        <!-- Access Control Models -->
-        <section class="glass-card">
-            <h2 class="section-title">
-                <i class="fas fa-cubes"></i>
-                Access Control Models
-            </h2>
-            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
-                Choose the right access control model based on your organization's security requirements and operational complexity.
-            </p>
-            
-            <div class="models-grid">
-                <div class="model-card rbac">
-                    <div class="model-icon">
-                        <i class="fas fa-users-cog"></i>
-                    </div>
-                    <h3>Role-Based Access Control (RBAC)</h3>
-                    <p>Assign permissions based on roles within the organization. Users inherit permissions from their assigned roles.</p>
-                    <ul class="model-features">
-                        <li><i class="fas fa-check"></i> Easy to understand and manage</li>
-                        <li><i class="fas fa-check"></i> Scalable for large organizations</li>
-                        <li><i class="fas fa-check"></i> Supports role hierarchies</li>
-                        <li><i class="fas fa-check"></i> Audit-friendly</li>
-                    </ul>
-                </div>
-
-                <div class="model-card abac">
-                    <div class="model-icon">
-                        <i class="fas fa-sliders-h"></i>
-                    </div>
-                    <h3>Attribute-Based Access Control (ABAC)</h3>
-                    <p>Grant access based on attributes of users, resources, and environment. Highly flexible policy-driven approach.</p>
-                    <ul class="model-features">
-                        <li><i class="fas fa-check"></i> Fine-grained access control</li>
-                        <li><i class="fas fa-check"></i> Context-aware decisions</li>
-                        <li><i class="fas fa-check"></i> Dynamic policy evaluation</li>
-                        <li><i class="fas fa-check"></i> Reduces role explosion</li>
-                    </ul>
-                </div>
-
-                <div class="model-card pbac">
-                    <div class="model-icon">
-                        <i class="fas fa-file-contract"></i>
-                    </div>
-                    <h3>Policy-Based Access Control (PBAC)</h3>
-                    <p>Define access through declarative policies. Combines elements of RBAC and ABAC for maximum flexibility.</p>
-                    <ul class="model-features">
-                        <li><i class="fas fa-check"></i> Centralized policy management</li>
-                        <li><i class="fas fa-check"></i> Version-controlled policies</li>
-                        <li><i class="fas fa-check"></i> Supports complex conditions</li>
-                        <li><i class="fas fa-check"></i> External policy stores</li>
-                    </ul>
-                </div>
-
-                <div class="model-card mac">
-                    <div class="model-icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h3>Mandatory Access Control (MAC)</h3>
-                    <p>System-enforced access based on security labels. Used in high-security environments requiring strict controls.</p>
-                    <ul class="model-features">
-                        <li><i class="fas fa-check"></i> Highest security level</li>
-                        <li><i class="fas fa-check"></i> No user discretion</li>
-                        <li><i class="fas fa-check"></i> Classification-based</li>
-                        <li><i class="fas fa-check"></i> Government/Military grade</li>
-                    </ul>
-                </div>
+    <main class="main-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="header-icon">
+                <i class="fas fa-user-shield"></i>
             </div>
-        </section>
+            <h1 class="page-title">Access Control</h1>
+            <p class="page-description">
+                Comprehensive role-based access control (RBAC), authentication mechanisms, 
+                and authorization strategies for secure system access management.
+            </p>
+        </div>
 
-        <!-- Model Comparison -->
-        <section class="glass-card">
+        <!-- Overview Section -->
+        <section class="glass-card-display">
             <h2 class="section-title">
-                <i class="fas fa-balance-scale"></i>
-                Model Comparison
+                <i class="fas fa-info-circle"></i>
+                Overview
             </h2>
-            
-            <table class="comparison-table">
-                <thead>
-                    <tr>
-                        <th>Feature</th>
-                        <th>RBAC</th>
-                        <th>ABAC</th>
-                        <th>PBAC</th>
-                        <th>MAC</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Ease of Implementation</td>
-                        <td><i class="fas fa-star check-mark"></i><i class="fas fa-star check-mark"></i><i class="fas fa-star check-mark"></i></td>
-                        <td><i class="fas fa-star check-mark"></i><i class="fas fa-star check-mark"></i></td>
-                        <td><i class="fas fa-star check-mark"></i><i class="fas fa-star check-mark"></i></td>
-                        <td><i class="fas fa-star check-mark"></i></td>
-                    </tr>
-                    <tr>
-                        <td>Granularity</td>
-                        <td>Medium</td>
-                        <td>High</td>
-                        <td>Very High</td>
-                        <td>High</td>
-                    </tr>
-                    <tr>
-                        <td>Context Awareness</td>
-                        <td><i class="fas fa-times x-mark"></i></td>
-                        <td><i class="fas fa-check check-mark"></i></td>
-                        <td><i class="fas fa-check check-mark"></i></td>
-                        <td><i class="fas fa-times x-mark"></i></td>
-                    </tr>
-                    <tr>
-                        <td>Dynamic Policies</td>
-                        <td>Limited</td>
-                        <td><i class="fas fa-check check-mark"></i></td>
-                        <td><i class="fas fa-check check-mark"></i></td>
-                        <td><i class="fas fa-times x-mark"></i></td>
-                    </tr>
-                    <tr>
-                        <td>Role Explosion Risk</td>
-                        <td>High</td>
-                        <td>Low</td>
-                        <td>Low</td>
-                        <td>N/A</td>
-                    </tr>
-                    <tr>
-                        <td>Best For</td>
-                        <td>Enterprise apps</td>
-                        <td>Cloud/Microservices</td>
-                        <td>Complex systems</td>
-                        <td>Military/Gov</td>
-                    </tr>
-                </tbody>
-            </table>
+            <p class="section-description">
+                Access Control is a fundamental security mechanism that regulates who can view or use 
+                resources in a computing environment. CORTEX implements multiple access control models 
+                to provide flexible, secure, and auditable access management across all system components.
+            </p>
         </section>
 
-        <!-- Permission Hierarchy Visualization -->
-        <section class="glass-card">
+        <!-- Access Control Models -->
+        <section class="glass-card-display">
             <h2 class="section-title">
                 <i class="fas fa-sitemap"></i>
-                Permission Hierarchy
+                Access Control Models
             </h2>
-            <p style="color: var(--text-secondary); margin-bottom: 1rem;">
-                Interactive visualization of role hierarchy and permission inheritance in an RBAC system.
-            </p>
-            <div id="permission-hierarchy"></div>
-        </section>
-
-        <!-- Security Principles -->
-        <section class="glass-card">
-            <h2 class="section-title">
-                <i class="fas fa-shield-virus"></i>
-                Core Security Principles
-            </h2>
-            
-            <div class="principles-grid">
-                <div class="principle-card least-privilege">
-                    <h4><i class="fas fa-user-lock"></i> Principle of Least Privilege</h4>
-                    <p>Grant users only the minimum permissions necessary to perform their job functions. Regularly review and revoke unnecessary access.</p>
+            <div class="models-grid">
+                <div class="model-card">
+                    <div class="model-icon"><i class="fas fa-users-cog"></i></div>
+                    <h3 class="model-title">RBAC</h3>
+                    <p class="model-description">Role-Based Access Control assigns permissions to roles, and users inherit permissions through role membership.</p>
                 </div>
-
-                <div class="principle-card separation">
-                    <h4><i class="fas fa-project-diagram"></i> Separation of Duties</h4>
-                    <p>Divide critical functions among different individuals to prevent fraud and errors. No single user should control all aspects of a transaction.</p>
+                <div class="model-card">
+                    <div class="model-icon"><i class="fas fa-tags"></i></div>
+                    <h3 class="model-title">ABAC</h3>
+                    <p class="model-description">Attribute-Based Access Control evaluates attributes (user, resource, environment) to make access decisions.</p>
                 </div>
-
-                <div class="principle-card defense">
-                    <h4><i class="fas fa-layer-group"></i> Defense in Depth</h4>
-                    <p>Implement multiple layers of security controls. If one layer fails, others continue to provide protection.</p>
+                <div class="model-card">
+                    <div class="model-icon"><i class="fas fa-user-lock"></i></div>
+                    <h3 class="model-title">DAC</h3>
+                    <p class="model-description">Discretionary Access Control allows resource owners to grant or restrict access to other users.</p>
                 </div>
-
-                <div class="principle-card zero-trust">
-                    <h4><i class="fas fa-fingerprint"></i> Zero Trust Architecture</h4>
-                    <p>Never trust, always verify. Authenticate and authorize every access request regardless of network location or prior authentication.</p>
+                <div class="model-card">
+                    <div class="model-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h3 class="model-title">MAC</h3>
+                    <p class="model-description">Mandatory Access Control enforces system-wide policies that cannot be overridden by users.</p>
                 </div>
             </div>
         </section>
 
-        <!-- Authorization Flow Diagram -->
-        <section class="glass-card">
+        <!-- Key Features -->
+        <section class="glass-card-display">
             <h2 class="section-title">
-                <i class="fas fa-random"></i>
-                Authorization Decision Flow
+                <i class="fas fa-star"></i>
+                Key Features
             </h2>
-            <p style="color: var(--text-secondary); margin-bottom: 1rem;">
-                How access control decisions are made in a modern zero-trust architecture.
-            </p>
-            
-            <div class="mermaid">
-flowchart TD
-    A[User Request] --> B{Authentication}
-    B -->|Failed| C[Access Denied]
-    B -->|Success| D{MFA Required?}
-    D -->|Yes| E[MFA Challenge]
-    E -->|Failed| C
-    E -->|Success| F{Context Check}
-    D -->|No| F
-    F --> G{Device Compliant?}
-    G -->|No| H[Quarantine / Limited Access]
-    G -->|Yes| I{Location Check}
-    I -->|Suspicious| J[Step-Up Auth]
-    J -->|Failed| C
-    J -->|Success| K{Role/Permission Check}
-    I -->|Normal| K
-    K -->|No Permission| C
-    K -->|Has Permission| L{Resource Policy}
-    L -->|Denied| C
-    L -->|Allowed| M[Grant Access]
-    M --> N[Audit Log]
-    C --> N
-
-    style A fill:#0ea5e9,stroke:#0284c7,color:#fff
-    style C fill:#ef4444,stroke:#dc2626,color:#fff
-    style M fill:#10b981,stroke:#059669,color:#fff
-    style N fill:#8b5cf6,stroke:#7c3aed,color:#fff
-            </div>
-        </section>
-
-        <!-- Role Builder Tool -->
-        <section class="glass-card">
-            <h2 class="section-title">
-                <i class="fas fa-tools"></i>
-                Interactive Role Builder
-            </h2>
-            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
-                Design custom roles by selecting permissions. Follow least privilege principle.
-            </p>
-            
-            <div class="role-builder">
-                <div>
-                    <h4 style="margin-bottom: 1rem;">Available Permissions</h4>
-                    <ul class="permission-checklist" id="permissionList">
-                        <!-- Permissions will be generated by JS -->
-                    </ul>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <i class="fas fa-fingerprint"></i>
+                    <span>Multi-Factor Auth</span>
                 </div>
-                <div class="role-preview">
-                    <h4><i class="fas fa-eye"></i> Role Preview</h4>
-                    <div style="margin-bottom: 1rem;">
-                        <label style="font-size: 0.9rem; color: var(--text-secondary);">Role Name</label>
-                        <input type="text" id="roleName" value="Custom Role" style="width: 100%; padding: 0.5rem; background: var(--bg-tertiary); border: 1px solid var(--glass-border); border-radius: 6px; color: var(--text-primary); margin-top: 0.5rem;">
-                    </div>
-                    <div id="selectedPermissions">
-                        <p style="color: var(--text-secondary); font-size: 0.9rem;">No permissions selected</p>
-                    </div>
-                    <div style="margin-top: 1.5rem;">
-                        <button onclick="exportRole()" style="background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); border: none; padding: 0.75rem 1.5rem; border-radius: 8px; color: white; cursor: pointer; font-weight: 600;">
-                            <i class="fas fa-download"></i> Export Role Definition
-                        </button>
-                    </div>
+                <div class="feature-item">
+                    <i class="fas fa-key"></i>
+                    <span>SSO Integration</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-clock"></i>
+                    <span>Session Management</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-history"></i>
+                    <span>Access Logging</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-ban"></i>
+                    <span>IP Restrictions</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-user-check"></i>
+                    <span>Identity Verification</span>
                 </div>
             </div>
         </section>
 
-        <!-- Access Matrix -->
-        <section class="glass-card">
-            <h2 class="section-title">
-                <i class="fas fa-th"></i>
-                Access Control Matrix
-            </h2>
-            <p style="color: var(--text-secondary); margin-bottom: 1rem;">
-                Visual representation of role-resource access permissions across the system.
-            </p>
-            <div id="access-matrix"></div>
-        </section>
-
-        <!-- Access Review Process -->
-        <section class="glass-card">
-            <h2 class="section-title">
-                <i class="fas fa-clipboard-check"></i>
-                Access Review Process
-            </h2>
-            
-            <div class="wizard-container">
-                <div class="wizard-steps">
-                    <div class="wizard-step completed" data-step="1">
-                        <div class="step-number">1</div>
-                        <span class="step-label">Identify<br>Users</span>
-                    </div>
-                    <div class="wizard-step completed" data-step="2">
-                        <div class="step-number">2</div>
-                        <span class="step-label">Collect<br>Permissions</span>
-                    </div>
-                    <div class="wizard-step active" data-step="3">
-                        <div class="step-number">3</div>
-                        <span class="step-label">Review<br>Access</span>
-                    </div>
-                    <div class="wizard-step" data-step="4">
-                        <div class="step-number">4</div>
-                        <span class="step-label">Approve/<br>Revoke</span>
-                    </div>
-                    <div class="wizard-step" data-step="5">
-                        <div class="step-number">5</div>
-                        <span class="step-label">Document<br>Changes</span>
-                    </div>
-                </div>
-
-                <div class="wizard-content">
-                    <h4 style="margin-bottom: 1rem; color: var(--accent-primary);">Step 3: Review Access Rights</h4>
-                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
-                        For each user-permission combination, verify:
-                    </p>
-                    <ul style="color: var(--text-secondary); padding-left: 1.5rem;">
-                        <li>Is this permission still required for their current role?</li>
-                        <li>Has the user changed departments or responsibilities?</li>
-                        <li>Are there any conflicting permissions (SoD violations)?</li>
-                        <li>Is the access level appropriate (read vs write vs admin)?</li>
-                        <li>Are there any dormant accounts that should be disabled?</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- ABAC Policy Example -->
-        <section class="glass-card">
+        <!-- Code Example -->
+        <section class="glass-card-display">
             <h2 class="section-title">
                 <i class="fas fa-code"></i>
-                ABAC Policy Example
+                Configuration Example
             </h2>
-            <p style="color: var(--text-secondary); margin-bottom: 1rem;">
-                Example of an attribute-based access control policy in XACML-like format.
-            </p>
-            
-            <div class="mermaid">
-flowchart LR
-    subgraph Subject["Subject Attributes"]
-        S1[Role: Manager]
-        S2[Department: Finance]
-        S3[Clearance: Confidential]
-    end
-
-    subgraph Resource["Resource Attributes"]
-        R1[Type: Financial Report]
-        R2[Classification: Confidential]
-        R3[Owner: Finance Dept]
-    end
-
-    subgraph Environment["Environment Attributes"]
-        E1[Time: Business Hours]
-        E2[Location: Corporate Network]
-        E3[Device: Managed]
-    end
-
-    subgraph PDP["Policy Decision Point"]
-        P1{Evaluate Rules}
-    end
-
-    Subject --> P1
-    Resource --> P1
-    Environment --> P1
-    P1 -->|All Match| PERMIT[✓ PERMIT]
-    P1 -->|Any Fail| DENY[✗ DENY]
-
-    style PERMIT fill:#10b981,stroke:#059669,color:#fff
-    style DENY fill:#ef4444,stroke:#dc2626,color:#fff
-            </div>
-
             <div class="code-block">
-<span class="comment">// ABAC Policy Definition</span>
-{
-  <span class="string">"policy_id"</span>: <span class="string">"finance_reports_access"</span>,
-  <span class="string">"effect"</span>: <span class="string">"PERMIT"</span>,
-  <span class="string">"target"</span>: {
-    <span class="string">"resources"</span>: [<span class="string">"financial_reports/*"</span>]
-  },
-  <span class="string">"rules"</span>: [
-    {
-      <span class="string">"condition"</span>: <span class="string">"subject.department == resource.owner"</span>
-    },
-    {
-      <span class="string">"condition"</span>: <span class="string">"subject.clearance >= resource.classification"</span>
-    },
-    {
-      <span class="string">"condition"</span>: <span class="string">"environment.location IN ['corporate', 'vpn']"</span>
-    }
-  ]
-}
-            </div>
-        </section>
-
-        <!-- IAM Integration -->
-        <section class="glass-card">
-            <h2 class="section-title">
-                <i class="fas fa-plug"></i>
-                IAM Integration Options
-            </h2>
-            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
-                CORTEX integrates with leading Identity and Access Management platforms.
-            </p>
-            
-            <div class="iam-grid">
-                <div class="iam-card azure">
-                    <i class="fab fa-microsoft"></i>
-                    <h4>Azure AD / Entra ID</h4>
-                    <p>Enterprise SSO with conditional access policies</p>
+                <div class="code-header">
+                    <i class="fas fa-file-code"></i>
+                    <span>access-control.yaml</span>
                 </div>
-                <div class="iam-card okta">
-                    <i class="fas fa-key"></i>
-                    <h4>Okta</h4>
-                    <p>Universal directory with adaptive MFA</p>
-                </div>
-                <div class="iam-card aws">
-                    <i class="fab fa-aws"></i>
-                    <h4>AWS IAM</h4>
-                    <p>Fine-grained AWS resource access control</p>
-                </div>
-                <div class="iam-card keycloak">
-                    <i class="fas fa-lock"></i>
-                    <h4>Keycloak</h4>
-                    <p>Open-source identity management</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Session Management -->
-        <section class="glass-card">
-            <h2 class="section-title">
-                <i class="fas fa-clock"></i>
-                Session Management
-            </h2>
-            
-            <div class="mermaid">
-sequenceDiagram
-    participant U as User
-    participant A as Auth Server
-    participant R as Resource Server
-    participant S as Session Store
-
-    U->>A: Login Request
-    A->>A: Validate Credentials
-    A->>S: Create Session
-    S-->>A: Session ID
-    A-->>U: Access Token + Refresh Token
+                <pre><code>access_control:
+  model: rbac
+  
+  roles:
+    admin:
+      permissions:
+        - read:*
+        - write:*
+        - delete:*
+        - manage:users
     
-    U->>R: Request + Access Token
-    R->>A: Validate Token
-    A-->>R: Token Valid
-    R-->>U: Protected Resource
+    developer:
+      permissions:
+        - read:*
+        - write:code
+        - execute:pipelines
+    
+    viewer:
+      permissions:
+        - read:dashboards
+        - read:reports
 
-    Note over U,S: Token Expiration
-    U->>A: Refresh Token
-    A->>S: Validate Session
-    S-->>A: Session Active
-    A-->>U: New Access Token
-
-    Note over U,S: Session Timeout
-    U->>R: Request + Expired Token
-    R->>A: Validate Token
-    A-->>R: Token Invalid
-    R-->>U: 401 Unauthorized
+  authentication:
+    methods:
+      - type: oauth2
+        provider: azure-ad
+        scopes: [openid, profile, email]
+      - type: mfa
+        required_for: [admin, developer]
+    
+    session:
+      timeout: 3600
+      refresh_enabled: true
+      max_concurrent: 3</code></pre>
             </div>
         </section>
 
         <!-- Best Practices -->
-        <section class="glass-card">
+        <section class="glass-card-display">
             <h2 class="section-title">
                 <i class="fas fa-lightbulb"></i>
-                Access Control Best Practices
+                Best Practices
             </h2>
-            
-            <div class="principles-grid">
-                <div class="principle-card" style="border-left-color: #00d4ff;">
-                    <h4><i class="fas fa-user-check"></i> Regular Access Reviews</h4>
-                    <p>Conduct quarterly access reviews. Remove orphaned accounts and revoke unnecessary permissions promptly.</p>
-                </div>
-
-                <div class="principle-card" style="border-left-color: #f59e0b;">
-                    <h4><i class="fas fa-user-clock"></i> Time-Based Access</h4>
-                    <p>Implement just-in-time (JIT) access for privileged operations. Set automatic expiration for elevated permissions.</p>
-                </div>
-
-                <div class="principle-card" style="border-left-color: #10b981;">
-                    <h4><i class="fas fa-history"></i> Comprehensive Logging</h4>
-                    <p>Log all access decisions, both grants and denials. Enable forensic analysis and compliance reporting.</p>
-                </div>
-
-                <div class="principle-card" style="border-left-color: #ef4444;">
-                    <h4><i class="fas fa-exclamation-triangle"></i> Break-Glass Procedures</h4>
-                    <p>Define emergency access procedures with strong auditing. Require post-incident review and justification.</p>
-                </div>
-            </div>
+            <ul class="practices-list">
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    <span>Implement principle of least privilege - grant only minimum permissions required for each role</span>
+                </li>
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    <span>Enable multi-factor authentication for all privileged accounts and sensitive operations</span>
+                </li>
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    <span>Regularly audit access permissions and remove unnecessary privileges</span>
+                </li>
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    <span>Implement session timeout and automatic logout for inactive sessions</span>
+                </li>
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    <span>Log all access attempts and maintain comprehensive audit trails</span>
+                </li>
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    <span>Use centralized identity management with SSO for consistent access control</span>
+                </li>
+            </ul>
         </section>
-
     </main>
 
-    <!-- Footer -->
-    <footer class="page-footer">
-        <div class="footer-links">
-            <a href="index.html"><i class="fas fa-arrow-left"></i> Back to Security Hub</a>
-            <a href="audit-logging.html">Audit Logging <i class="fas fa-arrow-right"></i></a>
+    <!-- Glass Footer -->
+    <footer class="glass-footer">
+        <div class="footer-content">
+            <div class="footer-copyright">
+                <p>© 2025 Asif Hussain. All rights reserved.</p>
+            </div>
+            <div class="footer-links">
+                <a href="https://github.com/asifhussain60/CORTEX" target="_blank">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+                <a href="https://asifhussain60.github.io/CORTEX/" target="_blank">
+                    <i class="fas fa-globe"></i> Website
+                </a>
+                <span class="footer-version">CORTEX v4.0</span>
+            </div>
         </div>
-        <p>© 2024 CORTEX Security Framework. All rights reserved.</p>
     </footer>
-
-    <script>
-        // Initialize Mermaid
-        mermaid.initialize({
-            startOnLoad: true,
-            theme: 'dark',
-            themeVariables: {
-                primaryColor: '#7c3aed',
-                primaryTextColor: '#fff',
-                primaryBorderColor: '#8b5cf6',
-                lineColor: '#a78bfa',
-                secondaryColor: '#1e1b4b',
-                tertiaryColor: '#312e81',
-                background: '#0f172a',
-                mainBkg: '#1e1b4b',
-                nodeBorder: '#8b5cf6',
-                clusterBkg: '#1e1b4b',
-                clusterBorder: '#8b5cf6',
-                titleColor: '#fff',
-                edgeLabelBackground: '#1e1b4b'
-            }
-        });
-
-        // Permission Hierarchy D3 Visualization
-        const hierarchyData = {
-            name: "Super Admin",
-            children: [
-                {
-                    name: "Admin",
-                    children: [
-                        {
-                            name: "Manager",
-                            children: [
-                                { name: "Team Lead", children: [{ name: "Developer" }, { name: "Analyst" }] },
-                                { name: "Senior Dev" }
-                            ]
-                        },
-                        {
-                            name: "Security Admin",
-                            children: [
-                                { name: "Security Analyst" },
-                                { name: "Auditor" }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    name: "Service Account",
-                    children: [
-                        { name: "API Gateway" },
-                        { name: "Batch Processor" }
-                    ]
-                }
-            ]
-        };
-
-        function createHierarchy() {
-            const container = document.getElementById('permission-hierarchy');
-            const width = container.clientWidth;
-            const height = 500;
-
-            d3.select(container).selectAll("*").remove();
-
-            const svg = d3.select(container)
-                .append('svg')
-                .attr('width', width)
-                .attr('height', height);
-
-            const g = svg.append('g')
-                .attr('transform', `translate(${width/2}, 50)`);
-
-            const treeLayout = d3.tree()
-                .size([width - 200, height - 100]);
-
-            const root = d3.hierarchy(hierarchyData);
-            treeLayout(root);
-
-            // Links
-            g.selectAll('.link')
-                .data(root.links())
-                .enter()
-                .append('path')
-                .attr('class', 'link')
-                .attr('d', d3.linkVertical()
-                    .x(d => d.x - width/2 + 100)
-                    .y(d => d.y))
-                .attr('fill', 'none')
-                .attr('stroke', 'rgba(124, 58, 237, 0.4)')
-                .attr('stroke-width', 2);
-
-            // Nodes
-            const nodes = g.selectAll('.node')
-                .data(root.descendants())
-                .enter()
-                .append('g')
-                .attr('class', 'node')
-                .attr('transform', d => `translate(${d.x - width/2 + 100}, ${d.y})`);
-
-            nodes.append('circle')
-                .attr('r', d => d.depth === 0 ? 25 : d.children ? 18 : 12)
-                .attr('fill', d => {
-                    if (d.depth === 0) return '#7c3aed';
-                    if (d.depth === 1) return '#00d4ff';
-                    if (d.children) return '#10b981';
-                    return '#f59e0b';
-                })
-                .attr('stroke', '#fff')
-                .attr('stroke-width', 2)
-                .style('cursor', 'pointer')
-                .on('mouseover', function() {
-                    d3.select(this).attr('r', d => (d.depth === 0 ? 28 : d.children ? 21 : 15));
-                })
-                .on('mouseout', function(event, d) {
-                    d3.select(this).attr('r', d.depth === 0 ? 25 : d.children ? 18 : 12);
-                });
-
-            nodes.append('text')
-                .attr('dy', d => d.children ? -25 : 25)
-                .attr('text-anchor', 'middle')
-                .attr('fill', '#fff')
-                .attr('font-size', '12px')
-                .text(d => d.data.name);
-        }
-
-        // Access Matrix Visualization
-        const roles = ['Admin', 'Manager', 'Developer', 'Analyst', 'Guest'];
-        const resources = ['Users', 'Reports', 'Settings', 'API', 'Logs', 'Billing'];
-        const accessMatrix = [
-            [3, 3, 3, 3, 3, 3], // Admin
-            [2, 3, 1, 2, 2, 2], // Manager
-            [0, 2, 0, 3, 1, 0], // Developer
-            [0, 2, 0, 1, 2, 0], // Analyst
-            [0, 1, 0, 0, 0, 0]  // Guest
-        ];
-
-        function createAccessMatrix() {
-            const container = document.getElementById('access-matrix');
-            const width = container.clientWidth;
-            const height = 400;
-            const margin = { top: 60, right: 30, bottom: 30, left: 100 };
-
-            d3.select(container).selectAll("*").remove();
-
-            const svg = d3.select(container)
-                .append('svg')
-                .attr('width', width)
-                .attr('height', height);
-
-            const cellWidth = (width - margin.left - margin.right) / resources.length;
-            const cellHeight = (height - margin.top - margin.bottom) / roles.length;
-
-            const colorScale = d3.scaleOrdinal()
-                .domain([0, 1, 2, 3])
-                .range(['#1e293b', '#f59e0b', '#3b82f6', '#10b981']);
-
-            const accessLabels = ['No Access', 'Read', 'Write', 'Full'];
-
-            const g = svg.append('g')
-                .attr('transform', `translate(${margin.left}, ${margin.top})`);
-
-            // Column headers
-            g.selectAll('.col-header')
-                .data(resources)
-                .enter()
-                .append('text')
-                .attr('x', (d, i) => i * cellWidth + cellWidth / 2)
-                .attr('y', -15)
-                .attr('text-anchor', 'middle')
-                .attr('fill', '#00d4ff')
-                .attr('font-size', '12px')
-                .text(d => d);
-
-            // Row headers
-            g.selectAll('.row-header')
-                .data(roles)
-                .enter()
-                .append('text')
-                .attr('x', -10)
-                .attr('y', (d, i) => i * cellHeight + cellHeight / 2)
-                .attr('text-anchor', 'end')
-                .attr('dominant-baseline', 'middle')
-                .attr('fill', '#a78bfa')
-                .attr('font-size', '12px')
-                .text(d => d);
-
-            // Cells
-            roles.forEach((role, i) => {
-                resources.forEach((resource, j) => {
-                    const cellG = g.append('g')
-                        .attr('transform', `translate(${j * cellWidth}, ${i * cellHeight})`);
-
-                    cellG.append('rect')
-                        .attr('width', cellWidth - 4)
-                        .attr('height', cellHeight - 4)
-                        .attr('x', 2)
-                        .attr('y', 2)
-                        .attr('rx', 6)
-                        .attr('fill', colorScale(accessMatrix[i][j]))
-                        .attr('stroke', 'rgba(255,255,255,0.1)')
-                        .style('cursor', 'pointer')
-                        .on('mouseover', function() {
-                            d3.select(this).attr('stroke', '#00d4ff').attr('stroke-width', 2);
-                        })
-                        .on('mouseout', function() {
-                            d3.select(this).attr('stroke', 'rgba(255,255,255,0.1)').attr('stroke-width', 1);
-                        });
-
-                    cellG.append('text')
-                        .attr('x', cellWidth / 2)
-                        .attr('y', cellHeight / 2)
-                        .attr('text-anchor', 'middle')
-                        .attr('dominant-baseline', 'middle')
-                        .attr('fill', accessMatrix[i][j] === 0 ? '#64748b' : '#fff')
-                        .attr('font-size', '11px')
-                        .text(accessLabels[accessMatrix[i][j]]);
-                });
-            });
-
-            // Legend
-            const legend = svg.append('g')
-                .attr('transform', `translate(${margin.left}, ${height - 25})`);
-
-            accessLabels.forEach((label, i) => {
-                const legendItem = legend.append('g')
-                    .attr('transform', `translate(${i * 120}, 0)`);
-
-                legendItem.append('rect')
-                    .attr('width', 16)
-                    .attr('height', 16)
-                    .attr('rx', 3)
-                    .attr('fill', colorScale(i));
-
-                legendItem.append('text')
-                    .attr('x', 22)
-                    .attr('y', 12)
-                    .attr('fill', '#a0aec0')
-                    .attr('font-size', '11px')
-                    .text(label);
-            });
-        }
-
-        // Permission List for Role Builder
-        const permissions = [
-            { id: 'users.read', name: 'View Users', category: 'Users', type: 'read' },
-            { id: 'users.write', name: 'Edit Users', category: 'Users', type: 'write' },
-            { id: 'users.delete', name: 'Delete Users', category: 'Users', type: 'delete' },
-            { id: 'reports.read', name: 'View Reports', category: 'Reports', type: 'read' },
-            { id: 'reports.write', name: 'Create Reports', category: 'Reports', type: 'write' },
-            { id: 'settings.read', name: 'View Settings', category: 'Settings', type: 'read' },
-            { id: 'settings.write', name: 'Modify Settings', category: 'Settings', type: 'write' },
-            { id: 'api.access', name: 'API Access', category: 'API', type: 'read' },
-            { id: 'api.manage', name: 'Manage API Keys', category: 'API', type: 'admin' },
-            { id: 'logs.read', name: 'View Audit Logs', category: 'Logs', type: 'read' },
-            { id: 'logs.export', name: 'Export Logs', category: 'Logs', type: 'write' },
-            { id: 'billing.view', name: 'View Billing', category: 'Billing', type: 'read' },
-            { id: 'billing.manage', name: 'Manage Billing', category: 'Billing', type: 'admin' }
-        ];
-
-        function initPermissionList() {
-            const list = document.getElementById('permissionList');
-            let currentCategory = '';
-
-            permissions.forEach(perm => {
-                if (perm.category !== currentCategory) {
-                    currentCategory = perm.category;
-                    const header = document.createElement('li');
-                    header.style.background = 'rgba(124, 58, 237, 0.2)';
-                    header.style.fontWeight = '600';
-                    header.style.color = '#a78bfa';
-                    header.innerHTML = `<i class="fas fa-folder"></i> ${currentCategory}`;
-                    list.appendChild(header);
-                }
-
-                const li = document.createElement('li');
-                li.innerHTML = `
-                    <input type="checkbox" id="${perm.id}" onchange="updatePreview()">
-                    <label for="${perm.id}">${perm.name}</label>
-                `;
-                li.onclick = (e) => {
-                    if (e.target.tagName !== 'INPUT') {
-                        const checkbox = li.querySelector('input');
-                        checkbox.checked = !checkbox.checked;
-                        updatePreview();
-                    }
-                };
-                list.appendChild(li);
-            });
-        }
-
-        function updatePreview() {
-            const selected = [];
-            permissions.forEach(perm => {
-                const checkbox = document.getElementById(perm.id);
-                if (checkbox && checkbox.checked) {
-                    selected.push(perm);
-                }
-            });
-
-            const container = document.getElementById('selectedPermissions');
-            if (selected.length === 0) {
-                container.innerHTML = '<p style="color: var(--text-secondary); font-size: 0.9rem;">No permissions selected</p>';
-            } else {
-                container.innerHTML = selected.map(p => {
-                    let typeClass = '';
-                    if (p.type === 'write') typeClass = 'write';
-                    else if (p.type === 'delete') typeClass = 'delete';
-                    else if (p.type === 'admin') typeClass = 'admin';
-                    return `<span class="permission-tag ${typeClass}">${p.name}</span>`;
-                }).join('');
-            }
-        }
-
-        function exportRole() {
-            const roleName = document.getElementById('roleName').value;
-            const selected = [];
-            permissions.forEach(perm => {
-                const checkbox = document.getElementById(perm.id);
-                if (checkbox && checkbox.checked) {
-                    selected.push(perm.id);
-                }
-            });
-
-            const roleDefinition = {
-                name: roleName,
-                permissions: selected,
-                created: new Date().toISOString()
-            };
-
-            const blob = new Blob([JSON.stringify(roleDefinition, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `${roleName.toLowerCase().replace(/\s+/g, '_')}_role.json`;
-            a.click();
-            URL.revokeObjectURL(url);
-        }
-
-        // Initialize visualizations
-        createHierarchy();
-        createAccessMatrix();
-        initPermissionList();
-
-        // Resize handlers
-        window.addEventListener('resize', () => {
-            createHierarchy();
-            createAccessMatrix();
-        });
-    </script>
 </body>
 </html>
