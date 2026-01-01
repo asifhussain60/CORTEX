@@ -831,7 +831,7 @@ When simplifying dramatic animations:
 ```
 
 **Variables Used:**
-- `--space-lg`: 2rem (32px)
+- `--space-lg`: 1.5rem (24px) - DEFAULT for stacked cards/grids
 - `--accent-primary`: #00d4ff (cyan)
 
 ---
