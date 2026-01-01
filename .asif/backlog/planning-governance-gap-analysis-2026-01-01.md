@@ -27,7 +27,10 @@ knowledge library consultation and refactor phase completeness to align with COR
 
 Create a specific user resposne template for planning orchestrator that is designed for optimum response for users based on autonmoous progress with visual progress bar. 
 Standardize cortex-maintentance.prompt.md as it follows the CORRECT response template with visual progress bar with autonomous execution progress. 
-planning orchestrator should always
+
+planning orchestrator should always add
+a. Final refactor phase ensuring not just the work done but also cleaning up orphaned code, duplicate code, unused imports, and code smells for the view, module controller being worked on.
+
 - 
 
 
