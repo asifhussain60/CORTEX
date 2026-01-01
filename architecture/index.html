@@ -222,6 +222,18 @@
             padding: var(--spacing-xl);
         }
         
+        /* Architecture Component Cards */
+        .protection-card a {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .protection-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0, 212, 255, 0.3);
+        }
+        
         .protection-icon {
             width: 48px;
             height: 48px;
@@ -451,61 +463,98 @@
         </div>
     </section>
 
-    <!-- SKULL Protection Preview -->
+    <!-- Architecture Components - Level 2 Overview Cards -->
     <section class="architecture-container skull-preview">
         <div class="section-header">
-            <h2 class="section-title">🛡️ SKULL Protection System</h2>
+            <h2 class="section-title">🧠 Architecture Components</h2>
             <p class="section-description">
-                15 defense layers with 118 rules protecting brain integrity
+                Explore the core architectural elements of CORTEX's intelligent brain system
             </p>
         </div>
         
         <div class="protection-grid">
-            <div class="neuglass-card protection-card">
-                <div class="protection-icon">🔒</div>
-                <div class="protection-title">TDD Enforcement</div>
+            <a href="skull-protection.html" class="neuglass-card protection-card" style="text-decoration: none; color: inherit; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+                <div class="protection-icon">🛡️</div>
+                <div class="protection-title">SKULL Protection</div>
                 <div class="protection-description">
-                    Mandatory test-first development. Tests must fail before implementation 
-                    code is written. RED → GREEN → REFACTOR cycle enforcement.
+                    15-layer defense system with 118 automated rules protecting brain integrity. 
+                    Concentric security model enforcing TDD, holistic discovery, and git isolation.
                 </div>
-            </div>
+                <div class="tier-stats" style="margin-top: var(--spacing-md);">
+                    <div class="tier-stat">
+                        <span class="tier-stat-value">15</span>
+                        <span class="tier-stat-label">Layers</span>
+                    </div>
+                    <div class="tier-stat">
+                        <span class="tier-stat-value">118</span>
+                        <span class="tier-stat-label">Rules</span>
+                    </div>
+                </div>
+            </a>
             
-            <div class="neuglass-card protection-card">
-                <div class="protection-icon">🔍</div>
-                <div class="protection-title">Holistic Discovery</div>
+            <a href="knowledge-graph.html" class="neuglass-card protection-card" style="text-decoration: none; color: inherit; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+                <div class="protection-icon">🕸️</div>
+                <div class="protection-title">Knowledge Graph</div>
                 <div class="protection-description">
-                    Search before create policy. Prevents duplication by requiring 
-                    comprehensive codebase search before any new file creation.
+                    Semantic network with 8,429 concept nodes and 24,817 relationship edges. 
+                    Force-directed visualization of patterns, learning, and cross-session memory.
                 </div>
-            </div>
+                <div class="tier-stats" style="margin-top: var(--spacing-md);">
+                    <div class="tier-stat">
+                        <span class="tier-stat-value">8,429</span>
+                        <span class="tier-stat-label">Nodes</span>
+                    </div>
+                    <div class="tier-stat">
+                        <span class="tier-stat-value">12ms</span>
+                        <span class="tier-stat-label">Search</span>
+                    </div>
+                </div>
+            </a>
             
-            <div class="neuglass-card protection-card">
-                <div class="protection-icon">🚫</div>
-                <div class="protection-title">Git Isolation</div>
+            <a href="brain-tiers.html" class="neuglass-card protection-card" style="text-decoration: none; color: inherit; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+                <div class="protection-icon">🏗️</div>
+                <div class="protection-title">Brain Tiers</div>
                 <div class="protection-description">
-                    CORTEX code never commits to user repositories. Strict separation 
-                    between system operations and user project modifications.
+                    4-tier governance hierarchy from Tier 0 (immutable rules) through Tier 3 
+                    (development context). Sankey flow showing memory architecture and data persistence.
                 </div>
-            </div>
+                <div class="tier-stats" style="margin-top: var(--spacing-md);">
+                    <div class="tier-stat">
+                        <span class="tier-stat-value">4</span>
+                        <span class="tier-stat-label">Tiers</span>
+                    </div>
+                    <div class="tier-stat">
+                        <span class="tier-stat-value">SQLite</span>
+                        <span class="tier-stat-label">Storage</span>
+                    </div>
+                </div>
+            </a>
             
-            <div class="neuglass-card protection-card">
-                <div class="protection-icon">📋</div>
-                <div class="protection-title">Planning Isolation</div>
+            <a href="development-context.html" class="neuglass-card protection-card" style="text-decoration: none; color: inherit; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+                <div class="protection-icon">🔧</div>
+                <div class="protection-title">Development Context</div>
                 <div class="protection-description">
-                    Planning commands create plans only, never implement. Separation 
-                    between strategy formation and execution phases.
+                    Hierarchical tree of 40+ context categories across 8 domains. Dynamic project 
+                    understanding adapting to codebase structure and development patterns.
                 </div>
-            </div>
+                <div class="tier-stats" style="margin-top: var(--spacing-md);">
+                    <div class="tier-stat">
+                        <span class="tier-stat-value">40+</span>
+                        <span class="tier-stat-label">Categories</span>
+                    </div>
+                    <div class="tier-stat">
+                        <span class="tier-stat-value">8</span>
+                        <span class="tier-stat-label">Domains</span>
+                    </div>
+                </div>
+            </a>
         </div>
     </section>
 
     <!-- Navigation Footer -->
-    <nav class="nav-footer" style="display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto var(--spacing-2xl); padding: var(--spacing-xl);">
+    <nav class="nav-footer" style="display: flex; justify-content: center; align-items: center; max-width: 1200px; margin: 0 auto var(--spacing-2xl); padding: var(--spacing-xl);">
         <a href="../index.html" class="nav-link prev" style="min-width: 220px; text-align: center;">
             ← Back to Home
-        </a>
-        <a href="skull-protection.html" class="nav-link next" style="min-width: 220px; text-align: center;">
-            SKULL Protection →
         </a>
     </nav>
 
