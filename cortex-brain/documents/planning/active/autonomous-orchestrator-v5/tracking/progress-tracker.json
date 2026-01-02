@@ -1,0 +1,412 @@
+{
+  "plan_metadata": {
+    "plan_id": "autonomous-orchestrator-v5",
+    "plan_name": "Autonomous Orchestrator v5.0 - Unified System",
+    "created": "2026-01-02T14:47:00Z",
+    "status": "active",
+    "complexity_tier": 4,
+    "estimated_duration_days": 27,
+    "estimated_completion": "2026-01-29",
+    "consolidation_note": "Unified from orchestrator-enhancement and orchestrator-enhancements folders"
+  },
+  "overall_progress": {
+    "percentage": 20,
+    "phases_complete": 1,
+    "phases_in_progress": 1,
+    "phases_not_started": 13,
+    "total_phases": 15,
+    "total_tasks": 315,
+    "tasks_complete": 13,
+    "elapsed_time_hours": 17.25
+  },
+  "architecture_integration": {
+    "date": "2026-01-02",
+    "status": "APPROVED",
+    "critical_finding": "All 4 AUTONOMOUS orchestrators share broken hand-off protocol",
+    "affected_orchestrators": [
+      {
+        "name": "Planning System",
+        "file": "planning_orchestrator.py",
+        "status": "BROKEN",
+        "priority": "P1",
+        "estimated_days": 10.5
+      },
+      {
+        "name": "ADO Operations",
+        "file": "ado_orchestrator.py",
+        "status": "BROKEN",
+        "priority": "P2",
+        "estimated_days": 3
+      },
+      {
+        "name": "Vacuum",
+        "file": "vacuum_orchestrator.py",
+        "status": "BROKEN",
+        "priority": "P2",
+        "estimated_days": 2.5
+      },
+      {
+        "name": "Cleanup",
+        "file": "cleanup_orchestrator.py",
+        "status": "BROKEN",
+        "priority": "P3",
+        "estimated_days": 2
+      }
+    ],
+    "root_cause": "CORTEX.prompt.md says STOP but no mechanism to invoke Python orchestrator",
+    "proposed_fix": "MCP Tool invoke_orchestrator()",
+    "fix_benefits": [
+      "Fixes ALL 4 orchestrators with one implementation",
+      "Guaranteed execution (LLM tool call → Python code runs)",
+      "Observability (tool call logged, result returned)",
+      "Testable (tool can be unit tested)",
+      "No manual bypass possible"
+    ],
+    "component_tiers": [
+      {
+        "tier": 1,
+        "name": "MCP Infrastructure",
+        "components": ["MCP tool server", "invoke_orchestrator()", "Orchestrator registry"],
+        "estimated_days": 3,
+        "priority": "P0"
+      },
+      {
+        "tier": 2,
+        "name": "Base Infrastructure",
+        "components": ["BaseOrchestrator v4.1", "Knowledge library integration", "Progress rendering"],
+        "estimated_days": 2,
+        "priority": "P1"
+      },
+      {
+        "tier": 3,
+        "name": "Individual Orchestrators",
+        "components": ["Planning v5", "ADO v2", "Vacuum v2", "Cleanup v2"],
+        "estimated_days": 18,
+        "priority": "P1-P3"
+      },
+      {
+        "tier": 4,
+        "name": "Testing & Finalization",
+        "components": ["Testing", "Migration", "REFACTOR", "Knowledge extraction"],
+        "estimated_days": 8,
+        "priority": "P1"
+      }
+    ]
+  },
+  "phase_progress": [
+    {
+      "phase_num": -1,
+      "phase_name": "Knowledge Library Consultation",
+      "status": "complete",
+      "progress_percentage": 100,
+      "tasks_total": 5,
+      "tasks_complete": 5,
+      "duration_estimate": "15m",
+      "duration_actual": "15m",
+      "started_at": "2026-01-02T09:00:00Z",
+      "completed_at": "2026-01-02T09:15:00Z",
+      "deliverables": [
+        "context/orchestrator-patterns.md",
+        "context/mcp-tool-patterns.md",
+        "context/brain-tier-patterns.md",
+        "context/progress-rendering-patterns.md",
+        "context/knowledge-library-integration.md"
+      ]
+    },
+    {
+      "phase_num": 0,
+      "phase_name": "Discovery & Architecture Analysis",
+      "status": "in_progress",
+      "progress_percentage": 80,
+      "tasks_total": 10,
+      "tasks_complete": 8,
+      "duration_estimate": "2.5h",
+      "duration_actual": "2h 15m",
+      "started_at": "2026-01-02T09:15:00Z",
+      "deliverables_complete": [
+        "Root cause analysis validation",
+        "Architecture integration analysis",
+        "Component tier identification",
+        "Risk assessment",
+        "Implementation sequence",
+        "Success criteria definition",
+        "Parallel track optimization",
+        "File structure mapping"
+      ],
+      "deliverables_pending": [
+        "Final stakeholder review",
+        "Architecture decision record"
+      ]
+    },
+    {
+      "phase_num": 1,
+      "phase_name": "MCP Tool Infrastructure",
+      "status": "not_started",
+      "progress_percentage": 0,
+      "tasks_total": 37,
+      "tasks_complete": 0,
+      "duration_estimate": "3d",
+      "priority": "P0",
+      "blocking": ["All subsequent phases"],
+      "deliverables": [
+        "src/mcp/server.py",
+        "src/mcp/tools/invoke_orchestrator.py",
+        "src/mcp/registry.py",
+        "src/mcp/config.py",
+        "tests/mcp/test_server.py",
+        "tests/mcp/test_invoke_orchestrator.py"
+      ]
+    },
+    {
+      "phase_num": 2,
+      "phase_name": "BaseOrchestrator v4.1 Foundation",
+      "status": "not_started",
+      "progress_percentage": 0,
+      "tasks_total": 22,
+      "tasks_complete": 0,
+      "duration_estimate": "2d",
+      "priority": "P1",
+      "blocked_by": ["Phase 1"],
+      "deliverables": [
+        "src/orchestrators/base_orchestrator_v4_1.py",
+        "Knowledge library integration",
+        "Progress rendering system",
+        "Auto-healing capabilities",
+        "tests/orchestrators/test_base_orchestrator.py"
+      ]
+    },
+    {
+      "phase_num": 3,
+      "phase_name": "Planning System v5 Core",
+      "status": "not_started",
+      "progress_percentage": 0,
+      "tasks_total": 35,
+      "tasks_complete": 0,
+      "duration_estimate": "4d",
+      "priority": "P1",
+      "blocked_by": ["Phase 2"],
+      "deliverables": [
+        "src/orchestrators/planning_orchestrator_v5.py",
+        "cortex-brain/manifests/orchestrators/planning-system-5.0-manifest.yaml",
+        "tests/orchestrators/test_planning_orchestrator.py"
+      ]
+    },
+    {
+      "phase_num": 4,
+      "phase_name": "Continuous Knowledge Library",
+      "status": "not_started",
+      "progress_percentage": 0,
+      "tasks_total": 15,
+      "tasks_complete": 0,
+      "duration_estimate": "1.5d",
+      "priority": "P1",
+      "blocked_by": ["Phase 3"]
+    },
+    {
+      "phase_num": 5,
+      "phase_name": "Progress Rendering System",
+      "status": "not_started",
+      "progress_percentage": 0,
+      "tasks_total": 12,
+      "tasks_complete": 0,
+      "duration_estimate": "1.5d",
+      "priority": "P1",
+      "blocked_by": ["Phase 3"]
+    },
+    {
+      "phase_num": 6,
+      "phase_name": "Hierarchical Plan Structure",
+      "status": "not_started",
+      "progress_percentage": 0,
+      "tasks_total": 18,
+      "tasks_complete": 0,
+      "duration_estimate": "2d",
+      "priority": "P1",
+      "blocked_by": ["Phase 3"]
+    },
+    {
+      "phase_num": 7,
+      "phase_name": "Brain Tier Integration",
+      "status": "not_started",
+      "progress_percentage": 0,
+      "tasks_total": 14,
+      "tasks_complete": 0,
+      "duration_estimate": "1.5d",
+      "priority": "P1",
+      "blocked_by": ["Phase 3"]
+    },
+    {
+      "phase_num": 8,
+      "phase_name": "ADO Operations v2",
+      "status": "not_started",
+      "progress_percentage": 0,
+      "tasks_total": 28,
+      "tasks_complete": 0,
+      "duration_estimate": "3d",
+      "priority": "P2",
+      "blocked_by": ["Phase 2"],
+      "deliverables": [
+        "src/orchestrators/ado_orchestrator_v2.py",
+        "cortex-brain/manifests/orchestrators/ado-operations-2.0-manifest.yaml",
+        "tests/orchestrators/test_ado_orchestrator.py"
+      ]
+    },
+    {
+      "phase_num": 9,
+      "phase_name": "Vacuum v2",
+      "status": "not_started",
+      "progress_percentage": 0,
+      "tasks_total": 24,
+      "tasks_complete": 0,
+      "duration_estimate": "2.5d",
+      "priority": "P2",
+      "blocked_by": ["Phase 2"],
+      "deliverables": [
+        "src/orchestrators/vacuum_orchestrator_v2.py",
+        "cortex-brain/manifests/orchestrators/vacuum-2.0-manifest.yaml",
+        "tests/orchestrators/test_vacuum_orchestrator.py"
+      ]
+    },
+    {
+      "phase_num": 10,
+      "phase_name": "Cleanup v2",
+      "status": "not_started",
+      "progress_percentage": 0,
+      "tasks_total": 18,
+      "tasks_complete": 0,
+      "duration_estimate": "2d",
+      "priority": "P3",
+      "blocked_by": ["Phase 2"],
+      "deliverables": [
+        "src/orchestrators/cleanup_orchestrator_v2.py",
+        "cortex-brain/manifests/orchestrators/cleanup-2.0-manifest.yaml",
+        "tests/orchestrators/test_cleanup_orchestrator.py"
+      ]
+    },
+    {
+      "phase_num": 11,
+      "phase_name": "Testing & Validation",
+      "status": "not_started",
+      "progress_percentage": 0,
+      "tasks_total": 32,
+      "tasks_complete": 0,
+      "duration_estimate": "3d",
+      "priority": "P1",
+      "blocked_by": ["Phase 10"]
+    },
+    {
+      "phase_num": 12,
+      "phase_name": "Migration & Documentation",
+      "status": "not_started",
+      "progress_percentage": 0,
+      "tasks_total": 16,
+      "tasks_complete": 0,
+      "duration_estimate": "2d",
+      "priority": "P1",
+      "blocked_by": ["Phase 11"]
+    },
+    {
+      "phase_num": 13,
+      "phase_name": "REFACTOR & Cleanup",
+      "status": "not_started",
+      "progress_percentage": 0,
+      "tasks_total": 24,
+      "tasks_complete": 0,
+      "duration_estimate": "2d",
+      "priority": "P1",
+      "blocked_by": ["Phase 12"]
+    },
+    {
+      "phase_num": 14,
+      "phase_name": "Knowledge Extraction",
+      "status": "not_started",
+      "progress_percentage": 0,
+      "tasks_total": 15,
+      "tasks_complete": 0,
+      "duration_estimate": "1d",
+      "priority": "P1",
+      "blocked_by": ["Phase 13"]
+    }
+  ],
+  "milestones": [
+    {
+      "name": "Foundation Complete",
+      "phases": [1, 2],
+      "target_date": "2026-01-07",
+      "status": "pending"
+    },
+    {
+      "name": "Planning System v5 Complete",
+      "phases": [3, 4, 5, 6, 7],
+      "target_date": "2026-01-18",
+      "status": "pending"
+    },
+    {
+      "name": "All Orchestrators Upgraded",
+      "phases": [8, 9, 10],
+      "target_date": "2026-01-25",
+      "status": "pending"
+    },
+    {
+      "name": "v5.0 Release",
+      "phases": [11, 12, 13, 14],
+      "target_date": "2026-01-29",
+      "status": "pending"
+    }
+  ],
+  "parallel_tracks": {
+    "enabled": false,
+    "note": "Can enable after Phase 2 completes to parallelize Planning (3-7) and Other Orchestrators (8-10)",
+    "potential_time_savings_days": 10,
+    "tracks": [
+      {
+        "name": "Track A: Planning System",
+        "phases": [3, 4, 5, 6, 7],
+        "duration_days": 10.5,
+        "requires_developer": 1
+      },
+      {
+        "name": "Track B: Other Orchestrators",
+        "phases": [8, 9, 10],
+        "duration_days": 7.5,
+        "requires_developer": 1
+      }
+    ]
+  },
+  "risks": [
+    {
+      "id": "R1",
+      "description": "MCP tool integration complexity",
+      "impact": "HIGH",
+      "probability": "MEDIUM",
+      "mitigation": "Phase 1 POC, extensive testing",
+      "status": "active"
+    },
+    {
+      "id": "R2",
+      "description": "BaseOrchestrator breaking changes",
+      "impact": "HIGH",
+      "probability": "LOW",
+      "mitigation": "Comprehensive unit tests, gradual migration",
+      "status": "active"
+    },
+    {
+      "id": "R3",
+      "description": "Knowledge library performance",
+      "impact": "MEDIUM",
+      "probability": "MEDIUM",
+      "mitigation": "Caching, async queries, batch operations",
+      "status": "active"
+    },
+    {
+      "id": "R4",
+      "description": "Migration path for legacy plans",
+      "impact": "MEDIUM",
+      "probability": "HIGH",
+      "mitigation": "Automated migration tool, backward compatibility",
+      "status": "active"
+    }
+  ],
+  "last_updated": "2026-01-02T14:47:00Z",
+  "next_update": "After Phase 0 completion"
+}
