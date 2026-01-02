@@ -4,58 +4,80 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Security Training - CORTEX Security</title>
-    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo-64.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/main.css?v=4.0.1">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
-    <nav class="nav-container">
-        <div class="nav-brand">CORTEX Security</div>
-        <div class="nav-links">
-            <a href="../index.html">Home</a>
-            <a href="owasp.html">OWASP</a>
-            <a href="compliance.html">Compliance</a>
-            <a href="security-training.html" class="active">Training</a>
+    <!-- Glass Header (Level 1 - No Logo) -->
+    <header class="glass-header">
+        <div class="header-content">
+            <nav class="header-nav">
+                <a href="../index.html" class="nav-link"><i class="fas fa-home"></i> Home</a>
+            </nav>
         </div>
-    </nav>
+    </header>
 
-    <div class="container">
-        <header class="page-header">
-            <h1>🎓 Security Training</h1>
-            <p class="subtitle">Comprehensive security awareness curriculum and certification tracking</p>
-            <div class="metadata">
-                <span>Last Updated: January 1, 2026</span>
-                <span>Version: 4.0.0</span>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <div class="hero-icon">
+                <i class="fas fa-graduation-cap"></i>
             </div>
-        </header>
-
-        <div class="glass-card overview-section">
-            <h2>📚 Training Overview</h2>
-            <p>CORTEX security training program provides comprehensive security awareness education across five core modules, totaling 13 hours of instruction. The curriculum progresses from fundamental security concepts to advanced incident response and compliance requirements, culminating in professional security certification.</p>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-value">5</div>
-                    <div class="stat-label">Training Modules</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">13</div>
-                    <div class="stat-label">Total Hours</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">8</div>
-                    <div class="stat-label">Security Domains</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">92%</div>
-                    <div class="stat-label">Team Completion</div>
-                </div>
-            </div>
+            <h1 class="hero-title">Security Training</h1>
+            <p class="hero-subtitle">
+                Comprehensive security awareness curriculum and certification tracking
+            </p>
         </div>
+    </section>
 
-        <div class="glass-card">
-            <h2>🗺️ Training Curriculum Roadmap</h2>
-            <p>Structured learning path from fundamentals to certification. Each module builds on previous knowledge and includes hands-on labs, assessments, and real-world scenarios.</p>
-            <div class="mermaid-container">
+    <!-- Main Content -->
+    <main class="content-section">
+        <!-- Training Overview -->
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-info-circle"></i>
+                <h2 class="card-title">Training Overview</h2>
+            </div>
+            <p class="card-description">
+                Comprehensive security education across five core modules totaling 13 hours of instruction.
+            </p>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <i class="fas fa-book-open"></i>
+                    <h4>5 Modules</h4>
+                    <p>Core training modules</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-clock"></i>
+                    <h4>13 Hours</h4>
+                    <p>Total instruction time</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-shield-alt"></i>
+                    <h4>8 Domains</h4>
+                    <p>Security domains covered</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-chart-line"></i>
+                    <h4>92%</h4>
+                    <p>Team completion rate</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Training Curriculum Roadmap -->
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-map"></i>
+                <h2 class="card-title">Training Curriculum Roadmap</h2>
+            </div>
+            <p class="card-description">
+                Structured learning path from fundamentals to certification with hands-on labs and assessments.
+            </p>
+            <div class="visualization-container">
                 <div class="mermaid">
 graph LR
     subgraph "Security Training Path"
@@ -80,141 +102,169 @@ graph LR
     style CERT fill:#7b61ff,stroke:#fff,stroke-width:3px
                 </div>
             </div>
-        </div>
+        </article>
 
-        <div class="glass-card">
-            <h2>📊 Team Training Progress</h2>
-            <p>Real-time tracking of training completion across team members. Progress bars show completed modules with color-coded segments. Goal: 100% team completion (13 hours per member).</p>
+        <!-- Team Training Progress -->
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-chart-bar"></i>
+                <h2 class="card-title">Team Training Progress</h2>
+            </div>
+            <p class="card-description">
+                Real-time tracking of module completion across team members.
+            </p>
             <div id="training-progress-chart" class="viz-container"></div>
-        </div>
+        </article>
 
-        <div class="glass-card">
-            <h2>🎯 Security Competency Assessment</h2>
-            <p>Radar chart visualization of team security competency across eight critical security domains. Scale ranges from 0 (Novice) to 5 (Expert), comparing team average against individual performance and target goals.</p>
+        <!-- Security Competency Assessment -->
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-crosshairs"></i>
+                <h2 class="card-title">Security Competency Assessment</h2>
+            </div>
+            <p class="card-description">
+                Team security competency across eight critical domains (0-5 scale).
+            </p>
             <div id="competency-radar" class="viz-container"></div>
-        </div>
+        </article>
 
-        <div class="glass-card">
-            <h2>📖 Training Modules</h2>
-            <div class="module-grid">
-                <div class="module-card glass-card-clickable animation-t1">
-                    <div class="module-icon">🎓</div>
-                    <h3>Fundamentals</h3>
-                    <p class="module-duration">2 hours</p>
-                    <ul>
-                        <li>Security principles and CIA triad</li>
-                        <li>Common attack vectors</li>
-                        <li>Defense in depth strategy</li>
-                        <li>Security roles and responsibilities</li>
-                    </ul>
-                    <div class="module-status completed">Completed</div>
-                </div>
-
-                <div class="module-card glass-card-clickable animation-t1">
-                    <div class="module-icon">🔍</div>
-                    <h3>Threat Awareness</h3>
-                    <p class="module-duration">3 hours</p>
-                    <ul>
-                        <li>Threat landscape overview</li>
-                        <li>Social engineering tactics</li>
-                        <li>Phishing detection and reporting</li>
-                        <li>Malware types and indicators</li>
-                    </ul>
-                    <div class="module-status completed">Completed</div>
-                </div>
-
-                <div class="module-card glass-card-clickable animation-t1">
-                    <div class="module-icon">🔐</div>
-                    <h3>Secure Coding</h3>
-                    <p class="module-duration">4 hours</p>
-                    <ul>
-                        <li>OWASP Top 10 vulnerabilities</li>
-                        <li>Input validation and sanitization</li>
-                        <li>Authentication and session management</li>
-                        <li>Cryptography best practices</li>
-                    </ul>
-                    <div class="module-status in-progress">In Progress</div>
-                </div>
-
-                <div class="module-card glass-card-clickable animation-t1">
-                    <div class="module-icon">🚨</div>
-                    <h3>Incident Response</h3>
-                    <p class="module-duration">2 hours</p>
-                    <ul>
-                        <li>Incident response lifecycle</li>
-                        <li>Detection and analysis</li>
-                        <li>Containment and eradication</li>
-                        <li>Post-incident activities</li>
-                    </ul>
-                    <div class="module-status pending">Pending</div>
-                </div>
-
-                <div class="module-card glass-card-clickable animation-t1">
-                    <div class="module-icon">✅</div>
-                    <h3>Compliance</h3>
-                    <p class="module-duration">2 hours</p>
-                    <ul>
-                        <li>GDPR, SOC 2, ISO 27001</li>
-                        <li>Data protection requirements</li>
-                        <li>Audit and documentation</li>
-                        <li>Breach notification procedures</li>
-                    </ul>
-                    <div class="module-status pending">Pending</div>
-                </div>
-
-                <div class="module-card glass-card-clickable animation-t1">
-                    <div class="module-icon">🏆</div>
-                    <h3>Certification</h3>
-                    <p class="module-duration">Assessment</p>
-                    <ul>
-                        <li>Comprehensive exam (50 questions)</li>
-                        <li>Practical security scenarios</li>
-                        <li>80% passing score required</li>
-                        <li>Valid for 12 months</li>
-                    </ul>
-                    <div class="module-status locked">Locked</div>
-                </div>
+        <!-- Training Modules -->
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-book-open"></i>
+                <h2 class="card-title">Training Modules</h2>
             </div>
-        </div>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <i class="fas fa-graduation-cap" style="color: #00d4ff;"></i>
+                    <h4>Fundamentals</h4>
+                    <p>2 hours</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i>Security principles and CIA triad</li>
+                        <li><i class="fas fa-check"></i>Common attack vectors</li>
+                        <li><i class="fas fa-check"></i>Defense in depth strategy</li>
+                        <li><i class="fas fa-check"></i>Security roles and responsibilities</li>
+                    </ul>
+                    <div class="badge-container">
+                        <span class="severity-badge severity-info">Completed</span>
+                    </div>
+                </div>
 
-        <div class="glass-card">
-            <h2>🎯 Learning Objectives</h2>
-            <div class="objectives-list">
-                <div class="objective-item">
-                    <span class="objective-icon">🎯</span>
-                    <div>
-                        <strong>Threat Recognition:</strong> Identify and report security threats including phishing, malware, and social engineering attacks
+                <div class="feature-item">
+                    <i class="fas fa-search" style="color: #7b61ff;"></i>
+                    <h4>Threat Awareness</h4>
+                    <p>3 hours</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i>Threat landscape overview</li>
+                        <li><i class="fas fa-check"></i>Social engineering tactics</li>
+                        <li><i class="fas fa-check"></i>Phishing detection and reporting</li>
+                        <li><i class="fas fa-check"></i>Malware types and indicators</li>
+                    </ul>
+                    <div class="badge-container">
+                        <span class="severity-badge severity-info">Completed</span>
                     </div>
                 </div>
-                <div class="objective-item">
-                    <span class="objective-icon">🔐</span>
-                    <div>
-                        <strong>Secure Development:</strong> Apply secure coding practices to prevent OWASP Top 10 vulnerabilities in applications
+
+                <div class="feature-item">
+                    <i class="fas fa-lock" style="color: #ffb84d;"></i>
+                    <h4>Secure Coding</h4>
+                    <p>4 hours</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i>OWASP Top 10 vulnerabilities</li>
+                        <li><i class="fas fa-check"></i>Input validation and sanitization</li>
+                        <li><i class="fas fa-check"></i>Authentication and session management</li>
+                        <li><i class="fas fa-check"></i>Cryptography best practices</li>
+                    </ul>
+                    <div class="badge-container">
+                        <span class="severity-badge severity-medium">In Progress</span>
                     </div>
                 </div>
-                <div class="objective-item">
-                    <span class="objective-icon">🚨</span>
-                    <div>
-                        <strong>Incident Response:</strong> Execute proper incident response procedures and escalation protocols
+
+                <div class="feature-item">
+                    <i class="fas fa-exclamation-triangle" style="color: #ff6b9d;"></i>
+                    <h4>Incident Response</h4>
+                    <p>2 hours</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i>Incident response lifecycle</li>
+                        <li><i class="fas fa-check"></i>Detection and analysis</li>
+                        <li><i class="fas fa-check"></i>Containment and eradication</li>
+                        <li><i class="fas fa-check"></i>Post-incident activities</li>
+                    </ul>
+                    <div class="badge-container">
+                        <span class="severity-badge severity-low">Pending</span>
                     </div>
                 </div>
-                <div class="objective-item">
-                    <span class="objective-icon">✅</span>
-                    <div>
-                        <strong>Compliance Awareness:</strong> Understand and implement compliance requirements for GDPR, SOC 2, and ISO 27001
+
+                <div class="feature-item">
+                    <i class="fas fa-check-circle" style="color: #2ecc71;"></i>
+                    <h4>Compliance</h4>
+                    <p>2 hours</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i>GDPR, SOC 2, ISO 27001</li>
+                        <li><i class="fas fa-check"></i>Data protection requirements</li>
+                        <li><i class="fas fa-check"></i>Audit and documentation</li>
+                        <li><i class="fas fa-check"></i>Breach notification procedures</li>
+                    </ul>
+                    <div class="badge-container">
+                        <span class="severity-badge severity-low">Pending</span>
                     </div>
                 </div>
-                <div class="objective-item">
-                    <span class="objective-icon">🛡️</span>
-                    <div>
-                        <strong>Data Protection:</strong> Implement appropriate data classification, encryption, and access controls
+
+                <div class="feature-item">
+                    <i class="fas fa-trophy" style="color: #7b61ff;"></i>
+                    <h4>Certification</h4>
+                    <p>Assessment</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i>Comprehensive exam (50 questions)</li>
+                        <li><i class="fas fa-check"></i>Practical security scenarios</li>
+                        <li><i class="fas fa-check"></i>80% passing score required</li>
+                        <li><i class="fas fa-check"></i>Valid for 12 months</li>
+                    </ul>
+                    <div class="badge-container">
+                        <span class="severity-badge">Locked</span>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </article>
 
-    <footer class="footer-container">
+        <!-- Learning Objectives -->
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-bullseye"></i>
+                <h2 class="card-title">Learning Objectives</h2>
+            </div>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <i class="fas fa-crosshairs"></i>
+                    <h4>Threat Recognition</h4>
+                    <p>Identify and report security threats including phishing, malware, and social engineering attacks</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-lock"></i>
+                    <h4>Secure Development</h4>
+                    <p>Apply secure coding practices to prevent OWASP Top 10 vulnerabilities in applications</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h4>Incident Response</h4>
+                    <p>Execute proper incident response procedures and escalation protocols</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-check-square"></i>
+                    <h4>Compliance Awareness</h4>
+                    <p>Understand and implement compliance requirements for GDPR, SOC 2, and ISO 27001</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-shield-alt"></i>
+                    <h4>Data Protection</h4>
+                    <p>Implement appropriate data classification, encryption, and access controls</p>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <!-- Footer -->
+    <footer class="glass-footer">
         <p>&copy; 2026 Asif Hussain. All rights reserved.</p>
         <p>CORTEX Security Training Platform v4.0.0</p>
     </footer>
