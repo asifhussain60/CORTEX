@@ -1,6 +1,6 @@
-# 🗺️ CORTEX Documentation Site - Level 1 Specifications (INDEX)
+# 🗺️ CORTEX Documentation Site - Master Specifications (INDEX)
 
-**Version:** 4.0.0 | **Status:** 🎯 MODULAR  
+**Version:** 4.1.0 | **Status:** 🎯 MODULAR + v5.0 READY  
 **Author:** Asif Hussain | **Last Updated:** January 2, 2026  
 **Copyright © 2026 Asif Hussain. All rights reserved.**
 
@@ -8,10 +8,10 @@
 
 ## 🎯 Purpose
 
-Master specification for CORTEX documentation site Level 1 pages across three multi-panel masonry tiles.
+Master specification for CORTEX documentation site across Level 1 pages and Level 2 phase deep-dives.
 
 **OLD (v3.3.0):** Single file (1,682 lines) ❌ BLOAT  
-**NEW (v4.0.0):** Index + 10 modular specifications (180 lines main index) ✅ OPTIMIZED
+**NEW (v4.1.0):** Index + 10 modular specs (180 lines) + v5.0 Level 2 architecture ✅ OPTIMIZED
 
 **Key Benefits:**
 - ✅ **89% size reduction** in main index file
@@ -167,36 +167,48 @@ Original v3.3.0 moved to: `cortex-brain/archives/Level1-spec-v3.3.0.md`
 
 ## 📚 Document Overview
 
-This specification documents **65 pages** across **9 tiles (6 standard + 3 multi-panels)**:
+**Current State:** 65 Level 1 pages across 9 tiles (6 standard + 3 multi-panels)  
+**v5.0 State:** 65 Level 1 + 23 Level 2 pages (Planning v5: 10 phases, ADO v2: 13 pages)
 
-**Standard Tiles:**
-- **Architecture:** 5 pages (Score: 45)
-- **Token Optimization:** 1 page (Score: 25)
-- **Best Practices:** 17 pages (Score: 35)
-- **Toolkit Manager:** 1 page (Score: 20)
-- **CORTEX Lens:** 1 page (Score: 30)
-- **Getting Started:** 2 pages (Score: 15)
+**Standard Tiles (Level 1 Only):**
+- Architecture: 5 pages (Score: 45) | Token Optimization: 1 page (Score: 25)
+- Best Practices: 17 pages (Score: 35) | Toolkit Manager: 1 page (Score: 20)
+- CORTEX Lens: 1 page (Score: 30) | Getting Started: 2 pages (Score: 15)
 
 **Multi-Panel Tiles:**
-- **Security:** 13 pages (Score: 55, 54% complete - 7 missing)
-- **Orchestrators:** 19 pages (Score: 75, 73% complete - 5 orphaned)
-- **Sharpen The Saw:** 6 pages (Score: 40, 100% complete)
+- **Security:** 13 Level 1 pages (Score: 55, 54% complete)
+- **Orchestrators (Basic):** 14 Level 1 pages (Score: 75, current state)
+- **Planning v5:** 1 Level 1 + 10 Level 2 pages (Score: 195, comprehensive viz)
+- **ADO v2:** 1 Level 1 + 13 Level 2 pages (Score: 178, wizard + auto-gen)
+- **Sharpen The Saw:** 6 Level 1 pages (Score: 40, 100% complete)
 
-**Key Finding:** After applying complexity formula `Score = (Viz Containers × 10) + (Mermaid × 5) + (D3.js × 1) + (Interactive × 3) + (Data Sources × 8) + (Animations × 4)`, ALL 9 tiles fit within Level 1 (highest score: 75 < 100 threshold).
+**Complexity Formula:** `Score = (Viz × 10) + (Mermaid × 5) + (D3.js × 1) + (Interactive × 3) + (Data × 8) + (Animations × 4)`
 
-**Architecture Decision:** NO Level 2 pages required. Use expandable sections, tabs, or modals for deeper content within Level 1 pages.
+**Architecture Decision:** Level 2 required when scores >100 (Planning v5, ADO v2 with comprehensive D3.js/Mermaid). See `integrate-this.md` for full specifications.
 
 **All details in modular files for efficient loading.**
 
 ---
 
-## 🎯 Level 1 Specification Generation Methodology (v4.1.0)
+## 🎯 Level 1/2 Specification Generation Methodology (v4.1.0)
 
-**Purpose:** Standardize the creation of comprehensive Level 1 specifications with D3.js visualizations, Mermaid diagrams, and acceptance criteria.
+**Purpose:** Standardize comprehensive specifications with D3.js/Mermaid visualizations and acceptance criteria.
 
-**Reference:** `cortex-brain/documents/planning/active/cortex-documentation/artifacts/integrate-this.md`
+**Reference:** `integrate-this.md` (1,625 lines - COMPLETE implementation guide)
 
-**Architecture Decision (January 2, 2026):** After holistic complexity analysis, ALL 9 CORTEX documentation tiles fit within Level 1 (scores: 15-75, threshold: 100). Level 2 pages NOT required.
+**Required Per Level 1 Page (Score >50):**
+- **6-12 D3.js Interactive Charts:** Timeline, Force Graph, Heatmap, Bar/Line, Sankey, Radial Tree
+- **4-8 Mermaid Diagrams:** Sequence, Flowchart, State, C4 Context, ER Diagram, Gantt
+- **Full Implementation Code:** 200+ lines D3.js classes with event handlers, data loading
+- **Acceptance Criteria:** Success Conditions, Validation Gates, Rollback Triggers, Test Coverage
+- **Performance Benchmarks:** <2s render, <100ms interaction, WCAG 2.1 AA compliance
+
+**Architecture Decision (v4.1.0):**
+- **Scores 0-99:** Level 1 only (basic/moderate visualizations)
+- **Scores 100+:** Level 1 + Level 2 breakdown (Planning v5: 195, ADO v2: 178)
+
+**Current State:** 9 basic tiles (scores 15-75) fit Level 1  
+**v5.0 State:** Planning v5 (10 phase pages) + ADO v2 (13 pages) require Level 2
 
 ### Complexity Scoring Algorithm
 

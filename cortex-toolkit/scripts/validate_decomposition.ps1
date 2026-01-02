@@ -19,7 +19,7 @@
     Type of artifact: Documentation, Prompt, Config, Manifest
 .EXAMPLE
     .\validate_decomposition.ps1 -OriginalFile "cortex-brain/archives/Level1-spec-v3.3.0.md" `
-                                   -IndexFile "cortex-brain/documents/planning/active/cortex-documentation/artifacts/Level1-spec.md" `
+                                   -IndexFile "cortex-brain/documents/planning/active/cortex-documentation/artifacts/00-master-plan.md" `
                                    -DecompFolder "cortex-brain/documents/planning/active/cortex-documentation/artifacts/level1-specs" `
                                    -ArtifactType "Documentation"
 #>

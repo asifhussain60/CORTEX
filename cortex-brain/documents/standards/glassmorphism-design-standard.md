@@ -1,6 +1,6 @@
 # 🎨 Glassmorphism Design Standard
 
-**Version:** 4.0.4 | **Status:** ✅ PRODUCTION  
+**Version:** 4.1.0 | **Status:** ✅ PRODUCTION  
 **Author:** Asif Hussain | **Last Updated:** January 2, 2026  
 **Copyright © 2026 Asif Hussain. All rights reserved.**
 
@@ -12,7 +12,8 @@ This standard defines **modern glassmorphism patterns** for CORTEX documentation
 
 **Target:** HTML documentation, dashboards, STS showcases, interactive visualizations  
 **Compatibility:** Chrome 90+, Firefox 88+, Safari 14+, Edge 90+  
-**Reference Implementation:** See `/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/documents/planning/active/cortex-documentation/artifacts/00-master-plan.md` for detailed page specifications.
+**Reference Implementation:** See `00-master-plan.md` for detailed page specifications  
+**Comprehensive Spec Guide:** See `integrate-this.md` for D3.js/Mermaid/Acceptance Criteria requirements
 
 **⚠️ Animation Philosophy (v4.0.0):**
 - **Subtle & Modern:** All animations designed to be non-distracting
@@ -114,40 +115,44 @@ Is it Level 0 (Home)?
 
 ---
 
-## 🏗️ View Hierarchy (SIMPLIFIED: Level 0 → Level 1 Only)
+## 🏗️ View Hierarchy (Level 0 → Level 1 → Level 2)
 
-**Architecture:** `Level 0 (Home) → Level 1 Detail Pages`
+**Architecture:** `Level 0 (Home) → Level 1 (Detail Pages) → Level 2 (Phase Deep-Dives)`
 
-**Critical Finding (January 2, 2026):** After holistic complexity analysis of all 9 tiles using the formula `Score = (Viz Containers × 10) + (Mermaid × 5) + (D3.js × 1) + (Interactive × 3) + (Data Sources × 8) + (Animations × 4)`, ALL content fits within Level 1.
+**Complexity Analysis (January 2, 2026):** Using formula `Score = (Viz Containers × 10) + (Mermaid × 5) + (D3.js × 1) + (Interactive × 3) + (Data Sources × 8) + (Animations × 4)`
 
-**Complexity Scores:**
-- Architecture: 45
-- Token Optimization: 25
-- Best Practices: 35
-- Toolkit Manager: 20
-- CORTEX Lens: 30
-- Getting Started: 15
-- Security (Multi-Panel): 55
-- Orchestrators (Multi-Panel): 75 (highest, still <100)
-- Sharpen The Saw (Multi-Panel): 40
+**Current 9 Tiles (Basic Implementation):**
+- Architecture: 45 | Token Optimization: 25 | Best Practices: 35
+- Toolkit Manager: 20 | CORTEX Lens: 30 | Getting Started: 15
+- Security: 55 | Orchestrators: 75 | Sharpen The Saw: 40
 
-**Result:** ⛔ **NO Level 2 pages needed** (threshold: 100+)
+**v5.0 Enhancements (With Comprehensive Visualizations):**
+- Planning System v5: **195** (10 phases → Level 2 required)
+- ADO Orchestrator v2: **178** (13 pages → Level 2 required)
+- Other orchestrators: 50-90 (Level 1 sufficient)
 
-**Design Decision:** Use expandable sections, tabs, or modals for deeper content within Level 1 pages instead of creating Level 2 hierarchy.
+**Threshold Rules:**
+- **Score 0-49:** Simple → Level 1 only (1-2 visualizations)
+- **Score 50-99:** Complex → Level 1 only (3-5 visualizations)
+- **Score 100+:** Very Complex → Level 1 + Level 2 breakdown (6-12 D3.js + 4-8 Mermaid)
+
+**Design Decision:** Planning v5 and ADO v2 require Level 2 phase pages due to comprehensive interactive visualizations. All other tiles remain Level 1.
 
 **Level 0 Tile Patterns:**
 
-| Tile | Pattern | Grid Layout | Pages | Score | Level 2? | Rationale |
-|------|---------|-------------|-------|-------|----------|-----------|
-| **Architecture** | Standard | N/A | 5 | 45 | ❌ NO | 5 Mermaid diagrams, moderate content |
-| **Token Optimization** | Standard | N/A | 1 | 25 | ❌ NO | Basic metrics, simple visualization |
-| **Best Practices** | Standard | N/A | 17 | 35 | ❌ NO | Domain pages, minimal viz per page |
-| **Toolkit Manager** | Standard | N/A | 1 | 20 | ❌ NO | Tool orchestration, basic concepts |
-| **CORTEX Lens** | Standard | N/A | 1 | 30 | ❌ NO | Dashboard concepts, simple layout |
-| **Getting Started** | Standard | N/A | 2 | 15 | ❌ NO | Setup guide, tutorial walkthrough |
-| **Security** | Multi-Panel | 2x2 (4 subpanels) | 13 | 55 | ❌ NO | 4 categories, moderate Mermaid usage |
-| **Orchestrators** | Multi-Panel | 2x3 (5 subpanels) | 19 | 75 | ❌ NO | 5 categories, borderline but acceptable |
-| **Sharpen The Saw** | Multi-Panel | 3x2 (6 subpanels) | 6 | 40 | ❌ NO | 6 single-link categories, simple content |
+| Tile | Pattern | Grid Layout | L1 Pages | Score | Level 2? | L2 Pages | Rationale |
+|------|---------|-------------|----------|-------|----------|----------|-----------||
+| **Architecture** | Standard | N/A | 5 | 45 | ❌ NO | 0 | 5 Mermaid diagrams, moderate content |
+| **Token Optimization** | Standard | N/A | 1 | 25 | ❌ NO | 0 | Basic metrics, simple visualization |
+| **Best Practices** | Standard | N/A | 17 | 35 | ❌ NO | 0 | Domain pages, minimal viz per page |
+| **Toolkit Manager** | Standard | N/A | 1 | 20 | ❌ NO | 0 | Tool orchestration, basic concepts |
+| **CORTEX Lens** | Standard | N/A | 1 | 30 | ❌ NO | 0 | Dashboard concepts, simple layout |
+| **Getting Started** | Standard | N/A | 2 | 15 | ❌ NO | 0 | Setup guide, tutorial walkthrough |
+| **Security** | Multi-Panel | 2x2 | 13 | 55 | ❌ NO | 0 | 4 categories, moderate Mermaid usage |
+| **Orchestrators (Basic)** | Multi-Panel | 2x3 | 14 | 75 | ❌ NO | 0 | 5 categories, current implementation |
+| **Planning v5** | Multi-Panel | 2x3 | 1 | 195 | ✅ YES | 10 | Comprehensive viz (12 D3.js + 8 Mermaid) |
+| **ADO v2** | Multi-Panel | 2x3 | 1 | 178 | ✅ YES | 13 | Wizard + auto-gen (10 D3.js + 7 Mermaid) |
+| **Sharpen The Saw** | Multi-Panel | 3x2 | 6 | 40 | ❌ NO | 0 | 6 single-link categories, simple content |
 
 ### Multi-Panel Pattern (3 Tiles Only)
 
@@ -219,7 +224,8 @@ Is it Level 0 (Home)?
 **Examples:**
 - ✅ `docs/sts/solid.html` → Home only (NO "STS Showcase" link)
 - ✅ `docs/security/access-control.html` → Home only
-- ✅ `docs/orchestrators/planning-system.html` → Home only
+- ✅ `docs/orchestrators/planning-system.html` → Home only (no phase pages = no Level 2)
+- ✅ `docs/orchestrators/planning-v5.html` → Home only (has 10 phase pages in Level 2)
 
 **HTML Pattern:**
 ```html
@@ -349,6 +355,96 @@ Is it Level 0 (Home)?
 - `main.css`: `?v=2026-01-02`
 - `sts.css`: `?v=2026-01-02-v2` (3-color refactor boxes update)
 - `index-multipanel.css`: `?v=2026-01-02`
+
+---
+
+## 📊 VISUALIZATION REQUIREMENTS (v4.1.0 - COMPREHENSIVE)
+
+**Purpose:** Ensure Level 1 pages include impressive, high-value interactive visualizations.
+
+**Reference:** Full implementation guide in `integrate-this.md` (1,625 lines with complete D3.js/Mermaid code)
+
+### D3.js Interactive Charts (6-12 per Level 1 page for scores >50)
+
+**Required Chart Types:**
+- **Timeline:** Session history, event sequences, orchestrator execution flow
+- **Force Graph:** Dependency networks, orchestrator relationships, knowledge graph
+- **Heatmap:** Usage patterns, token optimization opportunities, activity matrices
+- **Bar/Line Charts:** Metrics over time, performance trends, adoption rates
+- **Sankey Diagram:** Flow analysis, token usage breakdown, data pipelines
+- **Radial Tree:** Hierarchy visualization, brain tier structure, file relationships
+
+**Standards:**
+- D3.js v7.x required
+- Container: `<div id="chart-name-viz"></div>`
+- Responsive: 375px/768px/1440px breakpoints
+- Performance: <2s render, <100ms interaction
+- Accessibility: ARIA labels, keyboard navigation, reduced-motion support
+- Full implementation code (not placeholders)
+
+**Example (Session Timeline - see integrate-this.md lines 300-500 for full code):**
+```javascript
+class SessionTimeline {
+    constructor(containerId, data) { /* 200+ lines */ }
+    // Horizontal timeline with session markers, continuation arrows
+    // Hover tooltips, click expand, zoom/pan controls
+}
+```
+
+### Mermaid Diagrams (4-8 per Level 1 page for scores >50)
+
+**Required Diagram Types:**
+- **Sequence:** Workflow steps, API interactions, cross-session context flow
+- **Flowchart:** Decision trees, process flows, orchestrator routing logic
+- **State Machine:** Lifecycle transitions, planning phases, execution states
+- **C4 Context:** System architecture, integration points, external dependencies
+- **ER Diagram:** Database schema, knowledge graph structure, entity relationships
+- **Gantt Chart:** Project timeline, phase breakdown, milestone tracking
+
+**Standards:**
+- Container: `<div class="mermaid-container"><pre class="mermaid">...</pre></div>`
+- Theme: CORTEX dark theme (CSS variables)
+- Responsive: Horizontal scroll for large diagrams
+- Full Mermaid code (40-80 lines per diagram)
+
+**Example (see integrate-this.md lines 720-850 for full code):**
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant C as Copilot Chat
+    participant M as Master Orchestrator
+    [50+ lines showing continuation detection flow]
+```
+
+### Acceptance Criteria (Required for All Level 1 Specs)
+
+**Template Structure:**
+```markdown
+### Acceptance Criteria
+
+#### Success Conditions
+- [ ] SC-1: [Specific deliverable] exists and passes validation
+- [ ] SC-2: [Performance metric] meets or exceeds target (<2s render)
+- [ ] SC-3: [Integration test] passes with 100% success rate
+
+#### Validation Gates
+- **Gate 1 (Entry):** Prerequisites met, dependencies resolved
+- **Gate 2 (Mid-Phase):** 50% tasks complete, no blocking issues
+- **Gate 3 (Exit):** All tasks complete, tests passing, docs updated
+
+#### Rollback Triggers
+- **Critical:** [Condition requiring immediate rollback]
+- **High Priority:** [Fix within 24h]
+- **Medium Priority:** [Fix within 48h]
+```
+
+**Test Coverage Categories:**
+- Functional (5-10 per feature) → Unit + Integration tests
+- Performance (3-5 per feature) → Benchmark tests (<2s render, <100ms interaction)
+- Visual (6-8 per feature) → Visual regression (Percy/Chromatic)
+- Accessibility (5-7 per feature) → WCAG 2.1 AA (axe DevTools)
+
+**See `integrate-this.md` for complete methodology, full code examples, and 15+ visualization patterns.**
 
 ---
 

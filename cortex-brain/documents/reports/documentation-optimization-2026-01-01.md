@@ -2,7 +2,7 @@
 
 **Date:** January 1, 2026  
 **Optimized By:** CORTEX AI Assistant  
-**Scope:** Level1-spec.md + Glassmorphism-design-standard.md
+**Scope:** 00-master-plan.md + Glassmorphism-design-standard.md
 
 ---
 
@@ -14,7 +14,7 @@ Successfully optimized two critical CORTEX documentation files, removing **521 l
 
 | Document | Before | After | Lines Removed | QR Added | Net Change |
 |----------|--------|-------|---------------|----------|------------|
-| **Level1-spec.md** | 2,025 | 1,681 | -344 | +0 | -344 (-17%) |
+| **00-master-plan.md** | 2,025 | 1,681 | -344 | +0 | -344 (-17%) |
 | **Glassmorphism-design-standard.md** | 3,071 | 2,944 | -177 | +150 | -27 (-0.9%) |
 | **TOTAL** | **5,096** | **4,625** | **-521** | **+150** | **-471 (-9%)** |
 
@@ -29,7 +29,7 @@ Successfully optimized two critical CORTEX documentation files, removing **521 l
 
 ---
 
-## 📋 Level1-spec.md Optimization (v3.5.0)
+## 📋 00-master-plan.md Optimization (v3.5.0)
 
 ### Changes Summary
 
@@ -105,7 +105,7 @@ AFTER (1,681 lines):
   - Critical CSS Classes table
   - Spacing Quick Reference
   - Animation Decision Tree
-- Cross-reference to Level1-spec.md
+- Cross-reference to 00-master-plan.md
 - Version history entry (v4.0.2)
 
 **Improved:**
@@ -113,7 +113,7 @@ AFTER (1,681 lines):
 - Simplified View Hierarchy section
 - Updated Core Principles (8 & 12)
 - Fixed copyright year (2025 → 2026)
-- Unified terminology with Level1-spec.md
+- Unified terminology with 00-master-plan.md
 
 ### File Structure (Before → After)
 
@@ -152,7 +152,7 @@ AFTER (2,944 lines):
 1. **Spacing:** Consolidated two 180-line sections into one 100-line section at top
 2. **Hierarchy:** Removed Level 2 references (discovery confirms all Level 1)
 3. **Quick Reference:** Added decision trees for rapid pattern selection
-4. **Cross-Reference:** Explicitly links to Level1-spec.md for implementation
+4. **Cross-Reference:** Explicitly links to 00-master-plan.md for implementation
 
 ---
 
@@ -179,11 +179,11 @@ Both documents now consistently describe:
 
 ### Cross-References Added
 
-**In Level1-spec.md:**
+**In 00-master-plan.md:**
 - "**Design Standards:** Glassmorphism v4.0.1 (see glassmorphism-design-standard.md)"
 
 **In Glassmorphism-design-standard.md:**
-- "**Reference Implementation:** See Level1-spec.md for detailed page specifications"
+- "**Reference Implementation:** See 00-master-plan.md for detailed page specifications"
 
 ---
 
@@ -228,20 +228,20 @@ Both documents now consistently describe:
 
 ```bash
 # Verify files reduced in size
-wc -l Level1-spec.md                          # 1,681 (was 2,025)
+wc -l 00-master-plan.md                          # 1,681 (was 2,025)
 wc -l glassmorphism-design-standard.md        # 2,944 (was 3,071)
 
 # Check for remaining duplicates
-grep -c "Discovery Analysis" Level1-spec.md   # 1 (was 3)
+grep -c "Discovery Analysis" 00-master-plan.md   # 1 (was 3)
 grep -c "Spacing System" glassmorphism*.md    # 1 (was 2)
 
 # Verify Quick Reference added
-grep -c "Quick Reference" Level1-spec.md      # 1 (NEW)
+grep -c "Quick Reference" 00-master-plan.md      # 1 (NEW)
 grep -c "Quick Reference" glassmorphism*.md   # 1 (NEW)
 
 # Check cross-references
-grep -c "glassmorphism-design-standard" Level1-spec.md      # 1 (NEW)
-grep -c "Level1-spec.md" glassmorphism-design-standard.md   # 1 (NEW)
+grep -c "glassmorphism-design-standard" 00-master-plan.md      # 1 (NEW)
+grep -c "00-master-plan.md" glassmorphism-design-standard.md   # 1 (NEW)
 ```
 
 ### Manual Review Checklist

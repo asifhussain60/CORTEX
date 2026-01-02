@@ -9,7 +9,7 @@
 
 ## 📋 Summary
 
-Successfully recreated all 4 Assessment category pages for the CORTEX Security documentation site according to Level1-spec.md and Glassmorphism Design Standard v4.0.1.
+Successfully recreated all 4 Assessment category pages for the CORTEX Security documentation site according to 00-master-plan.md and Glassmorphism Design Standard v4.0.1.
 
 ---
 

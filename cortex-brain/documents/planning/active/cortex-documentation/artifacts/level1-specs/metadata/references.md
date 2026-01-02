@@ -1,6 +1,6 @@
 # References - Level 1 Specification
 
-**Document:** Level1-spec.md v4.0.0  
+**Document:** 00-master-plan.md v4.0.0  
 **Last Updated:** January 2, 2026
 
 ---

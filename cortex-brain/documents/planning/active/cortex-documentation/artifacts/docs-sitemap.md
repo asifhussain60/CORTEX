@@ -143,61 +143,39 @@ When working on a specific panel/section:
 
 **Purpose:** Determine if feature content fits in Level 1 or requires Level 2 breakdown.
 
-**Complexity Formula:**
-```
-Score = (Viz Containers × 10) + (Mermaid × 5) + (D3.js Calls × 1) + 
-        (Interactive Elements × 3) + (Data Sources × 8) + (Animations × 4)
-```
+**Formula:** `Score = (Viz × 10) + (Mermaid × 5) + (D3.js × 1) + (Interactive × 3) + (Data × 8) + (Animations × 4)`
 
 **Thresholds:**
-- **0-49:** Simple → Level 1 (1-2 visualizations)
-- **50-99:** Complex → Level 1 (3-5 visualizations)
-- **100-199:** Very Complex → Level 2 required (6-10 visualizations)
-- **200+:** Extreme → Level 2 + tabs/accordions (10+ visualizations)
+- **0-49:** Simple → Level 1 only (1-2 viz)
+- **50-99:** Complex → Level 1 only (3-5 viz, 6-12 D3.js + 4-8 Mermaid)
+- **100-199:** Very Complex → Level 2 required (Planning v5: 195, ADO v2: 178)
+- **200+:** Extreme → Level 2 + tabs/accordions
 
-**Example (Planning System v5):**
-```
-Viz Containers: 10 (timelines, flowcharts, state diagrams)
-Mermaid Diagrams: 8 (sequence, architecture, flow)
-D3.js Calls: 85 (timeline.js, force.js, heatmap.js)
-Interactive Elements: 25 (session cards, orchestrator badges)
-Data Sources: 4 (Tier 0, Tier 1, Tier 2, AST builder)
-Animations: 12 (fade, slide, pulse, glow)
+**See `integrate-this.md` for complete methodology with full D3.js/Mermaid implementation code.**
 
-Score = (10 × 10) + (8 × 5) + (85 × 1) + (25 × 3) + (4 × 8) + (12 × 4)
-      = 100 + 40 + 85 + 75 + 32 + 48 = 380
-      → REQUIRES Level 2 breakdown (10 phase pages)
-```
+**Examples:**
+- Planning System v5: **Score 195** → Level 2 (10 phases)
+- ADO Orchestrator v2: **Score 178** → Level 2 (13 pages)
+- Security Multi-Panel: **Score 55** → Level 1 only
 
-**Visualization Inventory Template:**
+### 10. **LEVEL 1/2 SPEC GENERATION WORKFLOW**
 
-| Viz Type | Count | D3.js Calls | Mermaid | Interactive? | Data Source | Complexity |
-|----------|-------|-------------|---------|--------------|-------------|------------|
-| Timeline | 2 | 15 | 0 | Yes (scrubber) | Tier 1 Sessions | 38 |
-| Force Graph | 1 | 12 | 0 | Yes (drag nodes) | Orchestrator Registry | 32 |
-| Heatmap | 1 | 8 | 0 | Yes (hover) | Token Stats | 24 |
-| Sequence | 0 | 0 | 1 | No | N/A | 5 |
-| State Machine | 0 | 0 | 1 | No | N/A | 5 |
-| **TOTAL** | **4** | **35** | **2** | **3 interactive** | **3 sources** | **104** |
+**Complete methodology in `integrate-this.md` (1,625 lines) includes:**
 
-**Result:** Score 104 → Level 2 required
+✅ Discovery Phase: Visualization inventory, complexity scoring, Level 1/2 decision  
+✅ Design Phase: 6-12 D3.js chart designs with full implementation code (200+ lines/chart)  
+✅ Mermaid Phase: 4-8 diagram types with complete code (40-80 lines/diagram)  
+✅ Acceptance Criteria: Success Conditions, Validation Gates, Rollback Triggers  
+✅ Implementation: HTML structure, CSS requirements, JS initialization, data loading  
+✅ Validation: Performance (<2s render), Accessibility (WCAG 2.1 AA), Visual regression
 
-### 10. **LEVEL 1 SPEC GENERATION WORKFLOW**
+**Quick Reference:**
+- Visualization inventory template: integrate-this.md lines 200-250
+- D3.js implementations: integrate-this.md lines 300-600 (Timeline, Force Graph, Heatmap)
+- Mermaid examples: integrate-this.md lines 720-900 (Sequence, Flowchart, State)
+- Acceptance criteria template: integrate-this.md lines 1100-1250
 
-**When creating new Level 1 specifications:**
-
-1. **Discovery Phase:**
-   - List all visualizations needed (D3.js + Mermaid)
-   - Calculate complexity score using formula
-   - Determine if Level 1 sufficient or Level 2 required
-
-2. **Design Phase:**
-   - Create visualization inventory table
-   - Design 6-12 D3.js charts (timeline, force graph, heatmap, etc.)
-   - Design 4-8 Mermaid diagrams (sequence, flowchart, state, C4)
-   - Include full code implementations (not just placeholders)
-
-3. **Documentation Phase:**
+**Key Requirements:**
    - Write comprehensive HTML structure templates
    - Define CSS classes (verify they exist in main.css)
    - Provide JavaScript initialization code
@@ -237,29 +215,31 @@ Score = (10 × 10) + (8 × 5) + (85 × 1) + (25 × 3) + (4 × 8) + (12 × 4)
 
 ### Holistic Tile Analysis
 
-**Level 0 (Home):** 9 tiles total (6 standard + 3 multi-panels)  
-**Level 1 (Detail Pages):** All content fits within Level 1  
-**Level 2 (Phase Deep-Dives):** NOT REQUIRED for any tile
+**Level 0 (Home):** 9 tiles (6 standard + 3 multi-panels)  
+**Level 1 (Detail Pages):** 65 pages (current) + 2 new (Planning v5, ADO v2)  
+**Level 2 (Phase Deep-Dives):** 23 pages (Planning v5: 10 phases, ADO v2: 13 pages)
 
 ### Complexity Analysis Results
 
 Using formula: `Score = (Viz Containers × 10) + (Mermaid × 5) + (D3.js Calls × 1) + (Interactive Elements × 3) + (Data Sources × 8) + (Animations × 4)`
 
-| Tile | Type | Level 1 Pages | Mermaid | D3.js | Score | Level 2? | Status |
-|------|------|---------------|---------|-------|-------|----------|--------|
-| **Architecture** (🧠) | Standard | 5 | 5 | 0 | 45 | ❌ NO | ✅ Complete |
-| **Token Optimization** (💰) | Standard | 1 | 2 | 0 | 25 | ❌ NO | ✅ Complete |
-| **Best Practices** (📚) | Standard | 17 | 3 | 0 | 35 | ❌ NO | ✅ Complete |
-| **Toolkit Manager** (🛠️) | Standard | 1 | 2 | 0 | 20 | ❌ NO | ✅ Complete |
-| **CORTEX Lens** (🔍) | Standard | 1 | 3 | 0 | 30 | ❌ NO | ✅ Complete |
-| **Getting Started** (🚀) | Standard | 2 | 1 | 0 | 15 | ❌ NO | ✅ Complete |
-| **Security** (🛡️) | Multi-Panel | 13 | 8 | 0 | 55 | ❌ NO | 🟡 54% |
-| **Orchestrators** (🎯) | Multi-Panel | 19 | 10 | 0 | 75 | ❌ NO | 🟡 73% |
-| **Sharpen The Saw** (🔧) | Multi-Panel | 6 | 6 | 0 | 40 | ❌ NO | ✅ 100% |
+| Tile | Type | L1 Pages | Mermaid | D3.js | Score | Level 2? | L2 Pages | Status |
+|------|------|----------|---------|-------|-------|----------|----------|--------|
+| **Architecture** (🧠) | Standard | 5 | 5 | 0 | 45 | ❌ NO | 0 | ✅ Complete |
+| **Token Optimization** (💰) | Standard | 1 | 2 | 0 | 25 | ❌ NO | 0 | ✅ Complete |
+| **Best Practices** (📚) | Standard | 17 | 3 | 0 | 35 | ❌ NO | 0 | ✅ Complete |
+| **Toolkit Manager** (🛠️) | Standard | 1 | 2 | 0 | 20 | ❌ NO | 0 | ✅ Complete |
+| **CORTEX Lens** (🔍) | Standard | 1 | 3 | 0 | 30 | ❌ NO | 0 | ✅ Complete |
+| **Getting Started** (🚀) | Standard | 2 | 1 | 0 | 15 | ❌ NO | 0 | ✅ Complete |
+| **Security** (🛡️) | Multi-Panel | 13 | 8 | 0 | 55 | ❌ NO | 0 | 🟡 54% |
+| **Orchestrators (Basic)** (🎯) | Multi-Panel | 14 | 10 | 0 | 75 | ❌ NO | 0 | 🟡 73% |
+| **Planning v5** (🎯) | Multi-Panel | 1 | 8 | 85 | 195 | ✅ YES | 10 | 🚧 v5.0 |
+| **ADO v2** (🎯) | Multi-Panel | 1 | 7 | 72 | 178 | ✅ YES | 13 | 🚧 v5.0 |
+| **Sharpen The Saw** (🔧) | Multi-Panel | 6 | 6 | 0 | 40 | ❌ NO | 0 | ✅ 100% |
 
 **Threshold:** Score <100 = Level 1 sufficient | Score ≥100 = Level 2 required
 
-**KEY FINDING:** ✅ **ALL 9 tiles fit within Level 1** (highest score: 75 for Orchestrators)
+**KEY FINDING:** Basic tiles (scores 15-75) fit Level 1. **Planning v5 (195) and ADO v2 (178) require Level 2** with comprehensive D3.js/Mermaid visualizations (see `integrate-this.md`).
 
 ### Documentation Scope (Revised)
 
@@ -267,30 +247,34 @@ Using formula: `Score = (Viz Containers × 10) + (Mermaid × 5) + (D3.js Calls �
 |---------------|---------------|---------------|---------------|-------------|--------|
 | **Standard Tiles** | 6 | 27 | 0 | 27 | ✅ COMPLETE |
 | **Multi-Panel: Security** | 1 | 13 | 0 | 13 | 🟡 54% (7 missing) |
-| **Multi-Panel: Orchestrators** | 1 | 19 | 0 | 19 | 🟡 73% (5 orphaned) |
+| **Multi-Panel: Orchestrators (Basic)** | 1 | 14 | 0 | 14 | 🟡 73% (5 orphaned) |
+| **Multi-Panel: Planning v5** | — | 1 | 10 | 11 | 🚧 v5.0 Development |
+| **Multi-Panel: ADO v2** | — | 1 | 13 | 14 | 🚧 v5.0 Development |
 | **Multi-Panel: Sharpen The Saw** | 1 | 6 | 0 | 6 | ✅ 100% |
-| **TOTAL** | **9** | **65** | **0** | **65** | **77% Complete** |
+| **TOTAL** | **9** | **62** | **23** | **85** | **73% Complete (62% with v5.0)** |
 
-### 6-Week Implementation Plan (DEPRECATED - ALL CONTENT FITS LEVEL 1)
+### 8-Week Implementation Plan (v4.1.0 - Level 1 + Level 2)
 
-**Architecture Decision:** After holistic complexity analysis, NO Level 2 pages required. All tiles score <100.
+**Architecture Decision:** Level 2 required for Planning v5 (10 phases) and ADO v2 (13 pages) with comprehensive visualizations.
 
-**NEW FOCUS:** Complete missing Security pages (7 pages) + integrate orphaned Orchestrator pages (5 pages).
+**Scope:** Complete Security pages + Orchestrator cleanup + Planning v5 Level 2 + ADO v2 Level 2
 
 | Week | Focus | Deliverables | Effort |
 |------|-------|--------------|--------|
-| **1-2** | Security Panel Completion | 7 missing pages (access-control → dashboard) | 28h |
-| **2-3** | Orchestrators Panel Integration | 5 orphaned pages → link in navigation | 16h |
-| **3-4** | Level 1 Compliance Audit | 38 Level 1 pages → glassmorphism v4.0.1 | 32h |
-| **4-5** | Visualization Enhancement | Add D3.js charts to complex pages | 24h |
-| **5-6** | QA + Performance Testing | Load testing, accessibility audit | 16h |
-| **TOTAL** | **6 weeks** | **12 new + 43 refactors** | **116h** |
+| **1-2** | Security Panel Completion | 7 missing pages | 28h |
+| **2-3** | Orchestrators Cleanup | 5 orphaned pages → link in nav | 16h |
+| **3-4** | Planning v5 Level 2 (Phases 1-5) | 5 phase pages (6-12 D3.js + 4-8 Mermaid each) | 40h |
+| **4-5** | Planning v5 Level 2 (Phases 6-10) | 5 phase pages (comprehensive viz) | 40h |
+| **5-6** | ADO v2 Level 2 (Wizard) | 7 wizard stage pages | 35h |
+| **6-7** | ADO v2 Level 2 (Auto-Gen) | 6 auto-generation phase pages | 30h |
+| **7-8** | QA + Performance Testing | Load testing, accessibility, visual regression | 24h |
+| **TOTAL** | **8 weeks** | **12 Security + 5 Cleanup + 23 Level 2** | **213h** |
 
-**Simplified Scope:**
-- ❌ NO Level 2 pages needed (complexity scores too low)
-- ✅ Focus on Level 1 completion (Security: 54% → 100%)
-- ✅ Orphan integration (Orchestrators: 5 unlinked files)
-- ✅ Standards compliance (38 pages → glassmorphism v4.0.1)
+**v5.0 Scope:**
+- ✅ Level 2 architecture (Planning v5: 10 phases, ADO v2: 13 pages)
+- ✅ Comprehensive visualizations (6-12 D3.js + 4-8 Mermaid per Level 2 page)
+- ✅ Full implementation code (not placeholders)
+- ✅ Acceptance criteria for all pages (see `integrate-this.md`)
 
 ---
 

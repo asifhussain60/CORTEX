@@ -3,7 +3,7 @@
 **Audit Date:** January 2, 2026  
 **Auditor:** GitHub Copilot (Claude Sonnet 4.5)  
 **Scope:** Orchestrators Multi-Panel HTML Files (19 pages: 14 linked + 5 unlinked)  
-**Standards:** Glassmorphism Design Standard v4.0.1 + Level1-spec.md  
+**Standards:** Glassmorphism Design Standard v4.0.1 + 00-master-plan.md  
 **Status:** 🔴 **0% Compliant** (0/19 files)
 
 ---
@@ -370,7 +370,7 @@ While these are not technically inline `style=""` attributes, embedded `<style>`
    - Key Rule: Level 1 pages have NO logo, use glass-header only
 
 2. **Level 1 Page Specification**
-   - Location: `cortex-brain/documents/planning/active/cortex-documentation/artifacts/Level1-spec.md`
+   - Location: `cortex-brain/documents/planning/active/cortex-documentation/artifacts/00-master-plan.md`
    - Section: "ORCHESTRATORS MULTI-PANEL" (lines 100-200)
    - Key Requirements: glass-header, hero-section, T1 animations
 

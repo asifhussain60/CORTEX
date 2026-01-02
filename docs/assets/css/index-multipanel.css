@@ -272,9 +272,11 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-auto-rows: clamp(50px, 12cqi, 70px);
+    grid-auto-flow: dense; /* Tetris-style packing */
     gap: clamp(0.5rem, 1.5cqi, 0.875rem);
     width: 100%;
     align-content: start;
+    min-height: clamp(150px, 36cqi, 210px); /* Ensure minimum height for sparse panels */
 }
 
 .category-tag {
@@ -444,7 +446,9 @@
     box-shadow: var(--shadow-tag-hover);
 }
 
-/* Tetris/Masonry Layouts */
+/* Tetris/Masonry Layouts for Security Panel */
+
+/* Protection Panel (3 cards) - Vertical emphasis */
 #security-panel .category-subpanel:nth-of-type(1) .category-tag:nth-child(1) {
     grid-column: span 1;
     grid-row: span 3;
@@ -463,13 +467,168 @@
     font-size: 1rem;
 }
 
-/* Continue with similar tetris layouts... */
-/* (Remaining masonry layouts preserved from original) */
+/* Assessment Panel (4 cards) - Balanced grid */
+#security-panel .category-subpanel:nth-of-type(2) .category-tag:nth-child(1) {
+    grid-column: span 2;
+    grid-row: span 2;
+    font-size: 1.1rem;
+}
+
+#security-panel .category-subpanel:nth-of-type(2) .category-tag:nth-child(2) {
+    grid-column: span 1;
+    grid-row: span 2;
+    font-size: 1rem;
+}
+
+#security-panel .category-subpanel:nth-of-type(2) .category-tag:nth-child(3) {
+    grid-column: span 2;
+    grid-row: span 1;
+    font-size: 1rem;
+}
+
+#security-panel .category-subpanel:nth-of-type(2) .category-tag:nth-child(4) {
+    grid-column: span 1;
+    grid-row: span 1;
+    font-size: 1rem;
+}
+
+/* Compliance Panel (3 cards) - Horizontal emphasis */
+#security-panel .category-subpanel:nth-of-type(3) .category-tag:nth-child(1) {
+    grid-column: span 3;
+    grid-row: span 1;
+    font-size: 1.1rem;
+}
+
+#security-panel .category-subpanel:nth-of-type(3) .category-tag:nth-child(2) {
+    grid-column: span 2;
+    grid-row: span 2;
+    font-size: 1.1rem;
+}
+
+#security-panel .category-subpanel:nth-of-type(3) .category-tag:nth-child(3) {
+    grid-column: span 1;
+    grid-row: span 2;
+    font-size: 1rem;
+}
+
+/* Response Panel (3 cards) - Vertical emphasis fills space */
+#security-panel .category-subpanel:nth-of-type(4) .category-tag:nth-child(1) {
+    grid-column: span 2;
+    grid-row: span 3;
+    font-size: 1.2rem;
+}
+
+#security-panel .category-subpanel:nth-of-type(4) .category-tag:nth-child(2) {
+    grid-column: span 1;
+    grid-row: span 2;
+    font-size: 1.1rem;
+}
+
+#security-panel .category-subpanel:nth-of-type(4) .category-tag:nth-child(3) {
+    grid-column: span 1;
+    grid-row: span 1;
+    font-size: 1rem;
+}
+
+/* Tetris-style dynamic card spanning for Orchestrators Panel */
+
+/* Planning Panel (4 cards) - Grid layout */
+#orchestrators-panel .category-subpanel:nth-of-type(1) .category-tag:nth-child(1) {
+    grid-column: span 2;
+    grid-row: span 2;
+    font-size: 1.1rem;
+}
+
+#orchestrators-panel .category-subpanel:nth-of-type(1) .category-tag:nth-child(2) {
+    grid-column: span 1;
+    grid-row: span 1;
+    font-size: 1rem;
+}
+
+#orchestrators-panel .category-subpanel:nth-of-type(1) .category-tag:nth-child(3) {
+    grid-column: span 1;
+    grid-row: span 1;
+    font-size: 1rem;
+}
+
+#orchestrators-panel .category-subpanel:nth-of-type(1) .category-tag:nth-child(4) {
+    grid-column: span 2;
+    grid-row: span 1;
+    font-size: 1rem;
+}
+
+/* Execution Panel (3 cards) - Large TDD emphasis */
+#orchestrators-panel .category-subpanel:nth-of-type(2) .category-tag:nth-child(1) {
+    grid-column: span 2;
+    grid-row: span 2;
+}
+
+#orchestrators-panel .category-subpanel:nth-of-type(2) .category-tag:nth-child(2) {
+    grid-column: span 1;
+    grid-row: span 2;
+}
+
+#orchestrators-panel .category-subpanel:nth-of-type(2) .category-tag:nth-child(3) {
+    grid-column: span 3;
+    grid-row: span 1;
+}
+
+/* System Panel (3 cards) - Balanced vertical */
+#orchestrators-panel .category-subpanel:nth-of-type(3) .category-tag:nth-child(1) {
+    grid-column: span 1;
+    grid-row: span 2;
+    font-size: 1.1rem;
+}
+
+#orchestrators-panel .category-subpanel:nth-of-type(3) .category-tag:nth-child(2) {
+    grid-column: span 2;
+    grid-row: span 2;
+    font-size: 1.1rem;
+}
+
+#orchestrators-panel .category-subpanel:nth-of-type(3) .category-tag:nth-child(3) {
+    grid-column: span 3;
+    grid-row: span 1;
+    font-size: 1rem;
+}
+
+/* Analysis Panel (3 cards) - T-shape */
+#orchestrators-panel .category-subpanel:nth-of-type(4) .category-tag:nth-child(1) {
+    grid-column: span 3;
+    grid-row: span 1;
+    font-size: 1.1rem;
+}
+
+#orchestrators-panel .category-subpanel:nth-of-type(4) .category-tag:nth-child(2) {
+    grid-column: span 2;
+    grid-row: span 2;
+    font-size: 1.1rem;
+}
+
+#orchestrators-panel .category-subpanel:nth-of-type(4) .category-tag:nth-child(3) {
+    grid-column: span 1;
+    grid-row: span 2;
+    font-size: 1rem;
+}
+
+/* Debug Panel (2 cards) - Large split */
+#orchestrators-panel .category-subpanel:nth-of-type(5) .category-tag:nth-child(1) {
+    grid-column: span 2;
+    grid-row: span 3;
+    font-size: 1.2rem;
+}
+
+#orchestrators-panel .category-subpanel:nth-of-type(5) .category-tag:nth-child(2) {
+    grid-column: span 1;
+    grid-row: span 3;
+    font-size: 1.2rem;
+}
 
 /* Responsive: Simplify masonry on mobile */
 @media (max-width: 768px) {
     .category-tags {
         grid-template-columns: repeat(2, 1fr);
+        min-height: auto;
     }
     
     .category-tag:nth-child(1),

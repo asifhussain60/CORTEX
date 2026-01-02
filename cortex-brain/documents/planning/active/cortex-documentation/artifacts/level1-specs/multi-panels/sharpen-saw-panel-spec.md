@@ -360,7 +360,7 @@ While Sharpen The Saw panel is complete, these optional enhancements could be co
 ## 📚 Reference Documentation
 
 ### Related Files
-- **Main Spec:** `Level1-spec.md` (parent document)
+- **Main Spec:** `00-master-plan.md` (parent document)
 - **Design Standards:** `level1-specs/core/design-standards.md`
 - **Executive Summary:** `level1-specs/core/executive-summary.md`
 
