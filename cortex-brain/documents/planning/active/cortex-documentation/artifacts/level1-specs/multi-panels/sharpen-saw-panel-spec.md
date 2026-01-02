@@ -1,6 +1,6 @@
 # Sharpen The Saw Multi-Panel Specification
 
-**Version:** 4.0.0 | **Last Updated:** January 2, 2026  
+**Version:** 4.0.4 | **Last Updated:** January 2, 2026  
 **Status:** 🟢 PERFECT IMPLEMENTATION (100% Complete)  
 **Copyright © 2026 Asif Hussain. All rights reserved.**
 
@@ -18,6 +18,12 @@ The **Sharpen The Saw** multi-panel represents best practices, principles, and c
 - **Unlinked:** 0 (0%)
 - **Average Complexity:** 16.6 (very low, text-focused educational content)
 - **Highest Complexity:** 30 (performance.html)
+
+**v4.0.4 Updates (January 2, 2026):**
+- ✅ Navigation cleanup: Removed "STS Showcase" link (Level 1 = Home only)
+- ✅ Cache-busting: All CSS links use `?v=2026-01-02-v2` query parameters
+- ✅ 3-color system: Cyan (Problem), Green (Fix), Purple (Result) refactor boxes
+- ✅ Standards compliance: 100% alignment with glassmorphism-design-standard.md v4.0.4
 
 ---
 
@@ -248,30 +254,64 @@ Level 0: docs/index.html (Home Page)
 
 ### ✅ All Pages Comply With:
 
-1. **Glassmorphism v4.0.1**
+1. **Glassmorphism v4.0.4**
    - Glass card backgrounds with blur
    - Subtle gradients and borders
    - Glassmorphic header and footer
+   - **3-color refactor explanation boxes** (Cyan/Green/Purple)
+   - **Home-only navigation** (NO "STS Showcase" link)
+   - **Cache-busting enabled** (`?v=2026-01-02-v2`)
 
 2. **ZERO Inline Styles Policy**
    - All styling via CSS classes
    - No `style=""` attributes in HTML
-   - Centralized styling in `main.css`
+   - Centralized styling in `sts.css` and `main.css`
 
 3. **T1 Animations Only**
    - 0.2-0.3s transitions
-   - Subtle fade-in effects
+   - Subtle fade-in effects on card hover
    - Professional, non-distracting animations
+   - Color-coded hover effects on Problem/Fix/Result boxes
 
-4. **Responsive Design**
+4. **Standardized Color System** (v4.0.3)
+   - **Box 1 (PROBLEM):** Cyan/Blue - `rgba(0, 150, 199, 0.1)` background, `#00d4ff` accent
+   - **Box 2 (FIX):** Green - `rgba(16, 185, 129, 0.1)` background, `#10b981` accent
+   - **Box 3 (RESULT):** Purple - `rgba(139, 92, 246, 0.1)` background, `#8b5cf6` accent
+   - Applied consistently across all 6 STS pages
+
+5. **Navigation Pattern** (v4.0.4)
+   - **Level 1 Rule:** Home link only (NO intermediate hub pages)
+   - Removed "STS Showcase" link from all 6 pages
+   - Clean, minimal navigation header
+   ```html
+   <header class="glass-header">
+       <div class="header-content">
+           <nav class="header-nav">
+               <a href="../index.html" class="nav-link">
+                   <i class="fas fa-home"></i>
+                   <span>Home</span>
+               </a>
+           </nav>
+       </div>
+   </header>
+   ```
+
+6. **Cache-Busting Strategy** (v4.0.4)
+   - All CSS links include version query parameters
+   - Current versions: `main.css?v=2026-01-02`, `sts.css?v=2026-01-02-v2`
+   - Forces browser to reload updated styles
+   - Consistent across all 6 STS pages
+
+7. **Responsive Design**
    - Mobile-first approach
    - Breakpoints: 375px → 768px → 1440px
    - Fluid typography and spacing
+   - 3-column grid on desktop, single column on mobile (<1024px)
 
-5. **Accessibility**
+6. **Accessibility**
    - ARIA labels on interactive elements
    - Keyboard navigation support
-   - Sufficient color contrast
+   - Sufficient color contrast (all colors meet WCAG AA standards)
 
 ---
 

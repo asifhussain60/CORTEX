@@ -1,7 +1,7 @@
 # 🎨 Glassmorphism Design Standard
 
-**Version:** 4.0.2 | **Status:** ✅ PRODUCTION  
-**Author:** Asif Hussain | **Last Updated:** January 1, 2026  
+**Version:** 4.0.4 | **Status:** ✅ PRODUCTION  
+**Author:** Asif Hussain | **Last Updated:** January 2, 2026  
 **Copyright © 2026 Asif Hussain. All rights reserved.**
 
 ---
@@ -61,6 +61,36 @@ This standard defines **modern glassmorphism patterns** for CORTEX documentation
 | `.category-subpanel` | Individual category panel | Within multi-panel grids |
 | `.single-tag` | Compact subpanel | Single-link categories |
 | `.category-tag` | Clickable link in subpanel | Action links within panels |
+
+### Masonry Card Link Naming Convention (v4.0.5)
+
+**Problem:** Long link text ("Planning System", "ADO Orchestrator", "Cleanup Orchestrator") creates visual congestion in masonry cards.
+
+**Solution:** Use concise, 1-2 word names that preserve clarity:
+
+| Full Name | Short Name | Context |
+|-----------|------------|----------|
+| Planning System | Planning | Planning category |
+| ADO Orchestrator | ADO | Planning category |
+| ADO Operations | ADO Ops | Planning category |
+| ADO Planning | ADO Plan | Planning category |
+| TDD Orchestrator | TDD | Execution category |
+| Execution Orchestrator | Execution | Execution category |
+| Cleanup Orchestrator | Cleanup | System category |
+| Sanitization | Sanitize | System category |
+| System Integrity | Integrity | System category |
+| Git Checkpoint | Checkpoint | System category |
+| Refinement | Refine | Analysis category |
+| CORTEX Lens | Lens | Analysis category |
+| Architectural Review | Arch Review | Analysis category |
+| Debug Orchestrator | Debug | Debug category |
+| Rollback Orchestrator | Rollback | Debug category |
+
+**Rules:**
+- **1-2 words maximum** for card link text
+- **Keep icon + short name** (e.g., `🔧 Debug` not `🔧 Debug Orchestrator`)
+- **Full names reserved for:** Page titles, headers, breadcrumbs
+- **Consistency:** Same short name across all references within masonry cards
 
 ### Spacing Quick Reference
 
@@ -149,6 +179,88 @@ Is it Level 0 (Home)?
 
 ---
 
+## 🧭 Navigation Pattern Rules (v4.0.4)
+
+**Architecture:** Hierarchical navigation based on page level.
+
+### Navigation by Level
+
+| Level | Navigation Links | Example |
+|-------|------------------|---------|
+| **Level 0** (Home) | Logo + Feature links + GitHub | `docs/index.html` |
+| **Level 1** (Detail) | Home only | `docs/sts/solid.html` |
+| **Level 2** (Phase) | Home + Parent Level 1 | `docs/orchestrators/planning-v5/phase-1.html` |
+
+### Level 1 Navigation (Detail Pages)
+
+**Rule:** Show ONLY the Home link. No intermediate hub pages.
+
+**Examples:**
+- ✅ `docs/sts/solid.html` → Home only (NO "STS Showcase" link)
+- ✅ `docs/security/access-control.html` → Home only
+- ✅ `docs/orchestrators/planning-system.html` → Home only
+
+**HTML Pattern:**
+```html
+<header class="glass-header">
+    <div class="header-content">
+        <nav class="header-nav">
+            <a href="../index.html" class="nav-link">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+        </nav>
+    </div>
+</header>
+```
+
+### Level 2 Navigation (Phase/Deep-Dive Pages)
+
+**Rule:** Show Home link AND parent Level 1 link.
+
+**Examples:**
+- ✅ `docs/orchestrators/planning-v5/phase-1-governance-validation.html`
+  - Home → `../../index.html`
+  - Planning System → `../planning-system.html`
+- ✅ `docs/orchestrators/ado-v2/wizard-stage-1-work-item-type.html`
+  - Home → `../../index.html`
+  - ADO Orchestrator → `../ado-orchestrator.html`
+
+**HTML Pattern:**
+```html
+<header class="glass-header">
+    <div class="header-content">
+        <nav class="header-nav">
+            <a href="../../index.html" class="nav-link">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="../planning-system.html" class="nav-link">
+                <i class="fas fa-arrow-left"></i>
+                <span>Planning System</span>
+            </a>
+        </nav>
+    </div>
+</header>
+```
+
+### ❌ Navigation Anti-Patterns
+
+| Violation | Wrong | Correct |
+|-----------|-------|---------|
+| **Intermediate hub links** | Level 1 shows "STS Showcase" link | Level 1 shows Home only |
+| **Breadcrumbs on Level 1** | Home > Category > Page | Home only |
+| **Logo on Level 1/2** | Logo + nav on detail page | Nav only (no logo) |
+| **Missing parent on Level 2** | Only Home link | Home + Parent Level 1 |
+
+**Rationale:**
+- Level 0 (Home) serves as the central navigation hub
+- Multi-panel tiles on Level 0 eliminate need for intermediate hub pages
+- Direct navigation improves UX and reduces cognitive load
+- Level 2 parent links provide contextual back navigation
+
+---
+
 ## 🎯 Core Principles
 
 1. **Multi-Layer Depth** - Stacked glass layers with varying opacity
@@ -163,6 +275,60 @@ Is it Level 0 (Home)?
 10. **Responsive Mandatory** - Mobile-first design (375px base, 768px tablet, 1440px desktop)
 11. **Proper Spacing** - Minimum 1.5rem (24px) vertical gap between stacked cards/panels (v4.0.1)
 12. **Cross-Document Consistency** - Align with Level1-spec.md for implementation details (v4.0.2)
+13. **Cache-Busting Required** - All CSS/JS links must include version query params (v4.0.4)
+
+---
+
+## 🔄 Cache-Busting Strategy (v4.0.4)
+
+**Problem:** Browser caching prevents users from seeing updated CSS/JS changes.  
+**Solution:** Version query parameters force browser to reload updated assets.
+
+### Implementation Pattern
+
+**Format:** `?v=YYYY-MM-DD-vN`
+- `YYYY-MM-DD`: Date of last modification
+- `vN`: Incremental version within same day (v1, v2, v3...)
+
+**Examples:**
+```html
+<!-- Initial release -->
+<link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02">
+<link rel="stylesheet" href="../assets/css/sts.css?v=2026-01-02">
+
+<!-- Same-day update (increment version) -->
+<link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02-v2">
+<link rel="stylesheet" href="../assets/css/sts.css?v=2026-01-02-v2">
+
+<!-- Next day (reset to base version) -->
+<link rel="stylesheet" href="../assets/css/main.css?v=2026-01-03">
+<link rel="stylesheet" href="../assets/css/sts.css?v=2026-01-03">
+```
+
+### When to Update
+
+**Update version parameter when:**
+- ✅ CSS file modified (styling changes)
+- ✅ JavaScript file modified (behavior changes)
+- ✅ Major design system updates
+- ✅ Bug fixes affecting visual appearance
+
+**No update needed for:**
+- ❌ HTML-only changes (no CSS/JS modified)
+- ❌ Content updates (text, images)
+- ❌ Backend logic changes
+
+### Consistency Rules
+
+1. **Same version across page group** - All STS pages use same `sts.css` version
+2. **Increment together** - If `main.css` and `sts.css` both change, increment both
+3. **Document in commits** - Git commit message should note version bump
+4. **Update all pages** - When CSS changes, update ALL pages using that stylesheet
+
+**Current Versions (January 2, 2026):**
+- `main.css`: `?v=2026-01-02`
+- `sts.css`: `?v=2026-01-02-v2` (3-color refactor boxes update)
+- `index-multipanel.css`: `?v=2026-01-02`
 
 ---
 
@@ -254,16 +420,66 @@ Is it Level 0 (Home)?
 </header>
 ```
 
-#### Level 1 & Level 2 Glass Header (NO LOGO - Home Link Only)
+#### Level 1 Glass Header (NO LOGO - Home Link Only)
+
+**Navigation Rule:** Level 1 pages show ONLY the Home link.
+
 ```html
 <header class="glass-header">
     <div class="header-content">
         <nav class="header-nav">
-            <a href="../index.html" class="nav-link"><i class="fas fa-home"></i> Home</a>
+            <a href="../index.html" class="nav-link">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
         </nav>
     </div>
 </header>
 ```
+
+**Examples:**
+- `docs/sts/solid.html` - Only Home link
+- `docs/security/access-control.html` - Only Home link
+- `docs/orchestrators/planning-system.html` - Only Home link
+
+#### Level 2 Glass Header (NO LOGO - Home + Parent Level 1 Link)
+
+**Navigation Rule:** Level 2 pages show Home link AND parent Level 1 link.
+
+```html
+<header class="glass-header">
+    <div class="header-content">
+        <nav class="header-nav">
+            <a href="../../index.html" class="nav-link">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="../planning-system.html" class="nav-link">
+                <i class="fas fa-arrow-left"></i>
+                <span>Planning System</span>
+            </a>
+        </nav>
+    </div>
+</header>
+```
+
+**Examples:**
+- `docs/orchestrators/planning-v5/phase-1-governance-validation.html`
+  - Home link → `../../index.html`
+  - Parent link → `../planning-system.html` (Planning System)
+- `docs/orchestrators/ado-v2/wizard-stage-1-work-item-type.html`
+  - Home link → `../../index.html`
+  - Parent link → `../ado-orchestrator.html` (ADO Orchestrator)
+- `docs/orchestrators/tdd/phase-1-red.html`
+  - Home link → `../../index.html`
+  - Parent link → `../tdd-orchestrator.html` (TDD Orchestrator)
+
+**⚠️ CRITICAL RULES:**
+- ❌ **NO intermediate hub pages** (e.g., NO "STS Showcase" link on STS detail pages)
+- ❌ **NO breadcrumbs** (use simple back links on Level 2 only)
+- ❌ **NO logo** on Level 1 or Level 2 pages
+- ✅ **Level 1:** Home only
+- ✅ **Level 2:** Home + Parent Level 1
 
 #### Glass Footer
 ```html
@@ -684,6 +900,108 @@ When simplifying dramatic animations:
 }
 /* Remove ::after with borderGlowSweep entirely */
 ```
+
+---
+
+## 🎨 Refactor Explanation Box Color System (STS Pages)
+
+**Purpose:** Standardized 3-color variation system for Problem/Fix/Result boxes across all Sharpen The Saw (STS) showcase pages.
+
+**Scope:** Security, SOLID, Code Quality, Performance, Testing, Documentation pages
+
+### Color Palette
+
+All STS pages use the same 3-color system for `.refactor-explanation` boxes:
+
+| Box | Label | Color | RGB | Usage |
+|-----|-------|-------|-----|-------|
+| **1st** | PROBLEM | Cyan/Blue | `rgba(0, 150, 199, 0.1)` | #00d4ff accent |
+| **2nd** | FIX | Green | `rgba(16, 185, 129, 0.1)` | #10b981 accent |
+| **3rd** | RESULT | Purple | `rgba(139, 92, 246, 0.1)` | #8b5cf6 accent |
+
+### Implementation Pattern
+
+**HTML Structure:**
+```html
+<div class="refactor-explanation">
+    <h4><i class="fas fa-lightbulb"></i> How This Was Refactored</h4>
+    <ul>
+        <li><strong>Problem:</strong> Description of the issue</li>
+        <li><strong>Fix:</strong> Solution approach</li>
+        <li><strong>Result:</strong> Outcome and benefits</li>
+    </ul>
+</div>
+```
+
+**CSS Implementation:**
+```css
+/* Box 1: Problem (Cyan) */
+.refactor-explanation li:nth-child(1) {
+    background: rgba(0, 150, 199, 0.1);
+    border: 1px solid rgba(0, 150, 199, 0.3);
+}
+
+.refactor-explanation li:nth-child(1):hover {
+    background: rgba(0, 150, 199, 0.15);
+    border-color: rgba(0, 150, 199, 0.5);
+    transform: translateY(-2px);
+}
+
+.refactor-explanation li:nth-child(1) strong {
+    color: #00d4ff;
+}
+
+/* Box 2: Fix (Green) */
+.refactor-explanation li:nth-child(2) {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.refactor-explanation li:nth-child(2):hover {
+    background: rgba(16, 185, 129, 0.15);
+    border-color: rgba(16, 185, 129, 0.5);
+    transform: translateY(-2px);
+}
+
+.refactor-explanation li:nth-child(2) strong {
+    color: #10b981;
+}
+
+/* Box 3: Result (Purple) */
+.refactor-explanation li:nth-child(3) {
+    background: rgba(139, 92, 246, 0.1);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.refactor-explanation li:nth-child(3):hover {
+    background: rgba(139, 92, 246, 0.15);
+    border-color: rgba(139, 92, 246, 0.5);
+    transform: translateY(-2px);
+}
+
+.refactor-explanation li:nth-child(3) strong {
+    color: #8b5cf6;
+}
+```
+
+### Design Principles
+
+1. **Consistency Across Pages:** Same 3 colors used on all STS pages (Security, SOLID, Code Quality, Performance, Testing, Docs)
+2. **Visual Hierarchy:** Color-coded boxes create clear Problem → Fix → Result flow
+3. **T1 Animations:** Subtle hover effects (lift + border glow) on all boxes
+4. **Accessibility:** High contrast ratios for text readability
+5. **Responsive:** 3-column grid on desktop, single column on mobile (<1024px)
+
+### Pages Using This System
+
+- `docs/sts/security.html` - Security vulnerabilities showcase
+- `docs/sts/solid.html` - SOLID principles showcase
+- `docs/sts/code-quality.html` - Code quality patterns
+- `docs/sts/performance.html` - Performance optimization
+- `docs/sts/testing.html` - Testing strategies
+- `docs/sts/documentation.html` - Documentation standards
+
+**File Location:** `docs/assets/css/sts.css` (lines 485-545)
 
 ---
 
@@ -1398,7 +1716,99 @@ document.querySelectorAll('.morph-card').forEach(card => {
 - **Security:** Treemap (vulnerabilities)
 - **Documentation:** Bar chart (doc coverage)
 
-### Pattern 11: Best Practices Guideline Cards
+---
+
+### Pattern 11: STS Refactor Explanation Cards (v4.0.3 - NEW)
+
+**Use Case:** Before/After code comparison sections in STS showcase pages  
+**Purpose:** Transform vertical bullet lists into horizontal card grids for better visual hierarchy
+
+**HTML Structure:**
+```html
+<div class="refactor-explanation">
+    <h4><i class="fas fa-lightbulb"></i> How This Was Refactored</h4>
+    <ul>
+        <li>
+            <strong>Vulnerability:</strong> String concatenation allows attackers to inject malicious SQL
+        </li>
+        <li>
+            <strong>Fix:</strong> Parameterized queries separate data from SQL commands
+        </li>
+        <li>
+            <strong>Result:</strong> User input is treated as data, never as executable code
+        </li>
+    </ul>
+</div>
+```
+
+**CSS Implementation (docs/assets/css/sts.css):**
+```css
+.refactor-explanation ul {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 0.75rem;
+}
+
+.refactor-explanation li {
+    padding: 1rem;
+    background: rgba(0, 212, 255, 0.05);
+    border: 1px solid rgba(0, 212, 255, 0.15);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.refactor-explanation li:hover {
+    background: rgba(0, 212, 255, 0.08);
+    border-color: rgba(0, 212, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.refactor-explanation li strong {
+    color: var(--sts-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+```
+
+**Responsive:** Single column on mobile (<1024px)
+
+---
+
+### Pattern 12: STS Code Panel Styling (v4.0.3 - NEW)
+
+**Use Case:** Before/After code comparison panels  
+**Purpose:** Retro console aesthetic with improved readability
+
+**Background Colors:**
+```css
+:root {
+    --sts-bg-primary: #1a1f3a;          /* Lightened from #0a0e27 */
+    --sts-bg-secondary: #2a2f4a;        /* Gradient midpoint */
+    --sts-glass-bg: rgba(36, 41, 68, 0.8);  /* Lighter glass panels */
+    --sts-code-bg: #0a0a0a;             /* Slightly lighter than #000 */
+}
+```
+
+**Code Font Styling:**
+```css
+.panel code {
+    font-family: 'Courier New', 'Courier', monospace;  /* Retro console */
+    font-size: 0.9375rem;        /* 15px - Increased by 15% */
+    line-height: 1.6;            /* Better spacing */
+    letter-spacing: 0.02em;      /* Clarity */
+}
+```
+
+**Design Principles:**
+- Retro console aesthetic (Courier New font)
+- 50% brighter background (#1a1f3a vs #0a0e27)
+- 15% larger font size (0.9375rem vs 0.8125rem)
+- Fixed C# badge duplication (removed ::before pseudo-elements)
+
+---
+
+### Pattern 13: Best Practices Guideline Cards
 
 **Use Cases:** 35 guidelines organized into 3 Level 2 pages
 
