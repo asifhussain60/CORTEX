@@ -3,760 +3,642 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Audit Logging - Comprehensive activity tracking, tamper-proof logs, and compliance monitoring">
+    <meta name="description" content="CORTEX Audit Logging - Comprehensive Activity Tracking, Event Correlation, and Compliance Reporting">
+    <meta name="keywords" content="CORTEX, audit logging, activity tracking, compliance, security events">
+    <meta name="author" content="Asif Hussain">
     <title>Audit Logging - CORTEX Security</title>
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo-64.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../assets/css/main.css?v=4.0.0">
-    <style>
-        /* ============================================
-           GLASSMORPHISM v4.0.0 - Level 1 View
-           Animation Tier: T1 (Subtle)
-           NO infinite animations
-           NO inline styles
-           ============================================ */
-        
-        :root {
-            --accent-primary: #00d4ff;
-            --accent-secondary: #0ea5e9;
-            --accent-tertiary: #06b6d4;
-            --bg-primary: #0a0e27;
-            --bg-secondary: #131835;
-            --bg-tertiary: #1a1f3e;
-            --text-primary: #ffffff;
-            --text-secondary: #a0aec0;
-            --text-muted: #64748b;
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --spacing-xs: 0.25rem;
-            --spacing-sm: 0.5rem;
-            --spacing-md: 1rem;
-            --spacing-lg: 1.5rem;
-            --spacing-xl: 2rem;
-            --spacing-2xl: 3rem;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
-            min-height: 100vh;
-            color: var(--text-primary);
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            line-height: 1.6;
-        }
-
-        /* ============================================
-           GLASS HEADER - Level 1 (NO LOGO)
-           ============================================ */
-        .glass-header {
-            background: rgba(10, 14, 39, 0.8);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 1rem 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .header-nav {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
-        }
-
-        .nav-link {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.2s ease;
-            cursor: pointer;
-        }
-
-        .nav-link:hover {
-            color: var(--accent-primary);
-        }
-
-        .nav-link i {
-            margin-right: 0.25rem;
-        }
-
-        /* ============================================
-           MAIN CONTENT
-           ============================================ */
-        .main-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: var(--spacing-2xl) var(--spacing-xl);
-        }
-
-        /* ============================================
-           PAGE HEADER
-           ============================================ */
-        .page-header {
-            text-align: center;
-            margin-bottom: var(--spacing-2xl);
-        }
-
-        .header-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto var(--spacing-lg);
-            font-size: 2.5rem;
-            box-shadow: 0 10px 40px rgba(0, 212, 255, 0.3);
-        }
-
-        .page-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: var(--spacing-md);
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .page-description {
-            color: var(--text-secondary);
-            font-size: 1.125rem;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        /* ============================================
-           GLASS CARDS - T1 Subtle
-           ============================================ */
-        .glass-card {
-            background: rgba(26, 31, 58, 0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: var(--spacing-xl);
-            margin-bottom: var(--spacing-xl);
-            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-            cursor: pointer;
-        }
-
-        .glass-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 212, 255, 0.15);
-            border-color: rgba(0, 212, 255, 0.3);
-        }
-
-        .glass-card-display {
-            background: rgba(26, 31, 58, 0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: var(--spacing-xl);
-            margin-bottom: var(--spacing-xl);
-            position: relative;
-            overflow: hidden;
-            cursor: default;
-        }
-
-        /* T1 Subtle: Static glass highlight (NO animation) */
-        .glass-card-display::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            pointer-events: none;
-        }
-
-        .section-title {
-            font-size: 1.75rem;
-            font-weight: 700;
-            margin-bottom: var(--spacing-lg);
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            color: var(--text-primary);
-        }
-
-        .section-title i {
-            color: var(--accent-primary);
-        }
-
-        .section-description {
-            color: var(--text-secondary);
-            margin-bottom: var(--spacing-lg);
-            line-height: 1.8;
-        }
-
-        /* ============================================
-           LOG CATEGORIES GRID
-           ============================================ */
-        .categories-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: var(--spacing-lg);
-            margin-bottom: var(--spacing-xl);
-        }
-
-        .category-card {
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(14, 165, 233, 0.1));
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: var(--spacing-lg);
-            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-            cursor: pointer;
-        }
-
-        .category-card:hover {
-            transform: translateY(-2px);
-            border-color: rgba(0, 212, 255, 0.3);
-            box-shadow: 0 8px 24px rgba(0, 212, 255, 0.2);
-        }
-
-        .category-icon {
-            font-size: 2rem;
-            margin-bottom: var(--spacing-md);
-            color: var(--accent-primary);
-        }
-
-        .category-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: var(--spacing-sm);
-            color: var(--text-primary);
-        }
-
-        .category-description {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            line-height: 1.6;
-        }
-
-        /* ============================================
-           METRICS GRID
-           ============================================ */
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: var(--spacing-md);
-            margin-bottom: var(--spacing-xl);
-        }
-
-        .metric-item {
-            background: rgba(0, 212, 255, 0.1);
-            border: 1px solid rgba(0, 212, 255, 0.2);
-            border-radius: 12px;
-            padding: var(--spacing-lg);
-            text-align: center;
-            transition: border-color 0.2s ease, background 0.2s ease;
-        }
-
-        .metric-item:hover {
-            border-color: rgba(0, 212, 255, 0.4);
-            background: rgba(0, 212, 255, 0.15);
-        }
-
-        .metric-item i {
-            color: var(--accent-primary);
-            font-size: 1.5rem;
-            margin-bottom: var(--spacing-sm);
-            display: block;
-        }
-
-        .metric-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--accent-primary);
-            margin-bottom: var(--spacing-xs);
-        }
-
-        .metric-label {
-            color: var(--text-muted);
-            font-size: 0.875rem;
-        }
-
-        /* ============================================
-           LOG ENTRY EXAMPLE
-           ============================================ */
-        .log-entries {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-md);
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .log-entry {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            padding: var(--spacing-md);
-            font-family: 'JetBrains Mono', 'Fira Code', monospace;
-            font-size: 0.8rem;
-        }
-
-        .log-entry .timestamp {
-            color: var(--text-muted);
-        }
-
-        .log-entry .level-info {
-            color: #4ade80;
-        }
-
-        .log-entry .level-warn {
-            color: #fbbf24;
-        }
-
-        .log-entry .level-error {
-            color: #f87171;
-        }
-
-        .log-entry .source {
-            color: var(--accent-primary);
-        }
-
-        .log-entry .message {
-            color: var(--text-primary);
-        }
-
-        /* ============================================
-           CODE EXAMPLE
-           ============================================ */
-        .code-block {
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: var(--spacing-lg);
-            overflow-x: auto;
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .code-block pre {
-            margin: 0;
-            font-family: 'JetBrains Mono', 'Fira Code', monospace;
-            font-size: 0.875rem;
-            line-height: 1.6;
-            color: var(--text-primary);
-        }
-
-        .code-header {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-sm);
-            margin-bottom: var(--spacing-md);
-            padding-bottom: var(--spacing-sm);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .code-header i {
-            color: var(--accent-primary);
-        }
-
-        .code-header span {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-        }
-
-        /* ============================================
-           BEST PRACTICES LIST
-           ============================================ */
-        .practices-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .practices-list li {
-            display: flex;
-            align-items: flex-start;
-            gap: var(--spacing-md);
-            padding: var(--spacing-md) 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .practices-list li:last-child {
-            border-bottom: none;
-        }
-
-        .practices-list i {
-            color: var(--accent-primary);
-            margin-top: 0.25rem;
-        }
-
-        .practices-list span {
-            color: var(--text-secondary);
-            line-height: 1.6;
-        }
-
-        /* ============================================
-           GLASS FOOTER
-           ============================================ */
-        .glass-footer {
-            background: rgba(10, 14, 39, 0.8);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 2rem;
-            margin-top: 4rem;
-        }
-
-        .footer-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .footer-copyright p {
-            color: var(--text-muted);
-            margin: 0;
-            font-size: 0.875rem;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 1.5rem;
-            align-items: center;
-        }
-
-        .footer-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            transition: color 0.2s ease;
-        }
-
-        .footer-links a:hover {
-            color: var(--accent-primary);
-        }
-
-        .footer-version {
-            color: var(--text-muted);
-            font-size: 0.75rem;
-            padding: 0.25rem 0.75rem;
-            background: rgba(0, 212, 255, 0.1);
-            border-radius: 12px;
-            border: 1px solid rgba(0, 212, 255, 0.2);
-        }
-
-        /* ============================================
-           RESPONSIVE DESIGN
-           ============================================ */
-        @media (max-width: 768px) {
-            .header-nav {
-                gap: 1rem;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            .nav-link span {
-                display: none;
-            }
-
-            .page-title {
-                font-size: 1.75rem;
-            }
-
-            .main-content {
-                padding: var(--spacing-lg);
-            }
-
-            .categories-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .metrics-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .footer-content {
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .page-header {
-                padding: var(--spacing-lg);
-            }
-
-            .header-icon {
-                width: 60px;
-                height: 60px;
-                font-size: 1.75rem;
-            }
-
-            .section-title {
-                font-size: 1.25rem;
-            }
-
-            .metrics-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
-    <!-- Glass Header (Level 1 - NO LOGO) -->
+    <!-- Glass Header (Level 1 - No Logo) -->
     <header class="glass-header">
         <div class="header-content">
             <nav class="header-nav">
-                <a href="../index.html" class="nav-link"><i class="fas fa-home"></i> <span>Home</span></a>
-                <a href="index.html" class="nav-link"><i class="fas fa-shield-halved"></i> <span>Security</span></a>
-                <a href="../architecture/index.html" class="nav-link"><i class="fas fa-brain"></i> <span>Architecture</span></a>
-                <a href="https://github.com/asifhussain60/CORTEX" class="nav-link" target="_blank"><i class="fab fa-github"></i></a>
+                <a href="../index.html" class="nav-link"><i class="fas fa-home"></i> Home</a>
+                <a href="index.html" class="nav-link"><i class="fas fa-shield-halved"></i> Security</a>
+                <a href="../documentation.html" class="nav-link"><i class="fas fa-book"></i> Documentation</a>
+                <a href="https://github.com/asifhussain60/CORTEX" class="nav-link" target="_blank">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
             </nav>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="main-content">
-        <!-- Page Header -->
-        <div class="page-header">
-            <div class="header-icon">
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <div class="hero-icon">
                 <i class="fas fa-clipboard-list"></i>
             </div>
-            <h1 class="page-title">Audit Logging</h1>
-            <p class="page-description">
-                Comprehensive activity tracking with tamper-proof logging, real-time monitoring, 
-                and compliance-ready audit trails for complete system visibility.
+            <h1 class="hero-title">Audit Logging</h1>
+            <p class="hero-subtitle">
+                Comprehensive activity tracking, event correlation, and tamper-proof audit trails to ensure 
+                security compliance and forensic readiness across CORTEX operations.
             </p>
         </div>
+    </section>
 
-        <!-- Overview Section -->
-        <section class="glass-card-display">
-            <h2 class="section-title">
-                <i class="fas fa-info-circle"></i>
-                Overview
-            </h2>
-            <p class="section-description">
-                Audit Logging provides comprehensive visibility into all system activities, capturing 
-                who did what, when, and where. CORTEX implements tamper-proof logging with cryptographic 
-                verification, ensuring audit trails meet regulatory requirements and enable forensic analysis 
-                when security incidents occur.
+    <!-- Main Content -->
+    <main class="content-section">
+        <!-- Audit Logging Architecture -->
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-project-diagram"></i>
+                <h2 class="card-title">Audit Logging Architecture</h2>
+            </div>
+            <p class="card-description">
+                Multi-tier logging architecture capturing security events, user activities, and system changes 
+                with immutable storage and real-time correlation.
             </p>
-        </section>
-
-        <!-- Log Categories -->
-        <section class="glass-card-display">
-            <h2 class="section-title">
-                <i class="fas fa-folder-tree"></i>
-                Log Categories
-            </h2>
-            <div class="categories-grid">
-                <div class="category-card">
-                    <div class="category-icon"><i class="fas fa-user-check"></i></div>
-                    <h3 class="category-title">Authentication Logs</h3>
-                    <p class="category-description">Track login attempts, MFA verification, session management, and identity verification events.</p>
-                </div>
-                <div class="category-card">
-                    <div class="category-icon"><i class="fas fa-door-open"></i></div>
-                    <h3 class="category-title">Access Control Logs</h3>
-                    <p class="category-description">Monitor permission checks, role assignments, and authorization decisions across resources.</p>
-                </div>
-                <div class="category-card">
-                    <div class="category-icon"><i class="fas fa-database"></i></div>
-                    <h3 class="category-title">Data Access Logs</h3>
-                    <p class="category-description">Record read, write, and delete operations on sensitive data with full context.</p>
-                </div>
-                <div class="category-card">
-                    <div class="category-icon"><i class="fas fa-cogs"></i></div>
-                    <h3 class="category-title">System Logs</h3>
-                    <p class="category-description">Capture configuration changes, service startups, and system-level events.</p>
-                </div>
-                <div class="category-card">
-                    <div class="category-icon"><i class="fas fa-exclamation-triangle"></i></div>
-                    <h3 class="category-title">Security Logs</h3>
-                    <p class="category-description">Document security-related events, threat detections, and incident responses.</p>
-                </div>
-                <div class="category-card">
-                    <div class="category-icon"><i class="fas fa-balance-scale"></i></div>
-                    <h3 class="category-title">Compliance Logs</h3>
-                    <p class="category-description">Generate audit-ready reports for regulatory requirements (SOC 2, GDPR, HIPAA).</p>
+            <div class="visualization-container">
+                <div class="mermaid">
+graph TB
+    subgraph "Event Sources"
+        APP[Application Layer]
+        API[API Gateway]
+        AUTH[Authentication Service]
+        DB[Database]
+        SYS[System Events]
+    end
+    
+    subgraph "Collection Layer"
+        AGG[Log Aggregator<br/>Fluentd/Logstash]
+        NORM[Event Normalizer]
+        ENRICH[Context Enricher]
+    end
+    
+    subgraph "Processing Layer"
+        CORR[Event Correlator]
+        DETECT[Anomaly Detector]
+        ALERT[Alert Engine]
+    end
+    
+    subgraph "Storage Layer"
+        HOT[(Hot Storage<br/>30 days)]
+        WARM[(Warm Storage<br/>1 year)]
+        COLD[(Cold Storage<br/>7 years)]
+        IMMUT[Immutable Ledger<br/>Blockchain]
+    end
+    
+    subgraph "Analysis Layer"
+        DASH[Security Dashboard]
+        SIEM[SIEM Integration]
+        REPORT[Compliance Reports]
+    end
+    
+    APP --> AGG
+    API --> AGG
+    AUTH --> AGG
+    DB --> AGG
+    SYS --> AGG
+    
+    AGG --> NORM
+    NORM --> ENRICH
+    ENRICH --> CORR
+    
+    CORR --> DETECT
+    DETECT --> ALERT
+    
+    CORR --> HOT
+    HOT --> WARM
+    WARM --> COLD
+    ENRICH --> IMMUT
+    
+    HOT --> DASH
+    WARM --> SIEM
+    COLD --> REPORT
+    IMMUT --> REPORT
+    
+    style AGG fill:#00d4ff,stroke:#fff,stroke-width:2px
+    style CORR fill:#7b61ff,stroke:#fff,stroke-width:2px
+    style IMMUT fill:#2ecc71,stroke:#fff,stroke-width:3px
+    style ALERT fill:#ff4757,stroke:#fff,stroke-width:2px
                 </div>
             </div>
-        </section>
+        </article>
 
-        <!-- Real-Time Metrics -->
-        <section class="glass-card-display">
-            <h2 class="section-title">
+        <!-- Event Timeline Visualization -->
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
                 <i class="fas fa-chart-line"></i>
-                Real-Time Metrics
-            </h2>
-            <div class="metrics-grid">
-                <div class="metric-item">
-                    <i class="fas fa-stream"></i>
-                    <div class="metric-value">1.2M</div>
-                    <div class="metric-label">Events/Day</div>
-                </div>
-                <div class="metric-item">
-                    <i class="fas fa-clock"></i>
-                    <div class="metric-value">&lt;50ms</div>
-                    <div class="metric-label">Ingestion Latency</div>
-                </div>
-                <div class="metric-item">
-                    <i class="fas fa-archive"></i>
-                    <div class="metric-value">365</div>
-                    <div class="metric-label">Days Retention</div>
-                </div>
-                <div class="metric-item">
-                    <i class="fas fa-shield-alt"></i>
-                    <div class="metric-value">100%</div>
-                    <div class="metric-label">Tamper-Proof</div>
+                <h2 class="card-title">Real-Time Event Timeline</h2>
+            </div>
+            <p class="card-description">
+                Interactive timeline showing recent security events with severity indicators and filtering controls.
+            </p>
+            <div class="visualization-container" id="event-timeline"></div>
+        </article>
+
+        <!-- Event Categories -->
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-layer-group"></i>
+                <h2 class="card-title">Audit Event Categories</h2>
+            </div>
+            <p class="card-description">
+                CORTEX captures eight critical event categories aligned with security frameworks and compliance requirements.
+            </p>
+            <div class="visualization-container">
+                <div class="mermaid">
+graph LR
+    subgraph "Event Categories"
+        AUTH_EV[🔐 Authentication<br/>Login/Logout/MFA]
+        AUTHZ_EV[🔑 Authorization<br/>Permission Checks]
+        DATA_EV[📊 Data Access<br/>CRUD Operations]
+        CONFIG_EV[⚙️ Configuration<br/>System Changes]
+        ADMIN_EV[👑 Administrative<br/>User Management]
+        SEC_EV[🛡️ Security Events<br/>Threats/Violations]
+        AUDIT_EV[📋 Compliance<br/>Policy Enforcement]
+        SYS_EV[🖥️ System Events<br/>Errors/Performance]
+    end
+    
+    AUTH_EV --> LOG[Audit Log<br/>Storage]
+    AUTHZ_EV --> LOG
+    DATA_EV --> LOG
+    CONFIG_EV --> LOG
+    ADMIN_EV --> LOG
+    SEC_EV --> LOG
+    AUDIT_EV --> LOG
+    SYS_EV --> LOG
+    
+    LOG --> RETENTION[Retention Policy<br/>7 Year Storage]
+    
+    style LOG fill:#7b61ff,stroke:#fff,stroke-width:3px
+    style RETENTION fill:#2ecc71,stroke:#fff,stroke-width:2px
                 </div>
             </div>
-        </section>
+        </article>
 
-        <!-- Sample Log Entries -->
-        <section class="glass-card-display">
-            <h2 class="section-title">
-                <i class="fas fa-file-alt"></i>
-                Sample Log Entries
-            </h2>
-            <div class="log-entries">
-                <div class="log-entry">
-                    <span class="timestamp">2026-01-01T10:23:45.123Z</span>
-                    <span class="level-info"> [INFO]</span>
-                    <span class="source"> [auth-service]</span>
-                    <span class="message"> User 'admin@cortex.io' authenticated successfully via MFA</span>
+        <!-- Event Distribution Chart -->
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-chart-pie"></i>
+                <h2 class="card-title">Event Distribution by Severity</h2>
+            </div>
+            <p class="card-description">
+                Real-time visualization of event volume across severity levels (last 24 hours).
+            </p>
+            <div class="visualization-container" id="severity-chart"></div>
+        </article>
+
+        <!-- Log Retention Policy -->
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-hourglass-half"></i>
+                <h2 class="card-title">Retention & Compliance Matrix</h2>
+            </div>
+            <div class="retention-grid">
+                <div class="retention-card">
+                    <div class="retention-icon">
+                        <i class="fas fa-fire"></i>
+                    </div>
+                    <h3 class="retention-title">Hot Storage</h3>
+                    <div class="retention-details">
+                        <p><strong>Duration:</strong> 30 days</p>
+                        <p><strong>Access:</strong> Real-time queries</p>
+                        <p><strong>Storage:</strong> SSD-based cluster</p>
+                        <p><strong>Use Case:</strong> Active investigations</p>
+                    </div>
                 </div>
-                <div class="log-entry">
-                    <span class="timestamp">2026-01-01T10:24:12.456Z</span>
-                    <span class="level-warn"> [WARN]</span>
-                    <span class="source"> [access-control]</span>
-                    <span class="message"> Permission denied: user 'dev@cortex.io' attempted admin action</span>
+                
+                <div class="retention-card">
+                    <div class="retention-icon">
+                        <i class="fas fa-temperature-high"></i>
+                    </div>
+                    <h3 class="retention-title">Warm Storage</h3>
+                    <div class="retention-details">
+                        <p><strong>Duration:</strong> 1 year</p>
+                        <p><strong>Access:</strong> Query in minutes</p>
+                        <p><strong>Storage:</strong> Object storage (S3)</p>
+                        <p><strong>Use Case:</strong> Compliance audits</p>
+                    </div>
                 </div>
-                <div class="log-entry">
-                    <span class="timestamp">2026-01-01T10:25:33.789Z</span>
-                    <span class="level-error"> [ERROR]</span>
-                    <span class="source"> [security]</span>
-                    <span class="message"> Multiple failed login attempts from IP 192.168.1.100 - account locked</span>
+                
+                <div class="retention-card">
+                    <div class="retention-icon">
+                        <i class="fas fa-snowflake"></i>
+                    </div>
+                    <h3 class="retention-title">Cold Storage</h3>
+                    <div class="retention-details">
+                        <p><strong>Duration:</strong> 7 years</p>
+                        <p><strong>Access:</strong> Restore in hours</p>
+                        <p><strong>Storage:</strong> Glacier/Archive</p>
+                        <p><strong>Use Case:</strong> Legal holds</p>
+                    </div>
+                </div>
+                
+                <div class="retention-card">
+                    <div class="retention-icon">
+                        <i class="fas fa-link"></i>
+                    </div>
+                    <h3 class="retention-title">Immutable Ledger</h3>
+                    <div class="retention-details">
+                        <p><strong>Duration:</strong> Permanent</p>
+                        <p><strong>Access:</strong> Verification only</p>
+                        <p><strong>Storage:</strong> Blockchain/WORM</p>
+                        <p><strong>Use Case:</strong> Tamper detection</p>
+                    </div>
                 </div>
             </div>
-        </section>
+        </article>
 
-        <!-- Code Example -->
-        <section class="glass-card-display">
-            <h2 class="section-title">
+        <!-- Audit Log Format -->
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-file-code"></i>
+                <h2 class="card-title">Structured Log Format (JSON)</h2>
+            </div>
+            <div class="code-example">
+                <h3 class="code-title">Standard Audit Event Schema</h3>
+                <pre><code class="language-json">{
+  "event_id": "evt_2026010112345678",
+  "timestamp": "2026-01-01T14:35:22.123Z",
+  "event_type": "authentication",
+  "event_category": "login_success",
+  "severity": "info",
+  "actor": {
+    "user_id": "usr_ah_12345",
+    "username": "asif.hussain",
+    "ip_address": "192.168.1.100",
+    "user_agent": "Mozilla/5.0...",
+    "session_id": "sess_abc123xyz"
+  },
+  "target": {
+    "resource_type": "cortex_api",
+    "resource_id": "api_v4_planning",
+    "action": "create_plan",
+    "result": "success"
+  },
+  "context": {
+    "mfa_used": true,
+    "mfa_method": "totp",
+    "location": {
+      "country": "US",
+      "city": "San Francisco",
+      "coordinates": [37.7749, -122.4194]
+    },
+    "device_fingerprint": "fp_device123"
+  },
+  "compliance": {
+    "gdpr_applicable": true,
+    "hipaa_applicable": false,
+    "pci_dss_applicable": false,
+    "retention_class": "standard"
+  },
+  "integrity": {
+    "hash": "sha256:abc123...",
+    "signature": "rsa:def456...",
+    "ledger_block": "block_789"
+  }
+}</code></pre>
+            </div>
+        </article>
+
+        <!-- Implementation Example -->
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
                 <i class="fas fa-code"></i>
-                Configuration Example
-            </h2>
-            <div class="code-block">
-                <div class="code-header">
-                    <i class="fas fa-file-code"></i>
-                    <span>audit-logging.yaml</span>
-                </div>
-                <pre><code>audit_logging:
-  enabled: true
-  
-  storage:
-    type: elasticsearch
-    index_pattern: cortex-audit-{yyyy.MM.dd}
-    retention_days: 365
-    
-  categories:
-    authentication:
-      enabled: true
-      level: INFO
-      include_mfa: true
-    access_control:
-      enabled: true
-      level: INFO
-      include_denials: true
-    data_access:
-      enabled: true
-      level: DEBUG
-      sensitive_fields_only: false
-    security:
-      enabled: true
-      level: WARN
-      
-  tamper_protection:
-    enabled: true
-    algorithm: SHA-256
-    chain_verification: true
-    
-  real_time:
-    streaming: true
-    alerts:
-      - type: failed_logins
-        threshold: 5
-        window: 5m
-      - type: privilege_escalation
-        notify: security-team</code></pre>
+                <h2 class="card-title">Audit Logger Implementation</h2>
             </div>
-        </section>
+            <div class="code-example">
+                <h3 class="code-title">Python Audit Logging Decorator</h3>
+                <pre><code class="language-python"># Python Audit Logging for CORTEX Operations
+from functools import wraps
+from cortex_brain.tier0.audit import AuditLogger
+import hashlib
+import json
 
-        <!-- Best Practices -->
-        <section class="glass-card-display">
-            <h2 class="section-title">
-                <i class="fas fa-lightbulb"></i>
-                Best Practices
-            </h2>
-            <ul class="practices-list">
-                <li>
-                    <i class="fas fa-check-circle"></i>
-                    <span>Implement tamper-proof logging with cryptographic hash chains for integrity verification</span>
-                </li>
-                <li>
-                    <i class="fas fa-check-circle"></i>
-                    <span>Log all authentication events including successful and failed attempts</span>
-                </li>
-                <li>
-                    <i class="fas fa-check-circle"></i>
-                    <span>Include sufficient context in each log entry (who, what, when, where, outcome)</span>
-                </li>
-                <li>
-                    <i class="fas fa-check-circle"></i>
-                    <span>Set appropriate retention periods based on compliance requirements</span>
-                </li>
-                <li>
-                    <i class="fas fa-check-circle"></i>
-                    <span>Enable real-time alerting for critical security events</span>
-                </li>
-                <li>
-                    <i class="fas fa-check-circle"></i>
-                    <span>Regularly review and audit log configurations for completeness</span>
-                </li>
-            </ul>
-        </section>
+audit_logger = AuditLogger()
+
+def audit_log(event_type: str, event_category: str, severity: str = 'info'):
+    """Decorator for automatic audit logging of function calls."""
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            # Capture function entry
+            event_data = {
+                'function': func.__name__,
+                'args': str(args),
+                'kwargs': str(kwargs),
+                'user': get_current_user(),
+                'timestamp': datetime.utcnow().isoformat()
+            }
+            
+            try:
+                # Execute function
+                result = func(*args, **kwargs)
+                
+                # Log success event
+                audit_logger.log_event(
+                    event_type=event_type,
+                    event_category=event_category,
+                    severity=severity,
+                    actor=event_data['user'],
+                    result='success',
+                    context=event_data
+                )
+                
+                return result
+                
+            except Exception as e:
+                # Log failure event
+                audit_logger.log_event(
+                    event_type=event_type,
+                    event_category=f"{event_category}_failed",
+                    severity='error',
+                    actor=event_data['user'],
+                    result='failure',
+                    error=str(e),
+                    context=event_data
+                )
+                raise
+        
+        return wrapper
+    return decorator
+
+# Usage Examples
+@audit_log('administrative', 'user_deletion', 'warning')
+def delete_user(user_id: str):
+    """Delete user account (audited)."""
+    # Implementation
+    pass
+
+@audit_log('data_access', 'sensitive_query', 'info')
+def query_customer_data(customer_id: str):
+    """Query customer PII (audited)."""
+    # Implementation
+    pass
+
+@audit_log('configuration', 'security_change', 'critical')
+def update_security_policy(policy_id: str, changes: dict):
+    """Update security policy (audited)."""
+    # Implementation
+    pass</code></pre>
+            </div>
+        </article>
+
+        <!-- Quick Links -->
+        <article class="glass-card-clickable animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-link"></i>
+                <h2 class="card-title">Related Security Topics</h2>
+            </div>
+            <div class="quick-links-grid">
+                <a href="access-control.html" class="quick-link-item">
+                    <i class="fas fa-lock"></i>
+                    <span>Access Control</span>
+                </a>
+                <a href="data-protection.html" class="quick-link-item">
+                    <i class="fas fa-database"></i>
+                    <span>Data Protection</span>
+                </a>
+                <a href="incident-response.html" class="quick-link-item">
+                    <i class="fas fa-fire-extinguisher"></i>
+                    <span>Incident Response</span>
+                </a>
+                <a href="compliance.html" class="quick-link-item">
+                    <i class="fas fa-certificate"></i>
+                    <span>Compliance Standards</span>
+                </a>
+            </div>
+        </article>
     </main>
 
     <!-- Glass Footer -->
     <footer class="glass-footer">
         <div class="footer-content">
-            <div class="footer-copyright">
-                <p>© 2025 Asif Hussain. All rights reserved.</p>
+            <div class="footer-section">
+                <p class="footer-copyright">© 2026 Asif Hussain. All rights reserved.</p>
             </div>
-            <div class="footer-links">
-                <a href="https://github.com/asifhussain60/CORTEX" target="_blank">
-                    <i class="fab fa-github"></i> GitHub
-                </a>
-                <a href="https://asifhussain60.github.io/CORTEX/" target="_blank">
-                    <i class="fas fa-globe"></i> Website
-                </a>
-                <span class="footer-version">CORTEX v4.0</span>
+            <div class="footer-section">
+                <a href="../index.html" class="footer-link">Home</a>
+                <a href="index.html" class="footer-link">Security Hub</a>
+                <a href="../documentation.html" class="footer-link">Documentation</a>
+                <a href="https://github.com/asifhussain60/CORTEX" class="footer-link" target="_blank">GitHub</a>
+            </div>
+            <div class="footer-section">
+                <p class="footer-version">CORTEX v4.0.0</p>
             </div>
         </div>
     </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#7b61ff',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#fff',
+                lineColor: '#00d4ff',
+                secondaryColor: '#00d4ff',
+                tertiaryColor: '#ff6b9d'
+            },
+            startOnLoad: true,
+            securityLevel: 'loose'
+        });
+
+        // D3.js Event Timeline
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sample event data (last 24 hours)
+            const now = new Date();
+            const events = [
+                {time: new Date(now - 2*60*60*1000), type: 'Authentication', severity: 'info', message: 'User login successful'},
+                {time: new Date(now - 4*60*60*1000), type: 'Authorization', severity: 'warning', message: 'Permission denied attempt'},
+                {time: new Date(now - 6*60*60*1000), type: 'Data Access', severity: 'info', message: 'Query customer records'},
+                {time: new Date(now - 8*60*60*1000), type: 'Configuration', severity: 'critical', message: 'Security policy updated'},
+                {time: new Date(now - 10*60*60*1000), type: 'Security Event', severity: 'error', message: 'Failed login attempts (x5)'},
+                {time: new Date(now - 12*60*60*1000), type: 'Administrative', severity: 'warning', message: 'User role modified'},
+                {time: new Date(now - 14*60*60*1000), type: 'Authentication', severity: 'info', message: 'MFA verification success'},
+                {time: new Date(now - 16*60*60*1000), type: 'Data Access', severity: 'info', message: 'Export compliance report'}
+            ];
+
+            const severityColors = {
+                'info': '#00d4ff',
+                'warning': '#ffb84d',
+                'error': '#ff6b9d',
+                'critical': '#ff4757'
+            };
+
+            const margin = {top: 40, right: 40, bottom: 60, left: 40};
+            const width = 900 - margin.left - margin.right;
+            const height = 300 - margin.top - margin.bottom;
+
+            const svg = d3.select('#event-timeline')
+                .append('svg')
+                .attr('width', '100%')
+                .attr('height', height + margin.top + margin.bottom)
+                .attr('viewBox', `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
+                .append('g')
+                .attr('transform', `translate(${margin.left},${margin.top})`);
+
+            const x = d3.scaleTime()
+                .domain(d3.extent(events, d => d.time))
+                .range([0, width]);
+
+            const y = d3.scalePoint()
+                .domain(['critical', 'error', 'warning', 'info'])
+                .range([0, height])
+                .padding(0.5);
+
+            // Add X axis
+            svg.append('g')
+                .attr('transform', `translate(0,${height})`)
+                .call(d3.axisBottom(x).ticks(6).tickFormat(d3.timeFormat('%H:%M')))
+                .attr('color', '#fff')
+                .selectAll('text')
+                .attr('fill', '#fff');
+
+            // Add Y axis
+            svg.append('g')
+                .call(d3.axisLeft(y))
+                .attr('color', '#fff')
+                .selectAll('text')
+                .attr('fill', '#fff')
+                .attr('font-weight', 'bold');
+
+            // Add timeline line
+            svg.append('line')
+                .attr('x1', 0)
+                .attr('y1', height / 2)
+                .attr('x2', width)
+                .attr('y2', height / 2)
+                .attr('stroke', 'rgba(255, 255, 255, 0.1)')
+                .attr('stroke-width', 2);
+
+            // Add events
+            svg.selectAll('.event')
+                .data(events)
+                .enter()
+                .append('circle')
+                .attr('class', 'event animation-t1')
+                .attr('cx', d => x(d.time))
+                .attr('cy', d => y(d.severity))
+                .attr('r', 6)
+                .attr('fill', d => severityColors[d.severity])
+                .attr('opacity', 0.8)
+                .on('mouseover', function(event, d) {
+                    d3.select(this)
+                        .transition()
+                        .duration(200)
+                        .attr('r', 10)
+                        .attr('opacity', 1);
+                    
+                    tooltip.style('opacity', 1)
+                        .html(`<strong>${d.type}</strong><br/>${d.message}<br/><em>${d.time.toLocaleTimeString()}</em>`);
+                })
+                .on('mousemove', function(event) {
+                    tooltip
+                        .style('left', (event.pageX + 15) + 'px')
+                        .style('top', (event.pageY - 15) + 'px');
+                })
+                .on('mouseout', function() {
+                    d3.select(this)
+                        .transition()
+                        .duration(200)
+                        .attr('r', 6)
+                        .attr('opacity', 0.8);
+                    
+                    tooltip.style('opacity', 0);
+                });
+
+            // D3.js Severity Distribution Pie Chart
+            const severityData = [
+                {severity: 'Info', count: 42, color: '#00d4ff'},
+                {severity: 'Warning', count: 18, color: '#ffb84d'},
+                {severity: 'Error', count: 7, color: '#ff6b9d'},
+                {severity: 'Critical', count: 3, color: '#ff4757'}
+            ];
+
+            const pieWidth = 400;
+            const pieHeight = 400;
+            const radius = Math.min(pieWidth, pieHeight) / 2 - 40;
+
+            const pieSvg = d3.select('#severity-chart')
+                .append('svg')
+                .attr('width', '100%')
+                .attr('height', pieHeight)
+                .attr('viewBox', `0 0 ${pieWidth} ${pieHeight}`)
+                .append('g')
+                .attr('transform', `translate(${pieWidth / 2},${pieHeight / 2})`);
+
+            const pie = d3.pie()
+                .value(d => d.count)
+                .sort(null);
+
+            const arc = d3.arc()
+                .innerRadius(radius * 0.5)
+                .outerRadius(radius);
+
+            const arcs = pieSvg.selectAll('.arc')
+                .data(pie(severityData))
+                .enter()
+                .append('g')
+                .attr('class', 'arc animation-t1');
+
+            arcs.append('path')
+                .attr('d', arc)
+                .attr('fill', d => d.data.color)
+                .attr('opacity', 0.8)
+                .on('mouseover', function(event, d) {
+                    d3.select(this)
+                        .transition()
+                        .duration(200)
+                        .attr('opacity', 1)
+                        .attr('transform', function(d) {
+                            const [x, y] = arc.centroid(d);
+                            return `translate(${x * 0.1}, ${y * 0.1})`;
+                        });
+                    
+                    tooltip.style('opacity', 1)
+                        .html(`<strong>${d.data.severity}</strong><br/>${d.data.count} events<br/><em>${Math.round(d.data.count / 70 * 100)}%</em>`);
+                })
+                .on('mousemove', function(event) {
+                    tooltip
+                        .style('left', (event.pageX + 15) + 'px')
+                        .style('top', (event.pageY - 15) + 'px');
+                })
+                .on('mouseout', function() {
+                    d3.select(this)
+                        .transition()
+                        .duration(200)
+                        .attr('opacity', 0.8)
+                        .attr('transform', 'translate(0, 0)');
+                    
+                    tooltip.style('opacity', 0);
+                });
+
+            // Add labels
+            arcs.append('text')
+                .attr('transform', d => `translate(${arc.centroid(d)})`)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#fff')
+                .attr('font-size', '14px')
+                .attr('font-weight', 'bold')
+                .text(d => d.data.count);
+
+            // Tooltip
+            const tooltip = d3.select('body')
+                .append('div')
+                .attr('class', 'visualization-tooltip')
+                .style('opacity', 0);
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
 </body>
 </html>
