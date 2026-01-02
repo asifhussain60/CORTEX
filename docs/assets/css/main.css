@@ -4845,6 +4845,11 @@ footer,
     margin-bottom: 1rem;
 }
 
+/* Hidden demo content (JS-controlled visibility) */
+.demo-info-content.hidden {
+    display: none;
+}
+
 /* Video Area */
 .demo-video-area {
     display: flex;
