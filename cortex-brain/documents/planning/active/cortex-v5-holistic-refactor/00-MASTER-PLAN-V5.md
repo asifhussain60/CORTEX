@@ -2802,7 +2802,7 @@ Assessment plan should include a "Discussion Required" section for TDD-Master or
 2. **ADO Orchestrator v2** (6 days) - Work item generation + wizard integration
 3. **Vacuum Orchestrator v2** (5 days) - Filesystem operations
 4. **Cleanup Orchestrator v2** (4 days) - Cache management
-5. **TDD Orchestrator Assessment** (3 days) - **⚠️ DISCUSSION REQUIRED:** Evaluate autonomous conversion strategy with stakeholder input before enhancement
+5. **TDD Orchestrator v2 Migration** (4 days) - **✅ APPROVED:** Autonomous conversion with Master Orch integration
 6. **Debug Orchestrator Assessment** (2 days) - Evaluate autonomous conversion
 7. **Sanitization Orchestrator** (2 days) - Evaluate and migrate if beneficial
 8. **Refinement Orchestrator** (2 days) - Evaluate and migrate if beneficial
@@ -2881,25 +2881,41 @@ Assessment plan should include a "Discussion Required" section for TDD-Master or
 **Duration:** 9 days  
 **Plan Reference:** `guided-orchestrators-assessment/00-master-plan.md`
 
-**⚠️ IMPORTANT: TDD-Master Orchestrator Discussion Required**
+**✅ TDD-Master Orchestrator Decision: APPROVED FOR AUTONOMOUS CONVERSION**
 
-Before proceeding with TDD Orchestrator enhancement, a design discussion is required to determine:
-- Autonomous vs GUIDED architecture decision
-- Integration with existing TDD workflows
-- Master Orchestrator routing strategy
-- Test execution framework requirements
-- RED→GREEN→REFACTOR enforcement mechanisms
+**Decision Date:** January 2, 2026  
+**Decision:** Convert TDD Orchestrator to AUTONOMOUS (v2) with Master Orchestrator integration
 
-**Action:** Schedule design review session when Task 6.4 begins (after Tasks 6.1-6.3 complete)
+**Rationale:**
+- ✅ **State Management:** Multi-phase TDD cycle (RED→GREEN→REFACTOR) requires transactional state tracking
+- ✅ **Test Execution:** Python-native test framework integration (pytest, unittest) more robust than tool calls
+- ✅ **Rollback Capability:** REFACTOR phase failures need atomic rollback to GREEN state
+- ✅ **Master Orchestrator Integration:** Pattern-based routing (`^(tdd|start tdd|run tests)$`)
+- ✅ **Coverage Tracking:** Automated coverage.py integration with database persistence
+- ✅ **SKULL Enforcement:** Programmatic RED→GREEN→REFACTOR validation (no manual checks)
 
-**Decision Criteria:**
-- Complexity of operations (AST parsing, complex analysis → autonomous)
-- Workflow simplicity (tool call sequences → remain guided)
-- State management needs (multi-phase rollback → autonomous)
-- User interaction requirements (approval workflows → guided)
+**Architecture Decision:**
+- **Primary:** AUTONOMOUS execution with Python test runners
+- **State Persistence:** PlanningStateDB tracks phase progression (RED/GREEN/REFACTOR)
+- **Lifecycle Hooks:** Pre-execution (validate test files), Post-execution (coverage report)
+- **User Interaction:** Approval gates after GREEN phase (optional, configurable)
+
+**Migration Plan:** To be generated via Planning v5 (`/CORTEX Plan TDD Orchestrator v2 Migration`)
+
+**Estimated Effort:** 4 days
+- Day 1: Core TDDOrchestratorV2 + test runner abstraction
+- Day 2: RED→GREEN phase automation + state tracking
+- Day 3: REFACTOR phase automation + code quality metrics
+- Day 4: Master Orch integration + 100% test coverage
+
+**Decision Criteria Applied:**
+- ✅ Complexity of operations: HIGH (test execution, coverage analysis) → autonomous
+- ✅ Workflow simplicity: MEDIUM (3-phase cycle benefits from state machine) → autonomous
+- ✅ State management needs: HIGH (multi-phase rollback required) → autonomous
+- ✅ User interaction requirements: LOW (optional approval gates) → autonomous compatible
 
 **Likely Outcomes:**
-- **TDD Mastery:** **🔴 DISCUSS FIRST** - Architecture decision required before enhancement (autonomous vs guided trade-offs)
+- **TDD Mastery:** **✅ APPROVED FOR AUTONOMOUS** - Decision recorded January 2, 2026 (4 days effort)
 - **Debug Orchestrator:** Convert to AUTONOMOUS (complex marker injection)
 - **Sanitization:** Convert to AUTONOMOUS (5-phase transformation needs transactions)
 - **Refinement:** Remain GUIDED (analysis phases benefit from tool call sequences)
@@ -2919,6 +2935,65 @@ For orchestrators remaining GUIDED:
 - CORTEX follows manifest instructions (existing behavior preserved)
 
 **By end of Phase 6, Master Orchestrator handles ALL orchestrators (AUTONOMOUS + GUIDED routing)**
+
+### Task 6.5: TDD Orchestrator v2 Migration (NEW - APPROVED)
+**Duration:** 4 days  
+**Plan Reference:** To be generated via `/CORTEX Plan TDD Orchestrator v2 Migration`  
+**Status:** ✅ Approved January 2, 2026
+
+**Key Deliverables:**
+- Pure Python test runner abstraction (pytest, unittest)
+- RED→GREEN→REFACTOR state machine with database tracking
+- Coverage.py integration with automated reporting
+- Code quality metrics for REFACTOR phase validation
+- Atomic rollback (REFACTOR failure → revert to GREEN state)
+- Master Orchestrator routing integration
+- 100% test coverage
+
+**Implementation Phases:**
+1. **Phase 0:** Core TDDOrchestratorV2 + TestRunnerAbstraction (pytest/unittest adapters)
+2. **Phase 1:** RED phase automation (run tests, verify failures, record baseline)
+3. **Phase 2:** GREEN phase automation (run tests, verify passes, checkpoint state)
+4. **Phase 3:** REFACTOR phase automation (code quality check, coverage ≥80%, rollback on failure)
+5. **Phase 4:** Master Orch integration + CORTEX.prompt.md update
+
+**🔴 ACTIVATION STEP (Day 4):**
+1. Add TDD v2 patterns to `master-orchestrator.yaml`:
+   ```yaml
+   - pattern: "^(tdd|start tdd|run tests).*$"
+     orchestrator: tdd_orchestrator_v2
+     confidence: 1.0
+     match_type: regex
+     priority: 25
+     metadata:
+       description: "TDD Mastery v2 (RED→GREEN→REFACTOR)"
+       autonomous: true
+   ```
+2. Register TDD v2 in OrchestratorRegistry
+3. Update CORTEX.prompt.md Intent Router: `tdd [x]` → 🛡️ **TDD Mastery v2 (AUTONOMOUS)**
+4. Test: "start tdd" → Master Orch routes → TDD v2 executes
+5. **Master Orchestrator now handles: Planning v5 + ADO v2 + Vacuum v2 + Cleanup v2 + TDD v2**
+
+**SKULL Enforcement:**
+- TDD_ENFORCEMENT: Programmatic RED→GREEN→REFACTOR validation (tests must fail before implementation)
+- HOLISTIC_DISCOVERY: Search for existing test files before creating new ones
+- REFACTOR_CLEANUP: Automated code quality checks (cyclomatic complexity, duplication)
+
+**State Database Integration:**
+```sql
+-- TDD session state tracking
+CREATE TABLE tdd_sessions (
+  session_id TEXT PRIMARY KEY,
+  phase TEXT CHECK(phase IN ('RED', 'GREEN', 'REFACTOR')),
+  test_file TEXT NOT NULL,
+  implementation_file TEXT,
+  coverage_baseline REAL,
+  coverage_current REAL,
+  rollback_checkpoint TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
 
 ### Completion Criteria
 - ✅ All orchestrators migrated per generated plans
