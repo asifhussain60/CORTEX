@@ -37,6 +37,34 @@ CREATE INDEX IF NOT EXISTS idx_rules_severity ON tier0_rules(severity);
 -- FIFO Queue: When conversation #21 starts, #1 gets deleted
 -- Performance: <100ms read for active conversation + recent 19
 
+-- Active Projects: Track ongoing planning sessions for project-level continuations
+CREATE TABLE IF NOT EXISTS tier1_active_projects (
+    project_id TEXT PRIMARY KEY,           -- e.g., "cortex-v5-holistic-refactor"
+    plan_name TEXT NOT NULL,               -- Human-readable plan name
+    plan_path TEXT NOT NULL,               -- Path to planning folder
+    current_phase TEXT,                    -- e.g., "Phase 5", "Phase 5.1a"
+    current_task TEXT,                     -- e.g., "Task 5.1", "Task 5.1a"
+    last_completed TEXT,                   -- Last completed phase/task
+    status TEXT NOT NULL DEFAULT 'active', -- "active", "paused", "complete"
+    progress_percentage INTEGER DEFAULT 0, -- Overall progress (0-100)
+    
+    -- Timestamps
+    created_at TEXT NOT NULL DEFAULT (datetime('now')),
+    last_updated TEXT NOT NULL DEFAULT (datetime('now')),
+    completed_at TEXT,                     -- When project completed
+    
+    -- Metadata for context injection
+    next_action TEXT,                      -- Next recommended action/command
+    artifacts_path TEXT,                   -- JSON array of key artifact paths
+    orchestrator_used TEXT,                -- Last orchestrator that updated this project
+    
+    CHECK (status IN ('active', 'paused', 'complete')),
+    CHECK (progress_percentage >= 0 AND progress_percentage <= 100)
+);
+
+CREATE INDEX IF NOT EXISTS idx_active_projects_status ON tier1_active_projects(status);
+CREATE INDEX IF NOT EXISTS idx_active_projects_updated ON tier1_active_projects(last_updated DESC);
+
 -- Conversations: Top-level conversation metadata
 CREATE TABLE IF NOT EXISTS tier1_conversations (
     conversation_id TEXT PRIMARY KEY,      -- UUID for each conversation

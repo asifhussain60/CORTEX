@@ -200,46 +200,95 @@ When Planning System is engaged (🛡️), `00-master-plan.md` MUST include:
 
 ## 🔗 Cross-Session Context Awareness
 
-**Status:** ✅ ACTIVE (Phase 4.5) - Master Orchestrator integrated with Tier 1 Working Memory
+**Status:** ✅ ACTIVE (Phase 4.5 + Option B) - Master Orchestrator integrated with Tier 1 Working Memory + Project Tracking
+
+**Two-Tier Continuation System:**
+
+### Tier 1: Orchestrator Session Continuation (High Priority)
+For short-term work resumption (TDD, Debug, ADO sessions).
 
 **How It Works:**
 1. User says "continue", "resume", "keep going", or "next phase"
 2. `CrossSessionContextMiddleware` detects continuation pattern
-3. Queries Tier 1 for last 3 session metadata (orchestrator_used, intent, artifacts)
-4. Injects <200 tokens of lightweight context into routing request
+3. Queries Tier 1 for last 3 orchestrator session metadata
+4. Injects <200 tokens of lightweight context
 5. Master Orchestrator routes to last-used orchestrator automatically
 
 **Example Flow:**
 ```
-Session 1: User says "plan user authentication" → Planning v5 executes
+Session 1: User says "run tests for auth module" → TDD Master executes
            → Session metadata recorded in Tier 1
 
 Session 2: User says "continue" → Middleware queries Tier 1
-           → Finds last orchestrator: planning_v5
-           → Master Orchestrator routes to Planning v5
-           → Resumes plan execution
+           → Finds last orchestrator: tdd_master
+           → Master Orchestrator routes to TDD Master
+           → Resumes test execution
 ```
 
-**Context Injected (Lightweight):**
+**Context Injected:**
 ```json
 {
-  "recent_activity": [
-    {
-      "session_id": "session-20260102-101500",
-      "orchestrator": "planning_v5",
-      "intent": "plan user authentication",
-      "artifacts": ["plan-001", "00-master-plan.md"],
-      "timestamp": "2026-01-02T10:15:00Z"
-    }
-  ],
+  "recent_activity": [{
+    "session_id": "session-20260102-101500",
+    "orchestrator": "tdd_master",
+    "intent": "run tests for auth module",
+    "artifacts": ["test_results.json"],
+    "timestamp": "2026-01-02T10:15:00Z"
+  }],
   "continuation_detected": true,
+  "continuation_type": "orchestrator_session",
   "context_source": "tier1_working_memory"
 }
 ```
 
-**Token Efficiency:** 200 tokens (metadata) vs 50,000 tokens (full conversation text) = **99.6% reduction**
+### Tier 2: Project-Level Continuation (Fallback)
+For long-term planning work resumption when no active orchestrator session.
 
-**Orchestrators Tracked:** All orchestrators (Planning, ADO, Vacuum, Cleanup, TDD, Debug, etc.)
+**How It Works:**
+1. User says "continue" (no active orchestrator session found)
+2. Middleware queries Tier 1 for active planning project
+3. Retrieves lightweight project context (<200 tokens)
+4. Master Orchestrator routes to Planning Orchestrator v5
+5. Planning resumes from last completed phase/task
+
+**Example Flow:**
+```
+Session 1: User completes "Phase 5.1a: ADO Wizard Enhancement"
+           → Planning Orchestrator writes project state to Tier 1
+           → Project: cortex-v5-refactor, progress: 40%, next: Task 5.1
+
+Session 2 (hours later): User says "continue" → Middleware finds:
+           → No recent orchestrator session
+           → Active project: cortex-v5-refactor (40% complete)
+           → Routes to Planning v5 with project context
+           → Planning resumes at Task 5.1
+```
+
+**Context Injected:**
+```json
+{
+  "active_project": {
+    "project_id": "cortex-v5-holistic-refactor",
+    "plan_name": "CORTEX v5 Holistic Refactor",
+    "current_phase": "Phase 5",
+    "current_task": "Task 5.1",
+    "last_completed": "Phase 5.1a",
+    "progress": 40,
+    "next_action": "/CORTEX Plan ADO Orchestrator v2 Migration",
+    "orchestrator": "planning_v5"
+  },
+  "continuation_detected": true,
+  "continuation_type": "active_project",
+  "context_source": "tier1_project_tracker"
+}
+```
+
+**Priority Logic:**
+- Orchestrator sessions (Tier 1) override project context (Tier 2)
+- If both exist, orchestrator session wins
+- Token Efficiency: 200 tokens (metadata) vs 50,000 tokens (full conversation) = **99.6% reduction**
+
+**Orchestrators Tracked:** All orchestrators (Planning, ADO, Vacuum, Cleanup, TDD, Debug, Sanitization, Refinement)
 
 ---
 
