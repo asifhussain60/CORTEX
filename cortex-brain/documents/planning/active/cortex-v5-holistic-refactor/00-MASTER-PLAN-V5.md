@@ -431,8 +431,8 @@ cortex-brain/templates/
     └── footer.jinja2
 ```
 
-### Task 3.3: Progress Tracking
-**Duration:** 4h
+### Task 3.3: Progress Tracking + Session Management
+**Duration:** 6h
 
 **Implementation:**
 - Real-time progress updates to database
@@ -440,6 +440,86 @@ cortex-brain/templates/
 - Percentage calculations across phases
 - Estimated vs actual time tracking
 - Status change notifications
+- **Session continuation prompt generation (NEW)**
+- **Token usage monitoring (NEW)**
+
+**Session Management Features:**
+
+```python
+class BaseOrchestratorV4_1:
+    # ... existing methods ...
+    
+    def update_continuation_prompt(self, phase_id: str) -> None:
+        """Update CONTINUATION-PROMPT.md after phase completion."""
+        plan_state = self.state_db.get_plan_status(self.plan_id)
+        context = {
+            'plan_name': plan_state['name'],
+            'timestamp': datetime.now().isoformat(),
+            'completed_phases': plan_state['completed_phases'],
+            'total_phases': plan_state['total_phases'],
+            'progress_percentage': plan_state['progress_percentage'],
+            'current_phase': plan_state['current_phase'],
+            'next_phase': plan_state['next_phase'],
+            'checkpoints': self._get_git_checkpoints(),
+            'plan_id': self.plan_id,
+            'database_status': plan_state['status'],
+            'last_checkpoint_commit': self._get_last_checkpoint()
+        }
+        
+        prompt_content = self.render_template(
+            'continuation-prompt.jinja2', 
+            context
+        )
+        
+        prompt_path = f"{self.plan_dir}/tracking/CONTINUATION-PROMPT.md"
+        with open(prompt_path, 'w') as f:
+            f.write(prompt_content)
+    
+    def check_token_usage(self) -> dict:
+        """Monitor conversation token usage (requires Copilot API access)."""
+        # NOTE: This requires Copilot Chat API integration
+        # For now, returns estimated usage based on phase count
+        return {
+            'estimated_tokens': self._estimate_tokens(),
+            'threshold': 80000,
+            'should_warn': self._estimate_tokens() > 80000,
+            'continuation_prompt_path': f"{self.plan_dir}/tracking/CONTINUATION-PROMPT.md"
+        }
+    
+    def _estimate_tokens(self) -> int:
+        """Rough token estimation based on conversation length."""
+        # Heuristic: ~1000 tokens per phase interaction
+        completed_phases = self.state_db.get_completed_phase_count(self.plan_id)
+        return completed_phases * 1000
+```
+
+**Automation Strategy:**
+
+1. **Automatic Generation:** 
+   - `update_continuation_prompt()` called after each phase completion
+   - Triggered in `complete_phase()` method
+   - File always up-to-date for session handoff
+
+2. **Token Monitoring:**
+   - **Current Limitation:** Copilot Chat doesn't expose token usage via API
+   - **Phase 7 Enhancement:** Integrate with Copilot Chat API if available
+   - **Fallback:** Manual monitoring via phase count heuristic
+   - **User Warning:** Display prompt path when estimated tokens > 80k
+
+3. **Manual Handoff (Phase 4-6):**
+   ```python
+   # In phase completion
+   self.update_continuation_prompt(phase_id)
+   if self.check_token_usage()['should_warn']:
+       print(f"⚠️ Token limit approaching. Use continuation prompt:")
+       print(f"   {self.plan_dir}/tracking/CONTINUATION-PROMPT.md")
+   ```
+
+4. **Future Automation (Phase 7+):**
+   - Research Copilot Chat Extensions API
+   - Implement token usage subscription
+   - Auto-display continuation prompt at 80% threshold
+   - Potential: Auto-create new chat window with continuation prompt
 
 ### Task 3.4: Master Orchestrator Core
 **Duration:** 1 day (NEW)
@@ -698,6 +778,9 @@ folder_structure:
     - "artifacts"
     - "reports"
     - "tracking"
+  required_files:
+    - "tracking/progress-tracker.json"
+    - "tracking/CONTINUATION-PROMPT.md"  # Session handoff for token limit
 
 context_discovery:
   search_patterns:
@@ -718,10 +801,18 @@ validation:
     - "00-master-plan.md"
     - "README.md"
     - "tracking/progress-tracker.json"
+    - "tracking/CONTINUATION-PROMPT.md"  # Session handoff
   required_sections:
     - "Visual Progress Tracker"
     - "Executive Summary"
     - "Implementation Phases"
+
+session_management:
+  continuation_prompt:
+    enabled: true
+    update_frequency: "after_each_phase"
+    template: "templates/planning/continuation-prompt.jinja2"
+    token_warning_threshold: 80000  # Warn at 80% of typical limit
 ```
 
 **Zero Natural Language:** Only data structures, no commands.
@@ -734,6 +825,7 @@ validation:
 - `cortex-brain/templates/planning/progress-tracker.json.jinja2`
 - `cortex-brain/templates/planning/README.md.jinja2`
 - `cortex-brain/templates/planning/context-summary.md.jinja2`
+- `cortex-brain/templates/planning/continuation-prompt.jinja2` **(NEW - Session handoff)**
 
 **Template Features:**
 - Dynamic progress bar generation
@@ -741,6 +833,91 @@ validation:
 - Automatic timestamp insertion
 - Context data injection
 - Cross-reference generation
+
+**Continuation Prompt Template Structure:**
+```jinja2
+# 🔄 CORTEX Plan Continuation Prompt
+
+**Plan:** {{ plan_name }}
+**Last Updated:** {{ timestamp }}
+**Progress:** {{ completed_phases }}/{{ total_phases }} phases ({{ progress_percentage }}%)
+**Token Usage Context:** This prompt enables seamless continuation across chat sessions.
+
+---
+
+## 📋 Quick Context
+
+**What we're building:** {{ feature_description }}
+
+**Completed Phases:**
+{% for phase in completed_phases_list %}
+- ✅ Phase {{ phase.number }}: {{ phase.name }} ({{ phase.duration }})
+{% endfor %}
+
+**Current Phase:** {{ current_phase.number }}: {{ current_phase.name }}
+**Next Phase:** {{ next_phase.number }}: {{ next_phase.name }}
+
+---
+
+## 🎯 Continuation Instructions
+
+**Copy this prompt into a new Copilot Chat window:**
+
+```
+Follow instructions in CORTEX.prompt.md.
+
+Continue executing plan: {{ plan_name }}
+Location: cortex-brain/documents/planning/active/{{ plan_name }}/
+
+Context:
+- We are at Phase {{ current_phase.number }}: {{ current_phase.name }}
+- {{ completed_phases }}/{{ total_phases }} phases complete
+- Last checkpoint: {{ last_checkpoint_commit }}
+- Database state: {{ database_status }}
+
+Next Action: {{ next_action }}
+
+Refer to 00-master-plan.md for full context. Use planning database for state:
+python -c "from src.database.planning_state_db import PlanningStateDB; db = PlanningStateDB(); print(db.get_plan_status('{{ plan_id }}'))"
+```
+
+---
+
+## 📊 State Summary
+
+**Git Checkpoints:**
+{% for checkpoint in checkpoints %}
+- {{ checkpoint.commit }}: {{ checkpoint.description }}
+{% endfor %}
+
+**Database State:**
+- Plan ID: {{ plan_id }}
+- Status: {{ plan_status }}
+- Active phase: {{ current_phase.number }}
+- Artifacts generated: {{ artifact_count }}
+
+**Key Files:**
+- Plan: `{{ plan_path }}/00-master-plan.md`
+- Tracker: `{{ plan_path }}/tracking/progress-tracker.json`
+- Database: `cortex-brain/database/planning_state.db`
+
+---
+
+## ⚠️ Important Notes
+
+1. **State Recovery:** All plan state is in PlanningStateDB - query it first
+2. **Git History:** Check `git log --oneline | head -10` for recent checkpoints
+3. **Phase Dependencies:** Refer to master plan for phase dependencies
+4. **Testing:** Run tests before marking phases complete
+
+**Last Updated:** {{ timestamp }} | **Auto-generated after Phase {{ last_completed_phase }}**
+```
+
+**Update Triggers:**
+- After each phase completion
+- Before creating git checkpoint
+- When progress tracker updates
+- Manual: `orchestrator.update_continuation_prompt()`
 
 ### Task 4.4: Master Orchestrator Integration (NEW)
 **Duration:** 4h
@@ -785,6 +962,10 @@ class PlanningOrchestratorV5(BaseOrchestratorV4_1):
 - ✅ **End-to-end routing test passes**
 - ✅ **CORTEX.prompt.md updated: Planning v5 routes via Master Orchestrator (LIVE)**
 - ✅ **Master Orchestrator ACTIVE for planning commands ("plan", "create a plan")**
+- ✅ **Continuation prompt template renders correctly**
+- ✅ **CONTINUATION-PROMPT.md generated in tracking/ folder**
+- ✅ **Token warning displays when approaching limit (80k threshold)**
+- ✅ **Copy-paste prompt successfully recreates context in new chat**
 - ✅ 100% test coverage for orchestrator
 - ✅ Manual test: Generate a sample plan successfully
 - ✅ Git checkpoint created: `checkpoint-phase-4-planning-v5-master-orch`
@@ -1144,7 +1325,52 @@ Orchestrators share state via StateManager + PlanningStateDB
 - ✅ Onboarding demonstrates Master Orchestrator
 - ✅ Obsolete routing code removed
 - ✅ End-to-end test: User command → Master Orch routing → orchestrator execution → result display
+- ✅ **Copilot Chat API automation research completed**
+- ✅ **Session management automation strategy documented**
 - ✅ Git checkpoint created: `checkpoint-phase-7-master-orch-validation`
+
+### Task 7.7: Session Management Automation Research (NEW)
+**Duration:** 4h
+
+**Goal:** Research Copilot Chat Extensions API capabilities for automated token monitoring and continuation prompt display
+
+**Research Areas:**
+1. **Copilot Chat Extensions API Exploration**
+   - Token usage event subscriptions
+   - Chat window lifecycle hooks
+   - API capabilities for token counting
+   - Webhook/callback availability
+
+2. **Automation Feasibility Assessment**
+   - Can we subscribe to token usage updates?
+   - Can we programmatically display continuation prompt at 80% threshold?
+   - Can we auto-create new chat window with pre-filled prompt?
+   - API rate limits and restrictions
+
+3. **Implementation Prototype (if API available)**
+   - Subscribe to token usage events
+   - Trigger continuation prompt display at 80k tokens
+   - Test auto-handoff workflow
+   - Document API integration pattern
+
+4. **Fallback Strategy Documentation (if API unavailable)**
+   - Confirm heuristic token estimation accuracy
+   - Document manual warning system limitations
+   - Propose alternative approaches (VS Code extension, external monitoring)
+   - Update session management guide with findings
+
+**Deliverables:**
+- `cortex-brain/documents/reports/copilot-chat-api-research.md`
+- API integration code (if feasible) or fallback strategy
+- Updated `session-management-and-continuation.md` with automation status
+- Recommendation for Phase 10 enhancement priority
+
+**Completion Criteria:**
+- ✅ Copilot Chat Extensions API capabilities documented
+- ✅ Token usage subscription feasibility determined
+- ✅ Prototype implemented (if API available) or fallback confirmed
+- ✅ Session management guide updated with research findings
+- ✅ Recommendation provided for future automation work
 
 ---
 
@@ -1284,6 +1510,7 @@ Orchestrators share state via StateManager + PlanningStateDB
 - `docs/guides/template-development.md`
 - `docs/guides/database-operations.md`
 - **`docs/guides/master-orchestrator-integration.md` (NEW)**
+- **`docs/guides/session-management-and-continuation.md` (NEW)**
 
 **Master Orchestrator Integration Guide:**
 - How to register orchestrators in YAML config
@@ -1293,6 +1520,14 @@ Orchestrators share state via StateManager + PlanningStateDB
 - Lifecycle hook implementation
 - Testing routing rules
 - Debugging routing failures
+
+**Session Management Guide:**
+- Token limit monitoring (heuristic estimation)
+- Continuation prompt structure and usage
+- Copy-paste session handoff instructions
+- Database state recovery procedures
+- Git checkpoint verification
+- Phase dependency validation
 
 **Content:**
 - Step-by-step orchestrator creation
