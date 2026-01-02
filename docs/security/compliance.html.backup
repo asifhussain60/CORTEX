@@ -7,128 +7,6 @@
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo-64.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../assets/css/main.css?v=4.0.1">
-    <style>
-        /* Tab System Styles */
-        .tabs-container {
-            margin-top: 1.5rem;
-        }
-        
-        .tab-buttons {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-        }
-        
-        .tab-button {
-            padding: 0.75rem 1.5rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            color: rgba(255, 255, 255, 0.7);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-size: 0.95rem;
-            font-weight: 500;
-        }
-        
-        .tab-button:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.9);
-            border-color: rgba(0, 212, 255, 0.3);
-        }
-        
-        .tab-button.active {
-            background: rgba(0, 212, 255, 0.15);
-            border-color: rgba(0, 212, 255, 0.5);
-            color: #00d4ff;
-        }
-        
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        /* Checklist Styles */
-        .checklist-section {
-            padding: 1.5rem;
-        }
-        
-        .framework-description {
-            color: rgba(255, 255, 255, 0.7);
-            margin: 1rem 0 1.5rem 0;
-            line-height: 1.6;
-        }
-        
-        .checklist-category {
-            margin-bottom: 2rem;
-        }
-        
-        .checklist-category h4 {
-            color: #00d4ff;
-            margin-bottom: 1rem;
-            font-size: 1.1rem;
-        }
-        
-        .checklist-items {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-        
-        .checklist-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.75rem;
-            padding: 0.75rem;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 6px;
-            transition: background 0.2s ease;
-        }
-        
-        .checklist-item:hover {
-            background: rgba(255, 255, 255, 0.06);
-        }
-        
-        .checklist-item input[type="checkbox"] {
-            margin-top: 0.25rem;
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-        }
-        
-        .checklist-item label {
-            flex: 1;
-            color: rgba(255, 255, 255, 0.8);
-            cursor: pointer;
-            line-height: 1.5;
-        }
-        
-        /* Progress Bar Styles */
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-            overflow: hidden;
-            margin: 0.5rem 0;
-        }
-        
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #00d4ff, #7b61ff);
-            transition: width 0.3s ease;
-            width: 0%;
-        }
-        
-        .progress-text {
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.6);
-        }
-    </style>
 </head>
 <body>
     <!-- Glass Header (Level 1 - No Logo) -->
@@ -155,51 +33,6 @@
 
     <!-- Main Content -->
     <main class="content-section">
-        <!-- Framework Overview -->
-        <article class="glass-card-display animation-t1">
-            <div class="card-header-with-icon">
-                <i class="fas fa-info-circle"></i>
-                <h2 class="card-title">Framework Overview</h2>
-            </div>
-            <p class="card-description">
-                Track compliance across five major regulatory frameworks with real-time status monitoring.
-            </p>
-            <div class="feature-grid">
-                <div class="feature-item">
-                    <i class="fas fa-shield-alt"></i>
-                    <h4>GDPR</h4>
-                    <p>EU data protection</p>
-                </div>
-                <div class="feature-item">
-                    <i class="fas fa-certificate"></i>
-                    <h4>SOC 2</h4>
-                    <p>Service organization controls</p>
-                </div>
-                <div class="feature-item">
-                    <i class="fas fa-heartbeat"></i>
-                    <h4>HIPAA</h4>
-                    <p>Healthcare data privacy</p>
-                </div>
-                <div class="feature-item">
-                    <i class="fas fa-credit-card"></i>
-                    <h4>PCI-DSS</h4>
-                    <p>Payment card security</p>
-                </div>
-                <div class="feature-item">
-                    <i class="fas fa-lock"></i>
-                    <h4>ISO 27001</h4>
-                    <p>Information security</p>
-                </div>
-            </div>
-        </article>
-
-        <!-- Compliance Checklists (Tabs) -->
-        <article class="glass-card-display animation-t1">
-            <div class="card-header-with-icon">
-                <i class="fas fa-tasks"></i>
-                <h2 class="card-title">Compliance Checklists</h2>
-            </div>
-            <div class="tabs-container">
             <div class="tab-buttons">
                 <button class="tab-button active" data-tab="gdpr">GDPR</button>
                 <button class="tab-button" data-tab="soc2">SOC 2</button>
@@ -212,7 +45,7 @@
             <div class="tab-content active" id="gdpr">
                 <div class="glass-card checklist-section">
                     <h3>🇪🇺 GDPR (General Data Protection Regulation)</h3>
-                    <p class="framework-description">EU data protection and privacy regulation.</p>
+                    <p class="framework-description">EU regulation on data protection and privacy for individuals within the European Union and European Economic Area.</p>
                     
                     <div class="checklist-category">
                         <h4>Data Subject Rights</h4>
@@ -294,7 +127,7 @@
             <div class="tab-content" id="soc2">
                 <div class="glass-card checklist-section">
                     <h3>🏢 SOC 2 (Service Organization Control 2)</h3>
-                    <p class="framework-description">Trust service criteria for customer data management.</p>
+                    <p class="framework-description">Trust service criteria for managing customer data based on five trust principles.</p>
                     
                     <div class="checklist-category">
                         <h4>Security (Common Criteria)</h4>
@@ -400,7 +233,7 @@
             <div class="tab-content" id="hipaa">
                 <div class="glass-card checklist-section">
                     <h3>🏥 HIPAA (Health Insurance Portability and Accountability Act)</h3>
-                    <p class="framework-description">Healthcare data protection standards for Protected Health Information.</p>
+                    <p class="framework-description">US healthcare data protection standards for Protected Health Information (PHI).</p>
                     
                     <div class="checklist-category">
                         <h4>Administrative Safeguards</h4>
@@ -500,7 +333,7 @@
             <div class="tab-content" id="pci-dss">
                 <div class="glass-card checklist-section">
                     <h3>💳 PCI-DSS (Payment Card Industry Data Security Standard)</h3>
-                    <p class="framework-description">Security standards for credit card information handling.</p>
+                    <p class="framework-description">Security standards for organizations handling credit card information.</p>
                     
                     <div class="checklist-category">
                         <h4>Build and Maintain Secure Networks</h4>
@@ -592,7 +425,7 @@
             <div class="tab-content" id="iso27001">
                 <div class="glass-card checklist-section">
                     <h3>🌐 ISO 27001 (Information Security Management)</h3>
-                    <p class="framework-description">International standard for information security management systems.</p>
+                    <p class="framework-description">International standard for information security management systems (ISMS).</p>
                     
                     <div class="checklist-category">
                         <h4>Organizational Controls</h4>
@@ -717,60 +550,51 @@
                     </div>
                 </div>
             </div>
-            </div>
-        </article>
+        </div>
 
-        <!-- Overall Compliance Status -->
-        <article class="glass-card-display animation-t1">
-            <div class="card-header-with-icon">
-                <i class="fas fa-chart-bar"></i>
-                <h2 class="card-title">Overall Compliance Status</h2>
-            </div>
-            <p class="card-description">
-                Real-time progress tracking across all frameworks.
-            </p>
-            <div class="feature-grid">
-                <div class="feature-item">
-                    <span class="section-subtitle">GDPR</span>
+        <div class="glass-card progress-section">
+            <h2>📊 Overall Compliance Status</h2>
+            <div class="compliance-summary">
+                <div class="framework-progress">
+                    <span class="framework-name">GDPR</span>
                     <div class="progress-bar">
                         <div class="progress-fill" id="gdpr-progress"></div>
                     </div>
                     <span class="progress-text" id="gdpr-text">0/14 (0%)</span>
                 </div>
-                <div class="feature-item">
-                    <span class="section-subtitle">SOC 2</span>
+                <div class="framework-progress">
+                    <span class="framework-name">SOC 2</span>
                     <div class="progress-bar">
                         <div class="progress-fill" id="soc2-progress"></div>
                     </div>
                     <span class="progress-text" id="soc2-text">0/17 (0%)</span>
                 </div>
-                <div class="feature-item">
-                    <span class="section-subtitle">HIPAA</span>
+                <div class="framework-progress">
+                    <span class="framework-name">HIPAA</span>
                     <div class="progress-bar">
                         <div class="progress-fill" id="hipaa-progress"></div>
                     </div>
                     <span class="progress-text" id="hipaa-text">0/17 (0%)</span>
                 </div>
-                <div class="feature-item">
-                    <span class="section-subtitle">PCI-DSS</span>
+                <div class="framework-progress">
+                    <span class="framework-name">PCI-DSS</span>
                     <div class="progress-bar">
                         <div class="progress-fill" id="pci-dss-progress"></div>
                     </div>
                     <span class="progress-text" id="pci-dss-text">0/12 (0%)</span>
                 </div>
-                <div class="feature-item">
-                    <span class="section-subtitle">ISO 27001</span>
+                <div class="framework-progress">
+                    <span class="framework-name">ISO 27001</span>
                     <div class="progress-bar">
                         <div class="progress-fill" id="iso27001-progress"></div>
                     </div>
                     <span class="progress-text" id="iso27001-text">0/23 (0%)</span>
                 </div>
             </div>
-        </article>
-    </main>
+        </div>
+    </div>
 
-    <!-- Footer -->
-    <footer class="glass-footer">
+    <footer class="footer">
         <p>&copy; 2026 CORTEX AI Assistant | Compliance Framework Tracking</p>
         <p>Last Updated: January 1, 2026 | Version 4.0.0</p>
     </footer>
@@ -846,25 +670,5 @@
         // Load state on page load
         loadState();
     </script>
-
-    <!-- Glass Footer -->
-    <footer class="glass-footer">
-        <div class="footer-content">
-            <div class="footer-copyright">
-                <p>© 2026 Asif Hussain. All rights reserved.</p>
-            </div>
-            <div class="footer-links">
-                <a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener noreferrer">
-                    <i class="fab fa-github"></i> GitHub
-                </a>
-                <a href="../index.html">
-                    <i class="fas fa-home"></i> Home
-                </a>
-            </div>
-            <div class="footer-version">
-                <span>v4.0.1</span>
-            </div>
-        </div>
-    </footer>
 </body>
 </html>
