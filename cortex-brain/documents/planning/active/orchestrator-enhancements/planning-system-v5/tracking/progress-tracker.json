@@ -1,0 +1,14 @@
+{
+  "plan_id": "planning-system-v5-2026-01-02",
+  "plan_name": "Planning System v5",
+  "parent_tracker": "../00-ORCHESTRATOR-MASTER.md",
+  "priority": "P1",
+  "created": "2026-01-02T10:00:00Z",
+  "status": "not_started",
+  "total_phases": 11,
+  "total_tasks": 83,
+  "tasks_complete": 0,
+  "progress_percentage": 0,
+  "estimated_duration_days": 4,
+  "blocked_by": "mcp-tool-infrastructure"
+}

@@ -1,0 +1,282 @@
+{
+  "plan_metadata": {
+    "plan_id": "planning-system-v5-implementation-2026-01-02",
+    "plan_name": "Planning System v5.0 - Robust Architecture",
+    "created": "2026-01-02T09:00:00Z",
+    "status": "active",
+    "complexity_tier": 4,
+    "estimated_duration_days": 49,
+    "estimated_completion": "2026-02-20"
+  },
+  "overall_progress": {
+    "percentage": 20,
+    "phases_complete": 1,
+    "phases_in_progress": 1,
+    "phases_not_started": 11,
+    "total_phases": 13,
+    "total_tasks": 152,
+    "tasks_complete": 13,
+    "elapsed_time_hours": 17.25
+  },
+  "architecture_integration_analysis": {
+    "date": "2026-01-02",
+    "status": "APPROVED",
+    "critical_finding": "All 4 AUTONOMOUS orchestrators share broken hand-off protocol",
+    "affected_orchestrators": [
+      {"name": "Planning System", "file": "planning_orchestrator.py", "status": "BROKEN"},
+      {"name": "ADO Operations", "file": "ado_orchestrator.py", "status": "BROKEN"},
+      {"name": "Vacuum", "file": "system", "status": "BROKEN"},
+      {"name": "Cleanup", "file": "system", "status": "BROKEN"}
+    ],
+    "root_cause": "CORTEX.prompt.md says STOP but no mechanism to invoke Python orchestrator",
+    "proposed_fix": "MCP Tool invoke_orchestrator()",
+    "fix_benefits": [
+      "Fixes ALL 4 orchestrators with one implementation",
+      "Guaranteed execution (LLM tool call → Python code runs)",
+      "Observability (tool call logged, result returned)",
+      "Testable (tool can be unit tested)",
+      "No manual bypass possible"
+    ],
+    "updated_loe_days": 13,
+    "component_tiers": [
+      {"tier": 1, "name": "Core Infrastructure", "components": ["MCP tool server", "invoke_orchestrator()"]},
+      {"tier": 2, "name": "Base Classes", "components": ["BaseOrchestrator v4.1"]},
+      {"tier": 3, "name": "Individual Orchestrators", "components": ["Planning", "ADO", "Vacuum", "Cleanup"]},
+      {"tier": 4, "name": "Manifests & Config", "components": ["CORTEX.prompt.md", "manifests"]}
+    ]
+  },
+  "phase_progress": [
+    {
+      "phase_num": -1,
+      "phase_name": "Knowledge Library Consultation",
+      "status": "completed",
+      "progress_percentage": 100,
+      "tasks_complete": 5,
+      "total_tasks": 5,
+      "start_time": "2026-01-02T09:00:00Z",
+      "end_time": "2026-01-02T09:15:00Z",
+      "duration_minutes": 15,
+      "artifacts": [
+        "context/knowledge-library-orchestrators.md",
+        "context/knowledge-library-invocation.md",
+        "context/knowledge-library-progress.md",
+        "context/knowledge-library-brain-tiers.md",
+        "context/knowledge-library-hierarchical-plans.md"
+      ],
+      "knowledge_library_files_consulted": 12,
+      "patterns_extracted": 23
+    },
+    {
+      "phase_num": 0,
+      "phase_name": "Discovery & Requirements",
+      "status": "in_progress",
+      "progress_percentage": 80,
+      "tasks_complete": 8,
+      "total_tasks": 10,
+      "start_time": "2026-01-02T09:15:00Z",
+      "end_time": null,
+      "duration_minutes": 135,
+      "artifacts": [
+        "context/root-cause-analysis.md",
+        "context/gap-analysis.md",
+        "context/requirements-prioritization.md"
+      ],
+      "current_task": "Task 0.9: Define success metrics"
+    },
+    {
+      "phase_num": 1,
+      "phase_name": "Invocation Bridge (MCP Tool)",
+      "status": "not_started",
+      "progress_percentage": 0,
+      "tasks_complete": 0,
+      "total_tasks": 12,
+      "start_time": null,
+      "end_time": null,
+      "duration_minutes": null,
+      "artifacts": [],
+      "blocked_by": ["phase_0"]
+    },
+    {
+      "phase_num": 2,
+      "phase_name": "Orchestrator Self-Validation",
+      "status": "not_started",
+      "progress_percentage": 0,
+      "tasks_complete": 0,
+      "total_tasks": 15,
+      "start_time": null,
+      "end_time": null,
+      "duration_minutes": null,
+      "artifacts": [],
+      "blocked_by": ["phase_1"]
+    },
+    {
+      "phase_num": 3,
+      "phase_name": "Continuous Knowledge Library Integration",
+      "status": "not_started",
+      "progress_percentage": 0,
+      "tasks_complete": 0,
+      "total_tasks": 10,
+      "start_time": null,
+      "end_time": null,
+      "duration_minutes": null,
+      "artifacts": [],
+      "blocked_by": ["phase_2"]
+    },
+    {
+      "phase_num": 4,
+      "phase_name": "Maintenance-Style Progress Rendering",
+      "status": "not_started",
+      "progress_percentage": 0,
+      "tasks_complete": 0,
+      "total_tasks": 8,
+      "start_time": null,
+      "end_time": null,
+      "duration_minutes": null,
+      "artifacts": [],
+      "blocked_by": ["phase_3"]
+    },
+    {
+      "phase_num": 5,
+      "phase_name": "Template Integration",
+      "status": "not_started",
+      "progress_percentage": 0,
+      "tasks_complete": 0,
+      "total_tasks": 10,
+      "start_time": null,
+      "end_time": null,
+      "duration_minutes": null,
+      "artifacts": [],
+      "blocked_by": ["phase_4"]
+    },
+    {
+      "phase_num": 6,
+      "phase_name": "Hierarchical Plan Structure",
+      "status": "not_started",
+      "progress_percentage": 0,
+      "tasks_complete": 0,
+      "total_tasks": 12,
+      "start_time": null,
+      "end_time": null,
+      "duration_minutes": null,
+      "artifacts": [],
+      "blocked_by": ["phase_5"]
+    },
+    {
+      "phase_num": 7,
+      "phase_name": "Brain Tier Update Pipeline",
+      "status": "not_started",
+      "progress_percentage": 0,
+      "tasks_complete": 0,
+      "total_tasks": 14,
+      "start_time": null,
+      "end_time": null,
+      "duration_minutes": null,
+      "artifacts": [],
+      "blocked_by": ["phase_6"]
+    },
+    {
+      "phase_num": 8,
+      "phase_name": "Testing & Validation",
+      "status": "not_started",
+      "progress_percentage": 0,
+      "tasks_complete": 0,
+      "total_tasks": 18,
+      "start_time": null,
+      "end_time": null,
+      "duration_minutes": null,
+      "artifacts": [],
+      "blocked_by": ["phase_7"]
+    },
+    {
+      "phase_num": 9,
+      "phase_name": "Migration & Documentation",
+      "status": "not_started",
+      "progress_percentage": 0,
+      "tasks_complete": 0,
+      "total_tasks": 10,
+      "start_time": null,
+      "end_time": null,
+      "duration_minutes": null,
+      "artifacts": [],
+      "blocked_by": ["phase_8"]
+    },
+    {
+      "phase_num": 10,
+      "phase_name": "REFACTOR & Cleanup",
+      "status": "not_started",
+      "progress_percentage": 0,
+      "tasks_complete": 0,
+      "total_tasks": 18,
+      "start_time": null,
+      "end_time": null,
+      "duration_minutes": null,
+      "artifacts": [],
+      "blocked_by": ["phase_9"]
+    },
+    {
+      "phase_num": 11,
+      "phase_name": "Knowledge Extraction",
+      "status": "not_started",
+      "progress_percentage": 0,
+      "tasks_complete": 0,
+      "total_tasks": 12,
+      "start_time": null,
+      "end_time": null,
+      "duration_minutes": null,
+      "artifacts": [],
+      "blocked_by": ["phase_10"]
+    },
+    {
+      "phase_num": 12,
+      "phase_name": "Documentation Library Update",
+      "status": "not_started",
+      "progress_percentage": 0,
+      "tasks_complete": 0,
+      "total_tasks": 8,
+      "start_time": null,
+      "end_time": null,
+      "duration_minutes": null,
+      "artifacts": [],
+      "blocked_by": ["phase_11"]
+    }
+  ],
+  "compliance": {
+    "score": 10.0,
+    "threshold": 8.0,
+    "checks": {
+      "phase_minus_one_present": true,
+      "refactor_comprehensive": true,
+      "knowledge_library_integration": true,
+      "copilot_instructions_present": true,
+      "visual_progress_tracker": true,
+      "hierarchical_structure": true,
+      "two_way_linking": true,
+      "brain_tier_updates": true
+    },
+    "violations": []
+  },
+  "knowledge_library": {
+    "queries_total": 5,
+    "queries_by_phase": {
+      "phase_minus_1": 5,
+      "phase_0": 0,
+      "phase_1": 0
+    },
+    "files_consulted": 12,
+    "patterns_extracted": 23,
+    "patterns_pending_extraction": 0
+  },
+  "brain_tier_updates": {
+    "tier_1_updates": 0,
+    "tier_2_updates": 0,
+    "tier_3_updates": 0,
+    "obsolete_patterns_detected": 0,
+    "patterns_replaced": 0
+  },
+  "validation": {
+    "last_validated": "2026-01-02T11:30:00Z",
+    "validator_version": "5.0.0",
+    "validation_passed": true,
+    "warnings": []
+  }
+}
