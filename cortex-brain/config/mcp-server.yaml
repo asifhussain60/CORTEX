@@ -11,12 +11,16 @@ orchestrators:
     type: "autonomous"
     description: "Planning System v5 with MCP integration"
   
-  ado_operations:
-    class: "AdoOrchestratorV2"
-    module: "src.orchestrators.ado_orchestrator_v2"
-    config: "cortex-brain/manifests/orchestrators/ado-operations-2.0-manifest.yaml"
+  ado_orchestrator_v2:
+    class: "ADOOrchestratorV2"
+    module: "src.orchestrators.ado.v2.ado_orchestrator_v2"
+    config: "cortex-brain/manifests/orchestrators/ado-orchestrator-v2.yaml"
     type: "autonomous"
-    description: "Azure DevOps work item generation"
+    description: "Azure DevOps work item generation (v2 - pure autonomous)"
+    version: "2.0.0"
+    modes:
+      - "auto"
+      - "wizard"
   
   vacuum:
     class: "VacuumOrchestratorV2"

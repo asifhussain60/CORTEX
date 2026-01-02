@@ -26,27 +26,29 @@ routing_rules:
       description: "Test-Driven Development orchestrator"
       autonomous: false
   
-  # ADO Operations - Wizard Mode (Interactive)
+  # ADO Operations v2 - Wizard Mode (Interactive)
   - pattern: "^(ado wizard|ado interactive).*$"
-    orchestrator: "ado_orchestrator"
+    orchestrator: "ado_orchestrator_v2"
     confidence: 1.0
     match_type: "regex"
     priority: 29
     metadata:
-      description: "ADO wizard mode (multi-turn conversational)"
+      description: "ADO v2 wizard mode (multi-turn conversational)"
       autonomous: true
       mode: "wizard"
+      version: "2.0"
   
-  # ADO Operations - Auto Mode (Quick Generation)
+  # ADO Operations v2 - Auto Mode (Quick Generation)
   - pattern: "^(ado|ado story|ado feature|azure devops).*$"
-    orchestrator: "ado_orchestrator"
+    orchestrator: "ado_orchestrator_v2"
     confidence: 1.0
     match_type: "regex"
     priority: 30
     metadata:
-      description: "ADO auto mode (quick generation)"
+      description: "ADO v2 auto mode (quick generation)"
       autonomous: true
       mode: "auto"
+      version: "2.0"
   
   # Sanitization
   - pattern: "^(sanitize|make generic|anonymize).*$"
