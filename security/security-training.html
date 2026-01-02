@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Training - CORTEX Security</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <nav class="nav-container">
+        <div class="nav-brand">CORTEX Security</div>
+        <div class="nav-links">
+            <a href="../index.html">Home</a>
+            <a href="owasp.html">OWASP</a>
+            <a href="compliance.html">Compliance</a>
+            <a href="security-training.html" class="active">Training</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header class="page-header">
+            <h1>🎓 Security Training</h1>
+            <p class="subtitle">Comprehensive security awareness curriculum and certification tracking</p>
+            <div class="metadata">
+                <span>Last Updated: January 1, 2026</span>
+                <span>Version: 4.0.0</span>
+            </div>
+        </header>
+
+        <div class="glass-card overview-section">
+            <h2>📚 Training Overview</h2>
+            <p>CORTEX security training program provides comprehensive security awareness education across five core modules, totaling 13 hours of instruction. The curriculum progresses from fundamental security concepts to advanced incident response and compliance requirements, culminating in professional security certification.</p>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">5</div>
+                    <div class="stat-label">Training Modules</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">13</div>
+                    <div class="stat-label">Total Hours</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">8</div>
+                    <div class="stat-label">Security Domains</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">92%</div>
+                    <div class="stat-label">Team Completion</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card">
+            <h2>🗺️ Training Curriculum Roadmap</h2>
+            <p>Structured learning path from fundamentals to certification. Each module builds on previous knowledge and includes hands-on labs, assessments, and real-world scenarios.</p>
+            <div class="mermaid-container">
+                <div class="mermaid">
+graph LR
+    subgraph "Security Training Path"
+        F[🎓 Fundamentals<br/>2 hours]
+        T[🔍 Threat Awareness<br/>3 hours]
+        SC[🔐 Secure Coding<br/>4 hours]
+        IR[🚨 Incident Response<br/>2 hours]
+        C[✅ Compliance<br/>2 hours]
+    end
+    
+    F --> T
+    T --> SC
+    SC --> IR
+    IR --> C
+    C --> CERT[🏆 Security<br/>Certification]
+    
+    style F fill:#00d4ff,stroke:#fff,stroke-width:2px
+    style T fill:#7b61ff,stroke:#fff,stroke-width:2px
+    style SC fill:#ffb84d,stroke:#fff,stroke-width:2px
+    style IR fill:#ff6b9d,stroke:#fff,stroke-width:2px
+    style C fill:#2ecc71,stroke:#fff,stroke-width:2px
+    style CERT fill:#7b61ff,stroke:#fff,stroke-width:3px
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card">
+            <h2>📊 Team Training Progress</h2>
+            <p>Real-time tracking of training completion across team members. Progress bars show completed modules with color-coded segments. Goal: 100% team completion (13 hours per member).</p>
+            <div id="training-progress-chart" class="viz-container"></div>
+        </div>
+
+        <div class="glass-card">
+            <h2>🎯 Security Competency Assessment</h2>
+            <p>Radar chart visualization of team security competency across eight critical security domains. Scale ranges from 0 (Novice) to 5 (Expert), comparing team average against individual performance and target goals.</p>
+            <div id="competency-radar" class="viz-container"></div>
+        </div>
+
+        <div class="glass-card">
+            <h2>📖 Training Modules</h2>
+            <div class="module-grid">
+                <div class="module-card glass-card-clickable animation-t1">
+                    <div class="module-icon">🎓</div>
+                    <h3>Fundamentals</h3>
+                    <p class="module-duration">2 hours</p>
+                    <ul>
+                        <li>Security principles and CIA triad</li>
+                        <li>Common attack vectors</li>
+                        <li>Defense in depth strategy</li>
+                        <li>Security roles and responsibilities</li>
+                    </ul>
+                    <div class="module-status completed">Completed</div>
+                </div>
+
+                <div class="module-card glass-card-clickable animation-t1">
+                    <div class="module-icon">🔍</div>
+                    <h3>Threat Awareness</h3>
+                    <p class="module-duration">3 hours</p>
+                    <ul>
+                        <li>Threat landscape overview</li>
+                        <li>Social engineering tactics</li>
+                        <li>Phishing detection and reporting</li>
+                        <li>Malware types and indicators</li>
+                    </ul>
+                    <div class="module-status completed">Completed</div>
+                </div>
+
+                <div class="module-card glass-card-clickable animation-t1">
+                    <div class="module-icon">🔐</div>
+                    <h3>Secure Coding</h3>
+                    <p class="module-duration">4 hours</p>
+                    <ul>
+                        <li>OWASP Top 10 vulnerabilities</li>
+                        <li>Input validation and sanitization</li>
+                        <li>Authentication and session management</li>
+                        <li>Cryptography best practices</li>
+                    </ul>
+                    <div class="module-status in-progress">In Progress</div>
+                </div>
+
+                <div class="module-card glass-card-clickable animation-t1">
+                    <div class="module-icon">🚨</div>
+                    <h3>Incident Response</h3>
+                    <p class="module-duration">2 hours</p>
+                    <ul>
+                        <li>Incident response lifecycle</li>
+                        <li>Detection and analysis</li>
+                        <li>Containment and eradication</li>
+                        <li>Post-incident activities</li>
+                    </ul>
+                    <div class="module-status pending">Pending</div>
+                </div>
+
+                <div class="module-card glass-card-clickable animation-t1">
+                    <div class="module-icon">✅</div>
+                    <h3>Compliance</h3>
+                    <p class="module-duration">2 hours</p>
+                    <ul>
+                        <li>GDPR, SOC 2, ISO 27001</li>
+                        <li>Data protection requirements</li>
+                        <li>Audit and documentation</li>
+                        <li>Breach notification procedures</li>
+                    </ul>
+                    <div class="module-status pending">Pending</div>
+                </div>
+
+                <div class="module-card glass-card-clickable animation-t1">
+                    <div class="module-icon">🏆</div>
+                    <h3>Certification</h3>
+                    <p class="module-duration">Assessment</p>
+                    <ul>
+                        <li>Comprehensive exam (50 questions)</li>
+                        <li>Practical security scenarios</li>
+                        <li>80% passing score required</li>
+                        <li>Valid for 12 months</li>
+                    </ul>
+                    <div class="module-status locked">Locked</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card">
+            <h2>🎯 Learning Objectives</h2>
+            <div class="objectives-list">
+                <div class="objective-item">
+                    <span class="objective-icon">🎯</span>
+                    <div>
+                        <strong>Threat Recognition:</strong> Identify and report security threats including phishing, malware, and social engineering attacks
+                    </div>
+                </div>
+                <div class="objective-item">
+                    <span class="objective-icon">🔐</span>
+                    <div>
+                        <strong>Secure Development:</strong> Apply secure coding practices to prevent OWASP Top 10 vulnerabilities in applications
+                    </div>
+                </div>
+                <div class="objective-item">
+                    <span class="objective-icon">🚨</span>
+                    <div>
+                        <strong>Incident Response:</strong> Execute proper incident response procedures and escalation protocols
+                    </div>
+                </div>
+                <div class="objective-item">
+                    <span class="objective-icon">✅</span>
+                    <div>
+                        <strong>Compliance Awareness:</strong> Understand and implement compliance requirements for GDPR, SOC 2, and ISO 27001
+                    </div>
+                </div>
+                <div class="objective-item">
+                    <span class="objective-icon">🛡️</span>
+                    <div>
+                        <strong>Data Protection:</strong> Implement appropriate data classification, encryption, and access controls
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer-container">
+        <p>&copy; 2026 Asif Hussain. All rights reserved.</p>
+        <p>CORTEX Security Training Platform v4.0.0</p>
+    </footer>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#00d4ff',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#00d4ff',
+                lineColor: '#7b61ff',
+                secondaryColor: '#7b61ff',
+                tertiaryColor: '#ff6b9d'
+            }
+        });
+
+        // Training Progress Chart (D3.js)
+        function createTrainingProgressChart() {
+            const data = [
+                { name: 'Sarah Chen', hours: [2, 3, 4, 2, 2], total: 13 },
+                { name: 'Marcus Johnson', hours: [2, 3, 4, 2, 1], total: 12 },
+                { name: 'Elena Rodriguez', hours: [2, 3, 3, 0, 0], total: 8 },
+                { name: 'David Kim', hours: [2, 3, 4, 2, 2], total: 13 },
+                { name: 'Aisha Patel', hours: [2, 3, 4, 1, 0], total: 10 },
+                { name: 'James Wilson', hours: [2, 3, 0, 0, 0], total: 5 },
+                { name: 'Sophie Anderson', hours: [2, 3, 4, 2, 2], total: 13 },
+                { name: 'Carlos Martinez', hours: [2, 3, 4, 2, 0], total: 11 }
+            ];
+
+            const modules = ['Fundamentals', 'Threat Awareness', 'Secure Coding', 'Incident Response', 'Compliance'];
+            const colors = ['#00d4ff', '#7b61ff', '#ffb84d', '#ff6b9d', '#2ecc71'];
+
+            const margin = { top: 40, right: 150, bottom: 60, left: 150 };
+            const width = 900 - margin.left - margin.right;
+            const height = 500 - margin.top - margin.bottom;
+
+            const svg = d3.select('#training-progress-chart')
+                .append('svg')
+                .attr('width', width + margin.left + margin.right)
+                .attr('height', height + margin.top + margin.bottom)
+                .append('g')
+                .attr('transform', `translate(${margin.left},${margin.top})`);
+
+            // Scales
+            const x = d3.scaleLinear()
+                .domain([0, 13])
+                .range([0, width]);
+
+            const y = d3.scaleBand()
+                .domain(data.map(d => d.name))
+                .range([0, height])
+                .padding(0.2);
+
+            // X-axis
+            svg.append('g')
+                .attr('transform', `translate(0,${height})`)
+                .call(d3.axisBottom(x).ticks(13))
+                .attr('class', 'axis');
+
+            // Y-axis
+            svg.append('g')
+                .call(d3.axisLeft(y))
+                .attr('class', 'axis');
+
+            // Goal line at 13 hours
+            svg.append('line')
+                .attr('x1', x(13))
+                .attr('x2', x(13))
+                .attr('y1', 0)
+                .attr('y2', height)
+                .attr('stroke', '#2ecc71')
+                .attr('stroke-width', 2)
+                .attr('stroke-dasharray', '5,5')
+                .attr('opacity', 0.7);
+
+            svg.append('text')
+                .attr('x', x(13))
+                .attr('y', -10)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#2ecc71')
+                .attr('font-size', '12px')
+                .text('Goal: 13 hours');
+
+            // Stacked bars
+            data.forEach(person => {
+                let cumulative = 0;
+                person.hours.forEach((hours, i) => {
+                    if (hours > 0) {
+                        svg.append('rect')
+                            .attr('x', x(cumulative))
+                            .attr('y', y(person.name))
+                            .attr('width', x(hours))
+                            .attr('height', y.bandwidth())
+                            .attr('fill', colors[i])
+                            .attr('opacity', 0.8)
+                            .attr('class', 'animation-t1')
+                            .on('mouseover', function() {
+                                d3.select(this).attr('opacity', 1);
+                            })
+                            .on('mouseout', function() {
+                                d3.select(this).attr('opacity', 0.8);
+                            })
+                            .append('title')
+                            .text(`${modules[i]}: ${hours} hours`);
+                    }
+                    cumulative += hours;
+                });
+
+                // Total hours label
+                svg.append('text')
+                    .attr('x', x(person.total) + 5)
+                    .attr('y', y(person.name) + y.bandwidth() / 2)
+                    .attr('dy', '0.35em')
+                    .attr('fill', '#fff')
+                    .attr('font-size', '12px')
+                    .attr('font-weight', 'bold')
+                    .text(`${person.total}h`);
+            });
+
+            // Legend
+            const legend = svg.append('g')
+                .attr('transform', `translate(${width + 20}, 0)`);
+
+            modules.forEach((module, i) => {
+                const legendRow = legend.append('g')
+                    .attr('transform', `translate(0, ${i * 25})`);
+
+                legendRow.append('rect')
+                    .attr('width', 15)
+                    .attr('height', 15)
+                    .attr('fill', colors[i])
+                    .attr('opacity', 0.8);
+
+                legendRow.append('text')
+                    .attr('x', 20)
+                    .attr('y', 12)
+                    .attr('fill', '#fff')
+                    .attr('font-size', '11px')
+                    .text(module);
+            });
+
+            // Axis labels
+            svg.append('text')
+                .attr('x', width / 2)
+                .attr('y', height + 40)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#fff')
+                .attr('font-size', '14px')
+                .text('Training Hours Completed');
+        }
+
+        // Security Competency Radar Chart (D3.js)
+        function createCompetencyRadar() {
+            const data = [
+                { domain: 'Authentication', teamAvg: 4.2, individual: 4.5, target: 4.5 },
+                { domain: 'Authorization', teamAvg: 3.8, individual: 4.0, target: 4.5 },
+                { domain: 'Encryption', teamAvg: 3.5, individual: 3.8, target: 4.5 },
+                { domain: 'Input Validation', teamAvg: 4.0, individual: 4.2, target: 4.5 },
+                { domain: 'Error Handling', teamAvg: 3.7, individual: 4.0, target: 4.0 },
+                { domain: 'Logging', teamAvg: 4.1, individual: 4.3, target: 4.5 },
+                { domain: 'API Security', teamAvg: 3.6, individual: 3.5, target: 4.5 },
+                { domain: 'Incident Response', teamAvg: 3.2, individual: 3.0, target: 4.0 }
+            ];
+
+            const width = 600;
+            const height = 600;
+            const margin = 80;
+            const radius = Math.min(width, height) / 2 - margin;
+
+            const svg = d3.select('#competency-radar')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height)
+                .append('g')
+                .attr('transform', `translate(${width/2},${height/2})`);
+
+            const angleSlice = Math.PI * 2 / data.length;
+            const maxValue = 5;
+
+            // Circular grid lines
+            const levels = 5;
+            for (let i = 1; i <= levels; i++) {
+                const levelRadius = radius * i / levels;
+                
+                svg.append('circle')
+                    .attr('r', levelRadius)
+                    .attr('fill', 'none')
+                    .attr('stroke', 'rgba(255, 255, 255, 0.1)')
+                    .attr('stroke-width', 1);
+
+                if (i === levels) {
+                    svg.append('text')
+                        .attr('x', 5)
+                        .attr('y', -levelRadius)
+                        .attr('fill', '#fff')
+                        .attr('font-size', '10px')
+                        .attr('opacity', 0.5)
+                        .text(maxValue);
+                }
+            }
+
+            // Axis lines and labels
+            data.forEach((d, i) => {
+                const angle = angleSlice * i - Math.PI / 2;
+                const x = radius * Math.cos(angle);
+                const y = radius * Math.sin(angle);
+
+                // Axis line
+                svg.append('line')
+                    .attr('x1', 0)
+                    .attr('y1', 0)
+                    .attr('x2', x)
+                    .attr('y2', y)
+                    .attr('stroke', 'rgba(255, 255, 255, 0.1)')
+                    .attr('stroke-width', 1);
+
+                // Domain label
+                const labelX = (radius + 30) * Math.cos(angle);
+                const labelY = (radius + 30) * Math.sin(angle);
+
+                svg.append('text')
+                    .attr('x', labelX)
+                    .attr('y', labelY)
+                    .attr('text-anchor', 'middle')
+                    .attr('dy', '0.35em')
+                    .attr('fill', '#fff')
+                    .attr('font-size', '12px')
+                    .text(d.domain);
+            });
+
+            // Function to create radar path
+            function radarPath(dataPoints) {
+                return d3.line()
+                    .x((d, i) => {
+                        const angle = angleSlice * i - Math.PI / 2;
+                        return (radius * dataPoints[i] / maxValue) * Math.cos(angle);
+                    })
+                    .y((d, i) => {
+                        const angle = angleSlice * i - Math.PI / 2;
+                        return (radius * dataPoints[i] / maxValue) * Math.sin(angle);
+                    })
+                    .curve(d3.curveLinearClosed);
+            }
+
+            // Target (dashed line)
+            const targetPoints = data.map(d => d.target);
+            svg.append('path')
+                .datum(targetPoints)
+                .attr('d', radarPath(targetPoints))
+                .attr('fill', 'none')
+                .attr('stroke', '#2ecc71')
+                .attr('stroke-width', 2)
+                .attr('stroke-dasharray', '5,5')
+                .attr('opacity', 0.5);
+
+            // Team average (filled)
+            const teamPoints = data.map(d => d.teamAvg);
+            svg.append('path')
+                .datum(teamPoints)
+                .attr('d', radarPath(teamPoints))
+                .attr('fill', '#7b61ff')
+                .attr('opacity', 0.3)
+                .attr('stroke', '#7b61ff')
+                .attr('stroke-width', 2);
+
+            // Individual (line)
+            const individualPoints = data.map(d => d.individual);
+            svg.append('path')
+                .datum(individualPoints)
+                .attr('d', radarPath(individualPoints))
+                .attr('fill', 'none')
+                .attr('stroke', '#00d4ff')
+                .attr('stroke-width', 3);
+
+            // Legend
+            const legend = svg.append('g')
+                .attr('transform', `translate(${-radius}, ${radius - 60})`);
+
+            const legendItems = [
+                { label: 'Individual', color: '#00d4ff', type: 'line' },
+                { label: 'Team Average', color: '#7b61ff', type: 'line' },
+                { label: 'Target', color: '#2ecc71', type: 'dashed' }
+            ];
+
+            legendItems.forEach((item, i) => {
+                const legendRow = legend.append('g')
+                    .attr('transform', `translate(0, ${i * 20})`);
+
+                if (item.type === 'dashed') {
+                    legendRow.append('line')
+                        .attr('x1', 0)
+                        .attr('x2', 20)
+                        .attr('y1', 7)
+                        .attr('y2', 7)
+                        .attr('stroke', item.color)
+                        .attr('stroke-width', 2)
+                        .attr('stroke-dasharray', '5,5');
+                } else {
+                    legendRow.append('line')
+                        .attr('x1', 0)
+                        .attr('x2', 20)
+                        .attr('y1', 7)
+                        .attr('y2', 7)
+                        .attr('stroke', item.color)
+                        .attr('stroke-width', 2);
+                }
+
+                legendRow.append('text')
+                    .attr('x', 25)
+                    .attr('y', 12)
+                    .attr('fill', '#fff')
+                    .attr('font-size', '12px')
+                    .text(item.label);
+            });
+
+            // Center score label
+            svg.append('text')
+                .attr('x', 0)
+                .attr('y', 0)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#00d4ff')
+                .attr('font-size', '24px')
+                .attr('font-weight', 'bold')
+                .text('3.8');
+
+            svg.append('text')
+                .attr('x', 0)
+                .attr('y', 20)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#fff')
+                .attr('font-size', '12px')
+                .text('Avg Score');
+        }
+
+        // Initialize visualizations
+        createTrainingProgressChart();
+        createCompetencyRadar();
+    </script>
+</body>
+</html>

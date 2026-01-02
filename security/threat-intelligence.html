@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Threat Intelligence - CORTEX Security</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <nav class="nav-container">
+        <div class="nav-brand">CORTEX Security</div>
+        <div class="nav-links">
+            <a href="../index.html">Home</a>
+            <a href="threat-intelligence.html" class="active">Threat Intel</a>
+            <a href="incident-response.html">Incident Response</a>
+            <a href="dashboard.html">Dashboard</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header class="page-header">
+            <h1>🧠 Threat Intelligence</h1>
+            <p class="subtitle">Real-time threat monitoring and proactive defense intelligence</p>
+            <div class="metadata">
+                <span>Last Updated: January 1, 2026</span>
+                <span>Version: 4.0.0</span>
+            </div>
+        </header>
+
+        <div class="glass-card overview-section">
+            <h2>🎯 Intelligence Overview</h2>
+            <p>CORTEX Threat Intelligence Platform aggregates data from multiple sources including OSINT, CVE databases, ISAC feeds, vendor advisories, and dark web monitoring. The platform transforms raw intelligence into actionable insights, providing indicators of compromise (IOCs), tactics/techniques/procedures (TTPs), and strategic recommendations for proactive defense.</p>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">5</div>
+                    <div class="stat-label">Intelligence Sources</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">847</div>
+                    <div class="stat-label">Active IOCs</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">23</div>
+                    <div class="stat-label">Threat Actor Groups</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">78%</div>
+                    <div class="stat-label">MITRE Coverage</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card">
+            <h2>🌐 Intelligence Sources</h2>
+            <p>Multi-source threat intelligence aggregation provides comprehensive visibility into the global threat landscape. Each source contributes unique insights that feed into the centralized Threat Intelligence Platform.</p>
+            <div class="mermaid-container">
+                <div class="mermaid">
+graph TB
+    subgraph "Intelligence Sources"
+        OSINT[🌐 OSINT<br/>Open Source Intelligence]
+        CVE[🔍 CVE Databases<br/>Known Vulnerabilities]
+        ISAC[🤝 ISAC<br/>Information Sharing]
+        VENDOR[🏢 Vendor Advisories<br/>Security Updates]
+        DARK[🕵️ Dark Web<br/>Monitoring]
+    end
+    
+    OSINT --> TIP[Threat Intelligence Platform]
+    CVE --> TIP
+    ISAC --> TIP
+    VENDOR --> TIP
+    DARK --> TIP
+    
+    TIP --> IOC[📋 Indicators of Compromise]
+    TIP --> TTP[⚔️ Tactics, Techniques, Procedures]
+    TIP --> ACTION[🎯 Actionable Intelligence]
+    
+    style TIP fill:#7b61ff,stroke:#fff,stroke-width:3px
+    style IOC fill:#ff4757,stroke:#fff,stroke-width:2px
+    style TTP fill:#ffb84d,stroke:#fff,stroke-width:2px
+    style ACTION fill:#2ecc71,stroke:#fff,stroke-width:2px
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card">
+            <h2>🕸️ Threat Actor Landscape</h2>
+            <p>Interactive network graph showing relationships between threat actor groups, shared TTPs, infrastructure, and targets. Node size indicates campaign volume; colors represent primary motivation.</p>
+            <div id="threat-actor-network" class="viz-container"></div>
+        </div>
+
+        <div class="glass-card">
+            <h2>📡 Real-Time Threat Feed</h2>
+            <p>Live timeline visualization of the latest 100 threats from aggregated feeds. Auto-updates every 30 seconds with new threats fading in. Filter by severity, category, or source.</p>
+            <div class="feed-controls">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="critical">Critical</button>
+                <button class="filter-btn" data-filter="high">High</button>
+                <button class="filter-btn" data-filter="medium">Medium</button>
+                <button class="filter-btn" data-filter="low">Low</button>
+            </div>
+            <div id="threat-timeline" class="viz-container"></div>
+        </div>
+
+        <div class="glass-card">
+            <h2>🎯 MITRE ATT&CK Coverage Matrix</h2>
+            <p>Heatmap showing detection coverage across MITRE ATT&CK tactics and techniques. Identifies blind spots and prioritizes detection development efforts. Click cells for technique details.</p>
+            <div id="mitre-coverage-matrix" class="viz-container"></div>
+        </div>
+
+        <div class="glass-card">
+            <h2>📊 Intelligence Metrics</h2>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <h3>IOC Processing</h3>
+                    <div class="metric-value">2,847</div>
+                    <div class="metric-label">IOCs processed today</div>
+                    <div class="metric-trend positive">+12% vs yesterday</div>
+                </div>
+                <div class="metric-card">
+                    <h3>Threat Enrichment</h3>
+                    <div class="metric-value">94%</div>
+                    <div class="metric-label">Enrichment success rate</div>
+                    <div class="metric-trend positive">+2% this week</div>
+                </div>
+                <div class="metric-card">
+                    <h3>False Positives</h3>
+                    <div class="metric-value">3.2%</div>
+                    <div class="metric-label">FP rate this month</div>
+                    <div class="metric-trend positive">-0.5% vs last month</div>
+                </div>
+                <div class="metric-card">
+                    <h3>Response Time</h3>
+                    <div class="metric-value">4.2h</div>
+                    <div class="metric-label">Avg IOC to action</div>
+                    <div class="metric-trend positive">-1.3h vs last month</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer-container">
+        <p>&copy; 2026 Asif Hussain. All rights reserved.</p>
+        <p>CORTEX Threat Intelligence Platform v4.0.0</p>
+    </footer>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#00d4ff',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#00d4ff',
+                lineColor: '#7b61ff',
+                secondaryColor: '#7b61ff',
+                tertiaryColor: '#ff6b9d'
+            }
+        });
+
+        // Threat Actor Network Graph (D3.js)
+        function createThreatActorNetwork() {
+            const nodes = [
+                { id: 'APT28', group: 'espionage', campaigns: 45, description: 'Russian state-sponsored' },
+                { id: 'Lazarus', group: 'financial', campaigns: 38, description: 'North Korean APT' },
+                { id: 'FIN7', group: 'financial', campaigns: 52, description: 'Financial cybercrime' },
+                { id: 'APT29', group: 'espionage', campaigns: 41, description: 'Russian intelligence' },
+                { id: 'Carbanak', group: 'financial', campaigns: 29, description: 'Banking malware' },
+                { id: 'APT41', group: 'espionage', campaigns: 35, description: 'Chinese state-sponsored' },
+                { id: 'REvil', group: 'ransomware', campaigns: 47, description: 'Ransomware-as-a-Service' },
+                { id: 'DarkSide', group: 'ransomware', campaigns: 24, description: 'Ransomware operations' },
+                { id: 'Anonymous', group: 'hacktivism', campaigns: 31, description: 'Hacktivist collective' },
+                { id: 'Turla', group: 'espionage', campaigns: 33, description: 'Russian cyber espionage' }
+            ];
+
+            const links = [
+                { source: 'APT28', target: 'APT29', value: 5 },
+                { source: 'APT28', target: 'Turla', value: 4 },
+                { source: 'Lazarus', target: 'APT41', value: 3 },
+                { source: 'FIN7', target: 'Carbanak', value: 6 },
+                { source: 'REvil', target: 'DarkSide', value: 4 },
+                { source: 'APT29', target: 'Turla', value: 5 },
+                { source: 'FIN7', target: 'Lazarus', value: 2 },
+                { source: 'APT41', target: 'Turla', value: 3 }
+            ];
+
+            const groupColors = {
+                espionage: '#7b61ff',
+                financial: '#ffb84d',
+                ransomware: '#ff4757',
+                hacktivism: '#00d4ff'
+            };
+
+            const width = 800;
+            const height = 600;
+
+            const svg = d3.select('#threat-actor-network')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+
+            const simulation = d3.forceSimulation(nodes)
+                .force('link', d3.forceLink(links).id(d => d.id).distance(120))
+                .force('charge', d3.forceManyBody().strength(-400))
+                .force('center', d3.forceCenter(width / 2, height / 2))
+                .force('collision', d3.forceCollide().radius(d => d.campaigns / 2 + 20));
+
+            // Links
+            const link = svg.append('g')
+                .selectAll('line')
+                .data(links)
+                .join('line')
+                .attr('stroke', 'rgba(255, 255, 255, 0.2)')
+                .attr('stroke-width', d => d.value);
+
+            // Nodes
+            const node = svg.append('g')
+                .selectAll('g')
+                .data(nodes)
+                .join('g')
+                .call(d3.drag()
+                    .on('start', dragStarted)
+                    .on('drag', dragged)
+                    .on('end', dragEnded));
+
+            node.append('circle')
+                .attr('r', d => d.campaigns / 2 + 10)
+                .attr('fill', d => groupColors[d.group])
+                .attr('opacity', 0.8)
+                .attr('class', 'animation-t1')
+                .on('mouseover', function(event, d) {
+                    d3.select(this)
+                        .attr('opacity', 1)
+                        .attr('r', d.campaigns / 2 + 15);
+                })
+                .on('mouseout', function(event, d) {
+                    d3.select(this)
+                        .attr('opacity', 0.8)
+                        .attr('r', d.campaigns / 2 + 10);
+                });
+
+            node.append('title')
+                .text(d => `${d.id}\n${d.description}\n${d.campaigns} campaigns`);
+
+            node.append('text')
+                .attr('text-anchor', 'middle')
+                .attr('dy', '0.35em')
+                .attr('fill', '#fff')
+                .attr('font-size', '11px')
+                .attr('font-weight', 'bold')
+                .attr('pointer-events', 'none')
+                .text(d => d.id);
+
+            simulation.on('tick', () => {
+                link
+                    .attr('x1', d => d.source.x)
+                    .attr('y1', d => d.source.y)
+                    .attr('x2', d => d.target.x)
+                    .attr('y2', d => d.target.y);
+
+                node.attr('transform', d => `translate(${d.x},${d.y})`);
+            });
+
+            function dragStarted(event) {
+                if (!event.active) simulation.alphaTarget(0.3).restart();
+                event.subject.fx = event.subject.x;
+                event.subject.fy = event.subject.y;
+            }
+
+            function dragged(event) {
+                event.subject.fx = event.x;
+                event.subject.fy = event.y;
+            }
+
+            function dragEnded(event) {
+                if (!event.active) simulation.alphaTarget(0);
+                event.subject.fx = null;
+                event.subject.fy = null;
+            }
+
+            // Legend
+            const legend = svg.append('g')
+                .attr('transform', 'translate(20, 20)');
+
+            const legendItems = [
+                { label: 'Espionage', color: groupColors.espionage },
+                { label: 'Financial', color: groupColors.financial },
+                { label: 'Ransomware', color: groupColors.ransomware },
+                { label: 'Hacktivism', color: groupColors.hacktivism }
+            ];
+
+            legendItems.forEach((item, i) => {
+                const legendRow = legend.append('g')
+                    .attr('transform', `translate(0, ${i * 25})`);
+
+                legendRow.append('circle')
+                    .attr('r', 8)
+                    .attr('fill', item.color)
+                    .attr('opacity', 0.8);
+
+                legendRow.append('text')
+                    .attr('x', 15)
+                    .attr('y', 5)
+                    .attr('fill', '#fff')
+                    .attr('font-size', '12px')
+                    .text(item.label);
+            });
+        }
+
+        // Real-Time Threat Feed Timeline (D3.js)
+        function createThreatTimeline() {
+            // Generate sample threat data
+            const now = new Date();
+            const threats = [];
+            const severities = ['critical', 'high', 'medium', 'low'];
+            const severityColors = {
+                critical: '#ff4757',
+                high: '#ffb84d',
+                medium: '#ffeb3b',
+                low: '#2ecc71'
+            };
+            const categories = ['Malware', 'Phishing', 'Exploit', 'DDoS', 'Data Breach', 'Ransomware'];
+
+            for (let i = 0; i < 100; i++) {
+                const minutesAgo = i * 5;
+                threats.push({
+                    time: new Date(now - minutesAgo * 60000),
+                    severity: severities[Math.floor(Math.random() * severities.length)],
+                    category: categories[Math.floor(Math.random() * categories.length)],
+                    description: `Threat ${100 - i}`
+                });
+            }
+
+            const margin = { top: 20, right: 50, bottom: 60, left: 60 };
+            const width = 900 - margin.left - margin.right;
+            const height = 400 - margin.top - margin.bottom;
+
+            const svg = d3.select('#threat-timeline')
+                .append('svg')
+                .attr('width', width + margin.left + margin.right)
+                .attr('height', height + margin.top + margin.bottom)
+                .append('g')
+                .attr('transform', `translate(${margin.left},${margin.top})`);
+
+            const x = d3.scaleTime()
+                .domain(d3.extent(threats, d => d.time))
+                .range([0, width]);
+
+            const y = d3.scaleLinear()
+                .domain([0, 3])
+                .range([height, 0]);
+
+            const severityScale = d => {
+                const mapping = { critical: 3, high: 2, medium: 1, low: 0 };
+                return mapping[d] + Math.random() * 0.4 - 0.2;
+            };
+
+            // X-axis
+            svg.append('g')
+                .attr('transform', `translate(0,${height})`)
+                .call(d3.axisBottom(x).ticks(8).tickFormat(d3.timeFormat('%H:%M')))
+                .attr('class', 'axis');
+
+            // Y-axis
+            svg.append('g')
+                .call(d3.axisLeft(y).tickValues([0, 1, 2, 3]).tickFormat(d => {
+                    const labels = ['Low', 'Medium', 'High', 'Critical'];
+                    return labels[d];
+                }))
+                .attr('class', 'axis');
+
+            // Threat markers
+            svg.selectAll('circle')
+                .data(threats)
+                .join('circle')
+                .attr('cx', d => x(d.time))
+                .attr('cy', d => y(severityScale(d.severity)))
+                .attr('r', 5)
+                .attr('fill', d => severityColors[d.severity])
+                .attr('opacity', 0.7)
+                .attr('class', 'animation-t1')
+                .on('mouseover', function(event, d) {
+                    d3.select(this)
+                        .attr('r', 8)
+                        .attr('opacity', 1);
+                })
+                .on('mouseout', function() {
+                    d3.select(this)
+                        .attr('r', 5)
+                        .attr('opacity', 0.7);
+                })
+                .append('title')
+                .text(d => `${d.category}\n${d.severity.toUpperCase()}\n${d.time.toLocaleTimeString()}`);
+
+            // Axis labels
+            svg.append('text')
+                .attr('x', width / 2)
+                .attr('y', height + 45)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#fff')
+                .attr('font-size', '14px')
+                .text('Time');
+
+            svg.append('text')
+                .attr('transform', 'rotate(-90)')
+                .attr('x', -height / 2)
+                .attr('y', -45)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#fff')
+                .attr('font-size', '14px')
+                .text('Severity');
+        }
+
+        // MITRE ATT&CK Coverage Matrix (D3.js)
+        function createMitreMatrix() {
+            const tactics = [
+                'Reconnaissance', 'Resource Dev', 'Initial Access', 'Execution',
+                'Persistence', 'Privilege Esc', 'Defense Evasion', 'Credential Access',
+                'Discovery', 'Lateral Move', 'Collection', 'C&C', 'Exfiltration', 'Impact'
+            ];
+
+            // Generate random coverage data
+            const data = [];
+            tactics.forEach((tactic, i) => {
+                const techniques = Math.floor(Math.random() * 8) + 8; // 8-15 techniques per tactic
+                for (let j = 0; j < techniques; j++) {
+                    data.push({
+                        tactic: tactic,
+                        tacticIndex: i,
+                        techniqueIndex: j,
+                        coverage: Math.random() // 0 = none, 0.5 = partial, 1 = full
+                    });
+                }
+            });
+
+            const cellSize = 25;
+            const margin = { top: 60, right: 20, bottom: 20, left: 120 };
+            const maxTechniques = 15;
+            const width = maxTechniques * cellSize;
+            const height = tactics.length * cellSize;
+
+            const svg = d3.select('#mitre-coverage-matrix')
+                .append('svg')
+                .attr('width', width + margin.left + margin.right)
+                .attr('height', height + margin.top + margin.bottom)
+                .append('g')
+                .attr('transform', `translate(${margin.left},${margin.top})`);
+
+            const colorScale = d3.scaleSequential()
+                .domain([0, 1])
+                .interpolator(d3.interpolateRgb('#1a1f3a', '#2ecc71'));
+
+            // Cells
+            svg.selectAll('rect')
+                .data(data)
+                .join('rect')
+                .attr('x', d => d.techniqueIndex * cellSize)
+                .attr('y', d => d.tacticIndex * cellSize)
+                .attr('width', cellSize - 1)
+                .attr('height', cellSize - 1)
+                .attr('fill', d => colorScale(d.coverage))
+                .attr('class', 'animation-t1')
+                .on('mouseover', function(event, d) {
+                    d3.select(this).attr('stroke', '#00d4ff').attr('stroke-width', 2);
+                })
+                .on('mouseout', function() {
+                    d3.select(this).attr('stroke', 'none');
+                })
+                .append('title')
+                .text(d => `${d.tactic}\nCoverage: ${Math.round(d.coverage * 100)}%`);
+
+            // Y-axis labels
+            svg.selectAll('.tactic-label')
+                .data(tactics)
+                .join('text')
+                .attr('class', 'tactic-label')
+                .attr('x', -10)
+                .attr('y', (d, i) => i * cellSize + cellSize / 2)
+                .attr('text-anchor', 'end')
+                .attr('dy', '0.35em')
+                .attr('fill', '#fff')
+                .attr('font-size', '11px')
+                .text(d => d);
+
+            // Legend
+            const legendWidth = 200;
+            const legendHeight = 15;
+            const legend = svg.append('g')
+                .attr('transform', `translate(${width - legendWidth}, ${-40})`);
+
+            const legendScale = d3.scaleLinear()
+                .domain([0, legendWidth])
+                .range([0, 1]);
+
+            legend.selectAll('rect')
+                .data(d3.range(legendWidth))
+                .join('rect')
+                .attr('x', d => d)
+                .attr('width', 1)
+                .attr('height', legendHeight)
+                .attr('fill', d => colorScale(legendScale(d)));
+
+            legend.append('text')
+                .attr('x', 0)
+                .attr('y', legendHeight + 15)
+                .attr('fill', '#fff')
+                .attr('font-size', '10px')
+                .text('No Coverage');
+
+            legend.append('text')
+                .attr('x', legendWidth)
+                .attr('y', legendHeight + 15)
+                .attr('text-anchor', 'end')
+                .attr('fill', '#fff')
+                .attr('font-size', '10px')
+                .text('Full Coverage');
+        }
+
+        // Initialize visualizations
+        createThreatActorNetwork();
+        createThreatTimeline();
+        createMitreMatrix();
+
+        // Filter buttons
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                // Filter logic would go here
+            });
+        });
+    </script>
+</body>
+</html>
