@@ -1,0 +1,82 @@
+{#
+# Completion Message Template
+# Displays success message after work item creation
+# Author: Asif Hussain
+# Copyright: © 2026 Asif Hussain. All rights reserved.
+#}
+# 🎉 ADO Work Items Created Successfully!
+
+## Summary
+
+{% if test_mode %}
+**🧪 TEST MODE:** No work items were actually created in Azure DevOps.
+{% else %}
+**✅ LIVE MODE:** Work items have been created in Azure DevOps.
+{% endif %}
+
+- **Feature:** {{ feature_name }}
+- **Work Items Created:** {{ items_created }}
+- **Total Story Points:** {{ story_points }}
+- **Estimated Effort:** {{ total_effort_hours }}h
+- **Execution Time:** {{ execution_time }}s
+
+---
+
+## 📦 Created Work Items
+
+{% if created_items %}
+{% for item in created_items %}
+### {{ item.type }}: {{ item.title }}
+- **ID:** {{ item.id }}
+- **URL:** {{ item.url }}
+- **State:** {{ item.state }}
+{% if item.story_points %}
+- **Story Points:** {{ item.story_points }}
+{% endif %}
+{% if item.estimated_hours %}
+- **Estimated:** {{ item.estimated_hours }}h
+{% endif %}
+
+{% endfor %}
+{% else %}
+_No work items created (test mode or dry run)_
+{% endif %}
+
+---
+
+## 🎯 Next Steps
+
+1. **Review** the created work items in Azure DevOps
+2. **Assign** work items to team members
+3. **Add** any additional details or attachments
+4. **Link** related work items if needed
+5. **Move** items to appropriate sprint/iteration
+
+{% if ado_board_url %}
+**View in ADO Board:** [{{ ado_board_url }}]({{ ado_board_url }})
+{% endif %}
+
+---
+
+{% if warnings %}
+## ⚠️ Warnings
+{% for warning in warnings %}
+- {{ warning }}
+{% endfor %}
+
+---
+{% endif %}
+
+{% if errors %}
+## ❌ Errors
+{% for error in errors %}
+- {{ error }}
+{% endfor %}
+
+---
+{% endif %}
+
+**Database Plan ID:** `{{ plan_id }}`
+**Execution ID:** `{{ execution_id }}`
+
+Thank you for using ADO Orchestrator v2! 🚀

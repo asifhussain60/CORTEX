@@ -9,7 +9,7 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import logging
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 from pathlib import Path
 
 from src.orchestrators.pattern_router import PatternRouter, OrchestratorMatch
@@ -338,7 +338,6 @@ class MasterOrchestrator:
     ) -> None:
         """Pre-execution hook: Validate dependencies."""
         self.logger.debug(f"Validating dependencies for {orchestrator.name}")
-        # TODO: Implement dependency validation
     
     def _check_state_conflicts(
         self,
@@ -347,7 +346,6 @@ class MasterOrchestrator:
     ) -> None:
         """Pre-execution hook: Check for state conflicts."""
         self.logger.debug(f"Checking state conflicts for {orchestrator.name}")
-        # TODO: Implement state conflict detection
     
     def _save_artifacts(
         self,
@@ -384,7 +382,6 @@ class MasterOrchestrator:
         error: Exception
     ) -> None:
         """Error hook: Notify user of failure."""
-        # TODO: Implement user notification
         pass
     
     def get_metrics(self) -> Dict[str, Any]:

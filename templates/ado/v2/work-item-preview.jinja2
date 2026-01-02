@@ -1,0 +1,133 @@
+{#
+# Work Item Preview Template
+# Displays generated work item hierarchy before approval
+# Author: Asif Hussain
+# Copyright: © 2026 Asif Hussain. All rights reserved.
+#}
+# 📋 Work Item Preview
+
+## Feature: {{ feature_name }}
+
+**Complexity:** {{ complexity | upper }}
+**Story Points:** {{ story_points }}
+**Estimated Effort:** {{ total_effort_hours }}h
+
+---
+
+## 🎯 Definition of Ready (DoR)
+
+**Completeness:** {{ dor_completeness }}%
+
+### Acceptance Criteria
+{% if acceptance_criteria %}
+{% for ac in acceptance_criteria %}
+- {{ ac }}
+{% endfor %}
+{% else %}
+_No acceptance criteria provided_
+{% endif %}
+
+### Assumptions
+{% if assumptions %}
+{% for assumption in assumptions %}
+- {{ assumption }}
+{% endfor %}
+{% else %}
+_No assumptions provided_
+{% endif %}
+
+### Constraints
+{% if constraints %}
+{% for constraint in constraints %}
+- {{ constraint }}
+{% endfor %}
+{% else %}
+_No constraints provided_
+{% endif %}
+
+---
+
+## 📦 Work Item Hierarchy
+
+### User Story: {{ feature_name }}
+- **Type:** User Story
+- **Story Points:** {{ story_points }}
+- **Priority:** {{ priority | default("Medium") }}
+- **Description:** {{ description | default(feature_name) }}
+
+#### Tasks
+{% if tasks %}
+{% for task in tasks %}
+{{ loop.index }}. **{{ task.title }}**
+   - Estimated: {{ task.estimated_hours }}h
+   - Remaining: {{ task.remaining_hours }}h
+{% if task.description %}   - Description: {{ task.description }}
+{% endif %}
+{% endfor %}
+{% else %}
+_No tasks generated_
+{% endif %}
+
+---
+
+## ✅ Test Requirements
+
+### Unit Tests
+{% if test_requirements.unit_tests %}
+{{ test_requirements.unit_tests }}
+{% else %}
+- Test happy path with valid inputs
+- Test edge cases and boundary conditions
+- Test error handling and validation
+- Achieve minimum 80% code coverage
+{% endif %}
+
+### Integration Tests
+{% if test_requirements.integration_tests %}
+{{ test_requirements.integration_tests }}
+{% else %}
+_Not required for this complexity level_
+{% endif %}
+
+### Acceptance Tests
+{% if test_requirements.acceptance_tests %}
+{{ test_requirements.acceptance_tests }}
+{% else %}
+- Validate all acceptance criteria are testable
+- Define test scenarios for each AC
+- Include both positive and negative test cases
+{% endif %}
+
+---
+
+## ⚠️ Risks & Dependencies
+{% if risks %}
+{% for risk in risks %}
+- {{ risk }}
+{% endfor %}
+{% else %}
+_No significant risks identified_
+{% endif %}
+
+{% if dependencies %}
+### Dependencies
+{% for dep in dependencies %}
+- {{ dep }}
+{% endfor %}
+{% endif %}
+
+---
+
+## 📊 Summary
+
+- **Total Work Items:** {{ total_work_items }}
+- **Total Story Points:** {{ story_points }}
+- **Total Effort:** {{ total_effort_hours }}h
+- **DoR Completeness:** {{ dor_completeness }}%
+{% if duplicate_detected %}
+- ⚠️ **Possible Duplicate:** Similar work items exist
+{% endif %}
+
+---
+
+**Ready to proceed with creation?**

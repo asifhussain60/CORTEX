@@ -1,0 +1,143 @@
+{#
+# DoR Refinement Prompt Template
+# Guides users to improve Definition of Ready completeness
+# Author: Asif Hussain
+# Copyright: © 2026 Asif Hussain. All rights reserved.
+#}
+# 🎯 Definition of Ready (DoR) Refinement
+
+## Current Status
+
+**Feature:** {{ feature_name }}
+**DoR Completeness:** {{ dor_completeness }}%
+
+{% if dor_completeness >= 90 %}
+✅ **Excellent!** Your DoR is very well defined.
+{% elif dor_completeness >= 70 %}
+✅ **Good!** Your DoR is adequately defined, but could be improved.
+{% elif dor_completeness >= 50 %}
+⚠️ **Acceptable.** Consider adding more detail to reduce risk.
+{% else %}
+❌ **Poor.** Additional refinement is strongly recommended.
+{% endif %}
+
+---
+
+## 📋 Current DoR Elements
+
+### Acceptance Criteria ({{ acceptance_criteria | length }} provided)
+{% if acceptance_criteria %}
+{% for ac in acceptance_criteria %}
+{{ loop.index }}. {{ ac }}
+{% endfor %}
+{% else %}
+❌ **No acceptance criteria provided**
+{% endif %}
+
+### Assumptions ({{ assumptions | length }} provided)
+{% if assumptions %}
+{% for assumption in assumptions %}
+- {{ assumption }}
+{% endfor %}
+{% else %}
+⚠️ **No assumptions provided**
+{% endif %}
+
+### Constraints ({{ constraints | length }} provided)
+{% if constraints %}
+{% for constraint in constraints %}
+- {{ constraint }}
+{% endfor %}
+{% else %}
+⚠️ **No constraints provided**
+{% endif %}
+
+---
+
+## 💡 Refinement Suggestions
+
+{% if not acceptance_criteria or acceptance_criteria | length == 0 %}
+### Missing: Acceptance Criteria
+**Question:** {{ dor_prompts.missing_acceptance_criteria | default("What specific behaviors or outcomes should be testable?") }}
+
+**Guidance:**
+- Define observable, testable outcomes
+- Use "Given-When-Then" format if helpful
+- Focus on user-visible behavior, not implementation
+- Consider both positive and negative scenarios
+
+**Example:**
+- Given a logged-in user, when they submit a valid form, then they see a success message
+- Given invalid input, when the user submits the form, then they see specific error messages
+
+---
+{% endif %}
+
+{% if not assumptions or assumptions | length == 0 %}
+### Missing: Assumptions
+**Question:** {{ dor_prompts.missing_assumptions | default("What are we assuming about the environment, users, or system?") }}
+
+**Guidance:**
+- List technical assumptions (e.g., "API is available", "Database schema exists")
+- List user assumptions (e.g., "Users are familiar with the UI", "Users have internet access")
+- List business assumptions (e.g., "Feature flag is enabled", "Legal approval obtained")
+
+**Example:**
+- The user authentication service is operational
+- Users have the necessary permissions to access this feature
+- The feature will be released behind a feature flag
+
+---
+{% endif %}
+
+{% if not constraints or constraints | length == 0 %}
+### Missing: Constraints
+**Question:** {{ dor_prompts.missing_constraints | default("Are there technical, regulatory, or business constraints?") }}
+
+**Guidance:**
+- Technical constraints (e.g., "Must use existing API", "Response time < 2s")
+- Regulatory constraints (e.g., "GDPR compliance required", "HIPAA compliant")
+- Business constraints (e.g., "Budget cap", "Must launch before Q2")
+- Resource constraints (e.g., "Limited to 2 developers", "No external vendors")
+
+**Example:**
+- Must comply with GDPR data retention policies
+- Response time must be under 500ms for 95th percentile
+- Cannot introduce new third-party dependencies
+
+---
+{% endif %}
+
+{% if dor_completeness < 70 %}
+### Additional Recommendations
+
+{% if acceptance_criteria | length < 2 %}
+- **Add more acceptance criteria:** Aim for at least 2-3 detailed criteria
+{% endif %}
+
+{% if not assumptions or assumptions | length == 0 %}
+- **Document assumptions:** Even if "none", explicitly state that
+{% endif %}
+
+{% if not constraints or constraints | length == 0 %}
+- **Identify constraints:** Technical, time, budget, or regulatory
+{% endif %}
+
+---
+{% endif %}
+
+## 🚀 Next Steps
+
+1. **Review** the questions above
+2. **Add** missing elements to your feature request
+3. **Re-run** the ADO Orchestrator with updated information
+4. **Verify** DoR completeness improves to 70%+
+
+---
+
+**Need Help?**
+- Use the `ado wizard` command for guided DoR refinement
+- Consult with your product owner or architect
+- Review similar features for reference examples
+
+**Current Plan ID:** `{{ plan_id }}`
