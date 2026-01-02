@@ -591,3 +591,126 @@ class PlanningStateDB:
         ))
         
         return cursor.lastrowid
+    
+    # ========================================
+    # Orchestrator Execution Logging (for StateManager)
+    # ========================================
+    
+    def log_execution(
+        self,
+        orchestrator_id: str,
+        status: str,
+        parameters: Optional[Dict[str, Any]] = None,
+        result: Optional[Dict[str, Any]] = None
+    ) -> int:
+        """
+        Log orchestrator execution event.
+        
+        Args:
+            orchestrator_id: Unique orchestrator identifier
+            status: Execution status ('started', 'in_progress', 'completed', 'failed')
+            parameters: Execution parameters
+            result: Execution result
+        
+        Returns:
+            Log ID for tracking
+        """
+        # Serialize parameters safely (convert non-serializable objects to strings)
+        safe_parameters = {}
+        if parameters:
+            for key, value in parameters.items():
+                try:
+                    json.dumps(value)  # Test if serializable
+                    safe_parameters[key] = value
+                except (TypeError, ValueError):
+                    # Convert non-serializable to string representation
+                    safe_parameters[key] = str(value)
+        
+        cursor = self._conn.execute("""
+            INSERT INTO orchestrator_execution_log (
+                orchestrator_id, status, parameters, result, timestamp
+            ) VALUES (?, ?, ?, ?, ?)
+        """, (
+            orchestrator_id,
+            status,
+            json.dumps(safe_parameters),
+            json.dumps(result or {}),
+            datetime.now().isoformat()
+        ))
+        
+        self._conn.commit()
+        return cursor.lastrowid
+    
+    def update_execution_log(
+        self,
+        log_id: int,
+        status: str,
+        result: Optional[Dict[str, Any]] = None
+    ) -> None:
+        """
+        Update orchestrator execution log entry.
+        
+        Args:
+            log_id: Execution log ID
+            status: New status
+            result: Execution result
+        """
+        self._conn.execute("""
+            UPDATE orchestrator_execution_log
+            SET status = ?, result = ?, timestamp = ?
+            WHERE log_id = ?
+        """, (
+            status,
+            json.dumps(result or {}),
+            datetime.now().isoformat(),
+            log_id
+        ))
+        
+        self._conn.commit()
+    
+    def get_execution_logs(
+        self,
+        orchestrator_id: Optional[str] = None,
+        status: Optional[str] = None,
+        limit: int = 100
+    ) -> List[Dict[str, Any]]:
+        """
+        Get orchestrator execution history.
+        
+        Args:
+            orchestrator_id: Filter by orchestrator (optional)
+            status: Filter by status (optional)
+            limit: Maximum number of records
+        
+        Returns:
+            List of execution log entries
+        """
+        query = "SELECT * FROM orchestrator_execution_log WHERE 1=1"
+        params = []
+        
+        if orchestrator_id:
+            query += " AND orchestrator_id = ?"
+            params.append(orchestrator_id)
+        
+        if status:
+            query += " AND status = ?"
+            params.append(status)
+        
+        query += " ORDER BY timestamp DESC LIMIT ?"
+        params.append(limit)
+        
+        cursor = self._conn.execute(query, params)
+        rows = cursor.fetchall()
+        
+        return [
+            {
+                'log_id': row['log_id'],
+                'orchestrator_id': row['orchestrator_id'],
+                'status': row['status'],
+                'parameters': json.loads(row['parameters']) if row['parameters'] else {},
+                'result': json.loads(row['result']) if row['result'] else {},
+                'timestamp': row['timestamp']
+            }
+            for row in rows
+        ]
+

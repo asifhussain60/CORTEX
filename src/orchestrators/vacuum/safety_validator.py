@@ -17,7 +17,7 @@ import os
 import subprocess
 import logging
 from pathlib import Path
-from typing import Dict, Any, List, Set
+from typing import Dict, Any, List, Set, Optional
 from datetime import datetime, timedelta
 
 
@@ -101,7 +101,7 @@ class SafetyValidator:
             f"(size_threshold={self.size_threshold_mb}MB, git_root={self.git_root})"
         )
     
-    def _find_git_root(self) -> Path | None:
+    def _find_git_root(self) -> Optional[Path]:
         """Find git repository root directory."""
         try:
             result = subprocess.run(

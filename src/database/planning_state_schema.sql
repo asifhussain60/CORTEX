@@ -167,6 +167,21 @@ CREATE TABLE IF NOT EXISTS metrics (
 CREATE INDEX IF NOT EXISTS idx_metrics_plan_name ON metrics(plan_id, metric_name);
 CREATE INDEX IF NOT EXISTS idx_metrics_recorded ON metrics(recorded_at);
 
+-- Orchestrator Execution Log: Track orchestrator lifecycle events (for StateManager)
+CREATE TABLE IF NOT EXISTS orchestrator_execution_log (
+    log_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    orchestrator_id TEXT NOT NULL,
+    status TEXT CHECK (status IN ('started', 'in_progress', 'completed', 'failed')) NOT NULL,
+    parameters TEXT,
+    result TEXT,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_orch_exec_log_orchestrator ON orchestrator_execution_log(orchestrator_id);
+CREATE INDEX IF NOT EXISTS idx_orch_exec_log_status ON orchestrator_execution_log(status);
+CREATE INDEX IF NOT EXISTS idx_orch_exec_log_timestamp ON orchestrator_execution_log(timestamp);
+
 -- Initial schema version
 INSERT OR IGNORE INTO schema_migrations (version, description)
-VALUES (1, 'Initial schema: plans, phases, tasks, artifacts, validations, snapshots, logs, metrics');
+VALUES (1, 'Initial schema: plans, phases, tasks, artifacts, validations, snapshots, logs, metrics, orchestrator_execution_log');
+

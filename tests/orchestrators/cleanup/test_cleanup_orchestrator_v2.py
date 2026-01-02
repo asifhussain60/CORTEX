@@ -34,7 +34,11 @@ def temp_workspace():
 def mock_state_db():
     """Mock PlanningStateDB."""
     db = Mock(spec=PlanningStateDB)
-    db.create_session.return_value = "test-session-123"
+    # Configure mock attributes before they're accessed
+    db.create_session = Mock(return_value="test-session-123")
+    db.log_execution = Mock(return_value=1)
+    db.update_execution_log = Mock()
+    db.get_execution_logs = Mock(return_value=[])
     return db
 
 

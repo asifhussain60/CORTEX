@@ -34,15 +34,20 @@ def pytest_configure(config):
     
     print("\n🔍 Validating orchestrator configuration...")
     
-    # Run validation script
+    # Run validation script (skip Phase 5 instantiation by default)
     script_path = Path(__file__).parent.parent.parent / "scripts" / "validate_orchestrator_config.py"
     
     if not script_path.exists():
         print(f"⚠️  Validation script not found: {script_path}")
         return
     
+    # Check if full validation requested (includes Phase 5 instantiation)
+    args = [sys.executable, str(script_path)]
+    if not config.getoption("--full-validation", default=False):
+        args.append("--skip-instantiation")
+    
     result = subprocess.run(
-        [sys.executable, str(script_path)],
+        args,
         capture_output=True,
         text=True
     )
@@ -51,6 +56,7 @@ def pytest_configure(config):
         print("\n" + result.stdout)
         print("\n❌ Configuration validation failed. Fix errors before running tests.")
         print("   To skip validation: pytest --no-config-validation")
+        print("   For full validation (Phase 5): pytest --full-validation")
         sys.exit(1)
     
     print("✅ Configuration validation passed\n")
@@ -63,6 +69,12 @@ def pytest_addoption(parser):
         action="store_true",
         default=False,
         help="Skip configuration validation before running tests"
+    )
+    parser.addoption(
+        "--full-validation",
+        action="store_true",
+        default=False,
+        help="Run full validation including Phase 5 instantiation tests"
     )
 
 

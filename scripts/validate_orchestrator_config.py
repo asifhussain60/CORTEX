@@ -34,8 +34,9 @@ except ImportError:
 class ConfigValidator:
     """Validates orchestrator configuration files."""
     
-    def __init__(self, verbose: bool = False):
+    def __init__(self, verbose: bool = False, skip_instantiation: bool = False):
         self.verbose = verbose
+        self.skip_instantiation = skip_instantiation
         self.errors: List[str] = []
         self.warnings: List[str] = []
         self.base_path = Path(__file__).parent.parent
@@ -79,6 +80,19 @@ class ConfigValidator:
         print("-" * 50)
         import_valid = self.validate_python_imports()
         print()
+        
+        # Phase 5: Runtime Instantiation Validation (optional)
+        instantiation_valid = True
+        if not self.skip_instantiation:
+            print("Phase 5: Runtime Instantiation Validation")
+            print("-" * 50)
+            instantiation_valid = self.validate_instantiation()
+            print()
+        else:
+            print("Phase 5: Runtime Instantiation Validation")
+            print("-" * 50)
+            print("  ⊗ Skipped (use --full-validation to enable)")
+            print()
         
         # Summary
         print("=" * 50)
@@ -291,6 +305,110 @@ class ConfigValidator:
             print(f"  ✅ All {len(orchestrators)} orchestrator classes found")
         
         return all_valid
+    
+    def validate_instantiation(self) -> bool:
+        """
+        Validate that orchestrators can be instantiated at runtime.
+        
+        Tests:
+        - Can import module and class
+        - Can instantiate with registry's expected parameters
+        - Instance is not None
+        
+        This catches interface contract mismatches that schema validation misses.
+        """
+        registry_path = self.base_path / "cortex-brain/config/mcp-server.yaml"
+        
+        if not registry_path.exists():
+            self.errors.append(f"Registry config not found: {registry_path}")
+            return False
+        
+        registry_config = yaml.safe_load(registry_path.read_text())
+        orchestrators = registry_config.get('orchestrators', {})
+        
+        all_valid = True
+        successful = 0
+        
+        # Add project root to path for imports
+        import sys
+        project_root = str(self.base_path)
+        if project_root not in sys.path:
+            sys.path.insert(0, project_root)
+        
+        for orch_id, definition in orchestrators.items():
+            module_path = definition['module']
+            class_name = definition['class']
+            config_path = definition.get('config')
+            
+            self.log_verbose(f"Testing instantiation: {orch_id}")
+            
+            try:
+                # Import the module and class
+                module = __import__(module_path, fromlist=[class_name])
+                orchestrator_class = getattr(module, class_name)
+                
+                self.log_verbose(f"  ✓ Imported {module_path}.{class_name}")
+                
+                # Attempt instantiation with common parameter patterns
+                instance = None
+                errors_encountered = []
+                
+                # Try pattern 1: config_path parameter
+                if config_path:
+                    try:
+                        full_config_path = str(self.base_path / config_path)
+                        instance = orchestrator_class(config_path=full_config_path)
+                        self.log_verbose(f"  ✓ Instantiated with config_path parameter")
+                    except TypeError as e:
+                        errors_encountered.append(f"config_path pattern: {e}")
+                
+                # Try pattern 2: no parameters (default constructor)
+                if instance is None:
+                    try:
+                        instance = orchestrator_class()
+                        self.log_verbose(f"  ✓ Instantiated with no parameters")
+                    except TypeError as e:
+                        errors_encountered.append(f"no-args pattern: {e}")
+                
+                # Try pattern 3: config dict parameter
+                if instance is None and config_path:
+                    try:
+                        full_config_path = self.base_path / config_path
+                        if full_config_path.exists():
+                            config_dict = yaml.safe_load(full_config_path.read_text())
+                            instance = orchestrator_class(config=config_dict)
+                            self.log_verbose(f"  ✓ Instantiated with config dict")
+                    except (TypeError, yaml.YAMLError) as e:
+                        errors_encountered.append(f"config dict pattern: {e}")
+                
+                # Check if instantiation succeeded
+                if instance is None:
+                    self.errors.append(
+                        f"Orchestrator '{orch_id}' instantiation failed. Tried patterns:\n" +
+                        "\n".join(f"    - {err}" for err in errors_encountered)
+                    )
+                    all_valid = False
+                else:
+                    self.log_verbose(f"  ✓ Instance created successfully: {type(instance).__name__}")
+                    successful += 1
+                    
+            except ImportError as e:
+                self.errors.append(
+                    f"Orchestrator '{orch_id}': Import failed: {e}"
+                )
+                all_valid = False
+            except Exception as e:
+                self.errors.append(
+                    f"Orchestrator '{orch_id}': Unexpected error: {e}"
+                )
+                all_valid = False
+        
+        if all_valid:
+            print(f"  ✅ All {successful}/{len(orchestrators)} orchestrators instantiated successfully")
+        else:
+            print(f"  ⚠️  {successful}/{len(orchestrators)} orchestrators instantiated successfully")
+        
+        return all_valid
 
 
 def main():
@@ -308,10 +426,18 @@ def main():
         action="store_true",
         help="Auto-fix issues where possible (not yet implemented)"
     )
+    parser.add_argument(
+        "--skip-instantiation",
+        action="store_true",
+        help="Skip Phase 5 instantiation validation (faster, less comprehensive)"
+    )
     
     args = parser.parse_args()
     
-    validator = ConfigValidator(verbose=args.verbose)
+    validator = ConfigValidator(
+        verbose=args.verbose,
+        skip_instantiation=args.skip_instantiation
+    )
     
     if args.fix:
         print("⚠️  Auto-fix not yet implemented")
