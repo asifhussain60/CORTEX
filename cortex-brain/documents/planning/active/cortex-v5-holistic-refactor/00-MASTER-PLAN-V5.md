@@ -1,11 +1,11 @@
 # 🛡️ CORTEX v5.0 Holistic Architecture Refactor
 
 **Plan ID:** cortex-v5-holistic-refactor  
-**Feature:** System-wide Pure Autonomous Architecture Transformation  
-**Created:** January 2, 2026  
+**Feature:** System-wide Pure Autonomous Architecture Transformation with Master Orchestrator  
+**Created:** January 2, 2026 | **Updated:** January 2, 2026 (Master Orchestrator integration)  
 **Complexity:** TIER 5 (ARCHITECTURAL)  
-**Strategy:** Bootstrap Planning System v5, then use it to plan remaining migrations  
-**Estimated Duration:** 35 days total (8 days bootstrap + 27 days migrations)
+**Strategy:** Bootstrap Planning System v5 + Master Orchestrator, then use them to plan remaining migrations  
+**Estimated Duration:** 38 days total (11 days bootstrap + 27 days migrations)
 
 ---
 
@@ -13,14 +13,15 @@
 
 **Overall Progress:** `████░░░░░░░░░░░░░░░░` **20%** ⏳ IN PROGRESS
 
-### Bootstrap Phase (Planning System v5)
+### Bootstrap Phase (Planning System v5 + Master Orchestrator)
 
 | Phase | Name | Progress | Duration | Status |
 |-------|------|----------|----------|--------|
 | 0 | Foundation Setup | `░░░░░░░░░░` | 1d | ⏸️ Not Started |
 | 1 | MCP Tool Infra | `██████████` | 2d | ✅ Complete |
 | 2 | State Database | `██████████` | 1.5d | ✅ Complete |
-| 3 | BaseOrch v4.1 | `░░░░░░░░░░` | 1.5d | ⏸️ Not Started |
+| 3 | BaseOrch v4.1 + Master Orch Core | `░░░░░░░░░░` | 2.5d | ⏸️ Not Started |
+| 3.5 | Master Orch Integration | `░░░░░░░░░░` | 1d | ⏸️ Not Started |
 | 4 | PlanOrch v5 | `░░░░░░░░░░` | 2d | ⏸️ Not Started |
 
 ### Migration Phase (Using Planning System v5)
@@ -34,9 +35,9 @@
 | 9 | Documentation | `░░░░░░░░░░` | 1.5d | ⏸️ Not Started |
 | 10 | REFACTOR & Cleanup | `░░░░░░░░░░` | 2d | ⏸️ Not Started |
 
-**Bootstrap Completion:** ~8 days  
-**Full Completion:** ~35 days  
-**Current Phase:** BaseOrchestrator v4.1 implementation
+**Bootstrap Completion:** ~11 days (includes Master Orchestrator)  
+**Full Completion:** ~38 days  
+**Current Phase:** BaseOrchestrator v4.1 + Master Orchestrator Core implementation
 
 **Checkpoints:**
 - ✅ Phase 1 checkpoint @ commit 90153190: MCP Tool Infrastructure
@@ -48,7 +49,25 @@
 
 ### The Transformation
 
-This plan eliminates hybrid control flow ambiguity across the entire CORTEX architecture by implementing a pure autonomous system where Python owns all execution logic and manifests contain only configuration data. The approach is **bootstrapped**: we build Planning System v5 first, then use it to create detailed plans for migrating all other orchestrators and agents.
+This plan eliminates hybrid control flow ambiguity across the entire CORTEX architecture by implementing a pure autonomous system where Python owns all execution logic and manifests contain only configuration data. The architecture introduces a **Master Orchestrator** - a centralized, machine-readable routing layer that eliminates LLM-dependent brittleness while enabling deterministic orchestrator coordination. The approach is **bootstrapped**: we build Planning System v5 + Master Orchestrator first, then use them to create detailed plans for migrating all other orchestrators and agents.
+
+### Why Master Orchestrator?
+
+**Problem:** Current intent routing via `CORTEX.prompt.md` is LLM-dependent, creating brittleness and unpredictability. No orchestrator-to-orchestrator communication exists.
+
+**Solution:** Master Orchestrator provides:
+- **Machine-Readable Routing:** Pure pattern matching via YAML config (no LLM interpretation)
+- **Orchestrator Registry:** Centralized discovery and lifecycle management
+- **State Coordination:** Cross-orchestrator state sharing via PlanningStateDB
+- **Execution Engine:** Autonomous orchestrator invocation with monitoring
+- **Hybrid Fallback:** LLM classifier for edge cases, pattern matching for 90%+ of requests
+
+**Architecture:**
+```
+User Input → Master Orchestrator (Pattern Match) → Orchestrator Execution
+                    ↓ (no match)
+              LLM Classifier (Fallback)
+```
 
 ### Why Bootstrap?
 
@@ -59,11 +78,14 @@ This plan eliminates hybrid control flow ambiguity across the entire CORTEX arch
 ### Success Criteria
 
 **Bootstrap Phase:**
+- ✅ Master Orchestrator routing layer operational (pattern matching + LLM fallback)
 - ✅ Planning System v5 operational with MCP tool integration
 - ✅ SQLite state database functioning with ACID transactions
 - ✅ BaseOrchestrator v4.1 supporting config-driven execution
 - ✅ Planning orchestrator generates plans with proper structure
 - ✅ Zero execution ambiguity in new planning system
+- ✅ Orchestrator registry supports dependency chains
+- ✅ Cross-orchestrator state sharing functional
 
 **Migration Phase:**
 - ✅ All 4 AUTONOMOUS orchestrators migrated (ADO, Vacuum, Cleanup)
@@ -334,9 +356,11 @@ class PlanningStateDB:
 
 ---
 
-## 🏛️ Phase 3: BaseOrchestrator v4.1 (1.5 days)
+## 🏛️ Phase 3: BaseOrchestrator v4.1 + Master Orchestrator Core (2.5 days)
 
-**Goal:** Config-driven orchestrator base class with template rendering
+**Goal:** Config-driven orchestrator base class with template rendering + Centralized routing layer
+
+**MAJOR ADDITION:** This phase now includes the **Master Orchestrator Core** - a machine-readable, pattern-based routing layer that eliminates LLM-dependent brittleness and enables deterministic orchestrator coordination. This is a critical architectural component that provides centralized orchestrator management, state coordination, and hybrid routing (pattern matching primary, LLM fallback).
 
 ### Task 3.1: Core Base Class
 **Duration:** 8h
@@ -397,20 +421,210 @@ cortex-brain/templates/
 - Estimated vs actual time tracking
 - Status change notifications
 
+### Task 3.4: Master Orchestrator Core
+**Duration:** 1 day (NEW)
+
+**Files to Create:**
+- `src/orchestrators/master_orchestrator.py` - Centralized routing engine
+- `cortex-brain/config/master-orchestrator.yaml` - Routing config
+- `src/orchestrators/pattern_router.py` - Pattern matching engine
+- `src/orchestrators/state_manager.py` - Cross-orchestrator state coordination
+- `src/orchestrators/execution_engine.py` - Lifecycle management
+- `tests/orchestrators/test_master_orchestrator.py` - Comprehensive routing tests
+
+**Architecture:**
+```python
+class MasterOrchestrator:
+    """Centralized orchestrator routing and lifecycle management."""
+    
+    def __init__(self, config_path: str, registry: OrchestratorRegistry, 
+                 state_db: PlanningStateDB, llm_fallback: Optional[LLMIntentClassifier]):
+        self.router = PatternRouter(config_path)
+        self.registry = registry
+        self.state_manager = StateManager(state_db)
+        self.execution_engine = ExecutionEngine()
+        self.llm_fallback = llm_fallback
+    
+    def route_request(self, user_input: str, context: dict) -> OrchestratorMatch:
+        """Primary pattern-based routing with LLM fallback."""
+        match = self.router.match_intent(user_input)
+        if match.confidence < 0.9 and self.llm_fallback:
+            match = self.llm_fallback.classify(user_input, context)
+        return match
+    
+    def execute_orchestrator(self, orchestrator_id: str, params: dict) -> ExecutionResult:
+        """Lifecycle management for orchestrator execution."""
+        orch = self.registry.get(orchestrator_id)
+        self.state_manager.begin_execution(orchestrator_id, params)
+        
+        try:
+            result = self.execution_engine.run(
+                orchestrator=orch,
+                params=params,
+                hooks=self._get_lifecycle_hooks(orchestrator_id)
+            )
+            self.state_manager.complete_execution(orchestrator_id, result)
+            return result
+        except Exception as e:
+            self.state_manager.fail_execution(orchestrator_id, str(e))
+            raise
+```
+
+**Routing Config (`cortex-brain/config/master-orchestrator.yaml`):**
+```yaml
+routing_rules:
+  - pattern: "^(plan|create a plan|make a plan)$"
+    orchestrator: planning_v5
+    confidence: 1.0
+    match_type: exact
+  
+  - pattern: "^(tdd|start tdd|run tests)$"
+    orchestrator: tdd_orchestrator
+    confidence: 1.0
+    match_type: exact
+  
+  - pattern: "^(ado|ado story|ado feature).*$"
+    orchestrator: ado_orchestrator
+    confidence: 1.0
+    match_type: regex
+  
+  - pattern: "^(sanitize|make generic).*$"
+    orchestrator: sanitization_orchestrator
+    confidence: 1.0
+    match_type: regex
+  
+  - pattern: "^(maintenance|health check)$"
+    orchestrator: maintenance_orchestrator
+    confidence: 1.0
+    match_type: exact
+  
+  - pattern: "^(refine|improve).*$"
+    orchestrator: refinement_orchestrator
+    confidence: 1.0
+    match_type: regex
+
+fallback:
+  enabled: true
+  classifier: llm_intent_classifier
+  confidence_threshold: 0.7
+  log_unmatched: true
+
+lifecycle_hooks:
+  pre_execution:
+    - validate_dependencies
+    - check_state_conflicts
+  post_execution:
+    - save_artifacts
+    - update_metrics
+  on_error:
+    - log_failure
+    - notify_user
+```
+
+**Pattern Router:**
+```python
+class PatternRouter:
+    """Machine-readable pattern matching engine."""
+    
+    def __init__(self, config_path: str):
+        self.rules = self._load_routing_rules(config_path)
+    
+    def match_intent(self, user_input: str) -> OrchestratorMatch:
+        """Match input against routing patterns."""
+        for rule in self.rules:
+            if rule['match_type'] == 'exact':
+                if re.match(rule['pattern'], user_input.strip().lower()):
+                    return OrchestratorMatch(
+                        orchestrator_id=rule['orchestrator'],
+                        confidence=rule['confidence'],
+                        match_type='exact'
+                    )
+            elif rule['match_type'] == 'regex':
+                if re.search(rule['pattern'], user_input, re.IGNORECASE):
+                    return OrchestratorMatch(
+                        orchestrator_id=rule['orchestrator'],
+                        confidence=rule['confidence'],
+                        match_type='regex'
+                    )
+        
+        return OrchestratorMatch(orchestrator_id=None, confidence=0.0, match_type='none')
+```
+
+**State Manager:**
+```python
+class StateManager:
+    """Cross-orchestrator state coordination via PlanningStateDB."""
+    
+    def __init__(self, db: PlanningStateDB):
+        self.db = db
+    
+    def begin_execution(self, orchestrator_id: str, params: dict) -> int:
+        """Create execution log entry."""
+        return self.db.log_execution(orchestrator_id, 'started', params)
+    
+    def share_state(self, from_orch: str, to_orch: str, data: dict) -> None:
+        """Enable orchestrator-to-orchestrator data sharing."""
+        self.db.save_artifact(from_orch, 'shared_state', data, destination=to_orch)
+    
+    def get_shared_state(self, orchestrator_id: str) -> dict:
+        """Retrieve state shared by other orchestrators."""
+        return self.db.get_artifacts_for(orchestrator_id)
+```
+
+**Execution Engine:**
+```python
+class ExecutionEngine:
+    """Orchestrator lifecycle management with hooks."""
+    
+    def run(self, orchestrator: BaseOrchestrator, params: dict, 
+            hooks: dict) -> ExecutionResult:
+        """Execute orchestrator with lifecycle hooks."""
+        # Pre-execution hooks
+        for hook in hooks.get('pre_execution', []):
+            self._execute_hook(hook, orchestrator, params)
+        
+        # Main execution
+        result = orchestrator.execute_autonomous()
+        
+        # Post-execution hooks
+        for hook in hooks.get('post_execution', []):
+            self._execute_hook(hook, orchestrator, result)
+        
+        return result
+```
+
+**Integration with Phase 1-2:**
+- Reuses `OrchestratorRegistry` from Phase 1 (MCP tools)
+- Reuses `PlanningStateDB` from Phase 2 (state persistence)
+- Extends registry for dependency resolution
+- Adds orchestrator lifecycle tracking to database
+
+**Testing Strategy:**
+- Unit tests: Pattern matching (exact/regex), config validation, lifecycle hooks
+- Integration tests: End-to-end routing for all 6 orchestrators, state sharing, fallback scenarios
+- Performance tests: Routing latency (<100ms), config reload (<50ms)
+- Edge cases: No match (LLM fallback), conflicting patterns, dependency chains
+
 ### Completion Criteria
 - ✅ BaseOrchestrator v4.1 fully functional
 - ✅ Config loading works with validation
 - ✅ Template rendering produces correct output
 - ✅ Progress tracking updates database correctly
 - ✅ Checkpoints and rollback work properly
-- ✅ 100% test coverage for base class
-- ✅ Git checkpoint created: `checkpoint-phase-3-base-orchestrator`
+- ✅ **Master Orchestrator routing operational (pattern matching + LLM fallback)**
+- ✅ **Orchestrator registry supports dependency resolution**
+- ✅ **Cross-orchestrator state sharing functional**
+- ✅ **All 6 orchestrators routable via YAML config**
+- ✅ 100% test coverage for base class and routing layer
+- ✅ Git checkpoint created: `checkpoint-phase-3-base-orchestrator-master-orch`
 
 ---
 
-## 🧠 Phase 4: Planning Orchestrator v5 (2 days)
+## 🧠 Phase 4: Planning Orchestrator v5 + Master Orchestrator Integration (2 days)
 
-**Goal:** Pure autonomous planning orchestrator with zero natural language in manifest
+**Goal:** Pure autonomous planning orchestrator with zero natural language in manifest + First Master Orchestrator client
+
+**INTEGRATION:** Planning v5 becomes the first orchestrator to integrate with Master Orchestrator, validating the routing layer and state coordination mechanisms.
 
 ### Task 4.1: Planning Orchestrator Implementation
 **Duration:** 1d
@@ -508,21 +722,58 @@ validation:
 - Context data injection
 - Cross-reference generation
 
+### Task 4.4: Master Orchestrator Integration (NEW)
+**Duration:** 4h
+
+**Integration Steps:**
+1. Register Planning v5 in `master-orchestrator.yaml` with patterns
+2. Implement `PlanningOrchestratorV5.get_registration_config()` for self-registration
+3. Add state coordination with Master Orchestrator's StateManager
+4. Test routing from user input → Master Orchestrator → Planning v5
+5. Validate lifecycle hooks (pre/post execution, error handling)
+
+**Registration Config:**
+```python
+class PlanningOrchestratorV5(BaseOrchestratorV4_1):
+    @staticmethod
+    def get_registration_config() -> dict:
+        return {
+            'orchestrator_id': 'planning_v5',
+            'patterns': [
+                {'pattern': r'^(plan|create a plan|make a plan)$', 'match_type': 'exact', 'confidence': 1.0}
+            ],
+            'dependencies': ['mcp_tools', 'planning_state_db'],
+            'lifecycle_hooks': {
+                'pre_execution': ['validate_workspace'],
+                'post_execution': ['save_plan_artifact']
+            }
+        }
+```
+
+**Testing:**
+- End-to-end: User input "plan feature X" → Routed to Planning v5 → Plan generated
+- State sharing: Planning v5 shares context with other orchestrators via StateManager
+- Error handling: Failed planning execution logged correctly
+
 ### Completion Criteria
 - ✅ Planning Orchestrator v5 generates complete plans
 - ✅ Plans have proper folder structure (4 subfolders)
 - ✅ Database tracks all phases and artifacts
 - ✅ Templates render correctly with injected data
 - ✅ Validation catches missing required content
+- ✅ **Planning v5 integrated with Master Orchestrator (routing + state sharing)**
+- ✅ **End-to-end routing test passes**
 - ✅ 100% test coverage for orchestrator
 - ✅ Manual test: Generate a sample plan successfully
-- ✅ Git checkpoint created: `checkpoint-phase-4-planning-v5`
+- ✅ Git checkpoint created: `checkpoint-phase-4-planning-v5-master-orch`
 
 ---
 
-## 🚀 Phase 5: Use Planning v5 for Migrations (0.5 days)
+## 🚀 Phase 5: Use Planning v5 + Master Orchestrator for Migrations (0.5 days)
 
-**Goal:** Validate Planning System v5 by using it to create detailed migration plans
+**Goal:** Validate Planning System v5 + Master Orchestrator by using them to create detailed migration plans via routing layer
+
+**ROUTING VALIDATION:** All plan generation requests will route through Master Orchestrator, validating pattern matching and orchestrator invocation.
 
 ### Task 5.1: Generate ADO Migration Plan
 **Duration:** 1h
@@ -671,29 +922,94 @@ cortex-brain/documents/planning/active/vacuum-v2-migration/
 
 ---
 
-## 🔗 Phase 7: System Integration (2 days)
+## 🔗 Phase 7: System Integration + Master Orchestrator Deployment (2 days)
 
-**Goal:** Integrate all components and update CORTEX entry point
+**Goal:** Integrate all components, deploy Master Orchestrator as primary routing layer, and update CORTEX entry point
 
-### Task 7.1: Update CORTEX.prompt.md
+**ROUTING TRANSITION:** Master Orchestrator replaces CORTEX.prompt.md as primary routing mechanism. LLM-based routing becomes fallback only.
+
+### Task 7.1: Update CORTEX.prompt.md for Master Orchestrator
 **Duration:** 4h
 
 **Changes Required:**
-- Update Intent Router with new orchestrator versions
-- Add MCP tool invocation instructions
-- Update Orchestrator Autonomy Matrix
-- Document new execution flow
-- Add database state query patterns
+- Replace direct Intent Router with Master Orchestrator invocation
+- Document pattern-based routing configuration
+- Add LLM fallback documentation (edge cases only)
+- Update Orchestrator Registry access patterns
+- Document state coordination mechanisms
 
-**New Intent Routing:**
+**New Intent Routing Architecture:**
 ```markdown
-| `/CORTEX Plan [x]` | 🛡️ Planning System v5 (AUTONOMOUS) | invoke_orchestrator("planning_system", request) |
-| `ado story [x]` | 🛡️ ADO Operations v2 (AUTONOMOUS) | invoke_orchestrator("ado_operations", request) |
-| `vacuum [path]` | 🛡️ Vacuum v2 (AUTONOMOUS) | invoke_orchestrator("vacuum", request) |
-| `cleanup [type]` | 🛡️ Cleanup v2 (AUTONOMOUS) | invoke_orchestrator("cleanup", request) |
+## 🔀 Intent Routing (Master Orchestrator)
+
+**Primary:** All user requests route through Master Orchestrator (`src/orchestrators/master_orchestrator.py`)
+
+**Flow:**
+```
+User Input → Master Orchestrator.route_request() 
+    → Pattern Match (90%+ requests) → Orchestrator Execution
+    → LLM Fallback (10% edge cases) → Orchestrator Execution
 ```
 
-### Task 7.2: Update Response Templates
+**Configuration:** `cortex-brain/config/master-orchestrator.yaml`
+
+**Orchestrator Registry:**
+- Planning v5 (patterns: `plan`, `create a plan`)
+- ADO v2 (patterns: `ado`, `ado story`, `ado feature`)
+- TDD (patterns: `tdd`, `start tdd`)
+- Maintenance (patterns: `maintenance`, `health check`)
+- Sanitization (patterns: `sanitize`, `make generic`)
+- Refinement (patterns: `refine`, `improve`)
+
+**State Coordination:**
+Orchestrators share state via `StateManager` using PlanningStateDB:
+```python
+# Orchestrator A shares context
+state_manager.share_state('orchestrator_a', 'orchestrator_b', {'key': 'value'})
+
+# Orchestrator B retrieves shared context
+context = state_manager.get_shared_state('orchestrator_b')
+```
+```
+
+### Task 7.2: Deploy Master Orchestrator as Primary Router
+**Duration:** 6h
+
+**Deployment Steps:**
+1. Create Master Orchestrator entry point in `src/cortex_main.py`
+2. Initialize `OrchestratorRegistry` with all Phase 3-6 orchestrators
+3. Load routing config from `master-orchestrator.yaml`
+4. Initialize `StateManager` with `PlanningStateDB`
+5. Configure LLM fallback (`LLMIntentClassifier`) with 70% confidence threshold
+6. Add lifecycle hooks for all orchestrators
+7. Test end-to-end routing for all 6+ orchestrators
+
+**Entry Point:**
+```python
+from src.orchestrators.master_orchestrator import MasterOrchestrator
+from src.mcp.registry import OrchestratorRegistry
+from src.database.planning_state_db import PlanningStateDB
+from src.cortex_agents.llm_intent_classifier import LLMIntentClassifier
+
+# Initialize components
+registry = OrchestratorRegistry('cortex-brain/config/orchestrators/')
+state_db = PlanningStateDB('cortex-brain/database/planning_state.db')
+llm_fallback = LLMIntentClassifier()
+
+# Create Master Orchestrator
+master_orch = MasterOrchestrator(
+    config_path='cortex-brain/config/master-orchestrator.yaml',
+    registry=registry,
+    state_db=state_db,
+    llm_fallback=llm_fallback
+)
+
+# Route and execute
+match = master_orch.route_request(user_input, context)
+result = master_orch.execute_orchestrator(match.orchestrator_id, params)
+```
+
+### Task 7.3: Update Response Templates
 **Duration:** 3h
 
 **Files to Update:**
@@ -703,50 +1019,60 @@ cortex-brain/documents/planning/active/vacuum-v2-migration/
 - `orchestrator_execution_summary` - Standard format for all autonomous orchestrators
 - `database_state_query` - Format for displaying plan status
 - `migration_complete` - Celebration template for completed migrations
+- `master_orchestrator_routing` - Display routing decision (pattern matched vs LLM fallback)
 
-### Task 7.3: Agent Layer Integration
-**Duration:** 1d
+### Task 7.4: Agent Layer Integration
+**Duration:** 5h
 
 **Update Agents:**
-- `IntentRouter` - Add MCP tool invocation capability
-- `ErrorCorrector` - Integrate with orchestrator error handling
-- `LearningLibrarian` - Track orchestrator execution patterns
+- `IntentRouter` - DEPRECATED (replaced by Master Orchestrator)
+- `ErrorCorrector` - Integrate with orchestrator error handling via lifecycle hooks
+- `LearningLibrarian` - Track orchestrator execution patterns from StateManager
 
 **Integration Points:**
-- Agents can query planning state database
-- Agents can invoke orchestrators via MCP
+- Agents query planning state database via `StateManager`
+- Agents DO NOT invoke orchestrators (Master Orchestrator owns invocation)
 - Agent configuration externalized to YAML
 
-### Task 7.4: Onboarding Updates
+### Task 7.5: Onboarding Updates
 **Duration:** 4h
 
 **Update Onboarding Flow:**
-- Demonstrate Planning System v5 usage
+- Demonstrate Master Orchestrator routing (show pattern match vs LLM fallback)
+- Show Planning System v5 usage via Master Orchestrator
 - Show database state queries
 - Explain autonomous vs guided orchestrators
 - Update interactive demonstrations
 
 ### Completion Criteria
-- ✅ CORTEX.prompt.md reflects new architecture
-- ✅ Response templates support new formats
-- ✅ Agents integrated with MCP protocol
-- ✅ Onboarding demonstrates new features
-- ✅ End-to-end test: User command → orchestrator execution → result display
-- ✅ Git checkpoint created: `checkpoint-phase-7-system-integration`
+- ✅ Master Orchestrator deployed as primary router
+- ✅ All orchestrators routable via YAML config
+- ✅ Pattern matching handles 90%+ requests
+- ✅ LLM fallback functional for edge cases
+- ✅ CORTEX.prompt.md reflects Master Orchestrator architecture
+- ✅ Response templates support routing display
+- ✅ Agents integrated with Master Orchestrator
+- ✅ Onboarding demonstrates Master Orchestrator
+- ✅ End-to-end test: User command → Master Orch routing → orchestrator execution → result display
+- ✅ Git checkpoint created: `checkpoint-phase-7-master-orch-deployment`
 
 ---
 
-## ✅ Phase 8: Testing & Validation (3 days)
+## ✅ Phase 8: Testing & Validation + Master Orchestrator (3 days)
 
-**Goal:** Comprehensive testing across all layers
+**Goal:** Comprehensive testing across all layers including Master Orchestrator routing
 
-### Task 8.1: Unit Test Suite
+### Task 8.1: Unit Test Suite + Routing Tests
 **Duration:** 1d
 
 **Coverage Requirements:**
 - BaseOrchestrator v4.1: 100%
 - Planning Orchestrator v5: 100%
 - Database layer: 100%
+- **Master Orchestrator: 100% (pattern matching, config loading, lifecycle hooks)**
+- **PatternRouter: 100% (exact/regex matching, confidence scoring)**
+- **StateManager: 100% (state sharing, execution tracking)**
+- **ExecutionEngine: 100% (lifecycle management, hook execution)**
 - MCP tools: 100%
 - Migrated orchestrators: 100%
 
@@ -757,26 +1083,47 @@ cortex-brain/documents/planning/active/vacuum-v2-migration/
 - Template rendering
 - Config validation
 
-### Task 8.2: Integration Test Suite
+### Task 8.2: Integration Test Suite + Master Orchestrator Routing
 **Duration:** 1d
 
 **End-to-End Scenarios:**
-1. User creates plan → Planning v5 executes → Plan folder created → Database updated
+1. User creates plan → Master Orchestrator routes → Planning v5 executes → Plan folder created → Database updated
 2. Plan fails mid-phase → Rollback triggered → State restored → User retries
 3. User resumes plan → Load from database → Continue from last phase → Complete
 4. Multiple plans concurrent → No state conflicts → All complete independently
+5. **Routing edge cases → Pattern matching fails → LLM fallback succeeds → Orchestrator executes**
+6. **State sharing → Orchestrator A saves context → Orchestrator B retrieves → Workflow continues**
+7. **Lifecycle hooks → Pre-execution validation → Main execution → Post-execution artifacts saved**
 
 **Files to Create:**
 - `tests/integration/test_planning_workflow.py`
 - `tests/integration/test_orchestrator_migrations.py`
 - `tests/integration/test_mcp_invocation.py`
 - `tests/integration/test_database_transactions.py`
+- **`tests/integration/test_master_orchestrator_routing.py` (NEW)**
+- **`tests/integration/test_state_coordination.py` (NEW)**
+- **`tests/integration/test_lifecycle_hooks.py` (NEW)**
 
-### Task 8.3: System Validation
+**Master Orchestrator Routing Tests:**
+- Pattern exact match: "plan" → planning_v5
+- Pattern regex match: "ado story X" → ado_orchestrator
+- No pattern match: "do something unusual" → LLM fallback → correct orchestrator
+- Confidence threshold: LLM returns 0.5 confidence → Reject (threshold 0.7)
+- Config reload: Update master-orchestrator.yaml → Reload without restart
+- Dependency validation: Orchestrator X requires Y → Validation passes/fails
+- Concurrent routing: 10 simultaneous requests → All routed correctly
+
+### Task 8.3: System Validation + Master Orchestrator
 **Duration:** 1d
 
 **Validation Checklist:**
-- [ ] All 4 AUTONOMOUS orchestrators execute via MCP
+- [ ] All 6+ orchestrators execute via Master Orchestrator routing
+- [ ] Pattern matching handles 90%+ test cases
+- [ ] LLM fallback correctly handles edge cases
+- [ ] Routing latency <100ms for pattern matching
+- [ ] Config reload <50ms
+- [ ] State coordination works across orchestrators
+- [ ] Lifecycle hooks execute in correct order
 - [ ] Database state queries return accurate data
 - [ ] Templates render without errors
 - [ ] Config validation catches schema violations
@@ -791,6 +1138,13 @@ cortex-brain/documents/planning/active/vacuum-v2-migration/
 - Existing functionality still works
 - Old plans remain accessible (archived)
 - Backward compatibility maintained during transition
+- Master Orchestrator doesn't break existing agents
+
+**Performance Benchmarks:**
+- Routing latency: <100ms (pattern), <500ms (LLM fallback)
+- Plan generation: <10s
+- Database query: <50ms
+- Config reload: <50ms
 
 ### Completion Criteria
 - ✅ 100% test coverage achieved
@@ -802,11 +1156,11 @@ cortex-brain/documents/planning/active/vacuum-v2-migration/
 
 ---
 
-## 📚 Phase 9: Documentation (1.5 days)
+## 📚 Phase 9: Documentation + Master Orchestrator (1.5 days)
 
-**Goal:** Comprehensive documentation for new architecture
+**Goal:** Comprehensive documentation for new architecture including Master Orchestrator
 
-### Task 9.1: Architecture Documentation
+### Task 9.1: Architecture Documentation + Master Orchestrator
 **Duration:** 6h
 
 **Files to Create:**
@@ -814,14 +1168,24 @@ cortex-brain/documents/planning/active/vacuum-v2-migration/
 - `docs/architecture/mcp-protocol-integration.md`
 - `docs/architecture/database-state-management.md`
 - `docs/architecture/orchestrator-lifecycle.md`
+- **`docs/architecture/master-orchestrator-design.md` (NEW)**
+
+**Master Orchestrator Documentation:**
+- Pattern-based routing architecture
+- Routing config schema (`master-orchestrator.yaml`)
+- State coordination mechanisms
+- Lifecycle hook system
+- LLM fallback strategy
+- Performance characteristics
+- Extensibility patterns (adding new orchestrators)
 
 **Content:**
-- System architecture diagrams
-- Execution flow charts
+- System architecture diagrams (with Master Orchestrator as central hub)
+- Execution flow charts (user input → routing → execution)
 - Database schema documentation
 - Component interaction patterns
 
-### Task 9.2: Developer Guide
+### Task 9.2: Developer Guide + Master Orchestrator
 **Duration:** 4h
 
 **Files to Create:**
@@ -829,12 +1193,23 @@ cortex-brain/documents/planning/active/vacuum-v2-migration/
 - `docs/guides/config-manifest-specification.md`
 - `docs/guides/template-development.md`
 - `docs/guides/database-operations.md`
+- **`docs/guides/master-orchestrator-integration.md` (NEW)**
+
+**Master Orchestrator Integration Guide:**
+- How to register orchestrators in YAML config
+- Pattern syntax (exact vs regex)
+- Confidence threshold tuning
+- State sharing best practices
+- Lifecycle hook implementation
+- Testing routing rules
+- Debugging routing failures
 
 **Content:**
 - Step-by-step orchestrator creation
 - Manifest schema reference
 - Template variable reference
 - Database API documentation
+- **Routing config examples**
 
 ### Task 9.3: Migration Guide
 **Duration:** 2h
@@ -970,30 +1345,38 @@ cortex-brain/archives/v4-orchestrators/
 ## 🎉 Project Completion Checklist
 
 ### Technical Deliverables
+- [ ] **Master Orchestrator operational with pattern-based routing**
+- [ ] **90%+ routing accuracy via pattern matching (measured)**
+- [ ] **LLM fallback handles edge cases (10% traffic)**
+- [ ] **Cross-orchestrator state coordination functional**
+- [ ] **Lifecycle hooks operational (pre/post execution, error handling)**
 - [ ] Planning System v5 operational via MCP
 - [ ] SQLite state database with ACID transactions
 - [ ] BaseOrchestrator v4.1 config-driven
-- [ ] 4 AUTONOMOUS orchestrators migrated (Planning, ADO, Vacuum, Cleanup)
+- [ ] 4+ AUTONOMOUS orchestrators migrated (Planning, ADO, Vacuum, Cleanup)
 - [ ] GUIDED orchestrators assessed and transformed where beneficial
-- [ ] Agent layer integrated with MCP protocol
-- [ ] 100% test coverage across all new components
+- [ ] Agent layer integrated with Master Orchestrator
+- [ ] 100% test coverage across all new components (including Master Orchestrator)
 - [ ] Zero natural language in manifests
 - [ ] All plans resumable from any phase
 - [ ] Filename standards enforced (≤20 chars)
 
 ### Documentation Deliverables
-- [ ] Architecture documentation complete
+- [ ] Architecture documentation complete (with Master Orchestrator design)
+- [ ] Master Orchestrator integration guide written
 - [ ] Developer guides written
 - [ ] Migration guide validated
 - [ ] User documentation updated
-- [ ] CORTEX.prompt.md reflects new architecture
+- [ ] CORTEX.prompt.md reflects Master Orchestrator architecture
 
 ### Validation Deliverables
-- [ ] All tests pass (unit + integration)
+- [ ] All tests pass (unit + integration + routing)
+- [ ] Master Orchestrator routing tests pass (100% coverage)
+- [ ] Performance benchmarks met (routing <100ms, config reload <50ms)
 - [ ] SKULL governance tests pass
 - [ ] System validation checklist complete
 - [ ] Regression testing passed
-- [ ] Performance benchmarks met
+- [ ] End-to-end routing validated for all orchestrators
 
 ### Operational Deliverables
 - [ ] Old code archived
@@ -1001,6 +1384,7 @@ cortex-brain/archives/v4-orchestrators/
 - [ ] Git checkpoints created for each phase
 - [ ] Migration reports generated
 - [ ] Lessons learned documented
+- [ ] Master Orchestrator config YAML validated
 
 ---
 
@@ -1050,13 +1434,21 @@ response_template: "autonomous_execution_progress"
 tdd_enforcement: true
 final_refactor_required: true
 
+# Master Orchestrator Integration (NEW)
+master_orchestrator_enabled: true
+routing_mode: "pattern_primary_llm_fallback"  # 90% pattern, 10% LLM
+state_coordination: true
+lifecycle_hooks: true
+
 # Plan Creation Context
 manual_planning_for_bootstrap: true  # This plan created manually
 use_v5_for_migrations: true          # Phase 5+ use Planning v5
+master_orch_routing: true            # All requests route via Master Orchestrator
 
 # State Management
 database_tracking: true
 atomic_operations: true
+cross_orchestrator_sharing: true     # Master Orchestrator StateManager enabled
 
 # ⚠️ CRITICAL: Autonomous Execution Mode (ALWAYS ENFORCED)
 execution_mode: "autonomous"         # MANDATORY - No supervised mode allowed
@@ -1078,40 +1470,69 @@ phase_transition:
   checkpoint_creation: true          # Create git checkpoint after each phase
   rollback_on_failure: true          # Auto-rollback on critical failure
 
+# Master Orchestrator Integration
+master_orchestrator_protocol:
+  routing_invocation: "automatic"    # Route all requests via Master Orchestrator
+  pattern_matching_primary: true     # Pattern matching handles 90%+
+  llm_fallback_enabled: true         # LLM handles edge cases
+  state_manager_active: true         # Cross-orchestrator state sharing
+  lifecycle_hooks_active: true       # Pre/post execution hooks
+
 # MCP Tool Integration
 mcp_invocation:
   method: "autonomous"               # MCP tools invoked autonomously
   hand_off_complete: true            # CORTEX stops after routing to orchestrator
   orchestrator_owns_execution: true  # Python owns all execution logic
+  master_orch_routes_first: true     # Master Orchestrator routes before MCP invocation
 ```
 
 ---
 
-## ⚠️ EXECUTION PROTOCOL
+## ⚠️ EXECUTION PROTOCOL (Master Orchestrator Enhanced)
 
-**This plan executes in PURE AUTONOMOUS MODE.**
+**This plan executes in PURE AUTONOMOUS MODE with Master Orchestrator routing.**
 
 ### What This Means:
 
-1. **No User Approval Required**: Each phase executes automatically after previous phase validates
-2. **Auto-Validation**: Tests run automatically, phase only completes if all tests pass
-3. **Auto-Commit**: Successful validation triggers automatic git commit
-4. **Auto-Transition**: Completion of phase N automatically starts phase N+1
-5. **Self-Healing**: Failures trigger up to 3 automatic retry attempts before escalation
-6. **CORTEX Role**: Route to orchestrator → STOP (Python executes autonomously)
+1. **Master Orchestrator Routing**: All user requests route through Master Orchestrator first
+2. **Pattern Matching Primary**: 90%+ requests handled by deterministic pattern matching
+3. **LLM Fallback**: Edge cases (10%) route to LLM classifier with 70% confidence threshold
+4. **State Coordination**: Orchestrators share state via StateManager + PlanningStateDB
+5. **Lifecycle Management**: Pre/post execution hooks for validation, artifact saving
+6. **No User Approval Required**: Each phase executes automatically after previous phase validates
+7. **Auto-Validation**: Tests run automatically, phase only completes if all tests pass
+8. **Auto-Commit**: Successful validation triggers automatic git commit
+9. **Auto-Transition**: Completion of phase N automatically starts phase N+1
+10. **Self-Healing**: Failures trigger up to 3 automatic retry attempts before escalation
+11. **CORTEX Role**: Route to Master Orchestrator → Master Orch routes to orchestrator → STOP (Python executes)
 
-### Phase Execution Flow:
+### Phase Execution Flow with Master Orchestrator:
 
 ```
-Phase N Start → Execute Tasks → Run Tests → Validate → Pass? 
-  ↓ YES                                               ↓ NO
-Create Checkpoint → Auto-commit → Phase N+1     Retry (max 3) → Escalate
+User Input → Master Orchestrator.route_request()
+    ↓
+Pattern Match (90%) OR LLM Fallback (10%)
+    ↓
+Master Orchestrator.execute_orchestrator()
+    ↓
+Pre-Execution Hooks (validate dependencies, check state)
+    ↓
+Orchestrator Autonomous Execution (Phase N)
+    ↓
+Execute Tasks → Run Tests → Validate
+    ↓ PASS                    ↓ FAIL
+Post-Exec Hooks          Retry (max 3) → Escalate
+    ↓
+Save Artifacts, Update Metrics
+    ↓
+Create Checkpoint → Auto-commit → Phase N+1
 ```
 
 ### User Interaction Points:
 
 - **Plan Approval**: User approves THIS master plan (one-time)
-- **Escalation Only**: User only engaged after 3 consecutive failures
+- **Escalation Only**: User only engaged after 3 consecutive failures or routing failures
+- **Routing Review**: User can inspect routing decisions in logs (pattern match vs LLM fallback)
 - **Completion Review**: User reviews final deliverables at project end
 
 **All intermediate phases execute WITHOUT user intervention.**
