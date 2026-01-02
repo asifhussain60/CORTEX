@@ -764,6 +764,8 @@ class PlanningOrchestratorV5(BaseOrchestratorV4_1):
 - ✅ Validation catches missing required content
 - ✅ **Planning v5 integrated with Master Orchestrator (routing + state sharing)**
 - ✅ **End-to-end routing test passes**
+- ✅ **CORTEX.prompt.md updated: Planning v5 routes via Master Orchestrator (LIVE)**
+- ✅ **Master Orchestrator ACTIVE for planning commands ("plan", "create a plan")**
 - ✅ 100% test coverage for orchestrator
 - ✅ Manual test: Generate a sample plan successfully
 - ✅ Git checkpoint created: `checkpoint-phase-4-planning-v5-master-orch`
@@ -776,10 +778,14 @@ class PlanningOrchestratorV5(BaseOrchestratorV4_1):
 
 **ROUTING VALIDATION:** All plan generation requests will route through Master Orchestrator, validating pattern matching and orchestrator invocation.
 
+**MASTER ORCHESTRATOR STATUS:** ✅ LIVE - Planning v5 routed via Master Orch (activated Phase 4)
+
 ### Task 5.1: Generate ADO Migration Plan
 **Duration:** 1h
 
 **Command:** `/CORTEX Plan ADO Orchestrator v2 Migration`
+
+**Routing Flow:** User input → MasterOrchestrator.route_request() → Pattern match "plan" → Planning v5 execution
 
 **Expected Output:**
 ```
@@ -877,6 +883,19 @@ cortex-brain/documents/planning/active/vacuum-v2-migration/
 - Template-driven outputs
 - 100% test coverage
 
+**🔴 ACTIVATION STEP (Day 6):**
+1. Add ADO v2 patterns to `master-orchestrator.yaml`:
+   ```yaml
+   - pattern: "^(ado|ado story|ado feature).*$"
+     orchestrator: ado_orchestrator_v2
+     confidence: 1.0
+     match_type: regex
+   ```
+2. Register ADO v2 in OrchestratorRegistry
+3. Update CORTEX.prompt.md Intent Router: ADO v2 routes via Master Orch
+4. Test: "ado story X" → Master Orch routes → ADO v2 executes
+5. **Master Orchestrator now handles: Planning v5 + ADO v2**
+
 ### Task 6.2: Vacuum Orchestrator v2 Migration
 **Duration:** 5 days  
 **Plan Reference:** `vacuum-v2-migration/00-master-plan.md`
@@ -887,6 +906,19 @@ cortex-brain/documents/planning/active/vacuum-v2-migration/
 - Transaction boundaries
 - Comprehensive logging
 
+**🔴 ACTIVATION STEP (Day 5):**
+1. Add Vacuum v2 patterns to `master-orchestrator.yaml`:
+   ```yaml
+   - pattern: "^(vacuum|deep clean|organize files).*$"
+     orchestrator: vacuum_orchestrator_v2
+     confidence: 1.0
+     match_type: regex
+   ```
+2. Register Vacuum v2 in OrchestratorRegistry
+3. Update CORTEX.prompt.md Intent Router: Vacuum v2 routes via Master Orch
+4. Test: "vacuum path/" → Master Orch routes → Vacuum v2 executes
+5. **Master Orchestrator now handles: Planning v5 + ADO v2 + Vacuum v2**
+
 ### Task 6.3: Cleanup Orchestrator v2 Migration
 **Duration:** 4 days  
 **Plan Reference:** `cleanup-v2-migration/00-master-plan.md`
@@ -896,6 +928,19 @@ cortex-brain/documents/planning/active/vacuum-v2-migration/
 - Cache management strategy
 - Log rotation automation
 - State persistence
+
+**🔴 ACTIVATION STEP (Day 4):**
+1. Add Cleanup v2 patterns to `master-orchestrator.yaml`:
+   ```yaml
+   - pattern: "^(cleanup|clear cache).*$"
+     orchestrator: cleanup_orchestrator_v2
+     confidence: 1.0
+     match_type: regex
+   ```
+2. Register Cleanup v2 in OrchestratorRegistry
+3. Update CORTEX.prompt.md Intent Router: Cleanup v2 routes via Master Orch
+4. Test: "cleanup cache" → Master Orch routes → Cleanup v2 executes
+5. **Master Orchestrator now handles: Planning v5 + ADO v2 + Vacuum v2 + Cleanup v2**
 
 ### Task 6.4: GUIDED Orchestrator Assessments
 **Duration:** 9 days  
@@ -913,105 +958,131 @@ cortex-brain/documents/planning/active/vacuum-v2-migration/
 - **Sanitization:** Convert to AUTONOMOUS (5-phase transformation needs transactions)
 - **Refinement:** Remain GUIDED (analysis phases benefit from tool call sequences)
 
+**🔴 ACTIVATION STEPS (Progressive):**
+
+For each orchestrator converted to AUTONOMOUS:
+1. Add patterns to `master-orchestrator.yaml` (e.g., TDD: `^(tdd|start tdd|run tests)$`)
+2. Register in OrchestratorRegistry
+3. Update CORTEX.prompt.md Intent Router (change 📋 GUIDED → 🛡️ AUTONOMOUS)
+4. Test routing: command → Master Orch routes → Orchestrator executes
+5. Document in routing config
+
+For orchestrators remaining GUIDED:
+- Add patterns to `master-orchestrator.yaml` with `type: guided`
+- Master Orch routes to CORTEX for manifest interpretation
+- CORTEX follows manifest instructions (existing behavior preserved)
+
+**By end of Phase 6, Master Orchestrator handles ALL orchestrators (AUTONOMOUS + GUIDED routing)**
+
 ### Completion Criteria
 - ✅ All orchestrators migrated per generated plans
 - ✅ 100% test coverage for new implementations
 - ✅ All plans marked 'completed' in database
 - ✅ Migration reports generated
 - ✅ Git checkpoints for each orchestrator
-- ✅ Final checkpoint: `checkpoint-phase-6-all-migrations`
+- ✅ **Master Orchestrator progressively activated after each migration**
+- ✅ **master-orchestrator.yaml contains ALL orchestrator patterns**
+- ✅ **CORTEX.prompt.md Intent Router fully updated**
+- ✅ **Master Orchestrator routing 100% of orchestrator traffic**
+- ✅ Final checkpoint: `checkpoint-phase-6-all-migrations-master-orch-complete`
 
 ---
 
-## 🔗 Phase 7: System Integration + Master Orchestrator Deployment (2 days)
+## 🔗 Phase 7: System Integration + Master Orchestrator Final Validation (2 days)
 
-**Goal:** Integrate all components, deploy Master Orchestrator as primary routing layer, and update CORTEX entry point
+**Goal:** Validate complete Master Orchestrator deployment, finalize system integration, conduct end-to-end testing
 
-**ROUTING TRANSITION:** Master Orchestrator replaces CORTEX.prompt.md as primary routing mechanism. LLM-based routing becomes fallback only.
+**MASTER ORCHESTRATOR STATUS:** ✅ FULLY DEPLOYED - All orchestrators routing via Master Orch (progressively activated Phases 4-6)
 
-### Task 7.1: Update CORTEX.prompt.md for Master Orchestrator
-**Duration:** 4h
+**NOTE:** Master Orchestrator is ALREADY LIVE by Phase 7. This phase focuses on validation, optimization, documentation consolidation, and cleanup.
+
+### Task 7.1: Master Orchestrator Deployment Validation (6h)
+
+**Validation Tasks:**
+
+1. **Routing Coverage Audit:**
+   - Verify all orchestrators in `master-orchestrator.yaml`
+   - Confirm CORTEX.prompt.md Intent Router matches config
+   - Test each pattern (exact + regex) with sample inputs
+   - Measure pattern match rate (target: 90%+)
+
+2. **Performance Benchmarking:**
+   - Routing latency: <100ms for pattern matching ✓
+   - Config reload time: <50ms ✓
+   - LLM fallback latency: <500ms ✓
+   - State coordination overhead: <20ms ✓
+
+3. **LLM Fallback Testing:**
+   - Test edge cases that don't match patterns
+   - Verify 70% confidence threshold enforcement
+   - Confirm LLM classifier routes to correct orchestrator
+   - Log fallback rate (target: <10%)
+
+4. **State Coordination Validation:**
+   - Test cross-orchestrator state sharing
+   - Verify PlanningStateDB integration
+   - Confirm lifecycle hooks execute correctly (pre/post execution)
+   - Test concurrent orchestrator execution (no state conflicts)
+
+5. **End-to-End Routing Tests:**
+   - Test all AUTONOMOUS orchestrators (Planning, ADO, Vacuum, Cleanup, etc.)
+   - Test all GUIDED orchestrators (TDD, Debug, Sanitization, Refinement)
+   - Verify correct hand-off for 🛡️ AUTONOMOUS (CORTEX stops)
+   - Verify correct interpretation for 📋 GUIDED (CORTEX follows manifest)
+
+### Task 7.2: CORTEX.prompt.md Final Documentation (4h)
+
+### Task 7.2: CORTEX.prompt.md Final Documentation (4h)
 
 **Changes Required:**
-- Replace direct Intent Router with Master Orchestrator invocation
-- Document pattern-based routing configuration
-- Add LLM fallback documentation (edge cases only)
-- Update Orchestrator Registry access patterns
-- Document state coordination mechanisms
+- Document Master Orchestrator as primary routing mechanism
+- Update Intent Router table with final orchestrator versions
+- Add Master Orchestrator configuration reference
+- Document pattern-based routing + LLM fallback strategy
+- Add state coordination examples
+- Update hand-off protocol for all orchestrators
 
-**New Intent Routing Architecture:**
+**Key Documentation Sections:**
+
 ```markdown
 ## 🔀 Intent Routing (Master Orchestrator)
 
-**Primary:** All user requests route through Master Orchestrator (`src/orchestrators/master_orchestrator.py`)
+**Status:** ✅ LIVE - All orchestrators route through Master Orchestrator
 
-**Flow:**
-```
-User Input → Master Orchestrator.route_request() 
-    → Pattern Match (90%+ requests) → Orchestrator Execution
-    → LLM Fallback (10% edge cases) → Orchestrator Execution
-```
+**Architecture:**
+User Input → MasterOrchestrator.route_request()
+  → Pattern Match (90%+) OR LLM Fallback (10%)
+  → Orchestrator Execution with lifecycle hooks
 
-**Configuration:** `cortex-brain/config/master-orchestrator.yaml`
+**Configuration:** cortex-brain/config/master-orchestrator.yaml
 
-**Orchestrator Registry:**
-- Planning v5 (patterns: `plan`, `create a plan`)
-- ADO v2 (patterns: `ado`, `ado story`, `ado feature`)
-- TDD (patterns: `tdd`, `start tdd`)
-- Maintenance (patterns: `maintenance`, `health check`)
-- Sanitization (patterns: `sanitize`, `make generic`)
-- Refinement (patterns: `refine`, `improve`)
+**Routing Coverage:**
+- Planning v5 (patterns: "plan", "create a plan", "make a plan")
+- ADO v2 (patterns: "ado", "ado story", "ado feature")
+- Vacuum v2 (patterns: "vacuum", "deep clean", "organize files")
+- Cleanup v2 (patterns: "cleanup", "clear cache")
+- TDD (patterns: "tdd", "start tdd", "run tests")
+- Debug (patterns: "debug", "fix bug", "troubleshoot")
+- Sanitization (patterns: "sanitize", "make generic")
+- Refinement (patterns: "refine", "improve")
+- Maintenance (patterns: "system maintenance", "health check")
 
 **State Coordination:**
-Orchestrators share state via `StateManager` using PlanningStateDB:
-```python
-# Orchestrator A shares context
-state_manager.share_state('orchestrator_a', 'orchestrator_b', {'key': 'value'})
-
-# Orchestrator B retrieves shared context
-context = state_manager.get_shared_state('orchestrator_b')
-```
+Orchestrators share state via StateManager + PlanningStateDB
 ```
 
-### Task 7.2: Deploy Master Orchestrator as Primary Router
-**Duration:** 6h
+### Task 7.3: Remove Obsolete Routing Code (3h)
 
-**Deployment Steps:**
-1. Create Master Orchestrator entry point in `src/cortex_main.py`
-2. Initialize `OrchestratorRegistry` with all Phase 3-6 orchestrators
-3. Load routing config from `master-orchestrator.yaml`
-4. Initialize `StateManager` with `PlanningStateDB`
-5. Configure LLM fallback (`LLMIntentClassifier`) with 70% confidence threshold
-6. Add lifecycle hooks for all orchestrators
-7. Test end-to-end routing for all 6+ orchestrators
+**Deprecation Tasks:**
+1. Archive old LLM-only routing logic (if any hardcoded routing exists)
+2. Remove redundant intent classification code
+3. Consolidate routing to Master Orchestrator entry point only
+4. Update all orchestrator invocations to use Master Orch
+5. Clean up legacy routing configuration files
 
-**Entry Point:**
-```python
-from src.orchestrators.master_orchestrator import MasterOrchestrator
-from src.mcp.registry import OrchestratorRegistry
-from src.database.planning_state_db import PlanningStateDB
-from src.cortex_agents.llm_intent_classifier import LLMIntentClassifier
+### Task 7.4: Update Response Templates (2h)
 
-# Initialize components
-registry = OrchestratorRegistry('cortex-brain/config/orchestrators/')
-state_db = PlanningStateDB('cortex-brain/database/planning_state.db')
-llm_fallback = LLMIntentClassifier()
-
-# Create Master Orchestrator
-master_orch = MasterOrchestrator(
-    config_path='cortex-brain/config/master-orchestrator.yaml',
-    registry=registry,
-    state_db=state_db,
-    llm_fallback=llm_fallback
-)
-
-# Route and execute
-match = master_orch.route_request(user_input, context)
-result = master_orch.execute_orchestrator(match.orchestrator_id, params)
-```
-
-### Task 7.3: Update Response Templates
-**Duration:** 3h
+### Task 7.4: Update Response Templates (2h)
 
 **Files to Update:**
 - `cortex-brain/response-templates-v4.yaml`
@@ -1022,8 +1093,7 @@ result = master_orch.execute_orchestrator(match.orchestrator_id, params)
 - `migration_complete` - Celebration template for completed migrations
 - `master_orchestrator_routing` - Display routing decision (pattern matched vs LLM fallback)
 
-### Task 7.4: Agent Layer Integration
-**Duration:** 5h
+### Task 7.5: Agent Layer Integration (4h)
 
 **Update Agents:**
 - `IntentRouter` - DEPRECATED (replaced by Master Orchestrator)
@@ -1035,8 +1105,7 @@ result = master_orch.execute_orchestrator(match.orchestrator_id, params)
 - Agents DO NOT invoke orchestrators (Master Orchestrator owns invocation)
 - Agent configuration externalized to YAML
 
-### Task 7.5: Onboarding Updates
-**Duration:** 4h
+### Task 7.6: Onboarding Updates (2h)
 
 **Update Onboarding Flow:**
 - Demonstrate Master Orchestrator routing (show pattern match vs LLM fallback)
@@ -1046,16 +1115,17 @@ result = master_orch.execute_orchestrator(match.orchestrator_id, params)
 - Update interactive demonstrations
 
 ### Completion Criteria
-- ✅ Master Orchestrator deployed as primary router
-- ✅ All orchestrators routable via YAML config
-- ✅ Pattern matching handles 90%+ requests
-- ✅ LLM fallback functional for edge cases
-- ✅ CORTEX.prompt.md reflects Master Orchestrator architecture
+- ✅ Master Orchestrator deployment validated (routing coverage, performance, fallback)
+- ✅ All orchestrators routable via YAML config (verified end-to-end)
+- ✅ Pattern matching handles 90%+ requests (measured)
+- ✅ LLM fallback functional for edge cases (<10% traffic)
+- ✅ CORTEX.prompt.md reflects Master Orchestrator architecture (final docs)
 - ✅ Response templates support routing display
 - ✅ Agents integrated with Master Orchestrator
 - ✅ Onboarding demonstrates Master Orchestrator
+- ✅ Obsolete routing code removed
 - ✅ End-to-end test: User command → Master Orch routing → orchestrator execution → result display
-- ✅ Git checkpoint created: `checkpoint-phase-7-master-orch-deployment`
+- ✅ Git checkpoint created: `checkpoint-phase-7-master-orch-validation`
 
 ---
 
