@@ -1,7 +1,8 @@
 # 🔄 Session Continuation Prompt
 
-**Generated:** 2026-01-02 23:59:00  
-**Plan:** cortex-v5-holistic-refactor (4/11 phases, 36%)
+**Generated:** 2026-01-02 23:59:59  
+**Plan:** cortex-v5-holistic-refactor (4.5/12 phases, 36%)  
+**Update:** Cross-Session Context Middleware integrated holistically
 
 ---
 
@@ -12,7 +13,10 @@ Follow instructions in .github/prompts/CORTEX.prompt.md.
 
 Continue plan: cortex-v5-holistic-refactor
 Location: cortex-brain/documents/planning/active/cortex-v5-holistic-refactor/00-MASTER-PLAN-V5.md
-Status: Phase 3 complete → Begin Phase 4
+Status: Phase 4 in-progress (22%) → Phase 4.5 IMMEDIATE activation upon Phase 4 completion
+
+🆕 HOLISTIC UPDATE: Cross-Session Context Middleware (Phase 4.5) now integrated across all phases.
+Master Orchestrator will preserve user context across chat sessions via Tier 1 Working Memory.
 ```
 
 ---
@@ -21,9 +25,44 @@ Status: Phase 3 complete → Begin Phase 4
 
 - **Last Checkpoint:** `pending-phase-3` (2026-01-02)
 - **Completed Phases:** 0 (Foundation), 1 (MCP), 2 (Database), 3 (BaseOrch v4.1 + Master Orch)
-- **Next Phase:** Phase 4 - Planning Orchestrator v5
-- **Artifacts:** 14 files created (2,700+ LOC implementation, 1,500+ LOC tests)
+- **In-Progress:** Phase 4 - Planning Orchestrator v5 (2/9 tasks, 22%)
+- **Next Immediate:** Phase 4.5 - Cross-Session Context Middleware (activates post-Phase 4)
+- **Artifacts:** 16 files created (3,000+ LOC implementation, 1,500+ LOC tests)
 - **Database:** `plan_id="cortex-v5-holistic-refactor"` status=ACTIVE
+
+---
+
+## 🆕 Phase 4.5: Cross-Session Context Middleware
+
+**Status:** 🎯 IMMEDIATE ACTIVATION (Post-Phase 4)  
+**Duration:** 2 days (16 hours)  
+**Rationale:** Enable Master Orchestrator to never lose track of user context across sessions
+
+### Architecture Enhancement
+```
+User: "continue"
+  ↓
+CrossSessionContextMiddleware (detects continuation)
+  ↓
+Query Tier 1 Working Memory (last 3 sessions)
+  ↓
+Inject metadata (<200 tokens)
+  ↓
+Master Orchestrator routes to last orchestrator automatically
+```
+
+### Key Deliverables
+- **Tier 1 Extensions:** 3 columns, 2 indexes (orchestrator_used, primary_intent, artifacts_generated)
+- **Context Middleware:** 250 lines, continuation detection, Tier 1 integration
+- **Master Orch Integration:** Continuation routing, session metadata recording
+- **Token Efficiency:** 99.6% reduction (200 tokens vs 50k for full conversation history)
+
+### Tasks (5 Total)
+1. Extend Tier 1 Working Memory schema (4h)
+2. Build Cross-Session Context Middleware (8h)
+3. Integrate with Master Orchestrator (4h)
+4. Update CORTEX.prompt.md documentation (2h)
+5. End-to-end validation (4h)
 
 ---
 

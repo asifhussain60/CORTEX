@@ -417,6 +417,7 @@ class BaseOrchestrator(ABC):
                 - threshold: Warning threshold
                 - should_warn: Boolean indicating if warning needed
                 - percentage: Current usage as percentage of threshold
+                - user_message: User-facing warning message (if should_warn=True)
         """
         completed_count = len(self.phase_manager.get_completed_phases())
         
@@ -430,10 +431,21 @@ class BaseOrchestrator(ABC):
             "estimated_tokens": estimated_tokens,
             "threshold": self.token_warning_threshold,
             "should_warn": should_warn,
-            "percentage": round(percentage, 1)
+            "percentage": round(percentage, 1),
+            "user_message": None
         }
         
         if should_warn:
+            # Create user-facing warning message
+            result["user_message"] = (
+                f"\n\n⚠️ **TOKEN WARNING**: Estimated {estimated_tokens:,} tokens "
+                f"({percentage:.1f}% of {self.token_warning_threshold:,} threshold).\n\n"
+                f"📋 **Continuation prompt updated**: `tracking/CONTINUATION-PROMPT.md`\n"
+                f"💡 **Recommendation**: Consider copying the continuation prompt "
+                f"for session handoff to maintain context across chat sessions."
+            )
+            
+            # Also log for debugging
             self.logger.warning(
                 f"⚠️ TOKEN WARNING: Estimated {estimated_tokens} tokens "
                 f"({percentage:.1f}% of {self.token_warning_threshold} threshold). "

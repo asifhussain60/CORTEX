@@ -44,7 +44,7 @@ class SessionManager:
         self._ensure_schema()
     
     def _ensure_schema(self):
-        """Ensure sessions table exists."""
+        """Ensure sessions table exists with orchestrator tracking."""
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
@@ -56,7 +56,10 @@ class SessionManager:
                 end_time TEXT,
                 conversation_count INTEGER DEFAULT 0,
                 is_active INTEGER DEFAULT 1,
-                last_activity TEXT NOT NULL
+                last_activity TEXT NOT NULL,
+                orchestrator_used TEXT,
+                primary_intent TEXT,
+                artifacts_generated TEXT
             )
         """)
         
@@ -68,6 +71,11 @@ class SessionManager:
         cursor.execute("""
             CREATE INDEX IF NOT EXISTS idx_sessions_last_activity 
             ON sessions(last_activity DESC)
+        """)
+        
+        cursor.execute("""
+            CREATE INDEX IF NOT EXISTS idx_sessions_orchestrator 
+            ON sessions(orchestrator_used)
         """)
         
         conn.commit()
@@ -353,3 +361,93 @@ class SessionManager:
         conn.close()
         
         return deleted_count
+    
+    def record_orchestrator_usage(
+        self,
+        session_id: str,
+        orchestrator: str,
+        intent: str,
+        artifacts: Optional[List[str]] = None
+    ) -> bool:
+        """
+        Record which orchestrator handled this session.
+        
+        Part of Phase 4.5: Cross-Session Context Middleware integration.
+        Tracks orchestrator usage for continuation routing.
+        
+        Args:
+            session_id: Session identifier
+            orchestrator: Orchestrator ID (e.g., "planning_v5", "ado_orchestrator")
+            intent: Primary user intent for this session
+            artifacts: List of artifact IDs/paths generated
+        
+        Returns:
+            True if update successful, False otherwise
+        """
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        cursor.execute("""
+            UPDATE sessions
+            SET orchestrator_used = ?,
+                primary_intent = ?,
+                artifacts_generated = ?,
+                last_activity = ?
+            WHERE session_id = ?
+        """, (
+            orchestrator,
+            intent,
+            json.dumps(artifacts or []),
+            datetime.now().isoformat(),
+            session_id
+        ))
+        
+        success = cursor.rowcount > 0
+        conn.commit()
+        conn.close()
+        
+        return success
+    
+    def get_recent_session_context(self, limit: int = 3) -> List[dict]:
+        """
+        Get lightweight metadata for last N sessions.
+        
+        Part of Phase 4.5: Cross-Session Context Middleware integration.
+        Returns only metadata (<200 tokens) for token efficiency.
+        
+        Args:
+            limit: Number of recent sessions (default: 3)
+        
+        Returns:
+            List of session metadata dicts with orchestrator info
+        """
+        conn = sqlite3.connect(self.db_path)
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+        
+        cursor.execute("""
+            SELECT 
+                session_id,
+                orchestrator_used,
+                primary_intent,
+                artifacts_generated,
+                last_activity
+            FROM sessions
+            WHERE orchestrator_used IS NOT NULL
+            ORDER BY last_activity DESC
+            LIMIT ?
+        """, (limit,))
+        
+        rows = cursor.fetchall()
+        conn.close()
+        
+        return [
+            {
+                "session_id": row["session_id"],
+                "orchestrator": row["orchestrator_used"],
+                "intent": row["primary_intent"],
+                "artifacts": json.loads(row["artifacts_generated"] or "[]"),
+                "timestamp": row["last_activity"]
+            }
+            for row in rows
+        ]

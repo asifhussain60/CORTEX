@@ -154,6 +154,11 @@ class BaseOrchestratorV4_1(ABC):
         self.name = self.config.get('orchestrator', {}).get('name', 'unknown')
         self.version = self.config.get('orchestrator', {}).get('version', '5.0')
         
+        # Token monitoring (default 80k threshold)
+        self.token_warning_threshold = self.config.get(
+            'execution', {}).get('token_warning_threshold', 80000
+        )
+        
         # Setup Jinja2 template environment
         template_path = Path(template_dir or self.config.get(
             'templates', {}).get('base_path', 'cortex-brain/templates')
@@ -601,3 +606,83 @@ class BaseOrchestratorV4_1(ABC):
         bar = fill * filled + empty * (width - filled)
         
         return bar
+    
+    def check_token_usage(self) -> Dict[str, Any]:
+        """
+        Estimate token usage and check if approaching limit.
+        
+        Returns:
+            Dict with keys:
+                - estimated_tokens: Heuristic token count
+                - threshold: Warning threshold
+                - should_warn: Boolean indicating if warning needed
+                - percentage: Current usage as percentage of threshold
+                - user_message: User-facing warning message (if should_warn=True)
+        """
+        if not self.plan_id:
+            # No plan context, cannot estimate
+            return {
+                "estimated_tokens": 0,
+                "threshold": self.token_warning_threshold,
+                "should_warn": False,
+                "percentage": 0.0,
+                "user_message": None
+            }
+        
+        # Get completed phases from database
+        completed_phases = self.state_db.get_plan_progress(self.plan_id)
+        completed_count = sum(
+            1 for p in completed_phases if p.get('status') == 'completed'
+        )
+        
+        # Heuristic: ~1000 tokens per phase interaction
+        estimated_tokens = self._estimate_phase_tokens(completed_count)
+        
+        percentage = (
+            estimated_tokens / self.token_warning_threshold * 100
+        ) if self.token_warning_threshold > 0 else 0
+        
+        should_warn = estimated_tokens >= self.token_warning_threshold
+        
+        result = {
+            "estimated_tokens": estimated_tokens,
+            "threshold": self.token_warning_threshold,
+            "should_warn": should_warn,
+            "percentage": round(percentage, 1),
+            "user_message": None
+        }
+        
+        if should_warn:
+            # Create user-facing warning message
+            result["user_message"] = (
+                f"\n\n⚠️ **TOKEN WARNING**: Estimated {estimated_tokens:,} tokens "
+                f"({percentage:.1f}% of {self.token_warning_threshold:,} threshold).\n\n"
+                f"📋 **Continuation prompt updated**: `tracking/CONTINUATION-PROMPT.md`\n"
+                f"💡 **Recommendation**: Consider copying the continuation prompt "
+                f"for session handoff to maintain context across chat sessions."
+            )
+            
+            # Also log for debugging
+            self.logger.warning(
+                f"⚠️ TOKEN WARNING: Estimated {estimated_tokens} tokens "
+                f"({percentage:.1f}% of {self.token_warning_threshold} threshold). "
+                f"Consider copying continuation prompt for session handoff."
+            )
+        
+        return result
+    
+    def _estimate_phase_tokens(self, completed_phase_count: int) -> int:
+        """
+        Estimate token usage based on completed phases.
+        
+        Heuristic:
+        - Each phase interaction: ~1000 tokens
+        - Includes: user request, analysis, code, response
+        
+        Args:
+            completed_phase_count: Number of completed phases
+        
+        Returns:
+            Estimated token count
+        """
+        return completed_phase_count * 1000

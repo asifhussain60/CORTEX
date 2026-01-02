@@ -15,6 +15,7 @@ from pathlib import Path
 from src.orchestrators.pattern_router import PatternRouter, OrchestratorMatch
 from src.orchestrators.state_manager import StateManager
 from src.orchestrators.execution_engine import ExecutionEngine, ExecutionResult
+from src.orchestrators.context_middleware import CrossSessionContextMiddleware
 from src.mcp.registry import OrchestratorRegistry
 from src.database.planning_state_db import PlanningStateDB
 
@@ -54,7 +55,8 @@ class MasterOrchestrator:
         config_path: str,
         registry: OrchestratorRegistry,
         state_db: PlanningStateDB,
-        llm_fallback: Optional[Any] = None
+        llm_fallback: Optional[Any] = None,
+        context_middleware: Optional[CrossSessionContextMiddleware] = None
     ):
         """
         Initialize Master Orchestrator.
@@ -64,6 +66,7 @@ class MasterOrchestrator:
             registry: OrchestratorRegistry for orchestrator discovery
             state_db: PlanningStateDB for state persistence
             llm_fallback: Optional LLMIntentClassifier for ambiguous inputs
+            context_middleware: Optional CrossSessionContextMiddleware for continuation routing
         """
         self.config_path = Path(config_path)
         self.registry = registry
@@ -78,13 +81,17 @@ class MasterOrchestrator:
         self.state_manager = StateManager(state_db)
         self.execution_engine = ExecutionEngine()
         
+        # Cross-session context middleware (Phase 4.5)
+        self.context_middleware = context_middleware or CrossSessionContextMiddleware()
+        
         # Execution tracking
         self._request_count = 0
         self._pattern_match_count = 0
         self._llm_fallback_count = 0
+        self._continuation_count = 0
         
         self.logger.info(
-            f"MasterOrchestrator initialized (config={config_path})"
+            f"MasterOrchestrator initialized with context middleware (config={config_path})"
         )
     
     def handle_request(
@@ -93,7 +100,9 @@ class MasterOrchestrator:
         context: Optional[Dict[str, Any]] = None
     ) -> ExecutionResult:
         """
-        Route and execute user request.
+        Route and execute user request with cross-session context awareness.
+        
+        Enhanced with context middleware for continuation detection (Phase 4.5).
         
         Args:
             user_input: User's natural language request
@@ -110,8 +119,20 @@ class MasterOrchestrator:
         
         self.logger.info(f"Handling request: '{user_input}'")
         
-        # Route request to orchestrator
-        match = self.route_request(user_input, context or {})
+        # STEP 1: Enrich context with cross-session metadata (NEW - Phase 4.5)
+        enriched_context = self.context_middleware.enrich_context(user_input, context)
+        
+        # STEP 2: Check if continuation with last orchestrator
+        if enriched_context.get('continuation_detected'):
+            last_orch = enriched_context['recent_activity'][0]['orchestrator']
+            self.logger.info(
+                f"Continuation detected → routing to last orchestrator: {last_orch}"
+            )
+            self._continuation_count += 1
+            return self._resume_orchestrator(last_orch, enriched_context)
+        
+        # STEP 3: Standard pattern-based routing
+        match = self.route_request(user_input, enriched_context)
         
         if not match.is_matched:
             error_msg = f"No orchestrator matched: '{user_input}'"
@@ -123,15 +144,24 @@ class MasterOrchestrator:
             f"(confidence={match.confidence:.2f}, type={match.match_type.value})"
         )
         
-        # Execute orchestrator
+        # STEP 4: Execute orchestrator
         result = self.execute_orchestrator(
             orchestrator_id=match.orchestrator_id,
             params={
                 'user_request': user_input,
-                'context': context or {},
+                'context': enriched_context,
                 'routing_match': match
             }
         )
+        
+        # STEP 5: Record session metadata for future continuations
+        if result.success and enriched_context.get('session_id'):
+            self._record_session_metadata(
+                session_id=enriched_context['session_id'],
+                orchestrator=match.orchestrator_id,
+                intent=user_input,
+                artifacts=result.artifacts
+            )
         
         return result
     
@@ -365,6 +395,107 @@ class MasterOrchestrator:
             Dictionary with metrics
         """
         router_stats = self.router.get_stats()
+        
+        return {
+            'total_requests': self._request_count,
+            'pattern_matches': self._pattern_match_count,
+            'llm_fallbacks': self._llm_fallback_count,
+            'continuations': self._continuation_count,
+            'pattern_match_rate': (
+                self._pattern_match_count / self._request_count 
+                if self._request_count > 0 else 0
+            ),
+            'continuation_rate': (
+                self._continuation_count / self._request_count
+                if self._request_count > 0 else 0
+            ),
+            'router_stats': router_stats
+        }
+    
+    def _resume_orchestrator(
+        self,
+        orchestrator_id: str,
+        context: Dict[str, Any]
+    ) -> ExecutionResult:
+        """
+        Resume execution with last orchestrator.
+        
+        Part of Phase 4.5: Cross-session continuation routing.
+        
+        Args:
+            orchestrator_id: ID of orchestrator to resume
+            context: Enriched context with recent_activity
+        
+        Returns:
+            ExecutionResult from orchestrator execution
+        """
+        # Get orchestrator from registry
+        orchestrator = self.registry.get_orchestrator(orchestrator_id)
+        
+        if not orchestrator:
+            self.logger.error(f"Orchestrator not found for resume: {orchestrator_id}")
+            return ExecutionResult(
+                success=False,
+                message=f"Cannot resume: orchestrator '{orchestrator_id}' not found",
+                orchestrator_id=orchestrator_id,
+                execution_time=0.0,
+                artifacts=[]
+            )
+        
+        # Execute with context
+        self.logger.info(f"Resuming orchestrator: {orchestrator_id}")
+        
+        result = self.execution_engine.execute(
+            orchestrator=orchestrator,
+            params={
+                'user_request': 'continue',  # Continuation request
+                'context': context
+            }
+        )
+        
+        # Record orchestrator usage in Tier 1
+        if result.success and context.get('session_id'):
+            self._record_session_metadata(
+                session_id=context['session_id'],
+                orchestrator=orchestrator_id,
+                intent='continuation',
+                artifacts=result.artifacts
+            )
+        
+        return result
+    
+    def _record_session_metadata(
+        self,
+        session_id: str,
+        orchestrator: str,
+        intent: str,
+        artifacts: List[str]
+    ) -> None:
+        """
+        Record orchestrator usage in Tier 1 for future continuations.
+        
+        Part of Phase 4.5: Cross-session context tracking.
+        
+        Args:
+            session_id: Session identifier
+            orchestrator: Orchestrator ID that handled request
+            intent: User's primary intent
+            artifacts: List of artifact paths/IDs generated
+        """
+        try:
+            self.context_middleware.session_manager.record_orchestrator_usage(
+                session_id=session_id,
+                orchestrator=orchestrator,
+                intent=intent,
+                artifacts=artifacts
+            )
+            
+            self.logger.debug(
+                f"Recorded session metadata: {orchestrator} (session={session_id})"
+            )
+        
+        except Exception as e:
+            self.logger.error(f"Failed to record session metadata: {e}")
         state_stats = self.state_manager.get_stats()
         engine_metrics = self.execution_engine.get_metrics()
         
