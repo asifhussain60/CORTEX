@@ -8749,6 +8749,22 @@ h1, h2, h3, h4, h5, h6, p, span, div {
     color: rgba(255, 255, 255, 0.6);
 }
 
+/* Compliance Progress Indicator */
+.compliance-progress {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: rgba(0, 212, 255, 0.05);
+    border-radius: 8px;
+    border-left: 3px solid var(--accent-primary);
+}
+
+.compliance-progress .progress-text {
+    font-size: 1rem;
+    color: var(--accent-primary);
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
 /* Dashboard-specific KPI & Visualization Styles */
 .kpi-section {
     width: 100%;
