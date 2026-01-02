@@ -1,0 +1,29 @@
+# 🔄 Session Continuation Prompt
+
+**Generated:** {{ timestamp }}  
+**Plan:** {{ plan_name }} ({{ completed_phases|length }}/{{ total_phases }} phases, {{ progress_percentage }}%)
+
+---
+
+## 📋 Resume Execution
+
+```
+Follow instructions in .github/prompts/CORTEX.prompt.md.
+
+Continue plan: {{ plan_name }}
+Location: cortex-brain/documents/planning/active/{{ plan_name }}/00-master-plan.md
+Status: Phase {{ current_phase.number }} complete → Begin Phase {{ next_phase.number }}
+```
+
+---
+
+## 📊 Quick Status
+
+- **Last Checkpoint:** `{{ checkpoints[0].hash if checkpoints else 'N/A' }}` ({{ checkpoints[0].date if checkpoints else 'N/A' }})
+- **Artifacts:** {{ artifact_count }}
+- **Database:** `plan_id="{{ plan_id }}"` status={{ plan_status }}
+
+---
+
+**See 00-master-plan.md for full context.**
+

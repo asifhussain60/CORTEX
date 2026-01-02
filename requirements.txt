@@ -11,6 +11,7 @@ pytest>=8.4.0              # Used by: 120+ test files, SKULL enforcement
 PyYAML>=6.0.2              # Used by: All config loaders, cortex-operations.yaml
 python-dateutil>=2.8.2     # Used by: Date utilities, YAML datetime parsing
 pydantic>=2.0.0            # Used by: Configuration validation, setup system
+Jinja2>=3.1.4              # Used by: Template rendering, continuation prompts
 
 # Dependency Injection (CORTEX 4.0)
 dependency-injector>=4.41.0 # Used by: src/di/container.py, orchestrator DI

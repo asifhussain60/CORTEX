@@ -1,0 +1,186 @@
+# Master Orchestrator Configuration v5.0
+# Centralized routing layer for deterministic orchestrator coordination
+
+schema_version: "5.0"
+
+# Pattern-Based Routing Rules (Primary)
+# 90%+ of requests handled via exact/regex matching
+routing_rules:
+  # Planning System
+  - pattern: "^(plan|create a plan|make a plan)\\s*.*$"
+    orchestrator: "planning_v5"
+    confidence: 1.0
+    match_type: "regex"
+    priority: 10
+    metadata:
+      description: "Planning system for structured planning"
+      autonomous: true
+  
+  # TDD Orchestrator
+  - pattern: "^(tdd|start tdd|run tests|test driven).*$"
+    orchestrator: "tdd_orchestrator"
+    confidence: 1.0
+    match_type: "regex"
+    priority: 20
+    metadata:
+      description: "Test-Driven Development orchestrator"
+      autonomous: false
+  
+  # ADO Operations
+  - pattern: "^(ado|ado story|ado feature|azure devops).*$"
+    orchestrator: "ado_orchestrator"
+    confidence: 1.0
+    match_type: "regex"
+    priority: 30
+    metadata:
+      description: "Azure DevOps work item generation"
+      autonomous: true
+  
+  # Sanitization
+  - pattern: "^(sanitize|make generic|anonymize).*$"
+    orchestrator: "sanitization_orchestrator"
+    confidence: 1.0
+    match_type: "regex"
+    priority: 40
+    metadata:
+      description: "Code and content sanitization"
+      autonomous: false
+  
+  # Maintenance
+  - pattern: "^(maintenance|health check|system health).*$"
+    orchestrator: "maintenance_orchestrator"
+    confidence: 1.0
+    match_type: "regex"
+    priority: 50
+    metadata:
+      description: "System maintenance and health checks"
+      autonomous: false
+  
+  # Refinement
+  - pattern: "^(refine|improve|optimize).*$"
+    orchestrator: "refinement_orchestrator"
+    confidence: 1.0
+    match_type: "regex"
+    priority: 60
+    metadata:
+      description: "Code refinement and improvement"
+      autonomous: false
+
+# LLM Fallback Configuration (Secondary)
+# Handles ambiguous inputs that don't match patterns
+fallback:
+  enabled: true
+  classifier: "llm_intent_classifier"
+  confidence_threshold: 0.7
+  log_unmatched: true
+  
+  # Fallback behavior
+  on_low_confidence:
+    action: "ask_user"  # or "use_default", "fail"
+    default_orchestrator: null
+  
+  # LLM configuration
+  llm_config:
+    model: "claude-sonnet-4.5"
+    temperature: 0.1
+    max_tokens: 500
+
+# Orchestrator Lifecycle Hooks
+lifecycle_hooks:
+  # Pre-execution hooks (run before orchestrator.execute())
+  pre_execution:
+    - name: "validate_dependencies"
+      enabled: true
+      priority: 10
+    
+    - name: "check_state_conflicts"
+      enabled: true
+      priority: 20
+  
+  # Post-execution hooks (run after successful execution)
+  post_execution:
+    - name: "save_artifacts"
+      enabled: true
+      priority: 10
+    
+    - name: "update_metrics"
+      enabled: true
+      priority: 20
+  
+  # Error hooks (run on execution failure)
+  on_error:
+    - name: "log_failure"
+      enabled: true
+      priority: 10
+    
+    - name: "notify_user"
+      enabled: true
+      priority: 20
+    
+    - name: "create_rollback_point"
+      enabled: false
+      priority: 30
+
+# State Coordination Settings
+state_coordination:
+  enabled: true
+  
+  # Cross-orchestrator state sharing
+  state_sharing:
+    enabled: true
+    max_state_age_hours: 24
+    auto_cleanup: true
+  
+  # Execution tracking
+  execution_tracking:
+    enabled: true
+    log_to_database: true
+    log_level: "INFO"
+
+# Monitoring and Metrics
+monitoring:
+  enabled: true
+  
+  # Metrics collection
+  metrics:
+    collect_routing_stats: true
+    collect_execution_stats: true
+    collect_performance_stats: true
+  
+  # Performance thresholds
+  thresholds:
+    routing_latency_ms: 100
+    execution_timeout_seconds: 3600
+    max_active_orchestrators: 10
+
+# Orchestrator Registry Integration
+registry:
+  config_path: "cortex-brain/config/mcp-server.yaml"
+  auto_discovery: true
+  cache_orchestrators: true
+  
+  # Dependency resolution
+  dependencies:
+    enabled: true
+    validate_on_start: true
+    allow_cycles: false
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  
+  # Log routing decisions
+  log_routing: true
+  log_execution: true
+  log_state_changes: true
+  
+  # Output
+  console: true
+  file: "logs/master-orchestrator.log"
+
+# Development Settings
+development:
+  hot_reload: true
+  debug_mode: false
+  validate_patterns_on_start: true

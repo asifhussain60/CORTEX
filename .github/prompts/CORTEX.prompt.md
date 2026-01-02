@@ -198,6 +198,51 @@ When Planning System is engaged (🛡️), `00-master-plan.md` MUST include:
 
 ---
 
+## 🔗 Cross-Session Context Awareness
+
+**Status:** ✅ ACTIVE (Phase 4.5) - Master Orchestrator integrated with Tier 1 Working Memory
+
+**How It Works:**
+1. User says "continue", "resume", "keep going", or "next phase"
+2. `CrossSessionContextMiddleware` detects continuation pattern
+3. Queries Tier 1 for last 3 session metadata (orchestrator_used, intent, artifacts)
+4. Injects <200 tokens of lightweight context into routing request
+5. Master Orchestrator routes to last-used orchestrator automatically
+
+**Example Flow:**
+```
+Session 1: User says "plan user authentication" → Planning v5 executes
+           → Session metadata recorded in Tier 1
+
+Session 2: User says "continue" → Middleware queries Tier 1
+           → Finds last orchestrator: planning_v5
+           → Master Orchestrator routes to Planning v5
+           → Resumes plan execution
+```
+
+**Context Injected (Lightweight):**
+```json
+{
+  "recent_activity": [
+    {
+      "session_id": "session-20260102-101500",
+      "orchestrator": "planning_v5",
+      "intent": "plan user authentication",
+      "artifacts": ["plan-001", "00-master-plan.md"],
+      "timestamp": "2026-01-02T10:15:00Z"
+    }
+  ],
+  "continuation_detected": true,
+  "context_source": "tier1_working_memory"
+}
+```
+
+**Token Efficiency:** 200 tokens (metadata) vs 50,000 tokens (full conversation text) = **99.6% reduction**
+
+**Orchestrators Tracked:** All orchestrators (Planning, ADO, Vacuum, Cleanup, TDD, Debug, etc.)
+
+---
+
 ## ⚠️ Fallback Behavior
 
 **1. LLM Classification Failure:**

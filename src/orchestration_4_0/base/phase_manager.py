@@ -255,6 +255,15 @@ class PhaseManager:
         phase = self._get_phase(phase_name)
         return phase.status
     
+    def get_completed_phases(self) -> List[Phase]:
+        """
+        Get list of all completed phases.
+        
+        Returns:
+            List of Phase objects with status COMPLETED
+        """
+        return [phase for phase in self.phases if phase.status == PhaseStatus.COMPLETED]
+    
     def _get_phase(self, phase_name: str) -> Phase:
         """Get phase by name"""
         for phase in self.phases:
