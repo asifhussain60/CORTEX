@@ -6,134 +6,599 @@
     <title>OWASP Top 10 - CORTEX Security</title>
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo-64.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../assets/css/main.css?v=4.0.0">
+    <link rel="stylesheet" href="../assets/css/main.css?v=4.0.1">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
-    <div class="level1-container">
-        <header class="page-header">
-            <nav class="breadcrumb">
-                <a href="../index.html#security-panel"><i class="fas fa-shield-alt"></i> Security</a>
-                <span>/</span>
-                <span>OWASP Top 10</span>
+    <!-- Glass Header (Level 1 - No Logo) -->
+    <header class="glass-header">
+        <div class="header-content">
+            <nav class="header-nav">
+                <a href="../index.html" class="nav-link"><i class="fas fa-home"></i> Home</a>
             </nav>
-            <h1>OWASP Top 10 Security Risks</h1>
-            <p class="subtitle">2021 Edition - Most critical web application security risks</p>
-        </header>
+        </div>
+    </header>
 
-        <main class="page-content">
-            <div class="glass-card">
-                <div class="card-header">
-                    <h2><i class="fas fa-exclamation-triangle"></i> OWASP Top 10 2021</h2>
-                    <p>The Open Web Application Security Project (OWASP) Top 10 represents the most critical security risks to web applications.</p>
-                </div>
-
-                <table class="comparison-table">
-                    <thead>
-                        <tr>
-                            <th>Rank</th>
-                            <th>Vulnerability</th>
-                            <th>Description</th>
-                            <th>Severity</th>
-                            <th>Mitigation</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="table-cell-emphasis">A01</td>
-                            <td><strong>Broken Access Control</strong></td>
-                            <td>Restrictions on authenticated users not properly enforced. Attackers can access unauthorized functionality and/or data, such as accessing other users' accounts, viewing sensitive files, or modifying data.</td>
-                            <td><span class="severity-badge critical">Critical</span></td>
-                            <td>Implement proper authorization checks at the server side. Deny by default. Use centralized access control mechanisms. Minimize CORS usage.</td>
-                        </tr>
-                        <tr>
-                            <td class="table-cell-emphasis">A02</td>
-                            <td><strong>Cryptographic Failures</strong></td>
-                            <td>Failures related to cryptography (or lack thereof) that often lead to exposure of sensitive data. Previously known as "Sensitive Data Exposure," this includes weaknesses in encryption, key management, and data protection.</td>
-                            <td><span class="severity-badge critical">Critical</span></td>
-                            <td>Classify data processed, stored, or transmitted. Apply controls per classification. Encrypt all sensitive data at rest and in transit. Use strong, up-to-date encryption algorithms. Proper key management.</td>
-                        </tr>
-                        <tr>
-                            <td class="table-cell-emphasis">A03</td>
-                            <td><strong>Injection</strong></td>
-                            <td>Application is vulnerable when user-supplied data is not validated, filtered, or sanitized. Includes SQL, NoSQL, OS command, ORM, LDAP, and Expression Language (EL) or Object Graph Navigation Library (OGNL) injection.</td>
-                            <td><span class="severity-badge critical">Critical</span></td>
-                            <td>Use parameterized queries, prepared statements, or stored procedures. Use ORM frameworks safely. Validate input using positive server-side validation. Escape special characters. Use LIMIT and other SQL controls within queries.</td>
-                        </tr>
-                        <tr>
-                            <td class="table-cell-emphasis">A04</td>
-                            <td><strong>Insecure Design</strong></td>
-                            <td>Risks related to design and architectural flaws. Missing or ineffective control design. Different from insecure implementation - even perfect implementation cannot fix insecure design. Requires secure development lifecycle and threat modeling.</td>
-                            <td><span class="severity-badge high">High</span></td>
-                            <td>Establish and use a secure development lifecycle with security professionals. Use threat modeling for critical flows. Integrate security language and controls into user stories. Implement plausibility checks at each tier.</td>
-                        </tr>
-                        <tr>
-                            <td class="table-cell-emphasis">A05</td>
-                            <td><strong>Security Misconfiguration</strong></td>
-                            <td>Missing appropriate security hardening or improperly configured permissions. Includes insecure default configurations, incomplete or ad hoc configurations, open cloud storage, misconfigured HTTP headers, verbose error messages with sensitive information.</td>
-                            <td><span class="severity-badge high">High</span></td>
-                            <td>Implement secure installation processes. Use minimal platform without unnecessary features. Review and update configurations. Use segmented application architecture. Send security directives to clients (e.g., Security Headers).</td>
-                        </tr>
-                        <tr>
-                            <td class="table-cell-emphasis">A06</td>
-                            <td><strong>Vulnerable and Outdated Components</strong></td>
-                            <td>Using components with known vulnerabilities. Includes unsupported or out-of-date versions of OS, web/application server, DBMS, APIs, and all components, libraries, and frameworks. Not scanning for vulnerabilities regularly.</td>
-                            <td><span class="severity-badge high">High</span></td>
-                            <td>Remove unused dependencies, features, files, and documentation. Continuously inventory versions of client-side and server-side components. Monitor sources like CVE and NVD. Only obtain components from official sources. Monitor for unmaintained libraries.</td>
-                        </tr>
-                        <tr>
-                            <td class="table-cell-emphasis">A07</td>
-                            <td><strong>Identification and Authentication Failures</strong></td>
-                            <td>Confirmation of user's identity, authentication, and session management is critical to protect against authentication-related attacks. Previously "Broken Authentication." Includes credential stuffing, brute force, and weak passwords.</td>
-                            <td><span class="severity-badge high">High</span></td>
-                            <td>Implement multi-factor authentication. Do not ship or deploy with default credentials. Implement weak password checks. Limit or delay failed login attempts. Use secure session management. Align password length, complexity, and rotation policies with NIST 800-63b.</td>
-                        </tr>
-                        <tr>
-                            <td class="table-cell-emphasis">A08</td>
-                            <td><strong>Software and Data Integrity Failures</strong></td>
-                            <td>Code and infrastructure that does not protect against integrity violations. Includes insecure CI/CD pipelines, auto-update without integrity verification, and serialization/deserialization issues. Previously included "Insecure Deserialization."</td>
-                            <td><span class="severity-badge medium">Medium</span></td>
-                            <td>Use digital signatures to verify software or data is from expected source and has not been altered. Ensure libraries and dependencies are consuming trusted repositories. Use software supply chain security tools. Ensure CI/CD pipeline has proper segregation.</td>
-                        </tr>
-                        <tr>
-                            <td class="table-cell-emphasis">A09</td>
-                            <td><strong>Security Logging and Monitoring Failures</strong></td>
-                            <td>Insufficient logging, detection, monitoring, and active response. Without logging and monitoring, breaches cannot be detected. Includes logins, failed logins, and high-value transactions not logged. Warnings and errors generate inadequate logs.</td>
-                            <td><span class="severity-badge medium">Medium</span></td>
-                            <td>Ensure all login, access control, and server-side input validation failures can be logged with sufficient user context for suspicious or malicious accounts. Ensure logs are in a format that can be consumed by centralized log management. Establish effective monitoring and alerting.</td>
-                        </tr>
-                        <tr>
-                            <td class="table-cell-emphasis">A10</td>
-                            <td><strong>Server-Side Request Forgery (SSRF)</strong></td>
-                            <td>SSRF flaws occur whenever a web application fetches a remote resource without validating the user-supplied URL. Allows an attacker to coerce the application to send a crafted request to an unexpected destination, even when protected by firewall, VPN, or network ACL.</td>
-                            <td><span class="severity-badge medium">Medium</span></td>
-                            <td>Sanitize and validate all client-supplied input data. Enforce URL schema, port, and destination with a positive allow list. Do not send raw responses to clients. Disable HTTP redirections. Use network segmentation to separate resource access.</td>
-                        </tr>
-                    </tbody>
-                </table>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <div class="hero-icon">
+                <i class="fas fa-exclamation-triangle"></i>
             </div>
+            <h1 class="hero-title">OWASP Top 10</h1>
+            <p class="hero-subtitle">
+                Most critical web application security risks - 2021 Edition
+            </p>
+        </div>
+    </section>
 
-            <div class="glass-card">
-                <div class="card-header">
-                    <h2><i class="fas fa-info-circle"></i> Additional Information</h2>
+    <!-- Main Content -->
+    <main class="content-section">
+        <!-- Overview Card -->
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-shield-alt"></i>
+                <h2 class="card-title">About OWASP Top 10</h2>
+            </div>
+            <p class="card-description">
+                The <strong>Open Web Application Security Project (OWASP) Top 10</strong> represents the most critical 
+                security risks to web applications, updated periodically based on data collected from organizations worldwide.
+            </p>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <h4>Current Edition</h4>
+                    <p>2021</p>
                 </div>
-                <div class="card-content">
-                    <p><strong>Source:</strong> <a href="https://owasp.org/Top10/" target="_blank" rel="noopener noreferrer">OWASP Top 10 - 2021</a></p>
-                    <p><strong>Last Updated:</strong> 2021 Edition</p>
-                    <p><strong>Next Update:</strong> Expected in 2025</p>
-                    <div class="alert-info">
-                        <i class="fas fa-lightbulb"></i>
-                        <div>
-                            <strong>Note:</strong> The OWASP Top 10 is updated periodically based on data collected from organizations worldwide. It represents a broad consensus about the most critical security risks to web applications.
-                        </div>
-                    </div>
+                <div class="feature-item">
+                    <i class="fas fa-clock"></i>
+                    <h4>Next Update</h4>
+                    <p>Expected 2025</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-link"></i>
+                    <h4>Official Source</h4>
+                    <p><a href="https://owasp.org/Top10/" target="_blank" rel="noopener noreferrer">owasp.org/Top10</a></p>
                 </div>
             </div>
-        </main>
+        </article>
 
-        <footer class="page-footer">
-            <a href="penetration-testing.html" class="nav-link"><i class="fas fa-arrow-left"></i> Previous: Penetration Testing</a>
-            <a href="../index.html#security-panel" class="nav-link">Back to Security Hub <i class="fas fa-home"></i></a>
-        </footer>
-    </div>
+        <!-- OWASP Top 10 Hierarchy Visualization -->
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-sitemap"></i>
+                <h2 class="card-title">OWASP Top 10 2021 Hierarchy</h2>
+            </div>
+            <p class="card-description">
+                Visual overview of the OWASP Top 10 security risks, color-coded by severity level.
+            </p>
+            <div class="visualization-container">
+                <div class="mermaid">
+graph TD
+    OT[OWASP Top 10 2021] --> A01[A01: Broken Access Control]
+    OT --> A02[A02: Cryptographic Failures]
+    OT --> A03[A03: Injection]
+    OT --> A04[A04: Insecure Design]
+    OT --> A05[A05: Security Misconfiguration]
+    OT --> A06[A06: Vulnerable Components]
+    OT --> A07[A07: Auth Failures]
+    OT --> A08[A08: Integrity Failures]
+    OT --> A09[A09: Logging Failures]
+    OT --> A10[A10: SSRF]
+    
+    style OT fill:#00d4ff,stroke:#fff,stroke-width:3px,color:#0a0e27
+    style A01 fill:#ff4757,stroke:#fff,stroke-width:2px,color:#fff
+    style A02 fill:#ff4757,stroke:#fff,stroke-width:2px,color:#fff
+    style A03 fill:#ffb84d,stroke:#fff,stroke-width:2px,color:#0a0e27
+    style A04 fill:#7b61ff,stroke:#fff,stroke-width:2px,color:#fff
+    style A05 fill:#7b61ff,stroke:#fff,stroke-width:2px,color:#fff
+    style A06 fill:#7b61ff,stroke:#fff,stroke-width:2px,color:#fff
+    style A07 fill:#7b61ff,stroke:#fff,stroke-width:2px,color:#fff
+    style A08 fill:#2ecc71,stroke:#fff,stroke-width:2px,color:#fff
+    style A09 fill:#2ecc71,stroke:#fff,stroke-width:2px,color:#fff
+    style A10 fill:#2ecc71,stroke:#fff,stroke-width:2px,color:#fff
+                </div>
+            </div>
+            <div class="badge-container">
+                <span class="severity-badge critical">Critical</span>
+                <span class="severity-badge high">High</span>
+                <span class="severity-badge medium">Medium-High</span>
+                <span class="severity-badge low">Medium</span>
+            </div>
+        </article>
+
+        <!-- Interactive Compliance Progress Dashboard -->
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-chart-bar"></i>
+                <h2 class="card-title">OWASP Compliance Progress</h2>
+            </div>
+            <p class="card-description">
+                Track implementation status of controls for each OWASP Top 10 category.
+            </p>
+            <div class="visualization-container" id="owaspComplianceChart"></div>
+        </article>
+
+        <!-- Detailed Risk Breakdown -->
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-list-ol"></i>
+                <h2 class="card-title">A01: Broken Access Control</h2>
+            </div>
+            <div class="badge-container">
+                <span class="severity-badge critical">Critical</span>
+            </div>
+            <p class="card-description">
+                <strong>Description:</strong> Restrictions on authenticated users not properly enforced. Attackers can access 
+                unauthorized functionality and/or data, such as accessing other users' accounts, viewing sensitive files, or modifying data.
+            </p>
+            <h4 class="section-subtitle"><i class="fas fa-shield-alt"></i> Mitigation Strategies</h4>
+            <ul class="feature-list">
+                <li><i class="fas fa-check-circle"></i> Implement proper authorization checks at the server side</li>
+                <li><i class="fas fa-check-circle"></i> Deny by default - fail securely</li>
+                <li><i class="fas fa-check-circle"></i> Use centralized access control mechanisms</li>
+                <li><i class="fas fa-check-circle"></i> Minimize CORS usage</li>
+                <li><i class="fas fa-check-circle"></i> Disable directory listing on web servers</li>
+            </ul>
+        </article>
+
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-key"></i>
+                <h2 class="card-title">A02: Cryptographic Failures</h2>
+            </div>
+            <div class="badge-container">
+                <span class="severity-badge critical">Critical</span>
+            </div>
+            <p class="card-description">
+                <strong>Description:</strong> Failures related to cryptography (or lack thereof) that often lead to exposure of sensitive data. 
+                Previously known as "Sensitive Data Exposure," this includes weaknesses in encryption, key management, and data protection.
+            </p>
+            <h4 class="section-subtitle"><i class="fas fa-shield-alt"></i> Mitigation Strategies</h4>
+            <ul class="feature-list">
+                <li><i class="fas fa-check-circle"></i> Classify data processed, stored, or transmitted by application</li>
+                <li><i class="fas fa-check-circle"></i> Apply controls per classification (e.g., GDPR, PCI DSS)</li>
+                <li><i class="fas fa-check-circle"></i> Encrypt all sensitive data at rest and in transit</li>
+                <li><i class="fas fa-check-circle"></i> Use strong, up-to-date encryption algorithms and protocols</li>
+                <li><i class="fas fa-check-circle"></i> Implement proper key management practices</li>
+                <li><i class="fas fa-check-circle"></i> Disable caching for sensitive data responses</li>
+            </ul>
+        </article>
+
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-code"></i>
+                <h2 class="card-title">A03: Injection</h2>
+            </div>
+            <div class="badge-container">
+                <span class="severity-badge high">High</span>
+            </div>
+            <p class="card-description">
+                <strong>Description:</strong> Application is vulnerable when user-supplied data is not validated, filtered, or sanitized. 
+                Includes SQL, NoSQL, OS command, ORM, LDAP, and Expression Language (EL) or Object Graph Navigation Library (OGNL) injection.
+            </p>
+            <h4 class="section-subtitle"><i class="fas fa-shield-alt"></i> Mitigation Strategies</h4>
+            <ul class="feature-list">
+                <li><i class="fas fa-check-circle"></i> Use parameterized queries, prepared statements, or stored procedures</li>
+                <li><i class="fas fa-check-circle"></i> Use ORM frameworks safely (watch for lazy loading vulnerabilities)</li>
+                <li><i class="fas fa-check-circle"></i> Validate input using positive server-side validation (allowlists)</li>
+                <li><i class="fas fa-check-circle"></i> Escape special characters using syntax-appropriate escaping</li>
+                <li><i class="fas fa-check-circle"></i> Use LIMIT and other SQL controls within queries</li>
+            </ul>
+        </article>
+
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-drafting-compass"></i>
+                <h2 class="card-title">A04: Insecure Design</h2>
+            </div>
+            <div class="badge-container">
+                <span class="severity-badge high">High</span>
+            </div>
+            <p class="card-description">
+                <strong>Description:</strong> Risks related to design and architectural flaws. Missing or ineffective control design. 
+                Different from insecure implementation - even perfect implementation cannot fix insecure design. Requires secure development lifecycle and threat modeling.
+            </p>
+            <h4 class="section-subtitle"><i class="fas fa-shield-alt"></i> Mitigation Strategies</h4>
+            <ul class="feature-list">
+                <li><i class="fas fa-check-circle"></i> Establish and use a secure development lifecycle with security professionals</li>
+                <li><i class="fas fa-check-circle"></i> Use threat modeling for critical authentication, access control, business logic, and key flows</li>
+                <li><i class="fas fa-check-circle"></i> Integrate security language and controls into user stories</li>
+                <li><i class="fas fa-check-circle"></i> Implement plausibility checks at each tier of application</li>
+                <li><i class="fas fa-check-circle"></i> Write unit and integration tests to validate all critical flows</li>
+            </ul>
+        </article>
+
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-cog"></i>
+                <h2 class="card-title">A05: Security Misconfiguration</h2>
+            </div>
+            <div class="badge-container">
+                <span class="severity-badge high">High</span>
+            </div>
+            <p class="card-description">
+                <strong>Description:</strong> Missing appropriate security hardening or improperly configured permissions. 
+                Includes insecure default configurations, incomplete or ad hoc configurations, open cloud storage, misconfigured HTTP headers, verbose error messages.
+            </p>
+            <h4 class="section-subtitle"><i class="fas fa-shield-alt"></i> Mitigation Strategies</h4>
+            <ul class="feature-list">
+                <li><i class="fas fa-check-circle"></i> Implement secure installation processes with repeatable hardening</li>
+                <li><i class="fas fa-check-circle"></i> Use minimal platform without unnecessary features, components, or documentation</li>
+                <li><i class="fas fa-check-circle"></i> Review and update configurations as part of patch management process</li>
+                <li><i class="fas fa-check-circle"></i> Use segmented application architecture for effective security separation</li>
+                <li><i class="fas fa-check-circle"></i> Send security directives to clients (e.g., Security Headers)</li>
+            </ul>
+        </article>
+
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-cubes"></i>
+                <h2 class="card-title">A06: Vulnerable and Outdated Components</h2>
+            </div>
+            <div class="badge-container">
+                <span class="severity-badge high">High</span>
+            </div>
+            <p class="card-description">
+                <strong>Description:</strong> Using components with known vulnerabilities. Includes unsupported or out-of-date versions of OS, 
+                web/application server, DBMS, APIs, and all components, libraries, and frameworks. Not scanning for vulnerabilities regularly.
+            </p>
+            <h4 class="section-subtitle"><i class="fas fa-shield-alt"></i> Mitigation Strategies</h4>
+            <ul class="feature-list">
+                <li><i class="fas fa-check-circle"></i> Remove unused dependencies, features, files, and documentation</li>
+                <li><i class="fas fa-check-circle"></i> Continuously inventory versions of client-side and server-side components</li>
+                <li><i class="fas fa-check-circle"></i> Monitor sources like CVE and NVD for vulnerability information</li>
+                <li><i class="fas fa-check-circle"></i> Only obtain components from official sources over secure links</li>
+                <li><i class="fas fa-check-circle"></i> Monitor for unmaintained libraries and components</li>
+            </ul>
+        </article>
+
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-user-lock"></i>
+                <h2 class="card-title">A07: Identification and Authentication Failures</h2>
+            </div>
+            <div class="badge-container">
+                <span class="severity-badge medium">Medium-High</span>
+            </div>
+            <p class="card-description">
+                <strong>Description:</strong> Confirmation of user's identity, authentication, and session management is critical to protect against 
+                authentication-related attacks. Previously "Broken Authentication." Includes credential stuffing, brute force, and weak passwords.
+            </p>
+            <h4 class="section-subtitle"><i class="fas fa-shield-alt"></i> Mitigation Strategies</h4>
+            <ul class="feature-list">
+                <li><i class="fas fa-check-circle"></i> Implement multi-factor authentication wherever possible</li>
+                <li><i class="fas fa-check-circle"></i> Do not ship or deploy with default credentials (especially for admin users)</li>
+                <li><i class="fas fa-check-circle"></i> Implement weak password checks (e.g., against top 10,000 worst passwords)</li>
+                <li><i class="fas fa-check-circle"></i> Limit or delay failed login attempts (rate limiting)</li>
+                <li><i class="fas fa-check-circle"></i> Use secure session management with proper invalidation</li>
+                <li><i class="fas fa-check-circle"></i> Align password length, complexity, and rotation policies with NIST 800-63b</li>
+            </ul>
+        </article>
+
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-file-signature"></i>
+                <h2 class="card-title">A08: Software and Data Integrity Failures</h2>
+            </div>
+            <div class="badge-container">
+                <span class="severity-badge low">Medium</span>
+            </div>
+            <p class="card-description">
+                <strong>Description:</strong> Code and infrastructure that does not protect against integrity violations. Includes insecure CI/CD pipelines, 
+                auto-update without integrity verification, and serialization/deserialization issues. Previously included "Insecure Deserialization."
+            </p>
+            <h4 class="section-subtitle"><i class="fas fa-shield-alt"></i> Mitigation Strategies</h4>
+            <ul class="feature-list">
+                <li><i class="fas fa-check-circle"></i> Use digital signatures to verify software or data is from expected source</li>
+                <li><i class="fas fa-check-circle"></i> Ensure libraries and dependencies are consuming trusted repositories</li>
+                <li><i class="fas fa-check-circle"></i> Use software supply chain security tools (OWASP Dependency Check, Snyk)</li>
+                <li><i class="fas fa-check-circle"></i> Ensure CI/CD pipeline has proper segregation, configuration, and access control</li>
+                <li><i class="fas fa-check-circle"></i> Verify unsigned or unencrypted serialized data is not sent to untrusted clients</li>
+            </ul>
+        </article>
+
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-clipboard-list"></i>
+                <h2 class="card-title">A09: Security Logging and Monitoring Failures</h2>
+            </div>
+            <div class="badge-container">
+                <span class="severity-badge low">Medium</span>
+            </div>
+            <p class="card-description">
+                <strong>Description:</strong> Insufficient logging, detection, monitoring, and active response. Without logging and monitoring, 
+                breaches cannot be detected. Includes logins, failed logins, and high-value transactions not logged. Warnings and errors generate inadequate logs.
+            </p>
+            <h4 class="section-subtitle"><i class="fas fa-shield-alt"></i> Mitigation Strategies</h4>
+            <ul class="feature-list">
+                <li><i class="fas fa-check-circle"></i> Ensure all login, access control, and server-side input validation failures can be logged</li>
+                <li><i class="fas fa-check-circle"></i> Log with sufficient user context to identify suspicious or malicious accounts</li>
+                <li><i class="fas fa-check-circle"></i> Ensure logs are in a format that can be consumed by centralized log management</li>
+                <li><i class="fas fa-check-circle"></i> Establish effective monitoring and alerting for suspicious activities</li>
+                <li><i class="fas fa-check-circle"></i> Establish or adopt incident response and recovery plans (e.g., NIST 800-61r2)</li>
+            </ul>
+        </article>
+
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-exchange-alt"></i>
+                <h2 class="card-title">A10: Server-Side Request Forgery (SSRF)</h2>
+            </div>
+            <div class="badge-container">
+                <span class="severity-badge low">Medium</span>
+            </div>
+            <p class="card-description">
+                <strong>Description:</strong> SSRF flaws occur whenever a web application fetches a remote resource without validating the user-supplied URL. 
+                Allows an attacker to coerce the application to send a crafted request to an unexpected destination, even when protected by firewall, VPN, or network ACL.
+            </p>
+            <h4 class="section-subtitle"><i class="fas fa-shield-alt"></i> Mitigation Strategies</h4>
+            <ul class="feature-list">
+                <li><i class="fas fa-check-circle"></i> Sanitize and validate all client-supplied input data</li>
+                <li><i class="fas fa-check-circle"></i> Enforce URL schema, port, and destination with a positive allow list</li>
+                <li><i class="fas fa-check-circle"></i> Do not send raw responses to clients</li>
+                <li><i class="fas fa-check-circle"></i> Disable HTTP redirections</li>
+                <li><i class="fas fa-check-circle"></i> Use network segmentation to separate resource access (e.g., DMZ)</li>
+            </ul>
+        </article>
+
+        <!-- CORTEX Implementation Status -->
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-check-circle"></i>
+                <h2 class="card-title">CORTEX Implementation Status</h2>
+            </div>
+            <p class="card-description">
+                How CORTEX addresses each OWASP Top 10 risk with concrete security implementations.
+            </p>
+            
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <span class="severity-badge critical">A01</span>
+                    <h4>Access Control</h4>
+                    <p><strong>✓ Implemented</strong><br>Brain tier isolation, SKULL rules, Git isolation</p>
+                </div>
+                <div class="feature-item">
+                    <span class="severity-badge critical">A02</span>
+                    <h4>Cryptography</h4>
+                    <p><strong>✓ Implemented</strong><br>Sanitization orchestrator, data anonymization</p>
+                </div>
+                <div class="feature-item">
+                    <span class="severity-badge high">A03</span>
+                    <h4>Injection</h4>
+                    <p><strong>✓ Implemented</strong><br>Input validation, parameterized queries</p>
+                </div>
+                <div class="feature-item">
+                    <span class="severity-badge high">A04</span>
+                    <h4>Design</h4>
+                    <p><strong>✓ Implemented</strong><br>Threat modeling, TDD enforcement</p>
+                </div>
+                <div class="feature-item">
+                    <span class="severity-badge high">A05</span>
+                    <h4>Misconfiguration</h4>
+                    <p><strong>✓ Implemented</strong><br>Config validation, maintenance checks</p>
+                </div>
+                <div class="feature-item">
+                    <span class="severity-badge high">A06</span>
+                    <h4>Components</h4>
+                    <p><strong>✓ Implemented</strong><br>Dependency scanning, STS updates</p>
+                </div>
+                <div class="feature-item">
+                    <span class="severity-badge medium">A07</span>
+                    <h4>Authentication</h4>
+                    <p><strong>◐ Partial</strong><br>Session management, access control</p>
+                </div>
+                <div class="feature-item">
+                    <span class="severity-badge low">A08</span>
+                    <h4>Integrity</h4>
+                    <p><strong>✓ Implemented</strong><br>Git checkpoints, CI/CD security</p>
+                </div>
+                <div class="feature-item">
+                    <span class="severity-badge low">A09</span>
+                    <h4>Logging</h4>
+                    <p><strong>✓ Implemented</strong><br>Audit logging, analytics dashboard</p>
+                </div>
+                <div class="feature-item">
+                    <span class="severity-badge low">A10</span>
+                    <h4>SSRF</h4>
+                    <p><strong>◐ Partial</strong><br>URL validation in integrations</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Additional Resources -->
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-book"></i>
+                <h2 class="card-title">Additional Resources</h2>
+            </div>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <a href="https://owasp.org/Top10/" target="_blank" rel="noopener noreferrer">
+                        <i class="fas fa-external-link-alt"></i>
+                        <h4>OWASP Top 10</h4>
+                        <p>Official documentation</p>
+                    </a>
+                </div>
+                <div class="feature-item">
+                    <a href="https://cheatsheetseries.owasp.org/" target="_blank" rel="noopener noreferrer">
+                        <i class="fas fa-file-alt"></i>
+                        <h4>Cheat Sheets</h4>
+                        <p>Implementation guides</p>
+                    </a>
+                </div>
+                <div class="feature-item">
+                    <a href="https://owasp.org/www-project-web-security-testing-guide/" target="_blank" rel="noopener noreferrer">
+                        <i class="fas fa-clipboard-check"></i>
+                        <h4>Testing Guide</h4>
+                        <p>Security testing procedures</p>
+                    </a>
+                </div>
+                <div class="feature-item">
+                    <a href="compliance-standards.html">
+                        <i class="fas fa-balance-scale"></i>
+                        <h4>Compliance</h4>
+                        <p>Standards & frameworks</p>
+                    </a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <!-- Glass Footer -->
+    <footer class="glass-footer">
+        <div class="footer-content">
+            <div class="footer-copyright">
+                <p>© 2026 Asif Hussain. All rights reserved.</p>
+            </div>
+            <div class="footer-links">
+                <a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener noreferrer">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+                <a href="../index.html">
+                    <i class="fas fa-home"></i> Home
+                </a>
+            </div>
+            <div class="footer-version">
+                <span>v4.0.1</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                darkMode: true,
+                background: '#0a0e27',
+                primaryColor: '#00d4ff',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#00d4ff',
+                lineColor: '#00d4ff',
+                secondaryColor: '#7b61ff',
+                tertiaryColor: '#ff6b9d'
+            }
+        });
+
+        // D3.js OWASP Compliance Progress Chart
+        function createOwaspComplianceChart() {
+            const data = [
+                { category: 'A01: Access Control', implemented: 12, total: 15, percentage: 80 },
+                { category: 'A02: Cryptography', implemented: 8, total: 10, percentage: 80 },
+                { category: 'A03: Injection', implemented: 14, total: 16, percentage: 87.5 },
+                { category: 'A04: Design', implemented: 9, total: 12, percentage: 75 },
+                { category: 'A05: Misconfiguration', implemented: 11, total: 14, percentage: 78.6 },
+                { category: 'A06: Components', implemented: 7, total: 10, percentage: 70 },
+                { category: 'A07: Authentication', implemented: 5, total: 12, percentage: 41.7 },
+                { category: 'A08: Integrity', implemented: 10, total: 11, percentage: 90.9 },
+                { category: 'A09: Logging', implemented: 13, total: 15, percentage: 86.7 },
+                { category: 'A10: SSRF', implemented: 4, total: 8, percentage: 50 }
+            ];
+
+            const container = d3.select('#owaspComplianceChart');
+            const width = container.node().getBoundingClientRect().width;
+            const height = 500;
+            const margin = { top: 20, right: 40, bottom: 60, left: 200 };
+
+            const svg = container.append('svg')
+                .attr('width', width)
+                .attr('height', height);
+
+            const chartWidth = width - margin.left - margin.right;
+            const chartHeight = height - margin.top - margin.bottom;
+
+            const g = svg.append('g')
+                .attr('transform', `translate(${margin.left},${margin.top})`);
+
+            // Scales
+            const xScale = d3.scaleLinear()
+                .domain([0, 100])
+                .range([0, chartWidth]);
+
+            const yScale = d3.scaleBand()
+                .domain(data.map(d => d.category))
+                .range([0, chartHeight])
+                .padding(0.2);
+
+            // Color scale
+            const colorScale = d3.scaleLinear()
+                .domain([0, 50, 75, 100])
+                .range(['#ff4757', '#ffb84d', '#7b61ff', '#2ecc71']);
+
+            // Bars
+            g.selectAll('.bar')
+                .data(data)
+                .enter()
+                .append('rect')
+                .attr('class', 'bar')
+                .attr('x', 0)
+                .attr('y', d => yScale(d.category))
+                .attr('width', d => xScale(d.percentage))
+                .attr('height', yScale.bandwidth())
+                .attr('fill', d => colorScale(d.percentage))
+                .attr('rx', 4)
+                .style('filter', 'drop-shadow(0 2px 8px rgba(0, 212, 255, 0.3))')
+                .on('mouseover', function(event, d) {
+                    d3.select(this)
+                        .style('opacity', 0.8)
+                        .style('filter', 'drop-shadow(0 4px 16px rgba(0, 212, 255, 0.6))');
+                })
+                .on('mouseout', function() {
+                    d3.select(this)
+                        .style('opacity', 1)
+                        .style('filter', 'drop-shadow(0 2px 8px rgba(0, 212, 255, 0.3))');
+                });
+
+            // Percentage labels
+            g.selectAll('.label')
+                .data(data)
+                .enter()
+                .append('text')
+                .attr('class', 'label')
+                .attr('x', d => xScale(d.percentage) + 5)
+                .attr('y', d => yScale(d.category) + yScale.bandwidth() / 2)
+                .attr('dy', '0.35em')
+                .text(d => `${Math.round(d.percentage)}% (${d.implemented}/${d.total})`)
+                .style('fill', '#fff')
+                .style('font-size', '12px')
+                .style('font-weight', '600');
+
+            // Y-axis
+            g.append('g')
+                .call(d3.axisLeft(yScale))
+                .style('color', '#b0b8d4')
+                .style('font-size', '14px');
+
+            // X-axis
+            g.append('g')
+                .attr('transform', `translate(0,${chartHeight})`)
+                .call(d3.axisBottom(xScale).ticks(5).tickFormat(d => `${d}%`))
+                .style('color', '#b0b8d4')
+                .style('font-size', '12px');
+
+            // X-axis label
+            g.append('text')
+                .attr('x', chartWidth / 2)
+                .attr('y', chartHeight + 40)
+                .attr('text-anchor', 'middle')
+                .text('Compliance Progress (%)')
+                .style('fill', '#b0b8d4')
+                .style('font-size', '14px');
+        }
+
+        // Initialize chart on load
+        window.addEventListener('load', () => {
+            createOwaspComplianceChart();
+        });
+
+        // Redraw chart on window resize
+        window.addEventListener('resize', () => {
+            d3.select('#owaspComplianceChart').selectAll('*').remove();
+            createOwaspComplianceChart();
+        });
+    </script>
 </body>
 </html>
