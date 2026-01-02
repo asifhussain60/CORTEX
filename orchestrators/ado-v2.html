@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX ADO Orchestrator v2.0 - Conversational wizard + automatic generation for Azure DevOps work items">
+    <title>ADO Orchestrator v2.0 - CORTEX</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+    <!-- Skip Link -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- Level 1 Navigation Header (glassmorphism v4.1.0 compliant) -->
+    <header class="glass-header">
+        <div class="header-content">
+            <nav class="header-nav">
+                <a href="../index.html" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="container" id="main-content">
+        <!-- Hero Section -->
+        <article class="glass-card-display animation-t1">
+            <div class="hero-header">
+                <h1>🎯 ADO Orchestrator v2.0</h1>
+                <p class="hero-subtitle">Conversational Wizard + Automatic Generation for Azure DevOps</p>
+            </div>
+            
+            <p class="hero-description">
+                The v2.0 ADO Orchestrator revolutionizes work item creation with a <strong>dual-mode architecture</strong>: 
+                a <strong>7-stage conversational wizard</strong> for interactive refinement, and <strong>6-phase automatic generation</strong> 
+                for Planning v5 integration. Whether you prefer guided conversations or fully autonomous workflows, v2.0 generates 
+                enterprise-grade Features, User Stories, and Tasks with proper hierarchy, acceptance criteria, effort estimates, 
+                and ADO-specific metadata—ready for immediate CSV import or API push.
+            </p>
+            
+            <!-- Key Metrics -->
+            <div class="metrics-grid metrics-grid-4">
+                <div class="metric-card glass-card-display">
+                    <div class="metric-value">2</div>
+                    <div class="metric-label">Generation Modes</div>
+                </div>
+                <div class="metric-card glass-card-display">
+                    <div class="metric-value">7</div>
+                    <div class="metric-label">Wizard Stages</div>
+                </div>
+                <div class="metric-card glass-card-display">
+                    <div class="metric-value">6</div>
+                    <div class="metric-label">Auto-Gen Phases</div>
+                </div>
+                <div class="metric-card glass-card-display">
+                    <div class="metric-value">90%</div>
+                    <div class="metric-label">Time Saved</div>
+                </div>
+            </div>
+            
+            <!-- Commands -->
+            <div class="command-card">
+                <code class="command-syntax">ado story [feature description]</code>
+                <p class="command-description">
+                    Launches conversational wizard for interactive work item creation (7 stages).
+                </p>
+                <div class="command-example">
+                    ado story user authentication with OAuth2 and MFA
+                </div>
+            </div>
+            
+            <div class="command-card">
+                <code class="command-syntax">ado feature [plan reference]</code>
+                <p class="command-description">
+                    Automatically generates work items from Planning v5 manifest (6 phases, zero interaction).
+                </p>
+                <div class="command-example">
+                    ado feature cross-session-context-middleware
+                </div>
+            </div>
+        </article>
+        
+        <!-- Dual-Mode Architecture -->
+        <article class="glass-card-display animation-t1">
+            <h2>🔀 Dual-Mode Architecture</h2>
+            
+            <div class="dual-modes">
+                <div class="mode-card glass-card-display">
+                    <div class="mode-header">
+                        <div class="mode-icon">💬</div>
+                        <h3>Conversational Wizard</h3>
+                        <span class="mode-badge">Interactive</span>
+                    </div>
+                    <p class="mode-description">
+                        7-stage dialogue for manual work item creation. Ideal for exploratory features, 
+                        quick stories, or when human judgment is needed.
+                    </p>
+                    <ul class="mode-features">
+                        <li>✅ Natural language input</li>
+                        <li>✅ Progressive refinement</li>
+                        <li>✅ Real-time validation</li>
+                        <li>✅ Interactive effort estimation</li>
+                        <li>✅ Acceptance criteria builder</li>
+                        <li>✅ Preview before generation</li>
+                    </ul>
+                    <div class="mode-timing">
+                        <strong>⏱️ Time:</strong> 5-10 minutes (guided)
+                    </div>
+                </div>
+                
+                <div class="mode-card glass-card-display">
+                    <div class="mode-header">
+                        <div class="mode-icon">⚡</div>
+                        <h3>Automatic Generation</h3>
+                        <span class="mode-badge">Autonomous</span>
+                    </div>
+                    <p class="mode-description">
+                        6-phase automatic workflow from Planning v5 manifests. Zero interaction required—
+                        perfect for complex features already planned.
+                    </p>
+                    <ul class="mode-features">
+                        <li>✅ Planning v5 integration</li>
+                        <li>✅ Zero human input</li>
+                        <li>✅ Complete work item hierarchy</li>
+                        <li>✅ Acceptance criteria from plan</li>
+                        <li>✅ Automatic effort calculation</li>
+                        <li>✅ Immediate CSV export</li>
+                    </ul>
+                    <div class="mode-timing">
+                        <strong>⏱️ Time:</strong> 30-90 seconds (autonomous)
+                    </div>
+                </div>
+            </div>
+        </article>
+        
+        <!-- 7-Stage Conversational Wizard -->
+        <article class="glass-card-display animation-t1">
+            <h2>💬 7-Stage Conversational Wizard</h2>
+            <p class="section-intro">
+                Interactive dialogue flow for manual work item creation. Click any stage to explore its deep-dive documentation.
+            </p>
+            
+            <div class="phases-masonry">
+                <a href="ado-v2/wizard-stage-1-work-item-type.html" class="glass-card-clickable animation-t1">
+                    <div class="phase-badge">Stage 1</div>
+                    <div class="phase-icon">🎯</div>
+                    <h3>Work Item Type Selection</h3>
+                    <p>Choose Feature, User Story, or Task with context-aware recommendations</p>
+                    <div class="phase-meta">
+                        <span class="phase-duration">⏱️ 10-20s</span>
+                    </div>
+                </a>
+                
+                <a href="ado-v2/wizard-stage-2-title-description.html" class="glass-card-clickable animation-t1">
+                    <div class="phase-badge">Stage 2</div>
+                    <div class="phase-icon">✍️</div>
+                    <h3>Title & Description</h3>
+                    <p>Natural language input with auto-refinement and template suggestions</p>
+                    <div class="phase-meta">
+                        <span class="phase-duration">⏱️ 30-60s</span>
+                    </div>
+                </a>
+                
+                <a href="ado-v2/wizard-stage-3-acceptance-criteria.html" class="glass-card-clickable animation-t1">
+                    <div class="phase-badge">Stage 3</div>
+                    <div class="phase-icon">✅</div>
+                    <h3>Acceptance Criteria</h3>
+                    <p>Interactive builder with GIVEN-WHEN-THEN templates and validation</p>
+                    <div class="phase-meta">
+                        <span class="phase-duration">⏱️ 1-2min</span>
+                    </div>
+                </a>
+                
+                <a href="ado-v2/wizard-stage-4-effort-estimation.html" class="glass-card-clickable animation-t1">
+                    <div class="phase-badge">Stage 4</div>
+                    <div class="phase-icon">⏳</div>
+                    <h3>Effort Estimation</h3>
+                    <p>AI-powered estimation with historical data comparison and adjustment</p>
+                    <div class="phase-meta">
+                        <span class="phase-duration">⏱️ 30-45s</span>
+                    </div>
+                </a>
+                
+                <a href="ado-v2/wizard-stage-5-hierarchy-relationships.html" class="glass-card-clickable animation-t1">
+                    <div class="phase-badge">Stage 5</div>
+                    <div class="phase-icon">🔗</div>
+                    <h3>Hierarchy & Relationships</h3>
+                    <p>Define parent-child links, dependencies, and related work items</p>
+                    <div class="phase-meta">
+                        <span class="phase-duration">⏱️ 45-90s</span>
+                    </div>
+                </a>
+                
+                <a href="ado-v2/wizard-stage-6-metadata-tagging.html" class="glass-card-clickable animation-t1">
+                    <div class="phase-badge">Stage 6</div>
+                    <div class="phase-icon">🏷️</div>
+                    <h3>Metadata & Tagging</h3>
+                    <p>Set priority, severity, tags, area path, and iteration path</p>
+                    <div class="phase-meta">
+                        <span class="phase-duration">⏱️ 30-60s</span>
+                    </div>
+                </a>
+                
+                <a href="ado-v2/wizard-stage-7-preview-export.html" class="glass-card-clickable animation-t1">
+                    <div class="phase-badge">Stage 7</div>
+                    <div class="phase-icon">📤</div>
+                    <h3>Preview & Export</h3>
+                    <p>Review complete work item, adjust, and export as CSV or push via API</p>
+                    <div class="phase-meta">
+                        <span class="phase-duration">⏱️ 30-60s</span>
+                    </div>
+                </a>
+            </div>
+        </article>
+        
+        <!-- 6-Phase Automatic Generation -->
+        <article class="glass-card-display animation-t1">
+            <h2>⚡ 6-Phase Automatic Generation</h2>
+            <p class="section-intro">
+                Fully autonomous workflow from Planning v5 manifests. No user interaction required. 
+                Click any phase to explore its deep-dive documentation.
+            </p>
+            
+            <div class="phases-masonry">
+                <a href="ado-v2/auto-phase-1-manifest-parsing.html" class="glass-card-clickable animation-t1">
+                    <div class="phase-badge">Phase 1</div>
+                    <div class="phase-icon">📄</div>
+                    <h3>Manifest Parsing</h3>
+                    <p>Load Planning v5 manifest, validate structure, extract work item data</p>
+                    <div class="phase-meta">
+                        <span class="phase-duration">⏱️ 2-5s</span>
+                        <span class="phase-criticality">🔴 Critical</span>
+                    </div>
+                </a>
+                
+                <a href="ado-v2/auto-phase-2-hierarchy-mapping.html" class="glass-card-clickable animation-t1">
+                    <div class="phase-badge">Phase 2</div>
+                    <div class="phase-icon">🗂️</div>
+                    <h3>Hierarchy Mapping</h3>
+                    <p>Map plan phases to Feature → User Story → Task hierarchy automatically</p>
+                    <div class="phase-meta">
+                        <span class="phase-duration">⏱️ 3-8s</span>
+                        <span class="phase-criticality">🔴 Critical</span>
+                    </div>
+                </a>
+                
+                <a href="ado-v2/auto-phase-3-acceptance-criteria-extraction.html" class="glass-card-clickable animation-t1">
+                    <div class="phase-badge">Phase 3</div>
+                    <div class="phase-icon">✅</div>
+                    <h3>Acceptance Criteria Extraction</h3>
+                    <p>Extract Success Conditions, Validation Gates, and Rollback Triggers from plan</p>
+                    <div class="phase-meta">
+                        <span class="phase-duration">⏱️ 5-10s</span>
+                        <span class="phase-criticality">🟡 High</span>
+                    </div>
+                </a>
+                
+                <a href="ado-v2/auto-phase-4-effort-calculation.html" class="glass-card-clickable animation-t1">
+                    <div class="phase-badge">Phase 4</div>
+                    <div class="phase-icon">⏳</div>
+                    <h3>Effort Calculation</h3>
+                    <p>Calculate effort from complexity scores and historical velocity data</p>
+                    <div class="phase-meta">
+                        <span class="phase-duration">⏱️ 3-6s</span>
+                        <span class="phase-criticality">🟢 Medium</span>
+                    </div>
+                </a>
+                
+                <a href="ado-v2/auto-phase-5-metadata-enrichment.html" class="glass-card-clickable animation-t1">
+                    <div class="phase-badge">Phase 5</div>
+                    <div class="phase-icon">🏷️</div>
+                    <h3>Metadata Enrichment</h3>
+                    <p>Add priority, tags, area/iteration paths from plan context and org defaults</p>
+                    <div class="phase-meta">
+                        <span class="phase-duration">⏱️ 2-4s</span>
+                        <span class="phase-criticality">🟢 Medium</span>
+                    </div>
+                </a>
+                
+                <a href="ado-v2/auto-phase-6-csv-generation.html" class="glass-card-clickable animation-t1">
+                    <div class="phase-badge">Phase 6</div>
+                    <div class="phase-icon">📤</div>
+                    <h3>CSV Generation & Export</h3>
+                    <p>Generate ADO-compliant CSV with proper column mapping and validation</p>
+                    <div class="phase-meta">
+                        <span class="phase-duration">⏱️ 3-7s</span>
+                        <span class="phase-criticality">🔴 Critical</span>
+                    </div>
+                </a>
+            </div>
+        </article>
+        
+        <!-- Architecture Overview -->
+        <article class="glass-card-display animation-t1">
+            <h2>🏗️ Architecture Overview</h2>
+            
+            <div class="mermaid-container">
+                <pre class="mermaid">
+graph TB
+    subgraph Input["📥 Input Sources"]
+        User[User: 'ado story X']
+        Plan[Planning v5 Manifest]
+    end
+    
+    MO[Master Orchestrator]
+    ADO[ADO Orchestrator v2]
+    
+    subgraph Wizard["💬 Conversational Wizard"]
+        W1[Stage 1: Type]
+        W2[Stage 2: Title/Desc]
+        W3[Stage 3: AC]
+        W4[Stage 4: Effort]
+        W5[Stage 5: Hierarchy]
+        W6[Stage 6: Metadata]
+        W7[Stage 7: Export]
+    end
+    
+    subgraph Auto["⚡ Automatic Generation"]
+        A1[Phase 1: Parse]
+        A2[Phase 2: Hierarchy]
+        A3[Phase 3: AC Extract]
+        A4[Phase 4: Effort Calc]
+        A5[Phase 5: Metadata]
+        A6[Phase 6: CSV Gen]
+    end
+    
+    subgraph Output["📤 Output"]
+        CSV[CSV Export]
+        API[ADO API Push]
+    end
+    
+    User --> MO
+    MO --> ADO
+    ADO --> W1
+    W1 --> W2 --> W3 --> W4 --> W5 --> W6 --> W7
+    W7 --> CSV
+    W7 --> API
+    
+    Plan --> A1
+    A1 --> A2 --> A3 --> A4 --> A5 --> A6
+    A6 --> CSV
+    A6 --> API
+    
+    style ADO fill:#00d4ff,stroke:#0099cc,stroke-width:3px
+    style W7 fill:#2ecc71,stroke:#25a359,stroke-width:2px
+    style A6 fill:#2ecc71,stroke:#25a359,stroke-width:2px
+                </pre>
+            </div>
+            
+            <p class="diagram-caption">
+                ADO v2.0 architecture showing dual-mode operation: 7-stage conversational wizard for interactive 
+                creation and 6-phase automatic generation from Planning v5 manifests.
+            </p>
+        </article>
+        
+        <!-- Work Item Hierarchy -->
+        <article class="glass-card-display animation-t1">
+            <h2>🗂️ Work Item Hierarchy</h2>
+            
+            <p>
+                ADO v2.0 generates a complete 3-tier hierarchy following Azure DevOps best practices:
+            </p>
+            
+            <div id="hierarchy-viz" class="viz-container"></div>
+            
+            <div class="hierarchy-description">
+                <div class="hierarchy-item">
+                    <h3>🎯 Features (Epic-level)</h3>
+                    <ul>
+                        <li>High-level business capabilities</li>
+                        <li>Maps to Planning v5 "Feature" scope</li>
+                        <li>Contains: Title, Description, Business Value, Acceptance Criteria</li>
+                        <li>Example: "User Authentication System"</li>
+                    </ul>
+                </div>
+                
+                <div class="hierarchy-item">
+                    <h3>📖 User Stories (Requirement-level)</h3>
+                    <ul>
+                        <li>User-focused functional requirements</li>
+                        <li>Maps to Planning v5 "Phases"</li>
+                        <li>Contains: As-a / I-want / So-that, Acceptance Criteria, Story Points</li>
+                        <li>Example: "As a user, I want OAuth2 login so that I can access with Google"</li>
+                    </ul>
+                </div>
+                
+                <div class="hierarchy-item">
+                    <h3>✅ Tasks (Implementation-level)</h3>
+                    <ul>
+                        <li>Technical implementation tasks</li>
+                        <li>Maps to Planning v5 "Phase Tasks"</li>
+                        <li>Contains: Description, Effort (hours), Remaining Work, Activity</li>
+                        <li>Example: "Implement OAuth2 provider integration (8 hours)"</li>
+                    </ul>
+                </div>
+            </div>
+        </article>
+        
+        <!-- CSV Output Format -->
+        <article class="glass-card-display animation-t1">
+            <h2>📊 CSV Output Format</h2>
+            
+            <p>
+                Generated CSV files are ADO-compliant and ready for immediate import. All required columns 
+                are included with proper data types and formatting.
+            </p>
+            
+            <div class="csv-sample">
+                <pre><code>Work Item Type,Title,Description,Acceptance Criteria,State,Priority,Effort,Tags,Area Path,Iteration Path,Parent
+Feature,User Authentication System,"Implement secure user authentication...","AC-1: Users can login with OAuth2...",New,1,,auth;security,MyProject\Backend,Sprint 24,
+User Story,OAuth2 Login,"As a user I want to login with Google...","Given user clicks Google login...",New,1,13,auth;oauth,MyProject\Backend,Sprint 24,User Authentication System
+Task,Implement OAuth2 Provider,"Create OAuth2Provider class...","Task complete when unit tests pass",New,2,8,implementation,MyProject\Backend,Sprint 24,OAuth2 Login</code></pre>
+            </div>
+            
+            <div class="csv-columns">
+                <h3>Standard Columns</h3>
+                <ul>
+                    <li><strong>Work Item Type:</strong> Feature | User Story | Task</li>
+                    <li><strong>Title:</strong> Concise work item name (50-80 chars)</li>
+                    <li><strong>Description:</strong> Detailed explanation with markdown</li>
+                    <li><strong>Acceptance Criteria:</strong> GIVEN-WHEN-THEN or SC-X format</li>
+                    <li><strong>State:</strong> New | Active | Resolved | Closed</li>
+                    <li><strong>Priority:</strong> 1 (Critical) → 4 (Low)</li>
+                    <li><strong>Effort:</strong> Story Points (Stories) or Hours (Tasks)</li>
+                    <li><strong>Tags:</strong> Semicolon-separated keywords</li>
+                    <li><strong>Area Path:</strong> Project\Component hierarchy</li>
+                    <li><strong>Iteration Path:</strong> Sprint or release timeline</li>
+                    <li><strong>Parent:</strong> Parent work item title (for hierarchy)</li>
+                </ul>
+            </div>
+        </article>
+        
+        <!-- Key Benefits -->
+        <article class="glass-card-display animation-t1">
+            <h2>🎯 Key Benefits</h2>
+            
+            <div class="benefits-grid">
+                <div class="benefit-card glass-card-display">
+                    <div class="benefit-icon">⏱️</div>
+                    <h3>90% Time Saved</h3>
+                    <p>What took 2-3 hours of manual ADO data entry now takes 30-90 seconds with automatic generation</p>
+                </div>
+                
+                <div class="benefit-card glass-card-display">
+                    <div class="benefit-icon">🎯</div>
+                    <h3>Perfect Hierarchy</h3>
+                    <p>Automatic parent-child linking ensures proper Feature → Story → Task relationships</p>
+                </div>
+                
+                <div class="benefit-card glass-card-display">
+                    <div class="benefit-icon">✅</div>
+                    <h3>Complete Acceptance Criteria</h3>
+                    <p>Every work item includes testable AC in GIVEN-WHEN-THEN or SC-VG-RT format</p>
+                </div>
+                
+                <div class="benefit-card glass-card-display">
+                    <div class="benefit-icon">📊</div>
+                    <h3>Accurate Effort Estimation</h3>
+                    <p>AI-powered estimates based on complexity scoring and historical velocity data</p>
+                </div>
+                
+                <div class="benefit-card glass-card-display">
+                    <div class="benefit-icon">🔗</div>
+                    <h3>Planning v5 Integration</h3>
+                    <p>Seamless handoff from Planning v5 manifests to ADO work items (zero manual mapping)</p>
+                </div>
+                
+                <div class="benefit-card glass-card-display">
+                    <div class="benefit-icon">🚀</div>
+                    <h3>Immediate Import</h3>
+                    <p>Generated CSV files import directly to ADO with zero validation errors</p>
+                </div>
+            </div>
+        </article>
+        
+        <!-- Comparison: v1.x vs v2.0 -->
+        <article class="glass-card-display animation-t1">
+            <h2>📈 v1.x → v2.0 Evolution</h2>
+            
+            <div class="comparison-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Capability</th>
+                            <th>ADO v1.x</th>
+                            <th>ADO v2.0</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Generation Modes</td>
+                            <td>1 (manual only)</td>
+                            <td>2 (wizard + auto)</td>
+                        </tr>
+                        <tr>
+                            <td>Planning Integration</td>
+                            <td>❌ Manual copy-paste</td>
+                            <td>✅ Direct manifest parsing</td>
+                        </tr>
+                        <tr>
+                            <td>Work Item Types</td>
+                            <td>3 (basic)</td>
+                            <td>3 (enhanced metadata)</td>
+                        </tr>
+                        <tr>
+                            <td>Hierarchy Mapping</td>
+                            <td>🟡 Semi-automatic</td>
+                            <td>✅ Fully automatic</td>
+                        </tr>
+                        <tr>
+                            <td>Acceptance Criteria</td>
+                            <td>🟡 Manual entry</td>
+                            <td>✅ Auto-extracted from plan</td>
+                        </tr>
+                        <tr>
+                            <td>Effort Estimation</td>
+                            <td>❌ Manual input</td>
+                            <td>✅ AI-powered calculation</td>
+                        </tr>
+                        <tr>
+                            <td>Conversational Flow</td>
+                            <td>❌ Basic prompts</td>
+                            <td>✅ 7-stage wizard</td>
+                        </tr>
+                        <tr>
+                            <td>Export Formats</td>
+                            <td>CSV only</td>
+                            <td>CSV + API push</td>
+                        </tr>
+                        <tr>
+                            <td>Validation</td>
+                            <td>🟡 Post-export</td>
+                            <td>✅ Real-time</td>
+                        </tr>
+                        <tr>
+                            <td>Preview</td>
+                            <td>❌ Not available</td>
+                            <td>✅ Interactive preview</td>
+                        </tr>
+                        <tr>
+                            <td>Time to Generate</td>
+                            <td>5-10 minutes</td>
+                            <td>30-90 seconds (auto)</td>
+                        </tr>
+                        <tr>
+                            <td>Error Rate</td>
+                            <td>~15% (validation errors)</td>
+                            <td><3% (pre-validated)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </article>
+        
+        <!-- Related Documentation -->
+        <article class="glass-card-display animation-t1">
+            <h2>📚 Related Documentation</h2>
+            
+            <div class="related-links">
+                <a href="planning-v5.html" class="related-link glass-card-clickable animation-t1">
+                    <div class="related-icon">🧠</div>
+                    <div class="related-content">
+                        <h3>Planning System v5</h3>
+                        <p>Create comprehensive plans that feed directly into ADO v2</p>
+                    </div>
+                </a>
+                
+                <a href="execution-orchestrator.html" class="related-link glass-card-clickable animation-t1">
+                    <div class="related-icon">⚡</div>
+                    <div class="related-content">
+                        <h3>Execution Orchestrator</h3>
+                        <p>Execute work items generated by ADO v2 with TDD integration</p>
+                    </div>
+                </a>
+                
+                <a href="../architecture/knowledge-graph.html" class="related-link glass-card-clickable animation-t1">
+                    <div class="related-icon">🕸️</div>
+                    <div class="related-content">
+                        <h3>Knowledge Graph</h3>
+                        <p>Powers ADO v2 metadata enrichment and relationship mapping</p>
+                    </div>
+                </a>
+                
+                <a href="../getting-started/index.html" class="related-link glass-card-clickable animation-t1">
+                    <div class="related-icon">🚀</div>
+                    <div class="related-content">
+                        <h3>Getting Started</h3>
+                        <p>Learn how to configure ADO v2 with your Azure DevOps instance</p>
+                    </div>
+                </a>
+            </div>
+        </article>
+    </main>
+    
+    <!-- D3.js Visualizations -->
+    <script>
+        // Work Item Hierarchy Visualization
+        function renderHierarchy() {
+            const container = d3.select('#hierarchy-viz');
+            const width = container.node().getBoundingClientRect().width;
+            const height = 450;
+            
+            // Hierarchy data
+            const data = {
+                name: "Feature: User Auth",
+                children: [
+                    {
+                        name: "Story: OAuth2",
+                        effort: 13,
+                        children: [
+                            { name: "Task: Provider Integration", effort: 8 },
+                            { name: "Task: Token Management", effort: 5 }
+                        ]
+                    },
+                    {
+                        name: "Story: MFA",
+                        effort: 8,
+                        children: [
+                            { name: "Task: TOTP Implementation", effort: 5 },
+                            { name: "Task: Backup Codes", effort: 3 }
+                        ]
+                    },
+                    {
+                        name: "Story: Session Mgmt",
+                        effort: 5,
+                        children: [
+                            { name: "Task: Redis Integration", effort: 3 },
+                            { name: "Task: Logout Flow", effort: 2 }
+                        ]
+                    }
+                ]
+            };
+            
+            // Create tree layout
+            const root = d3.hierarchy(data);
+            const treeLayout = d3.tree().size([width - 100, height - 100]);
+            treeLayout(root);
+            
+            // Create SVG
+            const svg = container.append('svg')
+                .attr('width', width)
+                .attr('height', height);
+            
+            const g = svg.append('g')
+                .attr('transform', 'translate(50, 50)');
+            
+            // Draw links
+            g.selectAll('.link')
+                .data(root.links())
+                .enter()
+                .append('path')
+                .attr('class', 'hierarchy-link')
+                .attr('d', d3.linkVertical()
+                    .x(d => d.x)
+                    .y(d => d.y))
+                .attr('fill', 'none')
+                .attr('stroke', 'rgba(123, 97, 255, 0.5)')
+                .attr('stroke-width', 2);
+            
+            // Draw nodes
+            const node = g.selectAll('.node')
+                .data(root.descendants())
+                .enter()
+                .append('g')
+                .attr('class', 'hierarchy-node')
+                .attr('transform', d => `translate(${d.x},${d.y})`);
+            
+            // Node circles
+            node.append('circle')
+                .attr('r', d => d.depth === 0 ? 12 : d.depth === 1 ? 10 : 8)
+                .attr('fill', d => {
+                    if (d.depth === 0) return '#00d4ff'; // Feature
+                    if (d.depth === 1) return '#7b61ff'; // Story
+                    return '#2ecc71'; // Task
+                })
+                .attr('stroke', '#fff')
+                .attr('stroke-width', 2);
+            
+            // Labels
+            node.append('text')
+                .attr('dy', d => d.depth === 0 ? -20 : d.children ? -15 : 15)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#fff')
+                .attr('font-size', d => d.depth === 0 ? '14px' : '12px')
+                .attr('font-weight', d => d.depth === 0 ? 'bold' : 'normal')
+                .text(d => d.data.name);
+            
+            // Effort labels for stories and tasks
+            node.filter(d => d.data.effort)
+                .append('text')
+                .attr('dy', d => d.children ? 30 : -18)
+                .attr('text-anchor', 'middle')
+                .attr('fill', 'rgba(255, 255, 255, 0.7)')
+                .attr('font-size', '10px')
+                .text(d => `${d.data.effort} pts`);
+        }
+        
+        // Initialize visualizations
+        document.addEventListener('DOMContentLoaded', () => {
+            renderHierarchy();
+            mermaid.initialize({ 
+                theme: 'dark',
+                themeVariables: {
+                    primaryColor: '#00d4ff',
+                    primaryTextColor: '#fff',
+                    primaryBorderColor: '#0099cc',
+                    lineColor: '#7b61ff',
+                    secondaryColor: '#7b61ff',
+                    tertiaryColor: '#2ecc71'
+                }
+            });
+        });
+    </script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</body>
+</html>
