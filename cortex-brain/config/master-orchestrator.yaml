@@ -60,15 +60,15 @@ routing_rules:
       description: "Code and content sanitization"
       autonomous: false
   
-  # Maintenance
-  - pattern: "^(maintenance|health check|system health).*$"
-    orchestrator: "maintenance_orchestrator"
-    confidence: 1.0
-    match_type: "regex"
-    priority: 50
-    metadata:
-      description: "System maintenance and health checks"
-      autonomous: false
+  # Maintenance - DISABLED: orchestrator not yet registered
+  # - pattern: "^(maintenance|health check|system health).*$"
+  #   orchestrator: "maintenance_orchestrator"
+  #   confidence: 1.0
+  #   match_type: "regex"
+  #   priority: 50
+  #   metadata:
+  #     description: "System maintenance and health checks"
+  #     autonomous: false
   
   # Cleanup v2 (Selective Modes)
   - pattern: "^(cleanup|cleanup cache|cleanup logs|cleanup artifacts|cleanup full|cleanup git).*$"
@@ -105,15 +105,37 @@ routing_rules:
           expected_space_freed: "100MB"
           priority: "LOW"
   
-  # Refinement
-  - pattern: "^(refine|improve|optimize).*$"
-    orchestrator: "refinement_orchestrator"
+  # Vacuum v2 (Deep Filesystem Cleanup)
+  - pattern: "^(vacuum|deep clean|organize files).*$"
+    orchestrator: "vacuum"
     confidence: 1.0
     match_type: "regex"
-    priority: 60
+    priority: 56
+    path_extraction:
+      pattern: "^(vacuum|deep clean|organize files)\\s+([^\\s]+).*$"
+      group: 2
+      default: "."
     metadata:
-      description: "Code refinement and improvement"
-      autonomous: false
+      description: "Vacuum v2 autonomous filesystem cleanup"
+      autonomous: true
+      version: "2.0"
+      features:
+        - "10 cleanup categories"
+        - "Duplicate detection"
+        - "Orphan test detection"
+        - "Transactional operations"
+        - "Checkpoint rollback"
+        - "CORTEX brain protection"
+  
+  # Refinement - DISABLED: orchestrator not yet registered
+  # - pattern: "^(refine|improve|optimize).*$"
+  #   orchestrator: "refinement_orchestrator"
+  #   confidence: 1.0
+  #   match_type: "regex"
+  #   priority: 60
+  #   metadata:
+  #     description: "Code refinement and improvement"
+  #     autonomous: false
 
 # LLM Fallback Configuration (Secondary)
 # Handles ambiguous inputs that don't match patterns

@@ -1,0 +1,218 @@
+{# Vacuum v2 Completion Report Template
+   Generates summary of executed cleanup operations
+   Author: Asif Hussain
+   Copyright © 2025-2026 Asif Hussain. All rights reserved.
+#}
+# ✅ Vacuum Cleanup Completed
+
+**Target Path:** `{{ target_path }}`  
+**Execution Date:** {{ timestamp }}  
+**Duration:** {{ duration }}  
+**Checkpoint ID:** `{{ checkpoint_id }}`
+
+---
+
+## 📊 Execution Summary
+
+| Metric | Count |
+|--------|-------|
+| Files Scanned | {{ stats.files_scanned }} |
+| Files Deleted | {{ stats.files_deleted }} |
+| Files Moved | {{ stats.files_moved }} |
+| Files Archived | {{ stats.files_archived }} |
+| Files Skipped | {{ stats.files_skipped }} |
+| **Space Reclaimed** | **{{ stats.space_reclaimed }}** |
+
+---
+
+## 🗂️ Operations by Category
+
+{% for category in categories %}
+### {{ loop.index }}. {{ category.name }}
+
+| Metric | Value |
+|--------|-------|
+| Files Processed | {{ category.files_processed }} |
+| Files Deleted | {{ category.files_deleted }} |
+| Space Reclaimed | {{ category.space_reclaimed }} |
+| Status | {{ category.status }} |
+
+{% if category.errors|length > 0 %}
+**⚠️ Errors:**
+{% for error in category.errors %}
+- `{{ error.file }}`: {{ error.message }}
+{% endfor %}
+{% endif %}
+
+{% endfor %}
+
+---
+
+## 🔍 Duplicate Removal
+
+{% if duplicates.removed > 0 %}
+**Duplicates Removed:** {{ duplicates.removed }}  
+**Space Saved:** {{ duplicates.space_saved }}  
+**Groups Processed:** {{ duplicates.groups_processed }}
+
+**Sample Deletions:**
+{% for deletion in duplicates.deletions[:10] %}
+- Deleted `{{ deletion.path }}` (duplicate of `{{ deletion.kept_file }}`)
+{% endfor %}
+{% if duplicates.deletions|length > 10 %}
+_... and {{ duplicates.deletions|length - 10 }} more duplicates_
+{% endif %}
+
+{% else %}
+_No duplicates removed_
+{% endif %}
+
+---
+
+## 🧪 Orphaned Tests Cleanup
+
+{% if orphans.removed > 0 %}
+**Orphaned Tests Removed:** {{ orphans.removed }}
+
+{% for orphan in orphans.removed_tests %}
+- `{{ orphan.path }}` (missing imports: {{ orphan.missing_imports|join(', ') }})
+{% endfor %}
+
+{% else %}
+_No orphaned tests removed_
+{% endif %}
+
+---
+
+## 📦 Checkpoint Information
+
+**Checkpoint ID:** `{{ checkpoint_id }}`  
+**Checkpoint Path:** `{{ checkpoint_path }}`  
+**Backup Size:** {{ checkpoint_size }}  
+**Files Backed Up:** {{ checkpoint_files }}
+
+**To rollback this cleanup:**
+```bash
+vacuum rollback {{ checkpoint_id }}
+```
+
+**⚠️ WARNING:** Checkpoint will expire in **7 days** ({{ checkpoint_expiry }})
+
+---
+
+## ⚠️ Issues Encountered
+
+{% if errors|length > 0 %}
+**Total Errors:** {{ errors|length }}
+
+{% for error in errors[:10] %}
+### {{ loop.index }}. {{ error.type }}
+**File:** `{{ error.file }}`  
+**Message:** {{ error.message }}  
+**Timestamp:** {{ error.timestamp }}
+{% endfor %}
+
+{% if errors|length > 10 %}
+_... and {{ errors|length - 10 }} more errors_
+
+**Full error log:** `{{ error_log_path }}`
+{% endif %}
+
+{% else %}
+✅ **No errors encountered**
+{% endif %}
+
+---
+
+## 🔐 Safety Validation Results
+
+### Protected Files
+{% if safety.protected > 0 %}
+**Critical Files Protected:** {{ safety.protected }}
+{% for file in safety.protected_files[:5] %}
+- `{{ file }}`
+{% endfor %}
+{% if safety.protected_files|length > 5 %}
+_... and {{ safety.protected_files|length - 5 }} more protected files_
+{% endif %}
+{% else %}
+✅ No critical files in target path
+{% endif %}
+
+### Skipped Files
+{% if safety.skipped > 0 %}
+**Files Skipped (Safety):** {{ safety.skipped }}
+
+**Reasons:**
+| Reason | Count |
+|--------|-------|
+{% for reason, count in safety.skip_reasons.items() %}
+| {{ reason }} | {{ count }} |
+{% endfor %}
+
+{% else %}
+✅ No files skipped
+{% endif %}
+
+---
+
+## 📈 Performance Metrics
+
+| Metric | Value |
+|--------|-------|
+| Total Duration | {{ perf.total_duration }} |
+| Discovery Phase | {{ perf.discovery_duration }} |
+| Analysis Phase | {{ perf.analysis_duration }} |
+| Execution Phase | {{ perf.execution_duration }} |
+| Average File Processing Time | {{ perf.avg_file_time }} |
+| Throughput | {{ perf.throughput }} files/sec |
+
+---
+
+## 📋 Next Steps
+
+{% if errors|length > 0 %}
+### ⚠️ Review Errors
+
+Some files could not be processed. Review the error log:
+```bash
+cat {{ error_log_path }}
+```
+
+To retry failed operations:
+```bash
+vacuum retry {{ checkpoint_id }}
+```
+{% endif %}
+
+### Verify Results
+
+Verify the cleanup met your expectations:
+```bash
+vacuum verify {{ checkpoint_id }}
+```
+
+### Rollback (if needed)
+
+To restore deleted files from checkpoint:
+```bash
+vacuum rollback {{ checkpoint_id }}
+```
+
+**⚠️ Checkpoint expires:** {{ checkpoint_expiry }}
+
+---
+
+# 🎉 CONGRATULATIONS
+
+## 🧠 CORTEX Vacuum Cleanup Complete
+
+**Space Reclaimed:** {{ stats.space_reclaimed }}  
+**Files Cleaned:** {{ stats.files_deleted }} deleted, {{ stats.files_moved }} moved, {{ stats.files_archived }} archived
+
+✅ **All work complete!** Your filesystem is now cleaner and more organized.
+
+---
+
+**Generated by CORTEX Vacuum v2**  
+**Author:** Asif Hussain | **Website:** https://asifhussain60.github.io/CORTEX/

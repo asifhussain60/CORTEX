@@ -268,7 +268,7 @@ class MasterOrchestrator:
             RuntimeError: If execution fails
         """
         # Get orchestrator from registry
-        orchestrator = self.registry.get_orchestrator(orchestrator_id)
+        orchestrator = self.registry.instantiate(orchestrator_id)
         
         if not orchestrator:
             raise ValueError(f"Orchestrator not found: {orchestrator_id}")
@@ -427,7 +427,7 @@ class MasterOrchestrator:
             ExecutionResult from orchestrator execution
         """
         # Get orchestrator from registry
-        orchestrator = self.registry.get_orchestrator(orchestrator_id)
+        orchestrator = self.registry.instantiate(orchestrator_id)
         
         if not orchestrator:
             self.logger.error(f"Orchestrator not found for resume: {orchestrator_id}")

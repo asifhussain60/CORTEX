@@ -6,15 +6,64 @@ Provides common test infrastructure including:
 - Brain database initialization
 - Mock configurations
 - Test data generators
+- Pre-test configuration validation
 """
 
 import os
 import shutil
+import subprocess
+import sys
 import tempfile
 from pathlib import Path
 from typing import Generator, Dict, Any
 import pytest
 import sqlite3
+
+
+def pytest_configure(config):
+    """
+    Run configuration validation before test suite starts.
+    
+    This prevents running tests against invalid configuration,
+    catching brittleness issues before expensive integration tests run.
+    """
+    # Skip validation if --no-config-validation flag present
+    if config.getoption("--no-config-validation", default=False):
+        print("\n⚠️  Skipping configuration validation (--no-config-validation)")
+        return
+    
+    print("\n🔍 Validating orchestrator configuration...")
+    
+    # Run validation script
+    script_path = Path(__file__).parent.parent.parent / "scripts" / "validate_orchestrator_config.py"
+    
+    if not script_path.exists():
+        print(f"⚠️  Validation script not found: {script_path}")
+        return
+    
+    result = subprocess.run(
+        [sys.executable, str(script_path)],
+        capture_output=True,
+        text=True
+    )
+    
+    if result.returncode != 0:
+        print("\n" + result.stdout)
+        print("\n❌ Configuration validation failed. Fix errors before running tests.")
+        print("   To skip validation: pytest --no-config-validation")
+        sys.exit(1)
+    
+    print("✅ Configuration validation passed\n")
+
+
+def pytest_addoption(parser):
+    """Add custom command-line options."""
+    parser.addoption(
+        "--no-config-validation",
+        action="store_true",
+        default=False,
+        help="Skip configuration validation before running tests"
+    )
 
 
 @pytest.fixture

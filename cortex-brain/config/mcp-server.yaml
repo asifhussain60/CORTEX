@@ -6,10 +6,38 @@ version: "1.0"
 orchestrators:
   planning_system:
     class: "PlanningOrchestratorV5"
-    module: "src.orchestrators.planning_orchestrator_v5"
+    module: "src.orchestrators.planning.planning_orchestrator_v5"
     config: "cortex-brain/manifests/orchestrators/planning-system-5.0-manifest.yaml"
     type: "autonomous"
     description: "Planning System v5 with MCP integration"
+  
+  planning_v5:
+    class: "PlanningOrchestratorV5"
+    module: "src.orchestrators.planning.planning_orchestrator_v5"
+    config: "cortex-brain/manifests/orchestrators/planning-system-5.0-manifest.yaml"
+    type: "autonomous"
+    description: "Planning System v5 (routing alias)"
+  
+  tdd_orchestrator:
+    class: "TDDOrchestrator"
+    module: "src.orchestrators.tdd.tdd_orchestrator_v4_migrated"
+    config: "cortex-brain/manifests/orchestrators/tdd-orchestrator-v4-manifest.yaml"
+    type: "guided"
+    description: "Test-Driven Development orchestrator with RED-GREEN-REFACTOR workflow"
+  
+  sanitization_orchestrator:
+    class: "SanitizationOrchestrator"
+    module: "src.orchestrators.sanitization.sanitization_orchestrator"
+    config: "cortex-brain/manifests/orchestrators/code-sanitization-manifest.yaml"
+    type: "guided"
+    description: "Code sanitization and anonymization orchestrator"
+  
+  cleanup_orchestrator_v2:
+    class: "CleanupOrchestratorV2"
+    module: "src.orchestrators.cleanup.cleanup_orchestrator_v2"
+    config: "cortex-brain/manifests/orchestrators/cleanup-orchestrator-v2.yaml"
+    type: "autonomous"
+    description: "Selective cleanup with multiple modes (cache/logs/artifacts/full/git)"
   
   ado_orchestrator_v2:
     class: "ADOOrchestratorV2"
@@ -24,17 +52,10 @@ orchestrators:
   
   vacuum:
     class: "VacuumOrchestratorV2"
-    module: "src.orchestrators.vacuum_orchestrator_v2"
-    config: "cortex-brain/manifests/orchestrators/vacuum-2.0-manifest.yaml"
+    module: "src.orchestrators.vacuum.vacuum_orchestrator_v2"
+    config: "cortex-brain/manifests/orchestrators/vacuum-orchestrator-v2.yaml"
     type: "autonomous"
     description: "Deep filesystem cleanup and reorganization"
-  
-  cleanup:
-    class: "CleanupOrchestratorV2"
-    module: "src.orchestrators.cleanup_orchestrator_v2"
-    config: "cortex-brain/manifests/orchestrators/cleanup-2.0-manifest.yaml"
-    type: "autonomous"
-    description: "Cache and temporary file management"
 
 # Server settings
 server:

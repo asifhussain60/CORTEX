@@ -102,10 +102,10 @@ LLM Classification → Keyword Regex → User Clarification
 |--------------|------|-------------|-------------------|
 | Planning System | 🛡️ AUTONOMOUS | Route intent → Load manifest → STOP | Execute planning workflow (folder creation, context gathering, plan generation) |
 | ADO Operations | 🛡️ AUTONOMOUS | Route intent → Load manifest → STOP | Generate work items, acceptance criteria, estimation |
-| Vacuum | 🛡️ AUTONOMOUS | Route intent → Load manifest → STOP | Deep filesystem cleanup, reorganization, validation |
+| Vacuum v2 | 🛡️ AUTONOMOUS | Route intent → Load manifest → STOP | Deep filesystem cleanup (10 categories, duplicates, orphans, transactional operations) |
+| Cleanup v2 | 🛡️ AUTONOMOUS | Route intent → Load rules → STOP | Selective cleanup (cache, logs, artifacts, full, git) |
 | TDD Mastery | 📋 GUIDED | Route intent → Read manifest → Execute steps | CORTEX follows TDD workflow instructions |
 | Debug Orchestrator | 📋 GUIDED | Route intent → Read manifest → Execute steps | CORTEX performs debugging analysis |
-| Cleanup | 🛡️ AUTONOMOUS | Route intent → Load rules → STOP | Execute cleanup logic (cache, bloat, temp files) |
 
 **Key Distinction:**
 - 🛡️ **AUTONOMOUS**: Has Python implementation, self-executing
@@ -129,7 +129,7 @@ LLM Classification → Keyword Regex → User Clarification
 | `refactor [artifact]`, `analyze [file]`, `optimize [file]` | 📋 **Refactor (GUIDED)** | `cortex-refactor.prompt.md` | Deep analysis + decomposition strategy |
 | `system maintenance`, `health check` | 📋 **Maintenance (GUIDED)** | Via `cortex-maintenance.prompt.md` | 11-phase health + auto-repair (modular v2.0) |
 | `cleanup cache`, `cleanup logs`, `cleanup artifacts`, `cleanup full`, `cleanup git` | 🛡️ **Cleanup v2 (AUTONOMOUS)** | `cleanup-orchestrator-v2.yaml` | Selective cleanup modes (10s-180s, 250MB-7.5GB freed) |
-| `vacuum [path]`, `deep clean [path]`, `organize files` | 🛡️ **Vacuum (AUTONOMOUS)** | `cortex-vacuum.prompt.md` | Deep filesystem cleanup + reorganization |
+| `vacuum [path]`, `deep clean [path]`, `organize files [path]` | 🛡️ **Vacuum v2 (AUTONOMOUS)** | `vacuum-orchestrator-v2.yaml` | Deep filesystem cleanup (10 categories, duplicates, orphans, transactional) |
 | `help`, `show commands` | **Help** | Template-based | Command list |
 
 **Manifest Path:** `cortex-brain/manifests/orchestrators/{manifest-file}`  
