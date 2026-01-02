@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Dashboard - CORTEX Security</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://d3js.org/d3-geo.v3.min.js"></script>
+    <script src="https://d3js.org/topojson.v3.min.js"></script>
+</head>
+<body>
+    <nav class="nav-container">
+        <div class="nav-brand">CORTEX Security</div>
+        <div class="nav-links">
+            <a href="../index.html">Home</a>
+            <a href="threat-intelligence.html">Threat Intel</a>
+            <a href="incident-response.html">Incident Response</a>
+            <a href="dashboard.html" class="active">Dashboard</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header class="page-header">
+            <h1>📊 Security Dashboard</h1>
+            <p class="subtitle">Real-time security monitoring and threat intelligence</p>
+            <div class="metadata">
+                <span>Last Updated: January 1, 2026</span>
+                <span>Version: 4.0.0</span>
+                <span>Auto-refresh: 30s</span>
+            </div>
+        </header>
+
+        <div class="glass-card overview-section">
+            <h2>🎯 Security Posture Overview</h2>
+            <div class="mermaid-container">
+                <div class="mermaid">
+graph TB
+    subgraph "Security Metrics"
+        SC[🎯 Security Score<br/>85/100]
+        THR[🚨 Active Threats<br/>3 Critical]
+        VUL[🔍 Vulnerabilities<br/>12 High Priority]
+        COMP[✅ Compliance<br/>92% Compliant]
+    end
+    
+    SC --> DASH[Security Dashboard]
+    THR --> DASH
+    VUL --> DASH
+    COMP --> DASH
+    
+    DASH --> ACTION[🎯 Prioritized Actions]
+    
+    style SC fill:#2ecc71,stroke:#fff,stroke-width:2px
+    style THR fill:#ff4757,stroke:#fff,stroke-width:2px
+    style VUL fill:#ffb84d,stroke:#fff,stroke-width:2px
+    style COMP fill:#00d4ff,stroke:#fff,stroke-width:2px
+    style DASH fill:#7b61ff,stroke:#fff,stroke-width:3px
+                </div>
+            </div>
+        </div>
+
+        <section class="kpi-section">
+            <div class="kpi-grid">
+                <article class="glass-card-display animation-t1 kpi-card">
+                    <div class="kpi-icon">🎯</div>
+                    <div class="kpi-value" id="security-score">85</div>
+                    <div class="kpi-label">Security Score</div>
+                    <div class="kpi-trend positive">+3 this week</div>
+                </article>
+                
+                <article class="glass-card-display animation-t1 kpi-card">
+                    <div class="kpi-icon">🚨</div>
+                    <div class="kpi-value critical" id="active-threats">3</div>
+                    <div class="kpi-label">Active Threats</div>
+                    <div class="kpi-trend negative">+1 today</div>
+                </article>
+                
+                <article class="glass-card-display animation-t1 kpi-card">
+                    <div class="kpi-icon">🔍</div>
+                    <div class="kpi-value warning" id="vulnerabilities">12</div>
+                    <div class="kpi-label">High Priority Vulns</div>
+                    <div class="kpi-trend positive">-5 this month</div>
+                </article>
+                
+                <article class="glass-card-display animation-t1 kpi-card">
+                    <div class="kpi-icon">✅</div>
+                    <div class="kpi-value success" id="compliance-pct">92%</div>
+                    <div class="kpi-label">Compliance</div>
+                    <div class="kpi-trend positive">+2% this quarter</div>
+                </article>
+            </div>
+        </section>
+
+        <section class="content-section dashboard-grid">
+            <article class="glass-card-display animation-t1 viz-large">
+                <h2>🌍 Live Threat Map</h2>
+                <p>Real-time visualization of global attack origins. Pulsing markers indicate active threats with size proportional to volume.</p>
+                <div id="threat-map-viz" class="viz-container"></div>
+            </article>
+            
+            <article class="glass-card-display animation-t1 viz-medium">
+                <h2>🎯 Security Score</h2>
+                <p>Overall security posture score with 30-day trend. Red (0-50), Yellow (51-75), Green (76-100).</p>
+                <div id="security-score-gauge" class="viz-container"></div>
+            </article>
+            
+            <article class="glass-card-display animation-t1 viz-medium">
+                <h2>🔍 Vulnerability Pipeline</h2>
+                <p>Remediation funnel showing vulnerability lifecycle from discovery to resolution.</p>
+                <div id="vulnerability-funnel" class="viz-container"></div>
+            </article>
+            
+            <article class="glass-card-display animation-t1 viz-wide">
+                <h2>📈 Security Events (24h)</h2>
+                <p>Time-series chart showing failed logins, suspicious API calls, firewall blocks, and IDS alerts over the last 24 hours.</p>
+                <div id="events-timeseries" class="viz-container"></div>
+            </article>
+            
+            <article class="glass-card-display animation-t1 viz-medium">
+                <h2>✅ Compliance Status</h2>
+                <p>Framework compliance overview with circular progress indicators. Click for detailed audit reports.</p>
+                <div id="compliance-grid" class="viz-container"></div>
+            </article>
+        </section>
+    </div>
+
+    <footer class="footer-container">
+        <p>&copy; 2026 Asif Hussain. All rights reserved.</p>
+        <p>CORTEX Security Dashboard v4.0.0</p>
+    </footer>
+
+    <style>
+        /* Dashboard-specific styles */
+        .kpi-section {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto 2rem;
+            padding: 0 1.5rem;
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .kpi-card {
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        .kpi-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .kpi-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .kpi-value.critical {
+            color: #ff4757;
+        }
+
+        .kpi-value.warning {
+            color: #ffb84d;
+        }
+
+        .kpi-value.success {
+            color: #2ecc71;
+        }
+
+        .kpi-label {
+            font-size: 0.9rem;
+            color: #aaa;
+            margin-bottom: 0.5rem;
+        }
+
+        .kpi-trend {
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .kpi-trend.positive {
+            color: #2ecc71;
+        }
+
+        .kpi-trend.negative {
+            color: #ff4757;
+        }
+
+        .kpi-trend.neutral {
+            color: #7b61ff;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 1.5rem;
+        }
+
+        .viz-large {
+            grid-column: span 12;
+        }
+
+        .viz-wide {
+            grid-column: span 12;
+        }
+
+        .viz-medium {
+            grid-column: span 6;
+        }
+
+        @media (max-width: 768px) {
+            .viz-medium {
+                grid-column: span 12;
+            }
+        }
+
+        .viz-container {
+            min-height: 400px;
+            position: relative;
+        }
+
+        .viz-container svg {
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#00d4ff',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#00d4ff',
+                lineColor: '#7b61ff',
+                secondaryColor: '#7b61ff',
+                tertiaryColor: '#ff6b9d'
+            }
+        });
+
+        // Live Threat Map (D3.js)
+        function createThreatMap() {
+            const width = 900;
+            const height = 500;
+
+            const svg = d3.select('#threat-map-viz')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+
+            const projection = d3.geoMercator()
+                .scale(130)
+                .translate([width / 2, height / 1.5]);
+
+            const path = d3.geoPath().projection(projection);
+
+            // Simplified world map (continents)
+            const world = {
+                type: "FeatureCollection",
+                features: [
+                    { type: "Feature", properties: { name: "North America" }, geometry: { type: "Polygon", coordinates: [[[-130, 50], [-130, 25], [-70, 25], [-70, 50], [-130, 50]]] } },
+                    { type: "Feature", properties: { name: "Europe" }, geometry: { type: "Polygon", coordinates: [[[-10, 60], [-10, 35], [40, 35], [40, 60], [-10, 60]]] } },
+                    { type: "Feature", properties: { name: "Asia" }, geometry: { type: "Polygon", coordinates: [[[40, 60], [40, 10], [140, 10], [140, 60], [40, 60]]] } },
+                    { type: "Feature", properties: { name: "South America" }, geometry: { type: "Polygon", coordinates: [[[-80, 10], [-80, -50], [-35, -50], [-35, 10], [-80, 10]]] } },
+                    { type: "Feature", properties: { name: "Africa" }, geometry: { type: "Polygon", coordinates: [[[-20, 35], [-20, -35], [50, -35], [50, 35], [-20, 35]]] } },
+                    { type: "Feature", properties: { name: "Australia" }, geometry: { type: "Polygon", coordinates: [[[110, -10], [110, -45], [155, -45], [155, -10], [110, -10]]] } }
+                ]
+            };
+
+            // Draw map
+            svg.selectAll('path')
+                .data(world.features)
+                .join('path')
+                .attr('d', path)
+                .attr('fill', 'rgba(26, 31, 58, 0.5)')
+                .attr('stroke', 'rgba(123, 97, 255, 0.3)')
+                .attr('stroke-width', 1);
+
+            // Threat locations
+            const threats = [
+                { name: 'Moscow', coords: [37.6, 55.7], volume: 45, type: 'DDoS' },
+                { name: 'Beijing', coords: [116.4, 39.9], volume: 38, type: 'Scan' },
+                { name: 'São Paulo', coords: [-46.6, -23.5], volume: 22, type: 'Intrusion' },
+                { name: 'Lagos', coords: [3.4, 6.5], volume: 15, type: 'DDoS' },
+                { name: 'Mumbai', coords: [72.8, 19.0], volume: 31, type: 'Scan' },
+                { name: 'New York', coords: [-74.0, 40.7], volume: 28, type: 'Intrusion' },
+                { name: 'London', coords: [-0.1, 51.5], volume: 19, type: 'DDoS' },
+                { name: 'Tokyo', coords: [139.7, 35.7], volume: 25, type: 'Scan' }
+            ];
+
+            const typeColors = {
+                'DDoS': '#ff4757',
+                'Scan': '#ffb84d',
+                'Intrusion': '#ff6b9d'
+            };
+
+            // Animated threat markers
+            const markers = svg.selectAll('.threat-marker')
+                .data(threats)
+                .join('g')
+                .attr('class', 'threat-marker')
+                .attr('transform', d => `translate(${projection(d.coords)})`);
+
+            // Pulsing circles
+            markers.each(function(d) {
+                const group = d3.select(this);
+                
+                // Outer pulse
+                group.append('circle')
+                    .attr('r', d.volume / 2)
+                    .attr('fill', typeColors[d.type])
+                    .attr('opacity', 0)
+                    .transition()
+                    .duration(2000)
+                    .attr('r', d.volume)
+                    .attr('opacity', 0.3)
+                    .transition()
+                    .duration(0)
+                    .attr('r', d.volume / 2)
+                    .attr('opacity', 0)
+                    .on('end', function repeat() {
+                        d3.select(this)
+                            .transition()
+                            .duration(2000)
+                            .attr('r', d.volume)
+                            .attr('opacity', 0.3)
+                            .transition()
+                            .duration(0)
+                            .attr('r', d.volume / 2)
+                            .attr('opacity', 0)
+                            .on('end', repeat);
+                    });
+
+                // Inner circle
+                group.append('circle')
+                    .attr('r', d.volume / 3)
+                    .attr('fill', typeColors[d.type])
+                    .attr('opacity', 0.8);
+            });
+
+            markers.append('title')
+                .text(d => `${d.name}\n${d.type}: ${d.volume} req/min`);
+
+            // Legend
+            const legend = svg.append('g')
+                .attr('transform', 'translate(20, 20)');
+
+            const legendItems = [
+                { label: 'DDoS Attack', color: typeColors.DDoS },
+                { label: 'Port Scan', color: typeColors.Scan },
+                { label: 'Intrusion Attempt', color: typeColors.Intrusion }
+            ];
+
+            legendItems.forEach((item, i) => {
+                const legendRow = legend.append('g')
+                    .attr('transform', `translate(0, ${i * 25})`);
+
+                legendRow.append('circle')
+                    .attr('r', 8)
+                    .attr('fill', item.color)
+                    .attr('opacity', 0.8);
+
+                legendRow.append('text')
+                    .attr('x', 15)
+                    .attr('y', 5)
+                    .attr('fill', '#fff')
+                    .attr('font-size', '12px')
+                    .text(item.label);
+            });
+        }
+
+        // Security Score Gauge (D3.js)
+        function createSecurityScoreGauge() {
+            const width = 400;
+            const height = 300;
+            const radius = Math.min(width, height) / 2 - 20;
+
+            const svg = d3.select('#security-score-gauge')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height)
+                .append('g')
+                .attr('transform', `translate(${width/2},${height/2 + 20})`);
+
+            const score = 85;
+
+            // Background arc
+            const backgroundArc = d3.arc()
+                .innerRadius(radius - 40)
+                .outerRadius(radius)
+                .startAngle(-Math.PI / 2)
+                .endAngle(Math.PI / 2);
+
+            svg.append('path')
+                .attr('d', backgroundArc)
+                .attr('fill', 'rgba(26, 31, 58, 0.5)');
+
+            // Color segments
+            const segments = [
+                { start: 0, end: 50, color: '#ff4757' },
+                { start: 50, end: 75, color: '#ffb84d' },
+                { start: 75, end: 100, color: '#2ecc71' }
+            ];
+
+            segments.forEach(seg => {
+                const arc = d3.arc()
+                    .innerRadius(radius - 40)
+                    .outerRadius(radius)
+                    .startAngle(-Math.PI / 2 + (seg.start / 100) * Math.PI)
+                    .endAngle(-Math.PI / 2 + (seg.end / 100) * Math.PI);
+
+                svg.append('path')
+                    .attr('d', arc)
+                    .attr('fill', seg.color)
+                    .attr('opacity', 0.3);
+            });
+
+            // Score arc (animated)
+            const scoreArc = d3.arc()
+                .innerRadius(radius - 40)
+                .outerRadius(radius)
+                .startAngle(-Math.PI / 2);
+
+            const scorePath = svg.append('path')
+                .attr('fill', score >= 75 ? '#2ecc71' : score >= 50 ? '#ffb84d' : '#ff4757')
+                .attr('opacity', 0.9);
+
+            scorePath.transition()
+                .duration(1500)
+                .attrTween('d', function() {
+                    const interpolate = d3.interpolate(0, score);
+                    return function(t) {
+                        const angle = -Math.PI / 2 + (interpolate(t) / 100) * Math.PI;
+                        return scoreArc.endAngle(angle)();
+                    };
+                });
+
+            // Center score
+            svg.append('text')
+                .attr('y', -10)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#00d4ff')
+                .attr('font-size', '48px')
+                .attr('font-weight', 'bold')
+                .text(score);
+
+            svg.append('text')
+                .attr('y', 20)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#fff')
+                .attr('font-size', '14px')
+                .text('Security Score');
+
+            // Threshold markers
+            [50, 75, 90].forEach(threshold => {
+                const angle = -Math.PI / 2 + (threshold / 100) * Math.PI;
+                const x = (radius - 20) * Math.cos(angle);
+                const y = (radius - 20) * Math.sin(angle);
+
+                svg.append('circle')
+                    .attr('cx', x)
+                    .attr('cy', y)
+                    .attr('r', 3)
+                    .attr('fill', '#fff')
+                    .attr('opacity', 0.5);
+            });
+
+            // 30-day sparkline
+            const sparklineData = [78, 79, 81, 80, 82, 83, 81, 84, 85, 84, 86, 85];
+            const sparklineY = 80;
+            const sparklineWidth = 200;
+            const sparklineHeight = 30;
+
+            const xScale = d3.scaleLinear()
+                .domain([0, sparklineData.length - 1])
+                .range([-sparklineWidth/2, sparklineWidth/2]);
+
+            const yScale = d3.scaleLinear()
+                .domain([75, 90])
+                .range([sparklineHeight, 0]);
+
+            const line = d3.line()
+                .x((d, i) => xScale(i))
+                .y(d => sparklineY + yScale(d) - sparklineHeight/2)
+                .curve(d3.curveMonotoneX);
+
+            svg.append('path')
+                .datum(sparklineData)
+                .attr('d', line)
+                .attr('fill', 'none')
+                .attr('stroke', '#00d4ff')
+                .attr('stroke-width', 2);
+
+            svg.append('text')
+                .attr('y', sparklineY + sparklineHeight)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#aaa')
+                .attr('font-size', '10px')
+                .text('30-day trend');
+        }
+
+        // Vulnerability Funnel (D3.js)
+        function createVulnerabilityFunnel() {
+            const data = [
+                { stage: 'Discovered', count: 145, color: '#ff4757' },
+                { stage: 'Triaged', count: 89, color: '#ffb84d' },
+                { stage: 'In Progress', count: 34, color: '#7b61ff' },
+                { stage: 'Remediated', count: 12, color: '#2ecc71' }
+            ];
+
+            const width = 400;
+            const height = 350;
+            const margin = { top: 20, right: 20, bottom: 20, left: 20 };
+
+            const svg = d3.select('#vulnerability-funnel')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+
+            const maxCount = d3.max(data, d => d.count);
+            const funnelWidth = width - margin.left - margin.right;
+            const stageHeight = (height - margin.top - margin.bottom) / data.length;
+
+            data.forEach((d, i) => {
+                const stageWidth = (d.count / maxCount) * funnelWidth;
+                const x = margin.left + (funnelWidth - stageWidth) / 2;
+                const y = margin.top + i * stageHeight;
+
+                // Trapezoid path
+                const nextStageWidth = i < data.length - 1 ? (data[i + 1].count / maxCount) * funnelWidth : stageWidth;
+                const nextX = margin.left + (funnelWidth - nextStageWidth) / 2;
+
+                const points = [
+                    [x, y],
+                    [x + stageWidth, y],
+                    [nextX + nextStageWidth, y + stageHeight],
+                    [nextX, y + stageHeight]
+                ];
+
+                svg.append('polygon')
+                    .attr('points', points.map(p => p.join(',')).join(' '))
+                    .attr('fill', d.color)
+                    .attr('opacity', 0.8)
+                    .attr('stroke', '#fff')
+                    .attr('stroke-width', 2)
+                    .on('mouseover', function() {
+                        d3.select(this).attr('opacity', 1);
+                    })
+                    .on('mouseout', function() {
+                        d3.select(this).attr('opacity', 0.8);
+                    })
+                    .append('title')
+                    .text(`${d.stage}: ${d.count} vulnerabilities`);
+
+                // Labels
+                svg.append('text')
+                    .attr('x', width / 2)
+                    .attr('y', y + stageHeight / 2 - 10)
+                    .attr('text-anchor', 'middle')
+                    .attr('fill', '#fff')
+                    .attr('font-size', '14px')
+                    .attr('font-weight', 'bold')
+                    .text(d.stage);
+
+                svg.append('text')
+                    .attr('x', width / 2)
+                    .attr('y', y + stageHeight / 2 + 10)
+                    .attr('text-anchor', 'middle')
+                    .attr('fill', '#fff')
+                    .attr('font-size', '18px')
+                    .attr('font-weight', 'bold')
+                    .text(d.count);
+
+                svg.append('text')
+                    .attr('x', width / 2)
+                    .attr('y', y + stageHeight / 2 + 28)
+                    .attr('text-anchor', 'middle')
+                    .attr('fill', '#aaa')
+                    .attr('font-size', '12px')
+                    .text(`${Math.round(d.count / data[0].count * 100)}%`);
+            });
+        }
+
+        // Security Events Time Series (D3.js)
+        function createEventsTimeSeries() {
+            const margin = { top: 40, right: 120, bottom: 60, left: 60 };
+            const width = 900 - margin.left - margin.right;
+            const height = 400 - margin.top - margin.bottom;
+
+            const svg = d3.select('#events-timeseries')
+                .append('svg')
+                .attr('width', width + margin.left + margin.right)
+                .attr('height', height + margin.top + margin.bottom)
+                .append('g')
+                .attr('transform', `translate(${margin.left},${margin.top})`);
+
+            // Generate 24-hour data
+            const now = new Date();
+            const hours = 24;
+            const data = [];
+
+            for (let i = hours; i >= 0; i--) {
+                const time = new Date(now - i * 3600000);
+                data.push({
+                    time: time,
+                    failedLogins: Math.floor(Math.random() * 50) + 20,
+                    suspiciousAPI: Math.floor(Math.random() * 30) + 10,
+                    firewallBlocks: Math.floor(Math.random() * 100) + 50,
+                    idsAlerts: Math.floor(Math.random() * 20) + 5
+                });
+            }
+
+            const x = d3.scaleTime()
+                .domain(d3.extent(data, d => d.time))
+                .range([0, width]);
+
+            const y = d3.scaleLinear()
+                .domain([0, 150])
+                .range([height, 0]);
+
+            // X-axis
+            svg.append('g')
+                .attr('transform', `translate(0,${height})`)
+                .call(d3.axisBottom(x).ticks(8).tickFormat(d3.timeFormat('%H:%M')))
+                .attr('class', 'axis');
+
+            // Y-axis
+            svg.append('g')
+                .call(d3.axisLeft(y))
+                .attr('class', 'axis');
+
+            // Lines
+            const series = [
+                { key: 'failedLogins', color: '#ffeb3b', label: 'Failed Logins' },
+                { key: 'suspiciousAPI', color: '#ffb84d', label: 'Suspicious API' },
+                { key: 'firewallBlocks', color: '#ff4757', label: 'Firewall Blocks' },
+                { key: 'idsAlerts', color: '#7b61ff', label: 'IDS Alerts' }
+            ];
+
+            const line = d3.line()
+                .x(d => x(d.time))
+                .curve(d3.curveMonotoneX);
+
+            series.forEach(s => {
+                line.y(d => y(d[s.key]));
+
+                svg.append('path')
+                    .datum(data)
+                    .attr('d', line)
+                    .attr('fill', 'none')
+                    .attr('stroke', s.color)
+                    .attr('stroke-width', 2.5)
+                    .attr('opacity', 0.8);
+            });
+
+            // Legend
+            const legend = svg.append('g')
+                .attr('transform', `translate(${width + 10}, 0)`);
+
+            series.forEach((s, i) => {
+                const legendRow = legend.append('g')
+                    .attr('transform', `translate(0, ${i * 25})`);
+
+                legendRow.append('line')
+                    .attr('x1', 0)
+                    .attr('x2', 20)
+                    .attr('y1', 7)
+                    .attr('y2', 7)
+                    .attr('stroke', s.color)
+                    .attr('stroke-width', 2.5);
+
+                legendRow.append('text')
+                    .attr('x', 25)
+                    .attr('y', 12)
+                    .attr('fill', '#fff')
+                    .attr('font-size', '11px')
+                    .text(s.label);
+            });
+
+            // Axis labels
+            svg.append('text')
+                .attr('x', width / 2)
+                .attr('y', height + 45)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#fff')
+                .attr('font-size', '14px')
+                .text('Time (Last 24 Hours)');
+
+            svg.append('text')
+                .attr('transform', 'rotate(-90)')
+                .attr('x', -height / 2)
+                .attr('y', -45)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#fff')
+                .attr('font-size', '14px')
+                .text('Event Count');
+        }
+
+        // Compliance Grid (D3.js)
+        function createComplianceGrid() {
+            const frameworks = [
+                { name: 'GDPR', score: 94, lastAudit: '2025-12-15', nextDue: '2026-06-15' },
+                { name: 'SOC 2', score: 89, lastAudit: '2025-11-20', nextDue: '2026-05-20' },
+                { name: 'ISO 27001', score: 92, lastAudit: '2025-12-01', nextDue: '2026-06-01' },
+                { name: 'HIPAA', score: 88, lastAudit: '2025-10-30', nextDue: '2026-04-30' },
+                { name: 'PCI-DSS', score: 95, lastAudit: '2025-12-10', nextDue: '2026-03-10' },
+                { name: 'FedRAMP', score: 85, lastAudit: '2025-11-15', nextDue: '2026-05-15' }
+            ];
+
+            const width = 450;
+            const cardSize = 120;
+            const gap = 20;
+            const cols = 2;
+
+            const svg = d3.select('#compliance-grid')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', Math.ceil(frameworks.length / cols) * (cardSize + gap));
+
+            const cards = svg.selectAll('g')
+                .data(frameworks)
+                .join('g')
+                .attr('transform', (d, i) => {
+                    const row = Math.floor(i / cols);
+                    const col = i % cols;
+                    return `translate(${col * (cardSize + gap)}, ${row * (cardSize + gap)})`;
+                })
+                .style('cursor', 'pointer')
+                .on('mouseover', function() {
+                    d3.select(this).select('rect').attr('opacity', 1);
+                })
+                .on('mouseout', function() {
+                    d3.select(this).select('rect').attr('opacity', 0.8);
+                });
+
+            // Card background
+            cards.append('rect')
+                .attr('width', cardSize)
+                .attr('height', cardSize)
+                .attr('rx', 10)
+                .attr('fill', 'rgba(26, 31, 58, 0.7)')
+                .attr('stroke', d => d.score >= 90 ? '#2ecc71' : d.score >= 75 ? '#ffb84d' : '#ff4757')
+                .attr('stroke-width', 2)
+                .attr('opacity', 0.8);
+
+            // Progress circle
+            cards.each(function(d) {
+                const group = d3.select(this);
+                const centerX = cardSize / 2;
+                const centerY = cardSize / 2 - 10;
+                const radius = 30;
+
+                // Background circle
+                group.append('circle')
+                    .attr('cx', centerX)
+                    .attr('cy', centerY)
+                    .attr('r', radius)
+                    .attr('fill', 'none')
+                    .attr('stroke', 'rgba(255, 255, 255, 0.1)')
+                    .attr('stroke-width', 6);
+
+                // Progress arc
+                const arc = d3.arc()
+                    .innerRadius(radius - 3)
+                    .outerRadius(radius + 3)
+                    .startAngle(0);
+
+                group.append('path')
+                    .attr('transform', `translate(${centerX},${centerY})`)
+                    .attr('d', arc.endAngle(2 * Math.PI * d.score / 100))
+                    .attr('fill', d.score >= 90 ? '#2ecc71' : d.score >= 75 ? '#ffb84d' : '#ff4757');
+
+                // Score text
+                group.append('text')
+                    .attr('x', centerX)
+                    .attr('y', centerY)
+                    .attr('text-anchor', 'middle')
+                    .attr('dy', '0.35em')
+                    .attr('fill', '#fff')
+                    .attr('font-size', '18px')
+                    .attr('font-weight', 'bold')
+                    .text(`${d.score}%`);
+            });
+
+            // Framework name
+            cards.append('text')
+                .attr('x', cardSize / 2)
+                .attr('y', cardSize - 15)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#fff')
+                .attr('font-size', '13px')
+                .attr('font-weight', 'bold')
+                .text(d => d.name);
+
+            cards.append('title')
+                .text(d => `${d.name}\nScore: ${d.score}%\nLast Audit: ${d.lastAudit}\nNext Due: ${d.nextDue}`);
+        }
+
+        // Initialize all visualizations
+        createThreatMap();
+        createSecurityScoreGauge();
+        createVulnerabilityFunnel();
+        createEventsTimeSeries();
+        createComplianceGrid();
+
+        // Auto-refresh simulation (update KPI values every 30 seconds)
+        setInterval(() => {
+            console.log('Auto-refresh: Dashboard data updated');
+            // In production, this would fetch real data from API
+        }, 30000);
+    </script>
+</body>
+</html>

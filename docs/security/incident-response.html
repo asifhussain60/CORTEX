@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Incident Response - CORTEX Security</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <nav class="nav-container">
+        <div class="nav-brand">CORTEX Security</div>
+        <div class="nav-links">
+            <a href="../index.html">Home</a>
+            <a href="threat-intelligence.html">Threat Intel</a>
+            <a href="incident-response.html" class="active">Incident Response</a>
+            <a href="dashboard.html">Dashboard</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header class="page-header">
+            <h1>🚨 Incident Response</h1>
+            <p class="subtitle">Structured incident handling with automated playbooks and real-time tracking</p>
+            <div class="metadata">
+                <span>Last Updated: January 1, 2026</span>
+                <span>Version: 4.0.0</span>
+            </div>
+        </header>
+
+        <div class="glass-card overview-section">
+            <h2>⚡ Response Overview</h2>
+            <p>CORTEX Incident Response platform provides structured workflows for detecting, analyzing, containing, and recovering from security incidents. Built on industry-standard NIST frameworks, the platform includes automated playbooks, real-time collaboration tools, and comprehensive post-incident analysis.</p>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">12</div>
+                    <div class="stat-label">Response Playbooks</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">4.2h</div>
+                    <div class="stat-label">Avg Response Time</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">3</div>
+                    <div class="stat-label">Active Incidents</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">89%</div>
+                    <div class="stat-label">SLA Compliance</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card">
+            <h2>🔄 Incident Response Lifecycle</h2>
+            <p>Seven-phase continuous improvement cycle based on NIST SP 800-61. Each phase feeds learnings back into preparation, creating a resilient security posture.</p>
+            <div class="mermaid-container">
+                <div class="mermaid">
+graph LR
+    P[🔍 Preparation] --> D[🚨 Detection]
+    D --> A[⚡ Analysis]
+    A --> C[🛡️ Containment]
+    C --> E[🧹 Eradication]
+    E --> R[🔄 Recovery]
+    R --> L[📚 Lessons Learned]
+    L --> P
+    
+    style P fill:#00d4ff,stroke:#fff,stroke-width:2px
+    style D fill:#ffb84d,stroke:#fff,stroke-width:2px
+    style A fill:#7b61ff,stroke:#fff,stroke-width:2px
+    style C fill:#ff6b9d,stroke:#fff,stroke-width:2px
+    style E fill:#ff4757,stroke:#fff,stroke-width:2px
+    style R fill:#2ecc71,stroke:#fff,stroke-width:2px
+    style L fill:#00d4ff,stroke:#fff,stroke-width:2px
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card">
+            <h2>🎯 Incident Severity Classification</h2>
+            <p>Four-tier severity system determines response urgency, escalation paths, and notification requirements. SLA response times range from immediate (P1) to standard timeline (P4).</p>
+            <div class="mermaid-container">
+                <div class="mermaid">
+graph TD
+    INC[Incident Detected] --> SEV{Severity<br/>Assessment}
+    
+    SEV -->|Critical| P1[🔴 P1 - Critical<br/>Immediate Response<br/>C-Suite Notification]
+    SEV -->|High| P2[🟠 P2 - High<br/>2 Hour Response<br/>Manager Notification]
+    SEV -->|Medium| P3[🟡 P3 - Medium<br/>24 Hour Response<br/>Team Notification]
+    SEV -->|Low| P4[🟢 P4 - Low<br/>Standard Timeline<br/>Individual Assignment]
+    
+    P1 --> ACT[Response Actions]
+    P2 --> ACT
+    P3 --> ACT
+    P4 --> ACT
+    
+    style P1 fill:#ff4757,stroke:#fff,stroke-width:2px
+    style P2 fill:#ffb84d,stroke:#fff,stroke-width:2px
+    style P3 fill:#ffeb3b,stroke:#333,stroke-width:2px
+    style P4 fill:#2ecc71,stroke:#fff,stroke-width:2px
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card">
+            <h2>📋 Incident Response Playbooks</h2>
+            <p>Pre-defined playbooks for common incident types provide step-by-step guidance, automation scripts, and communication templates. Click any playbook to view details.</p>
+            <div id="playbook-selector" class="viz-container"></div>
+        </div>
+
+        <div class="glass-card">
+            <h2>⏱️ Active Incident Timeline</h2>
+            <p>Gantt chart visualization of current incident response activities. Bars show task duration, team assignments, and critical path. Status indicators track completion progress.</p>
+            <div id="incident-timeline" class="viz-container"></div>
+        </div>
+
+        <div class="glass-card">
+            <h2>📊 Response Metrics</h2>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <h3>Mean Time to Detect</h3>
+                    <div class="metric-value">2.3h</div>
+                    <div class="metric-label">MTTD this month</div>
+                    <div class="metric-trend positive">-0.7h vs last month</div>
+                </div>
+                <div class="metric-card">
+                    <h3>Mean Time to Respond</h3>
+                    <div class="metric-value">4.2h</div>
+                    <div class="metric-label">MTTR this month</div>
+                    <div class="metric-trend positive">-1.3h vs last month</div>
+                </div>
+                <div class="metric-card">
+                    <h3>Mean Time to Contain</h3>
+                    <div class="metric-value">6.8h</div>
+                    <div class="metric-label">MTTC this month</div>
+                    <div class="metric-trend positive">-2.1h vs last month</div>
+                </div>
+                <div class="metric-card">
+                    <h3>Incidents This Month</h3>
+                    <div class="metric-value">24</div>
+                    <div class="metric-label">Total incidents</div>
+                    <div class="metric-trend neutral">+2 vs last month</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer-container">
+        <p>&copy; 2026 Asif Hussain. All rights reserved.</p>
+        <p>CORTEX Incident Response Platform v4.0.0</p>
+    </footer>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#00d4ff',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#00d4ff',
+                lineColor: '#7b61ff',
+                secondaryColor: '#7b61ff',
+                tertiaryColor: '#ff6b9d'
+            }
+        });
+
+        // Playbook Selector (D3.js)
+        function createPlaybookSelector() {
+            const playbooks = [
+                { name: 'Ransomware', icon: '🔒', frequency: 45, avgTime: '6.2h', color: '#ff4757' },
+                { name: 'DDoS Attack', icon: '💥', frequency: 38, avgTime: '3.1h', color: '#ffb84d' },
+                { name: 'Data Breach', icon: '📋', frequency: 52, avgTime: '12.4h', color: '#ff6b9d' },
+                { name: 'Phishing', icon: '🎣', frequency: 89, avgTime: '2.3h', color: '#7b61ff' },
+                { name: 'Malware', icon: '🦠', frequency: 67, avgTime: '4.8h', color: '#ff4757' },
+                { name: 'Insider Threat', icon: '👤', frequency: 12, avgTime: '18.5h', color: '#ffb84d' },
+                { name: 'SQL Injection', icon: '💉', frequency: 34, avgTime: '3.7h', color: '#00d4ff' },
+                { name: 'Zero-Day', icon: '⚡', frequency: 8, avgTime: '24.2h', color: '#ff6b9d' },
+                { name: 'Account Takeover', icon: '🔑', frequency: 41, avgTime: '4.1h', color: '#7b61ff' },
+                { name: 'API Abuse', icon: '🔌', frequency: 29, avgTime: '3.9h', color: '#2ecc71' },
+                { name: 'Credential Dump', icon: '🗝️', frequency: 23, avgTime: '5.6h', color: '#ffb84d' },
+                { name: 'Supply Chain', icon: '⛓️', frequency: 6, avgTime: '32.1h', color: '#ff4757' }
+            ];
+
+            const width = 900;
+            const cardWidth = 200;
+            const cardHeight = 150;
+            const gap = 20;
+            const cols = 3;
+
+            const container = d3.select('#playbook-selector')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', Math.ceil(playbooks.length / cols) * (cardHeight + gap));
+
+            const cards = container.selectAll('g')
+                .data(playbooks)
+                .join('g')
+                .attr('class', 'playbook-card')
+                .attr('transform', (d, i) => {
+                    const row = Math.floor(i / cols);
+                    const col = i % cols;
+                    return `translate(${col * (cardWidth + gap)}, ${row * (cardHeight + gap)})`;
+                })
+                .style('cursor', 'pointer')
+                .on('mouseover', function() {
+                    d3.select(this).select('rect').attr('opacity', 1);
+                })
+                .on('mouseout', function() {
+                    d3.select(this).select('rect').attr('opacity', 0.8);
+                })
+                .on('click', (event, d) => {
+                    alert(`${d.name} Playbook\nFrequency: ${d.frequency} incidents\nAvg Response Time: ${d.avgTime}`);
+                });
+
+            cards.append('rect')
+                .attr('width', cardWidth)
+                .attr('height', cardHeight)
+                .attr('rx', 10)
+                .attr('fill', 'rgba(26, 31, 58, 0.7)')
+                .attr('stroke', d => d.color)
+                .attr('stroke-width', 2)
+                .attr('opacity', 0.8);
+
+            cards.append('text')
+                .attr('x', cardWidth / 2)
+                .attr('y', 40)
+                .attr('text-anchor', 'middle')
+                .attr('font-size', '48px')
+                .text(d => d.icon);
+
+            cards.append('text')
+                .attr('x', cardWidth / 2)
+                .attr('y', 90)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#fff')
+                .attr('font-size', '16px')
+                .attr('font-weight', 'bold')
+                .text(d => d.name);
+
+            cards.append('text')
+                .attr('x', cardWidth / 2)
+                .attr('y', 110)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#aaa')
+                .attr('font-size', '12px')
+                .text(d => `${d.frequency} incidents/year`);
+
+            cards.append('text')
+                .attr('x', cardWidth / 2)
+                .attr('y', 130)
+                .attr('text-anchor', 'middle')
+                .attr('fill', d => d.color)
+                .attr('font-size', '12px')
+                .attr('font-weight', 'bold')
+                .text(d => `Avg: ${d.avgTime}`);
+        }
+
+        // Incident Timeline (D3.js Gantt Chart)
+        function createIncidentTimeline() {
+            const tasks = [
+                { phase: 'Detection', activity: 'SIEM Alert Triggered', start: 0, duration: 1, team: 'SOC', status: 'completed' },
+                { phase: 'Detection', activity: 'Alert Validation', start: 1, duration: 0.5, team: 'SOC', status: 'completed' },
+                { phase: 'Analysis', activity: 'Threat Intelligence Lookup', start: 1.5, duration: 1, team: 'Threat Intel', status: 'completed' },
+                { phase: 'Analysis', activity: 'Forensic Analysis', start: 2.5, duration: 2, team: 'IR Team', status: 'in-progress' },
+                { phase: 'Containment', activity: 'Isolate Affected Systems', start: 4.5, duration: 0.5, team: 'IR Team', status: 'pending' },
+                { phase: 'Containment', activity: 'Block IOCs', start: 5, duration: 1, team: 'SOC', status: 'pending' },
+                { phase: 'Eradication', activity: 'Remove Malware', start: 6, duration: 1.5, team: 'IR Team', status: 'pending' },
+                { phase: 'Eradication', activity: 'Patch Vulnerabilities', start: 7.5, duration: 2, team: 'IT Ops', status: 'pending' },
+                { phase: 'Recovery', activity: 'Restore from Backup', start: 9.5, duration: 2, team: 'IT Ops', status: 'pending' },
+                { phase: 'Recovery', activity: 'Verify System Integrity', start: 11.5, duration: 1, team: 'IR Team', status: 'pending' }
+            ];
+
+            const margin = { top: 60, right: 150, bottom: 60, left: 200 };
+            const width = 900 - margin.left - margin.right;
+            const height = 500 - margin.top - margin.bottom;
+
+            const svg = d3.select('#incident-timeline')
+                .append('svg')
+                .attr('width', width + margin.left + margin.right)
+                .attr('height', height + margin.top + margin.bottom)
+                .append('g')
+                .attr('transform', `translate(${margin.left},${margin.top})`);
+
+            const x = d3.scaleLinear()
+                .domain([0, 13])
+                .range([0, width]);
+
+            const y = d3.scaleBand()
+                .domain(tasks.map((d, i) => i))
+                .range([0, height])
+                .padding(0.2);
+
+            const statusColors = {
+                completed: '#2ecc71',
+                'in-progress': '#ffb84d',
+                pending: '#7b61ff'
+            };
+
+            // X-axis
+            svg.append('g')
+                .attr('transform', `translate(0,${height})`)
+                .call(d3.axisBottom(x).ticks(13))
+                .attr('class', 'axis');
+
+            svg.append('text')
+                .attr('x', width / 2)
+                .attr('y', height + 45)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#fff')
+                .attr('font-size', '14px')
+                .text('Hours Since Incident Start');
+
+            // Task bars
+            svg.selectAll('.task-bar')
+                .data(tasks)
+                .join('rect')
+                .attr('class', 'task-bar')
+                .attr('x', d => x(d.start))
+                .attr('y', (d, i) => y(i))
+                .attr('width', d => x(d.duration))
+                .attr('height', y.bandwidth())
+                .attr('fill', d => statusColors[d.status])
+                .attr('opacity', 0.8)
+                .attr('rx', 4)
+                .on('mouseover', function() {
+                    d3.select(this).attr('opacity', 1);
+                })
+                .on('mouseout', function() {
+                    d3.select(this).attr('opacity', 0.8);
+                })
+                .append('title')
+                .text(d => `${d.activity}\nTeam: ${d.team}\nDuration: ${d.duration}h\nStatus: ${d.status}`);
+
+            // Task labels
+            svg.selectAll('.task-label')
+                .data(tasks)
+                .join('text')
+                .attr('class', 'task-label')
+                .attr('x', -10)
+                .attr('y', (d, i) => y(i) + y.bandwidth() / 2)
+                .attr('text-anchor', 'end')
+                .attr('dy', '0.35em')
+                .attr('fill', '#fff')
+                .attr('font-size', '11px')
+                .text(d => d.activity);
+
+            // Team labels
+            svg.selectAll('.team-label')
+                .data(tasks)
+                .join('text')
+                .attr('class', 'team-label')
+                .attr('x', d => x(d.start + d.duration) + 5)
+                .attr('y', (d, i) => y(i) + y.bandwidth() / 2)
+                .attr('dy', '0.35em')
+                .attr('fill', '#aaa')
+                .attr('font-size', '10px')
+                .text(d => d.team);
+
+            // Critical path line
+            svg.append('line')
+                .attr('x1', x(4.5))
+                .attr('x2', x(4.5))
+                .attr('y1', 0)
+                .attr('y2', height)
+                .attr('stroke', '#ff4757')
+                .attr('stroke-width', 2)
+                .attr('stroke-dasharray', '5,5')
+                .attr('opacity', 0.5);
+
+            svg.append('text')
+                .attr('x', x(4.5))
+                .attr('y', -10)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#ff4757')
+                .attr('font-size', '12px')
+                .text('Critical Path');
+
+            // Legend
+            const legend = svg.append('g')
+                .attr('transform', `translate(${width - 120}, -40)`);
+
+            const legendItems = [
+                { label: 'Completed', color: statusColors.completed },
+                { label: 'In Progress', color: statusColors['in-progress'] },
+                { label: 'Pending', color: statusColors.pending }
+            ];
+
+            legendItems.forEach((item, i) => {
+                const legendRow = legend.append('g')
+                    .attr('transform', `translate(0, ${i * 20})`);
+
+                legendRow.append('rect')
+                    .attr('width', 15)
+                    .attr('height', 15)
+                    .attr('rx', 2)
+                    .attr('fill', item.color)
+                    .attr('opacity', 0.8);
+
+                legendRow.append('text')
+                    .attr('x', 20)
+                    .attr('y', 12)
+                    .attr('fill', '#fff')
+                    .attr('font-size', '11px')
+                    .text(item.label);
+            });
+        }
+
+        // Initialize visualizations
+        createPlaybookSelector();
+        createIncidentTimeline();
+    </script>
+</body>
+</html>
