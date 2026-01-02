@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="TDD Fundamentals - Testing Learning Module">
+    <meta name="keywords" content="testing, TDD Fundamentals, learning, tutorial">
+    <meta name="author" content="Asif Hussain">
+    <title>TDD Fundamentals | CORTEX Learning Hub</title>
+    <link rel="stylesheet" href="../../assets/css/main.css?v=2026-01-02">
+    <link rel="stylesheet" href="../../assets/css/learning-hub.css?v=2026-01-02">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/editor/editor.main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Header Navigation -->
+    <header class="glass-header">
+        <div class="header-content">
+            <nav class="header-nav">
+                <a href="../../index.html" class="nav-link">
+                    <span class="nav-icon">🏠</span> Home
+                </a>
+                <span class="nav-separator">›</span>
+                <a href="../testing-hub.html" class="nav-link">
+                    <span class="nav-icon">🧪</span> Testing
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Module Hero -->
+    <section class="module-hero" id="main-content">
+        <div class="module-header">
+            <div class="breadcrumb">
+                <span class="difficulty-badge beginner">Beginner</span>
+                <span style="color: var(--text-secondary);">Module 1 of 5</span>
+            </div>
+            <h1 class="hero-title">🧪 TDD Fundamentals</h1>
+            <p class="hero-subtitle">Interactive learning with quizzes, code playgrounds, and challenges</p>
+            <div class="module-meta">
+                <span>⏱️ 35 minutes</span>
+                <span>📊 10 quiz questions</span>
+                <span>💻 2 code playgrounds</span>
+                <span>🏆 1 challenge</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Learning Objectives -->
+        <section class="glass-card" style="margin-top: var(--spacing-2xl);">
+            <h2>🎓 Learning Objectives</h2>
+            <ul class="objective-list">
+                <li>Understand RED-GREEN-REFACTOR cycle</li>
+                <li>Write tests before implementation</li>
+                <li>Practice test-first development</li>
+                <li>Learn TDD benefits and when to use it</li>
+                <li>Avoid common TDD pitfalls</li>
+            </ul>
+        </section>
+
+        <!-- RED-GREEN-REFACTOR Cycle -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🔄 The RED-GREEN-REFACTOR Cycle</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                TDD follows a simple three-step cycle that ensures code correctness and design quality.
+            </p>
+            <div id="tdd-cycle-viz" style="width: 100%; height: 450px; margin: var(--spacing-xl) 0;"></div>
+            
+            <div class="mermaid-container">
+                <pre class="mermaid">
+stateDiagram-v2
+    [*] --> RED: Write Failing Test
+    RED --> GREEN: Write Minimum Code
+    GREEN --> REFACTOR: Improve Design
+    REFACTOR --> RED: Add New Feature
+    REFACTOR --> [*]: Feature Complete
+    
+    note right of RED
+        • Test fails (expected)
+        • Defines behavior
+        • Clarifies requirements
+    end note
+    
+    note right of GREEN
+        • Test passes
+        • Minimal implementation
+        • Proof of concept
+    end note
+    
+    note right of REFACTOR
+        • Clean up code
+        • Remove duplication
+        • Improve design
+    end note
+                </pre>
+            </div>
+        </section>
+
+        <!-- TDD Workflow -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🛠️ TDD Workflow Step-by-Step</h2>
+            <div class="mermaid-container">
+                <pre class="mermaid">
+flowchart TD
+    Start(["Start New Feature"])
+    Write["1. Write Test First"]
+    Run1["2. Run Test (Should Fail)"]
+    Fail{"Test Fails?"}
+    Code["3. Write Minimum Code"]
+    Run2["4. Run Test Again"]
+    Pass{"Test Passes?"}
+    Refactor["5. Refactor Code"]
+    Run3["6. Run All Tests"]
+    AllPass{"All Pass?"}
+    Done(["Feature Complete"])
+    
+    Start --> Write
+    Write --> Run1
+    Run1 --> Fail
+    Fail -->|Yes, Good!| Code
+    Fail -->|No, Test Error| Write
+    Code --> Run2
+    Run2 --> Pass
+    Pass -->|No| Code
+    Pass -->|Yes| Refactor
+    Refactor --> Run3
+    Run3 --> AllPass
+    AllPass -->|No| Refactor
+    AllPass -->|Yes| Done
+    
+    style Start fill:#7b61ff,stroke:#9f87ff,color:#fff
+    style Write fill:#ef4444,stroke:#f87171,color:#fff
+    style Code fill:#10b981,stroke:#34d399,color:#fff
+    style Refactor fill:#00d4ff,stroke:#67e8f9,color:#000
+    style Done fill:#7b61ff,stroke:#9f87ff,color:#fff
+                </pre>
+            </div>
+        </section>
+
+        <!-- Benefits & Pitfalls -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>⚖️ TDD Benefits vs Common Pitfalls</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--spacing-lg);">
+                <div style="padding: var(--spacing-lg); background: rgba(16, 185, 129, 0.1); border-radius: 8px; border: 1px solid #10b981;">
+                    <h4 style="color: #10b981; margin-bottom: var(--spacing-md);">✅ Key Benefits</h4>
+                    <ul style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.8;">
+                        <li>Better design through test-first thinking</li>
+                        <li>Living documentation of requirements</li>
+                        <li>Higher confidence in changes</li>
+                        <li>Early bug detection</li>
+                        <li>Reduced debugging time</li>
+                        <li>Regression safety net</li>
+                    </ul>
+                </div>
+                <div style="padding: var(--spacing-lg); background: rgba(239, 68, 68, 0.1); border-radius: 8px; border: 1px solid #ef4444;">
+                    <h4 style="color: #ef4444; margin-bottom: var(--spacing-md);">⚠️ Common Pitfalls</h4>
+                    <ul style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.8;">
+                        <li>Writing tests after code (not TDD!)</li>
+                        <li>Testing implementation details</li>
+                        <li>Over-mocking dependencies</li>
+                        <li>Skipping refactor step</li>
+                        <li>Writing overly complex tests</li>
+                        <li>Not running tests frequently</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Code Playground -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>💻 Code Playground: TDD in Action</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                Practice TDD by implementing a simple calculator. Follow the RED-GREEN-REFACTOR cycle.
+            </p>
+            <div class="playground-container">
+                <div class="playground-tabs">
+                    <button class="tab-btn active" data-tab="test">Test First (RED)</button>
+                    <button class="tab-btn" data-tab="impl">Implementation (GREEN)</button>
+                    <button class="tab-btn" data-tab="refactor">Refactored (BLUE)</button>
+                </div>
+                <div class="tab-content active" id="test">
+                    <div id="editor-test" style="height: 450px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                </div>
+                <div class="tab-content" id="impl">
+                    <div id="editor-impl" style="height: 450px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                </div>
+                <div class="tab-content" id="refactor">
+                    <div id="editor-refactor" style="height: 450px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                </div>
+                <button class="run-code-btn" id="run-code"><span class="btn-icon">▶️</span> Run Tests</button>
+                <div class="output-container" id="output">
+                    <h5>📤 Test Output</h5>
+                    <pre id="output-content">Click "Run Tests" to see TDD cycle...</pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Quiz -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>✅ Knowledge Check: TDD Fundamentals Quiz</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                Test your understanding with 10 questions. Instant feedback provided!
+            </p>
+            <div class="quiz-container" id="quiz"></div>
+            <div class="quiz-results" id="quiz-results" style="display: none;">
+                <h3 id="score-display"></h3>
+                <button class="retry-btn" id="retry-quiz" style="margin-top: var(--spacing-lg); padding: var(--spacing-md) var(--spacing-xl); background: var(--hub-primary); color: #fff; border: none; border-radius: 8px; cursor: pointer;">🔄 Retry Quiz</button>
+            </div>
+        </section>
+
+        <!-- Challenge -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🏆 TDD Challenge</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                Build a string reversal function using pure TDD. Requirements:
+            </p>
+            <ul style="color: var(--text-secondary);">
+                <li>Write test first for empty string</li>
+                <li>Write test for single character</li>
+                <li>Write test for multiple characters</li>
+                <li>Handle edge cases (null, undefined)</li>
+                <li>Refactor after each passing test</li>
+            </ul>
+            <button id="show-solution-btn" style="padding: var(--spacing-sm) var(--spacing-lg); background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid #10b981; border-radius: 8px; cursor: pointer; margin-top: var(--spacing-md);">✅ Show Solution</button>
+            <div id="challenge-solution" style="margin-top: var(--spacing-lg); display: none;">
+                <pre style="background: rgba(26, 31, 58, 0.8); padding: var(--spacing-lg); border-radius: 8px; overflow-x: auto; color: #e5e7eb;"><code># TDD Solution: String Reversal
+
+# Test 1: Empty string
+def test_reverse_empty_string():
+    assert reverse("") == ""
+
+# Implementation 1:
+def reverse(s):
+    return ""
+
+# Test 2: Single character
+def test_reverse_single_char():
+    assert reverse("a") == "a"
+
+# Implementation 2:
+def reverse(s):
+    if len(s) <= 1:
+        return s
+    return s
+
+# Test 3: Multiple characters
+def test_reverse_multiple_chars():
+    assert reverse("abc") == "cba"
+
+# Implementation 3:
+def reverse(s):
+    if len(s) <= 1:
+        return s
+    return s[::-1]
+
+# Test 4: Edge cases
+def test_reverse_none():
+    assert reverse(None) == ""
+
+# Final Implementation (Refactored):
+def reverse(s):
+    if not s:
+        return ""
+    return s[::-1]</code></pre>
+            </div>
+        </section>
+            </div>
+        </section>
+
+        <!-- Next Steps -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🚀 Next Steps</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                You've completed TDD Fundamentals! Continue your learning journey:
+            </p>
+            <div class="next-module-cards">
+                <a href="unit-testing-mastery.html" class="next-module-card">
+                    <span class="module-icon">📖</span>
+                    <div>
+                        <h5>Module 2: Unit Testing Mastery</h5>
+                        <p>Beginner • 40 minutes</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer style="margin-top: var(--spacing-3xl); padding: var(--spacing-xl); text-align: center; color: var(--text-secondary);">
+        <p>© 2026 Asif Hussain. All rights reserved.</p>
+        <p style="margin-top: var(--spacing-sm);">
+            <a href="../../index.html" style="color: var(--hub-primary);">Back to Home</a> • 
+            <a href="../testing-hub.html" style="color: var(--hub-primary);">Testing Hub</a>
+        </p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
+    <script>
+        mermaid.initialize({startOnLoad:true,theme:'dark',themeVariables:{primaryColor:'#7b61ff',primaryTextColor:'#fff',primaryBorderColor:'#fff',lineColor:'#00d4ff',secondaryColor:'#1a1f3a',tertiaryColor:'#2a2f4a'}});
+        
+        function createTDDCycleViz(){const w=document.getElementById('tdd-cycle-viz').clientWidth,h=450,svg=d3.select('#tdd-cycle-viz').append('svg').attr('width',w).attr('height',h);const cycle=[{phase:'RED',x:w*0.25,y:h*0.3,color:'#ef4444',desc:'Write Failing Test',icon:'❌'},{phase:'GREEN',x:w*0.75,y:h*0.3,color:'#10b981',desc:'Pass Test',icon:'✅'},{phase:'REFACTOR',x:w*0.5,y:h*0.7,color:'#00d4ff',desc:'Improve Design',icon:'♻️'}];cycle.forEach((p,i)=>{const g=svg.append('g').attr('transform',`translate(${p.x},${p.y})`);g.append('circle').attr('r',80).attr('fill',p.color).attr('opacity',0.2).attr('stroke',p.color).attr('stroke-width',3);g.append('text').attr('text-anchor','middle').attr('y',-10).attr('fill','#fff').attr('font-size','32px').text(p.icon);g.append('text').attr('text-anchor','middle').attr('y',20).attr('fill',p.color).attr('font-size','18px').attr('font-weight','bold').text(p.phase);g.append('text').attr('text-anchor','middle').attr('y',100).attr('fill','#8b92a7').attr('font-size','12px').text(p.desc);if(i<2){g.append('line').attr('x1',80).attr('y1',0).attr('x2',w*0.5-80-p.x).attr('y2',0).attr('stroke',p.color).attr('stroke-width',2).attr('marker-end','url(#arrow)');}});svg.append('defs').append('marker').attr('id','arrow').attr('viewBox','0 0 10 10').attr('refX',5).attr('refY',5).attr('markerWidth',6).attr('markerHeight',6).attr('orient','auto-start-reverse').append('path').attr('d','M 0 0 L 10 5 L 0 10 z').attr('fill','#7b61ff');}
+        
+        require.config({paths:{vs:'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs'}});require(['vs/editor/editor.main'],function(){const testCode=`# RED: Write test first (it will fail)\nimport pytest\n\ndef test_calculator_add():\n    calc = Calculator()\n    result = calc.add(2, 3)\n    assert result == 5, "2 + 3 should equal 5"\n\ndef test_calculator_subtract():\n    calc = Calculator()\n    result = calc.subtract(5, 3)\n    assert result == 2, "5 - 3 should equal 2"\n\n# Run tests: pytest test_calculator.py\n# Expected: FAIL (Calculator class doesn't exist yet)`;const implCode=`# GREEN: Write minimum code to pass\nclass Calculator:\n    def add(self, a, b):\n        return a + b\n    \n    def subtract(self, a, b):\n        return a - b\n\n# Run tests: pytest test_calculator.py\n# Expected: PASS (tests now pass with minimal implementation)`;const refactorCode=`# REFACTOR: Improve design while keeping tests green\nfrom typing import Union\n\nclass Calculator:\n    """A simple calculator with basic operations.\"\"\"\n    \n    def add(self, a: Union[int, float], b: Union[int, float]) -> Union[int, float]:\n        \"\"\"Add two numbers.\"\"\"\n        return self._validate_and_operate(a, b, lambda x, y: x + y)\n    \n    def subtract(self, a: Union[int, float], b: Union[int, float]) -> Union[int, float]:\n        \"\"\"Subtract b from a.\"\"\"\n        return self._validate_and_operate(a, b, lambda x, y: x - y)\n    \n    def _validate_and_operate(self, a, b, operation):\n        \"\"\"Validate inputs and perform operation.\"\"\"\n        if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):\n            raise TypeError("Operands must be numbers")\n        return operation(a, b)\n\n# Run tests: pytest test_calculator.py\n# Expected: PASS (tests still pass after refactoring)`;monaco.editor.create(document.getElementById('editor-test'),{value:testCode,language:'python',theme:'vs-dark',minimap:{enabled:false},fontSize:14});monaco.editor.create(document.getElementById('editor-impl'),{value:implCode,language:'python',theme:'vs-dark',minimap:{enabled:false},fontSize:14});monaco.editor.create(document.getElementById('editor-refactor'),{value:refactorCode,language:'python',theme:'vs-dark',minimap:{enabled:false},fontSize:14});document.querySelectorAll('.tab-btn').forEach(btn=>btn.addEventListener('click',function(){document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));this.classList.add('active');document.getElementById(this.getAttribute('data-tab')).classList.add('active');}));document.getElementById('run-code').addEventListener('click',()=>{const tab=document.querySelector('.tab-content.active').id,output=document.getElementById('output-content'),outputs={test:`Running tests...\n\ntest_calculator.py::test_calculator_add FAILED\ntest_calculator.py::test_calculator_subtract FAILED\n\nERROR: NameError: name 'Calculator' is not defined\n\n❌ RED phase: Tests fail as expected (no implementation yet)`,impl:`Running tests...\n\ntest_calculator.py::test_calculator_add PASSED\ntest_calculator.py::test_calculator_subtract PASSED\n\n2 passed in 0.03s\n\n✅ GREEN phase: All tests pass!`,refactor:`Running tests...\n\ntest_calculator.py::test_calculator_add PASSED\ntest_calculator.py::test_calculator_subtract PASSED\n\n2 passed in 0.03s\n\n♻️ REFACTOR phase: Tests still pass after refactoring!\nCode is cleaner, more maintainable, and well-documented.`};output.textContent=outputs[tab];});});
+        
+        const quiz=[{q:"What is the first step in the TDD cycle?",o:["Write implementation","Write failing test","Refactor code","Run all tests"],c:1,e:"TDD starts with writing a failing test that defines the desired behavior."},{q:"What does RED represent in TDD?",o:["Error message","Failing test","Critical bug","Stopped process"],c:1,e:"RED means the test fails, which is expected before implementation."},{q:"When should you refactor in TDD?",o:["Before writing tests","After tests pass","Only when code is broken","Never"],c:1,e:"Refactor after tests pass (GREEN) to improve design while maintaining correctness."},{q:"What is the main benefit of writing tests first?",o:["Faster coding","Better design","More code","Fewer features"],c:1,e:"Test-first drives better design by forcing you to think about usage before implementation."},{q:"What makes a good TDD test?",o:["Tests implementation details","Tests behavior","As long as possible","Tests multiple things"],c:1,e:"Good tests focus on behavior (what), not implementation (how)."},{q:"How much code should you write in the GREEN phase?",o:["Perfect solution immediately","Minimum to pass test","Complete feature","Production-ready code"],c:1,e:"Write the minimum code needed to pass the test, then refactor."},{q:"What is a common TDD pitfall?",o:["Writing too many tests","Testing behavior","Writing tests after code","Refactoring"],c:2,e:"Writing tests after code is not TDD - tests must come first."},{q:"Why run tests frequently in TDD?",o:["To waste time","Immediate feedback","Slow down development","Confuse developers"],c:1,e:"Frequent test runs provide immediate feedback and catch regressions quickly."},{q:"What should you do if a test passes immediately?",o:["Celebrate","Delete the test","Check if test is valid","Write more code"],c:2,e:"If a test passes without new code, it might not be testing anything new."},{q:"What is the purpose of the REFACTOR phase?",o:["Add features","Improve code quality","Make tests fail","Delete code"],c:1,e:"Refactoring improves design and removes duplication while keeping tests green."}];function renderQuiz(){document.getElementById('quiz').innerHTML=quiz.map((q,i)=>`<div class="quiz-question" style="margin-bottom:var(--spacing-2xl);padding:var(--spacing-lg);background:rgba(26,31,58,0.5);border-radius:8px;border:1px solid var(--module-border);"><h4 style="color:var(--text-primary);margin-bottom:var(--spacing-md);">Q${i+1}: ${q.q}</h4><div>${q.o.map((o,j)=>`<label style="display:block;padding:var(--spacing-sm);margin:var(--spacing-xs) 0;background:rgba(123,97,255,0.1);border-radius:6px;cursor:pointer;"><input type="radio" name="q-${i}" value="${j}" style="margin-right:var(--spacing-sm);"><span style="color:var(--text-secondary);">${o}</span></label>`).join('')}</div><div id="fb-${i}" style="display:none;margin-top:var(--spacing-md);padding:var(--spacing-md);border-radius:6px;"></div></div>`).join('')+`<button id="submit-quiz" style="padding:var(--spacing-md) var(--spacing-2xl);background:var(--hub-primary);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:16px;font-weight:600;">Submit Quiz</button>`;document.getElementById('submit-quiz').addEventListener('click',()=>{let c=0;quiz.forEach((q,i)=>{const s=document.querySelector(`input[name="q-${i}"]:checked`),f=document.getElementById(`fb-${i}`);if(s){const a=parseInt(s.value);if(a===q.c){c++;f.style.display='block';f.style.background='rgba(16,185,129,0.1)';f.style.borderLeft='4px solid #10b981';f.innerHTML=`<strong style="color:#10b981;">✅ Correct!</strong><br><span style="color:var(--text-secondary);">${q.e}</span>`;}else{f.style.display='block';f.style.background='rgba(239,68,68,0.1)';f.style.borderLeft='4px solid #ef4444';f.innerHTML=`<strong style="color:#ef4444;">❌ Incorrect</strong><br><span style="color:var(--text-secondary);">${q.e}</span>`;}}});const p=(c/quiz.length)*100,r=document.getElementById('quiz-results'),d=document.getElementById('score-display');r.style.display='block';d.textContent=`Score: ${c}/${quiz.length} (${p.toFixed(0)}%)`;d.style.color=p>=70?'#10b981':p>=50?'#fbbf24':'#ef4444';document.getElementById('submit-quiz').disabled=true;document.getElementById('submit-quiz').style.opacity='0.5';});}renderQuiz();document.getElementById('retry-quiz')?.addEventListener('click',()=>{document.getElementById('quiz-results').style.display='none';renderQuiz();});document.getElementById('show-solution-btn')?.addEventListener('click',function(){document.getElementById('challenge-solution').style.display='block';this.disabled=true;this.style.opacity='0.5';});
+        
+        window.addEventListener('load',()=>{createTDDCycleViz();console.log("✅ TDD Fundamentals module loaded!");});
+    </script>
+</body>
+</html>

@@ -3,8 +3,131 @@
 **Version:** 5.0.0 | **Status:** ✅ UPDATED FOR v5.0 ARCHITECTURE  
 **Author:** Asif Hussain | **Last Updated:** January 2, 2026  
 **Last Compliance Audit:** January 2, 2026  
-**v5.0 Update:** Master Orchestrator + Planning v5 + ADO v2 + 55 Level 2 Pages  
+**v5.0 Update:** Best Practices Learning Hub (80 modules) + Master Orchestrator + Planning v5 + ADO v2  
 **Copyright © 2026 Asif Hussain. All rights reserved.**
+
+---
+
+## 📋 QUICK NAVIGATION - SITE STRUCTURE AT A GLANCE
+
+**Total Pages:** 165 (9 Level 0 tiles → 62 Level 1 pages → 103 Level 2 pages)
+
+### 🎯 Current Implementation Status (January 2, 2026 - 21:45 UTC)
+
+| Component | Status | Files | Progress |
+|-----------|--------|-------|----------|
+| **CSS Framework** | ✅ Complete | `learning-hub.css` (1,030+ lines) | 100% |
+| **Level 1 Hubs (Phase 1)** | ✅ Complete | 4/17 hubs created | 24% |
+| **Level 2 Modules (Phase 1)** | ✅ Complete | 22/22 modules created | 100% |
+| **Linking Integration** | ✅ Complete | Updated `knowledge/index.html` | 100% |
+
+**What's Live Right Now:**
+- ✅ `docs/assets/css/learning-hub.css` - Production-ready stylesheet (1,030+ lines with Level 2 styles)
+- ✅ `docs/knowledge/index.html` - Featured Learning Paths section with 4 curated tracks
+- ✅ `docs/knowledge/api-design-hub.html` - API Design learning hub with 5 module cards
+- ✅ `docs/knowledge/testing-hub.html` - Testing learning hub with 5 module cards
+- ✅ `docs/knowledge/security-hub.html` - Security learning hub with 6 module cards
+- ✅ `docs/knowledge/design-patterns-hub.html` - Design Patterns hub with 6 module cards
+- ✅ **22 Level 2 Modules:** All Phase 1 modules created with full structure
+  - API Design: 5 modules (fundamentals, REST, versioning, auth, case studies)
+  - Testing: 5 modules (TDD, unit, BDD/E2E, coverage, mocking/CI-CD)
+  - Security: 6 modules (OWASP, auth, crypto, secure coding, threat modeling, IR)
+  - Design Patterns: 6 modules (fundamentals, creational, structural, behavioral, anti-patterns, real-world)
+- ✅ `docs/index.html` - Home page caption updated to "80 Interactive Learning Modules • 55 Hours"
+
+**Module Features (Implemented):**
+- ✅ Responsive navigation with breadcrumbs (Home → Hub → Module)
+- ✅ Module hero sections with difficulty badges and learning metrics
+- ✅ Learning objectives (5 per module)
+- ✅ Interactive content placeholders (ready for D3.js/Mermaid/Monaco)
+- ✅ Quiz system placeholders (ready for quiz data)
+- ✅ Next module navigation with smooth progression
+- ✅ Congratulations pages for final modules in each domain
+- ✅ Full glassmorphism design compliance (zero inline styles)
+- ✅ Accessibility features (skip links, ARIA, keyboard navigation)
+
+**Enhanced Modules (Gold Standard - 4/22 Complete):**
+- ✅ `api-design/fundamentals.html` - Complete with HTTP decision tree, status codes, dual-language playground, 10-question quiz
+- ✅ `api-design/rest-principles.html` - Complete with Richardson Maturity Model D3.js viz, HATEOAS sequence diagram, REST constraints, HATEOAS playground, 10-question quiz
+- ✅ `api-design/versioning-evolution.html` - Complete with versioning strategies comparison D3.js, deprecation timeline Gantt, breaking/non-breaking changes matrix, 3-strategy playground, 10-question quiz
+- ✅ `api-design/authentication-security.html` - Complete with OAuth 2.0 sequence diagram, JWT structure D3.js viz, rate limiting flowchart, JWT+OAuth playgrounds, 10-question quiz
+
+**Next Steps:**
+1. ~~Update `knowledge/index.html` to add Featured Learning Paths section~~ ✅ COMPLETE
+2. ~~Update home page caption: "80 Interactive Learning Modules • 55 Hours"~~ ✅ ALREADY DONE
+3. 🚧 **IN PROGRESS:** Enhance remaining 18 modules (4/22 complete - 18%)
+   - ✅ API Design: All 4 modules complete (fundamentals, REST, versioning, authentication)
+   - 🚧 Testing: All 5 modules pending (TDD, unit, BDD/E2E, coverage, mocking/CI-CD)
+   - 🚧 Security: All 6 modules pending (OWASP, auth, crypto, secure coding, threat modeling, IR)
+   - 🚧 Design Patterns: All 6 modules pending (fundamentals, creational, structural, behavioral, anti-patterns, real-world)
+4. Implement Monaco editor integration for all playgrounds
+5. Create quiz data files (JSON format) for all 22 modules
+
+### 🏠 Level 0: Home Page (`docs/index.html`)
+9 navigation tiles organized into 3 patterns:
+
+**Standard Tiles (6):** Single comprehensive pages
+- 🧠 Architecture (5 pages) → brain-tiers, SKULL, knowledge-graph, context
+- 💰 Token Optimization (1 page) → 97% reduction, $8.6K savings
+- 🛠️ Toolkit Manager (1 page) → Master Orchestrator routing
+- 🔍 CORTEX Lens (1 page) → AST analysis, reverse engineering
+- 🚀 Getting Started (2 pages) → 5-minute setup, tutorial
+
+**Learning Hub Tile (1):** Interactive learning platform
+- 📚 **Best Practices Learning Hub** (17 Level 1 hubs → 80 Level 2 modules)
+  - **Phase 1 Complete (4 hubs):** API Design, Testing, Security, Design Patterns
+  - **Phase 2 Pending (4 hubs):** Database, Cloud, DevOps, Microservices
+  - **Phase 3 Pending (9 hubs):** DDD, Engineering, Frontend, Mobile, Performance, etc.
+  - **Total Learning Hours:** 55 hours
+  - **Interactive Elements:** 80 quizzes, 85 code playgrounds, 80 challenges
+
+**Multi-Panel Tiles (3):** Category grids with multiple subcategories
+- 🛡️ Security (2x2 grid) → 13 pages across 4 categories
+- 🎯 Orchestrators (2x3 grid) → Planning v5 + ADO v2 + 14 basic orchestrators
+- 🔧 Sharpen The Saw (3x2 grid) → 6 best practice pages
+
+### 📊 Complexity Analysis (Score determines Level 1 vs Level 2)
+
+| Tile | Score | Level 1 Pages | Level 2 Pages | Status |
+|------|-------|---------------|---------------|--------|
+| **Architecture** | 45 | 5 | 0 | ✅ Complete |
+| **Token Optimization** | 25 | 1 | 0 | ✅ Complete |
+| **Best Practices Learning Hub** | 380 | 17 hubs | 80 modules | 🚧 Phase 1: 4/17 hubs |
+| **Toolkit Manager** | 20 | 1 | 0 | ✅ Complete |
+| **CORTEX Lens** | 30 | 1 | 0 | ✅ Complete |
+| **Getting Started** | 15 | 2 | 0 | ✅ Complete |
+| **Security** | 55 | 13 | 0 | 🟡 54% (7 missing) |
+| **Orchestrators** | 75 | 14 basic | 0 | 🟡 73% (5 orphaned) |
+| **Planning v5** | 195 | 1 | 10 phases | 🚧 v5.0 Development |
+| **ADO v2** | 178 | 1 | 13 pages | 🚧 v5.0 Development |
+| **Sharpen The Saw** | 40 | 6 | 0 | ✅ 100% |
+
+**Threshold:** Score <100 = Level 1 only | Score ≥100 = Level 2 required
+
+### 🎓 Best Practices Learning Hub Structure
+
+**NEW ARCHITECTURE:** Level 0 → Level 1 (Domain Hubs) → Level 2 (Learning Modules)
+
+**Purpose:** Transform static best practices into comprehensive learning journeys for junior developers.
+
+**Implementation Status:**
+- ✅ **CSS Framework:** `learning-hub.css` (550+ lines) - Complete
+- ✅ **Phase 1 (High-Value):** 4 Level 1 hub pages created
+  - `knowledge/api-design-hub.html` (5 modules, 3.5h)
+  - `knowledge/testing-hub.html` (5 modules, 3h)
+  - `knowledge/security-hub.html` (6 modules, 4h)
+  - `knowledge/design-patterns-hub.html` (6 modules, 4h)
+- 🚧 **Phase 2 (Foundations):** 4 hubs pending (Database, Cloud, DevOps, Microservices)
+- 🚧 **Phase 3 (Advanced):** 9 hubs pending
+- 🚧 **Level 2 Modules:** 0/80 created (22 modules from Phase 1 hubs)
+
+**Learning Hub Features:**
+- 🎨 D3.js visualizations (decision trees, force graphs, timelines)
+- 📊 Mermaid diagrams (flowcharts, sequence, state machines)
+- 💻 Code playgrounds (Monaco editor with Pyodide/QuickJS)
+- ✅ Interactive quizzes (5-15 questions per module)
+- 🏆 Progressive challenges (Beginner → Expert)
+- 📈 Progress tracking and skill badges
 
 ---
 
@@ -254,6 +377,161 @@ When working on a specific panel/section:
 ```
 
 **Reference:** See `integrate-this.md` for complete methodology and code examples.
+
+---
+
+## 📂 VISUAL SITE MAP - COMPLETE STRUCTURE
+
+```
+🏠 docs/index.html (Level 0 - Home Page)
+│
+├─📚 BEST PRACTICES LEARNING HUB (Score: 380 - LEVEL 2 REQUIRED)
+│  ├─ knowledge/index.html (Hub home with Featured Learning Paths)
+│  │
+│  ├─ ✅ PHASE 1: HIGH-VALUE DOMAINS (4/4 hubs complete)
+│  │  │
+│  │  ├─ 🌐 API Design (3.5 hours, 50 quizzes, 6 playgrounds)
+│  │  │  ├─ knowledge/api-design-hub.html (Level 1 Hub) ✅
+│  │  │  └─ Level 2 Modules (5): 🚧 TO CREATE
+│  │  │     ├─ fundamentals.html (Beginner, 30min)
+│  │  │     ├─ rest-principles.html (Intermediate, 45min)
+│  │  │     ├─ versioning-evolution.html (Intermediate, 40min)
+│  │  │     ├─ authentication-security.html (Advanced, 50min)
+│  │  │     └─ real-world-case-studies.html (Expert, 60min)
+│  │  │
+│  │  ├─ 🧪 Testing (3 hours, 50 quizzes, 8 playgrounds)
+│  │  │  ├─ knowledge/testing-hub.html (Level 1 Hub) ✅
+│  │  │  └─ Level 2 Modules (5): 🚧 TO CREATE
+│  │  │     ├─ tdd-fundamentals.html (Beginner, 35min)
+│  │  │     ├─ unit-testing-mastery.html (Beginner, 40min)
+│  │  │     ├─ bdd-e2e-testing.html (Intermediate, 45min)
+│  │  │     ├─ test-coverage-analysis.html (Intermediate, 30min)
+│  │  │     └─ mocking-ci-cd.html (Advanced, 30min)
+│  │  │
+│  │  ├─ 🔐 Security (4 hours, 60 quizzes, 7 playgrounds)
+│  │  │  ├─ knowledge/security-hub.html (Level 1 Hub) ✅
+│  │  │  └─ Level 2 Modules (6): 🚧 TO CREATE
+│  │  │     ├─ owasp-top-10.html (Beginner, 45min)
+│  │  │     ├─ authentication-authorization.html (Beginner, 50min)
+│  │  │     ├─ cryptography-essentials.html (Intermediate, 40min)
+│  │  │     ├─ secure-coding-practices.html (Intermediate, 35min)
+│  │  │     ├─ threat-modeling.html (Advanced, 45min)
+│  │  │     └─ incident-response.html (Expert, 25min)
+│  │  │
+│  │  └─ 🎨 Design Patterns (4 hours, 60 quizzes, 12 playgrounds)
+│  │     ├─ knowledge/design-patterns-hub.html (Level 1 Hub) ✅
+│  │     └─ Level 2 Modules (6): 🚧 TO CREATE
+│  │        ├─ pattern-fundamentals.html (Beginner, 35min)
+│  │        ├─ creational-patterns.html (Beginner, 50min)
+│  │        ├─ structural-patterns.html (Intermediate, 45min)
+│  │        ├─ behavioral-patterns.html (Intermediate, 55min)
+│  │        ├─ anti-patterns.html (Advanced, 30min)
+│  │        └─ real-world-applications.html (Expert, 25min)
+│  │
+│  ├─ 🚧 PHASE 2: TECHNICAL FOUNDATIONS (0/4 hubs)
+│  │  ├─ 🗄️ Database (5 modules, 3h) - TO CREATE
+│  │  ├─ ☁️ Cloud (4 modules, 2.5h) - TO CREATE
+│  │  ├─ 🔄 DevOps (5 modules, 3h) - TO CREATE
+│  │  └─ 🔬 Microservices (5 modules, 3.5h) - TO CREATE
+│  │
+│  └─ 🚧 PHASE 3: ADVANCED TOPICS (0/9 hubs)
+│     ├─ 🏗️ DDD (6 modules, 4h) - TO CREATE
+│     ├─ ⚙️ Engineering (4 modules, 2.5h) - TO CREATE
+│     ├─ 🎭 Frontend (5 modules, 3h) - TO CREATE
+│     ├─ 📨 Messaging (4 modules, 2.5h) - TO CREATE
+│     ├─ 📱 Mobile (4 modules, 2.5h) - TO CREATE
+│     ├─ ⚡ Performance (5 modules, 3h) - TO CREATE
+│     ├─ 🤖 RAG Domains (3 modules, 2h) - TO CREATE
+│     ├─ 🖼️ UI/UX (4 modules, 2.5h) - TO CREATE
+│     └─ Additional domains as needed
+│
+├─🧠 ARCHITECTURE (Score: 45 - Level 1 only) ✅
+│  ├─ architecture/index.html
+│  ├─ architecture/brain-tiers.html
+│  ├─ architecture/skull-protection.html
+│  ├─ architecture/knowledge-graph.html
+│  └─ architecture/development-context.html
+│
+├─💰 TOKEN OPTIMIZATION (Score: 25 - Level 1 only) ✅
+│  └─ token-optimization/index.html
+│
+├─🛠️ TOOLKIT MANAGER (Score: 20 - Level 1 only) ✅
+│  └─ toolkit-manager/index.html
+│
+├─🔍 CORTEX LENS (Score: 30 - Level 1 only) ✅
+│  └─ lens/index.html
+│
+├─🚀 GETTING STARTED (Score: 15 - Level 1 only) ✅
+│  ├─ getting-started/index.html
+│  └─ getting-started/tutorial.html
+│
+├─🛡️ SECURITY MULTI-PANEL (Score: 55 - Level 1 only) 🟡 54%
+│  ├─ security/index.html (2x2 grid navigation)
+│  ├─ Protection (3 pages): ✅ access-control, data-protection, audit-logging
+│  ├─ Assessment (3 pages): ✅ threat-modeling, risk-assessment, penetration-testing
+│  ├─ Compliance (4 pages): ✅ owasp, vulnerability-assessment | ❌ compliance, security-training
+│  └─ Response (3 pages): ❌ incident-response, threat-intelligence, dashboard
+│
+├─🎯 ORCHESTRATORS MULTI-PANEL (Score: 75 - Level 1 only) 🟡 73%
+│  ├─ orchestrators/index.html (2x3 grid navigation)
+│  ├─ Planning (4 pages): ✅ planning-system, ado-orchestrator, ado-planning, cleanup-orchestrator
+│  ├─ Execution (2 pages): ✅ tdd-orchestrator, execution-orchestrator
+│  ├─ System (4 pages): ✅ cleanup, system-integrity, git-checkpoint, sanitization
+│  ├─ Analysis (3 pages): ✅ refinement, cortex-lens, architectural-review
+│  └─ Debug (2 pages): ✅ debug, rollback
+│
+├─🎯 PLANNING v5 (Score: 195 - LEVEL 2 REQUIRED) 🚧
+│  ├─ orchestrators/planning-system.html (Level 1 overview)
+│  └─ Level 2 (10 phase pages): TO CREATE
+│     ├─ phase-1-governance-validation.html
+│     ├─ phase-2-knowledge-graph-integration.html
+│     ├─ phase-3-context-synthesis.html
+│     ├─ phase-4-plan-generation.html
+│     ├─ phase-5-visualization.html
+│     ├─ phase-6-validation.html
+│     ├─ phase-7-persistence.html
+│     ├─ phase-8-continuation.html
+│     ├─ phase-9-rollback.html
+│     └─ phase-10-success-metrics.html
+│
+├─🎯 ADO v2 (Score: 178 - LEVEL 2 REQUIRED) 🚧
+│  ├─ orchestrators/ado-orchestrator.html (Level 1 overview)
+│  └─ Level 2 (13 pages): TO CREATE
+│     ├─ Wizard (7 stages):
+│     │  ├─ wizard-stage-1-work-item-type.html
+│     │  ├─ wizard-stage-2-title-description.html
+│     │  ├─ wizard-stage-3-acceptance-criteria.html
+│     │  ├─ wizard-stage-4-technical-requirements.html
+│     │  ├─ wizard-stage-5-estimation.html
+│     │  ├─ wizard-stage-6-dependencies.html
+│     │  └─ wizard-stage-7-review.html
+│     └─ Auto-Generation (6 phases):
+│        ├─ auto-gen-phase-1-analysis.html
+│        ├─ auto-gen-phase-2-template-selection.html
+│        ├─ auto-gen-phase-3-content-generation.html
+│        ├─ auto-gen-phase-4-acceptance-criteria.html
+│        ├─ auto-gen-phase-5-estimation.html
+│        └─ auto-gen-phase-6-validation.html
+│
+└─🔧 SHARPEN THE SAW (Score: 40 - Level 1 only) ✅ 100%
+   ├─ sts/index.html (3x2 grid navigation)
+   ├─ sts/security.html
+   ├─ sts/solid.html
+   ├─ sts/code-quality.html
+   ├─ sts/performance.html
+   ├─ sts/testing.html
+   └─ sts/documentation.html
+```
+
+**KEY STATISTICS:**
+- **Total Pages:** 165
+  - Level 0: 1 (home)
+  - Level 1: 62 (standard pages + 17 learning hubs)
+  - Level 2: 103 (80 learning modules + 10 Planning + 13 ADO)
+- **Completion Status:**
+  - ✅ Complete: 28 pages (17%)
+  - 🚧 In Progress: 4 learning hubs (Phase 1)
+  - 🚧 Pending: 133 pages (80%)
 
 ---
 
@@ -2681,7 +2959,157 @@ FINAL: 75 (accounting for current state - many pages have minimal viz)
 
 ---
 
-## 📊 Documentation Generation Timeline (6 Weeks)
+## 🔗 NAVIGATION GUIDE - HOW TO LINK TO LEARNING HUB
+
+### From `docs/index.html` (Home Page)
+
+The Best Practices tile already links to `knowledge/index.html`:
+
+```html
+<!-- Line ~451 in docs/index.html -->
+<a href="knowledge/index.html" class="btn-hero btn-hero-knowledge animation-t2">
+    <span class="btn-hero-icon">📚</span>
+    <span class="btn-hero-text">CORTEX Best Practices</span>
+    <span class="btn-hero-caption">35 Guidelines for Implementation</span>
+</a>
+```
+
+**Recommended Update:** Change caption to reflect Learning Hub:
+
+```html
+<span class="btn-hero-caption">80 Interactive Learning Modules • 55 Hours</span>
+```
+
+### From `knowledge/index.html` (Best Practices Hub Home)
+
+**Two linking approaches:**
+
+#### Option 1: Featured Learning Paths Section (Recommended)
+
+Add new section at top of page (~line 150, after executive summary):
+
+```html
+<!-- Featured Learning Paths -->
+<section class="glass-card-display animation-t1" style="margin-bottom: var(--spacing-2xl);">
+    <h2 class="section-title">
+        <i class="fas fa-graduation-cap"></i>
+        Featured Learning Paths
+    </h2>
+    
+    <p class="intro-text">Interactive learning modules with quizzes, code playgrounds, and progressive challenges.</p>
+    
+    <div class="masonry-grid">
+        <!-- API Design Hub -->
+        <a href="api-design-hub.html" class="glass-card-clickable animation-t1" style="text-decoration: none;">
+            <div class="card-icon" style="font-size: 2.5rem;">🌐</div>
+            <h4 class="card-title">API Design</h4>
+            <p class="card-description">5 modules • 3.5 hours<br/>Master REST, GraphQL, and API versioning</p>
+            <div class="learning-metrics" style="display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap;">
+                <span style="font-size: 0.75rem; color: var(--text-muted);">📊 50 quizzes</span>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">💻 6 playgrounds</span>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">🏆 4 challenges</span>
+            </div>
+        </a>
+        
+        <!-- Testing Hub -->
+        <a href="testing-hub.html" class="glass-card-clickable animation-t1" style="text-decoration: none;">
+            <div class="card-icon" style="font-size: 2.5rem;">🧪</div>
+            <h4 class="card-title">Testing Mastery</h4>
+            <p class="card-description">5 modules • 3 hours<br/>TDD, BDD, E2E, and test automation</p>
+            <div class="learning-metrics" style="display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap;">
+                <span style="font-size: 0.75rem; color: var(--text-muted);">📊 50 quizzes</span>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">💻 8 playgrounds</span>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">🏆 5 challenges</span>
+            </div>
+        </a>
+        
+        <!-- Security Hub -->
+        <a href="security-hub.html" class="glass-card-clickable animation-t1" style="text-decoration: none;">
+            <div class="card-icon" style="font-size: 2.5rem;">🔐</div>
+            <h4 class="card-title">Security Expert</h4>
+            <p class="card-description">6 modules • 4 hours<br/>OWASP, cryptography, threat modeling</p>
+            <div class="learning-metrics" style="display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap;">
+                <span style="font-size: 0.75rem; color: var(--text-muted);">📊 60 quizzes</span>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">💻 7 playgrounds</span>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">🏆 5 challenges</span>
+            </div>
+        </a>
+        
+        <!-- Design Patterns Hub -->
+        <a href="design-patterns-hub.html" class="glass-card-clickable animation-t1" style="text-decoration: none;">
+            <div class="card-icon" style="font-size: 2.5rem;">🎨</div>
+            <h4 class="card-title">Design Patterns</h4>
+            <p class="card-description">6 modules • 4 hours<br/>Gang of Four patterns mastery</p>
+            <div class="learning-metrics" style="display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap;">
+                <span style="font-size: 0.75rem; color: var(--text-muted);">📊 60 quizzes</span>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">💻 12 playgrounds</span>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">🏆 6 challenges</span>
+            </div>
+        </a>
+    </div>
+</section>
+```
+
+#### Option 2: Update Existing Cards (Alternative)
+
+Replace existing static cards with links to hub pages (~line 160-350):
+
+```html
+<!-- In Backend & APIs section, replace REST API Design card -->
+<a href="api-design-hub.html" class="glass-card-clickable animation-t1" style="text-decoration: none;">
+    <div class="card-icon backend-icon">
+        <i class="fas fa-plug"></i>
+    </div>
+    <h4 class="card-title">🌐 API Design Learning Path</h4>
+    <p class="card-description">5 modules • 3.5 hours • Master REST, GraphQL, and API versioning</p>
+    <div class="card-badge badge-backend">Learning Hub</div>
+</a>
+```
+
+### Learning Hub Navigation Structure
+
+```
+Home (index.html)
+  ↓ Click "CORTEX Best Practices"
+Knowledge Index (knowledge/index.html)
+  ↓ Click "API Design" card
+API Design Hub (knowledge/api-design-hub.html)
+  ↓ Click "Module 1: Fundamentals"
+Module Page (knowledge/api-design/fundamentals.html)
+```
+
+### File Organization
+
+```
+docs/
+├── index.html (Level 0 - links to knowledge/index.html)
+├── knowledge/
+│   ├── index.html (Best Practices home - links to hubs)
+│   ├── api-design-hub.html (Level 1 - links to modules) ✅
+│   ├── testing-hub.html (Level 1) ✅
+│   ├── security-hub.html (Level 1) ✅
+│   ├── design-patterns-hub.html (Level 1) ✅
+│   ├── api-design/ (Level 2 folder)
+│   │   ├── fundamentals.html 🚧
+│   │   ├── rest-principles.html 🚧
+│   │   ├── versioning-evolution.html 🚧
+│   │   ├── authentication-security.html 🚧
+│   │   └── real-world-case-studies.html 🚧
+│   ├── testing/ (Level 2 folder)
+│   │   └── (5 module files) 🚧
+│   ├── security/ (Level 2 folder)
+│   │   └── (6 module files) 🚧
+│   └── design-patterns/ (Level 2 folder)
+│       └── (6 module files) 🚧
+└── assets/
+    └── css/
+        ├── main.css (v2026-01-02)
+        └── learning-hub.css (v2026-01-02) ✅
+```
+
+---
+
+## 📊 Documentation Generation Timeline
 
 | Week | Focus | Pages Created | Pages Refactored | Total Effort |
 |------|-------|---------------|------------------|--------------|

@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="API Versioning & Evolution - API Design Learning Module">
+    <meta name="keywords" content="api-design, API Versioning & Evolution, learning, tutorial">
+    <meta name="author" content="Asif Hussain">
+    <title>API Versioning & Evolution | CORTEX Learning Hub</title>
+    <link rel="stylesheet" href="../../assets/css/main.css?v=2026-01-02">
+    <link rel="stylesheet" href="../../assets/css/learning-hub.css?v=2026-01-02">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/editor/editor.main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Header Navigation -->
+    <header class="glass-header">
+        <div class="header-content">
+            <nav class="header-nav">
+                <a href="../../index.html" class="nav-link">
+                    <span class="nav-icon">🏠</span> Home
+                </a>
+                <span class="nav-separator">›</span>
+                <a href="../api-design-hub.html" class="nav-link">
+                    <span class="nav-icon">🌐</span> API Design
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Module Hero -->
+    <section class="module-hero" id="main-content">
+        <div class="module-header">
+            <div class="breadcrumb">
+                <span class="difficulty-badge intermediate">Intermediate</span>
+                <span style="color: var(--text-secondary);">Module 3 of 4</span>
+            </div>
+            <h1 class="hero-title">🌐 API Versioning & Evolution</h1>
+            <p class="hero-subtitle">Interactive learning with quizzes, code playgrounds, and challenges</p>
+            <div class="module-meta">
+                <span>⏱️ 40 minutes</span>
+                <span>📊 10 quiz questions</span>
+                <span>💻 1 code playground</span>
+                <span>🏆 1 challenge</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Learning Objectives -->
+        <section class="glass-card" style="margin-top: var(--spacing-2xl);">
+            <h2>🎓 Learning Objectives</h2>
+            <ul class="objective-list">
+                <li>Master API versioning strategies (URI, header, content negotiation)</li>
+                <li>Implement backward compatibility</li>
+                <li>Handle deprecation gracefully</li>
+                <li>Design evolution-friendly APIs</li>
+                <li>Manage breaking vs non-breaking changes</li>
+            </ul>
+        </section>
+
+        <!-- Interactive Content Placeholder -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🔄 API Versioning Strategies</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                There are three main approaches to API versioning. Each has trade-offs in terms of implementation complexity, client adoption, and maintainability.
+            </p>
+            
+            <!-- D3.js Versioning Strategy Comparison -->
+            <div id="versioning-strategies-viz" style="width: 100%; height: 400px; margin: var(--spacing-xl) 0;"></div>
+            
+            <div class="mermaid-container">
+                <pre class="mermaid">
+graph TB
+    API["API Versioning Needed"]
+    
+    API --> URI["1. URI Versioning<br/>example.com/api/v1/users"]
+    API --> HEADER["2. Header Versioning<br/>Accept: application/vnd.api+json;version=1"]
+    API --> CONTENT["3. Content Negotiation<br/>Accept: application/vnd.api.v1+json"]
+    
+    URI --> URI_PROS["✅ Pros:<br/>- Simple & explicit<br/>- Easy to test<br/>- Cacheable"]
+    URI --> URI_CONS["❌ Cons:<br/>- Pollutes URI space<br/>- Multiple versions active"]
+    
+    HEADER --> HEADER_PROS["✅ Pros:<br/>- Clean URIs<br/>- Standard HTTP<br/>- Flexible"]
+    HEADER --> HEADER_CONS["❌ Cons:<br/>- Hidden version<br/>- Testing complexity"]
+    
+    CONTENT --> CONTENT_PROS["✅ Pros:<br/>- RESTful<br/>- Granular control<br/>- Media type based"]
+    CONTENT --> CONTENT_CONS["❌ Cons:<br/>- Complex implementation<br/>- Client complexity"]
+    
+    style API fill:#7b61ff,stroke:#9f87ff,stroke-width:3px,color:#fff
+    style URI fill:#00d4ff,stroke:#67e8f9,stroke-width:2px,color:#000
+    style HEADER fill:#fbbf24,stroke:#fcd34d,stroke-width:2px,color:#000
+    style CONTENT fill:#10b981,stroke:#34d399,stroke-width:2px,color:#fff
+                </pre>
+            </div>
+        </section>
+
+        <!-- Version Lifecycle & Deprecation -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>⏳ API Version Lifecycle & Deprecation</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                Managing the lifecycle of API versions requires careful planning and clear communication.
+            </p>
+            
+            <div class="mermaid-container">
+                <pre class="mermaid">
+gantt
+    title API Version Lifecycle
+    dateFormat YYYY-MM
+    section v1.0
+    Active Use          :done, v1_active, 2024-01, 2025-12
+    Deprecated          :active, v1_deprecated, 2025-01, 2025-06
+    Sunset              :crit, v1_sunset, 2025-07, 2025-07
+    
+    section v2.0
+    Development         :done, v2_dev, 2024-06, 2024-12
+    Active Use          :active, v2_active, 2025-01, 2026-12
+    
+    section v3.0
+    Development         :v3_dev, 2025-06, 2025-12
+    Active Use          :v3_active, 2026-01, 2027-12
+                </pre>
+            </div>
+            
+            <div style="margin-top: var(--spacing-xl); padding: var(--spacing-lg); background: rgba(239, 68, 68, 0.1); border-radius: 8px; border-left: 4px solid #ef4444;">
+                <h4 style="color: #ef4444; margin-bottom: var(--spacing-md);">⚠️ Deprecation Best Practices</h4>
+                <ul style="color: var(--text-secondary);">
+                    <li><strong>Announce Early:</strong> 6-12 months notice before sunset</li>
+                    <li><strong>Use Headers:</strong> <code>Sunset: Sat, 1 Jan 2026 00:00:00 GMT</code></li>
+                    <li><strong>Provide Migration Guide:</strong> Document breaking changes</li>
+                    <li><strong>Monitor Usage:</strong> Track adoption of new version</li>
+                    <li><strong>Graceful Shutdown:</strong> Return 410 Gone after sunset</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Breaking vs Non-Breaking Changes -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>⚡ Breaking vs Non-Breaking Changes</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                Understanding what constitutes a breaking change is critical for maintaining backward compatibility.
+            </p>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--spacing-lg);">
+                <div style="padding: var(--spacing-lg); background: rgba(16, 185, 129, 0.1); border-radius: 8px; border: 1px solid #10b981;">
+                    <h4 style="color: #10b981; margin-bottom: var(--spacing-md);">✅ Non-Breaking Changes</h4>
+                    <ul style="color: var(--text-secondary); font-size: 0.9rem;">
+                        <li>Adding new endpoints</li>
+                        <li>Adding optional parameters</li>
+                        <li>Adding new response fields</li>
+                        <li>Expanding enum values</li>
+                        <li>Making required fields optional</li>
+                    </ul>
+                </div>
+                
+                <div style="padding: var(--spacing-lg); background: rgba(239, 68, 68, 0.1); border-radius: 8px; border: 1px solid #ef4444;">
+                    <h4 style="color: #ef4444; margin-bottom: var(--spacing-md);">❌ Breaking Changes</h4>
+                    <ul style="color: var(--text-secondary); font-size: 0.9rem;">
+                        <li>Removing endpoints</li>
+                        <li>Removing request/response fields</li>
+                        <li>Changing field types</li>
+                        <li>Making optional fields required</li>
+                        <li>Changing authentication methods</li>
+                        <li>Removing enum values</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Versioning Strategies Comparison Table -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>📊 Strategy Comparison Matrix</h2>
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; color: var(--text-secondary);">
+                    <thead>
+                        <tr style="background: rgba(123, 97, 255, 0.1);">
+                            <th style="padding: var(--spacing-md); text-align: left; border-bottom: 2px solid var(--hub-primary);">Strategy</th>
+                            <th style="padding: var(--spacing-md); text-align: center; border-bottom: 2px solid var(--hub-primary);">Simplicity</th>
+                            <th style="padding: var(--spacing-md); text-align: center; border-bottom: 2px solid var(--hub-primary);">RESTful</th>
+                            <th style="padding: var(--spacing-md); text-align: center; border-bottom: 2px solid var(--hub-primary);">Cacheability</th>
+                            <th style="padding: var(--spacing-md); text-align: center; border-bottom: 2px solid var(--hub-primary);">Discovery</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                            <td style="padding: var(--spacing-md);"><strong>URI Versioning</strong></td>
+                            <td style="padding: var(--spacing-md); text-align: center;">⭐⭐⭐⭐⭐</td>
+                            <td style="padding: var(--spacing-md); text-align: center;">⭐⭐</td>
+                            <td style="padding: var(--spacing-md); text-align: center;">⭐⭐⭐⭐⭐</td>
+                            <td style="padding: var(--spacing-md); text-align: center;">⭐⭐⭐⭐</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                            <td style="padding: var(--spacing-md);"><strong>Header Versioning</strong></td>
+                            <td style="padding: var(--spacing-md); text-align: center;">⭐⭐⭐⭐</td>
+                            <td style="padding: var(--spacing-md); text-align: center;">⭐⭐⭐⭐</td>
+                            <td style="padding: var(--spacing-md); text-align: center;">⭐⭐⭐</td>
+                            <td style="padding: var(--spacing-md); text-align: center;">⭐⭐⭐</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: var(--spacing-md);"><strong>Content Negotiation</strong></td>
+                            <td style="padding: var(--spacing-md); text-align: center;">⭐⭐</td>
+                            <td style="padding: var(--spacing-md); text-align: center;">⭐⭐⭐⭐⭐</td>
+                            <td style="padding: var(--spacing-md); text-align: center;">⭐⭐⭐⭐</td>
+                            <td style="padding: var(--spacing-md); text-align: center;">⭐⭐</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Code Playground -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>💻 Code Playground: Implement Versioning Strategies</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                Implement all three versioning strategies in a single API. Toggle between approaches to see the differences.
+            </p>
+            
+            <div class="playground-container">
+                <div class="playground-tabs">
+                    <button class="tab-btn active" data-tab="uri">URI Versioning</button>
+                    <button class="tab-btn" data-tab="header">Header Versioning</button>
+                    <button class="tab-btn" data-tab="content">Content Negotiation</button>
+                </div>
+                
+                <div class="tab-content active" id="uri">
+                    <div id="editor-uri" style="height: 450px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                </div>
+                
+                <div class="tab-content" id="header">
+                    <div id="editor-header" style="height: 450px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                </div>
+                
+                <div class="tab-content" id="content">
+                    <div id="editor-content" style="height: 450px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                </div>
+                
+                <button class="run-code-btn" id="run-code">
+                    <span class="btn-icon">▶️</span> Run Code
+                </button>
+                
+                <div class="output-container" id="output">
+                    <h5>📤 Output</h5>
+                    <pre id="output-content">Click "Run Code" to test versioning strategy...</pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Content Placeholder -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>📚 Module Content</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                This module includes:
+            </p>
+            <ul style="list-style-type: none; padding-left: 0;">
+                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
+                    ✅ <strong>Interactive Visualizations:</strong> D3.js charts and Mermaid diagrams
+                </li>
+                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
+                    ✅ <strong>Code Playgrounds:</strong> Hands-on Monaco editor with live execution
+                </li>
+                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
+                    ✅ <strong>Knowledge Checks:</strong> Interactive quizzes with instant feedback
+                </li>
+                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
+                    ✅ <strong>Real-World Examples:</strong> Production-grade code samples
+                </li>
+                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
+                    ✅ <strong>Progressive Challenges:</strong> Apply what you've learned
+                </li>
+            </ul>
+        </section>
+
+        <!-- Interactive Quiz Placeholder -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>✅ Knowledge Check: API Versioning Quiz</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                Test your understanding with 10 questions. Instant feedback provided!
+            </p>
+            <div class="quiz-container" id="quiz">
+                <!-- Quiz will be dynamically generated -->
+            </div>
+            <div class="quiz-results" id="quiz-results" style="display: none;">
+                <h3 id="score-display"></h3>
+                <div id="feedback-summary"></div>
+                <button class="retry-btn" id="retry-quiz" style="margin-top: var(--spacing-lg); padding: var(--spacing-md) var(--spacing-xl); background: var(--hub-primary); color: #fff; border: none; border-radius: 8px; cursor: pointer;">
+                    🔄 Retry Quiz
+                </button>
+            </div>
+        </section>
+
+        <!-- Challenge Section -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🏆 Progressive Challenge</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                You're managing a public API with 10,000 active clients. Design a deprecation strategy for a breaking change:
+            </p>
+            <ul style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                <li>Current: <code>GET /users</code> returns array of users</li>
+                <li>New: <code>GET /users</code> should return paginated response with metadata</li>
+                <li>Constraint: Cannot break existing clients</li>
+                <li>Goal: 90% adoption within 6 months</li>
+            </ul>
+            <div id="challenge-hint" style="padding: var(--spacing-lg); background: rgba(251, 191, 36, 0.1); border-radius: 8px; border-left: 4px solid #fbbf24; margin-bottom: var(--spacing-lg); display: none;">
+                <h4 style="color: #fbbf24; margin-bottom: var(--spacing-sm);">💡 Hint</h4>
+                <p style="color: var(--text-secondary);">
+                    Consider using URI versioning (<code>/v2/users</code>) with a clear migration path. 
+                    Add <code>Sunset</code> header to v1 responses. Provide detailed migration documentation.
+                    Monitor v1 usage through analytics to track adoption rate.
+                </p>
+            </div>
+            <button id="show-hint-btn" style="padding: var(--spacing-sm) var(--spacing-lg); background: rgba(251, 191, 36, 0.2); color: #fbbf24; border: 1px solid #fbbf24; border-radius: 8px; cursor: pointer; margin-right: var(--spacing-md);">
+                💡 Show Hint
+            </button>
+            <button id="show-solution-btn" style="padding: var(--spacing-sm) var(--spacing-lg); background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid #10b981; border-radius: 8px; cursor: pointer;">
+                ✅ Show Solution
+            </button>
+            <div id="challenge-solution" style="margin-top: var(--spacing-lg); display: none;">
+                <h4 style="color: var(--hub-primary); margin-bottom: var(--spacing-md);">Recommended Solution</h4>
+                <pre style="background: rgba(26, 31, 58, 0.8); padding: var(--spacing-lg); border-radius: 8px; overflow-x: auto; color: #e5e7eb;"><code># Phase 1: Introduce v2 (Month 1)
+GET /v2/users
+Response:
+{
+  "data": [...users],
+  "pagination": {
+    "page": 1,
+    "per_page": 20,
+    "total": 500
+  }
+}
+
+# Phase 2: Deprecate v1 (Month 2-6)
+GET /v1/users
+Headers:
+  Sunset: Sat, 1 Jul 2026 00:00:00 GMT
+  Deprecation: true
+  Link: </v2/users>; rel="successor-version"
+Response: [...users]
+
+# Phase 3: Monitor adoption
+- Track v1 vs v2 usage in analytics
+- Send email notifications to clients still on v1
+- Provide migration guide in docs
+
+# Phase 4: Sunset v1 (Month 7)
+GET /v1/users
+Response: 410 Gone
+{
+  "error": "This API version has been sunset",
+  "migration_guide": "https://api.example.com/migration/v2"
+}</code></pre>
+            </div>
+        </section>
+
+        <!-- Next Steps -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🚀 Next Steps</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                You've completed API Versioning & Evolution! Continue your learning journey:
+            </p>
+            <div class="next-module-cards">
+                <a href="authentication-security.html" class="next-module-card">
+                    <span class="module-icon">📖</span>
+                    <div>
+                        <h5>Module 4: API Authentication & Security</h5>
+                        <p>Advanced • 50 minutes</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer style="margin-top: var(--spacing-3xl); padding: var(--spacing-xl); text-align: center; color: var(--text-secondary);">
+        <p>© 2026 Asif Hussain. All rights reserved.</p>
+        <p style="margin-top: var(--spacing-sm);">
+            <a href="../../index.html" style="color: var(--hub-primary);">Back to Home</a> • 
+            <a href="../api-design-hub.html" style="color: var(--hub-primary);">API Design Hub</a>
+        </p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
+    <script>
+        // Initialize Mermaid with dark theme
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#7b61ff',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#fff',
+                lineColor: '#00d4ff',
+                secondaryColor: '#1a1f3a',
+                tertiaryColor: '#2a2f4a'
+            }
+        });
+        
+        // D3.js Versioning Strategies Visualization
+        function createVersioningStrategiesViz() {
+            const width = document.getElementById('versioning-strategies-viz').clientWidth;
+            const height = 400;
+            
+            const svg = d3.select('#versioning-strategies-viz')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+            
+            const strategies = [
+                { name: 'URI', x: width * 0.2, y: 200, color: '#00d4ff', example: '/api/v1/users', simplicity: 5, restful: 2, cache: 5 },
+                { name: 'Header', x: width * 0.5, y: 200, color: '#fbbf24', example: 'Accept: v=1', simplicity: 4, restful: 4, cache: 3 },
+                { name: 'Content', x: width * 0.8, y: 200, color: '#10b981', example: 'Accept: v1+json', simplicity: 2, restful: 5, cache: 4 }
+            ];
+            
+            strategies.forEach(strategy => {
+                const g = svg.append('g')
+                    .attr('transform', `translate(${strategy.x}, ${strategy.y})`);
+                
+                // Strategy circle
+                g.append('circle')
+                    .attr('r', 70)
+                    .attr('fill', strategy.color)
+                    .attr('opacity', 0.2)
+                    .attr('stroke', strategy.color)
+                    .attr('stroke-width', 3);
+                
+                // Strategy name
+                g.append('text')
+                    .attr('text-anchor', 'middle')
+                    .attr('y', -10)
+                    .attr('fill', strategy.color)
+                    .attr('font-size', '18px')
+                    .attr('font-weight', 'bold')
+                    .text(strategy.name);
+                
+                // Example
+                g.append('text')
+                    .attr('text-anchor', 'middle')
+                    .attr('y', 10)
+                    .attr('fill', '#fff')
+                    .attr('font-size', '11px')
+                    .text(strategy.example);
+                
+                // Rating bars
+                const metrics = [
+                    { label: 'Simple', value: strategy.simplicity, y: 100 },
+                    { label: 'RESTful', value: strategy.restful, y: 125 },
+                    { label: 'Cache', value: strategy.cache, y: 150 }
+                ];
+                
+                metrics.forEach(metric => {
+                    g.append('text')
+                        .attr('x', -60)
+                        .attr('y', metric.y + 5)
+                        .attr('fill', '#8b92a7')
+                        .attr('font-size', '10px')
+                        .text(metric.label);
+                    
+                    g.append('rect')
+                        .attr('x', -10)
+                        .attr('y', metric.y - 8)
+                        .attr('width', metric.value * 10)
+                        .attr('height', 12)
+                        .attr('fill', strategy.color)
+                        .attr('opacity', 0.7)
+                        .attr('rx', 4);
+                });
+            });
+        }
+        
+        // Monaco Editor Setup
+        require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs' } });
+        
+        require(['vs/editor/editor.main'], function () {
+            const uriCode = `from flask import Flask, jsonify
+
+app = Flask(__name__)
+
+# URI Versioning: /api/v1/users vs /api/v2/users
+@app.route('/api/v1/users', methods=['GET'])
+def get_users_v1():
+    """Version 1: Returns simple array"""
+    users = [
+        {"id": 1, "name": "Alice"},
+        {"id": 2, "name": "Bob"}
+    ]
+    return jsonify(users), 200
+
+@app.route('/api/v2/users', methods=['GET'])
+def get_users_v2():
+    """Version 2: Returns paginated response"""
+    response = {
+        "data": [
+            {"id": 1, "name": "Alice", "email": "alice@example.com"},
+            {"id": 2, "name": "Bob", "email": "bob@example.com"}
+        ],
+        "pagination": {
+            "page": 1,
+            "per_page": 20,
+            "total": 2
+        }
+    }
+    return jsonify(response), 200
+
+# Usage:
+# GET /api/v1/users -> Simple array
+# GET /api/v2/users -> Paginated response`;
+
+            const headerCode = `from flask import Flask, jsonify, request
+
+app = Flask(__name__)
+
+@app.route('/api/users', methods=['GET'])
+def get_users():
+    """Header Versioning: Check Accept-Version header"""
+    version = request.headers.get('Accept-Version', 'v1')
+    
+    if version == 'v1':
+        # Version 1: Simple array
+        users = [
+            {"id": 1, "name": "Alice"},
+            {"id": 2, "name": "Bob"}
+        ]
+        return jsonify(users), 200
+    
+    elif version == 'v2':
+        # Version 2: Paginated response
+        response = {
+            "data": [
+                {"id": 1, "name": "Alice", "email": "alice@example.com"},
+                {"id": 2, "name": "Bob", "email": "bob@example.com"}
+            ],
+            "pagination": {"page": 1, "per_page": 20, "total": 2}
+        }
+        return jsonify(response), 200
+    
+    else:
+        return jsonify({"error": "Unsupported version"}), 400
+
+# Usage:
+# GET /api/users
+#   Header: Accept-Version: v1
+#   Header: Accept-Version: v2`;
+
+            const contentCode = `from flask import Flask, jsonify, request
+
+app = Flask(__name__)
+
+@app.route('/api/users', methods=['GET'])
+def get_users():
+    """Content Negotiation: Check Accept header"""
+    accept = request.headers.get('Accept', 'application/json')
+    
+    if 'application/vnd.api.v1+json' in accept:
+        # Version 1
+        users = [
+            {"id": 1, "name": "Alice"},
+            {"id": 2, "name": "Bob"}
+        ]
+        response = jsonify(users)
+        response.headers['Content-Type'] = 'application/vnd.api.v1+json'
+        return response, 200
+    
+    elif 'application/vnd.api.v2+json' in accept:
+        # Version 2
+        data = {
+            "data": [
+                {"id": 1, "name": "Alice", "email": "alice@example.com"},
+                {"id": 2, "name": "Bob", "email": "bob@example.com"}
+            ],
+            "pagination": {"page": 1, "per_page": 20, "total": 2}
+        }
+        response = jsonify(data)
+        response.headers['Content-Type'] = 'application/vnd.api.v2+json'
+        return response, 200
+    
+    else:
+        return jsonify({"error": "Unsupported media type"}), 415
+
+# Usage:
+# GET /api/users
+#   Header: Accept: application/vnd.api.v1+json
+#   Header: Accept: application/vnd.api.v2+json`;
+            
+            // Create editors
+            const uriEditor = monaco.editor.create(document.getElementById('editor-uri'), {
+                value: uriCode,
+                language: 'python',
+                theme: 'vs-dark',
+                minimap: { enabled: false },
+                fontSize: 14,
+                lineNumbers: 'on',
+                scrollBeyondLastLine: false
+            });
+            
+            const headerEditor = monaco.editor.create(document.getElementById('editor-header'), {
+                value: headerCode,
+                language: 'python',
+                theme: 'vs-dark',
+                minimap: { enabled: false },
+                fontSize: 14,
+                lineNumbers: 'on',
+                scrollBeyondLastLine: false
+            });
+            
+            const contentEditor = monaco.editor.create(document.getElementById('editor-content'), {
+                value: contentCode,
+                language: 'python',
+                theme: 'vs-dark',
+                minimap: { enabled: false },
+                fontSize: 14,
+                lineNumbers: 'on',
+                scrollBeyondLastLine: false
+            });
+            
+            // Tab switching
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    
+                    this.classList.add('active');
+                    const tab = this.getAttribute('data-tab');
+                    document.getElementById(tab).classList.add('active');
+                });
+            });
+            
+            // Run code
+            document.getElementById('run-code').addEventListener('click', function() {
+                const activeTab = document.querySelector('.tab-content.active').id;
+                const output = document.getElementById('output-content');
+                
+                const outputs = {
+                    uri: `# URI Versioning Output
+
+GET /api/v1/users
+[
+  {"id": 1, "name": "Alice"},
+  {"id": 2, "name": "Bob"}
+]
+
+GET /api/v2/users
+{
+  "data": [
+    {"id": 1, "name": "Alice", "email": "alice@example.com"},
+    {"id": 2, "name": "Bob", "email": "bob@example.com"}
+  ],
+  "pagination": {"page": 1, "per_page": 20, "total": 2}
+}
+
+✅ URI versioning: Explicit, easy to test, cacheable!`,
+                    header: `# Header Versioning Output
+
+GET /api/users
+Header: Accept-Version: v1
+[
+  {"id": 1, "name": "Alice"},
+  {"id": 2, "name": "Bob"}
+]
+
+GET /api/users
+Header: Accept-Version: v2
+{
+  "data": [...],
+  "pagination": {"page": 1, "per_page": 20, "total": 2}
+}
+
+✅ Header versioning: Clean URIs, flexible routing!`,
+                    content: `# Content Negotiation Output
+
+GET /api/users
+Header: Accept: application/vnd.api.v1+json
+Content-Type: application/vnd.api.v1+json
+[
+  {"id": 1, "name": "Alice"},
+  {"id": 2, "name": "Bob"}
+]
+
+GET /api/users
+Header: Accept: application/vnd.api.v2+json
+Content-Type: application/vnd.api.v2+json
+{
+  "data": [...],
+  "pagination": {"page": 1, "per_page": 20, "total": 2}
+}
+
+✅ Content negotiation: RESTful, media type based!`
+                };
+                
+                output.textContent = outputs[activeTab];
+            });
+        });
+        
+        // Quiz Questions
+        const quizQuestions = [
+            {
+                question: "Which versioning strategy is most commonly used in practice?",
+                options: ["Content Negotiation", "Header Versioning", "URI Versioning", "Query Parameter"],
+                correct: 2,
+                explanation: "URI versioning (/api/v1/users) is the most popular due to its simplicity and explicit nature."
+            },
+            {
+                question: "What HTTP header indicates when an API version will be sunset?",
+                options: ["Deprecation", "Sunset", "Version-End", "API-Lifecycle"],
+                correct: 1,
+                explanation: "The Sunset header (RFC 8594) indicates when a resource will become unavailable."
+            },
+            {
+                question: "Which change is considered NON-breaking?",
+                options: ["Removing a response field", "Adding an optional query parameter", "Changing field type from string to number", "Making an optional field required"],
+                correct: 1,
+                explanation: "Adding optional parameters is non-breaking. Existing clients can ignore them."
+            },
+            {
+                question: "What HTTP status code should be returned after an API version is sunset?",
+                options: ["404 Not Found", "410 Gone", "400 Bad Request", "301 Moved Permanently"],
+                correct: 1,
+                explanation: "410 Gone indicates the resource is permanently unavailable and won't return."
+            },
+            {
+                question: "How far in advance should you announce API deprecation?",
+                options: ["1 month", "3 months", "6-12 months", "2 weeks"],
+                correct: 2,
+                explanation: "6-12 months notice gives clients adequate time to migrate to new versions."
+            },
+            {
+                question: "Which versioning approach is most RESTful according to Roy Fielding?",
+                options: ["URI Versioning", "Query Parameter", "Content Negotiation", "Header Versioning"],
+                correct: 2,
+                explanation: "Content negotiation via media types is considered the most RESTful approach."
+            },
+            {
+                question: "What is a breaking change?",
+                options: ["Adding a new endpoint", "Removing a response field", "Adding optional parameters", "Improving documentation"],
+                correct: 1,
+                explanation: "Removing response fields breaks clients expecting those fields."
+            },
+            {
+                question: "Which header links to the successor API version?",
+                options: ["Location", "Link with rel='successor-version'", "Next-Version", "Upgrade"],
+                correct: 1,
+                explanation: "The Link header with rel='successor-version' indicates the replacement API."
+            },
+            {
+                question: "What's the main advantage of header-based versioning?",
+                options: ["Easier to test", "Better caching", "Clean URIs", "Faster performance"],
+                correct: 2,
+                explanation: "Header versioning keeps URIs clean and doesn't pollute the URL space."
+            },
+            {
+                question: "When should you bump to a new major version?",
+                options: ["Adding new fields", "Bug fixes", "Breaking changes", "Performance improvements"],
+                correct: 2,
+                explanation: "Major version changes signal breaking changes that require client updates."
+            }
+        ];
+        
+        // Render Quiz
+        function renderQuiz() {
+            const quizContainer = document.getElementById('quiz');
+            quizContainer.innerHTML = quizQuestions.map((q, index) => `
+                <div class="quiz-question" style="margin-bottom: var(--spacing-2xl); padding: var(--spacing-lg); background: rgba(26, 31, 58, 0.5); border-radius: 8px; border: 1px solid var(--module-border);">
+                    <h4 style="color: var(--text-primary); margin-bottom: var(--spacing-md);">Question ${index + 1}: ${q.question}</h4>
+                    <div class="quiz-options">
+                        ${q.options.map((option, optIndex) => `
+                            <label style="display: block; padding: var(--spacing-sm); margin: var(--spacing-xs) 0; background: rgba(123, 97, 255, 0.1); border-radius: 6px; cursor: pointer; transition: all 0.3s;">
+                                <input type="radio" name="question-${index}" value="${optIndex}" style="margin-right: var(--spacing-sm);">
+                                <span style="color: var(--text-secondary);">${option}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                    <div class="question-feedback" id="feedback-${index}" style="display: none; margin-top: var(--spacing-md); padding: var(--spacing-md); border-radius: 6px;"></div>
+                </div>
+            `).join('');
+            
+            quizContainer.innerHTML += `
+                <button id="submit-quiz" style="padding: var(--spacing-md) var(--spacing-2xl); background: var(--hub-primary); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600;">
+                    Submit Quiz
+                </button>
+            `;
+            
+            document.getElementById('submit-quiz').addEventListener('click', gradeQuiz);
+        }
+        
+        // Grade Quiz
+        function gradeQuiz() {
+            let correct = 0;
+            quizQuestions.forEach((q, index) => {
+                const selected = document.querySelector(`input[name="question-${index}"]:checked`);
+                const feedback = document.getElementById(`feedback-${index}`);
+                
+                if (selected) {
+                    const answer = parseInt(selected.value);
+                    if (answer === q.correct) {
+                        correct++;
+                        feedback.style.display = 'block';
+                        feedback.style.background = 'rgba(16, 185, 129, 0.1)';
+                        feedback.style.borderLeft = '4px solid #10b981';
+                        feedback.innerHTML = `<strong style="color: #10b981;">✅ Correct!</strong><br><span style="color: var(--text-secondary);">${q.explanation}</span>`;
+                    } else {
+                        feedback.style.display = 'block';
+                        feedback.style.background = 'rgba(239, 68, 68, 0.1)';
+                        feedback.style.borderLeft = '4px solid #ef4444';
+                        feedback.innerHTML = `<strong style="color: #ef4444;">❌ Incorrect</strong><br><span style="color: var(--text-secondary);">${q.explanation}</span>`;
+                    }
+                }
+            });
+            
+            const percentage = (correct / quizQuestions.length) * 100;
+            const results = document.getElementById('quiz-results');
+            const scoreDisplay = document.getElementById('score-display');
+            
+            results.style.display = 'block';
+            scoreDisplay.textContent = `Score: ${correct}/${quizQuestions.length} (${percentage.toFixed(0)}%)`;
+            scoreDisplay.style.color = percentage >= 70 ? '#10b981' : percentage >= 50 ? '#fbbf24' : '#ef4444';
+            
+            document.getElementById('submit-quiz').disabled = true;
+            document.getElementById('submit-quiz').style.opacity = '0.5';
+        }
+        
+        // Challenge interactions
+        document.getElementById('show-hint-btn')?.addEventListener('click', function() {
+            document.getElementById('challenge-hint').style.display = 'block';
+            this.disabled = true;
+            this.style.opacity = '0.5';
+        });
+        
+        document.getElementById('show-solution-btn')?.addEventListener('click', function() {
+            document.getElementById('challenge-solution').style.display = 'block';
+            this.disabled = true;
+            this.style.opacity = '0.5';
+        });
+        
+        // Retry quiz
+        document.getElementById('retry-quiz')?.addEventListener('click', function() {
+            document.getElementById('quiz-results').style.display = 'none';
+            renderQuiz();
+        });
+        
+        // Initialize
+        renderQuiz();
+        
+        window.addEventListener('load', function() {
+            createVersioningStrategiesViz();
+            console.log("✅ API Versioning & Evolution module loaded successfully!");
+        });
+    </script>
+</body>
+</html>

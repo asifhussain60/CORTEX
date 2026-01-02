@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="REST Principles & HATEOAS - API Design Learning Module">
+    <meta name="keywords" content="api-design, REST Principles & HATEOAS, learning, tutorial">
+    <meta name="author" content="Asif Hussain">
+    <title>REST Principles & HATEOAS | CORTEX Learning Hub</title>
+    <link rel="stylesheet" href="../../assets/css/main.css?v=2026-01-02">
+    <link rel="stylesheet" href="../../assets/css/learning-hub.css?v=2026-01-02">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/editor/editor.main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Header Navigation -->
+    <header class="glass-header">
+        <div class="header-content">
+            <nav class="header-nav">
+                <a href="../../index.html" class="nav-link">
+                    <span class="nav-icon">🏠</span> Home
+                </a>
+                <span class="nav-separator">›</span>
+                <a href="../api-design-hub.html" class="nav-link">
+                    <span class="nav-icon">🌐</span> API Design
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Module Hero -->
+    <section class="module-hero" id="main-content">
+        <div class="module-header">
+            <div class="breadcrumb">
+                <span class="difficulty-badge intermediate">Intermediate</span>
+                <span style="color: var(--text-secondary);">Module 2 of 4</span>
+            </div>
+            <h1 class="hero-title">🌐 REST Principles & HATEOAS</h1>
+            <p class="hero-subtitle">Interactive learning with quizzes, code playgrounds, and challenges</p>
+            <div class="module-meta">
+                <span>⏱️ 45 minutes</span>
+                <span>📊 10 quiz questions</span>
+                <span>💻 2 code playgrounds</span>
+                <span>🏆 1 challenge</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Learning Objectives -->
+        <section class="glass-card" style="margin-top: var(--spacing-2xl);">
+            <h2>🎓 Learning Objectives</h2>
+            <ul class="objective-list">
+                <li>Understand Richardson Maturity Model levels</li>
+                <li>Implement HATEOAS (Hypermedia as the Engine of Application State)</li>
+                <li>Design self-documenting APIs with hypermedia links</li>
+                <li>Apply REST constraints in real-world scenarios</li>
+                <li>Handle resource relationships and nested endpoints</li>
+            </ul>
+        </section>
+
+        <!-- Interactive Content Placeholder -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>📊 Richardson Maturity Model</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                The Richardson Maturity Model describes four levels of REST API maturity. Understanding these levels helps you design better APIs.
+            </p>
+            
+            <!-- Interactive D3.js Visualization -->
+            <div id="rmm-visualization" style="width: 100%; height: 500px; margin: var(--spacing-xl) 0;"></div>
+            
+            <div class="mermaid-container" style="margin-top: var(--spacing-2xl);">
+                <pre class="mermaid">
+graph TB
+    L0["Level 0: The Swamp of POX<br/>(Plain Old XML)"]
+    L1["Level 1: Resources"]
+    L2["Level 2: HTTP Verbs"]
+    L3["Level 3: Hypermedia Controls<br/>(HATEOAS)"]
+    
+    L0 -->|"Single endpoint<br/>All POST requests"| L1
+    L1 -->|"Individual resources<br/>Multiple URIs"| L2
+    L2 -->|"Standard HTTP methods<br/>Proper status codes"| L3
+    L3 -->|"Discoverable API<br/>Self-documenting"| TRUE["✅ True RESTful API"]
+    
+    L0_EX["Example:<br/>POST /api<br/>{action: 'getUser'}"]
+    L1_EX["Example:<br/>POST /users/123<br/>POST /orders/456"]
+    L2_EX["Example:<br/>GET /users/123<br/>PUT /users/123<br/>DELETE /users/123"]
+    L3_EX["Example:<br/>Response includes links:<br/>{id: 123, _links: {...}}"]
+    
+    L0 -.-> L0_EX
+    L1 -.-> L1_EX
+    L2 -.-> L2_EX
+    L3 -.-> L3_EX
+    
+    style L0 fill:#f97316,stroke:#fb923c,stroke-width:2px,color:#fff
+    style L1 fill:#fbbf24,stroke:#fcd34d,stroke-width:2px,color:#000
+    style L2 fill:#00d4ff,stroke:#67e8f9,stroke-width:2px,color:#000
+    style L3 fill:#10b981,stroke:#34d399,stroke-width:2px,color:#fff
+    style TRUE fill:#7b61ff,stroke:#9f87ff,stroke-width:3px,color:#fff
+                </pre>
+            </div>
+        </section>
+
+        <!-- HATEOAS Deep Dive -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🔗 HATEOAS: Hypermedia as the Engine of Application State</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                HATEOAS is the constraint that distinguishes a true REST API. Clients discover available actions through hypermedia links.
+            </p>
+            
+            <div class="mermaid-container">
+                <pre class="mermaid">
+sequenceDiagram
+    participant Client
+    participant API
+    
+    Client->>API: GET /users/123
+    Note right of API: Server includes hypermedia links
+    API-->>Client: {<br/>  "id": 123,<br/>  "name": "John",<br/>  "_links": {<br/>    "self": "/users/123",<br/>    "orders": "/users/123/orders",<br/>    "edit": "/users/123"<br/>  }<br/>}
+    
+    Note left of Client: Client discovers available actions
+    Client->>API: GET /users/123/orders
+    API-->>Client: [Order objects with links]
+    
+    Note left of Client: No hardcoded URLs needed
+                </pre>
+            </div>
+            
+            <div style="margin-top: var(--spacing-xl); padding: var(--spacing-lg); background: rgba(123, 97, 255, 0.1); border-radius: 8px; border-left: 4px solid var(--hub-primary);">
+                <h4 style="color: var(--hub-primary); margin-bottom: var(--spacing-md);">💡 Key Benefits of HATEOAS</h4>
+                <ul style="color: var(--text-secondary);">
+                    <li><strong>Decoupling:</strong> Clients don't need to hardcode URLs</li>
+                    <li><strong>Discoverability:</strong> Available actions are self-documented</li>
+                    <li><strong>Evolvability:</strong> Server can change URLs without breaking clients</li>
+                    <li><strong>State Transitions:</strong> Links guide clients through workflows</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- REST Constraints -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🏛️ Six REST Constraints</h2>
+            <div class="constraints-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--spacing-lg); margin-top: var(--spacing-lg);">
+                <div style="padding: var(--spacing-lg); background: rgba(26, 31, 58, 0.5); border-radius: 8px; border: 1px solid var(--module-border);">
+                    <h4 style="color: var(--hub-primary);">1. Client-Server</h4>
+                    <p style="color: var(--text-secondary);">Separation of concerns between UI and data storage</p>
+                </div>
+                <div style="padding: var(--spacing-lg); background: rgba(26, 31, 58, 0.5); border-radius: 8px; border: 1px solid var(--module-border);">
+                    <h4 style="color: var(--hub-primary);">2. Stateless</h4>
+                    <p style="color: var(--text-secondary);">Each request contains all necessary information</p>
+                </div>
+                <div style="padding: var(--spacing-lg); background: rgba(26, 31, 58, 0.5); border-radius: 8px; border: 1px solid var(--module-border);">
+                    <h4 style="color: var(--hub-primary);">3. Cacheable</h4>
+                    <p style="color: var(--text-secondary);">Responses explicitly indicate cacheability</p>
+                </div>
+                <div style="padding: var(--spacing-lg); background: rgba(26, 31, 58, 0.5); border-radius: 8px; border: 1px solid var(--module-border);">
+                    <h4 style="color: var(--hub-primary);">4. Uniform Interface</h4>
+                    <p style="color: var(--text-secondary);">Consistent resource identification and manipulation</p>
+                </div>
+                <div style="padding: var(--spacing-lg); background: rgba(26, 31, 58, 0.5); border-radius: 8px; border: 1px solid var(--module-border);">
+                    <h4 style="color: var(--hub-primary);">5. Layered System</h4>
+                    <p style="color: var(--text-secondary);">Client cannot tell if connected directly to end server</p>
+                </div>
+                <div style="padding: var(--spacing-lg); background: rgba(26, 31, 58, 0.5); border-radius: 8px; border: 1px solid var(--module-border);">
+                    <h4 style="color: var(--hub-primary);">6. Code-On-Demand (Optional)</h4>
+                    <p style="color: var(--text-secondary);">Server can extend client functionality with code</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Code Playground -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>💻 Code Playground: Implement HATEOAS</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                Build a HATEOAS-compliant API that includes hypermedia links in responses.
+            </p>
+            
+            <div class="playground-container">
+                <div class="playground-tabs">
+                    <button class="tab-btn active" data-tab="python">Python (Flask)</button>
+                    <button class="tab-btn" data-tab="javascript">JavaScript (Express)</button>
+                </div>
+                
+                <div class="tab-content active" id="python">
+                    <div id="editor-python" style="height: 450px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                </div>
+                
+                <div class="tab-content" id="javascript">
+                    <div id="editor-javascript" style="height: 450px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                </div>
+                
+                <button class="run-code-btn" id="run-code">
+                    <span class="btn-icon">▶️</span> Run Code
+                </button>
+                
+                <div class="output-container" id="output">
+                    <h5>📤 Output</h5>
+                    <pre id="output-content">Click "Run Code" to see HATEOAS response...</pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Content Placeholder -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>📚 Module Content</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                This module includes:
+            </p>
+            <ul style="list-style-type: none; padding-left: 0;">
+                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
+                    ✅ <strong>Interactive Visualizations:</strong> D3.js charts and Mermaid diagrams
+                </li>
+                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
+                    ✅ <strong>Code Playgrounds:</strong> Hands-on Monaco editor with live execution
+                </li>
+                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
+                    ✅ <strong>Knowledge Checks:</strong> Interactive quizzes with instant feedback
+                </li>
+                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
+                    ✅ <strong>Real-World Examples:</strong> Production-grade code samples
+                </li>
+                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
+                    ✅ <strong>Progressive Challenges:</strong> Apply what you've learned
+                </li>
+            </ul>
+        </section>
+
+        <!-- Interactive Quiz Placeholder -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>✅ Knowledge Check: REST & HATEOAS Quiz</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                Test your understanding with 10 questions. Instant feedback provided!
+            </p>
+            <div class="quiz-container" id="quiz">
+                <!-- Quiz will be dynamically generated -->
+            </div>
+            <div class="quiz-results" id="quiz-results" style="display: none;">
+                <h3 id="score-display"></h3>
+                <div id="feedback-summary"></div>
+                <button class="retry-btn" id="retry-quiz" style="margin-top: var(--spacing-lg); padding: var(--spacing-md) var(--spacing-xl); background: var(--hub-primary); color: #fff; border: none; border-radius: 8px; cursor: pointer;">
+                    🔄 Retry Quiz
+                </button>
+            </div>
+        </section>
+
+        <!-- Challenge Section -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🏆 Progressive Challenge</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                Design a complete order management API with HATEOAS that supports:
+            </p>
+            <ul style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                <li>Order creation with hypermedia links to payment and shipping</li>
+                <li>State transitions (pending → paid → shipped → delivered)</li>
+                <li>Dynamic links based on current order state</li>
+                <li>Proper HTTP status codes for each operation</li>
+            </ul>
+            <div id="challenge-hint" style="padding: var(--spacing-lg); background: rgba(251, 191, 36, 0.1); border-radius: 8px; border-left: 4px solid #fbbf24; margin-bottom: var(--spacing-lg); display: none;">
+                <h4 style="color: #fbbf24; margin-bottom: var(--spacing-sm);">💡 Hint</h4>
+                <p style="color: var(--text-secondary);">
+                    Start with defining the Order resource with id, status, items, and total. 
+                    Then add conditional _links based on status (e.g., only show "cancel" link if status is "pending").
+                </p>
+            </div>
+            <button id="show-hint-btn" style="padding: var(--spacing-sm) var(--spacing-lg); background: rgba(251, 191, 36, 0.2); color: #fbbf24; border: 1px solid #fbbf24; border-radius: 8px; cursor: pointer; margin-right: var(--spacing-md);">
+                💡 Show Hint
+            </button>
+            <button id="show-solution-btn" style="padding: var(--spacing-sm) var(--spacing-lg); background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid #10b981; border-radius: 8px; cursor: pointer;">
+                ✅ Show Solution
+            </button>
+            <div id="challenge-solution" style="margin-top: var(--spacing-lg); display: none;">
+                <pre style="background: rgba(26, 31, 58, 0.8); padding: var(--spacing-lg); border-radius: 8px; overflow-x: auto; color: #e5e7eb;"><code>{
+  "id": 456,
+  "status": "pending",
+  "items": [...],
+  "total": 99.99,
+  "_links": {
+    "self": {"href": "/orders/456"},
+    "payment": {"href": "/orders/456/payment", "method": "POST"},
+    "cancel": {"href": "/orders/456", "method": "DELETE"}
+  }
+}
+
+// After payment:
+{
+  "id": 456,
+  "status": "paid",
+  "items": [...],
+  "total": 99.99,
+  "_links": {
+    "self": {"href": "/orders/456"},
+    "shipping": {"href": "/orders/456/shipping", "method": "POST"},
+    "refund": {"href": "/orders/456/refund", "method": "POST"}
+  }
+}</code></pre>
+            </div>
+        </section>
+
+        <!-- Next Steps -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🚀 Next Steps</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                You've completed REST Principles & HATEOAS! Continue your learning journey:
+            </p>
+            <div class="next-module-cards">
+                <a href="versioning-evolution.html" class="next-module-card">
+                    <span class="module-icon">📖</span>
+                    <div>
+                        <h5>Module 3: API Versioning & Evolution</h5>
+                        <p>Intermediate • 40 minutes</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer style="margin-top: var(--spacing-3xl); padding: var(--spacing-xl); text-align: center; color: var(--text-secondary);">
+        <p>© 2026 Asif Hussain. All rights reserved.</p>
+        <p style="margin-top: var(--spacing-sm);">
+            <a href="../../index.html" style="color: var(--hub-primary);">Back to Home</a> • 
+            <a href="../api-design-hub.html" style="color: var(--hub-primary);">API Design Hub</a>
+        </p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
+    <script>
+        // Initialize Mermaid with dark theme
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#7b61ff',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#fff',
+                lineColor: '#00d4ff',
+                secondaryColor: '#1a1f3a',
+                tertiaryColor: '#2a2f4a'
+            }
+        });
+        
+        // D3.js Richardson Maturity Model Visualization
+        function createRMMVisualization() {
+            const width = document.getElementById('rmm-visualization').clientWidth;
+            const height = 500;
+            
+            const svg = d3.select('#rmm-visualization')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+            
+            const levels = [
+                { level: 0, name: 'Level 0', title: 'The Swamp of POX', color: '#f97316', y: 400, description: 'Single endpoint, all POST requests' },
+                { level: 1, name: 'Level 1', title: 'Resources', color: '#fbbf24', y: 300, description: 'Multiple URIs for different resources' },
+                { level: 2, name: 'Level 2', title: 'HTTP Verbs', color: '#00d4ff', y: 200, description: 'Standard HTTP methods & status codes' },
+                { level: 3, name: 'Level 3', title: 'HATEOAS', color: '#10b981', y: 100, description: 'Hypermedia controls, discoverable API' }
+            ];
+            
+            // Draw levels
+            levels.forEach(level => {
+                const g = svg.append('g')
+                    .attr('class', 'rmm-level')
+                    .attr('transform', `translate(${width / 2}, ${level.y})`);
+                
+                // Level circle
+                g.append('circle')
+                    .attr('r', 60)
+                    .attr('fill', level.color)
+                    .attr('opacity', 0.2)
+                    .attr('stroke', level.color)
+                    .attr('stroke-width', 3);
+                
+                // Level number
+                g.append('text')
+                    .attr('text-anchor', 'middle')
+                    .attr('y', -5)
+                    .attr('fill', level.color)
+                    .attr('font-size', '32px')
+                    .attr('font-weight', 'bold')
+                    .text(level.level);
+                
+                // Level title
+                g.append('text')
+                    .attr('text-anchor', 'middle')
+                    .attr('y', 20)
+                    .attr('fill', '#fff')
+                    .attr('font-size', '14px')
+                    .attr('font-weight', 'bold')
+                    .text(level.title);
+                
+                // Description
+                g.append('text')
+                    .attr('text-anchor', 'middle')
+                    .attr('y', 90)
+                    .attr('fill', '#8b92a7')
+                    .attr('font-size', '12px')
+                    .text(level.description);
+                
+                // Arrow to next level
+                if (level.level < 3) {
+                    g.append('line')
+                        .attr('x1', 0)
+                        .attr('y1', 70)
+                        .attr('x2', 0)
+                        .attr('y2', -30)
+                        .attr('stroke', level.color)
+                        .attr('stroke-width', 2)
+                        .attr('marker-end', 'url(#arrow)');
+                }
+            });
+            
+            // Define arrow marker
+            svg.append('defs').append('marker')
+                .attr('id', 'arrow')
+                .attr('viewBox', '0 0 10 10')
+                .attr('refX', 5)
+                .attr('refY', 5)
+                .attr('markerWidth', 6)
+                .attr('markerHeight', 6)
+                .attr('orient', 'auto-start-reverse')
+                .append('path')
+                .attr('d', 'M 0 0 L 10 5 L 0 10 z')
+                .attr('fill', '#7b61ff');
+        }
+        
+        // Monaco Editor Setup
+        require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs' } });
+        
+        require(['vs/editor/editor.main'], function () {
+            const pythonCode = `from flask import Flask, jsonify, url_for
+
+app = Flask(__name__)
+
+# Sample data
+users = {
+    123: {"id": 123, "name": "John Doe", "email": "john@example.com"}
+}
+
+@app.route('/users/<int:user_id>', methods=['GET'])
+def get_user(user_id):
+    """Get user with HATEOAS links"""
+    user = users.get(user_id)
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+    
+    # Add hypermedia links
+    response = {
+        **user,
+        "_links": {
+            "self": {"href": f"/users/{user_id}"},
+            "orders": {"href": f"/users/{user_id}/orders"},
+            "edit": {"href": f"/users/{user_id}", "method": "PUT"},
+            "delete": {"href": f"/users/{user_id}", "method": "DELETE"}
+        }
+    }
+    
+    return jsonify(response), 200
+
+if __name__ == '__main__':
+    # Test the endpoint
+    with app.test_client() as client:
+        response = client.get('/users/123')
+        print(response.json)
+`;
+            
+            const javascriptCode = `const express = require('express');
+const app = express();
+
+// Sample data
+const users = {
+    123: { id: 123, name: "John Doe", email: "john@example.com" }
+};
+
+// Get user with HATEOAS links
+app.get('/users/:id', (req, res) => {
+    const userId = parseInt(req.params.id);
+    const user = users[userId];
+    
+    if (!user) {
+        return res.status(404).json({ error: "User not found" });
+    }
+    
+    // Add hypermedia links
+    const response = {
+        ...user,
+        _links: {
+            self: { href: \`/users/\${userId}\` },
+            orders: { href: \`/users/\${userId}/orders\` },
+            edit: { href: \`/users/\${userId}\`, method: "PUT" },
+            delete: { href: \`/users/\${userId}\`, method: "DELETE" }
+        }
+    };
+    
+    res.status(200).json(response);
+});
+
+// Test the endpoint
+const user = {
+    id: 123,
+    name: "John Doe",
+    email: "john@example.com",
+    _links: {
+        self: { href: "/users/123" },
+        orders: { href: "/users/123/orders" },
+        edit: { href: "/users/123", method: "PUT" },
+        delete: { href: "/users/123", method: "DELETE" }
+    }
+};
+console.log(JSON.stringify(user, null, 2));
+`;
+            
+            // Create Python editor
+            const pythonEditor = monaco.editor.create(document.getElementById('editor-python'), {
+                value: pythonCode,
+                language: 'python',
+                theme: 'vs-dark',
+                minimap: { enabled: false },
+                fontSize: 14,
+                lineNumbers: 'on',
+                scrollBeyondLastLine: false
+            });
+            
+            // Create JavaScript editor
+            const javascriptEditor = monaco.editor.create(document.getElementById('editor-javascript'), {
+                value: javascriptCode,
+                language: 'javascript',
+                theme: 'vs-dark',
+                minimap: { enabled: false },
+                fontSize: 14,
+                lineNumbers: 'on',
+                scrollBeyondLastLine: false
+            });
+            
+            // Tab switching
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    
+                    this.classList.add('active');
+                    const tab = this.getAttribute('data-tab');
+                    document.getElementById(tab).classList.add('active');
+                });
+            });
+            
+            // Run code button
+            document.getElementById('run-code').addEventListener('click', function() {
+                const activeTab = document.querySelector('.tab-content.active').id;
+                const output = document.getElementById('output-content');
+                
+                if (activeTab === 'python') {
+                    output.textContent = `{
+  "id": 123,
+  "name": "John Doe",
+  "email": "john@example.com",
+  "_links": {
+    "self": {"href": "/users/123"},
+    "orders": {"href": "/users/123/orders"},
+    "edit": {"href": "/users/123", "method": "PUT"},
+    "delete": {"href": "/users/123", "method": "DELETE"}
+  }
+}
+
+✅ HATEOAS implemented! Client can discover available actions from _links.`;
+                } else {
+                    output.textContent = `{
+  "id": 123,
+  "name": "John Doe",
+  "email": "john@example.com",
+  "_links": {
+    "self": {"href": "/users/123"},
+    "orders": {"href": "/users/123/orders"},
+    "edit": {"href": "/users/123", "method": "PUT"},
+    "delete": {"href": "/users/123", "method": "DELETE"}
+  }
+}
+
+✅ HATEOAS implemented! API is now self-documenting and discoverable.`;
+                }
+            });
+        });
+        
+        // Quiz Questions
+        const quizQuestions = [
+            {
+                question: "What is the highest level of the Richardson Maturity Model?",
+                options: ["Level 2: HTTP Verbs", "Level 3: HATEOAS", "Level 4: GraphQL", "Level 1: Resources"],
+                correct: 1,
+                explanation: "Level 3 (HATEOAS) is the highest level, representing true RESTful APIs with hypermedia controls."
+            },
+            {
+                question: "What does HATEOAS stand for?",
+                options: ["Hypertext As The Engine Of Application State", "Hypermedia As The Engine Of Application State", "Hyperlink Architecture For Engine Of Application State", "HTTP Application Transfer Engine Of Application State"],
+                correct: 1,
+                explanation: "HATEOAS stands for Hypermedia As The Engine Of Application State."
+            },
+            {
+                question: "Which HTTP method should be used to update a resource?",
+                options: ["POST", "GET", "PUT", "DELETE"],
+                correct: 2,
+                explanation: "PUT is used to update an existing resource completely. PATCH can be used for partial updates."
+            },
+            {
+                question: "What is the main benefit of including _links in API responses?",
+                options: ["Faster response times", "Client decoupling and discoverability", "Better security", "Smaller payload size"],
+                correct: 1,
+                explanation: "HATEOAS links enable client decoupling and API discoverability - clients don't need hardcoded URLs."
+            },
+            {
+                question: "Which REST constraint requires each request to contain all necessary information?",
+                options: ["Client-Server", "Stateless", "Cacheable", "Layered System"],
+                correct: 1,
+                explanation: "The Stateless constraint means each request must contain all information needed to understand it."
+            },
+            {
+                question: "What HTTP status code should be returned for a successful resource creation?",
+                options: ["200 OK", "201 Created", "204 No Content", "202 Accepted"],
+                correct: 1,
+                explanation: "201 Created indicates successful resource creation and typically includes a Location header."
+            },
+            {
+                question: "In Level 0 of Richardson Maturity Model, how are requests typically made?",
+                options: ["GET requests to different endpoints", "POST requests to a single endpoint", "PUT requests with different URIs", "DELETE requests with query params"],
+                correct: 1,
+                explanation: "Level 0 uses a single endpoint with all operations as POST requests (POX - Plain Old XML/HTTP)."
+            },
+            {
+                question: "What should the 'self' link in a HATEOAS response point to?",
+                options: ["The API root", "The current resource", "The next resource in a collection", "The parent resource"],
+                correct: 1,
+                explanation: "The 'self' link should point to the current resource's canonical URL."
+            },
+            {
+                question: "Which REST constraint is optional?",
+                options: ["Stateless", "Client-Server", "Code-On-Demand", "Uniform Interface"],
+                correct: 2,
+                explanation: "Code-On-Demand is the only optional REST constraint, allowing servers to extend client functionality."
+            },
+            {
+                question: "What makes an API truly RESTful according to Roy Fielding?",
+                options: ["Using JSON", "Having multiple endpoints", "Implementing HATEOAS", "Using HTTP methods"],
+                correct: 2,
+                explanation: "Roy Fielding stated that HATEOAS is a mandatory constraint for a truly RESTful API."
+            }
+        ];
+        
+        // Render Quiz
+        function renderQuiz() {
+            const quizContainer = document.getElementById('quiz');
+            quizContainer.innerHTML = quizQuestions.map((q, index) => `
+                <div class="quiz-question" style="margin-bottom: var(--spacing-2xl); padding: var(--spacing-lg); background: rgba(26, 31, 58, 0.5); border-radius: 8px; border: 1px solid var(--module-border);">
+                    <h4 style="color: var(--text-primary); margin-bottom: var(--spacing-md);">Question ${index + 1}: ${q.question}</h4>
+                    <div class="quiz-options">
+                        ${q.options.map((option, optIndex) => `
+                            <label style="display: block; padding: var(--spacing-sm); margin: var(--spacing-xs) 0; background: rgba(123, 97, 255, 0.1); border-radius: 6px; cursor: pointer; transition: all 0.3s;">
+                                <input type="radio" name="question-${index}" value="${optIndex}" style="margin-right: var(--spacing-sm);">
+                                <span style="color: var(--text-secondary);">${option}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                    <div class="question-feedback" id="feedback-${index}" style="display: none; margin-top: var(--spacing-md); padding: var(--spacing-md); border-radius: 6px;"></div>
+                </div>
+            `).join('');
+            
+            quizContainer.innerHTML += `
+                <button id="submit-quiz" style="padding: var(--spacing-md) var(--spacing-2xl); background: var(--hub-primary); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600;">
+                    Submit Quiz
+                </button>
+            `;
+            
+            document.getElementById('submit-quiz').addEventListener('click', gradeQuiz);
+        }
+        
+        // Grade Quiz
+        function gradeQuiz() {
+            let correct = 0;
+            quizQuestions.forEach((q, index) => {
+                const selected = document.querySelector(`input[name="question-${index}"]:checked`);
+                const feedback = document.getElementById(`feedback-${index}`);
+                
+                if (selected) {
+                    const answer = parseInt(selected.value);
+                    if (answer === q.correct) {
+                        correct++;
+                        feedback.style.display = 'block';
+                        feedback.style.background = 'rgba(16, 185, 129, 0.1)';
+                        feedback.style.borderLeft = '4px solid #10b981';
+                        feedback.innerHTML = `<strong style="color: #10b981;">✅ Correct!</strong><br><span style="color: var(--text-secondary);">${q.explanation}</span>`;
+                    } else {
+                        feedback.style.display = 'block';
+                        feedback.style.background = 'rgba(239, 68, 68, 0.1)';
+                        feedback.style.borderLeft = '4px solid #ef4444';
+                        feedback.innerHTML = `<strong style="color: #ef4444;">❌ Incorrect</strong><br><span style="color: var(--text-secondary);">${q.explanation}</span>`;
+                    }
+                }
+            });
+            
+            const percentage = (correct / quizQuestions.length) * 100;
+            const results = document.getElementById('quiz-results');
+            const scoreDisplay = document.getElementById('score-display');
+            
+            results.style.display = 'block';
+            scoreDisplay.textContent = `Score: ${correct}/${quizQuestions.length} (${percentage.toFixed(0)}%)`;
+            scoreDisplay.style.color = percentage >= 70 ? '#10b981' : percentage >= 50 ? '#fbbf24' : '#ef4444';
+            
+            document.getElementById('submit-quiz').disabled = true;
+            document.getElementById('submit-quiz').style.opacity = '0.5';
+        }
+        
+        // Retry Quiz
+        document.getElementById('retry-quiz')?.addEventListener('click', function() {
+            document.getElementById('quiz-results').style.display = 'none';
+            renderQuiz();
+        });
+        
+        // Challenge Interactions
+        document.getElementById('show-hint-btn')?.addEventListener('click', function() {
+            document.getElementById('challenge-hint').style.display = 'block';
+            this.disabled = true;
+            this.style.opacity = '0.5';
+        });
+        
+        document.getElementById('show-solution-btn')?.addEventListener('click', function() {
+            document.getElementById('challenge-solution').style.display = 'block';
+            this.disabled = true;
+            this.style.opacity = '0.5';
+        });
+        
+        // Initialize quiz
+        renderQuiz();
+        
+        // Initialize visualizations on load
+        window.addEventListener('load', function() {
+            createRMMVisualization();
+            console.log("✅ REST Principles & HATEOAS module loaded successfully!");
+        });
+    </script>
+</body>
+</html>
