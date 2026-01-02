@@ -86,13 +86,12 @@ class TestContinuationPrompt:
         prompt_file = plan_dir / "tracking" / "CONTINUATION-PROMPT.md"
         assert prompt_file.exists()
         
-        # Verify content
+        # Verify content (minimal format)
         content = prompt_file.read_text(encoding="utf-8")
         assert "test-plan" in content
-        assert "test-123" in content
-        assert "Phase 1" in content
-        assert "Phase 2" in content
-        assert "Continue executing plan" in content
+        assert "Phase 1 complete → Begin Phase 2" in content
+        assert "00-master-plan.md" in content
+        assert "See 00-master-plan.md for full context" in content
     
     def test_continuation_prompt_includes_progress(self, orchestrator, plan_dir):
         """Test that continuation prompt shows accurate progress."""
@@ -117,6 +116,8 @@ class TestContinuationPrompt:
         content = (plan_dir / "tracking" / "CONTINUATION-PROMPT.md").read_text(encoding="utf-8")
         assert "2/3 phases" in content
         assert "66%" in content or "67%" in content  # Allow rounding difference
+        assert "Phase 2 complete → Begin Phase 3" in content
+        assert "00-master-plan.md" in content
     
     def test_continuation_prompt_disabled(self, plan_dir):
         """Test that continuation prompt respects disabled config."""
@@ -155,7 +156,8 @@ class TestContinuationPrompt:
         assert result is True
         
         content = (plan_dir / "tracking" / "CONTINUATION-PROMPT.md").read_text(encoding="utf-8")
-        assert "Artifacts Generated:** 2" in content
+        assert "Artifacts:** 2" in content
+        assert "00-master-plan.md" in content
 
 
 class TestTokenUsageMonitoring:
@@ -281,27 +283,29 @@ class TestSessionManagementIntegration:
         
         assert prompt_created is True
         
-        # Verify prompt contains all necessary information
+        # Verify prompt contains minimal necessary information
         prompt_file = plan_dir / "tracking" / "CONTINUATION-PROMPT.md"
         content = prompt_file.read_text(encoding="utf-8")
         
-        # Check for key sections
+        # Check for key sections (minimal format)
         assert "Session Continuation Prompt" in content
-        assert "Quick Context" in content
-        assert "Continuation Instructions" in content
-        assert "State Summary" in content
-        assert "Important Notes" in content
+        assert "Resume Execution" in content
+        assert "Quick Status" in content
         
         # Check for specific data
         assert "integration-test-plan" in content
-        assert "int-test-123" in content
+        assert "int-test-123" in content or "plan_id=" in content
         assert "1/3 phases" in content
-        assert "Phase 1" in content
-        assert "Phase 2" in content
+        assert "Phase 1 complete → Begin Phase 2" in content
         
-        # Check for copy-paste prompt
+        # Check for copy-paste prompt and master plan reference
         assert "Follow instructions in .github/prompts/CORTEX.prompt.md" in content
-        assert "PlanningStateMCP" in content or "get_plan_status" in content
+        assert "00-master-plan.md" in content
+        assert "See 00-master-plan.md for full context" in content
+        
+        # Ensure verbose sections are NOT present
+        assert "Important Notes" not in content
+        assert "State Recovery:" not in content
     
     def test_session_handoff_at_plan_completion(self, orchestrator, plan_dir):
         """Test continuation prompt when plan is complete."""
@@ -326,7 +330,7 @@ class TestSessionManagementIntegration:
         content = (plan_dir / "tracking" / "CONTINUATION-PROMPT.md").read_text(encoding="utf-8")
         assert "3/3 phases" in content
         assert "100%" in content
-        assert "Plan Complete" in content
+        assert "00-master-plan.md" in content
 
 
 if __name__ == "__main__":

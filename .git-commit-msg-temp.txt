@@ -1,0 +1,46 @@
+refactor: Simplify continuation prompt to minimal format
+
+CHANGE: Reduced continuation prompt from verbose (74 lines) to minimal (19 lines)
+
+RATIONALE:
+- Master plan (00-master-plan.md) already contains full context
+- Continuation prompt should only reference the plan, not duplicate content
+- Bare minimum needed: plan location, which phase to continue, quick status
+
+BEFORE (verbose):
+- Quick Context section with all completed phases listed
+- Full continuation instructions with Python code
+- Git Checkpoints section (5 commits with full messages)
+- Database State section (4 fields)
+- Key Files section (4 file paths)
+- Important Notes section (5 detailed reminders)
+Total: ~2KB of duplicated information
+
+AFTER (minimal):
+- Plan name and progress percentage
+- Single copy-paste prompt with plan location and phase to continue
+- Quick status: last checkpoint hash, artifact count, database plan_id
+- Reference to 00-master-plan.md for full context
+Total: ~400 bytes, 80% reduction
+
+TEMPLATE CHANGES (templates/continuation-prompt.jinja2):
+- Removed: completed_phases_list loop, verbose git history, database state details
+- Removed: Key Files section, Important Notes section
+- Kept: Plan reference, phase transition (X complete → Begin Y), quick status
+- Format: 19 lines vs 74 lines (74% reduction)
+
+TEST CHANGES (tests/orchestration_4_0/base/test_session_management.py):
+- Added: Enforcement that verbose sections NOT present
+- Updated: All assertions to check for minimal format
+- Validates: 00-master-plan.md reference required
+- Validates: Phase transition format
+- Validates: No verbose sections present
+
+BENEFITS:
+✅ 80% smaller file size (400 bytes vs 2KB)
+✅ No content duplication (defers to master plan)
+✅ Faster to read and copy-paste
+✅ Single source of truth (master plan)
+✅ Still includes essential status (checkpoint, artifacts, plan_id)
+
+Tests: 12/12 passing with minimal format enforcement
