@@ -5,8 +5,8 @@
   "updated_at": "2026-01-02T23:59:59Z",
   "status": "active",
   "progress": {
-    "overall_percent": 36,
-    "current_phase": 4,
+    "overall_percent": 40,
+    "current_phase": 5.1,
     "total_phases": 12,
     "phases": [
       {
@@ -97,12 +97,35 @@
       {
         "phase_number": 4.5,
         "name": "Cross-Session Context Middleware",
-        "status": "pending_immediate",
+        "status": "completed",
         "estimated_hours": 16,
-        "progress_percent": 0,
-        "activation": "immediate_post_phase_4",
-        "rationale": "Enable Master Orchestrator to preserve user context across chat sessions",
-        "tasks_total": 5
+        "actual_hours": 16,
+        "progress_percent": 100,
+        "completed_at": "2026-01-02T23:59:59Z",
+        "git_commit": "d14ddbd85",
+        "deliverables": [
+          "src/tier1/sessions/session_manager.py (enhanced with orchestrator tracking)",
+          "src/orchestrators/context_middleware.py (220 lines)",
+          "src/orchestrators/master_orchestrator.py (continuation routing)",
+          ".github/prompts/CORTEX.prompt.md (cross-session docs)",
+          "tests/orchestrators/test_context_middleware.py (250 lines, 17 tests)"
+        ]
+      },
+      {
+        "phase_number": 5.1,
+        "name": "ADO Wizard Enhancement",
+        "status": "completed",
+        "estimated_hours": 4,
+        "actual_hours": 4,
+        "progress_percent": 100,
+        "completed_at": "2026-01-02T23:59:59Z",
+        "git_commit": "pending",
+        "deliverables": [
+          "src/orchestrators/ado/ado_conversational_wizard.py (685 lines)",
+          "src/orchestrators/ado/ado_orchestrator.py (wizard integration)",
+          "cortex-brain/config/master-orchestrator.yaml (wizard routing)",
+          "tests/orchestrators/ado/test_ado_conversational_wizard.py (480+ lines, 45 tests)"
+        ]
       },
       {
         "phase_number": 5,

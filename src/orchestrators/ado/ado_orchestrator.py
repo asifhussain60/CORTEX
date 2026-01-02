@@ -290,6 +290,7 @@ class ADOOrchestrator(BaseOrchestrator):
                 feature (str): Feature name/description to plan (required)
                 auto_approve (bool): Skip approval gate if True (default: False)
                 test_mode (bool): Use mocks instead of real ADO API (default: False)
+                mode (str): Execution mode - 'auto' (default) or 'wizard' (interactive)
                 
         Returns:
             ADOResult: Complete workflow outcome with:
@@ -322,11 +323,19 @@ class ADOOrchestrator(BaseOrchestrator):
             - Phase transitions logged for audit trail
             - Test mode prevents real ADO API calls
             - Auto-approve skips interactive approval gate
+            - Wizard mode provides multi-turn conversational interface
             - TODO markers indicate implementation pending phases
         """
         feature_name: str = kwargs.get("feature", "Unnamed Feature")
         auto_approve: bool = kwargs.get("auto_approve", False)
         test_mode: bool = kwargs.get("test_mode", False)
+        mode: str = kwargs.get("mode", "auto")  # 'auto' | 'wizard'
+        
+        # Mode detection: Route to wizard if specified
+        if mode == "wizard":
+            return self._execute_wizard_mode(kwargs)
+        
+        # Default: Execute auto-generation mode
         
         self.logger.info(f"🎭 Starting ADO planning workflow for: {feature_name}")
         self.logger.info(f"Mode: {'TEST' if test_mode else 'PRODUCTION'}")
@@ -1934,6 +1943,7 @@ class ADOOrchestrator(BaseOrchestrator):
         """
         import subprocess
         
+        
         try:
             # Try to show the commit
             result = subprocess.run(
@@ -1947,4 +1957,149 @@ class ADOOrchestrator(BaseOrchestrator):
             
         except Exception:
             return False
+
+    def _execute_wizard_mode(self, kwargs: Dict[str, Any]) -> ADOResult:
+        """
+        Execute ADO work item creation via conversational wizard.
+        
+        Provides multi-turn interactive workflow for complex work items
+        requiring iterative refinement. Uses ADOConversationalWizard
+        for guided conversation flow.
+        
+        Args:
+            kwargs: Execution parameters
+                feature (str): Initial feature description
+                vision_context (Optional[Dict]): Vision API context (if screenshot attached)
+                session_id (Optional[str]): Resume existing wizard session
+                user_input (Optional[str]): User response for current stage
+                
+        Returns:
+            ADOResult with wizard outcome or continuation prompt
+            
+        Example:
+            >>> # Start wizard
+            >>> result = orchestrator._execute_wizard_mode({
+            ...     'feature': 'User authentication with SSO'
+            ... })
+            >>> # Continue wizard
+            >>> result = orchestrator._execute_wizard_mode({
+            ...     'session_id': result.data['session_id'],
+            ...     'user_input': 'Feature, High, XL'
+            ... })
+        """
+        from src.orchestrators.ado.ado_conversational_wizard import (
+            ADOConversationalWizard,
+            WizardStage
+        )
+        
+        # Initialize wizard
+        wizard = ADOConversationalWizard(
+            state_db=self.config.get('state_db'),
+            vision_api=self.config.get('vision_api')
+        )
+        
+        session_id = kwargs.get('session_id')
+        user_input = kwargs.get('user_input')
+        vision_context = kwargs.get('vision_context')
+        
+        logs = []
+        
+        try:
+            # Starting new wizard session
+            if not session_id:
+                feature = kwargs.get('feature', 'Unnamed Feature')
+                self.logger.info(f"🎭 Starting ADO wizard for: {feature}")
+                
+                response = wizard.start_wizard(feature)
+                logs.append(f"✅ Wizard session started: {response.session_id}")
+                
+                # Return with continuation prompt
+                return ADOResult(
+                    status="wizard_in_progress",
+                    success=True,
+                    phase=ADOPhase.DISCOVERY,
+                    message=response.prompt,
+                    logs=logs,
+                    data={
+                        "session_id": response.session_id,
+                        "stage": response.stage.value,
+                        "context": response.context,
+                        "can_skip": response.can_skip,
+                        "wizard_mode": True
+                    }
+                )
+            
+            # Continuing existing wizard session
+            else:
+                if not user_input:
+                    return ADOResult(
+                        status="error",
+                        success=False,
+                        phase=ADOPhase.DISCOVERY,
+                        message="User input required for wizard continuation",
+                        errors=["Missing user_input parameter"],
+                        logs=logs
+                    )
+                
+                self.logger.info(f"🎭 Processing wizard response for session: {session_id}")
+                
+                response = wizard.process_response(
+                    session_id=session_id,
+                    user_input=user_input,
+                    vision_context=vision_context
+                )
+                
+                # Check if wizard completed
+                if response.stage == WizardStage.COMPLETE:
+                    ado_item = response.context.get('ado_item', {})
+                    logs.append(f"✅ Wizard completed: {ado_item.get('title', 'Unknown')}")
+                    
+                    # Return final result
+                    return ADOResult(
+                        status="success",
+                        success=True,
+                        phase=ADOPhase.COMPLETION,
+                        message=f"🎉 Work item '{ado_item.get('title')}' created successfully via wizard",
+                        items_created=1,
+                        items_planned=1,
+                        logs=logs,
+                        data={
+                            "ado_item": ado_item,
+                            "wizard_mode": True,
+                            "session_id": session_id
+                        }
+                    )
+                
+                # Continue wizard
+                else:
+                    logs.append(f"✅ Advanced to stage: {response.stage.value}")
+                    
+                    # Return with next prompt
+                    return ADOResult(
+                        status="wizard_in_progress",
+                        success=True,
+                        phase=ADOPhase.VALIDATION,  # Wizard in progress
+                        message=response.prompt,
+                        logs=logs,
+                        data={
+                            "session_id": session_id,
+                            "stage": response.stage.value,
+                            "context": response.context,
+                            "can_skip": response.can_skip,
+                            "validation_errors": response.validation_errors,
+                            "wizard_mode": True
+                        }
+                    )
+        
+        except Exception as e:
+            self.logger.error(f"Wizard execution error: {e}")
+            return ADOResult(
+                status="error",
+                success=False,
+                phase=ADOPhase.DISCOVERY,
+                message=f"Wizard error: {str(e)}",
+                errors=[str(e)],
+                logs=logs
+            )
+
 
