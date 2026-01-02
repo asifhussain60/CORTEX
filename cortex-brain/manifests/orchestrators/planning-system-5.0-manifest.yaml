@@ -1,0 +1,254 @@
+# Planning System v5.0 Manifest
+# Pure config-only manifest with zero natural language execution logic
+
+schema_version: "5.0"
+
+orchestrator:
+  name: "planning_v5"
+  version: "5.0"
+  type: "autonomous"
+  description: "Structured planning system with context discovery and state tracking"
+  class: "PlanningOrchestratorV5"
+  module: "src.orchestrators.planning.planning_orchestrator_v5"
+
+# Folder structure template
+folder_structure:
+  root: "cortex-brain/documents/planning/active/{plan_name}/"
+  subfolders:
+    - name: "context"
+      description: "Context discovery and analysis documents"
+    - name: "artifacts"
+      description: "Generated code, configs, and outputs"
+    - name: "reports"
+      description: "Progress and completion reports"
+    - name: "tracking"
+      description: "Progress tracker and state snapshots"
+  
+  required_files:
+    - path: "00-master-plan.md"
+      type: "plan"
+      description: "Master plan document"
+    - path: "README.md"
+      type: "documentation"
+      description: "Quick start guide"
+    - path: "tracking/progress-tracker.json"
+      type: "state"
+      description: "JSON progress tracker"
+    - path: "tracking/CONTINUATION-PROMPT.md"
+      type: "documentation"
+      description: "Session continuation prompt for token limit management"
+
+# Execution phases (config-only, Python implements logic)
+phases:
+  - number: 0
+    name: "Context Discovery"
+    description: "Search workspace for relevant files and patterns"
+    estimated_duration_hours: 0.5
+    outputs:
+      - "context/discovery.md"
+    
+  - number: 1
+    name: "Architecture Analysis"
+    description: "Parse codebase and analyze dependencies"
+    estimated_duration_hours: 0.5
+    outputs:
+      - "context/architecture-analysis.md"
+  
+  - number: 2
+    name: "Plan Generation"
+    description: "Generate master plan document from templates"
+    estimated_duration_hours: 1.0
+    outputs:
+      - "00-master-plan.md"
+      - "README.md"
+  
+  - number: 3
+    name: "Folder Creation"
+    description: "Create directory structure"
+    estimated_duration_hours: 0.1
+    outputs:
+      - "context/"
+      - "artifacts/"
+      - "reports/"
+      - "tracking/"
+  
+  - number: 4
+    name: "Validation"
+    description: "Validate plan structure and content"
+    estimated_duration_hours: 0.2
+    outputs:
+      - "reports/validation-report.md"
+
+# Context discovery configuration
+context_discovery:
+  enabled: true
+  
+  search_patterns:
+    - pattern: "class.*"
+      file_types: ["*.py"]
+      scope: "src/"
+      description: "Find Python classes"
+    
+    - pattern: "def test_"
+      file_types: ["*.py"]
+      scope: "tests/"
+      description: "Find test functions"
+    
+    - pattern: "orchestrator"
+      file_types: ["*.py", "*.md"]
+      scope: "./"
+      description: "Find orchestrator references"
+  
+  max_results_per_pattern: 100
+  include_file_content: false
+
+# Template configuration
+templates:
+  base_path: "cortex-brain/templates/planning"
+  
+  files:
+    - name: "master-plan.jinja2"
+      output: "00-master-plan.md"
+      required_vars:
+        - "feature_name"
+        - "plan_id"
+        - "created_date"
+    
+    - name: "README.md.jinja2"
+      output: "README.md"
+      required_vars:
+        - "feature_name"
+        - "plan_id"
+    
+    - name: "progress-tracker.json.jinja2"
+      output: "tracking/progress-tracker.json"
+      required_vars:
+        - "plan_id"
+        - "feature_name"
+        - "total_phases"
+    
+    - name: "continuation-prompt.jinja2"
+      output: "tracking/CONTINUATION-PROMPT.md"
+      required_vars:
+        - "plan_id"
+        - "feature_name"
+        - "completed_phases"
+        - "total_phases"
+
+# Validation rules
+validation:
+  required_files:
+    - "00-master-plan.md"
+    - "README.md"
+    - "tracking/progress-tracker.json"
+    - "tracking/CONTINUATION-PROMPT.md"
+  
+  required_folders:
+    - "context"
+    - "artifacts"
+    - "reports"
+    - "tracking"
+  
+  required_sections_in_plan:
+    - "Visual Progress Tracker"
+    - "Executive Summary"
+    - "Implementation Phases"
+    - "Next Steps"
+  
+  min_plan_length_lines: 50
+  max_plan_length_lines: 5000
+
+# Database integration
+database:
+  track_state: true
+  
+  plan_metadata:
+    - "feature_name"
+    - "user_request"
+    - "complexity_tier"
+    - "estimated_days"
+    - "folder_path"
+  
+  phase_tracking:
+    enabled: true
+    create_snapshots: true
+    snapshot_frequency: "after_each_phase"
+  
+  artifact_registry:
+    enabled: true
+    track_checksums: true
+    track_file_size: true
+
+# Session management (NEW - v5 feature)
+session_management:
+  continuation_prompt:
+    enabled: true
+    update_frequency: "after_each_phase"
+    template: "continuation-prompt.jinja2"
+    token_warning_threshold: 80000
+    display_warning: true
+  
+  auto_checkpoint:
+    enabled: true
+    frequency: "after_each_phase"
+    commit_message_template: "Phase {phase_number} complete: {phase_name}"
+
+# Master Orchestrator integration
+master_orchestrator:
+  registration:
+    patterns:
+      - pattern: "^(plan|create a plan|make a plan).*$"
+        match_type: "regex"
+        confidence: 1.0
+        priority: 10
+    
+    dependencies:
+      - "mcp_tools"
+      - "planning_state_db"
+      - "jinja2"
+    
+    lifecycle_hooks:
+      pre_execution:
+        - "validate_workspace"
+        - "check_dependencies"
+      
+      post_execution:
+        - "save_plan_artifact"
+        - "update_continuation_prompt"
+        - "create_git_checkpoint"
+      
+      on_error:
+        - "log_failure"
+        - "cleanup_partial_artifacts"
+  
+  state_sharing:
+    enabled: true
+    share_plan_context: true
+    share_artifacts: true
+
+# Performance settings
+performance:
+  max_context_files: 1000
+  max_file_size_mb: 10
+  parallel_file_search: true
+  cache_search_results: true
+  cache_ttl_seconds: 3600
+
+# Logging configuration
+logging:
+  level: "INFO"
+  log_phases: true
+  log_artifacts: true
+  log_validation: true
+  
+  output:
+    console: true
+    file: "logs/planning-v5.log"
+    database: true
+
+# Development settings
+development:
+  debug_mode: false
+  validate_templates: true
+  dry_run: false
+  skip_git_operations: false

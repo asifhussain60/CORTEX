@@ -1,0 +1,39 @@
+# MCP Server Configuration
+# Orchestrator registry for autonomous execution
+
+version: "1.0"
+
+orchestrators:
+  planning_system:
+    class: "PlanningOrchestratorV5"
+    module: "src.orchestrators.planning_orchestrator_v5"
+    config: "cortex-brain/manifests/orchestrators/planning-system-5.0-manifest.yaml"
+    type: "autonomous"
+    description: "Planning System v5 with MCP integration"
+  
+  ado_operations:
+    class: "AdoOrchestratorV2"
+    module: "src.orchestrators.ado_orchestrator_v2"
+    config: "cortex-brain/manifests/orchestrators/ado-operations-2.0-manifest.yaml"
+    type: "autonomous"
+    description: "Azure DevOps work item generation"
+  
+  vacuum:
+    class: "VacuumOrchestratorV2"
+    module: "src.orchestrators.vacuum_orchestrator_v2"
+    config: "cortex-brain/manifests/orchestrators/vacuum-2.0-manifest.yaml"
+    type: "autonomous"
+    description: "Deep filesystem cleanup and reorganization"
+  
+  cleanup:
+    class: "CleanupOrchestratorV2"
+    module: "src.orchestrators.cleanup_orchestrator_v2"
+    config: "cortex-brain/manifests/orchestrators/cleanup-2.0-manifest.yaml"
+    type: "autonomous"
+    description: "Cache and temporary file management"
+
+# Server settings
+server:
+  log_level: "INFO"
+  enable_metrics: true
+  hot_reload: true
