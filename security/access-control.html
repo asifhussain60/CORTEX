@@ -3,679 +3,467 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Access Control - Role-based access, authentication, and authorization strategies">
+    <meta name="description" content="CORTEX Access Control - Role-Based Access Control (RBAC), Permissions Matrix, and Authentication Strategies">
+    <meta name="keywords" content="CORTEX, access control, RBAC, permissions, authentication, authorization">
+    <meta name="author" content="Asif Hussain">
     <title>Access Control - CORTEX Security</title>
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo-64.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../assets/css/main.css?v=4.0.0">
-    <style>
-        /* ============================================
-           GLASSMORPHISM v4.0.0 - Level 1 View
-           Animation Tier: T1 (Subtle)
-           NO infinite animations
-           NO inline styles
-           ============================================ */
-        
-        :root {
-            --accent-primary: #00d4ff;
-            --accent-secondary: #0ea5e9;
-            --accent-tertiary: #06b6d4;
-            --bg-primary: #0a0e27;
-            --bg-secondary: #131835;
-            --bg-tertiary: #1a1f3e;
-            --text-primary: #ffffff;
-            --text-secondary: #a0aec0;
-            --text-muted: #64748b;
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --spacing-xs: 0.25rem;
-            --spacing-sm: 0.5rem;
-            --spacing-md: 1rem;
-            --spacing-lg: 1.5rem;
-            --spacing-xl: 2rem;
-            --spacing-2xl: 3rem;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
-            min-height: 100vh;
-            color: var(--text-primary);
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            line-height: 1.6;
-        }
-
-        /* ============================================
-           GLASS HEADER - Level 1 (NO LOGO)
-           ============================================ */
-        .glass-header {
-            background: rgba(10, 14, 39, 0.8);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 1rem 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .header-nav {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
-        }
-
-        .nav-link {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.2s ease;
-            cursor: pointer;
-        }
-
-        .nav-link:hover {
-            color: var(--accent-primary);
-        }
-
-        .nav-link i {
-            margin-right: 0.25rem;
-        }
-
-        /* ============================================
-           MAIN CONTENT
-           ============================================ */
-        .main-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: var(--spacing-2xl) var(--spacing-xl);
-        }
-
-        /* ============================================
-           PAGE HEADER
-           ============================================ */
-        .page-header {
-            text-align: center;
-            margin-bottom: var(--spacing-2xl);
-        }
-
-        .header-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto var(--spacing-lg);
-            font-size: 2.5rem;
-            box-shadow: 0 10px 40px rgba(0, 212, 255, 0.3);
-        }
-
-        .page-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: var(--spacing-md);
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .page-description {
-            color: var(--text-secondary);
-            font-size: 1.125rem;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        /* ============================================
-           GLASS CARDS - T1 Subtle
-           ============================================ */
-        .glass-card {
-            background: rgba(26, 31, 58, 0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: var(--spacing-xl);
-            margin-bottom: var(--spacing-xl);
-            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-            cursor: pointer;
-        }
-
-        .glass-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 212, 255, 0.15);
-            border-color: rgba(0, 212, 255, 0.3);
-        }
-
-        .glass-card-display {
-            background: rgba(26, 31, 58, 0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: var(--spacing-xl);
-            margin-bottom: var(--spacing-xl);
-            position: relative;
-            overflow: hidden;
-            cursor: default;
-        }
-
-        /* T1 Subtle: Static glass highlight (NO animation) */
-        .glass-card-display::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            pointer-events: none;
-        }
-
-        .section-title {
-            font-size: 1.75rem;
-            font-weight: 700;
-            margin-bottom: var(--spacing-lg);
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            color: var(--text-primary);
-        }
-
-        .section-title i {
-            color: var(--accent-primary);
-        }
-
-        .section-description {
-            color: var(--text-secondary);
-            margin-bottom: var(--spacing-lg);
-            line-height: 1.8;
-        }
-
-        /* ============================================
-           ACCESS MODELS GRID
-           ============================================ */
-        .models-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: var(--spacing-lg);
-            margin-bottom: var(--spacing-xl);
-        }
-
-        .model-card {
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(14, 165, 233, 0.1));
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: var(--spacing-lg);
-            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-            cursor: pointer;
-        }
-
-        .model-card:hover {
-            transform: translateY(-2px);
-            border-color: rgba(0, 212, 255, 0.3);
-            box-shadow: 0 8px 24px rgba(0, 212, 255, 0.2);
-        }
-
-        .model-icon {
-            font-size: 2rem;
-            margin-bottom: var(--spacing-md);
-            color: var(--accent-primary);
-        }
-
-        .model-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: var(--spacing-sm);
-            color: var(--text-primary);
-        }
-
-        .model-description {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            line-height: 1.6;
-        }
-
-        /* ============================================
-           FEATURES GRID
-           ============================================ */
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: var(--spacing-md);
-            margin-bottom: var(--spacing-xl);
-        }
-
-        .feature-item {
-            background: rgba(0, 212, 255, 0.1);
-            border: 1px solid rgba(0, 212, 255, 0.2);
-            border-radius: 8px;
-            padding: var(--spacing-md);
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-sm);
-            transition: border-color 0.2s ease, background 0.2s ease;
-        }
-
-        .feature-item:hover {
-            border-color: rgba(0, 212, 255, 0.4);
-            background: rgba(0, 212, 255, 0.15);
-        }
-
-        .feature-item i {
-            color: var(--accent-primary);
-            font-size: 1.25rem;
-        }
-
-        .feature-item span {
-            color: var(--text-primary);
-            font-weight: 500;
-        }
-
-        /* ============================================
-           CODE EXAMPLE
-           ============================================ */
-        .code-block {
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: var(--spacing-lg);
-            overflow-x: auto;
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .code-block pre {
-            margin: 0;
-            font-family: 'JetBrains Mono', 'Fira Code', monospace;
-            font-size: 0.875rem;
-            line-height: 1.6;
-            color: var(--text-primary);
-        }
-
-        .code-header {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-sm);
-            margin-bottom: var(--spacing-md);
-            padding-bottom: var(--spacing-sm);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .code-header i {
-            color: var(--accent-primary);
-        }
-
-        .code-header span {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-        }
-
-        /* ============================================
-           MERMAID DIAGRAM CONTAINER
-           ============================================ */
-        .mermaid-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: var(--spacing-xl) 0;
-            width: 100%;
-        }
-
-        .mermaid {
-            max-width: 800px;
-            width: 100%;
-        }
-
-        /* ============================================
-           BEST PRACTICES LIST
-           ============================================ */
-        .practices-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .practices-list li {
-            display: flex;
-            align-items: flex-start;
-            gap: var(--spacing-md);
-            padding: var(--spacing-md) 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .practices-list li:last-child {
-            border-bottom: none;
-        }
-
-        .practices-list i {
-            color: var(--accent-primary);
-            margin-top: 0.25rem;
-        }
-
-        .practices-list span {
-            color: var(--text-secondary);
-            line-height: 1.6;
-        }
-
-        /* ============================================
-           GLASS FOOTER
-           ============================================ */
-        .glass-footer {
-            background: rgba(10, 14, 39, 0.8);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 2rem;
-            margin-top: 4rem;
-        }
-
-        .footer-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .footer-copyright p {
-            color: var(--text-muted);
-            margin: 0;
-            font-size: 0.875rem;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 1.5rem;
-            align-items: center;
-        }
-
-        .footer-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            transition: color 0.2s ease;
-        }
-
-        .footer-links a:hover {
-            color: var(--accent-primary);
-        }
-
-        .footer-version {
-            color: var(--text-muted);
-            font-size: 0.75rem;
-            padding: 0.25rem 0.75rem;
-            background: rgba(0, 212, 255, 0.1);
-            border-radius: 12px;
-            border: 1px solid rgba(0, 212, 255, 0.2);
-        }
-
-        /* ============================================
-           RESPONSIVE DESIGN
-           ============================================ */
-        @media (max-width: 768px) {
-            .header-nav {
-                gap: 1rem;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            .nav-link span {
-                display: none;
-            }
-
-            .page-title {
-                font-size: 1.75rem;
-            }
-
-            .main-content {
-                padding: var(--spacing-lg);
-            }
-
-            .models-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .footer-content {
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .page-header {
-                padding: var(--spacing-lg);
-            }
-
-            .header-icon {
-                width: 60px;
-                height: 60px;
-                font-size: 1.75rem;
-            }
-
-            .section-title {
-                font-size: 1.25rem;
-            }
-        }
-    </style>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
-    <!-- Glass Header (Level 1 - NO LOGO) -->
+    <!-- Glass Header (Level 1 - No Logo) -->
     <header class="glass-header">
         <div class="header-content">
             <nav class="header-nav">
-                <a href="../index.html" class="nav-link"><i class="fas fa-home"></i> <span>Home</span></a>
-                <a href="index.html" class="nav-link"><i class="fas fa-shield-halved"></i> <span>Security</span></a>
-                <a href="../architecture/index.html" class="nav-link"><i class="fas fa-brain"></i> <span>Architecture</span></a>
-                <a href="https://github.com/asifhussain60/CORTEX" class="nav-link" target="_blank"><i class="fab fa-github"></i></a>
+                <a href="../index.html" class="nav-link"><i class="fas fa-home"></i> Home</a>
+                <a href="index.html" class="nav-link"><i class="fas fa-shield-halved"></i> Security</a>
+                <a href="../documentation.html" class="nav-link"><i class="fas fa-book"></i> Documentation</a>
+                <a href="https://github.com/asifhussain60/CORTEX" class="nav-link" target="_blank">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
             </nav>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="main-content">
-        <!-- Page Header -->
-        <div class="page-header">
-            <div class="header-icon">
-                <i class="fas fa-user-shield"></i>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <div class="hero-icon">
+                <i class="fas fa-lock"></i>
             </div>
-            <h1 class="page-title">Access Control</h1>
-            <p class="page-description">
-                Comprehensive role-based access control (RBAC), authentication mechanisms, 
-                and authorization strategies for secure system access management.
+            <h1 class="hero-title">Access Control</h1>
+            <p class="hero-subtitle">
+                Role-Based Access Control (RBAC), fine-grained permissions, and multi-factor authentication strategies 
+                to protect CORTEX operations and user data.
             </p>
         </div>
+    </section>
 
-        <!-- Overview Section -->
-        <section class="glass-card-display">
-            <h2 class="section-title">
-                <i class="fas fa-info-circle"></i>
-                Overview
-            </h2>
-            <p class="section-description">
-                Access Control is a fundamental security mechanism that regulates who can view or use 
-                resources in a computing environment. CORTEX implements multiple access control models 
-                to provide flexible, secure, and auditable access management across all system components.
-            </p>
-        </section>
-
-        <!-- Access Control Models -->
-        <section class="glass-card-display">
-            <h2 class="section-title">
+    <!-- Main Content -->
+    <main class="content-section">
+        <!-- RBAC Architecture -->
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
                 <i class="fas fa-sitemap"></i>
-                Access Control Models
-            </h2>
-            <div class="models-grid">
-                <div class="model-card">
-                    <div class="model-icon"><i class="fas fa-users-cog"></i></div>
-                    <h3 class="model-title">RBAC</h3>
-                    <p class="model-description">Role-Based Access Control assigns permissions to roles, and users inherit permissions through role membership.</p>
-                </div>
-                <div class="model-card">
-                    <div class="model-icon"><i class="fas fa-tags"></i></div>
-                    <h3 class="model-title">ABAC</h3>
-                    <p class="model-description">Attribute-Based Access Control evaluates attributes (user, resource, environment) to make access decisions.</p>
-                </div>
-                <div class="model-card">
-                    <div class="model-icon"><i class="fas fa-user-lock"></i></div>
-                    <h3 class="model-title">DAC</h3>
-                    <p class="model-description">Discretionary Access Control allows resource owners to grant or restrict access to other users.</p>
-                </div>
-                <div class="model-card">
-                    <div class="model-icon"><i class="fas fa-shield-alt"></i></div>
-                    <h3 class="model-title">MAC</h3>
-                    <p class="model-description">Mandatory Access Control enforces system-wide policies that cannot be overridden by users.</p>
+                <h2 class="card-title">RBAC Architecture</h2>
+            </div>
+            <p class="card-description">
+                CORTEX implements a hierarchical Role-Based Access Control system with four primary roles: 
+                Administrator, Developer, Analyst, and Viewer. Each role inherits permissions from lower-privilege roles.
+            </p>
+            <div class="visualization-container">
+                <div class="mermaid">
+graph TB
+    subgraph "RBAC Hierarchy"
+        ADMIN[👑 Administrator<br/>Full System Access]
+        DEV[👨‍💻 Developer<br/>Code & Config Access]
+        ANALYST[📊 Analyst<br/>Read + Report Access]
+        VIEWER[👁️ Viewer<br/>Read-Only Access]
+    end
+    
+    ADMIN --> DEV
+    DEV --> ANALYST
+    ANALYST --> VIEWER
+    
+    ADMIN --> SYS[🔧 System Operations]
+    ADMIN --> USER[👥 User Management]
+    ADMIN --> SEC[🔒 Security Config]
+    
+    DEV --> CODE[💻 Code Repository]
+    DEV --> DEPLOY[🚀 Deployment]
+    DEV --> CONFIG[⚙️ Configuration]
+    
+    ANALYST --> REPORTS[📈 Analytics]
+    ANALYST --> LOGS[📋 Audit Logs]
+    ANALYST --> METRICS[📊 Metrics Dashboard]
+    
+    VIEWER --> DOCS[📚 Documentation]
+    VIEWER --> STATUS[✅ System Status]
+    
+    style ADMIN fill:#ff4757,stroke:#fff,stroke-width:2px
+    style DEV fill:#ffb84d,stroke:#fff,stroke-width:2px
+    style ANALYST fill:#00d4ff,stroke:#fff,stroke-width:2px
+    style VIEWER fill:#2ecc71,stroke:#fff,stroke-width:2px
                 </div>
             </div>
-        </section>
+        </article>
 
-        <!-- Key Features -->
-        <section class="glass-card-display">
-            <h2 class="section-title">
-                <i class="fas fa-star"></i>
-                Key Features
-            </h2>
-            <div class="features-grid">
-                <div class="feature-item">
-                    <i class="fas fa-fingerprint"></i>
-                    <span>Multi-Factor Auth</span>
-                </div>
-                <div class="feature-item">
-                    <i class="fas fa-key"></i>
-                    <span>SSO Integration</span>
-                </div>
-                <div class="feature-item">
-                    <i class="fas fa-clock"></i>
-                    <span>Session Management</span>
-                </div>
-                <div class="feature-item">
-                    <i class="fas fa-history"></i>
-                    <span>Access Logging</span>
-                </div>
-                <div class="feature-item">
-                    <i class="fas fa-ban"></i>
-                    <span>IP Restrictions</span>
-                </div>
-                <div class="feature-item">
-                    <i class="fas fa-user-check"></i>
-                    <span>Identity Verification</span>
+        <!-- Permissions Matrix -->
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-table"></i>
+                <h2 class="card-title">Permissions Matrix</h2>
+            </div>
+            <p class="card-description">
+                Interactive permissions matrix showing granular access rights across CORTEX resources. 
+                Hover over cells to see permission details.
+            </p>
+            <div class="visualization-container" id="permissions-matrix"></div>
+        </article>
+
+        <!-- Authentication Flow -->
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-key"></i>
+                <h2 class="card-title">Authentication Flow</h2>
+            </div>
+            <p class="card-description">
+                Multi-factor authentication (MFA) workflow with fallback mechanisms and session management.
+            </p>
+            <div class="visualization-container">
+                <div class="mermaid">
+sequenceDiagram
+    participant U as User
+    participant A as Auth Service
+    participant MFA as MFA Provider
+    participant S as Session Manager
+    participant R as Resource
+    
+    U->>A: Login Request (username/password)
+    A->>A: Validate Credentials
+    
+    alt Valid Credentials
+        A->>MFA: Request MFA Challenge
+        MFA->>U: Send OTP (SMS/Email/App)
+        U->>MFA: Submit OTP
+        MFA->>A: Validate OTP
+        
+        alt OTP Valid
+            A->>S: Create Session Token
+            S->>U: Return JWT Token
+            U->>R: Access Resource (with token)
+            R->>S: Validate Token
+            S->>R: Token Valid
+            R->>U: Grant Access
+        else OTP Invalid
+            MFA->>U: Challenge Failed
+            U->>A: Retry (max 3 attempts)
+        end
+    else Invalid Credentials
+        A->>U: Access Denied
+        A->>A: Log Failed Attempt
+    end
                 </div>
             </div>
-        </section>
+        </article>
 
-        <!-- Code Example -->
-        <section class="glass-card-display">
-            <h2 class="section-title">
+        <!-- Access Control Principles -->
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-shield-alt"></i>
+                <h2 class="card-title">Access Control Principles</h2>
+            </div>
+            <div class="principles-grid">
+                <div class="principle-card">
+                    <div class="principle-icon">
+                        <i class="fas fa-user-lock"></i>
+                    </div>
+                    <h3 class="principle-title">Least Privilege</h3>
+                    <p class="principle-description">
+                        Users granted minimum permissions necessary to perform their job functions. 
+                        Privilege escalation requires approval workflow.
+                    </p>
+                </div>
+                
+                <div class="principle-card">
+                    <div class="principle-icon">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <h3 class="principle-title">Separation of Duties</h3>
+                    <p class="principle-description">
+                        Critical operations require multiple authorized users. No single user can complete 
+                        sensitive workflows independently.
+                    </p>
+                </div>
+                
+                <div class="principle-card">
+                    <div class="principle-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3 class="principle-title">Time-Based Access</h3>
+                    <p class="principle-description">
+                        Temporary elevated permissions expire automatically. Access reviews conducted quarterly 
+                        to validate continued need.
+                    </p>
+                </div>
+                
+                <div class="principle-card">
+                    <div class="principle-icon">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <h3 class="principle-title">Zero Trust Model</h3>
+                    <p class="principle-description">
+                        Verify every access request regardless of location. No implicit trust based on 
+                        network position or previous authentication.
+                    </p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Implementation Guide -->
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
                 <i class="fas fa-code"></i>
-                Configuration Example
-            </h2>
-            <div class="code-block">
-                <div class="code-header">
-                    <i class="fas fa-file-code"></i>
-                    <span>access-control.yaml</span>
-                </div>
-                <pre><code>access_control:
-  model: rbac
-  
-  roles:
-    admin:
-      permissions:
-        - read:*
-        - write:*
-        - delete:*
-        - manage:users
-    
-    developer:
-      permissions:
-        - read:*
-        - write:code
-        - execute:pipelines
-    
-    viewer:
-      permissions:
-        - read:dashboards
-        - read:reports
-
-  authentication:
-    methods:
-      - type: oauth2
-        provider: azure-ad
-        scopes: [openid, profile, email]
-      - type: mfa
-        required_for: [admin, developer]
-    
-    session:
-      timeout: 3600
-      refresh_enabled: true
-      max_concurrent: 3</code></pre>
+                <h2 class="card-title">Implementation Guide</h2>
             </div>
-        </section>
+            <div class="code-example">
+                <h3 class="code-title">RBAC Decorator Example</h3>
+                <pre><code class="language-python"># Python RBAC Decorator for CORTEX Operations
+from functools import wraps
+from cortex_brain.tier0.security import check_permissions
 
-        <!-- Best Practices -->
-        <section class="glass-card-display">
-            <h2 class="section-title">
-                <i class="fas fa-lightbulb"></i>
-                Best Practices
-            </h2>
-            <ul class="practices-list">
-                <li>
-                    <i class="fas fa-check-circle"></i>
-                    <span>Implement principle of least privilege - grant only minimum permissions required for each role</span>
-                </li>
-                <li>
-                    <i class="fas fa-check-circle"></i>
-                    <span>Enable multi-factor authentication for all privileged accounts and sensitive operations</span>
-                </li>
-                <li>
-                    <i class="fas fa-check-circle"></i>
-                    <span>Regularly audit access permissions and remove unnecessary privileges</span>
-                </li>
-                <li>
-                    <i class="fas fa-check-circle"></i>
-                    <span>Implement session timeout and automatic logout for inactive sessions</span>
-                </li>
-                <li>
-                    <i class="fas fa-check-circle"></i>
-                    <span>Log all access attempts and maintain comprehensive audit trails</span>
-                </li>
-                <li>
-                    <i class="fas fa-check-circle"></i>
-                    <span>Use centralized identity management with SSO for consistent access control</span>
-                </li>
-            </ul>
-        </section>
+def require_role(role: str):
+    """Decorator to enforce role-based access control."""
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            if not check_permissions(current_user, role):
+                raise PermissionDenied(
+                    f"User lacks required role: {role}"
+                )
+            return func(*args, **kwargs)
+        return wrapper
+    return decorator
+
+# Usage Examples
+@require_role('Administrator')
+def delete_user(user_id: str):
+    """Admin-only: Delete user account."""
+    pass
+
+@require_role('Developer')
+def deploy_code(branch: str):
+    """Developer-only: Deploy code to production."""
+    pass
+
+@require_role('Analyst')
+def generate_report(report_type: str):
+    """Analyst-only: Generate security reports."""
+    pass</code></pre>
+            </div>
+        </article>
+
+        <!-- Quick Links -->
+        <article class="glass-card-clickable animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-link"></i>
+                <h2 class="card-title">Related Security Topics</h2>
+            </div>
+            <div class="quick-links-grid">
+                <a href="data-protection.html" class="quick-link-item">
+                    <i class="fas fa-database"></i>
+                    <span>Data Protection</span>
+                </a>
+                <a href="audit-logging.html" class="quick-link-item">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>Audit Logging</span>
+                </a>
+                <a href="threat-modeling.html" class="quick-link-item">
+                    <i class="fas fa-crosshairs"></i>
+                    <span>Threat Modeling</span>
+                </a>
+                <a href="compliance.html" class="quick-link-item">
+                    <i class="fas fa-certificate"></i>
+                    <span>Compliance Standards</span>
+                </a>
+            </div>
+        </article>
     </main>
 
     <!-- Glass Footer -->
     <footer class="glass-footer">
         <div class="footer-content">
-            <div class="footer-copyright">
-                <p>© 2025 Asif Hussain. All rights reserved.</p>
+            <div class="footer-section">
+                <p class="footer-copyright">© 2026 Asif Hussain. All rights reserved.</p>
             </div>
-            <div class="footer-links">
-                <a href="https://github.com/asifhussain60/CORTEX" target="_blank">
-                    <i class="fab fa-github"></i> GitHub
-                </a>
-                <a href="https://asifhussain60.github.io/CORTEX/" target="_blank">
-                    <i class="fas fa-globe"></i> Website
-                </a>
-                <span class="footer-version">CORTEX v4.0</span>
+            <div class="footer-section">
+                <a href="../index.html" class="footer-link">Home</a>
+                <a href="index.html" class="footer-link">Security Hub</a>
+                <a href="../documentation.html" class="footer-link">Documentation</a>
+                <a href="https://github.com/asifhussain60/CORTEX" class="footer-link" target="_blank">GitHub</a>
+            </div>
+            <div class="footer-section">
+                <p class="footer-version">CORTEX v4.0.0</p>
             </div>
         </div>
     </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#7b61ff',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#fff',
+                lineColor: '#00d4ff',
+                secondaryColor: '#00d4ff',
+                tertiaryColor: '#ff6b9d'
+            },
+            startOnLoad: true,
+            securityLevel: 'loose'
+        });
+
+        // D3.js Permissions Matrix Visualization
+        document.addEventListener('DOMContentLoaded', function() {
+            const data = {
+                roles: ['Administrator', 'Developer', 'Analyst', 'Viewer'],
+                resources: [
+                    'User Management',
+                    'Code Repository',
+                    'Deployment',
+                    'Configuration',
+                    'Analytics',
+                    'Audit Logs',
+                    'Documentation',
+                    'System Status'
+                ],
+                permissions: [
+                    [2, 2, 2, 2, 2, 2, 2, 2], // Admin: Full access
+                    [0, 2, 2, 2, 1, 1, 2, 1], // Developer: Code/deploy focus
+                    [0, 1, 0, 0, 2, 2, 2, 1], // Analyst: Read + report
+                    [0, 1, 0, 0, 1, 1, 2, 1]  // Viewer: Read-only
+                ]
+            };
+
+            const colors = ['#ff4757', '#ffb84d', '#2ecc71']; // No access, Read, Full
+            const labels = ['No Access', 'Read Only', 'Full Access'];
+
+            const margin = {top: 80, right: 40, bottom: 40, left: 120};
+            const width = 800 - margin.left - margin.right;
+            const height = 500 - margin.top - margin.bottom;
+
+            const svg = d3.select('#permissions-matrix')
+                .append('svg')
+                .attr('width', '100%')
+                .attr('height', height + margin.top + margin.bottom)
+                .attr('viewBox', `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
+                .append('g')
+                .attr('transform', `translate(${margin.left},${margin.top})`);
+
+            const x = d3.scaleBand()
+                .domain(data.resources)
+                .range([0, width])
+                .padding(0.05);
+
+            const y = d3.scaleBand()
+                .domain(data.roles)
+                .range([0, height])
+                .padding(0.05);
+
+            // Add cells
+            data.roles.forEach((role, i) => {
+                data.resources.forEach((resource, j) => {
+                    const permission = data.permissions[i][j];
+                    
+                    svg.append('rect')
+                        .attr('class', 'matrix-cell animation-t1')
+                        .attr('x', x(resource))
+                        .attr('y', y(role))
+                        .attr('width', x.bandwidth())
+                        .attr('height', y.bandwidth())
+                        .attr('rx', 8)
+                        .attr('fill', colors[permission])
+                        .attr('opacity', 0.8)
+                        .on('mouseover', function() {
+                            d3.select(this)
+                                .transition()
+                                .duration(200)
+                                .attr('opacity', 1)
+                                .attr('transform', 'scale(1.05)');
+                            
+                            tooltip.style('opacity', 1)
+                                .html(`<strong>${role}</strong><br/>${resource}<br/><em>${labels[permission]}</em>`);
+                        })
+                        .on('mousemove', function(event) {
+                            tooltip
+                                .style('left', (event.pageX + 15) + 'px')
+                                .style('top', (event.pageY - 15) + 'px');
+                        })
+                        .on('mouseout', function() {
+                            d3.select(this)
+                                .transition()
+                                .duration(200)
+                                .attr('opacity', 0.8)
+                                .attr('transform', 'scale(1)');
+                            
+                            tooltip.style('opacity', 0);
+                        });
+                });
+            });
+
+            // Add X axis labels
+            svg.selectAll('.x-label')
+                .data(data.resources)
+                .enter()
+                .append('text')
+                .attr('class', 'axis-label')
+                .attr('x', d => x(d) + x.bandwidth() / 2)
+                .attr('y', -10)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#fff')
+                .attr('font-size', '12px')
+                .text(d => d);
+
+            // Add Y axis labels
+            svg.selectAll('.y-label')
+                .data(data.roles)
+                .enter()
+                .append('text')
+                .attr('class', 'axis-label')
+                .attr('x', -10)
+                .attr('y', d => y(d) + y.bandwidth() / 2)
+                .attr('text-anchor', 'end')
+                .attr('alignment-baseline', 'middle')
+                .attr('fill', '#fff')
+                .attr('font-size', '12px')
+                .attr('font-weight', 'bold')
+                .text(d => d);
+
+            // Add legend
+            const legend = svg.append('g')
+                .attr('transform', `translate(${width - 150}, -60)`);
+
+            labels.forEach((label, i) => {
+                const legendRow = legend.append('g')
+                    .attr('transform', `translate(0, ${i * 20})`);
+
+                legendRow.append('rect')
+                    .attr('width', 15)
+                    .attr('height', 15)
+                    .attr('rx', 3)
+                    .attr('fill', colors[i])
+                    .attr('opacity', 0.8);
+
+                legendRow.append('text')
+                    .attr('x', 20)
+                    .attr('y', 12)
+                    .attr('fill', '#fff')
+                    .attr('font-size', '11px')
+                    .text(label);
+            });
+
+            // Tooltip
+            const tooltip = d3.select('body')
+                .append('div')
+                .attr('class', 'visualization-tooltip')
+                .style('opacity', 0);
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
 </body>
 </html>
