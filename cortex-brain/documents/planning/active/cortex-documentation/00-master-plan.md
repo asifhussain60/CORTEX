@@ -69,6 +69,15 @@ Master specification for CORTEX documentation site across Level 1 pages and Leve
 - **Status:** 🟢 100% complete - perfect implementation
 - **Priority:** LOW (no work needed)
 
+**7. Best Practices Learning Hub** → `level1-specs/learning-hub/best-practices-learning-spec.md`
+- **Level 1 Pages:** 17 (domain hubs)
+- **Level 2 Pages:** 80 (interactive learning modules)
+- **Structure:** 3-6 modules per domain (Beginner → Expert)
+- **Features:** D3.js visualizations, code playgrounds, quizzes, challenges
+- **Total Learning Hours:** 55 hours
+- **Status:** 🚧 NEW - pedagogical platform
+- **Priority:** HIGH (junior developer learning aid)
+
 ---
 
 ### Implementation Guides (OPTIONAL - Planned v4.1.0)
@@ -98,6 +107,10 @@ Master specification for CORTEX documentation site across Level 1 pages and Leve
 
 **For Sharpen The Saw Work:**
 1. Load Executive Summary → Sharpen The Saw Panel Spec → (Optional) Design Standards
+
+**For Best Practices Learning Hub Work:**
+1. Load Executive Summary → Best Practices Learning Spec → Design Standards → Visualization Guide
+2. Reference: `integrate-this.md` for D3.js/Mermaid implementation patterns
 
 ---
 

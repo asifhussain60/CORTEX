@@ -144,7 +144,7 @@ Is it Level 0 (Home)?
 |------|---------|-------------|----------|-------|----------|----------|-----------||
 | **Architecture** | Standard | N/A | 5 | 45 | ❌ NO | 0 | 4-Tier Brain + Tier 0 Governance, 5 Mermaid diagrams |
 | **Token Optimization** | Standard | N/A | 1 | 25 | ❌ NO | 0 | 97% reduction, $8.6K savings, 2 Mermaid |
-| **Best Practices** | Standard | N/A | 17 | 35 | ❌ NO | 0 | 35 guidelines across 17 domain pages |
+| **Best Practices** | Learning Hub | N/A | 17 | 380 | ✅ YES | 80 | Interactive learning modules (3-6 per domain) with code playgrounds |
 | **Toolkit Manager** | Standard | N/A | 1 | 20 | ❌ NO | 0 | Master Orchestrator routing layer |
 | **CORTEX Lens** | Standard | N/A | 1 | 30 | ❌ NO | 0 | AST analysis, reverse engineering dashboard |
 | **Getting Started** | Standard | N/A | 2 | 15 | ❌ NO | 0 | 5-minute setup, interactive onboarding |
@@ -188,7 +188,89 @@ Is it Level 0 (Home)?
 - `.single-tag` - Compact styling for single-link panels
 - `.category-tag` - Clickable link within subpanel
 
-### Standard Tile Pattern (6 Tiles)
+### Learning Hub Pattern (Best Practices Only)
+
+**When to Use:** Best Practices tile (pedagogical content with interactive learning modules)
+
+**Architecture:** Level 0 → Level 1 (Domain Hubs) → Level 2 (Learning Modules)
+
+**Level 1 Structure (17 Domain Hubs):**
+```html
+<!-- Domain hub with learning path navigation -->
+<article class="glass-card-clickable animation-t1 learning-hub-card">
+    <div class="card-icon">🎓</div>
+    <h3>API Design Learning Path</h3>
+    <p>5 modules • 3.5 hours • Beginner to Expert</p>
+    <div class="learning-metrics">
+        <span class="metric">📊 5 Quizzes</span>
+        <span class="metric">💻 6 Playgrounds</span>
+        <span class="metric">🏆 4 Challenges</span>
+    </div>
+</article>
+```
+
+**Level 2 Structure (80 Learning Modules):**
+```html
+<!-- Interactive learning module page -->
+<section class="learning-module-hero">
+    <div class="module-header">
+        <span class="difficulty-badge beginner">Beginner</span>
+        <h1>API Design Fundamentals</h1>
+        <div class="module-meta">
+            <span>⏱️ 30 minutes</span>
+            <span>📝 10 quiz questions</span>
+            <span>💻 1 code playground</span>
+        </div>
+    </div>
+</section>
+
+<section class="learning-content">
+    <!-- D3.js interactive visualization -->
+    <div class="visualization-container" id="http-method-tree"></div>
+    
+    <!-- Mermaid diagram -->
+    <div class="mermaid-diagram">
+        <!-- Request/response lifecycle -->
+    </div>
+    
+    <!-- Code playground -->
+    <div class="code-playground">
+        <div class="editor-container" id="monaco-editor"></div>
+        <button class="run-code-btn">Run Code</button>
+        <div class="output-container"></div>
+    </div>
+    
+    <!-- Quiz section -->
+    <div class="quiz-container">
+        <!-- Interactive quiz questions -->
+    </div>
+    
+    <!-- Challenge section -->
+    <div class="challenge-container">
+        <h3>🏆 Challenge: Design Your First API</h3>
+        <!-- Progressive challenge content -->
+    </div>
+</section>
+```
+
+**CSS Classes:**
+- `.learning-hub-card` - Domain hub card on Level 1
+- `.learning-metrics` - Metrics display (quizzes, playgrounds, challenges)
+- `.learning-module-hero` - Module hero section with metadata
+- `.difficulty-badge` - Badge showing module difficulty (beginner/intermediate/advanced/expert)
+- `.module-meta` - Time, quiz count, playground count
+- `.visualization-container` - D3.js chart container
+- `.code-playground` - Monaco editor integration
+- `.quiz-container` - Interactive quiz section
+- `.challenge-container` - Progressive challenge section
+
+**Difficulty Badge Colors:**
+- `.difficulty-badge.beginner` - Green (`#10b981`)
+- `.difficulty-badge.intermediate` - Yellow (`#fbbf24`)
+- `.difficulty-badge.advanced` - Orange (`#f97316`)
+- `.difficulty-badge.expert` - Purple (`#8b5cf6`)
+
+### Standard Tile Pattern (5 Tiles)
 
 **When to Use:** Architecture, Token Optimization, Best Practices, Toolkit Manager, CORTEX Lens, Get Started
 
@@ -3603,7 +3685,51 @@ document.documentElement.style.setProperty('--glass-bg', 'rgba(26, 31, 58, 0.6)'
 
 ---
 
+## 🎓 Learning Hub Standards & Validation (v5.0)
+
+### Learning Module Requirements
+
+**Every Level 2 learning module MUST include:**
+
+1. **Module Header** - Difficulty badge, title, metadata (time, quiz count, playground count)
+2. **Interactive Visualization** - 1-2 D3.js charts
+3. **Conceptual Diagram** - 1-2 Mermaid diagrams
+4. **Code Playground** - Monaco editor with runtime
+5. **Assessment** - 5-15 quiz questions
+6. **Challenge** - Progressive hands-on exercise
+7. **Real-World Examples** - 2-3 production analyses
+
+### Validation Checklist
+
+**Level 2 Module Validation:**
+- [ ] Difficulty badge present
+- [ ] D3.js loads within 2 seconds
+- [ ] Mermaid renders correctly
+- [ ] Monaco editor functional
+- [ ] Quiz answers configured
+- [ ] Challenge tests work
+- [ ] Navigation links functional
+
+### Performance Requirements
+
+- Module page load: <2 seconds
+- D3.js render: <1 second
+- Code execution: <1 second
+- WCAG 2.1 AA compliance
+
+---
+
 ## 📄 Version History
+
+### v5.0.0 (January 2, 2026) - Learning Hub Architecture
+- 🎓 **NEW:** Best Practices Learning Hub (80 interactive modules)
+- 🎓 **NEW:** Learning module standards and validation
+- 🎓 **NEW:** Code playground requirements (Monaco + Pyodide/QuickJS)
+- 🎓 **NEW:** Quiz and challenge system standards
+- ✨ Updated complexity scoring for pedagogical content
+- ✨ Added Learning Hub Pattern (distinct from Standard/Multi-Panel)
+- 📚 Updated scope: 209 total pages (was 129)
+
 ### v4.0.2 (January 1, 2026) - Major Optimization
 - 🎯 **BREAKING:** Simplified hierarchy to Level 0 → Level 1 only (removed Level 2 references)
 - 🎯 **OPTIMIZATION:** Removed 177 lines of redundant spacing documentation
