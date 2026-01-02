@@ -1,6 +1,6 @@
 # 📊 Planning System v5.0 - Visual Progress Tracker
 
-**Plan ID:** `planning-system-v5-implementation-2026-01-02`  
+**Plan ID:** `orchestrator-enhancement`  
 **Synced With:** [`progress-tracker.json`](./progress-tracker.json)  
 **Last Updated:** January 2, 2026  
 **Auto-Generated:** Yes (sync with JSON on each phase completion)

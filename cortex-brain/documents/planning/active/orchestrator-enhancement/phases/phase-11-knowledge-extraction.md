@@ -63,7 +63,7 @@
 {
   "timestamp": "2026-01-02T16:45:00Z",
   "event": "plan_completed",
-  "plan_id": "planning-system-v5-implementation-2026-01-02",
+  "plan_id": "orchestrator-enhancement",
   "feature": "Planning System v5.0 - Robust Architecture",
   "status": "completed",
   "duration_days": 49,
@@ -88,7 +88,7 @@
   type: pattern
   domain: integration
   description: "MCP tool pattern for guaranteed orchestrator execution"
-  source: planning-system-v5-implementation-2026-01-02/phase-01
+  source: orchestrator-enhancement/phase-01
   created: "2026-01-02"
   confidence: high
   reusability: high
@@ -104,7 +104,7 @@
   type: pattern
   domain: knowledge-management
   description: "Query knowledge library at every phase, extract patterns back"
-  source: planning-system-v5-implementation-2026-01-02/phase-03
+  source: orchestrator-enhancement/phase-03
   created: "2026-01-02"
   confidence: high
   reusability: high
@@ -118,12 +118,12 @@
   type: pattern
   domain: planning
   description: "Master plan + phase sub-files with 2-way linking"
-  source: planning-system-v5-implementation-2026-01-02/phase-06
+  source: orchestrator-enhancement/phase-06
   created: "2026-01-02"
   confidence: high
   reusability: high
   examples:
-    - cortex-brain/documents/planning/active/planning-system-v5-implementation-2026-01-02/
+    - cortex-brain/documents/planning/active/orchestrator-enhancement/
   related_patterns:
     - bidirectional_linking_pattern
     - plan_navigation_pattern
@@ -388,7 +388,7 @@ for obsolete in obsolete_patterns:
 # Knowledge Extraction Report - Planning System v5.0
 
 **Date:** January 2, 2026  
-**Plan:** planning-system-v5-implementation-2026-01-02  
+**Plan:** orchestrator-enhancement  
 **Duration:** 49 days
 
 ---
