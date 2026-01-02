@@ -2767,6 +2767,10 @@ cortex-brain/documents/planning/active/vacuum-v2-migration/
 - Decision criteria for autonomous vs guided
 - Migration strategy for each orchestrator
 - Timeline and dependencies
+- **⚠️ TDD-Master orchestrator flagged for stakeholder discussion before enhancement**
+
+**Special Note - TDD Orchestrator:**
+Assessment plan should include a "Discussion Required" section for TDD-Master orchestrator, highlighting that architecture decisions (autonomous vs GUIDED) require stakeholder input before proceeding with implementation. Plan should present trade-offs, pros/cons, and recommendation but defer final decision to design review.
 
 ### Completion Criteria
 - ✅ 4 migration plans generated using Planning v5
@@ -2796,7 +2800,7 @@ cortex-brain/documents/planning/active/vacuum-v2-migration/
 2. **ADO Orchestrator v2** (6 days) - Work item generation + wizard integration
 3. **Vacuum Orchestrator v2** (5 days) - Filesystem operations
 4. **Cleanup Orchestrator v2** (4 days) - Cache management
-5. **TDD Orchestrator Assessment** (3 days) - Evaluate autonomous conversion
+5. **TDD Orchestrator Assessment** (3 days) - **⚠️ DISCUSSION REQUIRED:** Evaluate autonomous conversion strategy with stakeholder input before enhancement
 6. **Debug Orchestrator Assessment** (2 days) - Evaluate autonomous conversion
 7. **Sanitization Orchestrator** (2 days) - Evaluate and migrate if beneficial
 8. **Refinement Orchestrator** (2 days) - Evaluate and migrate if beneficial
@@ -2875,6 +2879,17 @@ cortex-brain/documents/planning/active/vacuum-v2-migration/
 **Duration:** 9 days  
 **Plan Reference:** `guided-orchestrators-assessment/00-master-plan.md`
 
+**⚠️ IMPORTANT: TDD-Master Orchestrator Discussion Required**
+
+Before proceeding with TDD Orchestrator enhancement, a design discussion is required to determine:
+- Autonomous vs GUIDED architecture decision
+- Integration with existing TDD workflows
+- Master Orchestrator routing strategy
+- Test execution framework requirements
+- RED→GREEN→REFACTOR enforcement mechanisms
+
+**Action:** Schedule design review session when Task 6.4 begins (after Tasks 6.1-6.3 complete)
+
 **Decision Criteria:**
 - Complexity of operations (AST parsing, complex analysis → autonomous)
 - Workflow simplicity (tool call sequences → remain guided)
@@ -2882,7 +2897,7 @@ cortex-brain/documents/planning/active/vacuum-v2-migration/
 - User interaction requirements (approval workflows → guided)
 
 **Likely Outcomes:**
-- **TDD Mastery:** Remain GUIDED (workflow benefits from CORTEX interpretation)
+- **TDD Mastery:** **🔴 DISCUSS FIRST** - Architecture decision required before enhancement (autonomous vs guided trade-offs)
 - **Debug Orchestrator:** Convert to AUTONOMOUS (complex marker injection)
 - **Sanitization:** Convert to AUTONOMOUS (5-phase transformation needs transactions)
 - **Refinement:** Remain GUIDED (analysis phases benefit from tool call sequences)
