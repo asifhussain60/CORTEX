@@ -1,0 +1,38 @@
+{#
+  ADO Approval Gate Template
+  
+  Used in Approval Phase to prompt user for approval before creating work items.
+  
+  Context variables:
+  - preview: str - rendered work item preview (from work-item-preview.jinja2)
+  - feature_name: str - feature name
+  - items_count: int - number of work items to create
+  - total_effort_hours: int - total effort
+#}
+
+{{ preview }}
+
+---
+
+# ✋ Approval Gate
+
+**{{ items_count }} work items** are ready to be created in Azure DevOps for **{{ feature_name }}** ({{ total_effort_hours }}h total effort).
+
+## Options
+
+**✅ APPROVE** - Create the work items as shown above  
+**❌ REJECT** - Cancel and do not create work items  
+**✏️ REQUEST CHANGES** - Provide feedback for refinement
+
+---
+
+**Please respond with:**
+- `approve` or `yes` to create work items
+- `reject` or `no` to cancel
+- `changes` followed by your feedback to request modifications
+
+**Note:** You have 5 minutes to respond. After timeout, this request will be automatically rejected for safety.
+
+---
+
+_Waiting for approval..._

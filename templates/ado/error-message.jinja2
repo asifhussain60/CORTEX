@@ -1,0 +1,55 @@
+{#
+  ADO Error Message Template
+  
+  Used to display errors in a consistent format.
+  
+  Context variables:
+  - error_type: str - type of error
+  - error_message: str - error description
+  - phase: str - phase where error occurred
+  - feature_name: str - feature being processed
+  - logs: List[str] - execution logs
+  - suggestions: List[str] - suggested fixes
+#}
+
+# ❌ ADO Orchestrator Error
+
+## Error in {{ phase | upper }} Phase
+
+**Feature:** {{ feature_name }}  
+**Error Type:** {{ error_type }}
+
+### Error Details
+```
+{{ error_message }}
+```
+
+---
+
+## Execution Logs
+
+{% for log in logs %}
+{{ log }}
+{% endfor %}
+
+---
+
+{% if suggestions %}
+## Suggested Fixes
+
+{% for suggestion in suggestions %}
+{{ loop.index }}. {{ suggestion }}
+{% endfor %}
+{% else %}
+## Troubleshooting
+
+1. Check error message above for specific issues
+2. Verify ADO configuration (PAT token, organization, project)
+3. Ensure network connectivity to Azure DevOps
+4. Review execution logs for additional context
+5. Try again with `test_mode=True` to simulate without ADO API calls
+{% endif %}
+
+---
+
+_Error occurred in ADO Orchestrator v2 • Phase: {{ phase }}_
