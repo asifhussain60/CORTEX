@@ -137,14 +137,12 @@ Level 0 (Home) → Level 1 (Tile Overview) → Level 2 (Component Detail)
 </header>
 ```
 
-#### Level 1 & Level 2 Glass Header (NO LOGO - Navigation Only)
+#### Level 1 & Level 2 Glass Header (NO LOGO - Home Link Only)
 ```html
 <header class="glass-header">
     <div class="header-content">
         <nav class="header-nav">
             <a href="../index.html" class="nav-link"><i class="fas fa-home"></i> Home</a>
-            <a href="../security/index.html" class="nav-link"><i class="fas fa-shield-halved"></i> Security</a>
-            <a href="../documentation.html" class="nav-link"><i class="fas fa-book"></i> Documentation</a>
         </nav>
     </div>
 </header>

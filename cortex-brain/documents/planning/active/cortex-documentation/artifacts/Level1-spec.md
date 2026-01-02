@@ -419,26 +419,30 @@ flowchart LR
 <section class="content-section">
     <article class="glass-card-display animation-t1">
         <h2>STRIDE Framework</h2>
-        <div class="mermaid">
-            <!-- STRIDE diagram -->
+        <div class="mermaid-container">
+            <div class="mermaid">
+                <!-- STRIDE diagram -->
+            </div>
         </div>
     </article>
     
     <article class="glass-card-display animation-t1">
         <h2>Threat Assessment Workflow</h2>
-        <div class="mermaid">
-            <!-- Workflow diagram -->
+        <div class="mermaid-container">
+            <div class="mermaid">
+                <!-- Workflow diagram -->
+            </div>
         </div>
     </article>
     
     <article class="glass-card-display animation-t1">
         <h2>Interactive Threat Matrix</h2>
-        <div id="threat-matrix-viz"></div>
+        <div id="threat-matrix-viz" class="viz-container"></div>
     </article>
     
     <article class="glass-card-display animation-t1">
         <h2>Attack Surface Analysis</h2>
-        <div id="attack-surface-viz"></div>
+        <div id="attack-surface-viz" class="viz-container"></div>
     </article>
 </section>
 ```
@@ -508,8 +512,10 @@ graph TD
 <section class="content-section">
     <article class="glass-card-display animation-t1">
         <h2>Risk Calculation Methodology</h2>
-        <div class="mermaid">
-            <!-- Risk formula diagram -->
+        <div class="mermaid-container">
+            <div class="mermaid">
+                <!-- Risk formula diagram -->
+            </div>
         </div>
         <div class="code-example">
             <p class="code-title">Risk Score Formula</p>
@@ -519,19 +525,21 @@ graph TD
     
     <article class="glass-card-display animation-t1">
         <h2>Risk Treatment Framework</h2>
-        <div class="mermaid">
-            <!-- Decision tree diagram -->
+        <div class="mermaid-container">
+            <div class="mermaid">
+                <!-- Decision tree diagram -->
+            </div>
         </div>
     </article>
     
     <article class="glass-card-display animation-t1">
         <h2>Current Risk Portfolio</h2>
-        <div id="risk-bubble-chart"></div>
+        <div id="risk-bubble-chart" class="viz-container"></div>
     </article>
     
     <article class="glass-card-display animation-t1">
         <h2>Risk Management Trends</h2>
-        <div id="risk-heatmap"></div>
+        <div id="risk-heatmap" class="viz-container"></div>
     </article>
 </section>
 ```
@@ -693,8 +701,10 @@ graph LR
 <section class="content-section">
     <article class="glass-card-display animation-t1">
         <h2>Training Curriculum</h2>
-        <div class="mermaid">
-            <!-- Roadmap diagram -->
+        <div class="mermaid-container">
+            <div class="mermaid">
+                <!-- Roadmap diagram -->
+            </div>
         </div>
     </article>
     
@@ -786,8 +796,11 @@ graph TB
 <section class="content-section">
     <article class="glass-card-display animation-t1">
         <h2>Intelligence Sources</h2>
-        <div class="mermaid">
-            <!-- Sources diagram -->
+        <div class="mermaid-container">
+            <div class="mermaid">
+                <!-- Sources diagram -->
+            </div>
+        </div>
         </div>
     </article>
     
@@ -885,26 +898,30 @@ graph TD
 <section class="content-section">
     <article class="glass-card-display animation-t1">
         <h2>Incident Response Lifecycle</h2>
-        <div class="mermaid">
-            <!-- Lifecycle diagram -->
+        <div class="mermaid-container">
+            <div class="mermaid">
+                <!-- Lifecycle diagram -->
+            </div>
         </div>
     </article>
     
     <article class="glass-card-display animation-t1">
         <h2>Severity Classification Framework</h2>
-        <div class="mermaid">
-            <!-- Severity diagram -->
+        <div class="mermaid-container">
+            <div class="mermaid">
+                <!-- Severity diagram -->
+            </div>
         </div>
     </article>
     
     <article class="glass-card-display animation-t1">
         <h2>Incident Response Playbooks</h2>
-        <div id="playbook-selector"></div>
+        <div id="playbook-selector" class="viz-container"></div>
     </article>
     
     <article class="glass-card-display animation-t1">
         <h2>Active Incident Timeline</h2>
-        <div id="incident-timeline"></div>
+        <div id="incident-timeline" class="viz-container"></div>
     </article>
 </section>
 ```
