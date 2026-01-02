@@ -451,7 +451,7 @@
                     <a href="knowledge/index.html" class="btn-hero btn-hero-knowledge animation-t2">
                         <span class="btn-hero-icon">📚</span>
                         <span class="btn-hero-text">CORTEX Best Practices</span>
-                        <span class="btn-hero-caption">35 Guidelines for Implementation</span>
+                        <span class="btn-hero-caption">80 Interactive Learning Modules • 55 Hours</span>
                     </a>
                     <a href="toolkit-manager/index.html" class="btn-hero btn-hero-primary animation-t2">
                         <span class="btn-hero-icon">🛠️</span>
@@ -462,6 +462,11 @@
                         <span class="btn-hero-icon"><i class="fas fa-search-plus"></i></span>
                         <span class="btn-hero-text">CORTEX LENS</span>
                         <span class="btn-hero-caption">AST Analysis & Reverse Engineering</span>
+                    </a>
+                    <a href="learning-paths/index.html" class="btn-hero btn-hero-knowledge animation-t2">
+                        <span class="btn-hero-icon">🎓</span>
+                        <span class="btn-hero-text">Learning Paths</span>
+                        <span class="btn-hero-caption">Interactive Journeys • Quizzes • Code Playgrounds</span>
                     </a>
                     <a href="getting-started/index.html" class="btn-hero btn-hero-warning animation-t2">
                         <span class="btn-hero-icon">🚀</span>
@@ -1165,6 +1170,9 @@
             function hideLoading() {
                 overlay.classList.remove('active');
             }
+
+            // Force hide overlay immediately on page load
+            hideLoading();
 
             // Attach click handlers to navigation links
             // Target: btn-hero links (feature tiles) and glass-card links

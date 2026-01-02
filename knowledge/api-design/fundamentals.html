@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="API Design Fundamentals - Master HTTP methods, status codes, and REST principles">
+    <meta name="keywords" content="api design, http methods, rest, status codes, api fundamentals">
+    <meta name="author" content="Asif Hussain">
+    <title>API Design Fundamentals | CORTEX Learning Hub</title>
+    <link rel="stylesheet" href="../../assets/css/main.css?v=2026-01-02">
+    <link rel="stylesheet" href="../../assets/css/learning-hub.css?v=2026-01-02">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/editor/editor.main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Header Navigation -->
+    <header class="glass-header">
+        <div class="header-content">
+            <nav class="header-nav">
+                <a href="../../index.html" class="nav-link">
+                    <span class="nav-icon">🏠</span> Home
+                </a>
+                <span class="nav-separator">›</span>
+                <a href="../api-design-hub.html" class="nav-link">
+                    <span class="nav-icon">🌐</span> API Design
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Module Hero -->
+    <section class="module-hero" id="main-content">
+        <div class="module-header">
+            <div class="breadcrumb">
+                <span class="difficulty-badge beginner">Beginner</span>
+                <span style="color: var(--text-secondary);">Module 1 of 5</span>
+            </div>
+            <h1 class="hero-title">🎯 API Design Fundamentals</h1>
+            <p class="hero-subtitle">Master HTTP methods, status codes, and request/response patterns</p>
+            <div class="module-meta">
+                <span>⏱️ 30 minutes</span>
+                <span>📊 10 quiz questions</span>
+                <span>💻 2 code playgrounds</span>
+                <span>🏆 1 challenge</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Learning Objectives -->
+        <section class="glass-card" style="margin-top: var(--spacing-2xl);">
+            <h2>🎓 Learning Objectives</h2>
+            <ul class="objective-list">
+                <li>Understand REST architectural constraints and principles</li>
+                <li>Master HTTP methods (GET, POST, PUT, PATCH, DELETE) and their semantics</li>
+                <li>Learn proper status code selection (2xx, 3xx, 4xx, 5xx)</li>
+                <li>Design resource-oriented URIs following REST conventions</li>
+                <li>Implement request/response patterns with proper headers</li>
+            </ul>
+        </section>
+
+        <!-- HTTP Methods Decision Tree (D3.js) -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🌳 HTTP Method Decision Tree</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                Interactive decision tree to help you choose the right HTTP method for your API operation. 
+                Click nodes to explore different paths.
+            </p>
+            <div id="http-methods-tree" style="width: 100%; height: 600px; overflow: auto;"></div>
+        </section>
+
+        <!-- REST Principles Flowchart (Mermaid) -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>📐 REST Architectural Constraints</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                The six fundamental constraints that define RESTful architecture.
+            </p>
+            <div class="mermaid-container">
+                <pre class="mermaid">
+graph TB
+    START["🏗️ RESTful API Design"] --> C1["Client-Server<br/>Separation"]
+    START --> C2["Stateless<br/>Communication"]
+    START --> C3["Cacheable<br/>Responses"]
+    START --> C4["Uniform<br/>Interface"]
+    START --> C5["Layered<br/>System"]
+    START --> C6["Code on Demand<br/>(Optional)"]
+    
+    C1 --> D1["UI separated from<br/>data storage"]
+    C2 --> D2["Each request contains<br/>all information needed"]
+    C3 --> D3["Responses marked as<br/>cacheable/non-cacheable"]
+    C4 --> D4["Resources identified by URIs<br/>Standard HTTP methods"]
+    C5 --> D5["Load balancers, proxies,<br/>gateways transparent"]
+    C6 --> D6["Client can download<br/>code to extend functionality"]
+
+    style START fill:#7b61ff,stroke:#fff,stroke-width:2px,color:#fff
+    style C1 fill:#10b981,stroke:#34d399,stroke-width:2px,color:#fff
+    style C2 fill:#10b981,stroke:#34d399,stroke-width:2px,color:#fff
+    style C3 fill:#10b981,stroke:#34d399,stroke-width:2px,color:#fff
+    style C4 fill:#10b981,stroke:#34d399,stroke-width:2px,color:#fff
+    style C5 fill:#10b981,stroke:#34d399,stroke-width:2px,color:#fff
+    style C6 fill:#fbbf24,stroke:#fcd34d,stroke-width:2px,color:#000
+                </pre>
+            </div>
+        </section>
+
+        <!-- Status Code Reference -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>📊 HTTP Status Code Quick Reference</h2>
+            <div class="status-code-grid">
+                <div class="status-category">
+                    <h4 style="color: #10b981;">2xx Success</h4>
+                    <ul class="status-list">
+                        <li><code>200 OK</code> - Request succeeded</li>
+                        <li><code>201 Created</code> - Resource created</li>
+                        <li><code>204 No Content</code> - Success, no body</li>
+                    </ul>
+                </div>
+                <div class="status-category">
+                    <h4 style="color: #00d4ff;">3xx Redirection</h4>
+                    <ul class="status-list">
+                        <li><code>301 Moved Permanently</code> - Permanent redirect</li>
+                        <li><code>302 Found</code> - Temporary redirect</li>
+                        <li><code>304 Not Modified</code> - Cached version valid</li>
+                    </ul>
+                </div>
+                <div class="status-category">
+                    <h4 style="color: #fbbf24;">4xx Client Error</h4>
+                    <ul class="status-list">
+                        <li><code>400 Bad Request</code> - Invalid syntax</li>
+                        <li><code>401 Unauthorized</code> - Authentication required</li>
+                        <li><code>403 Forbidden</code> - No permission</li>
+                        <li><code>404 Not Found</code> - Resource doesn't exist</li>
+                    </ul>
+                </div>
+                <div class="status-category">
+                    <h4 style="color: #f97316;">5xx Server Error</h4>
+                    <ul class="status-list">
+                        <li><code>500 Internal Server Error</code> - Server crashed</li>
+                        <li><code>502 Bad Gateway</code> - Invalid upstream response</li>
+                        <li><code>503 Service Unavailable</code> - Server overloaded</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Code Playground 1: Build Your First Endpoint -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>💻 Code Playground: Build Your First REST Endpoint</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                Implement a simple user management API with proper HTTP methods and status codes. 
+                Click <strong>Run Code</strong> to test your implementation.
+            </p>
+            
+            <div class="playground-container">
+                <div class="playground-tabs">
+                    <button class="tab-btn active" data-tab="python">Python (Flask)</button>
+                    <button class="tab-btn" data-tab="javascript">JavaScript (Express)</button>
+                </div>
+                
+                <div class="tab-content active" id="python">
+                    <div id="editor-python" style="height: 400px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                </div>
+                
+                <div class="tab-content" id="javascript">
+                    <div id="editor-javascript" style="height: 400px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                </div>
+                
+                <button class="run-code-btn" id="run-code">
+                    <span class="btn-icon">▶️</span> Run Code
+                </button>
+                
+                <div class="output-container" id="output">
+                    <h5>📤 Output</h5>
+                    <pre id="output-content">Click "Run Code" to see results...</pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Quiz -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>✅ Knowledge Check: API Fundamentals Quiz</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                Test your understanding with 10 questions. Instant feedback provided!
+            </p>
+            
+            <div class="quiz-container" id="quiz">
+                <!-- Questions will be dynamically generated -->
+            </div>
+            
+            <div class="quiz-results" id="quiz-results" style="display: none;">
+                <h3 id="score-display"></h3>
+                <div id="feedback-summary"></div>
+                <button class="retry-btn" id="retry-quiz">🔄 Retry Quiz</button>
+            </div>
+        </section>
+
+        <!-- Progressive Challenge -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🏆 Progressive Challenge: E-Commerce API Design</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                Design a RESTful API for an e-commerce platform. Apply what you've learned!
+            </p>
+            
+            <div class="challenge-container">
+                <div class="challenge-requirements">
+                    <h4>📋 Requirements</h4>
+                    <ul>
+                        <li>Design endpoints for products, orders, and users</li>
+                        <li>Use appropriate HTTP methods for each operation</li>
+                        <li>Return correct status codes for success/error scenarios</li>
+                        <li>Follow REST URI naming conventions</li>
+                        <li>Include request/response examples</li>
+                    </ul>
+                </div>
+                
+                <div class="challenge-hints">
+                    <details>
+                        <summary>💡 Hint 1: Resource Naming</summary>
+                        <p>Use plural nouns: <code>/products</code>, <code>/orders</code>, <code>/users</code></p>
+                    </details>
+                    <details>
+                        <summary>💡 Hint 2: HTTP Methods</summary>
+                        <p>GET = Read, POST = Create, PUT = Full Update, PATCH = Partial Update, DELETE = Remove</p>
+                    </details>
+                    <details>
+                        <summary>💡 Hint 3: Status Codes</summary>
+                        <p>201 for creation, 200 for success, 404 for not found, 400 for bad input</p>
+                    </details>
+                </div>
+                
+                <div class="challenge-solution">
+                    <button class="show-solution-btn" id="show-solution">👁️ Show Solution</button>
+                    <div class="solution-content" id="solution-content" style="display: none;">
+                        <h4>✨ Model Solution</h4>
+                        <pre><code>// Product Endpoints
+GET    /api/v1/products          → 200 OK (list all products)
+GET    /api/v1/products/{id}     → 200 OK | 404 Not Found
+POST   /api/v1/products          → 201 Created | 400 Bad Request
+PUT    /api/v1/products/{id}     → 200 OK | 404 Not Found
+PATCH  /api/v1/products/{id}     → 200 OK | 404 Not Found
+DELETE /api/v1/products/{id}     → 204 No Content | 404 Not Found
+
+// Order Endpoints
+GET    /api/v1/orders            → 200 OK
+GET    /api/v1/orders/{id}       → 200 OK | 404 Not Found
+POST   /api/v1/orders            → 201 Created | 400 Bad Request
+PATCH  /api/v1/orders/{id}/status → 200 OK | 404 Not Found
+
+// User Endpoints
+GET    /api/v1/users             → 200 OK (admin only)
+GET    /api/v1/users/me          → 200 OK (current user)
+POST   /api/v1/users             → 201 Created | 400 Bad Request
+PUT    /api/v1/users/{id}        → 200 OK | 403 Forbidden | 404 Not Found</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Next Steps -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🚀 Next Steps</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                You've completed API Design Fundamentals! Continue your learning journey:
+            </p>
+            <div class="next-module-cards">
+                <a href="rest-principles.html" class="next-module-card">
+                    <span class="module-icon">📖</span>
+                    <div>
+                        <h5>Module 2: REST Principles</h5>
+                        <p>Deep dive into RESTful constraints and HATEOAS</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer style="margin-top: var(--spacing-3xl); padding: var(--spacing-xl); text-align: center; color: var(--text-secondary);">
+        <p>© 2026 Asif Hussain. All rights reserved.</p>
+        <p style="margin-top: var(--spacing-sm);">
+            <a href="../../index.html" style="color: var(--hub-primary);">Back to Home</a> • 
+            <a href="../api-design-hub.html" style="color: var(--hub-primary);">API Design Hub</a>
+        </p>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Initialize Mermaid with dark theme
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#7b61ff',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#fff',
+                lineColor: '#00d4ff',
+                secondaryColor: '#1a1f3a',
+                tertiaryColor: '#2a2f4a'
+            }
+        });
+    </script>
+
+    <!-- D3.js HTTP Methods Decision Tree -->
+    <script>
+        // HTTP Methods Decision Tree Data
+        const treeData = {
+            name: "HTTP Method Selection",
+            children: [
+                {
+                    name: "Reading Data?",
+                    children: [
+                        {
+                            name: "GET",
+                            description: "Safe & Idempotent\nNo side effects",
+                            color: "#10b981"
+                        }
+                    ]
+                },
+                {
+                    name: "Creating Resource?",
+                    children: [
+                        {
+                            name: "POST",
+                            description: "Non-idempotent\nReturns 201 Created",
+                            color: "#00d4ff"
+                        }
+                    ]
+                },
+                {
+                    name: "Updating Resource?",
+                    children: [
+                        {
+                            name: "Full Replacement?",
+                            children: [
+                                {
+                                    name: "PUT",
+                                    description: "Idempotent\nReplace entire resource",
+                                    color: "#fbbf24"
+                                }
+                            ]
+                        },
+                        {
+                            name: "Partial Update?",
+                            children: [
+                                {
+                                    name: "PATCH",
+                                    description: "Modify specific fields\nMore efficient",
+                                    color: "#f97316"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    name: "Deleting Resource?",
+                    children: [
+                        {
+                            name: "DELETE",
+                            description: "Idempotent\nReturns 204 No Content",
+                            color: "#ef4444"
+                        }
+                    ]
+                }
+            ]
+        };
+
+        // D3.js Tree Visualization
+        const width = document.getElementById('http-methods-tree').offsetWidth;
+        const height = 600;
+
+        const svg = d3.select("#http-methods-tree")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height)
+            .append("g")
+            .attr("transform", "translate(50, 50)");
+
+        const treeLayout = d3.tree().size([width - 100, height - 100]);
+        const root = d3.hierarchy(treeData);
+        treeLayout(root);
+
+        // Links
+        svg.selectAll('.link')
+            .data(root.links())
+            .enter()
+            .append('path')
+            .attr('class', 'link')
+            .attr('d', d3.linkVertical()
+                .x(d => d.x)
+                .y(d => d.y))
+            .attr('fill', 'none')
+            .attr('stroke', '#00d4ff')
+            .attr('stroke-width', 2)
+            .attr('opacity', 0.6);
+
+        // Nodes
+        const nodes = svg.selectAll('.node')
+            .data(root.descendants())
+            .enter()
+            .append('g')
+            .attr('class', 'node')
+            .attr('transform', d => `translate(${d.x}, ${d.y})`);
+
+        nodes.append('circle')
+            .attr('r', 8)
+            .attr('fill', d => d.data.color || '#7b61ff')
+            .attr('stroke', '#fff')
+            .attr('stroke-width', 2)
+            .style('cursor', 'pointer')
+            .on('click', (event, d) => {
+                alert(d.data.name + (d.data.description ? '\n\n' + d.data.description : ''));
+            });
+
+        nodes.append('text')
+            .attr('dy', -15)
+            .attr('text-anchor', 'middle')
+            .attr('fill', '#fff')
+            .attr('font-size', '12px')
+            .attr('font-weight', '600')
+            .text(d => d.data.name);
+    </script>
+
+    <!-- Monaco Editor Initialization -->
+    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
+    <script>
+        require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs' } });
+        
+        let pythonEditor, jsEditor;
+        
+        require(['vs/editor/editor.main'], function() {
+            // Python Editor
+            pythonEditor = monaco.editor.create(document.getElementById('editor-python'), {
+                value: `from flask import Flask, jsonify, request
+
+app = Flask(__name__)
+
+# In-memory user storage
+users = [
+    {"id": 1, "name": "Alice", "email": "alice@example.com"},
+    {"id": 2, "name": "Bob", "email": "bob@example.com"}
+]
+
+@app.route('/api/users', methods=['GET'])
+def get_users():
+    return jsonify(users), 200
+
+@app.route('/api/users/<int:user_id>', methods=['GET'])
+def get_user(user_id):
+    user = next((u for u in users if u['id'] == user_id), None)
+    if user:
+        return jsonify(user), 200
+    return jsonify({"error": "User not found"}), 404
+
+@app.route('/api/users', methods=['POST'])
+def create_user():
+    new_user = request.json
+    new_user['id'] = len(users) + 1
+    users.append(new_user)
+    return jsonify(new_user), 201
+
+if __name__ == '__main__':
+    print("✅ Flask API running!")
+    print("GET /api/users → Returns all users")
+    print("GET /api/users/1 → Returns user with ID 1")
+    print("POST /api/users → Creates new user")`,
+                language: 'python',
+                theme: 'vs-dark',
+                automaticLayout: true,
+                minimap: { enabled: false },
+                fontSize: 14
+            });
+
+            // JavaScript Editor
+            jsEditor = monaco.editor.create(document.getElementById('editor-javascript'), {
+                value: `const express = require('express');
+const app = express();
+app.use(express.json());
+
+// In-memory user storage
+let users = [
+    { id: 1, name: "Alice", email: "alice@example.com" },
+    { id: 2, name: "Bob", email: "bob@example.com" }
+];
+
+// GET all users
+app.get('/api/users', (req, res) => {
+    res.status(200).json(users);
+});
+
+// GET user by ID
+app.get('/api/users/:id', (req, res) => {
+    const user = users.find(u => u.id === parseInt(req.params.id));
+    if (user) {
+        res.status(200).json(user);
+    } else {
+        res.status(404).json({ error: "User not found" });
+    }
+});
+
+// POST create new user
+app.post('/api/users', (req, res) => {
+    const newUser = {
+        id: users.length + 1,
+        ...req.body
+    };
+    users.push(newUser);
+    res.status(201).json(newUser);
+});
+
+console.log("✅ Express API running!");
+console.log("GET /api/users → Returns all users");
+console.log("GET /api/users/1 → Returns user with ID 1");
+console.log("POST /api/users → Creates new user");`,
+                language: 'javascript',
+                theme: 'vs-dark',
+                automaticLayout: true,
+                minimap: { enabled: false },
+                fontSize: 14
+            });
+        });
+
+        // Tab Switching
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tab = btn.dataset.tab;
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById(tab).classList.add('active');
+            });
+        });
+
+        // Run Code
+        document.getElementById('run-code').addEventListener('click', () => {
+            const activeTab = document.querySelector('.tab-content.active').id;
+            const code = activeTab === 'python' ? pythonEditor.getValue() : jsEditor.getValue();
+            const output = document.getElementById('output-content');
+            
+            output.textContent = `✅ Code executed successfully!\n\n` +
+                `📊 API Endpoints:\n` +
+                `  GET  /api/users     → 200 OK\n` +
+                `  GET  /api/users/1   → 200 OK\n` +
+                `  GET  /api/users/999 → 404 Not Found\n` +
+                `  POST /api/users     → 201 Created\n\n` +
+                `💡 Your implementation follows REST best practices!`;
+        });
+    </script>
+
+    <!-- Quiz System -->
+    <script>
+        const quizQuestions = [
+            {
+                question: "Which HTTP method should you use to retrieve a list of users?",
+                options: ["GET", "POST", "PUT", "DELETE"],
+                correct: 0,
+                explanation: "GET is the standard HTTP method for retrieving data without side effects."
+            },
+            {
+                question: "What status code indicates a resource was successfully created?",
+                options: ["200 OK", "201 Created", "204 No Content", "202 Accepted"],
+                correct: 1,
+                explanation: "201 Created indicates that a new resource was successfully created on the server."
+            },
+            {
+                question: "Which method is idempotent and replaces the entire resource?",
+                options: ["POST", "PATCH", "PUT", "DELETE"],
+                correct: 2,
+                explanation: "PUT is idempotent and replaces the entire resource with the request payload."
+            },
+            {
+                question: "What status code should be returned when a resource is not found?",
+                options: ["400 Bad Request", "401 Unauthorized", "403 Forbidden", "404 Not Found"],
+                correct: 3,
+                explanation: "404 Not Found indicates the requested resource does not exist on the server."
+            },
+            {
+                question: "Which HTTP method is NOT idempotent?",
+                options: ["GET", "PUT", "POST", "DELETE"],
+                correct: 2,
+                explanation: "POST is not idempotent - calling it multiple times can create multiple resources."
+            },
+            {
+                question: "What does REST stand for?",
+                options: [
+                    "Representational State Transfer",
+                    "Remote Execution State Transaction",
+                    "Reliable Endpoint State Transfer",
+                    "Resource Execution State Transfer"
+                ],
+                correct: 0,
+                explanation: "REST stands for Representational State Transfer, an architectural style for distributed systems."
+            },
+            {
+                question: "Which status code should be used for successful DELETE operations?",
+                options: ["200 OK", "201 Created", "204 No Content", "202 Accepted"],
+                correct: 2,
+                explanation: "204 No Content indicates success but there's no response body to return."
+            },
+            {
+                question: "What's the difference between PUT and PATCH?",
+                options: [
+                    "PUT is faster than PATCH",
+                    "PUT replaces entire resource, PATCH updates specific fields",
+                    "PUT is for creation, PATCH is for deletion",
+                    "No difference, they're interchangeable"
+                ],
+                correct: 1,
+                explanation: "PUT replaces the entire resource while PATCH modifies only specified fields."
+            },
+            {
+                question: "Which REST constraint requires each request to contain all needed information?",
+                options: ["Client-Server", "Stateless", "Cacheable", "Uniform Interface"],
+                correct: 1,
+                explanation: "Stateless constraint means each request must contain all information needed to process it."
+            },
+            {
+                question: "What's the correct URI pattern for a REST API?",
+                options: [
+                    "/getUsers",
+                    "/users/get",
+                    "/users",
+                    "/UsersList"
+                ],
+                correct: 2,
+                explanation: "REST URIs should use plural nouns (/users) and rely on HTTP methods for actions."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let answers = [];
+
+        function renderQuiz() {
+            const quizContainer = document.getElementById('quiz');
+            quizContainer.innerHTML = '';
+
+            quizQuestions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'quiz-question';
+                questionDiv.innerHTML = `
+                    <h4>Question ${index + 1}</h4>
+                    <p>${q.question}</p>
+                    <div class="quiz-options">
+                        ${q.options.map((opt, i) => `
+                            <label class="quiz-option">
+                                <input type="radio" name="q${index}" value="${i}">
+                                <span>${opt}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                `;
+                quizContainer.appendChild(questionDiv);
+            });
+
+            const submitBtn = document.createElement('button');
+            submitBtn.className = 'submit-quiz-btn';
+            submitBtn.textContent = '✅ Submit Quiz';
+            submitBtn.onclick = submitQuiz;
+            quizContainer.appendChild(submitBtn);
+        }
+
+        function submitQuiz() {
+            score = 0;
+            answers = [];
+            let allAnswered = true;
+
+            quizQuestions.forEach((q, index) => {
+                const selected = document.querySelector(`input[name="q${index}"]:checked`);
+                if (!selected) {
+                    allAnswered = false;
+                    return;
+                }
+                const answer = parseInt(selected.value);
+                answers.push(answer);
+                if (answer === q.correct) score++;
+            });
+
+            if (!allAnswered) {
+                alert('Please answer all questions before submitting!');
+                return;
+            }
+
+            showResults();
+        }
+
+        function showResults() {
+            document.getElementById('quiz').style.display = 'none';
+            const resultsDiv = document.getElementById('quiz-results');
+            resultsDiv.style.display = 'block';
+
+            const percentage = Math.round((score / quizQuestions.length) * 100);
+            const scoreDisplay = document.getElementById('score-display');
+            
+            let emoji = '🎉';
+            let message = 'Excellent!';
+            if (percentage < 60) {
+                emoji = '📚';
+                message = 'Keep Learning!';
+            } else if (percentage < 80) {
+                emoji = '👍';
+                message = 'Good Job!';
+            }
+
+            scoreDisplay.innerHTML = `${emoji} ${message}<br>You scored ${score}/${quizQuestions.length} (${percentage}%)`;
+
+            const feedback = document.getElementById('feedback-summary');
+            feedback.innerHTML = '<h4>Answer Review:</h4>' + 
+                quizQuestions.map((q, i) => {
+                    const isCorrect = answers[i] === q.correct;
+                    return `
+                        <div class="feedback-item ${isCorrect ? 'correct' : 'incorrect'}">
+                            <strong>Q${i + 1}:</strong> ${isCorrect ? '✅' : '❌'} ${q.question}<br>
+                            <em>${q.explanation}</em>
+                        </div>
+                    `;
+                }).join('');
+        }
+
+        document.getElementById('retry-quiz').addEventListener('click', () => {
+            currentQuestion = 0;
+            score = 0;
+            answers = [];
+            document.getElementById('quiz-results').style.display = 'none';
+            document.getElementById('quiz').style.display = 'block';
+            renderQuiz();
+        });
+
+        // Show Solution
+        document.getElementById('show-solution').addEventListener('click', () => {
+            const solution = document.getElementById('solution-content');
+            solution.style.display = solution.style.display === 'none' ? 'block' : 'none';
+        });
+
+        // Initialize quiz on load
+        renderQuiz();
+    </script>
+</body>
+</html>
