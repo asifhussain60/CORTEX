@@ -1816,6 +1816,333 @@ footer,
     }
 }
 
+/* ============================================
+   BUILT WITH CORTEX (BWC) - Meta Achievement Panel
+   ============================================ */
+.built-with-cortex-panel {
+    position: relative;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+    background: rgba(26, 31, 58, 0.4);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37),
+                inset 0 0 60px rgba(0, 212, 255, 0.05);
+}
+
+/* Animated Background Layers */
+.bwc-bg-grid {
+    position: absolute;
+    inset: 0;
+    background-image: 
+        linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: gridScroll 20s linear infinite;
+}
+
+@keyframes gridScroll {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(50px, 50px); }
+}
+
+.bwc-glow {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(0, 212, 255, 0.15) 0%, transparent 70%);
+    animation: glowPulse 8s ease-in-out infinite;
+}
+
+.bwc-glow-secondary {
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(123, 97, 255, 0.1) 0%, transparent 70%);
+    animation: glowPulse 8s ease-in-out infinite reverse;
+}
+
+@keyframes glowPulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.8; }
+}
+
+.bwc-scan-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
+    animation: scanLine 4s linear infinite;
+}
+
+@keyframes scanLine {
+    0% { transform: translateY(0); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: translateY(600px); opacity: 0; }
+}
+
+/* Content Container */
+.bwc-content {
+    position: relative;
+    z-index: 1;
+}
+
+.bwc-main {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.bwc-text {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.bwc-title {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.bwc-title-highlight {
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.bwc-tagline {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    margin-bottom: 0;
+}
+
+/* Dual Achievement Panels */
+.bwc-dual-panels {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.bwc-achievement-panel {
+    position: relative;
+    background: rgba(26, 31, 58, 0.6);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 16px;
+    padding: 2rem;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.bwc-achievement-panel:hover {
+    transform: translateY(-4px);
+    border-color: rgba(0, 212, 255, 0.5);
+    box-shadow: 0 12px 40px rgba(0, 212, 255, 0.2);
+}
+
+.bwc-achievement-panel-secondary {
+    border-color: rgba(123, 97, 255, 0.3);
+}
+
+.bwc-achievement-panel-secondary:hover {
+    border-color: rgba(123, 97, 255, 0.5);
+    box-shadow: 0 12px 40px rgba(123, 97, 255, 0.2);
+}
+
+.bwc-panel-scan-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
+    animation: panelScan 3s linear infinite;
+}
+
+.bwc-panel-scan-line-secondary {
+    background: linear-gradient(90deg, transparent, var(--accent-secondary), transparent);
+}
+
+@keyframes panelScan {
+    0% { transform: translateX(-100%); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: translateX(100%); opacity: 0; }
+}
+
+.bwc-panel-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.bwc-panel-icon {
+    font-size: 1.5rem;
+    color: var(--accent-primary);
+}
+
+.bwc-achievement-panel-secondary .bwc-panel-icon {
+    color: var(--accent-secondary);
+}
+
+.bwc-panel-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--text-primary);
+}
+
+.bwc-panel-subtitle {
+    font-size: 1rem;
+    color: var(--accent-primary);
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.bwc-achievement-panel-secondary .bwc-panel-subtitle {
+    color: var(--accent-secondary);
+}
+
+.bwc-panel-description {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+/* Panel Mini Stats */
+.bwc-panel-stats {
+    display: flex;
+    justify-content: space-around;
+    gap: 1rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.bwc-mini-stat {
+    text-align: center;
+}
+
+.bwc-mini-value {
+    display: block;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--accent-primary);
+    margin-bottom: 0.25rem;
+}
+
+.bwc-achievement-panel-secondary .bwc-mini-value {
+    color: var(--accent-secondary);
+}
+
+.bwc-mini-label {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Main Stats Grid */
+.bwc-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+}
+
+.bwc-stat {
+    background: rgba(26, 31, 58, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.bwc-stat:hover {
+    transform: translateY(-2px);
+    border-color: rgba(0, 212, 255, 0.3);
+    box-shadow: 0 8px 24px rgba(0, 212, 255, 0.15);
+}
+
+.bwc-stat-icon {
+    font-size: 2rem;
+    color: var(--accent-primary);
+    margin-bottom: 0.75rem;
+}
+
+.bwc-stat-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.bwc-stat-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.bwc-stat-bar {
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.bwc-stat-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+    border-radius: 2px;
+    transition: width 2s ease-out;
+}
+
+/* Responsive BWC Panel */
+@media (max-width: 1024px) {
+    .bwc-dual-panels {
+        grid-template-columns: 1fr;
+    }
+    
+    .bwc-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .built-with-cortex-panel {
+        padding: 2rem 1rem;
+    }
+    
+    .bwc-title {
+        font-size: 2rem;
+    }
+    
+    .bwc-tagline {
+        font-size: 1rem;
+    }
+    
+    .bwc-panel-stats {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .bwc-stats {
+        grid-template-columns: 1fr;
+    }
+}
+
 /* Page Logo Header (for inner pages) */
 .logo-header {
     text-align: center;
@@ -2565,21 +2892,26 @@ footer,
    AWAKENING IMAGE STYLING (Story Button)
    ============================================ */
 .awakening-image {
-    width: 200px;
-    height: 200px;
+    width: 200px !important;
+    height: 200px !important;
     border-radius: 15px;
     object-fit: cover;
-    display: block;
-    margin: 0 auto 1rem auto;
+    display: block !important;
+    margin: 0 0 1rem 0;
 }
 
 /* Story button icon container needs to show images properly */
 .btn-hero-story .btn-hero-icon {
-    font-size: inherit;
+    font-size: 0;
     line-height: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: block;
+    margin-bottom: 0;
+    text-align: center;
+}
+
+/* Ensure images inside story button icons are displayed at their defined size */
+.btn-hero-story .btn-hero-icon img {
+    display: inline-block;
 }
 
 /* ============================================
@@ -4843,6 +5175,11 @@ footer,
     color: var(--text-secondary);
     line-height: 1.6;
     margin-bottom: 1rem;
+}
+
+/* Hidden demo content (JS-controlled visibility) */
+.demo-info-content.hidden {
+    display: none;
 }
 
 /* Video Area */
