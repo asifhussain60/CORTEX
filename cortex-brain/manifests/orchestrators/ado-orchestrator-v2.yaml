@@ -2,6 +2,7 @@
 # Pure config-only YAML - NO natural language instructions
 # All execution logic in Python code
 
+schema_version: "5.0"
 version: "2.0.0"
 orchestrator: ado_orchestrator_v2
 type: autonomous
