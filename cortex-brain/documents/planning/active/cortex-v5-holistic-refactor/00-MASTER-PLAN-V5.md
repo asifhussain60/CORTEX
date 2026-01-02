@@ -115,6 +115,10 @@ src/
 │   └── migrations/
 ├── orchestrators/
 │   ├── base_orchestrator_v4_1.py (new)
+│   ├── master_orchestrator.py (new - Phase 3)
+│   ├── pattern_router.py (new - Phase 3)
+│   ├── state_manager.py (new - Phase 3)
+│   ├── execution_engine.py (new - Phase 3)
 │   ├── planning_orchestrator_v5.py (new)
 │   └── ...existing...
 └── utils/
@@ -123,7 +127,8 @@ src/
 cortex-brain/
 ├── database/                    # Database storage (new)
 └── config/
-    └── mcp-server.yaml (new)
+    ├── mcp-server.yaml (new)
+    └── master-orchestrator.yaml (new - Phase 3)
 
 tests/
 ├── mcp/ (new)
@@ -163,7 +168,7 @@ Document current state for comparison:
 
 **Artifacts to Create:**
 - `context/baseline-architecture.md` - Current system state
-- `context/brittleness-analysis.md` - Known issues across all components
+- `context/brittleness-analysis.md` - Known issues across all components (including LLM-dependent routing)
 - `context/orchestrator-inventory.md` - Complete orchestrator catalog
 - `context/agent-inventory.md` - All agents and their manifest dependencies
 
@@ -173,6 +178,9 @@ Document current state for comparison:
 - Catalog all agents with configuration sources
 - Map state management approaches across system
 - Document failure recovery capabilities (or lack thereof)
+- **Document current routing mechanism (CORTEX.prompt.md LLM-based) and its brittleness**
+- **Identify lack of orchestrator-to-orchestrator communication**
+- **Baseline for measuring Master Orchestrator improvements (Phase 3+)**
 
 ### Completion Criteria
 - ✅ Project structure exists with proper organization
@@ -185,6 +193,8 @@ Document current state for comparison:
 ## 🔧 Phase 1: MCP Tool Infrastructure (2 days)
 
 **Goal:** Build Model Context Protocol layer for universal orchestrator invocation
+
+**Master Orchestrator Context:** MCP tools provide the universal invocation mechanism that Master Orchestrator will use to execute orchestrators. The OrchestratorRegistry built here will be extended in Phase 3 to support Master Orchestrator's dependency resolution and lifecycle management.
 
 ### Task 1.1: MCP Server Foundation
 **Duration:** 1d
@@ -235,6 +245,7 @@ orchestrators:
 - Link to config file paths
 - Validate orchestrator availability on startup
 - Support hot-reload for development
+- **Foundation for Master Orchestrator registry (Phase 3 will extend)**
 
 ### Task 1.3: Universal Invocation Tool
 **Duration:** 4h
@@ -279,6 +290,7 @@ def invoke_orchestrator(
 - ✅ Registry loads orchestrator configs correctly
 - ✅ Universal tool invokes orchestrators successfully
 - ✅ Error handling prevents crashes
+- ✅ **Foundation ready for Master Orchestrator integration (Phase 3)**
 - ✅ Git checkpoint created: `checkpoint-phase-1-mcp-infrastructure`
 
 ---
@@ -286,6 +298,8 @@ def invoke_orchestrator(
 ## 🗄️ Phase 2: Planning State Database (1.5 days)
 
 **Goal:** Single source of truth for all planning state with ACID transactions
+
+**Master Orchestrator Context:** The PlanningStateDB built here will be used by Master Orchestrator's StateManager (Phase 3) for cross-orchestrator state coordination. The execution_log table will track Master Orchestrator routing decisions and orchestrator lifecycle events.
 
 ### Task 2.1: Database Schema Implementation
 **Duration:** 6h
@@ -303,6 +317,8 @@ def invoke_orchestrator(
 4. `artifacts` - Registry of generated files
 5. `validations` - Checkpoint results
 6. `state_snapshots` - Point-in-time captures
+7. **`execution_log` - Orchestrator execution tracking (includes Master Orch routing)**
+8. **`shared_state` - Cross-orchestrator state (for Master Orch StateManager - Phase 3)**
 
 **Key Features:**
 - Foreign key relationships with CASCADE
@@ -354,6 +370,7 @@ class PlanningStateDB:
 - ✅ Rollback works correctly on errors
 - ✅ Migration system operational
 - ✅ 100% test coverage for database layer
+- ✅ **Execution tracking tables ready for Master Orchestrator (Phase 3)**
 - ✅ Git checkpoint created: `checkpoint-phase-2-state-database`
 
 ---
