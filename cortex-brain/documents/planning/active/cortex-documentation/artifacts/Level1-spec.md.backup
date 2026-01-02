@@ -1494,6 +1494,350 @@ security-training.html      ~60
 - **ENHANCEMENT:** Added comprehensive Quick Reference section with at-a-glance status
 - **IMPROVEMENT:** Reorganized for better navigation (Quick Ref → Insights → Details)
 - **CLARITY:** Unified terminology (Level 1 Detail Pages, removed hub confusion)
+- **CROSS-REF:** Added explicit reference to glassmorphism-design-standard.md
+
+**Date:** January 1, 2026  
+**Tool Used:** Toolkit Manager Discovery Analysis  
+**Analyzed:** http://localhost:8000/index.html Orchestrators Multi-Panel
+
+### Orchestrators Multi-Panel Structure
+
+```
+📂 ORCHESTRATORS DOCUMENTATION STRUCTURE
+│
+├── 📋 PLANNING (4 pages)
+│   ├── planning-system.html            ✅ EXISTS (12.2 KB, Score: 11)
+│   ├── ado-orchestrator.html           ✅ EXISTS (6.1 KB, Score: 6)
+│   ├── ado-operations.html             ✅ EXISTS (7.2 KB, Score: 9)
+│   └── ado-planning.html               ❌ MISSING (linked but not created)
+│
+├── ⚙️ EXECUTION (2 pages)
+│   ├── tdd-orchestrator.html           ✅ EXISTS (21.3 KB, Score: 32)
+│   └── execution-orchestrator.html     ✅ EXISTS (7.1 KB, Score: 9)
+│
+├── 🔧 SYSTEM (4 pages)
+│   ├── cleanup-orchestrator.html       ✅ EXISTS (20.3 KB, Score: 41)
+│   ├── sanitization-orchestrator.html  ✅ EXISTS (6.9 KB, Score: 6)
+│   ├── system-integrity.html           ✅ EXISTS (24.3 KB, Score: 40)
+│   └── git-checkpoint.html             ✅ EXISTS (21.4 KB, Score: 45)
+│
+├── 📊 ANALYSIS (3 pages)
+│   ├── refinement-orchestrator.html    ✅ EXISTS (27.3 KB, Score: 45)
+│   ├── cortex-lens.html                ✅ EXISTS (25.6 KB, Score: 36)
+│   └── architectural-review.html       ✅ EXISTS (22.7 KB, Score: 41)
+│
+└── 🐛 DEBUG (2 pages)
+    ├── debug-orchestrator.html         ✅ EXISTS (27.3 KB, Score: 41)
+    └── rollback-orchestrator.html      ✅ EXISTS (21.5 KB, Score: 38)
+```
+
+**File Status Summary:**
+- ✅ **16 Existing & Linked:** From 15 linked pages, 16 exist (one extra exists)
+- ❌ **1 Missing:** ado-planning.html (linked but not created)
+- 🔧 **5 Unlinked Pages:** intelligent-dashboard.html, onboarding-orchestrator.html, pre-flight.html, sanitization.html, upgrade.html
+- 📂 **1 Hub Page:** index.html (3.1 KB, orchestrators landing page)
+
+**Complexity Analysis:**
+```
+Highest Complexity (All Level 1):
+1. git-checkpoint.html             Score: 45  (4 Mermaid, 2 D3 calls)
+2. refinement-orchestrator.html    Score: 45  (4 Mermaid, 7 D3 calls)
+3-5. Three-way tie at 41           Score: 41  (architectural-review, cleanup, debug)
+
+Lowest Complexity (Need Expansion):
+19. ado-orchestrator.html          Score: 6   (Basic page, minimal content)
+18. onboarding-orchestrator.html   Score: 6   (Basic page, minimal content)
+17. sanitization-orchestrator.html Score: 6   (Basic page, minimal content)
+```
+
+### Key Findings
+
+#### 1. All Pages are Level 1
+
+**Result:** ALL 19 orchestrator pages classify as Level 1 (max score: 45, threshold: 100)
+
+**Rationale:**
+- Highest complexity: 45 (git-checkpoint, refinement) - far below 100 threshold
+- All pages are single-view detail pages with embedded visualizations
+- No page requires multi-page drill-down (Level 2)
+- Consistent with security documentation pattern
+
+#### 2. Missing Page
+
+**ado-planning.html** (❌ MISSING)
+- Linked from Planning category in index.html
+- Expected content: ADO planning workflows, epic/feature/story hierarchy
+- Priority: MEDIUM (redundant with ado-orchestrator.html?)
+- Recommendation: Merge into ado-orchestrator.html or create minimal placeholder
+
+#### 3. Unlinked Pages (Orphaned Content)
+
+**5 pages exist but NOT linked from index.html:**
+
+1. **intelligent-dashboard.html** (37, Score: 37)
+   - Purpose: Likely alternative to or prototype for CORTEX Lens
+   - Recommendation: Consider linking under Analysis category OR retire
+
+2. **onboarding-orchestrator.html** (6, Score: 6)
+   - Purpose: User onboarding workflow
+   - Recommendation: Link under new "Onboarding" category OR merge into docs
+
+3. **pre-flight.html** (32, Score: 32)
+   - Purpose: Pre-execution validation checks
+   - Recommendation: Link under System category as "Pre-Flight Checks"
+
+4. **sanitization.html** (9, Score: 9)
+   - Purpose: Duplicate/alternative to sanitization-orchestrator.html?
+   - Recommendation: Consolidate with sanitization-orchestrator.html
+
+5. **upgrade.html** (11, Score: 11)
+   - Purpose: System upgrade orchestrator
+   - Recommendation: Link under System category
+
+#### 4. Content Quality Tiers
+
+**High Quality (Score ≥ 30):**
+- git-checkpoint, refinement-orchestrator, architectural-review
+- cleanup-orchestrator, debug-orchestrator, system-integrity
+- rollback-orchestrator, intelligent-dashboard, cortex-lens
+- pre-flight, tdd-orchestrator
+
+**Medium Quality (Score 10-29):**
+- planning-system, upgrade, ado-operations
+- execution-orchestrator, sanitization
+
+**Low Quality / Needs Expansion (Score < 10):**
+- ado-orchestrator, onboarding-orchestrator, sanitization-orchestrator
+
+### Recommendations
+
+#### ✅ Approved Actions
+
+1. **Create Missing Page:**
+   - ❌ ado-planning.html - ADO planning workflow page
+   - Priority: MEDIUM (4 hours estimated)
+
+2. **Link Orphaned Pages:**
+   - 🔗 pre-flight.html → Add to System category
+   - 🔗 upgrade.html → Add to System category
+   - 🔗 intelligent-dashboard.html → Add to Analysis category OR retire
+   - 🔗 onboarding-orchestrator.html → Create new Onboarding category OR move to docs
+
+3. **Consolidate Duplicates:**
+   - 🔀 Merge sanitization.html INTO sanitization-orchestrator.html
+   - Benefit: Eliminate confusion, single source of truth
+
+4. **Enhance Low-Quality Pages:**
+   - 🔧 ado-orchestrator.html (Score: 6 → 30+)
+   - 🔧 sanitization-orchestrator.html (Score: 6 → 30+)
+   - � onboarding-orchestrator.html (Score: 6 → 30+)
+   - Add: Mermaid diagrams, workflow visualizations, examples
+
+#### ⚠️ Special Considerations
+
+**Duplicate/Similar Pages:**
+- **sanitization.html** vs **sanitization-orchestrator.html**
+  - Decision: Keep orchestrator version, retire standalone
+  
+**Index.html Hub:**
+- Purpose: Orchestrators landing page (3.1 KB)
+- Keep as hub for orchestrator category
+- Different from security (no hub page)
+
+**Category Expansion:**
+- Current: 5 categories (Planning, Execution, System, Analysis, Debug)
+- Proposed: Add "Onboarding" category for onboarding-orchestrator.html
+- Benefit: Better organization for user-facing workflows
+
+### Implementation Roadmap
+
+**Phase 1: Quick Wins (Week 1) - 8 hours**
+1. ✅ Create ado-planning.html (4 hours)
+2. ✅ Link pre-flight.html to System category (0.5 hours)
+3. ✅ Link upgrade.html to System category (0.5 hours)
+4. ✅ Merge sanitization pages (3 hours)
+
+**Phase 2: Enhancement (Week 2) - 12 hours**
+5. 🔧 Enhance ado-orchestrator.html (4 hours)
+6. 🔧 Enhance sanitization-orchestrator.html (4 hours)
+7. 🔧 Enhance onboarding-orchestrator.html (4 hours)
+
+**Phase 3: Decision on Orphans (Week 3) - 4 hours**
+8. 🤔 Evaluate intelligent-dashboard.html (link vs retire)
+9. 🤔 Decide on onboarding category structure
+
+**Total Estimated Effort:** 24 hours
+
+### Validation Checklist
+
+- ✅ All existing pages analyzed for complexity
+- ✅ Missing pages identified from HTML links
+- ✅ Unlinked/orphaned pages discovered
+- ✅ Level 1 vs Level 2 determination made (ALL Level 1)
+- ✅ Enhancement opportunities identified
+- ✅ Implementation roadmap established
+- ✅ Sitemap updated with findings
+
+---
+
+## �📝 Version History
+
+## 🎓 SHARPEN THE SAW Discovery Analysis
+
+**Date:** January 1, 2026  
+**Tool Used:** Toolkit Manager Discovery Analysis  
+**Analyzed:** http://localhost:8000/index.html Sharpen The Saw Multi-Panel
+
+### Sharpen The Saw Multi-Panel Structure
+
+```
+📂 SHARPEN THE SAW DOCUMENTATION STRUCTURE
+│
+├── 🛡️ SECURITY (1 page)
+│   └── security.html               ✅ EXISTS (12.1 KB, Score: 16)
+│
+├── 🏛️ SOLID (1 page)
+│   └── solid.html                  ✅ EXISTS (11.8 KB, Score: 16)
+│
+├── ✨ CODE QUALITY (1 page)
+│   └── code-quality.html           ✅ EXISTS (9.6 KB, Score: 12)
+│
+├── ⚡ PERFORMANCE (1 page)
+│   └── performance.html            ✅ EXISTS (22.0 KB, Score: 30)
+│
+├── 🧪 TESTING (1 page)
+│   └── testing.html                ✅ EXISTS (9.3 KB, Score: 12)
+│
+└── 📚 DOCUMENTATION (1 page)
+    └── documentation.html          ✅ EXISTS (9.6 KB, Score: 12)
+```
+
+**File Status Summary:**
+- ✅ **6 Existing & Linked:** All 6 pages exist (100% coverage)
+- ❌ **0 Missing:** No missing pages
+- 🔧 **0 Unlinked Pages:** All HTML files properly linked
+- 📂 **No Hub Page:** Direct navigation from Level 0 (index.html)
+
+**Complexity Analysis:**
+```
+Highest Complexity (All Level 1):
+1. performance.html            Score: 30  (9 sections, 8 H3, 8 H4)
+2. security.html               Score: 16  (5 sections, 4 H3, 4 H4)
+3. solid.html                  Score: 16  (5 sections, 4 H3, 4 H4)
+
+Lowest Complexity (Consistent):
+4-6. Three-way tie              Score: 12  (4 sections, 3 H3, 3 H4)
+    • code-quality.html
+    • testing.html
+    • documentation.html
+```
+
+### Key Findings
+
+#### 1. All Pages are Level 1
+
+**Result:** ALL 6 Sharpen The Saw pages classify as Level 1 (max score: 30, threshold: 100)
+
+**Rationale:**
+- Highest complexity: 30 (performance.html) - far below 100 threshold
+- Average complexity: 16.6 (very low, text-focused content)
+- All pages are single-view best practice guides
+- No visualizations (Mermaid/D3.js) - primarily educational content
+- Consistent structure across all pages
+
+#### 2. Perfect Implementation
+
+**✅ 100% Coverage:**
+- All 6 linked pages exist
+- No missing pages
+- No orphaned/unlinked pages
+- Clean navigation structure
+
+**Content Characteristics:**
+- Text-heavy best practice guides
+- Structured with sections and headings
+- No interactive visualizations (unlike Security/Orchestrators)
+- Educational/reference focus vs. operational dashboards
+
+#### 3. Content Quality Assessment
+
+**High Quality (Score ≥ 20):**
+- performance.html (30) - Most comprehensive, 9 sections
+
+**Medium Quality (Score 12-16):**
+- security.html, solid.html (16 each) - 5 sections, well-structured
+- code-quality.html, testing.html, documentation.html (12 each) - 4 sections, concise
+
+**Observation:** Consistent quality across all pages, appropriate depth for best practice guides.
+
+### Recommendations
+
+#### ✅ Current State: Excellent
+
+1. **No Missing Pages:**
+   - All 6 pages implemented and linked
+   - 100% coverage achieved
+
+2. **Appropriate Complexity:**
+   - All pages suitable for Level 1
+   - Text-focused content matches "Sharpen The Saw" educational mission
+   - No over-engineering with unnecessary visualizations
+
+3. **Consistent Structure:**
+   - 1 page per category (Security, SOLID, Code Quality, Performance, Testing, Documentation)
+   - Uniform template and styling
+   - Clear hierarchy with sections and headings
+
+#### 🔍 Optional Enhancements (Low Priority)
+
+**Visualization Opportunities:**
+If future enhancement is desired, consider adding:
+
+1. **performance.html** (Score: 30 → 60+)
+   - Add performance metrics dashboard (D3.js time series)
+   - Add optimization decision tree (Mermaid flowchart)
+
+2. **testing.html** (Score: 12 → 35+)
+   - Add test pyramid visualization (D3.js/Mermaid)
+   - Add code coverage heatmap (D3.js)
+
+3. **code-quality.html** (Score: 12 → 35+)
+   - Add code smell detection workflow (Mermaid)
+   - Add complexity metrics visualization (D3.js)
+
+**Rationale for NOT adding now:**
+- Current content serves its educational purpose well
+- Sharpen The Saw is reference material, not operational tooling
+- Visualizations would add development time without proportional value
+- Keep focus on Security/Orchestrators where visualizations are essential
+
+### Implementation Status
+
+**Phase: COMPLETE ✅**
+- All 6 pages implemented
+- No missing pages
+- No broken links
+- Proper categorization
+- Consistent styling
+
+**Estimated Effort for Optional Enhancements:** 12 hours
+- performance.html visualizations: 4 hours
+- testing.html visualizations: 4 hours
+- code-quality.html visualizations: 4 hours
+
+**Recommendation:** Leave as-is, focus implementation efforts on Security/Orchestrators missing pages.
+
+### Validation Checklist
+
+- ✅ All existing pages analyzed for complexity
+- ✅ No missing pages identified
+- ✅ No orphaned/unlinked pages
+- ✅ Level 1 vs Level 2 determination made (ALL Level 1)
+- ✅ Content quality assessed
+- ✅ Implementation status validated (100% complete)
+
+---
+
 ## 📝 Version History
 
 **v3.4.0** (January 1, 2026) - Complete Site Sitemap Consolidation

@@ -1,8 +1,8 @@
 # 🎨 Glassmorphism Design Standard
 
-**Version:** 4.0.1 | **Status:** ✅ PRODUCTION  
+**Version:** 4.0.2 | **Status:** ✅ PRODUCTION  
 **Author:** Asif Hussain | **Last Updated:** January 1, 2026  
-**Copyright © 2025 Asif Hussain. All rights reserved.**
+**Copyright © 2026 Asif Hussain. All rights reserved.**
 
 ---
 
@@ -11,87 +11,141 @@
 This standard defines **modern glassmorphism patterns** for CORTEX documentation and UI components, incorporating **cutting-edge 2025 design techniques** including multi-layer depth, dynamic lighting, micro-interactions, and performance optimization.
 
 **Target:** HTML documentation, dashboards, STS showcases, interactive visualizations  
-**Compatibility:** Chrome 90+, Firefox 88+, Safari 14+, Edge 90+
+**Compatibility:** Chrome 90+, Firefox 88+, Safari 14+, Edge 90+  
+**Reference Implementation:** See `/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/documents/planning/active/cortex-documentation/artifacts/Level1-spec.md` for detailed page specifications.
 
 **⚠️ Animation Philosophy (v4.0.0):**
 - **Subtle & Modern:** All animations designed to be non-distracting
-- **Level 1 & Level 2 Pages:** ONLY T1 subtle animations (0.2-0.3s transitions, no dramatic effects)
-- **Clickable Tiles:** Glowing border + lift + large pointer cursor on hover
-- **Non-Clickable Tiles:** Slow glass reflection (8s) + default cursor, NO glow
+- **Level 1 Detail Pages:** ONLY T1 subtle animations (0.2-0.3s transitions, no dramatic effects)
+- **Clickable Elements:** Glowing border + lift + pointer cursor on hover
+- **Display Elements:** Slow glass reflection (8s) + default cursor, NO glow
 - **Consistent Styling:** Clear visual differentiation between interactive and display elements
 - **⛔ NO Dramatic Animations:** borderGlowSweep, blobMorph, and other T3 effects ONLY on Level 0 (Home page)
 
-**Scope:** Applies to ALL 9 CORTEX home page tiles and their 2-level hierarchies:
+**Scope:** Applies to ALL 9 CORTEX home page tiles and their hierarchies:
 1. 🧠 Architecture → SKULL, Knowledge Graph, Brain Tiers, Context
-2. 🛡️ Security → Threat Modeling, Compliance, Audits
-3. 🎯 Orchestrators → 17 autonomous workflow detail pages
+2. 🛡️ Security → 13 pages across 4 categories (Protection, Assessment, Compliance, Response)
+3. 🎯 Orchestrators → 19 pages across 5 categories (Planning, Execution, System, Analysis, Debug)
 4. 💰 Token Optimization → Analysis, Strategies, Savings
-5. 🔧 Sharpen The Saw → Code Quality, SOLID, Testing, Performance, Security, Docs
-6. 📚 CORTEX Best Practices → 35 Guidelines (3 Level 2 pages)
+5. 🔧 Sharpen The Saw → 6 best practice pages (Security, SOLID, Code Quality, Performance, Testing, Docs)
+6. 📚 CORTEX Best Practices → 35 Guidelines
 7. 🛠️ Toolkit Manager → Discovery, Orchestration, Integration
 8. 🔍 CORTEX LENS → AST, Reverse Engineering, Intelligence
 9. 🚀 Get Started → Installation, Configuration, First Steps
 
 ---
 
-## 🏗️ View Hierarchy (2-Level Maximum)
+## 🚀 Quick Reference
 
-**Critical Rule:** All tiles follow this structure:
+### Pattern Decision Matrix
+
+| Question | Answer → Pattern |
+|----------|------------------|
+| Does tile have 4+ categories? | YES → **Multi-Panel** / NO → **Standard Tile** |
+| How many categories? | 4 → **2x2 grid** / 5 → **2x3 grid** / 6 → **3x2 grid** |
+| Are subpanel links single or multiple? | Single → `.single-tag` compact / Multiple → default height |
+| Is element clickable? | YES → `.glass-card-clickable` + `.animation-t1` / NO → `.glass-card-display` |
+| What page level? | Level 0 → T3 animations OK / Level 1 → T1 only / NO Level 2 |
+
+### Critical CSS Classes
+
+| Class | Purpose | When to Use |
+|-------|---------|-------------|
+| `.glass-card-clickable` | Interactive tiles/cards | Navigational elements, buttons |
+| `.glass-card-display` | Static content cards | Information display, non-interactive panels |
+| `.animation-t1` | Subtle hover effects | ALL Level 1 pages (required) |
+| `.main-panel-wrapper` | Multi-panel wrapper | Security, Orchestrators, STS tiles |
+| `.category-panels-grid` | Grid container | Multi-panel layouts |
+| `.grid-3x2` | 3x2 layout modifier | 6-panel grids (STS) |
+| `.grid-2x3` | 2x3 layout modifier | 5-panel grids (Orchestrators) |
+| `.category-subpanel` | Individual category panel | Within multi-panel grids |
+| `.single-tag` | Compact subpanel | Single-link categories |
+| `.category-tag` | Clickable link in subpanel | Action links within panels |
+
+### Spacing Quick Reference
+
+| Element Type | Property | Value | Use Case |
+|--------------|----------|-------|----------|
+| Stacked cards | `margin-bottom` | `var(--space-lg)` (24px) | Between consecutive cards |
+| Multi-panel grids | `gap` | `var(--space-lg)` (24px) | All panel gaps |
+| Major sections | `margin-bottom` | `var(--space-2xl)` (48px) | Between sections |
+| Key features | `margin-bottom` | `var(--space-3xl)` (64px) | After feature sections |
+| Mobile (< 768px) | `gap` | `var(--space-md)` (16px) | Tighter mobile spacing |
+
+### Animation Decision Tree
+
 ```
-Level 0 (Home) → Level 1 (Tile Overview) → Level 2 (Component Detail)
+Is it Level 0 (Home)?
+├── YES → T3 animations allowed (dramatic effects)
+└── NO → Is it clickable?
+    ├── YES → T1 subtle (glow + lift + pointer)
+    └── NO → Static or slow reflection only
 ```
 
-**⛔ NO Level 3:** Use expandable sections, tabs, or modals for deeper content.
+---
+
+## 🏗️ View Hierarchy (SIMPLIFIED: 2-Level Max)
+
+**Architecture:** `Level 0 (Home) → Level 1 Detail Pages`
+
+**⛔ NO Level 2 PAGES:** Discovery analysis confirms all content fits within Level 1. Use expandable sections, tabs, or modals for deeper content within pages.
 
 **Level 0 Tile Patterns:**
 
-| Tile | Pattern | Grid Layout | Rationale |
-|------|---------|-------------|-----------|
-| **Security (13 pages, 4 categories)** | Multi-Panel | 2x2 (4 subpanels) | Complex categorization requires visual separation |
-| **Orchestrators (19 pages, 5 categories)** | Multi-Panel | 2x3 (5 subpanels, 1 odd) | Most complex tile, needs clear organization |
-| **Sharpen The Saw (6 pages, 6 categories)** | Multi-Panel | 3x2 (6 subpanels, compact single-tag) | 6 single-link categories displayed side-by-side |
-| **Architecture (4 pages)** | Standard Tile | N/A | Simple structure, direct navigation |
-| **Token Optimization (3 pages)** | Standard Tile | N/A | Simple linear workflow |
-| **Best Practices (35 guidelines)** | Standard Tile | N/A | Guideline format works in tile |
-| **Toolkit Manager (3 pages)** | Standard Tile | N/A | Simple structure |
-| **CORTEX Lens (3 pages)** | Standard Tile | N/A | Simple workflow |
-| **Get Started (3 pages)** | Standard Tile | N/A | Onboarding sequence |
+| Tile | Pattern | Grid Layout | Pages | Rationale |
+|------|---------|-------------|-------|-----------|
+| **Security** | Multi-Panel | 2x2 (4 subpanels) | 13 | 4 categories require visual separation |
+| **Orchestrators** | Multi-Panel | 2x3 (5 subpanels) | 19 | 5 categories, most complex tile |
+| **Sharpen The Saw** | Multi-Panel | 3x2 (6 subpanels) | 6 | 6 single-link categories, compact layout |
+| **All Others** | Standard Tile | N/A | 3-35 | Simple structure, direct navigation |
 
-**Multi-Panel Pattern Intelligence (v4.0.1):**
+### Multi-Panel Pattern (3 Tiles Only)
+
+**When to Use:** Security, Orchestrators, Sharpen The Saw (tiles with 4+ categories)
 
 **Grid Layout Rules:**
-- **4 subpanels:** 2x2 grid (Security pattern)
-- **5 subpanels:** 2x3 grid with 1 odd panel (Orchestrators pattern)
-- **6 subpanels:** 3x2 grid (STS pattern - side-by-side rows)
-- **Single-tag subpanels:** More compact sizing (min-height: 280px vs 380px)
+- **4 subpanels:** 2x2 grid (Security: Protection, Assessment, Compliance, Response)
+- **5 subpanels:** 2x3 grid (Orchestrators: Planning, Execution, System, Analysis, Debug)
+- **6 subpanels:** 3x2 grid (STS: Security, SOLID, Code Quality, Performance, Testing, Docs)
 
-**HTML Implementation:**
+**Implementation:**
 ```html
-<!-- 3x2 Grid for 6 panels -->
-<div class="category-panels-grid grid-3x2">
-    <div class="category-subpanel single-tag">
-        <!-- Icon, title, description, single link -->
+<!-- Multi-panel wrapper (non-clickable) -->
+<article class="glass-card-display main-panel-wrapper">
+    <div class="category-panels-grid grid-3x2">
+        <div class="category-subpanel single-tag">
+            <div class="category-icon">🛡️</div>
+            <h3>Security</h3>
+            <p class="category-description">Best practices for secure code</p>
+            <a href="sts/security.html" class="category-tag">View Security Guide</a>
+        </div>
+        <!-- Repeat for all 6 subpanels -->
     </div>
-    <!-- Repeat 6 times -->
-</div>
+</article>
 ```
 
 **CSS Classes:**
-- `.grid-3x2` - Forces 3x2 layout (2 columns, 3 rows)
-- `.single-tag` - Compact subpanel styling for single links
-- Default (no class) - 2x2 grid for 4-5 panels
+- `.main-panel-wrapper` - Outer wrapper (non-clickable display card)
+- `.category-panels-grid` - Grid container (default 2x2)
+- `.grid-3x2` - Modifier for 3x2 layout (6 subpanels)
+- `.grid-2x3` - Modifier for 2x3 layout (5 subpanels)
+- `.category-subpanel` - Individual category panel
+- `.single-tag` - Compact styling for single-link panels
+- `.category-tag` - Clickable link within subpanel
 
-**When to use each pattern:**
-- Main wrapper panel containing multiple category sub-panels
-- Each sub-panel shows category icon, title, description, and links
-- Tetris/masonry grid layout for visual interest (multi-tag subpanels)
-- Full-width single links for single-tag subpanels (STS pattern)
-- Non-clickable sub-panels (display only), clickable tags within
+### Standard Tile Pattern (6 Tiles)
 
-**Standard Tile Pattern (All Others):**
-- Single clickable card navigating to Level 1 index
-- Icon, title, caption layout
-- Hover glow and lift effect
+**When to Use:** Architecture, Token Optimization, Best Practices, Toolkit Manager, CORTEX Lens, Get Started
+
+**Implementation:**
+```html
+<!-- Standard clickable tile -->
+<article class="glass-card-clickable animation-t1">
+    <div class="card-icon">🧠</div>
+    <h3>Architecture</h3>
+    <p>CORTEX brain structure and cognitive framework</p>
+</article>
+```
 
 ---
 
@@ -103,12 +157,75 @@ Level 0 (Home) → Level 1 (Tile Overview) → Level 2 (Component Detail)
 4. **GPU Acceleration** - Hardware-accelerated transforms
 5. **Performance First** - Conditional blur, lazy loading
 6. **Accessibility** - WCAG 2.1 AA compliance, reduced-motion support
-7. **Subtle by Default** - T1 animations for ALL Level 1 & Level 2 pages (v4.0.0)
-8. **2-Level Maximum** - All 9 tiles limited to Level 0 → Level 1 → Level 2
+7. **Subtle by Default** - T1 animations for ALL Level 1 detail pages (v4.0.0)
+8. **Simplified Hierarchy** - Level 0 → Level 1 only, no Level 2 pages (v4.0.2)
 9. **NO Inline Styles** - All styling via CSS classes (zero tolerance for `style=""` attributes)
-10. **Header/Footer Standard** - Standardized glass header/footer across ALL views
-11. **Responsive Mandatory** - Mobile-first design with 375px base, tablet 768px, desktop 1440px breakpoints
-12. **Proper Spacing** - All stacked elements MUST have adequate margin/padding (minimum 1.5rem vertical gap between cards/panels) (v4.0.1)
+10. **Responsive Mandatory** - Mobile-first design (375px base, 768px tablet, 1440px desktop)
+11. **Proper Spacing** - Minimum 1.5rem (24px) vertical gap between stacked cards/panels (v4.0.1)
+12. **Cross-Document Consistency** - Align with Level1-spec.md for implementation details (v4.0.2)
+
+---
+
+## 📏 SPACING SYSTEM (v4.0.1 - CRITICAL)
+
+**Problem:** Cards/panels stacking without adequate vertical spacing creates cramped layouts.  
+**Solution:** Enforce minimum spacing using CSS variables.
+
+### Spacing Variables
+
+```css
+:root {
+    --space-xs: 0.25rem;   /* 4px */
+    --space-sm: 0.5rem;    /* 8px */
+    --space-md: 1rem;      /* 16px */
+    --space-lg: 1.5rem;    /* 24px - DEFAULT for stacked cards */
+    --space-xl: 2rem;      /* 32px */
+    --space-2xl: 3rem;     /* 48px - Section spacing */
+    --space-3xl: 4rem;     /* 64px - Major sections */
+}
+```
+
+### Stacked Element Rules
+
+**REQUIRED:**
+- **Cards/Panels:** `margin-bottom: var(--space-lg)` (24px minimum)
+- **Category Sections:** `margin-bottom: var(--space-2xl)` (48px)
+- **Multi-Panel Grids:** `gap: var(--space-lg)` (24px between all panels)
+- **Grid Rows:** `row-gap: var(--space-lg)` (prevents cramped rows)
+
+### Implementation Example
+
+```css
+/* Multi-panel grids (Security, Orchestrators, STS) */
+.category-panels-grid {
+    display: grid;
+    gap: var(--space-lg);  /* 24px all around */
+    margin-bottom: var(--space-2xl);  /* 48px after grid */
+}
+
+/* 3x2 Grid (STS) - MUST have row-gap */
+.category-panels-grid.grid-3x2 {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(3, auto);
+    row-gap: var(--space-lg);  /* CRITICAL: 24px between rows */
+    column-gap: var(--space-lg);
+}
+
+/* Stacked cards on detail pages */
+.glass-card + .glass-card {
+    margin-top: var(--space-lg);  /* 24px between cards */
+}
+```
+
+**Responsive Spacing:**
+```css
+@media (max-width: 767px) {
+    .category-panels-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-md);  /* 16px on mobile */
+    }
+}
+```
 
 ---
 
@@ -361,182 +478,6 @@ Level 0 (Home) → Level 1 (Tile Overview) → Level 2 (Component Detail)
     }
 }
 ```
-
----
-
-## 📐 Spacing System (v4.0.1)
-
-### ⚠️ CRITICAL: Proper Spacing for Stacked Elements
-
-**Issue:** Cards/panels stacking without adequate vertical spacing creates cramped, unprofessional layouts.
-
-**Solution:** Enforce minimum spacing requirements using CSS variables and layout utilities.
-
-### Spacing Variables
-
-```css
-:root {
-    /* Core spacing scale */
-    --space-xs: 0.25rem;   /* 4px - Tiny gaps */
-    --space-sm: 0.5rem;    /* 8px - Small gaps */
-    --space-md: 1rem;      /* 16px - Medium gaps */
-    --space-lg: 1.5rem;    /* 24px - Large gaps (DEFAULT for stacked cards) */
-    --space-xl: 2rem;      /* 32px - Extra large gaps */
-    --space-2xl: 3rem;     /* 48px - Section spacing */
-    --space-3xl: 4rem;     /* 64px - Major section spacing */
-}
-```
-
-### Stacked Element Rules
-
-**Minimum Requirements:**
-- **Cards/Panels:** `margin-bottom: var(--space-lg)` (1.5rem / 24px)
-- **Category Sections:** `margin-bottom: var(--space-2xl)` (3rem / 48px)
-- **Multi-Panel Grids:** `gap: var(--space-lg)` (1.5rem / 24px)
-- **Grid Rows:** `row-gap: var(--space-lg)` minimum
-
-### Grid Layout Spacing
-
-```css
-/* Multi-panel grids (Security, Orchestrators, STS) */
-.category-panels-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-lg);  /* 24px gaps between all panels */
-    margin-bottom: var(--space-2xl);
-}
-
-/* 2x2 Grid (4 panels - Security) */
-.category-panels-grid:not(.grid-3x2) {
-    grid-template-columns: repeat(2, 1fr);
-    row-gap: var(--space-lg);
-    column-gap: var(--space-lg);
-}
-
-/* 3x2 Grid (6 panels - STS) */
-.category-panels-grid.grid-3x2 {
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(3, auto);
-    row-gap: var(--space-lg);  /* CRITICAL: Prevents cramped rows */
-    column-gap: var(--space-lg);
-}
-
-/* 2x3 Grid (5 panels - Orchestrators) */
-.category-panels-grid.grid-2x3 {
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(3, auto);
-    row-gap: var(--space-lg);
-    column-gap: var(--space-lg);
-}
-```
-
-### Stacked Card Layouts
-
-```css
-/* Card stacking (Level 1 & 2 pages) */
-.glass-card + .glass-card {
-    margin-top: var(--space-lg);  /* 24px between consecutive cards */
-}
-
-/* Section spacing */
-.content-section {
-    margin-bottom: var(--space-2xl);  /* 48px between major sections */
-}
-
-/* Key features sections (Security, Orchestrators, STS panels) */
-.key-features-section {
-    margin-bottom: var(--space-3xl);  /* 64px between major panel sections */
-}
-
-/* Main panel wrappers */
-.main-panel-wrapper {
-    margin-bottom: var(--space-2xl);  /* 48px after each panel */
-}
-
-/* Subpanels within multi-panels */
-.category-subpanel {
-    padding: var(--space-lg);  /* Internal padding */
-    /* Spacing handled by parent grid gap */
-}
-```
-
-### Responsive Spacing
-
-```css
-/* Mobile: Tighter spacing for smaller screens */
-@media (max-width: 767px) {
-    .category-panels-grid {
-        grid-template-columns: 1fr;  /* Single column */
-        gap: var(--space-md);  /* 16px on mobile */
-    }
-    
-    .glass-card + .glass-card {
-        margin-top: var(--space-md);
-    }
-}
-
-/* Tablet & Desktop: Full spacing */
-@media (min-width: 768px) {
-    .category-panels-grid {
-        gap: var(--space-lg);  /* 24px on larger screens */
-    }
-}
-```
-
-### Common Mistakes to Avoid
-
-❌ **WRONG:**
-```css
-/* No spacing between stacked elements */
-.glass-card {
-    margin-bottom: 0;
-}
-
-/* Cramped grid rows */
-.grid {
-    row-gap: 8px;  /* Too tight! */
-}
-```
-
-✅ **CORRECT:**
-```css
-/* Adequate spacing */
-.glass-card {
-    margin-bottom: var(--space-lg);
-}
-
-/* Comfortable grid spacing */
-.grid {
-    gap: var(--space-lg);  /* 24px all around */
-}
-```
-
-### Validation Checklist
-
-Before marking any phase complete, validate spacing:
-
-- [ ] All stacked cards have ≥24px vertical spacing
-- [ ] Multi-panel grids use `gap: var(--space-lg)`
-- [ ] Grid `row-gap` is explicitly set (not just `gap`)
-- [ ] Section spacing is ≥48px between major sections
-- [ ] Key features sections have ≥64px bottom margin
-- [ ] Main panel wrappers have ≥48px bottom margin
-- [ ] Mobile spacing scales down appropriately (≥16px)
-- [ ] Visual inspection shows no cramped/touching elements
-
----
-
-## 🎬 Animation Tier System (v4.0.0 - Universal Standard)
-
-### ⛔ CRITICAL: Subtle Animations by Default
-
-**ALL documentation pages across ALL 9 tiles** use **T1 (Subtle)** animations. Dramatic animations are ONLY for Level 0 (Home page hero).
-
-### Animation Tiers
-
-| Tier | Name | Use Case | Duration | Effects | Scope |
-|------|------|----------|----------|---------|-------|
-| **T1** | Subtle | ALL Level 1 & Level 2 pages (9 tiles) | 0.2-0.3s | Opacity, light transforms, simple transitions | Universal |
 | **T2** | Accent | Interactive elements requiring feedback | 0.1-0.2s | Button press, form focus, selection highlight | UI elements |
 | **T3** | Dramatic | ONLY Level 0 (docs/index.html hero) | 2-10s | borderGlowSweep, blobMorph, particle effects | Home only |
 
@@ -2928,6 +2869,18 @@ document.documentElement.style.setProperty('--glass-bg', 'rgba(26, 31, 58, 0.6)'
 ---
 
 ## 📄 Version History
+### v4.0.2 (January 1, 2026) - Major Optimization
+- 🎯 **BREAKING:** Simplified hierarchy to Level 0 → Level 1 only (removed Level 2 references)
+- 🎯 **OPTIMIZATION:** Removed 177 lines of redundant spacing documentation
+- ✨ **NEW:** Added Quick Reference section with decision matrices and class tables
+- ✨ **NEW:** Added cross-reference to Level1-spec.md for implementation details
+- 🔄 **REFACTOR:** Consolidated spacing rules into single section at top (v4.0.1 content)
+- 🔄 **REFACTOR:** Simplified multi-panel pattern descriptions (removed redundancy)
+- 📚 **CLARITY:** Updated Core Principle #8 (2-level → simplified hierarchy)
+- 📚 **CLARITY:** Updated Core Principle #12 (added cross-document consistency)
+- 📚 **CONSISTENCY:** Aligned all terminology with Level1-spec.md (Level 1 Detail Pages)
+- 🐛 **FIX:** Corrected copyright year (2025 → 2026)
+
 
 ### v4.0.1 (January 1, 2026)
 - 🎯 **NEW:** Added Core Principle #12 - Proper Spacing rule
