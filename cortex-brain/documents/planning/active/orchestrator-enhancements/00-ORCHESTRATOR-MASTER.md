@@ -15,7 +15,7 @@
 
 | Orchestrator | Plan Link | Status | Progress | Priority |
 |--------------|-----------|--------|----------|----------|
-| 🧠 **Planning System v5** | [Enhancement Plan](planning-system-v5/) | ⏸️ Not Started | `░░░░░░░░░░` 0% | 🔴 P1 |
+| 🧠 **Planning System v5** | [Enhancement Plan](../orchestrator-enhancement/) | 🔄 In Progress | `████░░░░░░` 20% | 🔴 P1 |
 | 📋 **ADO Operations v2** | [Enhancement Plan](ado-operations-v2/) | ⏸️ Not Started | `░░░░░░░░░░` 0% | 🟡 P2 |
 | 🧹 **Vacuum v2** | [Enhancement Plan](vacuum-v2/) | ⏸️ Not Started | `░░░░░░░░░░` 0% | 🟡 P2 |
 | 🗑️ **Cleanup v2** | [Enhancement Plan](cleanup-v2/) | ⏸️ Not Started | `░░░░░░░░░░` 0% | 🟢 P3 |
