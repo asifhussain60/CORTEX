@@ -7,12 +7,16 @@ Provides template method pattern for all orchestrators with:
 - Lifecycle hooks
 - Dependency injection integration
 - Progress tracking
+- Session management and continuation prompts
 """
 
 from abc import ABC, abstractmethod
 from typing import Dict, Any, Optional, List
 from datetime import datetime
+from pathlib import Path
 import logging
+import subprocess
+from jinja2 import Environment, FileSystemLoader, TemplateNotFound
 
 from .phase_manager import PhaseManager, PhaseStatus
 from .error_handler import ErrorHandler, ErrorSeverity, RecoveryStrategy, OrchestratorError
@@ -62,6 +66,15 @@ class BaseOrchestrator(ABC):
         self.is_running: bool = False
         self.is_complete: bool = False
         self.result: Optional[Dict[str, Any]] = None
+        
+        # Session management
+        self.token_warning_threshold = self.config.get("token_warning_threshold", 80000)
+        self.continuation_prompt_enabled = self.config.get("continuation_prompt_enabled", True)
+        self.template_env = None
+        if self.continuation_prompt_enabled:
+            template_dir = Path(__file__).parent.parent.parent.parent / "templates"
+            if template_dir.exists():
+                self.template_env = Environment(loader=FileSystemLoader(str(template_dir)))
         
         self.logger.info(f"🎭 Orchestrator initialized: {name}")
     
@@ -309,6 +322,180 @@ class BaseOrchestrator(ABC):
             Phase execution result
         """
         return self._execute_phase(phase_name, context or {})
+    
+    # Session Management Methods
+    
+    def update_continuation_prompt(
+        self, 
+        plan_name: str,
+        plan_id: str,
+        plan_dir: Path,
+        current_phase: Dict[str, Any],
+        next_phase: Optional[Dict[str, Any]] = None
+    ) -> bool:
+        """
+        Generate or update continuation prompt for session handoff.
+        
+        Args:
+            plan_name: Name of the plan being executed
+            plan_id: Database plan ID
+            plan_dir: Path to plan directory
+            current_phase: Current phase information dict
+            next_phase: Next phase information dict (if available)
+            
+        Returns:
+            True if prompt generated successfully, False otherwise
+        """
+        if not self.continuation_prompt_enabled or not self.template_env:
+            self.logger.debug("Continuation prompt disabled or template environment unavailable")
+            return False
+        
+        try:
+            # Get template
+            template = self.template_env.get_template("continuation-prompt.jinja2")
+            
+            # Get git checkpoints
+            checkpoints = self._get_git_checkpoints(limit=5)
+            
+            # Get completed phases
+            completed_phases = self.phase_manager.get_completed_phases()
+            total_phases = len(self.phase_manager.phases)
+            
+            # Calculate progress
+            progress_percentage = int((len(completed_phases) / total_phases * 100)) if total_phases > 0 else 0
+            
+            # Prepare template context
+            context = {
+                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "plan_name": plan_name,
+                "plan_id": plan_id,
+                "completed_phases": completed_phases,
+                "completed_phases_list": [
+                    {
+                        "number": i + 1,
+                        "name": phase.name,
+                        "duration": getattr(phase, "duration", "N/A")
+                    }
+                    for i, phase in enumerate(completed_phases)
+                ],
+                "total_phases": total_phases,
+                "progress_percentage": progress_percentage,
+                "current_phase": current_phase,
+                "next_phase": next_phase or {"number": "N/A", "name": "Plan Complete"},
+                "checkpoints": checkpoints,
+                "plan_status": "IN_PROGRESS" if next_phase else "COMPLETE",
+                "artifact_count": len(list(plan_dir.glob("artifacts/*"))) if (plan_dir / "artifacts").exists() else 0
+            }
+            
+            # Render template
+            content = template.render(**context)
+            
+            # Write to tracking directory
+            tracking_dir = plan_dir / "tracking"
+            tracking_dir.mkdir(parents=True, exist_ok=True)
+            
+            output_path = tracking_dir / "CONTINUATION-PROMPT.md"
+            output_path.write_text(content, encoding="utf-8")
+            
+            self.logger.info(f"✅ Continuation prompt updated: {output_path}")
+            return True
+            
+        except TemplateNotFound:
+            self.logger.warning("⚠️ Continuation prompt template not found: continuation-prompt.jinja2")
+            return False
+        except Exception as e:
+            self.logger.error(f"❌ Error generating continuation prompt: {e}")
+            return False
+    
+    def check_token_usage(self) -> Dict[str, Any]:
+        """
+        Estimate token usage and check if approaching limit.
+        
+        Returns:
+            Dict with keys:
+                - estimated_tokens: Heuristic token count
+                - threshold: Warning threshold
+                - should_warn: Boolean indicating if warning needed
+                - percentage: Current usage as percentage of threshold
+        """
+        completed_count = len(self.phase_manager.get_completed_phases())
+        
+        # Heuristic: ~1000 tokens per phase interaction
+        estimated_tokens = completed_count * 1000
+        
+        percentage = (estimated_tokens / self.token_warning_threshold * 100) if self.token_warning_threshold > 0 else 0
+        should_warn = estimated_tokens >= self.token_warning_threshold
+        
+        result = {
+            "estimated_tokens": estimated_tokens,
+            "threshold": self.token_warning_threshold,
+            "should_warn": should_warn,
+            "percentage": round(percentage, 1)
+        }
+        
+        if should_warn:
+            self.logger.warning(
+                f"⚠️ TOKEN WARNING: Estimated {estimated_tokens} tokens "
+                f"({percentage:.1f}% of {self.token_warning_threshold} threshold). "
+                f"Consider copying continuation prompt for session handoff."
+            )
+        
+        return result
+    
+    def _estimate_tokens(self, text: str = "") -> int:
+        """
+        Estimate token count for given text.
+        
+        Simple heuristic: ~4 characters per token.
+        
+        Args:
+            text: Text to estimate tokens for
+            
+        Returns:
+            Estimated token count
+        """
+        if not text:
+            return len(self.phase_manager.get_completed_phases()) * 1000
+        
+        return len(text) // 4
+    
+    def _get_git_checkpoints(self, limit: int = 5) -> List[Dict[str, str]]:
+        """
+        Get recent git commits as checkpoints.
+        
+        Args:
+            limit: Maximum number of checkpoints to retrieve
+            
+        Returns:
+            List of checkpoint dicts with keys: hash, message, date
+        """
+        try:
+            result = subprocess.run(
+                ["git", "log", f"-{limit}", "--pretty=format:%h|%s|%ci"],
+                capture_output=True,
+                text=True,
+                cwd=Path.cwd()
+            )
+            
+            if result.returncode != 0:
+                return []
+            
+            checkpoints = []
+            for line in result.stdout.strip().split("\n"):
+                if "|" in line:
+                    parts = line.split("|", 2)
+                    if len(parts) == 3:
+                        checkpoints.append({
+                            "hash": parts[0],
+                            "message": parts[1],
+                            "date": parts[2][:10]  # Just the date part
+                        })
+            
+            return checkpoints
+            
+        except Exception as e:
+            self.logger.debug(f"Could not retrieve git checkpoints: {e}")
+            return []
     
     # Abstract methods that subclasses must implement
     
