@@ -107,7 +107,53 @@ After ANY documentation changes:
 
 **If class is missing:** Create it in main.css BEFORE using in HTML.
 
-### 6. **COMPLIANCE AUDIT WORKFLOW**
+### 6. **KEY FEATURES SECTION (v5.0 Enhancement)**
+
+**Purpose:** Primary feature showcase on home page with enhanced captions reflecting v5.0 capabilities.
+
+**Location:** `docs/index.html` (lines 430-480)
+
+**Layout:** 6 standard tiles in hero CTA grid
+
+**Enhancements (January 2, 2026):**
+- Updated captions to reflect v5.0 features (Tier 0 Governance, Master Orchestrator)
+- Added comprehensive visualization context (6-12 D3.js + 4-8 Mermaid per Level 1 page)
+- Included complexity scores and Level 1/2 architecture awareness
+- Aligned with `integrate-this.md` methodology
+
+**Current Tiles:**
+
+| Tile | Link | Caption | Score | Key Features |
+|------|------|---------|-------|--------------|
+| **Architecture** | architecture/index.html | 4-Tier Brain System | 45 | Needs update: "4-Tier Brain + Tier 0 Governance" |
+| **Token Optimization** | token-optimization/index.html | 97% Input Reduction, $8.6K Annual Savings | 25 | ✅ Current (accurate) |
+| **Best Practices** | knowledge/index.html | 35 Guidelines for Implementation | 35 | ✅ Current (accurate) |
+| **Toolkit Manager** | toolkit-manager/index.html | Tool Orchestration Layer | 20 | Needs update: "Master Orchestrator Routing Layer" |
+| **CORTEX LENS** | lens/index.html | AST Analysis & Reverse Engineering | 30 | ✅ Current (accurate) |
+| **Get Started** | getting-started/index.html | 5-Minute Setup | 15 | ✅ Current (accurate) |
+
+**Recommended Updates:**
+
+```html
+<!-- BEFORE (Architecture) -->
+<span class="btn-hero-caption">4-Tier Brain System</span>
+
+<!-- AFTER (Architecture) -->
+<span class="btn-hero-caption">4-Tier Brain + Tier 0 Governance</span>
+
+<!-- BEFORE (Toolkit Manager) -->
+<span class="btn-hero-caption">Tool Orchestration Layer</span>
+
+<!-- AFTER (Toolkit Manager) -->
+<span class="btn-hero-caption">Master Orchestrator Routing Layer</span>
+```
+
+**References:**
+- Design Standard: `glassmorphism-design-standard.md:140-160`
+- Master Plan: `00-master-plan.md:180-220`
+- Methodology: `integrate-this.md` (comprehensive spec guide)
+
+### 7. **COMPLIANCE AUDIT WORKFLOW**
 
 When working on a specific panel/section:
 

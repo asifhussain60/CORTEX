@@ -171,9 +171,9 @@ Original v3.3.0 moved to: `cortex-brain/archives/Level1-spec-v3.3.0.md`
 **v5.0 State:** 65 Level 1 + 23 Level 2 pages (Planning v5: 10 phases, ADO v2: 13 pages)
 
 **Standard Tiles (Level 1 Only):**
-- Architecture: 5 pages (Score: 45) | Token Optimization: 1 page (Score: 25)
-- Best Practices: 17 pages (Score: 35) | Toolkit Manager: 1 page (Score: 20)
-- CORTEX Lens: 1 page (Score: 30) | Getting Started: 2 pages (Score: 15)
+- Architecture: 5 pages (Score: 45) - 4-Tier Brain + Tier 0 Governance | Token Optimization: 1 page (Score: 25) - 97% reduction, $8.6K savings
+- Best Practices: 17 pages (Score: 35) - 35 guidelines | Toolkit Manager: 1 page (Score: 20) - Master Orchestrator routing
+- CORTEX Lens: 1 page (Score: 30) - AST analysis, reverse engineering | Getting Started: 2 pages (Score: 15) - 5-minute setup
 
 **Multi-Panel Tiles:**
 - **Security:** 13 Level 1 pages (Score: 55, 54% complete)

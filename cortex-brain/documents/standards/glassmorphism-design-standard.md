@@ -142,12 +142,12 @@ Is it Level 0 (Home)?
 
 | Tile | Pattern | Grid Layout | L1 Pages | Score | Level 2? | L2 Pages | Rationale |
 |------|---------|-------------|----------|-------|----------|----------|-----------||
-| **Architecture** | Standard | N/A | 5 | 45 | ❌ NO | 0 | 5 Mermaid diagrams, moderate content |
-| **Token Optimization** | Standard | N/A | 1 | 25 | ❌ NO | 0 | Basic metrics, simple visualization |
-| **Best Practices** | Standard | N/A | 17 | 35 | ❌ NO | 0 | Domain pages, minimal viz per page |
-| **Toolkit Manager** | Standard | N/A | 1 | 20 | ❌ NO | 0 | Tool orchestration, basic concepts |
-| **CORTEX Lens** | Standard | N/A | 1 | 30 | ❌ NO | 0 | Dashboard concepts, simple layout |
-| **Getting Started** | Standard | N/A | 2 | 15 | ❌ NO | 0 | Setup guide, tutorial walkthrough |
+| **Architecture** | Standard | N/A | 5 | 45 | ❌ NO | 0 | 4-Tier Brain + Tier 0 Governance, 5 Mermaid diagrams |
+| **Token Optimization** | Standard | N/A | 1 | 25 | ❌ NO | 0 | 97% reduction, $8.6K savings, 2 Mermaid |
+| **Best Practices** | Standard | N/A | 17 | 35 | ❌ NO | 0 | 35 guidelines across 17 domain pages |
+| **Toolkit Manager** | Standard | N/A | 1 | 20 | ❌ NO | 0 | Master Orchestrator routing layer |
+| **CORTEX Lens** | Standard | N/A | 1 | 30 | ❌ NO | 0 | AST analysis, reverse engineering dashboard |
+| **Getting Started** | Standard | N/A | 2 | 15 | ❌ NO | 0 | 5-minute setup, interactive onboarding |
 | **Security** | Multi-Panel | 2x2 | 13 | 55 | ❌ NO | 0 | 4 categories, moderate Mermaid usage |
 | **Orchestrators (Basic)** | Multi-Panel | 2x3 | 14 | 75 | ❌ NO | 0 | 5 categories, current implementation |
 | **Planning v5** | Multi-Panel | 2x3 | 1 | 195 | ✅ YES | 10 | Comprehensive viz (12 D3.js + 8 Mermaid) |
