@@ -3,456 +3,490 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Getting Started - CORTEX 4.0</title>
-    <link rel="stylesheet" href="../assets/css/main.css">
+    <meta name="description" content="Getting Started with CORTEX - 5-Minute Setup Guide for Installation and First Steps">
+    <meta name="keywords" content="CORTEX, getting started, installation, setup, tutorial">
+    <meta name="author" content="Asif Hussain">
+    <title>Getting Started | CORTEX 4.0</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02-v4">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
-    <nav class="breadcrumb">
-        <a href="../index.html"><i class="fas fa-home"></i> Home</a>
-        <span class="breadcrumb-separator">→</span>
-        <span class="breadcrumb-current">Getting Started</span>
-    </nav>
+    <!-- Glass Header Navigation -->
+    <header class="glass-header">
+        <div class="header-content">
+            <nav class="header-nav">
+                <a href="../index.html" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="container" id="main-content">
+        <!-- Page Title Card -->
+        <div class="glass-card-display animation-t1">
+            <div class="page-title-section">
+                <h1 class="page-title">
+                    <i class="fas fa-rocket"></i>
+                    Getting Started with CORTEX
+                </h1>
+                <p class="page-subtitle">5-Minute Setup Guide · Installation · Configuration · First Steps</p>
+            </div>
+            
+            <div class="metadata-grid">
+                <div class="metadata-item">
+                    <i class="fas fa-clock"></i>
+                    <span>5 Minutes</span>
+                </div>
+                <div class="metadata-item">
+                    <i class="fas fa-download"></i>
+                    <span>3 Commands</span>
+                </div>
+                <div class="metadata-item">
+                    <i class="fas fa-cogs"></i>
+                    <span>Zero Config</span>
+                </div>
+                <div class="metadata-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Quick Start</span>
+                </div>
+                <div class="metadata-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Score: 15</span>
+                </div>
+                <div class="metadata-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Updated: Jan 2026</span>
+                </div>
+            </div>
+        </div>
 
-    <div class="logo-header">
-        <a href="../index.html">
-            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
-        </a>
-    </div>
-
-    <main class="container">
-        <section style="text-align: center; margin-bottom: 3rem;">
-            <h1><i class="fas fa-rocket"></i> Getting Started with CORTEX 4.0</h1>
-            <p class="hero-subtitle">Native IDE extensions for VS Code and Visual Studio with multi-repo intelligence</p>
-        </section>
-
-        <!-- IDE Preference Notice -->
-        <div class="glass-card" style="padding: 2rem; margin-bottom: 3rem; border: 2px solid var(--accent-primary); background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(123, 97, 255, 0.15));">
-            <h2 style="color: var(--accent-primary); margin-bottom: 1rem;">
-                <i class="fas fa-star"></i> VS Code: The Preferred CORTEX Experience
+        <!-- Quick Start Overview -->
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title">
+                <i class="fas fa-bolt"></i>
+                Quick Start (3 Commands)
             </h2>
-            <p style="font-size: 1.125rem; line-height: 1.8; margin-bottom: 1rem;">
-                While CORTEX 4.0 now supports both <strong>Visual Studio Code</strong> and <strong>Visual Studio IDE</strong>, 
-                we <strong>strongly recommend VS Code</strong> for the best experience. Here's why:
-            </p>
-            <div class="metrics-grid-2" style="gap: 1.5rem; margin-top: 1.5rem;">
-                <div style="background: rgba(0, 0, 0, 0.3); padding: 1.5rem; border-radius: 8px;">
-                    <h3 style="color: var(--accent-primary); margin-bottom: 0.75rem;">
-                        <i class="fas fa-bolt"></i> Better Performance
-                    </h3>
-                    <p style="color: var(--text-secondary);">
-                        Faster extension load times, GitHub Copilot Chat integration optimized for VS Code's architecture
-                    </p>
-                </div>
-                <div style="background: rgba(0, 0, 0, 0.3); padding: 1.5rem; border-radius: 8px;">
-                    <h3 style="color: var(--accent-primary); margin-bottom: 0.75rem;">
-                        <i class="fas fa-code-branch"></i> Multi-Repo Support
-                    </h3>
-                    <p style="color: var(--text-secondary);">
-                        Multi-folder workspace feature allows seamless CORTEX + your projects management
-                    </p>
-                </div>
-                <div style="background: rgba(0, 0, 0, 0.3); padding: 1.5rem; border-radius: 8px;">
-                    <h3 style="color: var(--accent-primary); margin-bottom: 0.75rem;">
-                        <i class="fas fa-puzzle-piece"></i> Rich Extension Ecosystem
-                    </h3>
-                    <p style="color: var(--text-secondary);">
-                        Integrates with Python, Git, Docker, and thousands of other VS Code extensions
-                    </p>
-                </div>
-                <div style="background: rgba(0, 0, 0, 0.3); padding: 1.5rem; border-radius: 8px;">
-                    <h3 style="color: var(--accent-primary); margin-bottom: 0.75rem;">
-                        <i class="fas fa-users"></i> Community Support
-                    </h3>
-                    <p style="color: var(--text-secondary);">
-                        Larger VS Code community means more resources, tutorials, and troubleshooting help
-                    </p>
-                </div>
-            </div>
-            <p style="margin-top: 1.5rem; font-style: italic; color: var(--text-muted);">
-                <i class="fas fa-info-circle"></i> Visual Studio IDE support is available for teams with existing workflows, 
-                but feature parity and performance may differ.
-            </p>
-        </div>
-
-        <!-- Multi-Repo Architecture -->
-        <section class="glass-card" style="padding: 2rem; margin-bottom: 3rem;">
-            <h2><i class="fas fa-sitemap"></i> Understanding CORTEX Multi-Repo Architecture</h2>
-            <p style="font-size: 1.0625rem; line-height: 1.8; margin-bottom: 1.5rem;">
-                CORTEX 4.0 introduces a revolutionary <strong>1:∞ multi-repo architecture</strong> that fundamentally changes 
-                how AI assists your development workflow. Instead of installing CORTEX in every project, you install it 
-                <strong>once</strong> and use it across <strong>unlimited projects</strong>.
-            </p>
-
-            <h3 style="color: var(--accent-primary); margin-top: 2rem; margin-bottom: 1rem;">
-                <i class="fas fa-brain"></i> How It Works
-            </h3>
-            <p style="line-height: 1.8; margin-bottom: 1.5rem;">
-                Think of CORTEX as your personal AI development consultant that sits alongside your work, not inside it. 
-                CORTEX maintains its own <strong>4-tier brain</strong> (memory system) that learns from all your projects 
-                while respecting strict boundaries through <strong>SKULL protection rules</strong>.
-            </p>
-
-            <div style="background: rgba(0, 0, 0, 0.3); padding: 2rem; border-radius: 12px; margin: 2rem 0;">
-                <div class="mermaid">
-graph TB
-    CORTEX["<b>CORTEX Brain</b><br/>(Single Installation)<br/>D:\PROJECTS\CORTEX"]
-    
-    P1["<b>Your API Project</b><br/>D:\MyProjects\RestAPI"]
-    P2["<b>Your Web App</b><br/>D:\MyProjects\WebApp"]
-    P3["<b>Your Mobile App</b><br/>D:\MyProjects\MobileApp"]
-    P4["<b>Your Microservices</b><br/>D:\MyProjects\Services"]
-    
-    CORTEX -->|"Plans, TDD, Sanitization"| P1
-    CORTEX -->|"Plans, TDD, Sanitization"| P2
-    CORTEX -->|"Plans, TDD, Sanitization"| P3
-    CORTEX -->|"Plans, TDD, Sanitization"| P4
-    
-    P1 -.->|"Learning (patterns, failures)"| CORTEX
-    P2 -.->|"Learning (patterns, failures)"| CORTEX
-    P3 -.->|"Learning (patterns, failures)"| CORTEX
-    P4 -.->|"Learning (patterns, failures)"| CORTEX
-    
-    style CORTEX fill:#7b61ff,stroke:#9f87ff,stroke-width:3px,color:#fff
-    style P1 fill:#10b981,stroke:#34d399,stroke-width:2px,color:#fff
-    style P2 fill:#3b82f6,stroke:#60a5fa,stroke-width:2px,color:#fff
-    style P3 fill:#f59e0b,stroke:#fbbf24,stroke-width:2px,color:#fff
-    style P4 fill:#ef4444,stroke:#f87171,stroke-width:2px,color:#fff
-                </div>
-            </div>
-
-            <h3 style="color: var(--accent-primary); margin-top: 2rem; margin-bottom: 1rem;">
-                <i class="fas fa-shield-alt"></i> SKULL Protection: What CORTEX Does vs. Never Does
-            </h3>
             
-            <div class="metrics-grid-2" style="gap: 1.5rem; margin-top: 1.5rem;">
-                <div style="background: rgba(16, 185, 129, 0.1); border-left: 4px solid #10b981; padding: 1.5rem; border-radius: 6px;">
-                    <h4 style="color: #10b981; margin-bottom: 1rem;">
-                        <i class="fas fa-check-circle"></i> CORTEX DOES
-                    </h4>
-                    <ul style="list-style: none; padding: 0;">
-                        <li style="padding: 0.5rem 0; display: flex; gap: 0.75rem;">
-                            <i class="fas fa-check" style="color: #10b981; margin-top: 0.25rem;"></i>
-                            <span>Create plans in <code>cortex-brain/documents/planning/</code></span>
-                        </li>
-                        <li style="padding: 0.5rem 0; display: flex; gap: 0.75rem;">
-                            <i class="fas fa-check" style="color: #10b981; margin-top: 0.25rem;"></i>
-                            <span>Generate reports in <code>cortex-brain/documents/reports/</code></span>
-                        </li>
-                        <li style="padding: 0.5rem 0; display: flex; gap: 0.75rem;">
-                            <i class="fas fa-check" style="color: #10b981; margin-top: 0.25rem;"></i>
-                            <span>Learn from your code patterns (in its brain)</span>
-                        </li>
-                        <li style="padding: 0.5rem 0; display: flex; gap: 0.75rem;">
-                            <i class="fas fa-check" style="color: #10b981; margin-top: 0.25rem;"></i>
-                            <span>Guide you through Copilot Chat commands</span>
-                        </li>
-                        <li style="padding: 0.5rem 0; display: flex; gap: 0.75rem;">
-                            <i class="fas fa-check" style="color: #10b981; margin-top: 0.25rem;"></i>
-                            <span>Create/modify files in YOUR projects (when you ask)</span>
-                        </li>
-                    </ul>
-                </div>
-                
-                <div style="background: rgba(239, 68, 68, 0.1); border-left: 4px solid #ef4444; padding: 1.5rem; border-radius: 6px;">
-                    <h4 style="color: #ef4444; margin-bottom: 1rem;">
-                        <i class="fas fa-times-circle"></i> CORTEX NEVER DOES
-                    </h4>
-                    <ul style="list-style: none; padding: 0;">
-                        <li style="padding: 0.5rem 0; display: flex; gap: 0.75rem;">
-                            <i class="fas fa-times" style="color: #ef4444; margin-top: 0.25rem;"></i>
-                            <span>Commit CORTEX code into your repositories</span>
-                        </li>
-                        <li style="padding: 0.5rem 0; display: flex; gap: 0.75rem;">
-                            <i class="fas fa-times" style="color: #ef4444; margin-top: 0.25rem;"></i>
-                            <span>Create <code>.cortex/</code> folders in your projects</span>
-                        </li>
-                        <li style="padding: 0.5rem 0; display: flex; gap: 0.75rem;">
-                            <i class="fas fa-times" style="color: #ef4444; margin-top: 0.25rem;"></i>
-                            <span>Mix its brain data with your source code</span>
-                        </li>
-                        <li style="padding: 0.5rem 0; display: flex; gap: 0.75rem;">
-                            <i class="fas fa-times" style="color: #ef4444; margin-top: 0.25rem;"></i>
-                            <span>Modify files without your explicit instruction</span>
-                        </li>
-                        <li style="padding: 0.5rem 0; display: flex; gap: 0.75rem;">
-                            <i class="fas fa-times" style="color: #ef4444; margin-top: 0.25rem;"></i>
-                            <span>Allow implementation before tests fail (TDD)</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- Quick Navigation -->
-        <div class="metrics-grid-4" style="gap: 1rem; margin: 3rem 0;">
-            <a href="#vscode-path" class="glass-card" style="padding: 1.5rem; text-align: center; text-decoration: none; transition: all 0.3s;">
-                <i class="fas fa-laptop-code" style="font-size: 2.5rem; color: var(--accent-primary); margin-bottom: 0.75rem;"></i>
-                <h3 style="font-size: 1rem; margin: 0; color: var(--text-primary);">VS Code Setup</h3>
-            </a>
-            <a href="#vs-ide-path" class="glass-card" style="padding: 1.5rem; text-align: center; text-decoration: none; transition: all 0.3s;">
-                <i class="fas fa-desktop" style="font-size: 2.5rem; color: var(--text-secondary); margin-bottom: 0.75rem;"></i>
-                <h3 style="font-size: 1rem; margin: 0; color: var(--text-primary);">Visual Studio IDE</h3>
-            </a>
-            <a href="#configuration" class="glass-card" style="padding: 1.5rem; text-align: center; text-decoration: none; transition: all 0.3s;">
-                <i class="fas fa-cog" style="font-size: 2.5rem; color: var(--accent-primary); margin-bottom: 0.75rem;"></i>
-                <h3 style="font-size: 1rem; margin: 0; color: var(--text-primary);">Configuration</h3>
-            </a>
-            <a href="#first-steps" class="glass-card" style="padding: 1.5rem; text-align: center; text-decoration: none; transition: all 0.3s;">
-                <i class="fas fa-play" style="font-size: 2.5rem; color: var(--accent-primary); margin-bottom: 0.75rem;"></i>
-                <h3 style="font-size: 1rem; margin: 0; color: var(--text-primary);">First Steps</h3>
-            </a>
-        </div>
-
-        <!-- VS Code Installation Path -->
-        <section id="vscode-path" class="glass-card" style="padding: 2rem; margin-bottom: 3rem;">
-            <h2><i class="fas fa-laptop-code"></i> VS Code Installation Path (Recommended)</h2>
+            <p class="intro-text">Get CORTEX running in <strong>under 5 minutes</strong> with these 3 simple commands. No complex configuration needed - CORTEX works out of the box with GitHub Copilot.</p>
             
-            <h3 style="color: var(--accent-primary); margin-top: 2rem;">
-                <i class="fas fa-clipboard-check"></i> Prerequisites
-            </h3>
-            <ul style="list-style: none; padding: 0;">
-                <li style="padding: 0.75rem 0; display: flex; gap: 1rem;">
-                    <i class="fas fa-check-circle" style="color: var(--accent-primary); font-size: 1.25rem; margin-top: 0.25rem;"></i>
-                    <div>
-                        <strong>Visual Studio Code 1.85+</strong><br>
-                        <span style="color: var(--text-muted);">Download from <a href="https://code.visualstudio.com/" style="color: var(--accent-primary);">code.visualstudio.com</a></span>
-                    </div>
-                </li>
-                <li style="padding: 0.75rem 0; display: flex; gap: 1rem;">
-                    <i class="fas fa-check-circle" style="color: var(--accent-primary); font-size: 1.25rem; margin-top: 0.25rem;"></i>
-                    <div>
-                        <strong>GitHub Copilot Chat Extension</strong><br>
-                        <span style="color: var(--text-muted);">Requires active GitHub Copilot subscription (\-20/month)</span>
-                    </div>
-                </li>
-                <li style="padding: 0.75rem 0; display: flex; gap: 1rem;">
-                    <i class="fas fa-check-circle" style="color: var(--accent-primary); font-size: 1.25rem; margin-top: 0.25rem;"></i>
-                    <div>
-                        <strong>Python 3.8+</strong><br>
-                        <span style="color: var(--text-muted);">With pip package manager</span>
-                    </div>
-                </li>
-                <li style="padding: 0.75rem 0; display: flex; gap: 1rem;">
-                    <i class="fas fa-check-circle" style="color: var(--accent-primary); font-size: 1.25rem; margin-top: 0.25rem;"></i>
-                    <div>
-                        <strong>Git 2.30+</strong><br>
-                        <span style="color: var(--text-muted);">For cloning CORTEX repository</span>
-                    </div>
-                </li>
-            </ul>
-
-            <h3 style="color: var(--accent-primary); margin-top: 2rem;">
-                <i class="fas fa-download"></i> Step 1: Install CORTEX Extension
-            </h3>
-            <p style="line-height: 1.8; margin-bottom: 1rem;">
-                Install the CORTEX extension from VS Code Marketplace:
-            </p>
-            <div style="background: rgba(0, 0, 0, 0.4); border: 1px solid var(--glass-border); border-radius: 8px; padding: 1.5rem; position: relative; font-family: 'Courier New', monospace;">
-                <pre style="margin: 0; color: #00ff88;">1. Press Ctrl+Shift+X (Extensions)
-2. Search for "CORTEX"
-3. Click Install on "CORTEX - AI Development Intelligence" by asifhussain60
-4. Reload VS Code when prompted</pre>
-                <button onclick="copyCode('ext-install')" style="position: absolute; top: 0.75rem; right: 0.75rem; background: var(--accent-primary); color: white; border: none; border-radius: 6px; padding: 0.5rem 1rem; cursor: pointer;">
-                    <i class="fas fa-copy"></i> Copy
-                </button>
-            </div>
-
-            <h3 style="color: var(--accent-primary); margin-top: 2rem;">
-                <i class="fas fa-terminal"></i> Step 2: Clone CORTEX Repository
-            </h3>
-            <p style="line-height: 1.8; margin-bottom: 1rem;">
-                Clone CORTEX to a dedicated location (NOT inside your project folders):
-            </p>
-            <div style="background: rgba(0, 0, 0, 0.4); border: 1px solid var(--glass-border); border-radius: 8px; padding: 1.5rem; margin-bottom: 1rem;">
-                <pre style="margin: 0; color: #00ff88;"># Windows
-cd D:\\PROJECTS
-git clone https://github.com/asifhussain60/CORTEX.git
+            <div class="code-block">
+                <div class="code-header">
+                    <span>Installation Commands</span>
+                    <i class="fas fa-terminal"></i>
+                </div>
+                <pre><code># 1. Clone the repository
+git clone https://github.com/your-org/CORTEX.git
 cd CORTEX
 
-# macOS/Linux
-cd ~/projects
-git clone https://github.com/asifhussain60/CORTEX.git
-cd CORTEX</pre>
-            </div>
+# 2. Install dependencies
+pip install -r requirements.txt
 
-            <h3 style="color: var(--accent-primary); margin-top: 2rem;">
-                <i class="fas fa-python"></i> Step 3: Install Python Dependencies
-            </h3>
-            <div style="background: rgba(0, 0, 0, 0.4); border: 1px solid var(--glass-border); border-radius: 8px; padding: 1.5rem;">
-                <pre style="margin: 0; color: #00ff88;">pip install -r requirements.txt</pre>
-            </div>
-
-            <h3 style="color: var(--accent-primary); margin-top: 2rem;">
-                <i class="fas fa-folder-open"></i> Step 4: Setup Multi-Folder Workspace
-            </h3>
-            <p style="line-height: 1.8; margin-bottom: 1rem;">
-                Add CORTEX and your projects to a VS Code workspace:
-            </p>
-            <div style="background: rgba(0, 0, 0, 0.4); border: 1px solid var(--glass-border); border-radius: 8px; padding: 1.5rem;">
-                <pre style="margin: 0; color: #00ff88;">1. File → Add Folder to Workspace
-2. Select D:\\PROJECTS\\CORTEX
-3. File → Add Folder to Workspace again
-4. Select your project (e.g., D:\\MyProjects\\MyApp)
-5. File → Save Workspace As → my-dev-workspace.code-workspace</pre>
+# 3. Start CORTEX
+python -m cortex</code></pre>
             </div>
             
-            <div style="background: rgba(0, 212, 255, 0.1); border-left: 4px solid var(--accent-primary); padding: 1rem 1.5rem; margin-top: 1.5rem; border-radius: 6px;">
-                <p style="margin: 0;"><i class="fas fa-info-circle"></i> 
-                <strong>Pro Tip:</strong> CORTEX auto-detects which folder you're working in. Just open files from your project 
-                and use Copilot Chat - CORTEX knows the context!</p>
+            <div class="success-banner">
+                <i class="fas fa-check-circle"></i>
+                <span>✅ That's it! CORTEX is now running and integrated with GitHub Copilot.</span>
             </div>
         </section>
 
-
-        <!-- Visual Studio IDE Path -->
-        <section id="vs-ide-path" class="glass-card" style="padding: 2rem; margin-bottom: 3rem; opacity: 0.9;">
-            <h2><i class="fas fa-desktop"></i> Visual Studio IDE Installation Path</h2>
+        <!-- Setup Flow -->
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title">
+                <i class="fas fa-stream"></i>
+                Setup Flow
+            </h2>
             
-            <div style="background: rgba(255, 165, 0, 0.1); border-left: 4px solid var(--warning); padding: 1rem 1.5rem; margin-bottom: 1.5rem; border-radius: 6px;">
-                <p style="margin: 0;"><i class="fas fa-exclamation-triangle"></i> 
-                <strong>Limited Feature Set:</strong> Visual Studio IDE extension has reduced functionality compared to VS Code. 
-                We recommend VS Code unless you have specific IDE requirements.</p>
-            </div>
-
-            <h3 style="color: var(--text-secondary); margin-top: 2rem;">
-                <i class="fas fa-clipboard-check"></i> Prerequisites
-            </h3>
-            <ul style="list-style: none; padding: 0;">
-                <li style="padding: 0.75rem 0; display: flex; gap: 1rem;">
-                    <i class="fas fa-check-circle" style="color: var(--text-secondary); font-size: 1.25rem; margin-top: 0.25rem;"></i>
-                    <div>
-                        <strong>Visual Studio 2019/2022</strong><br>
-                        <span style="color: var(--text-muted);">Professional, Enterprise, or Community Edition</span>
-                    </div>
-                </li>
-                <li style="padding: 0.75rem 0; display: flex; gap: 1rem;">
-                    <i class="fas fa-check-circle" style="color: var(--text-secondary); font-size: 1.25rem; margin-top: 0.25rem;"></i>
-                    <div>
-                        <strong>GitHub Copilot for Visual Studio</strong><br>
-                        <span style="color: var(--text-muted);">Extension from Visual Studio Marketplace</span>
-                    </div>
-                </li>
-                <li style="padding: 0.75rem 0; display: flex; gap: 1rem;">
-                    <i class="fas fa-check-circle" style="color: var(--text-secondary); font-size: 1.25rem; margin-top: 0.25rem;"></i>
-                    <div>
-                        <strong>Python 3.8+</strong><br>
-                        <span style="color: var(--text-muted);">Same as VS Code requirements</span>
-                    </div>
-                </li>
-            </ul>
-
-            <h3 style="color: var(--text-secondary); margin-top: 2rem;">
-                <i class="fas fa-download"></i> Installation Steps
-            </h3>
-            <div style="background: rgba(0, 0, 0, 0.4); border: 1px solid var(--glass-border); border-radius: 8px; padding: 1.5rem;">
-                <pre style="margin: 0; color: var(--text-secondary);">1. Open Visual Studio
-2. Extensions → Manage Extensions
-3. Search for "CORTEX"
-4. Install "CORTEX for Visual Studio" by asifhussain60
-5. Restart Visual Studio
-6. Clone CORTEX repository (same as VS Code)
-7. Install Python dependencies (same as VS Code)</pre>
-            </div>
-
-            <div style="background: rgba(239, 68, 68, 0.1); border-left: 4px solid #ef4444; padding: 1rem 1.5rem; margin-top: 1.5rem; border-radius: 6px;">
-                <p style="margin: 0;"><i class="fas fa-info-circle"></i> 
-                <strong>Note:</strong> Multi-folder workspace is not supported in Visual Studio IDE. CORTEX detects context 
-                from solution files (.sln) instead.</p>
+            <div class="diagram-container">
+                <div class="mermaid">
+graph LR
+    Clone["📥 Clone Repo<br/><small>git clone</small>"]
+    Install["📦 Install Deps<br/><small>pip install</small>"]
+    Start["🚀 Start CORTEX<br/><small>python -m cortex</small>"]
+    Ready["✅ Ready!<br/><small>Type 'help'</small>"]
+    
+    Clone --> Install
+    Install --> Start
+    Start --> Ready
+    
+    style Clone fill:#6366f1,stroke:#818cf8,stroke-width:2px,color:#fff
+    style Install fill:#10b981,stroke:#34d399,stroke-width:2px,color:#fff
+    style Start fill:#f59e0b,stroke:#fbbf24,stroke-width:2px,color:#fff
+    style Ready fill:#ef4444,stroke:#f87171,stroke-width:3px,color:#fff
+                </div>
             </div>
         </section>
 
-        <!-- Configuration -->
-        <section id="configuration" class="glass-card" style="padding: 2rem; margin-bottom: 3rem;">
-            <h2><i class="fas fa-cog"></i> Configuration</h2>
+        <!-- Prerequisites -->
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title">
+                <i class="fas fa-clipboard-check"></i>
+                Prerequisites
+            </h2>
             
-            <h3 style="color: var(--accent-primary); margin-top: 1.5rem;">
-                <i class="fas fa-file-code"></i> Optional: Customize cortex.config.json
-            </h3>
-            <p style="line-height: 1.8; margin-bottom: 1rem;">
-                Most users can skip this step. CORTEX auto-configures on first run.
-            </p>
-            <div style="background: rgba(0, 0, 0, 0.4); border: 1px solid var(--glass-border); border-radius: 8px; padding: 1.5rem;">
-                <pre style="margin: 0; color: #00ff88; font-size: 0.9rem;">{
-  "brain_path": "./cortex-brain",
-  "python_path": "python",
-  "default_workspace": null,
-  "enable_git_checkpoints": true,
-  "enable_tdd_enforcement": true,
-  "multi_repo_mode": true
-}</pre>
+            <p class="intro-text">Before installing CORTEX, ensure you have these requirements:</p>
+            
+            <div class="masonry-grid">
+                <div class="glass-card-clickable animation-t1">
+                    <div class="card-icon prereq-icon">
+                        <i class="fab fa-github"></i>
+                    </div>
+                    <h4 class="card-title">GitHub Copilot</h4>
+                    <p class="card-description">Active GitHub Copilot subscription with access to GPT-4o in VS Code.</p>
+                    <div class="card-badge badge-required">REQUIRED</div>
+                </div>
+                
+                <div class="glass-card-clickable animation-t1">
+                    <div class="card-icon prereq-icon">
+                        <i class="fab fa-python"></i>
+                    </div>
+                    <h4 class="card-title">Python 3.10+</h4>
+                    <p class="card-description">Python 3.10 or higher installed on your system. Check with <code>python --version</code>.</p>
+                    <div class="card-badge badge-required">REQUIRED</div>
+                </div>
+                
+                <div class="glass-card-clickable animation-t1">
+                    <div class="card-icon prereq-icon">
+                        <i class="fab fa-microsoft"></i>
+                    </div>
+                    <h4 class="card-title">VS Code</h4>
+                    <p class="card-description">Visual Studio Code with GitHub Copilot extension installed and activated.</p>
+                    <div class="card-badge badge-required">REQUIRED</div>
+                </div>
+                
+                <div class="glass-card-clickable animation-t1">
+                    <div class="card-icon prereq-icon">
+                        <i class="fab fa-git-alt"></i>
+                    </div>
+                    <h4 class="card-title">Git</h4>
+                    <p class="card-description">Git installed for cloning the repository and version control operations.</p>
+                    <div class="card-badge badge-required">REQUIRED</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Installation Steps -->
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title">
+                <i class="fas fa-list-ol"></i>
+                Detailed Installation Steps
+            </h2>
+            
+            <!-- Step 1 -->
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3 class="step-title">Clone Repository</h3>
+                    <p class="step-description">Clone the CORTEX repository to your local machine:</p>
+                    <div class="code-snippet">
+                        <code>git clone https://github.com/your-org/CORTEX.git</code>
+                        <button class="copy-button" onclick="navigator.clipboard.writeText('git clone https://github.com/your-org/CORTEX.git')">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                    <p class="step-note"><i class="fas fa-info-circle"></i> This creates a <code>CORTEX/</code> directory with all source files.</p>
+                </div>
+            </div>
+            
+            <!-- Step 2 -->
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3 class="step-title">Navigate to Directory</h3>
+                    <p class="step-description">Change into the CORTEX directory:</p>
+                    <div class="code-snippet">
+                        <code>cd CORTEX</code>
+                        <button class="copy-button" onclick="navigator.clipboard.writeText('cd CORTEX')">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Step 3 -->
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3 class="step-title">Install Dependencies</h3>
+                    <p class="step-description">Install required Python packages:</p>
+                    <div class="code-snippet">
+                        <code>pip install -r requirements.txt</code>
+                        <button class="copy-button" onclick="navigator.clipboard.writeText('pip install -r requirements.txt')">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                    <p class="step-note"><i class="fas fa-info-circle"></i> This installs all core dependencies. Optional dependencies in <code>optional-requirements.txt</code>.</p>
+                </div>
+            </div>
+            
+            <!-- Step 4 -->
+            <div class="step-card">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h3 class="step-title">Verify Installation</h3>
+                    <p class="step-description">Check that CORTEX installed correctly:</p>
+                    <div class="code-snippet">
+                        <code>python -m cortex --version</code>
+                        <button class="copy-button" onclick="navigator.clipboard.writeText('python -m cortex --version')">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                    <p class="step-note"><i class="fas fa-check-circle"></i> Should output: <code>CORTEX 4.0.0</code></p>
+                </div>
+            </div>
+            
+            <!-- Step 5 -->
+            <div class="step-card">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                    <h3 class="step-title">Open in VS Code</h3>
+                    <p class="step-description">Open the CORTEX directory in VS Code:</p>
+                    <div class="code-snippet">
+                        <code>code .</code>
+                        <button class="copy-button" onclick="navigator.clipboard.writeText('code .')">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                    <p class="step-note"><i class="fas fa-info-circle"></i> VS Code will automatically detect <code>.github/copilot-instructions.md</code></p>
+                </div>
             </div>
         </section>
 
         <!-- First Steps -->
-        <section id="first-steps" class="glass-card" style="padding: 2rem; margin-bottom: 3rem;">
-            <h2><i class="fas fa-play"></i> First Steps</h2>
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title">
+                <i class="fas fa-play"></i>
+                First Steps
+            </h2>
             
-            <h3 style="color: var(--accent-primary); margin-top: 1.5rem;">
-                <i class="fas fa-comments"></i> Using CORTEX in Copilot Chat
-            </h3>
-            <p style="line-height: 1.8; margin-bottom: 1rem;">
-                Open Copilot Chat and try these commands:
-            </p>
+            <p class="intro-text">Once CORTEX is installed, try these commands in GitHub Copilot Chat:</p>
             
-            <div class="metrics-grid-2" style="gap: 1.5rem;">
-                <div style="background: rgba(0, 0, 0, 0.3); padding: 1.5rem; border-radius: 8px;">
-                    <h4 style="color: var(--accent-primary); margin-bottom: 0.75rem;">
-                        <i class="fas fa-question-circle"></i> Get Help
-                    </h4>
-                    <div style="background: rgba(0, 0, 0, 0.4); padding: 1rem; border-radius: 6px; font-family: monospace; color: #00ff88;">
-                        help
+            <div class="first-steps-grid">
+                <div class="command-card">
+                    <div class="command-icon">
+                        <i class="fas fa-hand-sparkles"></i>
                     </div>
+                    <h4 class="command-title">Say Hello</h4>
+                    <div class="command-text">
+                        <code>hi cortex</code>
+                    </div>
+                    <p class="command-description">CORTEX introduces itself with ASCII banner and capabilities overview.</p>
                 </div>
                 
-                <div style="background: rgba(0, 0, 0, 0.3); padding: 1.5rem; border-radius: 8px;">
-                    <h4 style="color: var(--accent-primary); margin-bottom: 0.75rem;">
-                        <i class="fas fa-clipboard-list"></i> Create a Plan
-                    </h4>
-                    <div style="background: rgba(0, 0, 0, 0.4); padding: 1rem; border-radius: 6px; font-family: monospace; color: #00ff88;">
-                        plan user authentication
+                <div class="command-card">
+                    <div class="command-icon">
+                        <i class="fas fa-question-circle"></i>
                     </div>
+                    <h4 class="command-title">See All Commands</h4>
+                    <div class="command-text">
+                        <code>help</code>
+                    </div>
+                    <p class="command-description">View complete list of available operations and orchestrators.</p>
                 </div>
                 
-                <div style="background: rgba(0, 0, 0, 0.3); padding: 1.5rem; border-radius: 8px;">
-                    <h4 style="color: var(--accent-primary); margin-bottom: 0.75rem;">
-                        <i class="fas fa-vial"></i> Start TDD
-                    </h4>
-                    <div style="background: rgba(0, 0, 0, 0.4); padding: 1rem; border-radius: 6px; font-family: monospace; color: #00ff88;">
-                        start tdd for login feature
+                <div class="command-card">
+                    <div class="command-icon">
+                        <i class="fas fa-project-diagram"></i>
                     </div>
+                    <h4 class="command-title">Create Your First Plan</h4>
+                    <div class="command-text">
+                        <code>plan: Create a REST API</code>
+                    </div>
+                    <p class="command-description">CORTEX generates 4-folder planning structure with requirements, architecture, implementation, validation.</p>
                 </div>
                 
-                <div style="background: rgba(0, 0, 0, 0.3); padding: 1.5rem; border-radius: 8px;">
-                    <h4 style="color: var(--accent-primary); margin-bottom: 0.75rem;">
-                        <i class="fas fa-broom"></i> Sanitize Code
-                    </h4>
-                    <div style="background: rgba(0, 0, 0, 0.4); padding: 1rem; border-radius: 6px; font-family: monospace; color: #00ff88;">
-                        sanitize src/config/
+                <div class="command-card">
+                    <div class="command-icon">
+                        <i class="fas fa-heartbeat"></i>
                     </div>
+                    <h4 class="command-title">Run System Check</h4>
+                    <div class="command-text">
+                        <code>maintenance</code>
+                    </div>
+                    <p class="command-description">Execute 12-phase health check to find duplicates, dead code, test gaps, and more.</p>
                 </div>
-            </div>
-
-            <div style="background: rgba(16, 185, 129, 0.1); border-left: 4px solid #10b981; padding: 1rem 1.5rem; margin-top: 2rem; border-radius: 6px;">
-                <p style="margin: 0;"><i class="fas fa-graduation-cap"></i> 
-                <strong>Interactive Onboarding:</strong> Type <code style="background: rgba(0,0,0,0.3); padding: 0.25rem 0.5rem; border-radius: 4px;">onboard</code> 
-                in Copilot Chat for a guided 6-phase tutorial!</p>
             </div>
         </section>
-        
-        <footer style="text-align: center; padding: 3rem 1rem; margin-top: 4rem; border-top: 1px solid var(--glass-border);">
-            <p style="color: var(--text-muted);">
-                <strong>CORTEX v4.0</strong> | Created by <a href="https://github.com/asifhussain60" style="color: var(--accent-primary);">Asif Hussain</a>
-            </p>
-            <p style="color: var(--text-muted); font-size: 0.875rem; margin-top: 0.5rem;">
-                © 2025 All rights reserved | 
-                <a href="../index.html" style="color: var(--accent-primary);">Home</a> | 
-                <a href="https://github.com/asifhussain60/CORTEX" style="color: var(--accent-primary);">GitHub</a>
-            </p>
-        </footer>
+
+        <!-- Configuration (Optional) -->
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title">
+                <i class="fas fa-cog"></i>
+                Configuration (Optional)
+            </h2>
+            
+            <p class="intro-text">CORTEX works with zero configuration, but you can customize behavior via <code>cortex.config.json</code>:</p>
+            
+            <div class="code-block">
+                <div class="code-header">
+                    <span>cortex.config.json</span>
+                    <i class="fas fa-file-code"></i>
+                </div>
+                <pre><code>{
+  "brain": {
+    "tier0_enabled": true,
+    "knowledge_graph_path": "cortex-brain/tier2/knowledge-graph.yaml"
+  },
+  "orchestrators": {
+    "planning": {
+      "autonomous": true,
+      "output_path": "cortex-brain/documents/planning/"
+    },
+    "tdd": {
+      "enforce_red_first": true
+    }
+  },
+  "token_optimization": {
+    "semantic_caching": true,
+    "target_reduction": 0.97
+  }
+}</code></pre>
+            </div>
+            
+            <div class="config-grid">
+                <div class="config-option">
+                    <h4><code>tier0_enabled</code></h4>
+                    <p>Enable Tier 0 Governance for SKULL rule enforcement.</p>
+                </div>
+                <div class="config-option">
+                    <h4><code>autonomous</code></h4>
+                    <p>Whether Planning/ADO orchestrators execute autonomously.</p>
+                </div>
+                <div class="config-option">
+                    <h4><code>enforce_red_first</code></h4>
+                    <p>TDD enforcement: tests must fail before implementation.</p>
+                </div>
+                <div class="config-option">
+                    <h4><code>semantic_caching</code></h4>
+                    <p>Enable semantic caching for 97% token reduction.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Troubleshooting -->
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title">
+                <i class="fas fa-wrench"></i>
+                Troubleshooting
+            </h2>
+            
+            <div class="troubleshooting-grid">
+                <div class="issue-card">
+                    <div class="issue-header">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>Python Not Found</span>
+                    </div>
+                    <p class="issue-description"><strong>Problem:</strong> <code>python: command not found</code></p>
+                    <p class="issue-solution"><strong>Solution:</strong> Install Python 3.10+ from <a href="https://python.org">python.org</a> or use <code>python3</code> instead.</p>
+                </div>
+                
+                <div class="issue-card">
+                    <div class="issue-header">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>GitHub Copilot Not Responding</span>
+                    </div>
+                    <p class="issue-description"><strong>Problem:</strong> CORTEX commands not recognized</p>
+                    <p class="issue-solution"><strong>Solution:</strong> Reload VS Code window (<code>Ctrl+Shift+P</code> → "Reload Window") to refresh Copilot instructions.</p>
+                </div>
+                
+                <div class="issue-card">
+                    <div class="issue-header">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>Dependencies Failing</span>
+                    </div>
+                    <p class="issue-description"><strong>Problem:</strong> <code>pip install</code> errors</p>
+                    <p class="issue-solution"><strong>Solution:</strong> Upgrade pip first: <code>pip install --upgrade pip</code> then retry installation.</p>
+                </div>
+                
+                <div class="issue-card">
+                    <div class="issue-header">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>Permission Denied</span>
+                    </div>
+                    <p class="issue-description"><strong>Problem:</strong> Permission errors during installation</p>
+                    <p class="issue-solution"><strong>Solution:</strong> Use virtual environment: <code>python -m venv venv</code> → <code>source venv/bin/activate</code> (Linux/Mac) or <code>venv\Scripts\activate</code> (Windows).</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Next Steps -->
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title">
+                <i class="fas fa-arrow-right"></i>
+                Next Steps
+            </h2>
+            
+            <div class="next-steps-grid">
+                <div class="next-step-card">
+                    <i class="fas fa-book"></i>
+                    <h4>Explore Documentation</h4>
+                    <p>Read through <a href="../index.html">KEY FEATURES</a> to understand CORTEX capabilities.</p>
+                </div>
+                
+                <div class="next-step-card">
+                    <i class="fas fa-brain"></i>
+                    <h4>Understand Architecture</h4>
+                    <p>Learn about the <a href="../architecture/index.html">4-Tier Brain System</a> and Tier 0 Governance.</p>
+                </div>
+                
+                <div class="next-step-card">
+                    <i class="fas fa-code"></i>
+                    <h4>Try Orchestrators</h4>
+                    <p>Test all <a href="../orchestrators/index.html">8 orchestrators</a>: Planning, TDD, ADO, Maintenance, etc.</p>
+                </div>
+                
+                <div class="next-step-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h4>Review Metrics</h4>
+                    <p>Check <a href="../token-optimization/index.html">Token Optimization</a> to see 97% reduction results.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Support -->
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title">
+                <i class="fas fa-life-ring"></i>
+                Need Help?
+            </h2>
+            
+            <div class="support-grid">
+                <div class="support-card">
+                    <i class="fas fa-book-open"></i>
+                    <h4>Documentation</h4>
+                    <p>Complete docs in <code>docs/</code> directory</p>
+                </div>
+                
+                <div class="support-card">
+                    <i class="fab fa-github"></i>
+                    <h4>GitHub Issues</h4>
+                    <p>Report bugs or request features</p>
+                </div>
+                
+                <div class="support-card">
+                    <i class="fas fa-comments"></i>
+                    <h4>Discussions</h4>
+                    <p>Join GitHub Discussions forum</p>
+                </div>
+                
+                <div class="support-card">
+                    <i class="fas fa-envelope"></i>
+                    <h4>Contact</h4>
+                    <p>Email: support@cortex.dev</p>
+                </div>
+            </div>
+        </section>
+
     </main>
 
+    <!-- Initialize Mermaid -->
     <script>
         mermaid.initialize({ 
             startOnLoad: true,
@@ -461,30 +495,10 @@ cd CORTEX</pre>
                 primaryColor: '#7b61ff',
                 primaryTextColor: '#fff',
                 primaryBorderColor: '#9f87ff',
-                lineColor: '#a0a6c0',
-                secondaryColor: '#00d4ff',
-                tertiaryColor: '#1a1f3a'
+                lineColor: '#00d4ff',
+                secondaryColor: '#10b981',
+                tertiaryColor: '#f59e0b'
             }
-        });
-
-        function copyCode(id) {
-            const pre = event.target.closest('div').querySelector('pre');
-            navigator.clipboard.writeText(pre.textContent.trim());
-            event.target.innerHTML = '<i class="fas fa-check"></i> Copied!';
-            event.target.style.background = '#10b981';
-            setTimeout(() => {
-                event.target.innerHTML = '<i class="fas fa-copy"></i> Copy';
-                event.target.style.background = 'var(--accent-primary)';
-            }, 2000);
-        }
-
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href'))?.scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
         });
     </script>
 </body>
