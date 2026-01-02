@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX Threat Modeling - STRIDE Methodology, Attack Surface Analysis, and Threat Assessment">
+    <meta name="keywords" content="CORTEX, threat modeling, STRIDE, attack surface, security assessment">
+    <meta name="author" content="Asif Hussain">
+    <title>Threat Modeling - CORTEX Security</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo-64.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/main.css?v=4.0.0">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <!-- Glass Header (Level 1 - No Logo) -->
+    <header class="glass-header">
+        <div class="header-content">
+            <nav class="header-nav">
+                <a href="../index.html" class="nav-link"><i class="fas fa-home"></i> Home</a>
+                <a href="index.html" class="nav-link"><i class="fas fa-shield-halved"></i> Security</a>
+                <a href="../documentation.html" class="nav-link"><i class="fas fa-book"></i> Documentation</a>
+                <a href="https://github.com/asifhussain60/CORTEX" class="nav-link" target="_blank">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <div class="hero-icon">
+                <i class="fas fa-bullseye"></i>
+            </div>
+            <h1 class="hero-title">Threat Modeling</h1>
+            <p class="hero-subtitle">
+                Systematic identification and mitigation of security threats using STRIDE methodology, 
+                attack surface analysis, and comprehensive threat assessment workflows.
+            </p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="content-section">
+        <!-- STRIDE Framework -->
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-diagram-project"></i>
+                <h2 class="card-title">STRIDE Threat Categories</h2>
+            </div>
+            <p class="card-description">
+                STRIDE is a comprehensive threat modeling framework that categorizes threats into six key areas. 
+                Each category represents a specific type of security vulnerability that must be addressed.
+            </p>
+            <div class="visualization-container">
+                <div class="mermaid">
+graph TB
+    subgraph "STRIDE Threat Categories"
+        S[🎭 Spoofing<br/>Identity Impersonation]
+        T[🔄 Tampering<br/>Data Modification]
+        R[🚫 Repudiation<br/>Deny Actions]
+        I[📢 Information Disclosure<br/>Data Leakage]
+        D[⛔ Denial of Service<br/>Availability Attack]
+        E[⬆️ Elevation of Privilege<br/>Unauthorized Access]
+    end
+    
+    S --> AUTH[Authentication Required]
+    T --> INTEGRITY[Integrity Controls]
+    R --> AUDIT[Audit Logging]
+    I --> ENCRYPTION[Encryption/Access Control]
+    D --> RESILIENCE[Resilience Measures]
+    E --> AUTHORIZATION[Authorization Controls]
+    
+    AUTH --> MITIGATE[Mitigation Strategies]
+    INTEGRITY --> MITIGATE
+    AUDIT --> MITIGATE
+    ENCRYPTION --> MITIGATE
+    RESILIENCE --> MITIGATE
+    AUTHORIZATION --> MITIGATE
+    
+    style S fill:#ff6b9d,stroke:#fff,stroke-width:2px
+    style T fill:#ffb84d,stroke:#fff,stroke-width:2px
+    style R fill:#7b61ff,stroke:#fff,stroke-width:2px
+    style I fill:#ff4757,stroke:#fff,stroke-width:2px
+    style D fill:#00d4ff,stroke:#fff,stroke-width:2px
+    style E fill:#2ecc71,stroke:#fff,stroke-width:2px
+                </div>
+            </div>
+        </article>
+
+        <!-- Threat Assessment Workflow -->
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-route"></i>
+                <h2 class="card-title">Threat Assessment Workflow</h2>
+            </div>
+            <p class="card-description">
+                A systematic approach to identifying, analyzing, and mitigating threats throughout the CORTEX ecosystem. 
+                This workflow ensures comprehensive coverage and continuous improvement.
+            </p>
+            <div class="visualization-container">
+                <div class="mermaid">
+flowchart LR
+    A[🎯 Identify Assets] --> B[🔍 Enumerate Threats]
+    B --> C[📊 Assess Risk]
+    C --> D[🛡️ Define Controls]
+    D --> E[✅ Validate Effectiveness]
+    E --> F[🔄 Continuous Monitoring]
+    
+    F --> B
+    
+    style A fill:#7b61ff,stroke:#fff,stroke-width:2px
+    style B fill:#ff6b9d,stroke:#fff,stroke-width:2px
+    style C fill:#ffb84d,stroke:#fff,stroke-width:2px
+    style D fill:#2ecc71,stroke:#fff,stroke-width:2px
+    style E fill:#00d4ff,stroke:#fff,stroke-width:2px
+    style F fill:#00d4ff,stroke:#fff,stroke-width:2px
+                </div>
+            </div>
+        </article>
+
+        <!-- Interactive Threat Matrix -->
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-table-cells"></i>
+                <h2 class="card-title">Threat Likelihood × Impact Matrix</h2>
+            </div>
+            <p class="card-description">
+                Interactive heatmap showing the relationship between threat likelihood and impact. 
+                Hover over cells to see specific threat examples and recommended actions.
+            </p>
+            <div class="visualization-container" id="threat-matrix"></div>
+        </article>
+
+        <!-- Attack Surface Visualization -->
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-network-wired"></i>
+                <h2 class="card-title">Attack Surface Visualization</h2>
+            </div>
+            <p class="card-description">
+                Force-directed graph showing CORTEX components and potential attack vectors. 
+                Drag nodes to explore connections, click to view detailed attack scenarios.
+            </p>
+            <div class="visualization-container" id="attack-surface"></div>
+        </article>
+
+        <!-- STRIDE Application Guide -->
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-list-check"></i>
+                <h2 class="card-title">Applying STRIDE to CORTEX</h2>
+            </div>
+            <div class="principles-grid">
+                <div class="principle-card">
+                    <div class="principle-icon">🎭</div>
+                    <h3 class="principle-title">Spoofing</h3>
+                    <p class="principle-description">
+                        <strong>Threat:</strong> Attacker impersonates CORTEX user or service<br>
+                        <strong>Mitigation:</strong> Multi-factor authentication, API key rotation, JWT with short expiry
+                    </p>
+                </div>
+                <div class="principle-card">
+                    <div class="principle-icon">🔄</div>
+                    <h3 class="principle-title">Tampering</h3>
+                    <p class="principle-description">
+                        <strong>Threat:</strong> Unauthorized modification of code, configs, or data<br>
+                        <strong>Mitigation:</strong> Git commit signing, file integrity monitoring, immutable audit logs
+                    </p>
+                </div>
+                <div class="principle-card">
+                    <div class="principle-icon">🚫</div>
+                    <h3 class="principle-title">Repudiation</h3>
+                    <p class="principle-description">
+                        <strong>Threat:</strong> User denies performing malicious action<br>
+                        <strong>Mitigation:</strong> Comprehensive audit logging, non-repudiation signatures, event correlation
+                    </p>
+                </div>
+                <div class="principle-card">
+                    <div class="principle-icon">📢</div>
+                    <h3 class="principle-title">Information Disclosure</h3>
+                    <p class="principle-description">
+                        <strong>Threat:</strong> Sensitive data exposed through logs, errors, or leaks<br>
+                        <strong>Mitigation:</strong> Data sanitization, encryption at rest/transit, minimal logging
+                    </p>
+                </div>
+                <div class="principle-card">
+                    <div class="principle-icon">⛔</div>
+                    <h3 class="principle-title">Denial of Service</h3>
+                    <p class="principle-description">
+                        <strong>Threat:</strong> Resource exhaustion preventing legitimate use<br>
+                        <strong>Mitigation:</strong> Rate limiting, input validation, resource quotas, graceful degradation
+                    </p>
+                </div>
+                <div class="principle-card">
+                    <div class="principle-icon">⬆️</div>
+                    <h3 class="principle-title">Elevation of Privilege</h3>
+                    <p class="principle-description">
+                        <strong>Threat:</strong> Attacker gains higher permissions than authorized<br>
+                        <strong>Mitigation:</strong> Principle of least privilege, input validation, secure defaults
+                    </p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Quick Links -->
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-link"></i>
+                <h2 class="card-title">Related Resources</h2>
+            </div>
+            <div class="quick-links-grid">
+                <a href="risk-assessment.html" class="quick-link-card">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Risk Assessment</span>
+                </a>
+                <a href="vulnerability-assessment.html" class="quick-link-card">
+                    <i class="fas fa-bug"></i>
+                    <span>Vulnerability Assessment</span>
+                </a>
+                <a href="penetration-testing.html" class="quick-link-card">
+                    <i class="fas fa-user-secret"></i>
+                    <span>Penetration Testing</span>
+                </a>
+                <a href="incident-response.html" class="quick-link-card">
+                    <i class="fas fa-bell"></i>
+                    <span>Incident Response</span>
+                </a>
+            </div>
+        </article>
+    </main>
+
+    <!-- Glass Footer -->
+    <footer class="glass-footer">
+        <div class="footer-content">
+            <p class="footer-copyright">
+                Copyright © 2026 Asif Hussain. All rights reserved.
+            </p>
+            <div class="footer-links">
+                <a href="../index.html" class="footer-link">Home</a>
+                <a href="https://github.com/asifhussain60/CORTEX" class="footer-link" target="_blank">GitHub</a>
+                <a href="../documentation.html" class="footer-link">Documentation</a>
+            </div>
+            <p class="footer-version">CORTEX v4.0.1 | Glassmorphism Design System</p>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#1a1f3a',
+                primaryTextColor: '#ffffff',
+                primaryBorderColor: '#00d4ff',
+                lineColor: '#7b61ff',
+                secondaryColor: '#2a3356',
+                tertiaryColor: '#7b61ff'
+            }
+        });
+
+        // Threat Matrix Data
+        const threatMatrixData = [
+            { likelihood: 5, impact: 5, threat: "Zero-day exploit in dependencies", severity: "Critical", color: "#ff4757" },
+            { likelihood: 4, impact: 5, threat: "Privilege escalation via API", severity: "Critical", color: "#ff4757" },
+            { likelihood: 3, impact: 5, threat: "Data breach via SQL injection", severity: "High", color: "#ffb84d" },
+            { likelihood: 5, impact: 4, threat: "Brute force authentication", severity: "High", color: "#ffb84d" },
+            { likelihood: 4, impact: 4, threat: "Session hijacking", severity: "High", color: "#ffb84d" },
+            { likelihood: 3, impact: 4, threat: "XSS in dashboard UI", severity: "Medium", color: "#7b61ff" },
+            { likelihood: 2, impact: 4, threat: "Insecure deserialization", severity: "Medium", color: "#7b61ff" },
+            { likelihood: 5, impact: 3, threat: "Weak password policy", severity: "Medium", color: "#7b61ff" },
+            { likelihood: 4, impact: 3, threat: "Missing rate limiting", severity: "Medium", color: "#7b61ff" },
+            { likelihood: 3, impact: 3, threat: "Information disclosure in errors", severity: "Low", color: "#00d4ff" },
+            { likelihood: 2, impact: 3, threat: "CSRF on non-critical endpoints", severity: "Low", color: "#00d4ff" },
+            { likelihood: 1, impact: 3, threat: "Clickjacking vulnerability", severity: "Low", color: "#2ecc71" },
+            { likelihood: 5, impact: 2, threat: "Verbose error messages", severity: "Low", color: "#2ecc71" },
+            { likelihood: 4, impact: 2, threat: "Missing security headers", severity: "Low", color: "#2ecc71" },
+            { likelihood: 3, impact: 2, threat: "Outdated TLS configuration", severity: "Very Low", color: "#2ecc71" },
+            { likelihood: 2, impact: 2, threat: "Directory listing enabled", severity: "Very Low", color: "#2ecc71" },
+            { likelihood: 1, impact: 2, threat: "Cookie without Secure flag", severity: "Very Low", color: "#2ecc71" },
+            { likelihood: 5, impact: 1, threat: "Verbose server banner", severity: "Very Low", color: "#2ecc71" },
+            { likelihood: 4, impact: 1, threat: "Missing HSTS header", severity: "Very Low", color: "#2ecc71" },
+            { likelihood: 3, impact: 1, threat: "Unneeded HTTP methods", severity: "Very Low", color: "#2ecc71" },
+            { likelihood: 2, impact: 1, threat: "Missing X-Frame-Options", severity: "Very Low", color: "#2ecc71" },
+            { likelihood: 1, impact: 1, threat: "Autocomplete on sensitive form", severity: "Very Low", color: "#2ecc71" }
+        ];
+
+        // Create Threat Matrix
+        const matrixWidth = 600;
+        const matrixHeight = 600;
+        const cellSize = 100;
+        const margin = { top: 50, right: 50, bottom: 80, left: 80 };
+
+        const matrixSvg = d3.select("#threat-matrix")
+            .append("svg")
+            .attr("width", matrixWidth)
+            .attr("height", matrixHeight)
+            .attr("viewBox", `0 0 ${matrixWidth} ${matrixHeight}`);
+
+        const matrixG = matrixSvg.append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+
+        // Draw grid
+        for (let i = 1; i <= 5; i++) {
+            for (let j = 1; j <= 5; j++) {
+                const threats = threatMatrixData.filter(d => d.likelihood === i && d.impact === j);
+                const threat = threats[0] || { severity: "None", color: "#1a1f3a" };
+                
+                const cell = matrixG.append("g")
+                    .attr("class", "matrix-cell")
+                    .attr("transform", `translate(${(i-1) * cellSize},${(5-j) * cellSize})`);
+
+                cell.append("rect")
+                    .attr("width", cellSize - 2)
+                    .attr("height", cellSize - 2)
+                    .attr("fill", threat.color)
+                    .attr("fill-opacity", 0.3)
+                    .attr("stroke", "rgba(255,255,255,0.2)")
+                    .attr("stroke-width", 1)
+                    .attr("rx", 8)
+                    .style("cursor", threats.length > 0 ? "pointer" : "default")
+                    .on("mouseover", function() {
+                        if (threats.length > 0) {
+                            d3.select(this)
+                                .transition()
+                                .duration(200)
+                                .attr("fill-opacity", 0.6)
+                                .attr("stroke", "#00d4ff")
+                                .attr("stroke-width", 2);
+                            
+                            tooltip.style("display", "block")
+                                .html(`
+                                    <strong>${threat.threat}</strong><br>
+                                    Likelihood: ${i}/5<br>
+                                    Impact: ${j}/5<br>
+                                    Severity: ${threat.severity}
+                                `);
+                        }
+                    })
+                    .on("mousemove", function(event) {
+                        if (threats.length > 0) {
+                            tooltip
+                                .style("left", (event.pageX + 15) + "px")
+                                .style("top", (event.pageY - 28) + "px");
+                        }
+                    })
+                    .on("mouseout", function() {
+                        d3.select(this)
+                            .transition()
+                            .duration(200)
+                            .attr("fill-opacity", 0.3)
+                            .attr("stroke", "rgba(255,255,255,0.2)")
+                            .attr("stroke-width", 1);
+                        tooltip.style("display", "none");
+                    });
+            }
+        }
+
+        // Axes
+        const likelihoodLabels = ["Very Low", "Low", "Medium", "High", "Very High"];
+        const impactLabels = ["Very Low", "Low", "Medium", "High", "Very High"];
+
+        matrixG.append("text")
+            .attr("x", 250)
+            .attr("y", 520)
+            .attr("text-anchor", "middle")
+            .attr("fill", "#00d4ff")
+            .attr("font-weight", "bold")
+            .text("Likelihood →");
+
+        matrixG.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("x", -250)
+            .attr("y", -60)
+            .attr("text-anchor", "middle")
+            .attr("fill", "#00d4ff")
+            .attr("font-weight", "bold")
+            .text("← Impact");
+
+        // Tooltip
+        const tooltip = d3.select("body")
+            .append("div")
+            .attr("class", "visualization-tooltip")
+            .style("display", "none");
+
+        // Attack Surface Force Graph
+        const attackNodes = [
+            { id: "API", group: 1, size: 30 },
+            { id: "Database", group: 2, size: 25 },
+            { id: "UI", group: 3, size: 20 },
+            { id: "Auth", group: 4, size: 28 },
+            { id: "Storage", group: 5, size: 22 },
+            { id: "Queue", group: 6, size: 18 },
+            { id: "Cache", group: 7, size: 15 }
+        ];
+
+        const attackLinks = [
+            { source: "API", target: "Database", attack: "SQL Injection" },
+            { source: "API", target: "Auth", attack: "Auth Bypass" },
+            { source: "UI", target: "API", attack: "XSS/CSRF" },
+            { source: "UI", target: "Auth", attack: "Session Hijacking" },
+            { source: "Auth", target: "Database", attack: "Privilege Escalation" },
+            { source: "API", target: "Storage", attack: "Path Traversal" },
+            { source: "API", target: "Queue", attack: "Message Injection" },
+            { source: "Database", target: "Storage", attack: "Data Exfiltration" },
+            { source: "Queue", target: "Cache", attack: "Cache Poisoning" }
+        ];
+
+        const attackWidth = 600;
+        const attackHeight = 500;
+
+        const attackSvg = d3.select("#attack-surface")
+            .append("svg")
+            .attr("width", attackWidth)
+            .attr("height", attackHeight)
+            .attr("viewBox", `0 0 ${attackWidth} ${attackHeight}`);
+
+        const simulation = d3.forceSimulation(attackNodes)
+            .force("link", d3.forceLink(attackLinks).id(d => d.id).distance(150))
+            .force("charge", d3.forceManyBody().strength(-400))
+            .force("center", d3.forceCenter(attackWidth / 2, attackHeight / 2))
+            .force("collision", d3.forceCollide().radius(d => d.size + 10));
+
+        const link = attackSvg.append("g")
+            .selectAll("line")
+            .data(attackLinks)
+            .enter()
+            .append("line")
+            .attr("stroke", "#7b61ff")
+            .attr("stroke-opacity", 0.6)
+            .attr("stroke-width", 2);
+
+        const node = attackSvg.append("g")
+            .selectAll("g")
+            .data(attackNodes)
+            .enter()
+            .append("g")
+            .call(d3.drag()
+                .on("start", dragstarted)
+                .on("drag", dragged)
+                .on("end", dragended));
+
+        node.append("circle")
+            .attr("r", d => d.size)
+            .attr("fill", d => d3.schemeCategory10[d.group])
+            .attr("fill-opacity", 0.7)
+            .attr("stroke", "#00d4ff")
+            .attr("stroke-width", 2)
+            .style("cursor", "pointer")
+            .on("mouseover", function(event, d) {
+                d3.select(this)
+                    .transition()
+                    .duration(200)
+                    .attr("r", d.size * 1.2)
+                    .attr("fill-opacity", 1)
+                    .attr("stroke-width", 3);
+                
+                const connectedLinks = attackLinks.filter(l => l.source.id === d.id || l.target.id === d.id);
+                const attacks = connectedLinks.map(l => l.attack).join(", ");
+                
+                tooltip.style("display", "block")
+                    .html(`
+                        <strong>${d.id} Component</strong><br>
+                        Attack Vectors: ${connectedLinks.length}<br>
+                        Types: ${attacks}
+                    `);
+            })
+            .on("mousemove", function(event) {
+                tooltip
+                    .style("left", (event.pageX + 15) + "px")
+                    .style("top", (event.pageY - 28) + "px");
+            })
+            .on("mouseout", function(event, d) {
+                d3.select(this)
+                    .transition()
+                    .duration(200)
+                    .attr("r", d.size)
+                    .attr("fill-opacity", 0.7)
+                    .attr("stroke-width", 2);
+                tooltip.style("display", "none");
+            });
+
+        node.append("text")
+            .attr("text-anchor", "middle")
+            .attr("dy", 5)
+            .attr("fill", "#ffffff")
+            .attr("font-weight", "bold")
+            .attr("font-size", "12px")
+            .attr("pointer-events", "none")
+            .text(d => d.id);
+
+        simulation.on("tick", () => {
+            link
+                .attr("x1", d => d.source.x)
+                .attr("y1", d => d.source.y)
+                .attr("x2", d => d.target.x)
+                .attr("y2", d => d.target.y);
+
+            node.attr("transform", d => `translate(${d.x},${d.y})`);
+        });
+
+        function dragstarted(event) {
+            if (!event.active) simulation.alphaTarget(0.3).restart();
+            event.subject.fx = event.subject.x;
+            event.subject.fy = event.subject.y;
+        }
+
+        function dragged(event) {
+            event.subject.fx = event.x;
+            event.subject.fy = event.y;
+        }
+
+        function dragended(event) {
+            if (!event.active) simulation.alphaTarget(0);
+            event.subject.fx = null;
+            event.subject.fy = null;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX Risk Assessment - Risk Calculation, Prioritization, and Treatment Planning">
+    <meta name="keywords" content="CORTEX, risk assessment, risk management, security risk, mitigation">
+    <meta name="author" content="Asif Hussain">
+    <title>Risk Assessment - CORTEX Security</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo-64.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/main.css?v=4.0.0">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <!-- Glass Header (Level 1 - No Logo) -->
+    <header class="glass-header">
+        <div class="header-content">
+            <nav class="header-nav">
+                <a href="../index.html" class="nav-link"><i class="fas fa-home"></i> Home</a>
+                <a href="index.html" class="nav-link"><i class="fas fa-shield-halved"></i> Security</a>
+                <a href="../documentation.html" class="nav-link"><i class="fas fa-book"></i> Documentation</a>
+                <a href="https://github.com/asifhussain60/CORTEX" class="nav-link" target="_blank">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <div class="hero-icon">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <h1 class="hero-title">Risk Assessment</h1>
+            <p class="hero-subtitle">
+                Quantitative risk analysis, prioritization, and treatment planning with data-driven 
+                visualizations to support informed security decisions.
+            </p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="content-section">
+        <!-- Risk Calculation Formula -->
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-calculator"></i>
+                <h2 class="card-title">Risk Calculation Methodology</h2>
+            </div>
+            <p class="card-description">
+                CORTEX uses a quantitative risk scoring system that combines likelihood and impact assessments. 
+                Risk scores guide prioritization and resource allocation for mitigation efforts.
+            </p>
+            <div class="visualization-container">
+                <div class="mermaid">
+graph LR
+    L[📊 Likelihood<br/>1-5 Scale] --> R[⚠️ Risk Score]
+    I[💥 Impact<br/>1-5 Scale] --> R
+    A[🎯 Asset Value<br/>Multiplier] --> R
+    
+    R --> C{Risk Score<br/>Classification}
+    
+    C --> CRIT[🔴 Critical<br/>20-25]
+    C --> HIGH[🟠 High<br/>15-19]
+    C --> MED[🟡 Medium<br/>10-14]
+    C --> LOW[🟢 Low<br/>5-9]
+    C --> MIN[⚪ Minimal<br/>1-4]
+    
+    style L fill:#00d4ff,stroke:#fff,stroke-width:2px
+    style I fill:#ff6b9d,stroke:#fff,stroke-width:2px
+    style A fill:#7b61ff,stroke:#fff,stroke-width:2px
+    style CRIT fill:#ff4757,stroke:#fff,stroke-width:2px
+    style HIGH fill:#ffb84d,stroke:#fff,stroke-width:2px
+    style MED fill:#7b61ff,stroke:#fff,stroke-width:2px
+    style LOW fill:#2ecc71,stroke:#fff,stroke-width:2px
+    style MIN fill:#ffffff,stroke:#fff,stroke-width:2px
+                </div>
+            </div>
+            <div class="code-example">
+                <div class="code-header">
+                    <span class="code-title">Risk Score Formula</span>
+                </div>
+                <pre><code>Risk Score = (Likelihood × Impact) × Asset Value Multiplier
+
+Likelihood Scale (1-5):
+1 = Rare (< 10% probability/year)
+2 = Unlikely (10-25%)
+3 = Possible (25-50%)
+4 = Likely (50-75%)
+5 = Almost Certain (> 75%)
+
+Impact Scale (1-5):
+1 = Negligible (minimal disruption)
+2 = Minor (limited data/service impact)
+3 = Moderate (significant operational impact)
+4 = Major (severe data breach/outage)
+5 = Catastrophic (system compromise/data loss)
+
+Asset Value Multiplier (0.5-2.0):
+0.5 = Low-criticality assets
+1.0 = Standard assets
+1.5 = High-criticality assets
+2.0 = Mission-critical assets</code></pre>
+            </div>
+        </article>
+
+        <!-- Risk Treatment Decision Tree -->
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-sitemap"></i>
+                <h2 class="card-title">Risk Treatment Decision Tree</h2>
+            </div>
+            <p class="card-description">
+                Systematic approach to determining the appropriate risk treatment strategy based on 
+                risk score, cost-benefit analysis, and organizational risk appetite.
+            </p>
+            <div class="visualization-container">
+                <div class="mermaid">
+graph TD
+    R[Risk Identified] --> A{Acceptable<br/>Risk?}
+    A -->|Yes| ACC[✅ Accept Risk<br/>Document Decision]
+    A -->|No| S{Can Risk be<br/>Eliminated?}
+    
+    S -->|Yes| AV[🚫 Avoid Risk<br/>Remove Vulnerability]
+    S -->|No| C{Cost-Effective<br/>to Mitigate?}
+    
+    C -->|Yes| MIT[🛡️ Mitigate Risk<br/>Implement Controls]
+    C -->|No| T{Can Transfer<br/>Risk?}
+    
+    T -->|Yes| TRANS[🔄 Transfer Risk<br/>Insurance/3rd Party]
+    T -->|No| REAS[🔁 Reassess<br/>Seek Alternatives]
+    
+    style R fill:#7b61ff,stroke:#fff,stroke-width:2px
+    style ACC fill:#2ecc71,stroke:#fff,stroke-width:2px
+    style AV fill:#ff4757,stroke:#fff,stroke-width:2px
+    style MIT fill:#00d4ff,stroke:#fff,stroke-width:2px
+    style TRANS fill:#ffb84d,stroke:#fff,stroke-width:2px
+    style REAS fill:#ff6b9d,stroke:#fff,stroke-width:2px
+                </div>
+            </div>
+        </article>
+
+        <!-- Risk Priority Bubble Chart -->
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-circle-dot"></i>
+                <h2 class="card-title">Risk Priority Matrix</h2>
+            </div>
+            <p class="card-description">
+                Interactive bubble chart showing risk distribution across likelihood and impact dimensions. 
+                Bubble size represents the number of affected assets. Click bubbles to view mitigation plans.
+            </p>
+            <div class="visualization-container" id="risk-bubble-chart"></div>
+        </article>
+
+        <!-- Risk Heatmap Time-Series -->
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-calendar-days"></i>
+                <h2 class="card-title">Risk Trends Over Time</h2>
+            </div>
+            <p class="card-description">
+                Calendar heatmap showing 12-month risk history. Color intensity indicates total risk score per day. 
+                Track progress in risk reduction and identify seasonal patterns.
+            </p>
+            <div class="visualization-container" id="risk-heatmap"></div>
+        </article>
+
+        <!-- Risk Treatment Strategies -->
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-shield-halved"></i>
+                <h2 class="card-title">Risk Treatment Strategies</h2>
+            </div>
+            <div class="principles-grid">
+                <div class="principle-card">
+                    <div class="principle-icon">✅</div>
+                    <h3 class="principle-title">Accept</h3>
+                    <p class="principle-description">
+                        <strong>When:</strong> Risk score < 5, cost of mitigation exceeds risk impact<br>
+                        <strong>Action:</strong> Document acceptance, monitor regularly, set review date<br>
+                        <strong>Example:</strong> Low-traffic API endpoint with minimal sensitive data
+                    </p>
+                </div>
+                <div class="principle-card">
+                    <div class="principle-icon">🚫</div>
+                    <h3 class="principle-title">Avoid</h3>
+                    <p class="principle-description">
+                        <strong>When:</strong> Risk score > 20, eliminating activity feasible<br>
+                        <strong>Action:</strong> Remove vulnerable feature, redesign architecture<br>
+                        <strong>Example:</strong> Disable insecure legacy authentication method
+                    </p>
+                </div>
+                <div class="principle-card">
+                    <div class="principle-icon">🛡️</div>
+                    <h3 class="principle-title">Mitigate</h3>
+                    <p class="principle-description">
+                        <strong>When:</strong> Risk score 10-19, controls available and cost-effective<br>
+                        <strong>Action:</strong> Implement security controls, reduce likelihood/impact<br>
+                        <strong>Example:</strong> Add input validation, encryption, access controls
+                    </p>
+                </div>
+                <div class="principle-card">
+                    <div class="principle-icon">🔄</div>
+                    <h3 class="principle-title">Transfer</h3>
+                    <p class="principle-description">
+                        <strong>When:</strong> Risk score 15-25, third-party better positioned<br>
+                        <strong>Action:</strong> Purchase insurance, outsource to specialized vendor<br>
+                        <strong>Example:</strong> Use managed security service for DDoS protection
+                    </p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Quick Links -->
+        <article class="glass-card-display animation-t1">
+            <div class="card-header-with-icon">
+                <i class="fas fa-link"></i>
+                <h2 class="card-title">Related Resources</h2>
+            </div>
+            <div class="quick-links-grid">
+                <a href="threat-modeling.html" class="quick-link-card">
+                    <i class="fas fa-bullseye"></i>
+                    <span>Threat Modeling</span>
+                </a>
+                <a href="vulnerability-assessment.html" class="quick-link-card">
+                    <i class="fas fa-bug"></i>
+                    <span>Vulnerability Assessment</span>
+                </a>
+                <a href="compliance.html" class="quick-link-card">
+                    <i class="fas fa-certificate"></i>
+                    <span>Compliance Standards</span>
+                </a>
+                <a href="dashboard.html" class="quick-link-card">
+                    <i class="fas fa-gauge-high"></i>
+                    <span>Security Dashboard</span>
+                </a>
+            </div>
+        </article>
+    </main>
+
+    <!-- Glass Footer -->
+    <footer class="glass-footer">
+        <div class="footer-content">
+            <p class="footer-copyright">
+                Copyright © 2026 Asif Hussain. All rights reserved.
+            </p>
+            <div class="footer-links">
+                <a href="../index.html" class="footer-link">Home</a>
+                <a href="https://github.com/asifhussain60/CORTEX" class="footer-link" target="_blank">GitHub</a>
+                <a href="../documentation.html" class="footer-link">Documentation</a>
+            </div>
+            <p class="footer-version">CORTEX v4.0.1 | Glassmorphism Design System</p>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#1a1f3a',
+                primaryTextColor: '#ffffff',
+                primaryBorderColor: '#00d4ff',
+                lineColor: '#7b61ff',
+                secondaryColor: '#2a3356',
+                tertiaryColor: '#7b61ff'
+            }
+        });
+
+        // Risk Bubble Chart Data
+        const riskData = [
+            { id: 1, name: "Unpatched Dependencies", likelihood: 4, impact: 5, assets: 8, color: "#ff4757", mitigation: "Implement automated dependency scanning and patching pipeline" },
+            { id: 2, name: "Weak Authentication", likelihood: 3, impact: 5, assets: 12, color: "#ff4757", mitigation: "Enforce MFA and strong password policies" },
+            { id: 3, name: "SQL Injection", likelihood: 2, impact: 5, assets: 5, color: "#ffb84d", mitigation: "Use parameterized queries and input validation" },
+            { id: 4, name: "XSS Vulnerabilities", likelihood: 4, impact: 3, assets: 10, color: "#7b61ff", mitigation: "Implement Content Security Policy and output encoding" },
+            { id: 5, name: "Session Hijacking", likelihood: 3, impact: 4, assets: 7, color: "#ffb84d", mitigation: "Use secure cookies with HttpOnly and SameSite flags" },
+            { id: 6, name: "Insecure API Endpoints", likelihood: 5, impact: 3, assets: 6, color: "#7b61ff", mitigation: "Add rate limiting and authentication to all APIs" },
+            { id: 7, name: "Data Leakage in Logs", likelihood: 4, impact: 2, assets: 15, color: "#7b61ff", mitigation: "Implement log sanitization and access controls" },
+            { id: 8, name: "Missing Rate Limiting", likelihood: 5, impact: 2, assets: 9, color: "#7b61ff", mitigation: "Deploy rate limiting middleware on all endpoints" },
+            { id: 9, name: "CSRF Attacks", likelihood: 2, impact: 3, assets: 4, color: "#2ecc71", mitigation: "Use anti-CSRF tokens on state-changing operations" },
+            { id: 10, name: "Clickjacking", likelihood: 1, impact: 2, assets: 3, color: "#2ecc71", mitigation: "Set X-Frame-Options header to DENY" }
+        ];
+
+        // Create Bubble Chart
+        const bubbleWidth = 700;
+        const bubbleHeight = 500;
+        const bubbleMargin = { top: 40, right: 40, bottom: 60, left: 60 };
+
+        const bubbleSvg = d3.select("#risk-bubble-chart")
+            .append("svg")
+            .attr("width", bubbleWidth)
+            .attr("height", bubbleHeight)
+            .attr("viewBox", `0 0 ${bubbleWidth} ${bubbleHeight}`);
+
+        const bubbleG = bubbleSvg.append("g")
+            .attr("transform", `translate(${bubbleMargin.left},${bubbleMargin.top})`);
+
+        const xScale = d3.scaleLinear()
+            .domain([0, 6])
+            .range([0, bubbleWidth - bubbleMargin.left - bubbleMargin.right]);
+
+        const yScale = d3.scaleLinear()
+            .domain([0, 6])
+            .range([bubbleHeight - bubbleMargin.top - bubbleMargin.bottom, 0]);
+
+        const sizeScale = d3.scaleSqrt()
+            .domain([0, d3.max(riskData, d => d.assets)])
+            .range([10, 40]);
+
+        // Grid lines
+        bubbleG.selectAll(".grid-line-x")
+            .data([1, 2, 3, 4, 5])
+            .enter()
+            .append("line")
+            .attr("class", "grid-line-x")
+            .attr("x1", d => xScale(d))
+            .attr("x2", d => xScale(d))
+            .attr("y1", 0)
+            .attr("y2", yScale(0))
+            .attr("stroke", "rgba(255,255,255,0.1)")
+            .attr("stroke-width", 1);
+
+        bubbleG.selectAll(".grid-line-y")
+            .data([1, 2, 3, 4, 5])
+            .enter()
+            .append("line")
+            .attr("class", "grid-line-y")
+            .attr("x1", 0)
+            .attr("x2", xScale(5))
+            .attr("y1", d => yScale(d))
+            .attr("y2", d => yScale(d))
+            .attr("stroke", "rgba(255,255,255,0.1)")
+            .attr("stroke-width", 1);
+
+        // Bubbles
+        const bubbles = bubbleG.selectAll(".risk-bubble")
+            .data(riskData)
+            .enter()
+            .append("g")
+            .attr("class", "risk-bubble")
+            .attr("transform", d => `translate(${xScale(d.likelihood)},${yScale(d.impact)})`);
+
+        bubbles.append("circle")
+            .attr("r", d => sizeScale(d.assets))
+            .attr("fill", d => d.color)
+            .attr("fill-opacity", 0.6)
+            .attr("stroke", "#00d4ff")
+            .attr("stroke-width", 2)
+            .style("cursor", "pointer")
+            .on("mouseover", function(event, d) {
+                d3.select(this)
+                    .transition()
+                    .duration(200)
+                    .attr("r", sizeScale(d.assets) * 1.2)
+                    .attr("fill-opacity", 1)
+                    .attr("stroke-width", 3);
+                
+                tooltip.style("display", "block")
+                    .html(`
+                        <strong>${d.name}</strong><br>
+                        Risk Score: ${d.likelihood * d.impact}<br>
+                        Likelihood: ${d.likelihood}/5<br>
+                        Impact: ${d.impact}/5<br>
+                        Affected Assets: ${d.assets}<br>
+                        <hr>
+                        <em>${d.mitigation}</em>
+                    `);
+            })
+            .on("mousemove", function(event) {
+                tooltip
+                    .style("left", (event.pageX + 15) + "px")
+                    .style("top", (event.pageY - 28) + "px");
+            })
+            .on("mouseout", function(event, d) {
+                d3.select(this)
+                    .transition()
+                    .duration(200)
+                    .attr("r", sizeScale(d.assets))
+                    .attr("fill-opacity", 0.6)
+                    .attr("stroke-width", 2);
+                tooltip.style("display", "none");
+            });
+
+        bubbles.append("text")
+            .attr("text-anchor", "middle")
+            .attr("dy", 5)
+            .attr("fill", "#ffffff")
+            .attr("font-weight", "bold")
+            .attr("font-size", "11px")
+            .attr("pointer-events", "none")
+            .text(d => d.id);
+
+        // Axes
+        const xAxis = d3.axisBottom(xScale).ticks(5);
+        const yAxis = d3.axisLeft(yScale).ticks(5);
+
+        bubbleG.append("g")
+            .attr("transform", `translate(0,${yScale(0)})`)
+            .call(xAxis)
+            .attr("color", "#ffffff");
+
+        bubbleG.append("g")
+            .call(yAxis)
+            .attr("color", "#ffffff");
+
+        bubbleG.append("text")
+            .attr("x", xScale(2.5))
+            .attr("y", yScale(0) + 45)
+            .attr("text-anchor", "middle")
+            .attr("fill", "#00d4ff")
+            .attr("font-weight", "bold")
+            .text("Likelihood →");
+
+        bubbleG.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("x", -yScale(2.5))
+            .attr("y", -45)
+            .attr("text-anchor", "middle")
+            .attr("fill", "#00d4ff")
+            .attr("font-weight", "bold")
+            .text("← Impact");
+
+        // Tooltip
+        const tooltip = d3.select("body")
+            .append("div")
+            .attr("class", "visualization-tooltip")
+            .style("display", "none");
+
+        // Risk Heatmap (12-month calendar)
+        const heatmapWidth = 900;
+        const heatmapHeight = 200;
+        const cellWidth = 20;
+        const cellHeight = 20;
+
+        const heatmapSvg = d3.select("#risk-heatmap")
+            .append("svg")
+            .attr("width", heatmapWidth)
+            .attr("height", heatmapHeight)
+            .attr("viewBox", `0 0 ${heatmapWidth} ${heatmapHeight}`);
+
+        const heatmapG = heatmapSvg.append("g")
+            .attr("transform", "translate(80,20)");
+
+        // Generate 12 months of data
+        const today = new Date();
+        const heatmapData = [];
+        for (let i = 365; i >= 0; i--) {
+            const date = new Date(today);
+            date.setDate(date.getDate() - i);
+            const riskScore = Math.floor(Math.random() * 25) + 1; // Random risk 1-25
+            heatmapData.push({
+                date: date,
+                score: riskScore,
+                dateStr: date.toISOString().split('T')[0]
+            });
+        }
+
+        const colorScale = d3.scaleSequential()
+            .domain([1, 25])
+            .interpolator(d3.interpolateRgb("#2ecc71", "#ff4757"));
+
+        const weeks = d3.group(heatmapData, d => d3.timeWeek.count(d3.timeYear(d.date), d.date));
+
+        weeks.forEach((weekData, weekNum) => {
+            weekData.forEach(d => {
+                const dayOfWeek = d.date.getDay();
+                
+                heatmapG.append("rect")
+                    .attr("x", weekNum * (cellWidth + 2))
+                    .attr("y", dayOfWeek * (cellHeight + 2))
+                    .attr("width", cellWidth)
+                    .attr("height", cellHeight)
+                    .attr("fill", colorScale(d.score))
+                    .attr("stroke", "rgba(255,255,255,0.2)")
+                    .attr("stroke-width", 1)
+                    .attr("rx", 3)
+                    .style("cursor", "pointer")
+                    .on("mouseover", function(event) {
+                        d3.select(this)
+                            .transition()
+                            .duration(200)
+                            .attr("stroke", "#00d4ff")
+                            .attr("stroke-width", 2);
+                        
+                        tooltip.style("display", "block")
+                            .html(`
+                                <strong>${d.dateStr}</strong><br>
+                                Total Risk Score: ${d.score}<br>
+                                ${d.score > 20 ? "🔴 Critical Risk Day" : d.score > 15 ? "🟠 High Risk" : d.score > 10 ? "🟡 Medium Risk" : "🟢 Low Risk"}
+                            `);
+                    })
+                    .on("mousemove", function(event) {
+                        tooltip
+                            .style("left", (event.pageX + 15) + "px")
+                            .style("top", (event.pageY - 28) + "px");
+                    })
+                    .on("mouseout", function() {
+                        d3.select(this)
+                            .transition()
+                            .duration(200)
+                            .attr("stroke", "rgba(255,255,255,0.2)")
+                            .attr("stroke-width", 1);
+                        tooltip.style("display", "none");
+                    });
+            });
+        });
+
+        // Month labels
+        const monthLabels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        monthLabels.forEach((month, i) => {
+            heatmapG.append("text")
+                .attr("x", (i * 4.5) * (cellWidth + 2))
+                .attr("y", -5)
+                .attr("fill", "#ffffff")
+                .attr("font-size", "12px")
+                .text(month);
+        });
+
+        // Day labels
+        const dayLabels = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        dayLabels.forEach((day, i) => {
+            heatmapG.append("text")
+                .attr("x", -70)
+                .attr("y", i * (cellHeight + 2) + 15)
+                .attr("fill", "#ffffff")
+                .attr("font-size", "12px")
+                .text(day);
+        });
+    </script>
+</body>
+</html>
