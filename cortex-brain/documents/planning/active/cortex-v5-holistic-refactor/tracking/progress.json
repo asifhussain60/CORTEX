@@ -5,8 +5,8 @@
   "updated_at": "2026-01-02T23:59:59Z",
   "status": "active",
   "progress": {
-    "overall_percent": 40,
-    "current_phase": 5.1,
+    "overall_percent": 33,
+    "current_phase": 5,
     "total_phases": 12,
     "phases": [
       {
@@ -130,9 +130,20 @@
       {
         "phase_number": 5,
         "name": "Use Planning v5 for Migrations",
-        "status": "pending",
+        "status": "completed",
         "estimated_hours": 4,
-        "progress_percent": 0
+        "actual_hours": 4,
+        "progress_percent": 100,
+        "completed_at": "2026-01-02T23:59:59Z",
+        "git_commit": "pending",
+        "deliverables": [
+          "cortex-brain/documents/planning/active/ado-v2-migration/00-master-plan.md",
+          "cortex-brain/documents/planning/active/ado-v2-migration/tracking/progress-tracker.json",
+          "cortex-brain/documents/planning/active/vacuum-v2-migration/00-master-plan.md",
+          "cortex-brain/documents/planning/active/cleanup-v2-migration/00-master-plan.md",
+          "cortex-brain/documents/planning/active/guided-orchestrators-assessment/00-master-plan.md",
+          "Four migration plans following Planning v5 structure (4 subfolders each)"
+        ]
       },
       {
         "phase_number": 6,

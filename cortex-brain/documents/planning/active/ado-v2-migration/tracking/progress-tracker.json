@@ -1,0 +1,156 @@
+{
+  "plan_id": "ado-v2-migration",
+  "feature_name": "ADO Orchestrator v2 Migration with Conversational Wizard",
+  "parent_plan_id": "cortex-v5-holistic-refactor",
+  "created_at": "2026-01-02T00:00:00Z",
+  "updated_at": "2026-01-02T00:00:00Z",
+  "status": "pending",
+  "progress": {
+    "overall_percent": 0,
+    "current_phase": 0,
+    "total_phases": 6,
+    "phases": [
+      {
+        "phase_number": 0,
+        "name": "Foundation & Analysis",
+        "status": "pending",
+        "estimated_hours": 8,
+        "progress_percent": 0,
+        "tasks": [
+          {
+            "task_id": "0.1",
+            "name": "ADO v1 Analysis",
+            "estimated_hours": 4,
+            "status": "pending"
+          },
+          {
+            "task_id": "0.2",
+            "name": "Baseline Testing",
+            "estimated_hours": 2,
+            "status": "pending"
+          },
+          {
+            "task_id": "0.3",
+            "name": "Migration Strategy Document",
+            "estimated_hours": 2,
+            "status": "pending"
+          }
+        ]
+      },
+      {
+        "phase_number": 1,
+        "name": "Core v2 Implementation",
+        "status": "pending",
+        "estimated_hours": 16,
+        "progress_percent": 0,
+        "tasks": [
+          {
+            "task_id": "1.1",
+            "name": "ADOOrchestratorV2 Base Class",
+            "estimated_hours": 6,
+            "status": "pending"
+          },
+          {
+            "task_id": "1.2",
+            "name": "Phase Method Implementation",
+            "estimated_hours": 8,
+            "status": "pending"
+          },
+          {
+            "task_id": "1.3",
+            "name": "Helper Utilities",
+            "estimated_hours": 2,
+            "status": "pending"
+          }
+        ]
+      },
+      {
+        "phase_number": 2,
+        "name": "Wizard Integration",
+        "status": "pending",
+        "estimated_hours": 8,
+        "progress_percent": 0
+      },
+      {
+        "phase_number": 3,
+        "name": "Config & Templates",
+        "status": "pending",
+        "estimated_hours": 8,
+        "progress_percent": 0
+      },
+      {
+        "phase_number": 4,
+        "name": "Testing & Validation",
+        "status": "pending",
+        "estimated_hours": 4,
+        "progress_percent": 0
+      },
+      {
+        "phase_number": 5,
+        "name": "Master Orchestrator Activation",
+        "status": "pending",
+        "estimated_hours": 4,
+        "progress_percent": 0
+      }
+    ]
+  },
+  "deliverables": {
+    "core_implementation": [
+      "src/orchestrators/ado/ado_orchestrator_v2.py",
+      "src/orchestrators/ado/complexity_analyzer.py",
+      "src/orchestrators/ado/dor_refiner.py",
+      "src/orchestrators/ado/story_point_calculator.py"
+    ],
+    "configuration": [
+      "cortex-brain/manifests/orchestrators/ado-orchestrator-v2.yaml",
+      "cortex-brain/config/master-orchestrator.yaml (updated)"
+    ],
+    "templates": [
+      "cortex-brain/templates/ado/work-item-preview.jinja2",
+      "cortex-brain/templates/ado/approval-prompt.jinja2",
+      "cortex-brain/templates/ado/completion-message.jinja2",
+      "cortex-brain/templates/ado/wizard/*.jinja2"
+    ],
+    "tests": [
+      "tests/orchestrators/ado/test_ado_orchestrator_v2.py",
+      "tests/orchestrators/ado/test_complexity_analyzer.py",
+      "tests/orchestrators/ado/test_dor_refiner.py"
+    ],
+    "documentation": [
+      "context/ado-v1-architecture.md",
+      "context/conversational-wizard-design.md",
+      "artifacts/migration-strategy.md"
+    ]
+  },
+  "milestones": {
+    "foundation_complete": {
+      "target_date": "Day 1",
+      "description": "ADO v1 analyzed, baseline established",
+      "phase": 0
+    },
+    "core_implementation_complete": {
+      "target_date": "Day 3",
+      "description": "ADO v2 core with 6 phases operational",
+      "phase": 1
+    },
+    "wizard_integrated": {
+      "target_date": "Day 4",
+      "description": "Dual-mode (auto + wizard) functional",
+      "phase": 2
+    },
+    "master_orch_activated": {
+      "target_date": "Day 6",
+      "description": "ADO v2 LIVE via Master Orchestrator routing",
+      "phase": 5
+    }
+  },
+  "metadata": {
+    "complexity_tier": 3,
+    "estimated_days": 6,
+    "parent_plan": "cortex-v5-holistic-refactor",
+    "parent_phase": 6.1,
+    "migration_type": "hybrid_to_autonomous",
+    "wizard_included": true,
+    "backward_compatible": true
+  }
+}

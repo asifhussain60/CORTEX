@@ -11,7 +11,7 @@
 
 ## 📊 Visual Progress Tracker
 
-**Overall Progress:** `█████░░░░░░░░░░░░░░░` **25%** ⏳ IN PROGRESS
+**Overall Progress:** `██████░░░░░░░░░░░░░░` **33%** ⏳ IN PROGRESS
 
 ### Bootstrap Phase (Planning System v5 + Master Orchestrator + Context Middleware)
 
@@ -29,8 +29,8 @@
 
 | Phase | Name | Progress | Duration | Status |
 |-------|------|----------|----------|--------|
-| 5 | Use v5 to Plan Migrations | `░░░░░░░░░░` | 0.5d + 4h | ⏸️ Not Started |
-| 5.1a | **ADO Wizard Enhancement** | `░░░░░░░░░░` | **4h** | ⏸️ **Not Started** |
+| 5 | Use v5 to Plan Migrations | `██████████` | 0.5d + 4h | ✅ **COMPLETE** |
+| 5.1a | **ADO Wizard Enhancement** | `██████████` | **4h** | ✅ **Complete** |
 | 6 | Execute Migration Plans | `░░░░░░░░░░` | 24d | ⏸️ Not Started |
 | 7 | System Integration | `░░░░░░░░░░` | 2d | ⏸️ Not Started |
 | 8 | Testing & Validation | `░░░░░░░░░░` | 3d | ⏸️ Not Started |
@@ -39,7 +39,7 @@
 
 **Bootstrap Completion:** ~13 days (includes Master Orchestrator + Context Middleware)  
 **Full Completion:** ~40 days  
-**Current Phase:** BaseOrchestrator v4.1 + Master Orchestrator Core implementation
+**Current Phase:** Phase 5 Complete (Migration Planning) → Ready for Phase 6 (Execute Migration Plans)
 
 **Checkpoints:**
 - ✅ Phase 1 checkpoint @ commit 90153190: MCP Tool Infrastructure
@@ -50,6 +50,8 @@
 - ✅ Session Management System @ commit a93860329: Continuation prompt for multi-session execution
 - ✅ **Continuation Prompt ACTIVATED** @ commit 40abf77af: Live implementation with 12/12 tests passing
 - ✅ **Phase 4.5 COMPLETE** @ commit d14ddbd85: Cross-Session Context Middleware operational (99.6% token efficiency)
+- ✅ **Phase 5.1a COMPLETE** @ commit [PENDING]: ADO Wizard Enhancement (conversational wizard + dual-mode routing)
+- ✅ **Phase 5 COMPLETE** @ commit [PENDING]: Migration plans generated (ADO v2, Vacuum v2, Cleanup v2, GUIDED assessment)
 
 ---
 
@@ -3383,7 +3385,48 @@ cortex-brain/archives/v4-orchestrators/
 - `isort` for import organization
 - Custom scripts for validation
 
-### Task 10.5: Final Validation
+### Task 10.5: Acceptance Criteria Validation (NEW)
+**Duration:** 2h
+
+**Goal:** Validate implementation against comprehensive acceptance criteria
+
+**Activities:**
+1. Run acceptance criteria test suite
+2. Generate plan-specific acceptance report
+3. Validate against FINAL-ACCEPTANCE-CRITERIA.md
+4. Document pass/fail for each criterion
+5. Create final acceptance report
+
+**Files to Create:**
+- `reports/final-acceptance-report.md` - Comprehensive acceptance validation
+- **Already Created:** `artifacts/final-acceptance-criteria-link.md` - Links to master criteria document
+
+**Test Execution:**
+```bash
+# Run acceptance criteria validation
+python scripts/generate_acceptance_report.py \
+  --plan-id cortex-v5-holistic-refactor \
+  --criteria cortex-brain/documents/planning/FINAL-ACCEPTANCE-CRITERIA.md \
+  --output cortex-brain/documents/planning/active/cortex-v5-holistic-refactor/reports/final-acceptance-report.md
+```
+
+**Acceptance Criteria Reference:** `../../FINAL-ACCEPTANCE-CRITERIA.md`
+
+**Plan-Specific Criteria:**
+- **MO-1.1.1**: Pattern matching ≥90% accuracy
+- **MO-1.3.1**: Context middleware <200 tokens
+- **PS-2.1.1**: Correct folder structure (4 subfolders)
+- **PS-2.3.1**: Phase -1 "Knowledge Library" present
+- **PS-2.4.1**: AST scan executes in Phase 0
+- **SKULL-9.3.1**: All orchestrators follow RED→GREEN→REFACTOR
+- **SKULL-9.5.2**: ≥18 cleanup tasks per file category
+
+**Deliverables:**
+- Final acceptance report with pass/fail for each criterion
+- Evidence artifacts for failed criteria (if any)
+- Corrective action plan for failures
+
+### Task 10.6: Final System Validation
 **Duration:** 6h
 
 **Validation Suite:**
@@ -3402,6 +3445,8 @@ cortex-brain/archives/v4-orchestrators/
 - All manifests validate against schema
 
 ### Completion Criteria
+- ✅ **Acceptance criteria validated (100% applicable criteria passed)**
+- ✅ **Final acceptance report generated**
 - ✅ Old code archived with migration notes
 - ✅ Duplicate code consolidated
 - ✅ 100% filename compliance (≤20 chars)
@@ -3437,6 +3482,7 @@ cortex-brain/archives/v4-orchestrators/
 - [ ] Migration guide validated
 - [ ] User documentation updated
 - [ ] CORTEX.prompt.md reflects Master Orchestrator architecture
+- [ ] **Final acceptance criteria linked to plan** (`artifacts/final-acceptance-criteria-link.md`)
 
 ### Validation Deliverables
 - [ ] All tests pass (unit + integration + routing)
@@ -3446,6 +3492,8 @@ cortex-brain/archives/v4-orchestrators/
 - [ ] System validation checklist complete
 - [ ] Regression testing passed
 - [ ] End-to-end routing validated for all orchestrators
+- [ ] **Acceptance criteria validation complete** (100% applicable criteria passed)
+- [ ] **Final acceptance report generated** (`reports/final-acceptance-report.md`)
 
 ### Operational Deliverables
 - [ ] Old code archived
