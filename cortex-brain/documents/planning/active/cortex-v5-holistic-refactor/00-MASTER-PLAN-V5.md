@@ -1,11 +1,11 @@
 # 🛡️ CORTEX v5.0 Holistic Architecture Refactor
 
 **Plan ID:** cortex-v5-holistic-refactor  
-**Feature:** System-wide Pure Autonomous Architecture Transformation with Master Orchestrator + Cross-Session Context  
-**Created:** January 2, 2026 | **Updated:** January 2, 2026 (Cross-Session Context Middleware integration)  
+**Feature:** System-wide Pure Autonomous Architecture Transformation with Master Orchestrator + Cross-Session Context + Governance Integration  
+**Created:** January 2, 2026 | **Updated:** January 2, 2026 (Tier 0 Governance + Knowledge Graph integration added)  
 **Complexity:** TIER 5 (ARCHITECTURAL)  
-**Strategy:** Bootstrap Planning System v5 + Master Orchestrator + Context Middleware, then use them to plan remaining migrations  
-**Estimated Duration:** 40 days total (13 days bootstrap + 27 days migrations)
+**Strategy:** Bootstrap Planning System v5 (with AST + Governance + Knowledge Graph) + Master Orchestrator + Context Middleware, then use them to plan remaining migrations  
+**Estimated Duration:** 40.5 days total (13.5 days bootstrap + 27 days migrations)
 
 ---
 
@@ -29,7 +29,8 @@
 
 | Phase | Name | Progress | Duration | Status |
 |-------|------|----------|----------|--------|
-| 5 | Use v5 to Plan Migrations | `░░░░░░░░░░` | 0.5d | ⏸️ Not Started |
+| 5 | Use v5 to Plan Migrations | `░░░░░░░░░░` | 0.5d + 4h | ⏸️ Not Started |
+| 5.1a | **ADO Wizard Enhancement** | `░░░░░░░░░░` | **4h** | ⏸️ **Not Started** |
 | 6 | Execute Migration Plans | `░░░░░░░░░░` | 24d | ⏸️ Not Started |
 | 7 | System Integration | `░░░░░░░░░░` | 2d | ⏸️ Not Started |
 | 8 | Testing & Validation | `░░░░░░░░░░` | 3d | ⏸️ Not Started |
@@ -56,7 +57,7 @@
 
 ### The Transformation
 
-This plan eliminates hybrid control flow ambiguity across the entire CORTEX architecture by implementing a pure autonomous system where Python owns all execution logic and manifests contain only configuration data. The architecture introduces a **Master Orchestrator** - a centralized, machine-readable routing layer that eliminates LLM-dependent brittleness while enabling deterministic orchestrator coordination. The approach is **bootstrapped**: we build Planning System v5 + Master Orchestrator first, then use them to create detailed plans for migrating all other orchestrators and agents.
+This plan eliminates hybrid control flow ambiguity across the entire CORTEX architecture by implementing a pure autonomous system where Python owns all execution logic and manifests contain only configuration data. The architecture introduces a **Master Orchestrator** - a centralized, machine-readable routing layer that eliminates LLM-dependent brittleness while enabling deterministic orchestrator coordination. Planning System v5 includes **Tier 0 Governance Integration** (brain-protection-rules.yaml with 61 rules) and **Tier 2 Knowledge Graph queries** to ensure all generated plans comply with CORTEX architectural constraints and leverage existing knowledge. The approach is **bootstrapped**: we build Planning System v5 (with AST + Governance + Knowledge Graph) + Master Orchestrator first, then use them to create detailed plans for migrating all other orchestrators and agents.
 
 ### Why Master Orchestrator?
 
@@ -743,31 +744,531 @@ class ExecutionEngine:
 
 **Files to Create:**
 - `src/orchestrators/planning_orchestrator_v5.py` - Pure Python implementation
+- `src/orchestrators/planning/governance_integrator.py` - **NEW: Tier 0 governance integration**
+- `src/orchestrators/planning/knowledge_graph_query.py` - **NEW: Tier 2 knowledge graph queries**
 - `tests/orchestrators/test_planning_orchestrator_v5.py` - Comprehensive tests
+- `tests/orchestrators/test_governance_integrator.py` - **NEW: Governance validation tests**
 
 **Core Capabilities:**
 ```python
 class PlanningOrchestratorV5(BaseOrchestratorV4_1):
     def discover_context(self, user_request: str) -> ContextResult
-    def analyze_architecture(self, context: ContextResult) -> ArchitectureAnalysis
-    def generate_plan(self, analysis: ArchitectureAnalysis) -> PlanDocument
+    def load_governance_rules(self) -> GovernanceRules  # NEW - Tier 0 integration
+    def validate_against_governance(self, context: ContextResult) -> GovernanceValidation  # NEW
+    def query_knowledge_graph(self, feature_name: str) -> KnowledgeContext  # NEW - Tier 2
+    def analyze_architecture(self, context: ContextResult, governance: GovernanceValidation) -> ArchitectureAnalysis
+    def generate_plan(self, analysis: ArchitectureAnalysis, governance: GovernanceRules) -> PlanDocument
     def create_folder_structure(self, plan: PlanDocument) -> FolderStructure
-    def validate_plan(self, plan: PlanDocument) -> ValidationResult
+    def validate_plan(self, plan: PlanDocument, governance: GovernanceRules) -> ValidationResult
     def execute(self, user_request: str) -> OrchestratorResult
 ```
 
 **Execution Flow:**
 1. Parse user request (extract feature name, complexity hints)
 2. Create plan in database (status: 'active')
-3. **Phase 0: Context Discovery** - Search workspace for relevant files
-4. **Phase 1: Architecture Analysis** - AST parsing, dependency analysis
-5. **Phase 2: Plan Generation** - Template-driven markdown creation
-6. **Phase 3: Folder Creation** - Atomic filesystem operations
-7. **Phase 4: Validation** - Automated checks (structure, content, references)
-8. Update database (status: 'completed')
-9. Return execution summary
+3. **Phase 0: Context Discovery** - Search workspace for relevant files + AST parsing
+4. **Phase 1: Governance Validation** - Cross-reference brain-protection-rules.yaml (Tier 0) + knowledge graphs
+5. **Phase 2: Architecture Analysis** - Dependency analysis with governance constraints
+6. **Phase 3: Plan Generation** - Template-driven markdown creation with governance rules enforced
+7. **Phase 4: Folder Creation** - Atomic filesystem operations
+8. **Phase 5: Validation** - Automated checks (structure, content, references, governance compliance)
+9. Update database (status: 'completed')
+10. Return execution summary
+
+**Governance Integration (NEW - Enhanced v5.1):**
+- **Tier 0 Brain Protection:** Load `brain-protection-rules.yaml` (61 rules, 24 layers)
+- **Instinct Validation:** Enforce tier0_instincts (INCREMENTAL_PLAN_GENERATION, TDD_ENFORCEMENT, etc.)
+- **Critical Path Protection:** Validate against critical_paths (CORTEX/src/tier0/, prompts/internal/)
+- **Knowledge Graph Context:** Query tier2 knowledge graphs for feature relationships
+- **SKULL Rule Enforcement:** Apply SKULL governance rules during plan generation
+- **Architectural Integrity:** Validate against BRAIN_ARCHITECTURE_INTEGRITY instinct
 
 **No Natural Language:** All decisions in Python code, no manifest interpretation.
+
+**Governance Integrator Implementation:**
+
+**File:** `src/orchestrators/planning/governance_integrator.py`
+
+```python
+"""
+Governance Integrator - Tier 0 Brain Protection Rules Integration.
+
+Loads and validates plans against brain-protection-rules.yaml governance.
+Ensures all generated plans comply with CORTEX architectural constraints.
+
+Author: Asif Hussain
+Copyright © 2025-2026 Asif Hussain. All rights reserved.
+"""
+
+import yaml
+import logging
+from typing import Dict, List, Any, Optional
+from dataclasses import dataclass
+from pathlib import Path
+from enum import Enum
+
+
+class GovernanceSeverity(Enum):
+    """Governance rule severity levels."""
+    BLOCKED = "blocked"   # Plan generation blocked
+    WARNING = "warning"   # Plan proceeds with warnings
+    INFO = "info"         # Informational only
+
+
+@dataclass
+class GovernanceRule:
+    """Single governance rule from brain-protection-rules.yaml."""
+    name: str
+    severity: GovernanceSeverity
+    description: str
+    validation_fn: str
+    critical_path: bool = False
+
+
+@dataclass
+class GovernanceValidation:
+    """Result of governance validation."""
+    is_valid: bool
+    violations: List[Dict[str, Any]]
+    warnings: List[str]
+    applied_rules: List[str]
+    governance_context: Dict[str, Any]
+
+
+class GovernanceIntegrator:
+    """
+    Integrates Tier 0 brain protection rules into planning.
+    
+    Features:
+    - Loads brain-protection-rules.yaml (61 rules, 24 layers)
+    - Validates feature requests against tier0_instincts
+    - Enforces critical path protection
+    - Checks SKULL rule compliance
+    - Provides governance context for plan generation
+    
+    Usage:
+        integrator = GovernanceIntegrator()
+        governance = integrator.load_rules()
+        validation = integrator.validate_feature_request(
+            feature_name="New API Endpoint",
+            context={"paths": ["src/api/"], "type": "feature"}
+        )
+        
+        if not validation.is_valid:
+            # Handle violations
+            for violation in validation.violations:
+                print(f"Violation: {violation['rule']} - {violation['message']}")
+    """
+    
+    def __init__(self, rules_path: Optional[Path] = None):
+        """
+        Initialize governance integrator.
+        
+        Args:
+            rules_path: Path to brain-protection-rules.yaml
+                       (default: cortex-brain/brain-protection-rules.yaml)
+        """
+        self.logger = logging.getLogger(__name__)
+        
+        if rules_path is None:
+            rules_path = Path("cortex-brain/brain-protection-rules.yaml")
+        
+        self.rules_path = rules_path
+        self.rules: Dict[str, Any] = {}
+        self.tier0_instincts: List[str] = []
+        self.critical_paths: List[str] = []
+        self.skull_rules: Dict[str, GovernanceRule] = {}
+        
+        self._load_governance_rules()
+    
+    def _load_governance_rules(self) -> None:
+        """Load brain protection rules from YAML."""
+        try:
+            with open(self.rules_path, 'r', encoding='utf-8') as f:
+                self.rules = yaml.safe_load(f)
+            
+            # Extract key governance components
+            self.tier0_instincts = self.rules.get('tier0_instincts', [])
+            self.critical_paths = self.rules.get('critical_paths', [])
+            
+            # Parse SKULL rules (if defined in rules)
+            skull_section = self.rules.get('rules', {})
+            for rule_key, rule_data in skull_section.items():
+                if isinstance(rule_data, dict):
+                    self.skull_rules[rule_key] = GovernanceRule(
+                        name=rule_key,
+                        severity=GovernanceSeverity(rule_data.get('severity', 'info')),
+                        description=rule_data.get('description', ''),
+                        validation_fn=rule_data.get('validation', ''),
+                        critical_path=rule_data.get('critical_path', False)
+                    )
+            
+            self.logger.info(f"Loaded {len(self.tier0_instincts)} tier0 instincts")
+            self.logger.info(f"Loaded {len(self.critical_paths)} critical paths")
+            self.logger.info(f"Loaded {len(self.skull_rules)} SKULL rules")
+        
+        except Exception as e:
+            self.logger.error(f"Failed to load governance rules: {e}")
+            raise
+    
+    def validate_feature_request(
+        self,
+        feature_name: str,
+        context: Dict[str, Any]
+    ) -> GovernanceValidation:
+        """
+        Validate feature request against governance rules.
+        
+        Args:
+            feature_name: Name of feature being planned
+            context: Feature context (paths, type, dependencies)
+        
+        Returns:
+            GovernanceValidation with violations/warnings
+        """
+        violations = []
+        warnings = []
+        applied_rules = []
+        
+        # Validate against tier0 instincts
+        instinct_violations = self._validate_tier0_instincts(feature_name, context)
+        violations.extend(instinct_violations)
+        applied_rules.extend([v['rule'] for v in instinct_violations])
+        
+        # Validate critical paths
+        path_violations = self._validate_critical_paths(context)
+        violations.extend(path_violations)
+        applied_rules.extend([v['rule'] for v in path_violations])
+        
+        # Validate SKULL rules
+        skull_results = self._validate_skull_rules(feature_name, context)
+        violations.extend(skull_results['violations'])
+        warnings.extend(skull_results['warnings'])
+        applied_rules.extend(skull_results['applied_rules'])
+        
+        # Build governance context for plan generation
+        governance_context = {
+            "tier0_instincts": self.tier0_instincts,
+            "critical_paths": self.critical_paths,
+            "applicable_rules": applied_rules,
+            "enforcement_mode": self.rules.get('enforcement', 'automated')
+        }
+        
+        is_valid = len([v for v in violations if v['severity'] == 'blocked']) == 0
+        
+        return GovernanceValidation(
+            is_valid=is_valid,
+            violations=violations,
+            warnings=warnings,
+            applied_rules=applied_rules,
+            governance_context=governance_context
+        )
+    
+    def _validate_tier0_instincts(
+        self,
+        feature_name: str,
+        context: Dict[str, Any]
+    ) -> List[Dict[str, Any]]:
+        """Validate against tier0 immutable instincts."""
+        violations = []
+        
+        # Example: TDD_ENFORCEMENT
+        if 'TDD_ENFORCEMENT' in self.tier0_instincts:
+            if context.get('type') == 'feature' and not context.get('test_plan'):
+                violations.append({
+                    'rule': 'TDD_ENFORCEMENT',
+                    'severity': 'warning',
+                    'message': 'Feature plan should include test strategy (TDD enforcement)'
+                })
+        
+        # Example: INCREMENTAL_PLAN_GENERATION
+        if 'INCREMENTAL_PLAN_GENERATION' in self.tier0_instincts:
+            if context.get('estimated_phases', 0) > 10:
+                violations.append({
+                    'rule': 'INCREMENTAL_PLAN_GENERATION',
+                    'severity': 'warning',
+                    'message': f'Plan has {context["estimated_phases"]} phases. Consider breaking into incremental plans.'
+                })
+        
+        # Example: DOCUMENT_ORGANIZATION_ENFORCEMENT
+        if 'DOCUMENT_ORGANIZATION_ENFORCEMENT' in self.tier0_instincts:
+            plan_paths = context.get('paths', [])
+            if any('CORTEX/' in p and '/cortex-brain/documents/' not in p for p in plan_paths):
+                violations.append({
+                    'rule': 'DOCUMENT_ORGANIZATION_ENFORCEMENT',
+                    'severity': 'blocked',
+                    'message': 'Documentation must be in cortex-brain/documents/, not repository root'
+                })
+        
+        return violations
+    
+    def _validate_critical_paths(
+        self,
+        context: Dict[str, Any]
+    ) -> List[Dict[str, Any]]:
+        """Validate against critical path protection."""
+        violations = []
+        
+        plan_paths = context.get('paths', [])
+        
+        for critical_path in self.critical_paths:
+            for plan_path in plan_paths:
+                if critical_path in plan_path:
+                    violations.append({
+                        'rule': 'CRITICAL_PATH_PROTECTION',
+                        'severity': 'blocked',
+                        'message': f'Plan modifies critical path: {critical_path}. Requires elevated review.'
+                    })
+        
+        return violations
+    
+    def _validate_skull_rules(
+        self,
+        feature_name: str,
+        context: Dict[str, Any]
+    ) -> Dict[str, List]:
+        """Validate against SKULL governance rules."""
+        violations = []
+        warnings = []
+        applied_rules = []
+        
+        for rule_name, rule in self.skull_rules.items():
+            # Apply rule validation (simplified - real implementation would call validation functions)
+            if rule.severity == GovernanceSeverity.BLOCKED:
+                # Check blocking conditions
+                pass
+            elif rule.severity == GovernanceSeverity.WARNING:
+                # Check warning conditions
+                pass
+            
+            applied_rules.append(rule_name)
+        
+        return {
+            'violations': violations,
+            'warnings': warnings,
+            'applied_rules': applied_rules
+        }
+    
+    def get_governance_summary(self) -> Dict[str, Any]:
+        """Get summary of loaded governance rules."""
+        return {
+            "total_rules": self.rules.get('rules', {}).get('total_count', 0),
+            "layers": self.rules.get('rules', {}).get('layers', 0),
+            "tier0_instincts": len(self.tier0_instincts),
+            "critical_paths": len(self.critical_paths),
+            "skull_rules": len(self.skull_rules),
+            "enforcement": self.rules.get('enforcement', 'unknown')
+        }
+```
+
+**Knowledge Graph Query Implementation:**
+
+**File:** `src/orchestrators/planning/knowledge_graph_query.py`
+
+```python
+"""
+Knowledge Graph Query - Tier 2 Knowledge Graph Integration.
+
+Queries cortex-brain/tier2 knowledge graphs for feature relationships.
+Provides context about existing features, dependencies, and patterns.
+
+Author: Asif Hussain
+Copyright © 2025-2026 Asif Hussain. All rights reserved.
+"""
+
+import yaml
+import logging
+from typing import Dict, List, Any, Optional
+from dataclasses import dataclass
+from pathlib import Path
+
+
+@dataclass
+class KnowledgeContext:
+    """Context from knowledge graph queries."""
+    related_features: List[str]
+    dependencies: List[str]
+    patterns: List[str]
+    risks: List[str]
+    recommendations: List[str]
+
+
+class KnowledgeGraphQuery:
+    """
+    Query Tier 2 knowledge graphs for planning context.
+    
+    Features:
+    - Load knowledge-graph.yaml (tier 2)
+    - Find related features
+    - Identify dependency chains
+    - Discover architectural patterns
+    - Surface risks and recommendations
+    
+    Usage:
+        query = KnowledgeGraphQuery()
+        context = query.get_feature_context("Authentication API")
+        
+        print(f"Related: {context.related_features}")
+        print(f"Dependencies: {context.dependencies}")
+    """
+    
+    def __init__(self, graph_path: Optional[Path] = None):
+        """Initialize knowledge graph query."""
+        self.logger = logging.getLogger(__name__)
+        
+        if graph_path is None:
+            graph_path = Path("cortex-brain/knowledge-graph.yaml")
+        
+        self.graph_path = graph_path
+        self.graph: Dict[str, Any] = {}
+        
+        self._load_knowledge_graph()
+    
+    def _load_knowledge_graph(self) -> None:
+        """Load knowledge graph from YAML."""
+        try:
+            if not self.graph_path.exists():
+                self.logger.warning(f"Knowledge graph not found: {self.graph_path}")
+                return
+            
+            with open(self.graph_path, 'r', encoding='utf-8') as f:
+                self.graph = yaml.safe_load(f) or {}
+            
+            self.logger.info(f"Loaded knowledge graph with {len(self.graph)} entries")
+        
+        except Exception as e:
+            self.logger.error(f"Failed to load knowledge graph: {e}")
+    
+    def get_feature_context(self, feature_name: str) -> KnowledgeContext:
+        """
+        Get knowledge context for feature planning.
+        
+        Args:
+            feature_name: Name of feature being planned
+        
+        Returns:
+            KnowledgeContext with related info
+        """
+        # Query knowledge graph for related features
+        related = self._find_related_features(feature_name)
+        dependencies = self._find_dependencies(feature_name)
+        patterns = self._find_patterns(feature_name)
+        risks = self._identify_risks(feature_name, dependencies)
+        recommendations = self._generate_recommendations(feature_name, patterns)
+        
+        return KnowledgeContext(
+            related_features=related,
+            dependencies=dependencies,
+            patterns=patterns,
+            risks=risks,
+            recommendations=recommendations
+        )
+    
+    def _find_related_features(self, feature_name: str) -> List[str]:
+        """Find features related to given feature."""
+        # Simplified - real implementation would traverse graph
+        related = []
+        
+        for key, value in self.graph.items():
+            if isinstance(value, dict) and 'related' in value:
+                if feature_name.lower() in str(value['related']).lower():
+                    related.append(key)
+        
+        return related
+    
+    def _find_dependencies(self, feature_name: str) -> List[str]:
+        """Find dependencies for feature."""
+        dependencies = []
+        
+        # Query graph for dependency chains
+        # Simplified implementation
+        
+        return dependencies
+    
+    def _find_patterns(self, feature_name: str) -> List[str]:
+        """Find architectural patterns applicable to feature."""
+        patterns = []
+        
+        # Pattern matching based on feature type
+        if 'api' in feature_name.lower():
+            patterns.append("RESTful API pattern")
+        if 'auth' in feature_name.lower():
+            patterns.append("Authentication middleware pattern")
+        
+        return patterns
+    
+    def _identify_risks(self, feature_name: str, dependencies: List[str]) -> List[str]:
+        """Identify risks based on knowledge graph."""
+        risks = []
+        
+        if len(dependencies) > 5:
+            risks.append("High dependency count may increase maintenance complexity")
+        
+        return risks
+    
+    def _generate_recommendations(self, feature_name: str, patterns: List[str]) -> List[str]:
+        """Generate recommendations from knowledge graph."""
+        recommendations = []
+        
+        if patterns:
+            recommendations.append(f"Consider using patterns: {', '.join(patterns)}")
+        
+        return recommendations
+```
+
+**Integration in PlanningOrchestratorV5:**
+
+```python
+# In src/orchestrators/planning_orchestrator_v5.py
+
+from src.orchestrators.planning.governance_integrator import GovernanceIntegrator
+from src.orchestrators.planning.knowledge_graph_query import KnowledgeGraphQuery
+
+class PlanningOrchestratorV5(BaseOrchestratorV4_1):
+    def __init__(self, ...):
+        super().__init__(...)
+        
+        # Initialize governance and knowledge graph integrations
+        self.governance = GovernanceIntegrator()
+        self.knowledge_graph = KnowledgeGraphQuery()
+    
+    def execute(self, user_request: str, **kwargs) -> OrchestratorResult:
+        """Execute with governance validation."""
+        # Phase 0: Context Discovery (existing AST + workspace search)
+        context_result = self.discover_context(user_request)
+        
+        # Phase 1: Governance Validation (NEW)
+        governance_validation = self.governance.validate_feature_request(
+            feature_name=context_result.feature_name,
+            context=context_result.to_dict()
+        )
+        
+        if not governance_validation.is_valid:
+            # Handle governance violations
+            return self._handle_governance_violations(governance_validation)
+        
+        # Phase 1b: Knowledge Graph Query (NEW)
+        knowledge_context = self.knowledge_graph.get_feature_context(
+            feature_name=context_result.feature_name
+        )
+        
+        # Phase 2: Architecture Analysis (with governance context)
+        analysis_result = self.analyze_architecture(
+            context_result,
+            governance_validation,
+            knowledge_context
+        )
+        
+        # Phase 3: Plan Generation (governance-aware)
+        plan = self.generate_plan(
+            analysis_result,
+            governance_validation.governance_context,
+            knowledge_context
+        )
+        
+        # Continue with folder creation, validation, etc.
+        ...
+```
 
 ### Task 4.2: Config-Only Manifest
 **Duration:** 4h
@@ -1706,6 +2207,502 @@ User: "plan database refactor"
 
 **CROSS-SESSION CONTEXT STATUS:** ✅ LIVE - Continuation routing operational (activated Phase 4.5)
 
+### Task 5.1a: ADO Orchestrator Conversational Wizard Enhancement (NEW)
+**Duration:** 4h  
+**Priority:** HIGH - Enhances user experience before v2 migration
+
+**Goal:** Add dual-mode conversational wizard to existing ADO Orchestrator for enhanced interactive work item creation
+
+**Problem:** Current ADO Orchestrator has good automation but limited user interaction for complex scenarios requiring iterative refinement of acceptance criteria, DoR, and DoD.
+
+**Solution:** Implement multi-turn conversational wizard that guides users through work item creation with natural conversation flow.
+
+**Architecture Decision: Conversational Wizard (NOT Browser SPA)**
+
+**Rationale:**
+- ✅ **Zero Context Switching:** Stays in Copilot Chat (no browser launch)
+- ✅ **Security:** No file system exposure, no XSS vectors, no path traversal
+- ✅ **Performance:** <5s total (vs 36s+ for browser SPA approach)
+- ✅ **Maintainability:** Pure Python (no JavaScript/TypeScript codebase)
+- ✅ **Architecture Alignment:** Preserves conversational AI nature of CORTEX
+- ✅ **Vision API Integration:** Screenshot analysis already available in conversation
+- ✅ **State Management:** Tier 1 Working Memory handles session state
+- ✅ **Scalability:** Works in any environment (no port conflicts, firewall issues)
+
+**Rejected Alternative:** Browser SPA
+- ❌ Context fragmentation (5+ context switches)
+- ❌ Security risks (file system access, XSS, CORS)
+- ❌ 18x slower (3s browser launch + form fill overhead)
+- ❌ 5x maintenance cost (Python + JavaScript + build pipeline)
+- ❌ Deployment complexity (Node.js + npm + web server)
+
+**Implementation:**
+
+**File:** `src/orchestrators/ado/ado_conversational_wizard.py`
+
+```python
+"""
+ADO Conversational Wizard - Multi-turn interactive work item creation.
+
+Provides guided conversational flow for complex ADO work items requiring
+iterative refinement. Complements existing auto-generation with interactive mode.
+
+Author: Asif Hussain
+Copyright © 2025-2026 Asif Hussain. All rights reserved.
+"""
+
+from enum import Enum
+from typing import Dict, Any, Optional, List
+from dataclasses import dataclass
+import uuid
+
+
+class WizardStage(Enum):
+    """Wizard progression stages."""
+    BASIC_INFO = "basic_info"              # Feature name, type, priority
+    ACCEPTANCE_CRITERIA = "acceptance_criteria"  # Vision API or manual entry
+    DEFINITION_OF_READY = "dor"           # Assumptions, constraints
+    DEFINITION_OF_DONE = "dod"            # Completion criteria
+    ESTIMATION = "estimation"              # Story points, effort
+    DEPENDENCIES = "dependencies"          # Related work items
+    REVIEW = "review"                      # Final approval
+    COMPLETE = "complete"
+
+
+@dataclass
+class WizardResponse:
+    """Response object for wizard interactions."""
+    session_id: str
+    stage: WizardStage
+    prompt: str
+    context: Dict[str, Any]
+    can_skip: bool = False
+    validation_errors: List[str] = None
+
+
+class ADOConversationalWizard:
+    """
+    Multi-turn conversational wizard for ADO work item creation.
+    
+    Usage:
+        # Start wizard
+        wizard = ADOConversationalWizard()
+        response = wizard.start_wizard("Authentication feature with SSO")
+        
+        # User responds
+        response = wizard.process_response(
+            session_id=response.session_id,
+            user_input="Feature, High priority, Large effort"
+        )
+        
+        # Continue until stage == COMPLETE
+    """
+    
+    def __init__(self, state_db=None, vision_api=None):
+        """Initialize wizard with optional dependencies."""
+        self.state_db = state_db
+        self.vision_api = vision_api
+        self.sessions: Dict[str, Dict[str, Any]] = {}
+    
+    def start_wizard(self, initial_input: str) -> WizardResponse:
+        """
+        Initiate wizard with feature description.
+        
+        Args:
+            initial_input: User's initial feature description
+            
+        Returns:
+            WizardResponse with first stage prompt
+        """
+        session_id = str(uuid.uuid4())
+        
+        # Parse initial feature info (basic extraction)
+        feature_name = self._extract_feature_name(initial_input)
+        
+        # Initialize session state
+        self.sessions[session_id] = {
+            "stage": WizardStage.BASIC_INFO,
+            "data": {
+                "feature_name": feature_name,
+                "initial_input": initial_input
+            }
+        }
+        
+        # Generate first prompt
+        prompt = self._generate_basic_info_prompt(feature_name)
+        
+        return WizardResponse(
+            session_id=session_id,
+            stage=WizardStage.BASIC_INFO,
+            prompt=prompt,
+            context={"feature_name": feature_name}
+        )
+    
+    def process_response(
+        self,
+        session_id: str,
+        user_input: str,
+        vision_context: Optional[Dict] = None
+    ) -> WizardResponse:
+        """
+        Process user response and advance wizard stage.
+        
+        Args:
+            session_id: Active wizard session ID
+            user_input: User's conversational response
+            vision_context: Optional Vision API analysis (screenshot)
+            
+        Returns:
+            WizardResponse for next stage or completion
+        """
+        session = self.sessions.get(session_id)
+        if not session:
+            raise ValueError(f"Invalid session ID: {session_id}")
+        
+        current_stage = session["stage"]
+        
+        # Process current stage response
+        self._process_stage_data(session, current_stage, user_input, vision_context)
+        
+        # Advance to next stage
+        next_stage = self._get_next_stage(current_stage)
+        session["stage"] = next_stage
+        
+        if next_stage == WizardStage.COMPLETE:
+            # Generate final ADO work item
+            ado_item = self._generate_ado_from_session(session)
+            return self._finalize_wizard(session_id, ado_item)
+        
+        # Generate prompt for next stage
+        prompt = self._generate_stage_prompt(next_stage, session["data"])
+        
+        return WizardResponse(
+            session_id=session_id,
+            stage=next_stage,
+            prompt=prompt,
+            context=session["data"],
+            can_skip=self._is_optional_stage(next_stage)
+        )
+    
+    def _generate_basic_info_prompt(self, feature_name: str) -> str:
+        """Generate interactive prompt for basic work item info."""
+        return f"""📋 **ADO Work Item Wizard - Basic Information**
+
+Feature: **{feature_name}**
+
+Please provide the following (or say 'continue' for defaults):
+
+1. **Work Item Type:** Story / Feature / Epic / Task / Bug (default: Story)
+2. **Priority:** High / Medium / Low (default: Medium)
+3. **Estimated Effort:** XS / S / M / L / XL (default: M)
+
+**Example:** "Feature, High priority, Large effort"
+
+You can also:
+- Say 'skip' to use all defaults
+- Attach a screenshot for Vision API analysis
+- Say 'help' for more guidance
+"""
+    
+    def _generate_stage_prompt(self, stage: WizardStage, data: Dict) -> str:
+        """Generate contextual prompts for each wizard stage."""
+        if stage == WizardStage.ACCEPTANCE_CRITERIA:
+            return f"""✅ **Acceptance Criteria for {data['feature_name']}**
+
+How would you like to provide acceptance criteria?
+
+**Option 1:** Attach a screenshot (Vision API will extract UI elements)
+**Option 2:** Describe manually (I'll convert to testable criteria)
+**Option 3:** Say 'generate' (AI-suggested criteria based on feature)
+
+**Current Context:**
+- Type: {data.get('work_item_type', 'Story')}
+- Priority: {data.get('priority', 'Medium')}
+- Effort: {data.get('effort', 'Medium')}
+"""
+        
+        elif stage == WizardStage.DEFINITION_OF_READY:
+            return f"""📝 **Definition of Ready (DoR)**
+
+Let's ensure this work item is ready for implementation:
+
+1. **Assumptions:** What are we assuming? (infrastructure, data, services)
+2. **Constraints:** Any limitations? (timeline, tech, compliance)
+
+**Tip:** Say 'default' for standard assumptions/constraints
+**Skip:** Say 'skip' if acceptance criteria are sufficient
+"""
+        
+        elif stage == WizardStage.REVIEW:
+            # Generate markdown preview of work item
+            preview = self._generate_preview_markdown(data)
+            return f"""🔍 **Review Work Item**
+
+{preview}
+
+**Actions:**
+- Say **'approve'** to create work item
+- Say **'refine [section]'** to modify (e.g., 'refine acceptance criteria')
+- Say **'cancel'** to abort
+
+What would you like to do?
+"""
+        
+        return f"Stage {stage.value} prompt"
+    
+    def _generate_preview_markdown(self, data: Dict) -> str:
+        """Generate visual preview of work item for approval."""
+        return f"""```markdown
+# {data['feature_name']}
+
+**Type:** {data.get('work_item_type', 'Story')}  
+**Priority:** {data.get('priority', 'Medium')}  
+**Effort:** {data.get('effort', 'M')}  
+**Story Points:** {data.get('story_points', 5)}
+
+## Acceptance Criteria
+{self._format_list(data.get('acceptance_criteria', []))}
+
+## Definition of Ready
+**Assumptions:**
+{self._format_list(data.get('assumptions', ['Standard development environment']))}
+
+**Constraints:**
+{self._format_list(data.get('constraints', ['Standard sprint timeline']))}
+
+## Definition of Done
+{self._format_list(data.get('dod', self._get_default_dod()))}
+
+## Dependencies
+{self._format_list(data.get('dependencies', ['None']))}
+```"""
+    
+    def _extract_feature_name(self, text: str) -> str:
+        """Extract feature name from user input."""
+        # Remove common prefixes
+        prefixes = ["ado story", "ado feature", "create", "add"]
+        clean_text = text.lower()
+        for prefix in prefixes:
+            clean_text = clean_text.replace(prefix, "").strip()
+        
+        # Capitalize first letter
+        return clean_text.capitalize() if clean_text else "Feature"
+    
+    def _process_stage_data(
+        self,
+        session: Dict,
+        stage: WizardStage,
+        user_input: str,
+        vision_context: Optional[Dict]
+    ):
+        """Process and store user input for current stage."""
+        data = session["data"]
+        
+        if stage == WizardStage.BASIC_INFO:
+            # Parse: "Feature, High, Large" or similar
+            parts = [p.strip().lower() for p in user_input.split(',')]
+            
+            if len(parts) >= 1 and parts[0] in ['story', 'feature', 'epic', 'task', 'bug']:
+                data['work_item_type'] = parts[0].capitalize()
+            
+            if len(parts) >= 2 and parts[1] in ['high', 'medium', 'low']:
+                data['priority'] = parts[1].capitalize()
+            
+            if len(parts) >= 3:
+                effort_map = {'xs': 'XS', 's': 'S', 'm': 'M', 'l': 'L', 'xl': 'XL'}
+                data['effort'] = effort_map.get(parts[2], 'M')
+        
+        elif stage == WizardStage.ACCEPTANCE_CRITERIA:
+            if vision_context:
+                # Use Vision API extraction
+                data['acceptance_criteria'] = vision_context.get('ui_elements', [])
+            elif user_input.lower() == 'generate':
+                # AI-generated criteria
+                data['acceptance_criteria'] = self._generate_acceptance_criteria(data)
+            else:
+                # Manual entry
+                data['acceptance_criteria'] = self._parse_criteria_list(user_input)
+        
+        # Additional stage processors...
+    
+    def _get_next_stage(self, current: WizardStage) -> WizardStage:
+        """Determine next wizard stage."""
+        stage_order = list(WizardStage)
+        current_idx = stage_order.index(current)
+        return stage_order[current_idx + 1] if current_idx < len(stage_order) - 1 else WizardStage.COMPLETE
+    
+    def _is_optional_stage(self, stage: WizardStage) -> bool:
+        """Check if stage can be skipped."""
+        optional_stages = {WizardStage.DEPENDENCIES, WizardStage.DEFINITION_OF_READY}
+        return stage in optional_stages
+    
+    def _generate_ado_from_session(self, session: Dict) -> Dict:
+        """Generate final ADO work item from wizard session data."""
+        data = session["data"]
+        return {
+            "title": data["feature_name"],
+            "type": data.get("work_item_type", "Story"),
+            "priority": data.get("priority", "Medium"),
+            "acceptance_criteria": data.get("acceptance_criteria", []),
+            "dor": {
+                "assumptions": data.get("assumptions", []),
+                "constraints": data.get("constraints", [])
+            },
+            "dod": data.get("dod", self._get_default_dod()),
+            "story_points": data.get("story_points", 5),
+            "dependencies": data.get("dependencies", [])
+        }
+    
+    def _finalize_wizard(self, session_id: str, ado_item: Dict) -> WizardResponse:
+        """Complete wizard and return final work item."""
+        return WizardResponse(
+            session_id=session_id,
+            stage=WizardStage.COMPLETE,
+            prompt=f"✅ **Work Item Created:** {ado_item['title']}",
+            context={"ado_item": ado_item}
+        )
+    
+    def _get_default_dod(self) -> List[str]:
+        """Get default Definition of Done items."""
+        return [
+            "Code implemented and tested",
+            "Unit tests pass (>80% coverage)",
+            "Code review approved",
+            "Documentation updated",
+            "Merged to main branch"
+        ]
+    
+    def _format_list(self, items: List[str]) -> str:
+        """Format list for markdown display."""
+        return "\n".join(f"- {item}" for item in items)
+    
+    def _parse_criteria_list(self, text: str) -> List[str]:
+        """Parse acceptance criteria from text."""
+        # Split by newlines or semicolons
+        criteria = []
+        for line in text.split('\n'):
+            line = line.strip().lstrip('-*•').strip()
+            if line:
+                criteria.append(line)
+        return criteria
+    
+    def _generate_acceptance_criteria(self, data: Dict) -> List[str]:
+        """AI-generate acceptance criteria based on feature context."""
+        # Placeholder: In production, call LLM for generation
+        return [
+            f"User can access {data['feature_name']} functionality",
+            f"{data['feature_name']} displays correct data",
+            f"{data['feature_name']} handles errors gracefully",
+            f"{data['feature_name']} meets performance requirements"
+        ]
+```
+
+**Integration with Existing ADO Orchestrator:**
+
+Update `src/orchestrators/ado/ado_orchestrator.py`:
+
+```python
+def execute(self, **kwargs: Any) -> ADOResult:
+    """Execute ADO workflow with mode detection."""
+    mode = kwargs.get('mode', 'auto')  # 'auto' | 'wizard'
+    
+    if mode == 'wizard':
+        # Use conversational wizard
+        wizard = ADOConversationalWizard(
+            state_db=self.state_db,
+            vision_api=self.vision_api
+        )
+        return self._execute_wizard_mode(wizard, kwargs)
+    else:
+        # Existing auto-generation workflow
+        return self._execute_auto_mode(kwargs)
+```
+
+**Master Orchestrator Routing Enhancement:**
+
+Update `cortex-brain/config/master-orchestrator.yaml`:
+
+```yaml
+# ADO Operations - Dual Mode
+- pattern: "^(ado wizard|ado interactive).*$"
+  orchestrator: "ado_orchestrator"
+  confidence: 1.0
+  match_type: "regex"
+  priority: 29
+  metadata:
+    description: "ADO wizard mode (interactive)"
+    autonomous: true
+    mode: "wizard"
+
+- pattern: "^(ado|ado story|ado feature).*$"
+  orchestrator: "ado_orchestrator"
+  confidence: 1.0
+  match_type: "regex"
+  priority: 30
+  metadata:
+    description: "ADO auto mode (quick generation)"
+    autonomous: true
+    mode: "auto"
+```
+
+**User Commands:**
+
+```
+# Quick auto-generation (existing)
+"ado story authentication feature"
+→ Existing 6-phase automated workflow
+
+# Interactive wizard (new)
+"ado wizard authentication feature"
+OR
+"ado interactive authentication feature"
+→ Multi-turn conversational wizard
+```
+
+**Implementation Tasks:**
+
+1. **Create Wizard Module** (2h)
+   - `src/orchestrators/ado/ado_conversational_wizard.py`
+   - Stage enumeration
+   - Session state management
+   - Prompt generation per stage
+
+2. **Integrate with ADO Orchestrator** (1h)
+   - Mode detection in execute()
+   - Wizard instantiation
+   - Result formatting
+
+3. **Update Master Orchestrator Config** (30min)
+   - Add wizard pattern (priority 29)
+   - Keep auto pattern (priority 30)
+   - Mode metadata
+
+4. **Testing** (30min)
+   - Test wizard flow (all stages)
+   - Test auto mode (unchanged)
+   - Test Vision API integration with wizard
+   - Test skip/default handling
+
+**Success Criteria:**
+- ✅ Wizard completes all 7 stages conversationally
+- ✅ Auto mode remains unchanged (backward compatibility)
+- ✅ Vision API integrates with acceptance criteria stage
+- ✅ Preview markdown displays correctly
+- ✅ Approval/refine loop works
+- ✅ Session state persists across conversation turns
+- ✅ Performance: <1s per wizard turn
+- ✅ Tests: 100% coverage for wizard module
+
+**Benefits:**
+- **User Friendliness:** Guided conversation vs form
+- **Flexibility:** Skip optional stages, use defaults
+- **Context Awareness:** Builds on previous responses
+- **Vision Integration:** Natural screenshot attachment in chat
+- **Zero Context Switch:** Stays in Copilot Chat
+- **Backward Compatible:** Existing auto mode unchanged
+
+---
+
 ### Task 5.1: Generate ADO Migration Plan
 **Duration:** 1h
 
@@ -1713,13 +2710,16 @@ User: "plan database refactor"
 
 **Routing Flow:** User input → MasterOrchestrator.route_request() → Pattern match "plan" → Planning v5 execution
 
+**Note:** This migration plan will **include the conversational wizard** (Task 5.1a) as part of the v2 enhancement.
+
 **Expected Output:**
 ```
 cortex-brain/documents/planning/active/ado-v2-migration/
 ├── 00-master-plan.md
 ├── context/
 │   ├── ado-v1-analysis.md
-│   └── work-item-generation-patterns.md
+│   ├── work-item-generation-patterns.md
+│   └── conversational-wizard-design.md (NEW)
 ├── artifacts/
 ├── reports/
 └── tracking/
@@ -1729,6 +2729,8 @@ cortex-brain/documents/planning/active/ado-v2-migration/
 **Validation:**
 - Plan includes config-only manifest design
 - Work item generation logic documented
+- **Conversational wizard architecture documented**
+- **Dual-mode routing (auto + wizard) specified**
 - Database integration specified
 - Test strategy defined
 
@@ -1790,13 +2792,14 @@ cortex-brain/documents/planning/active/vacuum-v2-migration/
 5. Generate phase completion reports
 
 **Migration Order:**
-1. **ADO Orchestrator v2** (6 days) - Work item generation
-2. **Vacuum Orchestrator v2** (5 days) - Filesystem operations
-3. **Cleanup Orchestrator v2** (4 days) - Cache management
-4. **TDD Orchestrator Assessment** (3 days) - Evaluate autonomous conversion
-5. **Debug Orchestrator Assessment** (2 days) - Evaluate autonomous conversion
-6. **Sanitization Orchestrator** (2 days) - Evaluate and migrate if beneficial
-7. **Refinement Orchestrator** (2 days) - Evaluate and migrate if beneficial
+1. **ADO Conversational Wizard** (4h) - Enhanced user experience via multi-turn conversation
+2. **ADO Orchestrator v2** (6 days) - Work item generation + wizard integration
+3. **Vacuum Orchestrator v2** (5 days) - Filesystem operations
+4. **Cleanup Orchestrator v2** (4 days) - Cache management
+5. **TDD Orchestrator Assessment** (3 days) - Evaluate autonomous conversion
+6. **Debug Orchestrator Assessment** (2 days) - Evaluate autonomous conversion
+7. **Sanitization Orchestrator** (2 days) - Evaluate and migrate if beneficial
+8. **Refinement Orchestrator** (2 days) - Evaluate and migrate if beneficial
 
 ### Task 6.1: ADO Orchestrator v2 Migration
 **Duration:** 6 days  
