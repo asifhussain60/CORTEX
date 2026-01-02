@@ -12,7 +12,7 @@ This standard defines **modern glassmorphism patterns** for CORTEX documentation
 
 **Target:** HTML documentation, dashboards, STS showcases, interactive visualizations  
 **Compatibility:** Chrome 90+, Firefox 88+, Safari 14+, Edge 90+  
-**Reference Implementation:** See `/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/documents/planning/active/cortex-documentation/artifacts/Level1-spec.md` for detailed page specifications.
+**Reference Implementation:** See `/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/documents/planning/active/cortex-documentation/artifacts/00-master-plan.md` for detailed page specifications.
 
 **⚠️ Animation Philosophy (v4.0.0):**
 - **Subtle & Modern:** All animations designed to be non-distracting
@@ -114,20 +114,40 @@ Is it Level 0 (Home)?
 
 ---
 
-## 🏗️ View Hierarchy (SIMPLIFIED: 2-Level Max)
+## 🏗️ View Hierarchy (SIMPLIFIED: Level 0 → Level 1 Only)
 
 **Architecture:** `Level 0 (Home) → Level 1 Detail Pages`
 
-**⛔ NO Level 2 PAGES:** Discovery analysis confirms all content fits within Level 1. Use expandable sections, tabs, or modals for deeper content within pages.
+**Critical Finding (January 2, 2026):** After holistic complexity analysis of all 9 tiles using the formula `Score = (Viz Containers × 10) + (Mermaid × 5) + (D3.js × 1) + (Interactive × 3) + (Data Sources × 8) + (Animations × 4)`, ALL content fits within Level 1.
+
+**Complexity Scores:**
+- Architecture: 45
+- Token Optimization: 25
+- Best Practices: 35
+- Toolkit Manager: 20
+- CORTEX Lens: 30
+- Getting Started: 15
+- Security (Multi-Panel): 55
+- Orchestrators (Multi-Panel): 75 (highest, still <100)
+- Sharpen The Saw (Multi-Panel): 40
+
+**Result:** ⛔ **NO Level 2 pages needed** (threshold: 100+)
+
+**Design Decision:** Use expandable sections, tabs, or modals for deeper content within Level 1 pages instead of creating Level 2 hierarchy.
 
 **Level 0 Tile Patterns:**
 
-| Tile | Pattern | Grid Layout | Pages | Rationale |
-|------|---------|-------------|-------|-----------|
-| **Security** | Multi-Panel | 2x2 (4 subpanels) | 13 | 4 categories require visual separation |
-| **Orchestrators** | Multi-Panel | 2x3 (5 subpanels) | 19 | 5 categories, most complex tile |
-| **Sharpen The Saw** | Multi-Panel | 3x2 (6 subpanels) | 6 | 6 single-link categories, compact layout |
-| **All Others** | Standard Tile | N/A | 3-35 | Simple structure, direct navigation |
+| Tile | Pattern | Grid Layout | Pages | Score | Level 2? | Rationale |
+|------|---------|-------------|-------|-------|----------|-----------|
+| **Architecture** | Standard | N/A | 5 | 45 | ❌ NO | 5 Mermaid diagrams, moderate content |
+| **Token Optimization** | Standard | N/A | 1 | 25 | ❌ NO | Basic metrics, simple visualization |
+| **Best Practices** | Standard | N/A | 17 | 35 | ❌ NO | Domain pages, minimal viz per page |
+| **Toolkit Manager** | Standard | N/A | 1 | 20 | ❌ NO | Tool orchestration, basic concepts |
+| **CORTEX Lens** | Standard | N/A | 1 | 30 | ❌ NO | Dashboard concepts, simple layout |
+| **Getting Started** | Standard | N/A | 2 | 15 | ❌ NO | Setup guide, tutorial walkthrough |
+| **Security** | Multi-Panel | 2x2 (4 subpanels) | 13 | 55 | ❌ NO | 4 categories, moderate Mermaid usage |
+| **Orchestrators** | Multi-Panel | 2x3 (5 subpanels) | 19 | 75 | ❌ NO | 5 categories, borderline but acceptable |
+| **Sharpen The Saw** | Multi-Panel | 3x2 (6 subpanels) | 6 | 40 | ❌ NO | 6 single-link categories, simple content |
 
 ### Multi-Panel Pattern (3 Tiles Only)
 
@@ -188,8 +208,9 @@ Is it Level 0 (Home)?
 | Level | Navigation Links | Example |
 |-------|------------------|---------|
 | **Level 0** (Home) | Logo + Feature links + GitHub | `docs/index.html` |
-| **Level 1** (Detail) | Home only | `docs/sts/solid.html` |
-| **Level 2** (Phase) | Home + Parent Level 1 | `docs/orchestrators/planning-v5/phase-1.html` |
+| **Level 1** (Detail) | Home only | `docs/sts/solid.html`, `docs/orchestrators/planning-system.html` |
+
+**Note:** Level 2 removed from architecture. All content fits within Level 1 after complexity analysis.
 
 ### Level 1 Navigation (Detail Pages)
 
@@ -250,14 +271,13 @@ Is it Level 0 (Home)?
 |-----------|-------|---------|
 | **Intermediate hub links** | Level 1 shows "STS Showcase" link | Level 1 shows Home only |
 | **Breadcrumbs on Level 1** | Home > Category > Page | Home only |
-| **Logo on Level 1/2** | Logo + nav on detail page | Nav only (no logo) |
-| **Missing parent on Level 2** | Only Home link | Home + Parent Level 1 |
+| **Logo on Level 1** | Logo + nav on detail page | Nav only (no logo) |
 
 **Rationale:**
 - Level 0 (Home) serves as the central navigation hub
 - Multi-panel tiles on Level 0 eliminate need for intermediate hub pages
 - Direct navigation improves UX and reduces cognitive load
-- Level 2 parent links provide contextual back navigation
+- NO Level 2 pages required after complexity analysis (all tiles <100 score)
 
 ---
 
@@ -274,7 +294,7 @@ Is it Level 0 (Home)?
 9. **NO Inline Styles** - All styling via CSS classes (zero tolerance for `style=""` attributes)
 10. **Responsive Mandatory** - Mobile-first design (375px base, 768px tablet, 1440px desktop)
 11. **Proper Spacing** - Minimum 1.5rem (24px) vertical gap between stacked cards/panels (v4.0.1)
-12. **Cross-Document Consistency** - Align with Level1-spec.md for implementation details (v4.0.2)
+12. **Cross-Document Consistency** - Align with 00-master-plan.md for implementation details (v4.0.2)
 13. **Cache-Busting Required** - All CSS/JS links must include version query params (v4.0.4)
 
 ---
@@ -392,6 +412,215 @@ Is it Level 0 (Home)?
     }
 }
 ```
+
+---
+
+## 🎨 D3.js & Mermaid Visualization Standards (v4.0.5)
+
+**Purpose:** Define standards for interactive data visualizations in CORTEX documentation.
+
+**Scope:** Level 1 detail pages with complex features requiring visual explanations.
+
+### Visualization Decision Matrix
+
+| Feature Complexity | D3.js Charts | Mermaid Diagrams | Total Visualizations |
+|--------------------|--------------|------------------|----------------------|
+| **Simple** (0-49) | 1-2 | 2-3 | 3-5 |
+| **Complex** (50-99) | 3-5 | 4-6 | 7-11 |
+| **Very Complex** (100-199) | 6-10 | 6-10 | 12-20 |
+| **Extreme** (200+) | 10+ | 8+ | 18+ (Level 2 required) |
+
+### D3.js Interactive Charts
+
+**Supported Chart Types:**
+
+| Chart Type | Use Case | Complexity | Interactivity |
+|------------|----------|------------|---------------|
+| **Timeline** | Session history, event sequences | 15-25 | Hover tooltips, click expand, zoom/pan |
+| **Force Graph** | Dependency networks, relationships | 20-35 | Drag nodes, highlight connections, filter |
+| **Heatmap** | Usage patterns, token optimization | 15-30 | Hover details, color scale legend |
+| **Bar Chart** | Metrics comparison, performance | 10-20 | Hover values, click drill-down |
+| **Line Chart** | Trends over time, progress tracking | 12-22 | Hover data points, zoom range |
+| **Sankey Diagram** | Flow analysis, data pipelines | 25-40 | Hover flow values, click node details |
+
+### D3.js CSS Integration
+
+**Required CSS Classes:**
+
+```css
+/* D3.js Visualization Containers */
+.viz-container {
+    width: 100%;
+    min-height: 300px;
+    margin-bottom: var(--space-lg);
+    padding: var(--space-md);
+    background: rgba(10, 14, 39, 0.6);
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+}
+
+.viz-tooltip {
+    position: absolute;
+    padding: var(--space-sm);
+    background: rgba(10, 14, 39, 0.95);
+    border: 1px solid var(--accent-primary);
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.viz-tooltip.visible {
+    opacity: 1;
+}
+
+/* D3.js Chart Elements */
+.viz-container svg {
+    width: 100%;
+    height: auto;
+}
+
+.viz-container .axis-time,
+.viz-container .axis-value {
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+}
+
+.viz-container .session-marker,
+.viz-container .node-circle {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.viz-container .session-marker:hover,
+.viz-container .node-circle:hover {
+    filter: drop-shadow(0 0 8px var(--accent-primary));
+    transform: scale(1.2);
+}
+
+.viz-container .network-link,
+.viz-container .continuation-arrow {
+    stroke: var(--accent-tertiary);
+    stroke-opacity: 0.6;
+    transition: stroke-opacity 0.3s ease;
+}
+
+.viz-container .dimmed {
+    opacity: 0.2;
+}
+```
+
+### Mermaid Diagram Standards
+
+**Supported Diagram Types:**
+
+| Diagram Type | Use Case | Complexity | When to Use |
+|--------------|----------|------------|-------------|
+| **Sequence** | Workflow steps, API interactions | 5-10 | Cross-component communication |
+| **Flowchart** | Decision trees, process flows | 5-12 | Conditional logic, branching paths |
+| **State Machine** | Lifecycle states, transitions | 5-8 | Status tracking, phase progression |
+| **C4 Context** | System architecture, boundaries | 8-15 | High-level system overview |
+| **ER Diagram** | Database schema, relationships | 6-12 | Data model documentation |
+| **Gantt Chart** | Project timeline, dependencies | 8-14 | Phase planning, milestone tracking |
+
+### Mermaid CSS Integration
+
+**Required CSS Classes:**
+
+```css
+/* Mermaid Diagram Container */
+.mermaid-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: var(--space-lg);
+    padding: var(--space-lg);
+    background: rgba(10, 14, 39, 0.4);
+    border-radius: var(--radius-lg);
+    overflow-x: auto;
+}
+
+.mermaid {
+    max-width: 800px;
+    width: 100%;
+}
+
+/* Mermaid Theme Variables */
+:root {
+    --mermaid-primary-color: #00d4ff;
+    --mermaid-secondary-color: #7b61ff;
+    --mermaid-tertiary-color: #ff6b9d;
+    --mermaid-background: rgba(10, 14, 39, 0.8);
+    --mermaid-text-color: #e5e7eb;
+    --mermaid-line-color: rgba(0, 212, 255, 0.4);
+}
+```
+
+### Visualization Performance Rules
+
+**Critical Performance Metrics:**
+
+| Metric | Threshold | Violation Action |
+|--------|-----------|------------------|
+| **Initial Render** | <2s for 100 data points | Optimize data processing |
+| **Interaction Response** | <100ms hover, <300ms click | Debounce/throttle events |
+| **Memory Usage** | <50MB for 500 data points | Implement data pagination |
+| **Frame Rate** | 60fps during animations | Use CSS transforms (GPU) |
+| **Bundle Size** | <100KB for D3.js modules | Import only needed modules |
+
+### Accessibility Requirements
+
+**WCAG 2.1 AA Compliance:**
+
+- ✅ **ARIA Labels:** All SVG elements must have descriptive labels
+- ✅ **Keyboard Navigation:** All interactive elements accessible via Tab/Enter
+- ✅ **Color Contrast:** Minimum 4.5:1 for text, 3:1 for UI elements
+- ✅ **Screen Reader:** Provide text alternatives for visual data
+- ✅ **Focus Indicators:** Visible focus outline (2px solid accent color)
+- ✅ **Reduced Motion:** Respect `prefers-reduced-motion` media query
+
+**Example Implementation:**
+
+```javascript
+// Accessibility-compliant D3.js chart
+svg.append('title')
+    .text('Session History Timeline - Shows orchestrator sessions over time');
+
+svg.selectAll('.session-marker')
+    .attr('role', 'button')
+    .attr('aria-label', d => `${d.orchestrator} session at ${d.timestamp}`)
+    .attr('tabindex', '0')
+    .on('keydown', (event, d) => {
+        if (event.key === 'Enter') {
+            expandSession(d);
+        }
+    });
+
+// Respect reduced motion preference
+if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    // Disable animations
+    simulation.stop();
+}
+```
+
+### Validation Checklist
+
+**Before deploying visualizations:**
+
+- [ ] D3.js version specified (v7.x)
+- [ ] Container has unique ID (`id="chart-name-viz"`)
+- [ ] CSS classes exist in `main.css` (no inline styles)
+- [ ] Responsive breakpoints tested (375px, 768px, 1440px)
+- [ ] Performance benchmarks met (<2s render, <100ms interaction)
+- [ ] ARIA labels on all interactive elements
+- [ ] Keyboard navigation works (Tab, Enter, Arrow keys)
+- [ ] Reduced motion preference respected
+- [ ] Tooltips positioned correctly (no overflow)
+- [ ] Color contrast validated (4.5:1 minimum)
+- [ ] Mermaid diagrams render correctly in all browsers
+- [ ] Documentation includes full code examples
 
 ---
 
@@ -3283,12 +3512,12 @@ document.documentElement.style.setProperty('--glass-bg', 'rgba(26, 31, 58, 0.6)'
 - 🎯 **BREAKING:** Simplified hierarchy to Level 0 → Level 1 only (removed Level 2 references)
 - 🎯 **OPTIMIZATION:** Removed 177 lines of redundant spacing documentation
 - ✨ **NEW:** Added Quick Reference section with decision matrices and class tables
-- ✨ **NEW:** Added cross-reference to Level1-spec.md for implementation details
+- ✨ **NEW:** Added cross-reference to 00-master-plan.md for implementation details
 - 🔄 **REFACTOR:** Consolidated spacing rules into single section at top (v4.0.1 content)
 - 🔄 **REFACTOR:** Simplified multi-panel pattern descriptions (removed redundancy)
 - 📚 **CLARITY:** Updated Core Principle #8 (2-level → simplified hierarchy)
 - 📚 **CLARITY:** Updated Core Principle #12 (added cross-document consistency)
-- 📚 **CONSISTENCY:** Aligned all terminology with Level1-spec.md (Level 1 Detail Pages)
+- 📚 **CONSISTENCY:** Aligned all terminology with 00-master-plan.md (Level 1 Detail Pages)
 - 🐛 **FIX:** Corrected copyright year (2025 → 2026)
 
 

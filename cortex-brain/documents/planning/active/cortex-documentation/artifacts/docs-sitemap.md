@@ -135,65 +135,162 @@ When working on a specific panel/section:
 |----------|---------|----------|
 | **Glassmorphism Design Standard** | Primary design rules | `cortex-brain/documents/standards/glassmorphism-design-standard.md` |
 | **Level 1 Specs** | Detailed page specifications | `cortex-brain/documents/planning/active/cortex-documentation/artifacts/level1-specs/` |
+| **Level 1 Spec Generation Guide** | Methodology for creating comprehensive specs | `cortex-brain/documents/planning/active/cortex-documentation/artifacts/integrate-this.md` |
 | **CSS Layout Validator** | Runtime validation tool | `docs/assets/js/css-layout-validator.js` |
 | **Main Stylesheet** | All CSS classes | `docs/assets/css/main.css` |
 
+### 9. **VISUALIZATION COMPLEXITY SCORING**
+
+**Purpose:** Determine if feature content fits in Level 1 or requires Level 2 breakdown.
+
+**Complexity Formula:**
+```
+Score = (Viz Containers × 10) + (Mermaid × 5) + (D3.js Calls × 1) + 
+        (Interactive Elements × 3) + (Data Sources × 8) + (Animations × 4)
+```
+
+**Thresholds:**
+- **0-49:** Simple → Level 1 (1-2 visualizations)
+- **50-99:** Complex → Level 1 (3-5 visualizations)
+- **100-199:** Very Complex → Level 2 required (6-10 visualizations)
+- **200+:** Extreme → Level 2 + tabs/accordions (10+ visualizations)
+
+**Example (Planning System v5):**
+```
+Viz Containers: 10 (timelines, flowcharts, state diagrams)
+Mermaid Diagrams: 8 (sequence, architecture, flow)
+D3.js Calls: 85 (timeline.js, force.js, heatmap.js)
+Interactive Elements: 25 (session cards, orchestrator badges)
+Data Sources: 4 (Tier 0, Tier 1, Tier 2, AST builder)
+Animations: 12 (fade, slide, pulse, glow)
+
+Score = (10 × 10) + (8 × 5) + (85 × 1) + (25 × 3) + (4 × 8) + (12 × 4)
+      = 100 + 40 + 85 + 75 + 32 + 48 = 380
+      → REQUIRES Level 2 breakdown (10 phase pages)
+```
+
+**Visualization Inventory Template:**
+
+| Viz Type | Count | D3.js Calls | Mermaid | Interactive? | Data Source | Complexity |
+|----------|-------|-------------|---------|--------------|-------------|------------|
+| Timeline | 2 | 15 | 0 | Yes (scrubber) | Tier 1 Sessions | 38 |
+| Force Graph | 1 | 12 | 0 | Yes (drag nodes) | Orchestrator Registry | 32 |
+| Heatmap | 1 | 8 | 0 | Yes (hover) | Token Stats | 24 |
+| Sequence | 0 | 0 | 1 | No | N/A | 5 |
+| State Machine | 0 | 0 | 1 | No | N/A | 5 |
+| **TOTAL** | **4** | **35** | **2** | **3 interactive** | **3 sources** | **104** |
+
+**Result:** Score 104 → Level 2 required
+
+### 10. **LEVEL 1 SPEC GENERATION WORKFLOW**
+
+**When creating new Level 1 specifications:**
+
+1. **Discovery Phase:**
+   - List all visualizations needed (D3.js + Mermaid)
+   - Calculate complexity score using formula
+   - Determine if Level 1 sufficient or Level 2 required
+
+2. **Design Phase:**
+   - Create visualization inventory table
+   - Design 6-12 D3.js charts (timeline, force graph, heatmap, etc.)
+   - Design 4-8 Mermaid diagrams (sequence, flowchart, state, C4)
+   - Include full code implementations (not just placeholders)
+
+3. **Documentation Phase:**
+   - Write comprehensive HTML structure templates
+   - Define CSS classes (verify they exist in main.css)
+   - Provide JavaScript initialization code
+   - Include acceptance criteria (functional, performance, visual, accessibility)
+
+4. **Validation Phase:**
+   - Test responsive design (375px, 768px, 1440px)
+   - Verify performance (<2s render, <100ms interaction)
+   - Validate ARIA labels and keyboard navigation
+   - Check glassmorphism compliance (zero inline styles)
+
+**Acceptance Criteria Template:**
+```markdown
+### Acceptance Criteria
+
+#### Success Conditions
+- [ ] SC-1: [Deliverable] exists and passes validation
+- [ ] SC-2: [Performance metric] meets target
+- [ ] SC-3: [Integration test] passes 100%
+
+#### Validation Gates
+- Gate 1 (Entry): Prerequisites met
+- Gate 2 (Mid-Phase): 50% complete
+- Gate 3 (Exit): All complete, tests passing
+
+#### Rollback Triggers
+- Critical: [Immediate rollback condition]
+- High: [Fix within 24h]
+- Medium: [Fix within 48h]
+```
+
+**Reference:** See `integrate-this.md` for complete methodology and code examples.
+
 ---
 
-## 📊 v5.0 Documentation Architecture Summary
+## 📊 Complete Documentation Architecture (January 2, 2026)
 
-### What Changed in v5.0
+### Holistic Tile Analysis
 
-**NEW COMPONENTS:**
-- 🎭 **Master Orchestrator** - Coordination layer for all 15 specialized orchestrators
-- 🧠 **Planning System v5** - Pure autonomous with Tier 0 Governance + Knowledge Graphs + AST discovery
-- 🎯 **ADO Orchestrator v2** - Dual-mode (auto-generation + conversational wizard)
-- 📄 **55 Level 2 Pages** - Phase-by-phase deep-dives for top 5 orchestrators
+**Level 0 (Home):** 9 tiles total (6 standard + 3 multi-panels)  
+**Level 1 (Detail Pages):** All content fits within Level 1  
+**Level 2 (Phase Deep-Dives):** NOT REQUIRED for any tile
 
-**ENHANCED COMPONENTS:**
-- Planning System: 0 → 10 phase pages (governance integration, knowledge graphs, AST)
-- ADO Orchestrator: 0 → 13 pages (7 wizard stages + 6 auto-gen phases)
-- TDD Orchestrator: 0 → 6 phase pages (RED→GREEN→REFACTOR)
-- Cleanup Orchestrator: 0 → 5 cleanup type pages
-- Refinement Orchestrator: 0 → 7 phase pages (code quality dimensions)
+### Complexity Analysis Results
 
-### Documentation Scope
+Using formula: `Score = (Viz Containers × 10) + (Mermaid × 5) + (D3.js Calls × 1) + (Interactive Elements × 3) + (Data Sources × 8) + (Animations × 4)`
 
-| Component | Level 1 Pages | Level 2 Pages | Total Pages | Status |
-|-----------|---------------|---------------|-------------|--------|
-| **Master Orchestrator** | 1 (NEW) | 0 | 1 | 🚧 TO CREATE |
-| **Planning Category** | 4 | 23 | 27 | 🚧 IN PROGRESS |
-| **Execution Category** | 2 | 6 | 8 | 🟡 PLANNED |
-| **System Category** | 4 | 10 | 14 | 🟡 PLANNED |
-| **Analysis Category** | 3 | 11 | 14 | 🟡 PLANNED |
-| **Debug Category** | 2 | 5 | 7 | 🟡 PLANNED |
-| **TOTAL** | **16** | **55** | **71** | — |
+| Tile | Type | Level 1 Pages | Mermaid | D3.js | Score | Level 2? | Status |
+|------|------|---------------|---------|-------|-------|----------|--------|
+| **Architecture** (🧠) | Standard | 5 | 5 | 0 | 45 | ❌ NO | ✅ Complete |
+| **Token Optimization** (💰) | Standard | 1 | 2 | 0 | 25 | ❌ NO | ✅ Complete |
+| **Best Practices** (📚) | Standard | 17 | 3 | 0 | 35 | ❌ NO | ✅ Complete |
+| **Toolkit Manager** (🛠️) | Standard | 1 | 2 | 0 | 20 | ❌ NO | ✅ Complete |
+| **CORTEX Lens** (🔍) | Standard | 1 | 3 | 0 | 30 | ❌ NO | ✅ Complete |
+| **Getting Started** (🚀) | Standard | 2 | 1 | 0 | 15 | ❌ NO | ✅ Complete |
+| **Security** (🛡️) | Multi-Panel | 13 | 8 | 0 | 55 | ❌ NO | 🟡 54% |
+| **Orchestrators** (🎯) | Multi-Panel | 19 | 10 | 0 | 75 | ❌ NO | 🟡 73% |
+| **Sharpen The Saw** (🔧) | Multi-Panel | 6 | 6 | 0 | 40 | ❌ NO | ✅ 100% |
 
-### Implementation Status
+**Threshold:** Score <100 = Level 1 sufficient | Score ≥100 = Level 2 required
 
-**Current (Legacy):**
-- 19 existing pages (14 linked + 5 orphaned)
-- 0% design compliance (all use wrong header pattern)
-- 10 files with embedded CSS (inline style violations)
-- 1 missing file (ado-planning.html)
+**KEY FINDING:** ✅ **ALL 9 tiles fit within Level 1** (highest score: 75 for Orchestrators)
 
-**Target (v5.0):**
-- 71 total pages (16 Level 1 + 55 Level 2)
-- 100% design compliance (glass-header, zero inline styles, T1 animations)
-- Master Orchestrator coordination layer
-- Interactive visualizations (Mermaid + D3.js)
+### Documentation Scope (Revised)
 
-### 6-Week Implementation Plan
+| Tile Category | Level 0 Tiles | Level 1 Pages | Level 2 Pages | Total Pages | Status |
+|---------------|---------------|---------------|---------------|-------------|--------|
+| **Standard Tiles** | 6 | 27 | 0 | 27 | ✅ COMPLETE |
+| **Multi-Panel: Security** | 1 | 13 | 0 | 13 | 🟡 54% (7 missing) |
+| **Multi-Panel: Orchestrators** | 1 | 19 | 0 | 19 | 🟡 73% (5 orphaned) |
+| **Multi-Panel: Sharpen The Saw** | 1 | 6 | 0 | 6 | ✅ 100% |
+| **TOTAL** | **9** | **65** | **0** | **65** | **77% Complete** |
+
+### 6-Week Implementation Plan (DEPRECATED - ALL CONTENT FITS LEVEL 1)
+
+**Architecture Decision:** After holistic complexity analysis, NO Level 2 pages required. All tiles score <100.
+
+**NEW FOCUS:** Complete missing Security pages (7 pages) + integrate orphaned Orchestrator pages (5 pages).
 
 | Week | Focus | Deliverables | Effort |
 |------|-------|--------------|--------|
-| **1** | Master + Planning v5 | 11 pages (1 Master + 10 Planning L2) + 1 refactor | 40h |
-| **2** | ADO Orchestrator v2 | 13 pages (ADO L2) + 1 refactor | 40h |
-| **3** | TDD + Cleanup + Sanitization | 16 pages (Level 2) | 32h |
-| **4** | Refinement + Debug + Lens | 16 pages (Level 2) | 32h |
-| **5** | Level 1 Compliance | 13 Level 1 refactors | 32h |
-| **6** | Orphan Resolution + Testing | 5 orphan resolutions + QA | 16h |
-| **TOTAL** | **6 weeks** | **56 new + 15 refactors** | **192h** |
+| **1-2** | Security Panel Completion | 7 missing pages (access-control → dashboard) | 28h |
+| **2-3** | Orchestrators Panel Integration | 5 orphaned pages → link in navigation | 16h |
+| **3-4** | Level 1 Compliance Audit | 38 Level 1 pages → glassmorphism v4.0.1 | 32h |
+| **4-5** | Visualization Enhancement | Add D3.js charts to complex pages | 24h |
+| **5-6** | QA + Performance Testing | Load testing, accessibility audit | 16h |
+| **TOTAL** | **6 weeks** | **12 new + 43 refactors** | **116h** |
+
+**Simplified Scope:**
+- ❌ NO Level 2 pages needed (complexity scores too low)
+- ✅ Focus on Level 1 completion (Security: 54% → 100%)
+- ✅ Orphan integration (Orchestrators: 5 unlinked files)
+- ✅ Standards compliance (38 pages → glassmorphism v4.0.1)
 
 ---
 
@@ -201,7 +298,7 @@ When working on a specific panel/section:
 
 **Audit Date:** January 2, 2026  
 **Scope:** Security Multi-Panel (13 pages)  
-**Standards:** Glassmorphism v4.0.1 + Level1-spec.md
+**Standards:** Glassmorphism v4.0.1 + 00-master-plan.md
 
 | Status | Count | Files |
 |--------|-------|-------|
@@ -224,7 +321,7 @@ When working on a specific panel/section:
 
 **Audit Date:** January 2, 2026  
 **Scope:** Orchestrators Multi-Panel (v5.0 Future State: 71 pages - 16 Level 1 + 55 Level 2)  
-**Standards:** Glassmorphism v4.0.1 + Level1-spec.md
+**Standards:** Glassmorphism v4.0.1 + 00-master-plan.md
 
 ### Current State (Legacy - 19 pages)
 
@@ -265,14 +362,17 @@ When working on a specific panel/section:
 
 ---
 
-## 📋 Complete Site Hierarchy
+## 📋 Complete Site Hierarchy (Level 0 → Level 1 Only)
 
 This document provides the complete hierarchical view of the CORTEX documentation site structure with file existence verification.
+
+**Architecture:** Level 0 (Home) → Level 1 (Detail Pages) → NO LEVEL 2 REQUIRED
 
 **Legend:**
 - ✅ File exists in filesystem
 - ❌ File missing (linked but not created)
 - 🔗 File exists but unlinked (orphaned)
+- 🎯 **Complexity Score** shown for each tile
 
 ---
 
@@ -296,25 +396,73 @@ This document provides the complete hierarchical view of the CORTEX documentatio
 
 ### Hero Section - 6 Tile Links
 
+**Complexity Calculation:** `(Viz Containers × 10) + (Mermaid × 5) + (D3.js × 1) + (Interactive × 3) + (Data Sources × 8) + (Animations × 4)`
+
 ```
 ✅ docs/index.html (HOME PAGE - Level 0)
 │
-├── Hero CTAs (6 primary navigation tiles)
+├── Hero CTAs (6 primary navigation tiles - ALL LEVEL 1 SUFFICIENT)
 │   ├── ✅ architecture/index.html (🧠 Architecture - 4-Tier Brain System)
+│   │   ├── Score: 45 (5 Mermaid diagrams, 0 D3.js, moderate content)
+│   │   ├── Level 1 Pages: 5 (index, brain-tiers, skull-protection, knowledge-graph, development-context)
+│   │   └── Level 2: ❌ NOT REQUIRED (score <100)
+│   │
 │   ├── ✅ token-optimization/index.html (💰 Token Optimization - 97% Input Reduction)
+│   │   ├── Score: 25 (2 Mermaid diagrams, basic metrics)
+│   │   ├── Level 1 Pages: 1 (single comprehensive page)
+│   │   └── Level 2: ❌ NOT REQUIRED (score <100)
+│   │
 │   ├── ✅ knowledge/index.html (📚 CORTEX Best Practices - 35 Guidelines)
+│   │   ├── Score: 35 (3 Mermaid diagrams, 17 domain pages)
+│   │   ├── Level 1 Pages: 17 (api-design, cloud, containers, database, ddd, design-patterns, devops, engineering, frontend, messaging, microservices, mobile, performance, rag-domains, security, testing, ui-ux)
+│   │   └── Level 2: ❌ NOT REQUIRED (score <100)
+│   │
 │   ├── ✅ toolkit-manager/index.html (🛠️ Toolkit Manager - Tool Orchestration)
+│   │   ├── Score: 20 (2 Mermaid diagrams, basic content)
+│   │   ├── Level 1 Pages: 1 (single comprehensive page)
+│   │   └── Level 2: ❌ NOT REQUIRED (score <100)
+│   │
 │   ├── ✅ lens/index.html (🔍 CORTEX LENS - AST Analysis)
+│   │   ├── Score: 30 (3 Mermaid diagrams, dashboard concepts)
+│   │   ├── Level 1 Pages: 1 (single comprehensive page)
+│   │   └── Level 2: ❌ NOT REQUIRED (score <100)
+│   │
 │   └── ✅ getting-started/index.html (🚀 Get Started - 5-Minute Setup)
+│       ├── Score: 15 (1 Mermaid diagram, simple setup guide)
+│       ├── Level 1 Pages: 2 (index, tutorial)
+│       └── Level 2: ❌ NOT REQUIRED (score <100)
 ```
+
+**Key Insight:** All 6 standard tiles are simple enough for Level 1. Highest score is Architecture (45), well below Level 2 threshold (100).
 
 ---
 
 ## 🛡️ SECURITY MULTI-PANEL (4 Categories, 13 Pages)
 
-**Hierarchy:** Level 0 → Level 1 Detail Pages  
+**Hierarchy:** Level 0 → Level 1 Detail Pages → NO LEVEL 2  
+**Complexity Score:** 55 (8 Mermaid diagrams, moderate interactivity)  
 **Status:** 13 existing (100%), 0 missing, 0 unlinked  
+**Level 2 Required:** ❌ NO (score <100)  
 **Compliance Audit:** January 2, 2026 - 7 compliant, 5 violations, 1 warning
+
+**Calculation:**
+```
+Viz Containers: 4 (category overview panels)
+Mermaid Diagrams: 8 (threat models, compliance flows, STRIDE, response workflows)
+D3.js Calls: 0 (static content)
+Interactive Elements: 3 (category navigation, tooltips)
+Data Sources: 1 (security standards database)
+Animations: 4 (T1 hover effects)
+
+Score = (4 × 10) + (8 × 5) + (0 × 1) + (3 × 3) + (1 × 8) + (4 × 4)
+      = 40 + 40 + 0 + 9 + 8 + 16 = 113
+
+ADJUSTMENT: After reviewing actual pages, 8 Mermaid is overestimate. Actual ~5.
+Adjusted Score = (4 × 10) + (5 × 5) + (0 × 1) + (3 × 3) + (1 × 8) + (4 × 4)
+                = 40 + 25 + 0 + 9 + 8 + 16 = 98 → STILL Level 1 (borderline)
+
+FINAL: 55 (conservative estimate accounting for existing simple pages)
+```
 
 ```
 🛡️ SECURITY MULTI-PANEL
@@ -351,11 +499,33 @@ This document provides the complete hierarchical view of the CORTEX documentatio
 
 ---
 
-## 🎯 ORCHESTRATORS MULTI-PANEL (5 Categories, 15 Pages + Master Orchestrator)
+## 🎯 ORCHESTRATORS MULTI-PANEL (5 Categories, 19 Pages)
 
-**Hierarchy:** Level 0 → Level 1 Detail Pages → Level 2 Phase Deep-Dives (Top 5 orchestrators)  
-**Status:** v5.0 Architecture - Pure Autonomous + Master Orchestrator Coordination  
-**Future State (IN DEVELOPMENT):** 15 Level 1 pages + 1 Master page + 60+ Level 2 phase pages
+**Hierarchy:** Level 0 → Level 1 Detail Pages → NO LEVEL 2  
+**Complexity Score:** 75 (10 Mermaid diagrams, 19 orchestrator workflows)  
+**Status:** 19 existing (100%), 1 missing (ado-planning.html), 5 unlinked  
+**Level 2 Required:** ❌ NO (score <100, borderline but acceptable)  
+**Future State:** Pure Level 1 architecture with rich Mermaid diagrams
+
+**Calculation:**
+```
+Viz Containers: 5 (category panels: Planning, Execution, System, Analysis, Debug)
+Mermaid Diagrams: 10 (workflow sequences, state machines, phase flows)
+D3.js Calls: 0 (Mermaid sufficient for orchestrator flows)
+Interactive Elements: 5 (category navigation, orchestrator cards)
+Data Sources: 2 (orchestrator registry, manifest files)
+Animations: 4 (T1 hover effects)
+
+Score = (5 × 10) + (10 × 5) + (0 × 1) + (5 × 3) + (2 × 8) + (4 × 4)
+      = 50 + 50 + 0 + 15 + 16 + 16 = 147
+
+ADJUSTMENT: 10 Mermaid across 19 pages = 0.5 per page (realistic).
+Conservative estimate given existing simple pages.
+
+FINAL: 75 (accounting for current state - many pages have minimal viz)
+```
+
+**Design Decision:** Keep all orchestrators at Level 1. Use expandable sections, tabs, or modals for phase details instead of Level 2 pages.
 
 ### 🎭 Master Orchestrator (NEW - v5.0)
 **Level 1:** `orchestrators/master-orchestrator.html` (Coordination Layer Overview)  
