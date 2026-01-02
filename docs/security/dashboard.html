@@ -9,7 +9,7 @@
     <title>Security Dashboard - CORTEX Security</title>
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo-64.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../assets/css/main.css?v=4.0.1">
+    <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://d3js.org/d3-geo.v3.min.js"></script>
@@ -141,108 +141,6 @@ graph TB
         <p>&copy; 2026 Asif Hussain. All rights reserved.</p>
         <p>CORTEX Security Dashboard v4.0.0</p>
     </footer>
-
-    <style>
-        /* Dashboard-specific styles */
-        .kpi-section {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto 2rem;
-            padding: 0 1.5rem;
-        }
-
-        .kpi-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .kpi-card {
-            text-align: center;
-            padding: 2rem 1rem;
-        }
-
-        .kpi-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        .kpi-value {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #fff;
-            margin-bottom: 0.5rem;
-        }
-
-        .kpi-value.critical {
-            color: #ff4757;
-        }
-
-        .kpi-value.warning {
-            color: #ffb84d;
-        }
-
-        .kpi-value.success {
-            color: #2ecc71;
-        }
-
-        .kpi-label {
-            font-size: 0.9rem;
-            color: #aaa;
-            margin-bottom: 0.5rem;
-        }
-
-        .kpi-trend {
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        .kpi-trend.positive {
-            color: #2ecc71;
-        }
-
-        .kpi-trend.negative {
-            color: #ff4757;
-        }
-
-        .kpi-trend.neutral {
-            color: #7b61ff;
-        }
-
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(12, 1fr);
-            gap: 1.5rem;
-        }
-
-        .viz-large {
-            grid-column: span 12;
-        }
-
-        .viz-wide {
-            grid-column: span 12;
-        }
-
-        .viz-medium {
-            grid-column: span 6;
-        }
-
-        @media (max-width: 768px) {
-            .viz-medium {
-                grid-column: span 12;
-            }
-        }
-
-        .viz-container {
-            min-height: 400px;
-            position: relative;
-        }
-
-        .viz-container svg {
-            display: block;
-            margin: 0 auto;
-        }
-    </style>
 
     <script>
         // Initialize Mermaid
