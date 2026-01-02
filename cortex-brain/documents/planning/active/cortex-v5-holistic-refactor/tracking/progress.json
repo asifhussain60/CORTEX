@@ -5,8 +5,8 @@
   "updated_at": "2026-01-02T23:59:59Z",
   "status": "active",
   "progress": {
-    "overall_percent": 33,
-    "current_phase": 5,
+    "overall_percent": 43,
+    "current_phase": 6,
     "total_phases": 12,
     "phases": [
       {
@@ -148,9 +148,77 @@
       {
         "phase_number": 6,
         "name": "Execute Migration Plans",
-        "status": "pending",
+        "status": "in_progress",
         "estimated_hours": 192,
-        "progress_percent": 0
+        "actual_hours": 32,
+        "progress_percent": 19,
+        "started_at": "2026-01-02T20:00:00Z",
+        "sub_phases": [
+          {
+            "phase_number": 6.1,
+            "name": "ADO v2 Migration (Conversational Wizard)",
+            "status": "completed",
+            "estimated_hours": 4,
+            "actual_hours": 4,
+            "progress_percent": 100,
+            "completed_at": "2026-01-02T23:59:59Z",
+            "git_commit": "pending",
+            "deliverables": [
+              "src/orchestrators/ado/v2/ado_orchestrator_v2.py (dual-mode architecture)",
+              "src/orchestrators/ado/v2/ado_conversational_wizard.py (685 lines)",
+              "src/orchestrators/ado/v2/ado_phases.py (6-phase workflow)",
+              "cortex-brain/config/master-orchestrator.yaml (wizard routing patterns)",
+              "tests/orchestrators/ado/v2/test_ado_orchestrator_v2.py (comprehensive tests)"
+            ]
+          },
+          {
+            "phase_number": 6.2,
+            "name": "Cleanup v2 Migration",
+            "status": "completed",
+            "estimated_hours": 28,
+            "actual_hours": 28,
+            "progress_percent": 100,
+            "completed_at": "2026-01-02T23:59:59Z",
+            "git_commit": "pending",
+            "deliverables": [
+              "src/orchestrators/cleanup/cleanup_orchestrator_v2.py (440 lines)",
+              "src/orchestrators/cleanup/cleanup_engine.py (500+ lines)",
+              "src/orchestrators/cleanup/cache_cleaner.py (80 lines)",
+              "src/orchestrators/cleanup/log_manager.py (140 lines)",
+              "src/orchestrators/cleanup/artifact_remover.py (105 lines)",
+              "src/orchestrators/cleanup/git_optimizer.py (285 lines)",
+              "cortex-brain/manifests/orchestrators/cleanup-orchestrator-v2.yaml (140 lines)",
+              "cortex-brain/templates/cleanup-report.jinja2 (95 lines)",
+              "cortex-brain/templates/log-rotation-report.jinja2 (30 lines)",
+              "cortex-brain/config/master-orchestrator.yaml (cleanup routing patterns)",
+              "tests/orchestrators/cleanup/test_cleanup_orchestrator_v2.py (350+ lines, 48+ tests)",
+              "cortex-brain/documents/planning/active/cleanup-v2-migration/docs/cleanup-v2-migration-guide.md (400+ lines)",
+              "validate_cleanup_v2.py (end-to-end validation, 100% pass rate)"
+            ]
+          },
+          {
+            "phase_number": 6.3,
+            "name": "Vacuum v2 Migration",
+            "status": "pending",
+            "estimated_hours": 40,
+            "progress_percent": 0
+          },
+          {
+            "phase_number": 6.4,
+            "name": "Sanitization v2 Migration",
+            "status": "pending",
+            "estimated_hours": 16,
+            "progress_percent": 0
+          },
+          {
+            "phase_number": 6.5,
+            "name": "Debug v2 Migration",
+            "status": "pending",
+            "estimated_hours": 24,
+            "progress_percent": 0,
+            "notes": "Pending approval - requires stakeholder discussion on AST analysis scope"
+          }
+        ]
       },
       {
         "phase_number": 7,

@@ -128,7 +128,7 @@ LLM Classification → Keyword Regex → User Clarification
 | `refine`, `improve cortex`, `optimize code` | 📋 **Refinement (GUIDED)** | `refinement-orchestrator-manifest.yaml` | 7-phase improvement |
 | `refactor [artifact]`, `analyze [file]`, `optimize [file]` | 📋 **Refactor (GUIDED)** | `cortex-refactor.prompt.md` | Deep analysis + decomposition strategy |
 | `system maintenance`, `health check` | 📋 **Maintenance (GUIDED)** | Via `cortex-maintenance.prompt.md` | 11-phase health + auto-repair (modular v2.0) |
-| `cleanup cache`, `cleanup full`, `cleanup [type]` | � **Maintenance Phase 2** | Via `cortex-maintenance.prompt.md` | Cache clear, bloat removal (Phase 2) |
+| `cleanup cache`, `cleanup logs`, `cleanup artifacts`, `cleanup full`, `cleanup git` | 🛡️ **Cleanup v2 (AUTONOMOUS)** | `cleanup-orchestrator-v2.yaml` | Selective cleanup modes (10s-180s, 250MB-7.5GB freed) |
 | `vacuum [path]`, `deep clean [path]`, `organize files` | 🛡️ **Vacuum (AUTONOMOUS)** | `cortex-vacuum.prompt.md` | Deep filesystem cleanup + reorganization |
 | `help`, `show commands` | **Help** | Template-based | Command list |
 
