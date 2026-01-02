@@ -5589,19 +5589,20 @@ h1, h2, h3, h4, h5, h6, p, span, div {
 .category-panels-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-lg, 1.5rem); /* 24px minimum spacing */
-    row-gap: var(--space-lg, 1.5rem);
-    column-gap: var(--space-lg, 1.5rem);
+    gap: 2rem; /* Increased from 1.5rem for better visual balance */
     margin-bottom: 2rem;
+    align-items: stretch; /* Ensure equal heights */
 }
 
 @media (min-width: 768px) {
     .category-panels-grid {
         grid-template-columns: repeat(2, 1fr);
+        gap: 2.5rem; /* Larger gap for desktop - better space distribution */
     }
     
     .category-panels-grid.grid-3x2 {
         grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
     }
 }
 
@@ -5609,9 +5610,12 @@ h1, h2, h3, h4, h5, h6, p, span, div {
     background: linear-gradient(135deg, rgba(10, 14, 39, 0.8), rgba(26, 31, 58, 0.8));
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 16px;
-    padding: 2rem 1.5rem;
+    padding: 2.5rem 2rem; /* Increased from 2rem 1.5rem for better content spacing */
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    min-height: 200px;
+    min-height: 280px; /* Enforce minimum height for consistency */
+    height: 100%; /* Fill grid cell height */
+    display: flex;
+    flex-direction: column;
 }
 
 .category-subpanel:hover {
@@ -5655,13 +5659,14 @@ h1, h2, h3, h4, h5, h6, p, span, div {
 .category-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: 0.75rem; /* Increased from 0.5rem for better tag spacing */
     justify-content: center;
+    margin-top: auto; /* Push tags to bottom when using flexbox */
 }
 
 .category-tag {
     display: inline-block;
-    padding: 0.4rem 0.9rem;
+    padding: 0.5rem 1.1rem; /* Increased padding for better clickability */
     background: rgba(0, 212, 255, 0.1);
     border: 1px solid rgba(0, 212, 255, 0.3);
     border-radius: 8px;
@@ -5810,9 +5815,9 @@ h1, h2, h3, h4, h5, h6, p, span, div {
 
 /* Level 0 Container Wrapper */
 .level0-container {
-    max-width: 1200px;
+    max-width: 1400px; /* Increased from 1200px for better space utilization */
     margin: 3rem auto;
-    padding: 0 1rem;
+    padding: 0 1.5rem; /* Increased from 1rem for balanced spacing */
 }
 
 .level0-container--narrow {
@@ -5820,7 +5825,7 @@ h1, h2, h3, h4, h5, h6, p, span, div {
 }
 
 .level0-container--wide {
-    max-width: 1400px;
+    max-width: 1600px; /* Increased for wider layouts */
 }
 
 /* Level 0 Section Panel */
@@ -5850,6 +5855,117 @@ h1, h2, h3, h4, h5, h6, p, span, div {
     margin: 0;
     font-size: 1.75rem;
     color: var(--accent-primary);
+}
+
+/* Level 0 Main Panel Wrapper */
+.level0-main-panel-wrapper {
+    max-width: 1400px;
+    margin: 3rem auto;
+    padding: 0 1.5rem;
+}
+
+.level0-main-panel {
+    padding: 2.5rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+}
+
+/* Level 0 Categories Grid */
+.level0-categories-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-top: 2rem;
+    align-items: stretch; /* Ensure equal heights */
+}
+
+@media (min-width: 768px) {
+    .level0-categories-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2.5rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .level0-categories-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 3rem;
+    }
+}
+
+/* Level 0 Category Subpanel */
+.level0-category-subpanel {
+    background: linear-gradient(135deg, rgba(10, 14, 39, 0.8), rgba(26, 31, 58, 0.8));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 2.5rem 2rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    min-height: 280px; /* Enforce minimum height for consistency */
+    height: 100%; /* Fill grid cell height */
+}
+
+.level0-category-subpanel:hover {
+    transform: translateY(-4px);
+    border-color: rgba(0, 212, 255, 0.4);
+    box-shadow: 0 8px 32px rgba(0, 212, 255, 0.2);
+}
+
+/* Level 0 Category Title */
+.level0-category-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--accent-primary, #00d4ff);
+    margin: 0;
+    text-align: left;
+}
+
+.level0-category-icon {
+    font-size: 1.8rem;
+    display: inline-block;
+}
+
+/* Level 0 Category Tags */
+.level0-category-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: auto;
+}
+
+.level0-category-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: var(--accent-primary, #00d4ff);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.level0-category-tag:hover {
+    background: rgba(0, 212, 255, 0.2);
+    border-color: rgba(0, 212, 255, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+}
+
+.level0-tag-icon {
+    font-size: 0.85rem;
+    opacity: 0.8;
 }
 
 /* Level 0 Content Card */

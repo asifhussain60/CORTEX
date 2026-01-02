@@ -1,9 +1,141 @@
 # 🗺️ CORTEX Documentation Site Map
 
-**Version:** 4.0.1 | **Status:** ✅ ACTIVE  
+**Version:** 4.0.2 | **Status:** ✅ ACTIVE  
 **Author:** Asif Hussain | **Last Updated:** January 2, 2026  
 **Last Compliance Audit:** January 2, 2026  
 **Copyright © 2026 Asif Hussain. All rights reserved.**
+
+---
+
+## 🧠 CORTEX INSTRUCTIONS - READ FIRST
+
+**⚠️ MANDATORY WORKFLOW FOR ALL DOCUMENTATION WORK:**
+
+### 1. **CHECK DESIGN STANDARDS BEFORE ANY CHANGES**
+
+Before modifying or creating ANY HTML files, you MUST:
+
+1. **Read Design Standards:**
+   - `cortex-brain/documents/standards/glassmorphism-design-standard.md` (PRIMARY)
+   - `cortex-brain/documents/planning/active/cortex-documentation/artifacts/level1-specs/` (DETAILED)
+
+2. **Verify CSS Classes Exist:**
+   - Search `docs/assets/css/main.css` for required classes
+   - If classes are MISSING → CREATE CSS FIRST
+   - Never apply classes that don't exist in stylesheet
+
+3. **Validate Against Rules:**
+   - ⛔ ZERO inline styles (`style=""` attributes forbidden)
+   - 🎨 Glassmorphism patterns only (`.glass-card`, `.glass-header`, etc.)
+   - 🎭 T1 animations for Level 1 pages (`.animation-t1`)
+   - 📱 Mobile-first responsive (CSS media queries required)
+   - 📏 Minimum spacing: `var(--space-lg)` (1.5rem/24px) between stacked elements
+
+### 2. **CSS-FIRST DEVELOPMENT RULE**
+
+**WORKFLOW:**
+```
+Step 1: User requests HTML changes
+Step 2: Check glassmorphism-design-standard.md
+Step 3: Search main.css for required classes
+Step 4: IF MISSING → Create CSS classes FIRST
+Step 5: Apply CSS classes to HTML
+Step 6: Run validation tool (css-layout-validator.js)
+Step 7: Test in browser
+```
+
+**NEVER:**
+- ❌ Add classes to HTML without verifying they exist in CSS
+- ❌ Use inline styles (`style="..."`)
+- ❌ Create HTML before CSS
+- ❌ Skip validation after changes
+
+### 3. **VALIDATION ENFORCEMENT**
+
+After ANY documentation changes:
+
+1. **Automatic Validation:**
+   - CSS validator runs on page load (`docs/assets/js/css-layout-validator.js`)
+   - Check browser console for issues
+   - Fix HIGH severity issues immediately
+
+2. **Manual Validation:**
+   ```javascript
+   // Browser console commands
+   CORTEX.validator.validate()       // Run checks
+   CORTEX.validator.applyFixes()     // Apply auto-fixes
+   CORTEX.validator.enableAutoFix()  // Enable persistent fixes
+   ```
+
+3. **Compliance Checklist:**
+   - [ ] CSS classes exist in main.css before HTML application
+   - [ ] Zero inline styles (scan HTML for `style=""`)
+   - [ ] Glass header pattern correct for page level
+   - [ ] T1 animations only (`.animation-t1` class)
+   - [ ] Proper spacing (min 24px between cards/panels)
+   - [ ] Responsive breakpoints working (375px/768px/1440px)
+
+### 4. **LEVEL-SPECIFIC RULES**
+
+| Level | Header Pattern | Animations | Logo |
+|-------|----------------|------------|------|
+| **Level 0** (Home) | `.glass-header` with logo + nav | T3 allowed | ✅ YES |
+| **Level 1** (Detail pages) | `.glass-header` with nav only | T1 ONLY | ❌ NO |
+
+**Critical Violations:**
+- 🔴 **nav-container pattern** → Must be `.glass-header`
+- 🔴 **breadcrumb navigation** → Remove, use simple back link
+- 🔴 **logo on Level 1** → Remove logo, keep nav only
+- 🔴 **embedded `<style>` tags** → Move to main.css
+- 🔴 **inline styles** → Replace with CSS classes
+
+### 5. **CSS CLASS REFERENCE**
+
+**Before applying these classes, VERIFY they exist in main.css:**
+
+| Class | Purpose | File Location |
+|-------|---------|---------------|
+| `.glass-header` | Navigation header | main.css:~290 |
+| `.glass-card-display` | Non-interactive cards | main.css:~534 |
+| `.glass-card-clickable` | Interactive cards/links | main.css:~501 |
+| `.animation-t1` | Subtle hover effects | main.css:~920 |
+| `.category-panels-grid` | Multi-panel grid layout | main.css:~5590 |
+| `.category-subpanel` | Individual category panels | main.css:~5610 |
+| `.level0-category-subpanel` | Level 0 category panels | main.css:~5900 |
+| `.level0-categories-grid` | Level 0 grid layout | main.css:~5875 |
+
+**If class is missing:** Create it in main.css BEFORE using in HTML.
+
+### 6. **COMPLIANCE AUDIT WORKFLOW**
+
+When working on a specific panel/section:
+
+1. **Check current compliance status** (see audit tables below)
+2. **Read glassmorphism-design-standard.md** for pattern details
+3. **Verify CSS classes exist** before modifying HTML
+4. **Create missing CSS classes** if needed
+5. **Apply changes to HTML**
+6. **Run validator** (`CORTEX.validator.validate()`)
+7. **Update compliance status** in this document
+
+### 7. **COMMON VIOLATIONS & FIXES**
+
+| Violation | Wrong | Correct |
+|-----------|-------|---------|
+| **Header pattern** | `<div class="nav-container">` | `<header class="glass-header">` |
+| **Inline styles** | `<div style="padding: 20px">` | `<div class="glass-card">` |
+| **Embedded CSS** | `<style>` in `<head>` | Extract to main.css |
+| **Logo on Level 1** | Logo + nav in header | Nav only in header |
+| **Wrong animation** | `.animation-t3` on Level 1 | `.animation-t1` only |
+
+### 8. **REFERENCES**
+
+| Document | Purpose | Location |
+|----------|---------|----------|
+| **Glassmorphism Design Standard** | Primary design rules | `cortex-brain/documents/standards/glassmorphism-design-standard.md` |
+| **Level 1 Specs** | Detailed page specifications | `cortex-brain/documents/planning/active/cortex-documentation/artifacts/level1-specs/` |
+| **CSS Layout Validator** | Runtime validation tool | `docs/assets/js/css-layout-validator.js` |
+| **Main Stylesheet** | All CSS classes | `docs/assets/css/main.css` |
 
 ---
 
