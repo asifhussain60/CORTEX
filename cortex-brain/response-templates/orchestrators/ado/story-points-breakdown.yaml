@@ -1,0 +1,25 @@
+# ADO Orchestrator - Story Points Breakdown
+# Detailed story points estimation
+
+version: "1.0"
+orchestrator: "ado"
+category: "conditional"
+description: "Story points breakdown by component"
+
+story_points_breakdown:
+  block_id: "BLK-ADO-003"
+  description: "Story points detailed breakdown"
+  condition: "story_points_calculated"
+  format: |
+    ### 📊 Story Points Breakdown
+    
+    | Component | Complexity | Points | Justification |
+    |-----------|------------|--------|---------------|
+    {{#each components}}
+    | {{name}} | {{complexity}} | {{points}} SP | {{rationale}} |
+    {{/each}}
+    
+    **Total:** {{total_sp}} SP
+  variables:
+    - components: "Array of component estimation objects"
+    - total_sp: "Total story points"

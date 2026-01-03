@@ -1,0 +1,22 @@
+# Documentation Orchestrator - Coverage Report
+# Documentation coverage metrics
+
+version: "1.0"
+orchestrator: "documentation"
+category: "conditional"
+description: "Documentation coverage analysis"
+
+coverage_report:
+  block_id: "BLK-DOC-002"
+  description: "Documentation coverage metrics"
+  condition: "coverage_calculated"
+  format: |
+    ### 📈 Documentation Coverage
+    
+    | Component | Coverage |
+    |-----------|----------|
+    {{#each components}}
+    | {{name}} | `{{bar}}` {{percentage}}% |
+    {{/each}}
+  variables:
+    - components: "Array of component coverage objects"

@@ -1,0 +1,173 @@
+# Section Library
+# Dynamic section definitions for adaptive response composition
+
+version: "1.0"
+category: "core"
+description: "Reusable section templates with conditional rendering rules"
+
+sections:
+  understanding:
+    emoji: "🎯"
+    title: "Understanding & Scope"
+    when_to_use:
+      - request_requires_clarification: true
+      - discovery_performed: true
+      - scope_definition_needed: true
+    content_guidelines: "What was understood from request + scope boundaries"
+    tier_usage: [FOCUSED, STRUCTURED, COMPREHENSIVE]
+  
+  approach:
+    emoji: "⚡"
+    title: "Approach & Considerations"
+    when_to_use:
+      - has_technical_challenge: true
+      - strategy_decision_made: true
+      - alternatives_considered: true
+    content_guidelines: "Key challenge OR 'No significant challenges' if straightforward"
+    tier_usage: [STRUCTURED, COMPREHENSIVE]
+  
+  response:
+    emoji: "💬"
+    title: "Response"
+    when_to_use:
+      - always: true
+    content_guidelines: "Main response content - concise pseudo-code by default, full code ONLY if explicitly requested"
+    tier_usage: [FOCUSED, STRUCTURED, COMPREHENSIVE]
+  
+  changes:
+    emoji: "📊"
+    title: "Impact & Changes"
+    when_to_use:
+      - files_modified: true
+      - metrics_available: true
+      - outcomes_achieved: true
+    content_guidelines: "What changed - files, metrics, test results"
+    tier_usage: [STRUCTURED, COMPREHENSIVE]
+  
+  next_steps:
+    emoji: "🔍"
+    title: "Next Steps"
+    when_to_use:
+      - user_action_required: true
+      - multi_phase_workflow: true
+      - follow_up_needed: true
+    content_guidelines: |
+      SINGLE ACTION RULE (MANDATORY):
+      - Provide EXACTLY ONE next step, never multiple options
+      - Select the highest-value action based on current context
+      - Include clear justification for why this action is optimal
+      - Format: "**Next:** [action] (provides [value/benefit])"
+      - Exception: Work complete → "✅ All work complete!"
+      
+      FORBIDDEN:
+      - ❌ "To continue: Option A OR Option B"
+      - ❌ Multiple bulleted next steps
+      - ❌ "You can either X or Y"
+      - ❌ Giving user choices when one path is clearly optimal
+      
+      CORRECT Examples:
+      - ✅ "**Next:** Fix test imports (unblocks 23 tests, completes Day 2)"
+      - ✅ "**Next:** Run integration tests (validates full workflow)"
+      - ✅ "All work complete!"
+    tier_usage: [FOCUSED, STRUCTURED, COMPREHENSIVE]
+  
+  context:
+    emoji: "🎯"
+    title: "Context"
+    when_to_use:
+      - discovery_performed: true
+      - background_needed: true
+    content_guidelines: "Background information, what was found"
+    tier_usage: [STRUCTURED, COMPREHENSIVE]
+  
+  analysis:
+    emoji: "⚡"
+    title: "Analysis"
+    when_to_use:
+      - data_analyzed: true
+      - insights_generated: true
+      - patterns_found: true
+    content_guidelines: "Key findings, patterns, insights"
+    tier_usage: [STRUCTURED, COMPREHENSIVE]
+  
+  details:
+    emoji: "💬"
+    title: "Details"
+    when_to_use:
+      - technical_details_needed: true
+      - implementation_specifics: true
+    content_guidelines: "Technical specifics, implementation details"
+    tier_usage: [COMPREHENSIVE]
+  
+  results:
+    emoji: "📊"
+    title: "Results"
+    when_to_use:
+      - metrics_available: true
+      - test_results: true
+      - measurements: true
+    content_guidelines: "Quantitative outcomes, test results, metrics"
+    tier_usage: [STRUCTURED, COMPREHENSIVE]
+  
+  actions:
+    emoji: "🔍"
+    title: "Actions"
+    when_to_use:
+      - user_action_required: true
+    content_guidelines: "What user should do next"
+    tier_usage: [FOCUSED, STRUCTURED]
+  
+  cautions:
+    emoji: "⚠️"
+    title: "Cautions"
+    when_to_use:
+      - risks_present: true
+      - warnings_needed: true
+      - breaking_changes: true
+    content_guidelines: "Risks, warnings, things to watch out for"
+    tier_usage: [STRUCTURED, COMPREHENSIVE]
+  
+  architecture:
+    emoji: "🏗️"
+    title: "Architecture"
+    when_to_use:
+      - system_design: true
+      - component_relationships: true
+    content_guidelines: "System structure, component relationships"
+    tier_usage: [COMPREHENSIVE]
+  
+  strategy:
+    emoji: "⚡"
+    title: "Strategy & Approach"
+    when_to_use:
+      - planning_needed: true
+      - approach_explanation: true
+    content_guidelines: "Strategic decisions, approach rationale"
+    tier_usage: [COMPREHENSIVE]
+  
+  implementation:
+    emoji: "💬"
+    title: "Implementation"
+    when_to_use:
+      - code_written: true
+      - changes_made: true
+    content_guidelines: "Describe what was implemented using concise pseudo-code or high-level approach - full code snippets ONLY if user explicitly requests"
+    tier_usage: [STRUCTURED, COMPREHENSIVE]
+  
+  achievements:
+    emoji: "🎉"
+    title: "Achievements"
+    when_to_use:
+      - milestones_reached: true
+      - goals_completed: true
+    content_guidelines: "What was accomplished, goals met"
+    tier_usage: [COMPREHENSIVE]
+  
+  technical:
+    emoji: "🔧"
+    title: "Technical Details"
+    when_to_use:
+      - deep_technical_content: true
+      - api_details: true
+    content_guidelines: "Low-level technical information"
+    tier_usage: [COMPREHENSIVE]

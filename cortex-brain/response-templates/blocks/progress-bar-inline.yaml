@@ -1,0 +1,52 @@
+# Progress Bar Inline
+# Simple inline progress bars
+
+version: "1.0"
+category: "blocks"
+description: "Compact inline progress bars"
+
+progress_bar_inline:
+  block_id: "BLK-STD-014"
+  description: "Simple inline progress bar"
+  category: "utility"
+  format: "`{{filled}}{{empty}}` {{percentage}}%"
+  config:
+    width: 10
+    filled_char: "█"
+    empty_char: "░"
+  variables:
+    - filled: "Filled portion (█ repeated)"
+    - empty: "Empty portion (░ repeated)"
+    - percentage: "Percentage complete"
+  examples:
+    - filled: "██████████"
+      empty: ""
+      percentage: 100
+      rendered: "`██████████` 100%"
+    
+    - filled: "█████"
+      empty: "░░░░░"
+      percentage: 50
+      rendered: "`█████░░░░░` 50%"
+    
+    - filled: ""
+      empty: "░░░░░░░░░░"
+      percentage: 0
+      rendered: "`░░░░░░░░░░` 0%"
+
+progress_bar_with_label:
+  block_id: "BLK-STD-015"
+  description: "Labeled progress bar"
+  category: "utility"
+  format: "**{{label}}:** `{{filled}}{{empty}}` {{percentage}}%"
+  variables:
+    - label: "Progress label"
+    - filled: "Filled chars"
+    - empty: "Empty chars"
+    - percentage: "Percentage"
+  examples:
+    - label: "Tests"
+      filled: "███████"
+      empty: "░░░"
+      percentage: 70
+      rendered: "**Tests:** `███████░░░` 70%"

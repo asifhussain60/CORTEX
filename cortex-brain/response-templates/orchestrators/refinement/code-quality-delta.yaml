@@ -1,0 +1,22 @@
+# Refinement Orchestrator - Code Quality Delta
+# Before/after quality metrics
+
+version: "1.0"
+orchestrator: "refinement"
+category: "conditional"
+description: "Before/after code quality comparison"
+
+code_quality_delta:
+  block_id: "BLK-RFN-002"
+  description: "Before/after code quality metrics"
+  condition: "refactoring_complete"
+  format: |
+    ### 📊 Code Quality Improvement
+    
+    | Metric | Before | After | Delta |
+    |--------|--------|-------|-------|
+    {{#each metrics}}
+    | {{name}} | {{before}} | {{after}} | {{delta_icon}} {{delta}} |
+    {{/each}}
+  variables:
+    - metrics: "Array of metric delta objects"

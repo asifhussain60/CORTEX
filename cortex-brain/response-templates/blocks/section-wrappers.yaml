@@ -1,0 +1,27 @@
+# Section Wrappers
+# Standard section wrapper formats
+
+version: "1.0"
+category: "blocks"
+description: "Section header and footer wrappers"
+
+section_header_h3:
+  block_id: "BLK-STD-016"
+  description: "Standard ### section header with emoji"
+  format: "### {{emoji}} {{title}}"
+  variables:
+    - emoji: "Section emoji"
+    - title: "Section title"
+
+section_header_h4:
+  block_id: "BLK-STD-017"
+  description: "Subsection header"
+  format: "#### {{title}}"
+  variables:
+    - title: "Subsection title"
+
+separator:
+  block_id: "BLK-STD-018"
+  description: "Markdown horizontal rule separator"
+  format: "---"
+  usage: "Use once after author line in header"

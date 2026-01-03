@@ -1,0 +1,29 @@
+# Planning Orchestrator - Threat Analysis
+# Security threat analysis block
+
+version: "1.0"
+orchestrator: "planning"
+category: "conditional"
+description: "STRIDE threat analysis summary"
+
+threat_analysis:
+  block_id: "BLK-PLN-001"
+  description: "Security threat analysis summary"
+  condition: "threat_analysis_enabled"
+  format: |
+    ### 🔒 Security Analysis
+    
+    | Metric | Value |
+    |--------|-------|
+    | **Threats** | {{threat_count}} ({{critical_count}} Critical, {{high_count}} High, {{medium_count}} Medium) |
+    | **STRIDE** | {{stride_categories}} |
+    | **Mitigations** | `{{mitigation_bar}}` {{mitigations_done}}/{{mitigations_total}} |
+  variables:
+    - threat_count: "Total threats identified"
+    - critical_count: "Critical severity count"
+    - high_count: "High severity count"
+    - medium_count: "Medium severity count"
+    - stride_categories: "STRIDE categories present"
+    - mitigation_bar: "Progress bar for mitigations"
+    - mitigations_done: "Mitigations completed"
+    - mitigations_total: "Total mitigations needed"

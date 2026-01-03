@@ -1,0 +1,27 @@
+{
+  "session_id": "tdd-20260103092824-35aa2bb3",
+  "orchestrator": "tdd_orchestrator_v2",
+  "feature_name": "Test request",
+  "test_path": "tests/",
+  "created_at": "2026-01-03T09:28:24.426984",
+  "state": {
+    "red_phase": {
+      "status": "complete",
+      "timestamp": "2026-01-03T09:28:24.427241",
+      "progress": {
+        "phase": "RED",
+        "tests_generated": 5,
+        "test_quality_score": 0.85,
+        "tests_failing": 5,
+        "tests_passing": 0
+      }
+    },
+    "green_phase": {
+      "status": "pending"
+    },
+    "refactor_phase": {
+      "status": "pending"
+    }
+  },
+  "current_phase": "RED"
+}

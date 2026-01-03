@@ -1,0 +1,26 @@
+# Planning Orchestrator - Plan Summary
+# Plan metrics and overview
+
+version: "1.0"
+orchestrator: "planning"
+category: "conditional"
+description: "Plan metrics summary table"
+
+plan_summary_table:
+  block_id: "BLK-PLN-002"
+  description: "Plan metrics summary table"
+  condition: "operation == 'plan_creation'"
+  format: |
+    ### 📊 Plan Summary
+    
+    | Metric | Value |
+    |--------|-------|
+    | **Plan ID** | {{plan_id}} |
+    | **Phases** | {{phase_count}} |
+    | **Estimated Effort** | {{effort}} |
+    | **Files to Modify** | {{file_count}} |
+  variables:
+    - plan_id: "Unique plan identifier"
+    - phase_count: "Number of phases"
+    - effort: "Estimated hours/days"
+    - file_count: "Files to be modified"

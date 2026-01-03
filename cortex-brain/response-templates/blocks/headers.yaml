@@ -1,0 +1,51 @@
+# Headers
+# Standard CORTEX header blocks for responses
+
+version: "1.0"
+category: "blocks"
+description: "Header blocks with author attribution and orchestrator shields"
+
+cortex_header:
+  block_id: "BLK-STD-001"
+  description: "Standard CORTEX header with author attribution"
+  category: "mandatory"
+  format: |
+    ## 🧠 CORTEX {{title}}
+    **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+  variables:
+    - title: "Response title (e.g., 'Code Analysis', 'Implementation Complete')"
+  examples:
+    - title: "Code Analysis"
+      rendered: |
+        ## 🧠 CORTEX Code Analysis
+        **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+cortex_header_shield:
+  block_id: "BLK-STD-002"
+  description: "CORTEX header with shield icon for orchestrator-engaged mode"
+  category: "mandatory"
+  condition: "orchestrator_engaged == true"
+  format: |
+    ## 🛡️🧠 CORTEX {{title}}
+    **Author:** Asif Hussain | **{{context_label}}:** {{context_value}} | **Orchestrator:** {{orchestrator_name}} ✅
+  variables:
+    - title: "Response title"
+    - context_label: "Plan, Feature, Operation, etc."
+    - context_value: "Plan name, feature name, etc."
+    - orchestrator_name: "Planning System 4.0, ADO System, TDD Mastery, etc."
+  examples:
+    - title: "Plan Execution"
+      context_label: "Plan"
+      context_value: "Database Migration"
+      orchestrator_name: "Planning System 4.0"
+      rendered: |
+        ## 🛡️🧠 CORTEX Plan Execution
+        **Author:** Asif Hussain | **Plan:** Database Migration | **Orchestrator:** Planning System 4.0 ✅
+
+cortex_header_simple:
+  block_id: "BLK-STD-003"
+  description: "Minimal header for INSTANT tier responses"
+  category: "optional"
+  format: "## 🧠 CORTEX {{title}}"
+  variables:
+    - title: "Brief title"

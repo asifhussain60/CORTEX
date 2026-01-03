@@ -1,0 +1,96 @@
+# Formatting Library
+# Reusable formatting patterns and templates
+
+version: "1.0"
+category: "core"
+description: "Standard formatting patterns for links, code, metrics, and visual elements"
+
+patterns:
+  file_link:
+    format: "[`{filename}`]({path})"
+    example: "[`app.py`](src/app.py)"
+  
+  pseudo_code:
+    format: "**Pseudo-code:** {description}"
+    example: "**Pseudo-code:** Validate input → query database → transform results"
+  
+  code_block:
+    format: "```{language}\n{code}\n```"
+    example: "```python\ndef hello():\n    pass\n```"
+  
+  code_reference:
+    format: "**Implementation:** {high_level_approach}"
+    example: "**Implementation:** Decorator pattern with validation middleware"
+  
+  collapsible:
+    format: "<details><summary>{title}</summary>\n\n{content}\n\n</details>"
+    usage: "For code snippets > 20 lines or multiple examples"
+  
+  metric:
+    format: "**{label}:** {value}"
+    example: "**Tests Passed:** 23/25"
+  
+  progress_bar:
+    format: "[{filled}{'>' if not complete else ''}{empty}] {percentage}%"
+    example: "[████████>░░░] 80%"
+  
+  checkbox_checked:
+    symbol: "✅"
+    format: "✅ {item}"
+  
+  checkbox_unchecked:
+    symbol: "☐"
+    format: "☐ {item}"
+  
+  checkbox_failed:
+    symbol: "❌"
+    format: "❌ {item}"
+
+lists:
+  numbered:
+    format: "1. {item}"
+  
+  bulleted:
+    format: "- {item}"
+  
+  checkbox:
+    format: "☐ {item}"
+  
+  checked:
+    format: "✅ {item}"
+
+visual_progress:
+  phase_progress:
+    format: |
+      ---
+      ### 📊 Progress Overview
+      
+      | Category | Progress | Status |
+      |----------|----------|--------|
+      | **Overall** | `{filled_overall}{empty_overall}` | **{overall_percentage}%** |
+      | ✅ Completed | `{filled_complete}{empty_complete}` | {complete_percentage}% |
+      | ⏳ In Progress | `{filled_progress}{empty_progress}` | {progress_percentage}% |
+      | ⏸️ Not Started | `{filled_pending}{empty_pending}` | {pending_percentage}% |
+      
+      ---
+  
+  plan_tracker:
+    format: |
+      ---
+      ### 📋 {plan_title}
+      
+      **Overall Progress:** `{progress_bar}` **{percentage}%**
+      
+      | Phase | Progress | Status |
+      |-------|----------|--------|
+      {phase_lines}
+      
+      ---
+      📊 **Tests:** {tests_passed}/{tests_total} | **Code:** {loc} LOC | **Status:** {status}
+      
+      ---
+
+branding:
+  author_line: "**Author:** Asif Hussain | **Website:** https://asifhussain60.github.io/CORTEX/"
+  separator: "---"
+  github_link: "**GitHub:** github.com/asifhussain60/CORTEX"

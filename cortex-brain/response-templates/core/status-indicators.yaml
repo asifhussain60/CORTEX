@@ -1,0 +1,57 @@
+# Status Indicators
+# Universal status icons and badges for CORTEX responses
+
+version: "1.0"
+category: "core"
+description: "Standard status indicators, icons, and emoji used across all templates"
+
+status_icons:
+  success: "✅"
+  pending: "⏳"
+  in_progress: "🔄"
+  failed: "❌"
+  warning: "⚠️"
+  info: "ℹ️"
+  skipped: "⏸️"
+  blocked: "🚫"
+
+phase_icons:
+  complete: "✅"
+  active: "🔄"
+  pending: "⏳"
+  failed: "❌"
+  skipped: "⏸️"
+
+test_icons:
+  pass: "✅"
+  fail: "❌"
+  skip: "⏸️"
+  error: "💥"
+
+priority_icons:
+  critical: "🔴"
+  high: "🟠"
+  medium: "🟡"
+  low: "🟢"
+  info: "🔵"
+
+trend_icons:
+  up: "📈"
+  down: "📉"
+  stable: "➡️"
+  unknown: "❓"
+
+orchestrator_icons:
+  planning: "🛡️"
+  ado: "🎫"
+  tdd: "🔬"
+  debug: "🐛"
+  lens: "📊"
+  refinement: "✨"
+  sanitization: "🧹"
+  documentation: "📚"
+  maintenance: "🔧"
+  vacuum: "🧽"
+
+shield_indicator: "🛡️"
+brain_indicator: "🧠"

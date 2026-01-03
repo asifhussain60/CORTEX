@@ -1,0 +1,48 @@
+# Plan File Link
+# Clickable links to plan files in editor
+
+version: "1.0"
+category: "blocks"
+description: "Clickable editor links for plan files"
+
+plan_file_link:
+  block_id: "BLK-STD-008"
+  description: "Clickable link to plan file in editor"
+  category: "conditional"
+  condition: "plan_created"
+  format: |
+    ### 📄 Plan File
+    
+    **Open in Editor:** [{{filename}}]({{path}})
+  variables:
+    - filename: "File name (e.g., 00-master-plan.md)"
+    - path: "Relative or absolute path"
+  examples:
+    - filename: "00-master-plan.md"
+      path: "cortex-brain/documents/planning/active/database-migration/00-master-plan.md"
+      rendered: |
+        ### 📄 Plan File
+        
+        **Open in Editor:** [00-master-plan.md](cortex-brain/documents/planning/active/database-migration/00-master-plan.md)
+
+plan_file_link_inline:
+  block_id: "BLK-STD-009"
+  description: "Inline plan file link (no section header)"
+  category: "conditional"
+  format: "**Open Plan:** [{{filename}}]({{path}})"
+  variables:
+    - filename: "File name"
+    - path: "File path"
+
+artifact_link:
+  block_id: "BLK-STD-010"
+  description: "Generic artifact link"
+  category: "conditional"
+  format: |
+    ### 📄 Artifacts
+    
+    {{#each files}}
+    - [{{name}}]({{path}})
+    {{/each}}
+  variables:
+    - files: "Array of file objects with name and path"

@@ -1,0 +1,23 @@
+# Debug Orchestrator - Root Cause Analysis
+# Confirmed root cause details
+
+version: "1.0"
+orchestrator: "debug"
+category: "conditional"
+description: "Root cause determination"
+
+root_cause_analysis:
+  block_id: "BLK-DBG-002"
+  description: "Root cause determination"
+  condition: "root_cause_found"
+  format: |
+    ### ⚙️ Root Cause
+    
+    **Cause:** {{cause}}  
+    **Location:** `{{file}}:{{line}}`  
+    **Impact:** {{impact}}
+  variables:
+    - cause: "Root cause description"
+    - file: "File path"
+    - line: "Line number"
+    - impact: "Impact description"

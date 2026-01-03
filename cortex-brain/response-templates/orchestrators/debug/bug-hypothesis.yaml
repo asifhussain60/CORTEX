@@ -1,0 +1,21 @@
+# Debug Orchestrator - Bug Hypothesis
+# Initial bug analysis and hypothesis
+
+version: "1.0"
+orchestrator: "debug"
+category: "mandatory"
+description: "Bug hypothesis generation"
+
+bug_hypothesis:
+  block_id: "BLK-DBG-001"
+  description: "Initial bug hypothesis"
+  format: |
+    ### 🔍 Bug Hypothesis
+    
+    **Suspected Cause:** {{hypothesis}}  
+    **Confidence:** {{confidence}}%  
+    **Affected Components:** {{components}}
+  variables:
+    - hypothesis: "Suspected root cause"
+    - confidence: "Confidence percentage"
+    - components: "Comma-separated component list"

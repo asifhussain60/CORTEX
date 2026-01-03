@@ -1,0 +1,32 @@
+# ADO Orchestrator - Work Item Summary
+# ADO work item breakdown with story points
+
+version: "1.0"
+orchestrator: "ado"
+category: "mandatory"
+description: "ADO work item hierarchy and story points"
+
+work_item_summary:
+  block_id: "BLK-ADO-001"
+  description: "ADO work item breakdown with story points"
+  format: |
+    ### 🎫 Work Item Summary
+    
+    | Type | Count | Story Points | Status |
+    |------|-------|--------------|--------|
+    | **Epic** | {{epic_count}} | - | {{epic_status}} |
+    | **Feature** | {{feature_count}} | {{feature_sp}} SP | {{feature_status}} |
+    | **User Story** | {{story_count}} | {{story_sp}} SP | {{story_status}} |
+    | **Task** | {{task_count}} | {{task_sp}} SP | {{task_status}} |
+  variables:
+    - epic_count: "Number of epics"
+    - feature_count: "Number of features"
+    - story_count: "Number of user stories"
+    - task_count: "Number of tasks"
+    - feature_sp: "Feature story points"
+    - story_sp: "Story story points"
+    - task_sp: "Task story points"
+    - epic_status: "Epic status icon"
+    - feature_status: "Feature status icon"
+    - story_status: "Story status icon"
+    - task_status: "Task status icon"

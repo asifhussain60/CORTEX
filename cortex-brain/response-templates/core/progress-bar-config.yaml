@@ -1,0 +1,40 @@
+# Progress Bar Configuration
+# Universal progress bar rendering configuration for all CORTEX templates
+
+version: "1.0"
+category: "core"
+description: "Standardized 10-character progress bar configuration with status icons"
+
+progress_bar:
+  width: 10
+  filled_char: "█"
+  empty_char: "░"
+  
+  icons:
+    complete: "✅"
+    in_progress: "🔄"
+    pending: "⏳"
+    failed: "❌"
+    skipped: "⏸️"
+  
+  format: "`{{filled_chars}}{{empty_chars}}` **{{percentage}}%** {{status_icon}} {{status_text}}"
+  
+  examples:
+    - filled: 10
+      empty: 0
+      percentage: 100
+      rendered: "`██████████` **100%** ✅ Complete"
+    
+    - filled: 5
+      empty: 5
+      percentage: 50
+      rendered: "`█████░░░░░` **50%** 🔄 In Progress"
+    
+    - filled: 0
+      empty: 10
+      percentage: 0
+      rendered: "`░░░░░░░░░░` **0%** ⏳ Pending"
+
+# Helper calculation
+# filled_count = round(percentage / 10)
+# empty_count = 10 - filled_count

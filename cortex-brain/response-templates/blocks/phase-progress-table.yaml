@@ -1,0 +1,76 @@
+# Phase Progress Table
+# Multi-phase progress tracking tables
+
+version: "1.0"
+category: "blocks"
+description: "Visual phase progress tables with bars and metrics"
+
+progress_tracker_standard:
+  block_id: "BLK-STD-006"
+  description: "Standardized visual progress tracker with 10-char bars"
+  category: "conditional"
+  condition: "multi_phase_operation"
+  format: |
+    ### 📊 {{operation_name}} Progress
+    
+    **Overall Progress:** `{{overall_bar}}` **{{overall_percentage}}%** {{status_emoji}} {{status_text}}
+    
+    | # | Phase | Progress | Deliverables | Time |
+    |---|-------|----------|--------------|------|
+    {{#each phases}}
+    | {{phase_num}} | {{phase_icon}} **{{phase_name}}** | `{{phase_bar}}` {{percentage}}% | {{completed_tasks}}/{{total_tasks}} | {{elapsed_time}} |
+    {{/each}}
+  config:
+    bar_width: 10
+    filled_char: "█"
+    empty_char: "░"
+    icons:
+      complete: "✅"
+      in_progress: "🔄"
+      pending: "⏳"
+      failed: "❌"
+      skipped: "⏸️"
+  variables:
+    - operation_name: "Operation or plan name"
+    - overall_bar: "10-char progress bar"
+    - overall_percentage: "Overall % complete"
+    - status_emoji: "Icon from config.icons"
+    - status_text: "In Progress, Complete, etc."
+    - phases: "Array of phase objects"
+  examples:
+    - operation_name: "Plan Execution"
+      overall_bar: "██████░░░░"
+      overall_percentage: 60
+      status_emoji: "🔄"
+      status_text: "In Progress"
+      phases:
+        - phase_num: 1
+          phase_icon: "✅"
+          phase_name: "Discovery"
+          phase_bar: "██████████"
+          percentage: 100
+          completed_tasks: 5
+          total_tasks: 5
+          elapsed_time: "45m"
+        - phase_num: 2
+          phase_icon: "🔄"
+          phase_name: "Implementation"
+          phase_bar: "█████░░░░░"
+          percentage: 50
+          completed_tasks: 3
+          total_tasks: 6
+          elapsed_time: "1h 20m"
+
+phase_table_compact:
+  block_id: "BLK-STD-007"
+  description: "Compact phase progress table without time tracking"
+  category: "conditional"
+  condition: "simple_phase_tracking"
+  format: |
+    ### 📊 Progress
+    
+    | Phase | Status | Progress |
+    |-------|--------|----------|
+    {{#each phases}}
+    | {{phase_icon}} {{phase_name}} | {{status}} | `{{phase_bar}}` {{percentage}}% |
+    {{/each}}

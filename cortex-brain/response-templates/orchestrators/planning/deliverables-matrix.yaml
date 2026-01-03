@@ -1,0 +1,22 @@
+# Planning Orchestrator - Deliverables Matrix
+# Deliverables tracking table
+
+version: "1.0"
+orchestrator: "planning"
+category: "conditional"
+description: "Deliverables completion matrix"
+
+deliverables_matrix:
+  block_id: "BLK-PLN-004"
+  description: "Deliverables completion matrix"
+  condition: "deliverables_tracked"
+  format: |
+    ### 📦 Deliverables
+    
+    | Deliverable | Status | Owner |
+    |-------------|--------|-------|
+    {{#each deliverables}}
+    | {{name}} | {{status_icon}} {{status}} | {{owner}} |
+    {{/each}}
+  variables:
+    - deliverables: "Array of deliverable objects"

@@ -1,0 +1,55 @@
+# Next Action
+# Single action next steps (SKULL rule enforcement)
+
+version: "1.0"
+category: "blocks"
+description: "Single action next steps with value justification"
+
+next_action:
+  block_id: "BLK-STD-011"
+  description: "Final next steps directive (single action rule)"
+  category: "mandatory"
+  format: |
+    **Next:** {{action}}
+  variables:
+    - action: "Single action directive or completion message"
+  rules:
+    - "EXACTLY ONE action per response"
+    - "Include value/benefit justification"
+    - "Exception: Work complete → '✅ All work complete!'"
+  examples:
+    - action: "Fix test imports (unblocks 23 tests, completes Day 2)"
+      rendered: "**Next:** Fix test imports (unblocks 23 tests, completes Day 2)"
+    
+    - action: "Run integration tests (validates full workflow)"
+      rendered: "**Next:** Run integration tests (validates full workflow)"
+    
+    - action: "✅ All work complete!"
+      rendered: "**Next:** ✅ All work complete!"
+
+next_action_with_command:
+  block_id: "BLK-STD-012"
+  description: "Next action with specific command to run"
+  category: "optional"
+  format: |
+    **Next:** {{action}}
+    
+    Say `{{command}}` to {{outcome}}
+  variables:
+    - action: "Action description"
+    - command: "Exact command user should say"
+    - outcome: "What the command achieves"
+  examples:
+    - action: "Continue with Phase 2 implementation"
+      command: "continue"
+      outcome: "resume plan execution"
+      rendered: |
+        **Next:** Continue with Phase 2 implementation
+        
+        Say `continue` to resume plan execution
+
+completion_message:
+  block_id: "BLK-STD-013"
+  description: "Work completion message (no further action)"
+  category: "special"
+  format: "✅ **All work complete!** No further action required."

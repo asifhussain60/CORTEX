@@ -1,0 +1,24 @@
+# Debug Orchestrator - Fix Verification
+# Verification checklist for applied fixes
+
+version: "1.0"
+orchestrator: "debug"
+category: "conditional"
+description: "Fix verification status"
+
+fix_verification:
+  block_id: "BLK-DBG-003"
+  description: "Fix verification status"
+  condition: "fix_applied"
+  format: |
+    ### ✅ Fix Verification
+    
+    | Check | Status |
+    |-------|--------|
+    | **Tests Pass** | {{test_status}} |
+    | **No Regressions** | {{regression_status}} |
+    | **Code Review** | {{review_status}} |
+  variables:
+    - test_status: "✅ Passed, ❌ Failed"
+    - regression_status: "✅ Clean, ⚠️ Issues"
+    - review_status: "✅ Approved, ⏳ Pending"

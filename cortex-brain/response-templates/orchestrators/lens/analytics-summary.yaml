@@ -1,0 +1,19 @@
+# CORTEX Lens - Analytics Summary
+# System analytics overview
+
+version: "1.0"
+orchestrator: "lens"
+category: "mandatory"
+description: "System analytics and metrics"
+
+analytics_summary:
+  block_id: "BLK-LNS-001"
+  description: "System analytics overview"
+  format: |
+    ### 📈 Analytics Summary
+    
+    {{#each metrics}}
+    - **{{name}}:** {{value}} {{#if trend}}({{trend_icon}} {{trend}}){{/if}}
+    {{/each}}
+  variables:
+    - metrics: "Array of metric objects with name/value/trend"

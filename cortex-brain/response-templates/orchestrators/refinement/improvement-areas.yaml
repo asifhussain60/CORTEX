@@ -1,0 +1,21 @@
+# Refinement Orchestrator - Improvement Areas
+# Code improvement opportunities
+
+version: "1.0"
+orchestrator: "refinement"
+category: "mandatory"
+description: "Identified improvement areas"
+
+improvement_areas:
+  block_id: "BLK-RFN-001"
+  description: "Code improvement opportunities"
+  format: |
+    ### 🎯 Improvement Areas
+    
+    | Area | Priority | Effort |
+    |------|----------|--------|
+    {{#each areas}}
+    | {{name}} | {{priority_icon}} {{priority}} | {{effort}} |
+    {{/each}}
+  variables:
+    - areas: "Array of improvement area objects"

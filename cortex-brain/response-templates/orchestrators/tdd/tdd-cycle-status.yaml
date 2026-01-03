@@ -1,0 +1,23 @@
+# TDD Orchestrator - TDD Cycle Status
+# RED→GREEN→REFACTOR cycle tracking
+
+version: "1.0"
+orchestrator: "tdd"
+category: "mandatory"
+description: "TDD cycle phase indicators"
+
+tdd_cycle_status:
+  block_id: "BLK-TDD-001"
+  description: "RED→GREEN→REFACTOR cycle status"
+  format: |
+    ### 🔴🟢🔄 TDD Cycle
+    
+    | Phase | Status |
+    |-------|--------|
+    | 🔴 RED (Failing Test) | {{red_status}} |
+    | 🟢 GREEN (Passing Test) | {{green_status}} |
+    | 🔄 REFACTOR (Clean Up) | {{refactor_status}} |
+  variables:
+    - red_status: "✅ Complete, 🔄 In Progress, ⏳ Pending"
+    - green_status: "✅ Complete, 🔄 In Progress, ⏳ Pending"
+    - refactor_status: "✅ Complete, 🔄 In Progress, ⏳ Pending"

@@ -1,0 +1,26 @@
+# Sanitization Orchestrator - Sanitization Findings
+# PII, secrets, and reference cleanup results
+
+version: "1.0"
+orchestrator: "sanitization"
+category: "mandatory"
+description: "Sanitization scan and cleanup results"
+
+sanitization_findings:
+  block_id: "BLK-SNT-001"
+  description: "Sanitization scan results"
+  format: |
+    ### 🔍 Sanitization Findings
+    
+    | Category | Found | Sanitized |
+    |----------|-------|-----------|
+    | **PII** | {{pii_found}} | {{pii_sanitized}} |
+    | **Secrets** | {{secrets_found}} | {{secrets_sanitized}} |
+    | **Internal Refs** | {{refs_found}} | {{refs_sanitized}} |
+  variables:
+    - pii_found: "PII instances found"
+    - pii_sanitized: "PII instances sanitized"
+    - secrets_found: "Secrets found"
+    - secrets_sanitized: "Secrets sanitized"
+    - refs_found: "Internal references found"
+    - refs_sanitized: "Internal references sanitized"

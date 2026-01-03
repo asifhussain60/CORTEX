@@ -1,0 +1,55 @@
+# Validation Status
+# DoR/DoD validation status blocks
+
+version: "1.0"
+category: "blocks"
+description: "Definition of Ready/Done validation status tables"
+
+validation_status_dor_dod:
+  block_id: "BLK-STD-004"
+  description: "Definition of Ready/Done validation status"
+  category: "conditional"
+  condition: "validation_required"
+  format: |
+    ### ✅ Validation Status
+    
+    | Check | Status |
+    |-------|--------|
+    | **Definition of Ready** | {{#if dor_passed}}✅ Passed{{else}}⚠️ {{dor_violations}} issue(s){{/if}} |
+    | **Definition of Done** | {{#if dod_passed}}✅ Passed{{else}}⏳ {{dod_remaining}} remaining{{/if}} |
+  variables:
+    - dor_passed: "Boolean"
+    - dor_violations: "Count of DoR violations"
+    - dod_passed: "Boolean"
+    - dod_remaining: "Count of remaining DoD items"
+  examples:
+    - dor_passed: true
+      dod_passed: false
+      dod_remaining: 3
+      rendered: |
+        ### ✅ Validation Status
+        
+        | Check | Status |
+        |-------|--------|
+        | **Definition of Ready** | ✅ Passed |
+        | **Definition of Done** | ⏳ 3 remaining |
+
+validation_status_with_ado:
+  block_id: "BLK-STD-005"
+  description: "Validation status including ADO authentication"
+  category: "conditional"
+  condition: "ado_integration_enabled"
+  format: |
+    ### ✅ Validation Status
+    
+    | Check | Status |
+    |-------|--------|
+    | **Definition of Ready** | {{#if dor_passed}}✅ Passed{{else}}⚠️ {{dor_violations}} issue(s){{/if}} |
+    | **Definition of Done** | {{#if dod_passed}}✅ Passed{{else}}⏳ {{dod_remaining}} remaining{{/if}} |
+    | **ADO Authentication** | {{#if ado_auth_valid}}✅ Connected{{else}}❌ Not authenticated{{/if}} |
+  variables:
+    - dor_passed: "Boolean"
+    - dor_violations: "DoR violation count"
+    - dod_passed: "Boolean"
+    - dod_remaining: "Remaining DoD items"
+    - ado_auth_valid: "Boolean ADO auth status"

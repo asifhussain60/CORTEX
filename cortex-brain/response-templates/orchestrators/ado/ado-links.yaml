@@ -1,0 +1,20 @@
+# ADO Orchestrator - ADO Links
+# External ADO work item hyperlinks
+
+version: "1.0"
+orchestrator: "ado"
+category: "conditional"
+description: "External ADO work item links"
+
+ado_links:
+  block_id: "BLK-ADO-002"
+  description: "External ADO work item links"
+  condition: "ado_links_exist"
+  format: |
+    ### 🔗 Azure DevOps Links
+    
+    {{#each ado_links}}
+    - [{{type}}: {{title}}]({{url}})
+    {{/each}}
+  variables:
+    - ado_links: "Array of ADO link objects"

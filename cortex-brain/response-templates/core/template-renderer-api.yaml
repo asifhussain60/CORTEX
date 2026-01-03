@@ -1,0 +1,90 @@
+# Template Renderer API
+# Helper methods available for template composition and rendering
+
+version: "1.0"
+category: "core"
+description: "API methods for TemplateRenderer implementation"
+
+implementation_helpers:
+  description: "Methods available in TemplateRenderer for algorithm execution"
+  
+  methods:
+    select_blocks:
+      signature: "select_blocks(context_signals, orchestrator_type) -> List[Block]"
+      description: "Select applicable blocks based on context and orchestrator"
+      returns: "List of Block objects to render"
+    
+    evaluate_condition:
+      signature: "evaluate_condition(condition, context) -> bool"
+      description: "Evaluate when_to_use condition against runtime context"
+      returns: "Boolean indicating if condition is met"
+    
+    sort_blocks_by_order:
+      signature: "sort_blocks_by_order(blocks, order_sequence) -> List[Block]"
+      description: "Sort blocks according to composition rules order"
+      returns: "Sorted list of Block objects"
+    
+    apply_tier_limit:
+      signature: "apply_tier_limit(blocks, tier) -> List[Block]"
+      description: "Apply max_sections limit for complexity tier"
+      returns: "Filtered list of highest-priority blocks"
+    
+    render_blocks:
+      signature: "render_blocks(blocks, context) -> str"
+      description: "Render all blocks with context interpolation"
+      returns: "Formatted markdown string"
+    
+    generate_progress_bar:
+      signature: "generate_progress_bar(percentage, width=10) -> str"
+      description: "Generate Unicode progress bar"
+      parameters:
+        - percentage: "Float 0-100"
+        - width: "Bar width in characters (default 10)"
+      returns: "String like '██████░░░░'"
+    
+    generate_tdd_status:
+      signature: "generate_tdd_status(red_done, green_done, refactor_done) -> str"
+      description: "Generate TDD cycle status indicators"
+      returns: "Formatted TDD status table"
+    
+    format_elapsed_time:
+      signature: "format_elapsed_time(seconds) -> str"
+      description: "Format seconds to human-readable time"
+      returns: "String like '2h 15m' or '45s'"
+    
+    generate_phase_rows:
+      signature: "generate_phase_rows(phases) -> str"
+      description: "Generate phase table rows from phase data"
+      returns: "Markdown table rows"
+    
+    render_autonomous_progress:
+      signature: "render_autonomous_progress(plan_name, phases, dor_passed, dod_passed, ...) -> str"
+      description: "Full convenience method for autonomous execution template"
+      returns: "Complete formatted response"
+    
+    render_ado_progress:
+      signature: "render_ado_progress(feature_name, phases, work_items, ...) -> str"
+      description: "Full convenience method for ADO execution template"
+      returns: "Complete formatted response"
+
+progress_helpers:
+  description: "Specialized helpers for progress visualization"
+  
+  calculate_filled_empty:
+    signature: "calculate_filled_empty(percentage, width) -> Tuple[int, int]"
+    formula: |
+      filled_count = round(percentage / 10) if width == 10 else round(percentage * width / 100)
+      empty_count = width - filled_count
+      return (filled_count, empty_count)
+  
+  generate_bar_string:
+    signature: "generate_bar_string(filled_count, empty_count, filled_char='█', empty_char='░') -> str"
+    implementation: |
+      return filled_char * filled_count + empty_char * empty_count
+  
+  get_status_icon:
+    signature: "get_status_icon(percentage) -> str"
+    logic: |
+      if percentage == 100: return "✅"
+      elif percentage > 0: return "🔄"
+      else: return "⏳"

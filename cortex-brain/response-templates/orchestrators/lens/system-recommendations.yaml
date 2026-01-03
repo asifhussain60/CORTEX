@@ -1,0 +1,21 @@
+# CORTEX Lens - System Recommendations
+# AI-generated improvement recommendations
+
+version: "1.0"
+orchestrator: "lens"
+category: "conditional"
+description: "System improvement recommendations"
+
+system_recommendations:
+  block_id: "BLK-LNS-003"
+  description: "AI-generated system recommendations"
+  condition: "recommendations_available"
+  format: |
+    ### 💡 Recommendations
+    
+    {{#each recommendations}}
+    {{priority_icon}} **{{title}}**  
+    {{description}}
+    {{/each}}
+  variables:
+    - recommendations: "Array of recommendation objects"

@@ -1,0 +1,21 @@
+# CORTEX Lens - Health Metrics
+# Component health indicators
+
+version: "1.0"
+orchestrator: "lens"
+category: "mandatory"
+description: "System health indicators"
+
+health_metrics:
+  block_id: "BLK-LNS-002"
+  description: "System health indicators"
+  format: |
+    ### 🏥 Health Metrics
+    
+    | Component | Status | Score |
+    |-----------|--------|-------|
+    {{#each components}}
+    | {{name}} | {{status_icon}} {{status}} | {{score}}/100 |
+    {{/each}}
+  variables:
+    - components: "Array of component health objects"

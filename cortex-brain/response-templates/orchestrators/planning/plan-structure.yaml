@@ -1,0 +1,25 @@
+# Planning Orchestrator - Plan Structure
+# ASCII folder structure visualization
+
+version: "1.0"
+orchestrator: "planning"
+category: "conditional"
+description: "ASCII tree structure for plan folder"
+
+plan_structure_tree:
+  block_id: "BLK-PLN-003"
+  description: "ASCII folder structure for plan"
+  condition: "operation == 'plan_creation'"
+  format: |
+    ### 📁 Plan Structure
+    
+    ```
+    {{plan_folder}}/
+    ├── 00-master-plan.md    # Main plan
+    ├── context/             # Context artifacts
+    ├── reports/             # Progress reports
+    ├── artifacts/           # Supporting files
+    └── tracking/            # progress-tracker.json
+    ```
+  variables:
+    - plan_folder: "Plan folder name"

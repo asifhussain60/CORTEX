@@ -1,0 +1,21 @@
+# Documentation Orchestrator - Doc Summary
+# Documentation generation summary
+
+version: "1.0"
+orchestrator: "documentation"
+category: "mandatory"
+description: "Documentation generation summary"
+
+doc_summary:
+  block_id: "BLK-DOC-001"
+  description: "Documentation generation summary"
+  format: |
+    ### 📚 Documentation Summary
+    
+    | Type | Count | Status |
+    |------|-------|--------|
+    {{#each doc_types}}
+    | {{type}} | {{count}} | {{status_icon}} {{status}} |
+    {{/each}}
+  variables:
+    - doc_types: "Array of documentation type objects"

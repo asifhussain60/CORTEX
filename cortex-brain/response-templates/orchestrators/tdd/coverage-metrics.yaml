@@ -1,0 +1,27 @@
+# TDD Orchestrator - Coverage Metrics
+# Code coverage statistics
+
+version: "1.0"
+orchestrator: "tdd"
+category: "conditional"
+description: "Code coverage metrics with progress bars"
+
+coverage_metrics:
+  block_id: "BLK-TDD-003"
+  description: "Code coverage metrics"
+  condition: "coverage_available"
+  format: |
+    ### 📈 Coverage
+    
+    | Type | Coverage |
+    |------|----------|
+    | **Line** | `{{line_bar}}` {{line_coverage}}% |
+    | **Branch** | `{{branch_bar}}` {{branch_coverage}}% |
+    | **Function** | `{{function_bar}}` {{function_coverage}}% |
+  variables:
+    - line_coverage: "Line coverage percentage"
+    - branch_coverage: "Branch coverage percentage"
+    - function_coverage: "Function coverage percentage"
+    - line_bar: "10-char progress bar"
+    - branch_bar: "10-char progress bar"
+    - function_bar: "10-char progress bar"

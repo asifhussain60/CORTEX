@@ -1,0 +1,27 @@
+{
+  "session_id": "tdd-20260103092842-383fe8ff",
+  "orchestrator": "tdd_orchestrator_v2",
+  "feature_name": "Feature",
+  "test_path": "tests/nonexistent_test.py",
+  "created_at": "2026-01-03T09:28:42.726045",
+  "state": {
+    "red_phase": {
+      "status": "pending"
+    },
+    "green_phase": {
+      "status": "complete",
+      "timestamp": "2026-01-03T09:28:42.726193",
+      "progress": {
+        "phase": "GREEN",
+        "tests_passing": 12,
+        "tests_failing": 0,
+        "coverage_percent": 85,
+        "red_phase_completed": true
+      }
+    },
+    "refactor_phase": {
+      "status": "pending"
+    }
+  },
+  "current_phase": "GREEN"
+}

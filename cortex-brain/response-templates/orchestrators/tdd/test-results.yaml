@@ -1,0 +1,27 @@
+# TDD Orchestrator - Test Results
+# Test execution results summary
+
+version: "1.0"
+orchestrator: "tdd"
+category: "mandatory"
+description: "Test execution results and metrics"
+
+test_results_summary:
+  block_id: "BLK-TDD-002"
+  description: "Test execution results"
+  format: |
+    ### 📊 Test Results
+    
+    | Metric | Value |
+    |--------|-------|
+    | **Total Tests** | {{total_tests}} |
+    | **Passed** | ✅ {{passed_tests}} |
+    | **Failed** | ❌ {{failed_tests}} |
+    | **Skipped** | ⏸️ {{skipped_tests}} |
+    | **Duration** | {{duration}}s |
+  variables:
+    - total_tests: "Total test count"
+    - passed_tests: "Passed test count"
+    - failed_tests: "Failed test count"
+    - skipped_tests: "Skipped test count"
+    - duration: "Test execution time"
