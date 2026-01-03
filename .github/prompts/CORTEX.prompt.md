@@ -96,27 +96,33 @@ LLM Classification → Keyword Regex → User Clarification
 **REQUIRED Behaviors for 🛡️ AUTONOMOUS Orchestrators:**
 1. ✅ Load manifest/orchestrator reference ONLY
 2. ✅ Use specified response template (e.g., `autonomous_execution_progress`)
-3. ✅ STOP immediately after hand-off header
-4. ✅ Let orchestrator Python code execute autonomously
+3. ✅ Render progress bars using format in "Post-Orchestrator Progress Rendering" section
+4. ✅ STOP immediately after displaying progress header
+5. ✅ Let orchestrator Python code execute autonomously
 
-**Visual Marker:** 🛡️ = Orchestrator takes over, CORTEX stops
+**Visual Marker:** 🛡️ = Orchestrator takes over, CORTEX displays progress, then stops
 
 ---
 
 ## 🔧 Orchestrator Autonomy Matrix
 
-| Orchestrator | Type | CORTEX Role | Orchestrator Role |
-|--------------|------|-------------|-------------------|
-| Planning System | 🛡️ AUTONOMOUS | Route intent → Load manifest → STOP | Execute planning workflow (folder creation, context gathering, plan generation) |
-| ADO Operations | 🛡️ AUTONOMOUS | Route intent → Load manifest → STOP | Generate work items, acceptance criteria, estimation |
-| Vacuum | 🛡️ AUTONOMOUS | Route intent → Load manifest → STOP | Deep filesystem cleanup, reorganization, validation |
-| TDD Mastery | 📋 GUIDED | Route intent → Read manifest → Execute steps | CORTEX follows TDD workflow instructions |
-| Debug Orchestrator | 📋 GUIDED | Route intent → Read manifest → Execute steps | CORTEX performs debugging analysis |
-| Cleanup | 🛡️ AUTONOMOUS | Route intent → Load rules → STOP | Execute cleanup logic (cache, bloat, temp files) |
+| Orchestrator | Type | CORTEX Role | Orchestrator Role | Progress Display |
+|--------------|------|-------------|-------------------|------------------|
+| Planning System | 🛡️ AUTONOMOUS | Route → Render progress → STOP | Execute planning workflow | ✅ YES (phased) |
+| ADO Operations | 🛡️ AUTONOMOUS | Route → Render progress → STOP | Generate work items | ✅ YES (phased) |
+| Vacuum | 🛡️ AUTONOMOUS | Route → Render progress → STOP | Filesystem cleanup | ✅ YES (phased) |
+| Investigation | 🛡️ AUTONOMOUS | Route → Render progress → STOP | Root cause analysis | ✅ YES (6 phases) |
+| Cleanup | 🛡️ AUTONOMOUS | Route → Render progress → STOP | Selective cleanup | ✅ YES (mode-based) |
+| TDD Mastery | 📋 GUIDED | Route → Read manifest → Execute | CORTEX follows TDD workflow | ❌ NO (direct execution) |
+| Debug Orchestrator | 📋 GUIDED | Route → Read manifest → Execute | CORTEX performs analysis | ❌ NO (analysis output) |
+| Refinement | � GUIDED | Route → Read manifest → Execute | CORTEX refines code | ❌ NO (incremental) |
+| Sanitization | 📋 GUIDED | Route → Read manifest → Execute | CORTEX sanitizes | ❌ NO (single-pass) |
 
 **Key Distinction:**
-- 🛡️ **AUTONOMOUS**: Has Python implementation, self-executing
-- 📋 **GUIDED**: Manifest contains instructions for CORTEX to follow
+- 🛡️ **AUTONOMOUS**: Has Python implementation, self-executing, **REQUIRES progress bars**
+- 📋 **GUIDED**: Manifest contains instructions for CORTEX to follow, **NO progress bars**
+
+**Progress Rendering:** See "Post-Orchestrator Progress Rendering" section for implementation details
 
 ---
 
@@ -166,6 +172,11 @@ Orchestrator Execution
 **Pattern Matching:** 100% confidence on all standard commands  
 **LLM Fallback:** Configured but not yet active (Phase 10 enhancement)  
 **State Coordination:** Cross-orchestrator state sharing via `StateManager` + `PlanningStateDB`
+
+**Progress Bar Display:**
+- 🛡️ AUTONOMOUS orchestrators (Planning, ADO, Vacuum, Cleanup, Investigation): ✅ Display progress bars
+- 📋 GUIDED orchestrators (TDD, Debug, Refinement, Sanitization): ❌ No progress bars
+- See "Post-Orchestrator Progress Rendering" section for implementation
 
 ### Continuation Detection
 
@@ -244,6 +255,145 @@ When Planning System is engaged (🛡️), `00-master-plan.md` MUST include:
 4. **copilot_instructions Block** - `response_template`, `tdd_enforcement`, `final_refactor_required`
 
 **Reference:** `planning-system-4.0-manifest.yaml` lines 118-157, 639-677
+
+---
+
+## 📊 Post-Orchestrator Progress Rendering
+
+**⚠️ CRITICAL: This section controls when and how progress bars are displayed.**
+
+### When to Display Progress Bars
+
+**✅ DISPLAY for 🛡️ AUTONOMOUS orchestrators ONLY:**
+- Planning System (`plan`, `create a plan`)
+- ADO Operations (`ado story`, `ado feature`)
+- Vacuum (`vacuum`, `deep clean`)
+- Cleanup (`cleanup cache`, `cleanup logs`)
+- Investigation (`investigate`, `find root cause`)
+
+**❌ DO NOT DISPLAY for 📋 GUIDED orchestrators:**
+- TDD Mastery (direct execution, not multi-phase)
+- Debug Orchestrator (analysis output, not progress tracking)
+- Refinement (incremental improvements, not phased)
+- Sanitization (single-pass operation)
+
+### How to Render Progress
+
+**Step 1: Detect Autonomous Execution**
+```
+IF orchestrator_type == "🛡️ AUTONOMOUS" AND orchestrator_returns_progress_data:
+    → Proceed to Step 2
+ELSE:
+    → Skip progress rendering (return standard response)
+```
+
+**Step 2: Render Progress Format**
+
+Use the progress format embedded in the orchestrator's response template:
+
+**For Planning System:**
+```markdown
+## 🛡️🧠 CORTEX Plan Execution
+**Author:** Asif Hussain | **Plan:** {plan_name} | **Orchestrator:** Planning System 4.0 ✅
+
+---
+
+### 📊 Execution Progress
+
+**Overall Progress:** `████████████░░░░░░░░` **60%** 🔄 IN PROGRESS
+
+| # | Phase | Progress | Deliverables | Time |
+|---|-------|----------|--------------|------|
+| 1 | ✅ **Discovery** | `██████████` 100% | 3/3 | 1.2h |
+| 2 | ✅ **Analysis** | `██████████` 100% | 2/2 | 0.8h |
+| 3 | ⏳ **Design** | `██████░░░░` 60% | 1/2 | 0.3h |
+| 4 | ⏸️ **Implementation** | `░░░░░░░░░░` 0% | 0/5 | 0h |
+| 5 | ⏸️ **Validation** | `░░░░░░░░░░` 0% | 0/2 | 0h |
+
+**Next:** Complete design phase → Generate architecture diagrams
+```
+
+**For ADO Operations:**
+```markdown
+## 🛡️🧠 CORTEX ADO Work Item Generation
+**Author:** Asif Hussain | **Feature:** {feature_name} | **Orchestrator:** ADO System ✅
+
+---
+
+### 📊 ADO Generation Progress
+
+**Overall Progress:** `████████████████████` **100%** ✅ COMPLETE
+
+| # | Phase | Progress | Deliverables | Time |
+|---|-------|----------|--------------|------|
+| 1 | ✅ **Feature Analysis** | `██████████` 100% | 1/1 | 0.5h |
+| 2 | ✅ **Story Generation** | `██████████` 100% | 5/5 | 1.2h |
+| 3 | ✅ **Task Breakdown** | `██████████` 100% | 12/12 | 0.8h |
+
+### 🎫 Work Item Summary
+
+| Type | Count | Story Points | Status |
+|------|-------|--------------|--------|
+| **Epic** | 1 | - | ✅ Created |
+| **Feature** | 1 | 21 SP | ✅ Created |
+| **User Story** | 5 | 21 SP | ✅ Created |
+| **Task** | 12 | - | ✅ Created |
+```
+
+**Step 3: Inject Progress Into Response**
+
+The progress table should appear **immediately after the header**, BEFORE any other content.
+
+### Progress Bar Format Rules
+
+**ASCII Characters:**
+- Filled: `█` (U+2588 Full Block)
+- Empty: `░` (U+2591 Light Shade)
+- Partial (optional): `▓` (U+2593 Dark Shade)
+
+**Status Emojis:**
+- Completed: ✅
+- In Progress: ⏳ or 🔄
+- Pending: ⏸️
+- Failed: ❌
+
+**Progress Bar Width:** 10 characters (fixed for table alignment)
+
+**Percentage Calculation:**
+```
+percentage = (completed_tasks / total_tasks) × 100
+filled_blocks = round(percentage / 10)
+empty_blocks = 10 - filled_blocks
+```
+
+### Template References
+
+**Full template definitions:**
+- Planning: `response-templates-v4.yaml` line 1449 (`autonomous_execution_progress`)
+- ADO: `response-templates-v4.yaml` line 1514 (`ado_execution_progress`)
+- Maintenance: `.github/prompts/maintenance/pipeline/final-report-template.prompt.md`
+- Investigation: `.github/prompts/cortex-investigate.prompt.md` line 375
+
+**Helper Methods (if using Python rendering):**
+- `TemplateRenderer.generate_progress_bar(percentage, width=10)`
+- `TemplateRenderer.render_autonomous_progress(orchestrator_result, context)`
+
+### Rendering Decision Tree
+
+```
+User Request
+    ↓
+Intent Router (pattern match)
+    ↓
+Orchestrator Type?
+    ├─ 🛡️ AUTONOMOUS
+    │     ↓
+    │  Has Progress Data?
+    │     ├─ YES → Render progress table (this section)
+    │     └─ NO → Standard response
+    │
+    └─ 📋 GUIDED → Standard response (no progress table)
+```
 
 ---
 

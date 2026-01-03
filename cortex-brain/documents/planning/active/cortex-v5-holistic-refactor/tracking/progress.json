@@ -2,11 +2,11 @@
   "plan_id": "cortex-v5-holistic-refactor",
   "feature_name": "CORTEX v5.0 Holistic Architecture Refactor with Cross-Session Context",
   "created_at": "2026-01-02T00:00:00Z",
-  "updated_at": "2026-01-03T10:53:00Z",
+  "updated_at": "2026-01-03T18:00:00Z",
   "status": "active",
   "progress": {
-    "overall_percent": 48,
-    "current_phase": 6,
+    "overall_percent": 50,
+    "current_phase": "6.4.5",
     "total_phases": 12,
     "phases": [
       {
@@ -88,11 +88,25 @@
       {
         "phase_number": 4,
         "name": "Planning Orchestrator v5",
-        "status": "in_progress",
+        "status": "completed",
         "estimated_hours": 16,
-        "progress_percent": 22,
-        "tasks_completed": 2,
-        "tasks_total": 9
+        "actual_hours": 16,
+        "progress_percent": 100,
+        "completed_at": "2026-01-03T14:15:00Z",
+        "git_commit": "pending",
+        "tasks_completed": 9,
+        "tasks_total": 9,
+        "deliverables": [
+          "src/orchestrators/planning/governance_integrator.py (290 lines)",
+          "src/orchestrators/planning/knowledge_graph_query.py (280 lines)",
+          "src/orchestrators/planning/planning_orchestrator_v5.py (enhanced with governance + knowledge graph)",
+          "cortex-brain/manifests/orchestrators/planning-system-5.0-manifest.yaml (governance + knowledge graph sections)",
+          "tests/orchestrators/planning/test_governance_integrator.py (21 tests, 20 passing)",
+          "tests/orchestrators/planning/test_knowledge_graph_query.py (34 tests, 31 passing)",
+          "Tier 0 governance validation integrated",
+          "Tier 2 knowledge graph queries integrated",
+          "Context discovery enhanced with governance + knowledge data"
+        ]
       },
       {
         "phase_number": 4.5,
@@ -218,14 +232,32 @@
             "notes": "3 duplicate detection tests failing - minor algorithm adjustment needed"
           },
           {
-            "phase_number": 6.4,
+            "phase_number": "6.4",
             "name": "Sanitization v2 Migration",
-            "status": "pending",
+            "status": "deferred",
             "estimated_hours": 16,
-            "progress_percent": 0
+            "progress_percent": 0,
+            "notes": "Deferred pending CORTEX.prompt.md transformation (architectural clarity needed first)"
           },
           {
-            "phase_number": 6.5,
+            "phase_number": "6.4.5",
+            "name": "CORTEX.prompt.md Lean Transformation",
+            "status": "not_started",
+            "estimated_hours": 8,
+            "progress_percent": 0,
+            "priority": "CRITICAL",
+            "notes": "Transform CORTEX.prompt.md into machine-readable format for Master Orchestrator. Establishes Hybrid Ownership Model (AUTONOMOUS vs GUIDED routing protocol).",
+            "deliverables": [
+              ".github/prompts/CORTEX.prompt.md (lean version, ~150 lines)",
+              "cortex-brain/documents/orchestrators-quick-ref.md (externalized orchestrator docs)",
+              "cortex-brain/documents/analysis/cortex-prompt-structure-analysis.md",
+              "cortex-brain/documents/planning/active/cortex-v5-holistic-refactor/artifacts/cortex-prompt-lean-spec.md",
+              "cortex-brain/documents/reports/cortex-prompt-lean-migration-report.md",
+              "Enhanced PatternRouter with prompt parsing capability"
+            ]
+          },
+          {
+            "phase_number": "6.5",
             "name": "Debug v2 Migration",
             "status": "pending",
             "estimated_hours": 24,

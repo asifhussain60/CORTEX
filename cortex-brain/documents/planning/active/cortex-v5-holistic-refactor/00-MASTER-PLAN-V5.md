@@ -35,7 +35,8 @@
 | 6.1 | **ADO v2 Migration** | `██████████` | **4h** | ✅ **Complete** |
 | 6.2 | **Cleanup v2 Migration** | `██████████` | **3.5d** | ✅ **Complete** |
 | 6.3 | **Vacuum v2 Migration** | `██████████` | **5d** | ✅ **Complete** |
-| 6.4 | Sanitization v2 Migration | `█████░░░░░` | 2d + 1.25d (review system) | ⏳ **IN PROGRESS** (50%) |
+| 6.4 | Sanitization v2 Migration | `░░░░░░░░░░` | 2d + 1.25d (review system) | ⏸️ **DEFERRED** (needs holistic review integration) |
+| 6.4.5 | **CORTEX.prompt.md Lean Transformation** | `░░░░░░░░░░` | **1d** | ⏸️ **NEXT PRIORITY** |
 | 6.5 | Debug v2 Migration | `░░░░░░░░░░` | 3d | ⏸️ Pending Approval |
 | 7 | System Integration | `██████████` | 2d | ✅ **COMPLETE** |
 | 8 | Testing & Validation | `░░░░░░░░░░` | 3d | ⏸️ Not Started |
@@ -43,8 +44,10 @@
 | 10 | REFACTOR & Cleanup | `░░░░░░░░░░` | 2d | ⏸️ Not Started |
 
 **Bootstrap Completion:** ~13 days (includes Master Orchestrator + Context Middleware)  
-**Full Completion:** ~40 days  
-**Current Phase:** Phase 7 Complete (System Integration) → Ready for Phase 6.4 (Sanitization v2 Migration)
+**Full Completion:** ~41 days (includes CORTEX.prompt.md transformation)  
+**Current Phase:** Phase 7 Complete (System Integration) → **NEXT: Phase 6.4.5 (CORTEX.prompt.md Lean Transformation)**
+
+**🆕 STRATEGIC PIVOT:** Phase 6.4.5 added to transform CORTEX.prompt.md into pure machine-readable format for Master Orchestrator consumption. This establishes **Hybrid Ownership Model** where AUTONOMOUS orchestrators are fully handed off to Python, while GUIDED orchestrators remain LLM-interpreted. This architectural clarification is critical before continuing orchestrator migrations.
 
 **Checkpoints:**
 - ✅ Phase 1 checkpoint @ commit 90153190: MCP Tool Infrastructure
@@ -3289,6 +3292,378 @@ For each orchestrator wired:
 - [ ] Wiring report generated
 - [ ] Coverage percentage updated
 - [ ] Git checkpoint created with tag `wiring-{orchestrator-id}-v2`
+
+---
+
+### Task 6.4.5: CORTEX.prompt.md Lean Transformation (NEW - NEXT PRIORITY)
+**Duration:** 1 day (8 hours)  
+**Status:** ⏸️ Not Started  
+**Strategic Importance:** 🔴 CRITICAL - Architectural Clarity Before Further Migrations
+
+**🎯 Goal:** Transform CORTEX.prompt.md from 850-line interpretive document into ~150-line machine-readable routing configuration that Master Orchestrator can consume directly. Establish **Hybrid Ownership Model** where routing logic lives in code, not prompt engineering.
+
+**Background:**
+Current CORTEX.prompt.md requires LLM interpretation of:
+- Intent routing logic (pattern matching described in prose)
+- Orchestrator behavior documentation (how orchestrators work)
+- Response format specifications (template selection rules)
+- Brain protection rules (SKULL enforcement)
+- Cross-cutting concerns (Vision API, continuation detection, etc.)
+
+This creates brittleness: routing depends on LLM correctly interpreting instructions rather than executing deterministic logic.
+
+**Target Architecture: Hybrid Ownership Model**
+```
+User Request
+   ↓
+GitHub Copilot (THIN LAYER - pattern detection only)
+   ↓ (reads lean CORTEX.prompt.md - pure routing table)
+   ↓
+   ├─ 🛡️ AUTONOMOUS Orchestrators
+   │    ↓
+   │    Master Orchestrator.handle_request(input)
+   │    ↓
+   │    Python execution (zero LLM interpretation)
+   │    ↓
+   │    ResponseRenderer displays progress
+   │
+   └─ 📋 GUIDED Orchestrators
+        ↓
+        Copilot loads manifest YAML
+        ↓
+        Copilot executes manifest instructions
+        ↓
+        Standard response
+```
+
+#### Sub-Task 6.4.5.1: Analyze Current CORTEX.prompt.md Structure (2h)
+
+**Files to Read:**
+- `.github/prompts/CORTEX.prompt.md` (current 850 lines)
+- `cortex-brain/config/master-orchestrator.yaml` (routing config)
+- `cortex-brain/response-templates-v4.yaml` (response formats)
+- `cortex-brain/brain-protection-rules.yaml` (SKULL rules)
+
+**Analysis Deliverable:** `cortex-brain/documents/analysis/cortex-prompt-structure-analysis.md`
+
+**Sections:**
+1. **Content Categorization**
+   - Routing logic (what stays in prompt)
+   - Orchestrator documentation (externalize)
+   - Response specifications (externalize)
+   - Brain protection (externalize)
+   - Examples and tutorials (externalize)
+
+2. **Machine-Readable vs Interpretive**
+   - Which sections are pure data (Intent Router table)
+   - Which sections require LLM reasoning (handoff protocols)
+   - Which sections are documentation (move to separate docs)
+
+3. **Externalization Map**
+   - Target location for each section
+   - References to maintain in lean prompt
+   - New files to create
+
+#### Sub-Task 6.4.5.2: Create Lean CORTEX.prompt.md Specification (2h)
+
+**Target Structure (~150 lines):**
+```markdown
+# 🎯 CORTEX Universal Entry Point
+Version: 5.0 | Author: Asif Hussain
+
+---
+
+## 🤖 Intent Router (Machine-Readable)
+
+| Pattern | Orchestrator | Type | Config | Priority |
+|---------|--------------|------|--------|----------|
+| `^(plan|create a plan).*$` | planning_v5 | 🛡️ AUTONOMOUS | master-orchestrator.yaml:L20 | 10 |
+| `^(ado|ado story).*$` | ado_v2 | 🛡️ AUTONOMOUS | master-orchestrator.yaml:L45 | 30 |
+| `^(vacuum|deep clean).*$` | vacuum_v2 | 🛡️ AUTONOMOUS | master-orchestrator.yaml:L56 | 56 |
+| `^(cleanup|cleanup cache).*$` | cleanup_v2 | 🛡️ AUTONOMOUS | master-orchestrator.yaml:L55 | 55 |
+| `^(tdd|start tdd).*$` | tdd_mastery | 📋 GUIDED | tdd-orchestrator-manifest.yaml | 20 |
+| `^(sanitize|make generic).*$` | sanitization | 📋 GUIDED | sanitization-manifest.yaml | 40 |
+| `^(debug|fix bug).*$` | debug | 📋 GUIDED | debug-manifest.yaml | 50 |
+| `^(refine|improve).*$` | refinement | 📋 GUIDED | refinement-manifest.yaml | 60 |
+| `introduce yourself|hello` | introduction | TEMPLATE | response-templates-v4.yaml:L1 | - |
+| `help|show commands` | help | TEMPLATE | response-templates-v4.yaml:L50 | - |
+
+**Routing Rules:**
+1. Exact pattern match → route immediately (confidence: 1.0)
+2. No match → LLM fallback classifier (confidence: 0.5-0.8)
+3. Multiple matches → highest priority wins
+4. Unknown intent → ask for clarification
+
+---
+
+## 🛡️ Routing Protocol: AUTONOMOUS Orchestrators
+
+**Trigger Patterns:** Commands with 🛡️ marker in Intent Router
+
+**Execution Flow:**
+1. **Detect** pattern from Intent Router table
+2. **Load** config from `cortex-brain/config/master-orchestrator.yaml`
+3. **Invoke** `MasterOrchestrator.handle_request(user_input, context)`
+4. **Display** progress using `ResponseRenderer` (see response-templates-v4.yaml)
+5. **STOP** - Python owns execution, Copilot only renders progress
+
+**Hand-Off Confirmation:**
+- Response MUST include header: `## 🛡️🧠 CORTEX {Orchestrator Name}`
+- Response MUST include progress table (see Post-Orchestrator Progress Rendering)
+- Response MUST NOT include implementation details (orchestrator handles it)
+
+**Example:**
+```
+User: "plan user authentication"
+   ↓
+Copilot: Detects `^(plan|create a plan).*$` → Matches planning_v5 (AUTONOMOUS)
+   ↓
+Copilot: Invokes MasterOrchestrator.handle_request("plan user authentication")
+   ↓
+Copilot: Displays progress header + table
+   ↓
+Copilot: STOPS (Planning Orchestrator v5 executes autonomously)
+```
+
+**Reference:** Master Orchestrator implementation in `src/orchestrators/master_orchestrator.py`
+
+---
+
+## 📋 Routing Protocol: GUIDED Orchestrators
+
+**Trigger Patterns:** Commands with 📋 marker in Intent Router
+
+**Execution Flow:**
+1. **Detect** pattern from Intent Router table
+2. **Load** manifest from `cortex-brain/manifests/orchestrators/{manifest}.yaml`
+3. **Execute** instructions as specified in manifest (Copilot interprets and executes)
+4. **Return** standard response (no progress table)
+
+**Execution Confirmation:**
+- Response MUST include header: `## 🧠 CORTEX {Orchestrator Name}`
+- Response includes work performed based on manifest instructions
+- Copilot interprets manifest phases and executes using available tools
+
+**Example:**
+```
+User: "tdd my_module.py"
+   ↓
+Copilot: Detects `^(tdd|start tdd).*$` → Matches tdd_mastery (GUIDED)
+   ↓
+Copilot: Loads cortex-brain/manifests/orchestrators/tdd-orchestrator-manifest.yaml
+   ↓
+Copilot: Reads Phase 1 (RED): "Run tests and verify failures"
+   ↓
+Copilot: Executes using runTests tool
+   ↓
+Copilot: Returns results with next steps
+```
+
+**Reference:** Manifest format in `cortex-brain/manifests/orchestrators/README.md`
+
+---
+
+## 📊 Response Templates
+
+**Location:** `cortex-brain/response-templates-v4.yaml`
+
+**Key Templates:**
+- `autonomous_execution_progress` - For 🛡️ AUTONOMOUS orchestrators
+- `guided_orchestrator_response` - For 📋 GUIDED orchestrators
+- `introduction` - For `introduce yourself` command
+- `help` - For `help` command
+
+**Usage:** ResponseRenderer automatically selects template based on orchestrator type
+
+---
+
+## 🛡️ Brain Protection (SKULL Rules)
+
+**Location:** `cortex-brain/brain-protection-rules.yaml` (61 rules)
+
+**Enforced Rules:**
+- TDD_ENFORCEMENT (RED→GREEN→REFACTOR mandatory)
+- HOLISTIC_DISCOVERY (search before create)
+- GIT_ISOLATION (CORTEX code never in user repos)
+- PLANNING_ISOLATION (planning commands create plans ONLY)
+- HAND_OFF_PROTOCOL (AUTONOMOUS orchestrators execute independently)
+
+**Enforcement:** Programmatic validation in BaseOrchestrator v4.1 + Master Orchestrator
+
+---
+
+## 📚 Additional Resources
+
+**Orchestrator Documentation:** `cortex-brain/documents/orchestrators-quick-ref.md`  
+**Architecture Overview:** `docs/architecture/master-orchestrator.md`  
+**Migration Guides:** `cortex-brain/documents/planning/active/*/00-master-plan.md`  
+**Knowledge Graph:** `cortex-brain/tier2/knowledge-graph.yaml`
+
+---
+
+**Anti-Bloat:** This file MUST stay under 200 lines. All implementation details externalized.
+```
+
+**Deliverable:** `cortex-brain/documents/planning/active/cortex-v5-holistic-refactor/artifacts/cortex-prompt-lean-spec.md`
+
+#### Sub-Task 6.4.5.3: Create Orchestrators Quick Reference (2h)
+
+**New File:** `cortex-brain/documents/orchestrators-quick-ref.md`
+
+**Purpose:** Externalized documentation of orchestrator behavior (removed from CORTEX.prompt.md)
+
+**Structure:**
+```markdown
+# CORTEX Orchestrators Quick Reference
+
+## 🛡️ AUTONOMOUS Orchestrators (Python-Executed)
+
+### Planning System v5
+- **Patterns:** `plan`, `create a plan`, `make a plan`
+- **Config:** `master-orchestrator.yaml:L20`
+- **Behavior:** Creates planning/active/{PLAN_NAME}/ with 4 subfolders
+- **Output:** progress-tracker.json + 00-master-plan.md
+- **State:** Tracked in PlanningStateDB
+
+### ADO Operations v2
+- **Patterns:** `ado`, `ado story`, `ado feature`
+- **Modes:** Wizard (interactive), Auto (quick generation)
+- **Config:** `master-orchestrator.yaml:L45`
+- **Behavior:** 6-phase work item generation
+- **Output:** Azure DevOps work items (Epic/Feature/Story/Task)
+
+### Vacuum v2
+- **Patterns:** `vacuum`, `deep clean`, `organize files`
+- **Config:** `master-orchestrator.yaml:L56`
+- **Behavior:** Filesystem cleanup with duplicate detection
+- **Safety:** 5-level risk classification, rollback capable
+
+### Cleanup v2
+- **Patterns:** `cleanup [cache|logs|artifacts|full|git]`
+- **Config:** `master-orchestrator.yaml:L55`
+- **Modes:** Selective cleanup with safe execution order
+- **Safety:** Preserves CORTEX brain tiers, manifests, database
+
+## 📋 GUIDED Orchestrators (Manifest-Driven)
+
+### TDD Mastery
+- **Patterns:** `tdd`, `start tdd`, `run tests`
+- **Manifest:** `tdd-orchestrator-manifest.yaml`
+- **Behavior:** RED→GREEN→REFACTOR cycle
+- **Enforcement:** SKULL rule TDD_ENFORCEMENT
+
+### Debug Orchestrator
+- **Patterns:** `debug`, `fix bug`, `troubleshoot`
+- **Manifest:** `debug-orchestrator-manifest.yaml`
+- **Behavior:** Root cause analysis + marker injection
+
+### Sanitization
+- **Patterns:** `sanitize`, `make generic`, `anonymize`
+- **Manifest:** `sanitization-manifest.yaml`
+- **Behavior:** 5-phase content sanitization
+
+### Refinement
+- **Patterns:** `refine`, `improve`, `optimize`
+- **Manifest:** `refinement-manifest.yaml`
+- **Behavior:** 7-phase code improvement
+
+---
+
+For detailed implementation, see individual orchestrator source code in `src/orchestrators/`.
+```
+
+**Deliverable:** `cortex-brain/documents/orchestrators-quick-ref.md`
+
+#### Sub-Task 6.4.5.4: Implement Lean CORTEX.prompt.md (2h)
+
+**Actions:**
+1. **Backup current version:**
+   ```bash
+   cp .github/prompts/CORTEX.prompt.md .github/prompts/CORTEX.prompt.md.v4.backup
+   ```
+
+2. **Replace with lean version:**
+   - Use specification from Sub-Task 6.4.5.2
+   - Strip all implementation details
+   - Keep only routing table + protocols + references
+
+3. **Verify line count:**
+   ```bash
+   wc -l .github/prompts/CORTEX.prompt.md
+   # Expected: <200 lines
+   ```
+
+4. **Create migration summary:**
+   - Document what was externalized and where
+   - List all new/updated files
+   - Explain routing protocol changes
+
+**Deliverable:** 
+- `.github/prompts/CORTEX.prompt.md` (lean version, ~150 lines)
+- `cortex-brain/documents/reports/cortex-prompt-lean-migration-report.md`
+
+#### Sub-Task 6.4.5.5: Update Master Orchestrator Integration (2h)
+
+**Enhancement:** Make Master Orchestrator read lean prompt directly for pattern matching
+
+**Files to Update:**
+1. **`src/orchestrators/pattern_router.py`:**
+   - Add method: `parse_cortex_prompt_md(prompt_path: str) -> List[RoutePattern]`
+   - Extract Intent Router table from Markdown
+   - Convert to RoutePattern objects
+   - Merge with YAML config patterns (YAML takes precedence)
+
+2. **`src/orchestrators/master_orchestrator.py`:**
+   - Add initialization parameter: `prompt_path: str = ".github/prompts/CORTEX.prompt.md"`
+   - Load patterns from both prompt and YAML config
+   - Log pattern sources for debugging
+
+3. **Tests:**
+   - `tests/orchestrators/test_pattern_router_prompt_parsing.py`
+   - Test Markdown table parsing
+   - Test pattern merging
+   - Test precedence rules
+
+**Validation:**
+```python
+# Test that patterns from CORTEX.prompt.md are loaded
+router = PatternRouter(
+    config_path="cortex-brain/config/master-orchestrator.yaml",
+    prompt_path=".github/prompts/CORTEX.prompt.md"
+)
+
+patterns = router.get_all_patterns()
+assert any(p.pattern == "^(plan|create a plan).*$" for p in patterns)
+assert any(p.orchestrator_id == "planning_v5" for p in patterns)
+```
+
+**Deliverable:** Enhanced PatternRouter that reads lean prompt
+
+---
+
+**Phase 6.4.5 Success Criteria:**
+- ✅ CORTEX.prompt.md reduced from 850 to <200 lines
+- ✅ All orchestrator docs externalized to `orchestrators-quick-ref.md`
+- ✅ Intent Router table is machine-readable (strict format)
+- ✅ Master Orchestrator can parse prompt directly
+- ✅ All existing routing continues to work (zero functional regression)
+- ✅ Pattern matching deterministic (no LLM interpretation for routing)
+- ✅ Hybrid Ownership Model documented and validated
+
+**Benefits:**
+1. **Clarity:** Routing logic in code, not prose
+2. **Testability:** Pattern matching unit-testable
+3. **Maintainability:** Single table to update for new orchestrators
+4. **Performance:** No token budget concerns
+5. **Predictability:** Deterministic routing (pattern match → orchestrator)
+
+**Migration Risk Assessment:**
+- **Risk Level:** LOW
+- **Rollback:** Restore `.github/prompts/CORTEX.prompt.md.v4.backup`
+- **Testing:** Validate all 10 orchestrator routing patterns still work
+- **User Impact:** ZERO (users see same behavior, better performance)
+
+---
 
 ### Task 6.5: TDD Orchestrator v2 Migration (NEW - APPROVED)
 **Duration:** 4 days  
