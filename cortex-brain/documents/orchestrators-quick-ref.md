@@ -12,6 +12,16 @@ CORTEX uses **10 orchestrators** organized into **2 categories**:
 - **🛡️ AUTONOMOUS (5):** Python-implemented, self-executing with progress tracking
 - **📋 GUIDED (5):** Manifest-driven, Copilot interprets and executes
 
+### 🛡️ Shield Icon Meaning
+
+When you see the **🛡️ shield icon**:
+- Master Orchestrator has **handed off execution** to Python
+- GitHub Copilot's role is **complete** (routing only)
+- Progress updates come from **autonomous Python orchestrator**
+- User should expect **different response format** (progress tracking)
+
+**Visual Indicator:** Response headers for autonomous orchestrators use `## 🛡️🧠 CORTEX {Name}` format.
+
 ---
 
 ## 🛡️ AUTONOMOUS Orchestrators

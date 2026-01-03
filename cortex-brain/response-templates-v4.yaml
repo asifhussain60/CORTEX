@@ -257,17 +257,25 @@ composable_blocks:
     
     cortex_header_shield:
       block_id: "BLK-STD-002"
-      description: "CORTEX header with shield icon for orchestrator-engaged mode"
+      description: "CORTEX header with shield icon for orchestrator-engaged mode (autonomous hand-off)"
       category: "mandatory"
       condition: "orchestrator_engaged == true"
       format: |
         ## 🛡️🧠 CORTEX {{title}}
+        
+        *🛡️ Autonomous Mode - Master Orchestrator Hand-Off Complete*
+        
         **Author:** Asif Hussain | **{{context_label}}:** {{context_value}} | **Orchestrator:** {{orchestrator_name}} ✅
       variables:
         - title: "Response title"
         - context_label: "Plan, Feature, Operation, etc."
         - context_value: "Plan name, feature name, etc."
         - orchestrator_name: "Planning System 4.0, ADO System, TDD Mastery, etc."
+      usage_note: |
+        The 🛡️ shield icon indicates GitHub Copilot has successfully handed off
+        execution to a Python-based autonomous orchestrator. This is a visual
+        confirmation that the routing was successful and the user should expect
+        progress updates from the Python implementation, not from GitHub Copilot.
     
     progress_tracker_standard:
       block_id: "BLK-STD-003"
@@ -355,6 +363,30 @@ composable_blocks:
         - filled: "Filled portion (█ repeated)"
         - empty: "Empty portion (░ repeated)"
         - percentage: "Percentage complete"
+    
+    hand_off_confirmation:
+      block_id: "BLK-STD-008"
+      description: "Hand-off confirmation block for autonomous orchestrators"
+      category: "mandatory"
+      condition: "orchestrator_engaged == true AND hand_off_initiated == true"
+      format: |
+        **✅ Routing Confirmed:**
+        - Pattern: `{{pattern_matched}}`
+        - Orchestrator: {{orchestrator_name}}
+        - Mode: {{orchestrator_mode}}
+        
+        ---
+        
+        **⚠️ HAND-OFF COMPLETE** - {{orchestrator_name}} is now executing autonomously.
+        Progress updates will appear below as phases complete.
+      variables:
+        - pattern_matched: "Regex pattern that triggered routing"
+        - orchestrator_name: "Name of orchestrator taking control"
+        - orchestrator_mode: "Autonomous, Wizard, Auto, Selective"
+      usage_note: |
+        This block appears immediately after the cortex_header_shield to confirm
+        successful routing and set user expectations. It signals that GitHub Copilot
+        has completed its role and the Python orchestrator is now in control.
   
   # ===== Planning Orchestrator Blocks =====
   

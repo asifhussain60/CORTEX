@@ -19,13 +19,20 @@
 
 All command routing is defined in `CORTEX.prompt.md`. Key orchestrators:
 
+**Legend:**
+- 🛡️ **AUTONOMOUS** = Hand-off to Python (GitHub Copilot stops after routing)
+- 📋 **GUIDED** = GitHub Copilot executes using manifest instructions
+
 | Intent Pattern | Route To | Type |
 |----------------|----------|------|
 | `introduce yourself`, `intro`, `hello`, `hi cortex` | Introduction → ASCII banner + capabilities | — |
 | `plan`, `create a plan`, `make a plan` | Planning System → folder with 4 subfolders | 🛡️ AUTONOMOUS |
 | `tdd`, `start tdd`, `run tests` | TDD Orchestrator → RED→GREEN→REFACTOR | 📋 GUIDED |
 | `ado`, `ado story`, `ado feature` | ADO Operations → work items | 🛡️ AUTONOMOUS |
-| `sanitize`, `make generic` | Sanitization → 5-phase cleanup | 📋 GUIDED |
+| `vacuum`, `deep clean` | Vacuum → Deep filesystem cleanup | 🛡️ AUTONOMOUS |
+| `cleanup`, `cleanup cache` | Cleanup → Cache/log removal | 🛡️ AUTONOMOUS |
+| `investigate`, `find root cause` | Investigation → Root cause analysis | 🛡️ AUTONOMOUS |
+| `sanitize`, `make generic` | Sanitization → PII/secret removal | �️ AUTONOMOUS |
 | `maintenance`, `health check` | Maintenance → 12-phase pipeline | 📋 GUIDED |
 | `refine`, `improve` | Refinement → 7-phase improvement | 📋 GUIDED |
 | **Image attachments** | **Vision API → Auto-analysis (no prompt needed)** | Auto |
@@ -52,16 +59,40 @@ When you see 🛡️ in Intent Router, these orchestrators **MUST take over comp
 |--------------|---------|----------|--------|
 | **Planning** | `plan`, `create a plan` | `autonomous_execution_progress` | `## 🛡️🧠 CORTEX Plan Execution` |
 | **ADO** | `ado story`, `ado feature` | `ado_execution_progress` | `## 🛡️🧠 CORTEX ADO Work Item Generation` |
+| **Vacuum** | `vacuum`, `deep clean` | `autonomous_execution_progress` | `## 🛡️🧠 CORTEX Vacuum Execution` |
+| **Cleanup** | `cleanup`, `cleanup cache` | `autonomous_execution_progress` | `## 🛡️🧠 CORTEX Cleanup Execution` |
+| **Investigation** | `investigate`, `find root cause` | `autonomous_execution_progress` | `## 🛡️🧠 CORTEX Investigation` |
+| **Sanitization** | `sanitize`, `anonymize` | `autonomous_execution_progress` | `## 🛡️🧠 CORTEX Sanitization` |
+
+**🛡️ Shield Icon Meaning:** Autonomous orchestrator is taking control - GitHub Copilot hands off execution to Python.
 
 **Hand-Off Protocol:**
 - ❌ Do NOT read manifest and execute yourself
 - ❌ Do NOT provide guidance based on manifest
 - ❌ Do NOT continue after loading orchestrator
 - ✅ Load manifest reference ONLY
-- ✅ Use specified response template
+- ✅ Use specified response template with 🛡️ header
 - ✅ STOP immediately after hand-off header
+- ✅ Display **brief** hand-off confirmation message
 
 **Visual Confirmation:** 🛡️ in response header = Orchestrator correctly engaged
+
+**Hand-Off Confirmation Format:**
+```markdown
+## 🛡️🧠 CORTEX {Orchestrator Name}
+
+*Autonomous Mode Engaged - Master Orchestrator Hand-Off Complete*
+
+**✅ Routing Confirmed:**
+- Pattern: `{matched_pattern}`
+- Orchestrator: {name}
+- Mode: Autonomous
+
+---
+
+**⚠️ HAND-OFF COMPLETE** - Python orchestrator is now executing.  
+Progress updates will appear below as phases complete.
+```
 
 ### ⛔ MANDATORY Plan Content
 
