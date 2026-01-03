@@ -37,37 +37,57 @@ button, a, input, select, textarea, [role="button"] {
     <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        /* Compact Tetris Override */
+        .tetris-panel {
+            padding: 0 2.5rem;
+            width: 70%;
+            margin: 0 auto;
+        }
+        
+        .glass-card-display .token-metrics-tetris {
+            margin-top: var(--spacing-md, 1rem);
+            gap: 0.5rem;
+        }
+        
+        .glass-card-display .token-metric-tile {
+            padding: 1.875rem clamp(0.5rem, 2cqi, 0.75rem);
+            gap: clamp(0.4rem, 1.5cqi, 0.6rem);
+            flex-direction: row;
+            text-align: left;
+        }
+        
+        .glass-card-display .token-metric-tile i {
+            font-size: clamp(1.25rem, 4cqi + 0.25rem, 1.75rem);
+            width: clamp(32px, 7cqi, 48px);
+            height: clamp(32px, 7cqi, 48px);
+            flex-shrink: 0;
+        }
+        
+        .glass-card-display .token-metric-tile .metric-value {
+            font-size: clamp(1.125rem, 3.5cqi + 0.5rem, 1.5rem);
+            font-weight: 600;
+            line-height: 1.2;
+        }
+        
+        .glass-card-display .token-metric-tile .metric-label {
+            font-size: clamp(0.7rem, 2cqi + 0.2rem, 0.875rem);
+        }
+        
+        .tetris-panel {
+            background: var(--glass-bg, rgba(26, 31, 58, 0.7));
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
+            border-radius: var(--radius-lg, 16px);
+            padding: var(--spacing-lg, 1.5rem);
+            box-shadow: var(--shadow, 0 8px 32px rgba(0, 0, 0, 0.37));
+        }
+    </style>
 </head>
 <body>
     <!-- Glass Header Navigation -->
-    <header class="glass-header">
-<style>
-/* Mobile font optimization */
-html {
-    -webkit-text-size-adjust: 100%;
-    -moz-text-size-adjust: 100%;
-    text-size-adjust: 100%;
-}
-</style>
-<style>
-/* Touch target optimization */
-a, button, [role="button"] {
-    min-width: 44px;
-    min-height: 44px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-</style>
-<style>
-/* Mobile touch optimization */
-button, a, input, select, textarea, [role="button"] {
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
-}
-</style>
-        <div class="header-content">
+    <header class="glass-header">`n        <div class="header-content">
             <nav class="header-nav" mobile-nav-optimized>
                 <a href="../index.html" class="nav-link" mobile-nav-optimized>
                     <i class="fas fa-home pulse-glow-glass--fast"></i>
@@ -86,30 +106,51 @@ button, a, input, select, textarea, [role="button"] {
                 <p class="page-subtitle">97% Input Reduction · $8.6K Annual Savings · 4-Tier Brain Architecture</p>
             </div>
             
-            <div class="metadata-grid">
-                <div class="metadata-item">
-                    <i class="fas fa-compress-arrows-alt pulse-glow-glass--fast"></i>
-                    <span>97.2% Reduction</span>
-                </div>
-                <div class="metadata-item">
-                    <i class="fas fa-dollar-sign pulse-glow-glass--fast"></i>
-                    <span>$8,636 Savings</span>
-                </div>
-                <div class="metadata-item">
-                    <i class="fas fa-brain pulse-glow-glass--fast"></i>
-                    <span>4-Tier Architecture</span>
-                </div>
-                <div class="metadata-item">
-                    <i class="fas fa-tachometer-alt pulse-glow-glass--fast"></i>
-                    <span>Sub-100ms Access</span>
-                </div>
-                <div class="metadata-item">
-                    <i class="fas fa-chart-bar pulse-glow-glass--fast"></i>
-                    <span>Score: 25</span>
-                </div>
-                <div class="metadata-item">
-                    <i class="fas fa-calendar-alt pulse-glow-glass--fast"></i>
-                    <span>Updated: Jan 2026</span>
+            <!-- Tetris-style metric tiles -->
+            <div class="tetris-panel">
+                <div class="token-metrics-tetris">
+                    <a href="#reduction" class="token-metric-tile tile-reduction">
+                        <i class="fas fa-compress-arrows-alt pulse-glow-glass--fast"></i>
+                        <div>
+                            <span class="metric-value">97.2%</span>
+                            <span class="metric-label">Reduction</span>
+                        </div>
+                    </a>
+                    <a href="#savings" class="token-metric-tile tile-savings">
+                        <i class="fas fa-dollar-sign pulse-glow-glass--fast"></i>
+                        <div>
+                            <span class="metric-value">$8,636</span>
+                            <span class="metric-label">Savings</span>
+                        </div>
+                    </a>
+                    <a href="#architecture" class="token-metric-tile tile-architecture">
+                        <i class="fas fa-brain pulse-glow-glass--fast"></i>
+                        <div>
+                            <span class="metric-value">4-Tier</span>
+                            <span class="metric-label">Architecture</span>
+                        </div>
+                    </a>
+                    <a href="#access" class="token-metric-tile tile-access">
+                        <i class="fas fa-tachometer-alt pulse-glow-glass--fast"></i>
+                        <div>
+                            <span class="metric-value">Sub-100ms</span>
+                            <span class="metric-label">Access</span>
+                        </div>
+                    </a>
+                    <a href="#score" class="token-metric-tile tile-score">
+                        <i class="fas fa-chart-bar pulse-glow-glass--fast"></i>
+                        <div>
+                            <span class="metric-value">25</span>
+                            <span class="metric-label">Score</span>
+                        </div>
+                    </a>
+                    <a href="#updated" class="token-metric-tile tile-updated">
+                        <i class="fas fa-calendar-alt pulse-glow-glass--fast"></i>
+                        <div>
+                            <span class="metric-value">Jan 2026</span>
+                            <span class="metric-label">Updated</span>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
@@ -475,56 +516,38 @@ sequenceDiagram
             <div class="reference-grid">
                 <div class="reference-section">
                     <h3>Tier 1 Optimizer</h3>
-                    <div class="capability-tiles">
-    <div class="glass-card">
-        <div class="card-body"><code>src/tier0-3/tier1_optimizer.py</code></div>
-    </div>
-    <div class="glass-card">
-        <div class="card-body">ML-based context relevance scoring</div>
-    </div>
-    <div class="glass-card">
-        <div class="card-body">FIFO buffer management (70 conversations)</div>
-    </div>
-    <div class="glass-card">
-        <div class="card-body">Sub-100ms retrieval performance</div>
-    </div>
-</div>
+                    <div class="reference-item">
+                        <code>src/tier0-3/tier1_optimizer.py</code>
+                    </div>
+                    <ul class="feature-list">
+                        <li>ML-based context relevance scoring</li>
+                        <li>FIFO buffer management (70 conversations)</li>
+                        <li>Sub-100ms retrieval performance</li>
+                    </ul>
                 </div>
                 
                 <div class="reference-section">
                     <h3>Knowledge Graph</h3>
-                    <div class="capability-tiles">
-    <div class="glass-card">
-        <div class="card-body"><code>cortex-brain/tier2/knowledge-graph.yaml</code></div>
-    </div>
-    <div class="glass-card">
-        <div class="card-body">Semantic relationship storage</div>
-    </div>
-    <div class="glass-card">
-        <div class="card-body">Pattern learning and inference</div>
-    </div>
-    <div class="glass-card">
-        <div class="card-body">Continuous graph enrichment</div>
-    </div>
-</div>
+                    <div class="reference-item">
+                        <code>cortex-brain/tier2/knowledge-graph.yaml</code>
+                    </div>
+                    <ul class="feature-list">
+                        <li>Semantic relationship storage</li>
+                        <li>Pattern learning and inference</li>
+                        <li>Continuous graph enrichment</li>
+                    </ul>
                 </div>
                 
                 <div class="reference-section">
                     <h3>Cross-Session Middleware</h3>
-                    <div class="capability-tiles">
-    <div class="glass-card">
-        <div class="card-body"><code>src/operations/utilities/vision_context_middleware.py</code></div>
-    </div>
-    <div class="glass-card">
-        <div class="card-body">Session metadata (200 tokens vs 50K)</div>
-    </div>
-    <div class="glass-card">
-        <div class="card-body">99.6% efficiency for continuation</div>
-    </div>
-    <div class="glass-card">
-        <div class="card-body">Automatic orchestrator routing</div>
-    </div>
-</div>
+                    <div class="reference-item">
+                        <code>src/operations/utilities/vision_context_middleware.py</code>
+                    </div>
+                    <ul class="feature-list">
+                        <li>Session metadata (200 tokens vs 50K)</li>
+                        <li>99.6% efficiency for continuation</li>
+                        <li>Automatic orchestrator routing</li>
+                    </ul>
                 </div>
                 
                 <div class="reference-section">

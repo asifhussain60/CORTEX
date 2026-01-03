@@ -1,0 +1,125 @@
+{
+  "plan_id": "glassmorphism-css-standardization",
+  "created": "2026-01-03T00:00:00Z",
+  "status": "active",
+  "overall_progress": 10,
+  "phases": [
+    {
+      "phase_number": 1,
+      "name": "Discovery & Documentation",
+      "status": "in_progress",
+      "progress": 20,
+      "estimated_hours": 2,
+      "actual_hours": 0.5,
+      "tasks_completed": 1,
+      "tasks_total": 5
+    },
+    {
+      "phase_number": 2,
+      "name": "Design Token Extraction",
+      "status": "not_started",
+      "progress": 0,
+      "estimated_hours": 3,
+      "actual_hours": 0,
+      "tasks_completed": 0,
+      "tasks_total": 6
+    },
+    {
+      "phase_number": 3,
+      "name": "Named Panel System Creation",
+      "status": "not_started",
+      "progress": 0,
+      "estimated_hours": 4,
+      "actual_hours": 0,
+      "tasks_completed": 0,
+      "tasks_total": 8
+    },
+    {
+      "phase_number": 4,
+      "name": "CSS Consolidation",
+      "status": "not_started",
+      "progress": 0,
+      "estimated_hours": 5,
+      "actual_hours": 0,
+      "tasks_completed": 0,
+      "tasks_total": 7
+    },
+    {
+      "phase_number": 5,
+      "name": "CORTEX Integration",
+      "status": "not_started",
+      "progress": 0,
+      "estimated_hours": 3,
+      "actual_hours": 0,
+      "tasks_completed": 0,
+      "tasks_total": 6
+    },
+    {
+      "phase_number": 6,
+      "name": "GitHub Pages Optimization",
+      "status": "not_started",
+      "progress": 0,
+      "estimated_hours": 3,
+      "actual_hours": 0,
+      "tasks_completed": 0,
+      "tasks_total": 7
+    },
+    {
+      "phase_number": 7,
+      "name": "Documentation & Style Guide",
+      "status": "not_started",
+      "progress": 0,
+      "estimated_hours": 2,
+      "actual_hours": 0,
+      "tasks_completed": 0,
+      "tasks_total": 6
+    },
+    {
+      "phase_number": 8,
+      "name": "Testing & Validation",
+      "status": "not_started",
+      "progress": 0,
+      "estimated_hours": 3,
+      "actual_hours": 0,
+      "tasks_completed": 0,
+      "tasks_total": 7
+    },
+    {
+      "phase_number": 9,
+      "name": "Migration & Deployment",
+      "status": "not_started",
+      "progress": 0,
+      "estimated_hours": 4,
+      "actual_hours": 0,
+      "tasks_completed": 0,
+      "tasks_total": 7
+    },
+    {
+      "phase_number": 10,
+      "name": "REFACTOR & Cleanup",
+      "status": "not_started",
+      "progress": 0,
+      "estimated_hours": 2,
+      "actual_hours": 0,
+      "tasks_completed": 0,
+      "tasks_total": 7
+    }
+  ],
+  "metrics": {
+    "total_estimated_hours": 31,
+    "total_actual_hours": 0.5,
+    "css_files_before": 24,
+    "css_files_target": 7,
+    "panel_taxonomy_count": 10,
+    "completion_target": "2026-01-07"
+  },
+  "vision_context": {
+    "images_analyzed": 3,
+    "panel_styles_identified": [
+      "Tetris (metrics grid)",
+      "Intro (hero description)",
+      "Compact Cards (horizontal row)",
+      "Grid Cards (detailed grid)"
+    ]
+  }
+}

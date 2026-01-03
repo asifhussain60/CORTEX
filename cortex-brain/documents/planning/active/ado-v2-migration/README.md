@@ -25,7 +25,7 @@ Migration of ADO Orchestrator from hybrid execution (v1) to pure autonomous arch
 
 ```
 ado-v2-migration/
-├── 00-master-plan.md          # Complete migration plan (6 phases)
+├── 00-ado-v2.md          # Complete migration plan (6 phases)
 ├── README.md                   # This file
 ├── context/                    # Analysis artifacts
 │   ├── ado-v1-architecture.md
@@ -80,7 +80,7 @@ ado interactive payment system
 
 ## Related Documents
 
-- Parent Plan: `cortex-brain/documents/planning/active/cortex-v5-holistic-refactor/00-MASTER-PLAN-V5.md`
+- Parent Plan: `cortex-brain/documents/planning/active/cortex-v5-holistic-refactor/00-cortex-v5.md`
 - Phase 5.1a Report: `cortex-v5-holistic-refactor/reports/phase-5-1a-completion.md`
 - ADO v1 Implementation: `src/orchestrators/ado/ado_orchestrator.py`
 - Conversational Wizard: `src/orchestrators/ado/ado_conversational_wizard.py`

@@ -304,6 +304,43 @@ class PlanningOrchestratorV5(BaseOrchestratorV4_1):
         
         return text or 'untitled-plan'
     
+    def _generate_master_plan_filename(self, feature_name: str) -> str:
+        """
+        Generate meaningful master plan filename.
+        
+        Args:
+            feature_name: Full feature name (kebab-case)
+        
+        Returns:
+            Master plan filename (00-{short-name}.md, <=25 chars total)
+        
+        Example:
+            feature_name="glassmorphism-css-standardization"
+            returns="00-glassmorphism.md" (17 chars)
+        """
+        # Extract meaningful short name (max 22 chars to fit "00-" prefix + ".md" suffix)
+        max_name_length = 22 - 3 - 3  # 22 total - "00-" - ".md" = 16 chars
+        
+        # Split on hyphens and take meaningful parts
+        parts = feature_name.split('-')
+        
+        # Strategy: Take first significant word + version/type suffix if exists
+        short_name = parts[0]
+        
+        # Check for version/type indicators in remaining parts
+        for part in parts[1:]:
+            if part in ['v1', 'v2', 'v3', 'v4', 'v5', 'migration', 'refactor', 'system']:
+                # Add significant suffix if it fits
+                if len(short_name + '-' + part) <= max_name_length:
+                    short_name = f"{short_name}-{part}"
+                break
+        
+        # Truncate if still too long
+        if len(short_name) > max_name_length:
+            short_name = short_name[:max_name_length].rstrip('-')
+        
+        return f"00-{short_name}.md"
+    
     def _create_plan_metadata(
         self,
         feature_name: str,
@@ -623,7 +660,8 @@ and documentation.
 """
         
         plan_dir = Path(f"cortex-brain/documents/planning/active/{feature_name}")
-        plan_path = plan_dir / "00-master-plan.md"
+        master_plan_filename = self._generate_master_plan_filename(feature_name)
+        plan_path = plan_dir / master_plan_filename
         
         self.create_artifact(
             path=str(plan_path),
@@ -641,14 +679,14 @@ and documentation.
 
 ## Quick Start
 
-See `00-master-plan.md` for complete plan details.
-
+See `{master_plan_filename}` for complete plan details.
 ## Structure
 
-- `00-master-plan.md` - Master plan document
+- `{master_plan_filename}` - Master plan document
 - `context/` - Context and analysis documents
 - `artifacts/` - Generated code and configs
 - `reports/` - Progress and completion reports
+- `tracking/` - Progress tracker and stateorts
 - `tracking/` - Progress tracker and state
 
 ## Progress

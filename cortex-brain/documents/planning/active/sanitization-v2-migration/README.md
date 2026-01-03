@@ -128,7 +128,7 @@ sanitization_orchestrator_v2.py (600-700 lines)
 ## 📚 Key Documents
 
 ### Planning Documents
-- **`00-master-plan.md`** - Complete migration plan (all phases)
+- **`00-sanitization-v2.md`** - Complete migration plan (all phases)
 - **`tracking/progress.json`** - Machine-readable progress tracking
 
 ### Holistic Reviews 🆕
