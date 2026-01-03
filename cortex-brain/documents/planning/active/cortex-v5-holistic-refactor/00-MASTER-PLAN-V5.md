@@ -2791,7 +2791,76 @@ Assessment plan should include a "Discussion Required" section for TDD-Master or
 
 ## 🔄 Phase 6: Execute Migration Plans (24 days)
 
-**Goal:** Implement all orchestrator migrations using the generated plans
+**Goal:** Implement all orchestrator migrations using the generated plans AND progressively wire them into Master Orchestrator
+
+### 🔌 Master Orchestrator Wiring Protocol
+
+**CRITICAL:** Each orchestrator MUST be wired into Master Orchestrator immediately upon achieving production-ready status.
+
+**📊 Wiring Status Tracker:** `cortex-brain/documents/reports/master-orchestrator-wiring-status.md`
+
+**Production-Ready Criteria:**
+- ✅ Implementation complete with all features
+- ✅ Test suite passing with ≥90% coverage
+- ✅ Phase completion report generated
+- ✅ Git checkpoint created
+
+**Wiring Checklist (Execute for EVERY orchestrator):**
+
+1. **Add Routing Patterns** to `cortex-brain/config/master-orchestrator.yaml`:
+   ```yaml
+   orchestrators:
+     - id: "{orchestrator_id}"
+       name: "{Orchestrator Name}"
+       version: "2.0.0"
+       type: autonomous  # or guided
+       patterns:
+         - pattern: "^(trigger|keywords|regex).*$"
+           confidence: 1.0
+           match_type: regex
+           priority: {priority_number}
+       module: "src.orchestrators.{module_path}"
+       class: "{OrchestratorClassName}"
+       enabled: true
+   ```
+
+2. **Register in OrchestratorRegistry** (`src/orchestrators/master/registry.py`):
+   - Add import statement
+   - Register class with metadata
+   - Verify dependency chains (if any)
+
+3. **Update CORTEX.prompt.md Intent Router** (`.github/prompts/CORTEX.prompt.md`):
+   - Update Intent Router table with new patterns
+   - Change type indicator (🛡️ AUTONOMOUS or 📋 GUIDED)
+   - Update orchestrator description
+   - Add manifest reference
+
+4. **Test Routing**:
+   - Manual test: Trigger orchestrator via user command
+   - Verify: Master Orch routes correctly
+   - Verify: Orchestrator executes successfully
+   - Verify: State tracking works (if applicable)
+
+5. **Update Documentation**:
+   - Add orchestrator to `cortex-brain/documents/reports/master-orchestrator-wiring-status.md`
+   - Record activation date and commit hash
+   - Update orchestrator count in Master Orch README
+
+6. **Create Wiring Completion Report**:
+   - Document wiring steps executed
+   - Include routing test results
+   - Record Master Orch coverage percentage
+   - Save to: `cortex-brain/documents/reports/wiring-{orchestrator-id}.md`
+
+**Master Orchestrator Coverage Tracking:**
+- **Current:** Planning v5 only (bootstrap complete)
+- **Target Phase 6.1:** Planning v5 + ADO v2
+- **Target Phase 6.2:** Planning v5 + ADO v2 + Cleanup v2
+- **Target Phase 6.3:** Planning v5 + ADO v2 + Cleanup v2 + Vacuum v2
+- **Target Phase 6.4:** + Sanitization v2
+- **Target Phase 6.5:** + Debug v2
+- **Target Phase 6.6:** + TDD v2
+- **Target Phase 7:** 100% coverage (all orchestrators)
 
 ### Execution Strategy
 
@@ -2801,6 +2870,7 @@ Assessment plan should include a "Discussion Required" section for TDD-Master or
 3. Update progress in database using Planning v5 APIs
 4. Create checkpoints after each phase
 5. Generate phase completion reports
+6. **🔴 IMMEDIATELY WIRE INTO MASTER ORCHESTRATOR (use checklist above)**
 
 **Migration Order:**
 1. **ADO Conversational Wizard** (4h) - Enhanced user experience via multi-turn conversation
@@ -2823,18 +2893,79 @@ Assessment plan should include a "Discussion Required" section for TDD-Master or
 - Template-driven outputs
 - 100% test coverage
 
-**🔴 ACTIVATION STEP (Day 6):**
-1. Add ADO v2 patterns to `master-orchestrator.yaml`:
-   ```yaml
-   - pattern: "^(ado|ado story|ado feature).*$"
-     orchestrator: ado_orchestrator_v2
-     confidence: 1.0
-     match_type: regex
-   ```
-2. Register ADO v2 in OrchestratorRegistry
-3. Update CORTEX.prompt.md Intent Router: ADO v2 routes via Master Orch
-4. Test: "ado story X" → Master Orch routes → ADO v2 executes
-5. **Master Orchestrator now handles: Planning v5 + ADO v2**
+**🔴 WIRING ACTIVATION (Immediately after Day 6 completion):**
+
+**Step 1: Add Routing Patterns**
+Add to `cortex-brain/config/master-orchestrator.yaml`:
+```yaml
+orchestrators:
+  - id: "ado_orchestrator_v2"
+    name: "ADO Orchestrator v2"
+    version: "2.0.0"
+    type: autonomous
+    patterns:
+      - pattern: "^(ado|ado story|ado feature).*$"
+        confidence: 1.0
+        match_type: regex
+        priority: 20
+      - pattern: "^(create work item|generate work item).*$"
+        confidence: 0.9
+        match_type: regex
+        priority: 19
+    module: "src.orchestrators.ado.ado_orchestrator_v2"
+    class: "ADOOrchestratorV2"
+    enabled: true
+    metadata:
+      description: "Azure DevOps work item generation with wizard"
+      autonomous: true
+      state_tracking: true
+```
+
+**Step 2: Register in OrchestratorRegistry**
+```python
+# In src/orchestrators/master/registry.py
+from src.orchestrators.ado.ado_orchestrator_v2 import ADOOrchestratorV2
+
+registry.register(
+    orchestrator_id="ado_orchestrator_v2",
+    orchestrator_class=ADOOrchestratorV2,
+    metadata={
+        "version": "2.0.0",
+        "type": "autonomous",
+        "requires_state": True,
+        "dependencies": []
+    }
+)
+```
+
+**Step 3: Update CORTEX.prompt.md Intent Router**
+Update table entry:
+```markdown
+| `plan ado`, `ado story`, `ado feature` | 🛡️ **ADO Operations v2 (AUTONOMOUS)** | `ado-v2-manifest.yaml` | **HAND-OFF** → Use `ado_execution_progress` template |
+```
+
+**Step 4: Test Routing**
+```bash
+# Manual test
+"ado story user authentication"
+Expected: Master Orch routes → ADO v2 executes → Work items generated
+
+# Verify in logs
+grep "MasterOrchestrator: Matched pattern" logs/master-orchestrator.log
+grep "ADOOrchestratorV2: Execution started" logs/ado-v2.log
+```
+
+**Step 5: Create Wiring Report**
+Generate: `cortex-brain/documents/reports/wiring-ado-v2.md`
+- Wiring date
+- Commit hash
+- Routing test results
+- Master Orch coverage: ~15% (2/13 orchestrators)
+
+**Master Orchestrator Status After Task 6.1:**
+- ✅ Planning v5 (bootstrap)
+- ✅ ADO v2 (newly wired)
+- ⏸️ Remaining: 11 orchestrators
 
 ### Task 6.2: Vacuum Orchestrator v2 Migration
 **Duration:** 5 days  
@@ -2846,18 +2977,79 @@ Assessment plan should include a "Discussion Required" section for TDD-Master or
 - Transaction boundaries
 - Comprehensive logging
 
-**🔴 ACTIVATION STEP (Day 5):**
-1. Add Vacuum v2 patterns to `master-orchestrator.yaml`:
-   ```yaml
-   - pattern: "^(vacuum|deep clean|organize files).*$"
-     orchestrator: vacuum_orchestrator_v2
-     confidence: 1.0
-     match_type: regex
-   ```
-2. Register Vacuum v2 in OrchestratorRegistry
-3. Update CORTEX.prompt.md Intent Router: Vacuum v2 routes via Master Orch
-4. Test: "vacuum path/" → Master Orch routes → Vacuum v2 executes
-5. **Master Orchestrator now handles: Planning v5 + ADO v2 + Vacuum v2**
+**🔴 WIRING ACTIVATION (Immediately after Day 5 completion):**
+
+**Step 1: Add Routing Patterns**
+Add to `cortex-brain/config/master-orchestrator.yaml`:
+```yaml
+orchestrators:
+  - id: "vacuum_orchestrator_v2"
+    name: "Vacuum Orchestrator v2"
+    version: "2.0.0"
+    type: autonomous
+    patterns:
+      - pattern: "^(vacuum|deep clean|organize files).*$"
+        confidence: 1.0
+        match_type: regex
+        priority: 18
+      - pattern: "^(cleanup filesystem|clean directory).*$"
+        confidence: 0.85
+        match_type: regex
+        priority: 17
+    module: "src.orchestrators.vacuum.vacuum_orchestrator_v2"
+    class: "VacuumOrchestratorV2"
+    enabled: true
+    metadata:
+      description: "Deep filesystem cleanup with atomic operations"
+      autonomous: true
+      requires_approval: true  # Destructive operations
+      rollback_capable: true
+```
+
+**Step 2: Register in OrchestratorRegistry**
+```python
+# In src/orchestrators/master/registry.py
+from src.orchestrators.vacuum.vacuum_orchestrator_v2 import VacuumOrchestratorV2
+
+registry.register(
+    orchestrator_id="vacuum_orchestrator_v2",
+    orchestrator_class=VacuumOrchestratorV2,
+    metadata={
+        "version": "2.0.0",
+        "type": "autonomous",
+        "destructive": True,
+        "requires_approval": True
+    }
+)
+```
+
+**Step 3: Update CORTEX.prompt.md Intent Router**
+Update table entry:
+```markdown
+| `vacuum [path]`, `deep clean [path]`, `organize files` | 🛡️ **Vacuum v2 (AUTONOMOUS)** | `vacuum-v2-manifest.yaml` | Deep filesystem cleanup + reorganization with rollback |
+```
+
+**Step 4: Test Routing**
+```bash
+# Manual test (dry-run mode)
+"vacuum tests/temp --dry-run"
+Expected: Master Orch routes → Vacuum v2 executes → Analysis report (no deletions)
+
+# Verify safety gates
+grep "VacuumOrchestratorV2: Approval required" logs/vacuum-v2.log
+```
+
+**Step 5: Create Wiring Report**
+Generate: `cortex-brain/documents/reports/wiring-vacuum-v2.md`
+- Safety gate validation
+- Rollback mechanism tested
+- Master Orch coverage: ~23% (3/13 orchestrators)
+
+**Master Orchestrator Status After Task 6.2:**
+- ✅ Planning v5
+- ✅ ADO v2
+- ✅ Vacuum v2 (newly wired)
+- ⏸️ Remaining: 10 orchestrators
 
 ### Task 6.3: Cleanup Orchestrator v2 Migration
 **Duration:** 4 days  
@@ -2869,18 +3061,86 @@ Assessment plan should include a "Discussion Required" section for TDD-Master or
 - Log rotation automation
 - State persistence
 
-**🔴 ACTIVATION STEP (Day 4):**
-1. Add Cleanup v2 patterns to `master-orchestrator.yaml`:
-   ```yaml
-   - pattern: "^(cleanup|clear cache).*$"
-     orchestrator: cleanup_orchestrator_v2
-     confidence: 1.0
-     match_type: regex
-   ```
-2. Register Cleanup v2 in OrchestratorRegistry
-3. Update CORTEX.prompt.md Intent Router: Cleanup v2 routes via Master Orch
-4. Test: "cleanup cache" → Master Orch routes → Cleanup v2 executes
-5. **Master Orchestrator now handles: Planning v5 + ADO v2 + Vacuum v2 + Cleanup v2**
+**🔴 WIRING ACTIVATION (Immediately after Day 4 completion):**
+
+**Step 1: Add Routing Patterns**
+Add to `cortex-brain/config/master-orchestrator.yaml`:
+```yaml
+orchestrators:
+  - id: "cleanup_orchestrator_v2"
+    name: "Cleanup Orchestrator v2"
+    version: "2.0.0"
+    type: autonomous
+    patterns:
+      - pattern: "^(cleanup|clear cache|cleanup cache).*$"
+        confidence: 1.0
+        match_type: regex
+        priority: 16
+      - pattern: "^(cleanup full|cleanup all).*$"
+        confidence: 0.95
+        match_type: regex
+        priority: 15
+      - pattern: "^(cleanup logs|rotate logs).*$"
+        confidence: 0.9
+        match_type: regex
+        priority: 14
+    module: "src.orchestrators.cleanup.cleanup_orchestrator_v2"
+    class: "CleanupOrchestratorV2"
+    enabled: true
+    metadata:
+      description: "Cache cleanup with deterministic execution order"
+      autonomous: true
+      safe_operation: true  # Non-destructive (can rebuild)
+```
+
+**Step 2: Register in OrchestratorRegistry**
+```python
+# In src/orchestrators/master/registry.py
+from src.orchestrators.cleanup.cleanup_orchestrator_v2 import CleanupOrchestratorV2
+
+registry.register(
+    orchestrator_id="cleanup_orchestrator_v2",
+    orchestrator_class=CleanupOrchestratorV2,
+    metadata={
+        "version": "2.0.0",
+        "type": "autonomous",
+        "safe_operation": True,
+        "frequent_usage": True
+    }
+)
+```
+
+**Step 3: Update CORTEX.prompt.md Intent Router**
+Update table entry:
+```markdown
+| `cleanup cache`, `cleanup full`, `cleanup [type]` | 🛡️ **Cleanup v2 (AUTONOMOUS)** | `cleanup-v2-manifest.yaml` | Cache clear, bloat removal with safe execution order |
+```
+
+**Step 4: Test Routing**
+```bash
+# Manual test
+"cleanup cache"
+Expected: Master Orch routes → Cleanup v2 executes → Cache cleared, report generated
+
+# Test all cleanup types
+"cleanup full" "cleanup logs" "cleanup temp"
+
+# Verify deterministic order
+grep "CleanupOrchestratorV2: Execution order" logs/cleanup-v2.log
+```
+
+**Step 5: Create Wiring Report**
+Generate: `cortex-brain/documents/reports/wiring-cleanup-v2.md`
+- All cleanup types tested
+- Execution order validation
+- Master Orch coverage: ~31% (4/13 orchestrators)
+
+**Master Orchestrator Status After Task 6.3:**
+- ✅ Planning v5
+- ✅ ADO v2
+- ✅ Vacuum v2
+- ✅ Cleanup v2 (newly wired)
+- ⏸️ Remaining: 9 orchestrators
 
 ### Task 6.4: GUIDED Orchestrator Assessments
 **Duration:** 9 days  
@@ -2925,21 +3185,109 @@ Assessment plan should include a "Discussion Required" section for TDD-Master or
 - **Sanitization:** Convert to AUTONOMOUS (5-phase transformation needs transactions)
 - **Refinement:** Remain GUIDED (analysis phases benefit from tool call sequences)
 
-**🔴 ACTIVATION STEPS (Progressive):**
+**🔴 WIRING ACTIVATION (Progressive - After Each Conversion):**
 
-For each orchestrator converted to AUTONOMOUS:
-1. Add patterns to `master-orchestrator.yaml` (e.g., TDD: `^(tdd|start tdd|run tests)$`)
-2. Register in OrchestratorRegistry
-3. Update CORTEX.prompt.md Intent Router (change 📋 GUIDED → 🛡️ AUTONOMOUS)
-4. Test routing: command → Master Orch routes → Orchestrator executes
-5. Document in routing config
+**For AUTONOMOUS Orchestrators (e.g., TDD v2, Debug v2, Sanitization v2):**
 
-For orchestrators remaining GUIDED:
-- Add patterns to `master-orchestrator.yaml` with `type: guided`
-- Master Orch routes to CORTEX for manifest interpretation
-- CORTEX follows manifest instructions (existing behavior preserved)
+1. **Add Routing Patterns** to `master-orchestrator.yaml`:
+   ```yaml
+   orchestrators:
+     - id: "{orchestrator_id}"
+       type: autonomous
+       patterns:
+         - pattern: "^(trigger|keywords).*$"
+           confidence: 1.0
+           match_type: regex
+           priority: {priority}
+   ```
 
-**By end of Phase 6, Master Orchestrator handles ALL orchestrators (AUTONOMOUS + GUIDED routing)**
+2. **Register in OrchestratorRegistry**:
+   ```python
+   registry.register(
+       orchestrator_id="{orchestrator_id}",
+       orchestrator_class={OrchestratorClass},
+       metadata={"version": "2.0.0", "type": "autonomous"}
+   )
+   ```
+
+3. **Update CORTEX.prompt.md Intent Router**:
+   - Change: 📋 GUIDED → 🛡️ AUTONOMOUS
+   - Update manifest reference
+   - Add autonomous execution notes
+
+4. **Test Routing**:
+   - Master Orch routes command
+   - Orchestrator executes autonomously
+   - Verify CORTEX stops after hand-off
+
+5. **Create Wiring Report**:
+   - `cortex-brain/documents/reports/wiring-{orchestrator-id}.md`
+   - Include routing tests and coverage update
+
+**For GUIDED Orchestrators (e.g., Refinement):**
+
+1. **Add Routing Patterns** to `master-orchestrator.yaml`:
+   ```yaml
+   orchestrators:
+     - id: "{orchestrator_id}"
+       type: guided
+       patterns:
+         - pattern: "^(trigger|keywords).*$"
+           confidence: 1.0
+           match_type: regex
+           priority: {priority}
+       manifest_path: "cortex-brain/manifests/orchestrators/{manifest}.yaml"
+   ```
+
+2. **Register in OrchestratorRegistry**:
+   ```python
+   registry.register(
+       orchestrator_id="{orchestrator_id}",
+       orchestrator_class=None,  # Guided uses manifest
+       metadata={"version": "2.0.0", "type": "guided", "manifest": "{path}"}
+   )
+   ```
+
+3. **Update CORTEX.prompt.md Intent Router**:
+   - Keep 📋 GUIDED indicator
+   - Verify manifest path
+   - Add "CORTEX follows manifest" note
+
+4. **Test Routing**:
+   - Master Orch routes to CORTEX
+   - CORTEX interprets manifest
+   - Manifest instructions executed
+
+5. **Create Wiring Report**:
+   - Document GUIDED routing flow
+   - Verify manifest interpretation works
+
+**Master Orchestrator Coverage Goals:**
+
+After each orchestrator conversion/migration:
+- Update `cortex-brain/documents/reports/master-orchestrator-coverage.md`
+- Track: Orchestrators wired / Total orchestrators
+- Goal: 100% by end of Phase 6
+
+**Example Coverage Progression:**
+- Post-6.1 (ADO v2): 15% (2/13)
+- Post-6.2 (Vacuum v2): 23% (3/13)
+- Post-6.3 (Cleanup v2): 31% (4/13)
+- Post-6.4 (Sanitization v2): 38% (5/13)
+- Post-6.5 (TDD v2): 46% (6/13)
+- Post-6.6 (Debug v2): 54% (7/13)
+- Target Phase 7: 100% (13/13)
+
+**Wiring Validation Checklist:**
+
+For each orchestrator wired:
+- [ ] Pattern added to `master-orchestrator.yaml`
+- [ ] Registered in `OrchestratorRegistry`
+- [ ] CORTEX.prompt.md Intent Router updated
+- [ ] Manual routing test passed
+- [ ] Wiring report generated
+- [ ] Coverage percentage updated
+- [ ] Git checkpoint created with tag `wiring-{orchestrator-id}-v2`
 
 ### Task 6.5: TDD Orchestrator v2 Migration (NEW - APPROVED)
 **Duration:** 4 days  
@@ -2962,22 +3310,105 @@ For orchestrators remaining GUIDED:
 4. **Phase 3:** REFACTOR phase automation (code quality check, coverage ≥80%, rollback on failure)
 5. **Phase 4:** Master Orch integration + CORTEX.prompt.md update
 
-**🔴 ACTIVATION STEP (Day 4):**
-1. Add TDD v2 patterns to `master-orchestrator.yaml`:
-   ```yaml
-   - pattern: "^(tdd|start tdd|run tests).*$"
-     orchestrator: tdd_orchestrator_v2
-     confidence: 1.0
-     match_type: regex
-     priority: 25
-     metadata:
-       description: "TDD Mastery v2 (RED→GREEN→REFACTOR)"
-       autonomous: true
-   ```
-2. Register TDD v2 in OrchestratorRegistry
-3. Update CORTEX.prompt.md Intent Router: `tdd [x]` → 🛡️ **TDD Mastery v2 (AUTONOMOUS)**
-4. Test: "start tdd" → Master Orch routes → TDD v2 executes
-5. **Master Orchestrator now handles: Planning v5 + ADO v2 + Vacuum v2 + Cleanup v2 + TDD v2**
+**🔴 WIRING ACTIVATION (Immediately after Day 4 completion):**
+
+**Step 1: Add Routing Patterns**
+Add to `cortex-brain/config/master-orchestrator.yaml`:
+```yaml
+orchestrators:
+  - id: "tdd_orchestrator_v2"
+    name: "TDD Mastery v2"
+    version: "2.0.0"
+    type: autonomous
+    patterns:
+      - pattern: "^(tdd|start tdd|run tests).*$"
+        confidence: 1.0
+        match_type: regex
+        priority: 25
+      - pattern: "^(test|testing|run test).*$"
+        confidence: 0.85
+        match_type: regex
+        priority: 24
+    module: "src.orchestrators.tdd.tdd_orchestrator_v2"
+    class: "TDDOrchestratorV2"
+    enabled: true
+    metadata:
+      description: "TDD Mastery v2 - RED→GREEN→REFACTOR cycle"
+      autonomous: true
+      state_tracking: true
+      skull_enforcement: ["TDD_ENFORCEMENT"]
+```
+
+**Step 2: Register in OrchestratorRegistry**
+```python
+# In src/orchestrators/master/registry.py
+from src.orchestrators.tdd.tdd_orchestrator_v2 import TDDOrchestratorV2
+
+registry.register(
+    orchestrator_id="tdd_orchestrator_v2",
+    orchestrator_class=TDDOrchestratorV2,
+    metadata={
+        "version": "2.0.0",
+        "type": "autonomous",
+        "requires_state": True,
+        "enforces_skull": ["TDD_ENFORCEMENT"],
+        "rollback_capable": True
+    }
+)
+```
+
+**Step 3: Update CORTEX.prompt.md Intent Router**
+Update table entry:
+```markdown
+| `start tdd`, `run tests`, `tdd [x]` | 🛡️ **TDD Mastery v2 (AUTONOMOUS)** | `tdd-v2-manifest.yaml` | RED→GREEN→REFACTOR with state tracking and rollback |
+```
+
+**Step 4: Test Routing**
+```bash
+# Manual test - Full TDD cycle
+"start tdd tests/test_example.py"
+Expected: 
+- Master Orch routes → TDD v2
+- RED phase: Tests fail ✅
+- GREEN phase: Implementation → Tests pass ✅
+- REFACTOR phase: Quality checks → Coverage ≥80% ✅
+
+# Test state tracking
+grep "TDDOrchestratorV2: Phase transition" logs/tdd-v2.log
+grep "TDDOrchestratorV2: State persisted" logs/tdd-v2.log
+
+# Test rollback
+"tdd refactor --with-bad-code"
+Expected: REFACTOR fails → Rollback to GREEN state
+```
+
+**Step 5: Validate SKULL Enforcement**
+```bash
+# Test TDD_ENFORCEMENT rule
+"tdd implement before test"
+Expected: TDD v2 rejects → "Tests must fail before implementation"
+
+# Verify holistic discovery
+"tdd start feature-x"
+Expected: Searches for existing test_feature_x.py before creating
+```
+
+**Step 6: Create Wiring Report**
+Generate: `cortex-brain/documents/reports/wiring-tdd-v2.md`
+- Full TDD cycle tested
+- State machine transitions validated
+- SKULL rule enforcement confirmed
+- Rollback mechanism tested
+- Master Orch coverage: ~46% (6/13 orchestrators)
+
+**Master Orchestrator Status After Task 6.5:**
+- ✅ Planning v5
+- ✅ ADO v2
+- ✅ Vacuum v2
+- ✅ Cleanup v2
+- ✅ Sanitization v2 (if converted)
+- ✅ TDD v2 (newly wired)
+- ⏸️ Remaining: 7 orchestrators
 
 **SKULL Enforcement:**
 - TDD_ENFORCEMENT: Programmatic RED→GREEN→REFACTOR validation (tests must fail before implementation)
@@ -3000,16 +3431,20 @@ CREATE TABLE tdd_sessions (
 );
 ```
 
-### Completion Criteria
+### Completion Criteria (Phase 6)
 - ✅ All orchestrators migrated per generated plans
 - ✅ 100% test coverage for new implementations
 - ✅ All plans marked 'completed' in database
 - ✅ Migration reports generated
 - ✅ Git checkpoints for each orchestrator
-- ✅ **Master Orchestrator progressively activated after each migration**
-- ✅ **master-orchestrator.yaml contains ALL orchestrator patterns**
-- ✅ **CORTEX.prompt.md Intent Router fully updated**
-- ✅ **Master Orchestrator routing 100% of orchestrator traffic**
+- ✅ **WIRING: Each orchestrator added to `master-orchestrator.yaml` immediately after completion**
+- ✅ **WIRING: All orchestrators registered in `OrchestratorRegistry` with correct metadata**
+- ✅ **WIRING: CORTEX.prompt.md Intent Router fully synchronized with master-orchestrator.yaml**
+- ✅ **WIRING: All routing tests passed (manual verification for each orchestrator)**
+- ✅ **WIRING: Individual wiring reports generated for each orchestrator**
+- ✅ **WIRING: Master Orchestrator coverage tracked and documented (target: 100% by Phase 7)**
+- ✅ **WIRING: Git tags created for each wiring event: `wiring-{orchestrator-id}-v2`**
+- ✅ Master Orchestrator routing 100% of orchestrator traffic (AUTONOMOUS + GUIDED)
 - ✅ Final checkpoint: `checkpoint-phase-6-all-migrations-master-orch-complete`
 
 ---
