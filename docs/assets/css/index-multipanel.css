@@ -146,6 +146,7 @@
 
 /* Category Sub-Panels Grid (Intelligent Layout) */
 .category-panels-grid {
+    container-type: inline-size;
     display: grid;
     grid-template-columns: 1fr;
     gap: var(--spacing-xl);
@@ -182,6 +183,7 @@
 
 /* Category Sub-Panels */
 .category-subpanel {
+    container-type: inline-size;
     background: linear-gradient(135deg, var(--glass-dark-primary), var(--glass-dark-secondary));
     border: 1px solid var(--white-alpha-10);
     border-radius: var(--radius-lg);
@@ -278,24 +280,25 @@
     grid-template-columns: repeat(3, 1fr);
     grid-auto-rows: clamp(50px, 12cqi, 70px);
     grid-auto-flow: dense; /* Tetris-style packing */
-    gap: clamp(0.5rem, 1.5cqi, 0.875rem);
+    gap: clamp(0.375rem, 1cqi, 0.75rem); /* Reduced by 50% for tighter spacing */
     width: 100%;
     align-content: start;
     min-height: clamp(150px, 36cqi, 210px); /* Ensure minimum height for sparse panels */
 }
 
 .category-tag {
-    background: linear-gradient(135deg, var(--color-cyan-alpha-15), var(--color-purple-alpha-15));
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    color: var(--color-cyan-alpha-95);
+    background: var(--glass-bg, rgba(26, 31, 58, 0.7));
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
+    border-radius: var(--radius-lg, 16px);
+    box-shadow: var(--shadow, 0 8px 32px rgba(0, 0, 0, 0.37));
+    color: var(--text-primary, rgba(255, 255, 255, 0.95));
     padding: clamp(0.5rem, 2cqi, 1rem) clamp(0.5rem, 1.5cqi, 0.875rem);
-    border-radius: var(--radius-sm);
     font-size: clamp(0.75rem, 2.5cqi + 0.2rem, 1.1rem);
     font-weight: 600;
-    border: 1px solid var(--color-cyan-alpha-35);
     text-decoration: none;
-    transition: var(--transition-panel);
+    transition: all 0.3s ease;
     cursor: pointer;
     position: relative;
     overflow: hidden;
@@ -338,118 +341,180 @@
 .category-tag::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, var(--white-alpha-20), transparent);
-    transition: left 0.5s ease;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.05) 50%,
+        transparent 70%
+    );
+    animation: glassReflection 8s ease-in-out infinite;
+    pointer-events: none;
 }
 
-.category-tag:hover::before {
-    left: 100%;
+@keyframes glassReflection {
+    0%, 100% { transform: translate(-50%, -50%) rotate(0deg); }
+    50% { transform: translate(-30%, -30%) rotate(180deg); }
 }
 
 .category-tag:hover {
-    transform: translateY(-3px);
-    color: var(--text-primary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg, 0 20px 48px rgba(0, 0, 0, 0.5));
+    border-color: rgba(0, 212, 255, 0.3);
 }
 
-/* Color Variations for Security Panel */
+/* Color Variations for Security Panel - Enhanced Glass Effect */
 #security-panel .category-subpanel:nth-of-type(1) .category-tag:nth-child(2) {
-    background: linear-gradient(135deg, var(--color-purple-alpha-15), var(--color-purple-orchid-alpha-15));
-    border-color: var(--color-purple-alpha-40);
-    color: var(--color-purple-orchid-alpha-95);
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(192, 132, 252, 0.05));
+    border-color: rgba(168, 85, 247, 0.3);
+}
+
+#security-panel .category-subpanel:nth-of-type(1) .category-tag:nth-child(2):hover {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(192, 132, 252, 0.1));
+    border-color: rgba(168, 85, 247, 0.5);
 }
 
 #security-panel .category-subpanel:nth-of-type(1) .category-tag:nth-child(3) {
-    background: linear-gradient(135deg, var(--color-emerald-alpha-15), var(--color-emerald-light-alpha-15));
-    border-color: var(--color-emerald-alpha-35);
-    color: var(--color-emerald-light-alpha-95);
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(52, 211, 153, 0.05));
+    border-color: rgba(16, 185, 129, 0.3);
+}
+
+#security-panel .category-subpanel:nth-of-type(1) .category-tag:nth-child(3):hover {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(52, 211, 153, 0.1));
+    border-color: rgba(16, 185, 129, 0.5);
 }
 
 #security-panel .category-subpanel:nth-of-type(2) .category-tag:nth-child(1) {
-    background: linear-gradient(135deg, var(--color-indigo-alpha-15), var(--color-indigo-light-alpha-15));
-    border-color: var(--color-indigo-alpha-35);
-    color: var(--color-indigo-lighter-alpha-95);
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(129, 140, 248, 0.05));
+    border-color: rgba(99, 102, 241, 0.3);
+}
+
+#security-panel .category-subpanel:nth-of-type(2) .category-tag:nth-child(1):hover {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(129, 140, 248, 0.1));
+    border-color: rgba(99, 102, 241, 0.5);
 }
 
 #security-panel .category-subpanel:nth-of-type(2) .category-tag:nth-child(2) {
-    background: linear-gradient(135deg, var(--color-pink-alpha-15), var(--color-pink-light-alpha-15));
-    border-color: var(--color-pink-alpha-35);
-    color: var(--color-pink-light-alpha-95);
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(244, 114, 182, 0.05));
+    border-color: rgba(236, 72, 153, 0.3);
+}
+
+#security-panel .category-subpanel:nth-of-type(2) .category-tag:nth-child(2):hover {
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(244, 114, 182, 0.1));
+    border-color: rgba(236, 72, 153, 0.5);
 }
 
 #security-panel .category-subpanel:nth-of-type(2) .category-tag:nth-child(3) {
-    background: linear-gradient(135deg, var(--color-amber-alpha-15), var(--color-amber-light-alpha-15));
-    border-color: var(--color-amber-alpha-35);
-    color: var(--color-amber-light-alpha-95);
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.05));
+    border-color: rgba(245, 158, 11, 0.3);
+}
+
+#security-panel .category-subpanel:nth-of-type(2) .category-tag:nth-child(3):hover {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(251, 191, 36, 0.1));
+    border-color: rgba(245, 158, 11, 0.5);
 }
 
 #security-panel .category-subpanel:nth-of-type(3) .category-tag:nth-child(1) {
-    background: linear-gradient(135deg, var(--color-teal-alpha-15), var(--color-cyan-alpha-15));
-    border-color: var(--color-teal-alpha-35);
-    color: var(--color-teal-alpha-95);
+    background: linear-gradient(135deg, rgba(20, 184, 166, 0.1), rgba(45, 212, 191, 0.05));
+    border-color: rgba(20, 184, 166, 0.3);
+}
+
+#security-panel .category-subpanel:nth-of-type(3) .category-tag:nth-child(1):hover {
+    background: linear-gradient(135deg, rgba(20, 184, 166, 0.15), rgba(45, 212, 191, 0.1));
+    border-color: rgba(20, 184, 166, 0.5);
 }
 
 #security-panel .category-subpanel:nth-of-type(3) .category-tag:nth-child(2) {
-    background: linear-gradient(135deg, var(--color-emerald-alpha-15), var(--color-emerald-light-alpha-15));
-    border-color: var(--color-emerald-alpha-35);
-    color: var(--color-emerald-light-alpha-95);
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(52, 211, 153, 0.05));
+    border-color: rgba(16, 185, 129, 0.3);
+}
+
+#security-panel .category-subpanel:nth-of-type(3) .category-tag:nth-child(2):hover {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(52, 211, 153, 0.1));
+    border-color: rgba(16, 185, 129, 0.5);
 }
 
 #security-panel .category-subpanel:nth-of-type(3) .category-tag:nth-child(3) {
-    background: linear-gradient(135deg, var(--color-purple-alpha-15), var(--color-purple-orchid-alpha-15));
-    border-color: var(--color-purple-alpha-40);
-    color: var(--color-purple-orchid-alpha-95);
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(192, 132, 252, 0.05));
+    border-color: rgba(168, 85, 247, 0.3);
+}
+
+#security-panel .category-subpanel:nth-of-type(3) .category-tag:nth-child(3):hover {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(192, 132, 252, 0.1));
+    border-color: rgba(168, 85, 247, 0.5);
 }
 
 #security-panel .category-subpanel:nth-of-type(4) .category-tag:nth-child(1) {
-    background: linear-gradient(135deg, var(--color-amber-alpha-15), var(--color-amber-light-alpha-15));
-    border-color: var(--color-amber-alpha-35);
-    color: var(--color-amber-light-alpha-95);
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.05));
+    border-color: rgba(245, 158, 11, 0.3);
+}
+
+#security-panel .category-subpanel:nth-of-type(4) .category-tag:nth-child(1):hover {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(251, 191, 36, 0.1));
+    border-color: rgba(245, 158, 11, 0.5);
 }
 
 #security-panel .category-subpanel:nth-of-type(4) .category-tag:nth-child(2) {
-    background: linear-gradient(135deg, var(--color-pink-alpha-15), var(--color-pink-light-alpha-15));
-    border-color: var(--color-pink-alpha-35);
-    color: var(--color-pink-light-alpha-95);
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(244, 114, 182, 0.05));
+    border-color: rgba(236, 72, 153, 0.3);
+}
+
+#security-panel .category-subpanel:nth-of-type(4) .category-tag:nth-child(2):hover {
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(244, 114, 182, 0.1));
+    border-color: rgba(236, 72, 153, 0.5);
 }
 
 #security-panel .category-subpanel:nth-of-type(4) .category-tag:nth-child(3) {
-    background: linear-gradient(135deg, var(--color-indigo-alpha-15), var(--color-indigo-light-alpha-15));
-    border-color: var(--color-indigo-alpha-35);
-    color: var(--color-indigo-lighter-alpha-95);
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(129, 140, 248, 0.05));
+    border-color: rgba(99, 102, 241, 0.3);
 }
 
-/* Orchestrators & STS Panel Colors */
+#security-panel .category-subpanel:nth-of-type(4) .category-tag:nth-child(3):hover {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(129, 140, 248, 0.1));
+    border-color: rgba(99, 102, 241, 0.5);
+}
+
+/* Orchestrators & STS Panel Colors - Enhanced Glass Effect */
 #orchestrators-panel .category-tag:nth-child(2),
 #sts-panel .category-tag:nth-child(2) {
-    background: linear-gradient(135deg, var(--color-purple-alpha-15), var(--color-purple-orchid-alpha-15));
-    border-color: var(--color-purple-alpha-40);
-    color: var(--color-purple-orchid-alpha-95);
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(192, 132, 252, 0.05));
+    border-color: rgba(168, 85, 247, 0.3);
+}
+
+#orchestrators-panel .category-tag:nth-child(2):hover,
+#sts-panel .category-tag:nth-child(2):hover {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(192, 132, 252, 0.1));
+    border-color: rgba(168, 85, 247, 0.5);
 }
 
 #orchestrators-panel .category-tag:nth-child(3),
 #sts-panel .category-tag:nth-child(3) {
-    background: linear-gradient(135deg, var(--color-emerald-alpha-15), var(--color-emerald-light-alpha-15));
-    border-color: var(--color-emerald-alpha-35);
-    color: var(--color-emerald-light-alpha-95);
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(52, 211, 153, 0.05));
+    border-color: rgba(16, 185, 129, 0.3);
+}
+
+#orchestrators-panel .category-tag:nth-child(3):hover,
+#sts-panel .category-tag:nth-child(3):hover {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(52, 211, 153, 0.1));
+    border-color: rgba(16, 185, 129, 0.5);
 }
 
 #orchestrators-panel .category-tag:nth-child(4),
 #sts-panel .category-tag:nth-child(4) {
-    background: linear-gradient(135deg, var(--color-indigo-alpha-15), var(--color-indigo-light-alpha-15));
-    border-color: var(--color-indigo-alpha-35);
-    color: var(--color-indigo-lighter-alpha-95);
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(129, 140, 248, 0.05));
+    border-color: rgba(99, 102, 241, 0.3);
 }
 
-/* Hover states with CSS variables */
-.category-tag:hover {
-    background: linear-gradient(135deg, var(--color-cyan-alpha-30), var(--color-purple-alpha-15));
-    border-color: rgba(0, 212, 255, 0.6);
-    box-shadow: var(--shadow-tag-hover);
+#orchestrators-panel .category-tag:nth-child(4):hover,
+#sts-panel .category-tag:nth-child(4):hover {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(129, 140, 248, 0.1));
+    border-color: rgba(99, 102, 241, 0.5);
 }
+
+/* Remove old hover state override */
 
 /* Tetris/Masonry Layouts for Security Panel */
 

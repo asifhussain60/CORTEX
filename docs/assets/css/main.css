@@ -473,7 +473,7 @@ body {
 .cta-buttons-large {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
+    gap: 0.75rem;
     justify-content: center;
     margin-top: 2.5rem;
     animation: fadeInUp 0.8s ease-out 0.4s both;
@@ -767,6 +767,7 @@ body {
    GLASS CARD COMPONENT
    ============================================ */
 .glass-card {
+    container-type: inline-size;
     background: var(--glass-bg);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
@@ -801,7 +802,7 @@ body {
     text-decoration: none;
     color: inherit;
     padding: 2rem;
-    gap: 1rem;
+    gap: 0.5rem;
     cursor: pointer;
     transition: all var(--transition-base);
 }
@@ -815,7 +816,7 @@ body {
 /* Enhanced Panel Section Titles (Knowledge Library) */
 .glass-card h2.section-title {
     text-align: center;
-    font-size: 2.5rem;
+    font-size: clamp(1.75rem, 5cqi + 0.5rem, 2.5rem);
     color: var(--accent-primary); /* #00d4ff */
     margin-bottom: 2rem;
     font-weight: var(--font-weight-bold);
@@ -3568,6 +3569,7 @@ footer,
 
 /* Capability Tiles (Card-based Layout) */
 .capability-tiles {
+    container-type: inline-size;
     display: grid;
     grid-template-columns: 1fr;
     gap: var(--spacing-md);
@@ -3592,7 +3594,7 @@ footer,
 }
 
 .capability-tile > i {
-    font-size: 1.25rem;
+    font-size: clamp(1rem, 3cqi + 0.25rem, 1.5rem);
     color: var(--accent-primary);
     flex-shrink: 0;
     margin-top: 0.125rem;
@@ -3605,14 +3607,14 @@ footer,
 .capability-tile strong {
     display: block;
     color: var(--text-primary);
-    font-size: 0.9375rem;
+    font-size: clamp(0.875rem, 2.5cqi + 0.2rem, 1.0625rem);
     margin-bottom: 0.25rem;
 }
 
 .capability-tile span {
     display: block;
     color: var(--text-secondary);
-    font-size: 0.875rem;
+    font-size: clamp(0.8125rem, 2cqi + 0.15rem, 0.9375rem);
     line-height: 1.4;
 }
 
@@ -8515,6 +8517,7 @@ h1, h2, h3, h4, h5, h6, p, span, div {
 
 /* Principle Card Grid (Content-Driven Layout) */
 .principle-card-grid {
+    container-type: inline-size;
     display: grid;
     grid-template-columns: repeat(2, 1fr); /* DEFAULT: 2-column for medium-long content */
     gap: var(--spacing-lg);
@@ -8548,8 +8551,8 @@ h1, h2, h3, h4, h5, h6, p, span, div {
 
 /* Icon: Always Centered */
 .principle-icon {
-    width: 60px;
-    height: 60px;
+    width: clamp(50px, 12cqi, 70px);
+    height: clamp(50px, 12cqi, 70px);
     margin: 0 auto var(--spacing-md);
     display: flex;
     align-items: center;
@@ -8559,13 +8562,13 @@ h1, h2, h3, h4, h5, h6, p, span, div {
 }
 
 .principle-icon i {
-    font-size: 1.75rem;
+    font-size: clamp(1.5rem, 4cqi + 0.5rem, 2rem);
     color: var(--accent-primary);
 }
 
 /* Title: Always Centered */
 .principle-title {
-    font-size: 1.125rem;
+    font-size: clamp(1rem, 3cqi + 0.25rem, 1.25rem);
     font-weight: 600;
     color: var(--text-primary);
     margin-bottom: var(--spacing-sm);
@@ -8574,7 +8577,7 @@ h1, h2, h3, h4, h5, h6, p, span, div {
 
 /* Description: LEFT-ALIGNED for multi-line readability */
 .principle-description {
-    font-size: 0.9375rem;
+    font-size: clamp(0.875rem, 2.5cqi + 0.2rem, 1rem);
     color: var(--text-secondary);
     line-height: 1.6;
     text-align: left; /* CRITICAL: Multi-line text must be left-aligned */

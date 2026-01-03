@@ -1,7 +1,7 @@
 # 🎨 Glassmorphism Design Standard
 
-**Version:** 4.2.6 | **Status:** ✅ PRODUCTION  
-**Author:** Asif Hussain | **Last Updated:** January 3, 2026 (Icon-Title Spacing Toolkit Validation)  
+**Version:** 4.2.8 | **Status:** ✅ PRODUCTION  
+**Author:** Asif Hussain | **Last Updated:** January 3, 2026 (Tier Panels → Tetris Layout)  
 **Copyright © 2026 Asif Hussain. All rights reserved.**
 
 **🛠️ TOOLKIT VALIDATION:** Use `validate-icon-title-spacing.ps1` to enforce compliance
@@ -12,12 +12,30 @@
 
 **⚠️ CRITICAL: Before modifying any CSS, read this section!**
 
-**Backup Location:** `backups/css-backup-20260103_093835/`
+**Latest Backup Location:** `backups/architecture-tetris-20260103_HHMMSS.html`  
+**Previous Backup:** `backups/css-backup-standardization-20260103_120046/`
 
 **What's Backed Up:**
 - All 14 CSS files from `docs/assets/css/`
-- Complete pre-cleanup state (2,043 classes, 865 unused identified)
+- Complete pre-standardization state
+- Architecture index page with tetris conversion
 - Includes: main.css, generated-classes.css, intentional-classes.css, learning-hub.css, etc.
+
+**Latest Changes (v4.2.8):**
+- ✅ Tier panels converted to tetris layout (Tier 0-3 in architecture/index.html)
+- ✅ Replaced vertical `.capability-tiles` with horizontal `.token-metrics-tetris`
+- ✅ 6 tiles per tier: icon + value + label structure
+- ✅ Consistent with token-optimization page pattern
+- ✅ All 4 brain tiers now use responsive tetris design
+- ✅ Links to detailed tier pages preserved
+
+**Previous Changes (v4.2.7):**
+- ✅ Container query units (`container-type: inline-size`) added globally
+- ✅ Responsive font sizing with `clamp()` and `cqi` units
+- ✅ Spacing reduced by 50% (1.5rem → 0.75rem, 1rem → 0.5rem)
+- ✅ Glass animations moved to default state (8s reflection)
+- ✅ Zero inline styles achieved (100% eliminated)
+- ✅ Archive notice styled with CSS classes
 
 **When to Restore from Backup:**
 
@@ -4053,6 +4071,31 @@ Card 2: "TDD mandatory for all..." (text cramped)
 ---
 
 ## 📄 Version History
+
+### v4.2.8 (January 3, 2026) - Tier Panels → Tetris Layout
+- 🎯 **BREAKING:** Converted vertical `.capability-tiles` to horizontal `.token-metrics-tetris` for Tier 0-3
+- ✨ **NEW:** Tier-Tetris pattern - 6 tiles per tier with icon + value + label structure
+- 🔄 **REFACTOR:** Replaced all 4 brain tier panels in `docs/architecture/index.html`
+- 📚 Tier 0 SKULL: TDD Enforcement, Holistic Discovery, Refactor Cleanup, Git Isolation, Planning Isolation, 22 Rules Total
+- 📚 Tier 1 Working Memory: Sub-100ms Retrieval, 70 Conversations, JSON Lines Format, Session Context, FIFO Auto-Eviction, Fast Access
+- 📚 Tier 2 Knowledge Graph: Pattern Recognition, Relationship Mapping, Semantic Inference, Continuous Learning, Graph Database, Context Aware
+- 📚 Tier 3 Development Context: Quality Metrics, Issue Patterns, Tech Stack Analysis, Evolution Tracking, Analytics Dashboard, Per-Repo Storage
+- 🎨 All tiles link to detailed tier documentation pages
+- ✅ Consistent with token-optimization page tetris pattern
+- ✅ Responsive font sizing with `clamp()` and `cqi` units
+- ✅ Zero inline styles maintained
+- 🎯 Reference implementation: `docs/architecture/index.html` (Tier Deep Dive section)
+- 💾 Backup: `backups/architecture-tetris-20260103_HHMMSS.html`
+
+### v4.2.7 (January 3, 2026) - Global Standardization
+- ✅ Container query units (`container-type: inline-size`) added globally
+- ✅ Responsive font sizing with `clamp()` and `cqi` units
+- ✅ Spacing reduced by 50% (1.5rem → 0.75rem, 1rem → 0.5rem)
+- ✅ Glass animations moved to default state (8s reflection)
+- ✅ Zero inline styles achieved (100% eliminated)
+- ✅ Tetris metrics added to all 10 Level 1 hub pages
+- ✅ D3.js removed from 7 pages (420KB total reduction)
+- 💾 Backup: `backups/css-backup-standardization-20260103_120046/`
 
 ### v4.1.4 (January 3, 2026) - Content-Driven Layout Intelligence
 - 🎯 **BREAKING:** Added Content-Driven Layout Decision Matrix (choose 2 vs 3 columns by content length)

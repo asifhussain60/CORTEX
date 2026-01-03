@@ -1,11 +1,21 @@
 {
+  "htmlIssues": [
+    {
+      "severity": "HIGH",
+      "file": "docs\\learning-paths\\index.html",
+      "expected": "<h1 class=\"page-title\"><i class=\"fas fa-graduation-cap pulse-glow-glass--fast\"></i> Learning Paths</h1>",
+      "type": "ICON_SEPARATE_LINE",
+      "description": "Icon and title text on separate lines (should be inline)",
+      "line": 85,
+      "current": "<h1 class=\"page-title\">                     <i class=\"fas fa-graduation-cap pulse-glow-glass--fast\"></i>                     Learning Paths                 </h1>"
+    }
+  ],
+  "timestamp": "20260103_123353",
   "summary": {
-    "cssFilesScanned": 14,
-    "totalIssues": 0,
+    "fixedIssues": 0,
+    "totalIssues": 1,
     "htmlFilesScanned": 317,
-    "fixedIssues": 0
+    "cssFilesScanned": 14
   },
-  "cssIssues": [],
-  "timestamp": "20260103_111932",
-  "htmlIssues": []
+  "cssIssues": []
 }

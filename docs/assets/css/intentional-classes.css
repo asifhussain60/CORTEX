@@ -1452,4 +1452,249 @@
     border-radius: var(--radius-md);
 }
 
+/* Token Optimization Tetris Layout */
+.token-metrics-tetris {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, auto);
+    gap: 0.75rem;
+    margin-top: var(--spacing-xl, 2rem);
+    container-type: inline-size;
+}
 
+.token-metric-tile {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(0.5rem, 2cqi, 1rem);
+    padding: clamp(1rem, 3cqi, 2rem);
+    background: var(--glass-bg, rgba(26, 31, 58, 0.7));
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
+    border-radius: var(--radius-lg, 16px);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    text-align: center;
+    box-shadow: var(--shadow, 0 8px 32px rgba(0, 0, 0, 0.37));
+}
+
+.token-metric-tile::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.05) 50%,
+        transparent 70%
+    );
+    animation: glassReflectionFast 8s ease-in-out infinite;
+    pointer-events: none;
+}
+
+.token-metric-tile:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg, 0 20px 48px rgba(0, 0, 0, 0.5));
+    border-color: rgba(0, 212, 255, 0.3);
+}
+
+@keyframes glassReflectionFast {
+    0%, 100% { transform: translate(-50%, -50%) rotate(0deg); }
+    50% { transform: translate(-30%, -30%) rotate(180deg); }
+}
+
+.token-metric-tile i {
+    font-size: clamp(1.5rem, 4cqi + 0.5rem, 2.5rem);
+    opacity: 0.9;
+    transition: transform 0.3s ease;
+    color: var(--accent-primary, #00d4ff);
+    width: clamp(40px, 8cqi, 60px);
+    height: clamp(40px, 8cqi, 60px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md, 12px);
+}
+
+.token-metric-tile:hover i {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.token-metric-tile .metric-value {
+    font-size: clamp(1.25rem, 4cqi + 0.5rem, 2rem);
+    font-weight: 700;
+    color: var(--accent-primary, #00d4ff);
+    margin: 0;
+    line-height: 1;
+}
+
+.token-metric-tile .metric-label {
+    font-size: clamp(0.7rem, 2cqi + 0.2rem, 0.875rem);
+    color: var(--text-secondary, rgba(255, 255, 255, 0.7));
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 0;
+}
+
+/* Tetris Layout Patterns - Asymmetric Grid */
+.tile-reduction {
+    grid-column: span 2;
+    grid-row: span 2;
+}
+
+.tile-savings {
+    grid-column: span 1;
+    grid-row: span 2;
+}
+
+.tile-architecture {
+    grid-column: span 2;
+    grid-row: span 1;
+}
+
+.tile-access {
+    grid-column: span 1;
+    grid-row: span 1;
+}
+
+.tile-score {
+    grid-column: span 1;
+    grid-row: span 1;
+}
+
+.tile-updated {
+    grid-column: span 2;
+    grid-row: span 1;
+}
+
+/* Color Variations with Icon Backgrounds */
+.tile-reduction i {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.tile-reduction {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(220, 38, 38, 0.05));
+}
+
+.tile-reduction:hover {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(220, 38, 38, 0.1));
+    border-color: rgba(239, 68, 68, 0.4);
+}
+
+.tile-savings i {
+    background: linear-gradient(135deg, #10b981, #34d399);
+}
+
+.tile-savings {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.05));
+}
+
+.tile-savings:hover {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(5, 150, 105, 0.1));
+    border-color: rgba(16, 185, 129, 0.4);
+}
+
+.tile-architecture i {
+    background: linear-gradient(135deg, #3b82f6, #60a5fa);
+}
+
+.tile-architecture {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.05));
+}
+
+.tile-architecture:hover {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(37, 99, 235, 0.1));
+    border-color: rgba(59, 130, 246, 0.4);
+}
+
+.tile-access i {
+    background: linear-gradient(135deg, #f59e0b, #fbbf24);
+}
+
+.tile-access {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.05));
+}
+
+.tile-access:hover {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(217, 119, 6, 0.1));
+    border-color: rgba(245, 158, 11, 0.4);
+}
+
+.tile-score i {
+    background: linear-gradient(135deg, #a855f7, #9333ea);
+}
+
+.tile-score {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(147, 51, 234, 0.05));
+}
+
+.tile-score:hover {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(147, 51, 234, 0.1));
+    border-color: rgba(168, 85, 247, 0.4);
+}
+
+.tile-updated i {
+    background: linear-gradient(135deg, #ec4899, #db2777);
+}
+
+.tile-updated {
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(219, 39, 119, 0.05));
+}
+
+.tile-updated:hover {
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(219, 39, 119, 0.1));
+    border-color: rgba(236, 72, 153, 0.4);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .token-metrics-tetris {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+    }
+    
+    .tile-reduction,
+    .tile-savings,
+    .tile-architecture,
+    .tile-access,
+    .tile-score,
+    .tile-updated {
+        grid-column: span 1;
+        grid-row: span 1;
+    }
+}
+
+/* ============================================
+   ARCHIVE NOTICE (Intentional Styling)
+   ============================================ */
+.archive-notice {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.1), rgba(255, 152, 0, 0.1));
+    border-left: 4px solid #FFC107;
+}
+
+.archive-notice-content {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.archive-notice i {
+    color: #FFC107;
+}
+
+.archive-link {
+    color: #FFC107;
+    text-decoration: underline;
+}
+
+.archive-link:hover {
+    color: #FFD54F;
+}
