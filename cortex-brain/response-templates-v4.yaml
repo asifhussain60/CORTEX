@@ -1628,6 +1628,133 @@ named_templates:
     format: "[{{filled_bar}}{{empty_bar}}] {{percentage}}%"
     example: "[████████████░░░░░░░░] 60%"
     context_needed: true
+  
+  # Phase 7: Master Orchestrator Integration Templates
+  
+  orchestrator_execution_summary:
+    description: "Standard format for autonomous orchestrator execution summaries"
+    tier: "TIER 3"
+    format: |
+      ### 🛡️ {{orchestrator_name}} Execution Complete
+      
+      **Orchestrator:** {{orchestrator_id}} ({{orchestrator_type}})  
+      **Status:** {{status}} {{status_icon}}  
+      **Duration:** {{execution_time}}  
+      **Routing:** {{routing_method}} (confidence: {{confidence}})
+      
+      {{#if artifacts}}
+      #### 📦 Artifacts Generated
+      {{#each artifacts}}
+      - [{{name}}]({{path}}) - {{description}}
+      {{/each}}
+      {{/if}}
+      
+      {{#if state_updated}}
+      #### 💾 State Updated
+      - **Plan ID:** {{plan_id}}
+      - **Phase:** {{current_phase}}
+      - **Progress:** {{progress_percentage}}%
+      {{/if}}
+      
+      **Next:** {{next_action}}
+    context_needed: true
+    metadata:
+      category: orchestrator
+      operation: execution_summary
+  
+  database_state_query:
+    description: "Format for displaying plan status from database queries"
+    tier: "TIER 2"
+    format: |
+      ### 📊 Plan Status: {{plan_id}}
+      
+      | Field | Value |
+      |-------|-------|
+      | Status | {{status}} {{status_icon}} |
+      | Current Phase | {{current_phase}}/{{total_phases}} |
+      | Progress | {{progress_percentage}}% |
+      | Last Updated | {{last_updated}} |
+      | Artifacts | {{artifact_count}} |
+      
+      {{#if current_phase_details}}
+      #### Current Phase: {{current_phase_name}}
+      {{current_phase_details}}
+      {{/if}}
+      
+      **Actions:** {{available_actions}}
+    context_needed: true
+    metadata:
+      category: database
+      operation: state_query
+  
+  migration_complete:
+    description: "Celebration template for completed orchestrator migrations"
+    tier: "TIER 3"
+    format: |
+      # 🎉 MIGRATION COMPLETE
+      
+      ## {{orchestrator_name}} v{{version}} Successfully Migrated
+      
+      ### ✅ What Changed
+      {{#each changes}}
+      - {{description}}
+      {{/each}}
+      
+      ### 🚀 New Capabilities
+      {{#each capabilities}}
+      - **{{name}}:** {{description}}
+      {{/each}}
+      
+      ### 📈 Metrics
+      | Metric | Before | After | Improvement |
+      |--------|--------|-------|-------------|
+      {{#each metrics}}
+      | {{name}} | {{before}} | {{after}} | {{improvement}} |
+      {{/each}}
+      
+      ### 🔗 Master Orchestrator Integration
+      - **Routing Pattern:** `{{routing_pattern}}`
+      - **Confidence:** {{routing_confidence}}
+      - **Type:** {{orchestrator_type}}
+      
+      ### 📝 Next Steps
+      {{next_steps}}
+    context_needed: true
+    metadata:
+      category: migration
+      operation: completion
+  
+  master_orchestrator_routing:
+    description: "Display routing decision (pattern matched vs LLM fallback)"
+    tier: "TIER 2"
+    format: |
+      ### 🔀 Routing Decision
+      
+      **Input:** "{{user_input}}"  
+      **Matched:** {{orchestrator_id}}  
+      **Method:** {{routing_method}} {{method_icon}}  
+      **Confidence:** {{confidence}} {{confidence_bar}}  
+      **Latency:** {{latency_ms}}ms
+      
+      {{#if pattern_matched}}
+      **Pattern:** `{{matched_pattern}}`
+      {{/if}}
+      
+      {{#if llm_fallback}}
+      **LLM Reasoning:** {{llm_reasoning}}
+      {{/if}}
+      
+      {{#if continuation}}
+      **Continuation Detected:** Routing to last orchestrator ({{last_orchestrator}})
+      {{/if}}
+    context_needed: true
+    metadata:
+      category: routing
+      operation: routing_display
+    icons:
+      pattern_match: "⚡"
+      llm_fallback: "🤖"
+      continuation: "↩️"
 
 # ============================================================================
 # MIGRATION NOTES
