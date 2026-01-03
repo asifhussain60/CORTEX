@@ -1,7 +1,7 @@
 # 🎨 Glassmorphism Design Standard
 
-**Version:** 4.2.2 | **Status:** ✅ PRODUCTION  
-**Author:** Asif Hussain | **Last Updated:** January 3, 2026 (CSS Cleanup + Backup)  
+**Version:** 4.2.3 | **Status:** ✅ PRODUCTION  
+**Author:** Asif Hussain | **Last Updated:** January 3, 2026 (Font Awesome Icon Fix)  
 **Copyright © 2026 Asif Hussain. All rights reserved.**
 
 ---
@@ -246,6 +246,176 @@ Is it Level 0 (Home)?
 18. **100% CSS Usage** - Unused CSS classes = dead code, must be removed (v4.2.0)
 19. **Zero Missing CSS** - All HTML class attributes must have CSS definitions (v4.2.0)
 20. **Mobile-First Compliance** - A+ grade (95%+) mobile-friendliness score mandatory (v4.2.0)
+21. **Font Awesome 6.x Compliance** - All icons require style prefix (`fas`, `far`, `fab`, `fal`, `fad`) + icon name (v4.2.2)
+
+---
+
+## 🎯 Principle 21: Font Awesome Icon Implementation (v4.2.2)
+
+**Purpose:** Ensure all Font Awesome icons render correctly with proper class prefix format required by Font Awesome 6.x.
+
+### Icon Format Requirements
+
+**Font Awesome 6.x Syntax:**
+```html
+<!-- ✅ CORRECT: Style prefix + icon name + optional classes -->
+<i class="fas fa-code-branch pulse-glow-glass--fast"></i>
+<i class="far fa-heart animation-t1"></i>
+<i class="fab fa-github"></i>
+
+<!-- ❌ WRONG: Missing style prefix -->
+<i class="fa-code-branch pulse-glow-glass--fast"></i>
+<i class="fa-heart animation-t1"></i>
+<i class="fa-github"></i>
+```
+
+### Style Prefix Reference
+
+| Prefix | Style | Usage | Example |
+|--------|-------|-------|---------|
+| `fas` | Solid | Default icons (90% of use cases) | `fas fa-shield-alt` |
+| `far` | Regular | Outlined icons | `far fa-heart` |
+| `fab` | Brands | Company/product logos | `fab fa-github` |
+| `fal` | Light | Thin/light weight icons | `fal fa-star` |
+| `fad` | Duotone | Two-tone icons | `fad fa-code` |
+
+### Implementation Guidelines
+
+**1. Always Use Style Prefix:**
+```html
+<!-- Navigation icons -->
+<i class="fas fa-home"></i>
+<i class="fas fa-cog"></i>
+<i class="fas fa-search"></i>
+
+<!-- Card icons -->
+<div class="card-icon ast-icon">
+    <i class="fas fa-code-branch pulse-glow-glass--fast"></i>
+</div>
+
+<!-- Stat icons -->
+<span class="stat-item">
+    <i class="fas fa-language pulse-glow-glass--fast"></i> Multi-Language
+</span>
+```
+
+**2. Combine with Animation Classes:**
+```html
+<!-- T1 Animation + Icon -->
+<i class="fas fa-brain animation-t1"></i>
+
+<!-- Pulse Glow + Icon -->
+<i class="fas fa-microscope pulse-glow-glass--fast"></i>
+
+<!-- Multiple utility classes -->
+<i class="fas fa-shield-alt pulse-glow-glass--fast animation-t1"></i>
+```
+
+**3. Section Icons:**
+```html
+<!-- Section headers -->
+<h2 class="section-title">
+    <i class="fas fa-brain"></i>
+    Intelligence Extraction Flow
+</h2>
+
+<!-- Tier headers -->
+<div class="tier-header">
+    <i class="fas fa-sitemap"></i>
+    <h4>Tier 0: Governance</h4>
+</div>
+```
+
+### Validation Methods
+
+**Method 1: PowerShell Search (Should Return 0 Matches):**
+```powershell
+# Search for icons missing fas/far/fab/fal/fad prefix
+Select-String -Path "docs/**/*.html" -Pattern 'class="[^"]*\bfa-[a-z-]+' | 
+    Where-Object { $_.Line -notmatch '\bfas\b|\bfar\b|\bfab\b|\bfal\b|\bfad\b' }
+```
+
+**Method 2: Grep Search (Should Return 0 Matches):**
+```bash
+# Search for broken icon patterns
+grep -r 'class="[^"]*\bfa-[a-z-]' docs/**/*.html | grep -v '\bfas\b\|\bfar\b\|\bfab\b\|\bfal\b\|\bfad\b'
+```
+
+**Method 3: Visual Verification:**
+- Open any page in browser
+- Check DevTools Console for Font Awesome warnings
+- Verify icons render correctly (not showing empty boxes)
+
+### Common Patterns
+
+**Glassmorphism Cards:**
+```html
+<div class="glass-card-clickable animation-t1">
+    <div class="card-icon security-icon">
+        <i class="fas fa-shield-alt"></i>
+    </div>
+    <h4 class="card-title">Security Scanning</h4>
+    <p class="card-description">Detect security vulnerabilities</p>
+    <div class="card-stats">
+        <span class="stat-item"><i class="fas fa-lock"></i> 12 Checks</span>
+        <span class="stat-item"><i class="fas fa-exclamation-triangle"></i> CVE Database</span>
+    </div>
+</div>
+```
+
+**Multi-Panel Subpanels:**
+```html
+<div class="category-subpanel">
+    <h3 class="subpanel-title">
+        <i class="fas fa-shield-alt"></i> Protection
+    </h3>
+    <div class="category-links">
+        <a href="security/skull-protection.html" class="category-tag">
+            <i class="fas fa-skull-crossbones"></i> SKULL Protection
+        </a>
+    </div>
+</div>
+```
+
+**Navigation Breadcrumbs:**
+```html
+<nav class="glass-breadcrumb">
+    <a href="../index.html">
+        <i class="fas fa-home"></i> Home
+    </a>
+    <span class="breadcrumb-separator"><i class="fas fa-chevron-right"></i></span>
+    <a href="index.html">
+        <i class="fas fa-brain"></i> Architecture
+    </a>
+</nav>
+```
+
+### CDN Reference
+
+**Required in `<head>`:**
+```html
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+```
+
+**Version Compatibility:**
+- Font Awesome 6.x: Requires style prefix (mandatory)
+- Font Awesome 5.x: Style prefix optional but recommended
+- Font Awesome 4.x: Uses different `fa fa-` prefix (legacy)
+
+### Fix Script
+
+**Automated Icon Fix:** `scripts/fix-fontawesome-icons.ps1`
+
+Corrects all instances of missing `fas` prefix across documentation:
+- Scans all HTML files in `docs/`
+- Adds `fas` prefix to `fa-xxxxx` patterns
+- Creates `.bak` backup files
+- Handles edge cases (duplicate prefixes, multiple classes)
+
+**Usage:**
+```powershell
+.\scripts\fix-fontawesome-icons.ps1
+```
 
 ---
 

@@ -69,7 +69,7 @@ button, a, input, select, textarea, [role="button"] {
         <div class="header-content">
             <nav class="header-nav" mobile-nav-optimized>
                 <a href="../index.html" class="nav-link" mobile-nav-optimized>
-                    <i class="pulse-glow-glass--fast fa-home"></i>
+                    <i class="fas fa-home pulse-glow-glass--fast"></i>
                     <span>Home</span>
                 </a>
             </nav>
@@ -78,7 +78,7 @@ button, a, input, select, textarea, [role="button"] {
 
     <main class="sts-main">
         <section class="sts-hero">
-            <h1><i class="pulse-glow-glass--fast fa-vial"></i> Testing Best Practices</h1>
+            <h1><i class="fas fa-vial pulse-glow-glass--fast"></i> Testing Best Practices</h1>
             <p class="hero-subtitle">Write maintainable, reliable tests that catch real bugs</p>
             <div class="sts-metrics">
                 <div class="metric-card"><div class="metric-value">3</div><div class="metric-label">Patterns</div></div>
@@ -90,11 +90,11 @@ button, a, input, select, textarea, [role="button"] {
         <!-- AAA Pattern - TypeScript Jest -->
         <section class="comparison-section">
             <div class="section-header">
-                <h3><i class="pulse-glow-glass--fast fa-check-double"></i> Arrange-Act-Assert Pattern</h3>
+                <h3><i class="fas fa-check-double pulse-glow-glass--fast"></i> Arrange-Act-Assert Pattern</h3>
                 <span class="language-badge typescript">TypeScript</span>
             </div>
             <div class="refactor-explanation">
-                <h4><i class="pulse-glow-glass--fast fa-lightbulb"></i> How This Was Refactored</h4>
+                <h4><i class="fas fa-lightbulb pulse-glow-glass--fast"></i> How This Was Refactored</h4>
                 <div class="capability-tiles">
     <div class="glass-card">
         <div class="card-body"><strong>Problem:</strong> Tests are hard to read, unclear what's being tested</div>
@@ -109,7 +109,7 @@ button, a, input, select, textarea, [role="button"] {
             </div>
             <div class="comparison-container">
                 <div class="panel before-panel">
-                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-times-circle"></i> Before: Unclear Structure</div>
+                    <div class="panel-header"><i class="fas fa-times-circle pulse-glow-glass--fast"></i> Before: Unclear Structure</div>
                     <pre><code class="language-badge">test('cart test', () => {
   const cart = new ShoppingCart();
   cart.addItem({ id: '1', name: 'Book', price: 10 });
@@ -123,7 +123,7 @@ button, a, input, select, textarea, [role="button"] {
 });</code></pre>
                 </div>
                 <div class="panel after-panel">
-                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-check-circle"></i> After: AAA Pattern</div>
+                    <div class="panel-header"><i class="fas fa-check-circle pulse-glow-glass--fast"></i> After: AAA Pattern</div>
                     <pre><code class="language-badge">describe('ShoppingCart', () => {
   describe('applyDiscount', () => {
     it('should reduce total by percentage', () => {
@@ -146,11 +146,11 @@ button, a, input, select, textarea, [role="button"] {
         <!-- Dependency Injection - C# -->
         <section class="comparison-section">
             <div class="section-header">
-                <h3><i class="pulse-glow-glass--fast fa-puzzle-piece"></i> Testable Code with DI</h3>
+                <h3><i class="fas fa-puzzle-piece pulse-glow-glass--fast"></i> Testable Code with DI</h3>
                 <span class="language-badge csharp">C#</span>
             </div>
             <div class="refactor-explanation">
-                <h4><i class="pulse-glow-glass--fast fa-lightbulb"></i> How This Was Refactored</h4>
+                <h4><i class="fas fa-lightbulb pulse-glow-glass--fast"></i> How This Was Refactored</h4>
                 <div class="capability-tiles">
     <div class="glass-card">
         <div class="card-body"><strong>Problem:</strong> Hardcoded dependencies make unit testing impossible</div>
@@ -165,7 +165,7 @@ button, a, input, select, textarea, [role="button"] {
             </div>
             <div class="comparison-container">
                 <div class="panel before-panel">
-                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-times-circle"></i> Before: Untestable</div>
+                    <div class="panel-header"><i class="fas fa-times-circle pulse-glow-glass--fast"></i> Before: Untestable</div>
                     <pre><code class="language-badge">public class OrderService
 {
     public async Task&lt;Order&gt; CreateOrder(OrderRequest request)
@@ -185,7 +185,7 @@ button, a, input, select, textarea, [role="button"] {
 }</code></pre>
                 </div>
                 <div class="panel after-panel">
-                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-check-circle"></i> After: Testable with DI</div>
+                    <div class="panel-header"><i class="fas fa-check-circle pulse-glow-glass--fast"></i> After: Testable with DI</div>
                     <pre><code class="language-badge">public class OrderService
 {
     private readonly IOrderRepository _repo;
@@ -218,11 +218,11 @@ button, a, input, select, textarea, [role="button"] {
         <!-- Component Testing - Angular -->
         <section class="comparison-section">
             <div class="section-header">
-                <h3><i class="pulse-glow-glass--fast fa-cube"></i> Angular Component Testing</h3>
+                <h3><i class="fas fa-cube pulse-glow-glass--fast"></i> Angular Component Testing</h3>
                 <span class="language-badge angular">Angular</span>
             </div>
             <div class="refactor-explanation">
-                <h4><i class="pulse-glow-glass--fast fa-lightbulb"></i> How This Was Refactored</h4>
+                <h4><i class="fas fa-lightbulb pulse-glow-glass--fast"></i> How This Was Refactored</h4>
                 <div class="capability-tiles">
     <div class="glass-card">
         <div class="card-body"><strong>Problem:</strong> Testing implementation details, brittle tests</div>
@@ -237,7 +237,7 @@ button, a, input, select, textarea, [role="button"] {
             </div>
             <div class="comparison-container">
                 <div class="panel before-panel">
-                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-times-circle"></i> Before: Testing Internals</div>
+                    <div class="panel-header"><i class="fas fa-times-circle pulse-glow-glass--fast"></i> Before: Testing Internals</div>
                     <pre><code class="language-badge">it('should toggle', () => {
   // Testing internal state - brittle!
   expect(component.isExpanded).toBeFalse();
@@ -252,7 +252,7 @@ button, a, input, select, textarea, [role="button"] {
 // Doesn't test what user actually sees</code></pre>
                 </div>
                 <div class="panel after-panel">
-                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-check-circle"></i> After: Testing Behavior</div>
+                    <div class="panel-header"><i class="fas fa-check-circle pulse-glow-glass--fast"></i> After: Testing Behavior</div>
                     <pre><code class="language-badge">it('should expand panel when header clicked', () => {
   // Arrange
   const header = fixture.debugElement

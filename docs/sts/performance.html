@@ -69,7 +69,7 @@ button, a, input, select, textarea, [role="button"] {
         <div class="header-content">
             <nav class="header-nav" mobile-nav-optimized>
                 <a href="../index.html" class="nav-link" mobile-nav-optimized>
-                    <i class="pulse-glow-glass--fast fa-home"></i>
+                    <i class="fas fa-home pulse-glow-glass--fast"></i>
                     <span>Home</span>
                 </a>
             </nav>
@@ -78,7 +78,7 @@ button, a, input, select, textarea, [role="button"] {
 
     <main class="sts-main">
         <section class="sts-hero">
-            <h1><i class="pulse-glow-glass--fast fa-tachometer-alt"></i> Performance Optimization</h1>
+            <h1><i class="fas fa-tachometer-alt pulse-glow-glass--fast"></i> Performance Optimization</h1>
             <p class="hero-subtitle">Eliminate bottlenecks and boost application speed</p>
             <div class="sts-metrics">
                 <div class="metric-card"><div class="metric-value">8</div><div class="metric-label">Optimizations</div></div>
@@ -90,11 +90,11 @@ button, a, input, select, textarea, [role="button"] {
         <!-- N+1 Query - C# Entity Framework -->
         <section class="comparison-section">
             <div class="section-header">
-                <h3><i class="pulse-glow-glass--fast fa-database"></i> N+1 Query Problem</h3>
+                <h3><i class="fas fa-database pulse-glow-glass--fast"></i> N+1 Query Problem</h3>
                 <span class="language-badge csharp">C#</span>
             </div>
             <div class="refactor-explanation">
-                <h4><i class="pulse-glow-glass--fast fa-lightbulb"></i> How This Was Refactored</h4>
+                <h4><i class="fas fa-lightbulb pulse-glow-glass--fast"></i> How This Was Refactored</h4>
                 <div class="capability-tiles">
     <div class="glass-card">
         <div class="card-body"><strong>Problem:</strong> Lazy loading triggers N+1 database queries</div>
@@ -109,7 +109,7 @@ button, a, input, select, textarea, [role="button"] {
             </div>
             <div class="comparison-container">
                 <div class="panel before-panel">
-                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-times-circle"></i> Before: N+1 Queries</div>
+                    <div class="panel-header"><i class="fas fa-times-circle pulse-glow-glass--fast"></i> Before: N+1 Queries</div>
                     <pre><code class="language-badge">public List&lt;OrderDto&gt; GetOrders()
 {
     var orders = _context.Orders.ToList(); // 1 query
@@ -125,7 +125,7 @@ button, a, input, select, textarea, [role="button"] {
 // Total: 1 + N + N = potentially 201 queries!</code></pre>
                 </div>
                 <div class="panel after-panel">
-                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-check-circle"></i> After: Eager Loading</div>
+                    <div class="panel-header"><i class="fas fa-check-circle pulse-glow-glass--fast"></i> After: Eager Loading</div>
                     <pre><code class="language-badge">public List&lt;OrderDto&gt; GetOrders()
 {
     var orders = _context.Orders
@@ -148,11 +148,11 @@ button, a, input, select, textarea, [role="button"] {
         <!-- Async/Await - TypeScript -->
         <section class="comparison-section">
             <div class="section-header">
-                <h3><i class="pulse-glow-glass--fast fa-bolt"></i> Sequential vs Parallel Async</h3>
+                <h3><i class="fas fa-bolt pulse-glow-glass--fast"></i> Sequential vs Parallel Async</h3>
                 <span class="language-badge typescript">TypeScript</span>
             </div>
             <div class="refactor-explanation">
-                <h4><i class="pulse-glow-glass--fast fa-lightbulb"></i> How This Was Refactored</h4>
+                <h4><i class="fas fa-lightbulb pulse-glow-glass--fast"></i> How This Was Refactored</h4>
                 <div class="capability-tiles">
     <div class="glass-card">
         <div class="card-body"><strong>Problem:</strong> Sequential awaits block unnecessarily</div>
@@ -167,7 +167,7 @@ button, a, input, select, textarea, [role="button"] {
             </div>
             <div class="comparison-container">
                 <div class="panel before-panel">
-                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-times-circle"></i> Before: Sequential (3s)</div>
+                    <div class="panel-header"><i class="fas fa-times-circle pulse-glow-glass--fast"></i> Before: Sequential (3s)</div>
                     <pre><code class="language-badge">async function loadDashboard(userId: string) {
   // Each await blocks the next - total 3 seconds!
   const user = await fetchUser(userId);      // 1 sec
@@ -178,7 +178,7 @@ button, a, input, select, textarea, [role="button"] {
 }</code></pre>
                 </div>
                 <div class="panel after-panel">
-                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-check-circle"></i> After: Parallel (1s)</div>
+                    <div class="panel-header"><i class="fas fa-check-circle pulse-glow-glass--fast"></i> After: Parallel (1s)</div>
                     <pre><code class="language-badge">async function loadDashboard(userId: string) {
   // All requests fire simultaneously!
   const [user, orders, stats] = await Promise.all([
@@ -197,11 +197,11 @@ button, a, input, select, textarea, [role="button"] {
         <!-- Change Detection - Angular -->
         <section class="comparison-section">
             <div class="section-header">
-                <h3><i class="pulse-glow-glass--fast fa-sync"></i> Angular Change Detection</h3>
+                <h3><i class="fas fa-sync pulse-glow-glass--fast"></i> Angular Change Detection</h3>
                 <span class="language-badge angular">Angular</span>
             </div>
             <div class="refactor-explanation">
-                <h4><i class="pulse-glow-glass--fast fa-lightbulb"></i> How This Was Refactored</h4>
+                <h4><i class="fas fa-lightbulb pulse-glow-glass--fast"></i> How This Was Refactored</h4>
                 <div class="capability-tiles">
     <div class="glass-card">
         <div class="card-body"><strong>Problem:</strong> Default change detection checks entire tree</div>
@@ -216,7 +216,7 @@ button, a, input, select, textarea, [role="button"] {
             </div>
             <div class="comparison-container">
                 <div class="panel before-panel">
-                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-times-circle"></i> Before: Check Always</div>
+                    <div class="panel-header"><i class="fas fa-times-circle pulse-glow-glass--fast"></i> Before: Check Always</div>
                     <pre><code class="language-badge">@Component({
   selector: 'app-user-list',
   template: `
@@ -236,7 +236,7 @@ export class UserListComponent {
 }</code></pre>
                 </div>
                 <div class="panel after-panel">
-                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-check-circle"></i> After: OnPush + Pure Pipe</div>
+                    <div class="panel-header"><i class="fas fa-check-circle pulse-glow-glass--fast"></i> After: OnPush + Pure Pipe</div>
                     <pre><code class="language-badge">@Component({
   selector: 'app-user-list',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -264,11 +264,11 @@ export class UserStatusPipe implements PipeTransform {
         <!-- SQL Indexing -->
         <section class="comparison-section">
             <div class="section-header">
-                <h3><i class="pulse-glow-glass--fast fa-search"></i> Database Indexing</h3>
+                <h3><i class="fas fa-search pulse-glow-glass--fast"></i> Database Indexing</h3>
                 <span class="language-badge sql">SQL</span>
             </div>
             <div class="refactor-explanation">
-                <h4><i class="pulse-glow-glass--fast fa-lightbulb"></i> How This Was Refactored</h4>
+                <h4><i class="fas fa-lightbulb pulse-glow-glass--fast"></i> How This Was Refactored</h4>
                 <div class="capability-tiles">
     <div class="glass-card">
         <div class="card-body"><strong>Problem:</strong> Full table scan on every query</div>
@@ -283,7 +283,7 @@ export class UserStatusPipe implements PipeTransform {
             </div>
             <div class="comparison-container">
                 <div class="panel before-panel">
-                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-times-circle"></i> Before: Full Table Scan</div>
+                    <div class="panel-header"><i class="fas fa-times-circle pulse-glow-glass--fast"></i> Before: Full Table Scan</div>
                     <pre><code class="language-badge">-- No index on Status or CreatedAt
 -- Full table scan: 5+ seconds on 10M rows
 
@@ -296,7 +296,7 @@ ORDER BY CreatedAt DESC;
 -- Execution plan shows: Table Scan (100% cost)</code></pre>
                 </div>
                 <div class="panel after-panel">
-                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-check-circle"></i> After: Covering Index</div>
+                    <div class="panel-header"><i class="fas fa-check-circle pulse-glow-glass--fast"></i> After: Covering Index</div>
                     <pre><code class="language-badge">-- Create covering index for this query pattern
 CREATE NONCLUSTERED INDEX IX_Orders_Status_Date
 ON Orders (Status, CreatedAt DESC)
@@ -317,11 +317,11 @@ ORDER BY CreatedAt DESC;
         <!-- Cache-Aside Pattern - C# -->
         <section class="comparison-section">
             <div class="section-header">
-                <h3><i class="pulse-glow-glass--fast fa-database"></i> Cache-Aside Pattern (Lazy Loading)</h3>
+                <h3><i class="fas fa-database pulse-glow-glass--fast"></i> Cache-Aside Pattern (Lazy Loading)</h3>
                 <span class="language-badge csharp">C#</span>
             </div>
             <div class="refactor-explanation">
-                <h4><i class="pulse-glow-glass--fast fa-lightbulb"></i> How This Was Refactored</h4>
+                <h4><i class="fas fa-lightbulb pulse-glow-glass--fast"></i> How This Was Refactored</h4>
                 <div class="capability-tiles">
     <div class="glass-card">
         <div class="card-body"><strong>Problem:</strong> Every request hits database (3 network round trips per call)</div>
@@ -336,7 +336,7 @@ ORDER BY CreatedAt DESC;
             </div>
             <div class="comparison-container">
                 <div class="panel before-panel">
-                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-times-circle"></i> Before: No Caching (3 Calls)</div>
+                    <div class="panel-header"><i class="fas fa-times-circle pulse-glow-glass--fast"></i> Before: No Caching (3 Calls)</div>
                     <pre><code class="language-badge">public async Task&lt;User&gt; GetUserAsync(int userId)
 {
     // Always hits database
@@ -355,7 +355,7 @@ ORDER BY CreatedAt DESC;
 // Total latency: ~200ms per request</code></pre>
                 </div>
                 <div class="panel after-panel">
-                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-check-circle"></i> After: Cache-Aside Pattern</div>
+                    <div class="panel-header"><i class="fas fa-check-circle pulse-glow-glass--fast"></i> After: Cache-Aside Pattern</div>
                     <pre><code class="language-badge">public async Task&lt;User&gt; GetUserAsync(int userId)
 {
     string cacheKey = $"user:{userId}";
@@ -389,11 +389,11 @@ ORDER BY CreatedAt DESC;
         <!-- Object Pooling - C# -->
         <section class="comparison-section">
             <div class="section-header">
-                <h3><i class="pulse-glow-glass--fast fa-recycle"></i> Object Pooling Pattern</h3>
+                <h3><i class="fas fa-recycle pulse-glow-glass--fast"></i> Object Pooling Pattern</h3>
                 <span class="language-badge csharp">C#</span>
             </div>
             <div class="refactor-explanation">
-                <h4><i class="pulse-glow-glass--fast fa-lightbulb"></i> How This Was Refactored</h4>
+                <h4><i class="fas fa-lightbulb pulse-glow-glass--fast"></i> How This Was Refactored</h4>
                 <div class="capability-tiles">
     <div class="glass-card">
         <div class="card-body"><strong>Problem:</strong> Creating 10,000 objects per second (high GC pressure)</div>
@@ -408,7 +408,7 @@ ORDER BY CreatedAt DESC;
             </div>
             <div class="comparison-container">
                 <div class="panel before-panel">
-                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-times-circle"></i> Before: Create/Destroy Objects</div>
+                    <div class="panel-header"><i class="fas fa-times-circle pulse-glow-glass--fast"></i> Before: Create/Destroy Objects</div>
                     <pre><code class="language-badge">public class MessageProcessor
 {
     public async Task ProcessMessagesAsync(IEnumerable&lt;byte[]&gt; messages)
@@ -434,7 +434,7 @@ ORDER BY CreatedAt DESC;
 // - Throughput: 5,000 msg/sec</code></pre>
                 </div>
                 <div class="panel after-panel">
-                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-check-circle"></i> After: Object Pool</div>
+                    <div class="panel-header"><i class="fas fa-check-circle pulse-glow-glass--fast"></i> After: Object Pool</div>
                     <pre><code class="language-badge">public class MessageProcessor
 {
     private readonly ArrayPool&lt;byte&gt; _bufferPool;
@@ -477,11 +477,11 @@ ORDER BY CreatedAt DESC;
         <!-- Big-O Optimization - TypeScript -->
         <section class="comparison-section">
             <div class="section-header">
-                <h3><i class="pulse-glow-glass--fast fa-chart-line"></i> Algorithm Complexity Optimization</h3>
+                <h3><i class="fas fa-chart-line pulse-glow-glass--fast"></i> Algorithm Complexity Optimization</h3>
                 <span class="language-badge typescript">TypeScript</span>
             </div>
             <div class="refactor-explanation">
-                <h4><i class="pulse-glow-glass--fast fa-lightbulb"></i> How This Was Refactored</h4>
+                <h4><i class="fas fa-lightbulb pulse-glow-glass--fast"></i> How This Was Refactored</h4>
                 <div class="capability-tiles">
     <div class="glass-card">
         <div class="card-body"><strong>Problem:</strong> O(n²) nested loops for finding pairs</div>
@@ -496,7 +496,7 @@ ORDER BY CreatedAt DESC;
             </div>
             <div class="comparison-container">
                 <div class="panel before-panel">
-                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-times-circle"></i> Before: O(n²) Nested Loops</div>
+                    <div class="panel-header"><i class="fas fa-times-circle pulse-glow-glass--fast"></i> Before: O(n²) Nested Loops</div>
                     <pre><code class="language-badge">function findPairsWithSum(numbers: number[], target: number): number[][] {
     const pairs: number[][] = [];
     
@@ -522,7 +522,7 @@ ORDER BY CreatedAt DESC;
 // n = 10,000: 50 seconds (unusable!)</code></pre>
                 </div>
                 <div class="panel after-panel">
-                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-check-circle"></i> After: O(n) Hash Table</div>
+                    <div class="panel-header"><i class="fas fa-check-circle pulse-glow-glass--fast"></i> After: O(n) Hash Table</div>
                     <pre><code class="language-badge">function findPairsWithSum(numbers: number[], target: number): number[][] {
     const pairs: number[][] = [];
     const seen = new Set&lt;number&gt;();
@@ -556,11 +556,11 @@ ORDER BY CreatedAt DESC;
         <!-- LRU Cache - level1-icon-python -->
         <section class="comparison-section">
             <div class="section-header">
-                <h3><i class="pulse-glow-glass--fast fa-memory"></i> LRU Cache Eviction Strategy</h3>
+                <h3><i class="fas fa-memory pulse-glow-glass--fast"></i> LRU Cache Eviction Strategy</h3>
                 <span class="language-badge level1-icon-python">level1-icon-python</span>
             </div>
             <div class="refactor-explanation">
-                <h4><i class="pulse-glow-glass--fast fa-lightbulb"></i> How This Was Refactored</h4>
+                <h4><i class="fas fa-lightbulb pulse-glow-glass--fast"></i> How This Was Refactored</h4>
                 <div class="capability-tiles">
     <div class="glass-card">
         <div class="card-body"><strong>Problem:</strong> Unbounded cache grows infinitely (memory leak)</div>
@@ -575,7 +575,7 @@ ORDER BY CreatedAt DESC;
             </div>
             <div class="comparison-container">
                 <div class="panel before-panel">
-                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-times-circle"></i> Before: Unbounded Cache</div>
+                    <div class="panel-header"><i class="fas fa-times-circle pulse-glow-glass--fast"></i> Before: Unbounded Cache</div>
                     <pre><code class="language-level1-icon-python">class Cache:
     def __init__(self):
         self._cache = {}  # No size limit!
@@ -595,7 +595,7 @@ ORDER BY CreatedAt DESC;
 # Eventually causes OutOfMemoryError</code></pre>
                 </div>
                 <div class="panel after-panel">
-                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-check-circle"></i> After: LRU Cache</div>
+                    <div class="panel-header"><i class="fas fa-check-circle pulse-glow-glass--fast"></i> After: LRU Cache</div>
                     <pre><code class="language-level1-icon-python">from collections import OrderedDict
 
 class LRUCache:

@@ -69,7 +69,7 @@ button, a, input, select, textarea, [role="button"] {
         <div class="header-content">
             <nav class="header-nav" mobile-nav-optimized>
                 <a href="../index.html" class="nav-link" mobile-nav-optimized>
-                    <i class="pulse-glow-glass--fast fa-home"></i>
+                    <i class="fas fa-home pulse-glow-glass--fast"></i>
                     <span>Home</span>
                 </a>
             </nav>
@@ -78,7 +78,7 @@ button, a, input, select, textarea, [role="button"] {
 
     <main class="sts-main">
         <section class="sts-hero">
-            <h1><i class="pulse-glow-glass--fast fa-shield-alt"></i> Security Vulnerabilities Fixed</h1>
+            <h1><i class="fas fa-shield-alt pulse-glow-glass--fast"></i> Security Vulnerabilities Fixed</h1>
             <p class="hero-subtitle">Watch CORTEX identify and fix critical security vulnerabilities</p>
             <div class="sts-metrics">
                 <div class="metric-card">
@@ -99,12 +99,12 @@ button, a, input, select, textarea, [role="button"] {
         <!-- SQL Injection - C# -->
         <section class="comparison-section">
             <div class="section-header">
-                <h3><i class="pulse-glow-glass--fast fa-database"></i> SQL Injection Prevention</h3>
+                <h3><i class="fas fa-database pulse-glow-glass--fast"></i> SQL Injection Prevention</h3>
                 <span class="language-badge csharp">C#</span>
             </div>
             
             <div class="refactor-explanation">
-                <h4><i class="pulse-glow-glass--fast fa-lightbulb"></i> How This Was Refactored</h4>
+                <h4><i class="fas fa-lightbulb pulse-glow-glass--fast"></i> How This Was Refactored</h4>
                 <div class="capability-tiles">
     <div class="glass-card">
         <div class="card-body"><strong>Vulnerability:</strong> String concatenation allows attackers to inject malicious SQL</div>
@@ -121,7 +121,7 @@ button, a, input, select, textarea, [role="button"] {
             <div class="comparison-container">
                 <div class="panel before-panel">
                     <div class="panel-header">
-                        <i class="pulse-glow-glass--fast fa-times-circle"></i> Before: Vulnerable
+                        <i class="fas fa-times-circle pulse-glow-glass--fast"></i> Before: Vulnerable
                     </div>
                     <pre><code class="language-badge">public class UserRepository
 {
@@ -142,7 +142,7 @@ button, a, input, select, textarea, [role="button"] {
 
                 <div class="panel after-panel">
                     <div class="panel-header">
-                        <i class="pulse-glow-glass--fast fa-check-circle"></i> After: Secure
+                        <i class="fas fa-check-circle pulse-glow-glass--fast"></i> After: Secure
                     </div>
                     <pre><code class="language-badge">public class UserRepository
 {
@@ -167,12 +167,12 @@ button, a, input, select, textarea, [role="button"] {
         <!-- XSS - Angular -->
         <section class="comparison-section">
             <div class="section-header">
-                <h3><i class="pulse-glow-glass--fast fa-code"></i> Cross-Site Scripting (XSS)</h3>
+                <h3><i class="fas fa-code pulse-glow-glass--fast"></i> Cross-Site Scripting (XSS)</h3>
                 <span class="language-badge angular">Angular</span>
             </div>
             
             <div class="refactor-explanation">
-                <h4><i class="pulse-glow-glass--fast fa-lightbulb"></i> How This Was Refactored</h4>
+                <h4><i class="fas fa-lightbulb pulse-glow-glass--fast"></i> How This Was Refactored</h4>
                 <div class="capability-tiles">
     <div class="glass-card">
         <div class="card-body"><strong>Vulnerability:</strong> innerHTML bypasses Angular's built-in sanitization</div>
@@ -189,7 +189,7 @@ button, a, input, select, textarea, [role="button"] {
             <div class="comparison-container">
                 <div class="panel before-panel">
                     <div class="panel-header">
-                        <i class="pulse-glow-glass--fast fa-times-circle"></i> Before: Vulnerable
+                        <i class="fas fa-times-circle pulse-glow-glass--fast"></i> Before: Vulnerable
                     </div>
                     <pre><code class="language-badge">@Component({
   selector: 'app-comment',
@@ -206,7 +206,7 @@ export class CommentComponent {
 
                 <div class="panel after-panel">
                     <div class="panel-header">
-                        <i class="pulse-glow-glass--fast fa-check-circle"></i> After: Secure
+                        <i class="fas fa-check-circle pulse-glow-glass--fast"></i> After: Secure
                     </div>
                     <pre><code class="language-badge">@Component({
   selector: 'app-comment',
@@ -234,12 +234,12 @@ export class CommentComponent {
         <!-- Auth - TypeScript -->
         <section class="comparison-section">
             <div class="section-header">
-                <h3><i class="pulse-glow-glass--fast fa-key"></i> Secure Authentication</h3>
+                <h3><i class="fas fa-key pulse-glow-glass--fast"></i> Secure Authentication</h3>
                 <span class="language-badge typescript">TypeScript</span>
             </div>
             
             <div class="refactor-explanation">
-                <h4><i class="pulse-glow-glass--fast fa-lightbulb"></i> How This Was Refactored</h4>
+                <h4><i class="fas fa-lightbulb pulse-glow-glass--fast"></i> How This Was Refactored</h4>
                 <div class="capability-tiles">
     <div class="glass-card">
         <div class="card-body"><strong>Vulnerability:</strong> Plain text passwords stored and compared directly</div>
@@ -256,7 +256,7 @@ export class CommentComponent {
             <div class="comparison-container">
                 <div class="panel before-panel">
                     <div class="panel-header">
-                        <i class="pulse-glow-glass--fast fa-times-circle"></i> Before: Vulnerable
+                        <i class="fas fa-times-circle pulse-glow-glass--fast"></i> Before: Vulnerable
                     </div>
                     <pre><code class="language-badge">class AuthService {
   async login(email: string, password: string) {
@@ -278,7 +278,7 @@ export class CommentComponent {
 
                 <div class="panel after-panel">
                     <div class="panel-header">
-                        <i class="pulse-glow-glass--fast fa-check-circle"></i> After: Secure
+                        <i class="fas fa-check-circle pulse-glow-glass--fast"></i> After: Secure
                     </div>
                     <pre><code class="language-badge">import bcrypt from 'bcrypt';
 
@@ -307,12 +307,12 @@ class AuthService {
         <!-- SQL Procedure -->
         <section class="comparison-section">
             <div class="section-header">
-                <h3><i class="pulse-glow-glass--fast fa-server"></i> Secure Stored Procedures</h3>
+                <h3><i class="fas fa-server pulse-glow-glass--fast"></i> Secure Stored Procedures</h3>
                 <span class="language-badge sql">SQL</span>
             </div>
             
             <div class="refactor-explanation">
-                <h4><i class="pulse-glow-glass--fast fa-lightbulb"></i> How This Was Refactored</h4>
+                <h4><i class="fas fa-lightbulb pulse-glow-glass--fast"></i> How This Was Refactored</h4>
                 <div class="capability-tiles">
     <div class="glass-card">
         <div class="card-body"><strong>Vulnerability:</strong> Dynamic SQL with EXEC allows injection even in stored procedures</div>
@@ -329,7 +329,7 @@ class AuthService {
             <div class="comparison-container">
                 <div class="panel before-panel">
                     <div class="panel-header">
-                        <i class="pulse-glow-glass--fast fa-times-circle"></i> Before: Vulnerable
+                        <i class="fas fa-times-circle pulse-glow-glass--fast"></i> Before: Vulnerable
                     </div>
                     <pre><code class="language-badge">CREATE PROCEDURE SearchProducts
     @SearchTerm NVARCHAR(100)
@@ -347,7 +347,7 @@ END</code></pre>
 
                 <div class="panel after-panel">
                     <div class="panel-header">
-                        <i class="pulse-glow-glass--fast fa-check-circle"></i> After: Secure
+                        <i class="fas fa-check-circle pulse-glow-glass--fast"></i> After: Secure
                     </div>
                     <pre><code class="language-badge">CREATE PROCEDURE SearchProducts
     @SearchTerm NVARCHAR(100)

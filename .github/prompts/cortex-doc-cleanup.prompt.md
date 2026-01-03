@@ -65,13 +65,14 @@ Automated documentation cleanup orchestrator that organizes the `docs/` folder, 
 
 ### Phase 2: File Organization 📦
 
-**Purpose:** Move orphaned files to archives, preserve linked content
+**Purpose:** Move orphaned files to archives, preserve linked content, remove backup files
 
 **Steps:**
 1. Run `docs-organizer.ps1` (live mode, no `-DryRun`)
 2. Archive orphaned files to `docs/archives/cleanup-{timestamp}/`
 3. Preserve stub pages (auto-detected via content markers)
 4. Keep all files linked from `docs/index.html` hierarchy
+5. **Delete all `.bak` backup files** from `docs/` recursively (created by fix scripts)
 
 **Stub Detection Markers:**
 - `stub-container` class
@@ -86,6 +87,13 @@ Automated documentation cleanup orchestrator that organizes the `docs/` folder, 
 - `docs/search-index.json`
 - `docs/404.md`
 
+**Backup File Cleanup:**
+```powershell
+# Remove all .bak files created by fix scripts
+Get-ChildItem -Path "docs" -Filter "*.bak" -Recurse | Remove-Item -Force
+Write-Host "✅ Deleted all .bak backup files" -ForegroundColor Green
+```
+
 **Tools:**
 ```powershell
 .\cortex-toolkit\docs-organizer.ps1 -Force
@@ -96,6 +104,7 @@ Automated documentation cleanup orchestrator that organizes the `docs/` folder, 
 - No linked files archived
 - Stub pages preserved
 - Root directory contains only 5 essential files
+- All `.bak` backup files deleted
 
 ---
 

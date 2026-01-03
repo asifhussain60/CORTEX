@@ -69,7 +69,7 @@ button, a, input, select, textarea, [role="button"] {
         <div class="header-content">
             <nav class="header-nav" mobile-nav-optimized>
                 <a href="../index.html" class="nav-link" mobile-nav-optimized>
-                    <i class="pulse-glow-glass--fast fa-home"></i>
+                    <i class="fas fa-home pulse-glow-glass--fast"></i>
                     <span>Home</span>
                 </a>
             </nav>
@@ -78,7 +78,7 @@ button, a, input, select, textarea, [role="button"] {
 
     <main class="sts-main">
         <section class="sts-hero">
-            <h1><i class="pulse-glow-glass--fast fa-book-open"></i> Self-Documenting Code</h1>
+            <h1><i class="fas fa-book-open pulse-glow-glass--fast"></i> Self-Documenting Code</h1>
             <p class="hero-subtitle">Transform cryptic code into readable, well-documented software</p>
             <div class="sts-metrics">
                 <div class="metric-card"><div class="metric-value">3</div><div class="metric-label">Patterns</div></div>
@@ -90,11 +90,11 @@ button, a, input, select, textarea, [role="button"] {
         <!-- TSDoc - TypeScript -->
         <section class="comparison-section">
             <div class="section-header">
-                <h3><i class="pulse-glow-glass--fast fa-tags"></i> TSDoc Comments</h3>
+                <h3><i class="fas fa-tags pulse-glow-glass--fast"></i> TSDoc Comments</h3>
                 <span class="language-badge typescript">TypeScript</span>
             </div>
             <div class="refactor-explanation">
-                <h4><i class="pulse-glow-glass--fast fa-lightbulb"></i> How This Was Refactored</h4>
+                <h4><i class="fas fa-lightbulb pulse-glow-glass--fast"></i> How This Was Refactored</h4>
                 <div class="capability-tiles">
     <div class="glass-card">
         <div class="card-body"><strong>Problem:</strong> Functions with unclear purpose and parameters</div>
@@ -109,7 +109,7 @@ button, a, input, select, textarea, [role="button"] {
             </div>
             <div class="comparison-container">
                 <div class="panel before-panel">
-                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-times-circle"></i> Before: Cryptic Function</div>
+                    <div class="panel-header"><i class="fas fa-times-circle pulse-glow-glass--fast"></i> Before: Cryptic Function</div>
                     <pre><code class="language-badge">function calc(a: number[], t: string, d?: number) {
   let r = 0;
   for (const x of a) {
@@ -124,7 +124,7 @@ button, a, input, select, textarea, [role="button"] {
 const result = calc([1, 2, 3], 'avg', 2);</code></pre>
                 </div>
                 <div class="panel after-panel">
-                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-check-circle"></i> After: Self-Documenting</div>
+                    <div class="panel-header"><i class="fas fa-check-circle pulse-glow-glass--fast"></i> After: Self-Documenting</div>
                     <pre><code class="language-badge">/**
  * Calculates aggregate statistics for a numeric array.
  * 
@@ -152,11 +152,11 @@ function calculateStats(
         <!-- XML Documentation - C# -->
         <section class="comparison-section">
             <div class="section-header">
-                <h3><i class="pulse-glow-glass--fast fa-file-code"></i> XML Documentation</h3>
+                <h3><i class="fas fa-file-code pulse-glow-glass--fast"></i> XML Documentation</h3>
                 <span class="language-badge csharp">C#</span>
             </div>
             <div class="refactor-explanation">
-                <h4><i class="pulse-glow-glass--fast fa-lightbulb"></i> How This Was Refactored</h4>
+                <h4><i class="fas fa-lightbulb pulse-glow-glass--fast"></i> How This Was Refactored</h4>
                 <div class="capability-tiles">
     <div class="glass-card">
         <div class="card-body"><strong>Problem:</strong> Public APIs without documentation</div>
@@ -171,7 +171,7 @@ function calculateStats(
             </div>
             <div class="comparison-container">
                 <div class="panel before-panel">
-                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-times-circle"></i> Before: Undocumented API</div>
+                    <div class="panel-header"><i class="fas fa-times-circle pulse-glow-glass--fast"></i> Before: Undocumented API</div>
                     <pre><code class="language-badge">public class UserService
 {
     public async Task&lt;User&gt; Get(int id, bool inc)
@@ -189,7 +189,7 @@ function calculateStats(
 }</code></pre>
                 </div>
                 <div class="panel after-panel">
-                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-check-circle"></i> After: XML Documented</div>
+                    <div class="panel-header"><i class="fas fa-check-circle pulse-glow-glass--fast"></i> After: XML Documented</div>
                     <pre><code class="language-badge">/// &lt;summary&gt;
 /// Provides operations for user management.
 /// &lt;/summary&gt;
@@ -218,11 +218,11 @@ public class UserService
         <!-- API Documentation - OpenAPI/Swagger -->
         <section class="comparison-section">
             <div class="section-header">
-                <h3><i class="pulse-glow-glass--fast fa-server"></i> OpenAPI/Swagger Documentation</h3>
+                <h3><i class="fas fa-server pulse-glow-glass--fast"></i> OpenAPI/Swagger Documentation</h3>
                 <span class="language-badge typescript">TypeScript</span>
             </div>
             <div class="refactor-explanation">
-                <h4><i class="pulse-glow-glass--fast fa-lightbulb"></i> How This Was Refactored</h4>
+                <h4><i class="fas fa-lightbulb pulse-glow-glass--fast"></i> How This Was Refactored</h4>
                 <div class="capability-tiles">
     <div class="glass-card">
         <div class="card-body"><strong>Problem:</strong> API endpoints without documentation</div>
@@ -237,7 +237,7 @@ public class UserService
             </div>
             <div class="comparison-container">
                 <div class="panel before-panel">
-                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-times-circle"></i> Before: Undocumented API</div>
+                    <div class="panel-header"><i class="fas fa-times-circle pulse-glow-glass--fast"></i> Before: Undocumented API</div>
                     <pre><code class="language-badge">@Controller('users')
 export class UserController {
   @Get(':id')
@@ -257,7 +257,7 @@ export class UserController {
 // - What errors can occur?</code></pre>
                 </div>
                 <div class="panel after-panel">
-                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-check-circle"></i> After: OpenAPI Documented</div>
+                    <div class="panel-header"><i class="fas fa-check-circle pulse-glow-glass--fast"></i> After: OpenAPI Documented</div>
                     <pre><code class="language-badge">@ApiTags('Users')
 @Controller('users')
 export class UserController {
