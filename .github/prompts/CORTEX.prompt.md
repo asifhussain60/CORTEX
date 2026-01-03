@@ -337,7 +337,41 @@ Session 2 (hours later): User says "continue" → Middleware finds:
 
 ---
 
-## 📋 Response Format (v4.0)
+## 📋 Response Format (v4.0.4)
+
+**Version:** 4.0.4 (Single Action Rule + Concise Executive Format)  
+**Updated:** January 3, 2026
+
+### 🎯 Single Action Rule (MANDATORY)
+
+**Every response MUST end with EXACTLY ONE next step, never multiple options.**
+
+**Rule:**
+- Select the highest-value action based on context
+- Provide clear justification for the chosen action
+- Format: `**Next:** [action] ([value/benefit])`
+- Exception: Work complete → `✅ All work complete!`
+
+**❌ FORBIDDEN:**
+- "To continue: Say X or Y"
+- "You can either A or B"
+- "Option 1: ... Option 2: ..."
+- Multiple choices when optimal path is clear
+
+**✅ CORRECT:**
+- `**Next:** Fix test imports (unblocks 23 tests, completes Day 2)`
+- `**Next:** Run integration tests (validates full workflow)`
+- `✅ All work complete!`
+
+### 📝 Concise Executive Format (MANDATORY)
+
+**Responses must be concise, meaningful, executive-level summaries.**
+
+**Guidelines:**
+- Focus on outcomes, decisions, and impact
+- No code snippets unless explicitly requested by user
+- High-level approach over line-by-line implementation details
+- Every section adds value
 
 **Header:**
 - **Introduction only** (`introduce yourself`, `intro`, `hello`): Start with ASCII banner directly — **NO header before banner**
@@ -354,7 +388,7 @@ Session 2 (hours later): User says "continue" → Middleware finds:
 | INSTANT | <50 | `{answer}` |
 | FOCUSED | 50-200 | `{explanation}` + `**Next:**` |
 | STRUCTURED | 200-600 | `**Context:**` + `**Changes:**` + `**Next:**` |
-| COMPREHENSIVE | 600+ | Multiple `### {Sections}` |
+| COMPREHENSIVE | 600+ | Multiple `### {Sections}` (executive summary) |
 
 **Next Steps:** EXACTLY ONE action OR `✅ All work complete!`
 
@@ -372,6 +406,8 @@ Session 2 (hours later): User says "continue" → Middleware finds:
 
 | Rule | Enforcement |
 |------|-------------|
+| **SINGLE_ACTION_RULE** | Every response ends with EXACTLY ONE next step (v4.0.4) |
+| **CONCISE_EXECUTIVE_FORMAT** | Executive summaries, no code unless requested (v4.0.4) |
 | **TDD_ENFORCEMENT** | RED→GREEN→REFACTOR mandatory |
 | **HOLISTIC_DISCOVERY** | Search before create (prevent duplication) |
 | **REFACTOR_CLEANUP** | Remove orphaned/duplicate code |

@@ -1,0 +1,267 @@
+{
+  "plan_id": "tdd-v2-migration",
+  "plan_name": "TDD Orchestrator v2 Migration",
+  "status": "not_started",
+  "created": "2026-01-03T00:00:00Z",
+  "updated": "2026-01-03T00:00:00Z",
+  "progress": {
+    "overall_percent": 0,
+    "current_day": 0,
+    "total_days": 4
+  },
+  "days": [
+    {
+      "day": 1,
+      "name": "Core TDDOrchestratorV2 + TestRunnerAbstraction",
+      "status": "not_started",
+      "estimated_hours": 8,
+      "actual_hours": 0,
+      "progress_percent": 0,
+      "tasks": [
+        {
+          "id": "1.1",
+          "name": "Create directory structure",
+          "status": "not_started"
+        },
+        {
+          "id": "1.2",
+          "name": "Implement TDDOrchestratorV2 scaffolding",
+          "status": "not_started"
+        },
+        {
+          "id": "1.3",
+          "name": "Define phase enum and state machine",
+          "status": "not_started"
+        },
+        {
+          "id": "1.4",
+          "name": "Implement TestRunnerAbstraction base class",
+          "status": "not_started"
+        },
+        {
+          "id": "1.5",
+          "name": "Implement PytestAdapter",
+          "status": "not_started"
+        },
+        {
+          "id": "1.6",
+          "name": "Implement UnittestAdapter",
+          "status": "not_started"
+        },
+        {
+          "id": "1.7",
+          "name": "Test discovery logic",
+          "status": "not_started"
+        },
+        {
+          "id": "1.8",
+          "name": "Unit tests for adapters (50+ tests)",
+          "status": "not_started"
+        }
+      ],
+      "deliverables": [
+        "src/orchestrators/tdd/tdd_orchestrator_v2.py (~200 lines)",
+        "src/orchestrators/tdd/test_runner_abstraction.py (~300 lines)",
+        "tests/orchestrators/tdd/test_test_runner_abstraction.py (50+ tests)"
+      ]
+    },
+    {
+      "day": 2,
+      "name": "RED Phase Automation",
+      "status": "not_started",
+      "estimated_hours": 8,
+      "actual_hours": 0,
+      "progress_percent": 0,
+      "tasks": [
+        {
+          "id": "2.1",
+          "name": "Implement execute_red_phase() method",
+          "status": "not_started"
+        },
+        {
+          "id": "2.2",
+          "name": "Test discovery from user request",
+          "status": "not_started"
+        },
+        {
+          "id": "2.3",
+          "name": "Execute tests and capture failures",
+          "status": "not_started"
+        },
+        {
+          "id": "2.4",
+          "name": "Categorize failure types",
+          "status": "not_started"
+        },
+        {
+          "id": "2.5",
+          "name": "Record baseline state",
+          "status": "not_started"
+        },
+        {
+          "id": "2.6",
+          "name": "Persist RED phase state to DB",
+          "status": "not_started"
+        },
+        {
+          "id": "2.7",
+          "name": "Handle edge cases (no tests, unexpected pass)",
+          "status": "not_started"
+        },
+        {
+          "id": "2.8",
+          "name": "Unit tests for RED phase (30+ tests)",
+          "status": "not_started"
+        }
+      ],
+      "deliverables": [
+        "execute_red_phase() implementation (~150 lines)",
+        "RED phase state schema in Planning State DB",
+        "tests/orchestrators/tdd/test_red_phase.py (30+ tests)"
+      ]
+    },
+    {
+      "day": 3,
+      "name": "GREEN Phase Automation",
+      "status": "not_started",
+      "estimated_hours": 8,
+      "actual_hours": 0,
+      "progress_percent": 0,
+      "tasks": [
+        {
+          "id": "3.1",
+          "name": "Implement execute_green_phase() method",
+          "status": "not_started"
+        },
+        {
+          "id": "3.2",
+          "name": "Re-execute tests from RED phase",
+          "status": "not_started"
+        },
+        {
+          "id": "3.3",
+          "name": "Verify all previously-failing tests now pass",
+          "status": "not_started"
+        },
+        {
+          "id": "3.4",
+          "name": "Detect new failures (regressions)",
+          "status": "not_started"
+        },
+        {
+          "id": "3.5",
+          "name": "Calculate code coverage (pytest-cov)",
+          "status": "not_started"
+        },
+        {
+          "id": "3.6",
+          "name": "Git checkpoint creation on success",
+          "status": "not_started"
+        },
+        {
+          "id": "3.7",
+          "name": "Handle partial success scenarios",
+          "status": "not_started"
+        },
+        {
+          "id": "3.8",
+          "name": "Unit tests for GREEN phase (30+ tests)",
+          "status": "not_started"
+        }
+      ],
+      "deliverables": [
+        "execute_green_phase() implementation (~150 lines)",
+        "Git checkpoint integration",
+        "Coverage tracking implementation",
+        "tests/orchestrators/tdd/test_green_phase.py (30+ tests)"
+      ]
+    },
+    {
+      "day": 4,
+      "name": "REFACTOR Phase + Integration",
+      "status": "not_started",
+      "estimated_hours": 8,
+      "actual_hours": 0,
+      "progress_percent": 0,
+      "tasks": [
+        {
+          "id": "4.1",
+          "name": "Implement execute_refactor_phase() method",
+          "status": "not_started"
+        },
+        {
+          "id": "4.2",
+          "name": "Code quality checks (pylint, mypy)",
+          "status": "not_started"
+        },
+        {
+          "id": "4.3",
+          "name": "Re-run tests to ensure green state",
+          "status": "not_started"
+        },
+        {
+          "id": "4.4",
+          "name": "Atomic rollback on quality check failure",
+          "status": "not_started"
+        },
+        {
+          "id": "4.5",
+          "name": "Register in mcp-server.yaml",
+          "status": "not_started"
+        },
+        {
+          "id": "4.6",
+          "name": "Update Master Orchestrator routing",
+          "status": "not_started"
+        },
+        {
+          "id": "4.7",
+          "name": "Test CLI bridge invocation",
+          "status": "not_started"
+        },
+        {
+          "id": "4.8",
+          "name": "100% test coverage validation",
+          "status": "not_started"
+        },
+        {
+          "id": "4.9",
+          "name": "Integration tests (end-to-end)",
+          "status": "not_started"
+        }
+      ],
+      "deliverables": [
+        "execute_refactor_phase() implementation (~150 lines)",
+        "MCP server registration (mcp-server.yaml update)",
+        "Master Orchestrator routing config",
+        "CLI bridge integration tests",
+        "Continuation prompt template",
+        "Complete test suite (100% coverage)"
+      ]
+    }
+  ],
+  "success_criteria": [
+    "RED→GREEN→REFACTOR cycle fully automated",
+    "Test framework abstraction (pytest/unittest/nose support)",
+    "Automatic test discovery from user request",
+    "Failure detection and categorization",
+    "Atomic rollback on REFACTOR failure",
+    "Git checkpoint creation on GREEN/REFACTOR success",
+    "State persistence across sessions",
+    "Master Orchestrator routing integration",
+    "Test execution < 5 seconds (performance benchmark)",
+    "100% test coverage for TDDOrchestratorV2",
+    "TestRunnerAbstraction reusable by 3+ orchestrators",
+    "MCP registration complete",
+    "CLI bridge invocation tested"
+  ],
+  "decision_record": {
+    "assessment_date": "2026-01-02",
+    "decision_score": 8.85,
+    "decision": "AUTONOMOUS",
+    "authority": "Phase 6.4 GUIDED Orchestrators Assessment",
+    "priority": "HIGH",
+    "week": 1,
+    "roadmap_position": "Week 1 of 3-week migration roadmap"
+  }
+}

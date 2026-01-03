@@ -1,11 +1,15 @@
-schema_version: '4.0.3'
-last_updated: '2025-12-31'
-architecture: adaptive_minimalism
+schema_version: '4.0.4'
+last_updated: '2026-01-03'
+architecture: adaptive_minimalism_with_single_action_rule
 description: |
   Response Template System v4.0 - 97% reduction (15,851 → 486 lines)
   
   Philosophy: Dynamic composition over static templates.
   No full templates - just routing rules + reusable components.
+  
+  SINGLE ACTION RULE (v4.0.4):
+  Every response MUST end with EXACTLY ONE next step (never multiple options).
+  Select the highest-value action. Enforced by Master Orchestrator.
   
   Tier system:
   - TIER 1 (INSTANT): <50 tokens, factual queries, no sections
@@ -16,6 +20,88 @@ description: |
   Custom Templates:
   - introduction: Comprehensive CORTEX overview for Engineers/Product Owners
   - business_value: ROI-focused presentation for Leadership
+
+# ============================================================================
+# ARCHITECTURAL PRINCIPLES
+# ============================================================================
+
+architectural_principles:
+  single_action_rule:
+    version: "1.0"
+    status: "MANDATORY"
+    description: "Every response must end with exactly ONE next step"
+    enforcement: "Master Orchestrator validates responses before delivery"
+    
+    rule:
+      statement: |
+        Responses MUST end with EXACTLY ONE next step, never multiple options.
+        AI must decide the highest-value action and present it with justification.
+      
+      rationale: |
+        - Eliminates decision fatigue for users
+        - Forces AI to prioritize and add value through decision-making
+        - Creates clear, actionable guidance
+        - Prevents cognitive overload from multiple choices
+        - Makes AI assistant more decisive and useful
+      
+      exceptions:
+        - work_complete: "When all work is done: '✅ All work complete!'"
+        - explicit_user_question: "When user explicitly asks 'what are my options?'"
+      
+      forbidden_patterns:
+        - "To continue: Say X or Y"
+        - "You can either A or B"
+        - "Option 1: ... Option 2: ..."
+        - Multiple bulleted next steps without clear priority
+        - Giving user choices when optimal path is clear
+      
+      correct_patterns:
+        - "**Next:** [action] ([value/benefit])"
+        - "Say '[command]' to [outcome]"
+        - "✅ All work complete!"
+      
+      decision_criteria:
+        - blockers_first: "Actions that unblock others take highest priority"
+        - value_maximization: "Actions with highest ROI/impact"
+        - logical_sequence: "Next logical step in workflow"
+        - user_context: "What user is actively working on"
+        - plan_alignment: "Actions aligned with active plan goals"
+    
+    validation:
+      master_orchestrator_check: true
+      response_scanner_patterns:
+        - regex: "\\b(or|either|option|choose)\\b.*\\b(or|either|option)\\b"
+          severity: "error"
+          message: "Multiple options detected - violates Single Action Rule"
+        - regex: "^(\\*\\*Next:\\*\\*|Say|✅)"
+          severity: "info"
+          message: "Valid single action format detected"
+      
+      enforcement_action:
+        on_violation: "Reject response, force AI to select single highest-value action"
+        on_success: "Deliver response to user"
+
+  concise_executive_format:
+    version: "1.0"
+    status: "MANDATORY"
+    description: "Responses must be concise, meaningful, executive-level summaries"
+    
+    rule:
+      statement: |
+        - Use executive summary format (high-level, outcome-focused)
+        - No code snippets unless explicitly requested by user
+        - Concise: Focus on impact, decisions, and outcomes
+        - Meaningful: Every section adds value
+      
+      forbidden_patterns:
+        - Large code blocks in responses (unless requested)
+        - Line-by-line implementation details (unless requested)
+        - Excessive technical minutiae without user request
+      
+      correct_patterns:
+        - "Implemented X with Y approach (430 lines)"
+        - "Updated 3 files: registry, orchestrator, config"
+        - "Result: 75% complete, 35min remaining"
 
 # ============================================================================
 # TEMPLATE SELECTION ALGORITHM (LEGO-Style Composition)
@@ -818,7 +904,24 @@ sections:
       - user_action_required: true
       - multi_phase_workflow: true
       - follow_up_needed: true
-    content_guidelines: "Numbered list OR checkboxes for complex work"
+    content_guidelines: |
+      SINGLE ACTION RULE (MANDATORY):
+      - Provide EXACTLY ONE next step, never multiple options
+      - Select the highest-value action based on current context
+      - Include clear justification for why this action is optimal
+      - Format: "**Next:** [action] (provides [value/benefit])"
+      - Exception: Work complete → "✅ All work complete!"
+      
+      FORBIDDEN:
+      - ❌ "To continue: Option A OR Option B"
+      - ❌ Multiple bulleted next steps
+      - ❌ "You can either X or Y"
+      - ❌ Giving user choices when one path is clearly optimal
+      
+      CORRECT Examples:
+      - ✅ "**Next:** Fix test imports (unblocks 23 tests, completes Day 2)"
+      - ✅ "**Next:** Run integration tests (validates full workflow)"
+      - ✅ "All work complete!"
   
   context:
     emoji: "🎯"

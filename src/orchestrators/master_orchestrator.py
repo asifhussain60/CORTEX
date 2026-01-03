@@ -16,6 +16,7 @@ from src.orchestrators.pattern_router import PatternRouter, OrchestratorMatch
 from src.orchestrators.state_manager import StateManager
 from src.orchestrators.execution_engine import ExecutionEngine, ExecutionResult
 from src.orchestrators.context_middleware import CrossSessionContextMiddleware
+from src.orchestrators.response_validator import ResponseValidator, ValidationResult as ResponseValidationResult
 from src.mcp.registry import OrchestratorRegistry
 from src.database.planning_state_db import PlanningStateDB
 
@@ -56,7 +57,8 @@ class MasterOrchestrator:
         registry: OrchestratorRegistry,
         state_db: PlanningStateDB,
         llm_fallback: Optional[Any] = None,
-        context_middleware: Optional[CrossSessionContextMiddleware] = None
+        context_middleware: Optional[CrossSessionContextMiddleware] = None,
+        enable_response_validation: bool = True
     ):
         """
         Initialize Master Orchestrator.
@@ -67,11 +69,13 @@ class MasterOrchestrator:
             state_db: PlanningStateDB for state persistence
             llm_fallback: Optional LLMIntentClassifier for ambiguous inputs
             context_middleware: Optional CrossSessionContextMiddleware for continuation routing
+            enable_response_validation: Enable Single Action Rule validation (default: True)
         """
         self.config_path = Path(config_path)
         self.registry = registry
         self.state_db = state_db
         self.llm_fallback = llm_fallback
+        self.enable_response_validation = enable_response_validation
         
         # Setup logging
         self.logger = logging.getLogger("cortex.orchestrators.master")
@@ -84,11 +88,22 @@ class MasterOrchestrator:
         # Cross-session context middleware (Phase 4.5)
         self.context_middleware = context_middleware or CrossSessionContextMiddleware()
         
+        # Response validator (v4.0.4 - Single Action Rule)
+        if self.enable_response_validation:
+            self.response_validator = ResponseValidator(
+                cortex_root=str(self.config_path.parent.parent)
+            )
+            self.logger.info("Response validation enabled (Single Action Rule enforcement)")
+        else:
+            self.response_validator = None
+            self.logger.warning("Response validation disabled")
+        
         # Execution tracking
         self._request_count = 0
         self._pattern_match_count = 0
         self._llm_fallback_count = 0
         self._continuation_count = 0
+        self._validation_failures = 0
         
         self.logger.info(
             f"MasterOrchestrator initialized with context middleware (config={config_path})"
@@ -154,7 +169,46 @@ class MasterOrchestrator:
             }
         )
         
-        # STEP 5: Record session metadata for future continuations
+        # STEP 5: Validate response (v4.0.4 - Single Action Rule)
+        if self.response_validator and result.success:
+            validation_result = self._validate_orchestrator_response(
+                result,
+                user_input
+            )
+            
+            if not validation_result.valid:
+                self._validation_failures += 1
+                self.logger.error(
+                    f"Response validation failed: {len(validation_result.violations)} "
+                    f"violation(s)"
+                )
+                
+                # Log violations
+                for violation in validation_result.violations:
+                    if violation.severity == "error":
+                        self.logger.error(
+                            f"  - {violation.message}: {violation.context[:100]}"
+                        )
+                    else:
+                        self.logger.warning(
+                            f"  - {violation.message}: {violation.context[:100]}"
+                        )
+                
+                # Add validation metadata to result
+                result.metadata['validation'] = {
+                    'valid': False,
+                    'violations': [
+                        {
+                            'type': v.violation_type.value,
+                            'severity': v.severity,
+                            'message': v.message,
+                            'fix': v.suggested_fix
+                        }
+                        for v in validation_result.violations
+                    ]
+                }
+        
+        # STEP 6: Record session metadata for future continuations
         if result.success and enriched_context.get('session_id'):
             self._record_session_metadata(
                 session_id=enriched_context['session_id'],
@@ -301,6 +355,65 @@ class MasterOrchestrator:
             raise RuntimeError(
                 f"Orchestrator execution failed: {orchestrator_id} - {e}"
             ) from e
+    
+    def _validate_orchestrator_response(
+        self,
+        result: ExecutionResult,
+        user_request: str
+    ) -> ResponseValidationResult:
+        """
+        Validate orchestrator response against Single Action Rule.
+        
+        Part of v4.0.4 architectural enhancement.
+        
+        Args:
+            result: ExecutionResult from orchestrator execution
+            user_request: Original user request for context analysis
+        
+        Returns:
+            ResponseValidationResult with validation outcome
+        """
+        try:
+            # Extract response text from result
+            # ExecutionResult may have different formats, try common fields
+            response_text = ""
+            
+            if hasattr(result, 'summary') and result.summary:
+                response_text = result.summary
+            elif hasattr(result, 'output') and result.output:
+                response_text = result.output
+            elif hasattr(result, 'message') and result.message:
+                response_text = result.message
+            else:
+                # Use string representation as fallback
+                response_text = str(result)
+            
+            # Run validation
+            validation_result = self.response_validator.validate_response(
+                response_text=response_text,
+                user_request=user_request
+            )
+            
+            if not validation_result.valid:
+                self.logger.warning(
+                    f"Response validation: {len(validation_result.violations)} violation(s)\n"
+                    f"{self.response_validator.format_violation_report(validation_result)}"
+                )
+            
+            return validation_result
+            
+        except Exception as e:
+            self.logger.error(
+                f"Response validation failed with exception: {e}",
+                exc_info=True
+            )
+            
+            # Return valid result on validation error (fail open)
+            return ResponseValidationResult(
+                valid=True,
+                violations=[],
+                response_text=""
+            )
     
     def _get_lifecycle_hooks(
         self,
@@ -493,6 +606,15 @@ class MasterOrchestrator:
         
         except Exception as e:
             self.logger.error(f"Failed to record session metadata: {e}")
+    
+    def get_metrics(self) -> Dict[str, Any]:
+        """
+        Get Master Orchestrator metrics.
+        
+        Returns:
+            Dictionary with metrics including validation statistics
+        """
+        router_stats = self.router.get_stats()
         state_stats = self.state_manager.get_stats()
         engine_metrics = self.execution_engine.get_metrics()
         
@@ -506,12 +628,21 @@ class MasterOrchestrator:
             if self._request_count > 0 else 0.0
         )
         
+        validation_failure_rate = (
+            self._validation_failures / self._request_count
+            if self._request_count > 0 else 0.0
+        )
+        
         return {
             'total_requests': self._request_count,
             'pattern_match_count': self._pattern_match_count,
             'llm_fallback_count': self._llm_fallback_count,
+            'continuation_count': self._continuation_count,
+            'validation_failures': self._validation_failures,
             'pattern_match_rate': pattern_match_rate,
             'llm_fallback_rate': llm_fallback_rate,
+            'validation_failure_rate': validation_failure_rate,
+            'response_validation_enabled': self.enable_response_validation,
             'router': router_stats,
             'state_manager': state_stats,
             'execution_engine': engine_metrics

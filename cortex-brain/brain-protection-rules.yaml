@@ -26,6 +26,8 @@ critical_paths:
 - .cortex-version
 - cortex-brain/migrations/
 tier0_instincts:
+- SINGLE_ACTION_RULE_ENFORCEMENT
+- CONCISE_EXECUTIVE_FORMAT_ENFORCEMENT
 - INCREMENTAL_PLAN_GENERATION
 - TDD_ENFORCEMENT
 - RED_PHASE_VALIDATION
@@ -6776,3 +6778,119 @@ validation:
       - Shared understanding
       - User trust in analysis
       - Professional transparency
+
+# ========================================
+# TIER 0 RULE DEFINITIONS (v4.0.4)
+# ========================================
+
+tier0_rules:
+  single_action_rule_enforcement:
+    tier: tier0
+    id: BPR-062
+    name: Single Action Rule Enforcement
+    enforcement_mode: enforce
+    applies_to:
+    - all_cortex_responses
+    - all_orchestrator_outputs
+    description: |
+      Response Architecture v4.0.4: Every response MUST end with EXACTLY ONE next step, never multiple options.
+      
+      RULE:
+      - Provide EXACTLY ONE next step with clear justification
+      - Select highest-value action based on context
+      - Format: "**Next:** [action] ([value/benefit])"
+      - Exception: Work complete → "✅ All work complete!"
+      
+      FORBIDDEN:
+      - ❌ "To continue: Option A OR Option B"
+      - ❌ "You can either X or Y"
+      - ❌ Multiple choices when optimal path is clear
+      
+      RATIONALE:
+      - Eliminates decision fatigue
+      - Forces AI to prioritize and add value
+      - Creates clear, actionable guidance
+      - Makes AI more decisive and useful
+    detection:
+      pattern:
+      - name: multiple_options_detected
+        match: "(or|either|option|choose).*\\b(or|either|option)"
+        severity: error
+      - name: valid_single_action
+        match: "^(\\*\\*Next:\\*\\*|Say|✅)"
+        severity: info
+    penalty: Response rejected, must provide single highest-value action
+    remediation: Select ONE optimal next step with justification
+    references:
+    - response-templates-v4.yaml (architectural_principles.single_action_rule)
+    - CORTEX.prompt.md (Response Format v4.0.4)
+    validation:
+      master_orchestrator_check: true
+      pre_delivery_scan: true
+    examples:
+      correct:
+      - "**Next:** Fix test imports (unblocks 23 tests, completes Day 2)"
+      - "**Next:** Run integration tests (validates full workflow)"
+      - "✅ All work complete!"
+      incorrect:
+      - "To continue: Say 'fix test imports' to complete Day 2, or 'proceed to day 3' to move forward"
+      - "You can either A or B"
+      - "Option 1: ... Option 2: ..."
+
+  concise_executive_format_enforcement:
+    tier: tier0
+    id: BPR-063
+    name: Concise Executive Format Enforcement
+    enforcement_mode: enforce
+    applies_to:
+    - all_cortex_responses
+    - all_orchestrator_outputs
+    description: |
+      Response Architecture v4.0.4: Responses must be concise, meaningful, executive-level summaries.
+      
+      RULE:
+      - Focus on outcomes, decisions, and impact
+      - NO code snippets unless explicitly requested by user
+      - High-level approach over line-by-line details
+      - Every section adds value
+      
+      FORBIDDEN:
+      - ❌ Large code blocks in responses (unless requested)
+      - ❌ Line-by-line implementation details (unless requested)
+      - ❌ Excessive technical minutiae without user request
+      
+      CORRECT:
+      - ✅ "Implemented X with Y approach (430 lines)"
+      - ✅ "Updated 3 files: registry, orchestrator, config"
+      - ✅ "Result: 75% complete, 35min remaining"
+      
+      RATIONALE:
+      - Respects user's time
+      - Provides executive-level insights
+      - User can request details if needed
+      - Focuses on value and outcomes
+    detection:
+      pattern:
+      - name: unrequested_code_block
+        match: "```[a-z]+\\n.*\\n```"
+        condition: user_did_not_request_code
+        severity: warning
+      - name: excessive_implementation_detail
+        match: line_by_line_code_explanation
+        condition: user_did_not_request_details
+        severity: warning
+    penalty: Response flagged for revision (warning level)
+    remediation: Summarize at executive level, offer details if user wants them
+    references:
+    - response-templates-v4.yaml (architectural_principles.concise_executive_format)
+    - CORTEX.prompt.md (Response Format v4.0.4)
+    validation:
+      master_orchestrator_check: true
+      user_request_analysis: true
+    examples:
+      correct:
+      - "Created TDD Orchestrator v2 (430 lines) with autonomous execution wrapper, state persistence, and CLI-friendly interface"
+      - "Updated MCP registry with TDD v2 registration (type: autonomous, version: 2.0.0)"
+      incorrect:
+      - "[50 lines of code] # without user requesting code"
+      - "[Line-by-line explanation of implementation] # without user requesting details"

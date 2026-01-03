@@ -23,7 +23,19 @@ orchestrators:
     module: "src.orchestrators.tdd.tdd_orchestrator_v4_migrated"
     config: "cortex-brain/manifests/orchestrators/tdd-orchestrator-v4-manifest.yaml"
     type: "guided"
-    description: "Test-Driven Development orchestrator with RED-GREEN-REFACTOR workflow"
+    description: "Test-Driven Development orchestrator with RED-GREEN-REFACTOR workflow (legacy v4)"
+  
+  tdd_orchestrator_v2:
+    class: "TDDOrchestratorV2"
+    module: "src.orchestrators.tdd.tdd_orchestrator_v2"
+    config: "cortex-brain/manifests/orchestrators/tdd-orchestrator-v4-manifest.yaml"
+    type: "autonomous"
+    description: "TDD Orchestrator v2 - Autonomous RED→GREEN→REFACTOR with CLI bridge"
+    version: "2.0.0"
+    phases:
+      - "RED"
+      - "GREEN"
+      - "REFACTOR"
   
   sanitization_orchestrator:
     class: "SanitizationOrchestrator"
