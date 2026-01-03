@@ -5061,6 +5061,27 @@ footer,
     font-size: 1.75rem;
 }
 
+.principles-header {
+    text-align: center;
+    margin-bottom: var(--spacing-2xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.principles-header i {
+    font-size: 1.75rem;
+    color: var(--accent-primary);
+}
+
+.principles-header h3 {
+    font-size: 1.5rem;
+    color: var(--accent-primary);
+    font-weight: 600;
+    margin: 0;
+}
+
 /* D3.js Card Interactions (principle cards use inline SVG) */
 .d3-viz-container svg {
     overflow: visible;

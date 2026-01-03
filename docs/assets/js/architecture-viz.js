@@ -1,205 +1,12 @@
 /**
  * CORTEX Architecture D3.js Visualizations
- * Interactive force-directed graph and principle cards
- * Version: 4.1.1
+ * Interactive force-directed graph for architecture overview
+ * Version: 4.1.4 (Principles now use HTML cards per glassmorphism v4.1.4)
  * Author: Asif Hussain
  */
 
 // ============================================
-// 1. Key Architectural Principles - Interactive Cards
-// ============================================
-function initPrinciplesViz() {
-    const principles = [
-        {
-            id: 'protection',
-            icon: '\uf3ed', // fa-shield-alt
-            title: 'Brain Protection First',
-            description: 'Tier 0 SKULL rules enforce safety at governance layer',
-            color: '#ef4444'
-        },
-        {
-            id: 'tdd',
-            icon: '\uf560', // fa-check-double
-            title: 'Test-Driven Development',
-            description: 'TDD mandatory for all production code (RED→GREEN→REFACTOR)',
-            color: '#10b981'
-        },
-        {
-            id: 'isolation',
-            icon: '\uf1d3', // fa-git-square
-            title: 'Git Isolation',
-            description: 'CORTEX code never mixed with user repositories',
-            color: '#f59e0b'
-        },
-        {
-            id: 'context',
-            icon: '\uf49e', // fa-brain
-            title: 'Context Preservation',
-            description: '4-Tier Brain maintains long-term memory across sessions',
-            color: '#3b82f6'
-        },
-        {
-            id: 'agents',
-            icon: '\uf544', // fa-robot
-            title: 'Agent Specialization',
-            description: 'Dedicated agents for planning and strategic reasoning',
-            color: '#7b61ff'
-        }
-    ];
-
-    const container = d3.select('#principles-viz');
-    const width = container.node().getBoundingClientRect().width;
-    const cardWidth = Math.min(280, (width - 80) / 3);
-    const cardHeight = 180;
-
-    const svg = container.append('svg')
-        .attr('width', width)
-        .attr('height', Math.ceil(principles.length / 3) * (cardHeight + 24) + 24);
-
-    const cards = svg.selectAll('.principle-card')
-        .data(principles)
-        .enter()
-        .append('g')
-        .attr('class', 'principle-card')
-        .attr('transform', (d, i) => {
-            const col = i % 3;
-            const row = Math.floor(i / 3);
-            const x = col * (cardWidth + 24) + 24;
-            const y = row * (cardHeight + 24) + 24;
-            return `translate(${x}, ${y})`;
-        })
-        .style('cursor', 'pointer')
-        .on('mouseenter', function(event, d) {
-            d3.select(this).select('rect')
-                .transition()
-                .duration(200)
-                .attr('y', -4)
-                .attr('stroke-width', 3);
-            
-            d3.select(this).select('.card-glow')
-                .transition()
-                .duration(200)
-                .attr('opacity', 0.4);
-        })
-        .on('mouseleave', function(event, d) {
-            d3.select(this).select('rect')
-                .transition()
-                .duration(200)
-                .attr('y', 0)
-                .attr('stroke-width', 2);
-            
-            d3.select(this).select('.card-glow')
-                .transition()
-                .duration(200)
-                .attr('opacity', 0);
-        });
-
-    // Card glow effect (hidden by default)
-    cards.append('rect')
-        .attr('class', 'card-glow')
-        .attr('width', cardWidth)
-        .attr('height', cardHeight)
-        .attr('rx', 12)
-        .attr('fill', d => d.color)
-        .attr('opacity', 0)
-        .attr('filter', 'blur(12px)');
-
-    // Card background
-    cards.append('rect')
-        .attr('width', cardWidth)
-        .attr('height', cardHeight)
-        .attr('rx', 12)
-        .attr('fill', 'rgba(30, 41, 59, 0.6)')
-        .attr('stroke', d => d.color)
-        .attr('stroke-width', 2)
-        .style('backdrop-filter', 'blur(12px)');
-
-    // Icon circle background
-    cards.append('circle')
-        .attr('cx', cardWidth / 2)
-        .attr('cy', 40)
-        .attr('r', 24)
-        .attr('fill', d => d.color)
-        .attr('opacity', 0.15);
-
-    // Icon
-    cards.append('text')
-        .attr('x', cardWidth / 2)
-        .attr('y', 40)
-        .attr('text-anchor', 'middle')
-        .attr('dominant-baseline', 'central')
-        .attr('font-family', 'Font Awesome 6 Free')
-        .attr('font-weight', 900)
-        .attr('font-size', '24px')
-        .attr('fill', d => d.color)
-        .text(d => d.icon);
-
-    // Title
-    cards.append('text')
-        .attr('x', cardWidth / 2)
-        .attr('y', 85)
-        .attr('text-anchor', 'middle')
-        .attr('font-size', '15px')
-        .attr('font-weight', '600')
-        .attr('fill', '#e2e8f0')
-        .text(d => d.title);
-
-    // Description (word-wrapped)
-    cards.each(function(d) {
-        const card = d3.select(this);
-        const words = d.description.split(' ');
-        let line = '';
-        let lineNumber = 0;
-        const lineHeight = 18;
-        const y = 110;
-        const maxWidth = cardWidth - 32;
-
-        const testText = card.append('text')
-            .attr('opacity', 0)
-            .attr('font-size', '13px');
-
-        words.forEach((word, i) => {
-            const testLine = line + word + ' ';
-            testText.text(testLine);
-            
-            if (testText.node().getComputedTextLength() > maxWidth && i > 0) {
-                card.append('text')
-                    .attr('x', cardWidth / 2)
-                    .attr('y', y + lineNumber * lineHeight)
-                    .attr('text-anchor', 'middle')
-                    .attr('font-size', '13px')
-                    .attr('fill', '#94a3b8')
-                    .text(line.trim());
-                
-                line = word + ' ';
-                lineNumber++;
-            } else {
-                line = testLine;
-            }
-        });
-
-        // Add last line
-        card.append('text')
-            .attr('x', cardWidth / 2)
-            .attr('y', y + lineNumber * lineHeight)
-            .attr('text-anchor', 'middle')
-            .attr('font-size', '13px')
-            .attr('fill', '#94a3b8')
-            .text(line.trim());
-
-        testText.remove();
-    });
-
-    // Responsive handling
-    window.addEventListener('resize', () => {
-        const newWidth = container.node().getBoundingClientRect().width;
-        svg.attr('width', newWidth);
-        // Recalculate positions if needed
-    });
-}
-
-// ============================================
-// 2. Architecture Overview - Force-Directed Graph
+// Architecture Overview - Force-Directed Graph
 // ============================================
 function initArchitectureGraph() {
     const container = d3.select('#architecture-overview');
@@ -444,9 +251,10 @@ function initArchitectureGraph() {
 }
 
 // ============================================
-// Initialize All Visualizations
+// Initialize Visualizations
 // ============================================
 document.addEventListener('DOMContentLoaded', () => {
-    initPrinciplesViz();
+    // Principles now use HTML cards (glassmorphism v4.1.4 Pattern D)
+    // Only initialize force-directed graph
     initArchitectureGraph();
 });
