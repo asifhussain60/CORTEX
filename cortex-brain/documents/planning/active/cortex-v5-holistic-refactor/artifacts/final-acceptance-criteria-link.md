@@ -48,6 +48,13 @@ This plan's final validation (Phase 10 - REFACTOR & Cleanup) MUST be tested agai
 | **TDD-3.3.1** | REFACTOR | Orphaned function detection runs | Section 3.3 |
 | **TDD-3.3.2** | REFACTOR | Duplicate code detection runs | Section 3.3 |
 | **ALL-10.3.1** | DoD Validation | DoD checklist in every phase | Section 10.3 |
+| **FILE-10.2.1** | File Location | FileLocationValidator integrated into Master Orch | Task 10.2 |
+| **FILE-10.2A.1** | File Location | Pre-commit hook blocks direct file writes | Task 10.2A |
+| **FILE-10.2A.2** | File Location | CI/CD pipeline fails on file location violations | Task 10.2A |
+| **FILE-10.2A.3** | File Location | All 20+ existing violations migrated to write_artifact() | Task 10.2A |
+| **REPORT-10.3.1** | Report Removal | No markdown report generation in orchestrators | Task 10.3 |
+| **REPORT-10.3.2** | Report Removal | Database query helpers replace report reading | Task 10.3 |
+| **REPORT-10.3.3** | Report Removal | 4+ report templates deleted | Task 10.3 |
 
 ---
 
@@ -74,7 +81,19 @@ pytest tests/brain_protection/ -v
 pytest tests/benchmarks/test_planning_v5_performance.py --benchmark-only
 pytest tests/benchmarks/test_master_orchestrator_routing.py --benchmark-only
 
-# Step 6: Generate acceptance report
+# Step 6: Validate file location enforcement (NEW)
+python scripts/validate_master_plan.py \
+  --plan cortex-v5-holistic-refactor \
+  --severity error
+
+# Step 7: Test pre-commit hook (Task 10.2A)
+python .github/hooks/pre-commit-file-location-check.py
+
+# Step 8: Validate report removal (Task 10.3)
+# Ensure no completion-report templates in orchestrators
+grep -r "completion-report" src/orchestrators/ && echo "❌ FAIL: Reports still generated" || echo "✅ PASS: No report generation"
+
+# Step 9: Generate acceptance report
 python scripts/generate_acceptance_report.py \
   --plan-id cortex-v5-holistic-refactor \
   --criteria cortex-brain/documents/planning/FINAL-ACCEPTANCE-CRITERIA.md \
@@ -116,9 +135,20 @@ The final acceptance report will be generated in Phase 10 using this structure:
 - [ ] Other Orchestrators (Not Started)
 
 ## REFACTOR Phase Results (Phase 10)
-- [ ] Orphaned code detection (Pending)
-- [ ] Duplicate code removal (Pending)
-- [ ] 18+ cleanup tasks (Pending)
+- [ ] File Location Enforcement (Task 10.2 + 10.2A)
+  - [ ] FileLocationValidator integrated into Master Orchestrator
+  - [ ] Pre-commit hook blocks direct file writes (100% coverage)
+  - [ ] CI/CD pipeline validates file locations
+  - [ ] All 20+ existing violations migrated to write_artifact()
+  - [ ] Zero bypass methods remaining
+- [ ] Report Generation Removal (Task 10.3)
+  - [ ] No markdown report generation in 4+ orchestrators
+  - [ ] Database query helpers replace report reading
+  - [ ] 4+ report templates deleted
+  - [ ] Token savings validated (200-500 tokens per execution)
+- [ ] Orphaned code detection (Task 10.5+)
+- [ ] Duplicate code removal (Task 10.5+)
+- [ ] 18+ cleanup tasks (Tasks 10.5-10.9)
 
 ## Performance Benchmarks
 | Metric | Target | Actual | Status |
@@ -133,6 +163,8 @@ The final acceptance report will be generated in Phase 10 using this structure:
 | TDD_ENFORCEMENT | ✅ PASS | All phases follow RED→GREEN→REFACTOR |
 | KNOWLEDGE_LIBRARY_INTEGRATION | ✅ PASS | Phase -1 in all generated plans |
 | GIT_ISOLATION | ✅ PASS | No CORTEX files in user repos |
+| FILE_ORGANIZATION_ENFORCEMENT | ⏳ IN PROGRESS | Task 10.2 + 10.2A implementation |
+| REFACTOR_CODE_CLEANUP_ENFORCEMENT | ⏳ IN PROGRESS | Task 10.3 (report removal) + 18+ tasks |
 
 ## Final Verdict
 🔄 **IN PROGRESS** (40% complete - Bootstrap phase validated)
@@ -205,13 +237,24 @@ This plan is considered **COMPLETE** when:
 2. ✅ All acceptance criteria met (100% in applicable sections)
 3. ✅ Performance benchmarks met (all targets)
 4. ✅ SKULL compliance validated (100%)
-5. ✅ Final acceptance report generated
-6. ✅ Stakeholder sign-off obtained
+5. ✅ **File location enforcement operational (Tasks 10.2 + 10.2A)**
+   - FileLocationValidator integrated into Master Orchestrator
+   - Pre-commit hook blocks direct file writes
+   - CI/CD pipeline validates file locations
+   - All existing violations migrated
+6. ✅ **Report generation removed (Task 10.3)**
+   - No markdown reports in orchestrators
+   - Database is single source of truth
+   - Token savings validated
+7. ✅ Final acceptance report generated
+8. ✅ Stakeholder sign-off obtained
 
 **Rejection Criteria:**
 - Any SKULL compliance test failure → Plan incomplete
 - Performance benchmark miss by >20% → Requires optimization
 - Test coverage <90% → Requires additional tests
+- **File location violations detected → Task 10.2A incomplete**
+- **Report generation still present → Task 10.3 incomplete**
 
 ---
 

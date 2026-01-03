@@ -60,6 +60,56 @@
 
 ---
 
+## 🎯 Response Template Reference
+
+**Orchestrator Type:** 🛡️ AUTONOMOUS  
+**Template:** `response-templates-v4.yaml:863` (autonomous_execution_progress)  
+**Reference:** See `.github/prompts/CORTEX.prompt.md` lines 118-157
+
+**Visual Marker:** When this orchestrator is engaged, user sees `🛡️` in response header.
+
+---
+
+## 🤖 Copilot Instructions
+
+```yaml
+copilot_instructions:
+  # Response template
+  response_template: "autonomous_execution_progress"
+  template_reference: "response-templates-v4.yaml:863"
+  
+  # SKULL enforcement
+  tdd_enforcement: true
+  tdd_cycle_required: "RED→GREEN→REFACTOR"
+  
+  # REFACTOR requirements
+  final_refactor_required: true
+  refactor_phase: "Phase 10"
+  refactor_task_minimum: 18
+  refactor_categories:
+    - orphaned_function_removal
+    - duplicate_code_elimination
+    - unused_import_cleanup
+    - code_smell_remediation
+    - complexity_reduction
+    - magic_number_extraction
+    - type_hint_validation
+    - docstring_completeness
+  
+  # Governance integration
+  knowledge_library_consultation: true
+  phase_minus_one_required: true
+  skull_rules_applicable:
+    - TDD_ENFORCEMENT
+    - KNOWLEDGE_LIBRARY_INTEGRATION_ENFORCEMENT
+    - GIT_CHECKPOINT_ENFORCEMENT
+    - REFACTOR_CODE_CLEANUP_ENFORCEMENT
+    - PROGRESS_TRACKER_ENFORCEMENT
+    - HOLISTIC_CODE_DISCOVERY_ENFORCEMENT
+```
+
+---
+
 ## 🎯 Executive Summary
 
 ### The Transformation
@@ -117,6 +167,128 @@ User Input → Context Middleware (Tier 1 Query) → Master Orchestrator (Patter
 - ✅ 100% test coverage for new implementations
 - ✅ All plans resumable from any phase
 - ✅ Single source of truth via database state
+
+---
+
+## 📚 Phase -1: Knowledge Library Consultation (1 hour)
+
+**Goal:** Consult existing knowledge before new work begins (SKULL: `KNOWLEDGE_LIBRARY_INTEGRATION_ENFORCEMENT`)
+
+**Purpose:** Query Tier 2 Knowledge Graph, lessons learned, and governance rules to:
+- Identify existing patterns for orchestrator brittleness mitigation
+- Apply lessons learned from similar architectural refactors  
+- Ensure SKULL rule compliance from the start
+- Leverage authoritative references (BaseOrchestrator v4.1 design patterns)
+
+### Task -1.1: Query Knowledge Graph (15 min)
+
+```bash
+# Query Tier 2 for related patterns
+python -m src.tier2.knowledge_graph query \
+  --topic "orchestrator brittleness" \
+  --topic "architectural refactor" \
+  --topic "pure autonomous migration" \
+  --output context/knowledge-graph-findings.md
+```
+
+**Expected Findings:**
+- Hybrid control flow → Pure autonomous pattern
+- File-based state → SQLite database pattern
+- Prompt-based → Config-driven pattern
+
+### Task -1.2: Review Lessons Learned (15 min)
+
+```bash
+# Extract relevant lessons from past work
+grep -i "orchestrator\|refactor\|migration\|brittleness" \
+  cortex-brain/lessons-learned.yaml \
+  > context/lessons-learned-relevant.md
+```
+
+**Target:** ≥5 relevant lessons applied to plan execution
+
+### Task -1.3: Consult TRUTH-SOURCES (15 min)
+
+Review authoritative references:
+- BaseOrchestrator v4.1 design patterns
+- Master Orchestrator architecture decisions
+- Planning System v5 specifications
+- MCP protocol specifications
+
+Document in `context/authoritative-references.md`
+
+### Task -1.4: Query Brain Protection Rules (15 min)
+
+```bash
+# Extract applicable SKULL rules for architectural refactors
+python -m src.tier0.governance query_rules \
+  --plan-type "architectural" \
+  --scope "orchestrator_migration" \
+  --output context/applicable-skull-rules.md
+```
+
+**Expected:** ≥10 applicable SKULL rules identified
+
+### Deliverable
+
+**Artifact:** `context/knowledge-library-findings.md`
+
+**Content Structure:**
+```markdown
+# Knowledge Library Findings
+
+## Knowledge Graph Patterns (3+)
+1. Pattern: Hybrid control flow → Pure autonomous
+   - Source: Planning System v4 migration
+   - Application: Use BaseOrchestrator v4.1 abstraction
+   
+2. Pattern: File-based state → SQLite database
+   - Source: State management refactor (2025-Q4)
+   - Application: PlanningStateDB for all orchestrators
+
+## Lessons Learned Applied (5+)
+1. Lesson: Start with BaseOrchestrator abstraction
+   - Source: v3.0 refactor (lessons-learned.yaml:45)
+   - Application: All migrations use BaseOrchestrator v4.1
+   
+2. Lesson: Use MCP protocol for universal invocation
+   - Source: MCP integration project
+   - Application: Registry pattern for orchestrator discovery
+
+## Authoritative References (3+)
+- BaseOrchestrator v4.1: src/orchestrators/base_orchestrator_v4_1.py
+- Master Orchestrator ADR: architecture/master-orchestrator-design.md
+- Planning v5 Spec: manifests/orchestrators/planning-system-4.0-manifest.yaml
+
+## Applicable SKULL Rules (10+)
+1. TDD_ENFORCEMENT - RED→GREEN→REFACTOR mandatory
+2. KNOWLEDGE_LIBRARY_INTEGRATION_ENFORCEMENT - This phase!
+3. GIT_CHECKPOINT_ENFORCEMENT - Checkpoint after each phase
+4. REFACTOR_CODE_CLEANUP_ENFORCEMENT - Phase 10 required
+5. PROGRESS_TRACKER_ENFORCEMENT - Visual progress tracking
+6. HOLISTIC_CODE_DISCOVERY_ENFORCEMENT - AST scanning
+7. FILE_ORGANIZATION_ENFORCEMENT - Correct folder structure
+8. PLAN_ARTIFACT_LOCATION_ENFORCEMENT - No root-level docs
+9. OPERATIONAL_READINESS_ENFORCEMENT - DoD checklists
+10. MANDATORY_PLANNING_ENFORCEMENT - Planning patterns detected
+
+## Recommendations for Plan Execution
+- Use BaseOrchestrator v4.1 patterns for consistency
+- Implement git checkpoints after each phase (Task added to Phase 7.1)
+- Include REFACTOR phase with ≥18 cleanup tasks (Phase 10 expanded)
+- Integrate AST scanning in Planning v5 Phase 0 (New Phase 6.4)
+- Add acceptance validation before completion (Tasks 6.2.1-6.2.6)
+```
+
+### Definition of Done
+
+- [ ] Knowledge Graph queried (≥3 patterns identified)
+- [ ] Lessons learned reviewed (≥5 relevant lessons)
+- [ ] TRUTH-SOURCES consulted (≥3 authoritative references)
+- [ ] Brain protection rules queried (≥10 applicable SKULL rules)
+- [ ] Findings documented in `context/knowledge-library-findings.md`
+- [ ] Recommendations applied to plan phases
+- [ ] Knowledge consultation logged in tracking/progress.json
 
 ---
 
@@ -2882,6 +3054,100 @@ Assessment plan should include a "Discussion Required" section for TDD-Master or
 4. Test: "cleanup cache" → Master Orch routes → Cleanup v2 executes
 5. **Master Orchestrator now handles: Planning v5 + ADO v2 + Vacuum v2 + Cleanup v2**
 
+### Task 6.3.1: Master Orchestrator Acceptance Validation (4h)
+
+**Purpose:** Validate MO-1.1.* through MO-1.3.* acceptance criteria
+
+**Test Suite:** `tests/acceptance/test_master_orchestrator_acceptance.py`
+
+**Key Validations:**
+- **MO-1.1.1:** Pattern matching ≥90% accuracy (100 sample inputs)
+- **MO-1.1.2:** Planning patterns detected correctly (100% detection rate)
+- **MO-1.1.3:** Implementation patterns bypass planning (100% correct routing)
+- **MO-1.1.4:** Continuation patterns route to last orchestrator (100% detection)
+- **MO-1.1.5:** LLM fallback triggers <10% of time
+- **MO-1.2.4:** State sharing between orchestrators functional
+- **MO-1.2.5:** Metrics tracking captures all executions accurately
+- **MO-1.3.1:** Tier 1 continuation context ≤200 tokens
+- **MO-1.3.3:** Priority logic (orchestrator > project) works
+- **MO-1.3.5:** Context injection includes metadata only (no full conversation)
+
+**Deliverable:** `reports/master-orchestrator-acceptance-report.md`
+
+### Task 6.3.2: Cross-Session Context Acceptance Validation (3h)
+
+**Purpose:** Validate MO-1.3.* criteria for context middleware
+
+**Test Suite:** `tests/acceptance/test_cross_session_context_acceptance.py`
+
+**Key Validations:**
+- Orchestrator continuation priority over project continuation
+- Context structure validation (required keys present)
+- Token count enforcement (≤200 tokens)
+- Continuation pattern detection (all 8 patterns)
+- No full conversation history in context
+
+**Deliverable:** `reports/cross-session-context-acceptance-report.md`
+
+### Task 6.3.3: Plan Filename Standardization (2h)
+
+**Purpose:** Fix PS-2.1.5 gap - standardize plan filename casing
+
+**Changes:**
+1. Rename `00-MASTER-PLAN-V5.md` → `00-master-plan.md` (lowercase)
+2. Update Planning System v5 generator to use lowercase filenames
+3. Create filesystem validation test suite
+
+**Test:** `tests/acceptance/test_plan_filename_standards.py`
+
+**Deliverable:** Standardized filenames + passing validation tests
+
+### Task 6.3.4: Update Master Plan with Mandatory Content (2h)
+
+**Status:** ✅ COMPLETE (already added in this session)
+
+**Additions Made:**
+- ✅ Response Template Reference block
+- ✅ Copilot Instructions block with SKULL rules
+- ✅ Phase -1 Knowledge Library Consultation
+
+**Validation:** Confirm all mandatory blocks present in master plan
+
+### Task 6.3.5: ADO v2 Acceptance Validation Report (2h)
+
+**Purpose:** Validate ADO-4.1.* criteria and generate compliance report
+
+**Test Execution:**
+```bash
+# Run ADO v2 acceptance tests
+pytest tests/acceptance/test_ado_v2_acceptance.py -v \
+  --cov=src/orchestrators/ado/v2 \
+  --cov-report=html
+
+# Generate report
+python scripts/generate_acceptance_report.py \
+  --component ado_v2 \
+  --criteria cortex-brain/documents/planning/FINAL-ACCEPTANCE-CRITERIA.md \
+  --section 4 \
+  --output reports/ado-v2-acceptance-report.md
+```
+
+**Deliverable:** `reports/ado-v2-acceptance-report.md` with ≥80% compliance
+
+### Task 6.3.6: Planning System v5 Acceptance Validation (1h)
+
+**Purpose:** Validate PS-2.1.* and PS-2.2.* criteria
+
+**Key Validations:**
+- PS-2.1.1-2.1.5: Folder structure correctness (4 subfolders, naming)
+- PS-2.2.1: Visual progress tracking present
+- PS-2.2.3: Final REFACTOR phase exists
+- PS-2.2.4: Copilot instructions block present
+
+**Deliverable:** `reports/planning-v5-acceptance-report.md`
+
+**Total Time for Acceptance Validation Tasks:** 14 hours
+
 ### Task 6.4: GUIDED Orchestrator Assessments
 **Duration:** 9 days  
 **Plan Reference:** `guided-orchestrators-assessment/00-master-plan.md`
@@ -3014,7 +3280,494 @@ CREATE TABLE tdd_sessions (
 
 ---
 
-## 🔗 Phase 7: System Integration + Master Orchestrator Final Validation (2 days)
+## � Phase 6.5: AST Integration into Planning System v5 (14 hours)
+
+**Goal:** Integrate AST (Abstract Syntax Tree) scanning into Planning System v5 for holistic code discovery
+
+**Rationale:** Fix PS-2.4.* acceptance criteria gaps - enable automated detection of orphaned functions, duplicate code, and complexity issues during plan generation
+
+**SKULL Rule:** `HOLISTIC_CODE_DISCOVERY_ENFORCEMENT` - Discover existing code before creating new code
+
+### Task 6.5.1: Create AST Scanner Agent (6h)
+
+**File:** `src/cortex_agents/ast_scanner.py` (400-500 lines)
+
+**Purpose:** Build comprehensive Python AST analysis agent
+
+**Features:**
+```python
+class ASTScanner:
+    """
+    Abstract Syntax Tree analyzer for Python codebases.
+    
+    Capabilities:
+    - Parse all Python files in workspace
+    - Build call graph (function → callers mapping)
+    - Detect orphaned functions (zero callers)
+    - Identify duplicate function signatures
+    - Calculate cyclomatic complexity metrics
+    - Find unused imports
+    - Track class hierarchy
+    """
+    
+    def scan_workspace(self, root_path: Path, exclude_patterns: List[str]) -> ScanResult:
+        """
+        Full workspace AST scan.
+        
+        Returns:
+            ScanResult with functions, classes, imports, call graph, metrics
+        """
+        pass
+    
+    def detect_orphans(self, call_graph: CallGraph) -> List[OrphanedFunction]:
+        """
+        Find functions with zero callers.
+        
+        Excludes:
+        - Entry points (main, __init__)
+        - Test functions
+        - Magic methods
+        - Explicitly decorated functions (@public, @api)
+        """
+        pass
+    
+    def detect_duplicates(self, functions: List[FunctionDef]) -> List[Duplicate]:
+        """
+        Find functions with identical signatures.
+        
+        Matches:
+        - Same name
+        - Same parameter list
+        - Same return type (if annotated)
+        """
+        pass
+    
+    def analyze_complexity(self, functions: List[FunctionDef]) -> Dict[str, int]:
+        """
+        Calculate cyclomatic complexity per function.
+        
+        Uses: radon.complexity module
+        Flags: Complexity > 10 as high complexity
+        """
+        pass
+    
+    def find_unused_imports(self, file_path: Path) -> List[UnusedImport]:
+        """
+        Identify imports not referenced in file.
+        
+        Uses: AST visitor pattern to track symbol usage
+        """
+        pass
+```
+
+**Dependencies:**
+```python
+# requirements.txt additions
+radon>=5.1.0        # Cyclomatic complexity analysis
+rope>=1.0.0         # Call graph analysis
+```
+
+**Test Suite:** `tests/cortex_agents/test_ast_scanner.py` (100+ tests)
+
+**Test Coverage Requirements:**
+- ✅ Workspace scanning with various project structures
+- ✅ Orphaned function detection (true positives and false positives)
+- ✅ Duplicate detection across files
+- ✅ Complexity calculation validation
+- ✅ Unused import detection
+- ✅ Exclusion pattern handling
+
+**Deliverable:** Fully functional AST scanner with 100% test coverage
+
+---
+
+### Task 6.5.2: Integrate AST Scanning into Planning v5 Phase 0 (4h)
+
+**File to Modify:** `src/orchestrators/planning_orchestrator_v5.py`
+
+**Change:** Update Phase 0 (Discovery) to include AST scanning
+
+**Implementation:**
+```python
+# src/orchestrators/planning_orchestrator_v5.py
+
+def _execute_phase_0_discovery(self, context: Dict[str, Any]) -> PhaseResult:
+    """
+    Phase 0: Context Discovery
+    
+    NEW: Includes AST scanning for holistic code analysis (PS-2.4.*)
+    """
+    
+    # Existing: Semantic search for relevant files
+    relevant_files = self._semantic_search(context["feature_description"])
+    
+    # NEW: AST scanning for code structure analysis
+    from src.cortex_agents.ast_scanner import ASTScanner
+    
+    self.logger.info("Starting AST workspace scan...")
+    ast_scanner = ASTScanner()
+    scan_result = ast_scanner.scan_workspace(
+        root_path=self.workspace_root,
+        exclude_patterns=[
+            "*/venv/*",
+            "*/node_modules/*",
+            "*/.tox/*",
+            "*/build/*",
+            "*/dist/*"
+        ]
+    )
+    self.logger.info(f"AST scan complete: {scan_result.file_count} files analyzed")
+    
+    # Generate structured AST output per acceptance schema (PS-2.4.2)
+    ast_output = {
+        "scan_timestamp": datetime.now().isoformat(),
+        "files_scanned": scan_result.file_count,
+        "workspace_root": str(self.workspace_root),
+        "functions": {
+            "total": len(scan_result.functions),
+            "public": len([f for f in scan_result.functions if not f.name.startswith("_")]),
+            "private": len([f for f in scan_result.functions if f.name.startswith("_")]),
+            "orphaned": len(scan_result.orphaned_functions)
+        },
+        "classes": {
+            "total": len(scan_result.classes),
+            "methods": sum(len(c.methods) for c in scan_result.classes)
+        },
+        "imports": {
+            "total": len(scan_result.imports),
+            "unused": len(scan_result.unused_imports)
+        },
+        "complexity": {
+            "high_complexity_functions": len([
+                f for f in scan_result.functions 
+                if scan_result.complexity_map.get(f.name, 0) > 10
+            ]),
+            "average_complexity": sum(scan_result.complexity_map.values()) / len(scan_result.complexity_map) if scan_result.complexity_map else 0
+        },
+        "duplicates": [
+            {
+                "signature": dup.signature,
+                "locations": [str(loc) for loc in dup.locations],
+                "recommendation": "Consolidate into shared utility function"
+            }
+            for dup in scan_result.duplicates
+        ],
+        "orphaned_functions": [
+            {
+                "name": f.name,
+                "location": f"{f.file_path}:{f.line_number}",
+                "recommendation": "Consider removal if truly unused"
+            }
+            for f in scan_result.orphaned_functions
+        ],
+        "high_complexity_functions": [
+            {
+                "name": func_name,
+                "complexity": complexity,
+                "location": scan_result.function_location_map[func_name],
+                "recommendation": "Refactor to reduce complexity (target ≤10)"
+            }
+            for func_name, complexity in scan_result.complexity_map.items()
+            if complexity > 10
+        ]
+    }
+    
+    # Write to context/ast-analysis.json (PS-2.4.5)
+    ast_file = self.plan_folder / "context" / "ast-analysis.json"
+    ast_file.write_text(json.dumps(ast_output, indent=2))
+    self.logger.info(f"AST analysis saved to {ast_file}")
+    
+    # Log key findings
+    if scan_result.orphaned_functions:
+        self.logger.warning(
+            f"Found {len(scan_result.orphaned_functions)} orphaned functions - "
+            "consider adding to Phase 10 REFACTOR tasks"
+        )
+    
+    if scan_result.duplicates:
+        self.logger.warning(
+            f"Found {len(scan_result.duplicates)} duplicate code blocks - "
+            "consolidation recommended in REFACTOR phase"
+        )
+    
+    return PhaseResult(
+        phase_name="Phase 0: Discovery",
+        artifacts=[
+            "context/discovery.md",
+            "context/ast-analysis.json"  # NEW
+        ],
+        metadata={
+            "relevant_files": len(relevant_files),
+            "ast_files_scanned": scan_result.file_count,
+            "orphaned_functions": len(scan_result.orphaned_functions),
+            "duplicates": len(scan_result.duplicates)
+        }
+    )
+```
+
+**Integration Points:**
+- Planning v5 Phase 0 automatically runs AST scan
+- Results saved to `context/ast-analysis.json` with acceptance schema
+- Findings logged for visibility
+- Metadata tracked in phase result
+
+---
+
+### Task 6.5.3: Generate AST Findings Report in Plan (2h)
+
+**Purpose:** Surface AST findings in generated plan document
+
+**Template Addition:** `src/response_templates/planning/plan_master_template.md`
+
+**New Section (after "Context Discovery"):**
+```markdown
+## 📊 Codebase Health Analysis (AST Scan)
+
+**Scan Date:** {{ast_scan.timestamp}}  
+**Files Analyzed:** {{ast_scan.files_scanned}}
+
+### Function Statistics
+- **Total Functions:** {{ast_scan.functions.total}}
+- **Public Functions:** {{ast_scan.functions.public}}
+- **Private Functions:** {{ast_scan.functions.private}}
+- **Orphaned Functions:** {{ast_scan.functions.orphaned}} {{#if ast_scan.functions.orphaned}}⚠️{{/if}}
+
+### Code Health Metrics
+- **Duplicate Code Blocks:** {{ast_scan.duplicates.length}} {{#if ast_scan.duplicates.length}}🔴{{/if}}
+- **Unused Imports:** {{ast_scan.imports.unused}} {{#if ast_scan.imports.unused}}🟡{{/if}}
+- **High Complexity Functions:** {{ast_scan.complexity.high_complexity_functions}} {{#if ast_scan.complexity.high_complexity_functions}}🟡{{/if}}
+- **Average Complexity:** {{ast_scan.complexity.average_complexity | round(2)}}
+
+{{#if ast_scan.orphaned_functions}}
+### ⚠️ Orphaned Functions Detected
+
+The following functions have **zero callers** and may be unused:
+
+{{#each ast_scan.orphaned_functions}}
+- `{{this.name}}` - {{this.location}}
+  - **Recommendation:** {{this.recommendation}}
+{{/each}}
+
+**Action Required:** Review in Phase 10 (REFACTOR) for potential removal.
+{{/if}}
+
+{{#if ast_scan.duplicates}}
+### 🔴 Duplicate Code Detected
+
+The following code blocks have identical implementations:
+
+{{#each ast_scan.duplicates}}
+- **Signature:** `{{this.signature}}`
+  - **Locations:**
+    {{#each this.locations}}
+    - {{this}}
+    {{/each}}
+  - **Recommendation:** {{this.recommendation}}
+{{/each}}
+
+**Action Required:** Consolidate duplicates in Phase 10 (REFACTOR).
+{{/if}}
+
+{{#if ast_scan.high_complexity_functions}}
+### 🟡 High Complexity Functions
+
+The following functions exceed cyclomatic complexity threshold (>10):
+
+{{#each ast_scan.high_complexity_functions}}
+- `{{this.name}}` (Complexity: {{this.complexity}}) - {{this.location}}
+  - **Recommendation:** {{this.recommendation}}
+{{/each}}
+
+**Action Required:** Refactor for simplicity in Phase 10 (REFACTOR).
+{{/if}}
+
+**Full Report:** See `context/ast-analysis.json`
+
+---
+```
+
+**Integration:** Planning v5 automatically includes this section in generated plans when AST data present
+
+---
+
+### Task 6.5.4: Test AST Integration (2h)
+
+**Test Suite:** `tests/orchestrators/planning/test_ast_integration.py`
+
+**Test Cases:**
+
+```python
+import pytest
+from pathlib import Path
+import json
+from src.orchestrators.planning_orchestrator_v5 import PlanningOrchestratorV5
+
+class TestASTIntegration:
+    """
+    Acceptance criteria validation: PS-2.4.1 through PS-2.4.5
+    """
+    
+    def test_ast_scan_executes_in_phase_0(self, temp_workspace):
+        """PS-2.4.1: AST scan executes in Phase 0 (Discovery)"""
+        orchestrator = PlanningOrchestratorV5(
+            workspace_root=temp_workspace,
+            plan_folder=temp_workspace / "plan"
+        )
+        
+        result = orchestrator.execute_phase(
+            phase_number=0,
+            context={"feature_description": "Test feature"}
+        )
+        
+        # Verify AST analysis artifact created
+        ast_file = orchestrator.plan_folder / "context" / "ast-analysis.json"
+        assert ast_file.exists(), "AST analysis file not created"
+        
+        # Verify artifact listed in phase result
+        assert "context/ast-analysis.json" in result.artifacts
+    
+    def test_ast_output_schema_valid(self, temp_workspace_with_code):
+        """PS-2.4.2: Scan results include function/class/import counts"""
+        orchestrator = PlanningOrchestratorV5(
+            workspace_root=temp_workspace_with_code,
+            plan_folder=temp_workspace_with_code / "plan"
+        )
+        
+        orchestrator.execute_phase(0, {"feature_description": "Test"})
+        
+        ast_file = orchestrator.plan_folder / "context" / "ast-analysis.json"
+        ast_data = json.loads(ast_file.read_text())
+        
+        # Verify required schema keys (PS-2.4.2)
+        assert "scan_timestamp" in ast_data
+        assert "files_scanned" in ast_data
+        assert "functions" in ast_data
+        assert "classes" in ast_data
+        assert "imports" in ast_data
+        
+        # Verify function stats structure
+        assert "total" in ast_data["functions"]
+        assert "public" in ast_data["functions"]
+        assert "private" in ast_data["functions"]
+        assert "orphaned" in ast_data["functions"]
+        
+        # Verify positive counts
+        assert ast_data["functions"]["total"] > 0
+        assert ast_data["files_scanned"] > 0
+    
+    def test_duplicate_detection(self, workspace_with_duplicates):
+        """PS-2.4.3: Duplicate code detection runs"""
+        # Create workspace with intentional duplicates
+        (workspace_with_duplicates / "module_a.py").write_text("""
+def calculate_total(items):
+    return sum(item.price for item in items)
+        """)
+        
+        (workspace_with_duplicates / "module_b.py").write_text("""
+def calculate_total(items):
+    return sum(item.price for item in items)
+        """)
+        
+        orchestrator = PlanningOrchestratorV5(
+            workspace_root=workspace_with_duplicates,
+            plan_folder=workspace_with_duplicates / "plan"
+        )
+        
+        orchestrator.execute_phase(0, {"feature_description": "Test"})
+        
+        ast_file = orchestrator.plan_folder / "context" / "ast-analysis.json"
+        ast_data = json.loads(ast_file.read_text())
+        
+        # Verify duplicate detected (PS-2.4.3)
+        assert len(ast_data["duplicates"]) >= 1
+        assert "calculate_total" in ast_data["duplicates"][0]["signature"]
+        assert len(ast_data["duplicates"][0]["locations"]) == 2
+    
+    def test_orphaned_function_detection(self, workspace_with_orphans):
+        """PS-2.4.4: Orphaned code detection runs"""
+        # Create workspace with orphaned function
+        (workspace_with_orphans / "module.py").write_text("""
+def used_function():
+    return "I am called"
+
+def orphaned_function():
+    return "Nobody calls me"
+
+def main():
+    result = used_function()
+    print(result)
+        """)
+        
+        orchestrator = PlanningOrchestratorV5(
+            workspace_root=workspace_with_orphans,
+            plan_folder=workspace_with_orphans / "plan"
+        )
+        
+        orchestrator.execute_phase(0, {"feature_description": "Test"})
+        
+        ast_file = orchestrator.plan_folder / "context" / "ast-analysis.json"
+        ast_data = json.loads(ast_file.read_text())
+        
+        # Verify orphaned function detected (PS-2.4.4)
+        assert len(ast_data["orphaned_functions"]) >= 1
+        orphan_names = [f["name"] for f in ast_data["orphaned_functions"]]
+        assert "orphaned_function" in orphan_names
+        assert "used_function" not in orphan_names  # Should not be flagged
+    
+    def test_ast_findings_in_generated_plan(self, temp_workspace_with_code):
+        """Verify AST findings appear in generated plan document"""
+        orchestrator = PlanningOrchestratorV5(
+            workspace_root=temp_workspace_with_code,
+            plan_folder=temp_workspace_with_code / "plan"
+        )
+        
+        # Execute full planning workflow
+        orchestrator.execute(context={"feature_description": "Test feature"})
+        
+        # Read generated plan
+        plan_file = orchestrator.plan_folder / "00-master-plan.md"
+        plan_content = plan_file.read_text()
+        
+        # Verify AST section present
+        assert "## 📊 Codebase Health Analysis" in plan_content
+        assert "Function Statistics" in plan_content
+        assert "Files Analyzed:" in plan_content
+```
+
+**Test Fixtures:**
+- `temp_workspace`: Empty workspace
+- `temp_workspace_with_code`: Workspace with sample Python files
+- `workspace_with_duplicates`: Workspace with intentional duplicate functions
+- `workspace_with_orphans`: Workspace with orphaned function
+
+**Coverage Target:** 100% of AST integration code paths
+
+---
+
+### Deliverables (Phase 6.5)
+
+- [ ] AST Scanner agent implemented (400-500 lines, 100% coverage)
+- [ ] Planning v5 Phase 0 includes AST scan execution
+- [ ] `context/ast-analysis.json` generated per acceptance schema (PS-2.4.2)
+- [ ] AST findings surfaced in generated plan documents
+- [ ] Test suite passing (100% coverage)
+- [ ] Acceptance criteria PS-2.4.1 through PS-2.4.5 validated
+
+### Completion Criteria
+
+- ✅ AST scanning executes automatically in Planning v5 Phase 0
+- ✅ Orphaned functions detected and reported (PS-2.4.4)
+- ✅ Duplicate code detected and reported (PS-2.4.3)
+- ✅ Unused imports identified (PS-2.4.2)
+- ✅ High complexity functions flagged (complexity >10)
+- ✅ AST analysis JSON saved to context/ (PS-2.4.5)
+- ✅ AST findings visible in generated plans
+- ✅ All tests passing (PS-2.4.1 validated)
+- ✅ Git checkpoint: `checkpoint-phase-6-5-ast-integration-complete`
+
+---
+
+## �🔗 Phase 7: System Integration + Master Orchestrator Final Validation (2 days)
 
 **Goal:** Validate complete Master Orchestrator deployment, finalize system integration, conduct end-to-end testing
 
@@ -3399,9 +4152,11 @@ Orchestrators share state via StateManager + PlanningStateDB
 
 ---
 
-## 🧹 Phase 10: REFACTOR & Cleanup (2 days)
+## 🧹 Phase 10: REFACTOR & Cleanup (2.5 days)
 
 **Goal:** Remove obsolete code, consolidate utilities, enforce standards
+
+**NEW in v5.1:** Added Tasks 10.2A (Universal File Write Enforcement) and 10.3 (Remove Unused Report Generation)
 
 ### Task 10.1: Archive Old Implementations
 **Duration:** 4h
@@ -3421,7 +4176,737 @@ cortex-brain/archives/v4-orchestrators/
 - Add deprecation notices
 - Document breaking changes
 
-### Task 10.2: Remove Duplicate Code
+### Task 10.2: File Location Enforcement System (HIGH PRIORITY)
+**Duration:** 4.5h
+
+**Goal:** Prevent file creation in wrong locations through programmatic validation
+
+**Rationale:** Fixes root cause of duplicate continuation prompts and scattered files across workspace. SKULL rule `FILE_ORGANIZATION_ENFORCEMENT` currently defined but not enforced programmatically.
+
+**Problem Evidence:**
+- Duplicate continuation prompts: `tracking/CONTINUATION-PROMPT.md` (correct) + `CONTINUATION-PROMPT-PHASE-6-3.md` (wrong location)
+- Root-level pollution: Files created in plan root instead of subfolders
+- Manual cleanup required: 2-4h/month finding misplaced files
+
+**Performance Impact:** Negligible (<0.01% overhead - 0.005ms per file validation)
+
+**Subtask 10.2.1: Create FileLocationValidator (2h)**
+
+**File:** `src/orchestrators/file_location_validator.py` (200 lines)
+
+**Implementation:**
+```python
+class FileLocationValidator:
+    """
+    Centralized file location validation for all orchestrators.
+    
+    Enforces SKULL rule: FILE_ORGANIZATION_ENFORCEMENT
+    Injected by Master Orchestrator into all child orchestrators.
+    """
+    
+    CATEGORY_MAPPINGS = {
+        # Planning artifacts
+        "plan": "cortex-brain/documents/planning/active/{plan_name}/",
+        "plan_tracking": "cortex-brain/documents/planning/active/{plan_name}/tracking/",
+        "plan_context": "cortex-brain/documents/planning/active/{plan_name}/context/",
+        "plan_report": "cortex-brain/documents/planning/active/{plan_name}/reports/",
+        "plan_artifact": "cortex-brain/documents/planning/active/{plan_name}/artifacts/",
+        
+        # Document categories
+        "report": "cortex-brain/documents/reports/",
+        "analysis": "cortex-brain/documents/analysis/",
+        "summary": "cortex-brain/documents/summaries/",
+        "investigation": "cortex-brain/documents/investigations/",
+        "implementation_guide": "cortex-brain/documents/implementation-guides/",
+        
+        # Operational artifacts
+        "health_report": "cortex-brain/health-reports/",
+        "cleanup_report": "cortex-brain/cleanup-reports/",
+        "metric": "cortex-brain/metrics/",
+        "log": "logs/",
+        
+        # Code artifacts
+        "source": "src/",
+        "test": "tests/",
+        "config": "cortex-brain/config/",
+    }
+    
+    def validate_and_correct(
+        self,
+        filename: str,
+        category: str,
+        context: Optional[Dict[str, Any]] = None
+    ) -> ValidationResult:
+        """
+        Validate file location and auto-correct if needed.
+        
+        Validates:
+        1. Category exists in CATEGORY_MAPPINGS
+        2. Filename length ≤20 characters (SKULL rule)
+        3. Path constructed from category + context
+        
+        Returns:
+            ValidationResult with actual_path (auto-corrected if needed)
+        """
+        # Implementation per design doc
+```
+
+**Test Suite:** `tests/orchestrators/test_file_location_validator.py` (50+ tests)
+
+**Test Coverage:**
+- ✅ Valid paths pass without correction
+- ✅ Long filenames auto-truncated to 20 chars
+- ✅ Unknown categories default to 'report'
+- ✅ Context variables substituted correctly
+- ✅ Planning subfolder validation
+- ✅ Statistics tracking (validations, corrections, compliance rate)
+
+**Deliverable:** Fully tested validator with 100% coverage
+
+---
+
+**Subtask 10.2.2: Integrate into Master Orchestrator (1h)**
+
+**File:** `src/orchestrators/master_orchestrator.py`
+
+**Changes:**
+```python
+class MasterOrchestrator:
+    def __init__(self, ...):
+        # ... existing init ...
+        
+        # NEW: File location validator (shared across orchestrators)
+        self.file_validator = FileLocationValidator(logger=self.logger)
+        self.logger.info("File location validation enabled")
+    
+    def _execute_orchestrator(self, orchestrator: Any, params: Dict) -> ExecutionResult:
+        """Execute orchestrator with shared resources."""
+        
+        # Inject file validator into orchestrator
+        if hasattr(orchestrator, 'set_file_validator'):
+            orchestrator.set_file_validator(self.file_validator)
+            self.logger.debug(f"Validator injected into {orchestrator.name}")
+        
+        # ... existing execution logic ...
+    
+    def get_metrics(self) -> Dict[str, Any]:
+        """Get metrics including file validation stats."""
+        return {
+            # ... existing metrics ...
+            'file_validation': self.file_validator.get_stats()
+        }
+```
+
+**Integration Points:**
+- Master Orchestrator creates single FileLocationValidator instance
+- Injects into ALL child orchestrators via `set_file_validator()`
+- Collects validation metrics for monitoring
+
+**Test Coverage:**
+- ✅ Validator injected into Planning Orchestrator
+- ✅ Validator injected into ADO Orchestrator
+- ✅ Validator injected into Vacuum/Cleanup Orchestrators
+- ✅ Metrics collected correctly
+
+---
+
+**Subtask 10.2.3: Integrate into BaseOrchestrator (1h)**
+
+**File:** `src/orchestrators/base/base_orchestrator_v4_1.py`
+
+**Changes:**
+```python
+class BaseOrchestratorV4_1(ABC):
+    def __init__(self, ...):
+        # ... existing init ...
+        self.file_validator = None  # Injected by Master Orchestrator
+    
+    def set_file_validator(self, validator: FileLocationValidator) -> None:
+        """Set file validator (injected by Master Orchestrator)."""
+        self.file_validator = validator
+        self.logger.debug("File validator configured")
+    
+    def write_artifact(
+        self,
+        filename: str,
+        content: str,
+        category: str,
+        context: Optional[Dict[str, Any]] = None
+    ) -> Path:
+        """
+        Write artifact with automatic location validation.
+        
+        API Design: Location-first (orchestrator provides category, not path)
+        
+        Args:
+            filename: Filename only (e.g., "test-results.md")
+            content: File content
+            category: File category (determines folder - see CATEGORY_MAPPINGS)
+            context: Optional context variables (e.g., {"plan_name": "..."})
+        
+        Returns:
+            Path: Actual path written (may be auto-corrected)
+        
+        Example:
+            # Planning orchestrator writes continuation prompt
+            self.write_artifact(
+                filename="CONTINUATION-PROMPT.md",
+                content=prompt_text,
+                category="plan_tracking",
+                context={"plan_name": self.plan_id}
+            )
+            # → cortex-brain/documents/planning/active/{plan_id}/tracking/CONTINUATION-PROMPT.md
+        """
+        if self.file_validator:
+            result = self.file_validator.validate_and_correct(
+                filename, category, context
+            )
+            
+            if not result.valid:
+                self.logger.warning(
+                    f"File location auto-corrected:\n"
+                    f"  Rule: {result.rule_violated}\n"
+                    f"  Path: {result.actual_path}"
+                )
+            
+            file_path = Path(result.actual_path)
+        else:
+            # Fallback: No validator (shouldn't happen with Master Orchestrator)
+            self.logger.warning("No file validator - using basic path")
+            file_path = Path(filename)
+        
+        # Write file
+        file_path.parent.mkdir(parents=True, exist_ok=True)
+        file_path.write_text(content, encoding='utf-8')
+        
+        self.logger.info(f"Artifact written: {file_path}")
+        return file_path
+```
+
+**Migration Impact:**
+- All orchestrators inherit `write_artifact()` from BaseOrchestrator
+- Existing `Path(...).write_text()` calls should migrate to `write_artifact()`
+- Backward compatible: Works with/without validator injection
+
+---
+
+**Subtask 10.2.4: Update SKULL Rule Specification (30m)**
+
+**File:** `cortex-brain/brain-protection-rules.yaml`
+
+**Update `FILE_ORGANIZATION_ENFORCEMENT` rule:**
+```yaml
+- rule_id: "FILE_ORGANIZATION_ENFORCEMENT"
+  name: "File Organization Enforcement"
+  severity: "blocked"
+  description: "Files must be created in correct locations based on category"
+  
+  enforcement:
+    method: "programmatic"
+    component: "FileLocationValidator"
+    injection_point: "Master Orchestrator → BaseOrchestrator"
+    auto_correction: true
+  
+  rules:
+    planning_files:
+      location: "cortex-brain/documents/planning/active/{PLAN_NAME}/"
+      allowed_at_root:
+        - "00-master-plan.md"
+        - "README.md"
+        - "MASTER-ORCHESTRATOR-INSTRUCTIONS.md"
+      required_subfolders:
+        - "tracking/"      # CONTINUATION-PROMPT.md, progress.json, state-snapshot.json
+        - "context/"       # AST analysis, semantic search results
+        - "reports/"       # Phase completion reports
+        - "artifacts/"     # Supporting files, gap analysis
+        - "phases/"        # Child phase plans (optional)
+      
+      file_placement_rules:
+        - "CONTINUATION-PROMPT.md → tracking/"
+        - "progress.json → tracking/"
+        - "state-snapshot.json → tracking/"
+        - "*-completion.md → reports/"
+        - "*-analysis.json → context/"
+        - "phase-*-plan.md → phases/"
+    
+    document_files:
+      location: "cortex-brain/documents/{category}/"
+      categories: ["reports", "analysis", "summaries", "investigations", "implementation-guides"]
+    
+    filename_rules:
+      max_length: 20  # Characters (excluding extension)
+      format: "kebab-case"
+      extension: ".md"
+  
+  validation:
+    performance_target: "<1ms per file"
+    auto_correction: true
+    logging: "warning level for corrections"
+```
+
+**Benefits:**
+- Explicit specification of planning folder structure
+- Documents allowed root files (only master plan)
+- Provides reference for validator implementation
+- Performance target documented
+
+---
+
+**Deliverables (Task 10.2):**
+- ✅ FileLocationValidator implemented (200 lines, 100% tested)
+- ✅ Master Orchestrator integration complete
+- ✅ BaseOrchestrator `write_artifact()` API added
+- ✅ SKULL rule expanded with enforcement details
+- ✅ All tests passing (validator + integration)
+- ✅ Performance validated (<1ms per file)
+- ✅ Zero file location violations in test suite
+
+**Acceptance Criteria:**
+- ✅ Single FileLocationValidator instance shared across orchestrators
+- ✅ All child orchestrators receive validator via injection
+- ✅ `write_artifact()` API enforces category-based locations
+- ✅ Long filenames auto-truncated to 20 chars
+- ✅ Validation metrics tracked (validations, corrections, compliance rate)
+- ✅ Planning files go to correct subfolders (tracking/, context/, etc.)
+- ✅ Document files go to category folders (reports/, analysis/, etc.)
+- ✅ Root-level file creation blocked (except master plan)
+
+**Impact:**
+- Prevents duplicate continuation prompts (root cause fixed)
+- Eliminates scattered files across workspace
+- Saves 2-4h/month in manual cleanup
+- 100% file location compliance enforced programmatically
+
+---
+
+### Task 10.2A: Universal File Write Enforcement (3h) 🔥 HIGH PRIORITY
+
+**Goal:** Extend file location enforcement beyond `write_artifact()` to catch ALL file write operations in CORTEX
+
+**Problem:** Task 10.2 validates when orchestrators use `write_artifact()`, but doesn't prevent direct file writes:
+- `Path(...).write_text(content)` - bypasses validator
+- `open(path, 'w').write(content)` - bypasses validator
+- `json.dump(data, open(path))` - bypasses validator
+- `yaml.dump(data, open(path))` - bypasses validator
+
+**Evidence from Codebase Analysis:**
+```python
+# Found 20+ instances of direct file writes that bypass validator:
+Path("vacuum-completion-report.md").write_text(...)  # vacuum_orchestrator_v2.py:660
+plan_dir / "tracking" / "CONTINUATION-PROMPT.md".write_text(...)
+report_path.write_text(report_content)  # Multiple orchestrators
+```
+
+**Root Cause:** FileLocationValidator is opt-in (requires calling `write_artifact()`), not mandatory.
+
+---
+
+**Subtask 10.2A.1: Pre-Commit Hook for File Write Detection (1.5h)**
+
+**File:** `.github/hooks/pre-commit-file-location-check.py`
+
+**Implementation:**
+```python
+#!/usr/bin/env python3
+"""
+Pre-commit hook: Detect direct file writes in Python code.
+
+Blocks commits containing file write operations that bypass FileLocationValidator.
+
+Author: Asif Hussain
+Copyright © 2025-2026 Asif Hussain. All rights reserved.
+"""
+
+import re
+import sys
+from pathlib import Path
+from typing import List, Tuple
+
+# Patterns that indicate direct file writes
+FORBIDDEN_PATTERNS = [
+    r'\.write_text\(',          # Path.write_text()
+    r'\.write_bytes\(',         # Path.write_bytes()
+    r'open\([^)]+,\s*[\'"]w',   # open(path, 'w')
+    r'open\([^)]+,\s*[\'"]a',   # open(path, 'a')
+    r'json\.dump\(',            # json.dump(data, open(...))
+    r'yaml\.dump\(',            # yaml.dump(data, open(...))
+]
+
+# Allowed exceptions (these files can use direct writes)
+ALLOWED_FILES = [
+    'src/orchestrators/base/base_orchestrator_v4_1.py',  # Implements write_artifact()
+    'src/orchestrators/file_location_validator.py',       # Validator itself
+    'tests/',                                              # Test files (testing write operations)
+    'scripts/',                                            # Admin scripts
+]
+
+def check_file(file_path: Path) -> List[Tuple[int, str, str]]:
+    """
+    Check file for forbidden file write patterns.
+    
+    Returns:
+        List of (line_number, pattern, line_content) tuples
+    """
+    violations = []
+    
+    # Skip allowed files
+    if any(allowed in str(file_path) for allowed in ALLOWED_FILES):
+        return violations
+    
+    try:
+        content = file_path.read_text(encoding='utf-8')
+        lines = content.split('\n')
+        
+        for line_num, line in enumerate(lines, start=1):
+            # Skip comments
+            if line.strip().startswith('#'):
+                continue
+            
+            for pattern in FORBIDDEN_PATTERNS:
+                if re.search(pattern, line):
+                    violations.append((line_num, pattern, line.strip()))
+    
+    except Exception as e:
+        print(f"Warning: Could not check {file_path}: {e}", file=sys.stderr)
+    
+    return violations
+
+def main() -> int:
+    """Main pre-commit hook logic."""
+    # Get staged Python files
+    staged_files = Path('.').rglob('*.py')
+    python_files = [f for f in staged_files if f.is_file() and 'src/orchestrators' in str(f)]
+    
+    all_violations = []
+    
+    for file_path in python_files:
+        violations = check_file(file_path)
+        if violations:
+            all_violations.append((file_path, violations))
+    
+    if all_violations:
+        print("❌ FILE LOCATION ENFORCEMENT VIOLATION")
+        print("=" * 60)
+        print("\nDetected direct file write operations that bypass FileLocationValidator:")
+        print("\n")
+        
+        for file_path, violations in all_violations:
+            print(f"📄 {file_path}")
+            for line_num, pattern, line_content in violations:
+                print(f"  Line {line_num}: {pattern}")
+                print(f"    {line_content}")
+            print()
+        
+        print("✅ SOLUTION: Use BaseOrchestrator.write_artifact() instead:")
+        print("  self.write_artifact(filename, content, category, context)")
+        print("\n")
+        print("See Task 10.2.3 in master plan for migration guide.")
+        print("=" * 60)
+        
+        return 1  # Block commit
+    
+    return 0  # Allow commit
+
+if __name__ == '__main__':
+    sys.exit(main())
+```
+
+**Installation:**
+```bash
+# In project root
+chmod +x .github/hooks/pre-commit-file-location-check.py
+ln -s ../../.github/hooks/pre-commit-file-location-check.py .git/hooks/pre-commit
+```
+
+**Testing:**
+```bash
+# Test hook
+python .github/hooks/pre-commit-file-location-check.py
+
+# Expected: Reports all current violations (20+ instances)
+```
+
+---
+
+**Subtask 10.2A.2: Linting Rule for CI/CD (1h)**
+
+**File:** `.github/workflows/file-location-lint.yml`
+
+**Implementation:**
+```yaml
+name: File Location Enforcement
+
+on:
+  pull_request:
+    paths:
+      - 'src/**/*.py'
+  push:
+    branches:
+      - main
+      - cortex4-refactor
+
+jobs:
+  lint-file-locations:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      
+      - name: Check for direct file writes
+        run: |
+          python .github/hooks/pre-commit-file-location-check.py
+          
+      - name: Report violations
+        if: failure()
+        run: |
+          echo "❌ File location violations detected"
+          echo "See job logs for details"
+          exit 1
+```
+
+**Integration:** Runs on every PR, blocks merge if violations found
+
+---
+
+**Subtask 10.2A.3: Migration Script for Existing Violations (30m)**
+
+**File:** `scripts/migrate_to_write_artifact.py`
+
+**Purpose:** Auto-migrate existing direct file writes to `write_artifact()` calls
+
+**Features:**
+- AST-based code rewriting
+- Category inference from file path
+- Context extraction from surrounding code
+- Generates migration report
+
+**Usage:**
+```bash
+# Dry-run mode (report only)
+python scripts/migrate_to_write_artifact.py --dry-run
+
+# Apply migrations
+python scripts/migrate_to_write_artifact.py --apply
+```
+
+---
+
+**Deliverables (Task 10.2A):**
+- ✅ Pre-commit hook detects direct file writes
+- ✅ GitHub Actions workflow blocks PRs with violations
+- ✅ Migration script converts existing violations
+- ✅ 20+ existing violations fixed
+- ✅ 100% file location compliance enforced at commit time
+
+**Acceptance Criteria:**
+- ✅ No commits allowed with direct file writes in `src/orchestrators/`
+- ✅ CI/CD pipeline fails on file location violations
+- ✅ All existing violations migrated to `write_artifact()`
+- ✅ Tests validate hook catches violations correctly
+
+**Impact:**
+- **Prevents future violations:** Catches at commit time, not runtime
+- **Zero bypass:** Cannot merge code that bypasses validator
+- **Automated migration:** Existing violations fixed automatically
+- **Architectural integrity:** Forces all orchestrators to use centralized file management
+
+---
+
+### Task 10.3: Remove Unused Report Generation (2h) 💰 TOKEN SAVINGS
+
+**Goal:** Eliminate completion report generation - CORTEX never reads these reports
+
+**Evidence from Codebase Analysis:**
+
+**Reports Generated (Write-Only):**
+- `vacuum-completion-report-{timestamp}.md` - 200+ lines per execution
+- `ado-completion-message.md` - 100+ lines per work item
+- Phase completion reports across all orchestrators
+- Summary reports in planning orchestrator
+
+**CORTEX Usage Analysis (Read Operations):**
+- ✅ Database state: Used by `get_plan_status()`, state recovery
+- ✅ progress.json: Used by progress tracking UI
+- ❌ Completion reports: **ZERO reads found** in codebase
+- ❌ Summary reports: **ZERO reads found** in codebase
+
+**Semantic Search Results:**
+```
+"code that reads phase completion reports" → ZERO matches in orchestrator code
+Admin feedback review reads from analytics DB, NOT markdown reports
+Executive summary generator looks for "COMPLETION" in filenames (metadata), doesn't read content
+```
+
+**Verdict:** Reports are write-only artifacts that consume tokens/disk without providing value.
+
+---
+
+**Subtask 10.3.1: Remove Report Generation from Orchestrators (1h)**
+
+**Files to Update:**
+
+1. **Vacuum Orchestrator** (`src/orchestrators/vacuum/vacuum_orchestrator_v2.py:634-670`)
+   ```python
+   # REMOVE Lines 653-670:
+   # - template = self.jinja_env.get_template('vacuum/completion-report.jinja2')
+   # - report_content = template.render(...)
+   # - report_path.write_text(report_content)
+   
+   # KEEP:
+   # - Database state updates (self.execution_result)
+   # - Logging (self.logger.info)
+   ```
+
+2. **ADO Orchestrator** (`src/orchestrators/ado/ado_orchestrator_v2.py`)
+   ```python
+   # REMOVE:
+   # - completion_message template rendering
+   # - report file generation
+   
+   # KEEP:
+   # - Work item ID returned in result
+   # - Database state tracking
+   ```
+
+3. **Planning Orchestrator** (`src/orchestrators/planning_orchestrator_v5.py`)
+   ```python
+   # REMOVE:
+   # - phase-completion-report.md generation
+   # - summary-report.md generation
+   
+   # KEEP:
+   # - progress.json updates
+   # - Database phase state
+   ```
+
+4. **Cleanup Orchestrator** (similar pattern)
+
+**Template Files to Remove:**
+- `cortex-brain/templates/vacuum/completion-report.jinja2`
+- `cortex-brain/templates/ado/completion-message.jinja2`
+- `cortex-brain/templates/planning/phase-report.md.jinja2`
+- `cortex-brain/templates/planning/summary-report.md.jinja2`
+
+**Manifest Updates:**
+```yaml
+# Remove from vacuum-orchestrator-v2.yaml:
+templates:
+  dry_run_report: "templates/vacuum/dry-run-report.jinja2"  # KEEP (user-facing)
+  # completion_report: REMOVED (unused)
+
+# Remove from ado-orchestrator-v2.yaml:
+templates:
+  # completion_message: REMOVED (unused)
+```
+
+---
+
+**Subtask 10.3.2: Update CORTEX.prompt.md Documentation (30m)**
+
+**File:** `.github/prompts/CORTEX.prompt.md`
+
+**Update Orchestrator Documentation:**
+```markdown
+### Orchestrator Outputs (v5 Simplified)
+
+**What Orchestrators Return:**
+- ✅ **Database State:** All execution state in PlanningStateDB
+- ✅ **Progress Tracking:** progress.json for UI visualization
+- ✅ **Artifacts:** Generated code, configs, plans
+- ✅ **Return Values:** ExecutionResult with status, metrics, errors
+
+**What Orchestrators NO LONGER Generate:**
+- ❌ Completion Reports (markdown) - Unused, token waste
+- ❌ Summary Reports (markdown) - Unused, duplicate state
+- ❌ Phase Reports (markdown) - Database state is source of truth
+
+**Rationale:** Analysis found ZERO code reading completion reports. All state 
+tracking moved to database (single source of truth). Saves 200-500 tokens per execution.
+```
+
+---
+
+**Subtask 10.3.3: Add Database Query Helpers (30m)**
+
+**File:** `src/database/planning_state_db.py`
+
+**New Methods (replace report reading):**
+```python
+class PlanningStateDB:
+    # ... existing methods ...
+    
+    def get_phase_completion_summary(self, plan_id: str, phase_number: int) -> Dict[str, Any]:
+        """
+        Get phase completion summary from database (replaces reading report files).
+        
+        Returns:
+            {
+                'phase_number': int,
+                'phase_name': str,
+                'status': str,
+                'duration_seconds': float,
+                'artifacts_generated': List[str],
+                'tasks_completed': int,
+                'completion_time': datetime
+            }
+        """
+        cursor = self.conn.cursor()
+        cursor.execute('''
+            SELECT 
+                phase_number, phase_name, status, duration_seconds,
+                artifacts_generated, tasks_completed, completion_time
+            FROM phases
+            WHERE plan_id = ? AND phase_number = ?
+        ''', (plan_id, phase_number))
+        
+        row = cursor.fetchone()
+        return dict(row) if row else None
+    
+    def get_execution_summary(self, plan_id: str) -> Dict[str, Any]:
+        """Get complete plan execution summary (replaces reading summary reports)."""
+        # ... query database state ...
+```
+
+**Usage Example:**
+```python
+# OLD (read markdown report):
+report_path = Path(f"vacuum-completion-report-{timestamp}.md")
+report_content = report_path.read_text()  # ❌ Doesn't exist anymore
+
+# NEW (query database):
+summary = db.get_phase_completion_summary(plan_id="vacuum-cleanup-20260103", phase_number=6)
+print(f"Phase {summary['phase_name']}: {summary['status']}")
+print(f"Duration: {summary['duration_seconds']}s")
+```
+
+---
+
+**Deliverables (Task 10.3):**
+- ✅ Report generation removed from 4 orchestrators
+- ✅ 4 report templates deleted
+- ✅ Manifest configs updated
+- ✅ Database query helpers added
+- ✅ Documentation updated
+
+**Benefits:**
+- **Token Savings:** 200-500 tokens per orchestrator execution
+- **Disk Savings:** ~50KB per execution (reports no longer written)
+- **Simplified Architecture:** Database is single source of truth
+- **Performance:** No template rendering overhead
+
+**Acceptance Criteria:**
+- ✅ No markdown report generation in orchestrators
+- ✅ All state queries use database methods
+- ✅ Tests validate database query helpers
+- ✅ Zero regressions (functionality unchanged, just source of data)
+
+---
+
+### Task 10.5: Remove Duplicate Code
 **Duration:** 6h
 
 **Areas to Consolidate:**
@@ -3431,12 +4916,33 @@ cortex-brain/archives/v4-orchestrators/
 - Validation functions → `src/utils/validation.py`
 
 **Deduplication Targets:**
-- File creation logic (use filename validator)
+- File creation logic (REPLACED by write_artifact() API - Task 10.2)
 - Progress bar generation (standardize format)
 - Checkpoint creation (use base class method)
 - Config loading (centralize in BaseOrchestrator)
 
-### Task 10.3: Enforce Filename Standards
+**File Creation Migration:**
+```python
+# OLD (scattered across orchestrators):
+Path("some-file.md").write_text(content)
+Path("cortex-brain/report.md").write_text(content)
+plan_dir / "tracking" / "CONTINUATION-PROMPT.md"
+
+# NEW (Task 10.2 write_artifact() API):
+self.write_artifact("some-file.md", content, category="report")
+self.write_artifact("CONTINUATION-PROMPT.md", content, category="plan_tracking", 
+                   context={"plan_name": self.plan_id})
+```
+
+**Migration Checklist:**
+- [ ] Planning Orchestrator: Migrate 5+ file creation calls
+- [ ] ADO Orchestrator: Migrate 3+ file creation calls
+- [ ] Vacuum Orchestrator: ~~Migrate report generation~~ REMOVED in Task 10.3
+- [ ] Cleanup Orchestrator: ~~Migrate report generation~~ REMOVED in Task 10.3
+- [ ] TDD Orchestrator: Migrate test file creation
+- [ ] Debug Orchestrator: Migrate investigation reports
+
+### Task 10.6: Enforce Filename Standards
 **Duration:** 4h
 
 **Cleanup Operations:**
@@ -3445,13 +4951,15 @@ cortex-brain/archives/v4-orchestrators/
 - Update all references (imports, docs)
 - Generate compliance report
 
+**Note:** FileLocationValidator (Task 10.2) auto-truncates long filenames going forward. This task cleans up existing violations.
+
 **Target Files:**
 - Python modules
 - Markdown documentation
 - Configuration files
 - Templates
 
-### Task 10.4: Optimize Imports
+### Task 10.7: Optimize Imports
 **Duration:** 2h
 
 **Optimization Tasks:**
@@ -3465,7 +4973,7 @@ cortex-brain/archives/v4-orchestrators/
 - `isort` for import organization
 - Custom scripts for validation
 
-### Task 10.5: Acceptance Criteria Validation (NEW)
+### Task 10.8: Acceptance Criteria Validation (NEW)
 **Duration:** 2h
 
 **Goal:** Validate implementation against comprehensive acceptance criteria
@@ -3506,7 +5014,7 @@ python scripts/generate_acceptance_report.py \
 - Evidence artifacts for failed criteria (if any)
 - Corrective action plan for failures
 
-### Task 10.6: Final System Validation
+### Task 10.9: Final System Validation
 **Duration:** 6h
 
 **Validation Suite:**
@@ -3516,6 +5024,8 @@ python scripts/generate_acceptance_report.py \
 - Check documentation links
 - Validate manifest schemas
 - Test sample operations end-to-end
+- **Validate file location enforcement (Tasks 10.2 + 10.2A)**
+- **Validate report removal (Task 10.3) - no markdown reports generated**
 
 **Quality Gates:**
 - Zero test failures
@@ -3523,10 +5033,17 @@ python scripts/generate_acceptance_report.py \
 - Zero linting errors above warning
 - All docs render correctly
 - All manifests validate against schema
+- **100% file location compliance (no bypasses)**
+- **Zero unused report generation**
 
 ### Completion Criteria
 - ✅ **Acceptance criteria validated (100% applicable criteria passed)**
 - ✅ **Final acceptance report generated**
+- ✅ **File location enforcement system operational (Tasks 10.2 + 10.2A)**
+- ✅ **FileLocationValidator integrated into Master Orchestrator**
+- ✅ **All orchestrators use write_artifact() API**
+- ✅ **Pre-commit hook blocks direct file writes**
+- ✅ **Report generation removed (Task 10.3) - database is source of truth**
 - ✅ Old code archived with migration notes
 - ✅ Duplicate code consolidated
 - ✅ 100% filename compliance (≤20 chars)
