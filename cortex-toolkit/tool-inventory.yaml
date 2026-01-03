@@ -904,6 +904,90 @@ tools:
       idempotent: true
       destructive: false
       average_duration_seconds: 10
+
+  - id: icon-title-spacing-validator
+    name: "Icon-Title Spacing Validator & Fixer"
+    version: "1.0.0"
+    category: validation
+    lifecycle: active
+    
+    capabilities:
+      - validation
+      - auto-fix
+      - html-correction
+      - css-correction
+      - spacing-enforcement
+      - glassmorphism-compliance
+    
+    can_do:
+      - "detect icons on separate lines from titles (should be inline)"
+      - "validate CSS gap values for icon-title pairs (must be var(--spacing-sm))"
+      - "automatically fix icon-title formatting across all HTML files"
+      - "enforce glassmorphism-design-standard.md v4.2.5+ spacing rules"
+      - "create backups before applying fixes"
+      - "generate detailed validation reports"
+      - "identify missing gap properties in flex layouts"
+    
+    execution:
+      command: ".\cortex-toolkit\validate-icon-title-spacing.ps1"
+      script: validate-icon-title-spacing.ps1
+      method: powershell
+      platforms: [windows]
+      requires_admin: false
+      idempotent: true
+      destructive: true
+      average_duration_seconds: 15
+      
+    input_schema:
+      type: object
+      properties:
+        DetectOnly:
+          type: boolean
+          default: false
+          description: "Only detect issues without fixing"
+        AutoFix:
+          type: boolean
+          default: false
+          description: "Automatically fix detected issues"
+        ReportPath:
+          type: string
+          default: "cortex-brain\\documents\\reports\\icon-title-spacing-validation.json"
+          description: "Path to save validation report"
+      
+    output_schema:
+      type: object
+      properties:
+        htmlFilesScanned:
+          type: integer
+          description: "Number of HTML files scanned"
+        cssFilesScanned:
+          type: integer
+          description: "Number of CSS files scanned"
+        totalIssues:
+          type: integer
+          description: "Total issues found"
+        fixedIssues:
+          type: integer
+          description: "Issues successfully fixed"
+        htmlIssues:
+          type: array
+          description: "List of HTML pattern issues"
+        cssIssues:
+          type: array
+          description: "List of CSS gap issues"
+    
+    examples:
+      - description: "Detect spacing issues only"
+        command: ".\cortex-toolkit\validate-icon-title-spacing.ps1 -DetectOnly"
+      - description: "Auto-fix all issues"
+        command: ".\cortex-toolkit\validate-icon-title-spacing.ps1 -AutoFix"
+    
+    depends_on: []
+    conflicts_with: []
+    related_tools:
+      - glassmorphism-validator
+      - validate-css-duplicates
+      - validate-responsive-design
       
     input_schema:
       type: object

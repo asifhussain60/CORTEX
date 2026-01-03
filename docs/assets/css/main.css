@@ -753,6 +753,14 @@ body {
     text-align: center;
     margin-bottom: 3rem;
     color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm); /* Tight icon-title coupling */
+}
+
+.section-title i {
+    color: var(--accent-primary);
 }
 
 /* ============================================
@@ -3535,18 +3543,19 @@ footer,
 }
 
 .tier-header {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-md);
+    display: block; /* Changed from flex to block for stacked layout */
     margin-bottom: var(--spacing-lg);
 }
 
 .tier-header .card-icon {
-    flex-shrink: 0;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: var(--spacing-sm);
 }
 
-.tier-header > div {
-    flex: 1;
+.tier-header .tier-title-group {
+    display: inline-block;
+    vertical-align: middle;
 }
 
 .tier-header .card-title {
@@ -3568,7 +3577,7 @@ footer,
 .capability-tile {
     display: flex;
     align-items: flex-start;
-    gap: var(--spacing-md);
+    gap: var(--spacing-sm); /* Reduced from --spacing-md for tighter icon-text coupling */
     padding: var(--spacing-md);
     background: rgba(10, 14, 39, 0.4);
     border-radius: var(--radius-sm);
@@ -4971,7 +4980,7 @@ footer,
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.75rem;
+    gap: var(--spacing-sm); /* Reduced for tighter icon-title coupling */
 }
 
 .principles-header i {
@@ -4984,7 +4993,7 @@ footer,
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.75rem;
+    gap: var(--spacing-sm); /* Reduced for tighter icon-title coupling */
 }
 
 .principles-header i {
@@ -6155,7 +6164,7 @@ h1, h2, h3, h4, h5, h6, p, span, div {
 .level0-card-header {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: var(--spacing-sm);
     margin-bottom: 1.25rem;
 }
 
@@ -10168,7 +10177,7 @@ h1, h2, h3, h4, h5, h6, p, span, div {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--spacing-md);
+    gap: var(--spacing-sm); /* Reduced for tighter icon-title coupling */
 }
 
 .page-title i {

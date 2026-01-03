@@ -1,8 +1,10 @@
 # 🎨 Glassmorphism Design Standard
 
-**Version:** 4.2.3 | **Status:** ✅ PRODUCTION  
-**Author:** Asif Hussain | **Last Updated:** January 3, 2026 (Font Awesome Icon Fix)  
+**Version:** 4.2.6 | **Status:** ✅ PRODUCTION  
+**Author:** Asif Hussain | **Last Updated:** January 3, 2026 (Icon-Title Spacing Toolkit Validation)  
 **Copyright © 2026 Asif Hussain. All rights reserved.**
+
+**🛠️ TOOLKIT VALIDATION:** Use `validate-icon-title-spacing.ps1` to enforce compliance
 
 ---
 
@@ -130,22 +132,57 @@ This standard defines **modern glassmorphism patterns** for CORTEX documentation
 | `.glass-card-clickable` | Interactive tiles/cards | Navigational elements, buttons |
 | `.glass-card-display` | Static content cards | Information display, non-interactive panels |
 | `.animation-t1` | Subtle hover effects | ALL Level 1 pages (required) |
-| `.principle-card-grid` | 2-3 column card grid | Principle/feature showcases |
+| `.principle-card-grid` | 2-3 column card grid | Principle/feature showcases (strict grid) |
+| `.principle-card-grid.columns-2` | 2-column strict grid | 4-tier brain, 2-agent system (2x2 or 1x2 layout) |
+| `.principle-card-grid.columns-3` | 3-column strict grid | 5+ principles, short-label content |
 | `.capability-tiles` | Vertical card stack | Detailed capabilities with long descriptions |
 | `.capability-tile` | Individual capability card | Left border accent, icon+text |
 | `.tier-header` | Inline icon+title | Horizontal flex layout |
-| `.two-column-grid` | 2-column responsive grid | 4-6 items with medium-long content |
+| `.two-column-grid` | 2-column responsive grid (auto-fit) | DEPRECATED: Use `.principle-card-grid.columns-2` for strict 2-panel |
 | `.orchestrator-tags` | Horizontal pill layout | Tags, labels, categories |
 
 ### Spacing Quick Reference
 
 | Element Type | Property | Value | Use Case |
 |--------------|----------|-------|----------|
+| **Icon-Title Pairs** | `gap` | `var(--spacing-sm)` (8px) | Tight coupling: section-title, page-title, tier-header, capability-tile |
 | Stacked cards | `margin-bottom` | `var(--space-lg)` (24px) | Between consecutive cards |
 | Multi-panel grids | `gap` | `var(--space-lg)` (24px) | All panel gaps |
 | Major sections | `margin-bottom` | `var(--space-2xl)` (48px) | Between sections |
 | Key features | `margin-bottom` | `var(--space-3xl)` (64px) | After feature sections |
 | Mobile (< 768px) | `gap` | `var(--space-md)` (16px) | Tighter mobile spacing |
+
+**⚠️ CRITICAL: Icon-Title Spacing Rule (v4.2.6)**
+All icon+title combinations MUST use `gap: var(--spacing-sm)` (8px) for tight visual coupling. This applies to:
+- `.section-title` - Main section headers with icons
+- `.page-title` - Page title headers with icons  
+- `.tier-header` - Tier card headers with icons
+- `.capability-tile` - Capability items with icons
+- `.principles-header` - Principle section headers with icons
+
+**Before (WRONG):** `gap: var(--spacing-md)` (16px) - Too much space  
+**After (CORRECT):** `gap: var(--spacing-sm)` (8px) - Tight coupling
+
+**HTML Pattern Requirements:**
+- Icons and titles MUST be inline within the same container (no separate lines)
+- ❌ **WRONG:** `<h2>\n  <i class="fas fa-icon"></i>\n  Title\n</h2>`
+- ✅ **CORRECT:** `<h2><i class="fas fa-icon"></i> Title</h2>`
+
+**Automated Validation:**
+```powershell
+# Detect issues only
+.\cortex-toolkit\validate-icon-title-spacing.ps1 -DetectOnly
+
+# Auto-fix all issues
+.\cortex-toolkit\validate-icon-title-spacing.ps1 -AutoFix
+```
+
+**Toolkit Tool:** `validate-icon-title-spacing.ps1` (v1.0.0)
+- Scans 317 HTML files + 14 CSS files
+- Detects icons on separate lines from titles
+- Validates CSS gap values (must be `var(--spacing-sm)`)
+- Auto-fixes issues with backup creation
+- Generates JSON validation report
 
 ### Animation Decision Tree
 
@@ -221,6 +258,62 @@ Is it Level 0 (Home)?
     <p>CORTEX brain structure and cognitive framework</p>
 </article>
 ```
+
+### Architecture Page Pattern (2-Panel Grid Structure)
+
+**When to Use:** Architecture page (`/architecture/index.html`) showing 4-tier brain system
+
+**Grid Layout Examples:**
+
+| Section | Content Count | Grid Class | Layout |
+|---------|---------------|------------|--------|
+| Key Architectural Principles | 5 principles | `.principle-card-grid.columns-3` | 3-column for balanced layout |
+| Tier Deep Dive | 4 tiers (Tier 0-3) | `.principle-card-grid.columns-2` | **2x2 strict grid** (2-panel) |
+| Agent System | 2 agents | `.principle-card-grid.columns-2` | **1x2 strict grid** (side-by-side) |
+
+**Implementation:**
+```html
+<!-- Tier Deep Dive (2x2 Panel Grid) -->
+<section class="glass-card-display animation-t1">
+    <h2 class="section-title">
+        <i class="fas fa-layer-group pulse-glow-glass--fast"></i>
+        Tier Deep Dive
+    </h2>
+    
+    <div class="principle-card-grid columns-2">
+        <!-- Tier 0: SKULL Governance -->
+        <div class="glass-card-clickable animation-t1">
+            <div class="tier-header">
+                <div class="card-icon tier-icon">
+                    <i class="fas fa-shield-alt pulse-glow-glass--fast"></i>
+                </div>
+                <div>
+                    <h3 class="card-title">Tier 0: SKULL Governance</h3>
+                    <p class="card-subtitle">Brain Protection & Safety Validation</p>
+                </div>
+            </div>
+            
+            <div class="capability-tiles">
+                <!-- Capability items -->
+            </div>
+        </div>
+        
+        <!-- Repeat for Tier 1, 2, 3 -->
+    </div>
+</section>
+```
+
+**Critical Differences:**
+
+| Class | Grid Behavior | Use Case |
+|-------|---------------|----------|
+| `.two-column-grid` | `auto-fit` responsive (fluid) | DEPRECATED: Use only for legacy pages |
+| `.principle-card-grid.columns-2` | **Strict 2-column** (fixed) | Architecture tiers, agent system (2-panel structure) |
+
+**Why Strict 2-Panel?**
+- Enforces visual symmetry for brain tier hierarchy (Tier 0/1 | Tier 2/3)
+- Prevents layout shifting on different screen sizes
+- Aligns with glassmorphism multi-panel pattern philosophy
 
 ---
 

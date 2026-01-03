@@ -13,11 +13,13 @@ This document shows the **node structure** starting from Home (root), displaying
 ---
 
 **Purpose:** Document the documentation structure for navigation and planning  
-**Last Updated:** January 3, 2026 (CSS Cleanup + Backup)  
+**Last Updated:** January 3, 2026 (Icon-Title Spacing Fix)  
 **Total Pages:** 318 (151 active + 167 stubs)  
 **Cleanup Stats:** 42 orphaned files archived, 7 new stub pages created, broken links reduced 28% (181 → 129)  
 **CSS Cleanup:** 865 unused classes identified, backup preserved, 335 auto-generated classes, 0 inline styles  
 **v5.0 Architecture:** 28 pages documented (Master Orchestrator Hub + Planning v5 + ADO v2)
+**Architecture Page Fix:** Tier Deep Dive now uses strict 2x2 panel grid (`.principle-card-grid.columns-2`)
+**Spacing Fix:** All icon-title pairs now use `gap: var(--spacing-sm)` (8px) for tight coupling
 
 ---
 

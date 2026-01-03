@@ -1038,6 +1038,7 @@
 /* Module Card Header (flex layout for badge positioning) */
 .module-card-header {
     display: flex;
+    gap: var(--spacing-sm);
     justify-content: space-between;
     align-items: flex-start;
 }
