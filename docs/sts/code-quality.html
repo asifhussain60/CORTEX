@@ -28,261 +28,119 @@ button, a, input, select, textarea, [role="button"] {
 </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="CORTEX Code Quality Showcase - DRY, KISS, YAGNI">
-    <meta name="author" content="Asif Hussain">
-    <title>Code Quality | STS | CORTEX 4.0</title>
-    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
-    <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02">
-    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
-    <link rel="stylesheet" href="../assets/css/sts.css?v=2026-01-02-v2">
+    <title>Code Quality - CORTEX</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <link rel="stylesheet" href="../assets/css/variables.css?v=2026-01-03">
+    <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-03">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
+    <style>
+        .stub-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        
+        .stub-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 3rem;
+            max-width: 600px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+        
+        .stub-icon {
+            font-size: 4rem;
+            color: var(--accent-primary, #00d9ff);
+            margin-bottom: 1.5rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .stub-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary, #ffffff);
+        }
+        
+        .stub-category {
+            font-size: 0.875rem;
+            color: var(--accent-secondary, #ffd700);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1.5rem;
+        }
+        
+        .stub-message {
+            font-size: 1.125rem;
+            line-height: 1.6;
+            color: var(--text-secondary, rgba(255, 255, 255, 0.7));
+            margin-bottom: 2rem;
+        }
+        
+        .stub-back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--accent-primary, #00d9ff);
+            color: var(--bg-primary, #0a0e27);
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .stub-back-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 217, 255, 0.3);
+        }
+        
+        .stub-metadata {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.75rem;
+            color: var(--text-tertiary, rgba(255, 255, 255, 0.5));
+        }
+    </style>
 </head>
-<body class="sts-showcase">
-    <!-- Glass Header Navigation -->
-    <header class="glass-header">
-<style>
-/* Mobile font optimization */
-html {
-    -webkit-text-size-adjust: 100%;
-    -moz-text-size-adjust: 100%;
-    text-size-adjust: 100%;
-}
-</style>
-<style>
-/* Touch target optimization */
-a, button, [role="button"] {
-    min-width: 44px;
-    min-height: 44px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-</style>
-<style>
-/* Mobile touch optimization */
-button, a, input, select, textarea, [role="button"] {
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
-}
-</style>
-        <div class="header-content">
-            <nav class="header-nav" mobile-nav-optimized>
-                <a href="../index.html" class="nav-link" mobile-nav-optimized>
-                    <i class="pulse-glow-glass--fast fa-home"></i>
-                    <span>Home</span>
-                </a>
-            </nav>
+<body>
+    <div class="stub-container">
+        <div class="stub-card">
+            <div class="stub-icon">
+                <i class="pulse-glow-glass--fast fa-hammer"></i>
+            </div>
+            
+            <div class="stub-category">Documentation</div>
+            
+            <h1 class="stub-title">Code Quality</h1>
+            
+            <p class="stub-message">
+                This page is currently under construction. We're working hard to bring you 
+                comprehensive content, interactive visualizations, and practical examples.
+            </p>
+            
+            <a href="../index.html" class="stub-back-link">
+                <i class="pulse-glow-glass--fast fa-arrow-left"></i>
+                Back to Overview
+            </a>
+            
+            <div class="stub-metadata">
+                <p>Page Status: <strong>Placeholder</strong></p>
+                <p>Created: 2026-01-03</p>
+                <p>Auto-generated by CORTEX Toolkit Manager</p>
+            </div>
         </div>
-    </header>
-
-    <main class="sts-main">
-        <section class="sts-hero">
-            <h1><i class="pulse-glow-glass--fast fa-gem"></i> Clean Code Principles</h1>
-            <p class="hero-subtitle">DRY, KISS, and YAGNI transformations for maintainable code</p>
-            <div class="sts-metrics">
-                <div class="metric-card"><div class="metric-value">3</div><div class="metric-label">Anti-Patterns</div></div>
-                <div class="metric-card accent"><div class="metric-value">3</div><div class="metric-label">Refactored</div></div>
-                <div class="metric-card"><div class="metric-value">40%</div><div class="metric-label">Less Code</div></div>
-            </div>
-        </section>
-
-        <!-- DRY - Angular -->
-        <section class="comparison-section">
-            <div class="section-header">
-                <h3><i class="pulse-glow-glass--fast fa-copy"></i> DRY - Don't Repeat Yourself</h3>
-                <span class="language-badge angular">Angular</span>
-            </div>
-            <div class="refactor-explanation">
-                <h4><i class="pulse-glow-glass--fast fa-lightbulb"></i> How This Was Refactored</h4>
-                <div class="capability-tiles">
-    <div class="glass-card">
-        <div class="card-body"><strong>Problem:</strong> Same validation logic duplicated across multiple components</div>
     </div>
-    <div class="glass-card">
-        <div class="card-body"><strong>Fix:</strong> Extract common validation into reusable service and directive</div>
-    </div>
-    <div class="glass-card">
-        <div class="card-body"><strong>Result:</strong> Single source of truth - changes propagate automatically</div>
-    </div>
-</div>
-            </div>
-            <div class="comparison-container">
-                <div class="panel before-panel">
-                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-times-circle"></i> Before: Duplicated Logic</div>
-                    <pre><code class="language-badge">// user-form.component.ts
-validateEmail(email: string): boolean {
-  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return regex.test(email);
-}
-
-// contact-form.component.ts
-validateEmail(email: string): boolean {
-  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return regex.test(email);
-}
-
-// newsletter.component.ts  
-validateEmail(email: string): boolean {
-  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return regex.test(email);
-}</code></pre>
-                </div>
-                <div class="panel after-panel">
-                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-check-circle"></i> After: Centralized</div>
-                    <pre><code class="language-badge">// validation.service.ts
-@Injectable({ providedIn: 'root' })
-export class ValidationService {
-  private emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  
-  validateEmail(email: string): boolean {
-    return this.emailRegex.test(email);
-  }
-  
-  validatePhone(phone: string): boolean { /*...*/ }
-  validatePostal(code: string): boolean { /*...*/ }
-}
-
-// Any component
-constructor(private validation: ValidationService) {}
-isValid = this.validation.validateEmail(email);</code></pre>
-                </div>
-            </div>
-        </section>
-
-        <!-- KISS - TypeScript -->
-        <section class="comparison-section">
-            <div class="section-header">
-                <h3><i class="pulse-glow-glass--fast fa-feather"></i> KISS - Keep It Simple</h3>
-                <span class="language-badge typescript">TypeScript</span>
-            </div>
-            <div class="refactor-explanation">
-                <h4><i class="pulse-glow-glass--fast fa-lightbulb"></i> How This Was Refactored</h4>
-                <div class="capability-tiles">
-    <div class="glass-card">
-        <div class="card-body"><strong>Problem:</strong> Over-engineered solution with unnecessary complexity</div>
-    </div>
-    <div class="glass-card">
-        <div class="card-body"><strong>Fix:</strong> Use simple, direct approach - leverage built-in methods</div>
-    </div>
-    <div class="glass-card">
-        <div class="card-body"><strong>Result:</strong> Readable, maintainable code that does exactly what's needed</div>
-    </div>
-</div>
-            </div>
-            <div class="comparison-container">
-                <div class="panel before-panel">
-                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-times-circle"></i> Before: Over-Engineered</div>
-                    <pre><code class="language-badge">class ArrayProcessor&lt;T&gt; {
-  private items: T[] = [];
-  private filterFn: ((item: T) =&gt; boolean) | null = null;
-  
-  setItems(items: T[]): this { this.items = items; return this; }
-  setFilter(fn: (item: T) =&gt; boolean): this { this.filterFn = fn; return this; }
-  
-  execute(): T[] {
-    if (!this.filterFn) throw new Error('Filter required');
-    return this.items.filter(this.filterFn);
-  }
-}
-
-// Usage
-const result = new ArrayProcessor&lt;number&gt;()
-  .setItems([1, 2, 3, 4, 5])
-  .setFilter(n =&gt; n &gt; 2)
-  .execute();</code></pre>
-                </div>
-                <div class="panel after-panel">
-                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-check-circle"></i> After: Simple & Direct</div>
-                    <pre><code class="language-badge">// Just use the built-in array method!
-const numbers = [1, 2, 3, 4, 5];
-const result = numbers.filter(n =&gt; n &gt; 2);
-
-// For reusability, a simple function is enough
-function filterGreaterThan&lt;T extends number&gt;(
-  items: T[], 
-  threshold: T
-): T[] {
-  return items.filter(item =&gt; item &gt; threshold);
-}
-
-const filtered = filterGreaterThan(numbers, 2);</code></pre>
-                </div>
-            </div>
-        </section>
-
-        <!-- YAGNI - C# -->
-        <section class="comparison-section">
-            <div class="section-header">
-                <h3><i class="pulse-glow-glass--fast fa-cut"></i> YAGNI - You Aren't Gonna Need It</h3>
-                <span class="language-badge csharp">C#</span>
-            </div>
-            <div class="refactor-explanation">
-                <h4><i class="pulse-glow-glass--fast fa-lightbulb"></i> How This Was Refactored</h4>
-                <div class="capability-tiles">
-    <div class="glass-card">
-        <div class="card-body"><strong>Problem:</strong> Premature abstractions and features "just in case"</div>
-    </div>
-    <div class="glass-card">
-        <div class="card-body"><strong>Fix:</strong> Remove unused code - implement only what's actually needed now</div>
-    </div>
-    <div class="glass-card">
-        <div class="card-body"><strong>Result:</strong> Lean codebase that's easier to understand and maintain</div>
-    </div>
-</div>
-            </div>
-            <div class="comparison-container">
-                <div class="panel before-panel">
-                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-times-circle"></i> Before: Premature Features</div>
-                    <pre><code class="language-badge">public interface IConfigProvider { }
-public interface IConfigProviderV2 : IConfigProvider { }
-public interface IConfigFactory { }
-
-public class ConfigManager
-{
-    private IConfigProvider _provider;
-    private IConfigFactory _factory; // Never used
-    private bool _enableCaching = false; // Never used
-    private Dictionary&lt;string, object&gt; _cache; // Never used
-    
-    public string GetSetting(string key) =&gt; 
-        Environment.GetEnvironmentVariable(key);
-    
-    // "Might need this later"
-    public void SetSetting(string key, string value) { }
-    public void RefreshCache() { }
-    public void EnableDistributedMode() { }
-}</code></pre>
-                </div>
-                <div class="panel after-panel">
-                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-check-circle"></i> After: Only What's Needed</div>
-                    <pre><code class="language-badge">public class ConfigService
-{
-    public string GetSetting(string key) =&gt;
-        Environment.GetEnvironmentVariable(key) 
-        ?? throw new KeyNotFoundException(key);
-    
-    public T GetSetting&lt;T&gt;(string key, T defaultValue = default)
-    {
-        var value = Environment.GetEnvironmentVariable(key);
-        if (string.IsNullOrEmpty(value)) return defaultValue;
-        return (T)Convert.ChangeType(value, typeof(T));
-    }
-}
-
-// Add caching WHEN you actually need it
-// Add distributed mode WHEN you actually need it</code></pre>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/csharp.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/typescript.min.js"></script>
-    <script>hljs.highlightAll();</script>
-    
-    <!-- Adaptive Code Panel Height Algorithm v2.2.0 -->
-    <script src="../assets/js/adaptive-panels.js"></script>
 </body>
 </html>

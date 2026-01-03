@@ -1,0 +1,1202 @@
+{
+  "timestamp": "2026-01-03T10:28:37.069506",
+  "summary": {
+    "total_html_files": 317,
+    "total_assets": 97,
+    "orphaned_files": 51,
+    "broken_links": 216,
+    "unused_assets": 71
+  },
+  "orphaned_files": [
+    "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\upgrade.html",
+    "archives\\prototypes-20260103-101816\\prototypes\\security\\threat-modeling.html",
+    "archives\\prototypes-20260103-101816\\prototypes\\security\\audit-logging.html",
+    "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\onboarding-orchestrator.html",
+    "archives\\orphaned-best-practices-20260103-102230\\planning-guidelines.html",
+    "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\ado-operations.html",
+    "archives\\orphaned-knowledge-20260103-102230\\query-optimization.html",
+    "archives\\orphaned-knowledge-20260103-102230\\service-design.html",
+    "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\architectural-review.html",
+    "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\intelligent-dashboard.html",
+    "archives\\validation-stubs-20260103-101816\\validation\\capabilities.html",
+    "archives\\prototypes-20260103-101816\\prototypes\\security\\dashboard.html",
+    "archives\\orphaned-knowledge-20260103-102230\\integration-testing.html",
+    "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\rollback-orchestrator.html",
+    "archives\\prototypes-20260103-101816\\prototypes\\security\\threat-intelligence.html",
+    "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\cortex-lens.html",
+    "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\pre-flight.html",
+    "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\planning-system.html",
+    "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\execution-orchestrator.html",
+    "archives\\orphaned-knowledge-20260103-102230\\data-protection.html",
+    "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\cleanup-orchestrator.html",
+    "sts\\testing-strategies.html",
+    "archives\\prototypes-20260103-101816\\prototypes\\security\\data-protection.html",
+    "archives\\prototypes-20260103-101816\\prototypes\\security\\security-training.html",
+    "archives\\prototypes-20260103-101816\\prototypes\\security\\access-control.html",
+    "archives\\prototypes-20260103-101816\\prototypes\\security\\vulnerability-assessment.html",
+    "archives\\prototypes-20260103-101816\\prototypes\\security\\penetration-testing.html",
+    "archives\\prototypes-20260103-101816\\prototypes\\security\\risk-assessment.html",
+    "archives\\orphaned-best-practices-20260103-102230\\collaboration-patterns.html",
+    "archives\\prototypes-20260103-101816\\prototypes\\knowledge\\index.html",
+    "archives\\prototypes-20260103-101816\\prototypes\\sts\\index.html",
+    "archives\\prototypes-20260103-101816\\prototypes\\toolkit-manager\\index.html",
+    "sts\\performance-optimization.html",
+    "archives\\prototypes-20260103-101816\\prototypes\\security\\owasp.html",
+    "archives\\orphaned-best-practices-20260103-102230\\index.html",
+    "archives\\orphaned-knowledge-20260103-102230\\index.html",
+    "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\git-checkpoint.html",
+    "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\system-integrity.html",
+    "archives\\orphaned-best-practices-20260103-102230\\coding-standards.html",
+    "archives\\prototypes-20260103-101816\\prototypes\\security\\compliance.html",
+    "sts\\security-best-practices.html",
+    "archives\\orphaned-knowledge-20260103-102230\\orm-best-practices.html",
+    "sts\\solid-principles.html",
+    "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\debug-orchestrator.html",
+    "archives\\prototypes-20260103-101816\\prototypes\\lens\\index.html",
+    "archives\\prototypes-20260103-101816\\prototypes\\token-optimization\\index.html",
+    "archives\\orphaned-knowledge-20260103-102230\\test-tabs.html",
+    "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\tdd-orchestrator.html",
+    "archives\\validation-stubs-20260103-101816\\validation\\metrics.html",
+    "archives\\prototypes-20260103-101816\\prototypes\\security\\incident-response.html",
+    "sts\\documentation-guidelines.html"
+  ],
+  "broken_links": [
+    {
+      "source": "knowledge\\api-design-hub.html",
+      "link": "../..../..../..../..../../assets/css/generated-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\....\\....\\assets\\css\\generated-classes.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\upgrade.html",
+      "link": "../assets/css/variables.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\variables.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\upgrade.html",
+      "link": "../assets/css/main.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\main.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\upgrade.html",
+      "link": "../../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\assets\\css\\intentional-classes.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\security\\threat-modeling.html",
+      "link": "../assets/css/variables.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\variables.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\security\\threat-modeling.html",
+      "link": "../assets/css/main.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\main.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\security\\threat-modeling.html",
+      "link": "../../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\assets\\css\\intentional-classes.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\security\\audit-logging.html",
+      "link": "../assets/css/variables.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\variables.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\security\\audit-logging.html",
+      "link": "../assets/css/main.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\main.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\security\\audit-logging.html",
+      "link": "../../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\assets\\css\\intentional-classes.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\onboarding-orchestrator.html",
+      "link": "../assets/css/variables.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\variables.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\onboarding-orchestrator.html",
+      "link": "../assets/css/main.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\main.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\onboarding-orchestrator.html",
+      "link": "../../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\assets\\css\\intentional-classes.css"
+    },
+    {
+      "source": "archives\\orphaned-best-practices-20260103-102230\\planning-guidelines.html",
+      "link": "../index.html",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\index.html"
+    },
+    {
+      "source": "security\\threat-modeling.html",
+      "link": "../documentation.html",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\documentation.html"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\ado-operations.html",
+      "link": "../assets/css/variables.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\variables.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\ado-operations.html",
+      "link": "../assets/css/main.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\main.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\ado-operations.html",
+      "link": "../../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\assets\\css\\intentional-classes.css"
+    },
+    {
+      "source": "knowledge\\containers-hub.html",
+      "link": "../..../..../..../..../../assets/css/generated-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\....\\....\\assets\\css\\generated-classes.css"
+    },
+    {
+      "source": "knowledge\\index.html",
+      "link": "../..../..../..../..../../assets/css/generated-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\....\\....\\assets\\css\\generated-classes.css"
+    },
+    {
+      "source": "knowledge\\design-patterns\\pattern-fundamentals.html",
+      "link": "../..../..../..../..../..../../assets/css/generated-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\knowledge\\....\\....\\....\\assets\\css\\generated-classes.css"
+    },
+    {
+      "source": "knowledge\\security\\authentication-authorization.html",
+      "link": "../..../..../..../..../..../../assets/css/generated-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\knowledge\\....\\....\\....\\assets\\css\\generated-classes.css"
+    },
+    {
+      "source": "getting-started\\tutorial.html",
+      "link": "../technical/orchestrators/code-sanitization.html",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\technical\\orchestrators\\code-sanitization.html"
+    },
+    {
+      "source": "getting-started\\tutorial.html",
+      "link": "../technical/orchestrators/refinement-orchestrator.html",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\technical\\orchestrators\\refinement-orchestrator.html"
+    },
+    {
+      "source": "archives\\orphaned-knowledge-20260103-102230\\query-optimization.html",
+      "link": "../performance-hub.html",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\performance-hub.html"
+    },
+    {
+      "source": "knowledge\\design-patterns-hub.html",
+      "link": "../..../..../..../..../../assets/css/generated-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\....\\....\\assets\\css\\generated-classes.css"
+    },
+    {
+      "source": "security\\risk-assessment.html",
+      "link": "../documentation.html",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\documentation.html"
+    },
+    {
+      "source": "archives\\orphaned-knowledge-20260103-102230\\service-design.html",
+      "link": "../microservices-hub.html",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\microservices-hub.html"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\architectural-review.html",
+      "link": "../assets/css/variables.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\variables.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\architectural-review.html",
+      "link": "../assets/css/main.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\main.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\architectural-review.html",
+      "link": "../../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\assets\\css\\intentional-classes.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\intelligent-dashboard.html",
+      "link": "../assets/css/variables.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\variables.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\intelligent-dashboard.html",
+      "link": "../assets/css/main.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\main.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\intelligent-dashboard.html",
+      "link": "../../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\assets\\css\\intentional-classes.css"
+    },
+    {
+      "source": "knowledge\\files\\files-hub.html",
+      "link": "../files-hub.html",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\knowledge\\files-hub.html"
+    },
+    {
+      "source": "knowledge\\security\\owasp-top-10.html",
+      "link": "../..../..../..../..../..../../assets/css/generated-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\knowledge\\....\\....\\....\\assets\\css\\generated-classes.css"
+    },
+    {
+      "source": "knowledge\\security\\owasp-top-10.html",
+      "link": "x",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\knowledge\\security\\x"
+    },
+    {
+      "source": "knowledge\\api-design\\fundamentals.html",
+      "link": "../../assets/css/main.csslevel1-integration-icon-containerv=2026-01-02",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\assets\\css\\main.csslevel1-integration-icon-containerv=2026-01-02"
+    },
+    {
+      "source": "knowledge\\api-design\\fundamentals.html",
+      "link": "../..../..../..../..../..../../assets/css/generated-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\knowledge\\....\\....\\....\\assets\\css\\generated-classes.css"
+    },
+    {
+      "source": "knowledge\\api-design\\fundamentals.html",
+      "link": "../../assets/css/learning-hub.csslevel1-integration-icon-containerv=2026-01-02",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\assets\\css\\learning-hub.csslevel1-integration-icon-containerv=2026-01-02"
+    },
+    {
+      "source": "archives\\validation-stubs-20260103-101816\\validation\\capabilities.html",
+      "link": "assets/css/variables.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\validation-stubs-20260103-101816\\validation\\assets\\css\\variables.css"
+    },
+    {
+      "source": "archives\\validation-stubs-20260103-101816\\validation\\capabilities.html",
+      "link": "assets/css/main.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\validation-stubs-20260103-101816\\validation\\assets\\css\\main.css"
+    },
+    {
+      "source": "archives\\validation-stubs-20260103-101816\\validation\\capabilities.html",
+      "link": "../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\validation-stubs-20260103-101816\\assets\\css\\intentional-classes.css"
+    },
+    {
+      "source": "archives\\validation-stubs-20260103-101816\\validation\\capabilities.html",
+      "link": "../index.html",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\validation-stubs-20260103-101816\\index.html"
+    },
+    {
+      "source": "faq.html",
+      "link": "technical/orchestrators/code-sanitization.html",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\technical\\orchestrators\\code-sanitization.html"
+    },
+    {
+      "source": "faq.html",
+      "link": "technical/orchestrators/refinement-orchestrator.html",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\technical\\orchestrators\\refinement-orchestrator.html"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\security\\dashboard.html",
+      "link": "../assets/css/variables.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\variables.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\security\\dashboard.html",
+      "link": "../assets/css/main.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\main.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\security\\dashboard.html",
+      "link": "../../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\assets\\css\\intentional-classes.css"
+    },
+    {
+      "source": "knowledge\\microservices.html",
+      "link": "microservices/badge-security-strategies.md",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\knowledge\\microservices\\badge-security-strategies.md"
+    },
+    {
+      "source": "knowledge\\microservices.html",
+      "link": "microservices/transform-panels-strategies-techniques.md",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\knowledge\\microservices\\transform-panels-strategies-techniques.md"
+    },
+    {
+      "source": "archives\\orphaned-knowledge-20260103-102230\\integration-testing.html",
+      "link": "../testing-hub.html",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\testing-hub.html"
+    },
+    {
+      "source": "knowledge\\software-engineering-hub.html",
+      "link": "../..../..../..../..../../assets/css/generated-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\....\\....\\assets\\css\\generated-classes.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\rollback-orchestrator.html",
+      "link": "../assets/css/variables.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\variables.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\rollback-orchestrator.html",
+      "link": "../assets/css/main.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\main.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\rollback-orchestrator.html",
+      "link": "../../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\assets\\css\\intentional-classes.css"
+    },
+    {
+      "source": "knowledge\\testing\\bdd-e2e-testing.html",
+      "link": "../..../..../..../..../..../../assets/css/generated-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\knowledge\\....\\....\\....\\assets\\css\\generated-classes.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\security\\threat-intelligence.html",
+      "link": "../assets/css/variables.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\variables.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\security\\threat-intelligence.html",
+      "link": "../assets/css/main.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\main.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\security\\threat-intelligence.html",
+      "link": "../../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\assets\\css\\intentional-classes.css"
+    },
+    {
+      "source": "knowledge\\database-hub.html",
+      "link": "../..../..../..../..../../assets/css/generated-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\....\\....\\assets\\css\\generated-classes.css"
+    },
+    {
+      "source": "knowledge\\frontend-hub.html",
+      "link": "../..../..../..../..../../assets/css/generated-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\....\\....\\assets\\css\\generated-classes.css"
+    },
+    {
+      "source": "security\\penetration-testing.html",
+      "link": "../documentation.html",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\documentation.html"
+    },
+    {
+      "source": "learning-paths\\index.html",
+      "link": "../..../..../..../..../../assets/css/generated-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\....\\....\\assets\\css\\generated-classes.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\cortex-lens.html",
+      "link": "../assets/css/variables.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\variables.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\cortex-lens.html",
+      "link": "../assets/css/main.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\main.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\cortex-lens.html",
+      "link": "../../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\assets\\css\\intentional-classes.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\architecture\\index.html",
+      "link": "../assets/css/variables.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\variables.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\architecture\\index.html",
+      "link": "../assets/css/main.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\main.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\architecture\\index.html",
+      "link": "../../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\assets\\css\\intentional-classes.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\pre-flight.html",
+      "link": "../assets/css/variables.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\variables.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\pre-flight.html",
+      "link": "../assets/css/main.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\main.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\pre-flight.html",
+      "link": "../../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\assets\\css\\intentional-classes.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\index.html",
+      "link": "../assets/css/variables.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\variables.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\index.html",
+      "link": "../assets/css/main.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\main.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\index.html",
+      "link": "../../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\assets\\css\\intentional-classes.css"
+    },
+    {
+      "source": "technical\\orchestrators\\index.html",
+      "link": "../..../..../..../..../..../../assets/css/generated-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\technical\\....\\....\\....\\assets\\css\\generated-classes.css"
+    },
+    {
+      "source": "knowledge\\design-patterns\\anti-patterns.html",
+      "link": "../..../..../..../..../..../../assets/css/generated-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\knowledge\\....\\....\\....\\assets\\css\\generated-classes.css"
+    },
+    {
+      "source": "security\\data-protection.html",
+      "link": "../documentation.html",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\documentation.html"
+    },
+    {
+      "source": "knowledge\\devops-hub.html",
+      "link": "../..../..../..../..../../assets/css/generated-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\....\\....\\assets\\css\\generated-classes.css"
+    },
+    {
+      "source": "security\\audit-logging.html",
+      "link": "../documentation.html",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\documentation.html"
+    },
+    {
+      "source": "knowledge\\security\\secure-coding-practices.html",
+      "link": "../..../..../..../..../..../../assets/css/generated-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\knowledge\\....\\....\\....\\assets\\css\\generated-classes.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\planning-system.html",
+      "link": "../assets/css/variables.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\variables.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\planning-system.html",
+      "link": "../assets/css/main.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\main.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\planning-system.html",
+      "link": "../../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\assets\\css\\intentional-classes.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\execution-orchestrator.html",
+      "link": "../assets/css/variables.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\variables.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\execution-orchestrator.html",
+      "link": "../assets/css/main.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\main.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\execution-orchestrator.html",
+      "link": "../../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\assets\\css\\intentional-classes.css"
+    },
+    {
+      "source": "archives\\orphaned-knowledge-20260103-102230\\data-protection.html",
+      "link": "../security-hub.html",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\security-hub.html"
+    },
+    {
+      "source": "knowledge\\api-design\\authentication-security.html",
+      "link": "../..../..../..../..../..../../assets/css/generated-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\knowledge\\....\\....\\....\\assets\\css\\generated-classes.css"
+    },
+    {
+      "source": "security\\vulnerability-assessment.html",
+      "link": "../documentation.html",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\documentation.html"
+    },
+    {
+      "source": "knowledge\\api-design\\versioning-evolution.html",
+      "link": "../..../..../..../..../..../../assets/css/generated-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\knowledge\\....\\....\\....\\assets\\css\\generated-classes.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\cleanup-orchestrator.html",
+      "link": "../assets/css/variables.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\variables.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\cleanup-orchestrator.html",
+      "link": "../assets/css/main.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\main.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\cleanup-orchestrator.html",
+      "link": "../../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\assets\\css\\intentional-classes.css"
+    },
+    {
+      "source": "sts\\index.html",
+      "link": "sts/code-quality.html",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\sts\\sts\\code-quality.html"
+    },
+    {
+      "source": "sts\\index.html",
+      "link": "sts/solid-principles.html",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\sts\\sts\\solid-principles.html"
+    },
+    {
+      "source": "sts\\index.html",
+      "link": "sts/testing-strategies.html",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\sts\\sts\\testing-strategies.html"
+    },
+    {
+      "source": "sts\\index.html",
+      "link": "sts/performance-optimization.html",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\sts\\sts\\performance-optimization.html"
+    },
+    {
+      "source": "sts\\index.html",
+      "link": "sts/security-best-practices.html",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\sts\\sts\\security-best-practices.html"
+    },
+    {
+      "source": "sts\\index.html",
+      "link": "sts/documentation-guidelines.html",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\sts\\sts\\documentation-guidelines.html"
+    },
+    {
+      "source": "knowledge\\api-design\\rest-principles.html",
+      "link": "../..../..../..../..../..../../assets/css/generated-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\knowledge\\....\\....\\....\\assets\\css\\generated-classes.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\security\\data-protection.html",
+      "link": "../assets/css/variables.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\variables.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\security\\data-protection.html",
+      "link": "../assets/css/main.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\main.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\security\\data-protection.html",
+      "link": "../../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\assets\\css\\intentional-classes.css"
+    },
+    {
+      "source": "knowledge\\design-patterns\\structural-patterns.html",
+      "link": "../..../..../..../..../..../../assets/css/generated-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\knowledge\\....\\....\\....\\assets\\css\\generated-classes.css"
+    },
+    {
+      "source": "knowledge\\testing\\tdd-fundamentals.html",
+      "link": "../..../..../..../..../..../../assets/css/generated-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\knowledge\\....\\....\\....\\assets\\css\\generated-classes.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\index.html",
+      "link": "assets/css/variables.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\variables.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\index.html",
+      "link": "assets/css/main.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\main.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\index.html",
+      "link": "../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\assets\\css\\intentional-classes.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\index.html",
+      "link": "../index.html",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\index.html"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\security\\security-training.html",
+      "link": "../assets/css/variables.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\variables.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\security\\security-training.html",
+      "link": "../assets/css/main.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\main.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\security\\security-training.html",
+      "link": "../../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\assets\\css\\intentional-classes.css"
+    },
+    {
+      "source": "knowledge\\microservices-hub.html",
+      "link": "../..../..../..../..../../assets/css/generated-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\....\\....\\assets\\css\\generated-classes.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\security\\access-control.html",
+      "link": "../assets/css/variables.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\variables.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\security\\access-control.html",
+      "link": "../assets/css/main.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\main.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\security\\access-control.html",
+      "link": "../../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\assets\\css\\intentional-classes.css"
+    },
+    {
+      "source": "sitemap.html",
+      "link": "../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\assets\\css\\intentional-classes.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\security\\vulnerability-assessment.html",
+      "link": "../assets/css/variables.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\variables.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\security\\vulnerability-assessment.html",
+      "link": "../assets/css/main.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\main.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\security\\vulnerability-assessment.html",
+      "link": "../../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\assets\\css\\intentional-classes.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\security\\penetration-testing.html",
+      "link": "../assets/css/variables.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\variables.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\security\\penetration-testing.html",
+      "link": "../assets/css/main.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\main.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\security\\penetration-testing.html",
+      "link": "../../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\assets\\css\\intentional-classes.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\security\\risk-assessment.html",
+      "link": "../assets/css/variables.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\variables.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\security\\risk-assessment.html",
+      "link": "../assets/css/main.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\main.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\security\\risk-assessment.html",
+      "link": "../../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\assets\\css\\intentional-classes.css"
+    },
+    {
+      "source": "knowledge\\testing\\mocking-ci-cd.html",
+      "link": "../..../..../..../..../..../../assets/css/generated-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\knowledge\\....\\....\\....\\assets\\css\\generated-classes.css"
+    },
+    {
+      "source": "archives\\orphaned-best-practices-20260103-102230\\collaboration-patterns.html",
+      "link": "../index.html",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\index.html"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\knowledge\\index.html",
+      "link": "../assets/css/variables.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\variables.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\knowledge\\index.html",
+      "link": "../assets/css/main.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\main.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\knowledge\\index.html",
+      "link": "../../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\assets\\css\\intentional-classes.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\sts\\index.html",
+      "link": "../assets/css/variables.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\variables.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\sts\\index.html",
+      "link": "../assets/css/main.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\main.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\sts\\index.html",
+      "link": "../../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\assets\\css\\intentional-classes.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\toolkit-manager\\index.html",
+      "link": "../assets/css/variables.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\variables.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\toolkit-manager\\index.html",
+      "link": "../assets/css/main.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\main.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\toolkit-manager\\index.html",
+      "link": "../../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\assets\\css\\intentional-classes.css"
+    },
+    {
+      "source": "knowledge\\messaging-hub.html",
+      "link": "../..../..../..../..../../assets/css/generated-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\....\\....\\assets\\css\\generated-classes.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\security\\owasp.html",
+      "link": "../assets/css/variables.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\variables.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\security\\owasp.html",
+      "link": "../assets/css/main.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\main.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\security\\owasp.html",
+      "link": "../../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\assets\\css\\intentional-classes.css"
+    },
+    {
+      "source": "knowledge\\mobile-hub.html",
+      "link": "../..../..../..../..../../assets/css/generated-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\....\\....\\assets\\css\\generated-classes.css"
+    },
+    {
+      "source": "archives\\orphaned-best-practices-20260103-102230\\index.html",
+      "link": "../assets/css/variables.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\assets\\css\\variables.css"
+    },
+    {
+      "source": "archives\\orphaned-best-practices-20260103-102230\\index.html",
+      "link": "../assets/css/main.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\assets\\css\\main.css"
+    },
+    {
+      "source": "archives\\orphaned-best-practices-20260103-102230\\index.html",
+      "link": "../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\assets\\css\\intentional-classes.css"
+    },
+    {
+      "source": "archives\\orphaned-best-practices-20260103-102230\\index.html",
+      "link": "../index.html",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\index.html"
+    },
+    {
+      "source": "orchestrators\\planning-v5.html",
+      "link": "planning-v5/phase-1-governance-validation.html",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\orchestrators\\planning-v5\\phase-1-governance-validation.html"
+    },
+    {
+      "source": "orchestrators\\planning-v5.html",
+      "link": "planning-v5/phase-2-knowledge-graph-analysis.html",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\orchestrators\\planning-v5\\phase-2-knowledge-graph-analysis.html"
+    },
+    {
+      "source": "orchestrators\\planning-v5.html",
+      "link": "planning-v5/phase-3-ast-impact-analysis.html",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\orchestrators\\planning-v5\\phase-3-ast-impact-analysis.html"
+    },
+    {
+      "source": "orchestrators\\planning-v5.html",
+      "link": "planning-v5/phase-4-complexity-scoring.html",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\orchestrators\\planning-v5\\phase-4-complexity-scoring.html"
+    },
+    {
+      "source": "orchestrators\\planning-v5.html",
+      "link": "planning-v5/phase-5-strategy-selection.html",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\orchestrators\\planning-v5\\phase-5-strategy-selection.html"
+    },
+    {
+      "source": "orchestrators\\planning-v5.html",
+      "link": "planning-v5/phase-6-phase-breakdown.html",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\orchestrators\\planning-v5\\phase-6-phase-breakdown.html"
+    },
+    {
+      "source": "orchestrators\\planning-v5.html",
+      "link": "planning-v5/phase-7-tdd-integration.html",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\orchestrators\\planning-v5\\phase-7-tdd-integration.html"
+    },
+    {
+      "source": "orchestrators\\planning-v5.html",
+      "link": "planning-v5/phase-8-token-optimization.html",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\orchestrators\\planning-v5\\phase-8-token-optimization.html"
+    },
+    {
+      "source": "orchestrators\\planning-v5.html",
+      "link": "planning-v5/phase-9-visualization-generation.html",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\orchestrators\\planning-v5\\phase-9-visualization-generation.html"
+    },
+    {
+      "source": "orchestrators\\planning-v5.html",
+      "link": "planning-v5/phase-10-manifest-finalization.html",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\orchestrators\\planning-v5\\phase-10-manifest-finalization.html"
+    },
+    {
+      "source": "archives\\orphaned-knowledge-20260103-102230\\index.html",
+      "link": "../index.html",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\index.html"
+    },
+    {
+      "source": "knowledge\\api-design\\real-world-case-studies.html",
+      "link": "../..../..../..../..../..../../assets/css/generated-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\knowledge\\....\\....\\....\\assets\\css\\generated-classes.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\git-checkpoint.html",
+      "link": "../assets/css/variables.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\variables.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\git-checkpoint.html",
+      "link": "../assets/css/main.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\main.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\git-checkpoint.html",
+      "link": "../../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\assets\\css\\intentional-classes.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\system-integrity.html",
+      "link": "../assets/css/variables.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\variables.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\system-integrity.html",
+      "link": "../assets/css/main.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\main.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\system-integrity.html",
+      "link": "../../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\assets\\css\\intentional-classes.css"
+    },
+    {
+      "source": "archives\\orphaned-best-practices-20260103-102230\\coding-standards.html",
+      "link": "../index.html",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\index.html"
+    },
+    {
+      "source": "knowledge\\design-patterns\\creational-patterns.html",
+      "link": "../..../..../..../..../..../../assets/css/generated-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\knowledge\\....\\....\\....\\assets\\css\\generated-classes.css"
+    },
+    {
+      "source": "security\\access-control.html",
+      "link": "../documentation.html",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\documentation.html"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\security\\compliance.html",
+      "link": "../assets/css/variables.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\variables.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\security\\compliance.html",
+      "link": "../assets/css/main.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\main.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\security\\compliance.html",
+      "link": "../../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\assets\\css\\intentional-classes.css"
+    },
+    {
+      "source": "knowledge\\cloud-hub.html",
+      "link": "../..../..../..../..../../assets/css/generated-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\....\\....\\assets\\css\\generated-classes.css"
+    },
+    {
+      "source": "knowledge\\testing\\test-coverage-analysis.html",
+      "link": "../..../..../..../..../..../../assets/css/generated-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\knowledge\\....\\....\\....\\assets\\css\\generated-classes.css"
+    },
+    {
+      "source": "archives\\orphaned-knowledge-20260103-102230\\orm-best-practices.html",
+      "link": "../database-hub.html",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\database-hub.html"
+    },
+    {
+      "source": "knowledge\\security\\incident-response.html",
+      "link": "../..../..../..../..../..../../assets/css/generated-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\knowledge\\....\\....\\....\\assets\\css\\generated-classes.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\debug-orchestrator.html",
+      "link": "../assets/css/variables.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\variables.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\debug-orchestrator.html",
+      "link": "../assets/css/main.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\main.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\debug-orchestrator.html",
+      "link": "../../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\assets\\css\\intentional-classes.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\lens\\index.html",
+      "link": "../assets/css/variables.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\variables.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\lens\\index.html",
+      "link": "../assets/css/main.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\main.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\lens\\index.html",
+      "link": "../../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\assets\\css\\intentional-classes.css"
+    },
+    {
+      "source": "security\\security-training.html",
+      "link": "../..../..../..../..../../assets/css/generated-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\....\\....\\assets\\css\\generated-classes.css"
+    },
+    {
+      "source": "knowledge\\ui-ux-hub.html",
+      "link": "../..../..../..../..../../assets/css/generated-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\....\\....\\assets\\css\\generated-classes.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\token-optimization\\index.html",
+      "link": "../assets/css/variables.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\variables.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\token-optimization\\index.html",
+      "link": "../assets/css/main.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\main.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\token-optimization\\index.html",
+      "link": "../../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\assets\\css\\intentional-classes.css"
+    },
+    {
+      "source": "archives\\orphaned-knowledge-20260103-102230\\test-tabs.html",
+      "link": "../../../assets/css/variables.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\assets\\css\\variables.css"
+    },
+    {
+      "source": "archives\\orphaned-knowledge-20260103-102230\\test-tabs.html",
+      "link": "../../../assets/css/main.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\assets\\css\\main.css"
+    },
+    {
+      "source": "archives\\orphaned-knowledge-20260103-102230\\test-tabs.html",
+      "link": "../../../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\assets\\css\\intentional-classes.css"
+    },
+    {
+      "source": "archives\\orphaned-knowledge-20260103-102230\\test-tabs.html",
+      "link": "../index.html",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\index.html"
+    },
+    {
+      "source": "knowledge\\rag-hub.html",
+      "link": "../..../..../..../..../../assets/css/generated-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\....\\....\\assets\\css\\generated-classes.css"
+    },
+    {
+      "source": "knowledge\\security\\cryptography-essentials.html",
+      "link": "../..../..../..../..../..../../assets/css/generated-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\knowledge\\....\\....\\....\\assets\\css\\generated-classes.css"
+    },
+    {
+      "source": "knowledge\\performance-hub.html",
+      "link": "../..../..../..../..../../assets/css/generated-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\....\\....\\assets\\css\\generated-classes.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\tdd-orchestrator.html",
+      "link": "../assets/css/variables.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\variables.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\tdd-orchestrator.html",
+      "link": "../assets/css/main.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\main.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\orchestrators\\tdd-orchestrator.html",
+      "link": "../../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\assets\\css\\intentional-classes.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\security\\index.html",
+      "link": "../assets/css/variables.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\variables.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\security\\index.html",
+      "link": "../assets/css/main.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\main.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\security\\index.html",
+      "link": "../../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\assets\\css\\intentional-classes.css"
+    },
+    {
+      "source": "archives\\validation-stubs-20260103-101816\\validation\\metrics.html",
+      "link": "assets/css/variables.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\validation-stubs-20260103-101816\\validation\\assets\\css\\variables.css"
+    },
+    {
+      "source": "archives\\validation-stubs-20260103-101816\\validation\\metrics.html",
+      "link": "assets/css/main.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\validation-stubs-20260103-101816\\validation\\assets\\css\\main.css"
+    },
+    {
+      "source": "archives\\validation-stubs-20260103-101816\\validation\\metrics.html",
+      "link": "../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\validation-stubs-20260103-101816\\assets\\css\\intentional-classes.css"
+    },
+    {
+      "source": "archives\\validation-stubs-20260103-101816\\validation\\metrics.html",
+      "link": "../index.html",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\validation-stubs-20260103-101816\\index.html"
+    },
+    {
+      "source": "knowledge\\design-patterns\\real-world-patterns.html",
+      "link": "../..../..../..../..../..../../assets/css/generated-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\knowledge\\....\\....\\....\\assets\\css\\generated-classes.css"
+    },
+    {
+      "source": "knowledge\\ddd-hub.html",
+      "link": "../..../..../..../..../../assets/css/generated-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\....\\....\\assets\\css\\generated-classes.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\security\\incident-response.html",
+      "link": "../assets/css/variables.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\variables.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\security\\incident-response.html",
+      "link": "../assets/css/main.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\main.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\security\\incident-response.html",
+      "link": "../../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\assets\\css\\intentional-classes.css"
+    },
+    {
+      "source": "knowledge\\security-hub.html",
+      "link": "../..../..../..../..../../assets/css/generated-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\....\\....\\assets\\css\\generated-classes.css"
+    },
+    {
+      "source": "knowledge\\security\\threat-modeling.html",
+      "link": "../..../..../..../..../..../../assets/css/generated-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\knowledge\\....\\....\\....\\assets\\css\\generated-classes.css"
+    },
+    {
+      "source": "knowledge\\design-patterns\\behavioral-patterns.html",
+      "link": "../..../..../..../..../..../../assets/css/generated-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\knowledge\\....\\....\\....\\assets\\css\\generated-classes.css"
+    },
+    {
+      "source": "knowledge\\testing\\unit-testing-mastery.html",
+      "link": "../..../..../..../..../..../../assets/css/generated-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\knowledge\\....\\....\\....\\assets\\css\\generated-classes.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\getting-started\\index.html",
+      "link": "../assets/css/variables.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\variables.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\getting-started\\index.html",
+      "link": "../assets/css/main.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\prototypes\\assets\\css\\main.css"
+    },
+    {
+      "source": "archives\\prototypes-20260103-101816\\prototypes\\getting-started\\index.html",
+      "link": "../../assets/css/intentional-classes.css",
+      "resolved": "D:\\PROJECTS\\CORTEX\\docs\\archives\\prototypes-20260103-101816\\assets\\css\\intentional-classes.css"
+    }
+  ],
+  "unused_assets": [
+    "assets\\css\\knowledge.css",
+    "technical\\assets\\styles\\glassmorphism.css",
+    "story\\illustrations\\images\\valuable\\cortex-awakening-ch01-02.jpeg",
+    "story\\illustrations\\images\\essentials\\cortex-awakening-ch07-01.jpeg",
+    "assets\\js\\roadmap.js",
+    "assets\\js\\gantt-chart.js",
+    "story\\illustrations\\images\\valuable\\cortex-awakening-ch11-02.jpeg",
+    "story\\illustrations\\images\\essentials\\cortex-awakening-ch11-01.jpeg",
+    "cortex-lens-output\\CORTEX\\cortex-unified.css",
+    "assets\\stylesheets\\broken-links.css",
+    "cortex-lens-output\\test-repo\\components\\d3-force-graph.js",
+    "assets\\js\\faq.js",
+    "story\\illustrations\\images\\essentials\\cortex-awakening-prologue-02.jpeg",
+    "cortex-lens-output\\test-repo\\components\\cortex-components.js",
+    "story\\illustrations\\images\\essentials\\cortex-awakening-ch13-01.jpeg",
+    "cortex-lens-output\\mock-landing\\assets\\cortex-unified.css",
+    "assets\\css\\faq.css",
+    "cortex-lens-output\\test-repo\\cortex-unified.css",
+    "story\\illustrations\\images\\valuable\\cortex-awakening-ch09-02.jpeg",
+    "cortex-lens-output\\test-repo\\components\\chart-builder.js",
+    "story\\illustrations\\images\\essentials\\cortex-awakening-ch01-03.jpeg",
+    "cortex-lens-output\\test-repo\\cortex-unified.js",
+    "cortex-lens-output\\CORTEX\\components\\d3-force-graph.js",
+    "story\\illustrations\\images\\essentials\\cortex-awakening-ch02-01.jpeg",
+    "assets\\images\\CORTEX-logo-HD..jpeg",
+    "story\\illustrations\\images\\valuable\\cortex-awakening-ch07-02.jpeg",
+    "assets\\images\\Awakening-400.png",
+    "story\\illustrations\\images\\essentials\\cortex-awakening-ch03-01.jpeg",
+    "assets\\js\\story.js",
+    "cortex-lens-output\\mock-landing\\tests\\landing-page.test.js",
+    "assets\\css\\story-print.css",
+    "assets\\css\\future.css",
+    "story\\illustrations\\images\\TitleCover.png",
+    "story\\illustrations\\images\\valuable\\cortex-awakening-ch05-01.jpeg",
+    "assets\\css\\story.css",
+    "story\\illustrations\\images\\essentials\\cortex-awakening-ch06-01.jpeg",
+    "assets\\js\\dependency-graph.js",
+    "assets\\js\\d3-architecture.js",
+    "story\\illustrations\\images\\valuable\\cortex-awakening-ch04-02.jpeg",
+    "story\\illustrations\\images\\essentials\\cortex-awakening-ch10-01.jpeg",
+    "story\\illustrations\\images\\essentials\\cortex-awakening-ch04-01.jpeg",
+    "cortex-lens-output\\mock-landing\\assets\\cortex-unified.js",
+    "technical\\assets\\scripts\\navigation.js",
+    "cortex-lens-output\\CORTEX\\cortex-unified.js",
+    "assets\\js\\search.js",
+    "story\\illustrations\\images\\valuable\\cortex-awakening-ch08-02.jpeg",
+    "story\\story-styles.css",
+    "cortex-lens-output\\CORTEX\\components\\data-renderer.js",
+    "assets\\js\\navigation.js",
+    "assets\\js\\lunr.min.js"
+  ],
+  "recommendations": [
+    "Remove or link 51 orphaned HTML files",
+    "Fix 216 broken links",
+    "Review and remove 71 unused assets"
+  ]
+}
