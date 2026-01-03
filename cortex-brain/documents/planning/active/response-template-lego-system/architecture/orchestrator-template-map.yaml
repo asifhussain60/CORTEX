@@ -1,0 +1,635 @@
+version: "1.0.0"
+description: "Orchestrator × Component Matrix - Shows which components each orchestrator uses"
+created: "2026-01-03"
+author: "Asif Hussain"
+
+# ==============================================================================
+# COMPONENT USAGE MATRIX
+# ==============================================================================
+
+orchestrators:
+  planning_v5:
+    name: "Planning Orchestrator v5"
+    path: "src/orchestrators/planning/planning_orchestrator_v5.py"
+    template_file: "planning-v5-template.yaml"
+    phases: 4
+    phase_names: ["Context Gathering", "Plan Generation", "Validation", "Documentation"]
+    
+    components:
+      core:
+        - header
+        - overall_progress_bar
+        - next_action
+      
+      display_moment:
+        - phase_table_full
+        - phase_update_interim
+        - summary_section
+        - artifacts_list
+      
+      optional:
+        - validation_checks  # DoR/DoD validation
+    
+    display_moments:
+      start:
+        - header
+        - overall_progress_bar
+        - phase_table_full
+        - next_action
+      
+      interim:
+        - phase_update_interim
+      
+      end:
+        - header
+        - overall_progress_bar
+        - phase_table_full
+        - validation_checks
+        - artifacts_list
+        - summary_section
+        - next_action
+    
+    custom_parameters:
+      header:
+        orchestrator_name: "Planning Orchestrator v5"
+      phase_table_full:
+        bar_width: 10
+  
+  ado_v2:
+    name: "ADO Orchestrator v2"
+    path: "src/orchestrators/ado/ado_orchestrator_v2.py"
+    template_file: "ado-v2-template.yaml"
+    phases: 5
+    phase_names: ["Feature Analysis", "Work Item Generation", "Acceptance Criteria", "Estimation", "Hierarchy Creation"]
+    
+    components:
+      core:
+        - header
+        - overall_progress_bar
+        - next_action
+      
+      display_moment:
+        - phase_table_full
+        - phase_update_interim
+        - summary_section
+        - artifacts_list
+      
+      optional:
+        - validation_checks  # DoR/DoD validation
+        - work_item_summary  # ADO-specific
+    
+    display_moments:
+      start:
+        - header
+        - overall_progress_bar
+        - phase_table_full
+        - next_action
+      
+      interim:
+        - phase_update_interim
+        - work_item_summary  # Show work items created so far
+      
+      end:
+        - header
+        - overall_progress_bar
+        - phase_table_full
+        - work_item_summary
+        - validation_checks
+        - artifacts_list
+        - summary_section
+        - next_action
+    
+    custom_parameters:
+      header:
+        orchestrator_name: "ADO Orchestrator v2"
+  
+  tdd_v2:
+    name: "TDD Orchestrator v2"
+    path: "src/orchestrators/tdd/tdd_orchestrator_v2.py"
+    template_file: "tdd-v2-template.yaml"
+    phases: 3
+    phase_names: ["RED Phase", "GREEN Phase", "REFACTOR Phase"]
+    
+    components:
+      core:
+        - header
+        - overall_progress_bar
+        - next_action
+      
+      display_moment:
+        - phase_table_full
+        - phase_update_interim
+        - summary_section
+        - artifacts_list
+      
+      optional:
+        - test_results  # TDD-specific
+    
+    display_moments:
+      start:
+        - header
+        - overall_progress_bar
+        - phase_table_full
+        - next_action
+      
+      interim:
+        - phase_update_interim
+        - test_results  # Show test pass rate after each phase
+      
+      end:
+        - header
+        - overall_progress_bar
+        - phase_table_full
+        - test_results
+        - artifacts_list
+        - summary_section
+        - next_action
+    
+    custom_parameters:
+      header:
+        orchestrator_name: "TDD Orchestrator v2"
+      phase_table_full:
+        phases:
+          - {num: 1, name: "RED Phase"}
+          - {num: 2, name: "GREEN Phase"}
+          - {num: 3, name: "REFACTOR Phase"}
+  
+  cleanup_v2:
+    name: "Cleanup Orchestrator v2"
+    path: "src/orchestrators/cleanup/cleanup_orchestrator_v2.py"
+    template_file: "cleanup-v2-template.yaml"
+    phases: 5
+    phase_names: ["Cache Cleanup", "Log Cleanup", "Artifacts Cleanup", "Full Cleanup", "Git Cleanup"]
+    dynamic_phases: true  # Phases vary by cleanup mode
+    
+    components:
+      core:
+        - header
+        - overall_progress_bar
+        - next_action
+      
+      display_moment:
+        - phase_table_full
+        - phase_update_interim
+        - summary_section
+        - artifacts_list
+      
+      optional:
+        - cleanup_summary  # Cleanup-specific
+    
+    display_moments:
+      start:
+        - header
+        - overall_progress_bar
+        - phase_table_full
+        - next_action
+      
+      interim:
+        - phase_update_interim
+        - cleanup_summary  # Show cleanup stats per mode
+      
+      end:
+        - header
+        - overall_progress_bar
+        - phase_table_full
+        - cleanup_summary
+        - artifacts_list
+        - summary_section
+        - next_action
+    
+    custom_parameters:
+      header:
+        orchestrator_name: "Cleanup Orchestrator v2"
+  
+  vacuum_v2:
+    name: "Vacuum Orchestrator v2"
+    path: "src/orchestrators/vacuum/vacuum_orchestrator_v2.py"
+    template_file: "vacuum-v2-template.yaml"
+    phases: 10
+    phase_names: ["Temp Files", "Caches", "Logs", "Backups", "Archives", "Duplicates", "Empty Dirs", "Orphaned Files", "Large Files", "Reorganization"]
+    
+    components:
+      core:
+        - header
+        - overall_progress_bar
+        - next_action
+      
+      display_moment:
+        - phase_table_full
+        - phase_update_interim
+        - summary_section
+        - artifacts_list
+      
+      optional:
+        - cleanup_summary  # Vacuum-specific
+    
+    display_moments:
+      start:
+        - header
+        - overall_progress_bar
+        - phase_table_full
+        - next_action
+      
+      interim:
+        - phase_update_interim
+        - cleanup_summary  # Show stats per category
+      
+      end:
+        - header
+        - overall_progress_bar
+        - phase_table_full
+        - cleanup_summary
+        - artifacts_list
+        - summary_section
+        - next_action
+    
+    custom_parameters:
+      header:
+        orchestrator_name: "Vacuum Orchestrator v2"
+      phase_table_full:
+        bar_width: 8  # Smaller bars for 10 phases
+  
+  debug:
+    name: "Debug Orchestrator"
+    path: "src/orchestrators/debug/debug_orchestrator.py"
+    template_file: "debug-template.yaml"
+    phases: 4
+    phase_names: ["Error Analysis", "Root Cause Identification", "Fix Generation", "Validation"]
+    
+    components:
+      core:
+        - header
+        - overall_progress_bar
+        - next_action
+      
+      display_moment:
+        - phase_table_full
+        - phase_update_interim
+        - summary_section
+        - artifacts_list
+      
+      optional: []
+    
+    display_moments:
+      start:
+        - header
+        - overall_progress_bar
+        - phase_table_full
+        - next_action
+      
+      interim:
+        - phase_update_interim
+      
+      end:
+        - header
+        - overall_progress_bar
+        - phase_table_full
+        - artifacts_list
+        - summary_section
+        - next_action
+    
+    custom_parameters:
+      header:
+        orchestrator_name: "Debug Orchestrator"
+  
+  maintenance:
+    name: "Maintenance Orchestrator"
+    template_file: "maintenance-template.yaml"
+    phases: 11
+    phase_names: ["Brain Health", "File System", "Dependencies", "Documentation", "Tests", "Security", "Performance", "Git", "Backups", "Metrics", "Reporting"]
+    implementation: "prompt-based"
+    
+    components:
+      core:
+        - header
+        - overall_progress_bar
+        - next_action
+      
+      display_moment:
+        - phase_table_full
+        - phase_update_interim
+        - summary_section
+        - artifacts_list
+      
+      optional:
+        - test_results  # Test validation phase
+    
+    display_moments:
+      start:
+        - header
+        - overall_progress_bar
+        - phase_table_full
+        - next_action
+      
+      interim:
+        - phase_update_interim
+      
+      end:
+        - header
+        - overall_progress_bar
+        - phase_table_full
+        - test_results
+        - artifacts_list
+        - summary_section
+        - next_action
+    
+    custom_parameters:
+      header:
+        orchestrator_name: "Maintenance Orchestrator"
+      phase_table_full:
+        bar_width: 8  # Smaller bars for 11 phases
+  
+  sanitization:
+    name: "Sanitization Orchestrator"
+    template_file: "sanitization-template.yaml"
+    phases: 5
+    phase_names: ["Sensitive Data Detection", "Placeholder Generation", "Data Replacement", "Validation", "Documentation"]
+    implementation: "prompt-based"
+    
+    components:
+      core:
+        - header
+        - overall_progress_bar
+        - next_action
+      
+      display_moment:
+        - phase_table_full
+        - phase_update_interim
+        - summary_section
+        - artifacts_list
+      
+      optional:
+        - threat_analysis  # Sanitization-specific
+    
+    display_moments:
+      start:
+        - header
+        - overall_progress_bar
+        - phase_table_full
+        - next_action
+      
+      interim:
+        - phase_update_interim
+        - threat_analysis  # Show threats found/remediated
+      
+      end:
+        - header
+        - overall_progress_bar
+        - phase_table_full
+        - threat_analysis
+        - artifacts_list
+        - summary_section
+        - next_action
+    
+    custom_parameters:
+      header:
+        orchestrator_name: "Sanitization Orchestrator"
+  
+  refinement:
+    name: "Refinement Orchestrator"
+    template_file: "refinement-template.yaml"
+    phases: 7
+    phase_names: ["Code Analysis", "Smell Detection", "Refactoring", "Optimization", "Testing", "Documentation", "Validation"]
+    implementation: "prompt-based"
+    
+    components:
+      core:
+        - header
+        - overall_progress_bar
+        - next_action
+      
+      display_moment:
+        - phase_table_full
+        - phase_update_interim
+        - summary_section
+        - artifacts_list
+      
+      optional:
+        - quality_metrics  # Refinement-specific
+    
+    display_moments:
+      start:
+        - header
+        - overall_progress_bar
+        - phase_table_full
+        - next_action
+      
+      interim:
+        - phase_update_interim
+        - quality_metrics  # Show quality improvements
+      
+      end:
+        - header
+        - overall_progress_bar
+        - phase_table_full
+        - quality_metrics
+        - artifacts_list
+        - summary_section
+        - next_action
+    
+    custom_parameters:
+      header:
+        orchestrator_name: "Refinement Orchestrator"
+
+# ==============================================================================
+# COMPONENT REUSE ANALYSIS
+# ==============================================================================
+
+component_usage:
+  header:
+    usage_count: 9
+    usage_percentage: 100
+    used_by:
+      - planning_v5
+      - ado_v2
+      - tdd_v2
+      - cleanup_v2
+      - vacuum_v2
+      - debug
+      - maintenance
+      - sanitization
+      - refinement
+  
+  overall_progress_bar:
+    usage_count: 9
+    usage_percentage: 100
+    used_by:
+      - planning_v5
+      - ado_v2
+      - tdd_v2
+      - cleanup_v2
+      - vacuum_v2
+      - debug
+      - maintenance
+      - sanitization
+      - refinement
+  
+  next_action:
+    usage_count: 9
+    usage_percentage: 100
+    used_by:
+      - planning_v5
+      - ado_v2
+      - tdd_v2
+      - cleanup_v2
+      - vacuum_v2
+      - debug
+      - maintenance
+      - sanitization
+      - refinement
+  
+  phase_table_full:
+    usage_count: 9
+    usage_percentage: 100
+    used_by:
+      - planning_v5
+      - ado_v2
+      - tdd_v2
+      - cleanup_v2
+      - vacuum_v2
+      - debug
+      - maintenance
+      - sanitization
+      - refinement
+  
+  phase_update_interim:
+    usage_count: 9
+    usage_percentage: 100
+    used_by:
+      - planning_v5
+      - ado_v2
+      - tdd_v2
+      - cleanup_v2
+      - vacuum_v2
+      - debug
+      - maintenance
+      - sanitization
+      - refinement
+  
+  summary_section:
+    usage_count: 9
+    usage_percentage: 100
+    used_by:
+      - planning_v5
+      - ado_v2
+      - tdd_v2
+      - cleanup_v2
+      - vacuum_v2
+      - debug
+      - maintenance
+      - sanitization
+      - refinement
+  
+  artifacts_list:
+    usage_count: 8
+    usage_percentage: 89
+    used_by:
+      - planning_v5
+      - ado_v2
+      - tdd_v2
+      - cleanup_v2
+      - vacuum_v2
+      - debug
+      - maintenance
+      - sanitization
+  
+  validation_checks:
+    usage_count: 2
+    usage_percentage: 22
+    used_by:
+      - planning_v5
+      - ado_v2
+  
+  work_item_summary:
+    usage_count: 1
+    usage_percentage: 11
+    used_by:
+      - ado_v2
+  
+  test_results:
+    usage_count: 2
+    usage_percentage: 22
+    used_by:
+      - tdd_v2
+      - maintenance
+  
+  cleanup_summary:
+    usage_count: 2
+    usage_percentage: 22
+    used_by:
+      - cleanup_v2
+      - vacuum_v2
+  
+  threat_analysis:
+    usage_count: 1
+    usage_percentage: 11
+    used_by:
+      - sanitization
+  
+  quality_metrics:
+    usage_count: 1
+    usage_percentage: 11
+    used_by:
+      - refinement
+
+# ==============================================================================
+# REUSABILITY METRICS
+# ==============================================================================
+
+metrics:
+  total_orchestrators: 9
+  total_components: 16
+  
+  core_components: 3
+  core_reuse_rate: 100  # All orchestrators use all core components
+  
+  display_moment_components: 4
+  display_moment_reuse_rate: 100  # All orchestrators use all display moment components
+  
+  optional_components: 6
+  optional_reuse_rate: 22  # Average: (22+11+22+22+11+11)/6 = 16.5%
+  
+  average_components_per_orchestrator: 10  # (9+10+9+9+9+8+9+9+9)/9
+  
+  duplication_eliminated: true
+  dry_compliance: 100
+
+# ==============================================================================
+# TEMPLATE GENERATION INSTRUCTIONS
+# ==============================================================================
+
+template_generation:
+  base_template: |
+    # Each orchestrator template follows this structure:
+    
+    orchestrator_name:
+      description: "Brief purpose"
+      orchestrator: "orchestrator_class_name"
+      
+      display_moments:
+        start:
+          components:
+            - component1: {param1: value1}
+            - component2: {param2: value2}
+        
+        interim:
+          components:
+            - component3: {param3: value3}
+        
+        end:
+          components:
+            - component1: {param1: value1}  # Can reuse components
+            - component4: {param4: value4}
+  
+  customization_points:
+    - orchestrator_name: "Unique identifier"
+    - phase_names: "Custom phase names per orchestrator"
+    - optional_components: "Add orchestrator-specific components"
+    - custom_parameters: "Override component default parameters"
+  
+  validation:
+    - "All orchestrators MUST use core components (header, overall_progress_bar, next_action)"
+    - "START display MUST include phase_table_full"
+    - "INTERIM display MUST include phase_update_interim"
+    - "END display MUST include summary_section"
+    - "Single Action Rule enforced via next_action component"

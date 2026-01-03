@@ -1,0 +1,709 @@
+version: "1.0.0"
+description: "Component specification for Response Template Lego System"
+created: "2026-01-03"
+author: "Asif Hussain"
+
+# ==============================================================================
+# CORE COMPONENTS (Always Present)
+# ==============================================================================
+
+components:
+  header:
+    category: "core"
+    purpose: "Identify orchestrator, feature, and author"
+    display_moments: ["start", "end"]
+    required: true
+    
+    parameters:
+      orchestrator_name:
+        type: "string"
+        required: true
+        description: "Name of the orchestrator (e.g., 'TDD Orchestrator v2')"
+        example: "Planning Orchestrator v5"
+      
+      feature_name:
+        type: "string"
+        required: true
+        description: "Feature or task being executed"
+        example: "User Authentication"
+      
+      author:
+        type: "string"
+        required: false
+        default: "Asif Hussain"
+        description: "Author of CORTEX system"
+    
+    template: |
+      ## 🛡️🧠 CORTEX {{orchestrator_name}}
+      **Author:** {{author}} | **Feature:** {{feature_name}} | **Orchestrator:** {{orchestrator_name}} ✅
+    
+    usage_example: |
+      - header:
+          orchestrator_name: "TDD Orchestrator v2"
+          feature_name: "user authentication"
+          author: "Asif Hussain"
+    
+    used_by:
+      - planning_v5
+      - ado_v2
+      - tdd_v2
+      - cleanup_v2
+      - vacuum_v2
+      - debug
+      - maintenance
+      - sanitization
+      - refinement
+  
+  overall_progress_bar:
+    category: "core"
+    purpose: "Display top-level execution progress with visual bar"
+    display_moments: ["start", "interim", "end"]
+    required: true
+    
+    parameters:
+      percentage:
+        type: "number"
+        required: true
+        range: [0, 100]
+        description: "Progress percentage (0-100)"
+        example: 50
+      
+      status:
+        type: "string"
+        required: true
+        enum: ["starting", "in_progress", "complete", "error"]
+        description: "Current execution status"
+        example: "in_progress"
+      
+      bar_width:
+        type: "number"
+        required: false
+        default: 20
+        description: "Width of progress bar in characters"
+    
+    template: |
+      **Overall Progress:** `{{progress_bar}}` **{{percentage}}%** {{status_emoji}} {{status_text}}
+    
+    helpers:
+      - name: "generate_progress_bar"
+        signature: "generate_progress_bar(percentage: float, width: int = 20) -> str"
+        description: "Generate Unicode progress bar (█ for filled, ░ for empty)"
+      
+      - name: "format_status_emoji"
+        signature: "format_status_emoji(status: str) -> str"
+        description: "Map status to emoji (⏸️ starting, ⏳ in_progress, ✅ complete, ❌ error)"
+      
+      - name: "format_status_text"
+        signature: "format_status_text(status: str) -> str"
+        description: "Map status to text (STARTING, IN PROGRESS, COMPLETE, ERROR)"
+    
+    usage_example: |
+      - overall_progress_bar:
+          percentage: 50
+          status: "in_progress"
+    
+    used_by:
+      - planning_v5
+      - ado_v2
+      - tdd_v2
+      - cleanup_v2
+      - vacuum_v2
+      - debug
+      - maintenance
+      - sanitization
+      - refinement
+  
+  next_action:
+    category: "core"
+    purpose: "Enforce Single Action Rule - exactly one next step"
+    display_moments: ["start", "interim", "end"]
+    required: true
+    
+    parameters:
+      action:
+        type: "string"
+        required: true
+        description: "The single next action to take"
+        example: "Begin RED phase (test generation)"
+      
+      benefit:
+        type: "string"
+        required: false
+        description: "Optional benefit/value of the action"
+        example: "unblocks 23 tests, completes Day 2"
+    
+    template: |
+      **Next:** {{action}}{{#if benefit}} ({{benefit}}){{/if}}
+    
+    validation_rules:
+      single_action_rule: true
+      forbidden_patterns: ["or", "either", "option 1", "option 2", "you can"]
+      completion_exception: "✅ All work complete!"
+    
+    usage_example: |
+      - next_action:
+          action: "Begin RED phase (test generation)"
+          benefit: "Creates failing tests that define requirements"
+    
+    used_by:
+      - planning_v5
+      - ado_v2
+      - tdd_v2
+      - cleanup_v2
+      - vacuum_v2
+      - debug
+      - maintenance
+      - sanitization
+      - refinement
+
+# ==============================================================================
+# DISPLAY MOMENT COMPONENTS
+# ==============================================================================
+
+  phase_table_full:
+    category: "display_moment"
+    purpose: "Display complete phase table with progress bars"
+    display_moments: ["start", "end"]
+    required: false
+    
+    parameters:
+      phases:
+        type: "array"
+        required: true
+        description: "Array of phase objects"
+        items:
+          num:
+            type: "number"
+            description: "Phase number"
+          name:
+            type: "string"
+            description: "Phase name"
+          status:
+            type: "string"
+            enum: ["not_started", "in_progress", "complete", "error"]
+          percentage:
+            type: "number"
+            range: [0, 100]
+          elapsed_time:
+            type: "string"
+            required: false
+            description: "Time taken (e.g., '3m 24s')"
+      
+      bar_width:
+        type: "number"
+        required: false
+        default: 10
+        description: "Width of phase progress bars"
+    
+    template: |
+      | # | Phase | Progress | Status |
+      |---|-------|----------|--------|
+      {{#each phases}}
+      | {{num}} | {{status_emoji}} **{{name}}** | `{{phase_bar}}` {{percentage}}% | {{status_text}}{{#if elapsed_time}} ({{elapsed_time}}){{/if}} |
+      {{/each}}
+    
+    helpers:
+      - name: "generate_phase_bars"
+        signature: "generate_phase_bars(phases: List[Dict]) -> List[str]"
+        description: "Generate progress bars for all phases"
+      
+      - name: "format_phase_status"
+        signature: "format_phase_status(phase: Dict) -> Tuple[str, str]"
+        description: "Return (emoji, status_text) for phase"
+    
+    usage_example: |
+      - phase_table_full:
+          phases:
+            - {num: 1, name: "RED Phase", status: "complete", percentage: 100, elapsed_time: "3m 24s"}
+            - {num: 2, name: "GREEN Phase", status: "in_progress", percentage: 50}
+            - {num: 3, name: "REFACTOR Phase", status: "not_started", percentage: 0}
+    
+    used_by:
+      - planning_v5
+      - ado_v2
+      - tdd_v2
+      - cleanup_v2
+      - vacuum_v2
+      - maintenance
+      - sanitization
+      - refinement
+  
+  phase_update_interim:
+    category: "display_moment"
+    purpose: "Show concise progress update (completed + next phase only)"
+    display_moments: ["interim"]
+    required: false
+    
+    parameters:
+      completed_phase:
+        type: "object"
+        required: true
+        properties:
+          name:
+            type: "string"
+            description: "Name of completed phase"
+          summary:
+            type: "string"
+            description: "Brief summary of what was accomplished"
+          elapsed_time:
+            type: "string"
+            description: "Time taken (e.g., '3m 24s')"
+      
+      next_phase:
+        type: "object"
+        required: true
+        properties:
+          name:
+            type: "string"
+            description: "Name of next phase"
+          description:
+            type: "string"
+            description: "What the next phase will do"
+          estimated_time:
+            type: "string"
+            required: false
+            description: "Estimated duration (e.g., '~5 minutes')"
+    
+    template: |
+      ✅ **{{completed_phase.name}} Complete** - {{completed_phase.summary}} ({{completed_phase.elapsed_time}})
+      
+      ⏳ **{{next_phase.name}} Next** - {{next_phase.description}}{{#if next_phase.estimated_time}} (Expected: {{next_phase.estimated_time}}){{/if}}
+    
+    usage_example: |
+      - phase_update_interim:
+          completed_phase:
+            name: "RED Phase"
+            summary: "12 tests generated, all failing as expected"
+            elapsed_time: "3m 24s"
+          next_phase:
+            name: "GREEN Phase"
+            description: "Implement code to pass tests"
+            estimated_time: "~5 minutes"
+    
+    used_by:
+      - planning_v5
+      - ado_v2
+      - tdd_v2
+      - cleanup_v2
+      - vacuum_v2
+      - maintenance
+      - sanitization
+      - refinement
+  
+  summary_section:
+    category: "display_moment"
+    purpose: "Display final success metrics"
+    display_moments: ["end"]
+    required: false
+    
+    parameters:
+      metrics:
+        type: "array"
+        required: true
+        description: "Array of metric objects"
+        items:
+          name:
+            type: "string"
+            description: "Metric name"
+          value:
+            type: "string"
+            description: "Metric value (formatted)"
+    
+    template: |
+      ### ✅ Success Metrics
+      {{#each metrics}}
+      - {{name}}: {{value}}
+      {{/each}}
+    
+    usage_example: |
+      - summary_section:
+          metrics:
+            - {name: "Tests generated", value: "12"}
+            - {name: "Coverage", value: "94%"}
+            - {name: "Quality score", value: "A+"}
+    
+    used_by:
+      - planning_v5
+      - ado_v2
+      - tdd_v2
+      - cleanup_v2
+      - vacuum_v2
+      - debug
+      - maintenance
+      - sanitization
+      - refinement
+  
+  artifacts_list:
+    category: "display_moment"
+    purpose: "List generated files with line counts"
+    display_moments: ["end"]
+    required: false
+    
+    parameters:
+      artifacts:
+        type: "array"
+        required: true
+        description: "Array of generated file objects"
+        items:
+          path:
+            type: "string"
+            description: "Relative path to file"
+          lines:
+            type: "number"
+            required: false
+            description: "Line count"
+          size:
+            type: "string"
+            required: false
+            description: "File size (e.g., '23 KB')"
+    
+    template: |
+      ### 📦 Artifacts Generated
+      {{#each artifacts}}
+      - {{path}}{{#if lines}} ({{lines}} lines){{/if}}{{#if size}} [{{size}}]{{/if}}
+      {{/each}}
+    
+    usage_example: |
+      - artifacts_list:
+          artifacts:
+            - {path: "tests/auth/test_user_authentication.py", lines: 142}
+            - {path: "src/auth/user_authentication.py", lines: 89}
+            - {path: "docs/auth-guide.md", lines: 56}
+    
+    used_by:
+      - planning_v5
+      - ado_v2
+      - tdd_v2
+      - cleanup_v2
+      - vacuum_v2
+      - debug
+      - sanitization
+
+# ==============================================================================
+# OPTIONAL COMPONENTS (Orchestrator-Specific)
+# ==============================================================================
+
+  validation_checks:
+    category: "optional"
+    purpose: "Show Definition of Ready/Done validation status"
+    display_moments: ["end"]
+    required: false
+    
+    parameters:
+      dor_status:
+        type: "object"
+        required: true
+        properties:
+          passed:
+            type: "boolean"
+          violations:
+            type: "number"
+            description: "Number of violations (if not passed)"
+      
+      dod_status:
+        type: "object"
+        required: true
+        properties:
+          passed:
+            type: "boolean"
+          remaining:
+            type: "number"
+            description: "Number of remaining items (if not passed)"
+    
+    template: |
+      ### ✅ Validation Status
+      
+      | Check | Status |
+      |-------|--------|
+      | **Definition of Ready** | {{#if dor_status.passed}}✅ Passed{{else}}⚠️ {{dor_status.violations}} issue(s){{/if}} |
+      | **Definition of Done** | {{#if dod_status.passed}}✅ Passed{{else}}⏳ {{dod_status.remaining}} remaining{{/if}} |
+    
+    usage_example: |
+      - validation_checks:
+          dor_status:
+            passed: true
+            violations: 0
+          dod_status:
+            passed: true
+            remaining: 0
+    
+    used_by:
+      - planning_v5
+      - ado_v2
+  
+  work_item_summary:
+    category: "optional"
+    purpose: "Summarize Azure DevOps work items created"
+    display_moments: ["end"]
+    required: false
+    
+    parameters:
+      work_items:
+        type: "array"
+        required: true
+        items:
+          type:
+            type: "string"
+            description: "Work item type (Feature, User Story, Task, Bug)"
+          count:
+            type: "number"
+          story_points:
+            type: "number"
+            required: false
+          status:
+            type: "string"
+    
+    template: |
+      ### 🎫 Work Item Summary
+      
+      | Type | Count | Story Points | Status |
+      |------|-------|--------------|--------|
+      {{#each work_items}}
+      | **{{type}}** | {{count}} | {{#if story_points}}{{story_points}} SP{{else}}-{{/if}} | {{status}} |
+      {{/each}}
+    
+    usage_example: |
+      - work_item_summary:
+          work_items:
+            - {type: "Feature", count: 1, story_points: 13, status: "New"}
+            - {type: "User Story", count: 5, story_points: 21, status: "New"}
+            - {type: "Task", count: 18, status: "New"}
+    
+    used_by:
+      - ado_v2
+  
+  test_results:
+    category: "optional"
+    purpose: "Display test execution results"
+    display_moments: ["interim", "end"]
+    required: false
+    
+    parameters:
+      tests:
+        type: "object"
+        required: true
+        properties:
+          passing:
+            type: "number"
+          total:
+            type: "number"
+          pass_rate:
+            type: "number"
+            description: "Percentage (0-100)"
+          coverage:
+            type: "number"
+            required: false
+            description: "Coverage percentage"
+          duration:
+            type: "string"
+            required: false
+            description: "Test run duration"
+    
+    template: |
+      ### 🧪 Test Results
+      
+      - **Passing:** {{tests.passing}}/{{tests.total}} ({{tests.pass_rate}}%)
+      {{#if tests.coverage}}- **Coverage:** {{tests.coverage}}%{{/if}}
+      {{#if tests.duration}}- **Duration:** {{tests.duration}}{{/if}}
+    
+    usage_example: |
+      - test_results:
+          tests:
+            passing: 12
+            total: 12
+            pass_rate: 100
+            coverage: 94
+            duration: "1.2s"
+    
+    used_by:
+      - tdd_v2
+      - maintenance
+  
+  cleanup_summary:
+    category: "optional"
+    purpose: "Summarize cleanup operations (files deleted, space freed)"
+    display_moments: ["end"]
+    required: false
+    
+    parameters:
+      cleanup_stats:
+        type: "object"
+        required: true
+        properties:
+          files_deleted:
+            type: "number"
+          space_freed:
+            type: "string"
+            description: "Human-readable size (e.g., '342 MB')"
+          backup_created:
+            type: "boolean"
+          backup_path:
+            type: "string"
+            required: false
+    
+    template: |
+      ### 🧹 Cleanup Summary
+      
+      - **Files Deleted:** {{cleanup_stats.files_deleted}}
+      - **Space Freed:** {{cleanup_stats.space_freed}}
+      {{#if cleanup_stats.backup_created}}- **Backup:** {{cleanup_stats.backup_path}}{{/if}}
+    
+    usage_example: |
+      - cleanup_summary:
+          cleanup_stats:
+            files_deleted: 1247
+            space_freed: "342 MB"
+            backup_created: true
+            backup_path: "cortex-brain/backups/cleanup_20260103.tar.gz"
+    
+    used_by:
+      - cleanup_v2
+      - vacuum_v2
+  
+  threat_analysis:
+    category: "optional"
+    purpose: "Display security threat analysis results"
+    display_moments: ["end"]
+    required: false
+    
+    parameters:
+      threats:
+        type: "array"
+        required: true
+        items:
+          category:
+            type: "string"
+            description: "Threat category (PII, API Keys, Credentials, etc.)"
+          count:
+            type: "number"
+          severity:
+            type: "string"
+            enum: ["low", "medium", "high", "critical"]
+          remediated:
+            type: "boolean"
+    
+    template: |
+      ### 🔒 Threat Analysis
+      
+      | Category | Count | Severity | Status |
+      |----------|-------|----------|--------|
+      {{#each threats}}
+      | {{category}} | {{count}} | {{severity_emoji}} {{severity}} | {{#if remediated}}✅ Remediated{{else}}⚠️ Pending{{/if}} |
+      {{/each}}
+    
+    helpers:
+      - name: "severity_emoji"
+        mapping:
+          low: "🟢"
+          medium: "🟡"
+          high: "🟠"
+          critical: "🔴"
+    
+    usage_example: |
+      - threat_analysis:
+          threats:
+            - {category: "PII", count: 24, severity: "high", remediated: true}
+            - {category: "API Keys", count: 3, severity: "critical", remediated: true}
+            - {category: "Hardcoded Paths", count: 12, severity: "medium", remediated: true}
+    
+    used_by:
+      - sanitization
+  
+  quality_metrics:
+    category: "optional"
+    purpose: "Display code quality improvement metrics"
+    display_moments: ["end"]
+    required: false
+    
+    parameters:
+      quality:
+        type: "object"
+        required: true
+        properties:
+          before:
+            type: "object"
+            properties:
+              score:
+                type: "string"
+              issues:
+                type: "number"
+          after:
+            type: "object"
+            properties:
+              score:
+                type: "string"
+              issues:
+                type: "number"
+          improvements:
+            type: "array"
+            items:
+              type: "string"
+    
+    template: |
+      ### 📊 Quality Metrics
+      
+      | Metric | Before | After | Change |
+      |--------|--------|-------|--------|
+      | **Quality Score** | {{quality.before.score}} | {{quality.after.score}} | {{quality_change_emoji}} |
+      | **Issues** | {{quality.before.issues}} | {{quality.after.issues}} | {{issues_change}} |
+      
+      **Improvements:**
+      {{#each quality.improvements}}
+      - {{this}}
+      {{/each}}
+    
+    usage_example: |
+      - quality_metrics:
+          quality:
+            before: {score: "B+", issues: 23}
+            after: {score: "A", issues: 5}
+            improvements:
+              - "Removed 18 code smells"
+              - "Reduced cyclomatic complexity by 40%"
+              - "Improved test coverage from 67% to 94%"
+    
+    used_by:
+      - refinement
+
+# ==============================================================================
+# COMPONENT DEPENDENCIES
+# ==============================================================================
+
+dependencies:
+  jinja2:
+    version: ">=3.0.0"
+    purpose: "Template rendering engine"
+  
+  pyyaml:
+    version: ">=6.0.0"
+    purpose: "YAML parsing for component/template definitions"
+
+# ==============================================================================
+# VALIDATION RULES
+# ==============================================================================
+
+validation:
+  single_action_rule:
+    enabled: true
+    component: "next_action"
+    forbidden_patterns: ["or", "either", "option 1", "option 2"]
+    exception: "✅ All work complete!"
+  
+  required_components:
+    all_orchestrators:
+      - "header"
+      - "overall_progress_bar"
+      - "next_action"
+  
+  display_moment_constraints:
+    start:
+      required: ["header", "overall_progress_bar", "next_action"]
+      optional: ["phase_table_full"]
+    
+    interim:
+      required: ["phase_update_interim"]
+      optional: ["test_results"]
+    
+    end:
+      required: ["header", "overall_progress_bar", "next_action"]
+      optional: ["phase_table_full", "summary_section", "artifacts_list"]
