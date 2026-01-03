@@ -1,7 +1,14 @@
 # 🎯 CORTEX Universal Entry Point
 
 **Version:** 4.0.1 | **Status:** ✅ PRODUCTION  
-**Author:** Asif Hussain | **Website:** https://asifhussain60.github.io/CORTEX/  
+**Author:** Asif Hussain | **Website:** https://asifhussain6| Command | Orchestrator | Pattern | Confidence | Type | Behavior |
+|---------|--------------|---------|------------|------|----------|
+| `introduce yourself`, `intro`, `hello`, `hi cortex` | **Introduction** | N/A | N/A | Template | ASCII banner + capabilities |
+| `plan`, `create a plan`, `make a plan` | 🛡️ **Planning v5** | `^(plan\|create a plan\|make a plan).*$` | 1.00 | regex | **HAND-OFF** → Autonomous execution |
+| `holistic review`, `review holistically`, `architectural review` | 🛡️ **Holistic Review** | `^(holistic review\|review holistically\|architectural review).*$` | 1.00 | regex | **AUTO-TRIGGER** → Reviews at phase transitions |
+| `ado`, `ado story`, `ado feature` | 🛡️ **ADO v2** | `^(ado\|ado story\|ado feature).*$` | 1.00 | regex | **HAND-OFF** → Wizard or auto mode |
+| `vacuum`, `deep clean`, `organize files` | 🛡️ **Vacuum v2** | `^(vacuum\|deep clean\|organize files).*$` | 1.00 | regex | **HAND-OFF** → Filesystem cleanup |
+| `cleanup`, `cleanup cache`, `cleanup logs` | 🛡️ **Cleanup v2** | `^(cleanup\|cleanup cache\|...).*$` | 1.00 | regex | **HAND-OFF** → Selective cleanup |b.io/CORTEX/  
 **Copyright © 2025 Asif Hussain. All rights reserved.**
 
 ---
@@ -113,25 +120,66 @@ LLM Classification → Keyword Regex → User Clarification
 
 ---
 
-## 🔀 Intent Router
+## 🔀 Intent Router (Master Orchestrator)
 
-| Command | Orchestrator | Manifest | Behavior |
-|---------|--------------|----------|----------|
-| `introduce yourself`, `intro`, `hello`, `hi cortex`, `what is cortex` | **Introduction** | `response-templates-v4.yaml:introduction` | ASCII banner + capabilities overview |
-| `/CORTEX Plan [x]`, `create a plan`, `make a plan`, `plan: [x]` | 🛡️ **Planning System (AUTONOMOUS)** | `planning-system-4.0-manifest.yaml` | **HAND-OFF** → Use `autonomous_execution_progress` template |
-| `plan ado`, `ado story`, `ado feature` | 🛡️ **ADO Operations (AUTONOMOUS)** | `ado-planning-manifest.yaml` | **HAND-OFF** → Use `ado_execution_progress` template |
-| `start tdd`, `run tests`, `tdd [x]` | 📋 **TDD Mastery (GUIDED)** | `tdd-orchestrator-v4-manifest.yaml` | Tests in `tests/` |
-| `debug [issue]`, `fix bug`, `troubleshoot` | 📋 **Debug Orchestrator (GUIDED)** | `debug-orchestrator-manifest.yaml` | Bug report + fix |
-| `open lens`, `show dashboard`, `analytics` | 📋 **CORTEX Lens (GUIDED)** | `cortex-lens-v3-manifest.yaml` | Dashboard visualization |
-| `onboard`, `getting started`, `learn cortex` | 📋 **Onboarding (GUIDED)** | Via `onboarding_interactive.py` | Interactive 6-phase guide |
-| `sanitize`, `make generic`, `anonymize` | 📋 **Sanitization (GUIDED)** | `code-sanitization-manifest.yaml` | Sanitized codebase |
-| `refine`, `improve cortex`, `optimize code` | 📋 **Refinement (GUIDED)** | `refinement-orchestrator-manifest.yaml` | 7-phase improvement |
-| `refactor [artifact]`, `analyze [file]`, `optimize [file]` | 📋 **Refactor (GUIDED)** | `cortex-refactor.prompt.md` | Deep analysis + decomposition strategy |
-| `system maintenance`, `health check` | 📋 **Maintenance (GUIDED)** | Via `cortex-maintenance.prompt.md` | 11-phase health + auto-repair (modular v2.0) |
-| `cleanup cache`, `cleanup full`, `cleanup [type]` | 🛡️ **Maintenance Phase 2** | Via `cortex-maintenance.prompt.md` | Cache clear, bloat removal (Phase 2) |
-| `vacuum [path]`, `deep clean [path]`, `organize files` | 🛡️ **Vacuum (AUTONOMOUS)** | `cortex-vacuum.prompt.md` | Deep filesystem cleanup + reorganization |
-| `cleanup docs`, `organize docs`, `validate docs` | 📋 **Doc Cleanup (GUIDED)** | `cortex-doc-cleanup.prompt.md` | 6-phase docs cleanup + stub generation + sync |
-| `help`, `show commands` | **Help** | Template-based | Command list |
+**Status:** ✅ **LIVE** - All orchestrators route through Master Orchestrator (Phase 7)
+
+### Architecture
+
+```
+User Input 
+  ↓
+Cross-Session Context Middleware (Phase 4.5)
+  ↓ (continuation detected)
+  ↓ → Last 3 Sessions Metadata (200 tokens)
+  ↓
+Master Orchestrator (Pattern-Based Routing)
+  ↓ (90%+ of requests)
+  ↓ → PatternRouter (regex-based, <1ms latency)
+  ↓ → OrchestratorRegistry (7 registered)
+  ↓ → ExecutionEngine (lifecycle hooks)
+  ↓ → StateManager (cross-orchestrator state)
+  ↓
+Orchestrator Execution
+```
+
+**Configuration:** `cortex-brain/config/master-orchestrator.yaml`  
+**Implementation:** `src/orchestrators/master_orchestrator.py`
+
+### Routing Rules
+
+| Command | Orchestrator | Pattern | Confidence | Type | Behavior |
+|---------|--------------|---------|------------|------|----------|
+| `introduce yourself`, `intro`, `hello`, `hi cortex` | **Introduction** | N/A | N/A | Template | ASCII banner + capabilities |
+| `plan`, `create a plan`, `make a plan` | 🛡️ **Planning v5** | `^(plan\|create a plan\|make a plan).*$` | 1.00 | regex | **HAND-OFF** → Autonomous execution |
+| `ado`, `ado story`, `ado feature` | 🛡️ **ADO v2** | `^(ado\|ado story\|ado feature).*$` | 1.00 | regex | **HAND-OFF** → Wizard or auto mode |
+| `vacuum`, `deep clean`, `organize files` | �️ **Vacuum v2** | `^(vacuum\|deep clean\|organize files).*$` | 1.00 | regex | **HAND-OFF** → Filesystem cleanup |
+| `cleanup`, `cleanup cache`, `cleanup logs` | �️ **Cleanup v2** | `^(cleanup\|cleanup cache\|...).*$` | 1.00 | regex | **HAND-OFF** → Selective cleanup |
+| `tdd`, `start tdd`, `run tests` | 📋 **TDD** | `^(tdd\|start tdd\|run tests).*$` | 1.00 | regex | GUIDED workflow |
+| `sanitize`, `make generic` | 📋 **Sanitization** | `^(sanitize\|make generic).*$` | 1.00 | regex | GUIDED sanitization |
+| `debug`, `fix bug`, `troubleshoot` | 📋 **Debug** | `^(debug\|fix bug\|troubleshoot).*$` | 1.00 | regex | GUIDED debugging |
+| `refine`, `improve`, `optimize` | 📋 **Refinement** | `^(refine\|improve\|optimize).*$` | 1.00 | regex | GUIDED improvement |
+| `investigate`, `find root cause`, `why is`, `debug architecture`, `fix brittleness` | 🛡️ **Investigation** | `^(investigate|find root cause|why is|debug architecture|fix brittleness).*$` | 1.00 | regex | Deep root cause analysis → Architecture-level fix → Master Orch integration |
+| `system maintenance`, `health check` | 📋 **Maintenance** | DISABLED | N/A | N/A | Not yet registered |
+| `help`, `show commands` | **Help** | N/A | N/A | Template | Command list |
+
+**Pattern Matching:** 100% confidence on all standard commands  
+**LLM Fallback:** Configured but not yet active (Phase 10 enhancement)  
+**State Coordination:** Cross-orchestrator state sharing via `StateManager` + `PlanningStateDB`
+
+### Continuation Detection
+
+**AUTO-ROUTING:** When user says "continue", "resume", or similar:
+1. Context middleware queries Tier 1 Working Memory
+2. Retrieves last 3 session metadata (~200 tokens)
+3. Routes to last-used orchestrator automatically
+4. Orchestrator resumes from last state
+
+**Example:**
+```
+Session 1: "plan user authentication" → Planning v5 executes
+Session 2: "continue" → AUTO-ROUTES to Planning v5
+```
 
 **Manifest Path:** `cortex-brain/manifests/orchestrators/{manifest-file}`  
 **Template Path:** `cortex-brain/response-templates-v4.yaml`

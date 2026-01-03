@@ -181,13 +181,9 @@ class PlanningOrchestratorV5(BaseOrchestratorV4_1):
             
             duration = (datetime.now() - start_time).total_seconds()
             
-            # Check token usage and prepare user-facing warning if needed
+            # Check token usage - middleware will handle user-facing warnings
             token_status = self.check_token_usage()
             success_message = f"Plan '{feature_name}' created successfully"
-            
-            # Append token warning to message if threshold reached
-            if token_status['should_warn'] and token_status.get('user_message'):
-                success_message += token_status['user_message']
             
             return OrchestratorResult(
                 status=OrchestratorStatus.COMPLETED,
@@ -199,7 +195,11 @@ class PlanningOrchestratorV5(BaseOrchestratorV4_1):
                     'artifacts': all_artifacts,
                     'duration_seconds': duration,
                     'phases_completed': 5,
-                    'token_status': token_status  # Include for debugging
+                    'token_usage_percentage': token_status.get('percentage', 0),  # For middleware
+                    'success_metadata': {
+                        'files_created': len([a for a in all_artifacts if 'created' in a.lower()]),
+                        'phases_completed': 5
+                    }
                 },
                 execution_time_seconds=duration
             )

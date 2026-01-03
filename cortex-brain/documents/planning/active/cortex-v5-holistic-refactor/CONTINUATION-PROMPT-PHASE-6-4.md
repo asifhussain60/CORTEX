@@ -1,8 +1,8 @@
 # Continuation Prompt for Next Chat Session
 
 **Date:** 2026-01-03  
-**Last Commit:** [PENDING] (Phase 6.3 COMPLETE: Vacuum Orchestrator v2 Migration)  
-**Current Progress:** 48% (Phase 6.3 complete, Phase 6.4 next)
+**Last Commit:** [PENDING] (Phase 6.4 IN PROGRESS: Sanitization v2 Migration - Design Phase)  
+**Current Progress:** 48% → 50% (Phase 6.4 active with holistic reviews)
 
 ---
 
@@ -24,19 +24,27 @@ The Cross-Session Context Middleware will automatically:
 ## 📊 Where You Left Off
 
 **CORTEX v5 Holistic Refactor Status:**
-- **Overall Progress:** 48% complete
+- **Overall Progress:** 48% → 50% (Phase 6.4 in progress)
 - **Current Phase:** Phase 6 (Execute Migration Plans)
 - **Last Completed:** Phase 6.3 (Vacuum Orchestrator v2 Migration)
-- **Next Up:** Phase 6.4 (Sanitization v2 Migration)
+- **Active:** Phase 6.4 (Sanitization v2 Migration - 20% complete)
 
 **Phase 6 Breakdown:**
 ```
 ✅ 6.1 ADO v2 Migration         (4h)    COMPLETE
 ✅ 6.2 Cleanup v2 Migration     (28h)   COMPLETE
-✅ 6.3 Vacuum v2 Migration      (40h)   COMPLETE  ← YOU ARE HERE
-⏸️ 6.4 Sanitization v2          (16h)   NOT STARTED
+✅ 6.3 Vacuum v2 Migration      (40h)   COMPLETE
+⏳ 6.4 Sanitization v2          (19h)   IN PROGRESS (20%) ← YOU ARE HERE
 ⏸️ 6.5 Debug v2 Migration       (24h)   PENDING APPROVAL
 ```
+
+**🆕 NEW: Holistic Review Integration**
+Phase 6.4 implements **5 holistic reviews** at strategic points:
+- ✅ Review #1 (Before Design) - COMPLETE
+- ⏸️ Review #2 (Before Implementation) - Pending
+- ⏸️ Review #3 (Before Configuration) - Pending
+- ⏸️ Review #4 (Before Integration) - Pending
+- ⏸️ Review #5 (Final Architecture Review) - Pending
 
 ---
 
@@ -73,29 +81,103 @@ The Cross-Session Context Middleware will automatically:
 
 ---
 
-## 🚀 Next Steps (Phase 6.4: Sanitization v2 Migration)
+## 🚀 Phase 6.4 Status: Sanitization v2 Migration (20% Complete)
 
-**Objective:**
-Migrate Sanitization from guided orchestrator to autonomous orchestrator with:
-- Code anonymization
-- Sensitive data removal
-- Generic placeholder generation
-- Safe sanitization patterns
-- Dry-run mode
+### 🆕 NEW APPROACH: Holistic Review Integration
 
-**Expected Duration:** 16 hours (2 days)
+Phase 6.4 is the **first migration to implement continuous holistic reviews** - a new best practice for adaptive planning.
 
-**Migration Plan Location:**
-`cortex-brain/documents/planning/active/sanitization-v2-migration/00-master-plan.md`
+**What Changed:**
+- **Before:** Linear execution (Plan → Design → Implement → Test → Done)
+- **Now:** Review-driven execution (Plan → Review → Design → Review → Implement → Review → Test → Review → Done)
 
-**Implementation Strategy:**
-1. Analyze current Sanitization implementation (code-sanitization-manifest.yaml)
-2. Design modular architecture (similar to Cleanup v2, Vacuum v2)
-3. Implement SanitizationOrchestratorV2 with BaseOrchestrator v4.1
-4. Create manifest and templates
-5. Write comprehensive tests
-6. Configure Master Orchestrator routing
-7. End-to-end validation
+**Why This Matters:**
+- ✅ Extract patterns from completed work (ADO v2, Cleanup v2, Vacuum v2)
+- ✅ Apply learnings to current work before it's too late to change
+- ✅ Validate architectural consistency across all v2 migrations
+- ✅ Document insights for future phases (Debug v2, Phase 8-10)
+- ✅ Identify reuse opportunities early
+
+**Review Schedule (5 reviews total):**
+```
+✅ Review #1 (Before Design)          1h    COMPLETE → 400+ line analysis
+⏸️ Review #2 (Before Implementation)  0.5h  Pending  → Code reuse strategy
+⏸️ Review #3 (Before Configuration)   0.5h  Pending  → Config patterns
+⏸️ Review #4 (Before Integration)     0.5h  Pending  → Routing optimization
+⏸️ Review #5 (Final Architecture)     1h    Pending  → System-wide insights
+```
+
+**Total Review Time:** 3.5 hours (18% of project)  
+**Expected Benefit:** Higher quality, faster future migrations, documented patterns
+
+---
+
+### What's Been Done (20% Complete)
+
+**Phase 0: Foundation ✅ (2h)**
+- Migration plan structure created
+- Existing Sanitization v1 analyzed
+- Reusable components identified (5 utility files, 45% reuse potential)
+
+**Phase 0.5: Holistic Review #1 ✅ (1h)**
+- Document: `architecture/holistic-review-01.md` (400+ lines)
+- Analyzed ADO v2, Cleanup v2, Vacuum v2 patterns
+- Identified proven architectural approaches:
+  - ✅ Engine-based modular architecture (5 engines)
+  - ✅ Transactional operations with rollback
+  - ✅ Progressive analysis for performance
+  - ✅ 5-level risk classification
+  - ✅ Dry-run mode by default
+- Code reuse strategy: 45% from existing utilities
+- Complexity estimate: 4,000-5,000 lines total
+
+**Phase 1: Design Architecture ⏳ (2h, 20% done)**
+- Master plan created (1,200+ lines)
+- Progress tracking established
+- Architecture overview defined
+- Component interfaces outlined
+
+---
+
+### What's Next (Phase 1 → Phase 1.5)
+
+**Current Task:** Complete Phase 1 (Design Architecture)
+
+**Remaining Design Work:**
+1. ⏳ Create detailed architecture diagram
+2. ⏳ Define TransformationTransaction interface
+3. ⏳ Specify 5-level risk classification rules
+4. ⏳ Design progressive analysis pipeline
+5. ⏳ Evaluate dual-mode architecture (autonomous vs wizard)
+6. ⏳ Document component interfaces
+7. ⏳ Define YAML configuration structure
+
+**Then:** Conduct **Holistic Review #2** before implementation begins
+
+---
+
+### Implementation Strategy
+
+**Architecture (From Holistic Review #1):**
+```
+sanitization_orchestrator_v2.py (600-700 lines)
+├── code_analyzer_engine.py     (400-500 lines) [50% reuse]
+├── transformer_engine.py       (500-600 lines) [20% reuse]
+├── validator_engine.py         (300-400 lines) [40% reuse]
+├── mapping_engine.py           (300-400 lines) [70% reuse]
+└── report_generator_engine.py  (200-300 lines) [60% reuse]
+```
+
+**5-Phase Workflow:**
+1. ANALYZE - File scanning, AST parsing, terminology extraction
+2. MAPPING - Domain→generic mapping, conflict resolution, approval
+3. TRANSFORM - Transactional transformation with checkpoint
+4. VALIDATE - Build/test validation, rollback on failure
+5. COMPLETE - Audit report, artifact saving, cleanup
+
+**Key Safety Features:**
+- Transactional operations (commit/rollback)
+- 5-level risk classification
 
 ---
 

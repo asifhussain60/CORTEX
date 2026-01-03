@@ -39,6 +39,7 @@ class ExecutionResult:
     artifacts: List[str] = field(default_factory=list)
     errors: List[str] = field(default_factory=list)
     metadata: Dict[str, Any] = field(default_factory=dict)
+    user_message: Optional[str] = None  # Rendered markdown for display
     
     def to_dict(self) -> dict:
         """Convert to dictionary for serialization."""
@@ -51,7 +52,8 @@ class ExecutionResult:
             'duration_seconds': self.duration_seconds,
             'artifacts': self.artifacts,
             'errors': self.errors,
-            'metadata': self.metadata
+            'metadata': self.metadata,
+            'user_message': self.user_message
         }
 
 
