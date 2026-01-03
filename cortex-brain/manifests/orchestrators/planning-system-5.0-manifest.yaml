@@ -235,6 +235,57 @@ performance:
   cache_search_results: true
   cache_ttl_seconds: 3600
 
+# Governance integration (Phase 4 enhancement)
+governance:
+  tier0_validation:
+    enabled: true
+    rules_path: "cortex-brain/brain-protection-rules.yaml"
+    enforcement: "automated"
+    
+    instincts:
+      - "TDD_ENFORCEMENT"
+      - "INCREMENTAL_PLAN_GENERATION"
+      - "DOCUMENT_ORGANIZATION_ENFORCEMENT"
+      - "GIT_ISOLATION"
+      - "PLANNING_ISOLATION"
+      
+  critical_path_protection:
+    enabled: true
+    paths:
+      - "cortex-brain/tier0/"
+      - ".github/prompts/internal/"
+      - "cortex-brain/brain-protection-rules.yaml"
+      
+  skull_rules:
+    enforcement: "automated"
+    severity_levels:
+      - "blocked"
+      - "warning"
+      - "info"
+
+# Knowledge graph integration (Phase 4 enhancement)
+knowledge_graph:
+  tier2_integration:
+    enabled: true
+    graph_path: "cortex-brain/knowledge-graph.yaml"
+    
+    queries:
+      - "related_features"
+      - "dependencies"
+      - "patterns"
+      - "risks"
+      - "recommendations"
+    
+  context_enrichment:
+    enabled: true
+    max_related_features: 5
+    max_dependencies: 10
+    
+  metadata_collection:
+    track_patterns: true
+    track_risks: true
+    track_recommendations: true
+
 # Logging configuration
 logging:
   level: "INFO"

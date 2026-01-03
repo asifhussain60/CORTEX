@@ -25,6 +25,14 @@ from src.orchestrators.base.base_orchestrator import (
     OrchestratorStatus
 )
 from src.database.planning_state_db import PlanningStateDB
+from src.orchestrators.planning.governance_integrator import (
+    GovernanceIntegrator,
+    GovernanceValidation
+)
+from src.orchestrators.planning.knowledge_graph_query import (
+    KnowledgeGraphQuery,
+    KnowledgeContext
+)
 
 
 class PlanningOrchestratorV5(BaseOrchestratorV4_1):
@@ -70,7 +78,11 @@ class PlanningOrchestratorV5(BaseOrchestratorV4_1):
         
         super().__init__(config_path, state_db, plan_id, template_dir)
         
-        self.logger.info("PlanningOrchestratorV5 initialized")
+        # Initialize governance and knowledge graph integrations (Phase 4 enhancement)
+        self.governance = GovernanceIntegrator()
+        self.knowledge_graph = KnowledgeGraphQuery()
+        
+        self.logger.info("PlanningOrchestratorV5 initialized with governance + knowledge graph")
     
     @staticmethod
     def get_registration_config() -> dict:
@@ -404,7 +416,20 @@ class PlanningOrchestratorV5(BaseOrchestratorV4_1):
         
         artifacts = []
         
-        # Create context document
+        # Phase 4 Enhancement: Governance Validation
+        governance_validation = self.governance.validate_feature_request(
+            feature_name=feature_name,
+            context={
+                'type': 'feature',
+                'paths': [],  # To be populated with actual paths
+                'estimated_phases': kwargs.get('estimated_phases', 5)
+            }
+        )
+        
+        # Phase 4 Enhancement: Knowledge Graph Query
+        knowledge_context = self.knowledge_graph.get_feature_context(feature_name)
+        
+        # Create context document with governance and knowledge graph data
         context_content = f"""# Context Discovery Report
 ## Feature: {feature_name}
 
@@ -413,6 +438,34 @@ class PlanningOrchestratorV5(BaseOrchestratorV4_1):
 ### Workspace Analysis
 - Workspace root: {Path.cwd()}
 - Planning for: {feature_name}
+
+### Governance Validation
+**Status:** {'✅ Valid' if governance_validation.is_valid else '❌ Violations Detected'}
+
+**Applied Rules:** {len(governance_validation.applied_rules)} rules
+- {', '.join(governance_validation.applied_rules[:5])}
+
+**Violations:** {len(governance_validation.violations)}
+{chr(10).join(f"- [{v['severity'].upper()}] {v['rule']}: {v['message']}" for v in governance_validation.violations[:5])}
+
+**Warnings:** {len(governance_validation.warnings)}
+{chr(10).join(f"- {w}" for w in governance_validation.warnings[:5])}
+
+### Knowledge Graph Context
+**Related Features:** {len(knowledge_context.related_features)}
+{chr(10).join(f"- {f}" for f in knowledge_context.related_features[:5])}
+
+**Dependencies:** {len(knowledge_context.dependencies)}
+{chr(10).join(f"- {d}" for d in knowledge_context.dependencies[:5])}
+
+**Recommended Patterns:**
+{chr(10).join(f"- {p}" for p in knowledge_context.patterns)}
+
+**Identified Risks:**
+{chr(10).join(f"- {r}" for r in knowledge_context.risks)}
+
+**Recommendations:**
+{chr(10).join(f"- {r}" for r in knowledge_context.recommendations)}
 
 ### Related Files
 (Auto-discovery will be implemented in future iteration)
