@@ -1,7 +1,7 @@
 # 🗺️ CORTEX Documentation Site - Master Specifications (INDEX)
 
-**Version:** 4.1.3 | **Status:** 🎯 SYNCED + CURRENT  
-**Author:** Asif Hussain | **Last Updated:** January 3, 2026 (Statistics Corrected)  
+**Version:** 4.2.0 | **Status:** 🎯 EFFICIENCY-OPTIMIZED  
+**Author:** Asif Hussain | **Last Updated:** January 3, 2026 (Priority Reordering)  
 **Copyright © 2026 Asif Hussain. All rights reserved.**
 
 ---
@@ -11,9 +11,14 @@
 Master specification for CORTEX documentation site across Level 1 pages and Level 2 phase deep-dives.
 
 **OLD (v3.3.0):** Single file (1,682 lines) ❌ BLOAT  
-**NEW (v4.1.0):** Index + 10 modular specs (180 lines) + v5.0 Level 2 architecture ✅ OPTIMIZED
+**NEW (v4.2.0):** Index + 10 modular specs (180 lines) + efficiency-based priorities ✅ OPTIMIZED
 
-**Current State (v4.1.3):** 347 HTML files total (187 active + 160 stubs)
+**Current State (v4.2.0):** 347 HTML files total (187 active + 160 stubs)
+
+**🚀 NEW: Efficiency-First Prioritization:**
+- **QUICK WINS** (10h): Orchestrators cleanup → Immediate 73% → 91% completion
+- **HIGH VALUE** (58 pages): Learning Hub → Junior developer training platform
+- **HIGH EFFORT** (54h): Security pages → Deferred for strategic planning
 
 **Key Benefits:**
 - ✅ **89% size reduction** in main index file
@@ -24,7 +29,25 @@ Master specification for CORTEX documentation site across Level 1 pages and Leve
 
 ---
 
-## 📚 Specification Modules (Load on Demand)
+## 📊 EFFICIENCY-BASED PRIORITY MATRIX (v4.2.0)
+
+**Ranking Criteria:** Value/Effort Ratio + Strategic Impact
+
+| Rank | Initiative | Effort | Value | Ratio | Status | Next Action |
+|------|-----------|--------|-------|-------|--------|-------------|
+| **🥇 #1** | **Orchestrators Cleanup** | 10h | HIGH | **9.0** | 🟡 73% → 91% | Integrate 5 orphan pages + add Master Orchestrator Hub |
+| **🥈 #2** | **Learning Hub (Phase 1)** | 20h | VERY HIGH | **8.5** | 🚧 28% → 50% | Implement 22 high-impact Level 2 modules (Python, Testing, Security) |
+| **🥉 #3** | **Learning Hub (Phase 2)** | 35h | HIGH | **7.2** | 🚧 50% → 100% | Complete remaining 36 stub modules |
+| **#4** | **Security Pages** | 54h | MEDIUM | **4.6** | 🔴 54% → 100% | Create 6 missing pages (Threat Modeling, Incident Response, etc.) |
+
+**Decision Rationale:**
+- **Orchestrators (#1):** QUICK WIN - 10 hours for 18% completion gain + unlocks v5.0 Master Hub
+- **Learning Hub (#2-3):** HIGHEST VALUE - Junior developer training, 80 interactive modules, 55 learning hours
+- **Security (#4):** HIGH EFFORT - Deferred until Learning Hub complete (better ROI)
+
+---
+
+## 📚 Specification Modules (Load on Demand - REORDERED BY PRIORITY)
 
 ### Core Specifications (REQUIRED)
 
@@ -50,35 +73,42 @@ Master specification for CORTEX documentation site across Level 1 pages and Leve
 
 ---
 
-### Multi-Panel Specifications (Load by Panel)
+### Multi-Panel Specifications (PRIORITY ORDER)
 
-**4. Security Multi-Panel** → `level1-specs/multi-panels/security-panel-spec.md`
-- **Pages:** 13 (7 existing, 6 missing)
-- **Categories:** 4 (Protection, Assessment, Compliance, Response)
-- **Visualizations:** 26+ (Mermaid + D3.js)
-- **Status:** 🔴 54% complete - needs work
-- **Priority:** HIGH (6 pages to create, 54 hours estimated)
-
-**5. Orchestrators Multi-Panel** → `level1-specs/multi-panels/orchestrators-panel-spec.md`
-- **Pages:** 19 (16 existing, 1 missing, 5 unlinked)
+**🥇 PRIORITY #1: Orchestrators Multi-Panel** → `level1-specs/multi-panels/orchestrators-panel-spec.md`
+- **Pages:** 22 (20 active, 2 stubs) - includes Master Orchestrator Hub (NEW v5.0)
 - **Categories:** 5 (Planning, Execution, System, Analysis, Debug)
-- **Status:** 🟡 73% complete - cleanup needed
-- **Priority:** MEDIUM (orphan integration, 10 hours estimated)
+- **Orphans:** 5 pages need integration (cortex-debug.html, cortex-onboarding.html, etc.)
+- **Status:** 🟡 73% → 91% (target)
+- **Effort:** 10 hours (QUICK WIN)
+- **Value/Effort:** **9.0** (HIGHEST)
+- **Next:** Integrate orphans + add Master Hub visualizations
 
-**6. Sharpen The Saw Multi-Panel** → `level1-specs/multi-panels/sharpen-saw-panel-spec.md`
-- **Pages:** 6 (6 existing, 100% complete)
-- **Categories:** 6 (Security, SOLID, Code Quality, Performance, Testing, Documentation)
-- **Status:** 🟢 100% complete - perfect implementation
-- **Priority:** LOW (no work needed)
-
-**7. Best Practices Learning Hub** → `level1-specs/learning-hub/best-practices-learning-spec.md`
+**🥈 PRIORITY #2: Best Practices Learning Hub** → `level1-specs/learning-hub/best-practices-learning-spec.md`
 - **Level 1 Pages:** 17 (domain hubs)
-- **Level 2 Pages:** 80 (interactive learning modules)
+- **Level 2 Pages:** 80 (interactive learning modules) - 22 implemented, 58 stubs
 - **Structure:** 3-6 modules per domain (Beginner → Expert)
 - **Features:** D3.js visualizations, code playgrounds, quizzes, challenges
 - **Total Learning Hours:** 55 hours
-- **Status:** 🚧 NEW - pedagogical platform
-- **Priority:** HIGH (junior developer learning aid)
+- **Status:** 🚧 28% → 100% (target)
+- **Effort:** Phase 1 (20h) + Phase 2 (35h) = 55 hours total
+- **Value/Effort:** **8.5** (Phase 1), **7.2** (Phase 2)
+- **Strategic Value:** Junior developer training platform, onboarding acceleration
+
+**#3: Security Multi-Panel** → `level1-specs/multi-panels/security-panel-spec.md`
+- **Pages:** 16 (10 active, 6 stubs) - includes stub index
+- **Categories:** 4 (Protection, Assessment, Compliance, Response)
+- **Visualizations:** 26+ (Mermaid + D3.js)
+- **Status:** 🔴 54% → 100% (target)
+- **Effort:** 54 hours (HIGH EFFORT)
+- **Value/Effort:** **4.6** (DEFERRED)
+- **Next:** Strategic planning after Learning Hub complete
+
+**#4: Sharpen The Saw Multi-Panel** → `level1-specs/multi-panels/sharpen-saw-panel-spec.md`
+- **Pages:** 6 (6 existing, 100% complete)
+- **Categories:** 6 (Security, SOLID, Code Quality, Performance, Testing, Documentation)
+- **Status:** 🟢 100% complete - MAINTENANCE ONLY
+- **Priority:** LOW (no work needed)
 
 ---
 
@@ -97,22 +127,51 @@ Master specification for CORTEX documentation site across Level 1 pages and Leve
 
 ---
 
-## 🔗 Load Order
+## 🔗 Load Order (EFFICIENCY-OPTIMIZED)
 
-### Standard Workflow
+### Priority #1: Orchestrators Cleanup (QUICK WIN - 10h)
 
-**For Security Work:**
-1. Load Executive Summary → Security Panel Spec → Design Standards → Validation Checklist
+**Goal:** 73% → 91% completion in 10 hours
 
-**For Orchestrators Work:**
-1. Load Executive Summary → Orchestrators Panel Spec → Design Standards → Validation Checklist
+**Workflow:**
+1. Load Executive Summary → Orchestrators Panel Spec
+2. Integrate 5 orphan pages into navigation
+3. Add Master Orchestrator Hub (v5.0) with Pattern Router, State Manager, Execution Engine
+4. Validate glassmorphism compliance (zero inline styles, T1 animations)
+5. Run automated validation script
 
-**For Sharpen The Saw Work:**
-1. Load Executive Summary → Sharpen The Saw Panel Spec → (Optional) Design Standards
+**Expected Outcome:** Fully navigable 22-page orchestrator ecosystem with v5.0 Master Hub
 
-**For Best Practices Learning Hub Work:**
-1. Load Executive Summary → Best Practices Learning Spec → Design Standards → Visualization Guide
-2. Reference: `integrate-this.md` for D3.js/Mermaid implementation patterns
+### Priority #2: Learning Hub Phase 1 (HIGH VALUE - 20h)
+
+**Goal:** 28% → 50% completion (implement 22 high-impact modules)
+
+**Workflow:**
+1. Load Executive Summary → Best Practices Learning Spec
+2. Identify 22 highest-value modules (Python, Testing, Security, Performance)
+3. Implement D3.js visualizations + code playgrounds
+4. Add quizzes + challenges
+5. Validate glassmorphism + responsive design
+
+**Expected Outcome:** Functional junior developer training platform (50% coverage)
+
+### Priority #3: Learning Hub Phase 2 (COMPLETION - 35h)
+
+**Goal:** 50% → 100% completion (implement remaining 36 modules)
+
+**Workflow:**
+1. Complete remaining stub modules across all 17 domains
+2. Add advanced visualizations (Sankey, Force Graphs, Heatmaps)
+3. Implement progress tracking + gamification
+4. Full validation + performance testing
+
+**Expected Outcome:** Complete 80-module learning platform (55 learning hours)
+
+### Priority #4: Security Pages (DEFERRED - 54h)
+
+**Goal:** 54% → 100% completion
+
+**Workflow:** Defer until Learning Hub complete (better ROI)
 
 ---
 
